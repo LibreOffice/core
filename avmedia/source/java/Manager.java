@@ -70,8 +70,13 @@ public class Manager implements com.sun.star.lang.XServiceInfo,
                                 com.sun.star.media.XManager
 
 {
-    public Manager()
+    private com.sun.star.lang.XMultiServiceFactory maFactory;
+
+    // -------------------------------------------------------------------------
+
+    public Manager( com.sun.star.lang.XMultiServiceFactory aFactory )
     {
+        maFactory = aFactory;
     }
 
     // ------------
@@ -104,7 +109,7 @@ public class Manager implements com.sun.star.lang.XServiceInfo,
 
         if( aPlayer != null )
         {
-            return new Player( aPlayer );
+            return new Player( maFactory, aPlayer, aURL );
         }
         else
             return null;
