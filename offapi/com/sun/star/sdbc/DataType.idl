@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataType.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:52:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 // DocMerge from idl: constants com::sun::star::sdbc::DataType
 /** These constants are used to specify database data types which are used
-        to identify the generic SQL types. The definition is based on JDBC 2.0.
+        to identify the generic SQL types. The definition is based on JDBC 3.0.
 
         <p>
         The actual type constant values are equivalent to those in the X/Open CLI.
@@ -192,6 +192,13 @@ published constants DataType
     /** indicates a type representing an SQL REF, a referencing type.
      */
     const long REF          = 2006;
+
+    /** identifies the generic SQL type
+     * <code>BOOLEAN</code>.
+     *
+     * @since OOo 2.0.0
+     */
+    const long BOOLEAN = 16;
 };
 
 //=============================================================================
