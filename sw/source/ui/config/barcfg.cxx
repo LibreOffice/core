@@ -2,9 +2,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,119 +65,138 @@
 
 #pragma hdrstop
 
-#ifndef _TOOLS_TABLE_HXX //autogen
-#include <tools/table.hxx>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
 #include "barcfg.hxx"
-#include "cfgid.h"
 
-#define BAR_VERSION  UINT16(1)
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
-DECLARE_TABLE(CfgUSHORTTable,void*);
+#define C2U(cChar) OUString::createFromAscii(cChar)
 
+#define SEL_TYPE_TABLE_TEXT     0
+#define SEL_TYPE_LIST_TEXT      1
+#define SEL_TYPE_TABLE_LIST     2
+#define SEL_TYPE_BEZIER         3
+
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
-    SfxConfigItem( bWeb ? CFG_TOOLBARCONFIG_ITEM : CFG_WEBTOOLBARCONFIG_ITEM ),
-    pTbl( new CfgUSHORTTable )
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBarSelection") :  C2U("Office.Writer/ObjectBarSelection"))
 {
-    SetInternal( TRUE );
-}
+    for(USHORT i = 0; i <= SEL_TYPE_BEZIER; i++ )
+        aTbxIdArray[i] = (USHORT)-1;
 
-SwToolbarConfigItem::~SwToolbarConfigItem()
-{
-    delete pTbl;
-}
-
-void SwToolbarConfigItem::SetTopToolbar( int nSelType, USHORT nBarId )
-{
-    if ( !pTbl->IsKeyValid( ULONG(nSelType) ) )
-        pTbl->Insert( ULONG(nSelType), (void*)(ULONG)nBarId );
-    else
-        pTbl->Replace( ULONG(nSelType), (void*)(ULONG)nBarId );
-}
-
-USHORT SwToolbarConfigItem::GetTopToolbar( int nSelType )
-{
-    if ( !pTbl->IsKeyValid( ULONG(nSelType) ) )
-        return USHRT_MAX;
-    else
-        return (USHORT)(ULONG)pTbl->Get( ULONG(nSelType) );
-}
-
-BOOL SwToolbarConfigItem::Store(SvStream& rStrm)
-{
-    rStrm << BAR_VERSION;
-    rStrm << UINT16(pTbl->Count());
-
-    if ( pTbl->Count() )
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
     {
-        UINT16 nVal = UINT16((ULONG)pTbl->First());
-        while ( nVal )
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            UINT16 nKey = UINT16((ULONG)pTbl->GetCurKey());
-            rStrm << nKey << nVal;
-            nVal = UINT16((ULONG)pTbl->Next());
-        }
-    }
-
-    return SfxConfigItem::ERR_OK;
-}
-
-
-int SwToolbarConfigItem::Load(SvStream& rStrm)
-{
-    UINT16 nVersion;
-    rStrm >> nVersion;
-
-    if ( nVersion >= BAR_VERSION )
-    {
-        UINT16 nCount;
-        rStrm >> nCount;
-        if ( nCount )
-        {
-            for ( UINT16 i = 0; i < nCount; ++i )
+            if(pValues[nProp].hasValue())
             {
-                UINT16 nKey, nVal;
-                rStrm >> nKey >> nVal;
-                pTbl->Insert( nKey, (void*)(ULONG)nVal );
+                sal_Int32 nVal;
+                pValues[nProp] >>= nVal;
+                aTbxIdArray[nProp] = (sal_uInt16)nVal;
             }
         }
-
-        SetDefault(FALSE);
-        return SfxConfigItem::ERR_OK;
     }
-    else
-        return SfxConfigItem::WARNING_VERSION;
 }
+/* ---------------------------------------------------------------------------
 
-
-void SwToolbarConfigItem::UseDefault()
+ ---------------------------------------------------------------------------*/
+SwToolbarConfigItem::~SwToolbarConfigItem()
 {
-    SfxConfigItem::UseDefault();
-    pTbl->Clear();
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int32 lcl_getArrayIndex(int nSelType)
+{
+    sal_Int32 nRet = -1;
+    if(nSelType & SwWrtShell::SEL_NUM)
+    {
+        if(nSelType & SwWrtShell::SEL_TBL)
+            nRet = SEL_TYPE_TABLE_LIST;
+        else
+            nRet = SEL_TYPE_LIST_TEXT;
+    }
+    else if(nSelType & SwWrtShell::SEL_TBL)
+        nRet = SEL_TYPE_TABLE_TEXT;
+    else if(nSelType & SwWrtShell::SEL_BEZ)
+        nRet = SEL_TYPE_BEZIER;
+    return nRet;
+}
+/* -----------------------------10.10.00 14:38--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, USHORT nBarId )
+{
+    sal_Int32 nProp = lcl_getArrayIndex(nSelType);
+    if(nProp >= 0)
+    {
+        aTbxIdArray[nProp] = nBarId;
+        SetModified();
+    }
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_uInt16 SwToolbarConfigItem::GetTopToolbar( sal_Int32 nSelType )
+{
+    sal_Int32 nProp = lcl_getArrayIndex(nSelType);
+    if(nProp >= 0)
+        return aTbxIdArray[nProp];
+    else
+        return 0xffff;
+}
+/* -----------------------------10.10.00 13:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Table",                   //  SEL_TYPE_TABLE_TEXT
+        "Numberdlist",            //  SEL_TYPE_LIST_TEXT
+        "Numberdlist_InTable",     //  SEL_TYPE_TABLE_LIST
+        "BezierObject_EditMode"   //  SEL_TYPE_BEZIER
+    };
+    const int nCount = 4;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
+}
+/* -----------------------------10.10.00 13:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwToolbarConfigItem::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        pValues[nProp] <<= (sal_Int32) (aTbxIdArray[nProp] == 0xffff ? -1 : aTbxIdArray[nProp]);
+    PutProperties(aNames, aValues);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/09/18 16:05:15  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  1998/04/08 11:46:42  OS
-    einer noch..
-
-
-      Rev 1.2   08 Apr 1998 13:46:42   OS
-   einer noch..
-
-      Rev 1.1   08 Apr 1998 13:41:32   OS
-   Table mit void* -> fuer UNX und MAC
-
-      Rev 1.0   02 Apr 1998 10:06:04   MA
-   new: ToolbarCfg
-
-
-------------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: barcfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,26 @@
 #ifndef SW_BARCFG_HXX
 #define SW_BARCFG_HXX
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
 #endif
 
 class CfgUSHORTTable;
 
-class SwToolbarConfigItem : public SfxConfigItem
+class SwToolbarConfigItem : public utl::ConfigItem
 {
-    CfgUSHORTTable *pTbl;
-private:
-    virtual int  Load (SvStream& rStrm);
-    virtual BOOL Store(SvStream& rStrm);
-    virtual void UseDefault();
+    sal_uInt16          aTbxIdArray[4];
+
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 
 public:
-    SwToolbarConfigItem( BOOL bWeb );
+    SwToolbarConfigItem( sal_Bool bWeb );
     ~SwToolbarConfigItem();
 
-    void    SetTopToolbar( int nSelType, USHORT nBarId );
-    USHORT  GetTopToolbar( int nSelType );  //USHRT_MAX: noch nicht eingetragen
+    virtual void            Commit();
+
+    void        SetTopToolbar( sal_Int32 nSelType, sal_uInt16 nBarId );
+    sal_uInt16  GetTopToolbar( sal_Int32 nSelType );    //USHRT_MAX: noch nicht eingetragen
 };
 
 #endif

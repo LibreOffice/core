@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:23:17 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
+#ifndef _SO_CLSIDS_HXX
+#include <so3/clsids.hxx>
+#endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -100,46 +102,36 @@
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
 #endif
-#ifndef _CFGID_H
-#include <cfgid.h>
-#endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _CFGSTR_HRC
-#include <cfgstr.hrc>
 #endif
 #ifndef _FLDUPDE_HXX
 #include <fldupde.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
-#define VERSION_01      1
-#define VERSION_02      2
-#define VERSION_03      3
-#define VERSION_04      4
-#define VERSION_05      5
-#define VERSION_06      6
-#define VERSION_07      7
-#define VERSION_08      8
-#define VERSION_09      9
-#define VERSION_10      10
-#define VERSION_11      11
-#define VERSION_12      12
-#define VERSION_13      13
-#define VERSION_14      14      //nFldUpdateFlags
-#define VERSION_15      15      //Insert-Flags auch fuer HTML
-#define VERSION_16      16      //Insert-Flags auch fuer HTML
-#define VERSION_17      17      //Preview flags AutoText + Index
-#define VERSION_18      18      //bDefaultFontsInCurrDocOnly
-#define MODCFG_VERSION  VERSION_18
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
+
+#define C2U(cChar) OUString::createFromAscii(cChar)
+#define GLOB_NAME_CALC      0
+#define GLOB_NAME_IMPRESS   1
+#define GLOB_NAME_DRAW      2
+#define GLOB_NAME_MATH      3
+#define GLOB_NAME_SIM       4
+#define GLOB_NAME_CHART     5
 
 SV_IMPL_PTRARR_SORT(InsCapOptArr, InsCaptionOptPtr)
-
 /* -----------------03.11.98 13:46-------------------
  *
  * --------------------------------------------------*/
-
 InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId) const
 {
     for (USHORT i = 0; i < Count(); i++ )
@@ -160,9 +152,26 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
  *
  * --------------------------------------------------*/
 
-const InsCaptionOpt* SwModuleOptions::GetCapOption(BOOL bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
+const InsCaptionOpt* SwModuleOptions::GetCapOption(
+    BOOL bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
 {
-    return bHTML ? aHTMLCapOptions.Find(eType, pOleId) : aCapOptions.Find(eType, pOleId);
+    if(bHTML)
+    {
+        DBG_ERROR("no caption option in sw/web!")
+        return 0;
+    }
+    else
+    {
+        sal_Bool bFound = FALSE;
+        if(eType == OLE_CAP && pOleId)
+        {
+            for( USHORT nId = 0; nId <= GLOB_NAME_CHART; nId++)
+                bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
+            if(!bFound)
+                return aInsertConfig.pOLEMiscOpt;
+        }
+        return aInsertConfig.pCapOptions->Find(eType, pOleId);
+    }
 }
 
 /* -----------------03.11.98 15:05-------------------
@@ -173,299 +182,83 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 {
     BOOL bRet = FALSE;
 
-    if (pOpt)
+    if(bHTML)
     {
-        InsCaptionOptArr& rArr = bHTML ? aHTMLCapOptions : aCapOptions;
+        DBG_ERROR("no caption option in sw/web!")
+    }
+    else if (pOpt)
+    {
+        sal_Bool bFound = FALSE;
+        if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
+        {
+            for( USHORT nId = 0; nId <= GLOB_NAME_CHART; nId++)
+                bFound = pOpt->GetOleId() == aInsertConfig.aGlobalNames[nId  ];
+            if(!bFound)
+            {
+                if(aInsertConfig.pOLEMiscOpt)
+                    *aInsertConfig.pOLEMiscOpt = *pOpt;
+                else
+                    aInsertConfig.pOLEMiscOpt = new InsCaptionOpt(*pOpt);
+            }
+        }
+
+        InsCaptionOptArr& rArr = *aInsertConfig.pCapOptions;
         InsCaptionOpt *pObj = rArr.Find(pOpt->GetObjType(), &pOpt->GetOleId());
 
         if (pObj)
         {
             *pObj = *pOpt;
-            SetDefault(FALSE);
         }
         else
             rArr.Insert(new InsCaptionOpt(*pOpt));
 
-        SetDefault(FALSE);
+        aInsertConfig.SetModified();
         bRet = TRUE;
     }
 
     return bRet;
 }
-
 /*-----------------13.01.97 12.44-------------------
 
 --------------------------------------------------*/
-
-int SwModuleOptions::Load(SvStream& rStream)
+SwModuleOptions::SwModuleOptions() :
+    aRevisionConfig(),
+    aInsertConfig(FALSE),
+    aWebInsertConfig(TRUE),
+    aTableConfig(FALSE),
+    aWebTableConfig(TRUE)
 {
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    int nRet;
-    SetDefault(FALSE);
-    UINT16 nVersion;
-    rStream >> nVersion;
-    if(nVersion >= VERSION_01)
-    {
-        UINT32 nColor;
-        UINT16 nVal;
-        rStream >>  nVal;
-//      nDefTab = nVal;
-
-        rStream >>  nVal;
-        nTblHMove = nVal;
-
-        rStream >>  nVal;
-        nTblVMove = nVal;
-
-        rStream >> nVal;
-        nTblHInsert = nVal;
-
-        rStream >> nVal;
-        nTblVInsert = nVal;
-
-        BYTE bVal;
-        rStream >> bVal;
-//      eUserMetric = (FieldUnit)bVal;
-        if (nVersion >= VERSION_08)
-        {
-            rStream >> bVal;
-//          eWebUserMetric = (FieldUnit)bVal;
-        }
-
-
-        rStream >> bVal;
-        eTblChgMode = (TblChgMode)bVal;
-
-        if ( nVersion >= VERSION_02 )
-        {
-            rStream >> bVal;
-            bGrfToGalleryAsLnk = BOOL(bVal);
-        }
-        if ( nVersion >= VERSION_03 )
-        {
-            rStream >> bVal;
-            nMailingFormats = bVal;
-
-            rStream >> bVal;
-            bSinglePrintJob = BOOL(bVal);
-
-            rStream >> bVal;
-            bNumAlignSize = BOOL(bVal);
-        }
-
-        if ( nVersion >= VERSION_04 )
-        {
-            rStream >> bVal;
-            bNameFromColumn = bVal;
-
-            rStream.ReadByteString(sMailingPath, eEncoding);
-            rStream.ReadByteString(sMailName, eEncoding);
-        }
-        if ( nVersion >= VERSION_05 )
-        {
-
-            rStream >> nVal;    aInsertAttr.nItemId = nVal;
-            rStream >> nVal;    aInsertAttr.nAttr = nVal;
-            rStream >> nColor;  aInsertAttr.nColor = nColor;
-
-            rStream >> nVal;    aDeletedAttr.nItemId = nVal;
-            rStream >> nVal;    aDeletedAttr.nAttr = nVal;
-            rStream >> nColor;  aDeletedAttr.nColor = nColor;
-
-            rStream >> nVal;    nMarkAlign = nVal;
-            rStream >> nColor;  aMarkColor.SetColor(nColor);
-        }
-
-        if( nVersion >= VERSION_06 )
-        {
-            rStream >> nVal;    aFormatAttr.nItemId = nVal;
-            rStream >> nVal;    aFormatAttr.nAttr = nVal;
-            rStream >> nColor;  aFormatAttr.nColor = nColor;
-        }
-
-        if( nVersion >= VERSION_07 )
-            rStream.ReadByteString(sWordDelimiter, eEncoding);
-
-        if (nVersion >= VERSION_09)
-        {
-            rStream >> bVal;    bInsWithCaption = bVal;
-            if (nVersion == VERSION_09)
-                rStream >> bVal;    // Flag gibts nicht mehr
-
-            if (nVersion < VERSION_13)
-            {   // Flags gibts nicht mehr
-                rStream >> bVal;
-                rStream >> bVal;
-            }
-
-            rStream >> nVal;
-            InsCaptionOpt aOpt;
-
-            for (USHORT i = 0; i < nVal; i++)
-            {
-                rStream >> aOpt;
-                aCapOptions.Insert(new InsCaptionOpt(aOpt));
-            }
-        }
-
-        if (nVersion >= VERSION_10)
-        {
-            if (nVersion < VERSION_13)
-                rStream >> bVal;    // Flag gibts nicht mehr
-
-            if (nVersion >= VERSION_11)
-            {
-                rStream >> bVal;    bInsTblFormatNum = bVal;
-                rStream >> bVal;    bInsTblAlignNum = bVal;
-                rStream >> nVal;    //nLinkMode = nVal;
-
-                if (nVersion == VERSION_12)
-                    rStream >> bVal;    // Flag gibts nicht mehr
-
-                if (nVersion >= VERSION_13)
-                {
-                    rStream >> nVal;    nInsTblFlags = nVal;
-                }
-                if(nVersion >= VERSION_14)
-                {
-                    rStream>> nVal; //nFldUpdateFlags = nVal;
-                }
-//              else
-//                  nFldUpdateFlags = AUTOUPD_OFF;
-                if(nVersion >= VERSION_15)
-                {
-                    rStream >> bVal; bHTMLInsWithCaption = bVal;
-                    rStream >> bVal; bHTMLInsTblFormatNum = bVal;
-                    rStream >> bVal; bHTMLInsTblAlignNum = bVal;
-                    rStream >> nVal; nHTMLInsTblFlags = nVal;
-                    rStream >> nVal;
-                    InsCaptionOpt aOpt;
-
-                    for (USHORT i = 0; i < nVal; i++)
-                    {
-                        rStream >> aOpt;
-                        aHTMLCapOptions.Insert(new InsCaptionOpt(aOpt));
-                    }
-                }
-                else
-                {
-                    bHTMLInsWithCaption = bHTMLInsTblAlignNum = FALSE;
-                    bHTMLInsTblFormatNum = TRUE;
-                    nHTMLInsTblFlags = ALL_TBL_INS_ATTR;
-                }
-
-                if( nVersion >= VERSION_16)
-                {
-                    rStream >> bVal;    bInsTblChangeNumFormat = bVal;
-                    rStream >> bVal;    bHTMLInsTblChangeNumFormat = bVal;
-                    if(nVersion >= VERSION_17)
-                    {
-                        rStream >> bVal;      bShowAutoTextPreview = bVal;
-                        rStream >> bVal;      bShowIndexPreview = bVal;
-                        if(nVersion >= VERSION_18)
-                        {
-                            rStream >> bVal;      bDefaultFontsInCurrDocOnly = bVal;
-                        }
-                    }
-                }
-            }
-        }
-
-        nRet = SfxConfigItem::ERR_OK;
-    }
-    else
-        nRet = SfxConfigItem::WARNING_VERSION;
-
-    return nRet;
+    aRevisionConfig.Load();
 }
+/* -----------------------------10.10.00 16:22--------------------------------
 
-/*-----------------13.01.97 12.44-------------------
-
---------------------------------------------------*/
-
-BOOL SwModuleOptions::Store(SvStream& rStream)
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwRevisionConfig::GetPropertyNames()
 {
-    rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
-    rStream << (UINT16) MODCFG_VERSION;
-    rStream << (UINT16) 0;//nDefTab;
-    rStream << (UINT16) nTblHMove;
-    rStream << (UINT16) nTblVMove;
-    rStream << (UINT16) nTblHInsert;
-    rStream << (UINT16) nTblVInsert;
-    rStream << (BYTE)   0;//eUserMetric;
-    rStream << (BYTE)   0;//eWebUserMetric;
-    rStream << (BYTE)   eTblChgMode;
-    rStream << (BYTE)   bGrfToGalleryAsLnk;
-    rStream << (BYTE)   nMailingFormats;
-    rStream << (BYTE)   bSinglePrintJob;
-    rStream << (BYTE)   bNumAlignSize;
-    rStream << (BYTE)   bNameFromColumn;
-    rStream.WriteByteString(sMailingPath, eEncoding);
-    rStream.WriteByteString(sMailName, eEncoding);
-    rStream << (UINT16) aInsertAttr.nItemId;
-    rStream << (UINT16) aInsertAttr.nAttr;
-    rStream << (UINT32) aInsertAttr.nColor;
-    rStream << (UINT16) aDeletedAttr.nItemId;
-    rStream << (UINT16) aDeletedAttr.nAttr;
-    rStream << (UINT32) aDeletedAttr.nColor;
-    rStream << (UINT16) nMarkAlign;
-    rStream << (UINT32) aMarkColor.GetColor();
-    rStream << (UINT16) aFormatAttr.nItemId;
-    rStream << (UINT16) aFormatAttr.nAttr;
-    rStream << (UINT32) aFormatAttr.nColor;
-    rStream.WriteByteString(sWordDelimiter, eEncoding);
-    rStream << (BYTE)   bInsWithCaption;
-    rStream << (UINT16) aCapOptions.Count();
-    for (USHORT i = 0; i < aCapOptions.Count(); i++)
-        rStream << *aCapOptions[i];
-    rStream << (BYTE)   bInsTblFormatNum;
-    rStream << (BYTE)   bInsTblAlignNum;
-    rStream << (UINT16) 0;//nLinkMode;
-    rStream << (UINT16) nInsTblFlags;
-    rStream << (UINT16) 0;//nFldUpdateFlags;
-
-    rStream << (BYTE)   bHTMLInsWithCaption;
-    rStream << (BYTE)   bHTMLInsTblFormatNum;
-    rStream << (BYTE)   bHTMLInsTblAlignNum;
-    rStream << (UINT16) nHTMLInsTblFlags;
-    rStream << (UINT16) aHTMLCapOptions.Count();
-    for( i = 0; i < aHTMLCapOptions.Count(); i++)
-        rStream << *aHTMLCapOptions[i];
-    rStream << (BYTE)   bHTMLInsTblChangeNumFormat;
-    rStream << (BYTE)   bInsTblChangeNumFormat;
-
-    rStream << (BYTE)   bShowAutoTextPreview;
-    rStream << (BYTE)   bShowIndexPreview;
-
-    rStream << (BYTE)    bDefaultFontsInCurrDocOnly;
-    return SfxConfigItem::ERR_OK;
+    static const char* aPropNames[] =
+    {
+        "TextDisplay/Insert/Attribute",             // 0
+        "TextDisplay/Insert/Color",                 // 1
+        "TextDisplay/Delete/Attribute",             // 2
+        "TextDisplay/Delete/Color",                 // 3
+        "TextDisplay/ChangedAttribute/Attribute",   // 4
+        "TextDisplay/ChangedAttribute/Color",       // 5
+        "LinesChanged/Mark",                        // 6
+        "LinesChanged/Color"                        // 7
+    };
+    const int nCount = 8;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
 }
-/*-----------------13.01.97 12.44-------------------
+/*-- 10.10.00 16:22:22---------------------------------------------------
 
---------------------------------------------------*/
-
-void SwModuleOptions::UseDefault()
+  -----------------------------------------------------------------------*/
+SwRevisionConfig::SwRevisionConfig() :
+    ConfigItem(C2U("Office.Writer/Revision"))
 {
-/*  MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    if(MEASURE_METRIC != eSys)
-    {
-        eUserMetric = eWebUserMetric = FUNIT_INCH;
-        nDefTab = 720;                  // 1/2"
-        nTblHMove = nTblVMove = 360;    // 1/4"
-        nTblHInsert = 360;              // 1/4"
-        nTblVInsert = 1440;             // 1"
-    }
-    else
-    {
-        eUserMetric = eWebUserMetric = FUNIT_CM;
-        nDefTab = 709;                  // 1,25 cm
-        nTblHMove = nTblVMove = MM50;   // 0,5  cm
-        nTblHInsert = MM50;             // 0,5  cm
-        nTblVInsert = 1415;             // 2,5  cm
-    }*/
-
-    eTblChgMode = TBLVAR_CHGABS;
-
     aInsertAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;
     aInsertAttr.nAttr = UNDERLINE_SINGLE;
     aInsertAttr.nColor = COL_TRANSPARENT;
@@ -475,102 +268,613 @@ void SwModuleOptions::UseDefault()
     aFormatAttr.nItemId = SID_ATTR_CHAR_WEIGHT;
     aFormatAttr.nAttr = WEIGHT_BOLD;
     aFormatAttr.nColor = COL_BLACK;
-    nMarkAlign = HORI_OUTSIDE;
-    aMarkColor.SetColor(COL_BLACK);
-
-    bGrfToGalleryAsLnk = TRUE;
-
-    nMailingFormats = TXTFORMAT_OFFICE;
-    bNumAlignSize = TRUE;
-    bSinglePrintJob = FALSE;
-    bNameFromColumn = FALSE;
-
-    sWordDelimiter = String::CreateFromAscii("() \t\xa\x1");
-
-    bHTMLInsWithCaption = bInsWithCaption = FALSE;
-
-    nHTMLInsTblFlags = nInsTblFlags = ALL_TBL_INS_ATTR;
-    bHTMLInsTblFormatNum = bInsTblFormatNum = TRUE;
-    bHTMLInsTblChangeNumFormat = bInsTblChangeNumFormat = TRUE;
-    bHTMLInsTblAlignNum = bInsTblAlignNum = TRUE;
-
-//  nLinkMode = MANUAL;
-//  nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
-
-    bShowAutoTextPreview = TRUE;
-    bShowIndexPreview = TRUE;
-
-    bDefaultFontsInCurrDocOnly = FALSE;
-
-    aCapOptions.DeleteAndDestroy( 0, aCapOptions.Count() );
-    aHTMLCapOptions.DeleteAndDestroy( 0, aCapOptions.Count() );
-
-    SfxConfigItem::UseDefault();
+    Load();
 }
+/*-- 10.10.00 16:22:23---------------------------------------------------
 
-/*-----------------13.01.97 12.44-------------------
-
---------------------------------------------------*/
-
-SwModuleOptions::SwModuleOptions() :
-    SfxConfigItem( CFG_SW_MODULE )
+  -----------------------------------------------------------------------*/
+SwRevisionConfig::~SwRevisionConfig()
 {
-    UseDefault();
 }
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
-/*-----------------13.01.97 13.11-------------------
-
---------------------------------------------------*/
-
-String SwModuleOptions::GetName() const
+  -----------------------------------------------------------------------*/
+void SwRevisionConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
 {
-    return String(SW_RES(STR_CFG_MODULE));
+    Load();
 }
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
-/*--------------------------------------------------------------------
+  -----------------------------------------------------------------------*/
+void SwRevisionConfig::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
 
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:33  hr
-    initial import
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        sal_Int32 nVal = -1;
+        switch(nProp)
+        {
+            case 0 : nVal = aInsertAttr.nAttr   ; break;
+            case 1 : nVal = aInsertAttr.nColor  ; break;
+            case 2 : nVal = aDeletedAttr.nAttr  ; break;
+            case 3 : nVal = aDeletedAttr.nColor ; break;
+            case 4 : nVal = aFormatAttr.nAttr   ; break;
+            case 5 : nVal = aFormatAttr.nColor  ; break;
+            case 6 : nVal = nMarkAlign          ; break;
+            case 7 : nVal = aMarkColor.GetColor(); break;
+        }
+        pValues[nProp] <<= nVal;
+    }
+    PutProperties(aNames, aValues);
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
-    Revision 1.34  2000/09/18 16:05:15  willem.vandorp
-    OpenOffice header added.
+  -----------------------------------------------------------------------*/
+void SwRevisionConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                sal_Int32 nVal;
+                pValues[nProp] >>= nVal;
+                switch(nProp)
+                {
+                    case 0 : aInsertAttr.nAttr      = nVal; break;
+                    case 1 : aInsertAttr.nColor     = nVal; break;
+                    case 2 : aDeletedAttr.nAttr     = nVal; break;
+                    case 3 : aDeletedAttr.nColor    = nVal; break;
+                    case 4 : aFormatAttr.nAttr      = nVal; break;
+                    case 5 : aFormatAttr.nColor     = nVal; break;
+                    case 6 : nMarkAlign             = nVal; break;
+                    case 7 : aMarkColor.SetColor(nVal); break;
+                }
+            }
+        }
+    }
+}
+/* -----------------------------10.10.00 16:22--------------------------------
 
-    Revision 1.33  2000/07/20 13:16:58  jp
-    change old txtatr-character to the two new characters
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwInsertConfig::GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Table/Header",                                 // 0
+        "Table/RepeatHeader",                           // 1
+        "Table/Border",                                 // 2
+        "Table/Split",                                  // 3 from here not in writer/web
+        "Caption/Automatic",                            // 4
+        "Caption/StarWriterObject/Table/Category",      // 5
+        "Caption/StarWriterObject/Table/Numbering",     // 6
+        "Caption/StarWriterObject/Table/CaptionText",   // 7
+        "Caption/StarWriterObject/Table/Delimiter",     // 8
+        "Caption/StarWriterObject/Table/Level",         // 9
+        "Caption/StarWriterObject/Table/Position",      //10
+        "Caption/StarWriterObject/Frame/Category",      //11
+        "Caption/StarWriterObject/Frame/Numbering",     //12
+        "Caption/StarWriterObject/Frame/CaptionText",   //13
+        "Caption/StarWriterObject/Frame/Delimiter",     //14
+        "Caption/StarWriterObject/Frame/Level",         //15
+        "Caption/StarWriterObject/Frame/Position",      //16
+        "Caption/StarWriterObject/Graphic/Category",    //17
+        "Caption/StarWriterObject/Graphic/Numbering",   //18
+        "Caption/StarWriterObject/Graphic/CaptionText", //19
+        "Caption/StarWriterObject/Graphic/Delimiter",   //20
+        "Caption/StarWriterObject/Graphic/Level",       //21
+        "Caption/StarOfficeObject/Calc/Category",       //22
+        "Caption/StarOfficeObject/Calc/Numbering",      //23
+        "Caption/StarOfficeObject/Calc/CaptionText",    //24
+        "Caption/StarOfficeObject/Calc/Delimiter",      //25
+        "Caption/StarOfficeObject/Calc/Level",          //26
+        "Caption/StarOfficeObject/Calc/Position",       //27
+        "Caption/StarOfficeObject/Impress/Category",    //28
+        "Caption/StarOfficeObject/Impress/Numbering",   //29
+        "Caption/StarOfficeObject/Impress/CaptionText", //30
+        "Caption/StarOfficeObject/Impress/Delimiter",   //31
+        "Caption/StarOfficeObject/Impress/Level",       //32
+        "Caption/StarOfficeObject/Impress/Position",    //33
+        "Caption/StarOfficeObject/Chart/Category",      //34
+        "Caption/StarOfficeObject/Chart/Numbering",     //35
+        "Caption/StarOfficeObject/Chart/CaptionText",   //36
+        "Caption/StarOfficeObject/Chart/Delimiter",     //37
+        "Caption/StarOfficeObject/Chart/Level",         //38
+        "Caption/StarOfficeObject/Chart/Position",      //39
+        "Caption/StarOfficeObject/Image/Category",      //40
+        "Caption/StarOfficeObject/Image/Numbering",     //41
+        "Caption/StarOfficeObject/Image/CaptionText",   //42
+        "Caption/StarOfficeObject/Image/Delimiter",     //43
+        "Caption/StarOfficeObject/Image/Level",         //44
+        "Caption/StarOfficeObject/Image/Position",      //45
+        "Caption/StarOfficeObject/Formula/Category",    //46
+        "Caption/StarOfficeObject/Formula/Numbering",   //47
+        "Caption/StarOfficeObject/Formula/CaptionText", //48
+        "Caption/StarOfficeObject/Formula/Delimiter",   //49
+        "Caption/StarOfficeObject/Formula/Level",       //50
+        "Caption/StarOfficeObject/Formula/Position",    //51
+        "Caption/StarOfficeObject/Draw/Category",       //52
+        "Caption/StarOfficeObject/Draw/Numbering",      //53
+        "Caption/StarOfficeObject/Draw/CaptionText",    //54
+        "Caption/StarOfficeObject/Draw/Delimiter",      //55
+        "Caption/StarOfficeObject/Draw/Level",          //56
+        "Caption/StarOfficeObject/Draw/Position",       //57
+        "Caption/StarOfficeObject/OLEMisc/Category",    //58
+        "Caption/StarOfficeObject/OLEMisc/Numbering",   //59
+        "Caption/StarOfficeObject/OLEMisc/CaptionText", //60
+        "Caption/StarOfficeObject/OLEMisc/Delimiter",   //61
+        "Caption/StarOfficeObject/OLEMisc/Level",       //62
+        "Caption/StarOfficeObject/OLEMisc/Position",    //63
+    };
+    const int nCount = bIsWeb ? 3: 64;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
+}
+/*-- 10.10.00 16:22:22---------------------------------------------------
 
-    Revision 1.32  2000/06/13 13:22:43  os
-    #75770# Doc only flag in standard font TabPage now persistent
+  -----------------------------------------------------------------------*/
+SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/Insert") : C2U("Office.Writer/Insert")),
+    bIsWeb(bWeb),
+    pCapOptions(0),
+    pOLEMiscOpt(0)
+{
+    aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);;
+    aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
+    aGlobalNames[GLOB_NAME_DRAW   ] = SvGlobalName(SO3_SDRAW_CLASSID);
+    aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
+    aGlobalNames[GLOB_NAME_SIM    ] = SvGlobalName(SO3_SIM_CLASSID);
+    aGlobalNames[GLOB_NAME_CHART  ] = SvGlobalName(SO3_SCH_CLASSID);
+    if(!bIsWeb)
+        pCapOptions = new InsCaptionOptArr;
+    Load();
+}
+/*-- 10.10.00 16:22:23---------------------------------------------------
 
-    Revision 1.31  2000/05/18 14:57:43  os
-    append CH_TXTATR instead of 0xff in CreateFromAscii
+  -----------------------------------------------------------------------*/
+SwInsertConfig::~SwInsertConfig()
+{
+    delete pCapOptions;
+    delete pOLEMiscOpt;
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
-    Revision 1.30  2000/04/11 08:02:23  os
-    UNICODE
+  -----------------------------------------------------------------------*/
+void SwInsertConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+{
+    Load();
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
-    Revision 1.29  2000/02/11 14:43:50  hr
-    #70473# changes for unicode ( patched by automated patchtool )
+  -----------------------------------------------------------------------*/
+void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
+{
+    switch(nOffset)
+    {
+        case 0: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
+        case 1: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
+        case 2: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
+        case 3: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
+        case 4: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
+        case 5: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
+    }
+}
+//-----------------------------------------------------------------------------
+void SwInsertConfig::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
 
-    Revision 1.28  1999/12/29 07:54:07  os
-    #71320# flags for AutoText and index preview
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        sal_Int32 nVal = -1;
+        const InsCaptionOpt* pWriterTableOpt = 0;
+        const InsCaptionOpt* pWriterFrameOpt = 0;
+        const InsCaptionOpt* pWriterGraphicOpt = 0;
+        const InsCaptionOpt* pOLECalcOpt = 0;
+        const InsCaptionOpt* pOLEImpressOpt = 0;
+        const InsCaptionOpt* pOLEChartOpt = 0;
+        const InsCaptionOpt* pOLEImageOpt = 0;
+        const InsCaptionOpt* pOLEFormulaOpt = 0;
+        const InsCaptionOpt* pOLEDrawOpt = 0;
+        if(pCapOptions)
+        {
+            pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
+            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
+            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
+            pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
+            pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
+            pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
+            pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
+            pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
+            pOLEImageOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_SIM    ]);
+        }
+        switch(nProp)
+        {
+            case  0:
+            {
+                sal_Bool bVal = 0 !=(nInsTblFlags&HEADLINE); pValues[nProp].setValue(&bVal, rType);
+            }
+            break;//"Table/Header",
+            case  1:
+            {
+                sal_Bool bVal = 0 !=(nInsTblFlags&REPEAT); pValues[nProp].setValue(&bVal, rType);
+            }
+            break;//"Table/RepeatHeader",
+            case  2:
+            {
+                sal_Bool bVal = 0 !=(nInsTblFlags&DEFAULT_BORDER ); pValues[nProp].setValue(&bVal, rType);
+            }
+            break;//"Table/Border",
+            case  3:
+            {
+                sal_Bool bVal = 0 !=(nInsTblFlags&SPLIT_LAYOUT); pValues[nProp].setValue(&bVal, rType);
+            }
+            break;//"Table/Split",
+            case  4: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
 
-    Revision 1.27  1999/04/20 16:58:38  JP
-    Task #65061#: neu: ZahlenFormaterkennung abschaltbar
+            case  5: case  6: case  7: case  8: case  9: case 10: //"Caption/StarWriterObject/Table/Position",
+                    if(pWriterTableOpt)
+                        lcl_WriteOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
+            break;
+            case 11: case 12: case 13: case 14: case 15: case 16:
+                    if(pWriterFrameOpt)
+                        lcl_WriteOpt(*pWriterFrameOpt, pValues, nProp, nProp - 11);
+            case 17: case 18: case 19: case 20: case 21:
+                    if(pWriterGraphicOpt)
+                        lcl_WriteOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 17);
+                    break;
+            case 22: case 23: case 24: case 25: case 26: case 27:
+                    if(pOLECalcOpt)
+                        lcl_WriteOpt(*pOLECalcOpt, pValues, nProp, nProp - 22);
+            break;
+            case 28: case 29: case 30: case 31: case 32:
+            case 33:
+                    if(pOLEImpressOpt)
+                        lcl_WriteOpt(*pOLEImpressOpt, pValues, nProp, nProp - 28);
+            break;
+            case 34: case 35: case 36: case 37: case 38: case 39:
+                    if(pOLEChartOpt)
+                        lcl_WriteOpt(*pOLEChartOpt, pValues, nProp, nProp - 34);
+            break;
+            case 40: case 41: case 42: case 43: case 44: case 45:
+                    if(pOLEImageOpt)
+                        lcl_WriteOpt(*pOLEImageOpt, pValues, nProp, nProp - 40);
+            break;
+            case 46: case 47: case 48: case 49: case 50: case 51:
+                    if(pOLEFormulaOpt)
+                        lcl_WriteOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 46);
+            break;
+            case 52: case 53: case 54:  case 55: case 56: case 57:
+                    if(pOLEDrawOpt)
+                        lcl_WriteOpt(*pOLEDrawOpt, pValues, nProp, nProp - 52);
+            break;
+            case 58: case 59: case 60: case 61: case 62: case 63:
+                    if(pOLEMiscOpt)
+                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - 58);
+            break;
+        }
+    }
+    PutProperties(aNames, aValues);
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
+{
+    switch(nOffset)
+    {
+        case 0:
+        {
+            OUString sTemp; pValues[nProp] >>= sTemp;
+            rOpt.SetCategory(sTemp);
+        }
+        break;//Category
+        case 1:
+        {
+            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            rOpt.SetNumType(nTemp);
+        }
+        break;//Numbering",
+        case 2:
+        {
+            OUString sTemp; pValues[nProp] >>= sTemp;
+            rOpt.SetCaption(sTemp);
+        }
+        break;//CaptionText",
+        case 3:
+        {
+            OUString sTemp; pValues[nProp] >>= sTemp;
+            if(sTemp.getLength())
+                rOpt.SetSeparator(sTemp[0]);
+        }
+        break;//Delimiter",
+        case 4:
+        {
+            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            rOpt.SetLevel(nTemp);
+        }
+        break;//Level",
+        case 5:
+        {
+            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            rOpt.SetPos(nTemp);
+        }
+        break;//Position",
+    }
+}
+//-----------------------------------------------------------------------------
+void SwInsertConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        InsCaptionOpt* pWriterTableOpt = 0;
+        InsCaptionOpt* pWriterFrameOpt = 0;
+        InsCaptionOpt* pWriterGraphicOpt = 0;
+        InsCaptionOpt* pOLECalcOpt = 0;
+        InsCaptionOpt* pOLEImpressOpt = 0;
+        InsCaptionOpt* pOLEChartOpt = 0;
+        InsCaptionOpt* pOLEImageOpt = 0;
+        InsCaptionOpt* pOLEFormulaOpt = 0;
+        InsCaptionOpt* pOLEDrawOpt = 0;
+        if(pCapOptions)
+        {
+            pWriterTableOpt = pCapOptions->Find(TABLE_CAP, 0);
+            pWriterFrameOpt = pCapOptions->Find(FRAME_CAP, 0);
+            pWriterGraphicOpt = pCapOptions->Find(GRAPHIC_CAP, 0);
+            pOLECalcOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
+            pOLEImpressOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
+            pOLEDrawOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW   ]);
+            pOLEFormulaOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH   ]);
+            pOLEChartOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART  ]);
+            pOLEImageOpt = pCapOptions->Find(OLE_CAP, &aGlobalNames[GLOB_NAME_SIM    ]);
+        }
+        else if(aNames.getLength() > 2)
+            return;
 
-      Rev 1.26   20 Apr 1999 18:58:38   JP
-   Task #65061#: neu: ZahlenFormaterkennung abschaltbar
+        nInsTblFlags = 0;
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case  0:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        if(bVal)
+                            nInsTblFlags|= HEADLINE;
+                    }
+                    break;//"Table/Header",
+                    case  1:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        if(bVal)
+                            nInsTblFlags|= REPEAT;
+                    }
+                    break;//"Table/RepeatHeader",
+                    case  2:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        if(bVal)
+                            nInsTblFlags|= DEFAULT_BORDER;
+                    }
+                    break;//"Table/Border",
+                    case  3:
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        if(bVal)
+                            nInsTblFlags|= SPLIT_LAYOUT;
+                    }
+                    break;//"Table/Split",
+                    case  5: case  6: case  7: case  8: case  9: case 10:
+                        if(!pWriterTableOpt)
+                        {
+                            pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
+                            pCapOptions->Insert(pWriterTableOpt);
+                        }
+                        lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
+                    break;
+                    case 11: case 12: case 13: case 14: case 15: case 16:
+                        if(!pWriterFrameOpt)
+                        {
+                            pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
+                            pCapOptions->Insert(pWriterFrameOpt);
+                        }
+                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - 11);
+                    case 17: case 18: case 19: case 20: case 21:
+                        if(!pWriterGraphicOpt)
+                        {
+                            pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
+                            pCapOptions->Insert(pWriterGraphicOpt);
+                        }
+                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 17);
+                        break;
+                    case 22: case 23: case 24: case 25: case 26: case 27:
+                        if(!pOLECalcOpt)
+                        {
+                            pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
+                            pCapOptions->Insert(pOLECalcOpt);
+                        }
+                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - 22);
+                    break;
+                    case 28: case 29: case 30: case 31: case 32:
+                    case 33:
+                        if(!pOLEImpressOpt)
+                        {
+                            pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
+                            pCapOptions->Insert(pOLEImpressOpt);
+                        }
+                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - 28);
+                    break;
+                    case 34: case 35: case 36: case 37: case 38: case 39:
+                        if(!pOLEChartOpt)
+                        {
+                            pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
+                            pCapOptions->Insert(pOLEChartOpt);
+                        }
+                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - 34);
+                    break;
+                    case 40: case 41: case 42: case 43: case 44: case 45:
+                        if(!pOLEImageOpt)
+                        {
+                            pOLEImageOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_SIM]);
+                            pCapOptions->Insert(pOLEImageOpt);
+                        }
+                        lcl_ReadOpt(*pOLEImageOpt, pValues, nProp, nProp - 40);
+                    break;
+                    case 46: case 47: case 48: case 49: case 50: case 51:
+                        if(!pOLEFormulaOpt)
+                        {
+                            pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
+                            pCapOptions->Insert(pOLEFormulaOpt);
+                        }
+                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 46);
+                    break;
+                    case 52: case 53: case 54:  case 55: case 56: case 57:
+                        if(!pOLEDrawOpt)
+                        {
+                            pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
+                            pCapOptions->Insert(pOLEDrawOpt);
+                        }
+                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 52);
+                    break;
+                    case 58: case 59: case 60: case 61: case 62: case 63:
+                        if(!pOLEMiscOpt)
+                        {
+                            pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
+                        }
+                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - 58);
+                    break;
 
-      Rev 1.25   15 Mar 1999 09:46:20   MA
-   #63047# neue Defaults
+                }
+            }
+        }
+    }
+}
+/* -----------------------------10.10.00 16:22--------------------------------
 
-      Rev 1.24   11 Mar 1999 23:56:40   JP
-   Task #63171#: Optionen fuer Feld-/LinkUpdate Doc oder Modul lokal
+ ---------------------------------------------------------------------------*/
+Sequence<OUString> SwTableConfig::GetPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "Shift/Row",                    //  0
+        "Shift/Column",                 //  1
+        "Insert/Row",                   //  2
+        "Insert/Column",                //  3
+        "Change/Effect",                //  4
+        "Input/NumberRecognition",      //  5
+        "Input/NumberFormatRecognition",//  6
+        "Input/Alignment"               //  7
+    };
+    const int nCount = 8;
+    Sequence<OUString> aNames(nCount);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < nCount; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    return aNames;
+}
+/*-- 10.10.00 16:22:22---------------------------------------------------
 
-      Rev 1.23   17 Feb 1999 08:37:56   OS
-   #58158# Einfuegen TabPage auch in HTML-Docs
+  -----------------------------------------------------------------------*/
+SwTableConfig::SwTableConfig(sal_Bool bWeb) :
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/Table") : C2U("Office.Writer/Table"))
+{
+    Load();
+}
+/*-- 10.10.00 16:22:23---------------------------------------------------
 
-*************************************************************************/
+  -----------------------------------------------------------------------*/
+SwTableConfig::~SwTableConfig()
+{
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void SwTableConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+{
+    Load();
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void SwTableConfig::Commit()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case 0 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblHMove); break;  //"Shift/Row",
+            case 1 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblVMove); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblHInsert); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblVInsert); break;   //"Insert/Column",
+            case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
+            case 5 : pValues[nProp].setValue(&bInsTblFormatNum, rType); break;  //"Input/NumberRecognition",
+            case 6 : pValues[nProp].setValue(&bInsTblChangeNumFormat, rType); break;  //"Input/NumberFormatRecognition",
+            case 7 : pValues[nProp].setValue(&bInsTblAlignNum, rType); break;  //"Input/Alignment"
+        }
+    }
+    PutProperties(aNames, aValues);
+}
+/*-- 10.10.00 16:22:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwTableConfig::Load()
+{
+    Sequence<OUString> aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    EnableNotification(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                sal_Int32 nTemp;
+                switch(nProp)
+                {
+                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (USHORT)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
+                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (USHORT)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
+                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
+                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
+                    case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
+                    case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue();  break;  //"Input/NumberRecognition",
+                    case 6 : bInsTblChangeNumFormat = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/NumberFormatRecognition",
+                    case 7 : bInsTblAlignNum = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/Alignment"
+                }
+            }
+        }
+    }
+}
 
