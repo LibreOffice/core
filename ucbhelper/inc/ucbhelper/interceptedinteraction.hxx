@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interceptedinteraction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:33:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 //_______________________________________________
 // namespace
@@ -95,7 +98,7 @@ namespace ucbhelper{
               only
             - or as base class if interactions must be modified.
  */
-class InterceptedInteraction : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionHandler >
+class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionHandler >
 {
     //-------------------------------------------
     // types
@@ -359,7 +362,7 @@ class InterceptedInteraction : public ::cppu::WeakImplHelper1< ::com::sun::star:
         /** @short  implements the default handling:
                     - intercept or forward to internal handler.
          */
-        void impl_handleDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE void impl_handleDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
 
         //---------------------------------------
         /** @short  implements the interception of requests.
@@ -379,7 +382,7 @@ class InterceptedInteraction : public ::cppu::WeakImplHelper1< ::com::sun::star:
             @return A identifier, which inidicates if the request was intercepted,
                     the continuation was found and selected ... or not.
          */
-        EInterceptionState impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
 };
 
 } // namespace ucbhelper
