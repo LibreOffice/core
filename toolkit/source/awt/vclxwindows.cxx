@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-19 13:15:50 $
+ *  last change: $Author: tbe $ $Date: 2002-07-03 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4461,7 +4461,7 @@ void VCLXMenuWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     DBG_ASSERT( m_pMenu, "VCLXMenuWindow::CreateAccessibleContext: no menu!" );
 
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu( this, m_pMenu, m_nIndexInParent, m_xParent );
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleMenu_old( this, m_pMenu, m_nIndexInParent, m_xParent );
 }
 
 // ::com::sun::star::lang::XUnoTunnel
