@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:53:49 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,16 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "Display ~border" ;
         Text[ english_us ] = "Display border in";
         Text[ portuguese ] = "Mostrar moldura em";
-        Text[ russian ] = "Ïîêàçàòü ğàìêè â öâåòå";
+        Text[ russian ] = "Ïîêàçàòü ğàìêó";
         Text[ greek ] = "ÅìöÜíéóç ğëáéóßïõ óôï";
         Text[ dutch ] = "Kader weergeven in";
-        Text[ french ] = "Afficher cadre dans";
-        Text[ spanish ] = "Mostrar borde en";
+        Text[ french ] = "Afficher le cadre";
+        Text[ spanish ] = "Mostrar borde";
         Text[ finnish ] = "Näytä reunus";
         Text[ italian ] = "Mostra cornice in";
         Text[ danish ] = "Vis ramme i";
         Text[ swedish ] = "Visa ~ram i";
-        Text[ polish ] = "Poka¿ ramkê w k~olorze";
+        Text[ polish ] = "Poka¿ ramkê";
         Text[ portuguese_brazilian ] = "Rahmen anzeigen in";
         Text[ japanese ] = "˜g‚ğ•\\¦";
         Text[ korean ] = "°æ°è¼± Ç¥½Ã";
@@ -192,11 +192,11 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ swedish ] = "Kopiera t~illbaka" ;
         Text [ danish ] = "Kopier tilbage" ;
         Text [ italian ] = "Ricopia all'indietro" ;
-        Text [ spanish ] = "Actualizar escenario con valores modificados" ;
-        Text [ french ] = "Recopier" ;
+        Text [ spanish ] = "Volver a copiar" ;
+        Text [ french ] = "~Recopier" ;
         Text [ dutch ] = "Terugkopiëren" ;
         Text [ portuguese ] = "Actualizar cenário com os valores da folha modificados" ;
-        Text[ chinese_simplified ] = "¸üĞÂ¹¤×÷±í·½°¸";
+        Text[ chinese_simplified ] = "¸´ÖÆ»ØÀ´";
         Text[ russian ] = "Îáğàòíîå êîïèğîâàíèå";
         Text[ polish ] = "Kopiuj z powrotem";
         Text[ japanese ] = "Œ³‚Ì’l‚É–ß‚·";
@@ -279,11 +279,11 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ danish ] = "Kopier hele arket" ;
         Text [ italian ] = "Copia intera tabella" ;
         Text [ spanish ] = "Copiar toda la hoja" ;
-        Text [ french ] = "Copier la feuille entière" ;
+        Text [ french ] = "~Copier la feuille entière" ;
         Text [ dutch ] = "Hele tabel kopiëren" ;
         Text [ portuguese ] = "Copiar tabela inteira" ;
         Text[ chinese_simplified ] = "¸´ÖÆÕû¸ö¹¤×÷±í";
-        Text[ russian ] = "Êîïèğîâàòü âñş òàáëèöó";
+        Text[ russian ] = "Êîïèğîâàòü âåñü ëèñò";
         Text[ polish ] = "Kopiuj ca³y arkusz";
         Text[ japanese ] = "•\\‘S‘Ì‚ğºËß°";
         Text[ chinese_traditional ] = "½Æ»s¾ã­Ó¤u§@ªí";
@@ -386,7 +386,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ portuguese_brazilian ] = "Name des Szenarios";
         Text[ portuguese ] = "Nome do cenário";
         Text[ danish ] = "Scenariets navn";
-        Text[ french ] = "Nom du scénario";
+        Text[ french ] = "~Nom du scénario";
         Text[ swedish ] = "~Namn på scenariot";
         Text[ dutch ] = "Naam van het scenario";
         Text[ spanish ] = "Nombre del escenario";
@@ -410,16 +410,16 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "~Kommentar" ;
         Text [ ENGLISH ] = "~Comment" ;
         Text [ ENGLISH_US ] = "Comment";
-        Text[ italian ] = "Commento";
+        Text[ italian ] = "~Commento";
         Text[ portuguese_brazilian ] = "Kommentar";
         Text[ portuguese ] = "Comentário";
         Text[ danish ] = "Kommentar";
-        Text[ french ] = "Commentaire";
+        Text[ french ] = "~Commentaire";
         Text[ swedish ] = "~Kommentar";
         Text[ dutch ] = "Commentaar";
         Text[ spanish ] = "Comentario";
         Text[ chinese_simplified ] = "×¢½â";
-        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ russian ] = "Êîììåíòàğèè";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "ºÒİÄ";
         Text[ chinese_traditional ] = "µù¸Ñ";
