@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 12:28:01 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ NameBuffer*     ExcDocument::pTabNames = NULL;
 
 static String lcl_GetVbaTabName( UINT16 n )
 {
-    String  aRet( RTL_CONSTASCII_STRINGPARAM( "__VBA__" ) );
+    String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
     aRet += String::CreateFromInt32( n );
     return aRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:04:28 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     if( !pExcRoot || !pExcRoot->pImpTabIdBuffer || !pExcRoot->pExtsheetBuffer )
         return;
 
-    String sStreamName( RTL_CONSTASCII_STRINGPARAM( pRevLogStreamName ) );
+    String sStreamName( pRevLogStreamName, RTL_TEXTENCODING_ASCII_US );
     SvStorage& rStorage = *pExcRoot->pRootStorage;
 
     if( !rStorage.IsContained( sStreamName ) || !rStorage.IsStream( sStreamName ) )

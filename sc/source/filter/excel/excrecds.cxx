@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-06 12:28:01 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2827,7 +2827,7 @@ ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRo
         }
     }
     else
-        pForm = new String( RTL_CONSTASCII_STRINGPARAM( "\"Internal Error: Unknown Numberformat!\"" ) );
+        pForm = new String( RTL_CONSTASCII_USTRINGPARAM( "\"Internal Error: Unknown Numberformat!\"" ) );
 
     nFormLen = ( BYTE ) pForm->Len();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-14 12:00:33 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,15 +285,15 @@ UINT16 ShrfmlaBuffer::Find( const ScAddress aAddr )
 
 String ShrfmlaBuffer::CreateName( const ScRange& r )
 {
-    String          aName( RTL_CONSTASCII_STRINGPARAM( SHRFMLA_BASENAME ) );
+    String          aName( RTL_CONSTASCII_USTRINGPARAM( SHRFMLA_BASENAME ) );
     aName += String::CreateFromInt32( r.aStart.Col() );
-    aName.AppendAscii( "_" );
+    aName.Append( '_' );
     aName += String::CreateFromInt32( r.aStart.Row() );
-    aName.AppendAscii( "_" );
+    aName.Append( '_' );
     aName += String::CreateFromInt32( r.aEnd.Col() );
-    aName.AppendAscii( "_" );
+    aName.Append( '_' );
     aName += String::CreateFromInt32( r.aEnd.Row() );
-    aName.AppendAscii( "_" );
+    aName.Append( '_' );
     aName += String::CreateFromInt32( r.aStart.Tab() );
 
     return aName;

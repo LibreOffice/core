@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:24:21 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,7 +1316,7 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
     XclObj::SaveCont( rStrm );
 
     // write only as embedded, not linked
-    String          aStorageName( RTL_CONSTASCII_STRINGPARAM( "MBD" ) );
+    String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
     UINT32          nPictureId = UINT32(this);
     sprintf( aBuf, "%08X", nPictureId );

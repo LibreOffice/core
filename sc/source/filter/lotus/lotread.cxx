@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ FltError ImportLotus::Read()
     UINT16      nCnt;
     String      aTabName;
     String      aBaseName;
-    String      aRef( RTL_CONSTASCII_STRINGPARAM( "temp" ) );
+    String      aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
     if( nTabs )
     {
         if( nTabs > 1 )

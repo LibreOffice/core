@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ String RootData::GetCondFormStyleName( const UINT16 n )
     if( n <= nLastCond )
         nCondRangeCnt++;
 
-    String  t( RTL_CONSTASCII_STRINGPARAM( "CndFrmStyl_" ) );
+    String  t( RTL_CONSTASCII_USTRINGPARAM( "CndFrmStyl_" ) );
 
     t += UniString::CreateFromInt32( nCondRangeCnt );
     t.AppendAscii( "_" );
@@ -815,7 +815,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( *rR.pA
         pName = new String( rIn.ReadUniString( eSrc, nName ) );
     else
     {
-        pName = new String( RTL_CONSTASCII_STRINGPARAM( "Scenery" ) );
+        pName = new String( RTL_CONSTASCII_USTRINGPARAM( "Scenery" ) );
         rIn.Ignore( 1 );
     }
 

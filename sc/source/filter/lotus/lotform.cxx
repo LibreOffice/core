@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:58:59 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                     aStack << aPool.Store( nRngIndex );
                 else
             {
-                    String  aText( RTL_CONSTASCII_STRINGPARAM( "NRREF " ) );
+                    String  aText( RTL_CONSTASCII_USTRINGPARAM( "NRREF " ) );
                     aText += aTmp;
                     aStack << aPool.Store( aText );
             }
@@ -605,7 +605,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                     aStack << aPool.Store( nRngIndex );
                 else
                 {
-                    String  aText( RTL_CONSTASCII_STRINGPARAM( "ABSNREF " ) );
+                    String  aText( RTL_CONSTASCII_USTRINGPARAM( "ABSNREF " ) );
                     aText += aTmp;
                     aStack << aPool.Store( aText );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:53:18 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,7 +1292,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
     sal_Bool bRet = sal_False;
-    String sStreamName( RTL_CONSTASCII_STRINGPARAM( pUserNamesStreamName ) );
+    String sStreamName( pUserNamesStreamName, RTL_TEXTENCODING_ASCII_US );
     SvStream* pSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
     DBG_ASSERT( pSvStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( pSvStrm )
@@ -1320,7 +1320,7 @@ void XclExpChangeTrack::Write()
 
     if( WriteUserNamesStream() )
     {
-        String sStreamName( RTL_CONSTASCII_STRINGPARAM( pRevLogStreamName ) );
+        String sStreamName( pRevLogStreamName, RTL_TEXTENCODING_ASCII_US );
         SvStorageStreamRef xSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
         DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
         if( xSvStrm.Is() )
