@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fme $ $Date: 2001-08-16 09:16:02 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:07:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..
 
 PRJNAME=smath3
 TARGET=smslots
-SDIEXPORT=smnew
+SDIEXPORT=smath
 SVSDIINC=$(PRJ)$/inc
 
 # --- Settings -----------------------------------------------------
@@ -80,7 +80,6 @@ SDINAME=$(TARGET)
 
 SVSDIDEPEND= \
     $(SOLARINCDIR)$/svxslots.ilb \
-    smnew.sdi \
     smath.sdi \
     smslots.sdi \
     $(SVSDIINC)$/starmath.hrc
