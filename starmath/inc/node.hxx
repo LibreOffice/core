@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-19 11:53:35 $
+ *  last change: $Author: tl $ $Date: 2001-07-20 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,13 +323,13 @@ class SmPolygonNode : public SmGraphicNode
 protected:
     SmPolygonNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmGraphicNode(eNodeType, rNodeToken),
-        aPolygon( (char) rNodeToken.cMathChar )
+        aPolygon( rNodeToken.cMathChar )
     {}
 
 public:
     SmPolygonNode(const SmToken &rNodeToken)
     :   SmGraphicNode(NPOLYGON, rNodeToken),
-        aPolygon( (char) rNodeToken.cMathChar )
+        aPolygon( rNodeToken.cMathChar )
     {}
 
     SmPolygon &                 GetPolygon() { return aPolygon; }

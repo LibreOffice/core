@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
+ *  last change: $Author: tl $ $Date: 2001-07-20 13:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2231,7 +2231,7 @@ void SmPolygonNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 void SmRootSymbolNode::DrawBar(OutputDevice &rDev, const Point &rPosition) const
 {
     // get polygon and rectangle
-    SmPolygon  aBarPoly = SmPolygon( (char) MS_BAR );
+    SmPolygon  aBarPoly = SmPolygon( MS_BAR );
 
     // extra length to close small (wedge formed) gap between root-sign and
     // horizontal bar
