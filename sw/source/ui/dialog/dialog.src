@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:10:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ CheckBox CB_READ_ONLY
     Text [ ENGLISH ] = "~Read only" ;
     Text [ norwegian ] = "~Skrivebeskyttet" ;
     Text [ italian ] = "~Sola lettura" ;
-    Text [ portuguese_brazilian ] = "~Só leitura" ;
+    Text [ portuguese_brazilian ] = "~S?leitura" ;
     Text [ portuguese ] = "~Só leitura" ;
     Text [ finnish ] = "~Vain luku" ;
     Text [ danish ] = "Skrivebeskyttet" ;
@@ -122,7 +122,7 @@ String STR_LINKEDIT_TEXT
     Text [ ENGLISH ] = "Edit links" ;
     Text [ norwegian ] = "Edit links" ;
     Text [ italian ] = "Modifica collegamenti" ;
-    Text [ portuguese_brazilian ] = "Editar ligações" ;
+    Text [ portuguese_brazilian ] = "Editar liga??s" ;
     Text [ portuguese ] = "Editar ligações" ;
     Text [ finnish ] = "Muokkaa linkkejä" ;
     Text [ danish ] = "Rediger kæder" ;
@@ -150,7 +150,7 @@ String STR_PATH_NOT_FOUND1
     Text [ English ] = "The directory '" ;
     Text [ norwegian ] = "The directory '" ;
     Text [ italian ] = "La cartella" ;
-    Text [ portuguese_brazilian ] = "O diretório" ;
+    Text [ portuguese_brazilian ] = "O diret?io" ;
     Text [ portuguese ] = "O directório '" ;
     Text [ finnish ] = "Hakemisto '" ;
     Text [ danish ] = "Biblioteket '" ;
@@ -179,7 +179,7 @@ String STR_PATH_NOT_FOUND2
     Text [ English ] = "' does not exist." ;
     Text [ norwegian ] = "' does not exist." ;
     Text [ italian ] = "' non esiste." ;
-    Text [ portuguese_brazilian ] = "' não existe." ;
+    Text [ portuguese_brazilian ] = "' n?o existe." ;
     Text [ portuguese ] = "' não existe." ;
     Text [ finnish ] = "Kohdetta ' ei ole." ;
     Text [ danish ] = "' eksisterer ikke." ;
