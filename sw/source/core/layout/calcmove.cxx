@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:07:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,9 +1290,23 @@ void SwCntntFrm::MakeAll()
         if ( !bValidPrtArea )
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
+            // --> OD 2004-09-28 #i34730# - keep current frame height
+            const SwTwips nOldH = (Frm().*fnRect->fnGetHeight)();
+            // <--
             MakePrtArea( rAttrs );
             if ( nOldW != (Prt().*fnRect->fnGetWidth)() )
                 Prepare( PREP_FIXSIZE_CHG );
+            // --> OD 2004-09-28 #i34730# - check, if frame height has changed.
+            // If yes, send a PREP_ADJUST_FRM and invalidate the size flag to
+            // force a format. The format will check in its method
+            // <SwTxtFrm::CalcPreps()>, if the already formatted lines still
+            // fit and if not, performs necessary actions.
+            if ( bValidSize && nOldH != (Frm().*fnRect->fnGetHeight)() )
+            {
+                Prepare( PREP_ADJUST_FRM );
+                bValidSize = FALSE;
+            }
+            // <--
         }
 
         if ( aOldFrmPos != (Frm().*fnRect->fnGetPos)() )
