@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:32:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
                             pView   ( NULL ),
                             rAttrs  ( rInAttrs )
 {
-    pExtOutDev = new ExtOutputDevice( this );
+    pExtOutDev = new XOutputDevice( this );
 
     SetMapMode( MAP_100TH_MM );
 
