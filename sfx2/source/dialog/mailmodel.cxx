@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: tra $ $Date: 2001-12-11 08:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,12 @@
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+#ifndef _VOS_THREAD_HXX_
+#include <vos/thread.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 #include <mailmodel.hxx>
 #include "bindings.hxx"
@@ -124,8 +130,11 @@
 #include "fcontnr.hxx"
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
+#include "sfxresid.hxx"
 
 #include "sfxsids.hrc"
+#include "mailwindow.hrc"
+#include "dialog.hrc"
 
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
@@ -148,6 +157,65 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::rtl;
+
+
+// class OThread
+class OMailSendThread : public ::vos::OThread
+{
+    public:
+        OMailSendThread(
+                Reference< XSimpleMailClient > xSimpleMailClient,
+                Reference< XSimpleMailMessage > xSimpleMailMessage,
+                long nSendFlags ) :
+            m_xSimpleMailClient( xSimpleMailClient ),
+            m_xSimpleMailMessage( xSimpleMailMessage ),
+            m_nSendFlags( nSendFlags ),
+            m_bSend( sal_False ) {}
+
+        virtual ~OMailSendThread();
+
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+
+    private:
+        long        m_nSendFlags;
+        sal_Bool    m_bSend;
+        Reference< XSimpleMailClient > m_xSimpleMailClient;
+        Reference< XSimpleMailMessage > m_xSimpleMailMessage;
+};
+
+OMailSendThread::~OMailSendThread()
+{
+}
+
+void SAL_CALL OMailSendThread::run()
+{
+    try
+    {
+        m_xSimpleMailClient->sendSimpleMailMessage( m_xSimpleMailMessage, m_nSendFlags );
+        m_bSend = sal_True;
+    }
+    catch ( IllegalArgumentException& )
+    {
+        m_bSend = sal_False;
+    }
+    catch ( Exception& )
+    {
+        m_bSend = sal_False;
+    }
+
+    if ( m_bSend == sal_False )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+        aBox.Execute();
+    }
+}
+
+void SAL_CALL OMailSendThread::onTerminated()
+{
+    delete this;
+}
 
 // class DefaultMailer_Impl ------------------------------------------------
 
@@ -617,27 +685,19 @@ sal_Bool SfxMailModel_Impl::Send()
 
                         xSimpleMailMessage->setSubject( maSubject );
                         xSimpleMailMessage->setAttachement( aAttachmentSeq );
-/*
-                        SfxViewFrame* pTopViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetTopViewFrame();
-                        SfxObjectShellRef xDocShell = pTopViewFrm->GetObjectShell();
-                        SvStorageRef xStorage = xDocShell->GetStorage();
-                        xDocShell->DoHandsOff();
-*/
-                        try
-                        {
-                            xSimpleMailClient->sendSimpleMailMessage( xSimpleMailMessage, nSendFlags );
-                            bSend = sal_True;
-                        }
-                        catch ( IllegalArgumentException& )
-                        {
-                            bSend = sal_False;
-                        }
-                        catch ( Exception& )
-                        {
-                            bSend = sal_False;
-                        }
 
-//                      xDocShell->DoSaveCompleted( xStorage );
+                        // Bugfix: #95743#
+                        // Due to the current clipboard implementation we cannot stop the main thread
+                        // because the clipboard implementation calls the main thread from another thread
+                        // and this would result in a deadlock!
+                        // Currently we create a thread to send a message and process all remaining error
+                        // handling in this thread!!
+
+                        OMailSendThread* pMailSendThread = new OMailSendThread( xSimpleMailClient, xSimpleMailMessage, nSendFlags );
+                        pMailSendThread->create();
+
+                        // Return always true as the real error handling occurss in the OMailSendThread-implementation!
+                        bSend = sal_True;
                     }
                 }
             }
