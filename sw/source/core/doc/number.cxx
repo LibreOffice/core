@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:41:31 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void SetNoNum( BYTE * nLvl, BOOL nVal )
 
 void SetLevel(BYTE * nLvl, BYTE nNewLevel)
 {
-    if (IsNum)
+    if (IsNum(*nLvl))
         *nLvl = nNewLevel;
     else
         *nLvl = nNewLevel | NO_NUMLEVEL;
