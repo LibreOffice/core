@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:09:02 $
+ *  last change: $Author: hr $ $Date: 2002-04-03 13:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ void OQueryController::clearFields()
     OTableFields().swap(m_vTableFieldDesc);
 }
 // -----------------------------------------------------------------------------
-FeatureState OQueryController::GetState(sal_uInt16 _nId)
+FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     aReturn.bEnabled = sal_True;
@@ -790,8 +790,8 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
     OStreamSection aSection(_rxOut.get());
 
     // some data
-    _rxOut << m_nSplitPos;
-    _rxOut << m_nVisibleRows;
+    _rxOut->writeLong(m_nSplitPos);
+    _rxOut->writeLong(m_nVisibleRows);
 
     // the fielddata
     OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
@@ -801,14 +801,14 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
         if(!(*aFieldIter)->IsEmpty())
             ++nCount;
     }
-    _rxOut << nCount;
+    _rxOut->writeLong(nCount);
     aFieldIter = m_vTableFieldDesc.begin();
     for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
     {
         if(!(*aFieldIter)->IsEmpty())
             (*aFieldIter)->Save(_rxOut);
     }
-    _rxOut << m_nVisibleRows;
+    _rxOut->writeLong(m_nVisibleRows);
 }
 // -----------------------------------------------------------------------------
 void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
@@ -818,15 +818,15 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
     try
     {
         // some data
-        _rxIn >> m_nSplitPos;
-        _rxIn >> m_nVisibleRows;
+        m_nSplitPos = _rxIn->readLong();
+        m_nVisibleRows = _rxIn->readLong();
 
         //////////////////////////////////////////////////////////////////////
         // Liste loeschen
         OTableFields().swap(m_vTableFieldDesc);
 
         sal_Int32 nCount = 0;
-        _rxIn >> nCount;
+        nCount = _rxIn->readLong();
         m_vTableFieldDesc.reserve(nCount);
         for(sal_Int32 j=0;j<nCount;++j)
         {
@@ -842,7 +842,7 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
     {
     }
     if(aSection.available())
-        _rxIn >> m_nVisibleRows;
+        m_nVisibleRows = _rxIn->readLong();
 }
 
 // -----------------------------------------------------------------------------
