@@ -104,18 +104,10 @@ public class AnyConverter
      */
     static public boolean isObject(Object object){
         boolean retVal= false;
-        if( object.getClass().getInterfaces().length > 0)
+        if (object instanceof Any)
+            object= ((Any) object).getObject();
+        if (object != null && object.getClass().getInterfaces().length > 0)
             retVal= true;
-        else
-        {
-            Type _t= new Type( object.getClass());
-            if( _t.getTypeClass() == TypeClass.ANY)
-            {
-                Any _any= (Any)object;
-                if( _any.getType().getTypeClass() == TypeClass.INTERFACE)
-                    retVal= true;
-            }
-        }
         return retVal;
     }
 
@@ -237,14 +229,19 @@ public class AnyConverter
         return (Type) convertSimple( TypeClass.TYPE, null, object);
     }
 
-    /** converts a UNO object an any containing a UNO object into a UNO object.
-        @param object the object to convert
-        @throws com.sun.star.lang.IllegalArgumentException in case no UNO object is contained within object.
-        @return the object contained within the object
+    /** converts a UNO object or an Any containing a UNO object into an UNO object of a specified type.
+     *  The argument <em>object</em> is examined for implemented interfaces. If it has implemented interfaces
+     *  then the method attempts to query for the interface specified by the <em>type</em> argument. That query
+     *  (UnoRuntime.queryInterface) might return null, if the interface is not implemented.
+     *
+     *  @param type the Type of the returned value
+     *  @param object the object that is to be converted
+     *  @return the object contained within the object
+     *  @throws com.sun.star.lang.IllegalArgumentException in case no UNO object is contained within object.
      */
     static public Object toObject(Type type, Object object)
         throws com.sun.star.lang.IllegalArgumentException{
-        return convertSimple( TypeClass.ANY,  type, object);
+        return convertSimple( TypeClass.INTERFACE,  type, object);
     }
 
     /** converts an array or an any containing an array into an array.
@@ -263,157 +260,133 @@ public class AnyConverter
     */
     static private boolean containsType( TypeClass what, Object object){
         boolean retVal= false;
-        Type _t= new Type( object.getClass());
+        if (object instanceof Any)
+            object= ((Any) object).getObject();
 
-        if( _t.getTypeClass() == TypeClass.ANY)
-        {
-            Any _any= (Any)object;
-            if( _any.getType().getTypeClass().getValue() == what.getValue())
-                retVal= true;
-        }
-        else if( _t.getTypeClass().getValue() == what.getValue())
+        Type _t= object == null ? new Type(void.class) : new Type( object.getClass());
+        if (_t.getTypeClass().getValue() == what.getValue())
             retVal= true;
+
         return retVal;
     }
 
     static private Object convertSimple( TypeClass destTClass, Type destType, Object src)
         throws com.sun.star.lang.IllegalArgumentException {
 
-        Type srcType= new Type( src.getClass());
         Object _src= src;
         int srcTypeValue=0;
-        // If |src| is an Any then we check if the  Any's Type matches the type
-        // of the contained object and obtain the object which is processed further on.
-        if( Any.class.isAssignableFrom( src.getClass()))
+
+        if (src instanceof Any)
+            _src= ((Any) src).getObject();
+
+        if (_src != null)
         {
-            Any _any = (Any)src;
-            _src= _any.getObject();
-            srcType= new Type( _src.getClass());
-            // If the Any's type in an interface then check if the Any's object member
-            // implements interfaces
-            if( _any.getType().getTypeClass() == TypeClass.INTERFACE)
-            {
-                if( _src.getClass().getInterfaces().length ==  0)
-                    throw new com.sun.star.lang.IllegalArgumentException(
-                        "The argument does not implement interfaces");
-                else
-                    srcTypeValue= TypeClass.ANY.getValue();
-            }
-            else if( srcType.getTypeClass().getValue() != _any.getType().getTypeClass().getValue())
-                // The Type of the object in the any must match the type in the any
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "The Type in the Any does not fit the Any's data");
-            else
-                srcTypeValue= srcType.getTypeClass().getValue();
-        }
-        else
-        {
-            // if we have an object
-            if( destTClass == TypeClass.ANY)
+            Type srcType= new Type(_src.getClass());
+
+            if( destTClass == TypeClass.INTERFACE)
             {
                 if( _src.getClass().getInterfaces().length == 0)
                     throw new com.sun.star.lang.IllegalArgumentException(
                         "The argument does not implement interfaces");
                 else
-                    srcTypeValue= TypeClass.ANY.getValue();
+                    srcTypeValue= TypeClass.INTERFACE.getValue();
             }
             else
-                srcTypeValue= srcType.getTypeClass().getValue();
-        }
+                srcTypeValue= new Type(_src.getClass()).getTypeClass().getValue();
 
-        switch( destTClass.getValue())
-        {
-        case TypeClass.CHAR_value:
-            if( srcTypeValue == TypeClass.CHAR_value)
-                return _src;
-            break;
-        case TypeClass.BOOLEAN_value:
-            if( srcTypeValue == TypeClass.BOOLEAN_value)
-                return _src;
-            break;
-        case TypeClass.BYTE_value:
-            if( srcTypeValue == TypeClass.BYTE_value)
-                return _src;
-            break;
-        case TypeClass.SHORT_value:
-            switch( srcTypeValue)
+            switch( destTClass.getValue())
             {
+            case TypeClass.CHAR_value:
+                if( srcTypeValue == TypeClass.CHAR_value)
+                    return _src;
+                break;
+            case TypeClass.BOOLEAN_value:
+                if( srcTypeValue == TypeClass.BOOLEAN_value)
+                    return _src;
+                break;
             case TypeClass.BYTE_value:
-                return new Short( ((Byte)_src).byteValue());
+                if( srcTypeValue == TypeClass.BYTE_value)
+                    return _src;
+                break;
             case TypeClass.SHORT_value:
-                return _src;
-            }
-            break;
-        case TypeClass.LONG_value:
-            switch( srcTypeValue)
-            {
-            case TypeClass.BYTE_value:
-                return new Integer( ((Byte)_src).byteValue());
-            case TypeClass.SHORT_value:
-                return new Integer( ((Short)_src).shortValue());
+                switch( srcTypeValue)
+                {
+                case TypeClass.BYTE_value:
+                    return new Short( ((Byte)_src).byteValue());
+                case TypeClass.SHORT_value:
+                    return _src;
+                }
+                break;
             case TypeClass.LONG_value:
-                return _src;
-            }
-            break;
-        case TypeClass.HYPER_value:
-            switch( srcTypeValue)
-            {
-            case TypeClass.BYTE_value:
-                return new Long( ((Byte)_src).byteValue());
-            case TypeClass.SHORT_value:
-                return new Long( ((Short)_src).shortValue());
-            case TypeClass.LONG_value:
-                return new Long( ((Integer)_src).intValue());
+                switch( srcTypeValue)
+                {
+                case TypeClass.BYTE_value:
+                    return new Integer( ((Byte)_src).byteValue());
+                case TypeClass.SHORT_value:
+                    return new Integer( ((Short)_src).shortValue());
+                case TypeClass.LONG_value:
+                    return _src;
+                }
+                break;
             case TypeClass.HYPER_value:
-                return _src;
-            }
-            break;
-        case TypeClass.FLOAT_value:
-            switch( srcTypeValue)
-            {
-            case TypeClass.BYTE_value:
-                return new Float( ((Byte)_src).byteValue());
-            case TypeClass.SHORT_value:
-                return new Float( ((Short)_src).shortValue());
+                switch( srcTypeValue)
+                {
+                case TypeClass.BYTE_value:
+                    return new Long( ((Byte)_src).byteValue());
+                case TypeClass.SHORT_value:
+                    return new Long( ((Short)_src).shortValue());
+                case TypeClass.LONG_value:
+                    return new Long( ((Integer)_src).intValue());
+                case TypeClass.HYPER_value:
+                    return _src;
+                }
+                break;
             case TypeClass.FLOAT_value:
-                return _src;
-            }
-            break;
-        case TypeClass.DOUBLE_value:
-            switch( srcTypeValue)
-            {
-            case TypeClass.BYTE_value:
-                return new Double( ((Byte)_src).byteValue());
-            case TypeClass.SHORT_value:
-                return new Double( ((Short)_src).shortValue());
-            case TypeClass.LONG_value:
-                return new Double( ((Integer)_src).intValue());
-            case TypeClass.FLOAT_value:
-                return new Double( ((Float)_src).floatValue());
+                switch( srcTypeValue)
+                {
+                case TypeClass.BYTE_value:
+                    return new Float( ((Byte)_src).byteValue());
+                case TypeClass.SHORT_value:
+                    return new Float( ((Short)_src).shortValue());
+                case TypeClass.FLOAT_value:
+                    return _src;
+                }
+                break;
             case TypeClass.DOUBLE_value:
-                return _src;
+                switch( srcTypeValue)
+                {
+                case TypeClass.BYTE_value:
+                    return new Double( ((Byte)_src).byteValue());
+                case TypeClass.SHORT_value:
+                    return new Double( ((Short)_src).shortValue());
+                case TypeClass.LONG_value:
+                    return new Double( ((Integer)_src).intValue());
+                case TypeClass.FLOAT_value:
+                    return new Double( ((Float)_src).floatValue());
+                case TypeClass.DOUBLE_value:
+                    return _src;
+                }
+                break;
+            case TypeClass.STRING_value:
+                if( srcTypeValue == TypeClass.STRING_value)
+                    return _src;
+                break;
+
+            case TypeClass.TYPE_value:
+                if( srcTypeValue == TypeClass.TYPE_value)
+                    return _src;
+                break;
+            case TypeClass.INTERFACE_value:
+                if( srcTypeValue == TypeClass.INTERFACE_value)
+                    return UnoRuntime.queryInterface( destType, _src);
+                break;
+            case TypeClass.SEQUENCE_value:
+                if( srcTypeValue == TypeClass.SEQUENCE_value)
+                    return _src;
+                break;
+
             }
-            break;
-        case TypeClass.STRING_value:
-            if( srcTypeValue == TypeClass.STRING_value)
-                return _src;
-            break;
-
-        case TypeClass.TYPE_value:
-            if( srcTypeValue == TypeClass.TYPE_value)
-                return _src;
-            break;
-        case TypeClass.ANY_value:
-            if( srcTypeValue == TypeClass.ANY_value)
-                return UnoRuntime.queryInterface( destType, _src);
-            break;
-        case TypeClass.SEQUENCE_value:
-            if( srcTypeValue == TypeClass.SEQUENCE_value)
-                return _src;
-            break;
-
         }
-
         throw new com.sun.star.lang.IllegalArgumentException(
             "The Argument did not hold the proper type");
     }
