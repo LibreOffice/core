@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: khendricks $ $Date: 2003-05-18 13:31:54 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:00:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,11 @@ DLLPRE =
 
 CFLAGS+=-I$(SOLARINCDIR)$/python
 
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
+# no -Bdirect for SunWS CC
+DIRECT = $(LINKFLAGSDEFS)
+.ENDIF
+
 .IF "$(GUI)" == "UNX"
 PYUNOLIB=-lpyuno
 PYTHONLIB=-lpython
@@ -129,7 +134,15 @@ ALL : ALLTAR \
 $(DLLDEST)$/%.py: %.py
     +cp $? $@
 
+# For Mac OS X,
+# The python loader component is linked against libpyuno.dylib,
+# which hasn't been delivered yet but dyld needs to know where it is
+# so regcomp can load the component.
 $(DLLDEST)$/pyuno_services.rdb : makefile.mk
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
+.IF "$(OS)"=="MACOSX"
+    +cd $(DLLDEST) && sh -c "DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(OUT)$/lib;export DYLD_LIBRARY_PATH;regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
+.ELSE
     +cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
+.ENDIF    # $(OS)=="MACOSX"
     +cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
