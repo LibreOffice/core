@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,9 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
     pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_SOLID ) );
     pXFSet->GetItemSet().Put( XFillColorItem( String(), RGB_Color( COL_WHITE ) ) );
-    pXOut->SetFillAttr( *pXFSet );
+
+//-/    pXOut->SetFillAttr( *pXFSet );
+    pXOut->SetFillAttr( pXFSet->GetItemSet() );
 
     // #73550#
     pXOut->OverrideLineColor( Color( COL_BLACK ) );
@@ -469,7 +471,10 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
     pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_HATCH ) );
     pXFSet->GetItemSet().Put( XFillHatchItem( String(), Get( nIndex )->GetHatch() ) );
-    pXOut->SetFillAttr( *pXFSet );
+
+//-/    pXOut->SetFillAttr( *pXFSet );
+    pXOut->SetFillAttr( pXFSet->GetItemSet() );
+
     pXOut->DrawRect( Rectangle( aZero, aVDSize ) );
 
     Bitmap* pBitmap = new Bitmap( pVD->GetBitmap( aZero, pVD->GetOutputSize() ) );

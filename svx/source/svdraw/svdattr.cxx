@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 09:38:35 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@
 #include <xflclit.hxx>
 #include <xlineit0.hxx>
 
+#ifndef _SVX3DITEMS_HXX
+#include <svx3ditems.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -153,9 +157,9 @@ SdrItemPool::SdrItemPool(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEn
 
 void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
 {
-#ifdef SDRDEFITEMCACHE
-    pDefLineAttr=NULL;
-#endif SDRDEFITEMCACHE
+//-/#ifdef SDRDEFITEMCACHE
+//-/    pDefLineAttr=NULL;
+//-/#endif SDRDEFITEMCACHE
 
     if (pMaster==NULL) {
         pMaster=this;
@@ -341,8 +345,67 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     for( i = SDRATTR_GRAFRESERVE3; i <= SDRATTR_GRAFRESERVE6; i++ )
         ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
     ppPoolDefaults[ SDRATTRSET_GRAF - SDRATTR_START ] = new SdrGrafSetItem( pMaster );
-
     pItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
+
+    // 3D Object Attr (28092000 AW)
+    ppPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new Svx3DPercentDiagonalItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new Svx3DBackscaleItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new Svx3DDepthItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new Svx3DHorizontalSegmentsItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new Svx3DVerticalSegmentsItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new Svx3DEndAngleItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new Svx3DDoubleSidedItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new Svx3DNormalsInvertItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_X - SDRATTR_START ] = new Svx3DTextureProjectionXItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_PROJ_Y - SDRATTR_START ] = new Svx3DTextureProjectionYItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_SHADOW_3D - SDRATTR_START ] = new Svx3DShadow3DItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_COLOR - SDRATTR_START ] = new Svx3DMaterialColorItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_EMISSION - SDRATTR_START ] = new Svx3DMaterialEmissionItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR - SDRATTR_START ] = new Svx3DMaterialSpecularItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY - SDRATTR_START ] = new Svx3DMaterialSpecularIntensityItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_KIND - SDRATTR_START ] = new Svx3DTextureKindItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new Svx3DTextureFilterItem;
+
+    for( i = SDRATTR_3DOBJ_RESERVED_01; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
+        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
+
+    // 3D Scene Attr (28092000 AW)
+    ppPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new Svx3DDistanceItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new Svx3DFocalLengthItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new Svx3DTwoSidedLightingItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new Svx3DLightcolor1Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new Svx3DLightcolor2Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_3 - SDRATTR_START ] = new Svx3DLightcolor3Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_4 - SDRATTR_START ] = new Svx3DLightcolor4Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_5 - SDRATTR_START ] = new Svx3DLightcolor5Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_6 - SDRATTR_START ] = new Svx3DLightcolor6Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_7 - SDRATTR_START ] = new Svx3DLightcolor7Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_8 - SDRATTR_START ] = new Svx3DLightcolor8Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_AMBIENTCOLOR - SDRATTR_START ] = new Svx3DAmbientcolorItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_1 - SDRATTR_START ] = new Svx3DLightOnOff1Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_2 - SDRATTR_START ] = new Svx3DLightOnOff2Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_3 - SDRATTR_START ] = new Svx3DLightOnOff3Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_4 - SDRATTR_START ] = new Svx3DLightOnOff4Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_5 - SDRATTR_START ] = new Svx3DLightOnOff5Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_6 - SDRATTR_START ] = new Svx3DLightOnOff6Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_7 - SDRATTR_START ] = new Svx3DLightOnOff7Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTON_8 - SDRATTR_START ] = new Svx3DLightOnOff8Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_1 - SDRATTR_START ] = new Svx3DLightDirection1Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_2 - SDRATTR_START ] = new Svx3DLightDirection2Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_3 - SDRATTR_START ] = new Svx3DLightDirection3Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_4 - SDRATTR_START ] = new Svx3DLightDirection4Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_5 - SDRATTR_START ] = new Svx3DLightDirection5Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_6 - SDRATTR_START ] = new Svx3DLightDirection6Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_7 - SDRATTR_START ] = new Svx3DLightDirection7Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_LIGHTDIRECTION_8 - SDRATTR_START ] = new Svx3DLightDirection8Item;
+    ppPoolDefaults[ SDRATTR_3DSCENE_SHADOW_SLANT - SDRATTR_START ] = new Svx3DShadowSlantItem;
+    ppPoolDefaults[ SDRATTR_3DSCENE_SHADE_MODE - SDRATTR_START ] = new Svx3DShadeModeItem;
+
+    for( i = SDRATTR_3DSCENE_RESERVED_01; i <= SDRATTR_3DSCENE_RESERVED_20; i++ )
+        ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
 
     ////////////////////////////////
 #ifdef DBG_UTIL
@@ -383,42 +446,42 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     }
 }
 
-void SdrItemPool::ImpMakeDefItems()
-{
-#ifdef SDRDEFITEMCACHE
-    if (pDefLineAttr==NULL) {
-        XLineAttrSetItem aLineSetItem(this);
-        pDefLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
-        aLineSetItem.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
-        pDefTextFrameLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
-
-        XFillAttrSetItem aFillSetItem(this);
-        pDefFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
-        aFillSetItem.GetItemSet().Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
-        aFillSetItem.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-        pDefTextFrameFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
-
-        XTextAttrSetItem aTextSetItem(this);
-        pDefTextAttr=(XTextAttrSetItem*)&Put(aTextSetItem);
-        pDefTextFrameTextAttr=pDefTextAttr;
-
-        SdrShadowSetItem aShadSetItem(this);
-        pDefShadAttr=(SdrShadowSetItem*)&Put(aShadSetItem);
-        pDefTextFrameShadAttr=pDefShadAttr;
-
-        SdrOutlinerSetItem aOutlSetItem(this);
-        pDefTextFrameOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
-        aOutlSetItem.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
-        pDefOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
-
-        SdrMiscSetItem aMiscSetItem(this);
-        pDefTextFrameMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
-        aMiscSetItem.GetItemSet().Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        aMiscSetItem.GetItemSet().Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-        pDefMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
-    }
-#endif SDRDEFITEMCACHE
-}
+//-/void SdrItemPool::ImpMakeDefItems()
+//-/{
+//-/#ifdef SDRDEFITEMCACHE
+//-/    if (pDefLineAttr==NULL) {
+//-/        XLineAttrSetItem aLineSetItem(this);
+//-/        pDefLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
+//-/        aLineSetItem.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/        pDefTextFrameLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
+//-/
+//-/        XFillAttrSetItem aFillSetItem(this);
+//-/        pDefFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
+//-/        aFillSetItem.GetItemSet().Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
+//-/        aFillSetItem.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
+//-/        pDefTextFrameFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
+//-/
+//-/        XTextAttrSetItem aTextSetItem(this);
+//-/        pDefTextAttr=(XTextAttrSetItem*)&Put(aTextSetItem);
+//-/        pDefTextFrameTextAttr=pDefTextAttr;
+//-/
+//-/        SdrShadowSetItem aShadSetItem(this);
+//-/        pDefShadAttr=(SdrShadowSetItem*)&Put(aShadSetItem);
+//-/        pDefTextFrameShadAttr=pDefShadAttr;
+//-/
+//-/        SdrOutlinerSetItem aOutlSetItem(this);
+//-/        pDefTextFrameOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
+//-/        aOutlSetItem.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+//-/        pDefOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
+//-/
+//-/        SdrMiscSetItem aMiscSetItem(this);
+//-/        pDefTextFrameMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
+//-/        aMiscSetItem.GetItemSet().Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+//-/        aMiscSetItem.GetItemSet().Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+//-/        pDefMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
+//-/    }
+//-/#endif SDRDEFITEMCACHE
+//-/}
 
 /*************************************************************************
 |*
@@ -1484,7 +1547,8 @@ SfxPoolItem* __EXPORT SdrShadowSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrShadowSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST);
     pSet->Load(rStream);
     return new SdrShadowSetItem(pSet);
 }
@@ -1560,7 +1624,8 @@ SfxPoolItem* __EXPORT SdrCaptionSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrCaptionSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_CAPTION_FIRST, SDRATTR_CAPTION_LAST);
     pSet->Load(rStream);
     return new SdrCaptionSetItem(pSet);
 }
@@ -1583,7 +1648,8 @@ SfxPoolItem* __EXPORT SdrOutlinerSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrOutlinerSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),EE_ITEMS_START,EE_ITEMS_END);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        EE_ITEMS_START, EE_ITEMS_END);
     pSet->Load(rStream);
     return new SdrOutlinerSetItem(pSet);
 }
@@ -2096,7 +2162,8 @@ SfxPoolItem* __EXPORT SdrMiscSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrMiscSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
     pSet->Load(rStream);
     return new SdrMiscSetItem(pSet);
 }
@@ -2299,7 +2366,8 @@ SfxPoolItem* __EXPORT SdrEdgeSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrEdgeSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST);
     pSet->Load(rStream);
     return new SdrEdgeSetItem(pSet);
 }
@@ -2506,7 +2574,8 @@ SfxPoolItem* __EXPORT SdrMeasureSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrMeasureSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST);
     pSet->Load(rStream);
     return new SdrMeasureSetItem(pSet);
 }
@@ -2572,7 +2641,8 @@ SfxPoolItem* __EXPORT SdrCircSetItem::Clone(SfxItemPool* pToPool) const
 
 SfxPoolItem* __EXPORT SdrCircSetItem::Create(SvStream& rStream, USHORT nVersion) const
 {
-    SfxItemSet *pSet=new SfxItemSet(*GetItemSet().GetPool(),SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST);
+    SfxItemSet *pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_CIRC_FIRST, SDRATTR_CIRC_LAST);
     pSet->Load(rStream);
     return new SdrCircSetItem(pSet);
 }
@@ -2635,7 +2705,8 @@ SfxPoolItem* __EXPORT SdrGrafSetItem::Clone( SfxItemPool* pToPool ) const
 
 SfxPoolItem* __EXPORT SdrGrafSetItem::Create( SvStream& rStream, USHORT nVersion ) const
 {
-    SfxItemSet* pSet = new SfxItemSet( *GetItemSet().GetPool(), SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
+    SfxItemSet* pSet = new SfxItemSet(*GetItemSet().GetPool(),
+        SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
     pSet->Load( rStream );
     return new SdrGrafSetItem( pSet );
 }

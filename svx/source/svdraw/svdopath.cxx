@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,26 +305,29 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
+    const SfxItemSet& rSet = GetItemSet();
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
-    aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/    XLineAttrSetItem aXLSet(rSet.GetPool());
+    SfxItemSet aEmptySet(*rSet.GetPool());
+    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
 
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(rXOut,!IsClosed()))
     {
-        UINT32 nXDist=((SdrShadowXDistItem&)(aSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(aSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolyPolygon aTmpXPoly(aPathPolygon);
         aTmpXPoly.Move(nXDist,nYDist);
 
         // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aXLSet);
+        rXOut.SetLineAttr(aEmptySet);
 
         if (!IsClosed()) {
             USHORT nPolyAnz=aTmpXPoly.Count();
@@ -339,25 +342,25 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if(pLineGeometry)
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
         }
     }
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     // avoid line drawing in XOut
-    rXOut.SetLineAttr(aXLSet);
+    rXOut.SetLineAttr(aEmptySet);
 
     if(bIsFillDraft)
     {
         // perepare ItemSet to avoid XOut filling
-        XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
-        aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetFillAttr(aXFSet);
+        rXOut.SetFillAttr(aEmptySet);
     }
     else
     {
-        if(pFillAttr && (IsClosed() || bHideContour))
-            rXOut.SetFillAttr(*pFillAttr);
+        if(IsClosed() || bHideContour)
+        {
+            rXOut.SetFillAttr(rSet);
+        }
     }
 
     if (!bHideContour) {
@@ -375,7 +378,7 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(!bHideContour && pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     FASTBOOL bOk=TRUE;
@@ -2059,7 +2062,7 @@ void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 
 void SdrPathObj::RecalcSnapRect()
 {
-    aSnapRect=aPathPolygon.GetBoundRect();
+    maSnapRect=aPathPolygon.GetBoundRect();
 }
 
 void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)

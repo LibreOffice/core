@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
             //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
 
             SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
-            pObj->NbcSetAttributes(aAttrSet, FALSE);
+
+//-/            pObj->NbcSetAttributes(aAttrSet, FALSE);
+            pObj->SetItemSet(aAttrSet);
+
             pGroup->GetSubList()->InsertObject(pObj);
         }
 
@@ -298,7 +301,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-        pObj->NbcSetAttributes(aAttrSet,FALSE);
+
+//-/        pObj->NbcSetAttributes(aAttrSet,FALSE);
+        pObj->SetItemSet(aAttrSet);
+
         pGroup->GetSubList()->InsertObject(pObj);
     }
     if (eStrk!=STRIKEOUT_NONE) {
@@ -326,7 +332,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
         SdrObject* pObj=rTextObj.ImpConvertMakeObj(aXPP,TRUE,!bToPoly, TRUE);
-        pObj->NbcSetAttributes(aAttrSet,FALSE);
+
+//-/        pObj->NbcSetAttributes(aAttrSet,FALSE);
+        pObj->SetItemSet(aAttrSet);
+
         pGroup->GetSubList()->InsertObject(pObj);
     }
     return 0;

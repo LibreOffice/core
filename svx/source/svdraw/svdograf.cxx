@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-20 15:06:47 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include "svdundo.hxx"
 #include "svdfmtf.hxx"
 #include "sdgcpitm.hxx"
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
+#endif
 
 #ifndef SVX_LIGHT
 
@@ -289,7 +293,7 @@ SdrGrafObj::SdrGrafObj():
     bNoShear=TRUE;
 
 #ifdef GRAFATTR
-    pGrafAttr = NULL;
+//-/    pGrafAttr = NULL;
     bCopyToPoolOnAfterRead = FALSE;
 #endif // GRAFATTR
 }
@@ -308,7 +312,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
     bNoShear = TRUE;
 
 #ifdef GRAFATTR
-    pGrafAttr = NULL;
+//-/    pGrafAttr = NULL;
     bCopyToPoolOnAfterRead = FALSE;
 #endif // GRAFATTR
 }
@@ -326,7 +330,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
     bNoShear = TRUE;
 
 #ifdef GRAFATTR
-    pGrafAttr = NULL;
+//-/    pGrafAttr = NULL;
     bCopyToPoolOnAfterRead = FALSE;
 #endif // GRAFATTR
 }
@@ -339,7 +343,7 @@ SdrGrafObj::~SdrGrafObj()
     ImpLinkAbmeldung();
 
 #ifdef GRAFATTR
-    pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, NULL, FALSE );
+//-/    pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, NULL, FALSE );
 #endif // GRAFATTR
 }
 
@@ -1137,7 +1141,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
         SetGraphicLink( aFileName, aFilterName );
 
 #ifdef GRAFATTR
-    if( ( pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, ( (SdrGrafObj&) rObj ).pGrafAttr ) ) != NULL )
+//-/    if( ( pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, ( (SdrGrafObj&) rObj ).pGrafAttr ) ) != NULL )
         ImpSetAttrToGrafInfo();
 #endif // GRAFATTR
 }
@@ -1327,7 +1331,33 @@ const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
     return &GetGraphic().GetGDIMetaFile();
 }
 
-// -----------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrGrafObj::PreSave()
+{
+    // call parent
+    SdrRectObj::PreSave();
+
+    // prepare SetItems for storage
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
+    SdrGrafSetItem aGrafAttr(rSet.GetPool());
+    aGrafAttr.GetItemSet().Put(rSet);
+    aGrafAttr.GetItemSet().SetParent(pParent);
+    mpObjectItemSet->Put(aGrafAttr);
+}
+
+void SdrGrafObj::PostSave()
+{
+    // call parent
+    SdrRectObj::PostSave();
+
+    // remove SetItems from local itemset
+    mpObjectItemSet->ClearItem(SDRATTRSET_GRAF);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrGrafObj::WriteData(SvStream& rOut) const
 {
@@ -1401,7 +1431,19 @@ void SdrGrafObj::WriteData(SvStream& rOut) const
     SfxItemPool* pPool = GetItemPool();
 
     if(pPool)
-        pPool->StoreSurrogate(rOut, pGrafAttr);
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_GRAF));
+
+
+
+//-/        SdrGrafSetItem aGrafAttr(pPool);
+//-/        aGrafAttr.GetItemSet().Put(GetItemSet());
+//-/        const SfxPoolItem& rGrafAttr = pPool->Put(aGrafAttr);
+//-/        pPool->StoreSurrogate(rOut, &rGrafAttr);
+//-/        pPool->StoreSurrogate(rOut, pGrafAttr);
+    }
     else
         rOut << UINT16( SFX_ITEMS_NULL );
 #endif // GRAFATTR
@@ -1552,18 +1594,22 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
             if( pPool )
             {
-                USHORT nWhich = SDRATTRSET_GRAF;
-
-                pGrafAttr = (const SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, NULL );
-                pGrafAttr = (const SdrGrafSetItem*) pPool->LoadSurrogate( rIn, nWhich, 0 );
-
-                if( pGrafAttr )
-                {
-                    if( pStyleSheet )
-                        ( (SfxItemSet*) &pGrafAttr->GetItemSet() )->SetParent( &pStyleSheet->GetItemSet() );
-
+                sal_uInt16 nSetID = SDRATTRSET_GRAF;
+                const SdrGrafSetItem* pGrafAttr = (const SdrGrafSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+                if(pGrafAttr)
+                    SetItemSet(pGrafAttr->GetItemSet());
+//-/                USHORT nWhich = SDRATTRSET_GRAF;
+//-/
+//-/                pGrafAttr = (const SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, NULL );
+//-/                pGrafAttr = (const SdrGrafSetItem*) pPool->LoadSurrogate( rIn, nWhich, 0 );
+//-/
+//-/                if( pGrafAttr )
+//-/                {
+//-/                    if( pStyleSheet )
+//-/                        ( (SfxItemSet*) &pGrafAttr->GetItemSet() )->SetParent( &pStyleSheet->GetItemSet() );
+//-/
                     ImpSetAttrToGrafInfo();
-                }
+//-/                }
             }
             else
             {
@@ -1707,16 +1753,27 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
             // Bitmap als Attribut retten
             if(pRetval)
             {
-                SfxItemSet aSet(GetModel()->GetItemPool());
-                TakeAttributes(aSet, FALSE, TRUE);
+//-/                SfxItemSet aSet(GetModel()->GetItemPool());
+//-/                TakeAttributes(aSet, FALSE, TRUE);
+//-/
+//-/                // Bitmap als Fuellung holen
+//-/                aSet.Put(XFillStyleItem(XFILL_BITMAP));
+//-/                Bitmap aBitmap( GetTransformedGraphic().GetBitmap() );
+//-/                XOBitmap aXBmp(aBitmap, XBITMAP_STRETCH);
+//-/                aSet.Put(XFillBitmapItem(String(), aXBmp));
+//-/                aSet.Put(XFillBmpTileItem(FALSE));
+//-/                pRetval->NbcSetAttributes(aSet, FALSE);
 
                 // Bitmap als Fuellung holen
+                SfxItemSet aSet(GetItemSet());
+
                 aSet.Put(XFillStyleItem(XFILL_BITMAP));
                 Bitmap aBitmap( GetTransformedGraphic().GetBitmap() );
                 XOBitmap aXBmp(aBitmap, XBITMAP_STRETCH);
                 aSet.Put(XFillBitmapItem(String(), aXBmp));
                 aSet.Put(XFillBmpTileItem(FALSE));
-                pRetval->NbcSetAttributes(aSet, FALSE);
+
+                pRetval->SetItemSet(aSet);
             }
             break;
         }
@@ -1758,75 +1815,88 @@ void SdrGrafObj::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::ForceDefaultAttr( SfxItemPool* pPool )
+void SdrGrafObj::ForceDefaultAttr()
 {
-    SdrRectObj::ForceDefaultAttr( pPool );
+    SdrRectObj::ForceDefaultAttr();
 
-    if( pPool )
-    {
-        if( !pGrafAttr )
-        {
-            SdrGrafSetItem  aSetItem( pPool );
-            SfxItemSet&     rSet = aSetItem.GetItemSet();
-
-            rSet.Put( SdrGrafLuminanceItem( 0 ) );
-            rSet.Put( SdrGrafContrastItem( 0 ) );
-            rSet.Put( SdrGrafRedItem( 0 ) );
-            rSet.Put( SdrGrafGreenItem( 0 ) );
-            rSet.Put( SdrGrafBlueItem( 0 ) );
-            rSet.Put( SdrGrafGamma100Item( 100 ) );
-            rSet.Put( SdrGrafTransparenceItem( 0 ) );
-            rSet.Put( SdrGrafInvertItem( FALSE ) );
-            rSet.Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
-            rSet.Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
-
-            pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, &aSetItem, FALSE );
-        }
-    }
+//-/    if(pPool)
+//-/    {
+    SetItem( SdrGrafLuminanceItem( 0 ) );
+    SetItem( SdrGrafContrastItem( 0 ) );
+    SetItem( SdrGrafRedItem( 0 ) );
+    SetItem( SdrGrafGreenItem( 0 ) );
+    SetItem( SdrGrafBlueItem( 0 ) );
+    SetItem( SdrGrafGamma100Item( 100 ) );
+    SetItem( SdrGrafTransparenceItem( 0 ) );
+    SetItem( SdrGrafInvertItem( FALSE ) );
+    SetItem( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
+    SetItem( SdrGrafCropItem( 0, 0, 0, 0 ) );
+//-/    }
+//-/    if( pPool )
+//-/    {
+//-/        if( !pGrafAttr )
+//-/        {
+//-/            SdrGrafSetItem  aSetItem( pPool );
+//-/            SfxItemSet&     rSet = aSetItem.GetItemSet();
+//-/
+//-/            rSet.Put( SdrGrafLuminanceItem( 0 ) );
+//-/            rSet.Put( SdrGrafContrastItem( 0 ) );
+//-/            rSet.Put( SdrGrafRedItem( 0 ) );
+//-/            rSet.Put( SdrGrafGreenItem( 0 ) );
+//-/            rSet.Put( SdrGrafBlueItem( 0 ) );
+//-/            rSet.Put( SdrGrafGamma100Item( 100 ) );
+//-/            rSet.Put( SdrGrafTransparenceItem( 0 ) );
+//-/            rSet.Put( SdrGrafInvertItem( FALSE ) );
+//-/            rSet.Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
+//-/            rSet.Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
+//-/
+//-/            pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, &aSetItem, FALSE );
+//-/        }
+//-/    }
 }
 
 // -----------------------------------------------------------------------------
 
-USHORT SdrGrafObj::GetSetItemCount() const
-{
-    return( 1 + SdrRectObj::GetSetItemCount() );
-}
+//-/USHORT SdrGrafObj::GetSetItemCount() const
+//-/{
+//-/    return( 1 + SdrRectObj::GetSetItemCount() );
+//-/}
 
 // -----------------------------------------------------------------------------
 
-const SfxSetItem* SdrGrafObj::GetSetItem( USHORT nNum ) const
-{
-    return( !nNum ? pGrafAttr : SdrRectObj::GetSetItem( --nNum ) );
-}
+//-/const SfxSetItem* SdrGrafObj::GetSetItem( USHORT nNum ) const
+//-/{
+//-/    return( !nNum ? pGrafAttr : SdrRectObj::GetSetItem( --nNum ) );
+//-/}
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SetSetItem( USHORT nNum, const SfxSetItem* pAttr )
-{
-    if( !nNum )
-        pGrafAttr = (const SdrGrafSetItem*) pAttr;
-    else
-        SdrRectObj::SetSetItem( --nNum, pAttr );
-}
+//-/void SdrGrafObj::SetSetItem( USHORT nNum, const SfxSetItem* pAttr )
+//-/{
+//-/    if( !nNum )
+//-/        pGrafAttr = (const SdrGrafSetItem*) pAttr;
+//-/    else
+//-/        SdrRectObj::SetSetItem( --nNum, pAttr );
+//-/}
 
 // -----------------------------------------------------------------------------
 
-SfxSetItem* SdrGrafObj::MakeNewSetItem( USHORT nNum, FASTBOOL bClone ) const
-{
-    SfxSetItem* pRet;
-
-    if( !nNum )
-    {
-        if( bClone && pGrafAttr )
-            pRet = new SdrGrafSetItem( *pGrafAttr );
-        else
-            pRet = new SdrGrafSetItem( GetItemPool() );
-    }
-    else
-        pRet = SdrRectObj::MakeNewSetItem( --nNum, bClone );
-
-    return pRet;
-}
+//-/SfxSetItem* SdrGrafObj::MakeNewSetItem( USHORT nNum, FASTBOOL bClone ) const
+//-/{
+//-/    SfxSetItem* pRet;
+//-/
+//-/    if( !nNum )
+//-/    {
+//-/        if( bClone && pGrafAttr )
+//-/            pRet = new SdrGrafSetItem( *pGrafAttr );
+//-/        else
+//-/            pRet = new SdrGrafSetItem( GetItemPool() );
+//-/    }
+//-/    else
+//-/        pRet = SdrRectObj::MakeNewSetItem( --nNum, bClone );
+//-/
+//-/    return pRet;
+//-/}
 
 // -----------------------------------------------------------------------------
 
@@ -1839,61 +1909,90 @@ void SdrGrafObj::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, FASTBOOL bDont
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::NbcSetAttributes( const SfxItemSet& rAttr, FASTBOOL bReplaceAll )
+//-/void SdrGrafObj::NbcSetAttributes( const SfxItemSet& rAttr, FASTBOOL bReplaceAll )
+//-/{
+//-/    SetXPolyDirty();
+//-/    SdrRectObj::NbcSetAttributes( rAttr, bReplaceAll );
+//-/    ImpSetAttrToGrafInfo();
+//-/}
+
+void SdrGrafObj::SetItem(const SfxPoolItem& rItem)
 {
     SetXPolyDirty();
-    SdrRectObj::NbcSetAttributes( rAttr, bReplaceAll );
+    SdrRectObj::SetItem(rItem);
     ImpSetAttrToGrafInfo();
+}
+
+void SdrGrafObj::ClearItem(USHORT nWhich)
+{
+    SetXPolyDirty();
+    SdrRectObj::ClearItem(nWhich);
+    ImpSetAttrToGrafInfo();
+}
+
+void SdrGrafObj::SetItemSet(const SfxItemSet& rSet)
+{
+    SetXPolyDirty();
+    SdrRectObj::SetItemSet(rSet);
+    ImpSetAttrToGrafInfo();
+}
+
+SfxItemSet* SdrGrafObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // graf attributes
+        SDRATTR_GRAF_FIRST, SDRATTRSET_GRAF,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
 }
 
 // -----------------------------------------------------------------------------
 
 void SdrGrafObj::ImpSetAttrToGrafInfo()
 {
-    if( pGrafAttr )
-    {
-        const SfxItemSet&       rSet = pGrafAttr->GetItemSet();
-        const USHORT            nTrans = ( (SdrGrafTransparenceItem&) rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
-        const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) rSet.Get( SDRATTR_GRAFCROP );
+//-/    if(mpObjectItemSet)
+//-/    {
+    const SfxItemSet& rSet = GetItemSet();
+    const sal_uInt16 nTrans = ( (SdrGrafTransparenceItem&) rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
+    const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) rSet.Get( SDRATTR_GRAFCROP );
 
-        aGrafInfo.SetLuminance( ( (SdrGrafLuminanceItem&) rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
-        aGrafInfo.SetContrast( ( (SdrGrafContrastItem&) rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
-        aGrafInfo.SetChannelR( ( (SdrGrafRedItem&) rSet.Get( SDRATTR_GRAFRED ) ).GetValue() );
-        aGrafInfo.SetChannelG( ( (SdrGrafGreenItem&) rSet.Get( SDRATTR_GRAFGREEN ) ).GetValue() );
-        aGrafInfo.SetChannelB( ( (SdrGrafBlueItem&) rSet.Get( SDRATTR_GRAFBLUE ) ).GetValue() );
-        aGrafInfo.SetGamma( ( (SdrGrafGamma100Item&) rSet.Get( SDRATTR_GRAFGAMMA ) ).GetValue() * 0.01 );
-        aGrafInfo.SetTransparency( (BYTE) FRound( Min( nTrans, (USHORT) 100 )  * 2.55 ) );
-        aGrafInfo.SetInvert( ( (SdrGrafInvertItem&) rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
-        aGrafInfo.SetDrawMode( ( (SdrGrafModeItem&) rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
-        aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
+    aGrafInfo.SetLuminance( ( (SdrGrafLuminanceItem&) rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
+    aGrafInfo.SetContrast( ( (SdrGrafContrastItem&) rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
+    aGrafInfo.SetChannelR( ( (SdrGrafRedItem&) rSet.Get( SDRATTR_GRAFRED ) ).GetValue() );
+    aGrafInfo.SetChannelG( ( (SdrGrafGreenItem&) rSet.Get( SDRATTR_GRAFGREEN ) ).GetValue() );
+    aGrafInfo.SetChannelB( ( (SdrGrafBlueItem&) rSet.Get( SDRATTR_GRAFBLUE ) ).GetValue() );
+    aGrafInfo.SetGamma( ( (SdrGrafGamma100Item&) rSet.Get( SDRATTR_GRAFGAMMA ) ).GetValue() * 0.01 );
+    aGrafInfo.SetTransparency( (BYTE) FRound( Min( nTrans, (USHORT) 100 )  * 2.55 ) );
+    aGrafInfo.SetInvert( ( (SdrGrafInvertItem&) rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
+    aGrafInfo.SetDrawMode( ( (SdrGrafModeItem&) rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
+    aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
-        SetXPolyDirty();
-        SetRectsDirty();
-    }
+    SetXPolyDirty();
+    SetRectsDirty();
+//-/    }
 }
 
 // -----------------------------------------------------------------------------
 
 void SdrGrafObj::ImpSetGrafInfoToAttr()
 {
-    if( pGrafAttr )
-    {
-        SdrGrafSetItem  aSetItem( *pGrafAttr );
-        SfxItemSet&     rSet = aSetItem.GetItemSet();
-
-        rSet.Put( SdrGrafLuminanceItem( aGrafInfo.GetLuminance() ) );
-        rSet.Put( SdrGrafContrastItem( aGrafInfo.GetContrast() ) );
-        rSet.Put( SdrGrafRedItem( aGrafInfo.GetChannelR() ) );
-        rSet.Put( SdrGrafGreenItem( aGrafInfo.GetChannelG() ) );
-        rSet.Put( SdrGrafBlueItem( aGrafInfo.GetChannelB() ) );
-        rSet.Put( SdrGrafGamma100Item( FRound( aGrafInfo.GetGamma() * 100.0 ) ) );
-        rSet.Put( SdrGrafTransparenceItem( (USHORT) FRound( aGrafInfo.GetTransparency() / 2.55 ) ) );
-        rSet.Put( SdrGrafInvertItem( aGrafInfo.IsInvert() ) );
-        rSet.Put( SdrGrafModeItem( aGrafInfo.GetDrawMode() ) );
-        rSet.Put( SdrGrafCropItem( aGrafInfo.GetLeftCrop(), aGrafInfo.GetTopCrop(), aGrafInfo.GetRightCrop(), aGrafInfo.GetBottomCrop() ) );
-
-        pGrafAttr = (SdrGrafSetItem*) ImpSetNewAttr( pGrafAttr, &aSetItem );
-    }
+    SetItem( SdrGrafLuminanceItem( aGrafInfo.GetLuminance() ) );
+    SetItem( SdrGrafContrastItem( aGrafInfo.GetContrast() ) );
+    SetItem( SdrGrafRedItem( aGrafInfo.GetChannelR() ) );
+    SetItem( SdrGrafGreenItem( aGrafInfo.GetChannelG() ) );
+    SetItem( SdrGrafBlueItem( aGrafInfo.GetChannelB() ) );
+    SetItem( SdrGrafGamma100Item( FRound( aGrafInfo.GetGamma() * 100.0 ) ) );
+    SetItem( SdrGrafTransparenceItem( (USHORT) FRound( aGrafInfo.GetTransparency() / 2.55 ) ) );
+    SetItem( SdrGrafInvertItem( aGrafInfo.IsInvert() ) );
+    SetItem( SdrGrafModeItem( aGrafInfo.GetDrawMode() ) );
+    SetItem( SdrGrafCropItem( aGrafInfo.GetLeftCrop(), aGrafInfo.GetTopCrop(), aGrafInfo.GetRightCrop(), aGrafInfo.GetBottomCrop() ) );
 }
 
 #endif // GRAFATTR

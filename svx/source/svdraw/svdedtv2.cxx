@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-26 13:12:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,14 +560,22 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
             pSource=aIter.Next();
         }
     }
-    if (pSource!=NULL && pDest!=NULL) {
+
+    if(pSource && pDest)
+    {
         SfxItemSet aSet(pMod->GetItemPool(),
-            SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,
-            SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
-            EE_ITEMS_START,EE_ITEMS_END,
-            0,0); // #52757#, #52762#
-        pSource->TakeAttributes(aSet,FALSE,FALSE);
-        pDest->NbcSetAttributes(aSet,TRUE);
+            SDRATTR_START,              SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_NOTPERSIST_LAST+1,  SDRATTR_END,
+            EE_ITEMS_START,             EE_ITEMS_END,
+            0, 0); // #52757#, #52762#
+
+//-/        pSource->TakeAttributes(aSet,FALSE,FALSE);
+        aSet.Put(pSource->GetItemSet());
+
+//-/        pDest->NbcSetAttributes(aSet,TRUE);
+        pDest->ClearItem();
+        pDest->SetItemSet(aSet);
+
         pDest->NbcSetLayer(pSource->GetLayer());
         pDest->NbcSetStyleSheet(pSource->GetStyleSheet(),TRUE);
     }

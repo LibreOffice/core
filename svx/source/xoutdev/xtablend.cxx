@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,14 +533,21 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, BOOL bDelete )
         aVDSize = pVD->GetOutputSize();
 
     pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    pXOut->SetLineAttr( *pXLSet );
-    pXOut->SetFillAttr( *pXFSet );
+//-/    pXOut->SetLineAttr( *pXLSet );
+
+    pXOut->SetLineAttr( pXLSet->GetItemSet() );
+//-/    pXOut->SetFillAttr( *pXFSet );
+
+    pXOut->SetFillAttr( pXFSet->GetItemSet() );
     pXOut->DrawRect( Rectangle( aZero, aVDSize ) );
 
     pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_SOLID ) );
     pXLSet->GetItemSet().Put( XLineStartItem( String(), Get( nIndex )->GetLineEnd() ) );
     pXLSet->GetItemSet().Put( XLineEndItem( String(), Get( nIndex )->GetLineEnd() ) );
-    pXOut->SetLineAttr( *pXLSet );
+
+//-/    pXOut->SetLineAttr( *pXLSet );
+    pXOut->SetLineAttr( pXLSet->GetItemSet() );
+
     pXOut->DrawLine( Point( 0, aVDSize.Height() / 2 ),
                      Point( aVDSize.Width(), aVDSize.Height() / 2 ) );
 

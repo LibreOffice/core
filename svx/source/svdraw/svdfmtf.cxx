@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:39:44 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,9 +405,12 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
     if (pObj!=NULL)
     {
         pObj->SetLayer(nLayer);
-        if (bLine) pObj->NbcSetAttributes(*pLineAttr,FALSE);
-        if (bFill) pObj->NbcSetAttributes(*pFillAttr,FALSE);
-        if (bText) pObj->NbcSetAttributes(*pTextAttr,FALSE);
+//-/        if (bLine) pObj->NbcSetAttributes(*pLineAttr,FALSE);
+//-/        if (bFill) pObj->NbcSetAttributes(*pFillAttr,FALSE);
+//-/        if (bText) pObj->NbcSetAttributes(*pTextAttr,FALSE);
+        if (bLine) pObj->SetItemSet(*pLineAttr);
+        if (bFill) pObj->SetItemSet(*pFillAttr);
+        if (bText) pObj->SetItemSet(*pTextAttr);
     }
 }
 
@@ -461,7 +464,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     if (nRad!=0) {
         SfxItemSet aSet(*pLineAttr->GetPool(),SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS);
         aSet.Put(SdrEckenradiusItem(nRad));
-        pRect->NbcSetAttributes(aSet,FALSE);
+//-/        pRect->NbcSetAttributes(aSet,FALSE);
+        pRect->SetItemSet(aSet);
     }
     InsertObj(pRect);
 }
@@ -559,7 +563,8 @@ FASTBOOL ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge(const XPolyPolyg
             if (pLastPoly->GetPathPoly()==rPoly) {
                 SetAttributes(NULL);
                 if (!bNoLine && bNoFill) {
-                    pLastPoly->NbcSetAttributes(*pLineAttr,FALSE);
+//-/                    pLastPoly->NbcSetAttributes(*pLineAttr,FALSE);
+                    pLastPoly->SetItemSet(*pLineAttr);
                     return TRUE;
                 }
             }
@@ -677,7 +682,8 @@ void ImpSdrGDIMetaFileImport::ImportText(const Point& rPos, const XubString& rSt
         SfxItemSet aAttr(*pFillAttr->GetPool(),XATTR_FILL_FIRST,XATTR_FILL_LAST);
         pFillAttr->Put(XFillStyleItem(XFILL_SOLID));
         pFillAttr->Put(XFillColorItem(String(), aFnt.GetFillColor()));
-        pText->NbcSetAttributes(aAttr,FALSE);
+//-/        pText->NbcSetAttributes(aAttr,FALSE);
+        pText->SetItemSet(aAttr);
     }
     ULONG nWink=aFnt.GetOrientation();
     if (nWink!=0) {
@@ -794,7 +800,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
             aHatchAttr.Put( XFillStyleItem( XFILL_HATCH ) );
             aHatchAttr.Put( XFillHatchItem( &pModel->GetItemPool(), XHatch( rHatch.GetColor(), eStyle,
                                                               rHatch.GetDistance(), rHatch.GetAngle() ) ) );
-            pPath->NbcSetAttributes(aHatchAttr,FALSE);
+//-/            pPath->NbcSetAttributes(aHatchAttr,FALSE);
+            pPath->SetItemSet(aHatchAttr);
             InsertObj(pPath);
         }
     }
@@ -894,7 +901,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     SetAttributes( pPath );
                     aGradAttr.Put( XFillStyleItem( XFILL_GRADIENT ) );
                     aGradAttr.Put( XFillGradientItem( &pModel->GetItemPool(), aXGradient ) );
-                    pPath->NbcSetAttributes(aGradAttr,FALSE);
+//-/                    pPath->NbcSetAttributes(aGradAttr,FALSE);
+                    pPath->SetItemSet(aGradAttr);
                     InsertObj(pPath);
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:58 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = TRUE;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetSetItem(1)->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;
@@ -319,23 +319,27 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
+    const SfxItemSet& rSet = GetItemSet();
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
-    aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/    XLineAttrSetItem aXLSet(rSet.GetPool());
+    SfxItemSet aEmptySet(*rSet.GetPool());
+    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
 
     // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rXOut,FALSE)) {
-        UINT32 nXDist=((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
+    if (!bHideContour && ImpSetShadowAttributes(rXOut,FALSE))
+    {
+        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
 
         // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aXLSet);
+        rXOut.SetLineAttr(aEmptySet);
 
         if (PaintNeedsXPoly(nEckRad)) {
             XPolygon aX(GetXPoly());
@@ -351,26 +355,23 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if(pLineGeometry)
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
         }
     }
 
-    if(pFillAttr!=NULL || !IsTextFrame())
+    if(!IsTextFrame())
     {
         // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-        rXOut.SetLineAttr(aXLSet);
+        rXOut.SetLineAttr(aEmptySet);
 
         if(bIsFillDraft)
         {
             // perepare ItemSet to avoid XOut filling
-            XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
-            aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-            rXOut.SetFillAttr(aXFSet);
+            rXOut.SetFillAttr(aEmptySet);
         }
         else
         {
-            if(pFillAttr)
-                rXOut.SetFillAttr(*pFillAttr);
+            rXOut.SetFillAttr(rSet);
         }
 
         if (!bHideContour) {
@@ -388,7 +389,7 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(!bHideContour && pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     if (HasText()) {
@@ -524,7 +525,7 @@ void SdrRectObj::RecalcSnapRect()
 {
     long nEckRad=GetEckenradius();
     if ((aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) && nEckRad!=0) {
-        aSnapRect=GetXPoly().GetBoundRect();
+        maSnapRect=GetXPoly().GetBoundRect();
     } else {
         SdrTextObj::RecalcSnapRect();
     }
@@ -748,12 +749,15 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt=0;
-    if (pLineAttr!=NULL) {
-        nWdt=((XLineWidthItem&)(pLineAttr->GetItemSet().Get(XATTR_LINEWIDTH))).GetValue();
-        nWdt++;
-        nWdt/=2;
-    }
+//-/    INT32 nWdt=0;
+
+//-/    if(mpObjectItemSet)
+//-/    {
+    INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+    nWdt++;
+    nWdt /= 2;
+//-/    }
+
     Point aPt;
     switch (nPosNum) {
         case 0: aPt=aRect.TopCenter();    aPt.Y()-=nWdt; break;
@@ -771,12 +775,15 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 
 SdrGluePoint SdrRectObj::GetCornerGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt=0;
-    if (pLineAttr!=NULL) {
-        nWdt=((XLineWidthItem&)(pLineAttr->GetItemSet().Get(XATTR_LINEWIDTH))).GetValue();
-        nWdt++;
-        nWdt/=2;
-    }
+//-/    INT32 nWdt=0;
+
+//-/    if(mpObjectItemSet)
+//-/    {
+    INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+    nWdt++;
+    nWdt /= 2;
+//-/    }
+
     Point aPt;
     switch (nPosNum) {
         case 0: aPt=aRect.TopLeft();     aPt.X()-=nWdt; aPt.Y()-=nWdt; break;
@@ -813,11 +820,33 @@ void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const Sf
     SetXPolyDirty(); // wg. Eckenradius
 }
 
-void SdrRectObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void SdrRectObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
+//-/    SetXPolyDirty(); // wg. Eckenradius
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrRectObj::SetItem(const SfxPoolItem& rItem)
 {
-    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
-    SetXPolyDirty(); // wg. Eckenradius
+    SdrTextObj::SetItem(rItem);
+    SetXPolyDirty();
 }
+
+void SdrRectObj::ClearItem(USHORT nWhich)
+{
+    SdrTextObj::ClearItem(nWhich);
+    SetXPolyDirty();
+}
+
+void SdrRectObj::SetItemSet(const SfxItemSet& rSet)
+{
+    SdrTextObj::SetItemSet(rSet);
+    SetXPolyDirty();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrRectObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
 {
@@ -870,7 +899,9 @@ void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             aSet.Put(XFillStyleItem(XFILL_NONE));
             aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
             aSet.Put(XLineStyleItem(XLINE_NONE));
-            NbcSetAttributes(aSet,FALSE);
+
+//-/            NbcSetAttributes(aSet,FALSE);
+            SetItemSet(aSet);
         }
     } else {
         SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)

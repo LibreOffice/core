@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,14 @@
 #include "xlntrit.hxx"
 #include "xfltrit.hxx"
 #include "xlinjoit.hxx"
+
+#ifndef _SVDPOOL_HXX
+#include "svdpool.hxx"
+#endif
+
+#ifndef _MyEDITENG_HXX
+#include "editeng.hxx"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1108,6 +1116,52 @@ void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// class to remember broadcast start positions
+
+SdrBroadcastItemChange::SdrBroadcastItemChange(const SdrObject& rObj)
+{
+    if(rObj.ISA(SdrObjGroup))
+    {
+        SdrObjListIter aIter((const SdrObjGroup&)rObj, IM_DEEPNOGROUPS);
+        mpData = new List();
+
+        while(aIter.IsMore())
+        {
+            SdrObject* pObj = aIter.Next();
+            if(pObj)
+                ((List*)mpData)->Insert(new Rectangle(pObj->GetBoundRect()), LIST_APPEND);
+        }
+
+        mnCount = ((List*)mpData)->Count();
+    }
+    else
+    {
+        mnCount = 1;
+        mpData = new Rectangle(rObj.GetBoundRect());
+    }
+}
+
+SdrBroadcastItemChange::~SdrBroadcastItemChange()
+{
+    if(mnCount > 1)
+    {
+        for(sal_uInt32 a(0); a < mnCount;a++)
+            delete ((Rectangle*)((List*)mpData)->GetObject(a));
+        delete ((List*)mpData);
+    }
+    else
+        delete ((Rectangle*)mpData);
+}
+
+const Rectangle& SdrBroadcastItemChange::GetRectangle(sal_uInt32 nIndex) const
+{
+    if(mnCount > 1)
+        return *((Rectangle*)((List*)mpData)->GetObject(nIndex));
+    else
+        return *((Rectangle*)mpData);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //   @@@@  @@@@@  @@@@@@ @@@@@  @@@@  @@@@@@
 //  @@  @@ @@  @@     @@ @@    @@  @@   @@
@@ -1179,12 +1233,15 @@ void SdrObject::SetRectsDirty(FASTBOOL bNotMyself)
 
 void SdrObject::SetModel(SdrModel* pNewModel)
 {
-    if (pNewModel!=NULL && pPage!=NULL) {
-        if (pPage->GetModel()!=pNewModel) {
-            pPage=NULL;
+    if(pNewModel && pPage)
+    {
+        if(pPage->GetModel() != pNewModel)
+        {
+            pPage = NULL;
         }
     }
-    pModel=pNewModel;
+
+    pModel = pNewModel;
 }
 
 void SdrObject::SetObjList(SdrObjList* pNewObjList)
@@ -1203,9 +1260,42 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     }
 }
 
+// init global static itempool
+SdrItemPool* SdrObject::mpGlobalItemPool = NULL;
+
+SdrItemPool* SdrObject::GetGlobalDrawObjectItemPool()
+{
+    if(!mpGlobalItemPool)
+    {
+        mpGlobalItemPool = new SdrItemPool(SDRATTR_START, SDRATTR_END);
+        SfxItemPool* pGlobalOutlPool = EditEngine::CreatePool();
+        mpGlobalItemPool->SetSecondaryPool(pGlobalOutlPool);
+        mpGlobalItemPool->SetDefaultMetric((SfxMapUnit)SdrEngineDefaults::GetMapUnit());
+        mpGlobalItemPool->FreezeIdRanges();
+    }
+
+    return mpGlobalItemPool;
+}
+
+void SdrObject::FreeGlobalDrawObjectItemPool()
+{
+    // code for deletion of GlobalItemPool
+    if(mpGlobalItemPool)
+    {
+        SfxItemPool* pGlobalOutlPool = mpGlobalItemPool->GetSecondaryPool();
+        delete mpGlobalItemPool;
+        delete pGlobalOutlPool;
+    }
+}
+
 SdrItemPool* SdrObject::GetItemPool() const
 {
-    return pModel==NULL ? NULL : (SdrItemPool*)(&pModel->GetItemPool());
+//-/    return pModel==NULL ? NULL : (SdrItemPool*)(&pModel->GetItemPool());
+    if(pModel)
+        return (SdrItemPool*)(&pModel->GetItemPool());
+
+    // use a static global default pool
+    return SdrObject::GetGlobalDrawObjectItemPool();
 }
 
 UINT32 SdrObject::GetObjInventor()   const
@@ -1380,17 +1470,44 @@ void SdrObject::RecalcBoundRect()
 {
 }
 
-void SdrObject::SendRepaintBroadcast(FASTBOOL bNoPaintNeeded) const
+void SdrObject::SendRepaintBroadcast(const Rectangle& rRect) const
 {
-    DBG_CHKTHIS(SdrObject,NULL);
-    FASTBOOL bBrd=pPlusData!=NULL && pPlusData->pBroadcast!=NULL;
-    FASTBOOL bPnt=bInserted && pModel!=NULL;
-    if (bPnt || bBrd) {
+    BOOL bBrd(pPlusData && pPlusData->pBroadcast);
+    BOOL bPnt(bInserted && pModel);
+
+    if(bPnt || bBrd)
+    {
+        SdrHint aHint(*this, rRect);
+
+        if(bBrd)
+            pPlusData->pBroadcast->Broadcast(aHint);
+
+        if(bPnt)
+            pModel->Broadcast(aHint);
+
+        // alle Animationen wegen Obj-Aenderung neustarten
+        RestartAnimation(NULL);
+    }
+}
+
+void SdrObject::SendRepaintBroadcast(BOOL bNoPaintNeeded) const
+{
+    BOOL bBrd(pPlusData && pPlusData->pBroadcast);
+    BOOL bPnt(bInserted && pModel);
+
+    if(bPnt || bBrd)
+    {
         SdrHint aHint(*this);
         aHint.SetNeedRepaint(!bNoPaintNeeded);
-        if (bBrd) pPlusData->pBroadcast->Broadcast(aHint);
-        if (bPnt) pModel->Broadcast(aHint);
-        RestartAnimation(NULL); // alle Animationen wegen Obj-Aenderung neustarten
+
+        if(bBrd)
+            pPlusData->pBroadcast->Broadcast(aHint);
+
+        if(bPnt)
+            pModel->Broadcast(aHint);
+
+        // alle Animationen wegen Obj-Aenderung neustarten
+        RestartAnimation(NULL);
     }
 }
 
@@ -1418,9 +1535,10 @@ void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPoly
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get LineStyleParameterPack
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
-    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
+//-/    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
+    LineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, rOut);
     LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
 
     // compute single lines
@@ -2059,9 +2177,10 @@ void SdrObject::ImpDrawLineGeometry(
 
 BOOL SdrObject::LineGeometryUsageIsNecessary() const
 {
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
-    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)aSet.Get(XATTR_LINESTYLE)).GetValue();
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
+//-/    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)aSet.Get(XATTR_LINESTYLE)).GetValue();
+    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
 }
 
@@ -2211,17 +2330,20 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
     ExtOutputDevice aXOut( &aBlackHole );
     SdrObject*      pClone = Clone();
-    SfxItemSet      aSet( (SfxItemPool&)( *GetItemPool() ),
-                          XATTR_LINESTYLE, XATTR_LINESTYLE,
-                          XATTR_LINECOLOR, XATTR_LINECOLOR,
-                          XATTR_FILLSTYLE, XATTR_FILLSTYLE, 0 );
-
-    pClone->TakeAttributes( aSet, TRUE, FALSE );
-
-    aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-    aSet.Put( XLineColorItem(String(), Color( COL_BLACK ) ) );
-    aSet.Put( XFillStyleItem( XFILL_NONE ) );
-    pClone->NbcSetAttributes( aSet, FALSE );
+//-/    SfxItemSet      aSet( (SfxItemPool&)( *GetItemPool() ),
+//-/                          XATTR_LINESTYLE, XATTR_LINESTYLE,
+//-/                          XATTR_LINECOLOR, XATTR_LINECOLOR,
+//-/                          XATTR_FILLSTYLE, XATTR_FILLSTYLE, 0 );
+//-/
+//-/    pClone->TakeAttributes( aSet, TRUE, FALSE );
+//-/
+//-/    aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+//-/    aSet.Put( XLineColorItem(String(), Color( COL_BLACK ) ) );
+//-/    aSet.Put( XFillStyleItem( XFILL_NONE ) );
+//-/    pClone->NbcSetAttributes( aSet, FALSE );
+    pClone->SetItem(XLineStyleItem(XLINE_SOLID));
+    pClone->SetItem(XLineColorItem(String(), Color(COL_BLACK)));
+    pClone->SetItem(XFillStyleItem(XFILL_NONE));
 
     aMtf.Record( &aBlackHole );
     aPaintInfo.nPaintMode = SDRPAINTMODE_DRAFTTEXT | SDRPAINTMODE_DRAFTGRAF;
@@ -3126,17 +3248,112 @@ void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/void SdrObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/}
+
+//-/void SdrObject::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/}
+
+//-/void SdrObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SfxItemSet* SdrObject::CreateNewItemSet(SfxItemPool& rPool)
+{
+//-/    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
+    // Basic implementation; Basic object has NO attributes
+    return NULL;
+}
+
+SfxItemSet* SdrObject::mpEmptyItemSet = 0L;
+const SfxItemSet& SdrObject::GetItemSet() const
+{
+    if(!mpEmptyItemSet)
+        mpEmptyItemSet = ((SdrObject*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+    DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
+    return *mpEmptyItemSet;
+}
+
+void SdrObject::SetItem( const SfxPoolItem& rItem )
 {
 }
 
-void SdrObject::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrObject::ClearItem( USHORT nWhich )
 {
 }
 
-void SdrObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrObject::SetItemSet( const SfxItemSet& rSet )
 {
 }
+
+void SdrObject::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
+{
+    sal_uInt32 nCount(rChange.GetRectangleCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+        SendRepaintBroadcast(rChange.GetRectangle(a));
+
+    if(ISA(SdrObjGroup))
+    {
+        SdrObjListIter aIter(*((SdrObjGroup*)this), IM_DEEPNOGROUPS);
+        while(aIter.IsMore())
+        {
+            SdrObject* pObj = aIter.Next();
+            SendRepaintBroadcast(pObj->GetBoundRect());
+        }
+    }
+    else
+        SendRepaintBroadcast(GetBoundRect());
+
+    for(a = 0; a < nCount; a++)
+        SendUserCall(SDRUSERCALL_CHGATTR, rChange.GetRectangle(a));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// syntactical sugar for ItemSet accesses
+
+void SdrObject::SetItemAndBroadcast(const SfxPoolItem& rItem)
+{
+    SdrBroadcastItemChange aC(*this);
+    SetItem(rItem);
+    BroadcastItemChange(aC);
+}
+
+void SdrObject::ClearItemAndBroadcast(USHORT nWhich)
+{
+    SdrBroadcastItemChange aC(*this);
+    ClearItem(nWhich);
+    BroadcastItemChange(aC);
+}
+
+void SdrObject::SetItemSetAndBroadcast(const SfxItemSet& rSet)
+{
+    SdrBroadcastItemChange aC(*this);
+    SetItemSet(rSet);
+    BroadcastItemChange(aC);
+}
+
+const SfxPoolItem& SdrObject::GetItem(USHORT nWhich) const
+{
+    return GetItemSet().Get(nWhich);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrObject::PreSave()
+{
+}
+
+void SdrObject::PostSave()
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
 {
@@ -3523,8 +3740,9 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         // useful when new closed filled polygons are created
         if(aPolyPoly3D.Count() || (bForceLineDash && aLinePoly3D.Count()))
         {
-            SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-            pRet->TakeAttributes(aSet, TRUE, FALSE);
+//-/            SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/            pRet->TakeAttributes(aSet, TRUE, FALSE);
+            SfxItemSet aSet(pRet->GetItemSet());
             XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
             SdrPathObj* aLinePolygonPart = NULL;
             SdrPathObj* aLineLinePart = NULL;
@@ -3544,7 +3762,9 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aSet.Put(XFillStyleItem(XFILL_SOLID));
                 aSet.Put(XLineStyleItem(XLINE_NONE));
                 aSet.Put(XFillTransparenceItem(nTransLine));
-                aLinePolygonPart->NbcSetAttributes(aSet, FALSE);
+
+//-/                aLinePolygonPart->NbcSetAttributes(aSet, FALSE);
+                aLinePolygonPart->SetItemSet(aSet);
             }
 
             if(aLinePoly3D.Count())
@@ -3555,7 +3775,9 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aSet.Put(XLineWidthItem(0L));
                 aSet.Put(XFillStyleItem(XFILL_NONE));
                 aSet.Put(XLineStyleItem(XLINE_SOLID));
-                aLineLinePart->NbcSetAttributes(aSet, FALSE);
+
+//-/                aLineLinePart->NbcSetAttributes(aSet, FALSE);
+                aLineLinePart->SetItemSet(aSet);
 
                 if(aLinePolygonPart)
                     bBuildGroup = TRUE;
@@ -3577,13 +3799,18 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 pGroup->SetModel(pRet->GetModel());
 
                 aSet.ClearItem();
-                pRet->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                pRet->TakeAttributes(aSet, TRUE, FALSE);
+                aSet.Put(pRet->GetItemSet());
+
                 aSet.Put(XLineStyleItem(XLINE_NONE));
                 aSet.Put(XLineWidthItem(0L));
 
                 SdrObject* pClone = pRet->Clone();
                 pClone->SetModel(pRet->GetModel());
-                pClone->NbcSetAttributes(aSet, FALSE);
+
+//-/                pClone->NbcSetAttributes(aSet, FALSE);
+                pClone->SetItemSet(aSet);
 
                 pGroup->GetSubList()->NbcInsertObject( pClone );
 

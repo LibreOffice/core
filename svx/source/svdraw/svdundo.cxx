@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,14 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
     bHaveToTakeRedoSet(TRUE)
 {
     bStyleSheet=bStyleSheet1;
-    pUndoSet=new SfxItemSet(rNewObj.GetModel()->GetUndoItemPool());
-    pRedoSet=new SfxItemSet(rNewObj.GetModel()->GetUndoItemPool());
+
+//-/    pUndoSet=new SfxItemSet(rNewObj.GetModel()->GetUndoItemPool());
+//-/    pRedoSet=new SfxItemSet(rNewObj.GetModel()->GetUndoItemPool());
+//-/    pUndoSet = rNewObj.CreateNewItemSet(rNewObj.GetModel()->GetUndoItemPool());
+//-/    pRedoSet = rNewObj.CreateNewItemSet(rNewObj.GetModel()->GetUndoItemPool());
+    pUndoSet = rNewObj.CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+    pRedoSet = rNewObj.CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+
     SdrObjList* pOL=rNewObj.GetSubList();
     if (pOL!=NULL && pOL->GetObjCount()) { // Aha, Gruppenobjekt
         pUndoGroup=new SdrUndoGroup(*pObj->GetModel());
@@ -302,8 +308,12 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
         for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
             pUndoGroup->AddAction(new SdrUndoAttrObj(*pOL->GetObj(nObjNum),bStyleSheet1));
         }
-    } else {
-        pObj->TakeAttributes(*pUndoSet,FALSE,TRUE);
+    }
+    else
+    {
+//-/        pObj->TakeAttributes(*pUndoSet,FALSE,TRUE);
+        pUndoSet->Put(pObj->GetItemSet());
+
         if (bStyleSheet) pUndoStyleSheet=pObj->GetStyleSheet();
         if (bSaveText) {
             pTextUndo=pObj->GetOutlinerParaObject();
@@ -324,7 +334,11 @@ __EXPORT SdrUndoAttrObj::~SdrUndoAttrObj()
 void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
 {
     if (pRepeatSet!=NULL) delete pRepeatSet;
-    pRepeatSet=new SfxItemSet(pObj->GetModel()->GetUndoItemPool());
+
+//-/    pRepeatSet=new SfxItemSet(pObj->GetModel()->GetUndoItemPool());
+//-/    pRepeatSet = pObj->CreateNewItemSet(pObj->GetModel()->GetUndoItemPool());
+    pRepeatSet = pObj->CreateNewItemSet(*((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
+
     pRepeatSet->Put(rSet);
 }
 
@@ -335,14 +349,23 @@ void __EXPORT SdrUndoAttrObj::Undo()
     } else {
         if (bHaveToTakeRedoSet) {
             bHaveToTakeRedoSet=FALSE;
-            pObj->TakeAttributes(*pRedoSet,FALSE,TRUE);
+
+//-/            pObj->TakeAttributes(*pRedoSet,FALSE,TRUE);
+            pRedoSet->Put(pObj->GetItemSet());
+
             if (bStyleSheet) pRedoStyleSheet=pObj->GetStyleSheet();
         }
         if (bStyleSheet) {
             pRedoStyleSheet=pObj->GetStyleSheet();
             pObj->SetStyleSheet(pUndoStyleSheet,TRUE);
         }
-        pObj->SetAttributes(*pUndoSet,TRUE);
+
+//-/        pObj->SetAttributes(*pUndoSet,TRUE);
+        SdrBroadcastItemChange aItemChange(*pObj);
+        pObj->ClearItem();
+        pObj->SetItemSet(*pUndoSet);
+        pObj->BroadcastItemChange(aItemChange);
+
         if (pTextUndo!=NULL) {
             pObj->SetOutlinerParaObject(pTextUndo->Clone());
         }
@@ -358,7 +381,12 @@ void __EXPORT SdrUndoAttrObj::Redo()
             pUndoStyleSheet=pObj->GetStyleSheet();
             pObj->SetStyleSheet(pRedoStyleSheet,TRUE);
         }
-        pObj->SetAttributes(*pRedoSet,TRUE);
+
+//-/        pObj->SetAttributes(*pRedoSet,TRUE);
+        SdrBroadcastItemChange aItemChange(*pObj);
+        pObj->ClearItem();
+        pObj->SetItemSet(*pRedoSet);
+        pObj->BroadcastItemChange(aItemChange);
     }
 }
 
@@ -528,11 +556,13 @@ void SdrUndoObjList::SetOwner(BOOL bNew)
         // Undo-Managers wechseln
         if(bNew)
         {
-            pObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+//-/            pObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+            pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
         }
         else
         {
-            pObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+//-/            pObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+            pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
             pObj->SetStyleSheet(pObj->GetStyleSheet(), TRUE);
         }
 
@@ -739,11 +769,13 @@ void SdrUndoReplaceObj::SetNewOwner(BOOL bNew)
         // Undo-Managers wechseln
         if(bNew)
         {
-            pNewObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+//-/            pNewObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+            pNewObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
         }
         else
         {
-            pNewObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+//-/            pNewObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+            pNewObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
         }
 
         // umsetzen
@@ -760,11 +792,13 @@ void SdrUndoReplaceObj::SetOldOwner(BOOL bNew)
         // Undo-Managers wechseln
         if(bNew)
         {
-            pObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+//-/            pObj->MigrateItemPool(&rMod.GetItemPool(), &rMod.GetUndoItemPool());
+            pObj->MigrateItemPool(&rMod.GetItemPool(), ((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()));
         }
         else
         {
-            pObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+//-/            pObj->MigrateItemPool(&rMod.GetUndoItemPool(), &rMod.GetItemPool());
+            pObj->MigrateItemPool(((SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool()), &rMod.GetItemPool());
         }
 
         // umsetzen

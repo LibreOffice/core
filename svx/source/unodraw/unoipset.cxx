@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,21 +138,21 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 }
 
 //----------------------------------------------------------------------
-void SvxItemPropertySet::Generate3DAttrDefaultItem(sal_uInt16 nWID, SfxItemSet& rSet)
-{
-    SfxItemSet aSet( *rSet.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END);
-    E3dDefaultAttributes a3DDefaultAttr;
-    a3DDefaultAttr.TakeDefaultValues(aSet);
-    const SfxPoolItem* pItem = 0;
-    SfxPoolItem *pNewItem = 0;
-    SfxItemState eState = aSet.GetItemState( nWID, sal_True, &pItem );
-    if(eState >= SFX_ITEM_DEFAULT && pItem)
-    {
-        pNewItem = pItem->Clone();
-        rSet.Put( *pNewItem, nWID );
-        delete pNewItem;
-    }
-}
+//-/void SvxItemPropertySet::Generate3DAttrDefaultItem(sal_uInt16 nWID, SfxItemSet& rSet)
+//-/{
+//-/    SfxItemSet aSet( *rSet.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END);
+//-/    E3dDefaultAttributes a3DDefaultAttr;
+//-/    a3DDefaultAttr.TakeDefaultValues(aSet);
+//-/    const SfxPoolItem* pItem = 0;
+//-/    SfxPoolItem *pNewItem = 0;
+//-/    SfxItemState eState = aSet.GetItemState( nWID, sal_True, &pItem );
+//-/    if(eState >= SFX_ITEM_DEFAULT && pItem)
+//-/    {
+//-/        pNewItem = pItem->Clone();
+//-/        rSet.Put( *pNewItem, nWID );
+//-/        delete pNewItem;
+//-/    }
+//-/}
 
 //----------------------------------------------------------------------
 void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet,
@@ -193,17 +193,17 @@ void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rProp
                         else
                         {
                             // Eintrag sicherstellen in ItemSet
-                            if(pDst->nWID >= SID_ATTR_3D_START && pDst->nWID <= SID_ATTR_3D_END)
-                            {
-                                // 3D-Attribut, eigenen Default
-                                Generate3DAttrDefaultItem(pDst->nWID, rSet);
-                            }
-                            else
-                            {
+//-/                            if(pDst->nWID >= SID_ATTR_3D_START && pDst->nWID <= SID_ATTR_3D_END)
+//-/                            {
+//-/                                // 3D-Attribut, eigenen Default
+//-/                                Generate3DAttrDefaultItem(pDst->nWID, rSet);
+//-/                            }
+//-/                            else
+//-/                            {
                                 // Default aus ItemPool holen
                                 if(rSet.GetPool()->IsWhich(pDst->nWID))
                                     rSet.Put(rSet.GetPool()->GetDefaultItem(pDst->nWID));
-                            }
+//-/                            }
 
                             // setzen
                             setPropertyValue(pDst, *pUsrAny, rSet);
@@ -293,12 +293,13 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
 
     uno::Any aVal;
     SfxItemSet aSet( *pItemPool, pMap->nWID, pMap->nWID);
-    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-    {
-        // 3D-Attribut, eigenen Default generieren
-        ((SvxItemPropertySet*)this)->Generate3DAttrDefaultItem(pMap->nWID, aSet);
-    }
-    else if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
+//-/    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+//-/    {
+//-/        // 3D-Attribut, eigenen Default generieren
+//-/        ((SvxItemPropertySet*)this)->Generate3DAttrDefaultItem(pMap->nWID, aSet);
+//-/    }
+//-/    else
+    if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Default aus ItemPool holen
         if(pItemPool->IsWhich(pMap->nWID))

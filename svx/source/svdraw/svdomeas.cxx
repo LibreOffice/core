@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,15 +188,11 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
     FieldUnit eMeasureUnit(FUNIT_NONE);
     FieldUnit eModUIUnit(FUNIT_NONE);
 
-    if(rObj.pMeasureAttr)
-    {
-        const SfxItemSet& rSet = rObj.pMeasureAttr->GetItemSet();
-
-        bTextRota90 = ((SdrMeasureTextRota90Item&)rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
-        eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
-        aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
-        bShowUnit = ((SdrMeasureShowUnitItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
-    }
+    const SfxItemSet& rSet = rObj.GetItemSet();
+    bTextRota90 = ((SdrMeasureTextRota90Item&)rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
+    eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
+    aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
+    bShowUnit = ((SdrMeasureShowUnitItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
 
     SdrModel* pModel = rObj.pModel;
 
@@ -304,85 +300,101 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
 
 TYPEINIT1(SdrMeasureObj,SdrTextObj);
 
-void SdrMeasureObj::ForceDefaultAttr(SfxItemPool* pPool)
+void SdrMeasureObj::ForceDefaultAttr()
 {
-    BOOL bLineMerk(!pLineAttr);
-    BOOL bOutlMerk(!pOutlAttr);
-    BOOL bMiscMerk(!pMiscAttr);
+//-/    BOOL bLineMerk(!pLineAttr);
+//-/    BOOL bOutlMerk(!pOutlAttr);
+//-/    BOOL bMiscMerk(!pMiscAttr);
 
-    SdrTextObj::ForceDefaultAttr(pPool);
+    SdrTextObj::ForceDefaultAttr();
 
-    if(pPool)
-    {
-        if(!pMeasureAttr)
-        {
-            SdrMeasureSetItem aSetItem(pPool);
+//-/    if(pPool)
+//-/    {
+    //#71958# by default, the show units Bool-Item is set as hard
+    // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
+    // from one application to another
+    SetItem(SdrMeasureShowUnitItem(TRUE));
 
-            //#71958# by default, the show units Bool-Item is set as hard
-            // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
-            // from one application to another
-            aSetItem.GetItemSet().Put(SdrMeasureShowUnitItem(TRUE));
+    XPolygon aXP(4);        //      []
+    aXP[0] = Point(100,0);    // 0,4__[]__2,4
+    aXP[1] = Point(200,400);  //    \    /
+    aXP[2] = Point(0,400);    //     \  /
+    aXP[3] = Point(100,0);    //      \/1,0
 
-            pMeasureAttr = (SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr, &aSetItem, FALSE);
-        }
-
-        if(bLineMerk && pLineAttr)
-        {
-            XLineAttrSetItem aSetItem(*pLineAttr);
-
-            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
-
-            XPolygon aXP(4);        //      []
-            aXP[0] = Point(100,0);    // 0,4__[]__2,4
-            aXP[1] = Point(200,400);  //    \    /
-            aXP[2] = Point(0,400);    //     \  /
-            aXP[3] = Point(100,0);    //      \/1,0
-
-            aSetItem.GetItemSet().Put(XLineStartItem(String(), aXP));
-            aSetItem.GetItemSet().Put(XLineStartWidthItem(200));
-            aSetItem.GetItemSet().Put(XLineEndItem(String(), aXP));
-            aSetItem.GetItemSet().Put(XLineEndWidthItem(200));
-            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
-
-            pLineAttr=(XLineAttrSetItem*)ImpSetNewAttr(pLineAttr, &aSetItem, FALSE);
-        }
-    }
+    SetItem(XLineStartItem(String(), aXP));
+    SetItem(XLineStartWidthItem(200));
+    SetItem(XLineEndItem(String(), aXP));
+    SetItem(XLineEndWidthItem(200));
+    SetItem(XLineStyleItem(XLINE_SOLID));
+//-/        if(!pMeasureAttr)
+//-/        {
+//-/            SdrMeasureSetItem aSetItem(pPool);
+//-/
+//-/            //#71958# by default, the show units Bool-Item is set as hard
+//-/            // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
+//-/            // from one application to another
+//-/            aSetItem.GetItemSet().Put(SdrMeasureShowUnitItem(TRUE));
+//-/
+//-/            pMeasureAttr = (SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr, &aSetItem, FALSE);
+//-/        }
+//-/
+//-/        if(bLineMerk && pLineAttr)
+//-/        {
+//-/            XLineAttrSetItem aSetItem(*pLineAttr);
+//-/
+//-/            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
+//-/
+//-/            XPolygon aXP(4);        //      []
+//-/            aXP[0] = Point(100,0);    // 0,4__[]__2,4
+//-/            aXP[1] = Point(200,400);  //    \    /
+//-/            aXP[2] = Point(0,400);    //     \  /
+//-/            aXP[3] = Point(100,0);    //      \/1,0
+//-/
+//-/            aSetItem.GetItemSet().Put(XLineStartItem(String(), aXP));
+//-/            aSetItem.GetItemSet().Put(XLineStartWidthItem(200));
+//-/            aSetItem.GetItemSet().Put(XLineEndItem(String(), aXP));
+//-/            aSetItem.GetItemSet().Put(XLineEndWidthItem(200));
+//-/            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
+//-/
+//-/            pLineAttr=(XLineAttrSetItem*)ImpSetNewAttr(pLineAttr, &aSetItem, FALSE);
+//-/        }
+//-/    }
 }
 
-USHORT SdrMeasureObj::GetSetItemCount() const
-{
-    return 1+SdrTextObj::GetSetItemCount();
-}
+//-/USHORT SdrMeasureObj::GetSetItemCount() const
+//-/{
+//-/    return 1+SdrTextObj::GetSetItemCount();
+//-/}
 
-const SfxSetItem* SdrMeasureObj::GetSetItem(USHORT nNum) const
-{
-    if (nNum==0) return pMeasureAttr;
-    nNum--;
-    return SdrTextObj::GetSetItem(nNum);
-}
+//-/const SfxSetItem* SdrMeasureObj::GetSetItem(USHORT nNum) const
+//-/{
+//-/    if (nNum==0) return pMeasureAttr;
+//-/    nNum--;
+//-/    return SdrTextObj::GetSetItem(nNum);
+//-/}
 
-void SdrMeasureObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
-{
-    if (nNum==0) pMeasureAttr=(const SdrMeasureSetItem*)pAttr;
-    else {
-        nNum--;
-        SdrTextObj::SetSetItem(nNum,pAttr);
-    }
-}
+//-/void SdrMeasureObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
+//-/{
+//-/    if (nNum==0) pMeasureAttr=(const SdrMeasureSetItem*)pAttr;
+//-/    else {
+//-/        nNum--;
+//-/        SdrTextObj::SetSetItem(nNum,pAttr);
+//-/    }
+//-/}
 
-SfxSetItem* SdrMeasureObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
-{
-    if (nNum==0) {
-        if (bClone) return new SdrMeasureSetItem(*pMeasureAttr);
-        else return new SdrMeasureSetItem(GetItemPool());
-    } else {
-        nNum--;
-        return SdrTextObj::MakeNewSetItem(nNum,bClone);
-    }
-}
+//-/SfxSetItem* SdrMeasureObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
+//-/{
+//-/    if (nNum==0) {
+//-/        if (bClone) return new SdrMeasureSetItem(*pMeasureAttr);
+//-/        else return new SdrMeasureSetItem(GetItemPool());
+//-/    } else {
+//-/        nNum--;
+//-/        return SdrTextObj::MakeNewSetItem(nNum,bClone);
+//-/    }
+//-/}
 
 SdrMeasureObj::SdrMeasureObj():
-    pMeasureAttr(NULL),
+//-/    pMeasureAttr(NULL),
     bTextDirty(FALSE)
 {
 }
@@ -390,7 +402,7 @@ SdrMeasureObj::SdrMeasureObj():
 SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
     aPt1(rPt1),
     aPt2(rPt2),
-    pMeasureAttr(NULL),
+//-/    pMeasureAttr(NULL),
     bTextDirty(FALSE)
 {
 }
@@ -398,7 +410,7 @@ SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
 SdrMeasureObj::~SdrMeasureObj()
 {
     // Attr entfernen (macht das SdrAttrObj noch nicht automatisch)
-    pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,NULL,FALSE);
+//-/    pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,NULL,FALSE);
 }
 
 void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -496,52 +508,56 @@ struct ImpMeasurePoly
 
 void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
 {
-    rRec.aPt1=aPt1;
-    rRec.aPt2=aPt2;
-    if (pMeasureAttr!=NULL) {
-        const SfxItemSet& rSet=pMeasureAttr->GetItemSet();
-        rRec.eKind            =((SdrMeasureKindItem&            )rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
-        rRec.eWantTextHPos    =((SdrMeasureTextHPosItem&        )rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
-        rRec.eWantTextVPos    =((SdrMeasureTextVPosItem&        )rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
-        rRec.nLineDist        =((SdrMeasureLineDistItem&        )rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
-        rRec.nHelplineOverhang=((SdrMeasureHelplineOverhangItem&)rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
-        rRec.nHelplineDist    =((SdrMeasureHelplineDistItem&    )rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
-        rRec.nHelpline1Len    =((SdrMeasureHelpline1LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
-        rRec.nHelpline2Len    =((SdrMeasureHelpline2LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
-        rRec.bBelowRefEdge    =((SdrMeasureBelowRefEdgeItem&    )rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
-        rRec.bTextRota90      =((SdrMeasureTextRota90Item&      )rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
-        rRec.bTextUpsideDown  =((SdrMeasureTextUpsideDownItem&  )rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
-        rRec.nMeasureOverhang =((SdrMeasureOverhangItem&        )rSet.Get(SDRATTR_MEASUREOVERHANG        )).GetValue();
-        rRec.eMeasureUnit     =((SdrMeasureUnitItem&            )rSet.Get(SDRATTR_MEASUREUNIT            )).GetValue();
-        rRec.aMeasureScale    =((SdrMeasureScaleItem&           )rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
-        rRec.bShowUnit        =((SdrMeasureShowUnitItem&        )rSet.Get(SDRATTR_MEASURESHOWUNIT        )).GetValue();
-        rRec.aFormatString    =((SdrMeasureFormatStringItem&    )rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
-        rRec.bTextAutoAngle    =((SdrMeasureTextAutoAngleItem&    )rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
-        rRec.nTextAutoAngleView=((SdrMeasureTextAutoAngleViewItem&)rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
-        rRec.bTextIsFixedAngle =((SdrMeasureTextIsFixedAngleItem& )rSet.Get(SDRATTR_MEASURETEXTISFIXEDANGLE )).GetValue();
-        rRec.nTextFixedAngle   =((SdrMeasureTextFixedAngleItem&   )rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
-    } else {
-        rRec.eKind=SDRMEASURE_STD;
-        rRec.eWantTextHPos=SDRMEASURE_TEXTHAUTO;
-        rRec.eWantTextVPos=SDRMEASURE_TEXTVAUTO;
-        rRec.nLineDist=800;
-        rRec.nHelplineOverhang=200;
-        rRec.nHelplineDist=100;
-        rRec.nHelpline1Len=0;
-        rRec.nHelpline2Len=0;
-        rRec.bBelowRefEdge=FALSE;
-        rRec.bTextRota90=FALSE;
-        rRec.bTextUpsideDown=FALSE;
-        rRec.nMeasureOverhang=600;
-        rRec.eMeasureUnit=FUNIT_NONE;
-        rRec.aMeasureScale=Fraction(1,1);
-        rRec.bShowUnit=FALSE;
-        rRec.aFormatString.Erase();
-        rRec.bTextAutoAngle=TRUE;
-        rRec.nTextAutoAngleView=31500;
-        rRec.bTextIsFixedAngle=FALSE;
-        rRec.nTextFixedAngle=0;
-    }
+    rRec.aPt1 = aPt1;
+    rRec.aPt2 = aPt2;
+
+//-/    if(mpObjectItemSet)
+//-/    {
+    const SfxItemSet& rSet = GetItemSet();
+    rRec.eKind            =((SdrMeasureKindItem&            )rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
+    rRec.eWantTextHPos    =((SdrMeasureTextHPosItem&        )rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
+    rRec.eWantTextVPos    =((SdrMeasureTextVPosItem&        )rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
+    rRec.nLineDist        =((SdrMeasureLineDistItem&        )rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
+    rRec.nHelplineOverhang=((SdrMeasureHelplineOverhangItem&)rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
+    rRec.nHelplineDist    =((SdrMeasureHelplineDistItem&    )rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
+    rRec.nHelpline1Len    =((SdrMeasureHelpline1LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
+    rRec.nHelpline2Len    =((SdrMeasureHelpline2LenItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
+    rRec.bBelowRefEdge    =((SdrMeasureBelowRefEdgeItem&    )rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
+    rRec.bTextRota90      =((SdrMeasureTextRota90Item&      )rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
+    rRec.bTextUpsideDown  =((SdrMeasureTextUpsideDownItem&  )rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
+    rRec.nMeasureOverhang =((SdrMeasureOverhangItem&        )rSet.Get(SDRATTR_MEASUREOVERHANG        )).GetValue();
+    rRec.eMeasureUnit     =((SdrMeasureUnitItem&            )rSet.Get(SDRATTR_MEASUREUNIT            )).GetValue();
+    rRec.aMeasureScale    =((SdrMeasureScaleItem&           )rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
+    rRec.bShowUnit        =((SdrMeasureShowUnitItem&        )rSet.Get(SDRATTR_MEASURESHOWUNIT        )).GetValue();
+    rRec.aFormatString    =((SdrMeasureFormatStringItem&    )rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
+    rRec.bTextAutoAngle    =((SdrMeasureTextAutoAngleItem&    )rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
+    rRec.nTextAutoAngleView=((SdrMeasureTextAutoAngleViewItem&)rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
+    rRec.bTextIsFixedAngle =((SdrMeasureTextIsFixedAngleItem& )rSet.Get(SDRATTR_MEASURETEXTISFIXEDANGLE )).GetValue();
+    rRec.nTextFixedAngle   =((SdrMeasureTextFixedAngleItem&   )rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
+//-/    }
+//-/    else
+//-/    {
+//-/        rRec.eKind=SDRMEASURE_STD;
+//-/        rRec.eWantTextHPos=SDRMEASURE_TEXTHAUTO;
+//-/        rRec.eWantTextVPos=SDRMEASURE_TEXTVAUTO;
+//-/        rRec.nLineDist=800;
+//-/        rRec.nHelplineOverhang=200;
+//-/        rRec.nHelplineDist=100;
+//-/        rRec.nHelpline1Len=0;
+//-/        rRec.nHelpline2Len=0;
+//-/        rRec.bBelowRefEdge=FALSE;
+//-/        rRec.bTextRota90=FALSE;
+//-/        rRec.bTextUpsideDown=FALSE;
+//-/        rRec.nMeasureOverhang=600;
+//-/        rRec.eMeasureUnit=FUNIT_NONE;
+//-/        rRec.aMeasureScale=Fraction(1,1);
+//-/        rRec.bShowUnit=FALSE;
+//-/        rRec.aFormatString.Erase();
+//-/        rRec.bTextAutoAngle=TRUE;
+//-/        rRec.nTextAutoAngleView=31500;
+//-/        rRec.bTextIsFixedAngle=FALSE;
+//-/        rRec.nTextFixedAngle=0;
+//-/    }
 }
 
 void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const
@@ -563,28 +579,34 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     long nArrowNeed=0;
     long nShortLen=0;
     FASTBOOL bPfeileAussen=FALSE;
-    if (pLineAttr!=NULL) {
-        const SfxItemSet& rSet=pLineAttr->GetItemSet();
-        INT32 nLineWdt=((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
-        rPol.nLineWdt2=(nLineWdt+1)/2;
 
-        nArrow1Wdt=((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
-        if (nArrow1Wdt<0) nArrow1Wdt=-nLineWdt*nArrow1Wdt/100; // <0 = relativ
-        nArrow2Wdt=((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
-        if (nArrow2Wdt<0) nArrow2Wdt=-nLineWdt*nArrow2Wdt/100; // <0 = relativ
+//-/    if(mpObjectItemSet)
+//-/    {
+    const SfxItemSet& rSet = GetItemSet();
+    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // Strichstaerke
+    rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
-        XPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue());
-        XPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue());
-        bArrow1Center=((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
-        bArrow2Center=((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
-        nArrow1Len=XOutputDevice::InitLineStartEnd(aPol1,nArrow1Wdt,bArrow1Center)-1;
-        nArrow2Len=XOutputDevice::InitLineStartEnd(aPol2,nArrow2Wdt,bArrow2Center)-1;
-        // nArrowLen ist bei bCenter bereits halbiert
-        // Bei 2 Pfeilen a 4mm ist unter 10mm Schluss.
-        nArrowNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2;
-        if (rPol.nLineLen<nArrowNeed) bPfeileAussen=TRUE;
-        nShortLen=(nArrow1Len+nArrow1Wdt + nArrow2Len+nArrow2Wdt) /2;
-    }
+    nArrow1Wdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+    if(nArrow1Wdt < 0)
+        nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relativ
+
+    nArrow2Wdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+    if(nArrow2Wdt < 0)
+        nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relativ
+
+    XPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue());
+    XPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue());
+    bArrow1Center = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
+    bArrow2Center = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
+    nArrow1Len = XOutputDevice::InitLineStartEnd(aPol1, nArrow1Wdt, bArrow1Center) - 1;
+    nArrow2Len = XOutputDevice::InitLineStartEnd(aPol2, nArrow2Wdt, bArrow2Center) - 1;
+
+    // nArrowLen ist bei bCenter bereits halbiert
+    // Bei 2 Pfeilen a 4mm ist unter 10mm Schluss.
+    nArrowNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2;
+    if (rPol.nLineLen<nArrowNeed) bPfeileAussen=TRUE;
+    nShortLen=(nArrow1Len+nArrow1Wdt + nArrow2Len+nArrow2Wdt) /2;
+//-/    }
 
     rPol.eUsedTextHPos=rRec.eWantTextHPos;
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
@@ -743,27 +765,29 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
         return TRUE;
 
     // prepare ItemSet of this object
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
+    const SfxItemSet& rSet = GetItemSet();
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
-    aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/    XLineAttrSetItem aXLSet(rSet.GetPool());
+    SfxItemSet aEmptySet(*rSet.GetPool());
+    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
 
     // prepare line geometry
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
 
     // Shadows
-    BOOL bShadOn = ((SdrShadowItem&)(aSet.Get(SDRATTR_SHADOW))).GetValue();
+    BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
     if(bShadOn && pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawShadowLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aXLSet);
+    rXOut.SetLineAttr(aEmptySet);
 
     // !!! aGeo muss noch fuer Textausgabe gesetzt werden !!!
     // aRect ebenso
@@ -796,7 +820,7 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
     if(pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     FASTBOOL bOk=TRUE;
@@ -843,8 +867,15 @@ void SdrMeasureObj::UndirtyText() const
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE)),ESelection(0,1));
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_UNIT)),ESelection(0,2));
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS)),ESelection(0,3));
-            if (pStyleSheet!=NULL) rOutliner.SetStyleSheet( 0, pStyleSheet );
-            if (pOutlAttr!=NULL) rOutliner.SetParaAttribs(0,pOutlAttr->GetItemSet());
+
+            if(GetStyleSheet())
+                rOutliner.SetStyleSheet(0, GetStyleSheet());
+
+//-/            if(mpObjectItemSet)
+            rOutliner.SetParaAttribs(0, GetItemSet());
+//-/            if(pOutlAttr)
+//-/                rOutliner.SetParaAttribs(0, pOutlAttr->GetItemSet());
+
             // casting auf nonconst
             ((SdrMeasureObj*)this)->pOutlinerParaObject=rOutliner.CreateParaObject();
         } else {
@@ -987,7 +1018,7 @@ void SdrMeasureObj::operator=(const SdrObject& rObj)
     SdrTextObj::operator=(rObj);
     aPt1=((SdrMeasureObj&)rObj).aPt1;
     aPt2=((SdrMeasureObj&)rObj).aPt2;
-    pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,((SdrMeasureObj&)rObj).pMeasureAttr);
+//-/    pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,((SdrMeasureObj&)rObj).pMeasureAttr);
     bTextDirty=((SdrMeasureObj&)rObj).bTextDirty;
 }
 
@@ -1089,27 +1120,60 @@ FASTBOOL SdrMeasureObj::EndDrag(SdrDragStat& rDrag)
     switch (nHdlNum) {
         case 2: aPt1=pMR->aPt1; SetTextDirty(); break;
         case 3: aPt2=pMR->aPt2; SetTextDirty(); break;
-        default: {
-            SdrMeasureSetItem aSI(*pMeasureAttr);
-            switch (nHdlNum) {
-                case 0: case 1: {
-                    if (pMR->nHelpline1Len!=aRec0.nHelpline1Len) {
-                        aSI.GetItemSet().Put(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
+        default:
+        {
+            switch(nHdlNum)
+            {
+                case 0:
+                case 1:
+                {
+                    if(pMR->nHelpline1Len!=aRec0.nHelpline1Len)
+                    {
+                        SetItem(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
                     }
-                    if (pMR->nHelpline2Len!=aRec0.nHelpline2Len) {
-                        aSI.GetItemSet().Put(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
+
+                    if(pMR->nHelpline2Len!=aRec0.nHelpline2Len)
+                    {
+                        SetItem(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
                     }
-                } break;
-                case 4: case 5: {
-                    if (pMR->nLineDist!=aRec0.nLineDist) {
-                        aSI.GetItemSet().Put(SdrMeasureLineDistItem(pMR->nLineDist));
+
+                    break;
+                }
+
+                case 4:
+                case 5:
+                {
+                    if (pMR->nLineDist!=aRec0.nLineDist)
+                    {
+                        SetItem(SdrMeasureLineDistItem(pMR->nLineDist));
                     }
-                    if (pMR->bBelowRefEdge!=aRec0.bBelowRefEdge) {
-                        aSI.GetItemSet().Put(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
+
+                    if(pMR->bBelowRefEdge!=aRec0.bBelowRefEdge)
+                    {
+                        SetItem(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
                     }
                 }
             }
-            pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,&aSI);
+//-/            SdrMeasureSetItem aSI(*pMeasureAttr);
+//-/            switch (nHdlNum) {
+//-/                case 0: case 1: {
+//-/                    if (pMR->nHelpline1Len!=aRec0.nHelpline1Len) {
+//-/                        aSI.GetItemSet().Put(SdrMeasureHelpline1LenItem(pMR->nHelpline1Len));
+//-/                    }
+//-/                    if (pMR->nHelpline2Len!=aRec0.nHelpline2Len) {
+//-/                        aSI.GetItemSet().Put(SdrMeasureHelpline2LenItem(pMR->nHelpline2Len));
+//-/                    }
+//-/                } break;
+//-/                case 4: case 5: {
+//-/                    if (pMR->nLineDist!=aRec0.nLineDist) {
+//-/                        aSI.GetItemSet().Put(SdrMeasureLineDistItem(pMR->nLineDist));
+//-/                    }
+//-/                    if (pMR->bBelowRefEdge!=aRec0.bBelowRefEdge) {
+//-/                        aSI.GetItemSet().Put(SdrMeasureBelowRefEdgeItem(pMR->bBelowRefEdge));
+//-/                    }
+//-/                }
+//-/            }
+//-/            pMeasureAttr=(SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,&aSI);
         }
     } // switch
     SetRectsDirty();
@@ -1371,8 +1435,8 @@ void SdrMeasureObj::RecalcBoundRect()
 void SdrMeasureObj::RecalcSnapRect()
 {
     // !!!!! nur zu Testzwecken !!!!!
-    aSnapRect=Rectangle(aPt1,aPt2);
-    aSnapRect.Justify();
+    maSnapRect=Rectangle(aPt1,aPt2);
+    maSnapRect.Justify();
 }
 
 USHORT SdrMeasureObj::GetSnapPointCount() const
@@ -1439,9 +1503,9 @@ void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& r
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get LineStyleParameterPack
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
-    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
+    LineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, rOut);
     LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
     Polygon3D aPoly3D;
@@ -1507,8 +1571,9 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get local ItemSet
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, TRUE, FALSE);
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, TRUE, FALSE);
+    SfxItemSet aSet(GetItemSet());
 
     // prepare group
     SdrObjGroup* pGroup = new SdrObjGroup;
@@ -1527,7 +1592,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[0]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineStartWidthItem(0L));
@@ -1547,7 +1615,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[0]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(nEndWidth));
@@ -1557,7 +1628,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[1]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1575,7 +1649,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[0]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(nEndWidth));
@@ -1585,7 +1662,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[1]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1598,7 +1678,10 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
         aNewPoly.Insert(aTmpPolyPolygon[nLoopStart]);
         pPath = new SdrPathObj(OBJ_PATHLINE, aNewPoly);
         pPath->SetModel(GetModel());
-        pPath->NbcSetAttributes(aSet, FALSE);
+
+//-/        pPath->NbcSetAttributes(aSet, FALSE);
+        pPath->SetItemSet(aSet);
+
         pGroup->GetSubList()->NbcInsertObject(pPath);
     }
 
@@ -1738,28 +1821,109 @@ void SdrMeasureObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDo
     SdrTextObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
 }
 
-void SdrMeasureObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void SdrMeasureObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    SetTextDirty();
+//-/    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrMeasureObj::SetItem(const SfxPoolItem& rItem)
 {
     SetTextDirty();
-    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
+    SdrTextObj::SetItem(rItem);
 }
+
+void SdrMeasureObj::ClearItem(USHORT nWhich)
+{
+    SetTextDirty();
+    SdrTextObj::ClearItem(nWhich);
+}
+
+void SdrMeasureObj::SetItemSet(const SfxItemSet& rSet)
+{
+    SetTextDirty();
+    SdrTextObj::SetItemSet(rSet);
+}
+
+SfxItemSet* SdrMeasureObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // measure attributes
+        SDRATTR_MEASURE_FIRST, SDRATTRSET_MEASURE,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrMeasureObj::PreSave()
+{
+    // call parent
+    SdrTextObj::PreSave();
+
+    // prepare SetItems for storage
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
+    SdrMeasureSetItem aMeasAttr(rSet.GetPool());
+    aMeasAttr.GetItemSet().Put(rSet);
+    aMeasAttr.GetItemSet().SetParent(pParent);
+    mpObjectItemSet->Put(aMeasAttr);
+}
+
+void SdrMeasureObj::PostSave()
+{
+    // call parent
+    SdrTextObj::PostSave();
+
+    // remove SetItems from local itemset
+    mpObjectItemSet->ClearItem(SDRATTRSET_MEASURE);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrMeasureObj::WriteData(SvStream& rOut) const
 {
     UndirtyText();
+
     SdrTextObj::WriteData(rOut);
     SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrMeasureObj");
 #endif
-    rOut<<aPt1;
-    rOut<<aPt2;
-    rOut<<BOOL(FALSE); // bTextOverwritten wg. Kompatibilitaet. Gibt's nicht mehr.
+
+    rOut << aPt1;
+    rOut << aPt2;
+    rOut << BOOL(FALSE); // bTextOverwritten wg. Kompatibilitaet. Gibt's nicht mehr.
+
     SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pPool->StoreSurrogate(rOut,pMeasureAttr);
-    } else {
-        rOut<<UINT16(SFX_ITEMS_NULL);
+
+    if(pPool)
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MEASURE));
+
+
+
+//-/        SdrMeasureSetItem aMeasAttr(pPool);
+//-/        aMeasAttr.GetItemSet().Put(GetItemSet());
+//-/        const SfxPoolItem& rMeasAttr = pPool->Put(aMeasAttr);
+//-/        pPool->StoreSurrogate(rOut, &rMeasAttr);
+//-/        pPool->StoreSurrogate(rOut,pMeasureAttr);
+    }
+    else
+    {
+        rOut << sal_uInt16(SFX_ITEMS_NULL);
     }
 }
 
@@ -1776,16 +1940,24 @@ void SdrMeasureObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     BOOL bTextOverwrittenTmp;
     rIn>>bTextOverwrittenTmp;
     SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pMeasureAttr=(const SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,NULL);     // ggf altes rauswerfen
-        USHORT nWhichRef=SDRATTRSET_MEASURE;
-        pMeasureAttr=(const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
-        if (pStyleSheet!=NULL && pMeasureAttr!=NULL) {
-            ((SfxItemSet*)&pMeasureAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
-        }
-    } else {
-        UINT16 nSuroDum;
-        rIn>>nSuroDum;
+
+    if(pPool)
+    {
+        sal_uInt16 nSetID = SDRATTRSET_MEASURE;
+        const SdrMeasureSetItem* pMeasAttr = (const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+        if(pMeasAttr)
+            SetItemSet(pMeasAttr->GetItemSet());
+//-/        pMeasureAttr=(const SdrMeasureSetItem*)ImpSetNewAttr(pMeasureAttr,NULL);     // ggf altes rauswerfen
+//-/        USHORT nWhichRef=SDRATTRSET_MEASURE;
+//-/        pMeasureAttr=(const SdrMeasureSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
+//-/        if (pStyleSheet!=NULL && pMeasureAttr!=NULL) {
+//-/            ((SfxItemSet*)&pMeasureAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
+//-/        }
+    }
+    else
+    {
+        sal_uInt16 nSuroDum;
+        rIn >> nSuroDum;
     }
 }
 

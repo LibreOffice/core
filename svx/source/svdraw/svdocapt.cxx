@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: john.marmion $ $Date: 2000-09-28 08:49:18 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef _SVX_XFLTRIT_HXX
 #include <xfltrit.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +229,7 @@ SdrCaptionObj::SdrCaptionObj():
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
     mbSpecialTextBoxShadow(FALSE)
 {
-    pCaptAttr=NULL;
+//-/    pCaptAttr=NULL;
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect):
@@ -233,7 +237,7 @@ SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect):
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
     mbSpecialTextBoxShadow(FALSE)
 {
-    pCaptAttr=NULL;
+//-/    pCaptAttr=NULL;
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
@@ -242,13 +246,13 @@ SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     mbSpecialTextBoxShadow(FALSE)
 {
     aTailPoly[0]=rTail;
-    pCaptAttr=NULL;
+//-/    pCaptAttr=NULL;
 }
 
 SdrCaptionObj::~SdrCaptionObj()
 {
     // Attr entfernen (oder macht das SdrAttrObj noch nicht automatisch)
-    pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,NULL,FALSE);
+//-/    pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,NULL,FALSE);
 }
 
 FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
@@ -256,32 +260,37 @@ FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInf
     // special shadow paint for calc
     if(mbSpecialTextBoxShadow)
     {
-        sal_uInt32 nXDist = ((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
-        sal_uInt32 nYDist = ((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
-        const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWCOLOR)));
+        const SfxItemSet& rSet = GetItemSet();
+        sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+        const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
         Color aShadCol(rShadColItem.GetValue());
-        sal_uInt16 nTransp = ((SdrShadowTransparenceItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-        XFillStyle eStyle = ((XFillStyleItem&)(pFillAttr->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
-        XFillAttrSetItem aF(*pFillAttr);
+        sal_uInt16 nTransp = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
+        XFillStyle eStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+
+//-/        XFillAttrSetItem aF(rSet.GetPool());
+        SfxItemSet aSet(rSet);
+//-/        aF.GetItemSet().Put(rSet);
 
         if(eStyle == XFILL_HATCH) // #41666#
         {
-            XHatch aHatch = ((XFillHatchItem&)(pFillAttr->GetItemSet().Get(XATTR_FILLHATCH))).GetValue();
+            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
             aHatch.SetColor(aShadCol);
-            aF.GetItemSet().Put(XFillHatchItem(String(),aHatch));
+            aSet.Put(XFillHatchItem(String(),aHatch));
         }
         else
         {
             if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
             {
                 // also fuer Gradient und Bitmap
-                aF.GetItemSet().Put(XFillStyleItem(XFILL_SOLID));
+                aSet.Put(XFillStyleItem(XFILL_SOLID));
             }
 
-            aF.GetItemSet().Put(XFillColorItem(String(),aShadCol));
-            aF.GetItemSet().Put(XFillTransparenceItem(nTransp));
+            aSet.Put(XFillColorItem(String(),aShadCol));
+            aSet.Put(XFillTransparenceItem(nTransp));
         }
-        rOut.SetFillAttr(aF);
+
+        rOut.SetFillAttr(aSet);
 
         sal_Int32 nEckRad(GetEckenradius());
         if(PaintNeedsXPoly(nEckRad))
@@ -347,12 +356,15 @@ SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
     FASTBOOL bHit=SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
     if (!bHit) {
         INT32 nMyTol=nTol;
-        INT32 nWdt=0;
-        if (pLineAttr!=NULL) {
-            nWdt=((XLineWidthItem&)(pLineAttr->GetItemSet().Get(XATTR_LINEWIDTH))).GetValue();
-            nWdt++;
-            nWdt/=2;
-        }
+//-/        INT32 nWdt=0;
+
+//-/        if(mpObjectItemSet)
+//-/        {
+        INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+        nWdt++;
+        nWdt /= 2;
+//-/        }
+
         if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Linie keine Toleranz noetig
         Rectangle aR(rPnt,rPnt);
         aR.Left()  -=nMyTol;
@@ -368,7 +380,7 @@ void SdrCaptionObj::operator=(const SdrObject& rObj)
 {
     SdrRectObj::operator=(rObj);
     aTailPoly=((SdrCaptionObj&)rObj).aTailPoly;
-    pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,((SdrCaptionObj&)rObj).pCaptAttr);
+//-/    pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,((SdrCaptionObj&)rObj).pCaptAttr);
 }
 
 void SdrCaptionObj::TakeObjNameSingul(XubString& rName) const
@@ -549,19 +561,20 @@ void SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) c
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {
-    if (pCaptAttr!=NULL) {
-        const SfxItemSet& rSet=pCaptAttr->GetItemSet();
-        rPara.eType      =((SdrCaptionTypeItem&)      (rSet.Get(SDRATTR_CAPTIONTYPE      ))).GetValue();
-        rPara.bFixedAngle=((SdrCaptionFixedAngleItem&)(rSet.Get(SDRATTR_CAPTIONANGLE     ))).GetValue();
-        rPara.nAngle     =((SdrCaptionAngleItem&)     (rSet.Get(SDRATTR_CAPTIONFIXEDANGLE))).GetValue();
-        rPara.nGap       =((SdrCaptionGapItem&)       (rSet.Get(SDRATTR_CAPTIONGAP       ))).GetValue();
-        rPara.eEscDir    =((SdrCaptionEscDirItem&)    (rSet.Get(SDRATTR_CAPTIONESCDIR    ))).GetValue();
-        rPara.bEscRel    =((SdrCaptionEscIsRelItem&)  (rSet.Get(SDRATTR_CAPTIONESCISREL  ))).GetValue();
-        rPara.nEscRel    =((SdrCaptionEscRelItem&)    (rSet.Get(SDRATTR_CAPTIONESCREL    ))).GetValue();
-        rPara.nEscAbs    =((SdrCaptionEscAbsItem&)    (rSet.Get(SDRATTR_CAPTIONESCABS    ))).GetValue();
-        rPara.nLineLen   =((SdrCaptionLineLenItem&)   (rSet.Get(SDRATTR_CAPTIONLINELEN   ))).GetValue();
-        rPara.bFitLineLen=((SdrCaptionFitLineLenItem&)(rSet.Get(SDRATTR_CAPTIONFITLINELEN))).GetValue();
-    }
+//-/    if(mpObjectItemSet)
+//-/    {
+    const SfxItemSet& rSet = GetItemSet();
+    rPara.eType      =((SdrCaptionTypeItem&)      (rSet.Get(SDRATTR_CAPTIONTYPE      ))).GetValue();
+    rPara.bFixedAngle=((SdrCaptionFixedAngleItem&)(rSet.Get(SDRATTR_CAPTIONANGLE     ))).GetValue();
+    rPara.nAngle     =((SdrCaptionAngleItem&)     (rSet.Get(SDRATTR_CAPTIONFIXEDANGLE))).GetValue();
+    rPara.nGap       =((SdrCaptionGapItem&)       (rSet.Get(SDRATTR_CAPTIONGAP       ))).GetValue();
+    rPara.eEscDir    =((SdrCaptionEscDirItem&)    (rSet.Get(SDRATTR_CAPTIONESCDIR    ))).GetValue();
+    rPara.bEscRel    =((SdrCaptionEscIsRelItem&)  (rSet.Get(SDRATTR_CAPTIONESCISREL  ))).GetValue();
+    rPara.nEscRel    =((SdrCaptionEscRelItem&)    (rSet.Get(SDRATTR_CAPTIONESCREL    ))).GetValue();
+    rPara.nEscAbs    =((SdrCaptionEscAbsItem&)    (rSet.Get(SDRATTR_CAPTIONESCABS    ))).GetValue();
+    rPara.nLineLen   =((SdrCaptionLineLenItem&)   (rSet.Get(SDRATTR_CAPTIONLINELEN   ))).GetValue();
+    rPara.bFitLineLen=((SdrCaptionFitLineLenItem&)(rSet.Get(SDRATTR_CAPTIONFITLINELEN))).GetValue();
+//-/    }
 }
 
 void SdrCaptionObj::ImpRecalcTail()
@@ -755,7 +768,7 @@ const Point& SdrCaptionObj::GetAnchorPos() const
 void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
-    aSnapRect.Union(aTailPoly.GetBoundRect());
+    maSnapRect.Union(aTailPoly.GetBoundRect());
     // !!!!! fehlende Impl.
 }
 
@@ -821,28 +834,66 @@ void SdrCaptionObj::SetModel(SdrModel* pNewModel)
     ImpRecalcTail();
 }
 
-void SdrCaptionObj::ForceDefaultAttr(SfxItemPool* pPool)
+//-/void SdrCaptionObj::ForceDefaultAttr(SfxItemPool* pPool)
+//-/{
+//-/    FASTBOOL bLineMerk=pLineAttr==NULL;
+//-/    SdrRectObj::ForceDefaultAttr(pPool);
+//-/    if (pPool!=NULL) {
+//-/        if (pCaptAttr==NULL) {
+//-/            SdrCaptionSetItem aSetItem(pPool);
+//-/            pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,&aSetItem,FALSE);
+//-/        }
+//-/        if (bLineMerk && pLineAttr!=NULL) {
+//-/            XLineAttrSetItem aSetItem(*pLineAttr);
+//-/            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
+//-/            pLineAttr=(XLineAttrSetItem*)ImpSetNewAttr(pLineAttr,&aSetItem,FALSE);
+//-/        }
+//-/    }
+//-/}
+
+//-/void SdrCaptionObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    SdrRectObj::NbcSetAttributes(rAttr,bReplaceAll);
+//-/    ImpRecalcTail();
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrCaptionObj::SetItem( const SfxPoolItem& rItem )
 {
-    FASTBOOL bLineMerk=pLineAttr==NULL;
-    SdrRectObj::ForceDefaultAttr(pPool);
-    if (pPool!=NULL) {
-        if (pCaptAttr==NULL) {
-            SdrCaptionSetItem aSetItem(pPool);
-            pCaptAttr=(SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,&aSetItem,FALSE);
-        }
-        if (bLineMerk && pLineAttr!=NULL) {
-            XLineAttrSetItem aSetItem(*pLineAttr);
-            aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_SOLID));
-            pLineAttr=(XLineAttrSetItem*)ImpSetNewAttr(pLineAttr,&aSetItem,FALSE);
-        }
-    }
+    ImpRecalcTail();
+    SdrRectObj::SetItem(rItem);
 }
 
-void SdrCaptionObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrCaptionObj::ClearItem( USHORT nWhich )
 {
-    SdrRectObj::NbcSetAttributes(rAttr,bReplaceAll);
     ImpRecalcTail();
+    SdrRectObj::ClearItem(nWhich);
 }
+
+void SdrCaptionObj::SetItemSet( const SfxItemSet& rSet )
+{
+    ImpRecalcTail();
+    SdrRectObj::SetItemSet(rSet);
+}
+
+SfxItemSet* SdrCaptionObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // caption attributes
+        SDRATTR_CAPTION_FIRST, SDRATTRSET_CAPTION,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrCaptionObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
 {
@@ -856,37 +907,37 @@ void SdrCaptionObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const
     ImpRecalcTail();
 }
 
-USHORT SdrCaptionObj::GetSetItemCount() const
-{
-    return 1+SdrRectObj::GetSetItemCount();
-}
+//-/USHORT SdrCaptionObj::GetSetItemCount() const
+//-/{
+//-/    return 1+SdrRectObj::GetSetItemCount();
+//-/}
 
-const SfxSetItem* SdrCaptionObj::GetSetItem(USHORT nNum) const
-{
-    if (nNum==0) return pCaptAttr;
-    nNum--;
-    return SdrRectObj::GetSetItem(nNum);
-}
+//-/const SfxSetItem* SdrCaptionObj::GetSetItem(USHORT nNum) const
+//-/{
+//-/    if (nNum==0) return pCaptAttr;
+//-/    nNum--;
+//-/    return SdrRectObj::GetSetItem(nNum);
+//-/}
 
-void SdrCaptionObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
-{
-    if (nNum==0) pCaptAttr=(const SdrCaptionSetItem*)pAttr;
-    else {
-        nNum--;
-        SdrRectObj::SetSetItem(nNum,pAttr);
-    }
-}
+//-/void SdrCaptionObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
+//-/{
+//-/    if (nNum==0) pCaptAttr=(const SdrCaptionSetItem*)pAttr;
+//-/    else {
+//-/        nNum--;
+//-/        SdrRectObj::SetSetItem(nNum,pAttr);
+//-/    }
+//-/}
 
-SfxSetItem* SdrCaptionObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
-{
-    if (nNum==0) {
-        if (bClone) return new SdrCaptionSetItem(*pCaptAttr);
-        else return new SdrCaptionSetItem(GetItemPool());
-    } else {
-        nNum--;
-        return SdrRectObj::MakeNewSetItem(nNum,bClone);
-    }
-}
+//-/SfxSetItem* SdrCaptionObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
+//-/{
+//-/    if (nNum==0) {
+//-/        if (bClone) return new SdrCaptionSetItem(*pCaptAttr);
+//-/        else return new SdrCaptionSetItem(GetItemPool());
+//-/    } else {
+//-/        nNum--;
+//-/        return SdrRectObj::MakeNewSetItem(nNum,bClone);
+//-/    }
+//-/}
 
 SdrObjGeoData* SdrCaptionObj::NewGeoData() const
 {
@@ -930,6 +981,34 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
     return pRet;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrCaptionObj::PreSave()
+{
+    // call parent
+    SdrRectObj::PreSave();
+
+    // prepare SetItems for storage
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
+    SdrCaptionSetItem aCaptAttr(rSet.GetPool());
+    aCaptAttr.GetItemSet().Put(rSet);
+    aCaptAttr.GetItemSet().SetParent(pParent);
+    mpObjectItemSet->Put(aCaptAttr);
+}
+
+void SdrCaptionObj::PostSave()
+{
+    // call parent
+    SdrRectObj::PostSave();
+
+    // remove SetItems from local itemset
+    mpObjectItemSet->ClearItem(SDRATTRSET_CAPTION);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void SdrCaptionObj::WriteData(SvStream& rOut) const
 {
     SdrRectObj::WriteData(rOut);
@@ -937,37 +1016,64 @@ void SdrCaptionObj::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCaptionObj");
 #endif
-    rOut<<aTailPoly;
-    SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pPool->StoreSurrogate(rOut,pCaptAttr);
-    } else {
-        rOut<<UINT16(SFX_ITEMS_NULL);
+
+    rOut << aTailPoly;
+    SfxItemPool* pPool = GetItemPool();
+
+    if(pPool)
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
+
+
+
+//-/        SdrCaptionSetItem aCaptAttr(pPool);
+//-/        aCaptAttr.GetItemSet().Put(GetItemSet());
+//-/        const SfxPoolItem& rCaptAttr = pPool->Put(aCaptAttr);
+//-/        pPool->StoreSurrogate(rOut, &rCaptAttr);
+//-/        pPool->StoreSurrogate(rOut,pCaptAttr);
+    }
+    else
+    {
+        rOut << UINT16(SFX_ITEMS_NULL);
     }
 }
 
 void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 {
-    if (rIn.GetError()!=0) return;
+    if(rIn.GetError())
+        return;
+
     SdrRectObj::ReadData(rHead,rIn);
     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCaptionObj");
 #endif
-    rIn>>aTailPoly;
 
-    if (rHead.GetVersion()<11) { UINT16 nWhichDum; rIn>>nWhichDum; } // ab V11 keine WhichId mehr
-    SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pCaptAttr=(const SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,NULL);     // ggf altes rauswerfen
-        USHORT nWhichRef=SDRATTRSET_CAPTION;
-        pCaptAttr=(const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
-        if (pStyleSheet!=NULL && pCaptAttr!=NULL) {
-            ((SfxItemSet*)&pCaptAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
-        }
-    } else {
-        UINT16 nSuroDum;
-        rIn>>nSuroDum;
+    rIn >> aTailPoly;
+
+    if(rHead.GetVersion() < 11) { sal_uInt16 nWhichDum; rIn >> nWhichDum; } // ab V11 keine WhichId mehr
+
+    SfxItemPool* pPool = GetItemPool();
+
+    if(pPool)
+    {
+        sal_uInt16 nSetID = SDRATTRSET_CAPTION;
+        const SdrCaptionSetItem* pCaptAttr = (const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+        if(pCaptAttr)
+            SetItemSet(pCaptAttr->GetItemSet());
+//-/        pCaptAttr=(const SdrCaptionSetItem*)ImpSetNewAttr(pCaptAttr,NULL);     // ggf altes rauswerfen
+//-/        USHORT nWhichRef=SDRATTRSET_CAPTION;
+//-/        pCaptAttr=(const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
+//-/        if (pStyleSheet!=NULL && pCaptAttr!=NULL) {
+//-/            ((SfxItemSet*)&pCaptAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
+//-/        }
+    }
+    else
+    {
+        sal_uInt16 nSuroDum;
+        rIn >> nSuroDum;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();
         long nHgt1=rRect.Bottom()-rRect.Top();
-        SdrTextObj::NbcResize(aSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
+        SdrTextObj::NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         long nHDist=GetTextLeftDistance()+GetTextRightDistance();
@@ -160,7 +160,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 {
     MoveRect(aRect,rSiz);
     MoveRect(aOutRect,rSiz);
-    MoveRect(aSnapRect,rSiz);
+    MoveRect(maSnapRect,rSiz);
     SetRectsDirty(TRUE);
 }
 
@@ -385,10 +385,15 @@ void SdrTextObj::ImpConvertSetAttrAndLayer(SdrObject* pObj, FASTBOOL bNoSetAttr)
         if (pModel!=NULL) {
             pObj->SetModel(pModel);
             if (!bNoSetAttr) {
-                SfxItemSet aItemSet((SfxItemPool&)(*GetItemPool()));
-                TakeAttributes(aItemSet,FALSE,TRUE);
-                pObj->SetAttributes(aItemSet,TRUE);
-                pObj->NbcSetStyleSheet(pStyleSheet,TRUE);
+//-/                SfxItemSet aItemSet((SfxItemPool&)(*GetItemPool()));
+//-/                TakeAttributes(aItemSet,FALSE,TRUE);
+//-/                pObj->SetAttributes(aItemSet,TRUE);
+                SdrBroadcastItemChange aItemChange(*pObj);
+                pObj->ClearItem();
+                pObj->SetItemSet(GetItemSet());
+                pObj->BroadcastItemChange(aItemChange);
+
+                pObj->NbcSetStyleSheet(GetStyleSheet(),TRUE);
             }
         }
     }

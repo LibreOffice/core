@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-27 10:48:39 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,11 +304,6 @@ SvStream& operator>>(SvStream& rIn, SdrEdgeInfoRec& rEI)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define GETEDGEKIND (pEdgeAttr==NULL ? SDREDGE_ORTHOLINES : \
-                     ((SdrEdgeKindItem&)(pEdgeAttr->GetItemSet().Get(SDRATTR_EDGEKIND))).GetValue())
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
 SdrEdgeObj::SdrEdgeObj():
@@ -316,7 +315,7 @@ SdrEdgeObj::SdrEdgeObj():
     bTmpDirtyOnAfterRead=FALSE;
     nNotifyingCount=0;
     pEdgeTrack=new XPolygon;
-    pEdgeAttr=NULL;
+//-/    pEdgeAttr=NULL;
 }
 
 SdrEdgeObj::~SdrEdgeObj()
@@ -324,59 +323,97 @@ SdrEdgeObj::~SdrEdgeObj()
     DisconnectFromNode(TRUE);
     DisconnectFromNode(FALSE);
     delete pEdgeTrack;
-    pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,NULL,FALSE);
+//-/    pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,NULL,FALSE);
 }
 
-void SdrEdgeObj::ForceDefaultAttr(SfxItemPool* pPool)
+//-/void SdrEdgeObj::ForceDefaultAttr(SfxItemPool* pPool)
+//-/{
+//-/    SdrTextObj::ForceDefaultAttr(pPool);
+//-/    if (pPool!=NULL) {
+//-/        if (pEdgeAttr==NULL) {
+//-/            SdrEdgeSetItem aSetItem(pPool);
+//-/            pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,&aSetItem,FALSE);
+//-/        }
+//-/    }
+//-/}
+
+//-/USHORT SdrEdgeObj::GetSetItemCount() const
+//-/{
+//-/    return 1+SdrTextObj::GetSetItemCount();
+//-/}
+
+//-/const SfxSetItem* SdrEdgeObj::GetSetItem(USHORT nNum) const
+//-/{
+//-/    if (nNum==0) return pEdgeAttr;
+//-/    nNum--;
+//-/    return SdrTextObj::GetSetItem(nNum);
+//-/}
+
+//-/void SdrEdgeObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
+//-/{
+//-/    if (nNum==0) {
+//-/        pEdgeAttr=(const SdrEdgeSetItem*)pAttr;
+//-/        bEdgeTrackDirty=TRUE;
+//-/    } else {
+//-/        nNum--;
+//-/        SdrTextObj::SetSetItem(nNum,pAttr);
+//-/    }
+//-/}
+
+//-/SfxSetItem* SdrEdgeObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
+//-/{
+//-/    if (nNum==0) {
+//-/        if (bClone && pEdgeAttr!=NULL) return new SdrEdgeSetItem(*pEdgeAttr);
+//-/        else return new SdrEdgeSetItem(GetItemPool());
+//-/    } else {
+//-/        nNum--;
+//-/        return SdrTextObj::MakeNewSetItem(nNum,bClone);
+//-/    }
+//-/}
+
+//-/void SdrEdgeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
+//-/    ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrEdgeObj::SetItem(const SfxPoolItem& rItem)
 {
-    SdrTextObj::ForceDefaultAttr(pPool);
-    if (pPool!=NULL) {
-        if (pEdgeAttr==NULL) {
-            SdrEdgeSetItem aSetItem(pPool);
-            pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,&aSetItem,FALSE);
-        }
-    }
+    SdrTextObj::SetItem(rItem);
+    ImpSetAttrToEdgeInfo();
 }
 
-USHORT SdrEdgeObj::GetSetItemCount() const
+void SdrEdgeObj::ClearItem(USHORT nWhich)
 {
-    return 1+SdrTextObj::GetSetItemCount();
+    SdrTextObj::ClearItem(nWhich);
+    ImpSetAttrToEdgeInfo();
 }
 
-const SfxSetItem* SdrEdgeObj::GetSetItem(USHORT nNum) const
+void SdrEdgeObj::SetItemSet(const SfxItemSet& rSet)
 {
-    if (nNum==0) return pEdgeAttr;
-    nNum--;
-    return SdrTextObj::GetSetItem(nNum);
+    SdrTextObj::SetItemSet(rSet);
+    ImpSetAttrToEdgeInfo();
 }
 
-void SdrEdgeObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
+SfxItemSet* SdrEdgeObj::CreateNewItemSet(SfxItemPool& rPool)
 {
-    if (nNum==0) {
-        pEdgeAttr=(const SdrEdgeSetItem*)pAttr;
-        bEdgeTrackDirty=TRUE;
-    } else {
-        nNum--;
-        SdrTextObj::SetSetItem(nNum,pAttr);
-    }
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // edge attributes
+        SDRATTR_EDGE_FIRST, SDRATTRSET_EDGE,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
 }
 
-SfxSetItem* SdrEdgeObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
-{
-    if (nNum==0) {
-        if (bClone && pEdgeAttr!=NULL) return new SdrEdgeSetItem(*pEdgeAttr);
-        else return new SdrEdgeSetItem(GetItemPool());
-    } else {
-        nNum--;
-        return SdrTextObj::MakeNewSetItem(nNum,bClone);
-    }
-}
-
-void SdrEdgeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-{
-    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
-    ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrEdgeObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
 {
@@ -386,104 +423,149 @@ void SdrEdgeObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
 
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 {
-    if (pEdgeAttr!=NULL) {
-        SdrEdgeKind eKind=GETEDGEKIND;
-        const SfxItemSet& rSet=pEdgeAttr->GetItemSet();
-        long nVal1=((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-        long nVal2=((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-        long nVal3=((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
-        if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
-            long nVals[3]={nVal1,nVal2,nVal3};
-            USHORT n=0;
-            if (aEdgeInfo.nObj1Lines>=2 && n<3) {
-                aEdgeInfo.ImpSetLineVersatz(OBJ1LINE2,*pEdgeTrack,nVals[n]);
-                n++;
-            }
-            if (aEdgeInfo.nObj1Lines>=3 && n<3) {
-                aEdgeInfo.ImpSetLineVersatz(OBJ1LINE3,*pEdgeTrack,nVals[n]);
-                n++;
-            }
-            if (aEdgeInfo.nMiddleLine!=0xFFFF && n<3) {
-                aEdgeInfo.ImpSetLineVersatz(MIDDLELINE,*pEdgeTrack,nVals[n]);
-                n++;
-            }
-            if (aEdgeInfo.nObj2Lines>=3 && n<3) {
-                aEdgeInfo.ImpSetLineVersatz(OBJ2LINE3,*pEdgeTrack,nVals[n]);
-                n++;
-            }
-            if (aEdgeInfo.nObj2Lines>=2 && n<3) {
-                aEdgeInfo.ImpSetLineVersatz(OBJ2LINE2,*pEdgeTrack,nVals[n]);
-                n++;
-            }
-            bEdgeTrackDirty=TRUE;
-        } else if (eKind==SDREDGE_THREELINES) {
-            FASTBOOL bHor1=aEdgeInfo.nAngle1==0 || aEdgeInfo.nAngle1==18000;
-            FASTBOOL bHor2=aEdgeInfo.nAngle2==0 || aEdgeInfo.nAngle2==18000;
-            if (bHor1) {
-                aEdgeInfo.aObj1Line2.X()=nVal1;
-            } else {
-                aEdgeInfo.aObj1Line2.Y()=nVal1;
-            }
-            if (bHor2) {
-                aEdgeInfo.aObj2Line2.X()=nVal2;
-            } else {
-                aEdgeInfo.aObj2Line2.Y()=nVal2;
-            }
+    const SfxItemSet& rSet = GetItemSet();
+    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
+    sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = ((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+
+    if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
+    {
+        sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
+        sal_uInt16 n = 0;
+
+        if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
+        {
+            aEdgeInfo.ImpSetLineVersatz(OBJ1LINE2, *pEdgeTrack, nVals[n]);
+            n++;
+        }
+
+        if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
+        {
+            aEdgeInfo.ImpSetLineVersatz(OBJ1LINE3, *pEdgeTrack, nVals[n]);
+            n++;
+        }
+
+        if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
+        {
+            aEdgeInfo.ImpSetLineVersatz(MIDDLELINE, *pEdgeTrack, nVals[n]);
+            n++;
+        }
+
+        if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
+        {
+            aEdgeInfo.ImpSetLineVersatz(OBJ2LINE3, *pEdgeTrack, nVals[n]);
+            n++;
+        }
+
+        if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
+        {
+            aEdgeInfo.ImpSetLineVersatz(OBJ2LINE2, *pEdgeTrack, nVals[n]);
+            n++;
+        }
+
+        bEdgeTrackDirty = TRUE;
+    }
+    else if(eKind == SDREDGE_THREELINES)
+    {
+        BOOL bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
+        BOOL bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+
+        if(bHor1)
+        {
+            aEdgeInfo.aObj1Line2.X() = nVal1;
+        }
+        else
+        {
+            aEdgeInfo.aObj1Line2.Y() = nVal1;
+        }
+
+        if(bHor2)
+        {
+            aEdgeInfo.aObj2Line2.X() = nVal2;
+        }
+        else
+        {
+            aEdgeInfo.aObj2Line2.Y() = nVal2;
         }
     }
 }
 
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
-    if (pEdgeAttr!=NULL) {
-        SdrEdgeKind eKind=GETEDGEKIND;
-        const SfxItemSet& rSet=pEdgeAttr->GetItemSet();
-        long nValAnz=((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
-        long nVal1=((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-        long nVal2=((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-        long nVal3=((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
-        long nVals[3]={nVal1,nVal2,nVal3};
-        USHORT n=0;
-        if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
-            if (aEdgeInfo.nObj1Lines>=2 && n<3) {
-                nVals[n]=aEdgeInfo.ImpGetLineVersatz(OBJ1LINE2,*pEdgeTrack);
-                n++;
-            }
-            if (aEdgeInfo.nObj1Lines>=3 && n<3) {
-                nVals[n]=aEdgeInfo.ImpGetLineVersatz(OBJ1LINE3,*pEdgeTrack);
-                n++;
-            }
-            if (aEdgeInfo.nMiddleLine!=0xFFFF && n<3) {
-                nVals[n]=aEdgeInfo.ImpGetLineVersatz(MIDDLELINE,*pEdgeTrack);
-                n++;
-            }
-            if (aEdgeInfo.nObj2Lines>=3 && n<3) {
-                nVals[n]=aEdgeInfo.ImpGetLineVersatz(OBJ2LINE3,*pEdgeTrack);
-                n++;
-            }
-            if (aEdgeInfo.nObj2Lines>=2 && n<3) {
-                nVals[n]=aEdgeInfo.ImpGetLineVersatz(OBJ2LINE2,*pEdgeTrack);
-                n++;
-            }
-        } else if (eKind==SDREDGE_THREELINES) {
-            FASTBOOL bHor1=aEdgeInfo.nAngle1==0 || aEdgeInfo.nAngle1==18000;
-            FASTBOOL bHor2=aEdgeInfo.nAngle2==0 || aEdgeInfo.nAngle2==18000;
-            n=2;
-            nVals[0]=bHor1 ? aEdgeInfo.aObj1Line2.X() : aEdgeInfo.aObj1Line2.Y();
-            nVals[1]=bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
+    const SfxItemSet& rSet = GetItemSet();
+    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
+    sal_Int32 nValAnz = ((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+    sal_Int32 nVal1 = ((SdrEdgeLine1DeltaItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = ((SdrEdgeLine2DeltaItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = ((SdrEdgeLine3DeltaItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
+    sal_uInt16 n = 0;
+
+    if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
+    {
+        if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
+        {
+            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ1LINE2, *pEdgeTrack);
+            n++;
         }
-        if (n!=nValAnz || nVals[0]!=nVal1 || nVals[1]!=nVal2 || nVals[2]!=nVal3) {
-            SdrEdgeSetItem aSI(*pEdgeAttr);
-            SfxItemSet& rNewSet=aSI.GetItemSet();
-            if (n!=nValAnz) rNewSet.Put(SdrEdgeLineDeltaAnzItem(n));
-            if (nVals[0]!=nVal1) rNewSet.Put(SdrEdgeLine1DeltaItem(nVals[0]));
-            if (nVals[1]!=nVal2) rNewSet.Put(SdrEdgeLine2DeltaItem(nVals[1]));
-            if (nVals[2]!=nVal3) rNewSet.Put(SdrEdgeLine3DeltaItem(nVals[2]));
-            if (n<3) rNewSet.ClearItem(SDRATTR_EDGELINE3DELTA);
-            if (n<2) rNewSet.ClearItem(SDRATTR_EDGELINE2DELTA);
-            if (n<1) rNewSet.ClearItem(SDRATTR_EDGELINE1DELTA);
-            pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,&aSI);
+
+        if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
+        {
+            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ1LINE3, *pEdgeTrack);
+            n++;
         }
+
+        if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
+        {
+            nVals[n] = aEdgeInfo.ImpGetLineVersatz(MIDDLELINE, *pEdgeTrack);
+            n++;
+        }
+
+        if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
+        {
+            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ2LINE3, *pEdgeTrack);
+            n++;
+        }
+
+        if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
+        {
+            nVals[n] = aEdgeInfo.ImpGetLineVersatz(OBJ2LINE2, *pEdgeTrack);
+            n++;
+        }
+    }
+    else if(eKind == SDREDGE_THREELINES)
+    {
+        BOOL bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
+        BOOL bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+
+        n = 2;
+        nVals[0] = bHor1 ? aEdgeInfo.aObj1Line2.X() : aEdgeInfo.aObj1Line2.Y();
+        nVals[1] = bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
+    }
+
+    if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
+    {
+        if(n != nValAnz)
+            SetItem(SdrEdgeLineDeltaAnzItem(n));
+
+        if(nVals[0] != nVal1)
+            SetItem(SdrEdgeLine1DeltaItem(nVals[0]));
+
+        if(nVals[1] != nVal2)
+            SetItem(SdrEdgeLine2DeltaItem(nVals[1]));
+
+        if(nVals[2] != nVal3)
+            SetItem(SdrEdgeLine3DeltaItem(nVals[2]));
+
+        if(n < 3)
+            ClearItem(SDRATTR_EDGELINE3DELTA);
+
+        if(n < 2)
+            ClearItem(SDRATTR_EDGELINE2DELTA);
+
+        if(n < 1)
+            ClearItem(SDRATTR_EDGELINE1DELTA);
     }
 }
 
@@ -526,7 +608,7 @@ const Rectangle& SdrEdgeObj::GetSnapRect() const
 
 void SdrEdgeObj::RecalcSnapRect()
 {
-    aSnapRect=pEdgeTrack->GetBoundRect();
+    maSnapRect=pEdgeTrack->GetBoundRect();
 }
 
 void SdrEdgeObj::RecalcBoundRect()
@@ -562,25 +644,29 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
+    const SfxItemSet& rSet = GetItemSet();
+//-/    GetItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
-    aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
+    SfxItemSet aEmptySet(*rSet.GetPool());
+    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
 
     // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rXOut,TRUE)) {
-        UINT32 nXDist=((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
+    if(!bHideContour && ImpSetShadowAttributes(rXOut,TRUE))
+    {
+        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolygon aXP(*pEdgeTrack);
         aXP.Move(nXDist,nYDist);
 
         // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aXLSet);
+        rXOut.SetLineAttr(aEmptySet);
 
         rXOut.DrawXPolyLine(aXP);
 
@@ -588,24 +674,24 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if(pLineGeometry)
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
         }
     }
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aXLSet);
+    rXOut.SetLineAttr(aEmptySet);
 
     if(bIsFillDraft)
     {
         // perepare ItemSet to avoid XOut filling
-        XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
-        aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetFillAttr(aXFSet);
+        rXOut.SetFillAttr(aEmptySet);
     }
     else
     {
-        if(bHideContour && pFillAttr)
-            rXOut.SetFillAttr(*pFillAttr);
+        if(bHideContour)
+        {
+            rXOut.SetFillAttr(rSet);
+        }
     }
 
     if (!bHideContour) {
@@ -617,7 +703,7 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(!bHideContour && pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     FASTBOOL bOk=TRUE;
@@ -927,6 +1013,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     }
     FASTBOOL bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage && rCon1.pObj->IsInserted();
     FASTBOOL bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage && rCon2.pObj->IsInserted();
+    const SfxItemSet& rSet = GetItemSet();
+
     if (bCon1) {
         if (rCon1.pObj==(SdrObject*)this) { // sicherheitshalber Abfragen #44515#
             aBoundRect1=aOutRect;
@@ -935,18 +1023,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
-        if (pEdgeAttr!=NULL) {
-            const SfxItemSet& rSet=pEdgeAttr->GetItemSet();
-            long nH=((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
-            long nV=((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
-            aBewareRect1.Left()-=nH;
-            aBewareRect1.Right()+=nH;
-            aBewareRect1.Top()-=nV;
-            aBewareRect1.Bottom()+=nV;
-        } else {
-            aBewareRect1.Left()-=500; aBewareRect1.Right()+=500;
-            aBewareRect1.Top()-=500; aBewareRect1.Bottom()+=500;
-        }
+
+//-/        if(mpObjectItemSet)
+//-/        {
+        sal_Int32 nH = ((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
+        sal_Int32 nV = ((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
+
+        aBewareRect1.Left()-=nH;
+        aBewareRect1.Right()+=nH;
+        aBewareRect1.Top()-=nV;
+        aBewareRect1.Bottom()+=nV;
+//-/        } else {
+//-/            aBewareRect1.Left()-=500; aBewareRect1.Right()+=500;
+//-/            aBewareRect1.Top()-=500; aBewareRect1.Bottom()+=500;
+//-/        }
     } else {
         aBoundRect1=Rectangle(aPt1,aPt1);
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
@@ -960,18 +1050,20 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         }
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
-        if (pEdgeAttr!=NULL) {
-            const SfxItemSet& rSet=pEdgeAttr->GetItemSet();
-            long nH=((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
-            long nV=((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
-            aBewareRect2.Left()-=nH;
-            aBewareRect2.Right()+=nH;
-            aBewareRect2.Top()-=nV;
-            aBewareRect2.Bottom()+=nV;
-        } else {
-            aBewareRect2.Left()-=500; aBewareRect2.Right()+=500;
-            aBewareRect2.Top()-=500; aBewareRect2.Bottom()+=500;
-        }
+
+//-/        if(mpObjectItemSet)
+//-/        {
+        sal_Int32 nH = ((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
+        sal_Int32 nV = ((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
+
+        aBewareRect2.Left()-=nH;
+        aBewareRect2.Right()+=nH;
+        aBewareRect2.Top()-=nV;
+        aBewareRect2.Bottom()+=nV;
+//-/        } else {
+//-/            aBewareRect2.Left()-=500; aBewareRect2.Right()+=500;
+//-/            aBewareRect2.Top()-=500; aBewareRect2.Bottom()+=500;
+//-/        }
     } else {
         aBoundRect2=Rectangle(aPt2,aPt2);
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
@@ -1033,7 +1125,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
     ULONG* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
-    SdrEdgeKind eKind=GETEDGEKIND;
+    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
     FASTBOOL bRts1=nAngle1==0;
     FASTBOOL bObn1=nAngle1==9000;
     FASTBOOL bLks1=nAngle1==18000;
@@ -1826,7 +1918,6 @@ void SdrEdgeObj::operator=(const SdrObject& rObj)
     aCon2          =((SdrEdgeObj&)rObj).aCon2;
     aCon1.pObj=NULL;
     aCon2.pObj=NULL;
-    pEdgeAttr=(SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,((SdrEdgeObj&)rObj).pEdgeAttr);
     aEdgeInfo=((SdrEdgeObj&)rObj).aEdgeInfo;
 }
 
@@ -1858,7 +1949,7 @@ void SdrEdgeObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
 
 USHORT SdrEdgeObj::GetHdlCount() const
 {
-    SdrEdgeKind eKind=GETEDGEKIND;
+    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
     USHORT nHdlAnz=0;
     USHORT nPntAnz=pEdgeTrack->GetPointCount();
     if (nPntAnz!=0) {
@@ -1888,7 +1979,7 @@ SdrHdl* SdrEdgeObj::GetHdl(USHORT nHdlNum) const
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[USHORT(nPntAnz-1)],HDL_POLY);
             if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(TRUE);
         } else {
-            SdrEdgeKind eKind=GETEDGEKIND;
+            SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetItem(SDRATTR_EDGEKIND))).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
                 USHORT nO1=aEdgeInfo.nObj1Lines>0 ? aEdgeInfo.nObj1Lines-1 : 0;
                 USHORT nO2=aEdgeInfo.nObj2Lines>0 ? aEdgeInfo.nObj2Lines-1 : 0;
@@ -2417,6 +2508,34 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
     aEdgeInfo      =rEGeo.aEdgeInfo;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrEdgeObj::PreSave()
+{
+    // call parent
+    SdrTextObj::PreSave();
+
+    // prepare SetItems for storage
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
+    SdrEdgeSetItem aEdgeAttr(rSet.GetPool());
+    aEdgeAttr.GetItemSet().Put(rSet);
+    aEdgeAttr.GetItemSet().SetParent(pParent);
+    mpObjectItemSet->Put(aEdgeAttr);
+}
+
+void SdrEdgeObj::PostSave()
+{
+    // call parent
+    SdrTextObj::PostSave();
+
+    // remove SetItems from local itemset
+    mpObjectItemSet->ClearItem(SDRATTRSET_EDGE);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void SdrEdgeObj::WriteData(SvStream& rOut) const
 {
     SdrTextObj::WriteData(rOut);
@@ -2424,22 +2543,40 @@ void SdrEdgeObj::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
     aCompat.SetID("SdrEdgeObj");
 #endif
+
     {
         SdrDownCompat aTrackCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
 #ifdef DBG_UTIL
         aTrackCompat.SetID("SdrEdgeObj(EdgeTrack)");
 #endif
-        rOut<<*pEdgeTrack;
+        rOut << *pEdgeTrack;
     }
-    aCon1.Write(rOut,this); // Die Connections haben
-    aCon2.Write(rOut,this); // ihren eigenen Header
-    SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pPool->StoreSurrogate(rOut,pEdgeAttr);
-    } else {
-        rOut<<UINT16(SFX_ITEMS_NULL);
+
+    aCon1.Write(rOut, this); // Die Connections haben
+    aCon2.Write(rOut, this); // ihren eigenen Header
+
+    SfxItemPool* pPool = GetItemPool();
+
+    if(pPool)
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_EDGE));
+
+
+
+//-/        SdrEdgeSetItem aEdgeAttr(pPool);
+//-/        aEdgeAttr.GetItemSet().Put(GetItemSet());
+//-/        const SfxPoolItem& rEdgeAttr = pPool->Put(aEdgeAttr);
+//-/        pPool->StoreSurrogate(rOut, &rEdgeAttr);
+//-/        pPool->StoreSurrogate(rOut,pEdgeAttr);
     }
-    rOut<<aEdgeInfo;
+    else
+    {
+        rOut << UINT16(SFX_ITEMS_NULL);
+    }
+
+    rOut << aEdgeInfo;
 }
 
 void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
@@ -2472,20 +2609,31 @@ void SdrEdgeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             aCon2.ReadTilV10(rIn,this); // Connections
         }
     }
-    if (aCompat.GetBytesLeft()>0) { // ab 10-08-1996 (noch Vers 12) Items fuer Verbinder
-        SfxItemPool* pPool=GetItemPool();
-        if (pPool!=NULL) {
-            pEdgeAttr=(const SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,NULL);     // ggf altes rauswerfen
-            USHORT nWhichRef=SDRATTRSET_EDGE;
-            pEdgeAttr=(const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
-            if (pStyleSheet!=NULL && pEdgeAttr!=NULL) {
-                ((SfxItemSet*)&pEdgeAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
-            }
-        } else {
-            UINT16 nSuroDum;
-            rIn>>nSuroDum;
+
+    if(aCompat.GetBytesLeft() > 0)
+    {
+        // ab 10-08-1996 (noch Vers 12) Items fuer Verbinder
+        SfxItemPool* pPool = GetItemPool();
+        if(pPool)
+        {
+            sal_uInt16 nSetID = SDRATTRSET_EDGE;
+            const SdrEdgeSetItem* pEdgeAttr = (const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+            if(pEdgeAttr)
+                SetItemSet(pEdgeAttr->GetItemSet());
+//-/            pEdgeAttr=(const SdrEdgeSetItem*)ImpSetNewAttr(pEdgeAttr,NULL);     // ggf altes rauswerfen
+//-/            USHORT nWhichRef=SDRATTRSET_EDGE;
+//-/            pEdgeAttr=(const SdrEdgeSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
+//-/            if (pStyleSheet!=NULL && pEdgeAttr!=NULL) {
+//-/                ((SfxItemSet*)&pEdgeAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
+//-/            }
+        }
+        else
+        {
+            sal_uInt16 nSuroDum;
+            rIn >> nSuroDum;
         }
     }
+
     if (aCompat.GetBytesLeft()>0) { // ab 14-01-1997 (noch Vers 12) EdgeInfoRec
         rIn>>aEdgeInfo;
     } else {

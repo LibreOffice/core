@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,10 +974,11 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             {
                 SdrObject* pObj = aMark.GetMark(0)->GetObj();
                 SdrModel* pModel = GetModel();
-                SfxItemSet aSet(pModel->GetItemPool(), XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE, 0, 0);
-                pObj->TakeAttributes(aSet, TRUE, FALSE);
+//-/                SfxItemSet aSet(pModel->GetItemPool(), XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE, 0, 0);
+//-/                pObj->TakeAttributes(aSet, TRUE, FALSE);
+                const SfxItemSet& rSet = pObj->GetItemSet();
                 const SfxPoolItem* pPoolItem;
-                SfxItemState eState = aSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, FALSE, &pPoolItem);
+                SfxItemState eState = rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, FALSE, &pPoolItem);
 
                 if(SFX_ITEM_SET == eState)
                 {
@@ -991,14 +992,15 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                         aGrad.SetStartIntens(100);
                         aGrad.SetEndIntens(100);
                         aNewItem.SetValue(aGrad);
-                        aSet.Put(aNewItem);
+//-/                        aSet.Put(aNewItem);
 
                         // add undo to allow user to take back this step
                         pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
                         pModel->AddUndo(new SdrUndoAttrObj(*pObj));
                         pModel->EndUndo();
 
-                        pObj->SetAttributes(aSet, FALSE);
+                        pObj->SetItem(aNewItem);
+//-/                        pObj->SetAttributes(aSet, FALSE);
                     }
 
                     // set values and transform to vector set
@@ -1006,7 +1008,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     GradTransVector aGradTransVector;
                     GradTransGradient aGradTransGradient;
 
-                    aGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)aSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
+                    aGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
                     aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles
@@ -1036,9 +1038,10 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             if(nMarkAnz == 1)
             {
                 SdrObject* pObj = aMark.GetMark(0)->GetObj();
-                SfxItemSet aSet(GetModel()->GetItemPool());
-                pObj->TakeAttributes(aSet, FALSE, FALSE);
-                XFillStyle eFillStyle = ((XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+//-/                SfxItemSet aSet(GetModel()->GetItemPool());
+//-/                pObj->TakeAttributes(aSet, FALSE, FALSE);
+                const SfxItemSet& rSet = pObj->GetItemSet();
+                XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
                 if(eFillStyle == XFILL_GRADIENT)
                 {
@@ -1048,7 +1051,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     GradTransGradient aGradTransGradient;
                     Size aHdlSize(15, 15);
 
-                    aGradTransGradient.aGradient = ((XFillGradientItem&)aSet.Get(XATTR_FILLGRADIENT)).GetValue();
+                    aGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetValue();
                     aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles

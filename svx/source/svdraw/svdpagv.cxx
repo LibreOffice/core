@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,21 +1318,13 @@ FASTBOOL SdrPageView::MasterShouldBeCached(const SdrPage* pPg) const
             if (!bYes) bYes=pObj->GetSubList()!=NULL;
             // Und nun Attribute Checken
             if (!bYes) {
-                SfxItemSet aSet(rView.pMod->GetItemPool());
-                pObj->TakeAttributes(aSet,FALSE,FALSE);
-                XLineStyle eLineStyle=((XLineStyleItem&)(aSet.Get(XATTR_LINESTYLE))).GetValue();
-                XFillStyle eFillStyle=((XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+//-/                SfxItemSet aSet(rView.pMod->GetItemPool());
+//-/                pObj->TakeAttributes(aSet,FALSE,FALSE);
+                const SfxItemSet& rSet = pObj->GetItemSet();
+                XLineStyle eLineStyle=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+                XFillStyle eFillStyle=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
                 bYes=(eLineStyle!=XLINE_NONE && eLineStyle!=XLINE_SOLID) ||
                      (eFillStyle!=XFILL_NONE && eFillStyle!=XFILL_SOLID);
-#ifdef nichtmehrJOEDEBUG
-                DebWriteln("SdrPageView::MasterShouldBeCached()");
-                DebIncIndent();
-                DEBOUT(nObjNum);
-                DEBOUT(USHORT(nId));
-                DEBOUT(eLineStyle);
-                DEBOUT(eFillStyle);
-                DebDecIndent();
-#endif
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,11 +304,17 @@ BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // #32424# SetText vor SetAttr, weil SetAttr sonst unwirksam!
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+
+//-/    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+    pObj->SetItemSet(aDefaultAttr);
+
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
-    pObj->NbcSetAttributes(aTempAttr, FALSE);
+
+//-/    pObj->NbcSetAttributes(aTempAttr, FALSE);
+    pObj->SetItemSet(aTempAttr);
+
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
@@ -344,11 +350,17 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, USHORT eFormat, const Point& rPos,
     pObj->SetModel(pMod);
     pObj->SetLayer(nLayer);
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+
+//-/    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+    pObj->SetItemSet(aDefaultAttr);
+
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
-    pObj->NbcSetAttributes(aTempAttr, FALSE);
+
+//-/    pObj->NbcSetAttributes(aTempAttr, FALSE);
+    pObj->SetItemSet(aTempAttr);
+
     pObj->NbcSetText(rInput,eFormat);
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());

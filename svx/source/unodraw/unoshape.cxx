@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-27 10:42:32 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,12 @@ void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw
 
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
         aPropSet.ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
-        pObj->SetAttributes( aSet, sal_False );
+
+//-/        pObj->SetAttributes( aSet, sal_False );
+//-/        SdrBroadcastItemChange aItemChange(*pObj);
+        pObj->SetItemSetAndBroadcast(aSet);
+//-/        pObj->BroadcastItemChange(aItemChange);
+
         pObj->ApplyNotPersistAttr( aSet );
     }
 }
@@ -932,7 +937,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     if( !SetFillAttribute( nWID, rName, aSet ) )
         return sal_False;
 
-    pObj->SetAttributes( aSet, sal_False );
+//-/    pObj->SetAttributes( aSet, sal_False );
+//-/    SdrBroadcastItemChange aItemChange(*pObj);
+    pObj->SetItemSetAndBroadcast(aSet);
+//-/    pObj->BroadcastItemChange(aItemChange);
 
     return sal_True;
 }
@@ -1090,7 +1098,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             default:
             {
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-                pObj->TakeAttributes( aSet, sal_False, sal_False );
+//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
+                aSet.Put(pObj->GetItemSet());
 
                 if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
                     return;
@@ -1163,7 +1172,10 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                     }
                     else
                     {
-                        pObj->SetAttributes( aSet, sal_False );
+//-/                        pObj->SetAttributes( aSet, sal_False );
+//-/                        SdrBroadcastItemChange aItemChange(*pObj);
+                        pObj->SetItemSetAndBroadcast(aSet);
+//-/                        pObj->BroadcastItemChange(aItemChange);
                     }
                 }
                 return;
@@ -1409,7 +1421,8 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             default:
             {
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-                pObj->TakeAttributes( aSet, sal_False, sal_False );
+//-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
+                aSet.Put(pObj->GetItemSet());
 
                 if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
                     return aAny;
@@ -1577,7 +1590,8 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
         else
         {
             SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-            pObj->TakeAttributes( aSet, sal_False, sal_True );
+//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
+            aSet.Put(pObj->GetItemSet());
 
             if(!aSet.Count())
             {
@@ -1648,7 +1662,8 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
         else
         {
             SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-            pObj->TakeAttributes( aSet, sal_False, sal_True );
+//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
+            aSet.Put(pObj->GetItemSet());
 
             if(!aSet.Count())
             {
@@ -1668,7 +1683,10 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
             }
             else
             {
-                pObj->SetAttributes( aSet, sal_False );
+//-/                pObj->SetAttributes( aSet, sal_False );
+//-/                SdrBroadcastItemChange aItemChange(*pObj);
+                pObj->SetItemSetAndBroadcast(aSet);
+//-/                pObj->BroadcastItemChange(aItemChange);
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
+#endif
+
 void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
 {
     Point aCenter(rR.Center());
@@ -149,7 +153,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
     nEndWink=36000;
     eKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
-    pCircAttr=NULL;
+//-/    pCircAttr=NULL;
 }
 
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
@@ -159,7 +163,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
     nEndWink=36000;
     eKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
-    pCircAttr=NULL;
+//-/    pCircAttr=NULL;
 }
 
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink):
@@ -171,13 +175,13 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewSta
     if (nWinkDif==36000) nEndWink+=nWinkDif; // Vollkreis
     eKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
-    pCircAttr=NULL;
+//-/    pCircAttr=NULL;
 }
 
 SdrCircObj::~SdrCircObj()
 {
     // Attr entfernen (oder macht das SdrAttrObj noch nicht automatisch)
-    pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,NULL,FALSE);
+//-/    pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,NULL,FALSE);
 }
 
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -204,33 +208,44 @@ FASTBOOL SdrCircObj::PaintNeedsXPoly() const
     // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
     if (eKind!=OBJ_CIRC) bNeed=TRUE;
 #endif
-    if (!bNeed && pLineAttr!=NULL) {
-        const SfxItemSet& rSet=pLineAttr->GetItemSet();
+
+    const SfxItemSet& rSet = GetItemSet();
+    if(!bNeed)
+    {
         // XPoly ist notwendig fuer alles was nicht LineSolid oder LineNone ist
-        XLineStyle eLine=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
-        bNeed= eLine!=XLINE_NONE && eLine!=XLINE_SOLID;
+        XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        bNeed = eLine != XLINE_NONE && eLine != XLINE_SOLID;
+
         // XPoly ist notwendig fuer dicke Linien
-        if (!bNeed && eLine!=XLINE_NONE) {
-            bNeed=((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue()!=0;
-        }
+        if(!bNeed && eLine != XLINE_NONE)
+            bNeed = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue() != 0;
+
         // XPoly ist notwendig fuer Kreisboegen mit Linienenden
-        if (!bNeed && eKind==OBJ_CARC) {
+        if(!bNeed && eKind == OBJ_CARC)
+        {
             // Linienanfang ist da, wenn StartPolygon und StartWidth!=0
-            bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue().GetPointCount()!=0 &&
-                  ((XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue()!=0;
-            if (!bNeed) {
+            bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue().GetPointCount() != 0 &&
+                  ((XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue() != 0;
+
+            if(!bNeed)
+            {
                 // Linienende ist da, wenn EndPolygon und EndWidth!=0
-                bNeed=((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue().GetPointCount()!=0 &&
-                      ((XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue()!=0;
+                bNeed = ((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue().GetPointCount() != 0 &&
+                        ((XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue() != 0;
             }
         }
     }
+
     // XPoly ist notwendig, wenn Fill !=None und !=Solid
-    if (!bNeed && pFillAttr!=NULL && eKind!=OBJ_CARC) {
-        XFillStyle eFill=((XFillStyleItem&)(pFillAttr->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
-        bNeed= eFill!=XFILL_NONE && eFill!=XFILL_SOLID;
+    if(!bNeed && eKind != OBJ_CARC)
+    {
+        XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+        bNeed = eFill != XFILL_NONE && eFill != XFILL_SOLID;
     }
-    if (!bNeed && eKind!=OBJ_CIRC && nStartWink==nEndWink) bNeed=TRUE; // Weil sonst Vollkreis gemalt wird
+
+    if(!bNeed && eKind != OBJ_CIRC && nStartWink == nEndWink)
+        bNeed=TRUE; // Weil sonst Vollkreis gemalt wird
+
     return bNeed;
 }
 
@@ -332,24 +347,27 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
     // prepare ItemSet of this object
-    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-    TakeAttributes(aSet, FALSE, TRUE);
+    const SfxItemSet& rSet = GetItemSet();
+//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
+//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-    XLineAttrSetItem aXLSet((SfxItemPool*)GetItemPool());
-    aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
+//-/    XLineAttrSetItem aXLSet(rSet.GetPool());
+    SfxItemSet aEmptySet(*rSet.GetPool());
+    aEmptySet.Put(XLineStyleItem(XLINE_NONE));
+    aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(rXOut,eKind==OBJ_CARC || bIsFillDraft))
     {
-        UINT32 nXDist=((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
-        UINT32 nYDist=((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
+        UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+        UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
 
         // avoid shadow line drawing in XOut
-        rXOut.SetLineAttr(aXLSet);
+        rXOut.SetLineAttr(aEmptySet);
 
         if (PaintNeedsXPoly()) {
             XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
@@ -384,24 +402,23 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if(pLineGeometry)
         {
             // draw the line geometry
-            ImpDrawShadowLineGeometry(rXOut, aSet, *pLineGeometry);
+            ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
         }
     }
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
-    rXOut.SetLineAttr(aXLSet);
+    rXOut.SetLineAttr(aEmptySet);
 
     if(bIsFillDraft)
     {
         // perepare ItemSet to avoid XOut filling
-        XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
+        XFillAttrSetItem aXFSet(rSet.GetPool());
         aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetFillAttr(aXFSet);
+        rXOut.SetFillAttr(aEmptySet);
     }
     else
     {
-        if(pFillAttr)
-            rXOut.SetFillAttr(*pFillAttr);
+        rXOut.SetFillAttr(rSet);
     }
 
     if (!bHideContour) {
@@ -430,7 +447,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(!bHideContour && pLineGeometry)
     {
         // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, aSet, *pLineGeometry);
+        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
     }
 
     FASTBOOL bOk=TRUE;
@@ -610,11 +627,12 @@ void SdrCircObj::TakeObjNamePlural(XubString& rName) const
 void SdrCircObj::operator=(const SdrObject& rObj)
 {
     SdrRectObj::operator=(rObj);
-    nStartWink=((SdrCircObj&)rObj).nStartWink;
-    nEndWink  =((SdrCircObj&)rObj).nEndWink;
-    aPnt1     =((SdrCircObj&)rObj).aPnt1;
-    aPnt2     =((SdrCircObj&)rObj).aPnt2;
-    pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,((SdrCircObj&)rObj).pCircAttr);
+
+    nStartWink = ((SdrCircObj&)rObj).nStartWink;
+    nEndWink = ((SdrCircObj&)rObj).nEndWink;
+    aPnt1 = ((SdrCircObj&)rObj).aPnt1;
+    aPnt2 = ((SdrCircObj&)rObj).aPnt2;
+//-/    pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,((SdrCircObj&)rObj).pCircAttr);
 }
 
 void SdrCircObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
@@ -1030,7 +1048,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 {
     MoveRect(aRect,aSiz);
     MoveRect(aOutRect,aSiz);
-    MoveRect(aSnapRect,aSiz);
+    MoveRect(maSnapRect,aSiz);
     MovePoint(aPnt1,aSiz);
     MovePoint(aPnt2,aSiz);
     SetXPolyDirty();
@@ -1245,9 +1263,9 @@ void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 void SdrCircObj::RecalcSnapRect()
 {
     if (PaintNeedsXPoly()) {
-        aSnapRect=GetXPoly().GetBoundRect();
+        maSnapRect=GetXPoly().GetBoundRect();
     } else {
-        TakeUnrotatedSnapRect(aSnapRect);
+        TakeUnrotatedSnapRect(maSnapRect);
     }
 }
 
@@ -1259,7 +1277,7 @@ void SdrCircObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();
         long nHgt1=rRect.Bottom()-rRect.Top();
-        NbcResize(aSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
+        NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         aRect=rRect;
@@ -1295,59 +1313,82 @@ void __EXPORT SdrCircObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
     ImpSetAttrToCircInfo();
 }
 
-void SdrCircObj::ForceDefaultAttr(SfxItemPool* pPool)
+void SdrCircObj::ForceDefaultAttr()
 {
-    SdrRectObj::ForceDefaultAttr(pPool);
-    if (pPool!=NULL) {
-        if (pCircAttr==NULL) {
-            SdrCircKind eKindA=SDRCIRC_FULL;
-            if (eKind==OBJ_SECT) eKindA=SDRCIRC_SECT;
-            else if (eKind==OBJ_CARC) eKindA=SDRCIRC_ARC;
-            else if (eKind==OBJ_CCUT) eKindA=SDRCIRC_CUT;
-            SdrCircSetItem aSetItem(pPool);
-            SfxItemSet& rSet=aSetItem.GetItemSet();
-            if (eKindA!=SDRCIRC_FULL) {
-                rSet.Put(SdrCircKindItem(eKindA));
-                if (nStartWink!=0) rSet.Put(SdrCircStartAngleItem(nStartWink));
-                if (nEndWink!=36000) rSet.Put(SdrCircEndAngleItem(nEndWink));
-            }
-            pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,&aSetItem,FALSE);
-        }
+    SdrRectObj::ForceDefaultAttr();
+
+//-/    if(pPool)
+//-/    {
+    SdrCircKind eKindA = SDRCIRC_FULL;
+
+    if(eKind == OBJ_SECT)
+        eKindA = SDRCIRC_SECT;
+    else if(eKind == OBJ_CARC)
+        eKindA = SDRCIRC_ARC;
+    else if(eKind == OBJ_CCUT)
+        eKindA = SDRCIRC_CUT;
+
+    if(eKindA != SDRCIRC_FULL)
+    {
+        SetItem(SdrCircKindItem(eKindA));
+
+        if(nStartWink)
+            SetItem(SdrCircStartAngleItem(nStartWink));
+
+        if(nEndWink != 36000)
+            SetItem(SdrCircEndAngleItem(nEndWink));
     }
+//-/    }
+//-/    if (pPool!=NULL) {
+//-/        if (pCircAttr==NULL) {
+//-/            SdrCircKind eKindA=SDRCIRC_FULL;
+//-/            if (eKind==OBJ_SECT) eKindA=SDRCIRC_SECT;
+//-/            else if (eKind==OBJ_CARC) eKindA=SDRCIRC_ARC;
+//-/            else if (eKind==OBJ_CCUT) eKindA=SDRCIRC_CUT;
+//-/            SdrCircSetItem aSetItem(pPool);
+//-/            SfxItemSet& rSet=aSetItem.GetItemSet();
+//-/            if (eKindA!=SDRCIRC_FULL) {
+//-/                rSet.Put(SdrCircKindItem(eKindA));
+//-/                if (nStartWink!=0) rSet.Put(SdrCircStartAngleItem(nStartWink));
+//-/                if (nEndWink!=36000) rSet.Put(SdrCircEndAngleItem(nEndWink));
+//-/            }
+//-/            pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,&aSetItem,FALSE);
+//-/        }
+//-/    }
 }
 
-USHORT SdrCircObj::GetSetItemCount() const
-{
-    return 1+SdrRectObj::GetSetItemCount();
-}
+//-/USHORT SdrCircObj::GetSetItemCount() const
+//-/{
+//-/    return 1+SdrRectObj::GetSetItemCount();
+//-/}
 
-const SfxSetItem* SdrCircObj::GetSetItem(USHORT nNum) const
-{
-    if (nNum==0) return pCircAttr;
-    nNum--;
-    return SdrRectObj::GetSetItem(nNum);
-}
+//-/const SfxSetItem* SdrCircObj::GetSetItem(USHORT nNum) const
+//-/{
+//-/    if (nNum==0) return pCircAttr;
+//-/    nNum--;
+//-/    return SdrRectObj::GetSetItem(nNum);
+//-/}
 
-void SdrCircObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
-{
-    if (nNum==0) {
-        pCircAttr=(const SdrCircSetItem*)pAttr;
-    } else {
-        nNum--;
-        SdrRectObj::SetSetItem(nNum,pAttr);
-    }
-}
+//-/void SdrCircObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
+//-/{
+//-/    if (nNum==0) {
+//-/        pCircAttr=(const SdrCircSetItem*)pAttr;
+//-/    } else {
+//-/        nNum--;
+//-/        SdrRectObj::SetSetItem(nNum,pAttr);
+//-/    }
+//-/}
 
-SfxSetItem* SdrCircObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
-{
-    if (nNum==0) {
-        if (bClone && pCircAttr!=NULL) return new SdrCircSetItem(*pCircAttr);
-        else return new SdrCircSetItem(GetItemPool());
-    } else {
-        nNum--;
-        return SdrRectObj::MakeNewSetItem(nNum,bClone);
-    }
-}
+//-/SfxSetItem* SdrCircObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
+//-/{
+//-/    if (nNum==0) {
+//-/        if (bClone && pCircAttr!=NULL) return new SdrCircSetItem(*pCircAttr);
+//-/        else return new SdrCircSetItem(GetItemPool());
+//-/    } else {
+//-/        nNum--;
+//-/        return SdrRectObj::MakeNewSetItem(nNum,bClone);
+//-/    }
+//-/}
 
 void SdrCircObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
 {
@@ -1356,58 +1397,115 @@ void SdrCircObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
     ImpSetAttrToCircInfo();
 }
 
-void SdrCircObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void SdrCircObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    SetXPolyDirty();
+//-/    SdrRectObj::NbcSetAttributes(rAttr,bReplaceAll);
+//-/    ImpSetAttrToCircInfo();
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrCircObj::SetItem(const SfxPoolItem& rItem)
 {
     SetXPolyDirty();
-    SdrRectObj::NbcSetAttributes(rAttr,bReplaceAll);
+    SdrRectObj::SetItem(rItem);
     ImpSetAttrToCircInfo();
 }
 
+void SdrCircObj::ClearItem(USHORT nWhich)
+{
+    SetXPolyDirty();
+    SdrRectObj::ClearItem(nWhich);
+    ImpSetAttrToCircInfo();
+}
+
+void SdrCircObj::SetItemSet(const SfxItemSet& rSet)
+{
+    SetXPolyDirty();
+    SdrRectObj::SetItemSet(rSet);
+    ImpSetAttrToCircInfo();
+}
+
+SfxItemSet* SdrCircObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // circle attributes
+        SDRATTR_CIRC_FIRST, SDRATTRSET_CIRC,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void SdrCircObj::ImpSetAttrToCircInfo()
 {
-    if (pCircAttr!=NULL) {
-        const SfxItemSet& rSet=pCircAttr->GetItemSet();
-        SdrCircKind eNewKindA=((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
-        SdrObjKind eNewKind=eKind;
-        if (eNewKindA==SDRCIRC_FULL) eNewKind=OBJ_CIRC;
-        else if (eNewKindA==SDRCIRC_SECT) eNewKind=OBJ_SECT;
-        else if (eNewKindA==SDRCIRC_ARC) eNewKind=OBJ_CARC;
-        else if (eNewKindA==SDRCIRC_CUT) eNewKind=OBJ_CCUT;
-        long nNewStart=((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-        long nNewEnd=((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
-        FASTBOOL bKindChg=eKind!=eNewKind;
-        FASTBOOL bWinkChg=nNewStart!=nStartWink || nNewEnd!=nEndWink;
-        if (bKindChg || bWinkChg) {
-            eKind=eNewKind;
-            nStartWink=nNewStart;
-            nEndWink=nNewEnd;
-            if (bKindChg || (eKind!=OBJ_CIRC && bWinkChg)) {
-                SetXPolyDirty();
-                SetRectsDirty();
-            }
+    const SfxItemSet& rSet = GetItemSet();
+    SdrCircKind eNewKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
+    SdrObjKind eNewKind = eKind;
+
+    if(eNewKindA == SDRCIRC_FULL)
+        eNewKind = OBJ_CIRC;
+    else if(eNewKindA == SDRCIRC_SECT)
+        eNewKind = OBJ_SECT;
+    else if(eNewKindA == SDRCIRC_ARC)
+        eNewKind = OBJ_CARC;
+    else if(eNewKindA == SDRCIRC_CUT)
+        eNewKind = OBJ_CCUT;
+
+    sal_Int32 nNewStart = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nNewEnd = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+
+    BOOL bKindChg = eKind != eNewKind;
+    BOOL bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
+
+    if(bKindChg || bWinkChg)
+    {
+        eKind = eNewKind;
+        nStartWink = nNewStart;
+        nEndWink = nNewEnd;
+
+        if(bKindChg || (eKind != OBJ_CIRC && bWinkChg))
+        {
+            SetXPolyDirty();
+            SetRectsDirty();
         }
     }
 }
 
 void SdrCircObj::ImpSetCircInfoToAttr()
 {
-    if (pCircAttr!=NULL) {
-        const SfxItemSet& rOldSet=pCircAttr->GetItemSet();
-        SdrCircKind eNewKindA=SDRCIRC_FULL;
-        if (eKind==OBJ_SECT) eNewKindA=SDRCIRC_SECT;
-        else if (eKind==OBJ_CARC) eNewKindA=SDRCIRC_ARC;
-        else if (eKind==OBJ_CCUT) eNewKindA=SDRCIRC_CUT;
-        SdrCircKind eOldKindA=((SdrCircKindItem&)rOldSet.Get(SDRATTR_CIRCKIND)).GetValue();
-        long nOldStartWink=((SdrCircStartAngleItem&)rOldSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-        long nOldEndWink=((SdrCircEndAngleItem&)rOldSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
-        if (eNewKindA!=eOldKindA || nStartWink!=nOldStartWink || nEndWink!=nOldEndWink) {
-            SdrCircSetItem aSI(*pCircAttr);
-            SfxItemSet& rNewSet=aSI.GetItemSet();
-            if (eNewKindA!=eOldKindA) rNewSet.Put(SdrCircKindItem(eNewKindA));
-            if (nStartWink!=nOldStartWink) rNewSet.Put(SdrCircStartAngleItem(nStartWink));
-            if (nEndWink!=nOldEndWink) rNewSet.Put(SdrCircEndAngleItem(nEndWink));
-            pCircAttr=(SdrCircSetItem*)ImpSetNewAttr(pCircAttr,&aSI);
-        }
+    SdrCircKind eNewKindA = SDRCIRC_FULL;
+    const SfxItemSet& rSet = GetItemSet();
+
+    if(eKind == OBJ_SECT)
+        eNewKindA = SDRCIRC_SECT;
+    else if(eKind == OBJ_CARC)
+        eNewKindA = SDRCIRC_ARC;
+    else if(eKind == OBJ_CCUT)
+        eNewKindA = SDRCIRC_CUT;
+
+    SdrCircKind eOldKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
+    sal_Int32 nOldStartWink = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nOldEndWink = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+
+    if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
+    {
+        if(eNewKindA != eOldKindA)
+            SetItem(SdrCircKindItem(eNewKindA));
+
+        if(nStartWink != nOldStartWink)
+            SetItem(SdrCircStartAngleItem(nStartWink));
+
+        if(nEndWink != nOldEndWink)
+            SetItem(SdrCircEndAngleItem(nEndWink));
     }
 }
 
@@ -1422,6 +1520,34 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
     return pRet;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrCircObj::PreSave()
+{
+    // call parent
+    SdrRectObj::PreSave();
+
+    // prepare SetItems for storage
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
+    SdrCircSetItem aCircAttr(rSet.GetPool());
+    aCircAttr.GetItemSet().Put(rSet);
+    aCircAttr.GetItemSet().SetParent(pParent);
+    mpObjectItemSet->Put(aCircAttr);
+}
+
+void SdrCircObj::PostSave()
+{
+    // call parent
+    SdrRectObj::PostSave();
+
+    // remove SetItems from local itemset
+    mpObjectItemSet->ClearItem(SDRATTRSET_CIRC);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void SdrCircObj::WriteData(SvStream& rOut) const
 {
     SdrRectObj::WriteData(rOut);
@@ -1429,67 +1555,96 @@ void SdrCircObj::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCircObj");
 #endif
-    if (eKind!=OBJ_CIRC) {
-        rOut<<nStartWink;
-        rOut<<nEndWink;
+
+    if(eKind != OBJ_CIRC)
+    {
+        rOut << nStartWink;
+        rOut << nEndWink;
     }
+
     SfxItemPool* pPool=GetItemPool();
-    if (pPool!=NULL) {
-        pPool->StoreSurrogate(rOut,pCircAttr);
-    } else {
-        rOut<<UINT16(SFX_ITEMS_NULL);
+    if(pPool)
+    {
+        const SfxItemSet& rSet = GetItemSet();
+
+        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
+
+
+
+//-/        SdrCircSetItem aCircAttr(pPool);
+//-/        aCircAttr.GetItemSet().Put(GetItemSet());
+//-/        const SfxPoolItem& rCircAttr = pPool->Put(aCircAttr);
+//-/        pPool->StoreSurrogate(rOut, &rCircAttr);
+//-/        pPool->StoreSurrogate(rOut,pCircAttr);
+    }
+    else
+    {
+        rOut << UINT16(SFX_ITEMS_NULL);
     }
 }
 
 void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 {
-    if (rIn.GetError()!=0) return;
+    if(rIn.GetError())
+        return;
+
     SdrRectObj::ReadData(rHead,rIn);
     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCircObj");
 #endif
-    if (eKind!=OBJ_CIRC) {
-        rIn>>nStartWink;
-        rIn>>nEndWink;
+
+    if(eKind != OBJ_CIRC)
+    {
+        rIn >> nStartWink;
+        rIn >> nEndWink;
     }
-    if (aCompat.GetBytesLeft()>0) {
-        SfxItemPool* pPool=GetItemPool();
-        if (pPool!=NULL) {
-            pCircAttr=(const SdrCircSetItem*)ImpSetNewAttr(pCircAttr,NULL);     // ggf altes rauswerfen
-            USHORT nWhichRef=SDRATTRSET_CIRC;
-            pCircAttr=(const SdrCircSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
-            if (pStyleSheet!=NULL && pCircAttr!=NULL) {
-                ((SfxItemSet*)&pCircAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
-            }
-        } else {
-            UINT16 nSuroDum;
-            rIn>>nSuroDum;
+
+    if(aCompat.GetBytesLeft() > 0)
+    {
+        SfxItemPool* pPool = GetItemPool();
+
+        if(pPool)
+        {
+            sal_uInt16 nSetID = SDRATTRSET_CIRC;
+            const SdrCircSetItem* pCircAttr = (const SdrCircSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+            if(pCircAttr)
+                SetItemSet(pCircAttr->GetItemSet());
+//-/            pCircAttr=(const SdrCircSetItem*)ImpSetNewAttr(pCircAttr,NULL);     // ggf altes rauswerfen
+//-/            USHORT nWhichRef=SDRATTRSET_CIRC;
+//-/            pCircAttr=(const SdrCircSetItem*)pPool->LoadSurrogate(rIn,nWhichRef,0);
+//-/            if (pStyleSheet!=NULL && pCircAttr!=NULL) {
+//-/                ((SfxItemSet*)&pCircAttr->GetItemSet())->SetParent(&pStyleSheet->GetItemSet());
+//-/            }
         }
-    } else {
+        else
+        {
+            sal_uInt16 nSuroDum;
+            rIn >> nSuroDum;
+        }
+    }
+    else
+    {
         // create pCircAttr for old Objects to let ImpSetCircInfoToAttr() do it's work
         SdrCircKind eKindA(SDRCIRC_FULL);
 
         if(eKind == OBJ_SECT)
             eKindA = SDRCIRC_SECT;
         else if(eKind == OBJ_CARC)
-            eKindA=SDRCIRC_ARC;
+            eKindA = SDRCIRC_ARC;
         else if(eKind == OBJ_CCUT)
-            eKindA=SDRCIRC_CUT;
-
-        SfxItemPool* pPool = GetItemPool();
-        SdrCircSetItem aSetItem(pPool);
-        SfxItemSet& rSet = aSetItem.GetItemSet();
+            eKindA = SDRCIRC_CUT;
 
         if(eKindA != SDRCIRC_FULL)
         {
-            rSet.Put(SdrCircKindItem(eKindA));
-            if(nStartWink != 0)
-                rSet.Put(SdrCircStartAngleItem(nStartWink));
+            SetItem(SdrCircKindItem(eKindA));
+
+            if(nStartWink)
+                SetItem(SdrCircStartAngleItem(nStartWink));
+
             if(nEndWink != 36000)
-                rSet.Put(SdrCircEndAngleItem(nEndWink));
+                SetItem(SdrCircEndAngleItem(nEndWink));
         }
-        pCircAttr = (SdrCircSetItem*)ImpSetNewAttr(pCircAttr, &aSetItem, FALSE);
     }
 }
 

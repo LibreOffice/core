@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,14 @@
 
 #ifndef _PERSIST_HXX //autogen
 #include <so3/persist.hxx>
+#endif
+
+#ifndef _SVX_SVXIDS_HRC
+#include "svxids.hrc"
+#endif
+
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
 #endif
 
 #ifndef SVX_LIGHT
@@ -358,6 +366,7 @@ SdrObjGroup::SdrObjGroup()
     nDrehWink=0;
     nShearWink=0;
     bClosedObj=FALSE;
+    mpGroupItemSet = NULL;
 }
 
 
@@ -365,6 +374,8 @@ SdrObjGroup::~SdrObjGroup()
 {
     ReleaseGroupLink();
     delete pSub;
+    if(mpGroupItemSet)
+        delete mpGroupItemSet;
 }
 
 
@@ -696,11 +707,6 @@ void SdrObjGroup::SetObjList(SdrObjList* pNewObjList)
 {
     SdrObject::SetObjList(pNewObjList);
     pSub->SetUpList(pNewObjList);
-    /*if (pNewObjList!=NULL) {
-        pUp=pNewObjList->GetOwnerObj();
-    } else {
-        pUp=NULL;
-    }*/
 }
 
 
@@ -868,7 +874,6 @@ void SdrObjGroup::operator=(const SdrObject& rObj)
         aName      =((SdrObjGroup&)rObj).aName;
         aRefPoint  =((SdrObjGroup&)rObj).aRefPoint;
         bRefPoint  =((SdrObjGroup&)rObj).bRefPoint;
-        bReserve   =((SdrObjGroup&)rObj).bReserve;
     }
 }
 
@@ -1340,55 +1345,152 @@ void SdrObjGroup::SetRelativePos(const Point& rPnt)
 }
 
 
-void SdrObjGroup::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-{
-    const SfxItemSet* pAttr=&rAttr;
-    //
-    //SfxItemSet aSet(rAttr);
-    //pAttr=&aSet;
-    //for (USHORT nWhich=SDRATTR_NOTPERSIST_FIRST; nWhich<=SDRATTR_NOTPERSIST_LAST; nWhich++) {
-    //    aSet.InvalidateItem(nWhich);
-    //}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    if (!IsLinkedGroup()) {
-        SdrObjList* pOL=pSub;
-        ULONG nObjAnz=pOL->GetObjCount();
-        for (ULONG i=0; i<nObjAnz; i++) {
-            pOL->GetObj(i)->NbcSetAttributes(*pAttr,bReplaceAll);
+//-/void SdrObjGroup::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    const SfxItemSet* pAttr=&rAttr;
+//-/    //
+//-/    //SfxItemSet aSet(rAttr);
+//-/    //pAttr=&aSet;
+//-/    //for (USHORT nWhich=SDRATTR_NOTPERSIST_FIRST; nWhich<=SDRATTR_NOTPERSIST_LAST; nWhich++) {
+//-/    //    aSet.InvalidateItem(nWhich);
+//-/    //}
+//-/
+//-/    if (!IsLinkedGroup()) {
+//-/        SdrObjList* pOL=pSub;
+//-/        ULONG nObjAnz=pOL->GetObjCount();
+//-/        for (ULONG i=0; i<nObjAnz; i++) {
+//-/            pOL->GetObj(i)->NbcSetAttributes(*pAttr,bReplaceAll);
+//-/        }
+//-/    }
+//-/
+//-/    // NbcApplyNotPersistAttr(rAttr);
+//-/}
+
+//-/void SdrObjGroup::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    if (!IsLinkedGroup()) {
+//-/        SdrObjList* pOL=pSub;
+//-/        ULONG nObjAnz=pOL->GetObjCount();
+//-/        for (ULONG i=0; i<nObjAnz; i++) {
+//-/            pOL->GetObj(i)->SetAttributes(rAttr,bReplaceAll);
+//-/        }
+//-/    }
+//-/}
+
+//-/void SdrObjGroup::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    SdrObjList* pOL=pSub;
+//-/    ULONG nObjAnz=pOL->GetObjCount();
+//-/    for (ULONG i=0; i<nObjAnz; i++) {
+//-/        pOL->GetObj(i)->TakeAttributes(rAttr,TRUE,bOnlyHardAttr);
+//-/    }
+//-/
+//-/    //if (bMerge) {
+//-/        // NotPersist-Items erstmal mit Put, damit die Werte der Sub-Objekte ueberschrieben werden
+//-/        // Todo: Muss mit den urspruenglichen Werten Gemerged werden!
+//-/    //}
+//-/    // TakeNotPersistAttr(rAttr,FALSE);
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// groups may contain 3d objects(?)
+//-/SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
+//-/{
+//-/    return new SfxItemSet(rPool,
+//-/        SDRATTR_START,  SDRATTR_END,
+//-/        SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-/        0, 0);
+//-/}
+
+const SfxItemSet& SdrObjGroup::GetItemSet() const
+{
+    if(!mpGroupItemSet)
+    {
+        ((SdrObjGroup*)this)->mpGroupItemSet =
+        ((SdrObjGroup*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+        DBG_ASSERT(mpGroupItemSet, "Could not create an SfxItemSet(!)");
+    }
+
+    // collect all ItemSets in mpGroupItemSet
+    mpGroupItemSet->ClearItem();
+
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+//-/        mpGroupItemSet->MergeValues(pSub->GetObj(a)->GetItemSet(), TRUE);
+        const SfxItemSet& rSet = pSub->GetObj(a)->GetItemSet();
+        SfxWhichIter aIter(rSet);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+
+        while(nWhich)
+        {
+            const SfxPoolItem* pItem = NULL;
+            rSet.GetItemState(nWhich, TRUE, &pItem);
+
+            if(pItem)
+            {
+                if(pItem == (SfxPoolItem *)-1)
+                    mpGroupItemSet->InvalidateItem(nWhich);
+                else
+                    mpGroupItemSet->MergeValue(*pItem, TRUE);
+            }
+            nWhich = aIter.NextWhich();
         }
     }
 
-    // NbcApplyNotPersistAttr(rAttr);
+    return *mpGroupItemSet;
 }
 
-
-void SdrObjGroup::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrObjGroup::SetItem( const SfxPoolItem& rItem )
 {
-    if (!IsLinkedGroup()) {
-        SdrObjList* pOL=pSub;
-        ULONG nObjAnz=pOL->GetObjCount();
-        for (ULONG i=0; i<nObjAnz; i++) {
-            pOL->GetObj(i)->SetAttributes(rAttr,bReplaceAll);
-        }
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->SetItem( rItem );
     }
 }
 
-
-void SdrObjGroup::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void SdrObjGroup::ClearItem( USHORT nWhich )
 {
-    SdrObjList* pOL=pSub;
-    ULONG nObjAnz=pOL->GetObjCount();
-    for (ULONG i=0; i<nObjAnz; i++) {
-        pOL->GetObj(i)->TakeAttributes(rAttr,TRUE,bOnlyHardAttr);
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->ClearItem( nWhich );
     }
-
-    //if (bMerge) {
-        // NotPersist-Items erstmal mit Put, damit die Werte der Sub-Objekte ueberschrieben werden
-        // Todo: Muss mit den urspruenglichen Werten Gemerged werden!
-    //}
-    // TakeNotPersistAttr(rAttr,FALSE);
 }
 
+void SdrObjGroup::SetItemSet( const SfxItemSet& rSet )
+{
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->SetItemSet( rSet );
+    }
+}
+
+SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items
+    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
+}
+
+//-/void SdrObjGroup::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
+//-/{
+//-/    if(!IsLinkedGroup())
+//-/    {
+//-/        sal_uInt32 nCount(pSub->GetObjCount());
+//-/        for(sal_uInt32 a(0); a < nCount; a++)
+//-/            pSub->GetObj(a)->BroadcastItemChange(rOldRect);
+//-/    }
+//-/}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SfxStyleSheet* SdrObjGroup::GetStyleSheet() const
 {
@@ -1535,15 +1637,19 @@ void SdrObjGroup::AfterRead()
 // ItemPool fuer dieses Objekt wechseln
 void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 {
-    // call parent
-    SdrObject::MigrateItemPool(pSrcPool, pDestPool);
-
-    // own reaction
-    SdrObjList* pOL = pSub;
-    UINT32 nObjAnz = pOL->GetObjCount();
-    for(UINT32 a=0;a<nObjAnz;a++)
+    if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
     {
-        pOL->GetObj(a)->MigrateItemPool(pSrcPool, pDestPool);
+        // call parent
+        SdrObject::MigrateItemPool(pSrcPool, pDestPool);
+
+        // own reaction
+        SdrObjList* pOL = pSub;
+        sal_uInt32 nObjAnz(pOL->GetObjCount());
+
+        for(sal_uInt32 a(0); a < nObjAnz; a++)
+        {
+            pOL->GetObj(a)->MigrateItemPool(pSrcPool, pDestPool);
+        }
     }
 }
 

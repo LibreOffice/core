@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-26 10:46:04 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,19 +129,25 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             // damit sich der Outliner initiallisiert
             rOutl.SetText( String(), rOutl.GetParagraph( 0 ) );
 
-            if(pStyleSheet)
-                rOutl.SetStyleSheet( 0, pStyleSheet );
+            if(GetStyleSheet())
+                rOutl.SetStyleSheet( 0, GetStyleSheet());
 
             // Beim setzen der harten Attribute an den ersten Absatz muss
             // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
             // werden, da sonst bei SetParaAttribs() auch alle in diesem
             // Parent enthaltenen Items hart am Absatz attributiert werden.
             // -> BugID 22467
-            const SfxItemSet* pTmpSet=&pOutlAttr->GetItemSet();
-            const SfxItemSet* pParentMerk=pTmpSet->GetParent();
+//-/            if(mpObjectItemSet)
+//-/            {
+            const SfxItemSet& rSet = GetItemSet();
+            SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
+            aOutlSetItem.GetItemSet().Put(rSet);
+            const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
+            const SfxItemSet* pParentMerk = pTmpSet->GetParent();
             ((SfxItemSet*)pTmpSet)->SetParent(NULL);
             rOutl.SetParaAttribs(0,*pTmpSet);
             ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
+//-/            }
         }
     }
     if (bFitToSize) {

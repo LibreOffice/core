@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,8 +852,9 @@ IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, pHdl)
 void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo)
 {
     // from IAO positions and colors to gradient
-    SfxItemSet aSet(pObj->GetModel()->GetItemPool());
-    pObj->TakeAttributes(aSet, FALSE, FALSE);
+//-/    SfxItemSet aSet(pObj->GetModel()->GetItemPool());
+//-/    pObj->TakeAttributes(aSet, FALSE, FALSE);
+    const SfxItemSet& rSet = pObj->GetItemSet();
 
     GradTransformer aGradTransformer;
     GradTransGradient aOldGradTransGradient;
@@ -870,9 +871,9 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
         aGradTransVector.aCol2 = pColHdl2->GetColor();
 
     if(IsGradient())
-        aOldGradTransGradient.aGradient = ((XFillGradientItem&)aSet.Get(XATTR_FILLGRADIENT)).GetValue();
+        aOldGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetValue();
     else
-        aOldGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)aSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
+        aOldGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
 
     // transform vector data to gradient
     aGradTransformer.VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, pObj, bMoveSingleHandle, bMoveFirstHandle);
@@ -902,7 +903,10 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
             pModel->EndUndo();
         }
 
-        pObj->SetAttributes(aNewSet, FALSE);
+//-/        pObj->SetAttributes(aNewSet, FALSE);
+//-/        SdrBroadcastItemChange aItemChange(*pObj);
+        pObj->SetItemSetAndBroadcast(aNewSet);
+//-/        pObj->BroadcastItemChange(aItemChange);
     }
 
     // back transformation, set values on pIAOHandle
@@ -1139,8 +1143,11 @@ BOOL ImpEdgeHdl::IsHorzDrag() const
     SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
     if (pEdge==NULL) return FALSE;
     if (nObjHdlNum<=1) return FALSE;
-    SdrEdgeKind eKind=SDREDGE_ORTHOLINES;
-    if (pEdge->pEdgeAttr!=NULL) eKind=((SdrEdgeKindItem&)(pEdge->pEdgeAttr->GetItemSet().Get(SDRATTR_EDGEKIND))).GetValue();
+
+//-/    SdrEdgeKind eKind=SDREDGE_ORTHOLINES;
+//-/    if (pEdge->pEdgeAttr!=NULL) eKind=((SdrEdgeKindItem&)(pEdge->pEdgeAttr->GetItemSet().Get(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(pEdge->GetItem(SDRATTR_EDGEKIND))).GetValue();
+
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
     if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
         return !rInfo.ImpIsHorzLine(eLineCode,*pEdge->pEdgeTrack);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabgrdt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,8 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
     pXFSet->GetItemSet().Put(
         XFillGradientItem( pXPool, Get( nIndex )->GetGradient() ) );
-    pXOut->SetFillAttr( *pXFSet );
+//-/    pXOut->SetFillAttr( *pXFSet );
+    pXOut->SetFillAttr( pXFSet->GetItemSet() );
 
     // #73550#
     pXOut->OverrideLineColor( Color( COL_BLACK ) );

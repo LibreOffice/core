@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,10 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, BOOL bDelete )
     Size aVDSize = pVD->GetOutputSize();
     pVD->DrawRect( Rectangle( aZero, aVDSize ) );
     pXLSet->GetItemSet().Put( XLineDashItem( String(), Get( nIndex )->GetDash() ) );
-    pXOut->SetLineAttr( *pXLSet );
+
+//-/    pXOut->SetLineAttr( *pXLSet );
+    pXOut->SetLineAttr( pXLSet->GetItemSet() );
+
     pXOut->DrawLine( Point( 0, aVDSize.Height() / 2 ),
                      Point( aVDSize.Width(), aVDSize.Height() / 2 ) );
 

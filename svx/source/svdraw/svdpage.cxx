@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,9 +925,9 @@ void SdrObjList::RestartAllAnimations(SdrPageView* pPageView) const
 
 FASTBOOL SdrObjList::ImpGetFillColor(SdrObject* pObj, Color& rCol) const
 {
-    SfxItemSet aSet(pModel->GetItemPool());
-    pObj->TakeAttributes(aSet,FALSE,FALSE);
-    return GetDraftFillColor(aSet,rCol);
+//-/    SfxItemSet aSet(pModel->GetItemPool());
+//-/    pObj->TakeAttributes(aSet,FALSE,FALSE);
+    return GetDraftFillColor(pObj->GetItemSet(),rCol);
 }
 
 FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,

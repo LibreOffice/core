@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,23 +438,34 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
             if (pAktCreate!=NULL) {
                 BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-                pAktCreate->NbcSetAttributes(aDefaultAttr,FALSE);
-                if (HAS_BASE(SdrCaptionObj,pAktCreate)) {
+
+//-/                pAktCreate->NbcSetAttributes(aDefaultAttr,FALSE);
+                pAktCreate->SetItemSet(aDefaultAttr);
+
+                if (HAS_BASE(SdrCaptionObj,pAktCreate))
+                {
                     SfxItemSet aSet(pMod->GetItemPool());
                     aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
                     aSet.Put(XFillStyleItem(XFILL_NONE));
-                    pAktCreate->NbcSetAttributes(aSet,FALSE);
+
+//-/                    pAktCreate->NbcSetAttributes(aSet,FALSE);
+                    pAktCreate->SetItemSet(aSet);
+
                     bStartEdit=TRUE;
                 }
                 if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
-                                             nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT)) {
+                    nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
+                {
                     // Fuer alle Textrahmen default keinen Hintergrund und keine Umrandung
                     SfxItemSet aSet(pMod->GetItemPool());
                     aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
                     aSet.Put(XFillStyleItem(XFILL_NONE));
                     aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
                     aSet.Put(XLineStyleItem(XLINE_NONE));
-                    pAktCreate->NbcSetAttributes(aSet,FALSE);
+
+//-/                    pAktCreate->NbcSetAttributes(aSet,FALSE);
+                    pAktCreate->SetItemSet(aSet);
+
                     bStartEdit=TRUE;
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
@@ -511,7 +522,9 @@ BOOL SdrCreateView::BegCreateLibObj(const Point& rPnt, SdrObject* pObj, BOOL bMo
         pObj->SetModel(pMod);
         if (bSetDefAttr) {
             if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-            pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+
+//-/            pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+            pObj->SetItemSet(aDefaultAttr);
         }
         if (bSetDefLayer) {
             SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
@@ -552,10 +565,11 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         if (IsSolidDraggingNow() && !IsSolidDraggingCheck()) {
             // Z.B. fuer Fill+Linelose Textrahmen bei SolidDragging
             SetSolidDraggingCheck(TRUE);
-            SfxItemSet aSet(pMod->GetItemPool());
-            pAktCreate->TakeAttributes(aSet,FALSE,FALSE);
-            XFillStyle eFill=((XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
-            XLineStyle eLine=((XLineStyleItem&)(aSet.Get(XATTR_LINESTYLE))).GetValue();
+//-/            SfxItemSet aSet(pMod->GetItemPool());
+//-/            pAktCreate->TakeAttributes(aSet,FALSE,FALSE);
+            const SfxItemSet& rSet = pAktCreate->GetItemSet();
+            XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+            XLineStyle eLine=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
             if (eLine==XLINE_NONE && eFill==XFILL_NONE) {
                 SetSolidDraggingNow(FALSE);
             }
@@ -919,7 +933,8 @@ BOOL SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) co
 {
     if(pAktCreate)
     {
-        pAktCreate->TakeAttributes(rTargetSet, FALSE, bOnlyHardAttr);
+//-/        pAktCreate->TakeAttributes(rTargetSet, FALSE, bOnlyHardAttr);
+        rTargetSet.Put(pAktCreate->GetItemSet());
         return TRUE;
     }
     else
@@ -930,10 +945,18 @@ BOOL SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) co
 
 BOOL SdrCreateView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
-    if (pAktCreate!=NULL) {
-        pAktCreate->SetAttributes(rSet,bReplaceAll);
+    if(pAktCreate)
+    {
+//-/        pAktCreate->SetAttributes(rSet,bReplaceAll);
+        SdrBroadcastItemChange aItemChange(*pAktCreate);
+        if(bReplaceAll)
+            pAktCreate->ClearItem();
+        pAktCreate->SetItemSet(rSet);
+        pAktCreate->BroadcastItemChange(aItemChange);
         return TRUE;
-    } else {
+    }
+    else
+    {
         return SdrDragView::SetAttributes(rSet,bReplaceAll);
     }
 }

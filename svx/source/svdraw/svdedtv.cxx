@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,11 +465,12 @@ void SdrEditView::CheckPossibilities()
                 // gradient depends on fillstyle
                 const SdrMark* pM = aMark.GetMark(0);
                 const SdrObject* pObj = pM->GetObj();
-                SfxItemSet aSet(GetModel()->GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE, 0, 0);
 
-                pObj->TakeAttributes(aSet, FALSE, TRUE);
+//-/                SfxItemSet aSet(GetModel()->GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE, 0, 0);
+//-/
+//-/                pObj->TakeAttributes(aSet, FALSE, TRUE);
 
-                XFillStyle eFillStyle = ((XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+                XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
 
                 if(eFillStyle != XFILL_GRADIENT)
                 {
@@ -791,7 +792,8 @@ BOOL SdrEditView::InsertObject(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions
     }
     if ((nOptions & SDRINSERT_SETDEFATTR)!=0) {
         if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
-        pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+//-/        pObj->NbcSetAttributes(aDefaultAttr,FALSE);
+        pObj->SetItemSet(aDefaultAttr);
     }
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_VIEWCALL);

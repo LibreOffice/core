@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 11:00:29 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,73 +319,104 @@ const Size& SdrTextObj::GetTextSize() const
 
 FASTBOOL SdrTextObj::IsAutoGrowHeight() const
 {
-    if (!bTextFrame) return FALSE; // AutoGrow nur bei TextFrames
-    if (pMiscAttr!=NULL) {
-        const SfxItemSet& rSet=pMiscAttr->GetItemSet();
-        FASTBOOL bRet=((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
-        if (bRet) {
-            SdrTextAniKind eAniKind=((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
-            if (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE) {
-                SdrTextAniDirection eDirection=((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
-                if (eDirection==SDRTEXTANI_UP || eDirection==SDRTEXTANI_DOWN) {
-                    bRet=FALSE;
-                }
+    if(!bTextFrame)
+        return FALSE; // AutoGrow nur bei TextFrames
+
+    const SfxItemSet& rSet = GetItemSet();
+//-/    if(mpObjectItemSet)
+//-/    {
+    BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+
+    if(bRet)
+    {
+        SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
+
+        if(eAniKind == SDRTEXTANI_SCROLL || eAniKind == SDRTEXTANI_ALTERNATE || eAniKind == SDRTEXTANI_SLIDE)
+        {
+            SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+
+            if(eDirection == SDRTEXTANI_UP || eDirection == SDRTEXTANI_DOWN)
+            {
+                bRet = FALSE;
             }
         }
-        return bRet;
     }
-    return TRUE; // default ist TRUE
+    return bRet;
+//-/    }
+//-/    return TRUE; // default ist TRUE
 }
 
 FASTBOOL SdrTextObj::IsAutoGrowWidth() const
 {
-    if (!bTextFrame) return FALSE; // AutoGrow nur bei TextFrames
-    if (pMiscAttr!=NULL) {
-        const SfxItemSet& rSet=pMiscAttr->GetItemSet();
-        FASTBOOL bRet=((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
-        if (bRet) {
-            SdrTextAniKind eAniKind=((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
-            if (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE) {
-                SdrTextAniDirection eDirection=((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
-                if (eDirection==SDRTEXTANI_LEFT || eDirection==SDRTEXTANI_RIGHT) {
-                    bRet=FALSE;
-                }
+    if(!bTextFrame)
+        return FALSE; // AutoGrow nur bei TextFrames
+
+    const SfxItemSet& rSet = GetItemSet();
+//-/    if(mpObjectItemSet)
+//-/    {
+    BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
+
+    if(bRet)
+    {
+        SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
+
+        if(eAniKind == SDRTEXTANI_SCROLL || eAniKind == SDRTEXTANI_ALTERNATE || eAniKind == SDRTEXTANI_SLIDE)
+        {
+            SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+
+            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            {
+                bRet = FALSE;
             }
         }
-        return bRet;
     }
-    return FALSE; // default ist FALSE
+    return bRet;
+//-/    }
+//-/    return FALSE; // default ist FALSE
 }
 
 SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
 {
-    if (IsContourTextFrame()) return SDRTEXTHORZADJUST_BLOCK;
-    if (pMiscAttr!=NULL) {
-        const SfxItemSet& rSet=pMiscAttr->GetItemSet();
-        SdrTextHorzAdjust eRet=((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
-        if (eRet==SDRTEXTHORZADJUST_BLOCK) {
-            SdrTextAniKind eAniKind=((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
-            if (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE) {
-                SdrTextAniDirection eDirection=((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
-                if (eDirection==SDRTEXTANI_LEFT || eDirection==SDRTEXTANI_RIGHT) {
-                    eRet=SDRTEXTHORZADJUST_LEFT;
-                }
+    if(IsContourTextFrame())
+        return SDRTEXTHORZADJUST_BLOCK;
+
+    const SfxItemSet& rSet = GetItemSet();
+//-/    if(mpObjectItemSet)
+//-/    {
+    SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
+
+    if(eRet == SDRTEXTHORZADJUST_BLOCK)
+    {
+        SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
+
+        if(eAniKind == SDRTEXTANI_SCROLL || eAniKind == SDRTEXTANI_ALTERNATE || eAniKind == SDRTEXTANI_SLIDE)
+        {
+            SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+
+            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            {
+                eRet = SDRTEXTHORZADJUST_LEFT;
             }
         }
-        return eRet;
     }
-    return bTextFrame ? SDRTEXTHORZADJUST_BLOCK : SDRTEXTHORZADJUST_CENTER;
+    return eRet;
+//-/    }
+//-/
+//-/    return bTextFrame ? SDRTEXTHORZADJUST_BLOCK : SDRTEXTHORZADJUST_CENTER;
 } // defaults: BLOCK fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
 SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
 {
-    if (IsContourTextFrame()) return SDRTEXTVERTADJUST_TOP;
-    if (pMiscAttr!=NULL) {
-        const SfxItemSet& rSet=pMiscAttr->GetItemSet();
-        SdrTextVertAdjust eRet=((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
-        return eRet;
-    }
-    return bTextFrame ? SDRTEXTVERTADJUST_TOP : SDRTEXTVERTADJUST_CENTER;
+    if(IsContourTextFrame())
+        return SDRTEXTVERTADJUST_TOP;
+
+//-/    if(mpObjectItemSet)
+//-/    {
+    SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(GetItem(SDRATTR_TEXT_VERTADJUST))).GetValue();
+    return eRet;
+//-/    }
+
+//-/    return bTextFrame ? SDRTEXTVERTADJUST_TOP : SDRTEXTVERTADJUST_CENTER;
 } // defaults: TOP fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
 void SdrTextObj::ImpJustifyRect(Rectangle& rRect) const
@@ -420,7 +451,7 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = TRUE;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetSetItem(1)->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
     rInfo.bShearAllowed     =bNoTextFrame;
     FASTBOOL bCanConv=ImpCanConvTextToCurve();
@@ -474,10 +505,11 @@ void SdrTextObj::SetPage(SdrPage* pNewPage)
 
 void SdrTextObj::SetModel(SdrModel* pNewModel)
 {
+    const SfxItemSet& rSet = GetItemSet();
     SdrModel* pOldModel=pModel;
-    FASTBOOL bLinked=IsLinkedText();
-    FASTBOOL bChg=pNewModel!=pModel;
-    FASTBOOL bHgtSet=pOutlAttr!=NULL && pOutlAttr->GetItemSet().GetItemState(EE_CHAR_FONTHEIGHT,TRUE)==SFX_ITEM_SET;
+    BOOL bLinked=IsLinkedText();
+    BOOL bChg=pNewModel!=pModel;
+    BOOL bHgtSet = rSet.GetItemState(EE_CHAR_FONTHEIGHT, TRUE) == SFX_ITEM_SET;
     if (bLinked && bChg) {
         ImpLinkAbmeldung();
     }
@@ -495,15 +527,17 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
         // !!! fehlende Implementation !!!
         ULONG nOldFontHgt=pOldModel->GetDefaultFontHeight();
         ULONG nNewFontHgt=pNewModel->GetDefaultFontHeight();
-        FASTBOOL bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-        FASTBOOL bSetHgtItem=bDefHgtChanged && pOutlAttr!=NULL && !bHgtSet;
+        BOOL bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+        BOOL bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem) { // #32665#
             // zunaechst das HeightItem festklopfen, damit
             // 1. Es eben bestehen bleibt und
             // 2. DoStretchChars vom richtigen Wert ausgeht
-            SdrOutlinerSetItem aSI(*pOutlAttr);
-            aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
-            pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
+            //-/            aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
+            SetItem(SvxFontHeightItem(nOldFontHgt));
+//-/            SdrOutlinerSetItem aSI(*pOutlAttr);
+//-/            aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
+//-/            pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
         }
         // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -522,9 +556,10 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             if (bSetHgtItem) {
                 // Und nun noch das Rahmenattribut korregieren
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
-                SdrOutlinerSetItem aSI(*pOutlAttr);
-                aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
-                pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
+                SetItem(SvxFontHeightItem(nOldFontHgt));
+//-/                SdrOutlinerSetItem aSI(*pOutlAttr);
+//-/                aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
+//-/                pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
             }
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
@@ -564,21 +599,19 @@ SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
 
 FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
 {
-    if (pMiscAttr!=NULL) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrEckenradiusItem(nRad));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
-        return TRUE;
-    }
-    return FALSE;
+//-/    if(mpObjectItemSet)
+//-/    {
+    SetItem(SdrEckenradiusItem(nRad));
+    return TRUE;
+//-/    }
+//-/    return FALSE;
 }
 
 FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextAutoGrowHeightItem(bAuto));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextAutoGrowHeightItem(bAuto));
         return TRUE;
     }
     return FALSE;
@@ -586,10 +619,9 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextMinFrameHeightItem(nHgt));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextMinFrameHeightItem(nHgt));
         return TRUE;
     }
     return FALSE;
@@ -597,10 +629,9 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 
 FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextMaxFrameHeightItem(nHgt));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextMaxFrameHeightItem(nHgt));
         return TRUE;
     }
     return FALSE;
@@ -608,10 +639,9 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 
 FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(FASTBOOL bAuto)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextAutoGrowWidthItem(bAuto));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextAutoGrowWidthItem(bAuto));
         return TRUE;
     }
     return FALSE;
@@ -619,14 +649,14 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(FASTBOOL bAuto)
 
 FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextMinFrameWidthItem(nWdt));
-        if (bDisableAutoWidthOnDragging) {
-            bDisableAutoWidthOnDragging=FALSE;
-            aSI.GetItemSet().Put(SdrTextAutoGrowWidthItem(FALSE));
+    if(bTextFrame)
+    {
+        SetItem(SdrTextMinFrameWidthItem(nWdt));
+        if(bDisableAutoWidthOnDragging)
+        {
+            bDisableAutoWidthOnDragging = FALSE;
+            SetItem(SdrTextAutoGrowWidthItem(FALSE));
         }
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
         return TRUE;
     }
     return FALSE;
@@ -634,10 +664,9 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 
 FASTBOOL SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextMaxFrameWidthItem(nWdt));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextMaxFrameWidthItem(nWdt));
         return TRUE;
     }
     return FALSE;
@@ -645,10 +674,9 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
 
 FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 {
-    if (pMiscAttr!=NULL && bTextFrame) {
-        SdrMiscSetItem aSI(*pMiscAttr);
-        aSI.GetItemSet().Put(SdrTextFitToSizeTypeItem(eFit));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSI);
+    if(bTextFrame)
+    {
+        SetItem(SdrTextFitToSizeTypeItem(eFit));
         return TRUE;
     }
     return FALSE;
@@ -984,7 +1012,13 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 {
                     rOutliner.SetUpdateMode(TRUE); // hier kann ggf. noch optimiert werden !!!
                     ImpTextPortionHandler aTPHandler(rOutliner,*this);
-                    rXOut.SetTextAttr(*pTextAttr);
+
+//-/                    rXOut.SetTextAttr(*pTextAttr);
+//-/                    const SfxItemSet& rSet = GetItemSet();
+//-/                    XTextAttrSetItem aTextSetItem(rSet.GetPool());
+//-/                    aTextSetItem.GetItemSet().Put(rSet);
+                    rXOut.SetTextAttr(GetItemSet());
+
                     aTPHandler.DrawTextToPath(rXOut); // drucken bei aktivem Textedit fehlt hier
                     rOutliner.Clear();
                 }
@@ -1184,18 +1218,23 @@ void SdrTextObj::StopTextAnimation(OutputDevice* pOutDev, long nExtraData)
 }
 
 FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffset,
-                SdrOutliner& rOutliner, const Rectangle& rAnchorRect, const Rectangle& rPaintRect, const SdrPaintInfoRec& rInfoRec) const
+    SdrOutliner& rOutliner, const Rectangle& rAnchorRect, const Rectangle& rPaintRect,
+    const SdrPaintInfoRec& rInfoRec) const
 {
-    if (pMiscAttr==NULL) return FALSE;
-    const SfxItemSet& rSet=pMiscAttr->GetItemSet();
-    SdrTextAniKind eAniKind=GetTextAniKind();
-    FASTBOOL bBlink=eAniKind==SDRTEXTANI_BLINK;
-    SdrTextAniDirection eDirection=((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
-    ImpSdrMtfAnimator* pAnimator=((SdrTextObj*)this)->ImpForceMtfAnimator();
+//-/    if(!mpObjectItemSet)
+//-/        return FALSE;
+
+    SdrTextAniKind eAniKind = GetTextAniKind();
+    FASTBOOL bBlink = eAniKind == SDRTEXTANI_BLINK;
+    const SfxItemSet& rSet = GetItemSet();
+    SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+    ImpSdrMtfAnimator* pAnimator = ((SdrTextObj*)this)->ImpForceMtfAnimator();
     pAnimator->SetAnimationNotifyHdl(LINK(this,SdrTextObj,ImpAnimationHdl));
+
     // erstmal checken, ob nicht schon laeuft
-    ImpMtfAnimationInfo* pRunningInfo=NULL;
-    for (ULONG nInfoNum=pAnimator->GetInfoCount(); nInfoNum>0 && pRunningInfo==NULL;) {
+    ImpMtfAnimationInfo* pRunningInfo = NULL;
+
+    for(ULONG nInfoNum = pAnimator->GetInfoCount(); nInfoNum>0 && pRunningInfo==NULL;) {
         nInfoNum--;
         ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
         if (pInfo->pPageView==rInfoRec.pPV && pInfo->pOutDev==&rOut) {
@@ -1331,7 +1370,16 @@ void SdrTextObj::ImpAddTextToBoundRect()
                 SdrOutliner& rOutl=ImpGetDrawOutliner();
                 rOutl.SetUpdateMode(TRUE);
                 ImpTextPortionHandler aTPHandler(rOutl,*this);
-                aXOut.SetTextAttr(*pTextAttr);
+
+//-/                if(mpObjectItemSet)
+//-/                {
+//-/                const SfxItemSet& rSet = GetItemSet();
+//-/                XTextAttrSetItem aTextSetItem(rSet.GetPool());
+//-/                aTextSetItem.GetItemSet().Put(rSet);
+                aXOut.SetTextAttr(GetItemSet());
+//-/                    aXOut.SetTextAttr(*pTextAttr);
+//-/                }
+
                 aTPHandler.DrawTextToPath(aXOut,FALSE);
                 if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
                 *pFormTextBoundRect=aTPHandler.GetFormTextBoundRect();
@@ -1575,9 +1623,9 @@ void SdrTextObj::RecalcSnapRect()
         Polygon aPol(aRect);
         if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-        aSnapRect=aPol.GetBoundRect();
+        maSnapRect=aPol.GetBoundRect();
     } else {
-        aSnapRect=aRect;
+        maSnapRect=aRect;
     }
 }
 
@@ -1609,6 +1657,22 @@ void SdrTextObj::ImpCheckMasterCachable()
         bNotMasterCachable=rText.HasField(SvxPageField::StaticType());
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrTextObj::PreSave()
+{
+    // call parent
+    SdrAttrObj::PreSave();
+
+    // Prepare OutlinerParaObjects for storing
+    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
+    if(pParaObj && GetModel())
+        pParaObj->PrepareStore((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
 {
@@ -1826,15 +1890,16 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             rIn>>*pFormTextBoundRect;
         }
     }
-    if (rHead.GetVersion()<12 && !bTextFrame) {
-        SdrMiscSetItem aMisc(*pMiscAttr);
-        aMisc.GetItemSet().Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        aMisc.GetItemSet().Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-        pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aMisc);
-        SdrOutlinerSetItem aOutl(*pOutlAttr);
-        aOutl.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
-        pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aOutl);
+
+    if(rHead.GetVersion() < 12 && !bTextFrame)
+    {
+        SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+        SetItem(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+//-/        SdrOutlinerSetItem aOutl(*pOutlAttr);
+//-/        aOutl.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+        SetItem(SvxAdjustItem(SVX_ADJUST_CENTER));
     }
+
     if (bTextFrame && pOutlinerParaObject!=NULL)
         NbcAdjustTextFrameWidthAndHeight();
 
@@ -1842,7 +1907,7 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
          pOutlinerParaObject->GetTextObject().GetVersion() < 500 &&
          !pOutlinerParaObject->IsEditDoc() )
     {
-        pOutlinerParaObject->MergeParaAttribs( pOutlAttr->GetItemSet() );
+        pOutlinerParaObject->MergeParaAttribs( GetItemSet() );
     }
 
     ImpSetTextStyleSheetListeners();
@@ -1976,10 +2041,8 @@ SdrFitToSizeType SdrTextObj::GetFitToSize() const
 {
     SdrFitToSizeType eType = SDRTEXTFIT_NONE;
 
-    if( pMiscAttr && !IsAutoGrowWidth() )
-    {
-        eType = ((SdrTextFitToSizeTypeItem&)(pMiscAttr->GetItemSet().Get(SDRATTR_TEXT_FITTOSIZE))).GetValue();
-    }
+    if(!IsAutoGrowWidth())
+        eType = ((SdrTextFitToSizeTypeItem&)(GetItem(SDRATTR_TEXT_FITTOSIZE))).GetValue();
 
     return eType;
 }

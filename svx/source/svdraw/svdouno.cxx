@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,13 +332,18 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                     {
                         if( pPV->GetView().IsFillDraft() )
                         {
-                            // perepare ItemSet to avoid old XOut filling
-                            XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
-                            aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-                            rXOut.SetFillAttr(aXFSet);
+                            const SfxItemSet& rSet = GetItemSet();
 
-                            if ( pLineAttr )
-                                rXOut.SetLineAttr( *pLineAttr );
+                            // perepare ItemSet to avoid old XOut filling
+//-/                            XFillAttrSetItem aFillAttrSet(rSet.GetPool());
+                            SfxItemSet aEmptySet(*rSet.GetPool());
+                            aEmptySet.Put(XFillStyleItem(XFILL_NONE));
+                            rXOut.SetFillAttr(aEmptySet);
+
+//-/                            if(mpObjectItemSet)
+//-/                            {
+                            rXOut.SetLineAttr(rSet);
+//-/                            }
 
                             rXOut.DrawRect( aRect );
                         }

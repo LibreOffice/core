@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-24 11:49:05 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,7 +1203,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             aSet.Put( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
             pTObj->SetModel( pSdrModel );
-            pTObj->NbcSetAttributes( aSet, FALSE );
+
+//-/            pTObj->NbcSetAttributes( aSet, FALSE );
+            pTObj->SetItemSet(aSet);
+
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
             {   // rotate text with shape ?
@@ -2660,17 +2663,21 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
                                                         {
                                                             void* pPtr;
                                                             const SfxPoolItem* pPoolItem = NULL;
-                                                            SfxItemSet aSourceAttr( pSdrModel->GetItemPool() );
-                                                            pBackGroundObj->TakeAttributes( aSourceAttr, FALSE, TRUE );
-                                                            SfxItemState eState = aSourceAttr.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+
+//-/                                                            SfxItemSet aSourceAttr( pSdrModel->GetItemPool() );
+//-/                                                            pBackGroundObj->TakeAttributes( aSourceAttr, FALSE, TRUE );
+//-/                                                            SfxItemState eState = aSourceAttr.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+                                                            SfxItemState eState = pBackGroundObj->GetItemSet().GetItemState(XATTR_FILLCOLOR, FALSE, &pPoolItem);
+
                                                             if ( pPoolItem )
                                                             {
                                                                 for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                                                                 {
-                                                                    SfxItemSet aTempAttr( pSdrModel->GetItemPool() );
-                                                                    ((SdrObject*)pPtr)->TakeAttributes( aTempAttr, FALSE, TRUE );
-                                                                    aTempAttr.Put( *pPoolItem );
-                                                                    ((SdrObject*)pPtr)->NbcSetAttributes( aTempAttr, FALSE );
+                                                                    ((SdrObject*)pPtr)->SetItem(*pPoolItem);
+//-/                                                                    SfxItemSet aTempAttr( pSdrModel->GetItemPool() );
+//-/                                                                    ((SdrObject*)pPtr)->TakeAttributes( aTempAttr, FALSE, TRUE );
+//-/                                                                    aTempAttr.Put( *pPoolItem );
+//-/                                                                    ((SdrObject*)pPtr)->NbcSetAttributes( aTempAttr, FALSE );
                                                                 }
                                                             }
                                                         }
@@ -2974,7 +2981,10 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
         pRet = new SdrRectObj( aRect );
         pRet->SetModel( pSdrModel );
-        pRet->NbcSetAttributes( *pSet, FALSE );
+
+//-/        pRet->NbcSetAttributes( *pSet, FALSE );
+        pRet->SetItemSet(*pSet);
+
         pRet->SetMarkProtect( TRUE );
         pRet->SetMoveProtect( TRUE );
         pRet->SetResizeProtect( TRUE );

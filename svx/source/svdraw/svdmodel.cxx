@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 10:59:24 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     bUIOnlyKomma=FALSE;
     pLayerAdmin=NULL;
     pItemPool=pPool;
-    pUndoItemPool=NULL;
+//-/    pUndoItemPool=NULL;
     bMyPool=FALSE;
     pPersist=pPers;
     pDrawOutliner=NULL;
@@ -339,15 +339,15 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     SetTextDefaults();
 
     // Undo-ItemPool anlegen
-    if(!pUndoItemPool)
-    {
-        // Pool fuer UNDO-Objekte anlegen
-        pUndoItemPool = new SdrItemPool(SDRATTR_START, SDRATTR_END);
-        SfxItemPool* pUndoOutlPool = EditEngine::CreatePool();
-        pUndoItemPool->SetSecondaryPool(pUndoOutlPool);
-        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-        pUndoItemPool->FreezeIdRanges();
-    }
+//-/    if(!pUndoItemPool)
+//-/    {
+//-/        // Pool fuer UNDO-Objekte anlegen
+//-/        pUndoItemPool = new SdrItemPool(SDRATTR_START, SDRATTR_END);
+//-/        SfxItemPool* pUndoOutlPool = EditEngine::CreatePool();
+//-/        pUndoItemPool->SetSecondaryPool(pUndoOutlPool);
+//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+//-/        pUndoItemPool->FreezeIdRanges();
+//-/    }
 
 #ifdef DBG_UTIL
     UINT16 nCnt(0);
@@ -491,13 +491,13 @@ SdrModel::~SdrModel()
         delete pOutlPool;
     }
 
-    // UndoItemPool wegwerfen
-    if(pUndoItemPool)
-    {
-        SfxItemPool* pUndoOutlPool = pUndoItemPool->GetSecondaryPool();
-        delete pUndoItemPool;
-        delete pUndoOutlPool;
-    }
+//-/    // UndoItemPool wegwerfen
+//-/    if(pUndoItemPool)
+//-/    {
+//-/        SfxItemPool* pUndoOutlPool = pUndoItemPool->GetSecondaryPool();
+//-/        delete pUndoItemPool;
+//-/        delete pUndoOutlPool;
+//-/    }
 
     delete pLoadedModel;
 
@@ -1054,7 +1054,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
         eObjUnit=eMap;
         aObjUnit=rFrac;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
@@ -1067,7 +1067,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
     if (eObjUnit!=eMap) {
         eObjUnit=eMap;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
+//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
@@ -2377,34 +2377,83 @@ void SdrModel::SetStarDrawPreviewMode(BOOL bPreview)
 
 void SdrModel::PrepareStore()
 {
-    // Prepare OutlinerParaObjects for storing
-    USHORT nCnt = GetMasterPageCount();
-    for ( USHORT i = 0; i < nCnt; i++ )
+    // is done by PreSave now
+    DBG_ERROR("Please call PreSave now. It'll do the desired job.");
+}
+
+//-/void SdrModel::PrepareStore()
+//-/{
+//-/    // Prepare OutlinerParaObjects for storing
+//-/    USHORT nCnt = GetMasterPageCount();
+//-/    for ( USHORT i = 0; i < nCnt; i++ )
+//-/    {
+//-/        // MasterPages
+//-/        SdrObjListIter aIter( *GetMasterPage( i ) );
+//-/        while( aIter.IsMore() )
+//-/        {
+//-/            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
+//-/            if( pOPO )
+//-/                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
+//-/        }
+//-/    }
+//-/
+//-/    nCnt = GetPageCount();
+//-/    for ( i = 0; i < nCnt; i++ )
+//-/    {
+//-/        // Pages
+//-/        SdrObjListIter aIter( *GetPage( i ) );
+//-/        while( aIter.IsMore() )
+//-/        {
+//-/            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
+//-/            if( pOPO )
+//-/                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
+//-/        }
+//-/    }
+//-/}
+
+void SdrModel::PreSave()
+{
+    sal_uInt16 nCnt(GetMasterPageCount());
+
+    for(sal_uInt16 i(0); i < nCnt; i++)
     {
         // MasterPages
-        SdrObjListIter aIter( *GetMasterPage( i ) );
-        while( aIter.IsMore() )
-        {
-            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-            if( pOPO )
-                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
-        }
+        SdrObjListIter aIter(*GetMasterPage(i));
+        while(aIter.IsMore())
+            aIter.Next()->PreSave();
     }
 
     nCnt = GetPageCount();
-    for ( i = 0; i < nCnt; i++ )
+    for(i = 0; i < nCnt; i++)
     {
         // Pages
-        SdrObjListIter aIter( *GetPage( i ) );
-        while( aIter.IsMore() )
-        {
-            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-            if( pOPO )
-                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
-        }
+        SdrObjListIter aIter(*GetPage(i));
+        while(aIter.IsMore())
+            aIter.Next()->PreSave();
     }
 }
 
+void SdrModel::PostSave()
+{
+    sal_uInt16 nCnt(GetMasterPageCount());
+
+    for(sal_uInt16 i(0); i < nCnt; i++)
+    {
+        // MasterPages
+        SdrObjListIter aIter(*GetMasterPage(i));
+        while(aIter.IsMore())
+            aIter.Next()->PostSave();
+    }
+
+    nCnt = GetPageCount();
+    for(i = 0; i < nCnt; i++)
+    {
+        // Pages
+        SdrObjListIter aIter(*GetPage(i));
+        while(aIter.IsMore())
+            aIter.Next()->PostSave();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2428,5 +2477,15 @@ SdrHint::SdrHint(const SdrObject& rNewObj)
     pObjList=rNewObj.GetObjList();
     bNeedRepaint=TRUE;
     eHint=HINT_OBJCHG;
+}
+
+SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
+{
+    aRect = rRect;
+    pPage = rNewObj.GetPage();
+    pObj = &rNewObj;
+    pObjList = rNewObj.GetObjList();
+    bNeedRepaint = TRUE;
+    eHint = HINT_OBJCHG;
 }
 

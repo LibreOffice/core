@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,10 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect+=aAnchor;
 }
 
-void SdrVirtObj::SendRepaintBroadcast(FASTBOOL bNoPaintNeeded) const
-{
-    SdrObject::SendRepaintBroadcast(bNoPaintNeeded);
-}
+//-/void SdrVirtObj::SendRepaintBroadcast(FASTBOOL bNoPaintNeeded) const
+//-/{
+//-/    SdrObject::SendRepaintBroadcast(bNoPaintNeeded);
+//-/}
 
 void SdrVirtObj::SetChanged()
 {
@@ -567,20 +567,47 @@ void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrVirtObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/void SdrVirtObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    rRefObj.TakeAttributes(rAttr,bMerge,bOnlyHardAttr);
+//-/}
+
+//-/void SdrVirtObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    rRefObj.NbcSetAttributes(rAttr,bReplaceAll);
+//-/}
+
+//-/void SdrVirtObj::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    rRefObj.SetAttributes(rAttr,bReplaceAll);
+//-/}
+
+const SfxItemSet& SdrVirtObj::GetItemSet() const
 {
-    rRefObj.TakeAttributes(rAttr,bMerge,bOnlyHardAttr);
+    return rRefObj.GetItemSet();
 }
 
-void SdrVirtObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrVirtObj::SetItem( const SfxPoolItem& rItem )
 {
-    rRefObj.NbcSetAttributes(rAttr,bReplaceAll);
+    rRefObj.SetItem(rItem);
 }
 
-void SdrVirtObj::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void SdrVirtObj::ClearItem( USHORT nWhich )
 {
-    rRefObj.SetAttributes(rAttr,bReplaceAll);
+    rRefObj.ClearItem(nWhich);
 }
+
+void SdrVirtObj::SetItemSet( const SfxItemSet& rSet )
+{
+    rRefObj.SetItemSet(rSet);
+}
+
+void SdrVirtObj::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
+{
+    rRefObj.BroadcastItemChange(rChange);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SfxStyleSheet* SdrVirtObj::GetStyleSheet() const
 {
