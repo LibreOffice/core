@@ -437,7 +437,7 @@ public class FormulaParser {
              do {
                  num += look;
                 status = getChar();
-             } while(isDigit(look) && status);
+             } while((isDigit(look) || ((look == '.') && isDigit(formulaStr.charAt(index)))) && status);
              skipWhite();
             tokenVector.add(tokenFactory.getOperandToken(num, "INTEGER"));
             Debug.log(Debug.TRACE,"Number parsed : " + num);
