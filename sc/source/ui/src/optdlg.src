@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:21:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ italian ] = "Il valore 0 corrisponde a 30/12/1899";
         Text[ greek ] = "30/12/1899 (Π~ροεπιλογή)";
         Text[ korean ] = "1899/12/30 (κΈ°λ³Έκ°’)(~U)";
-        QuickHelpText[ greek ] = "Τιμή 0 αντιστοιχεί στην τιμή 30/12/1899";
+        QuickHelpText[ greek ] = "Value 0 corresponds to 12/30/1899";
         QuickHelpText[ korean ] = "κ°’0μ€ 1899,12,30μ— μΌμΉ";
         Text[ turkish ] = "30.12.1899 (~φntanύmlύ)";
         Text[ language_user1 ] = " ";
@@ -763,7 +763,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_simplified ] = "ζε―»θƒε›΄ = ε’ <> εΏ…ι΅»ι€‚η”¨ε…¨ιƒ¨η„ε•ε…ƒζ Ό(~W)";
         Text[ russian ] = "Σρλξβθÿ οξθρκΰ = θ <> δξλζνϋ πΰροπξρςπΰνÿςόρÿ νΰ βρώ ÿχεικσ";
         Text[ polish ] = "Kryt~eria wyszukiwania = i <> muszΉ siκ odnosiζ do ca³ych komσrek";
-        Text[ japanese ] = "ζ¤η΄Άζ΅δ»¶ = γ¨ <> γ―γ™γΉγ¦γ®γ‚»γƒ«γ«ι©η”¨(~W)";
+        Text[ japanese ] = "ζ¤η΄Άζ΅δ»¶ = γ¨ <> γ―γ‚»γƒ«ε…¨δ½“γ«ι©η”¨(~W)";
         Text[ chinese_traditional ] = "ζε°‹η―„ε = ε’ <> εΏ…ι ι©η”¨ε…¨ιƒ¨η„ε„²ε­ζ Ό(~W)";
         Text[ arabic ] = "νΜΘ Γδ ΚδΨΘή γΪΗννΡ ΗαΘΝΛ = ζ <> Ϊαμ ΞαΗνΗ ίΗγαΙ";
         Text[ greek ] = "Τα κριτήρια αναζήτησης = και <> πρέπει να ταιριάζουν με ολόκληρα κελιά";
@@ -1495,7 +1495,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ finnish ] = "~Pienet kahvat";
         Text[ catalan ] = "Manejaments ~senzills";
         Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΈΰΈ±ΰΈ”ΰΈΰΈ²ΰΈ£ΰΉ~ΰΈΰΈΰΈ‡ΰΉΰΈ²ΰΈΆ";
-        Text[ czech ] = "JednoduchΓ© ΓΊchopy";
+        Text[ czech ] = "JednoduchΓ© ΓΊchyty";
         Text[ hebrew ] = "~Einfache Griffe";
         Text[ hindi ] = "~ΰ¤Έΰ¤Ύΰ¤®ΰ¤Ύΰ¤¨ΰ¥ΰ¤― ΰ¤Ήΰ¥‰ΰ¤¨ΰ¥ΰ¤΅ΰ¤²ΰ¥‡ΰ¤‚";
         Text[ slovak ] = "JednoduchΓ© ΓΊchy~tky";
@@ -1528,7 +1528,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ finnish ] = "Isot kahvat";
         Text[ catalan ] = "Manejaments ~grans";
         Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΈΰΈ±ΰΈ”ΰΈΰΈ²ΰΈ£ΰΉƒ~ΰΈ«ΰΈΰΉ";
-        Text[ czech ] = "VelkΓ© ΓΊchopy";
+        Text[ czech ] = "VelkΓ© ΓΊchyty";
         Text[ hebrew ] = "Gr~oΓe Griffe";
         Text[ hindi ] = "~ΰ¤¬ΰ¤΅ΰ¤Όΰ¤Ύ ΰ¤Ήΰ¥‰ΰ¤¨ΰ¥ΰ¤΅ΰ¤²ΰ¥‡ΰ¤‚";
         Text[ slovak ] = "VeΔΎ~kΓ© ΓΊchytky";
@@ -3435,6 +3435,16 @@ TabPage RID_SCPAGE_PRINT
         Text[ slovak ] = "~TlaΔiΕ¥ len vybranΓ© listy";
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
