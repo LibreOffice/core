@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:05:03 $
+ *  last change: $Author: pjunck $  $Date: 2004-10-27 13:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author  rpiterman
  */
-public class ImageList implements ListDataListener, ItemSelectable {
+    public class ImageList implements ListDataListener, ItemSelectable {
 
     private XControl imgContainer;
     private XFixedText lblImageText;
@@ -86,7 +86,7 @@ public class ImageList implements ListDataListener, ItemSelectable {
     private XButton btnNext;
     private XFixedText lblCounter;
     private XControl images[];
-    private boolean benabled;
+    private boolean benabled = true;
 
     private Size gap = new Size(4, 4);
     private int cols = 4;
@@ -118,7 +118,7 @@ public class ImageList implements ListDataListener, ItemSelectable {
 
     private ImageKeyListener imageKeyListener;
 
-    private static final Integer BACKGROUND_COLOR = new Integer(SystemColor.window.getRGB() + 16777216);
+    private static final Integer BACKGROUND_COLOR = new Integer(16777216);  //new Integer(SystemColor.window.getRGB() + 16777216);
 
     private final static Short HIDE_PAGE = new Short((short) 99);
     private final static Integer TRANSPARENT = new Integer(-1);
@@ -836,6 +836,17 @@ public class ImageList implements ListDataListener, ItemSelectable {
      * @param b
      */
     public void setenabled(boolean b) {
+
+        for (int i = 0; i < images.length; i++)
+            UnoDialog2.setEnabled(images[i], b);
+
+        UnoDialog2.setEnabled(grbxSelectedImage,b );
+        UnoDialog2.setEnabled( lblImageText ,b );
+        if (showButtons) {
+            UnoDialog2.setEnabled( btnBack ,b );
+            UnoDialog2.setEnabled( btnNext ,b );
+            UnoDialog2.setEnabled( lblCounter ,b );
+        }
         benabled = b;
     }
 
