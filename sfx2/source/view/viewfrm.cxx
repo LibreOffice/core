@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:37:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
 #include <com/sun/star/frame/XLoadable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _SPLITWIN_HXX //autogen
@@ -3480,7 +3480,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     com::sun::star::uno::UNO_QUERY);
 
             Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-            Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
             if ( xPropSet.is() )
             {
                 try
@@ -3620,7 +3620,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_TOGGLESTATUSBAR:
                 {
-                    com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame()->GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
