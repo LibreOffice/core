@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:48:49 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
+// OD 2004-05-05 #i28701#
+#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
+#include <fmtwrapinfluenceonobjpos.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -194,6 +198,8 @@ class SwShapeDescriptor_Impl
     uno::Reference< XTextRange > xTextRange;
     // OD 2004-04-21 #i26791#
     SwFmtFollowTextFlow* mpFollowTextFlow;
+    // OD 2004-05-05 #i28701# - add property 'WrapInfluenceOnObjPos'
+    SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPos;
 
 public:
     SwShapeDescriptor_Impl() :
@@ -207,7 +213,10 @@ public:
      pLRSpace(0),
      bOpaque(sal_False),
      // OD 2004-04-21 #i26791#
-     mpFollowTextFlow( new SwFmtFollowTextFlow( FALSE ) )
+     mpFollowTextFlow( new SwFmtFollowTextFlow( FALSE ) ),
+     // OD 2004-05-05 #i28701#
+     pWrapInfluenceOnObjPos( new SwFmtWrapInfluenceOnObjPos(
+                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED ) )
      {}
 
     ~SwShapeDescriptor_Impl()
@@ -220,6 +229,8 @@ public:
         delete pLRSpace;
         // OD 2004-04-22 #i26791#
         delete mpFollowTextFlow;
+        // OD 2004-05-05 #i28701#
+        delete pWrapInfluenceOnObjPos;
     }
     SwFmtAnchor*    GetAnchor(sal_Bool bCreate = sal_False)
         {
@@ -294,6 +305,22 @@ public:
     void RemoveFollowTextFlow()
     {
         DELETEZ(mpFollowTextFlow);
+    }
+
+    // OD 2004-05-05 #i28701#
+    inline SwFmtWrapInfluenceOnObjPos* GetWrapInfluenceOnObjPos(
+                                        const sal_Bool _bCreate = sal_False )
+    {
+        if ( _bCreate && !pWrapInfluenceOnObjPos )
+        {
+            pWrapInfluenceOnObjPos = new SwFmtWrapInfluenceOnObjPos(
+                    text::WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED );
+        }
+        return pWrapInfluenceOnObjPos;
+    }
+    inline void RemoveWrapInfluenceOnObjPos()
+    {
+        DELETEZ(pWrapInfluenceOnObjPos);
     }
 };
 /****************************************************************************
@@ -662,6 +689,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if ( pDesc->GetFollowTextFlow() )
         {
             aSet.Put( *pDesc->GetFollowTextFlow() );
+        }
+
+        // OD 2004-05-05 #i28701#
+        if ( pDesc->GetWrapInfluenceOnObjPos() )
+        {
+            aSet.Put( *pDesc->GetWrapInfluenceOnObjPos() );
         }
     }
 
@@ -1203,6 +1236,12 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pItem = pImpl->GetFollowTextFlow( sal_True );
                     }
                     break;
+                    // OD 2004-05-05 #i28701#
+                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    {
+                        pItem = pImpl->GetWrapInfluenceOnObjPos( sal_True );
+                    }
+                    break;
                 }
                 if(pItem)
                     ((SfxPoolItem*)pItem)->PutValue(aValue, pMap->nMemberId);
@@ -1347,6 +1386,12 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         pItem = pImpl->GetFollowTextFlow();
                     }
                     break;
+                    // OD 2004-05-05 #i28701#
+                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    {
+                        pItem = pImpl->GetWrapInfluenceOnObjPos();
+                    }
+                    break;
                 }
                 if(pItem)
                     pItem->QueryValue(aRet, pMap->nMemberId);
@@ -1452,6 +1497,12 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                         case  RES_SURROUND:
                             pItem = pImpl->GetSurround();
                         break;
+                        // OD 2004-05-05 #i28701#
+                        case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                        {
+                            pItem = pImpl->GetWrapInfluenceOnObjPos();
+                        }
+                        break;
                     }
                     if(pItem)
                         pRet[nProperty] = PropertyState_DIRECT_VALUE;
@@ -1518,6 +1569,12 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
                     case RES_FOLLOW_TEXT_FLOW:
                     {
                         pImpl->RemoveFollowTextFlow();
+                    }
+                    break;
+                    // OD 2004-05-05 #i28701#
+                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    {
+                        pImpl->RemoveWrapInfluenceOnObjPos();
                     }
                     break;
                 }
