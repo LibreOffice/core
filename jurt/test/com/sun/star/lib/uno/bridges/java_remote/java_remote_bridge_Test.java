@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:22:50 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,10 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
             u1.waitUnreachable();
             u2.waitUnreachable();
         }
+        // For whatever strange reason, this sleep seems to be necessary to
+        // reliably ensure that even the last proxy's finalization is over
+        // before the following assure is executed:
+        Thread.sleep(1000);
 
         assure("proxy count", ProxyFactory.getDebugCount() == 0);
 
