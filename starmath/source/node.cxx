@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ void SmNode::PrepareAttributes()
 
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     bIsDebug    = TRUE;
 #else
     bIsDebug    = FALSE;
@@ -434,7 +434,7 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 void  SmNode::ToggleDebug() const
     // toggle 'bIsDebug' in current subtree
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     SmNode *pThis = (SmNode *) this;
 
     pThis->bIsDebug = bIsDebug ? FALSE : TRUE;
