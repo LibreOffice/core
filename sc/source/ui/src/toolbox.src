@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:09:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,9 +1576,14 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_EXTRUSION_LIGHTING_FLOATER;\
         SID_EXTRUSION_SURFACE_FLOATER;\
         SID_EXTRUSION_3D_COLOR;\
+        SID_PRINTPREVIEW;\
+        SID_DEFINE_PRINTAREA;\
+        SID_DELETE_PRINTAREA;\
+        SID_OPENDLG_EDIT_PRINTAREA;\
+        SID_ADD_PRINTAREA;\
     };                                                  \
     IdCount = {                                         \
-        173;                                            \
+        178;                                            \
     };
 
 
