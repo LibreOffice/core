@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:38:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4701,15 +4701,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 }
                 nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
             }
-            else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the customshapes from msashape,
-                    || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
-                    || ( aObjData.eShapeType == mso_sptCurvedUpArrow )
-                    || ( aObjData.eShapeType == mso_sptCurvedDownArrow ) )
-            {
-                    pRet = GetAutoForm( aObjData.eShapeType );
-                    if ( pRet )
-                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
-            }
             else
             {
                 // Check if we are using our new as shape type. This is done by
@@ -4806,21 +4797,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
                         }
-                    }
-                    else if (
-                        mso_sptWedgeRectCallout == aObjData.eShapeType ||
-                        mso_sptWedgeRRectCallout == aObjData.eShapeType ||
-                        mso_sptWedgeEllipseCallout == aObjData.eShapeType ||
-                        mso_sptBalloon == aObjData.eShapeType ||
-                        mso_sptCloudCallout == aObjData.eShapeType )
-                    {
-                        // Balloon mappen
-                        if( mso_sptBalloon == aObjData.eShapeType )
-                            aObjData.eShapeType = mso_sptWedgeRRectCallout;
-
-                        pRet = GetAutoForm( aObjData.eShapeType );
-                        if ( pRet )
-                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
                     }
                     else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
                                 || ( aObjData.eShapeType == mso_sptCallout90 )
@@ -6579,40 +6555,15 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
 SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
 {
-    UINT16 nNewType = 1; // Rectangle als default
     SdrObject* pRet = NULL;
-    switch ( eTyp )
-    {
-        case mso_sptCurvedLeftArrow           : nNewType= 53; break;
-        case mso_sptCurvedRightArrow          : nNewType= 52; break;
-        case mso_sptCurvedUpArrow             : nNewType= 54; break;
-        case mso_sptCurvedDownArrow           : nNewType= 55; break;
-        case mso_sptWave                      : nNewType= 89; break;
-        case mso_sptDoubleWave                : nNewType= 90; break;
 
-        case mso_sptWedgeRectCallout          : nNewType= 98; break;
-        case mso_sptWedgeRRectCallout         : nNewType= 99; break;
-        case mso_sptWedgeEllipseCallout       : nNewType=100; break;
-        case mso_sptCloudCallout              : nNewType=101; break;
-    }
-    // Model holen falls noch nicht angelegt
-    if( !pFormModel )
+    if(120 >= UINT16(eTyp))
     {
-        if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
-        {
-            ((SvxMSDffManager*)this)->pFormModel = new FmFormModel();
-            SfxItemPool& rPool = pFormModel->GetItemPool();
-            rPool.FreezeIdRanges();
-            if ( !GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, 0, pFormModel ) && pFormModel ) // Objekte sind nicht da
-                delete ((SvxMSDffManager*)this)->pFormModel, ((SvxMSDffManager*)this)->pFormModel = NULL;
-        }
+        pRet = new SdrRectObj();
     }
-    if( pFormModel && pFormModel->GetPageCount() )  // Objekt aus dem model holen, falls es  noch klappt
-    {
-        const SdrObject* pObj = pFormModel->GetPage( 0 )->GetObj( 120 - nNewType );
-        if( pObj )
-            pRet = (SdrObject*)pObj->Clone();
-    }
+
+    DBG_ASSERT(pRet, "SvxMSDffManager::GetAutoForm -> UNKNOWN AUTOFORM");
+
     return pRet;
 }
 
