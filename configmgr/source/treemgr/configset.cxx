@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,22 @@ ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, 
     // return ElementTree( pNewTree );
 
     return aRet;
+}
+//-----------------------------------------------------------------------------
+
+TemplateProvider SetElementFactory::findTemplateProvider(Tree const& aTree, NodeRef const& aNode)
+{
+    OSL_ENSURE(!aTree.isEmpty(), "ERROR: Getting Element Factory requires a valid tree");
+    OSL_ENSURE(aNode.isValid(), "ERROR: Getting Element Factory requires a valid node");
+    OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: Tree/Node mismatch");
+    if (aNode.isValid() )
+    {
+        Node* pNode = TreeImplHelper::node(aNode);
+        OSL_ENSURE (pNode->isSetNode(), "WARNING: Getting Element Factory requires a SET node");
+        if (pNode->isSetNode())
+            return pNode->setImpl().getTemplateProvider();
+    }
+    return TemplateProvider();
 }
 
 //-----------------------------------------------------------------------------
