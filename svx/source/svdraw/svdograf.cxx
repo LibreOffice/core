@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:21:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #define _ANIMATION
 #define ITEMID_GRF_CROP 0
 
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #include <math.h>
 #include <vcl/salbtype.hxx>
 #include <sot/formats.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svtools/style.hxx>
@@ -118,7 +118,7 @@
 // - SdrGraphicLink -
 // ------------------
 
-class SdrGraphicLink : public so3::SvBaseLink
+class SdrGraphicLink : public sfx2::SvBaseLink
 {
     SdrGrafObj*         pGrafObj;
 
@@ -137,7 +137,7 @@ public:
 // -----------------------------------------------------------------------------
 
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj):
-    ::so3::SvBaseLink( ::so3::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pGrafObj(pObj)
 {
     SetSynchron( FALSE );
@@ -2004,7 +2004,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                 aStreamInfo.mbDeleteAfterUse = FALSE;
                 aStreamInfo.maUserData = pGraphic->GetUserData();
-                aStreamInfo.mpStorageRef = NULL;
 
                 SvStream* pStream = pModel->GetDocumentStream( aStreamInfo );
 
@@ -2035,10 +2034,15 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     pStream->ResetError();
 
-                    if( aStreamInfo.mbDeleteAfterUse || aStreamInfo.mpStorageRef )
+                    if( aStreamInfo.mbDeleteAfterUse || aStreamInfo.mxStorageRef.is() )
                     {
+                        if ( aStreamInfo.mxStorageRef.is() )
+                        {
+                            aStreamInfo.mxStorageRef->dispose();
+                            aStreamInfo.mxStorageRef = 0;
+                        }
+
                         delete pStream;
-                        delete aStreamInfo.mpStorageRef;
                     }
                 }
             }
