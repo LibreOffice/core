@@ -209,7 +209,7 @@ Dim oStreamString as Object
 Dim oUcb as Object
 Dim sCRLF as String
 
-	sCRLF = CHR(10) &amp; CHR(13)
+	sCRLF = CHR(13) &amp; CHR(10)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oOutputStream = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
 	If oUcb.Exists(FilePath) Then
