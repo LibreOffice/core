@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:41 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,7 +833,7 @@ SwGrfNumPortion::~SwGrfNumPortion()
     delete pBrush;
 }
 
-void SwGrfNumPortion::StopAnimation( OutputDevice *pOut )
+void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 {
     if ( IsAnimated() )
         ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( pOut, nId );
@@ -1032,7 +1032,7 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
     }
 }
 
-void SwTxtFrm::StopAnimation( OutputDevice *pOut )
+void SwTxtFrm::StopAnimation( OutputDevice* pOut )
 {
     ASSERT( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
     if( HasPara() )
@@ -1193,8 +1193,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     // In nMainAscent/Descent we store the ascent and descent
     // of the original surrounding font
     USHORT nMaxDescent, nMaxAscent, nMaxWidth;
-    USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, rInf.GetOut() );
-    const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, rInf.GetOut() );
+    USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
+    const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
     nMainDescent -= nMainAscent;
     // we start with a 50% font, but if we notice that the combined portion
     // becomes bigger than the surrounding font, we check 45% and maybe 40%.
@@ -1227,7 +1227,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
             Size aSize = aTmpFont._GetTxtSize( aDrawInf );
-            USHORT nAsc = aTmpFont.GetAscent( pSh, rInf.GetOut() );
+            USHORT nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
             aPos[ i ] = (USHORT)aSize.Width();
             if( i == nTop ) // enter the second line
             {
