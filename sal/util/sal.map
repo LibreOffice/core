@@ -76,6 +76,7 @@ UDK_2_0_0 {
         osl_getPeerAddrOfSocket;
         osl_getProcess;
         osl_getProcessInfo;
+        osl_getProcessWorkingDir;
         osl_getProfileName;
         osl_getProfileSectionEntries;
         osl_getProfileSections;

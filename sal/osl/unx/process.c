@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
+ *  last change: $Author: obr $ $Date: 2001-05-14 11:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2054,3 +2054,29 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
 }
 
 
+/******************************************************************************
+ *
+ *                  new function to return the process working dir
+ *
+ *****************************************************************************/
+
+oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
+{
+    char buffer[PATH_MAX];
+
+    if( getcwd( buffer, PATH_MAX ) )
+    {
+        rtl_uString* ustrTmp = NULL;
+
+        /* convert file path to unicode */
+        rtl_string2UString( &ustrTmp, buffer, strlen( buffer ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+
+        /* convert file path to file URL */
+        osl_getFileURLFromSystemPath( ustrTmp, pustrWorkingDir );
+
+        rtl_uString_release( ustrTmp );
+        return osl_Process_E_None;
+    }
+
+    return osl_Process_E_Unknown;
+}
