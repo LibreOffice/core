@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
+ *  last change: $Author: hr $ $Date: 2002-03-19 11:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,12 @@ namespace configmgr
             {
             }
 
-            Data     node;
+            NodeInstance(NodeInstance const & _other)
+            : node(_other.node)
+            , root(_other.root)
+            {}
+
+            mutable Data     node;
             NodePath root;
         };
 // ---------------------------------------------------------------------------
@@ -135,7 +140,13 @@ namespace configmgr
             {
             }
 
-            Data node;
+            TemplateInstance(TemplateInstance const & _other)
+            : node(_other.node)
+            , name(_other.name)
+            , component(_other.component)
+            {}
+
+            mutable Data node;
             Name name; // if empty, this is a complete set of component templates
             Name component;
         };
