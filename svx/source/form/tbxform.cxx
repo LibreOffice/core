@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:12:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,6 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_GROUPBOX:
             case SID_FM_LISTBOX:
             case SID_FM_COMBOBOX:
-            case SID_FM_URLBUTTON:
             case SID_FM_EDIT:
             case SID_FM_DBGRID:
             case SID_FM_IMAGEBUTTON:
