@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,6 +909,8 @@ void OQueryController::updateTitle()
     {
         if ( !m_bIndependent )
         {
+            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            ::osl::MutexGuard aGuard(m_aMutex);
             if ( !sName.getLength() )
             {
                 String aDefaultName = String( ModuleRes( m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
@@ -1694,5 +1696,7 @@ IMPL_LINK( OQueryController, OnExecuteAddTable, void*, pNotInterestedIn )
     return 0L;
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------
+
