@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 13:40:00 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 10:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #include <svx/drawitem.hxx>
 #include <svx/fmview.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
 #include <sch/schdll.hxx>
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
@@ -1620,8 +1622,47 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     }
 }
 
+BOOL lcl_HasTransparent( ScDocument* pDoc, USHORT nTab, const ScRange* pRange )
+{
+    BOOL bFound = FALSE;
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    if (pDrawLayer)
+    {
+        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        DBG_ASSERT(pPage,"Page ?");
+        if (pPage)
+        {
+            Rectangle aMMRect;
+            if ( pRange )
+                aMMRect = pDoc->GetMMRect( pRange->aStart.Col(), pRange->aStart.Row(),
+                                             pRange->aEnd.Col(), pRange->aEnd.Row(), nTab );
+
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObject = aIter.Next();
+            while (pObject && !bFound)
+            {
+                if (pObject->IsTransparent())
+                {
+                    if ( pRange )
+                    {
+                        Rectangle aObjRect = pObject->GetLogicRect();
+                        if ( aObjRect.IsOver( aMMRect ) )
+                            bFound = TRUE;
+                    }
+                    else
+                        bFound = TRUE;
+                }
+
+                pObject = aIter.Next();
+            }
+        }
+    }
+
+    return bFound;
+}
+
 void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
-                        ScMarkData* pMarkData, BOOL bForceSelected )
+                        ScMarkData* pMarkData, Window* pDialogParent, BOOL bForceSelected )
 {
     SfxPrinter* pPrinter = GetPrinter();
     if ( !pPrinter ) return;
@@ -1684,38 +1725,77 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
     if ( pPrintDialog && pPrintDialog->IsCollateEnabled() && pPrintDialog->IsCollateChecked() )
         nCollateCopies = pPrintDialog->GetCopyCount();
 
-    for ( USHORT n=0; n<nCollateCopies; n++ )
+    //  test if printed range contains transparent objects
+
+    BOOL bHasTransp = FALSE;
+    BOOL bAnyPrintRanges = aDocument.HasPrintRange();
+    ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
+    for ( nTab=0; nTab<nTabCount && !bHasTransp; nTab++ )
     {
-        long nTabStart = 0;
-        long nDisplayStart = 0;
-        long nAttrPage = 1;
-
-        for ( nTab=0; nTab<nTabCount; nTab++ )
+        if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
         {
-            if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
+            SfxStyleSheetBase* pStyleSheet = pStylePool->Find(
+                            aDocument.GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+            if ( pStyleSheet )
             {
-                FmFormView* pDrawView = NULL;
-                Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
-                if ( aDocument.HasControl( nTab, aFull ) )
+                const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+                if ( ((const ScViewObjectModeItem&)rSet.Get(ATTR_PAGE_CHARTS)).GetValue() == VOBJ_MODE_SHOW ||
+                     ((const ScViewObjectModeItem&)rSet.Get(ATTR_PAGE_OBJECTS)).GetValue() == VOBJ_MODE_SHOW ||
+                     ((const ScViewObjectModeItem&)rSet.Get(ATTR_PAGE_DRAWINGS)).GetValue() == VOBJ_MODE_SHOW )
                 {
-                    ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
-                    pDrawView = new FmFormView( pModel, pPrinter );
-                    pDrawView->ShowPagePgNum( nTab, Point() );
-                    pDrawView->SetPrintPreview( TRUE );
+                    if ( pMarkedRange )
+                        bHasTransp = bHasTransp || lcl_HasTransparent( &aDocument, nTab, pMarkedRange );
+                    else if ( aDocument.GetPrintRangeCount(nTab) )
+                    {
+                        USHORT nRangeCount = aDocument.GetPrintRangeCount(nTab);
+                        for (USHORT i=0; i<nRangeCount; i++)
+                            bHasTransp = bHasTransp ||
+                                lcl_HasTransparent( &aDocument, nTab, aDocument.GetPrintRange( nTab, i ) );
+                    }
+                    else if (!bAnyPrintRanges)
+                        bHasTransp = bHasTransp || lcl_HasTransparent( &aDocument, nTab, NULL );
                 }
+            }
+        }
+    }
 
-                ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange );
-                aPrintFunc.SetDrawView( pDrawView );
-                aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, &rProgress );
+    BOOL bContinue = pPrinter->InitJob( pDialogParent, bHasTransp );
 
-                nTabStart += aPageArr[nTab];
-                if ( aDocument.NeedPageResetAfterTab(nTab) )
-                    nDisplayStart = 0;
-                else
-                    nDisplayStart += aPageArr[nTab];
-                nAttrPage = aPrintFunc.GetFirstPageNo();    // behalten oder aus Vorlage
+    if ( bContinue )
+    {
+        for ( USHORT n=0; n<nCollateCopies; n++ )
+        {
+            long nTabStart = 0;
+            long nDisplayStart = 0;
+            long nAttrPage = 1;
 
-                delete pDrawView;
+            for ( nTab=0; nTab<nTabCount; nTab++ )
+            {
+                if ( bAllTabs || !pMarkData || pMarkData->GetTableSelect( nTab ) )
+                {
+                    FmFormView* pDrawView = NULL;
+                    Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
+                    if ( aDocument.HasControl( nTab, aFull ) )
+                    {
+                        ScDrawLayer* pModel = aDocument.GetDrawLayer();     // ist nicht NULL
+                        pDrawView = new FmFormView( pModel, pPrinter );
+                        pDrawView->ShowPagePgNum( nTab, Point() );
+                        pDrawView->SetPrintPreview( TRUE );
+                    }
+
+                    ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange );
+                    aPrintFunc.SetDrawView( pDrawView );
+                    aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, &rProgress );
+
+                    nTabStart += aPageArr[nTab];
+                    if ( aDocument.NeedPageResetAfterTab(nTab) )
+                        nDisplayStart = 0;
+                    else
+                        nDisplayStart += aPageArr[nTab];
+                    nAttrPage = aPrintFunc.GetFirstPageNo();    // behalten oder aus Vorlage
+
+                    delete pDrawView;
+                }
             }
         }
     }
