@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:30:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2040,7 +2040,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         if( bUnlock )
         {
             if( pSect->HasFollow() != bFollow )
-                pSect->_InvalidateSize();
+                pSect->InvalidateSize();
             pSect->ColUnlock();
         }
 
