@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-14 08:23:14 $
+ *  last change: $Author: fs $ $Date: 2000-12-20 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,6 +1009,7 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
     // as the name is invalid
     m_aSelector.Enable(bValid && m_aDatasources.isValid());
     GetOKButton().Enable(bValid);
+    GetApplyButton()->Enable(bValid);
 
     // if this is the first modification did on this data source, we have to adjust the DS list accordingly
     if (!m_bResetting)
@@ -1022,7 +1023,7 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
         }
 
         // enable the apply button
-        GetApplyButton()->Enable(sal_True);
+        GetApplyButton()->Enable(sal_True && bValid);
 
     }
     return bValid ? 1L : 0L;
@@ -2208,6 +2209,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2000/12/14 08:23:14  fs
+ *  #81938# make the ThousandsSeparator persistent
+ *
  *  Revision 1.25  2000/12/07 14:16:41  fs
  *  #80186# reset the 'password required' flag when changing the data source type to one without passwords
  *
