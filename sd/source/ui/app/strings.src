@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:50:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ String STR_UNDO_BEZCLOSE
  //-------------------------------------
 String STR_SLIDE_MODE
 {
-    Text [ de ] = "Diatisch" ;
+    Text [ de ] = "Foliensortierung" ;
     Text [ en-US ] = "Slide Sorter" ;
 };
 String STR_DRAW_MODE
@@ -562,7 +562,7 @@ String STR_NOTES_MODE
 };
 String STR_HANDOUT_MODE
 {
-    Text [ de ] = "Handzettel" ;
+    Text [ de ] = "Handout" ;
     Text [ en-US ] = "Handout" ;
 };
 String STR_PRESENTATION_LAYOUT
@@ -3047,7 +3047,7 @@ String STR_LEFT_PANE_TITLE
 String STR_RIGHT_PANE_TITLE
 {
     Text [ de ] = "Aufgabenbereich";
-    Text [ en-US ] = "Task Panel";
+    Text [ en-US ] = "Tasks";
 };
 String STR_TASKPANEL_MASTER_PAGE_TITLE
 {
@@ -3056,33 +3056,38 @@ String STR_TASKPANEL_MASTER_PAGE_TITLE
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
 {
-    Text [ de ] = "Panel";
-    Text [ en-US ] = "Panel";
+    Text [ de ] = "Ansicht";
+    Text [ en-US ] = "View";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
 {
-    Text [ de ] = "Lock Aufgabenbereich";
-    Text [ en-US ] = "Lock Task Panel";
+    Text [ de ] = "Aufgabenbereich andocken";
+    Text [ en-US ] = "~Dock Task Panel";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
-    Text [ de ] = "Unlock Aufgabenbereich";
-    Text [ en-US ] = "Unlock Task Panel";
+    Text [ de ] = "Aufgabenbereich entdocken";
+    Text [ en-US ] = "~Release Task Panel";
+};
+String STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE
+{
+    Text [ de ] = "Aufgabenbereich schließen";
+    Text [ en-US ] = "~Close Task Panel";
 };
 String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
 {
-    Text [ de ] = "Verwendete Master Pages";
-    Text [ en-US ] = "Currently Used Master Pages";
+    Text [ de ] = "In dieser Präsentation verwendet";
+    Text [ en-US ] = "Used in This Presentation";
 };
 String STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE
 {
-    Text [ de ] = "Zuletzt verwendete Master Pages";
-    Text [ en-US ] = "Recently Used Master Pages";
+    Text [ de ] = "Zuletzt verwendet";
+    Text [ en-US ] = "Recently Used";
 };
 String STR_TASKPANEL_ALL_MASTER_PAGES_TITLE
 {
-    Text [ de ] = "Verfügbare Master Pages";
-    Text [ en-US ] = "All Available Master Pages";
+    Text [ de ] = "Zur Verwendung vorhanden";
+    Text [ en-US ] = "Available for Use";
 };
 String STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION
 {
