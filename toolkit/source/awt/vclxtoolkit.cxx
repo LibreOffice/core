@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 12:04:47 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 13:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,6 +625,9 @@ void SAL_CALL VCLXToolkit::disposing()
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
     VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
+
+    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+
     VirtualDevice* pV = new VirtualDevice;
     pV->SetOutputSizePixel( Size( Width, Height ) );
     pVDev->SetVirtualDevice( pV );
