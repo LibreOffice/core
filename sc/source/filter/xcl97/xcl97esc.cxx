@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:47:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,8 @@ XclEscher::~XclEscher()
 void XclEscher::AddSdrPage( RootData& rRootData )
 {
     if( ScDrawLayer* pDrawLayer = rRootData.pDoc->GetDrawLayer() )
-        if( SdrPage* pPage = pDrawLayer->GetPage( rRootData.pER->GetCurrScTab() ) )
+        if( SdrPage* pPage = pDrawLayer->GetPage(
+                    static_cast<sal_uInt16>(rRootData.pER->GetCurrScTab()) ) )
             pEx->AddSdrPage( *pPage );
     // #106213# the first dummy object may still be open
     DBG_ASSERT( pEx->GetGroupLevel() <= 1, "XclEscher::AddSdrPage - still groups open?" );
@@ -439,24 +440,26 @@ void XclExpEscherAnchor::SetFlags( const SdrObject& rSdrObj )
 }
 
 
-BOOL XclExpEscherAnchor::FindNextCol( USHORT& nCol, short nDir )
+BOOL XclExpEscherAnchor::FindNextCol( sal_uInt16& nCol, short nDir )
 {
-    while ( nDir < 0 ? 0 < nCol : nCol < MAXCOL )
+    while ( nDir < 0 ? 0 < nCol : nCol < static_cast<sal_uInt16>(MAXCOL) )
     {
         nCol += nDir;
-        if ( !(GetDoc().GetColFlags( nCol, maAnchor.mnScTab ) & CR_HIDDEN) )
+        if ( !(GetDoc().GetColFlags( static_cast<SCCOL>(nCol),
+                        maAnchor.mnScTab) & CR_HIDDEN) )
             return TRUE;
     }
     return FALSE;
 }
 
 
-BOOL XclExpEscherAnchor::FindNextRow( USHORT& nRow, short nDir )
+BOOL XclExpEscherAnchor::FindNextRow( sal_uInt16& nRow, short nDir )
 {
-    while ( nDir < 0 ? 0 < nRow : nRow < MAXROW )
+    while ( nDir < 0 ? 0 < nRow : nRow < static_cast<sal_uInt16>(MAXROW) )
     {
         nRow += nDir;
-        if ( !(GetDoc().GetRowFlags( nRow, maAnchor.mnScTab ) & CR_HIDDEN) )
+        if ( !(GetDoc().GetRowFlags( static_cast<SCROW>(nRow),
+                        maAnchor.mnScTab) & CR_HIDDEN) )
             return TRUE;
     }
     return FALSE;
@@ -484,7 +487,7 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const S
     XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
     BOOL bBad = FALSE;
-    maAnchor.mnLCol = rPos.Col();
+    maAnchor.mnLCol = static_cast<sal_uInt16>(rPos.Col());
     // go right
     if ( !FindNextCol( maAnchor.mnLCol, 1 ) )
         bBad = TRUE;
@@ -496,9 +499,10 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const S
     if ( bBad )
     {   // go left
         bBad = FALSE;
-        maAnchor.mnRCol = rPos.Col();
+        maAnchor.mnRCol = static_cast<sal_uInt16>(rPos.Col());
         if ( !FindNextCol( maAnchor.mnRCol, -1 ) )
-            maAnchor.mnLCol = maAnchor.mnRCol = rPos.Col(); // hopeless
+            maAnchor.mnLCol = maAnchor.mnRCol =
+                static_cast<sal_uInt16>(rPos.Col()); // hopeless
         else
         {
             maAnchor.mnLCol = maAnchor.mnRCol;
@@ -518,13 +522,14 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const S
     }
 
     BOOL bTop = FALSE;
-    maAnchor.mnTRow = rPos.Row();
+    maAnchor.mnTRow = static_cast<sal_uInt16>(rPos.Row());
     switch ( maAnchor.mnTRow )
     {
         case 0 :
         case 1 :
             maAnchor.mnTRow = 0;
-            bTop = (GetDoc().GetRowFlags( maAnchor.mnTRow, maAnchor.mnScTab ) & CR_HIDDEN) == 0;
+            bTop = (GetDoc().GetRowFlags( static_cast<SCROW>(maAnchor.mnTRow),
+                        static_cast<SCTAB>(maAnchor.mnScTab)) & CR_HIDDEN) == 0;
         break;
         default:
             maAnchor.mnTRow -= 2;
@@ -543,9 +548,10 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const S
     if ( bBad )
     {   // go up
         bBad = FALSE;
-        maAnchor.mnBRow = rPos.Row();
+        maAnchor.mnBRow = static_cast<sal_uInt16>(rPos.Row());
         if ( !FindNextRow( maAnchor.mnBRow, -1 ) )
-            maAnchor.mnTRow = maAnchor.mnBRow = rPos.Row(); // hopeless
+            maAnchor.mnTRow = maAnchor.mnBRow =
+                static_cast<sal_uInt16>(rPos.Row()); // hopeless
         else
         {
             maAnchor.mnTRow = maAnchor.mnBRow;
@@ -583,8 +589,8 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const S
 XclExpEscherDropDownAnchor::XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rPos ) :
     XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
 {
-    maAnchor.mnLCol = rPos.Col();
-    maAnchor.mnTRow = rPos.Row();
+    maAnchor.mnLCol = static_cast<sal_uInt16>(rPos.Col());
+    maAnchor.mnTRow = static_cast<sal_uInt16>(rPos.Row());
     maAnchor.mnRCol = maAnchor.mnLCol + 1;
     maAnchor.mnBRow = maAnchor.mnTRow + 1;
     maAnchor.mnLX = maAnchor.mnTY = maAnchor.mnRX = maAnchor.mnBY = 0;
