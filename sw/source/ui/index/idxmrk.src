@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:10:32 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 21:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
             Text[ portuguese_brazilian ] = "Insert";\
-            Text[ japanese ] = "‘}“ü";\
+            Text[ japanese ] = "“o˜^";\
             Text[ korean ] = "»ğÀÔ";\
             Text[ chinese_simplified ] = "²åÈë";\
             Text[ chinese_traditional ] = "´¡¤J";\
@@ -182,7 +182,7 @@
             QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
             QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
             QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
-            QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°İ’è‚Ìõˆø";\
+            QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø!";\
             QuickHelpText[ korean ] = "»õ¡¡»ç¿ëÀÚÁ¤ÀÇ¡¡»öÀÎ!";\
             QuickHelpText[ chinese_simplified ] = "New user defined index";\
             QuickHelpText[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ¦Û­q¥Ø¿ı!";\
@@ -270,7 +270,7 @@
             Text[ chinese_simplified ] = "Ä¿Â¼(~I)";               \
             Text[ russian ] = "Óêàçàòåëü";                          \
             Text[ polish ] = "Indeks";                              \
-            Text[ japanese ] = "õˆø(~I)";                         \
+            Text[ japanese ] = "í—Ş(~I)";                         \
             Text[ chinese_traditional ] = "¥Ø¿ı(~I)";              \
             Text[ arabic ] = "İåÑÓ";                                \
             Text[ greek ] = "ÅõñåôŞñéï";\
@@ -337,7 +337,7 @@
             Text[ chinese_simplified ] = "µÚÒ»¸ö¹Ø¼ü×Ö";            \
             Text[ russian ] = "1-ûé êëş÷";                          \
             Text[ polish ] = "Pierwszy klucz";                      \
-            Text[ japanese ] = "·° 1";                         \
+            Text[ japanese ] = "•ª—ŞÀ²ÄÙ ~1";                         \
             Text[ chinese_traditional ] = "²Ä¤@­ÓÃöÁä¦r(~K)";       \
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáÃæá";                       \
             Text[ greek ] = "~1ï êëåéäß";\
@@ -375,7 +375,7 @@
             Text[ chinese_simplified ] = "µÚ¶ş¸ö¹Ø¼ü×Ö";            \
             Text[ russian ] = "2-îé êëş÷";                          \
             Text[ polish ] = "Drugi klucz";                         \
-            Text[ japanese ] = "·° 2";                         \
+            Text[ japanese ] = "•ª—ŞÀ²ÄÙ ~2";                         \
             Text[ chinese_traditional ] = "²Ä¤G­ÓÃöÁä¦r(~E)";       \
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáËÇäí";                      \
             Text[ greek ] = "~2ï Êëåéäß";\
@@ -479,7 +479,7 @@
             Text[ swedish ] = "~Använd på alla liknande texter.";               \
             Text[ polish ] = "Zastosuj w podobnych tekstach.";                  \
             Text[ portuguese_brazilian ] = "~Apply to all similar texts.";      \
-            Text[ japanese ] = "—Ş—½ÍßÙ‚É“K—p(~A)";               \
+            Text[ japanese ] = "•Ê‚ÌŒÂŠ‚Ì“¯‚¶Œê‹å‚É“K—p(~A)";               \
             Text[ chinese_simplified ] = "ÊÊÓÃÓÚÏàÍ¬µÄÕıÎÄ(~A)";           \
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
@@ -619,7 +619,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ swedish ] = "Ny användarförteckning";
         Text[ polish ] = "Nowy indeks u¿ytkownika";
         Text[ portuguese_brazilian ] = "New user index name";
-        Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø";
+        Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìí—Ş";
         Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ »öÀÎ";
         Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§Ä¿Â¼";
         Text[ chinese_traditional ] = "·s«Ø¦Û­q¥Ø¿ı";
@@ -674,7 +674,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ swedish ] = "Skapa ny användardefinierad förteckning";
     Text[ polish ] = "Utwórz nowy indeks zdefiniowany przez u¿ytkownika";
     Text[ portuguese_brazilian ] = "Define new user index";
-    Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø‚Ìì¬";
+    Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìí—Ş‚Ìì¬";
     Text[ korean ] = "»õ »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
     Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§×Ô¶¨Ä¿Â¼";
     Text[ chinese_traditional ] = "·s¼W¦Û­qªº¥Ø¿ı";
@@ -701,7 +701,7 @@ String STR_IDXMRK_EDIT
     Text[ chinese_simplified ] = "±à¼­Ä¿Â¼ÌõÄ¿";
     Text[ russian ] = "Ïğàâêà ıëåìåíòà óêàçàòåëÿ";
     Text[ polish ] = "Edytuj wpis do indeksu";
-    Text[ japanese ] = "õˆø€–Ú‚Ì•ÒW";
+    Text[ japanese ] = "–ÚŸ¥õˆø€–Ú‚Ì•ÒW";
     Text[ chinese_traditional ] = "½s¿è¥Ø¿ı¶µ¥Ø";
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İåÑÓí";
     Text[ greek ] = "Åğåîåñãáóßá êáôá÷şñéóçò åõñåôçñßïõ";
@@ -728,7 +728,7 @@ String STR_IDXMRK_INSERT
     Text[ chinese_simplified ] = "²åÈëË÷ÒıÌõÄ¿";
     Text[ russian ] = "Âñòàâèòü ıëåìåíò óêàçàòåëÿ";
     Text[ polish ] = "Wstaw wpis do indeksu";
-    Text[ japanese ] = "–ÚŸ‚Æõˆø€–Ú‚Ì‘}“ü";
+    Text[ japanese ] = "–ÚŸ¥õˆø€–Ú‚Ì“o˜^";
     Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı±ø¥Ø";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İåÑÓí";
     Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò åõñåôçñßïõ";
@@ -785,7 +785,7 @@ String STR_IDXMRK_INSERT
             Text[ swedish ] = "~Från dokumentinnehåll";\
             Text[ polish ] = "Z zawartoœci dokumentu";\
             Text[ portuguese_brazilian ] = "From document content";\
-            Text[ japanese ] = "•¶‘“à—e‚©‚ç(~F)";\
+            Text[ japanese ] = "ÄŞ·­ÒİÄ‚©‚ç(~F)";\
             Text[ korean ] = "¹®¼­ ³»¿ëÀ¸·ÎºÎÅÍ(~F)";\
             Text[ chinese_simplified ] = "²ÉÓÃÎÄµµÄÚÈİ";\
             Text[ chinese_traditional ] = "±q¤å¥ó¤º®e";\
@@ -944,7 +944,7 @@ String STR_IDXMRK_INSERT
             Text[ swedish ] = "Infoga";\
             Text[ polish ] = "Wstaw";\
             Text[ portuguese_brazilian ] = "Insert";\
-            Text[ japanese ] = "‘}“ü";\
+            Text[ japanese ] = "“o˜^";\
             Text[ korean ] = "»ğÀÔ";\
             Text[ chinese_simplified ] = "²åÈë";\
             Text[ chinese_traditional ] = "´¡¤J";\
@@ -1130,7 +1130,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ swedish ] = "Postdata";
         Text[ polish ] = "Dane wpisu";
         Text[ portuguese_brazilian ] = "Entry data";
-        Text[ japanese ] = "“ü—Í“ú";
+        Text[ japanese ] = "“ü—ÍÃŞ°À";
         Text[ korean ] = "ÀÔ·Â µ¥ÀÌÅÍ";
         Text[ chinese_simplified ] = "ÌõÄ¿Êı¾İ";
         Text[ chinese_traditional ] = "±ø¥Ø¸ê®Æ";
@@ -1174,7 +1174,7 @@ String STR_AUTHMRK_EDIT
     Text[ swedish ] = "Redigera post i litteraturförteckning";
     Text[ polish ] = "Edytuj wpis bibliograficzny";
     Text[ portuguese_brazilian ] = "Edit authority entry";
-    Text[ japanese ] = "Ql•¶Œ£•\\‚Ì•ÒW";
+    Text[ japanese ] = "Ql•¶Œ£€–Ú‚Ì•ÒW";
     Text[ korean ] = "Âü°í¹®Çå Ç×¸ñ ÆíÁı";
     Text[ chinese_simplified ] = "±à¼­ÎÄÏ×Ä¿Â¼ÌõÄ¿";
     Text[ chinese_traditional ] = "½s¿è°Ñ¦Ò¤åÄm¥Ø¿ı±ø¥Ø";
@@ -1199,7 +1199,7 @@ String STR_AUTHMRK_INSERT
     Text[ swedish ] = "Infoga post i litteraturförteckning";
     Text[ polish ] = "Wstaw wpis bibliograficzny";
     Text[ portuguese_brazilian ] = "Insert authority entry";
-    Text[ japanese ] = "Ql•¶Œ£‚Ì‘}“ü";
+    Text[ japanese ] = "Ql•¶Œ£€–Ú‚Ì“o˜^";
     Text[ korean ] = "Âüº¸¹®Çå Ç×¸ñ »ğÀÔ";
     Text[ chinese_simplified ] = "²åÈëÎÄÏ×Ä¿Â¼ÌõÄ¿";
     Text[ chinese_traditional ] = "´¡¤J°Ñ¦Ò¤åÄm¥Ø¿ı±ø¥Ø";
@@ -1216,7 +1216,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ english_us ] = "The bibliography entry is already contained in the document with different data. ";
     MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. ";
     MESSAGE[ russian ] = "İòîò ıëåìåíò áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. ";
-    MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò ğåñéİ÷åôáé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. ";
+    MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò õğÜñ÷åé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. Èİëåôå íá åöáñìïóôïıí ôá íİá äåäïìİíá;";
     MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. ";
     MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document.  ";
     MESSAGE[ spanish ] = "La entrada de bibliografía existe ya con datos diferentes en el documento. ";
@@ -1228,7 +1228,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Í‚±‚Ì•¶‘‚Ì•Ê‚ÌŒÂŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B ";
     MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
     MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£ ";
-    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼Æ¾Úªº¥Ø¿ı¶µ¥Ø¡C ";
+    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼Æ¾Úªº¥Ø¿ı±ø¥Ø¡C ";
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. ";
     MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
 };
