@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "BreakDlg.hxx"
+
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
@@ -69,13 +71,20 @@
 #include <vcl/msgbox.hxx>
 
 #include "sdattr.hxx"
-#include "brkdlg.hxx"
 #include "brkdlg.hrc"
 #include "sdresid.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "strings.hrc"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -83,20 +92,24 @@
 |*
 \************************************************************************/
 
-SdBreakDlg::SdBreakDlg( Window* pWindow, SdDrawView* _pDrView, SdDrawDocShell* pShell,
-                        ULONG nSumActionCount, ULONG nObjCount ) :
-                SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
-                aFtObjInfo          ( this, SdResId( FT_OBJ_INFO ) ),
-                aFtActInfo          ( this, SdResId( FT_ACT_INFO ) ),
-                aFtInsInfo          ( this, SdResId( FT_INS_INFO ) ),
-                aFiObjInfo          ( this, SdResId( FI_OBJ_INFO ) ),
-                aFiActInfo          ( this, SdResId( FI_ACT_INFO ) ),
-                aFiInsInfo          ( this, SdResId( FI_INS_INFO ) ),
-                aBtnCancel          ( this, SdResId( BTN_CANCEL ) ),
-                aLink               ( LINK( this, SdBreakDlg, UpDate)),
-                mpProgress          ( NULL )
+BreakDlg::BreakDlg(
+    ::Window* pWindow,
+    DrawView* _pDrView,
+    DrawDocShell* pShell,
+    ULONG nSumActionCount,
+    ULONG nObjCount )
+    : SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
+      aFtObjInfo            ( this, SdResId( FT_OBJ_INFO ) ),
+      aFtActInfo            ( this, SdResId( FT_ACT_INFO ) ),
+      aFtInsInfo            ( this, SdResId( FT_INS_INFO ) ),
+      aFiObjInfo            ( this, SdResId( FI_OBJ_INFO ) ),
+      aFiActInfo            ( this, SdResId( FI_ACT_INFO ) ),
+      aFiInsInfo            ( this, SdResId( FI_INS_INFO ) ),
+      aBtnCancel            ( this, SdResId( BTN_CANCEL ) ),
+      aLink             ( LINK( this, BreakDlg, UpDate)),
+      mpProgress            ( NULL )
 {
-    aBtnCancel.SetClickHdl( LINK( this, SdBreakDlg, CancelButtonHdl));
+    aBtnCancel.SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 
     mpProgress = new SfxProgress( pShell, String(SdResId(STR_BREAK_METAFILE)), nSumActionCount*3 );
 
@@ -110,7 +123,7 @@ SdBreakDlg::SdBreakDlg( Window* pWindow, SdDrawView* _pDrView, SdDrawDocShell* p
     FreeResource();
 }
 
-SdBreakDlg::~SdBreakDlg()
+BreakDlg::~BreakDlg()
 {
     if( mpProgress )
         delete mpProgress;
@@ -120,7 +133,7 @@ SdBreakDlg::~SdBreakDlg()
 }
 
 // Control-Handler fuer den Abbruch Button
-IMPL_LINK( SdBreakDlg, CancelButtonHdl, void *, EMPTYARG )
+IMPL_LINK( BreakDlg, CancelButtonHdl, void *, EMPTYARG )
 {
   bCancel = TRUE;
   aBtnCancel.Disable();
@@ -133,7 +146,7 @@ IMPL_LINK( SdBreakDlg, CancelButtonHdl, void *, EMPTYARG )
 // Jeder weitere sollte die bearbeiteten actions seit dem letzten aufruf von
 // UpDate erhalten.
 
-IMPL_LINK( SdBreakDlg, UpDate, void*, nInit )
+IMPL_LINK( BreakDlg, UpDate, void*, nInit )
 {
     String aEmptyStr;
 
@@ -190,20 +203,21 @@ IMPL_LINK( SdBreakDlg, UpDate, void*, nInit )
 
 // Oeffnet den Modalen Dialog und startet einen Timer der die Arbeitsfunktion
 // nach oeffnen des Dialogs ausfuehrt
-short SdBreakDlg::Execute()
+short BreakDlg::Execute()
 {
   aTimer.SetTimeout( 10 );
-  aTimer.SetTimeoutHdl( LINK( this, SdBreakDlg, InitialUpdate ) );
+  aTimer.SetTimeoutHdl( LINK( this, BreakDlg, InitialUpdate ) );
   aTimer.Start();
 
   return SfxModalDialog::Execute();
 }
 
 // Linkmethode welche die Arbeitsfunktion startet
-IMPL_LINK( SdBreakDlg, InitialUpdate, Timer*, pTimer )
+IMPL_LINK( BreakDlg, InitialUpdate, Timer*, pTimer )
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
     EndDialog(TRUE);
     return 0L;
 }
 
+} // end of namespace sd
