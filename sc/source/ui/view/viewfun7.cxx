@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:08:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,16 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetObj();
-                SdrObject* pNeuObj=pObj->Clone(pDestPage,pModel);
+
+                // #116235#
+                SdrObject* pNeuObj=pObj->Clone();
+                //SdrObject* pNeuObj=pObj->Clone(pDestPage,pModel);
+
                 if (pNeuObj!=NULL)
                 {
+                    pNeuObj->SetModel(pModel);
+                    pNeuObj->SetPage(pDestPage);
+
                     //  #68787# copy graphics within the same model - always needs new name
                     if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
                         pNeuObj->SetName(((ScDrawLayer*)pModel)->GetNewGraphicName());
