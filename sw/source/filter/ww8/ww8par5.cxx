@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-17 11:47:21 $
+ *  last change: $Author: cmc $ $Date: 2002-01-18 14:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,12 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _FMTCLDS_HXX
+#include <fmtclds.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -2337,13 +2343,31 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     TOXTypes eTox;                              // Baue ToxBase zusammen
     switch( pF->nId )
     {
-        case  8: eTox = TOX_INDEX; break;
-        case 13: eTox = TOX_CONTENT; break;
-        default: eTox = TOX_USER; break;
+        case  8:
+            eTox = TOX_INDEX;
+            break;
+        case 13:
+            eTox = TOX_CONTENT;
+            break;
+        default:
+            eTox = TOX_USER;
+            break;
     }
-    USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL
-                                             : TOX_MARK;
+
+    USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL : TOX_MARK;
+
     USHORT nIndexCols = 0;
+    const SwSection *pTest = rDoc.GetCurrSection(*pPaM->GetPoint());
+    if (pTest)  //section is open, set to its no of section cols
+    {
+        const SwSectionFmt *pFmt = pTest->GetFmt();
+        if (pFmt)
+            nIndexCols = pFmt->GetCol().GetNumCols();
+    }
+    else if (pPageDesc)  //set to current number of page cols
+        nIndexCols = pPageDesc->GetMaster().GetCol().GetNumCols();
+
+
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
     SwTOXBase* pBase = new SwTOXBase( pType, aOrigForm, nCreateOf, aEmptyStr );
