@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:29:50 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ TabPage RID_PAGE_TABLESELECTION
             "Please note that the settings made on this page will take effect immediately upon leaving the page.";
         Text [ english_us ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ portuguese ] = "O formulбrio do controlo ainda nгo estб ligado (ou entгo sу parcialmente) a nenhuma fonte de dados.\n\nSeleccione uma fonte de dados e uma tabela.\n\n\nNгo esqueзa que a configuraзгo do formulбrio efectuada nesta pбgina passa a estar activa logo que sair dela.";
-        Text[ russian ] = "‘ормул€р, к которому относитс€ элемент управлени€, в насто€щий момент не св€зан (или неполностью св€зан) с источником базы данных. \n\n¬ыберите, пожалуйста, источник данных или таблицу.\n\n\nќбратите внимание на то, что изменени€, выполненные на этой странице, вступают в силу сразу же после ухода с этой страницы.";
+        Text[ russian ] = "‘ормул€р, к которому относитс€ элемент управлени€, в насто€щий момент не св€зан (или неполностью св€зан) с исходными данными. \n\n¬ыберите, пожалуйста, исходные данные или таблицу.\n\n\nќбратите внимание на то, что изменени€, выполненные на этой странице, вступают в силу сразу же после ухода с этой страницы.";
         Text[ greek ] = "ƒен хр№счей уэндеуз (ё ден Ёчей плпклзсщиея бкьмз з уэндеуз) фзт цьсмбт уфзн прпяб бнёкей фп редяп елЁгчпх ме мйб рспЁлехуз дедпмЁнщн.\n\n–бсбкблю ерйлЁофе мйб рспЁлехуз дедпмЁнщн кбй Ёнбн рянбкб.\n\n\n–спупчё: ѕй схимяуейт фйт прпяет ерйлЁгефе уе бхфё фз уелядб гйб фзн цьсмб иб йучэупхн бмЁущт меф№ фп клеяуймп бхфёт фзт уелядбт.";
         Text[ dutch ] = "Het formulier dat behoort tot het controleveld is op het ogenblik nog niet (of nog niet compleet) verbonden met een gegevensbron.\n\nKies een gegevensbron en een tabel.\n\n\nAttentie: de opties die u op deze pagina instelt treden onmiddellijk in werking bij het verlaten van de pagina.";
         Text[ french ] = "Le formulaire, auquel appartient le contrфle, n'est actuellement pas (du moins pas complиtement) connectй а une source de donnйes.\n\nSйlectionnez une source de donnйes, ainsi qu'une table.\n\n\nEn outre, notez que les paramиtres spйcifiйs ici pour le formulaire seront immйdiatement pris en compte dиs que vous quitterez cette page.";
@@ -578,6 +578,9 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/09/26 20:29:50  kz
+ *  Merge SRC638: 26.09.01 - 22:29:05
+ *
  *  Revision 1.25  2001/08/29 20:53:41  kz
  *  Merge SRC638: 29.08.01 - 22:52:37
  *
@@ -656,6 +659,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
