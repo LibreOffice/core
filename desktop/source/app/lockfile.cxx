@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2002-09-30 15:24:07 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 15:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace desktop {
 
     Lockfile::Lockfile(void)
     :m_bRemove(sal_False)
+    ,m_bIsLocked(sal_False)
     {
         // build the file-url to use for the lock
         OUString aUserPath;
@@ -113,19 +114,30 @@ namespace desktop {
 
         // generate date string
         char *tmpTime = ctime( &t );
-        tmpTime[24] = 0x00; // buffer is always 26 chars, remove \n
+        tmpTime[24] = 0x00; // buffer is always 26 chars, remove '\n'
         m_aDate = OUString::createFromAscii( tmpTime );
 
+        // try to create file
+        File aFile(m_aLockname);
+        if (aFile.open( OpenFlag_Create ) == File::E_EXIST) {
+            m_bIsLocked = sal_True;
+        } else {
+            // new lock created
+            aFile.close( );
+            syncToFile( );
+            m_bRemove = sal_True;
+        }
     }
 
     sal_Bool Lockfile::check( void )
     {
-        File aFile(m_aLockname);
-        if (aFile.open( OpenFlag_Create ) == File::E_EXIST) {
-            // lock exists, ask user what to do
+
+        if (m_bIsLocked) {
+            // lock existed, ask user what to do
             if (execWarning( ) == RET_YES) {
                 // remove file and create new
                 File::remove( m_aLockname );
+                File aFile(m_aLockname);
                 aFile.open( OpenFlag_Create );
                 aFile.close( );
                 syncToFile( );
@@ -137,10 +149,7 @@ namespace desktop {
                 return sal_False;
             }
         } else {
-            // new lock created
-            aFile.close( );
-            syncToFile( );
-            m_bRemove = sal_True;
+            // lock was created by us
             return sal_True;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2002-10-04 10:32:20 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 15:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ namespace desktop {
         OUString m_aLockname;
         // flag whether the d'tor should delete the lock
         sal_Bool m_bRemove;
+        sal_Bool m_bIsLocked;
         // ID
         OUString m_aId;
         OUString m_aDate;
