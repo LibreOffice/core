@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:29:52 $
+ *  last change: $Author: dr $ $Date: 2001-06-11 13:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,37 +204,6 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Pos = MAP_APPFONT ( 267 , 43 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
-    };
-    FixedText FT_ASSIGN
-    {
-        Text = "Bereich" ;
-        Text [ ENGLISH ] = "Range" ;
-        Hide = TRUE ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
-        Size = MAP_APPFONT ( 128 , 12 ) ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "Range" ;
-        Text [ portuguese_brazilian ] = "Bereich" ;
-        Text [ swedish ] = "Område" ;
-        Text [ danish ] = "Område" ;
-        Text [ italian ] = "Area" ;
-        Text [ spanish ] = "Área" ;
-        Text [ french ] = "Plage" ;
-        Text [ dutch ] = "Bereik" ;
-        Text [ portuguese ] = "Intervalo" ;
-        Text[ chinese_simplified ] = "ÇøÓò";
-        Text[ russian ] = "Äèàïàçîí";
-        Text[ polish ] = "Zakres";
-        Text[ japanese ] = "”ÍˆÍ";
-        Text[ chinese_traditional ] = "°Ï°ì";
-        Text[ arabic ] = "ÇáäØÇÞ";
-        Text[ greek ] = "Ðåñéï÷Þ";
-        Text[ korean ] = "¹üÀ§";
-        Text[ turkish ] = "Aralýk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Área";
-        Text[ finnish ] = "Alue";
     };
     Edit ED_ASSIGN
     {

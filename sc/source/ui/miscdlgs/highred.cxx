@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-31 13:09:48 $
+ *  last change: $Author: dr $ $Date: 2001-06-11 13:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
         //
-        aFtAssign       ( this, ResId( FT_ASSIGN ) ),
         aEdAssign       ( this, ResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ResId( RB_ASSIGN ), &aEdAssign ),
         aHighlightBox   ( this, ResId( CB_HIGHLIGHT)),
