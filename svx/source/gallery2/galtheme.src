@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:15:27 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 17:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ french ] = "Effets 3D";
     Text[ spanish ] = "Efectos 3D";
     Text[ italian ] = "Effetti 3D";
-    Text[ danish ] = "3D";
+    Text[ danish ] = "3D-effekter";
     Text[ swedish ] = "3D-effekter";
     Text[ polish ] = "Efekty 3-W";
     Text[ portuguese_brazilian ] = "3D";
@@ -144,7 +144,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ korean ] = "Í∏ÄÎ®∏Î¶¨ Í∏∞Ìò∏";
     Text[ turkish ] = "Madde i˛aretleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "ViÒetas";
+    Text[ catalan ] = "Pics";
     Text[ finnish ] = "Luettelomerkit";
 };
 
@@ -161,7 +161,7 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text[ french ] = "Bureau";
     Text[ spanish ] = "Oficina";
     Text[ italian ] = "Ufficio";
-    Text[ danish ] = "Clipart";
+    Text[ danish ] = "Kontor";
     Text[ swedish ] = "Kontor";
     Text[ polish ] = "Biuro";
     Text[ portuguese_brazilian ] = "Clipart";
@@ -248,7 +248,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ french ] = "Emoticons";
     Text[ spanish ] = "EmoticÛn";
     Text[ italian ] = "Emoticons";
-    Text[ danish ] = "Former";
+    Text[ danish ] = "Smileys";
     Text[ swedish ] = "Emoticons";
     Text[ polish ] = "Buüki";
     Text[ portuguese_brazilian ] = "Forms";
@@ -347,7 +347,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ korean ] = "ÌôàÌéòÏù¥ÏßÄ";
     Text[ turkish ] = "Web sayfas˝";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P·gina principal";
+    Text[ catalan ] = "P‡gina d'inici";
     Text[ finnish ] = "Kotisivu";
 };
 
@@ -364,7 +364,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ french ] = "Interaction";
     Text[ spanish ] = "InteracciÛn";
     Text[ italian ] = "Interazione";
-    Text[ danish ] = "Interaktioner";
+    Text[ danish ] = "Interaktion";
     Text[ swedish ] = "Interaktion";
     Text[ polish ] = "Interakcja";
     Text[ portuguese_brazilian ] = "Interaction";
@@ -376,7 +376,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ korean ] = "ÏÉÅÌò∏ÏûëÏö©";
     Text[ turkish ] = "Etkile˛im";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "InteracciÛn";
+    Text[ catalan ] = "InteracciÛ";
     Text[ finnish ] = "Vuorovaikutus";
 };
 
@@ -422,7 +422,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ french ] = "Gens";
     Text[ spanish ] = "Personas";
     Text[ italian ] = "Persone";
-    Text[ danish ] = "M¯bler";
+    Text[ danish ] = "Personer";
     Text[ swedish ] = "Personer";
     Text[ polish ] = "Ludziki";
     Text[ portuguese_brazilian ] = "Furniture";
@@ -496,7 +496,7 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ french ] = "RËgles";
     Text[ spanish ] = "LÌmites";
     Text[ italian ] = "Limiti";
-    Text[ danish ] = "Linealer";
+    Text[ danish ] = "GrÊnser";
     Text[ swedish ] = "Linjaler";
     Text[ polish ] = "Granice";
     Text[ portuguese_brazilian ] = "Rulers";
@@ -566,7 +566,7 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ korean ] = "Í∏∞Ìò∏";
     Text[ turkish ] = "Simgeler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "SÌmbolos";
+    Text[ catalan ] = "SÌmbols";
     Text[ finnish ] = "Symbolit";
 };
 
@@ -620,7 +620,7 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text[ french ] = "FlËches";
     Text[ spanish ] = "Flechas";
     Text[ italian ] = "Frecce";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Pile";
     Text[ swedish ] = "Pilar";
     Text[ polish ] = "Strza≥ki";
     Text[ portuguese_brazilian ] = "My theme";
@@ -648,7 +648,7 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[ french ] = "Bulles";
     Text[ spanish ] = "Llamadas";
     Text[ italian ] = "Vignetta";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Talebobler";
     Text[ swedish ] = "Pratbubblor";
     Text[ polish ] = "Chmurki tekstowe";
     Text[ portuguese_brazilian ] = "My theme";
@@ -676,7 +676,7 @@ String RID_GALLERYSTR_THEME_KEYBOARD
     Text[ french ] = "Clavier";
     Text[ spanish ] = "Teclado";
     Text[ italian ] = "Tastiera";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Tastatur";
     Text[ swedish ] = "Tangentbord";
     Text[ polish ] = "Klawiatura";
     Text[ portuguese_brazilian ] = "My theme";
@@ -704,7 +704,7 @@ String RID_GALLERYSTR_THEME_TIME
     Text[ french ] = "Heure";
     Text[ spanish ] = "Hora";
     Text[ italian ] = "Orario";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Tid";
     Text[ swedish ] = "Tid";
     Text[ polish ] = "Czas";
     Text[ portuguese_brazilian ] = "My theme";
@@ -732,7 +732,7 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ french ] = "PrÈsentation";
     Text[ spanish ] = "PresentaciÛn";
     Text[ italian ] = "Presentazione";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "PrÊsentation";
     Text[ swedish ] = "Presentation";
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "My theme";
@@ -742,7 +742,7 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ chinese_traditional ] = "Á∞°Â†±";
     Text[ turkish ] = "Kullan˝c˝ konusu";
     Text[ arabic ] = "⁄—÷  ﬁœÌ„Ì";
-    Text[ catalan ] = "PresentaciÛn";
+    Text[ catalan ] = "PresentaciÛ";
     Text[ finnish ] = "Esitys";
 };
 
@@ -760,7 +760,7 @@ String RID_GALLERYSTR_THEME_CALENDAR
     Text[ french ] = "Calendrier";
     Text[ spanish ] = "Calendario";
     Text[ italian ] = "Calendario";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Kalender";
     Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
     Text[ portuguese_brazilian ] = "My theme";
@@ -788,7 +788,7 @@ String RID_GALLERYSTR_THEME_NAVIGATION
     Text[ french ] = "Navigation";
     Text[ spanish ] = "NavegaciÛn";
     Text[ italian ] = "Navigazione";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Navigation";
     Text[ swedish ] = "Navigation";
     Text[ polish ] = "Nawigacja";
     Text[ portuguese_brazilian ] = "My theme";
@@ -816,7 +816,7 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text[ french ] = "Communication";
     Text[ spanish ] = "ComunicaciÛn";
     Text[ italian ] = "Comunicazione";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Kommunikation";
     Text[ swedish ] = "Kommunikation";
     Text[ polish ] = "Komunikacja";
     Text[ portuguese_brazilian ] = "My theme";
@@ -844,7 +844,7 @@ String RID_GALLERYSTR_THEME_FINANCES
     Text[ french ] = "…conomie";
     Text[ spanish ] = "Finanzas";
     Text[ italian ] = "Finanze";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Finanser";
     Text[ swedish ] = "Ekonomi";
     Text[ polish ] = "Finanse";
     Text[ portuguese_brazilian ] = "My theme";
@@ -872,7 +872,7 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text[ french ] = "Ordinateur";
     Text[ spanish ] = "Ordenador";
     Text[ italian ] = "Computer";
-    Text[ danish ] = "Eget emne";
+    Text[ danish ] = "Computer";
     Text[ swedish ] = "Dator";
     Text[ polish ] = "Komputer";
     Text[ portuguese_brazilian ] = "My theme";
@@ -900,7 +900,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ french ] = "Climat";
     Text[ spanish ] = "Clima";
     Text[ italian ] = "Clima";
-    Text[ danish ] = "Climate";
+    Text[ danish ] = "Klima";
     Text[ swedish ] = "Klimat";
     Text[ polish ] = "Klimat";
     Text[ portuguese_brazilian ] = "Climate";
@@ -928,7 +928,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ french ] = "…cole & universitÈ";
     Text[ spanish ] = "Escuela y universidad";
     Text[ italian ] = "Scuola & Universit‡";
-    Text[ danish ] = "School & University";
+    Text[ danish ] = "Skole og universitet";
     Text[ swedish ] = "Skola & universitet";
     Text[ polish ] = "Szko≥a i uniwersytet";
     Text[ portuguese_brazilian ] = "School & University";
@@ -956,7 +956,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ french ] = "Solutions";
     Text[ spanish ] = "Soluciones de problemas";
     Text[ italian ] = "Soluzioni";
-    Text[ danish ] = "Problem Solving";
+    Text[ danish ] = "Probleml¯sninger";
     Text[ swedish ] = "Problemlˆsningar";
     Text[ polish ] = "Rozwiπzania problemu";
     Text[ portuguese_brazilian ] = "Problem Solving";
