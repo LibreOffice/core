@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Dirk Grobler (OpenOffice) -->
+<xs:schema targetNamespace="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oor="http://openoffice.org/2001/registry" elementFormDefault="unqualified" attributeFormDefault="qualified">
+  <xs:annotation>
+    <xs:documentation>specifies the document format for OOo configuration component schemata.</xs:documentation>
+  </xs:annotation>
+  <xs:redefine schemaLocation="component-types.xsd">
+    <xs:complexType name="group">
+      <xs:annotation>
+        <xs:documentation>redefines the group node type 
+                by adding documentation elements.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+        <xs:extension base="oor:group">
+          <xs:sequence>
+            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="node-ref" type="oor:node-ref"/>
+              <xs:group ref="oor:subNodes"/>
+            </xs:choice>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="set">
+      <xs:annotation>
+        <xs:documentation>redefines the set node type 
+                by adding documentation and item definition elements.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+        <xs:extension base="oor:set">
+          <xs:sequence>
+            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute ref="oor:node-type"/>
+                <xs:attribute ref="oor:component"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute ref="oor:node-type" use="required"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="prop">
+      <xs:annotation>
+        <xs:documentation>redefines the property type 
+                by adding documentation and type constraint elements.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+        <xs:extension base="oor:prop">
+          <xs:sequence>
+            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="constraints" minOccurs="0">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="enumeration" type="oor:constraint" minOccurs="0" maxOccurs="unbounded"/>
+                  <xs:element name="length" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="minLength" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="maxLength" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="minInclusive" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="maxInclusive" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="minExclusive" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="maxExclusive" type="oor:constraint" minOccurs="0"/>
+                  <xs:element name="whiteSpace" type="oor:constraint" minOccurs="0"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute ref="oor:nillable"/>
+          <xs:attribute ref="oor:type" use="required"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:redefine>
+  <xs:complexType name="node-ref">
+    <xs:annotation>
+      <xs:documentation>allows to define node references. A node references points to an existing templated definition. This definition will be expanded at runtime.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute ref="oor:name" use="required"/>
+    <xs:attribute ref="oor:node-type" use="required"/>
+    <xs:attribute ref="oor:component"/>
+  </xs:complexType>
+  <xs:complexType name="constraint">
+    <xs:annotation>
+      <xs:documentation>basic type for constraints, which can be applied for property elements.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="value" type="xs:anySimpleType" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="info">
+    <xs:annotation>
+      <xs:documentation>type for providing human readable information.  Can be attached to any kind of component schema element.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="desc" minOccurs="0">
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation>provide a human
+                        readable documentation for a schema element.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute ref="xml:lang"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="label" minOccurs="0">
+        <xs:complexType>
+          <xs:annotation>
+            <xs:documentation>describes a title or label, 
+                        which can be reused in a console.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute ref="xml:lang"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="component-schema">
+    <xs:annotation>
+      <xs:documentation>Root element, which encompasses the schema specification</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="import" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute ref="oor:component" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="uses" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute ref="oor:component" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="templates" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:group ref="oor:subNodes"/>
+            </xs:sequence>
+          </xs:complexType>
+          <xs:unique name="templatesMember">
+            <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+            <xs:field xpath="@oor:name"/>
+          </xs:unique>
+        </xs:element>
+        <xs:element name="component">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="node-ref" type="oor:node-ref"/>
+                <xs:group ref="oor:subNodes"/>
+              </xs:choice>
+            </xs:sequence>
+          </xs:complexType>
+          <xs:unique name="schemaProperties">
+            <xs:selector xpath="oor:prop"/>
+            <xs:field xpath="@oor:name"/>
+          </xs:unique>
+          <xs:unique name="schemaMember">
+            <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+            <xs:field xpath="@oor:name"/>
+          </xs:unique>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+      <xs:attribute name="package" type="xs:NMTOKEN" use="required">
+        <xs:annotation>
+          <xs:documentation>contains the name of the package. 
+                    Package names are composed similar to java packages. 
+                    Packages are used to structure component configuration data. 
+                    An example of a package is 'org.openoffice', 
+                    where 'org' and 'openoffice' each define a package.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
