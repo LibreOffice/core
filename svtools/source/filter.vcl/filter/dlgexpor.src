@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ ModalDialog DLG_EXPORT_PIX
         < "4Bit-¶×°ÊßÚ¯Ä" ; Default ; > ;
         < "8Bit-¸ÞÚ°½¹°Ù" ; Default ; > ;
         < "8Bit-¶×°ÊßÚ¯Ä" ; Default ; > ;
-        < "24Bit-‘NÊF" ; Default ; > ;
+        < "24Bit ~True Color" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
