@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-27 10:00:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,16 @@ bool PDFWriter::Emit()
 PDFWriter::PDFVersion PDFWriter::GetVersion() const
 {
     return ((PDFWriterImpl*)pImplementation)->getVersion();
+}
+
+void PDFWriter::SetDocInfo( const PDFDocInfo& rInfo )
+{
+    ((PDFWriterImpl*)pImplementation)->setDocInfo( rInfo );
+}
+
+const PDFDocInfo& PDFWriter::GetDocInfo() const
+{
+    return ((PDFWriterImpl*)pImplementation)->getDocInfo();
 }
 
 void PDFWriter::SetFont( const Font& rFont )
