@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ danish ] = "Anvend";
         Text[ swedish ] = "�verta";
         Text[ polish ] = "Zastosuj";
-        Text[ portuguese_brazilian ] = "Apply";
+        Text[ portuguese_brazilian ] = "Aplicar";
         Text[ japanese ] = "適用";
         Text[ korean ] = "적용";
         Text[ chinese_simplified ] = "采用";
@@ -108,6 +108,9 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ catalan ] = "Aplica";
         Text[ finnish ] = "K�yt�";
         Text[ thai ] = "ใช้";
+        Text[ czech ] = "Použít";
+        Text[ hebrew ] = "‮יישום‬";
+        Text[ hindi ] = "लागू करो";
     };
     PushButton BT_CLOSE
     {
@@ -127,7 +130,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ danish ] = "Luk";
         Text[ swedish ] = "St�ng";
         Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Close";
+        Text[ portuguese_brazilian ] = "Fechar";
         Text[ japanese ] = "閉じる";
         Text[ korean ] = "닫기";
         Text[ chinese_simplified ] = "关闭";
@@ -138,6 +141,9 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ catalan ] = "Tanca";
         Text[ finnish ] = "Sulje";
         Text[ thai ] = "ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "बन्द करो";
     };
     Control TLB_MARK
     {
@@ -157,16 +163,19 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ danish ] = "M�l i dokumentet";
     Text[ swedish ] = "M�l i dokumentet";
     Text[ polish ] = "Cel w dokumencie";
-    Text[ portuguese_brazilian ] = "Target in document";
+    Text[ portuguese_brazilian ] = "Destino no documento";
     Text[ japanese ] = "ドキュメントにあるターゲット";
     Text[ korean ] = "문서 내 연결 대상";
     Text[ chinese_simplified ] = "文档中的连接目标";
     Text[ chinese_traditional ] = "文件內的連結目標";
     Text[ arabic ] = "����� �� �������";
-    Text[ turkish ] = "Belge i�indeki hedef";
+    Text[ turkish ] = "Belgedeki Hedef";
     Text[ catalan ] = "Objectiu en el document";
     Text[ finnish ] = "Kohde asiakirjassa";
     Text[ thai ] = "เป้าหมายในเอกสาร";
+    Text[ czech ] = "Cíl v dokumentu";
+    Text[ hebrew ] = "‮היעד במסמך‬";
+    Text[ hindi ] = "लेखपत्र में लक्ष्य";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
@@ -184,16 +193,19 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text[ danish ] = "Der findes ingen m�l i dokumentet.";
     Text[ swedish ] = "Det finns inga m�l i dokumentet.";
     Text[ polish ] = "Brak cel�w w dokumencie.";
-    Text[ portuguese_brazilian ] = "There are no targets available in the document.";
+    Text[ portuguese_brazilian ] = "N�o existem destinos no documento";
     Text[ japanese ] = "ドキュメントにターゲットがありません。";
     Text[ korean ] = "문서 내 대상이 없습니다.";
     Text[ chinese_simplified ] = "文档中不存在连接目标。";
     Text[ chinese_traditional ] = "文件內沒有連結目標。";
     Text[ arabic ] = "������� ���� �� �������.";
-    Text[ turkish ] = "Belge hedef i�ermiyor.";
+    Text[ turkish ] = "Hedefler belgede bulunmamaktad�r.";
     Text[ catalan ] = "En aquest document no hi ha cap objectiu.";
     Text[ finnish ] = "Kohteita ei ole t�ss� asiakirjassa.";
     Text[ thai ] = "เป้าหมายไม่อยู่ในเอกสาร";
+    Text[ czech ] = "Cíle v dokumentu neexistují.";
+    Text[ hebrew ] = "‮אין יעדים במסמך.‬";
+    Text[ hindi ] = "लक्ष्य लेखपत्र में अस्तित्व में नहीं है ।";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
@@ -210,8 +222,8 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ italian ] = "Non � stato possibile aprire il documento.";
     Text[ danish ] = "Det var ikke muligt at �bne dokumentet.";
     Text[ swedish ] = "Dokumentet kunde inte �ppnas.";
-    Text[ polish ] = "Nie mo�na by�o otworzy� dokumentu.";
-    Text[ portuguese_brazilian ] = "Couldn't open the document.";
+    Text[ polish ] = "Nie mo�na otworzy� dokumentu.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel abrir o documento.";
     Text[ japanese ] = "ドキュメントは開けませんでした。";
     Text[ korean ] = "문서를 열지 못했습니다.";
     Text[ chinese_simplified ] = "无法打开这个文档。";
@@ -221,6 +233,18 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ catalan ] = "No s'ha pogut obrir el document.";
     Text[ finnish ] = "Asiakirjan avaaminen ei onnistunut.";
     Text[ thai ] = "ไม่สามารถเปิดเอกสารได้";
+    Text[ czech ] = "Není možné otevřít soubor.";
+    Text[ hebrew ] = "‮לא ניתן לפתוח את המסמך.‬";
+    Text[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
 };
+
+
+
+
+
+
+
+
+
 
 
