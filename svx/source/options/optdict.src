@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:00:17 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ japanese ] = "“ό—Ν‚µ‚½–Ό‘O‚Ν‚·‚Ε‚Ι‚ ‚θ‚ά‚·B\nV‚µ‚Ά–Ό‘O‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     Text[ chinese_traditional ] = "³o­ΣΏι¤JªΊ¦WΊΩ¤wΈg¦s¦b΅C\n½Π±zΏι¤J¤@­Σ·s¦WΊΩ΅C";
     Text[ arabic ] = "ΗαΗΣγ ΗαΠν ΓΟΞαΚε γζΜζΟ γΣΘήΗπ.\nΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΜΟνΟ.";
-    Text[ greek ] = "Το όνομα υπάρχει ήδη.\nΠαρακαλώ επιλέξτε ένα άλλο όνομα.";
+    Text[ greek ] = "Το όνομα υπάρχει ήδη.\nΠαρακαλώ επιλέξτε κάποιο άλλο όνομα.";
     Text[ korean ] = "ΑφΑ¤µΘ ΐΜΈ§ΐΜ ΐΜΉΜ ΐΦ½ΐ΄Ο΄Ω.\n»υ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girilen ad mevcut durumda.\nLόtfen baώka bir ad girin.";
     Text[ language_user1 ] = " ";
