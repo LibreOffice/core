@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:39:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,7 @@ void lcl_FixPosition( SwPosition& rPos )
     // make sure the position has 1) the proper node, and 2) a proper index
     SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
 
-    if( rPos.nContent.GetIdxReg() != pTxtNode  ||
-        rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
+    if( rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
     {
         DBG_ERROR( "illegal position" );
         xub_StrLen nLen = rPos.nContent.GetIndex();
