@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consoli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:47:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include "errorcodes.hxx"
 #include "cell.hxx"
 
-#define SC_CONS_NOTFOUND    0xFFFF
+#define SC_CONS_NOTFOUND    -1
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -114,7 +114,7 @@ static OpCode eOpCodeTable[] = {            //  Reihenfolge wie bei enum ScSubTo
 
 // -----------------------------------------------------------------------
 
-void ScReferenceList::AddEntry( USHORT nCol, USHORT nRow, USHORT nTab )
+void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScReferenceEntry* pOldData = pData;
     pData = new ScReferenceEntry[ nFullSize+1 ];
@@ -137,7 +137,8 @@ void ScReferenceList::AddEntry( USHORT nCol, USHORT nRow, USHORT nTab )
     nFullSize = nCount;
 }
 
-void lcl_AddString( String**& pData, USHORT& nCount, const String& rInsert )
+template< typename T >
+void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
 {
     String** pOldData = pData;
     pData = new String*[ nCount+1 ];
@@ -183,7 +184,7 @@ ScConsData::~ScConsData()
 
 #define DELETEARR(ppArray,nCount)   \
 {                                   \
-    USHORT i;                       \
+    ULONG i;                        \
     if (ppArray)                    \
         for(i=0; i<nCount; i++)     \
             delete[] ppArray[i];    \
@@ -193,7 +194,7 @@ ScConsData::~ScConsData()
 
 #define DELETESTR(ppArray,nCount)   \
 {                                   \
-    USHORT i;                       \
+    ULONG i;                        \
     if (ppArray)                    \
         for(i=0; i<nCount; i++)     \
             delete ppArray[i];      \
@@ -203,18 +204,18 @@ ScConsData::~ScConsData()
 
 void ScConsData::DeleteData()
 {
-    USHORT i;
-
     if (ppRefs)
-        for (i=0; i<nColCount; i++)
+    {
+        for (SCSIZE i=0; i<nColCount; i++)
         {
-            for (USHORT j=0; j<nRowCount; j++)
+            for (SCSIZE j=0; j<nRowCount; j++)
                 if (ppUsed[i][j])
                     ppRefs[i][j].Clear();
             delete[] ppRefs[i];
         }
-    delete[] ppRefs;
-    ppRefs = NULL;
+        delete[] ppRefs;
+        ppRefs = NULL;
+    }
 
 //  DELETEARR( ppData1, nColCount );
 //  DELETEARR( ppData2, nColCount );
@@ -241,14 +242,13 @@ void ScConsData::DeleteData()
 
 void ScConsData::InitData( BOOL bDelete )
 {
-    USHORT i;
     if (bDelete)
         DeleteData();
 
     if (bReference && nColCount && !ppRefs)
     {
         ppRefs = new ScReferenceList*[nColCount];
-        for (i=0; i<nColCount; i++)
+        for (SCSIZE i=0; i<nColCount; i++)
             ppRefs[i] = new ScReferenceList[nRowCount];
     }
     else if (nColCount && !ppCount)
@@ -256,7 +256,7 @@ void ScConsData::InitData( BOOL bDelete )
         ppCount  = new double*[nColCount];
         ppSum    = new double*[nColCount];
         ppSumSqr = new double*[nColCount];
-        for (i=0; i<nColCount; i++)
+        for (SCSIZE i=0; i<nColCount; i++)
         {
             ppCount[i]  = new double[nRowCount];
             ppSum[i]    = new double[nRowCount];
@@ -267,7 +267,7 @@ void ScConsData::InitData( BOOL bDelete )
     if (nColCount && !ppUsed)
     {
         ppUsed = new BOOL*[nColCount];
-        for (i=0; i<nColCount; i++)
+        for (SCSIZE i=0; i<nColCount; i++)
         {
             ppUsed[i] = new BOOL[nRowCount];
             memset( ppUsed[i], 0, nRowCount * sizeof(BOOL) );
@@ -276,11 +276,11 @@ void ScConsData::InitData( BOOL bDelete )
 
     if (nRowCount && nDataCount && !ppTitlePos)
     {
-        ppTitlePos = new USHORT*[nRowCount];
-        for (i=0; i<nRowCount; i++)
+        ppTitlePos = new SCSIZE*[nRowCount];
+        for (SCSIZE i=0; i<nRowCount; i++)
         {
-            ppTitlePos[i] = new USHORT[nDataCount];
-            memset( ppTitlePos[i], 0, nDataCount * sizeof(USHORT) );    //! unnoetig ?
+            ppTitlePos[i] = new SCSIZE[nDataCount];
+            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //! unnoetig ?
         }
     }
 
@@ -292,17 +292,17 @@ void ScConsData::DoneFields()
     InitData(FALSE);
 }
 
-void ScConsData::SetSize( USHORT nCols, USHORT nRows )
+void ScConsData::SetSize( SCCOL nCols, SCROW nRows )
 {
     DeleteData();
-    nColCount = nCols;
-    nRowCount = nRows;
+    nColCount = static_cast<SCSIZE>(nCols);
+    nRowCount = static_cast<SCSIZE>(nRows);
 }
 
-void ScConsData::GetSize( USHORT& rCols, USHORT& rRows ) const
+void ScConsData::GetSize( SCCOL& rCols, SCROW& rRows ) const
 {
-    rCols = nColCount;
-    rRows = nRowCount;
+    rCols = static_cast<SCCOL>(nColCount);
+    rRows = static_cast<SCROW>(nRowCount);
 }
 
 void ScConsData::SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef )
@@ -316,27 +316,27 @@ void ScConsData::SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, B
     eFunction = eFunc;
 }
 
-void ScConsData::AddFields( ScDocument* pSrcDoc, USHORT nTab,
-                            USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 )
+void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
+                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ++nDataCount;
 
     String aTitle;
 
-    USHORT nStartCol = nCol1;
-    USHORT nStartRow = nRow1;
+    SCCOL nStartCol = nCol1;
+    SCROW nStartRow = nRow1;
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
 
     if (bColByName)
     {
-        for (USHORT nCol=nStartCol; nCol<=nCol2; nCol++)
+        for (SCCOL nCol=nStartCol; nCol<=nCol2; nCol++)
         {
             pSrcDoc->GetString( nCol, nRow1, nTab, aTitle );
             if (aTitle.Len())
             {
                 BOOL bFound = FALSE;
-                for (USHORT i=0; i<nColCount && !bFound; i++)
+                for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
                         bFound = TRUE;
                 if (!bFound)
@@ -347,13 +347,13 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, USHORT nTab,
 
     if (bRowByName)
     {
-        for (USHORT nRow=nStartRow; nRow<=nRow2; nRow++)
+        for (SCROW nRow=nStartRow; nRow<=nRow2; nRow++)
         {
             pSrcDoc->GetString( nCol1, nRow, nTab, aTitle );
             if (aTitle.Len())
             {
                 BOOL bFound = FALSE;
-                for (USHORT i=0; i<nRowCount && !bFound; i++)
+                for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
                         bFound = TRUE;
                 if (!bFound)
@@ -365,8 +365,8 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, USHORT nTab,
 
 void ScConsData::AddName( const String& rName )
 {
-    USHORT nArrX;
-    USHORT nArrY;
+    SCSIZE nArrX;
+    SCSIZE nArrY;
 
     if (bReference)
     {
@@ -376,7 +376,7 @@ void ScConsData::AddName( const String& rName )
         {
             //  Daten auf gleiche Laenge bringen
 
-            USHORT nMax = 0;
+            SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
                     nMax = Max( nMax, ppRefs[nArrX][nArrY].GetCount() );
@@ -549,8 +549,8 @@ double lcl_CalcData( ScSubTotalFunc eFunc,
     return fVal;
 }
 
-void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
-                            USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 )
+void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
+                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     PutInOrder(nCol1,nCol2);
     PutInOrder(nRow1,nRow2);
@@ -565,8 +565,8 @@ void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
         nRow2 = nRow1 + nRowCount - 1;
     }
 
-    USHORT nCol;
-    USHORT nRow;
+    SCCOL nCol;
+    SCROW nRow;
 
     //      Ecke links oben
 
@@ -588,27 +588,27 @@ void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
 
     //      Titel suchen
 
-    USHORT nStartCol = nCol1;
-    USHORT nStartRow = nRow1;
+    SCCOL nStartCol = nCol1;
+    SCROW nStartRow = nRow1;
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
     String aTitle;
-    USHORT* pDestCols = NULL;
-    USHORT* pDestRows = NULL;
+    SCCOL*  pDestCols = NULL;
+    SCROW*  pDestRows = NULL;
     if (bColByName)
     {
-        pDestCols = new USHORT[nCol2-nStartCol+1];
+        pDestCols = new SCCOL[nCol2-nStartCol+1];
         for (nCol=nStartCol; nCol<=nCol2; nCol++)
         {
             pSrcDoc->GetString(nCol,nRow1,nTab,aTitle);
-            USHORT nPos = SC_CONS_NOTFOUND;
+            SCCOL nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
                 BOOL bFound = FALSE;
-                for (USHORT i=0; i<nColCount && !bFound; i++)
+                for (SCSIZE i=0; i<nColCount && !bFound; i++)
                     if ( *ppColHeaders[i] == aTitle )
                     {
-                        nPos = i;
+                        nPos = static_cast<SCCOL>(i);
                         bFound = TRUE;
                     }
                 DBG_ASSERT(bFound, "Spalte nicht gefunden");
@@ -618,18 +618,18 @@ void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
     }
     if (bRowByName)
     {
-        pDestRows = new USHORT[nRow2-nStartRow+1];
+        pDestRows = new SCROW[nRow2-nStartRow+1];
         for (nRow=nStartRow; nRow<=nRow2; nRow++)
         {
             pSrcDoc->GetString(nCol1,nRow,nTab,aTitle);
-            USHORT nPos = SC_CONS_NOTFOUND;
+            SCROW nPos = SC_CONS_NOTFOUND;
             if (aTitle.Len())
             {
                 BOOL bFound = FALSE;
-                for (USHORT i=0; i<nRowCount && !bFound; i++)
+                for (SCSIZE i=0; i<nRowCount && !bFound; i++)
                     if ( *ppRowHeaders[i] == aTitle )
                     {
-                        nPos = i;
+                        nPos = static_cast<SCROW>(i);
                         bFound = TRUE;
                     }
                 DBG_ASSERT(bFound, "Zeile nicht gefunden");
@@ -645,13 +645,13 @@ void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
     BOOL bAnyCell = ( eFunction == SUBTOTAL_FUNC_CNT2 );
     for (nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        USHORT nArrX = nCol-nCol1;
+        SCCOL nArrX = nCol-nCol1;
         if (bColByName) nArrX = pDestCols[nArrX];
         if (nArrX != SC_CONS_NOTFOUND)
         {
             for (nRow=nRow1; nRow<=nRow2; nRow++)
             {
-                USHORT nArrY = nRow-nRow1;
+                SCROW nArrY = nRow-nRow1;
                 if (bRowByName) nArrY = pDestRows[nArrY];
                 if ( nArrY != SC_CONS_NOTFOUND && (
                         bAnyCell ? pSrcDoc->HasData( nCol, nRow, nTab )
@@ -695,16 +695,16 @@ void ScConsData::AddData( ScDocument* pSrcDoc, USHORT nTab,
 
 //  vorher testen, wieviele Zeilen eingefuegt werden (fuer Undo)
 
-USHORT ScConsData::GetInsertCount() const
+SCROW ScConsData::GetInsertCount() const
 {
-    USHORT nInsert = 0;
-    USHORT nArrX;
-    USHORT nArrY;
+    SCROW nInsert = 0;
+    SCSIZE nArrX;
+    SCSIZE nArrY;
     if ( ppRefs && ppUsed )
     {
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
-            USHORT nNeeded = 0;
+            SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
                     nNeeded = Max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
@@ -718,15 +718,12 @@ USHORT ScConsData::GetInsertCount() const
 //  fertige Daten ins Dokument schreiben
 //! optimieren nach Spalten?
 
-void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRow, USHORT nTab )
+void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     OpCode eOpCode = eOpCodeTable[eFunction];
 
-    USHORT nArrX;
-    USHORT nArrY;
-    USHORT nCount;
-    USHORT nPos;
-    USHORT i;
+    SCSIZE nArrX;
+    SCSIZE nArrY;
 
     //  Ecke links oben
 
@@ -735,17 +732,17 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRo
 
     //  Titel
 
-    USHORT nStartCol = nCol;
-    USHORT nStartRow = nRow;
+    SCCOL nStartCol = nCol;
+    SCROW nStartRow = nRow;
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
 
     if (bColByName)
-        for (i=0; i<nColCount; i++)
+        for (SCSIZE i=0; i<nColCount; i++)
             pDestDoc->SetString( nStartCol+i, nRow, nTab, *ppColHeaders[i] );
     if (bRowByName)
-        for (i=0; i<nRowCount; i++)
-            pDestDoc->SetString( nCol, nStartRow+i, nTab, *ppRowHeaders[i] );
+        for (SCSIZE j=0; j<nRowCount; j++)
+            pDestDoc->SetString( nCol, nStartRow+j, nTab, *ppRowHeaders[j] );
 
     nCol = nStartCol;
     nRow = nStartRow;
@@ -784,7 +781,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRo
 
         for (nArrY=0; nArrY<nRowCount; nArrY++)
         {
-            USHORT nNeeded = 0;
+            SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
                 if (ppUsed[nArrX][nArrY])
                     nNeeded = Max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
@@ -797,10 +794,10 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRo
                     if (ppUsed[nArrX][nArrY])
                     {
                         ScReferenceList& rList = ppRefs[nArrX][nArrY];
-                        nCount = rList.GetCount();
+                        SCSIZE nCount = rList.GetCount();
                         if (nCount)
                         {
-                            for (nPos=0; nPos<nCount; nPos++)
+                            for (SCSIZE nPos=0; nPos<nCount; nPos++)
                             {
                                 ScReferenceEntry aRef = rList.GetEntry(nPos);
                                 if (aRef.nTab != SC_CONS_NOTFOUND)
@@ -844,11 +841,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRo
                 //  Gliederung einfuegen
 
                 ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, TRUE )->GetRowArray();
-                USHORT nOutStart = nRow+nArrY;
-                USHORT nOutEnd = nRow+nArrY+nNeeded-1;
+                SCROW nOutStart = nRow+nArrY;
+                SCROW nOutEnd = nRow+nArrY+nNeeded-1;
                 BOOL bSize = FALSE;
                 pOutArr->Insert( nOutStart, nOutEnd, bSize );
-                for (USHORT nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
+                for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
                     pDestDoc->ShowRow( nOutRow, nTab, FALSE );
                 pDestDoc->UpdateOutlineRow( nOutStart, nOutEnd, nTab, FALSE );
 
@@ -857,9 +854,9 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRo
                 if (ppTitlePos && ppTitles && ppRowHeaders)
                 {
                     String aDelim( RTL_CONSTASCII_USTRINGPARAM(" / ") );
-                    for (nPos=0; nPos<nDataCount; nPos++)
+                    for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
                     {
-                        USHORT nTPos = ppTitlePos[nArrY][nPos];
+                        SCSIZE nTPos = ppTitlePos[nArrY][nPos];
                         BOOL bDo = TRUE;
                         if (nPos+1<nDataCount)
                             if (ppTitlePos[nArrY][nPos+1] == nTPos)
