@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 12:54:37 $
+ *  last change: $Author: bm $ $Date: 2000-12-04 09:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+#ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
+#include "NamedBoolPropertyHdl.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
@@ -144,6 +147,7 @@ using namespace com::sun::star;
 #define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 4 )
 #define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 5 )
 #define XML_SCH_TYPE_FILLSTYLE              ( XML_SCH_TYPES_START + 6 )
+#define XML_SCH_TYPE_TEXT_CROSSEDOUT        ( XML_SCH_TYPES_START + 7 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, c }
@@ -246,7 +250,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // text attributes
 
     { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
-    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_BOOL,  0},
+    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SCH_TYPE_TEXT_CROSSEDOUT,   0},
     { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,       XML_TYPE_STRING, 0 },
     { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
     { "CharFontCharSet",XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
@@ -371,6 +375,14 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_LINEJOIN:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartLineJointEnumMap, ::getCppuType((const drawing::LineJoint*)0) );
                 break;
+
+            case XML_SCH_TYPE_TEXT_CROSSEDOUT:
+            {
+                const rtl::OUString aTrueStr( rtl::OUString::createFromAscii( sXML_crossedout_single ));
+                const rtl::OUString aFalseStr( rtl::OUString::createFromAscii( sXML_none ));
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
