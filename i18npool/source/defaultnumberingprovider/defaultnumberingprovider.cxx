@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-26 06:46:25 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 00:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,18 +91,14 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-inline
-rtl::OUString C2U( const char* s )
-{
-  return OUString::createFromAscii(s);
-}
-
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF)
 {
+    translit = new TransliterationImpl(xMSF);
 }
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
 {
+    delete translit;
 }
 
 Sequence< Reference<container::XIndexAccess> >
@@ -211,7 +207,7 @@ Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
 {
     for( int i=0; i<aProperties.getLength(); i++ )
     {
-        if( aProperties[i].Name == C2U(name) )
+        if( aProperties[i].Name.equalsAscii(name) )
         {
             return aProperties[i].Value;
         }
@@ -219,18 +215,6 @@ Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
     if(bRequired)
         throw IllegalArgumentException();
     return Any();
-}
-
-void
-DefaultNumberingProvider::getTransliteration()
-{
-    Reference < XInterface > xI = xSMgr->createInstance(OUString::createFromAscii( "com.sun.star.i18n.Transliteration") );
-
-    if ( xI.is() ) {
-        Any x = xI->queryInterface(
-            ::getCppuType( (const Reference< XTransliteration >*)0) );
-        x >>= translit;
-    }
 }
 
 //XNumberingFormatter
@@ -379,45 +363,17 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 #endif
 
           case TRANSLITERATION:
-               {
-               OUString &tmp = OUString::valueOf( number );
-               OUString transliteration;
            try {
-        getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+            OUString &tmp = OUString::valueOf( number );
+            OUString transliteration;
+            getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+            translit->loadModuleByImplName(transliteration, aLocale);
+            Sequence< long > offset;
+            result += translit->transliterate(tmp, 0, tmp.getLength(), offset);
            } catch (Exception& ) {
-        transliteration = OUString::createFromAscii("");
-           }
-               getTransliteration();
-        if ( ! translit.is() ) {
-                    throw IllegalArgumentException();
-        }
-
-        Sequence < TransliterationModulesNew > module(1);
-               if( !transliteration.compareToAscii("NumToTextLower_zh_CN") ) {
-                    module[0]=TransliterationModulesNew_NumToTextLower_zh_CN;
-               } else if( !transliteration.compareToAscii("NumToTextUpper_zh_CN") ) {
-                    module[0]=TransliterationModulesNew_NumToTextUpper_zh_CN;
-               } else if( !transliteration.compareToAscii("NumToTextLower_zh_TW") ) {
-                    module[0]=TransliterationModulesNew_NumToTextLower_zh_TW;
-               } else if( !transliteration.compareToAscii("NumToTextUpper_zh_TW") ) {
-                    module[0]=TransliterationModulesNew_NumToTextUpper_zh_TW;
-               } else if( !transliteration.compareToAscii("NumToTextFormalHangul_ko") ) {
-                    module[0]=TransliterationModulesNew_NumToTextFormalHangul_ko;
-               } else if( !transliteration.compareToAscii("NumToTextFormalLower_ko") ) {
-                    module[0]=TransliterationModulesNew_NumToTextFormalLower_ko;
-               } else if( !transliteration.compareToAscii("NumToTextFormalUpper_ko") ) {
-                    module[0]=TransliterationModulesNew_NumToTextFormalUpper_ko;
-               } else
-               {
                     assert(0);
                     throw IllegalArgumentException();
-               }
-               translit->loadModuleNew( module, aLocale);
-               Sequence< long > offset( tmp.getLength()*2 );
-               OUString& res = translit->transliterate(tmp, 0, tmp.getLength(), offset);
-               result += res;
-               result += C2U("~");
-               }
+           }
                break;
 
           default:
@@ -454,10 +410,11 @@ static const Supported_NumberingType aSupportedTypes[] =
     {style::NumberingType::PAGE_DESCRIPTOR,         "Page"},
     {style::NumberingType::BITMAP,              "Bitmap"},
     {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA"},
-    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa"}
+    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa"},
 #ifdef DEBUG
-    ,{20,   "First"}
+    {20,    "First"},
 #endif
+    {style::NumberingType::CHARS_LOWER_LETTER_N,    "Transliteration"}
 };
     static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
@@ -503,25 +460,25 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(nNumberingType == aSupportedTypes[i].nType)
-            return C2U(aSupportedTypes[i].cSymbol);
+            return OUString::createFromAscii(aSupportedTypes[i].cSymbol);
     return OUString();
 }
 /* -----------------------------05.07.01 13:34--------------------------------
 
  ---------------------------------------------------------------------------*/
+const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {
-    return C2U("com.sun.star.i18n.DefaultNumberingProvider");
+    return OUString::createFromAscii(cDefaultNumberingProvider);
 }
 /* -----------------------------05.07.01 13:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 sal_Bool DefaultNumberingProvider::supportsService(const rtl::OUString& rServiceName)
                 throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii(cDefaultNumberingProvider);
+    return rServiceName.equalsAscii(cDefaultNumberingProvider);
 }
 /* -----------------------------05.07.01 13:34--------------------------------
 
@@ -530,7 +487,7 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
                 throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = C2U(cDefaultNumberingProvider);
+    aRet[0] = OUString::createFromAscii(cDefaultNumberingProvider);
     return aRet;
 }
 
