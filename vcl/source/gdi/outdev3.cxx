@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-31 13:16:39 $
+ *  last change: $Author: hdu $ $Date: 2002-06-13 19:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5658,7 +5658,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
             xub_StrLen nEndIndex = rOrigStr.Len();
             if( (ULONG)nIndex + nLen < nEndIndex )
                 nEndIndex = nIndex + nLen;
-            nTextWidth += (nEndIndex - nIndex ) * nCharExtra;
+            nTextWidth -= (nEndIndex - nIndex) * nCharExtra;
         }
         nTextWidth *= pSalLayout->GetUnitsPerPixel();
         if( mbMap )
@@ -5666,6 +5666,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
         nRetVal = pSalLayout->GetTextBreak( nTextWidth );
         pSalLayout->Release();
     }
+
     return nRetVal;
 }
 
@@ -5699,7 +5700,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
             xub_StrLen nEndIndex = rOrigStr.Len();
             if( (ULONG)nIndex + nLen < nEndIndex )
                 nEndIndex = nIndex + nLen;
-            nTextWidth += (nEndIndex - nIndex ) * nCharExtra;
+            nTextWidth -= (nEndIndex - nIndex) * nCharExtra;
         }
         nTextWidth *= pSalLayout->GetUnitsPerPixel();
         if( mbMap )
