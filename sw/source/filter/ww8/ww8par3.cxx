@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,6 +1377,100 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pLFOInfo->pNumRule;
 }
 
+void WW8ListManager::MapStyleToOrigList(const SwNumRule &rNmRule,
+    SwWW8StyInf& rStyleInf)
+{
+    maStyleNumberingMap.insert(std::make_pair< SwNumRule const * const, SwWW8StyInf * >(&rNmRule,&rStyleInf));
+}
+
+void WW8ListManager::StrengthReduceListStyles()
+{
+    /*
+     For all the styles that wanted to use a given list style check and that
+     had new list styles created to match the actual indentation used for the
+     style see if it is possible to put humpty dumpty back together again and
+     create a single list style that comprises all the split styles based on
+     the original style.
+
+     There must have been at least one split from the original style to need to
+     do this (i.e. the sPrevious check) and there must be only one (or none)
+     style using each list level to avoid clobbering the synced indentation for
+     the conflicting styles that caused the split from the desired list in the
+     first place.
+    */
+    myMapIter aIter = maStyleNumberingMap.begin();
+    myMapIter aEnd = maStyleNumberingMap.end();
+    while (aIter != aEnd)
+    {
+        const SwNumRule *pNumRule = aIter->first;
+        std::vector<String> aLevels[MAXLEVEL];
+        const int nMax = pNumRule->IsContinusNum() ? 1 : MAXLEVEL;
+
+        myMapIter aCurrentIter = aIter;
+        myMapIter aEndOfCurrentIter =
+            maStyleNumberingMap.upper_bound(pNumRule);
+        while (aCurrentIter != aEndOfCurrentIter)
+        {
+            const SwWW8StyInf *pCurrent = aCurrentIter->second;
+            ASSERT(pCurrent->nListLevel < nMax, "strange");
+            const SwNumRuleItem &rItem = pCurrent->pFmt->GetNumRule();
+            ASSERT(rItem.GetValue().Len(), "impossible");
+            if (rItem.GetValue().Len())
+                aLevels[pCurrent->nListLevel].push_back(rItem.GetValue());
+            ++aCurrentIter;
+        }
+        bool bSuitable = true;
+        bool bRequired = false;
+        String sPrevious;
+        for (int i = 0;i < nMax;++i)
+        {
+            std::sort(aLevels[i].begin(), aLevels[i].end());
+            std::vector<String>::iterator aSIter =
+                std::unique(aLevels[i].begin(),aLevels[i].end());
+            aLevels[i].erase(aSIter, aLevels[i].end());
+            if (aLevels[i].size() > 1)
+            {
+                bSuitable = false;
+                break;
+            }
+            else if (!aLevels[i].empty())
+            {
+                if (!sPrevious.Len())
+                    sPrevious = aLevels[i][0];
+                else if (sPrevious != aLevels[i][0])
+                    bRequired = true;
+            }
+        }
+        if (bSuitable && bRequired)
+        {
+            SwNumRule *pNewRule = CreateNextRule(
+                pNumRule->IsContinusNum() ? true : false);
+
+            for (int i=0; i < MAXLEVEL; ++i)
+                pNewRule->Set(i, pNumRule->Get(i));
+
+            for (aCurrentIter = aIter; aCurrentIter != aEndOfCurrentIter;
+                ++aCurrentIter)
+            {
+                SwWW8StyInf *pCurrent = aCurrentIter->second;
+                const SwNumRuleItem &rItem = pCurrent->pFmt->GetNumRule();
+                ASSERT(rItem.GetValue().Len(), "impossible");
+                if (!rItem.GetValue().Len())
+                    continue;
+                const SwNumRule* pRule = rDoc.FindNumRulePtr(rItem.GetValue());
+                ASSERT(pRule, "impossible");
+                if (!pRule)
+                    continue;
+                const SwNumFmt& rRule = pRule->Get(pCurrent->nListLevel);
+                pNewRule->Set(pCurrent->nListLevel, rRule);
+                pCurrent->pFmt->SetAttr(SwNumRuleItem(pNewRule->GetName()));
+            }
+        }
+        aIter = aEndOfCurrentIter;
+    }
+    maStyleNumberingMap.clear();
+}
+
 //----------------------------------------------------------------------------
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz
 //----------------------------------------------------------------------------
@@ -1571,6 +1665,26 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
                     rStyleInf.nLFOIndex = pCollA[rStyleInf.nBase].nLFOIndex;
                     rStyleInf.nListLevel = pCollA[rStyleInf.nBase].nListLevel;
                 }
+            }
+
+            //If this style has a numrule the map this style to its desired
+            //numrule, so we can check later if a different indentation
+            //required a new numrule for the list level in use to be created
+            //instead, and if so then we can check if a single numrule
+            //comprising all the specially created levels can be substituted
+            //for the multiple list styles for each level
+            if (
+                 rStyleInf.pFmt && rStyleInf.bHasStyNumRule &&
+                 (USHRT_MAX > rStyleInf.nLFOIndex) &&
+                 (WW8ListManager::nMaxLevel > rStyleInf.nListLevel)
+               )
+            {
+                SwNumRule* pNmRule =
+                    pLstManager->GetNumRuleForActivation(rStyleInf.nLFOIndex,
+                    rStyleInf.nListLevel);
+                ASSERT(pNmRule, "impossible")
+                if (pNmRule)
+                    pLstManager->MapStyleToOrigList(*pNmRule, rStyleInf);
             }
         }
     }
