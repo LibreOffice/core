@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 08:06:35 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 11:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,10 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
             Reference< XDriverAccess > xDriverManager;
             sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
                 // in case an error occures
-            sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_DRIVERMANAGER);
+            sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
             try
             {
-                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
                 DBG_ASSERT(xDriverManager.is(), "OTableTreeListBox::UpdateTableList : could not instantiate the driver manager, or it does not provide the necessary interface!");
             }
             catch (Exception& e)
@@ -528,6 +528,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/29 08:06:35  oj
+ *  only assign array when length != 0
+ *
  *  Revision 1.10  2001/03/29 07:09:53  oj
  *  show views the correct way
  *

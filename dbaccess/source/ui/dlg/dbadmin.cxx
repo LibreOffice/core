@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 13:37:04 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 11:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,10 +777,10 @@ Reference<XConnection> ODbAdminDialog::createConnection()
                 Reference< XDriverAccess > xDriverManager;
                 String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
                     // in case an error occures
-                sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_DRIVERMANAGER);
+                sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
                 try
                 {
-                    xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                    xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
                     DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::createConnection: could not instantiate the driver manager, or it does not provide the necessary interface!");
                 }
                 catch (Exception& e)
@@ -2564,6 +2564,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.48  2001/05/10 13:37:04  fs
+ *  #86223# restore view settings after applying (no matter if syncronously or asynchronously / +successfullyConnected to make the password persistent
+ *
  *  Revision 1.47  2001/04/27 15:47:03  fs
  *  resetPages: do a ShowPage(GENERAL) before removing pages
  *
