@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:20:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,7 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
             case DST_OUTLOOKEXP:
             case DST_FLAT:
             case DST_EVOLUTION:
+             case DST_THUNDERBIRD:
             case DST_CALC:
                 bSupportsTableCreation = FALSE;
                 break;
@@ -447,12 +448,13 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_MSACCESS:
         case DST_MYSQL_ODBC:
         case DST_ODBC:
+        case DST_MOZILLA:
+        case DST_THUNDERBIRD:
             bEnableBrowseButton = TRUE;
             break;
         case DST_MYSQL_JDBC:
         case DST_ORACLE_JDBC:
         case DST_LDAP:
-        case DST_MOZILLA:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP:
         case DST_JDBC:
@@ -495,6 +497,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
             break;
         case DST_MSACCESS:
         case DST_MOZILLA:
+        case DST_THUNDERBIRD:
         case DST_EVOLUTION:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP: //????
@@ -562,8 +565,10 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
     {
         ++nSeparator;
-        if (_rDsn.EqualsIgnoreCaseAscii("mozilla", nSeparator,_rDsn.Len() - nSeparator))
+        if (_rDsn.EqualsIgnoreCaseAscii("mozilla:", nSeparator,_rDsn.Len() - nSeparator))
             return DST_MOZILLA;
+        if (_rDsn.EqualsIgnoreCaseAscii("thunderbird:", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_THUNDERBIRD;
         if (_rDsn.EqualsIgnoreCaseAscii("ldap:", nSeparator,_rDsn.Len() - nSeparator))
             return DST_LDAP;
         if (_rDsn.EqualsIgnoreCaseAscii("outlook", nSeparator,_rDsn.Len() - nSeparator))
