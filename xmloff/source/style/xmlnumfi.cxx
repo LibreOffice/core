@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-30 15:10:33 $
+ *  last change: $Author: sab $ $Date: 2001-12-13 11:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,27 +1337,43 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
 
 void SvXMLNumFormatContext::GetFormat(rtl::OUString& rFormatString, lang::Locale& rLocale)
 {
-    if (aMyConditions.size())
+    //#95893#; remember the created FormatString and Locales
+    if (!sFormatString.getLength() &&
+        !aLocale.Language.getLength() &&
+        !aLocale.Country.getLength())
     {
-        rtl::OUString sFormat;
-        lang::Locale aLoc;
-        for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+        if (aMyConditions.size())
         {
-            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
-            if (pStyle)
+            rtl::OUString sFormat;
+            lang::Locale aLoc;
+            for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
             {
-                pStyle->GetFormat(sFormat, aLoc);
-                AddCondition(i, sFormat, aLoc);
+                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+                if (pStyle)
+                {
+                    pStyle->GetFormat(sFormat, aLoc);
+                    AddCondition(i, sFormat, aLoc);
+                }
             }
         }
+
+        if ( !aFormatCode.getLength() )
+        {
+            //  insert empty format as empty string (with quotes)
+            //  #93901# this check has to be done before inserting the conditions
+            aFormatCode.appendAscii("\"\"");    // ""
+        }
+
+        aFormatCode.insert( 0, aConditions.makeStringAndClear() );
+        sFormatString = aFormatCode.makeStringAndClear();
+        String aLanguage, aCountry;
+        ConvertLanguageToIsoNames(nFormatLang, aLanguage, aCountry);
+        aLocale.Language = rtl::OUString(aLanguage);
+        aLocale.Country = rtl::OUString(aCountry);
     }
-    aFormatCode.insert( 0, aConditions.makeStringAndClear() );
-    rFormatString = aFormatCode.makeStringAndClear();
-    String aLanguage, aCountry;
-    ConvertLanguageToIsoNames(nFormatLang, aLanguage, aCountry);
-    rLocale.Language = rtl::OUString(aLanguage);
-    rLocale.Country = rtl::OUString(aCountry);
+    rLocale = aLocale;
+    rFormatString = sFormatString;
 }
 
 void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
