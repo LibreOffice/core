@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 19:21:59 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 10:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,11 @@ protected: //methods
         , sal_Int32 nIndex
         , bool bVertical
         );
+
+    virtual void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+        , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
+        , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
 
     virtual void createRegressionCurvesShapes( const VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<
