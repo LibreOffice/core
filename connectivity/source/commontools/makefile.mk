@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-05 08:52:05 $
+#   last change: $Author: fs $ $Date: 2000-10-05 08:54:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ SLOFILES=\
         $(SLO)$/dbexception.obj	\
         $(SLO)$/dbconversion.obj	\
         $(SLO)$/enumhelper.obj		\
-        $(SLO)$/propertyhelper.obj		\
         $(SLO)$/CommonTools.obj		\
         $(SLO)$/DateConversion.obj	\
 
