@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-09 10:56:44 $
+ *  last change: $Author: hdu $ $Date: 2001-07-09 15:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,7 +1041,7 @@ static RecodeTable aRecodeTable[] =
     {"zapfdingbats",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
     {"dingbats",        {aMonotypeSortsTab,"StarSymbol", NULL}},
     {"zapfchancery",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfChancery=MonotypeSorts-X
-//  {"monotypesorts2",{aMonotypeSorts2Tab,"StarSymbol", NULL}}
+//  {"monotypesorts2",  {aMonotypeSorts2Tab,"StarSymbol", NULL}}
 
 //  {"wingdings",       {aWingDingsTab, "StarSymbol", NULL}},
 //  {"wingdings2",      {aWingDings2Tab,"StarSymbol", NULL}},
@@ -1062,12 +1062,8 @@ const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
     String aMapName( rMapFontName );
     ImplGetEnglishSearchFontName( aMapName );
 
-    if( aMapName.EqualsAscii( "opensymbol" ) )
-        aMapName.CreateFromAscii( "starsymbol" );
-    if( aOrgName.EqualsAscii( "opensymbol" ) )
-        aOrgName.CreateFromAscii( "starsymbol" );
-
-    if( aMapName.EqualsAscii( "starsymbol" ) )
+    if( aMapName.EqualsAscii( "starsymbol" )
+     || aMapName.EqualsAscii( "opensymbol" ) )
     {
         int nEntries = sizeof(aRecodeTable) / sizeof(aRecodeTable[0]);
         for( int i = 0; i < nEntries; ++i)
@@ -1079,7 +1075,8 @@ const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
     }
     else if( aMapName.EqualsAscii( "starbats" ) )
     {
-        if( aOrgName.EqualsAscii( "starsymbol" ) ) pCvt = &aStarSymbolCvt;
+        if( aOrgName.EqualsAscii( "starsymbol" ) )      pCvt = &aStarSymbolCvt;
+        else if( aOrgName.EqualsAscii( "opensymbol" ) ) pCvt = &aStarSymbolCvt;
     }
 
     return pCvt;
@@ -1098,9 +1095,9 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
     {
         int nEntries = sizeof(aRecodeTable) / sizeof(aRecodeTable[0]);
-        if ( nFlags & FONTTOSUBSFONT_IMPORT )
+        if ( nFlags & FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS ) // only StarMath+StarBats
             nEntries = 2;
-        for( int i = 0; i < nEntries; ++i)
+        for( int i = 0; i < nEntries; ++i )
         {
             RecodeTable& r = aRecodeTable[i];
             if( aName.EqualsAscii( r.pOrgName ) )
@@ -1109,8 +1106,9 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
     }
     else
     {
-        // FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS:
-        if( aName.EqualsAscii( "starsymbol" ) )     pCvt = &aStarSymbolCvt;
+        // TODO: FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
+        if( aName.EqualsAscii( "starsymbol" ) )       pCvt = &aStarSymbolCvt;
+        else if( aName.EqualsAscii( "opensymbol" ) )  pCvt = &aStarSymbolCvt;
     }
 
     return (FontToSubsFontConverter)pCvt;
