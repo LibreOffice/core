@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:33:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 17:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1499,11 +1499,20 @@ void TabControl::RemovePage( USHORT nPageId )
         // If current page is removed, than first page gets the current page
         if ( pItem->mnId == mnCurPageId )
         {
+            mnCurPageId = 0;
+
+            // don't do this by simply setting mnCurPageId to pFirstItem->mnId
+            // this leaves a lot of stuff (such trivias as _showing_ the new current page) undone
+            // instead, call SetCurPageId
+            // without this, the next (outside) call to SetCurPageId with the id of the first page
+            // will result in doing nothing (as we assume that nothing changed, then), and the page
+            // will never be shown.
+            // 86875 - 05/11/2001 - frank.schoenheit@germany.sun.com
+
             ImplTabItem* pFirstItem = mpItemList->GetObject( 0 );
             if ( pFirstItem )
-                mnCurPageId = pFirstItem->mnId;
-            else
-                mnCurPageId = 0;
+                SetCurPageId( pFirstItem->mnId );
+
         }
         delete pItem;
 
