@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:50 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2041,12 +2041,15 @@ KSHORT SwTxtFrm::GetLineSpace() const
             ViewShell* pVsh = (ViewShell*)GetShell();
             if ( !pVsh )
                 break;
-            OutputDevice *pOut = pVsh->GetOut();
+            OutputDevice* pOut = pVsh->GetOut();
             if( !pVsh->GetDoc()->IsBrowseMode() ||
                 pVsh->GetViewOptions()->IsPrtFormat() )
             {
                 pOut = &GetTxtNode()->GetDoc()->GetRefDev();
             }
+
+            ASSERT( pOut, "SwTxtFrm::GetLineSpace() without pOut" )
+
             SwFont aFont( pSet, GetTxtNode()->GetDoc() );
             // Wir muessen dafuer sorgen, dass am OutputDevice der Font
             // korrekt restauriert wird, sonst droht ein Last!=Owner.
@@ -2055,18 +2058,18 @@ KSHORT SwTxtFrm::GetLineSpace() const
                 SwFntObj *pOldFont = pLastFont;
                 pLastFont = NULL;
                 aFont.SetFntChg( sal_True );
-                aFont.ChgPhysFnt( pVsh, pOut );
-                nRet = aFont.GetHeight( pVsh, pOut );
+                aFont.ChgPhysFnt( pVsh, *pOut );
+                nRet = aFont.GetHeight( pVsh, *pOut );
                 pLastFont->Unlock();
                 pLastFont = pOldFont;
-                pLastFont->SetDevFont( pVsh, pOut );
+                pLastFont->SetDevFont( pVsh, *pOut );
             }
             else
             {
                 Font aOldFont = pOut->GetFont();
                 aFont.SetFntChg( sal_True );
-                aFont.ChgPhysFnt( pVsh, pOut );
-                nRet = aFont.GetHeight( pVsh, pOut );
+                aFont.ChgPhysFnt( pVsh, *pOut );
+                nRet = aFont.GetHeight( pVsh, *pOut );
                 pLastFont->Unlock();
                 pLastFont = NULL;
                 pOut->SetFont( aOldFont );
