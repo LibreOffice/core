@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 09:59:18 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Importa modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar para..." ;
                     Text [ portuguese ] = "I~mportar modelo..." ;
-                    Text [ finnish ] = "Tuo mallipohja" ;
+                    Text [ finnish ] = "Tuo mallipohja..." ;
                     Text [ danish ] = "Importer skabelon..." ;
                     Text [ french ] = "I~mporter un modËle..." ;
                     Text [ swedish ] = "~Importera mall..." ;
@@ -642,7 +642,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "Esporta modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar de..." ;
                     Text [ portuguese ] = "E~xportar modelo..." ;
-                    Text [ finnish ] = "Vie mallipohja" ;
+                    Text [ finnish ] = "Vie mallipohja..." ;
                     Text [ danish ] = "Eksporter skabelon..." ;
                     Text [ french ] = "E~xporter un modËle..." ;
                     Text [ swedish ] = "~Exportera mall..." ;
@@ -709,7 +709,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ spanish ] = "~ConfiguraciÛn de la impresora..." ;
                     Text [ danish ] = "Udskriftsindstillin~ger..." ;
                     Text [ swedish ] = "Skrivarinst‰llnin~gar..." ;
-                    Text [ finnish ] = "Tulostimen asetukset" ;
+                    Text [ finnish ] = "Tulostimen asetukset..." ;
                     Text [ english_us ] = "Printer Settings..." ;
                     Text[ chinese_simplified ] = "ËÆæÂÆöÊâìÂç∞Êú∫...";
                     Text[ russian ] = "Õ‡ÒÚÓÈÍË ÔËÌÚÂ‡...";
@@ -737,7 +737,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Aggiorna" ;
                     Text [ portuguese_brazilian ] = "~Atualizar" ;
                     Text [ portuguese ] = "~Actualizar" ;
-                    Text [ finnish ] = "P‰ivit‰" ;
+                    Text [ finnish ] = "P?ivit?" ;
                     Text [ danish ] = "Opdater" ;
                     Text [ french ] = "~Actualiser" ;
                     Text [ swedish ] = "Upp~datera" ;
@@ -878,6 +878,7 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
 
 
 
