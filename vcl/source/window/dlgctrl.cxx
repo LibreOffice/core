@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 12:54:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,26 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
 
 // -----------------------------------------------------------------------
 
+// checks if this window has dialog control
+BOOL Window::ImplHasDlgCtrl()
+{
+    Window* pDlgCtrlParent;
+    Window* pDlgCtrl;
+
+    // lookup window for dialog control
+    pDlgCtrl = this;
+    pDlgCtrlParent = ImplGetParent();
+    while ( pDlgCtrlParent &&
+            !pDlgCtrlParent->ImplIsOverlapWindow() &&
+            ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+        pDlgCtrlParent = pDlgCtrlParent->ImplGetParent();
+
+    if ( !pDlgCtrlParent || ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
+        return FALSE;
+    else
+        return TRUE;
+}
+
 void Window::ImplDlgCtrlNextWindow()
 {
     Window* pDlgCtrlParent;
@@ -861,7 +881,7 @@ void Window::ImplDlgCtrlNextWindow()
     USHORT  nFormStart;
     USHORT  nFormEnd;
 
-    // Fenster fuer Dialog-Steuerung suchen
+    // lookup window for dialog control
     pDlgCtrl = this;
     pDlgCtrlParent = ImplGetParent();
     while ( pDlgCtrlParent &&
@@ -872,7 +892,7 @@ void Window::ImplDlgCtrlNextWindow()
     if ( !pDlgCtrlParent || ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         return;
 
-    // Fenster in der Child-Liste suchen
+    // lookup window in child list
     pSWindow = ::ImplFindDlgCtrlWindow( pDlgCtrlParent, pDlgCtrl,
                                         nIndex, nFormStart, nFormEnd );
     if ( !pSWindow )
