@@ -402,7 +402,7 @@ extern "C" {
                 bRes = sal_True;
             }
             catch (InvalidRegistryException &) {
-                  OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+                  OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
             }
         }
 
