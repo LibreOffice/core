@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:05:23 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 22:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ chinese_traditional ] = "¨Ο¥Ξ­Σ¤HªΊΒ²³ψ(~U)";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ΪΡΦ ΚήΟνγν γΞΥΥ";
         Text[ greek ] = "Χρήση προσαρμοσμέν~ης παρουσίασης οθόνης";
-        Text[ korean ] = "°³Ί° ½½¶σΐΜµε Όξ ΐΜΏλ(~U)";
+        Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ ΐΜΏλ";
         Text[ turkish ] = "Φzel ekran sunusunu kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Utilizar presentaciσn personalizada";
@@ -307,7 +307,7 @@ ModalDialog DLG_CUSTOMSHOW
     Text[ chinese_traditional ] = "­Σ¤HΒ²³ψ";
     Text[ arabic ] = "ΪΡζΦ ΚήΟνγνΙ γΞΥΥΙ";
     Text[ greek ] = "Προσαρμοσμένη παρουσίαση οθόνης";
-    Text[ korean ] = "°³Ί° ½½¶σΐΜµε Όξ";
+    Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ";
     Text[ turkish ] = "Φzel ekran sunularύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Presentaciσn personalizada";
@@ -480,11 +480,12 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ chinese_traditional ] = "©wΈq­Σ¤HΒ²³ψ";
     Text[ arabic ] = "ΚΪΡνέ ΗαΪΡΦ ΗαΚήΟνγν ΗαγΞΥΥ";
     Text[ greek ] = "Ορισμός προσαρμοσμένης παρουσίασης οθόνης";
-    Text[ korean ] = "°³Ί° ½½¶σΐΜµε Όξ Α¤ΐΗ";
+    Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ Α¤ΐΗ";
     Text[ turkish ] = "Φzel ekran sunusu tanύmla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir presentaciσn personalizada";
     Text[ finnish ] = "Mδδritδ mukautettu diaesitys";
 };
+
 
 
