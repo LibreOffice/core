@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:34:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,12 +533,12 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( BOOL bNoVDevIfOneBmpMarked ) const
 {
     Bitmap aBmp;
 
-    if( HasMarkedObj() )
+    if( AreObjectsMarked() )
     {
         if( bNoVDevIfOneBmpMarked )
         {
-            SdrObject*  pGrafObjTmp = aMark.GetMark( 0 )->GetObj();
-            SdrGrafObj* pGrafObj = ( aMark.GetMarkCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
                 aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
@@ -560,7 +560,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
 {
     GDIMetaFile aMtf;
 
-    if( HasMarkedObj() )
+    if( AreObjectsMarked() )
     {
         Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
@@ -568,8 +568,8 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
 
         if( bNoVDevIfOneMtfMarked )
         {
-            SdrObject*  pGrafObjTmp = aMark.GetMark( 0 )->GetObj();
-            SdrGrafObj* pGrafObj = ( aMark.GetMarkCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() ==1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
             if( pGrafObj )
             {
@@ -627,10 +627,10 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
 {
     Graphic aRet;
 
-    if( HasMarkedObj() )
+    if( AreObjectsMarked() )
     {
-        if( ( 1 == aMark.GetMarkCount() ) && aMark.GetMark( 0 ) )
-            aRet = SdrExchangeView::GetObjGraphic( pMod, aMark.GetMark( 0 )->GetObj() );
+        if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
+            aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
         else
             aRet = GetMarkedObjMetaFile( FALSE );
     }
@@ -705,7 +705,7 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
 
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
 {
-    ((SdrExchangeView*)this)->aMark.ForceSort();
+    SortMarkedObjects();
     pXOut->SetOutDev(&rOut);
     SdrPaintInfoRec aInfoRec;
     aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
@@ -717,9 +717,9 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
     sal_uInt32                                  n, nCount;
 
-    for( n = 0, nCount = aMark.GetMarkCount(); n < nCount; n++ )
+    for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
     {
-        SdrMark* pMark = aMark.GetMark( n );
+        SdrMark* pMark = GetSdrMarkByIndex( n );
 
         // paint objects on control layer on top of all otherobjects
         if( nControlLayerId == pMark->GetObj()->GetLayer() )
@@ -755,7 +755,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 {
     // Wenn das sortieren der MarkList mal stoeren sollte,
     // werde ich sie mir wohl kopieren muessen.
-    ((SdrExchangeView*)this)->aMark.ForceSort();
+    SortMarkedObjects();
     SdrModel* pNeuMod=pMod->AllocModel();
     SdrPage* pNeuPag=pNeuMod->AllocPage(FALSE);
     pNeuMod->InsertPage(pNeuPag);
@@ -767,9 +767,9 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
     sal_uInt32                                  n, nCount, nCloneErrCnt = 0;
 
-    for( n = 0, nCount = aMark.GetMarkCount(); n < nCount; n++ )
+    for( n = 0, nCount = GetMarkedObjectCount(); n < nCount; n++ )
     {
-        SdrMark* pMark = aMark.GetMark( n );
+        SdrMark* pMark = GetSdrMarkByIndex( n );
 
         // paint objects on control layer on top of all otherobjects
         if( nControlLayerId == pMark->GetObj()->GetLayer() )
