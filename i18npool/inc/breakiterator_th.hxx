@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_th.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-03 19:09:09 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #define _I18N_BREAKITERATOR_TH_HXX_
 
 #include <breakiterator_ctl.hxx>
-#include <xdictionary.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -77,6 +76,8 @@ public:
 
 protected:
     void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
+    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos, const com::sun::star::lang::Locale& rLocale,
+    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
 };
 
 } } } }
