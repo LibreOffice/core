@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-11-29 14:56:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,12 @@
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
 #endif
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
 #include <smplhint.hxx>
 #include <poolitem.hxx>
 #include <itemset.hxx>
@@ -80,6 +85,9 @@
 #include <itemiter.hxx>
 #include "style.hxx"
 #include "svstdarr.hxx"
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #define STYLESTREAM             "SfxStyleSheets"
 #define STYLESTREAM_VERSION     USHORT(50)
@@ -316,64 +324,27 @@ BOOL SfxStyleSheetBase::IsUsed() const
 
 XubString SfxStyleSheetBase::GetDescription()
 {
-#if SUPD >= 368
     return GetDescription( SFX_MAPUNIT_CM );
-
-/*!!!
-    if ( !pSet )
-        GetItemSet();
-    SfxItemIter aIter( *pSet );
-    XubString aDesc;
-    const SfxPoolItem* pItem = aIter.FirstItem();
-
-    while ( pItem )
-    {
-        XubString aItemPresentation;
-
-        if ( !IsInvalidItem( pItem ) &&
-             rPool.GetPool().GetPresentation(
-                *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                SFX_MAPUNIT_CM, aItemPresentation ) )
-        {
-            if ( aDesc.Len() && aItemPresentation.Len() )
-#ifndef ENABLEUNICODE
-                aDesc += " + ";
-#else
-                aDesc += L" + ";
-#endif
-            if ( aItemPresentation.Len() )
-                aDesc += aItemPresentation;
-        }
-        pItem = aIter.NextItem();
-    }
-    return aDesc;
-*/
 }
 
 // eingestellte Attribute ausgeben
 
 XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
 {
-#endif
     SfxItemIter aIter( GetItemSet() );
     XubString aDesc;
     const SfxPoolItem* pItem = aIter.FirstItem();
 
+    IntlWrapper aIntlWrapper(comphelper::getProcessServiceFactory(),
+            Application::GetSettings().GetLanguage());
     while ( pItem )
     {
         XubString aItemPresentation;
 
-#if SUPD >= 368
         if ( !IsInvalidItem( pItem ) &&
              rPool.GetPool().GetPresentation(
                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                eMetric, aItemPresentation ) )
-#else
-        if ( !IsInvalidItem( pItem ) &&
-             rPool.GetPool().GetPresentation(
-                *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
-                SFX_MAPUNIT_CM, aItemPresentation ) )
-#endif
+                eMetric, aItemPresentation, &aIntlWrapper ) )
         {
             if ( aDesc.Len() && aItemPresentation.Len() )
                 aDesc.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" + "));
@@ -570,11 +541,7 @@ SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
         rpIter->GetSearchFamily() != nSearchFamily )
     {
         delete rpIter;
-#if SUPD > 363
         rpIter = CreateIterator( nSearchFamily, nMask );
-#else
-        rpIter = new SfxStyleSheetIterator( this, nSearchFamily, nMask );
-#endif
     }
     return *rpIter;
 }
@@ -636,7 +603,6 @@ String SfxStyleSheetBasePool::GetStreamName()
 /////////////////////////////////// Factory ////////////////////////////////
 
 
-#if SUPD > 363
 
 SfxStyleSheetIterator* SfxStyleSheetBasePool::CreateIterator
 (
@@ -647,7 +613,6 @@ SfxStyleSheetIterator* SfxStyleSheetBasePool::CreateIterator
     return new SfxStyleSheetIterator(this,eFam,mask);
 }
 
-#endif
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create
 (
