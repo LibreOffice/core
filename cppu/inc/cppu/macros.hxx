@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:07:47 $
+ *  last change: $Author: dbo $ $Date: 2001-10-12 16:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <uno/lbnames.h>
 #endif
 
+// patching the GNU3 incomatible alignment change
+#define CPPU_GNU3_ALIGN( x )
 
 // Microsoft Visual C++ 4.x, 5.0, 6.0
 #if defined(_MSC_VER)
@@ -133,6 +135,8 @@
 #       define  CPPU_CLBN_TMP   UNO_LB_GCC3
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC3_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
+#undef CPPU_GNU3_ALIGN
+#define CPPU_GNU3_ALIGN( x ) __attribute__ ((aligned (x)))
 #  else
 #       error "unknown gcc version"
 #   endif
