@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:13:03 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ Resource RID_ERRCTX
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå øàáëîíà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu szablonu $(ARG1)";
         Text[ japanese ] = "$(ERR)ÃİÌßÚ°Ä$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
-        Text[ chinese_traditional ] = "¸Ë¸ü¼Ë¦¡ $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ chinese_traditional ] = "¸ü¤J¼Ë¦¡ $(ARG1) ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáŞÇáÈ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
         Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÔØÑùÊ½$(ARG1)Ê±";
@@ -310,7 +310,7 @@ Resource RID_ERRCTX
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu $(ARG1)";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚Ì“Ç‚İ‚İ‚ÌÛ";
-        Text[ chinese_traditional ] = "¸Ë¸ü¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
+        Text[ chinese_traditional ] = "¸ü¤J¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
         Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
@@ -413,7 +413,7 @@ Resource RID_ERRCTX
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå BASIC äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu BASIC $(ARG1)";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚ÌBASIC‚Ì“Ç‚İ‚İ‚ÌÛ";
-        Text[ chinese_traditional ] = "¸Ë¸ü¤å¥ó $(ARG1)  BASIC ®Éµo¥Í $(ERR)";
+        Text[ chinese_traditional ] = "¸ü¤J¤å¥ó $(ARG1)  BASIC ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá BASIC ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van BASIC van document $(ARG1)";
         Text[ chinese_simplified ] = "×°ÔØÎÄµµ $(ARG1) BASIC Ê±·¢Éú $(ERR)";
@@ -657,7 +657,7 @@ Resource RID_ERRHDL
     {
         Text = "Leseproblem" ;
         Text [ ENGLISH ] = "Read problem" ;
-        Text [ english_us ] = "Read Error" ;
+        Text [ english_us ] = "Read-Error" ;
         Text [ italian ] = "Errore di lettura" ;
         Text [ spanish ] = "Error de lectura" ;
         Text [ french ] = "Erreur de lecture" ;
@@ -1979,7 +1979,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Çàòğåáîâàííûå äàííûå Èíòåğíåòà íå íàõîäÿòñÿ â êıø è ïåğåäàòü èõ íåâîçìîæíî, ò.ê. ğåæèì Online íå àêòèâèçèğîâàí.";
         Text[ polish ] = "Wymaganych danych z sieci Internet nie ma w pamiêci podrêcznej i nie mo¿na ich za³adowaæ, poniewa¿ tryb online nie jest uaktywniony.";
         Text[ japanese ] = "w’è‚µ‚½²İÀ°È¯Ä‚ÌÃŞ°À‚Í·¬¯¼­‚É‚È‚­‚ÄAµİ×²İ Ó°ÄŞ‚ª±¸Ã¨ÌŞ‚Å‚Í‚È‚¢‚½‚ß‚É“]‘—‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "ÁÙ¨S¦³³s½u¨ì Internet ¡M¦Ó¥B½w¨R°Ï¤]¨S¦³¼È¦s½Ğ¨Dªº Internet ¸ê®Æ¦ÓµLªk¶Ç»¼¸ê®Æ";
+        Text[ chinese_traditional ] = "ÁÙ¨S¦³³s½u¨ì Internet ¡M¦Ó¥B½w½Ä°Ï¤]¨S¦³¼È¦s½Ğ¨Dªº Internet ¸ê®Æ¦ÓµLªk¶Ç»¼¸ê®Æ";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÅäÊÑäÊ ÇáãØáæÈÉ ÛíÑ ãæÌæÏÉ İí æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊÉ¡ æáÇ íãßä äŞáåÇ¡ ÅĞ Ãä æÖÚ ÇáÇÊÕÇá ÛíÑ äÔØ";
         Text[ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is";
         Text[ chinese_simplified ] = "ÒòÎªÄúµÄ¼ÆËã»úºÍ»¹Ã»ÓĞºÍ¹ú¼Ê»¥ÁªÍøÁ¬½Ó£¬¶øÇÒ¼ÆËã»úµÄ»º³åÇøÒ²Ã»ÓĞÄúÇëÇóµÄ¹ú¼Ê»¥ÁªÍøµÄÊı¾İ£¬Òò´ËÎŞ·¨×°ÔØ´«µİÊı¾İ";
@@ -2086,7 +2086,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Ñîçäàòü ñîäåğæàíèå íåâîçìîæíî";
         Text[ polish ] = "Zawartoœæ nie mog³a zostaæ utworzona";
         Text[ japanese ] = "“à—e‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk¥Í¦¨¤º®e";
+        Text[ chinese_traditional ] = "µLªk²£¥Í³o­Ó¤º®e";
         Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÍÊæì";
         Text[ dutch ] = "Er kon geen inhoud worden gecreëerd.";
         Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÄÚÈİ";
