@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:25:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     FASTBOOL bConvertToPathPossible = pDrView->IsConvertToPathObjPossible(FALSE);
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
@@ -871,8 +871,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         // Eine Seite hat das AutoLayout "Titel"
                         bDisable = FALSE;
 
-                        SdPage* pRefMPage = (SdPage*) pPage->GetMasterPage(0);
-                        if (pRefMPage && pRefMPage == pMPage)
+                        SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
+
+                        if(&rRefMPage == pMPage)
                         {
                             // Eine Seite mit dem AutoLayout "Titel"
                             // referenziert die aktuelle MasterPage
@@ -964,7 +965,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // sind
         BOOL bHasOutliner = FALSE;
         BOOL bHasOther    = FALSE;
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         const ULONG nCount = rMarkList.GetMarkCount();
         for(ULONG nNum = 0; nNum < nCount; nNum++)
         {
@@ -1435,7 +1436,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     //             disabled, if the marked objects not able to handle
     //             these attributes
     //
-    if (!pDrView->HasMarked())
+    if (!pDrView->AreObjectsMarked())
     {
         rSet.DisableItem (SID_CONVERT_TO_METAFILE);
         rSet.DisableItem (SID_CONVERT_TO_BITMAP);
@@ -1443,7 +1444,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     else
     {
         // get marklist
-        SdrMarkList aMarkList = pDrView->GetMarkList();
+        SdrMarkList aMarkList = pDrView->GetMarkedObjectList();
 
         BOOL bFoundBitmap         = FALSE;
         BOOL bFoundMetafile       = FALSE;
@@ -1533,7 +1534,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Disable, if there is no hyperlink
     //
     sal_Bool bDisableEditHyperlink = sal_True;
-    if( pDrView->HasMarked() && ( pDrView->GetMarkList().GetMarkCount() == 1 ) )
+    if( pDrView->AreObjectsMarked() && ( pDrView->GetMarkedObjectList().GetMarkCount() == 1 ) )
     {
         if( pDrView->IsTextEdit() )
         {
@@ -1555,7 +1556,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkList().GetMark(0)->GetObj());
+            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pDrView->GetMarkedObjectList().GetMark(0)->GetObj());
 
             if ( pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor() )
             {
