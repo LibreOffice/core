@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:31:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,11 +508,13 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         {
             < "%PRODUCTNAME Database" ; 0; > ;
             < "Verbindungen" ; SID_SB_CONNECTIONPOOLING; > ;
+            < "Datenbanken" ; SID_SB_DBREGISTEROPTIONS; > ;
         };
         ItemList [ en-US ] =
         {
-                 < "%PRODUCTNAME Database" ; 0; > ;
+            < "%PRODUCTNAME Database" ; 0; > ;
             < "Connections" ; SID_SB_CONNECTIONPOOLING; > ;
+            < "Databases" ; SID_SB_DBREGISTEROPTIONS; > ;
         };
     };
 };
