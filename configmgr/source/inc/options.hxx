@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:53:36 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 15:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,12 @@ namespace configmgr
         rtl::OUString   m_sUser;                                // user key used (could be empty)
         rtl::OUString   m_sDefaultUser;                         // user key used (could be empty)
         sal_Int32       m_nCacheID;                             // set if data should not be fetched from the cache, but reloaded
-        bool            m_bLasyWrite;                           // true, if tree use lasy writing
+        bool            m_bLazyWrite;                           // true, if tree use lazy writing
     public:
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
             :m_xConverter(_xConverter)
             ,m_nCacheID(0)
-            ,m_bLasyWrite(false)
+            ,m_bLazyWrite(false)
         {}
 
         OOptions(const OOptions& _rOptions)
@@ -113,7 +113,7 @@ namespace configmgr
             ,m_sLocale(_rOptions.m_sLocale)
             ,m_sUser(_rOptions.m_sUser)
             ,m_nCacheID(0),                      // cache identity is not copied
-            m_bLasyWrite(_rOptions.m_bLasyWrite)
+            m_bLazyWrite(_rOptions.m_bLazyWrite)
         {
             if (!_rOptions.canUseCache()) this->setNoCache();
         }
@@ -135,8 +135,8 @@ namespace configmgr
         void setDefaultUser(const rtl::OUString& _rUser) {m_sDefaultUser = _rUser;}
         void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
-        void setLasyWrite(bool _bLasyWrite = false) {m_bLasyWrite = _bLasyWrite;}
-        bool getLasyWrite() {return m_bLasyWrite;}
+        void setLazyWrite(bool _bLazyWrite = false) {m_bLazyWrite = _bLazyWrite;}
+        bool getLazyWrite() {return m_bLazyWrite;}
 
         friend sal_Int32 compareCacheIdentity(OOptions const& lhs, OOptions const& rhs)
         { return rhs.m_nCacheID - lhs.m_nCacheID; }

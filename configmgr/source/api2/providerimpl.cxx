@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:19 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 15:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ namespace configmgr
     rtl::OUString OProviderImpl::FactoryArguments::sDepth(ASCII("depth"));
     rtl::OUString OProviderImpl::FactoryArguments::sLocale(ASCII("locale"));
     rtl::OUString OProviderImpl::FactoryArguments::sNoCache(ASCII("nocache"));
-    rtl::OUString OProviderImpl::FactoryArguments::sLasyWrite(ASCII("lasywrite"));
+    rtl::OUString OProviderImpl::FactoryArguments::sLazyWrite(ASCII("lazywrite"));
 
 #ifdef DBG_UTIL
     //-----------------------------------------------------------------------------
@@ -473,7 +473,7 @@ namespace configmgr
             aArgs.insert(OProviderImpl::FactoryArguments::sDepth);
             aArgs.insert(OProviderImpl::FactoryArguments::sLocale);
             aArgs.insert(OProviderImpl::FactoryArguments::sNoCache);
-            aArgs.insert(OProviderImpl::FactoryArguments::sLasyWrite);
+            aArgs.insert(OProviderImpl::FactoryArguments::sLazyWrite);
         }
 
         HashSet::const_iterator it = aArgs.find(rName);
@@ -521,7 +521,7 @@ namespace configmgr
                                                       OUString& /* [out] */ _rLocale,
                                                       sal_Int32& /* [out] */ _nLevels,
                                                       bool& /* [out] */ _bNoCache,
-                                                      bool& /* [out] */ _bLasyWrite)
+                                                      bool& /* [out] */ _bLazyWrite)
         throw (lang::IllegalArgumentException)
     {
 
@@ -531,7 +531,7 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
         sal_Bool bNoCache = sal_False;
-        sal_Bool bLasyWrite = sal_False;
+        sal_Bool bLazyWrite = sal_False;
 
         // the args have to be a sequence of property values, currently three property names are recognized
         beans::PropertyValue aCurrent;
@@ -552,8 +552,8 @@ namespace configmgr
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
                 else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sNoCache))
                     bExtractSuccess = (aCurrent.Value >>= bNoCache);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLasyWrite))
-                    bExtractSuccess = (aCurrent.Value >>= bLasyWrite);
+                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLazyWrite))
+                    bExtractSuccess = (aCurrent.Value >>= bLazyWrite);
 /*
 #ifdef DBG_UTIL
                 else
@@ -603,7 +603,7 @@ namespace configmgr
         _rLocale = sLocale;
         _rUser = sUser;
         _bNoCache = (bNoCache != sal_False);
-        _bLasyWrite = bLasyWrite;
+        _bLazyWrite = bLazyWrite;
     }
 // class OOptions
     //..........................................................................

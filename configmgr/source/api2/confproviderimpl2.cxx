@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:18 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 15:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,9 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
         bool bNoCache;
-        bool bLasyWrite; // no need here
+        bool bLazyWrite; // no need here
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLasyWrite);
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLazyWrite);
 
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
@@ -206,17 +206,17 @@ namespace configmgr
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
         bool bNoCache;
-        bool bLasyWrite;
+        bool bLazyWrite;
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLasyWrite);
-#ifdef DEBUG
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache, bLazyWrite);
+#ifdef LLA_PRIVAT_DEBUG
         // HACK for Test only
         ConfigurationName aName(sPath);
         if (!aName.isEmpty() && aName.moduleName().equalsIgnoreCase(ASCII("org.openoffice.Office.Common")))
         {
-            // bLasyWrite = true;
+            // bLazyWrite = true;
         }
-        bLasyWrite = true;
+        bLazyWrite = true;
 #endif
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
@@ -249,7 +249,7 @@ namespace configmgr
 
         if (sLocale.getLength())    xOptions->setLocale(sLocale);
         if (bNoCache)               xOptions->setNoCache(bNoCache);
-        if (bLasyWrite)             xOptions->setLasyWrite(bLasyWrite);
+        if (bLazyWrite)             xOptions->setLazyWrite(bLazyWrite);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
