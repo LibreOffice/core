@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:58:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef _IDLC_ASTMODULE_HXX_
 #include <idlc/astmodule.hxx>
 #endif
@@ -88,10 +89,14 @@
 #ifndef _IDLC_ASTSEQUENCE_HXX_
 #include <idlc/astsequence.hxx>
 #endif
+#include "idlc/astoperation.hxx"
+
+#include "registry/version.h"
+#include "registry/writer.hxx"
 
 using namespace ::rtl;
 
-sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstModule::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if ( getNodeType() == NT_root )
@@ -108,8 +113,6 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         }
     }
 
-    const sal_uInt8*    pBlob = NULL;
-    sal_uInt32          aBlobSize = 0;
     sal_uInt16          nConst = getNodeCount(NT_const);
 
     if ( nConst > 0 )
@@ -118,16 +121,14 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         if ( getNodeType() == NT_constants )
             typeClass = RT_TYPE_CONSTANTS;
 
-        RegistryTypeWriter aBlob(pLoader->getApi(),
-                                 typeClass,
-                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OUString(), nConst, 0, 0);
+        typereg::Writer aBlob(
+            TYPEREG_VERSION_0, getDocumentation(),
+            OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), typeClass,
+            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
+            nConst, 0, 0);
 
-        aBlob.setDoku( getDocumentation() );
-        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
+        DeclList::const_iterator iter = getIteratorBegin();
+        DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         sal_uInt16 index = 0;
         while ( iter != end )
@@ -141,8 +142,8 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             ++iter;
         }
 
-        pBlob = aBlob.getBlop();
-        aBlobSize = aBlob.getBlopSize();
+        sal_uInt32 aBlobSize;
+        void const * pBlob = aBlob.getBlob(&aBlobSize);
 
         if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
                                 (RegValue)pBlob, aBlobSize))
@@ -158,17 +159,17 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         if ( getNodeType() == NT_constants )
             typeClass = RT_TYPE_CONSTANTS;
 
-        RegistryTypeWriter aBlob(pLoader->getApi(),
-                                 typeClass,
-                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OUString(), 0, 0, 0);
+        rtl::OUString fileName;
+        if (getNodeType() == NT_constants) {
+            fileName = OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8);
+        }
+        typereg::Writer aBlob(
+            TYPEREG_VERSION_0, getDocumentation(), fileName, typeClass,
+            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0, 0, 0,
+            0);
 
-        aBlob.setDoku( getDocumentation() );
-        if ( getNodeType() == NT_constants )
-            aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-        pBlob = aBlob.getBlop();
-        aBlobSize = aBlob.getBlopSize();
+        sal_uInt32 aBlobSize;
+        void const * pBlob = aBlob.getBlob(&aBlobSize);
 
         if ( getNodeType() != NT_root )
         {
@@ -182,10 +183,10 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             }
         }
     }
-    return AstDeclaration::dump(rKey, pLoader);
+    return AstDeclaration::dump(rKey);
 }
 
-sal_Bool AstTypeDef::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -196,16 +197,18 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         return sal_False;
     }
 
-    RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_TYPEDEF,
-                             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             OStringToOUString(getBaseType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                             0, 0, 0);
+    typereg::Writer aBlob(
+        TYPEREG_VERSION_0, getDocumentation(),
+        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
+        RT_TYPE_TYPEDEF,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, 0, 0, 0);
+    aBlob.setSuperTypeName(
+        0,
+        OStringToOUString(
+            getBaseType()->getRelativName(), RTL_TEXTENCODING_UTF8));
 
-    aBlob.setDoku( getDocumentation() );
-    aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-    const sal_uInt8*    pBlob = aBlob.getBlop();
-    sal_uInt32          aBlobSize = aBlob.getBlopSize();
+    sal_uInt32 aBlobSize;
+    void const * pBlob = aBlob.getBlob(&aBlobSize);
 
     if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
@@ -218,159 +221,170 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     return sal_True;
 }
 
-sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstService::dump(RegistryKey& rKey)
 {
-    if ( !idlc()->getOptions()->isValid("-C") )
-        return sal_True;
+    typereg_Version version = TYPEREG_VERSION_0;
+    rtl::OString superName;
+    sal_uInt16 constructors = 0;
+    sal_uInt16 properties = 0;
+    sal_uInt16 references = 0;
+    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+          ++i)
+    {
+        switch ((*i)->getNodeType()) {
+        case NT_interface:
+            version = TYPEREG_VERSION_1;
+            OSL_ASSERT(superName.getLength() == 0);
+            superName = (*i)->getRelativName();
+            break;
 
+        case NT_operation:
+            OSL_ASSERT(getNodeType() == NT_service);
+            ++constructors;
+            break;
+
+        case NT_property:
+            OSL_ASSERT(getNodeType() == NT_service);
+            ++properties;
+            break;
+
+        case NT_service_member:
+            if (getNodeType() == NT_singleton) {
+                OSL_ASSERT(superName.getLength() == 0);
+                if (!idlc()->getOptions()->isValid("-C")) {
+                    return true;
+                }
+                superName = static_cast< AstServiceMember * >(*i)->
+                    getRealService()->getRelativName();
+                break;
+            }
+        case NT_interface_member:
+        case NT_observes:
+        case NT_needs:
+            OSL_ASSERT(getNodeType() == NT_service);
+            ++references;
+            break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
+        }
+    }}
     RegistryKey localKey;
-    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
-    {
-        fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
-                idlc()->getOptions()->getProgramName().getStr(),
-                getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-        return sal_False;
+    if (rKey.createKey(
+            rtl::OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
+            localKey)) {
+        fprintf(
+            stderr, "%s: warning, could not create key '%s' in '%s'\n",
+            idlc()->getOptions()->getProgramName().getStr(),
+            getFullName().getStr(),
+            rtl::OUStringToOString(
+                rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
+        return false;
     }
-
-    if ( getNodeType() == NT_singleton )
-    {
-        DeclList::iterator iter = getIteratorBegin();
-        AstServiceMember* pServMember = (AstServiceMember*)*iter;
-        OString tmp(((AstServiceMember*)(*iter))->getRealService()->getRelativName());
-
-        RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SINGLETON,
-                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OStringToOUString(pServMember->getRealService()->getRelativName(),
-                                                RTL_TEXTENCODING_UTF8),
-                                 0, 0, 0);
-
-        aBlob.setDoku( getDocumentation() );
-        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-        const sal_uInt8* pBlob = aBlob.getBlop();
-        sal_uInt32       aBlobSize = aBlob.getBlopSize();
-
-        if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
-                                (RegValue)pBlob, aBlobSize))
-        {
-            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
-                    idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-            return sal_False;
-        }
-    } else
-    {
-        sal_uInt16 nProperties = 0;
-        sal_uInt16 nIfaceMember = 0;
-        sal_uInt16 nServMember = 0;
-        sal_uInt16 nNeeds = 0;
-        sal_uInt16 nObserves = 0;
-        if ( nMembers() > 0 )
-        {
-            DeclList::iterator iter = getIteratorBegin();
-            DeclList::iterator end = getIteratorEnd();
-            while ( iter != end )
-            {
-                switch ( (*iter)->getNodeType() )
-                {
-                    case NT_property:
-                        nProperties++;
-                        break;
-                    case NT_interface_member:
-                        nIfaceMember++;
-                        break;
-                    case NT_service_member:
-                        nServMember++;
-                        break;
-                    case NT_observes:
-                        nObserves++;
-                        break;
-                    case NT_needs:
-                        nNeeds++;
-                        break;
-                }
-                ++iter;
-            }
-        }
-        sal_uInt16 nReferences = nIfaceMember + nServMember + nObserves + nNeeds;
-
-        RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SERVICE,
-                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OUString(), nProperties, 0, nReferences);
-
-        aBlob.setDoku( getDocumentation() );
-        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-        if ( nProperties || nReferences )
-        {
-            DeclList::iterator iter = getIteratorBegin();
-            DeclList::iterator end = getIteratorEnd();
-            AstDeclaration* pDecl = NULL;
-            sal_uInt16  propertyIndex = 0;
-            sal_uInt16  referenceIndex = 0;
-            while ( iter != end )
-            {
-                pDecl = *iter;
-                switch ( pDecl->getNodeType() )
-                {
-                case NT_property:
-                    ((AstAttribute*)pDecl)->dumpBlob(aBlob, propertyIndex++);
-                    break;
-                case NT_interface_member:
-                {
-                    AstInterfaceMember* pIfaceMember = (AstInterfaceMember*)pDecl;
-                    sal_uInt16 access = (pIfaceMember->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID);
-                    aBlob.setReferenceData(referenceIndex++,
-                               OStringToOUString( pIfaceMember->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                               RT_REF_SUPPORTS, pIfaceMember->getDocumentation(), access);
-                }
-                    break;
-                case NT_service_member:
-                {
-                    AstServiceMember* pServMember = (AstServiceMember*)pDecl;
-                    sal_uInt16 access = (pServMember->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID);
-                    aBlob.setReferenceData(referenceIndex++,
-                               OStringToOUString( pServMember->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                               RT_REF_EXPORTS, pServMember->getDocumentation(), access);
-                }
-                    break;
-                case NT_observes:
-                {
-                    AstObserves* pObserves = (AstObserves*)pDecl;
-                    aBlob.setReferenceData(referenceIndex++,
-                               OStringToOUString( pObserves->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                               RT_REF_OBSERVES, pObserves->getDocumentation());
-                }
-                    break;
-                case NT_needs:
-                {
-                    AstNeeds* pNeeds = (AstNeeds*)pDecl;
-                    aBlob.setReferenceData(referenceIndex++,
-                               OStringToOUString( pNeeds->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                               RT_REF_NEEDS, pNeeds->getDocumentation());
-                }
-                    break;
-                }
-                ++iter;
-            }
-        }
-
-        const sal_uInt8* pBlob = aBlob.getBlop();
-        sal_uInt32       aBlobSize = aBlob.getBlopSize();
-
-        if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
-                              (RegValue)pBlob, aBlobSize))
-        {
-            fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
-                    idlc()->getOptions()->getProgramName().getStr(),
-                    getFullName().getStr(), OUStringToOString(localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
-            return sal_False;
-        }
+    typereg::Writer writer(
+        version, getDocumentation(),
+        rtl::OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
+        getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
+        rtl::OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
+        superName.getLength() == 0 ? 0 : 1, properties, constructors,
+        references);
+    if (superName.getLength() != 0) {
+        writer.setSuperTypeName(
+            0, rtl::OStringToOUString(superName, RTL_TEXTENCODING_UTF8));
     }
-    return sal_True;
+    sal_uInt16 constructorIndex = 0;
+    sal_uInt16 propertyIndex = 0;
+    sal_uInt16 referenceIndex = 0;
+    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+          ++i)
+    {
+        switch ((*i)->getNodeType()) {
+        case NT_operation:
+            static_cast< AstOperation * >(*i)->dumpBlob(
+                writer, constructorIndex++);
+            break;
+
+        case NT_property:
+            static_cast< AstAttribute * >(*i)->dumpBlob(
+                writer, propertyIndex++, 0);
+            break;
+
+        case NT_interface_member:
+            {
+                AstInterfaceMember * decl = static_cast< AstInterfaceMember *>(
+                    *i);
+                writer.setReferenceData(
+                    referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
+                    (decl->isOptional()
+                     ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                    rtl::OStringToOUString(
+                        decl->getRealInterface()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8));
+                break;
+            }
+
+        case NT_service_member:
+            if (getNodeType() == NT_service) {
+                AstServiceMember * decl = static_cast< AstServiceMember * >(*i);
+                writer.setReferenceData(
+                    referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
+                    (decl->isOptional()
+                     ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                    rtl::OStringToOUString(
+                        decl->getRealService()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8));
+            }
+            break;
+
+        case NT_observes:
+            {
+                AstObserves * decl = static_cast< AstObserves * >(*i);
+                writer.setReferenceData(
+                    referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
+                    RT_ACCESS_INVALID,
+                    rtl::OStringToOUString(
+                        decl->getRealInterface()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8));
+                break;
+            }
+
+        case NT_needs:
+            {
+                AstNeeds * decl = static_cast< AstNeeds * >(*i);
+                writer.setReferenceData(
+                    referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
+                    RT_ACCESS_INVALID,
+                    rtl::OStringToOUString(
+                        decl->getRealService()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8));
+                break;
+            }
+
+        default:
+            OSL_ASSERT((*i)->getNodeType() == NT_interface);
+            break;
+        }
+    }}
+    sal_uInt32 size;
+    void const * blob = writer.getBlob(&size);
+    if (localKey.setValue(
+            rtl::OUString(), RG_VALUETYPE_BINARY, const_cast< void * >(blob),
+            size))
+    {
+        fprintf(
+            stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
+            idlc()->getOptions()->getProgramName().getStr(),
+            getFullName().getStr(),
+            rtl::OUStringToOString(
+                localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
+        return false;
+    }
+    return true;
 }
 
-sal_Bool AstAttribute::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
+sal_Bool AstAttribute::dumpBlob(
+    typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex)
 {
     RTFieldAccess accessMode = RT_ACCESS_INVALID;
 
@@ -414,28 +428,50 @@ sal_Bool AstAttribute::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
         accessMode |= RT_ACCESS_REMOVEABLE;
     }
 
-    rBlob.setFieldData(index, OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
-                       OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                       getDocumentation(), OUString(), accessMode);
+    rtl::OUString name(
+        OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
+    rBlob.setFieldData(
+        index, getDocumentation(), OUString(), accessMode, name,
+        OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
+        RTConstValue());
+    dumpExceptions(rBlob, m_getExceptions, RT_MODE_ATTRIBUTE_GET, methodIndex);
+    dumpExceptions(rBlob, m_setExceptions, RT_MODE_ATTRIBUTE_SET, methodIndex);
 
     return sal_True;
 }
 
-AstType* SAL_CALL resolveTypeDef(AstType* pType)
+void AstAttribute::dumpExceptions(
+    typereg::Writer & writer, DeclList const & exceptions, RTMethodMode flags,
+    sal_uInt16 * methodIndex)
 {
-    if ( pType->getNodeType() == NT_typedef )
-    {
-        return resolveTypeDef(((AstTypeDef*)pType)->getBaseType());
+    if (!exceptions.empty()) {
+        OSL_ASSERT(methodIndex != 0);
+        sal_uInt16 idx = (*methodIndex)++;
+        // exceptions.size() <= SAL_MAX_UINT16 already checked in
+        // AstInterface::dump:
+        writer.setMethodData(
+            idx, rtl::OUString(), flags,
+            OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")), 0,
+            static_cast< sal_uInt16 >(exceptions.size()));
+        sal_uInt16 exceptionIndex = 0;
+        for (DeclList::const_iterator i(exceptions.begin());
+             i != exceptions.end(); ++i)
+        {
+            writer.setMethodExceptionTypeName(
+                idx, exceptionIndex++,
+                rtl::OStringToOUString(
+                    (*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
+        }
     }
-    return pType;
 }
 
-const sal_Char* AstSequence::getRelativName()
+const sal_Char* AstSequence::getRelativName() const
 {
     if ( !m_pRelativName )
     {
         m_pRelativName = new OString("[]");
-        AstType* pType = resolveTypeDef( m_pMemberType );
+        AstType const * pType = resolveTypedefs( m_pMemberType );
         *m_pRelativName += pType->getRelativName();
     }
 
