@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:58:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ namespace dbaui
 
 
         // called when the test connection button was clicked
-        DECL_LINK(OnTestConnectionClickHdl,PushButton*);
         DECL_LINK(OnBrowseConnections, PushButton*);
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
