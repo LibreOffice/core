@@ -613,6 +613,21 @@ inline void FileAppendRcFooter(std::ostream& os, std::istream& is)
     FileAppendFile(os, is);
 }
 
+//###########################################
+bool is_placeholder(const std::string& str)
+{
+    return ((str.length() > 1) &&
+            ('%' == str[0]) &&
+            ('%' == str[str.length() - 1]));
+}
+
+//###########################################
+void std_string_to_winrc_string(std::string& str)
+{
+    str = OUStringToWinResourceString(
+        rtl::OUString::createFromAscii(str.c_str()));
+}
+
 //-------------------------------------------
 /** Iterate all languages in the substitutor,
     replace the all placeholder and append the
@@ -648,6 +663,15 @@ void InflateRcTemplateAndAppendToFile(
                 std::string token;
                 iss >> token;
                 substitutor.Substitute(token);
+
+                // #110274# HACK for partially merged
+                // *.lng files where some strings have
+                // a particular language that others
+                // don't have in order to keep the
+                // build
+                if (is_placeholder(token))
+                    std_string_to_winrc_string(token);
+
                 line += token;
                 line += " ";
             }
