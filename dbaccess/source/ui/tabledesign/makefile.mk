@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:03:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ SLOFILES =\
             $(SLO)$/TableUndo.obj
 
 
-SRCFILES =  table.src
+SRS1NAME=$(TARGET)
+SRC1FILES =  table.src
 
 # --- Targets -------------------------------------------------------
 
