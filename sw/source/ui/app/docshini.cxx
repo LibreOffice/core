@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 14:18:36 $
+ *  last change: $Author: mib $ $Date: 2001-10-19 12:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,13 +269,14 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
 
     sal_Bool bRet = SfxInPlaceObject::InitNew( pStor );
     SetMapUnit( MAP_TWIP );
+    sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
         AddLink();      // pDoc / pIo ggf. anlegen
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
-            SetHTMLTemplate( *GetDoc() );   //Styles aus HTML.vor
+            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->SetGlobalDoc();       // Globaldokument
 
@@ -354,8 +355,11 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
                                     aEmptyStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich);
             }
             pDoc->SetDefault(*pFontItem);
-            SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-            pColl->ResetAttr(nFontWhich);
+            if( !bHTMLTemplSet )
+            {
+                SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+                pColl->ResetAttr(nFontWhich);
+            }
             delete pFontItem;
         }
         USHORT aFontIdPoolId[] =
@@ -387,8 +391,13 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
                     bDelete = sal_True;
                 }
                 SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
-                pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
+                if( !bHTMLTemplSet ||
+                    SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
+                                                    nFontWhich, sal_False ) )
+                {
+                    pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+                                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
+                }
                 if(bDelete)
                 {
                     delete (SfxFont*) pFnt;
