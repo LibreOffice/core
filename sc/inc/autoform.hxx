@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:50:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ JP 20.07.95:
 #include <svx/bolnitem.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
 #endif
@@ -267,7 +270,7 @@ public:
 };
 
 
-class ScAutoFormatData : public DataObject
+class SC_DLLPUBLIC ScAutoFormatData : public DataObject
 {
 private:
     String                      aName;
@@ -284,8 +287,8 @@ private:
 
     ScAutoFormatDataField**     ppDataField;
 
-    ScAutoFormatDataField&      GetField( USHORT nIndex );
-    const ScAutoFormatDataField& GetField( USHORT nIndex ) const;
+    SC_DLLPRIVATE ScAutoFormatDataField&       GetField( USHORT nIndex );
+    SC_DLLPRIVATE const ScAutoFormatDataField& GetField( USHORT nIndex ) const;
 
 public:
                     ScAutoFormatData();
@@ -331,7 +334,7 @@ public:
 #endif
 };
 
-class ScAutoFormat : public SortedCollection
+class SC_DLLPUBLIC ScAutoFormat : public SortedCollection
 {
 private:
     BOOL                        bSaveLater;
@@ -352,4 +355,3 @@ public:
 
 
 #endif
-
