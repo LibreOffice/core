@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 10:39:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,13 +388,13 @@ void ODBTable::construct()
         Property* pEnd      = pBegin + aProps.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
-            if(pBegin->Name == PROPERTY_CATALOGNAME)
+            if (0 == pBegin->Name.compareToAscii(PROPERTY_CATALOGNAME))
                 pBegin->Attributes = PropertyAttribute::READONLY;
-            else if(pBegin->Name == PROPERTY_SCHEMANAME)
+            else if (0 == pBegin->Name.compareToAscii(PROPERTY_SCHEMANAME))
                 pBegin->Attributes = PropertyAttribute::READONLY;
-            else if(pBegin->Name == PROPERTY_DESCRIPTION)
+            else if (0 == pBegin->Name.compareToAscii(PROPERTY_DESCRIPTION))
                 pBegin->Attributes = PropertyAttribute::READONLY;
-            else if(pBegin->Name == PROPERTY_NAME)
+            else if (0 == pBegin->Name.compareToAscii(PROPERTY_NAME))
                 pBegin->Attributes = PropertyAttribute::READONLY;
         }
     }

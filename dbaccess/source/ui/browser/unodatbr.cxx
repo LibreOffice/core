@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 12:16:31 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,23 +2505,25 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
     sal_Int32 nInitialDisplayCommandType;
     for(;pBegin != pEnd;++pBegin)
     {
-        if((*pBegin >>= aValue) && aValue.Name == PROPERTY_DATASOURCENAME)
+        if (!(*pBegin >>= aValue))
+            continue;
+        if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
             aValue.Value >>= m_sDefaultDataSourceName;
-        else if(aValue.Name == PROPERTY_COMMANDTYPE)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMANDTYPE))
             aValue.Value >>= nInitialDisplayCommandType;
-        else if(aValue.Name == PROPERTY_COMMAND)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_COMMAND))
             aValue.Value >>= m_sDefaultCommand;
-        else if(aValue.Name == PROPERTY_ACTIVECONNECTION)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
             ::cppu::extractInterface(xConnection,aValue.Value);
-        else if(aValue.Name == PROPERTY_UPDATE_CATALOGNAME)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_CATALOGNAME))
             aValue.Value >>= aCatalogName;
-        else if(aValue.Name == PROPERTY_UPDATE_SCHEMANAME)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_SCHEMANAME))
             aValue.Value >>= aSchemaName;
-        else if(aValue.Name == PROPERTY_UPDATE_TABLENAME)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_UPDATE_TABLENAME))
             aValue.Value >>= aTableName;
-        else if(aValue.Name == PROPERTY_USE_ESCAPE_PROCESSING)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_USE_ESCAPE_PROCESSING))
             bEsacpeProcessing = ::cppu::any2bool(aValue.Value);
-        else if(aValue.Name == PROPERTY_SHOWTREEVIEW)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEW))
         {
             try
             {
@@ -2534,7 +2536,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
             {
             }
         }
-        else if(aValue.Name == PROPERTY_SHOWTREEVIEWBUTTON)
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEWBUTTON))
         {
             try
             {

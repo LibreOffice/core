@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,15 +359,15 @@ void ODBTableDecorator::construct()
     Property* pEnd = pBegin + aTableProps.getLength();
     for (;pBegin != pEnd ; ++pBegin)
     {
-        if(PROPERTY_CATALOGNAME == pBegin->Name)
+        if (0 == pBegin->Name.compareToAscii(PROPERTY_CATALOGNAME))
             pBegin->Handle = PROPERTY_ID_CATALOGNAME;
-        else if(PROPERTY_SCHEMANAME == pBegin->Name)
+        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_SCHEMANAME))
             pBegin->Handle = PROPERTY_ID_SCHEMANAME;
-        else if(PROPERTY_NAME == pBegin->Name)
+        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_NAME))
             pBegin->Handle = PROPERTY_ID_NAME;
-        else if(PROPERTY_DESCRIPTION == pBegin->Name)
+        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_DESCRIPTION))
             pBegin->Handle = PROPERTY_ID_DESCRIPTION;
-        else if(PROPERTY_TYPE == pBegin->Name)
+        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_TYPE))
             pBegin->Handle = PROPERTY_ID_TYPE;
     }
 
