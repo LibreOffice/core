@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-30 14:57:38 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,8 +349,9 @@ SalConverterCache::ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
     rtl_UnicodeToTextConverter aConverter = GetU2TConverter(nEncoding);
 
     const sal_uInt32 nCvtFlags =
-               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
-             | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK ;
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
+            | RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK ;
     sal_uInt32  nCvtInfo;
     sal_Size    nCvtChars;
 
