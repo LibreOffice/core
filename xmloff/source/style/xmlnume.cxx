@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:34:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -331,7 +328,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
     sTmp.append( nLevel+1L );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
     if( sTextStyleName.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sTextStyleName );
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                GetExport().EncodeStyleName( sTextStyleName ) );
     if( sPrefix.getLength() > 0 )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sPrefix );
     if( sSuffix.getLength() > 0 )
@@ -365,9 +363,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 
         if( sImageURL.getLength() )
         {
-//          String sURL( sImageURL );
-//          INetURLObject::AbsToRel( sURL );
-//          sImageURL = sURL;
             OUString sURL( GetExport().AddEmbeddedGraphicObject( sImageURL ) );
             if( sURL.getLength() )
             {
@@ -452,62 +447,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 GetExport().AddAttribute( XML_NAMESPACE_FO, XML_TEXT_ALIGN, eValue );
         }
 
-        if( NumberingType::CHAR_SPECIAL == eType )
-        {
-            if( sBulletFontName.getLength() )
-            {
-                OUString sStyleName =
-                    GetExport().GetFontAutoStylePool()->Find(
-                        sBulletFontName, sBulletFontStyleName,
-                        eBulletFontFamily, eBulletFontPitch,
-                        eBulletFontEncoding );
-
-                if( sStyleName.getLength() )
-                {
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  XML_FONT_NAME,
-                                                  sStyleName );
-                }
-                else
-                {
-                    Any aAny;
-                    OUString sTmp;
-
-                    const SvXMLUnitConverter& rUnitConv =
-                        GetExport().GetMM100UnitConverter();
-                    XMLFontFamilyNamePropHdl aFamilyNameHdl;
-                    aAny <<= sBulletFontName;
-                    if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
-                        GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                                  XML_FONT_FAMILY, sTmp );
-
-                    if( sBulletFontStyleName.getLength() )
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  XML_FONT_STYLE_NAME,
-                                                  sBulletFontStyleName );
-
-                    XMLFontFamilyPropHdl aFamilyHdl;
-                    aAny <<= (sal_Int16)eBulletFontFamily;
-                    if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  XML_FONT_FAMILY_GENERIC,
-                                                  sTmp );
-
-                    XMLFontPitchPropHdl aPitchHdl;
-                    aAny <<= (sal_Int16)eBulletFontPitch;
-                    if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  XML_FONT_PITCH, sTmp );
-
-                    XMLFontEncodingPropHdl aEncHdl;
-                    aAny <<= (sal_Int16)eBulletFontEncoding;
-                    if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  XML_FONT_CHARSET, sTmp );
-                }
-            }
-        }
-        else if( NumberingType::BITMAP == eType )
+        if( NumberingType::BITMAP == eType )
         {
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
@@ -570,6 +510,66 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             }
         }
 
+        if( GetExport().GetAttrList().getLength() > 0 )
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                      XML_LIST_LEVEL_PROPERTIES, sal_True, sal_True );
+        }
+        if( NumberingType::CHAR_SPECIAL == eType )
+        {
+            if( sBulletFontName.getLength() )
+            {
+                OUString sStyleName =
+                    GetExport().GetFontAutoStylePool()->Find(
+                        sBulletFontName, sBulletFontStyleName,
+                        eBulletFontFamily, eBulletFontPitch,
+                        eBulletFontEncoding );
+
+                if( sStyleName.getLength() )
+                {
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_FONT_NAME,
+                                                  sStyleName );
+                }
+                else
+                {
+                    Any aAny;
+                    OUString sTmp;
+
+                    const SvXMLUnitConverter& rUnitConv =
+                        GetExport().GetMM100UnitConverter();
+                    XMLFontFamilyNamePropHdl aFamilyNameHdl;
+                    aAny <<= sBulletFontName;
+                    if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                                  XML_FONT_FAMILY, sTmp );
+
+                    if( sBulletFontStyleName.getLength() )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_FONT_STYLE_NAME,
+                                                  sBulletFontStyleName );
+
+                    XMLFontFamilyPropHdl aFamilyHdl;
+                    aAny <<= (sal_Int16)eBulletFontFamily;
+                    if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_FONT_FAMILY_GENERIC,
+                                                  sTmp );
+
+                    XMLFontPitchPropHdl aPitchHdl;
+                    aAny <<= (sal_Int16)eBulletFontPitch;
+                    if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_FONT_PITCH, sTmp );
+
+                    XMLFontEncodingPropHdl aEncHdl;
+                    aAny <<= (sal_Int16)eBulletFontEncoding;
+                    if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  XML_FONT_CHARSET, sTmp );
+                }
+            }
+        }
         if( NumberingType::BITMAP != eType )
         {
             // fo:color = "#..."
@@ -587,7 +587,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                                   sBuffer.makeStringAndClear() );
                 }
             }
-
             // fo:height="...%"
             if( nBullRelSize )
             {
@@ -596,11 +595,10 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                               sTmp.makeStringAndClear() );
             }
         }
-
         if( GetExport().GetAttrList().getLength() > 0 )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                      XML_PROPERTIES, sal_True, sal_True );
+                                      XML_TEXT_PROPERTIES, sal_True, sal_True );
         }
         if( NumberingType::BITMAP == eType && sImageURL.getLength() )
         {
@@ -640,7 +638,14 @@ void SvxXMLNumRuleExport::Export( const OUString& rName,
 
     // style:name="..."
     if( rName.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rName );
+    {
+        sal_Bool bEncoded = sal_False;
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                          GetExport().EncodeStyleName( rName, &bEncoded ) );
+        if( bEncoded )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+                                     rName);
+    }
 
     // text:consecutive-numbering="..."
     if( bContNumbering )
@@ -687,7 +692,14 @@ void SvxXMLNumRuleExport::exportNumberingRule(
 
     // style:name="..."
     if( rName.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rName );
+    {
+        sal_Bool bEncoded = sal_False;
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                          GetExport().EncodeStyleName( rName, &bEncoded ) );
+        if( bEncoded )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+                                 rName);
+    }
 
     // text:consecutive-numbering="..."
     sal_Bool bContNumbering = sal_False;
