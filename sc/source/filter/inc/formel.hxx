@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:38:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,9 @@ protected:
     void                Reset();
 
 public:
-    inline UINT16       GetEingabeCol( void ) const { return aEingPos.Col(); }
-    inline UINT16       GetEingabeRow( void ) const { return aEingPos.Row(); }
-    inline UINT16       GetEingabeTab( void ) const { return aEingPos.Tab(); }
+    inline SCCOL        GetEingabeCol( void ) const { return aEingPos.Col(); }
+    inline SCROW        GetEingabeRow( void ) const { return aEingPos.Row(); }
+    inline SCTAB        GetEingabeTab( void ) const { return aEingPos.Tab(); }
     inline ScAddress    GetEingPos( void ) const    { return aEingPos; }
 };
 
