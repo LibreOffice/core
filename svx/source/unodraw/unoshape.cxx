@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-30 13:23:59 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,6 +1263,19 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 aRect.SetSize(aObjSize);
                 pObj->SetSnapRect(aRect);
                 return;
+            }
+            break;
+        }
+        case OWN_ATTR_MIRRORED:
+        {
+            sal_Bool bMirror;
+            if(rVal >>= bMirror )
+            {
+                if( pObj && pObj->ISA(SdrGrafObj) )
+                {
+                    ((SdrGrafObj*)pObj)->SetMirrored(bMirror);
+                    return;
+                }
             }
             break;
         }

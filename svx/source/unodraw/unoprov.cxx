@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-26 13:47:18 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        { MAP_CHAR_LEN("IsMirrored"),               OWN_ATTR_MIRRORED           , &::getCppuBooleanType(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("IsMirrored"),               OWN_ATTR_MIRRORED           , &::getCppuBooleanType(), 0, 0},
         { MAP_CHAR_LEN("ShapeUserDefinedAttributes"),       SDRATTR_XMLATTRIBUTES,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0}
     };
