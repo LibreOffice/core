@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:10:22 $
+ *  last change: $Date: 2004-12-10 16:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@ public class GraphicalTestArguments
     String m_sOnlyPage = "";                       // default is "", there is no page which we want to print only.
 
     int m_nResolutionInDPI = 0;
+
+    boolean m_bStoreFile = true;
+    boolean m_bResuseOffice = false;
+
     // CONSTRUCTOR
     private GraphicalTestArguments(){}
 
@@ -138,7 +142,7 @@ public class GraphicalTestArguments
             // ....
 
             // REFERENCE_TYPE ----------
-            String sReferenceType = (String)param.get( PropertyName.REFERENCE_TYPE );
+            String sReferenceType = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_TYPE );
             if (sReferenceType == null || sReferenceType.length() == 0)
             {
             }
@@ -149,7 +153,7 @@ public class GraphicalTestArguments
             }
 
             // PRINTER_NAME ----------
-            String sPrinterName = (String)param.get( PropertyName.PRINTER_NAME );
+            String sPrinterName = (String)param.get( PropertyName.DOC_COMPARATOR_PRINTER_NAME );
             if (sPrinterName == null || sPrinterName.length() == 0)
             {
             }
@@ -159,7 +163,7 @@ public class GraphicalTestArguments
                 setPrinterName(sPrinterName);
             }
             // DEFAULT_XML_FORMAT_APP ------
-            String sDefaultXMLFormatApp = (String)param.get( PropertyName.DEFAULT_XML_FORMAT_APP );
+            String sDefaultXMLFormatApp = (String)param.get( PropertyName.DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP );
             if (sDefaultXMLFormatApp == null || sDefaultXMLFormatApp.length() == 0)
             {
             }
@@ -169,7 +173,7 @@ public class GraphicalTestArguments
             }
 
             m_bIncludeSubdirectories = true;
-            String sRECURSIVE = (String)param.get( PropertyName.INCLUDE_SUBDIRS );
+            String sRECURSIVE = (String)param.get( PropertyName.DOC_COMPARATOR_INCLUDE_SUBDIRS );
 // TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns
 //       with a default of 'false' which is not very helpful if the default should be 'true'
 //       maybe a getBoolean("name", true) could be a better choise.
@@ -184,14 +188,76 @@ public class GraphicalTestArguments
             }
 
             // ----------------------------------------
-            m_nMaxPages = param.getInt( PropertyName.PRINT_MAX_PAGE );
-            m_sOnlyPage = (String)param.get(PropertyName.PRINT_ONLY_PAGE);
+            m_nMaxPages = param.getInt( PropertyName.DOC_COMPARATOR_PRINT_MAX_PAGE );
+            m_sOnlyPage = (String)param.get(PropertyName.DOC_COMPARATOR_PRINT_ONLY_PAGE);
 
-            m_nResolutionInDPI = param.getInt( PropertyName.GFX_OUTPUT_DPI_RESOLUTION );
+            m_nResolutionInDPI = param.getInt( PropertyName.DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION );
             if (m_nResolutionInDPI == 0)
             {
                 // 212 DPI is 1754 x 2474 pixel for DIN A4
                 m_nResolutionInDPI = 212;
+            }
+
+            // ----------------------------------------
+            String sImportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME);
+            if (sImportFilterName != null && sImportFilterName.length() > 0)
+            {
+                // System.out.println("found " + PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME + " " + sImportFilterName );
+                m_sImportFilterName = sImportFilterName;
+            }
+            // ----------------------------------------
+            String sExportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME);
+            if (sExportFilterName != null && sExportFilterName.length() > 0)
+            {
+                // System.out.println("found " + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + " " + sExportFilterName );
+                m_sExportFilterName = sExportFilterName;
+            }
+            // ----------------------------------------
+            String sOfficeProgram = (String)param.get(PropertyName.DOC_CONVERTER_OFFICE_PROGRAM);
+            if (sOfficeProgram != null && sOfficeProgram.length() > 0)
+            {
+                m_sOfficeProgram = sOfficeProgram;
+            }
+            // ----------------------------------------
+            String sREUSE_OFFICE = (String)param.get( PropertyName.DOC_CONVERTER_REUSE_OFFICE);
+            if (sREUSE_OFFICE == null)
+            {
+                sREUSE_OFFICE = "false";
+            }
+            if (sREUSE_OFFICE.toLowerCase().equals("yes") ||
+                sREUSE_OFFICE.toLowerCase().equals("true"))
+            {
+                m_bResuseOffice = true;
+            }
+            else
+            {
+                m_bResuseOffice = false;
+            }
+
+
+            String sHTMLOutputPrefix = (String)param.get( PropertyName.DOC_COMPARATOR_HTML_OUTPUT_PREFIX);
+            if (sHTMLOutputPrefix == null)
+            {
+                m_sHTMLOutputPrefix = "";
+            }
+            else
+            {
+                m_sHTMLOutputPrefix = sHTMLOutputPrefix;
+            }
+
+            String sWithBorderMove = (String)param.get( PropertyName.DOC_COMPARATOR_GFXCMP_WITH_BORDERMOVE);
+            if (sWithBorderMove == null)
+            {
+                sWithBorderMove = "";
+            }
+            if (sWithBorderMove.toLowerCase().equals("yes") ||
+                sWithBorderMove.toLowerCase().equals("true"))
+            {
+                m_bWithBorderMove = true;
+            }
+            else
+            {
+                m_bWithBorderMove = false;
             }
         }
 
@@ -261,6 +327,11 @@ public class GraphicalTestArguments
                             {
                                 return false;
                             }
+                            // This type of document no one would like to load.
+                            if (pathname.getName().endsWith(".zip"))
+                            {
+                                return false;
+                            }
                             return true;
                         }
                 };
@@ -313,7 +384,7 @@ public class GraphicalTestArguments
     public String getInputPath()
         {
             String sInputPath;
-            sInputPath = (String)m_aCurrentParams.get(PropertyName.INPUT_PATH);
+            sInputPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_INPUT_PATH);
             return sInputPath;
         }
     /**
@@ -322,7 +393,7 @@ public class GraphicalTestArguments
     public String getOutputPath()
         {
             String sOutputPath;
-            sOutputPath = (String)m_aCurrentParams.get(PropertyName.OUTPUT_PATH);
+            sOutputPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_OUTPUT_PATH);
             return sOutputPath;
         }
     /**
@@ -331,7 +402,7 @@ public class GraphicalTestArguments
     public String getReferencePath()
         {
             String sReferencePath;
-            sReferencePath = (String)m_aCurrentParams.get(PropertyName.REFERENCE_PATH);
+            sReferencePath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_REFERENCE_PATH);
             return sReferencePath;
         }
     /**
@@ -340,19 +411,19 @@ public class GraphicalTestArguments
     public String getDiffPath()
         {
             String sDiffPath;
-            sDiffPath = (String)m_aCurrentParams.get(PropertyName.DIFF_PATH);
+            sDiffPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_DIFF_PATH);
             return sDiffPath;
         }
 
     public boolean getOverwrite()
         {
-            boolean bOverwrite = m_aCurrentParams.getBool( PropertyName.OVERWRITE_REFERENCE);
+            boolean bOverwrite = m_aCurrentParams.getBool( PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE);
             return bOverwrite;
         }
     public String getReferenceInputPath()
         {
             String sReferenceInputPath;
-            sReferenceInputPath = (String)m_aCurrentParams.get(PropertyName.REFERENCE_INPUT_PATH);
+            sReferenceInputPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_REFERENCE_INPUT_PATH);
             return sReferenceInputPath;
         }
 
@@ -367,6 +438,86 @@ public class GraphicalTestArguments
 //  TODO: here we need the getBuildID(string) method
             String sBuildID = convwatch.BuildID.getBuildID(sAPP);
             return sBuildID;
+        }
+
+        // Handle for Reference Build ID, is set in ConvWatch.createPostscriptStartCheck()
+    private String m_sRefBuildID;
+
+    public void setRefBuildID(String _sRef)
+        {
+            m_sRefBuildID = _sRef;
+        }
+    public String getRefBuildID()
+        {
+            return m_sRefBuildID;
+        }
+
+    public void disallowStore()
+        {
+            m_bStoreFile = false;
+        }
+    public void allowStore()
+        {
+            m_bStoreFile = true;
+        }
+    public boolean isStoreAllowed()
+        {
+            return m_bStoreFile;
+        }
+
+
+    // get/set for FilterName
+    // get the right Filtername (internal Name) from
+    // http://framework.openoffice.org/files/documents/25/897/filter_description.html
+
+    String m_sImportFilterName = "";
+    String m_sExportFilterName = "";
+    public void setImportFilterName(String _sImportFilterName)
+        {
+            m_sImportFilterName = _sImportFilterName;
+        }
+    public String getImportFilterName()
+        {
+            return m_sImportFilterName;
+        }
+    public void setExportFilterName(String _sExportFilterName)
+        {
+            m_sExportFilterName = _sExportFilterName;
+        }
+    public String getExportFilterName()
+        {
+            return m_sExportFilterName;
+        }
+
+    String m_sOfficeProgram = "";
+    public void setOfficeProgram(String _sName)
+        {
+            m_sOfficeProgram = _sName;
+        }
+    public String getOfficeProgram()
+        {
+            return m_sOfficeProgram;
+        }
+
+    public boolean restartOffice()
+        {
+            if (m_bResuseOffice == false)
+            {
+                return true;
+            }
+            return false;
+        }
+
+    String m_sHTMLOutputPrefix = "";
+    public String getHTMLOutputPrefix()
+        {
+            return m_sHTMLOutputPrefix;
+        }
+
+    boolean m_bWithBorderMove = false;
+    public boolean isBorderMove()
+        {
+            return m_bWithBorderMove;
         }
 
 }

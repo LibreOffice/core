@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IniFile.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-11-02 11:14:18 $
+ *  last change:$Date: 2004-12-10 16:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ class IniFile
      */
     public boolean is()
         {
-            return m_aList.size() > 1 ? true : false;
+            return m_aList.size() > 0 ? true : false;
         }
 
     // -----------------------------------------------------------------------------
@@ -158,18 +158,23 @@ class IniFile
         {
             String sValue = "";
             // ----------- find _sSection ---------------
+            int i = 0;
+            if (_sSection.length() > 0)
+            {
             String sFindSection = "[" + _sSection + "]";
-            int i;
             for (i=0; i<m_aList.size();i++)
             {
                 String sLine = (String) m_aList.get(i);
                 if (sLine.startsWith(sFindSection))
                 {
+                        i++;
                     break;
                 }
             }
+            }
+
             // ------------ find key --------------------
-            for (int j=i + 1; j<m_aList.size();j++)
+            for (int j=i; j<m_aList.size();j++)
             {
                 String sLine = (String) m_aList.get(j);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GfxCompare.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:09:39 $
+ *  last change: $Date: 2004-12-10 16:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@ public class GfxCompare extends EnhancedComplexTestCase
 
             String fs = System.getProperty("file.separator");
             String sTmpDir = System.getProperty("java.io.tmpdir");
+            if (m_aArguments.getOutputPath() != null)
+            {
+                sTmpDir = m_aArguments.getOutputPath();
+            }
 
             if (_sFile.toLowerCase().endsWith("ps") ||
                 _sFile.toLowerCase().endsWith("prn") ||

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalDifferenceCheck.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:09:53 $
+ *  last change: $Date: 2004-12-10 16:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,23 @@ public class GraphicalDifferenceCheck
      */
     public static void createReferences(String _sInputPath, String _sReferencePath, GraphicalTestArguments _aGTA) throws ConvWatchException
         {
-System.out.println("createReferences: " + _sInputPath + "refpath" + _sReferencePath);
+//!
+//            System.out.println("createReferences() InputPath: " + _sInputPath + " refpath: " + _sReferencePath);
             File aInputPath = new File(_sInputPath);
+
+//            System.out.println("Inputpath in file: " + aInputPath.getAbsolutePath());
+//!
+//             if (aInputPath.exists())
+//             {
+//                 System.out.println("Inputpath exists");
+//             }
+//             else
+//             {
+//                 System.out.println("Inputpath doesn't exists");
+//                 return;
+//             }
+
+
             if (aInputPath.isDirectory())
             {
                 String fs = System.getProperty("file.separator");
@@ -107,6 +122,8 @@ System.out.println("createReferences: " + _sInputPath + "refpath" + _sReferenceP
             }
             else
             {
+//!
+                // System.out.println("No directory.");
                 createOneReferenceFile(_sInputPath, _sReferencePath, _aGTA);
             }
         }
@@ -123,6 +140,19 @@ System.out.println("createReferences: " + _sInputPath + "refpath" + _sReferenceP
     public static boolean createOneReferenceFile(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA) throws ConvWatchException
         {
             return OfficePrint.buildReference(_aGTA, _sReferencePath, _sInputFile);
+        }
+
+    /**
+     * Check if a reference exist
+     *
+     * @param _sInputFile       the original document
+     * @param _sReferencePath   the directory where the document will print as file or export as pdf.
+     *
+     * @throws  ConvWatchException if the are problems, see containing message
+     */
+    public static boolean isReferenceExists(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA)
+        {
+            return OfficePrint.isReferenceExists(_aGTA, _sReferencePath, _sInputFile);
         }
 
 
