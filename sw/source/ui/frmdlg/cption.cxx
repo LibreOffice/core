@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 20:28:29 $
+ *  last change: $Author: os $ $Date: 2001-02-14 15:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,13 +487,18 @@ SwCaptionDialog::~SwCaptionDialog()
 /*------------------------------------------------------------------------
  Beschreibung: form ohne Spaces
 ------------------------------------------------------------------------*/
-
-
-
-void NoSpaceCombo::KeyInput(const KeyEvent& rEvt)
+long NoSpaceCombo::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
-        SwComboBox::KeyInput(rEvt);
+    long nHandled = 0;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+        if(pKEvt->GetKeyCode().GetCode() == KEY_SPACE)
+            nHandled = 1;
+    }
+    if(!nHandled)
+        nHandled = SwComboBox::PreNotify( rNEvt );
+    return nHandled;
 }
 
 
@@ -567,158 +572,6 @@ void SwSequenceOptionDialog::Apply()
     if( bUpdate )
         rSh.UpdateExpFlds();
 }
-
-
-
-/*-----------------25.02.94 21:56-------------------
-
-   $Log: not supported by cvs2svn $
-   Revision 1.1.1.1  2000/09/18 17:14:37  hr
-   initial import
-
-   Revision 1.74  2000/09/18 16:05:32  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.73  2000/09/12 08:39:37  os
-   #78678# CreateFromInt32
-
-   Revision 1.72  2000/07/27 21:16:09  jp
-   opt: get template names direct from the doc and don't load it from the resource
-
-   Revision 1.71  2000/04/26 14:49:17  os
-   GetName() returns const String&
-
-   Revision 1.70  2000/04/18 15:14:56  os
-   UNICODE
-
-   Revision 1.69  2000/03/23 06:49:59  os
-   UNOIII
-
-   Revision 1.68  2000/02/15 14:18:19  os
-   #72904# check container::XNameAccess
-
-   Revision 1.67  2000/02/11 14:47:24  hr
-   #70473# changes for unicode ( patched by automated patchtool )
-
-   Revision 1.66  1999/11/19 16:40:22  os
-   modules renamed
-
-   Revision 1.65  1999/08/19 11:52:22  OS
-   OLE objects: no GPF
-
-
-      Rev 1.64   19 Aug 1999 13:52:22   OS
-   OLE objects: no GPF
-
-      Rev 1.63   21 Jul 1999 14:15:14   OS
-   #67425# Appearance improved
-
-      Rev 1.62   10 Jun 1999 13:02:36   OS
-   rename objects
-
-      Rev 1.61   09 Jun 1999 10:43:04   OS
-   #66732# Insert caption: copy border and shadow optionally
-
-      Rev 1.60   10 Dec 1998 09:45:52   MIB
-   #60060#: Beschriftungen fuer Zeichen-Objekte
-
-      Rev 1.59   17 Nov 1998 10:52:52   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.58   06 Nov 1998 17:04:06   OM
-   #58158# Automatische Beschriftung
-
-      Rev 1.57   11 Aug 1998 14:22:08   HR
-   void* kann nicht direkt nach sal_uInt16 gecastet werden
-
-      Rev 1.56   10 Aug 1998 16:42:42   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.55   19 Jun 1998 11:44:04   JP
-   neu: Nummernkreis Optionen - fuer die Kapitelweisenummerierung
-
-      Rev 1.54   20 Apr 1998 13:45:00   OS
-   Variablen duerfen nicht ueber Nummernkreise eingefuegt werden
-
-      Rev 1.53   27 Feb 1998 16:41:44   OM
-   Unterhalb
-
-      Rev 1.52   02 Feb 1998 10:59:28   OM
-   #46835# Auch bei Cursor im Rahmen (SEL_TXT) richtigen Selektionsmodus (SEL_FRM) auswerten
-
-      Rev 1.51   08 Jan 1998 09:16:12   OS
-   initialen Focus umgesetzt #45673#
-
-      Rev 1.50   24 Nov 1997 17:40:10   MA
-   include
-
-      Rev 1.49   03 Nov 1997 13:19:46   MA
-   precomp entfernt
-
-      Rev 1.48   02 Oct 1997 15:22:10   OM
-   Feldumstellung
-
-      Rev 1.47   05 May 1997 17:09:08   TRI
-   ICC brauchte Instanz
-
-      Rev 1.46   29 Apr 1997 16:17:56   OM
-   Unsichtbare Benutzerfelder
-
-      Rev 1.45   04 Apr 1997 10:32:48   OM
-   Datenbanken nach Gebrauch wieder schliessen
-
-      Rev 1.44   18 Mar 1997 17:38:42   OM
-   Segmentiert
-
-      Rev 1.43   18 Mar 1997 17:35:54   OM
-   keine Spaces in Kategorie
-
-      Rev 1.42   14 Mar 1997 15:58:14   OS
-   neue Beschriftungsvorlage von Beschriftung abgeleitet
-
-      Rev 1.41   09 Jan 1997 08:41:24   OS
-   Beschriftungsdialog mit HelpID und HelpButton
-
-      Rev 1.40   11 Nov 1996 10:44:14   MA
-   ResMgr
-
-      Rev 1.39   02 Oct 1996 17:36:14   MA
-   Umstellung Enable/Disable
-
-      Rev 1.38   28 Aug 1996 11:52:50   OS
-   includes
-
-      Rev 1.37   09 Jul 1996 17:52:20   OM
-   Alternatives Formatmenue fuer Expressionfields
-
-      Rev 1.36   06 Feb 1996 15:19:22   JP
-   Link Umstellung 305
-
-      Rev 1.35   28 Nov 1995 11:20:24   JP
-   Umstellungsbugs entfernt, optimiert
-
-      Rev 1.34   27 Nov 1995 21:16:00   JP
-   static Strings gegen Pointer ausgetauscht, werden im InitUi angelegt/zerstoert
-
-      Rev 1.33   24 Nov 1995 16:58:08   OM
-   PCH->PRECOMPILED
-
-      Rev 1.32   13 Nov 1995 13:40:26   MA
-   chg: Link-Cast entfernt
-
-      Rev 1.31   08 Nov 1995 13:46:22   OM
-   Change->Set
-
-      Rev 1.30   06 Oct 1995 15:34:52   MA
-   fix: Selectiontype ist verodert
-
-      Rev 1.29   30 Aug 1995 14:13:50   MA
-   fix: sexport'iert
-
-      Rev 1.28   21 Aug 1995 09:27:08   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
---------------------------------------------------*/
 
 
 
