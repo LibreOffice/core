@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "template.hxx"
 
 #include "configpath.hxx"
+#include "options.hxx"
 
 #include <vos/refernce.hxx>
 #include <map>
@@ -192,8 +193,8 @@ namespace configmgr
             static void assignActualType (Template& aTemplate,UnoType const& aType);
             //-----------------------------------------------------------------
 
-            static TemplateHolder findTemplate (TemplateName const& aNames, TemplateProvider const& aProvider);
-            static TemplateHolder makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs);
+            static TemplateHolder makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs);
+
             static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& aProvider, ISubtree const& aSet);
             //-----------------------------------------------------------------
 
@@ -211,21 +212,34 @@ namespace configmgr
     //-------------------------------------------------------------------------
 
         //---------------------------------------------------------------------
+        // class SpecialTemplateProvider_Impl
+        //---------------------------------------------------------------------
+
+        struct SpecialTemplateProvider_Impl : vos::OReference
+        {
+            SpecialTemplateProvider_Impl();
+
+            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs);
+
+        private:
+            TemplateRepository m_aRepository;
+        };
+
+        //---------------------------------------------------------------------
         // class TemplateProvider_Impl
         //---------------------------------------------------------------------
 
         struct TemplateProvider_Impl : vos::OReference
         {
-            TemplateProvider_Impl(ITemplateProvider* pProvider);
+            TemplateProvider_Impl(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions);
 
             std::auto_ptr<INode> instantiate(TemplateHolder const& aTemplate);
 
-            TemplateHolder findTemplate (TemplateName const& aNames);
-            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs);
             TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, ISubtree const& aSet);
-
         private:
-            ITemplateProvider* m_pProvider;
+            ITemplateProvider& m_rProvider;
+            vos::ORef< OOptions > m_xOptions;
+
             TemplateRepository m_aRepository;
         };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:28:40 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,19 +143,7 @@ TemplateHolder TemplateImplHelper::createNew (TemplateName const& aNames,UnoType
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::findTemplate (TemplateName const& aNames, TemplateProvider const& aProvider)
-{
-    OSL_ENSURE(aProvider.m_aImpl.isValid(), "Cannot find a template without a provider");
-
-    if (aProvider.m_aImpl.isValid())
-        return aProvider.m_aImpl->findTemplate(aNames);
-
-    else
-        return TemplateHolder(0);
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder TemplateImplHelper::makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs)
+TemplateHolder TemplateImplHelper::makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs)
 {
     OSL_ENSURE(aProvider.m_aImpl.isValid(), "Cannot find a template without a provider");
 
@@ -169,7 +157,7 @@ TemplateHolder TemplateImplHelper::makeTemplate (TemplateName const& aNames, Tem
 
 TemplateHolder TemplateImplHelper::makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& aProvider, ISubtree const& aSet)
 {
-    OSL_ENSURE(aProvider.m_aImpl.isValid(), "Cannot find a template without a provider");
+    OSL_ENSURE(aProvider.m_aImpl.isValid(), "ERROR: Cannot find a template without a provider");
 
     if (aProvider.m_aImpl.isValid())
         return aProvider.m_aImpl->makeElementTemplateWithType(aNames,aSet);
@@ -192,41 +180,16 @@ void TemplateImplHelper::assignActualType (Template& aTemplate,UnoType const& aT
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// class TemplateProvider_Impl
+// class SpecialTemplateProvider_Impl
 //-----------------------------------------------------------------------------
 
-TemplateProvider_Impl::TemplateProvider_Impl(ITemplateProvider* pProvider)
-: m_pProvider(pProvider)
-, m_aRepository()
+SpecialTemplateProvider_Impl::SpecialTemplateProvider_Impl()
+: m_aRepository()
 {
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> TemplateProvider_Impl::instantiate(TemplateHolder const& aTemplate)
-{
-    std::auto_ptr<INode> pRet;
-    if (m_pProvider && aTemplate.isValid())
-    {
-        pRet = m_pProvider->requestTemplateInstance(aTemplate->getName().toString(), aTemplate->getModule().toString(), NULL);
-    }
-    return pRet;
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder TemplateProvider_Impl::findTemplate (TemplateName const& aNames)
-{
-    typedef TemplateRepository::value_type Entry;
-
-    TemplateRepository::iterator it = m_aRepository.find(aNames);
-    if (it == m_aRepository.end())
-        it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames) ) ).first;
-
-    return it->second;
-
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder TemplateProvider_Impl::makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs)
+TemplateHolder SpecialTemplateProvider_Impl::makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs)
 {
     typedef TemplateRepository::value_type Entry;
 
@@ -242,6 +205,29 @@ TemplateHolder TemplateProvider_Impl::makeTemplate (TemplateName const& aNames, 
     return it->second;
 
 }
+
+//-----------------------------------------------------------------------------
+// class TemplateProvider_Impl
+//-----------------------------------------------------------------------------
+
+TemplateProvider_Impl::TemplateProvider_Impl(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions)
+: m_rProvider(rProvider)
+, m_xOptions(xOptions)
+, m_aRepository()
+{
+}
+//-----------------------------------------------------------------------------
+
+std::auto_ptr<INode> TemplateProvider_Impl::instantiate(TemplateHolder const& aTemplate)
+{
+    std::auto_ptr<INode> pRet;
+    if (aTemplate.isValid())
+    {
+        pRet = m_rProvider.requestTemplateInstance(aTemplate->getName().toString(), aTemplate->getModule().toString(), m_xOptions);
+    }
+    return pRet;
+}
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 namespace
@@ -343,15 +329,13 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
         else if (!detectElementType(aType,aSet))
         {
             std::auto_ptr<INode> pTemplateInstance;
-            if (m_pProvider)
-            {
-                OSL_ASSERT(aNames.aName.toString() == aSet.getElementTemplateName());
-                OSL_ASSERT(aNames.aModule.toString() == aSet.getElementTemplateModule());
 
-                OUString sPath = aNames.makePath().toString(); // could also be extracted from aSet
+            OSL_ASSERT(aNames.aName.toString() == aSet.getElementTemplateName());
+            OSL_ASSERT(aNames.aModule.toString() == aSet.getElementTemplateModule());
 
-                pTemplateInstance = m_pProvider->requestTemplateInstance(aNames.aName.toString(), aNames.aModule.toString(), NULL);
-            }
+            OUString sPath = aNames.makePath().toString(); // could also be extracted from aSet
+
+            pTemplateInstance = m_rProvider.requestTemplateInstance(aNames.aName.toString(), aNames.aModule.toString(), m_xOptions);
 
             aType = detectNodeType(pTemplateInstance.get()); // throws if necessary
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     class ITemplateProvider;
     class ISubtree;
+    class OOptions;
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -92,13 +93,31 @@ namespace configmgr
         {
             friend class SetElementFactory;
             friend class TemplateImplHelper;
-            vos::ORef<TemplateProvider_Impl>  m_aImpl;
+
+            vos::ORef<TemplateProvider_Impl>        m_aImpl;
         public:
-            TemplateProvider(); // creates an empty (invalid) template provider
-            explicit
-            TemplateProvider(ITemplateProvider& pProvider);
+            TemplateProvider(); // creates an empty (invalid) template instance provider
+            TemplateProvider(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions);
             TemplateProvider(TemplateProvider const& aOther);
+            TemplateProvider& operator=(TemplateProvider const& aOther);
             ~TemplateProvider();
+
+            bool isValid() const { return !!m_aImpl.isValid(); }
+        };
+//-----------------------------------------------------------------------------
+
+        struct SpecialTemplateProvider_Impl;
+        class SpecialTemplateProvider
+        {
+            friend class TemplateImplHelper;
+
+            vos::ORef<SpecialTemplateProvider_Impl>  m_aImpl;
+        public:
+            explicit
+            SpecialTemplateProvider();
+            SpecialTemplateProvider(SpecialTemplateProvider const& aOther);
+            SpecialTemplateProvider& operator=(SpecialTemplateProvider const& aOther);
+            ~SpecialTemplateProvider();
 
             bool isValid() const { return !!m_aImpl.isValid(); }
         };
@@ -142,21 +161,13 @@ namespace configmgr
         /// get the package name of the template
             Name            getModule() const { return m_aModule; }
 
-        /// find the template for the given path (instance type may be unknown)
-        //  static TemplateHolder fromPath(OUString const& sName, TemplateProvider const& aProvider);
-
-        /// find the template for the given path (instance type may be unknown)
-            static TemplateHolder fromNames(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider);
-
             friend class TemplateImplHelper;
         };
 
         /// make a template instance that matches the given (simple) type
-        TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider);
+        TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, SpecialTemplateProvider const& aProvider);
         /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
-        //TemplateHolder makeTreeTemplate(OUString const& sPath, TemplateProvider const& aProvider);
-        /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
-        TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider);
+        TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider);
         /// make a template instance that matches the elements of the given set. Ensures that the element type is known
         TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider);
 //-----------------------------------------------------------------------------

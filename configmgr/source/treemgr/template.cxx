@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:28:40 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,15 @@ namespace configmgr
 // class TemplateProvider
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 TemplateProvider::TemplateProvider()
 : m_aImpl()
 {
 }
 
 //-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(ITemplateProvider& rProvider)
-: m_aImpl(new TemplateProvider_Impl(&rProvider))
+TemplateProvider::TemplateProvider(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions)
+: m_aImpl( new TemplateProvider_Impl(rProvider,xOptions) )
 {
 }
 
@@ -88,11 +89,46 @@ TemplateProvider::TemplateProvider(TemplateProvider const& aOther)
 : m_aImpl(aOther.m_aImpl)
 {
 }
+
+//-----------------------------------------------------------------------------
+TemplateProvider& TemplateProvider::operator =(TemplateProvider const& aOther)
+{
+    m_aImpl = aOther.m_aImpl;
+    return *this;
+}
+
 //-----------------------------------------------------------------------------
 TemplateProvider::~TemplateProvider()
 {
 }
 
+//-----------------------------------------------------------------------------
+// class SpecialTemplateProvider
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+SpecialTemplateProvider::SpecialTemplateProvider()
+: m_aImpl( new SpecialTemplateProvider_Impl() )
+{
+}
+
+//-----------------------------------------------------------------------------
+SpecialTemplateProvider::SpecialTemplateProvider(SpecialTemplateProvider const& aOther)
+: m_aImpl(aOther.m_aImpl)
+{
+}
+
+//-----------------------------------------------------------------------------
+SpecialTemplateProvider& SpecialTemplateProvider::operator =(SpecialTemplateProvider const& aOther)
+{
+    m_aImpl = aOther.m_aImpl;
+    return *this;
+}
+
+//-----------------------------------------------------------------------------
+SpecialTemplateProvider::~SpecialTemplateProvider()
+{
+}
 
 //-----------------------------------------------------------------------------
 // class Template
@@ -137,30 +173,17 @@ RelativePath Template::getPath() const
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder Template::fromNames(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
-{
-    TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
-    return TemplateImplHelper::findTemplate(aNames, aProvider );
-}
-//-----------------------------------------------------------------------------
-TemplateHolder locate(Name const& aName, Name const& aModule, TemplateProvider const& aProvider)
-{
-    TemplateName aNames(aName,aModule);
-    return TemplateImplHelper::findTemplate(aNames, aProvider );
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider)
+TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, SpecialTemplateProvider const& aProvider)
 {
     TemplateName aNames(aType,false);
-    return TemplateImplHelper::makeTemplate( aNames, aProvider, aType, aAttrs);
+    return TemplateImplHelper::makeSpecialTemplate( aNames, aProvider, aType, aAttrs);
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
+TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
-    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
+    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
 }
 //-----------------------------------------------------------------------------
 
