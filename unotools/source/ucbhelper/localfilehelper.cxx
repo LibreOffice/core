@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2000-12-04 10:50:59 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,48 @@ using namespace ::com::sun::star::ucb;
 
 namespace utl
 {
+
+sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn )
+{
+    rtl::OUString aRet;
+    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    if ( !pBroker )
+    {
+        ::rtl::OUString aTmp;
+        FileBase::normalizePath( rName, aTmp );
+        FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
+    }
+    else
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+                pBroker->getContentProviderManagerInterface();
+        aRet = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, aRet );
+    }
+
+    rReturn = aRet;
+    return ( aRet.getLength() != 0 );
+}
+
+sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& rReturn )
+{
+    rtl::OUString aRet;
+    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    if ( !pBroker )
+    {
+        ::rtl::OUString aTmp;
+        FileBase::getNormalizedPathFromFileURL( rName, aTmp );
+        FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
+    }
+    else
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+                pBroker->getContentProviderManagerInterface();
+        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName, rName );
+    }
+
+    rReturn = aRet;
+    return sal_True;
+}
 
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
 {

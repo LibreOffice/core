@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:45:37 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ public:
                     Returning sal_True and an empty URL means that the URL doesn't point to a local file.
                     */
     static sal_Bool ConvertPhysicalNameToURL( const String& rName, String& rReturn );
+    static sal_Bool ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn );
 
                     /**
                     Converts a "UCB compatible" URL into a "physical" file name.
@@ -91,6 +92,7 @@ public:
                     file system is present ( watch: this doesn't mean that this file really exists! )
                     */
     static sal_Bool ConvertURLToPhysicalName( const String& rName, String& rReturn );
+    static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
 
     static sal_Bool IsLocalFile( const String& rName );
 
