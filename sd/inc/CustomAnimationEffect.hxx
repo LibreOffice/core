@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:29:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ public:
     bool calculateIterateDuration();
 
     void setAudio( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& xAudio );
+    bool getStopAudio() const;
     void setStopAudio();
     void createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume = 1.0 );
     void removeAudio();
