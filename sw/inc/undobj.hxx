@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:38:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,19 +1352,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     OUT_UNDOBJ( SwUndoChgSection )
-};
-
-class SwUndoChgSectPsswd : public SwUndo
-{
-    ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
-    ULONG nSectNd;
-public:
-    SwUndoChgSectPsswd(
-                const ::com::sun::star::uno::Sequence <sal_Int8> & rOld,
-                const SwSectionNode* pSectNd = 0 );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoChgSectPsswd )
 };
 
 //------------ Undo von verschieben/stufen von Gliederung ----------------
