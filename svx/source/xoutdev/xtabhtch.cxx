@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
+ *  last change: $Author: mh $ $Date: 2001-10-22 11:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef SVX_XFILLIT0_HXX //autogen
 #include <xfillit0.hxx>
 #endif
-
-#define GLOBALOVERFLOW
-#include <segmentc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
