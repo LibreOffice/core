@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+#   last change: $Author: sj $ $Date: 2001-05-22 12:22:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ SLOFILES =	\
         $(SLO)$/docshel2.obj \
         $(SLO)$/docshel3.obj \
         $(SLO)$/docshel4.obj \
-        $(SLO)$/docshel5.obj \
         $(SLO)$/sdclient.obj \
         $(SLO)$/grdocsh.obj
 
