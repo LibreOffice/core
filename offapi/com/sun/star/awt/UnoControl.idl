@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:52:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
     <p>The change of data directly at the control may not affect the
     model data. To ensure this behavior, modify the data of the model.</p>
  */
-service UnoControl
+published service UnoControl
 {
     interface com::sun::star::lang::XComponent;
 
