@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-16 08:01:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <tools/rtti.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>          // fuer SWPOSDOC
 #endif
@@ -208,7 +211,7 @@ const int   CRSR_NOERROR =  0x00,
             CRSR_POSCHG =   0x02;   // Position vom Layout veraendert
 
 // die Cursor - Shell
-class SwCrsrShell : public ViewShell, public SwModify
+class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
 {
     friend class SwCallLink;
     friend class SwVisCrsr;
@@ -321,11 +324,11 @@ private:
     // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
-    void UpdateCrsr( USHORT eFlags
+    SW_DLLPRIVATE void UpdateCrsr( USHORT eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
                      BOOL bIdleEnd = FALSE );
 
-    void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
+    SW_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
     // -> #i27615#
 
@@ -333,7 +336,7 @@ private:
        Updates the marked numbering level stored in this shell
        according to the cursor.
      */
-    void UpdateMarkedNumLevel();
+    SW_DLLPRIVATE void UpdateMarkedNumLevel();
 
     /**
        Set the marked numbering level stored in this shell.
@@ -343,23 +346,24 @@ private:
 
        The empty string denotes that no numbering rule is marked.
      */
-    void SetMarkedNumLevel(const String & sNumRule, BYTE nLevel);
+    SW_DLLPRIVATE void SetMarkedNumLevel(const String & sNumRule, BYTE nLevel);
     // <- #i27615#
 
-    FASTBOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
-    FASTBOOL UpDown( BOOL, USHORT );
-    FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
-    FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
-    FASTBOOL SttEndDoc( BOOL bStt );
+    // private method(s) accessed from public inline method(s) must be exported.
+                  FASTBOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
+    SW_DLLPRIVATE FASTBOOL UpDown( BOOL, USHORT );
+    SW_DLLPRIVATE FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
+    SW_DLLPRIVATE FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
+    SW_DLLPRIVATE FASTBOOL SttEndDoc( BOOL bStt );
 
 #ifdef BIDI
-    short GetTextDirection( const Point* pPt = 0 ) const;
+    SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 #endif
 
 typedef FASTBOOL (SwCursor:: *FNCrsr)();
-    FASTBOOL CallCrsrFN( FNCrsr );
+    SW_DLLPRIVATE FASTBOOL CallCrsrFN( FNCrsr );
 
-    const SwRedline* _GotoRedline( USHORT nArrPos, BOOL bSelect );
+    SW_DLLPRIVATE const SwRedline* _GotoRedline( USHORT nArrPos, BOOL bSelect );
 
 protected:
 
