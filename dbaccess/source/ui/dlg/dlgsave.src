@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 07:06:32 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_SAVE_AS
         Text[ greek ] = "Παρακαλώ εισάγετε το όνομα του αντικειμένου που θα δημιουργηθεί:";
         Text[ dutch ] = "Vul een naam in voor het object dat u wil  creλren:";
         Text[ french ] = "Saisissez un nom pour l'objet ΰ crιer :";
-        Text[ spanish ] = "Indique un nombre para el objeto a crear:";
+        Text[ spanish ] = "Introduzca un nombre para el objeto que crear:";
         Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
         Text[ danish ] = "Angiv et navn pε det objekt, der skal oprettes:";
         Text[ swedish ] = "Ange ett namn fφr objektet som ska skapas:";
@@ -354,7 +354,7 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "Der Name '$name$:  $' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
         Text [ ENGLISH ] = "The name '$name$:  $' does already exist.\nPlease enter a new name." ;
-        Text [ english_us ] = "The name '$name$:  $' already exists.\nPlease enter another name." ;
+        Text [ english_us ] = "The name '$name$: $' already exists.\nPlease enter another name." ;
         Text[ language_user1 ] = " ";
         Text[ portuguese ] = "O nome '$name$:  $' jα existe.\nIndique outro.";
         Text[ russian ] = "Θμÿ '$name$:  $' σζε ρσωερςβσες.\nΒβεδθςε, οξζΰλσιρςΰ, δπσγξε θμÿ.";
@@ -381,7 +381,7 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "Der Name '$name$:  $' existiert bereits.\nWollen Sie es όberschreiben?" ;
         Text [ ENGLISH ] = "The name '$name$:  $' does already exist.\nDo you want to overwrite it?" ;
-        Text [ english_us ] = "The name '$name$:  $' already exists.\nDo you want to overwrite it?" ;
+        Text [ english_us ] = "The name '$name$: $' already exists.\nDo you want to overwrite it?" ;
         Text[ language_user1 ] = " ";
         Text[ portuguese ] = "O nome '$name$:  $' jα existe.\nSubstituir?";
         Text[ russian ] = "Θμÿ '$name$:  $' σζε ρσωερςβσες.\nΗΰμενθςό εγξ?";
