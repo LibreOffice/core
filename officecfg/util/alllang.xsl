@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:49:25 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns:oor="http://openoffice.org/2001/registry"
+		xmlns:install="http://openoffice.org/2004/installation"
 		xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"
+        exclude-result-prefixes="install"
 		extension-element-prefixes="filehelper">
 
 <!-- Get the correct format -->
@@ -72,6 +74,7 @@
 
 <!--************************** PARAMETER ******************************** -->
 <xsl:param name="locale"/>
+<xsl:param name="module"/>
 <xsl:param name="xcs"/>
 <xsl:param name="schemaRoot">.</xsl:param>
 <xsl:param name="fallback-locale">en-US</xsl:param>
@@ -89,12 +92,13 @@
 					<xsl:apply-templates mode="locale"/>
 				</xsl:when>
 				<xsl:otherwise>
-			        <xsl:apply-templates select = "@*" mode="non-locale"/>
+			        <xsl:apply-templates select = "@*"/>
 					<xsl:for-each select="node|prop">
 						<xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
-						<xsl:apply-templates select="." mode="non-locale">
+						<xsl:apply-templates select=".">
 							<xsl:with-param name="component-schema" select="$component-schema"/>
 							<xsl:with-param name="context" select="$component-schema/component/*[@oor:name = current()/@oor:name]"/>
+							<xsl:with-param name="find-module" select="$module"/>
 						</xsl:apply-templates>
 					</xsl:for-each>
 				</xsl:otherwise>
@@ -106,7 +110,7 @@
 	<xsl:template match="node|prop" mode = "locale">
         <xsl:choose>
             <xsl:when test="$locale=$fallback-locale">
-                <xsl:if test="count(descendant::value[@xml:lang=$locale]/../value[not (@xml:lang)])">
+                <xsl:if test="descendant::value[@xml:lang=$locale]/../value[not (@xml:lang)]">
   			        <xsl:copy>
 				        <xsl:apply-templates select = "@*" mode="locale"/>
 				        <xsl:apply-templates mode = "locale"/>
@@ -114,7 +118,7 @@
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:if test="count(descendant::value[@xml:lang = $locale])">
+                <xsl:if test="descendant::value[@xml:lang = $locale]">
   			        <xsl:copy>
 				        <xsl:apply-templates select = "@*" mode="locale"/>
 				        <xsl:apply-templates mode = "locale"/>
@@ -140,27 +144,30 @@
     <!-- suppress all merge instructions -->
 	<xsl:template match = "@oor:op" mode="locale"/>
 
+    <!-- suppress all module markers -->
+	<xsl:template match = "@install:module" mode="locale"/>
+
 <!-- locale independent data -->
 
     <!-- handle template references      -->
-	<xsl:template name="resolve-template-non-locale">
+	<xsl:template name="copy-resolve-template">
 		<xsl:param name = "node-type"/>
 		<xsl:param name = "schema-type"/>
 		<xsl:param name = "component-schema"/>
 		
         <xsl:choose>
             <xsl:when test="$schema-type='node-ref'">
-                <xsl:apply-templates select="." mode="non-locale">				
-                    <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>																					
+                <xsl:apply-templates select=".">				
+                    <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>	
                     <xsl:with-param name="component-schema" select="$component-schema"/>							
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$schema-type='set'">
                 <xsl:copy>
-                    <xsl:apply-templates select = "@*"  mode="non-locale"/>
+                    <xsl:apply-templates select = "@*" />
                     <xsl:for-each select="node|prop">						
-                        <xsl:apply-templates select="." mode="non-locale">				
-                            <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>																					
+                        <xsl:apply-templates select=".">				
+                            <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>	
                             <xsl:with-param name="component-schema" select="$component-schema"/>							
                         </xsl:apply-templates>
                     </xsl:for-each>
@@ -174,60 +181,99 @@
         </xsl:choose>
     </xsl:template>
     
-	<xsl:template match="node" mode="non-locale">
+	<xsl:template name="copy-node">
 		<xsl:param name = "context"/>
 		<xsl:param name = "component-schema"/>
 
-		<xsl:if test="count(descendant::value[(not (@xml:lang)) or (@xml:lang=$fallback-locale)]) or count(descendant-or-self::*[(@oor:finalized='true') or (@oor:mandatory='true') or (@oor:op='replace') or (@oor:op='remove')])">
-            <xsl:choose>
-                <!-- look for matching templates in other components -->
-                <xsl:when test="$context/@oor:node-type and $context/@oor:component">
-                    <xsl:variable name="fileURL">
-                        <xsl:call-template name="composeFileURL">
-                            <xsl:with-param name="component-schema" select="$component-schema"/>
-                            <xsl:with-param name="componentName"><xsl:value-of select="$context/@oor:component"/></xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:variable>
-
-                    <xsl:call-template name="resolve-template-non-locale">
-                        <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
-                        <xsl:with-param name="schema-type" select="local-name($context)"/>
-                        <xsl:with-param name="component-schema" select="document($fileURL)/oor:component-schema"/>
-                    </xsl:call-template>
-                </xsl:when>
-                <!-- look for matching templates within the same component -->
-                <xsl:when test="$context/@oor:node-type">
-                    <xsl:call-template name="resolve-template-non-locale">
-                        <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
-                        <xsl:with-param name="schema-type" select="local-name($context)"/>
+        <xsl:choose>
+            <!-- look for matching templates in other components -->
+            <xsl:when test="$context/@oor:node-type and $context/@oor:component">
+                <xsl:variable name="fileURL">
+                    <xsl:call-template name="composeFileURL">
                         <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="componentName"><xsl:value-of select="$context/@oor:component"/></xsl:with-param>
                     </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:copy>
-                        <xsl:apply-templates select = "@*"  mode="non-locale"/>
-						<xsl:for-each select="node|prop">
-							<xsl:apply-templates select="." mode="non-locale">
-								<xsl:with-param name="component-schema" select="$component-schema"/>
-								<xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>
-							</xsl:apply-templates>
-						</xsl:for-each>
-                    </xsl:copy>
-                </xsl:otherwise>
-            </xsl:choose>
-		</xsl:if>
+                </xsl:variable>
+                <xsl:call-template name="copy-resolve-template">
+                    <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
+                    <xsl:with-param name="schema-type" select="local-name($context)"/>
+                    <xsl:with-param name="component-schema" select="document($fileURL)/oor:component-schema"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- look for matching templates within the same component -->
+            <xsl:when test="$context/@oor:node-type">
+                <xsl:call-template name="copy-resolve-template">
+                    <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
+                    <xsl:with-param name="schema-type" select="local-name($context)"/>
+                    <xsl:with-param name="component-schema" select="$component-schema"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select = "@*" />
+                    <xsl:for-each select="node|prop">
+                        <xsl:apply-templates select=".">
+                            <xsl:with-param name="component-schema" select="$component-schema"/>
+                            <xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>
+                        </xsl:apply-templates>
+                    </xsl:for-each>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+	</xsl:template>
+    
+	<xsl:template match="node">
+		<xsl:param name = "context"/>
+		<xsl:param name = "component-schema"/>
+
+        <xsl:variable name="applicable-values" select="descendant::value[not (@xml:lang) or (@xml:lang=$fallback-locale)]"/>
+        <xsl:variable name="substantive-nodes" select="descendant-or-self::*[(@oor:finalized='true') or (@oor:mandatory='true') or (@oor:op!='modify')]"/>
+
+        <xsl:choose>
+            <!-- go ahead, if we are in the active module -->
+            <xsl:when test="ancestor-or-self::*/@install:module=$module">
+                <xsl:if test="$applicable-values | $substantive-nodes">
+                    <xsl:call-template name="copy-node">
+                        <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="context" select="$context"/>
+                    </xsl:call-template>
+                </xsl:if>
+			</xsl:when>
+            <!-- strip data from wrong module -->
+            <xsl:when test="ancestor-or-self::*/@install:module"/>
+            <!-- looking for module -->
+            <xsl:when test="$module">
+                <xsl:if test="($applicable-values | $substantive-nodes)/ancestor-or-self::*/@install:module=$module">
+                    <xsl:call-template name="copy-node">
+                        <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="context" select="$context"/>
+                    </xsl:call-template>
+                </xsl:if>
+			</xsl:when>
+            <!-- copying non-module data -->
+            <xsl:otherwise>
+                <xsl:if test="($applicable-values | $substantive-nodes)[not(ancestor::*/@install:module)]">
+                    <xsl:call-template name="copy-node">
+                        <xsl:with-param name="component-schema" select="$component-schema"/>
+                        <xsl:with-param name="context" select="$context"/>
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="prop" mode="non-locale">
+	<xsl:template match="prop">
 		<xsl:param name = "context"/>
 		<xsl:choose>
+            <xsl:when test="$module and not(ancestor-or-self::*/@install:module=$module)"/>
+            <xsl:when test="not($module) and ancestor-or-self::*/@install:module"/>
 			<xsl:when test="not ($context) or @oor:finalized='true'">
 				<xsl:copy>
-					<xsl:apply-templates select = "@*" mode="non-locale"/>
-					<xsl:apply-templates select = "value" mode="non-locale"/>
+					<xsl:apply-templates select = "@*"/>
+					<xsl:apply-templates select = "value"/>
 				</xsl:copy>
 			</xsl:when>
-			<xsl:when test="count (value[not (@xml:lang)])">
+			<xsl:when test="value[not (@xml:lang)]">
 			    <!-- copy locale independent values only, if the values differ -->
 				<xsl:variable name="isRedundant">
 					<xsl:call-template name="isRedundant">
@@ -237,24 +283,24 @@
 				</xsl:variable>
 				<xsl:if test="$isRedundant ='false'">
 					<xsl:copy>
-						<xsl:apply-templates select = "@*" mode="non-locale"/>
-						<xsl:apply-templates select = "value" mode="non-locale"/>
+						<xsl:apply-templates select = "@*"/>
+						<xsl:apply-templates select = "value"/>
 					</xsl:copy>
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:copy>
-					<xsl:apply-templates select = "@*" mode="non-locale"/>
+					<xsl:apply-templates select = "@*"/>
 					<xsl:apply-templates select = "value" mode="fallback-locale"/>
 				</xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template match="value" mode="non-locale">
+	<xsl:template match="value">
 		<xsl:if test="not (@xml:lang)">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*" mode="non-locale"/>
+				<xsl:apply-templates select = "@*"/>
 				<xsl:value-of select="."/>
 			</xsl:copy>
 		</xsl:if>
@@ -263,15 +309,25 @@
 	<xsl:template match="value" mode="fallback-locale">
 		<xsl:if test="@xml:lang = $fallback-locale">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*" mode="non-locale"/>
+				<xsl:apply-templates select = "@*"/>
 				<xsl:value-of select="."/>
 			</xsl:copy>
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match = "@*" mode="non-locale">
+	<xsl:template match = "@*">
 		<xsl:copy/>
 	</xsl:template>
+
+    <!-- suppress all merge instructions, that are out-of-module -->
+	<xsl:template match = "@oor:op">
+        <xsl:if test="not($module) or ancestor::*/@install:module">
+            <xsl:copy/>
+		</xsl:if>
+	</xsl:template>
+
+    <!-- suppress all module markers -->
+	<xsl:template match = "@install:module"/>
 
 <!-- compares two values -->
 	<xsl:template name="isRedundant">
