@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-20 09:55:18 $
+#   last change: $Author: vg $ $Date: 2005-03-08 16:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -58,8 +58,6 @@ LIBSALCPPRT=$(0)
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-PKGCONFIG_MODULES=gtk+-2.0
-.INCLUDE: pkg_config.mk
 
 # ------------------------------------------------------------------
 
