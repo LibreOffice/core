@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-10 14:04:12 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 16:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
                 {
                     pSh->Left();
                     {
-                        SvxDicListChgClamp aClamp( SvxGetDictionaryList() );
+                        Reference<XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+                        SvxDicListChgClamp aClamp( xDictionaryList );
                         pSh->GetView().GetViewFrame()->GetDispatcher()->
                             Execute( FN_SPELLING_DLG, SFX_CALLMODE_ASYNCHRON );
                     }
@@ -390,8 +391,9 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
                 break;
                 case MN_IGNORE :
                 {
+                    Reference< XDictionary > xDictionary( SvxGetIgnoreAllList(), UNO_QUERY );
                     sal_Int16 nAddRes = SvxAddEntryToDic(
-                            Reference< XDictionary > ( SvxGetIgnoreAllList(), UNO_QUERY ),
+                            xDictionary,
                             xSpellAlt->getWord(), sal_False,
                             aEmptyStr, LANGUAGE_NONE );
                 }
