@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocumentSettings.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-29 13:18:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::SpreadsheetDocument
  */
-service SpreadsheetDocumentSettings
+published service SpreadsheetDocumentSettings
 {
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
