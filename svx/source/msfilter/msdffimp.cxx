@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:09:28 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5409,6 +5409,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nCropFromRight = GetPropertyValue(
                                     DFF_Prop_cropFromRight, 0 );
 
+        pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) ? true : false;
+        pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) ? true : false;
+
         UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
         pImpRec->eLineStyle = (nLineFlags & 8)
                             ? (MSO_LineStyle)GetPropertyValue(
@@ -6419,6 +6422,7 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
                 pGrStream = pOut;
         }
 
+#define DBG_EXTRACTGRAPHICS
 #ifdef DBG_EXTRACTGRAPHICS
 
         static sal_Int32 nCount;
@@ -7028,6 +7032,8 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       bReplaceByFly   = FALSE;
       bLastBoxInChain = TRUE;
       bHasUDefProp    = FALSE; // was the DFF_msofbtUDefProp record set?
+      bVFlip = FALSE;
+      bHFlip = FALSE;
 }
 
 SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
@@ -7062,6 +7068,8 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     bReplaceByFly    = rCopy.bReplaceByFly;
     bLastBoxInChain  = rCopy.bLastBoxInChain;
     bHasUDefProp     = rCopy.bHasUDefProp;
+    bVFlip = rCopy.bVFlip;
+    bHFlip = rCopy.bHFlip;
     nClientAnchorLen = rCopy.nClientAnchorLen;
     if( rCopy.nClientAnchorLen )
     {
