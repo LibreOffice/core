@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,14 +231,6 @@ const sal_uInt16 EXC_ID_NOTE                = 0x001C;
 const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 
 
-// (0x001E, 0x041E) FORMAT ----------------------------------------------------
-
-const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
-
-const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
-const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
-
-
 // (0x0023) EXTERNNAME --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_EXTERNNAME          = 0x0023;
@@ -258,114 +250,13 @@ const sal_uInt16 EXC_ID_RIGHTMARGIN         = 0x0027;
 const sal_uInt16 EXC_ID_TOPMARGIN           = 0x0028;
 const sal_uInt16 EXC_ID_BOTTOMMARGIN        = 0x0029;
 
+const sal_uInt16 EXC_ULMARGIN_DEFAULT_TWIPS = 1417;     // Excel default top/bottom twip size = 2.5cm
+const sal_uInt16 EXC_LRMARGIN_DEFAULT_TWIPS = 1077;     // Excel default left/right twip size = 1.9cm
+
 // (0x0012, 0x0019) PROTECT and WINDOWPROTECT --------------------
 
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
-
-
-// (0x0031) FONT --------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_FONT                = 0x0031;
-
-const sal_uInt16 EXC_FONT_APP               = 0;        /// Application font index.
-
-const sal_uInt32 EXC_FONT_MAXCOUNT4         = 0x00FF;
-const sal_uInt32 EXC_FONT_MAXCOUNT5         = 0x00FF;
-const sal_uInt32 EXC_FONT_MAXCOUNT8         = 0xFFFF;
-
-// attributes
-const sal_uInt16 EXC_FONTATTR_NONE          = 0x0000;
-const sal_uInt16 EXC_FONTATTR_BOLD          = 0x0001;
-const sal_uInt16 EXC_FONTATTR_ITALIC        = 0x0002;
-const sal_uInt16 EXC_FONTATTR_UNDERLINE     = 0x0004;
-const sal_uInt16 EXC_FONTATTR_STRIKEOUT     = 0x0008;
-const sal_uInt16 EXC_FONTATTR_OUTLINE       = 0x0010;
-const sal_uInt16 EXC_FONTATTR_SHADOW        = 0x0020;
-
-// weight
-const sal_uInt16 EXC_FONTWGHT_DONTKNOW      = 0;
-const sal_uInt16 EXC_FONTWGHT_THIN          = 100;
-const sal_uInt16 EXC_FONTWGHT_ULTRALIGHT    = 200;
-const sal_uInt16 EXC_FONTWGHT_LIGHT         = 300;
-const sal_uInt16 EXC_FONTWGHT_SEMILIGHT     = 350;
-const sal_uInt16 EXC_FONTWGHT_NORMAL        = 400;
-const sal_uInt16 EXC_FONTWGHT_MEDIUM        = 500;
-const sal_uInt16 EXC_FONTWGHT_SEMIBOLD      = 600;
-const sal_uInt16 EXC_FONTWGHT_BOLD          = 700;
-const sal_uInt16 EXC_FONTWGHT_ULTRABOLD     = 800;
-const sal_uInt16 EXC_FONTWGHT_BLACK         = 900;
-
-// families
-const sal_uInt8 EXC_FONTFAM_DONTKNOW        = 0x00;
-const sal_uInt8 EXC_FONTFAM_ROMAN           = 0x01;
-const sal_uInt8 EXC_FONTFAM_SWISS           = 0x02;
-const sal_uInt8 EXC_FONTFAM_SYSTEM          = EXC_FONTFAM_SWISS;
-const sal_uInt8 EXC_FONTFAM_MODERN          = 0x03;
-const sal_uInt8 EXC_FONTFAM_SCRIPT          = 0x04;
-const sal_uInt8 EXC_FONTFAM_DECORATIVE      = 0x05;
-
-// charsets
-const sal_uInt8 EXC_FONTCSET_DONTKNOW       = 0x00;
-const sal_uInt8 EXC_FONTCSET_MS_1252        = 0x00;
-const sal_uInt8 EXC_FONTCSET_APPLE_ROMAN    = 0x00;
-const sal_uInt8 EXC_FONTCSET_IBM_437        = 0x00;
-const sal_uInt8 EXC_FONTCSET_IBM_850        = 0xFF;
-const sal_uInt8 EXC_FONTCSET_IBM_860        = 0x00;
-const sal_uInt8 EXC_FONTCSET_IBM_861        = 0x00;
-const sal_uInt8 EXC_FONTCSET_IBM_863        = 0x00;
-const sal_uInt8 EXC_FONTCSET_IBM_865        = 0x00;
-const sal_uInt8 EXC_FONTCSET_SYSTEM         = 0x00;
-const sal_uInt8 EXC_FONTCSET_SYMBOL         = 0x02;
-
-// color
-const sal_uInt16 EXC_FONT_AUTOCOLOR         = 0x7FFF;
-
-
-// (0x0043, 0x0243, 0x0443, 0x00E0) XF ----------------------------------------
-
-const sal_uInt16 EXC_ID2_XF                 = 0x0043;
-const sal_uInt16 EXC_ID3_XF                 = 0x0243;
-const sal_uInt16 EXC_ID4_XF                 = 0x0443;
-const sal_uInt16 EXC_ID_XF                  = 0x00E0;
-
-const sal_uInt32 EXC_XF_MAXCOUNT            = 4050;     /// Maximum number of all XF records.
-const sal_uInt32 EXC_XF_MAXSTYLECOUNT       = 1536;     /// Arbitrary maximum number of style XFs.
-const sal_uInt16 EXC_XF_USEROFFSET          = 21;       /// Index to first user defined record.
-const sal_uInt16 EXC_XF_DEFAULTSTYLE        = 0;        /// Excel index to cefault style XF.
-const sal_uInt16 EXC_XF_DEFAULTCELL         = 15;       /// Excel index to cefault cell XF.
-
-const sal_uInt16 EXC_XF_NOCOLOR             = 0;
-const sal_uInt16 EXC_XF_AUTOCOLOR           = 64;
-const sal_uInt16 EXC_XF_TRANSPCOLOR         = 65;
-
-const sal_uInt16 EXC_XF_LOCKED              = 0x0001;
-const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
-const sal_uInt16 EXC_XF_STYLE               = 0x0004;
-const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
-const sal_uInt16 EXC_XF_WRAPPED             = 0x0008;   /// Automatic line break.
-const sal_uInt16 EXC_XF_SHRINK              = 0x0010;   /// Shrink to fit into cell.
-
-const sal_uInt8 EXC_XF_DIFF_VALFMT          = 0x01;
-const sal_uInt8 EXC_XF_DIFF_FONT            = 0x02;
-const sal_uInt8 EXC_XF_DIFF_ALIGN           = 0x04;
-const sal_uInt8 EXC_XF_DIFF_BORDER          = 0x08;
-const sal_uInt8 EXC_XF_DIFF_AREA            = 0x10;
-const sal_uInt8 EXC_XF_DIFF_PROT            = 0x20;
-
-const sal_uInt8 EXC_XF2_VALFMT_MASK         = 0x3F;
-const sal_uInt8 EXC_XF2_LOCKED              = 0x40;
-const sal_uInt8 EXC_XF2_HIDDEN              = 0x80;
-const sal_uInt8 EXC_XF2_LEFTLINE            = 0x08;
-const sal_uInt8 EXC_XF2_RIGHTLINE           = 0x10;
-const sal_uInt8 EXC_XF2_TOPLINE             = 0x20;
-const sal_uInt8 EXC_XF2_BOTTOMLINE          = 0x40;
-const sal_uInt8 EXC_XF2_BACKGROUND          = 0x80;
-
-const sal_uInt16 EXC_XF8_SHRINKTOFIT        = 0x0010;
-const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
-
-const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
 
 
 // (0x0055) DEFCOLWIDTH -------------------------------------------------------
@@ -414,41 +305,9 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
 
 
-// (0x0092) PALETTE -----------------------------------------------------------
-
-const sal_uInt16 EXC_ID_PALETTE             = 0x0092;
-
-const sal_uInt16 EXC_COLOR_OFFSET2          = 0;
-const sal_uInt16 EXC_COLOR_OFFSET3          = 8;
-const sal_uInt16 EXC_COLOR_OFFSET5          = 8;
-const sal_uInt16 EXC_COLOR_OFFSET8          = 8;
-
-const sal_uInt16 EXC_COLOR_BIFF2_BLACK      = 0;
-const sal_uInt16 EXC_COLOR_BIFF2_WHITE      = 1;
-
-
-// (0x00E9) BITMAP ------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_BITMAP              = 0x00E9;
-const sal_uInt32 EXC_BITMAP_UNKNOWNID       = 0x00010009;
-const sal_uInt32 EXC_BITMAP_MAXREC          = 0x201C;
-const sal_uInt32 EXC_BITMAP_MAXCONT         = 0x2014;
-
-
-// (0x00FC, 0x00FF) SST, EXTSST -----------------------------------------------
-
-const sal_uInt16 EXC_ID_SST                 = 0x00FC;
-const sal_uInt16 EXC_ID_EXTSST              = 0x00FF;
-
-
 // (0x013D) TABID -------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_TABID               = 0x013D;
-
-
-// (0x015F) LABELRANGES -------------------------------------------------------
-
-const sal_uInt16 EXC_ID_LABELRANGES         = 0x015F;
 
 
 // (0x01AE) SUPBOOK -----------------------------------------------------------
@@ -460,115 +319,6 @@ const sal_uInt16 EXC_TAB_INVALID            = 0xFFFF;     /// Deleted 3D referen
 
 const sal_uInt16 EXC_SUPB_SELF              = 0x0401;
 const sal_uInt16 EXC_SUPB_ADDIN             = 0x3A01;
-
-
-// (0x01B2) DVAL, (0x01BE) DV -------------------------------------------------
-
-const sal_uInt16 EXC_ID_DVAL                = 0x01B2;
-const sal_uInt16 EXC_ID_DV                  = 0x01BE;
-
-const sal_uInt32 EXC_DVAL_NOOBJ             = 0xFFFFFFFF;
-
-// data validation flags
-const sal_uInt32 EXC_DV_STRINGLIST          = 0x00000080;
-const sal_uInt32 EXC_DV_IGNOREBLANK         = 0x00000100;
-const sal_uInt32 EXC_DV_SUPPRESSDROPDOWN    = 0x00000200;
-const sal_uInt32 EXC_DV_SHOWPROMPT          = 0x00040000;
-const sal_uInt32 EXC_DV_SHOWERROR           = 0x00080000;
-
-// data validation data mode
-const sal_uInt32 EXC_DV_MODE_MASK           = 0x0000000F;
-const sal_uInt32 EXC_DV_MODE_ANY            = 0x00000000;
-const sal_uInt32 EXC_DV_MODE_WHOLE          = 0x00000001;
-const sal_uInt32 EXC_DV_MODE_DECIMAL        = 0x00000002;
-const sal_uInt32 EXC_DV_MODE_LIST           = 0x00000003;
-const sal_uInt32 EXC_DV_MODE_DATE           = 0x00000004;
-const sal_uInt32 EXC_DV_MODE_TIME           = 0x00000005;
-const sal_uInt32 EXC_DV_MODE_TEXTLEN        = 0x00000006;
-const sal_uInt32 EXC_DV_MODE_CUSTOM         = 0x00000007;
-
-// data validation conditions
-const sal_uInt32 EXC_DV_COND_MASK           = 0x00F00000;
-const sal_uInt32 EXC_DV_COND_BETWEEN        = 0x00000000;
-const sal_uInt32 EXC_DV_COND_NOTBETWEEN     = 0x00100000;
-const sal_uInt32 EXC_DV_COND_EQUAL          = 0x00200000;
-const sal_uInt32 EXC_DV_COND_NOTEQUAL       = 0x00300000;
-const sal_uInt32 EXC_DV_COND_GREATER        = 0x00400000;
-const sal_uInt32 EXC_DV_COND_LESS           = 0x00500000;
-const sal_uInt32 EXC_DV_COND_EQGREATER      = 0x00600000;
-const sal_uInt32 EXC_DV_COND_EQLESS         = 0x00700000;
-
-// data validation error style
-const sal_uInt32 EXC_DV_ERROR_MASK          = 0x00000070;
-const sal_uInt32 EXC_DV_ERROR_STOP          = 0x00000000;
-const sal_uInt32 EXC_DV_ERROR_WARNING       = 0x00000010;
-const sal_uInt32 EXC_DV_ERROR_INFO          = 0x00000020;
-
-
-// (0x01B8) HLINK -------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_HLINK               = 0x01B8;
-
-const sal_uInt32 EXC_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
-const sal_uInt32 EXC_HLINK_ABS              = 0x00000002;   /// Absolute path.
-const sal_uInt32 EXC_HLINK_DESCR            = 0x00000014;   /// Description.
-const sal_uInt32 EXC_HLINK_MARK             = 0x00000008;   /// Text mark.
-const sal_uInt32 EXC_HLINK_FRAME            = 0x00000080;   /// Target frame.
-const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
-
-
-// (0x0293) STYLE -------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_STYLE               = 0x0293;
-
-const sal_uInt16 EXC_STYLE_BUILTIN          = 0x8000;
-const sal_uInt16 EXC_STYLE_XFMASK           = 0x0FFF;
-
-const sal_uInt8 EXC_STYLE_NORMAL            = 0x00;         /// "Normal" style.
-const sal_uInt8 EXC_STYLE_ROWLEVEL          = 0x01;         /// "RowLevel_*" styles.
-const sal_uInt8 EXC_STYLE_COLLEVEL          = 0x02;         /// "ColLevel_*" styles.
-const sal_uInt8 EXC_STYLE_COMMA             = 0x03;         /// "Comma" style.
-const sal_uInt8 EXC_STYLE_CURRENCY          = 0x04;         /// "Currency" style.
-const sal_uInt8 EXC_STYLE_PERCENT           = 0x05;         /// "Percent" style.
-const sal_uInt8 EXC_STYLE_COMMA_0           = 0x06;         /// "Comma [0]" style.
-const sal_uInt8 EXC_STYLE_CURRENCY_0        = 0x07;         /// "Currency [0]" style.
-const sal_uInt8 EXC_STYLE_USERDEF           = 0xFF;         /// No built-in style.
-
-const sal_uInt8 EXC_STYLE_LEVELCOUNT        = 7;            /// Number of outline level styles.
-const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value for unused level.
-
-
-// web queries ================================================================
-
-#define EXC_WEBQRY_FILTER                   "calc_HTML_WebQuery"
-
-// (0x00CD) SXSTRING
-const sal_uInt16 EXC_ID_SXSTRING            = 0x00CD;
-
-// (0x00DC) PARAMQRY
-const sal_uInt16 EXC_ID_PQRY                = 0x00DC;
-const sal_uInt16 EXC_PQRY_DOC               = 0x0000;       /// Entire document.
-const sal_uInt16 EXC_PQRY_TABLES            = 0x0100;       /// All tables.
-const sal_uInt16 EXC_PQRY_DEFAULTFLAGS      = 0x0044;       /// Flags for export.
-
-// (0x01AD) QSI
-const sal_uInt16 EXC_ID_QSI                 = 0x01AD;
-const sal_uInt16 EXC_QSI_DEFAULTFLAGS       = 0x0349;       /// Flags for export.
-
-// (0x0802) unknown record
-const sal_uInt16 EXC_ID_0802                = 0x0802;
-
-// (0x0803) WEBQRYSETTINGS
-const sal_uInt16 EXC_ID_WQSETT              = 0x0803;
-const sal_uInt16 EXC_WQSETT_ALL             = 0x0000;       /// All tables or entire document.
-const sal_uInt16 EXC_WQSETT_SPECTABLES      = 0x0002;       /// Specific tables.
-const sal_uInt16 EXC_WQSETT_DEFAULTFLAGS    = 0x0023;       /// Flags for export.
-const sal_uInt16 EXC_WQSETT_NOFORMAT        = 0x0001;
-const sal_uInt16 EXC_WQSETT_FORMATRTF       = 0x0002;
-const sal_uInt16 EXC_WQSETT_FORMATFULL      = 0x0003;
-
-// (0x0804) WEBQRYTABLES
-const sal_uInt16 EXC_ID_WQTABLES            = 0x0804;
 
 
 // ============================================================================
