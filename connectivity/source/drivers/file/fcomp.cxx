@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:47:22 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include "file/FStringFunctions.hxx"
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
+
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -242,6 +246,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     else if (SQL_ISRULE(pPredicateNode,like_predicate))
     {
         execute_LIKE(pPredicateNode);
+    }
+    else if (SQL_ISRULE(pPredicateNode,between_predicate))
+    {
+        execute_BETWEEN(pPredicateNode);
     }
     else if (SQL_ISRULE(pPredicateNode,test_for_null))
     {
@@ -425,7 +433,92 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     m_aCodeList.push_back(pOperator);
     return NULL;
 }
+//------------------------------------------------------------------
+OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+{
+    DBG_ASSERT(pPredicateNode->count() == 6,"OFILECursor: Fehler im Parse Tree");
 
+    if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
+    {
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
+        return NULL;
+    }
+
+    OSQLParseNode* pColumn = pPredicateNode->getChild(0);
+    OSQLParseNode* p1stValue = pPredicateNode->getChild(3);
+    OSQLParseNode* p2ndtValue = pPredicateNode->getChild(5);
+
+    if (
+            !(p1stValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p1stValue,parameter))
+        &&  !(p2ndtValue->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(p2ndtValue,parameter))
+        )
+    {
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
+        return NULL;
+    }
+
+    sal_Bool bNot = SQL_ISTOKEN(pPredicateNode->getChild(1),NOT);
+
+    OOperand* pColumnOp = execute(pColumn);
+    OOperand* pOb1 = execute(p1stValue);
+    OBoolOperator* pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::LESS_EQUAL : SQLFilterOperator::GREATER);
+    m_aCodeList.push_back(pOperator);
+
+    execute(pColumn);
+    OOperand* pOb2 = execute(p2ndtValue);
+    pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::GREATER_EQUAL : SQLFilterOperator::LESS);
+    m_aCodeList.push_back(pOperator);
+
+    if ( pColumnOp && pOb1 && pOb2 )
+    {
+        switch(pColumnOp->getDBType())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+                pOb1->setValue(pOb1->getValue().getString());
+                pOb2->setValue(pOb2->getValue().getString());
+                break;
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                pOb1->setValue((double)pOb1->getValue());
+                pOb2->setValue((double)pOb2->getValue());
+                break;
+            case DataType::FLOAT:
+                pOb1->setValue((float)pOb1->getValue());
+                pOb2->setValue((float)pOb2->getValue());
+                break;
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                pOb1->setValue((double)pOb1->getValue());
+                pOb2->setValue((double)pOb2->getValue());
+                break;
+            case DataType::DATE:
+                pOb1->setValue((Date)pOb1->getValue());
+                pOb2->setValue((Date)pOb2->getValue());
+                break;
+            case DataType::TIME:
+                pOb1->setValue((Time)pOb1->getValue());
+                pOb2->setValue((Time)pOb2->getValue());
+                break;
+            case DataType::TIMESTAMP:
+                pOb1->setValue((DateTime)pOb1->getValue());
+                pOb2->setValue((DateTime)pOb2->getValue());
+                break;
+        }
+    }
+
+
+
+    OBoolOperator* pBoolOp = NULL;
+    if ( bNot )
+        pBoolOp = new OOp_OR();
+    else
+        pBoolOp = new OOp_AND();
+    m_aCodeList.push_back(pBoolOp);
+
+    return NULL;
+}
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
