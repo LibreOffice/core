@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-14 11:10:28 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 08:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2049,6 +2049,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                             pGraphic->SetGraphic( aGraphic );
                             pGraphic->SetUserData( aUserData );
+                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                         }
                     }
                     else
@@ -2056,6 +2057,9 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         pStream->Seek( nGrafStreamPos );
                         *pStream >> aGraphic;
                         pGraphic->SetGraphic( aGraphic );
+
+                        if( !pStream->GetError() )
+                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                     }
 
                     pStream->ResetError();
@@ -2065,11 +2069,13 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         delete pStream;
                         delete aStreamInfo.mpStorageRef;
                     }
-
-                    pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                 }
             }
             else if( !ImpUpdateGraphicLink() )
+            {
+                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
+            }
+            else
             {
                 pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
             }
