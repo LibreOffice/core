@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:46 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ namespace pcr
                 IBrowserControl*            getControl();
 
                 void                        SetKindOfControl(BrowserControlType);
-                BrowserControlType              GetKindOfControl();
+                BrowserControlType          GetKindOfControl();
 
                 void                        SetHelpId(sal_uInt32 nCtrHelpId,sal_uInt32 nBtUniqueId);
 
@@ -132,6 +132,7 @@ namespace pcr
                 void                        SetPosSizePixel(Point aPos,Size aSize);
                 Size                        GetSizePixel();
                 void                        Show(sal_Bool bFlag=sal_True);
+                void                        Enable( sal_Bool _bDoEnable = sal_True );
                 void                        Hide();
                 sal_Bool                    IsVisible();
                 void                        Invalidate();
