@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 13:00:02 $
+ *  last change: $Author: fs $ $Date: 2001-09-07 10:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing(const EventObject& _rSource) throw( RuntimeException )
     {
-        if ( isConnected() && ( _rSource.Source == getConnection() ) )
+        if ( !getBroadcastHelper().bInDispose  && !getBroadcastHelper().bDisposed && isConnected() && ( _rSource.Source == getConnection() ) )
         {
             losingConnection();
         }
@@ -420,6 +420,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/08/16 13:00:02  hr
+ *  #65293#: syntax
+ *
  *  Revision 1.3  2001/08/15 13:36:51  fs
  *  #88637# add a separator above the toolbox
  *
