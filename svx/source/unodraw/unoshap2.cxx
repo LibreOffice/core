@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,6 +1724,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         }
 
         ((SdrGrafObj*)pObj)->SetGrafStreamURL( aStreamURL );
+        ((SdrGrafObj*)pObj)->ForceSwapOut();
     }
     else
     {
