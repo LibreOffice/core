@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:24:59 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,9 @@ public:
     OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW( () );
 
     // XPropertySetInfo-Methoden
-    virtual Sequence< Property > SAL_CALL getProperties(void);
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName);
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName);
+    virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
@@ -134,7 +134,8 @@ OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
 /**
  * Return the sequence of properties, which are provided throug the constructor.
  */
-Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void)
+Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::com::sun::star::uno::RuntimeException)
+
 {
     return aInfos;
 }
@@ -142,7 +143,7 @@ Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void)
 /**
  * Return the sequence of properties, which are provided throug the constructor.
  */
-Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName )
+Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     Property * pR;
     pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -158,7 +159,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 /**
  * Return the sequence of properties, which are provided throug the constructor.
  */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName )
+sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     Property * pR;
     pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),

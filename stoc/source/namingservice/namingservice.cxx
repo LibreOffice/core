@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namingservice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:59 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,9 @@ public:
         return Sequence< OUString >( &aStr, 1 );
     }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const ::rtl::OUString& Name );
-    virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object );
-    virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const ::rtl::OUString& Name ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(Exception, RuntimeException);
 };
 
 //==================================================================================================
@@ -239,7 +239,7 @@ Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
 }
 
 // XServiceInfo
-Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name )
+Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );
     Reference< XInterface > xRet;
@@ -250,14 +250,14 @@ Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString&
 }
 
 // XServiceInfo
-void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object )
+void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );
     aMap[ Name ] = Object;
 }
 
 // XServiceInfo
-void NamingService_Impl::revokeObject( const OUString& Name )
+void NamingService_Impl::revokeObject( const OUString& Name ) throw(Exception, RuntimeException)
 {
     Guard< Mutex > aGuard( aMutex );
     aMap.erase( Name );

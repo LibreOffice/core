@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,11 @@ namespace remotebridges_bridge
         // XInterface
     public:
         ::com::sun::star::uno::Any      SAL_CALL
-               queryInterface( const ::com::sun::star::uno::Type & aType );
+               queryInterface( const ::com::sun::star::uno::Type & aType ) throw(::com::sun::star::uno::RuntimeException);
 
-        void        SAL_CALL acquire()
+        void        SAL_CALL acquire() throw()
             { OComponentHelper::acquire(); }
-        void        SAL_CALL release()
+        void        SAL_CALL release() throw()
             { OComponentHelper::release(); }
 
     public:

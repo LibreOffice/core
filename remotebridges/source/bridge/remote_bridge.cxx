@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace remotebridges_bridge
         }
     }
 
-    Any ORemoteBridge::queryInterface( const  Type & aType )
+    Any ORemoteBridge::queryInterface( const  Type & aType ) throw(RuntimeException)
     {
         Any a = ::cppu::queryInterface(
             aType ,

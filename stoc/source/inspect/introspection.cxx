@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:48:13 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,7 +929,7 @@ public:
           throw( IllegalTypeException, RuntimeException );
 
     // Methoden von XMaterialHolder
-    virtual Any SAL_CALL getMaterial(void);
+    virtual Any SAL_CALL getMaterial(void) throw(RuntimeException);
 
     // Methoden von XExactName
     virtual OUString SAL_CALL getExactName( const OUString& rApproximateName ) throw( RuntimeException );
@@ -1451,7 +1451,7 @@ Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type
 }
 
 // Methoden von XMaterialHolder
-Any ImplIntrospectionAccess::getMaterial(void)
+Any ImplIntrospectionAccess::getMaterial(void) throw(RuntimeException)
 {
     return maInspectedObject;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace remotebridges_factory {
         g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
-    ::com::sun::star::uno::Any OBridge::queryInterface( const ::com::sun::star::uno::Type & aType )
+    ::com::sun::star::uno::Any OBridge::queryInterface( const ::com::sun::star::uno::Type & aType ) throw(RuntimeException)
     {
         Any a = ::cppu::queryInterface(
             aType ,

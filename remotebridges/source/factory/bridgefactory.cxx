@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,11 @@ namespace remotebridges_factory
 
     public: // XInterface
         ::com::sun::star::uno::Any      SAL_CALL
-            queryInterface( const ::com::sun::star::uno::Type & aType );
+            queryInterface( const ::com::sun::star::uno::Type & aType ) throw(RuntimeException);
 
-        void        SAL_CALL acquire()
+        void        SAL_CALL acquire() throw()
             { OComponentHelper::acquire(); }
-        void        SAL_CALL release()
+        void        SAL_CALL release() throw()
             { OComponentHelper::release(); }
 
     public:
@@ -279,7 +279,7 @@ namespace remotebridges_factory
         return sService;
     }
 
-    Any OBridgeFactory::queryInterface( const Type &aType )
+    Any OBridgeFactory::queryInterface( const Type &aType ) throw(RuntimeException)
     {
         Any a = ::cppu::queryInterface(
             aType ,

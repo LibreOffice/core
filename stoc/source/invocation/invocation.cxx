@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-27 10:29:52 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ public:
        throw( RuntimeException);
 
     // Methoden von XMaterialHolder
-    virtual Any         SAL_CALL getMaterial(void);
+    virtual Any         SAL_CALL getMaterial(void) throw(RuntimeException);
 
     // ? XTool
     virtual void        SAL_CALL setMaterial( const Any& rMaterial );
@@ -412,7 +412,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 
 
 //--------------------------------------------------------------------------------------------------
-Any Invocation_Impl::getMaterial(void)
+Any Invocation_Impl::getMaterial(void) throw(RuntimeException)
 {
     // AB, 12.2.1999  Sicherstellen, dass das Material wenn moeglich
     // aus der direkten Invocation bzw. von der Introspection geholt

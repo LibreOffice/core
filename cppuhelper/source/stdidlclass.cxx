@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@ public:
     Any                 SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
         throw(::com::sun::star::uno::RuntimeException);
 
-    void                SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void                SAL_CALL release()                       { OWeakObject::release(); }
+    void                SAL_CALL acquire() throw()   { OWeakObject::acquire(); }
+    void                SAL_CALL release() throw()   { OWeakObject::release(); }
 
     // XIdlClassProvider
     Sequence< Reference < XIdlClass > > SAL_CALL getIdlClasses(void)
