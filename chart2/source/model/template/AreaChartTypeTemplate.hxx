@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AreaChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
-    virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
+    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);

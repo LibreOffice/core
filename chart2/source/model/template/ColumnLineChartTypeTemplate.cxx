@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:37 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ Reference< chart2::XDataSeriesTreeParent > ColumnLineChartTypeTemplate::createDa
     return aRoot;
 }
 
-chart2::StackMode ColumnLineChartTypeTemplate::getStackMode() const
+chart2::StackMode ColumnLineChartTypeTemplate::getYStackMode() const
 {
     return m_eStackMode;
 }
@@ -337,7 +337,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
             bResult = ( helper::DataSeriesTreeHelper::getStackMode(
                             uno::Reference< chart2::XDataSeriesTreeParent >(
                                 aChartTypeGroups[0], uno::UNO_QUERY )) ==
-                        getStackMode() );
+                        getYStackMode() );
         }
     }
     catch( uno::Exception & ex )

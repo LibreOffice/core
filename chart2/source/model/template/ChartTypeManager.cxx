@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:36 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "AreaChartTypeTemplate.hxx"
 #include "PieChartTypeTemplate.hxx"
 #include "ScatterChartTypeTemplate.hxx"
+#include "StockChartTypeTemplate.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -613,13 +614,29 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 break;
 
             case TEMPLATE_STOCKLOWHIGHCLOSE:
+                xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StockChartTypeTemplate::LOW_HI_CLOSE ));
+                break;
             case TEMPLATE_STOCKOPENLOWHIGHCLOSE:
+                xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StockChartTypeTemplate::OPEN_LOW_HI_CLOSE ));
+                break;
             case TEMPLATE_STOCKVOLUMELOWHIGHCLOSE:
+                xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StockChartTypeTemplate::VOL_LOW_HI_CLOSE ));
+                break;
             case TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE:
+                xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE ));
+                break;
+
             case TEMPLATE_SURFACE:
             case TEMPLATE_THREEDSCATTER:
             case TEMPLATE_THREEDSCATTERSYMBOL:
 //             case TEMPLATE_ADDIN:
+                // just to avoid assertions due to invalid objects
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::StackMode_NONE, chart2::CurveStyle_CUBIC_SPLINES, true, 3 ));
                 break;
 
             case TEMPLATE_NOT_FOUND:

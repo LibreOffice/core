@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
+
+// uncomment to get a scale group in z-direction (for deep-stacking)
+// #define ENABLE_NODE_FOR_Z
 
 // ======================================================================
 
@@ -222,7 +225,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
 
                 if( bResult )
                     bResult = ( helper::DataSeriesTreeHelper::getStackMode( xParent ) ==
-                                getStackMode() );
+                                getYStackMode() );
             }
         }
     }
@@ -248,7 +251,17 @@ sal_Int32 ChartTypeTemplate::getDimension() const
     return 2;
 }
 
-chart2::StackMode ChartTypeTemplate::getStackMode() const
+chart2::StackMode ChartTypeTemplate::getXStackMode() const
+{
+    return chart2::StackMode_NONE;
+}
+
+chart2::StackMode ChartTypeTemplate::getYStackMode() const
+{
+    return chart2::StackMode_NONE;
+}
+
+chart2::StackMode ChartTypeTemplate::getZStackMode() const
 {
     return chart2::StackMode_NONE;
 }
@@ -521,11 +534,25 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
 
     // 'x-axis' group
     Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
-        createScaleGroup( true, true, rCoordSys, 0, chart2::StackMode_STACKED ));
+        createScaleGroup( true, true, rCoordSys, 0, getXStackMode() ));
+
+#ifdef ENABLE_NODE_FOR_Z
+    Reference< chart2::XDataSeriesTreeNode > aFirstCatNode( aCategoryNode );
+
+    // 'z-axis' group for 3d-charts
+    if( getDimension() == 3 )
+    {
+        Reference< chart2::XDataSeriesTreeNode > aDepthNode(
+            createScaleGroup( true, true, rCoordSys, 2, getZStackMode() ));
+        // add value node to category node
+        attachNodeToNode( aDepthNode, aCategoryNode );
+        aFirstCatNode.set( aDepthNode );
+    }
+#endif
 
     // 'y-axis' group
     Reference< chart2::XDataSeriesTreeNode > aValueNode(
-        createScaleGroup( false, true, rCoordSys, 1, getStackMode() ));
+        createScaleGroup( false, true, rCoordSys, 1, getYStackMode() ));
 
     // build tree
     // add series node to value node
@@ -535,7 +562,11 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
     attachNodeToNode( aCategoryNode, aValueNode );
 
     // add category node to chart type node
+#ifdef ENABLE_NODE_FOR_Z
+    attachNodeToNode( aChartTypeNode, aFirstCatNode );
+#else
     attachNodeToNode( aChartTypeNode, aCategoryNode );
+#endif
 
     // add chart type node to root of tree
     aRoot->addChild( aChartTypeNode );

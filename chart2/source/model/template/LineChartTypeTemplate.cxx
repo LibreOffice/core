@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:24 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,17 @@ sal_Int32 LineChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-chart2::StackMode LineChartTypeTemplate::getStackMode() const
+chart2::StackMode LineChartTypeTemplate::getYStackMode() const
 {
     return m_eStackMode;
+}
+
+chart2::StackMode LineChartTypeTemplate::getZStackMode() const
+{
+    if( m_nDim == 2 )
+        return chart2::StackMode_NONE;
+
+    return chart2::StackMode_STACKED;
 }
 
 uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()

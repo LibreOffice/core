@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:37 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,20 @@ protected:
     /// returns 2 by default.  Supported are 2 and 3
     virtual sal_Int32 getDimension() const;
 
+    /** returns StackMode_NONE by default.  For a column/bar chart you would
+        want to return StackMode_STACKED here.
+     */
+    virtual ::drafts::com::sun::star::chart2::StackMode getXStackMode() const;
+
     /** returns StackMode_NONE by default.  This is a global flag used for all series
         if createDataSeriesTree() is not overloaded
      */
-    virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
+    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
+
+    /** returns StackMode_NONE by default.  For a column/bar chart you would
+        want to return StackMode_STACKED here.
+     */
+    virtual ::drafts::com::sun::star::chart2::StackMode getZStackMode() const;
 
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()

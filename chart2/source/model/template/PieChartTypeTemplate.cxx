@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
 
     // 'y-axis' group
     Reference< chart2::XDataSeriesTreeNode > aValueNode(
-        createScaleGroup( false, true, rCoordSys, 1, getStackMode() ));
+        createScaleGroup( false, true, rCoordSys, 1, getYStackMode() ));
 
     // add chart type node to root of tree
     aRoot->addChild( aChartTypeNode );
@@ -359,7 +359,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
 
             // 'y-axis' group
             Reference< chart2::XDataSeriesTreeNode > aValueNode2(
-                createScaleGroup( false, true, rCoordSys, 1, getStackMode() ));
+                createScaleGroup( false, true, rCoordSys, 1, getYStackMode() ));
 
             Sequence< Reference< chart2::XDataSeries > > aRest( aSeriesSeq.getConstArray() + 1,
                                                                 aSeriesSeq.getLength() - 1 );

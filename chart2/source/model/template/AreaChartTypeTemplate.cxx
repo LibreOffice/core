@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AreaChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ sal_Int32 AreaChartTypeTemplate::getDimension() const
     return nDim;
 }
 
-chart2::StackMode AreaChartTypeTemplate::getStackMode() const
+chart2::StackMode AreaChartTypeTemplate::getYStackMode() const
 {
     return m_eStackMode;
 }

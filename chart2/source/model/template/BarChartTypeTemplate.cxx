@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,14 @@ sal_Int32 BarChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-chart2::StackMode BarChartTypeTemplate::getStackMode() const
+chart2::StackMode BarChartTypeTemplate::getYStackMode() const
 {
     return m_eStackMode;
+}
+
+chart2::StackMode BarChartTypeTemplate::getXStackMode() const
+{
+    return chart2::StackMode_STACKED;
 }
 
 uno::Reference< chart2::XChartType > BarChartTypeTemplate::getDefaultChartType()

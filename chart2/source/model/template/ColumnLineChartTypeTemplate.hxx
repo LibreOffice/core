@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:37 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ protected:
                 ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
 
-    virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
+    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
 
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
