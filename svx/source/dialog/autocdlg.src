@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:49:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ TabDialog RID_OFA_AUTOCORR_DLG
     String ST_FRACTION \
     { \
         Text [ de ] = "1/2 ... durch ½ ... ersetzen" ; \
-        Text [ en-US ] = "Replace 1/2 ... with ½ ..." ; \
+        Text [ en-US ] = "Replace 1/2 ... with Â½ ..." ; \
         Text [ x-comment ] = " ";\
     }; \
     String ST_DASH \
