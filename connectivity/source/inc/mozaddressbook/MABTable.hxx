@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: dkenny $ $Date: 2001-06-01 09:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
+            ~OMozabTable( );
 
             virtual sal_Int32 getCurrentLastPos() const;
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
