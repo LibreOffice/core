@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:47:54 $
+ *  last change: $Author: obo $ $Date: 2002-12-13 10:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
                     nOff += 6;
 
                 Color aTextColor( mpVDev->GetTextColor() );
-                Color aShadowColor( Color( COL_BLACK ) );
+                Color aShadowColor = Color( COL_BLACK );
 
                 if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
                     aShadowColor = Color( COL_LIGHTGRAY );
