@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 11:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,6 +851,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         TestHintWindow();       // neu positionieren
 
     UpdateVarZoom();    //  update variable zoom types (after resizing GridWindows)
+
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_WINDOWRESIZED));
 }
 
 void ScTabView::UpdateVarZoom()
