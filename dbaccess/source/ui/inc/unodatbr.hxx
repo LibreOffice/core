@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:50:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 10:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
 // =========================================================================
 class SvLBoxEntry;
@@ -131,6 +134,9 @@ namespace dbaui
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
         SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
         SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
+
+        ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
+            // if we're part of a document, this is the state of the DocumentDataSource slot
 
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
@@ -267,6 +273,9 @@ namespace dbaui
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot(sal_Int32 _nId);
 
+        // connect to the external dispatchers (if any)
+        void connectExternalDispatches();
+
         /** add an entry (including the subentries for queries/tables) to the list model
 
             <p>The given names and images may be empty, in this case they're filled with the correct
@@ -335,8 +344,52 @@ namespace dbaui
 
         void openHelpAgent(sal_Int32 _nHelpId);
 
+        sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor);
+
         sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
             const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing);
+
+        /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
+            @param _rDescriptor
+                the object descriptor
+            @param _ppDataSourceEntry
+                If not <NULL/>, the data source tree entry will be returned here
+            @param _ppContainerEntry
+                If not <NULL/>, the object container tree entry will be returned here
+            @param _bExpandAncestors
+                If <TRUE/>, all ancestor on the way to the entry will be expanded
+        */
+        SvLBoxEntry* getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
+            SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
+            sal_Bool _bExpandAncestors = sal_True
+        );
+        /** retrieves the tree entry for the object described by data source name, command and command type
+            @param _rDataSource
+                the data source name
+            @param _rCommand
+                the command
+            @param _nCommandType
+                the command type
+            @param _rDescriptor
+                the object descriptor
+            @param _ppDataSourceEntry
+                If not <NULL/>, the data source tree entry will be returned here
+            @param _ppContainerEntry
+                If not <NULL/>, the object container tree entry will be returned here
+            @param _bExpandAncestors
+                If <TRUE/>, all ancestor on the way to the entry will be expanded
+        */
+        SvLBoxEntry* getObjectEntry(
+            const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
+            SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
+            sal_Bool _bExpandAncestors = sal_True
+        );
+
+        /// checks if m_aDocumentDataSource describes a known object
+        void checkDocumentDataSource();
+
+        void extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor,
+            ::rtl::OUString& _rDataSource, ::rtl::OUString& _rCommand, sal_Int32& _rCommandType, sal_Bool& _rEscapeProcessing);
 
         void transferChangedControlProperty(const ::rtl::OUString& _rProperty, const ::com::sun::star::uno::Any& _rNewValue);
 
