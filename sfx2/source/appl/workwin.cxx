@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,21 +878,24 @@ void SfxWorkWindow::ShowChilds_Impl()
         {
             if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) )
             {
+                USHORT nFlags = pCli->bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE;
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        ((DockingWindow*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        ((DockingWindow*)pCli->pWin)->Show( TRUE, nFlags );
                         break;
                     case RSC_TOOLBOX :
-                        ((ToolBox*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        ((ToolBox*)pCli->pWin)->Show( TRUE, nFlags );
                         break;
                     case RSC_SPLITWINDOW :
-                        ((SplitWindow*)pCli->pWin)->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        ((SplitWindow*)pCli->pWin)->Show( TRUE, nFlags );
                         break;
                     default:
-                        pCli->pWin->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                        pCli->pWin->Show( TRUE, nFlags );
                         break;
                 }
+
+                pCli->bSetFocus = FALSE;
             }
             else
             {
@@ -1336,7 +1339,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 // Momentan kein Fenster da, aber es ist eingeschaltet; Fenster
                 // und ggf. Context erzeugen
                 if ( bCreate )
-                    CreateChildWin_Impl( pCW );
+                    CreateChildWin_Impl( pCW, FALSE );
 
                 if ( !bAllChildsVisible )
                 {
@@ -1397,7 +1400,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
     }
 }
 
-void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
+void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
 {
     if ( pCW->aInfo.bVisible != 42 )
         pCW->aInfo.bVisible = TRUE;
@@ -1443,17 +1446,16 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
 
         pCW->pWin = pChildWin;
 
-        if ( pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT ||
-                pChildWin->GetWindow()->GetParent() == pWorkWin)
+        if ( pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT || pChildWin->GetWindow()->GetParent() == pWorkWin)
         {
             // Das Fenster ist entweder nicht angedockt oder au\serhalb
             // eines SplitWindows angedockt und mu\s daher explizit als
             // Child registriert werden
-            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()),
-                            pChildWin->GetAlignment(), pChildWin->CanGetFocus());
+            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment(), pChildWin->CanGetFocus());
             pCW->pCli->nVisible = CHILD_VISIBLE;
             if ( pChildWin->GetAlignment() != SFX_ALIGN_NOALIGNMENT && bIsFullScreen )
-                    pCW->pCli->nVisible ^= CHILD_ACTIVE;
+                pCW->pCli->nVisible ^= CHILD_ACTIVE;
+            pCW->pCli->bSetFocus = bSetFocus;
         }
         else
         {
@@ -2172,7 +2174,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
             else
             {
                 // Fenster erzeugen
-                CreateChildWin_Impl( pCW );
+                CreateChildWin_Impl( pCW, bSetFocus );
                 if ( !pCW->pWin )
                     // Erzeugung war erfolglos
                     pCW->bCreate = FALSE;
@@ -2399,6 +2401,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFoc
             {
                 if ( pCW->pCli )
                 {
+                    pCW->pCli->bSetFocus = bSetFocus;
                     pCW->pCli->nVisible = CHILD_VISIBLE;
                     pChildWin->Show( bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }

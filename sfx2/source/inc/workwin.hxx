@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:36:39 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 15:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,12 @@ struct SfxChild_Impl
     USHORT                          nVisible;
     BOOL                            bResize;
     BOOL                            bCanGetFocus;
+    BOOL                            bSetFocus;
 
     SfxChild_Impl( Window& rChild, const Size& rSize,
                    SfxChildAlignment eAlignment, BOOL bIsVisible ):
         pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(FALSE),
-        bCanGetFocus( FALSE )
+        bCanGetFocus( FALSE ), bSetFocus( FALSE )
     {
         nVisible = bIsVisible ? CHILD_VISIBLE : CHILD_NOT_VISIBLE;
     }
@@ -267,7 +268,7 @@ protected:
     BOOL                    bIsFullScreen : 1;
 
 protected:
-    void                    CreateChildWin_Impl(SfxChildWin_Impl*);
+    void                    CreateChildWin_Impl(SfxChildWin_Impl*,BOOL);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
     void                    AlignChild_Impl( Window& rWindow, const Size& rNewSize,
