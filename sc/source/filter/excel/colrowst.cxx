@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:58:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
+#endif
+#ifndef SC_XLTABLE_HXX
+#include "xltable.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
@@ -331,8 +334,8 @@ void ColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
 
     // #109555# assign the default column formatting here to ensure
     // that explicit cell formatting is not overwritten.
-    for( SCCOL nCol = nColFirst; nCol <= nColLast; ++nCol )
-        rRoot.GetXFIndexBuffer().SetColumnDefXF(static_cast<sal_uInt16>(nCol),nXF);
+    for( SCCOL nScCol = nColFirst; nScCol <= nColLast; ++nScCol )
+        rRoot.GetXFRangeBuffer().SetColumnDefXF( nScCol, nXF );
 }
 
 
@@ -355,7 +358,7 @@ void ColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeigh
     if( nGrbit & EXC_ROW_UNSYNCED )
         nFlags |= ROWFLAG_MAN;
 
-    if( nGrbit &  EXC_ROW_ZEROHEIGHT )
+    if( nGrbit &  EXC_ROW_HIDDEN )
         nFlags |= ROWFLAG_HIDDEN;
 
     pRowFlags[ nRow ] = nFlags;
