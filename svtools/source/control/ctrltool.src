@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@ String STR_SVT_STYLE_LIGHT
     Text [ dutch ] = "Light" ;
     Text [ swedish ] = "Mager" ;
     Text [ danish ] = "Light" ;
-    Text [ portuguese_brazilian ] = "Light" ;
+    Text [ portuguese_brazilian ] = "Claro" ;
     Text [ portuguese ] = "Claro" ;
     Text[ russian ] = "������";
-    Text[ polish ] = "Light";
+    Text[ polish ] = "Lekka";
     Text[ japanese ] = "細字";
     Text[ chinese_simplified ] = "细";
     Text[ chinese_traditional ] = "細";
@@ -86,6 +86,9 @@ String STR_SVT_STYLE_LIGHT
     Text[ catalan ] = "Clar";
     Text[ finnish ] = "Vaalea";
     Text[ thai ] = "น้อย";
+    Text[ czech ] = "Lehké";
+    Text[ hebrew ] = "‮קל‬";
+    Text[ hindi ] = "हल्का";
 };
 
 String STR_SVT_STYLE_LIGHT_ITALIC
@@ -99,10 +102,10 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text [ dutch ] = "Light Cursief" ;
     Text [ swedish ] = "Mager kursiv" ;
     Text [ danish ] = "Light kursiv" ;
-    Text [ portuguese_brazilian ] = "Light Italic" ;
+    Text [ portuguese_brazilian ] = "It�lico claro" ;
     Text [ portuguese ] = "It�lico claro" ;
     Text[ russian ] = "������ ������";
-    Text[ polish ] = "Kursywa light";
+    Text[ polish ] = "Kursywa lekka";
     Text[ japanese ] = "細字 斜体";
     Text[ chinese_simplified ] = "细斜体";
     Text[ chinese_traditional ] = "細斜體";
@@ -114,6 +117,9 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text[ catalan ] = "Cursiva lleu";
     Text[ finnish ] = "Kevyesti kursivoitu";
     Text[ thai ] = "เอียงน้อย";
+    Text[ czech ] = "Lehce skloněné";
+    Text[ hebrew ] = "‮איטלקי קל‬";
+    Text[ hindi ] = "Light Italic";
 };
 
 String STR_SVT_STYLE_NORMAL
@@ -127,10 +133,10 @@ String STR_SVT_STYLE_NORMAL
     Text [ dutch ] = "Standaard" ;
     Text [ swedish ] = "Standard" ;
     Text [ danish ] = "Normal" ;
-    Text [ portuguese_brazilian ] = "Normal" ;
+    Text [ portuguese_brazilian ] = "Regular" ;
     Text [ portuguese ] = "Padr�o" ;
     Text[ russian ] = "�������";
-    Text[ polish ] = "Domy�lnie";
+    Text[ polish ] = "Regularna";
     Text[ japanese ] = "標準";
     Text[ chinese_simplified ] = "标准";
     Text[ chinese_traditional ] = "標準";
@@ -142,6 +148,9 @@ String STR_SVT_STYLE_NORMAL
     Text[ catalan ] = "Normal";
     Text[ finnish ] = "S��nn�llinen";
     Text[ thai ] = "ปกติ";
+    Text[ czech ] = "Běžné";
+    Text[ hebrew ] = "‮עובי רגיל‬";
+    Text[ hindi ] = "सामान्य";
 };
 
 String STR_SVT_STYLE_NORMAL_ITALIC
@@ -155,7 +164,7 @@ String STR_SVT_STYLE_NORMAL_ITALIC
     Text [ dutch ] = "Cursief" ;
     Text [ swedish ] = "Kursiv" ;
     Text [ danish ] = "Kursiv" ;
-    Text [ portuguese_brazilian ] = "Italic" ;
+    Text [ portuguese_brazilian ] = "It�lico" ;
     Text [ portuguese ] = "It�lico" ;
     Text[ russian ] = "������";
     Text[ polish ] = "Kursywa";
@@ -170,6 +179,9 @@ String STR_SVT_STYLE_NORMAL_ITALIC
     Text[ catalan ] = "Cursiva";
     Text[ finnish ] = "Kursivoitu";
     Text[ thai ] = "เอียง";
+    Text[ czech ] = "Kurzíva";
+    Text[ hebrew ] = "‮איטלקי‬";
+    Text[ hindi ] = "टेढ़ा";
 };
 
 String STR_SVT_STYLE_BOLD
@@ -183,10 +195,10 @@ String STR_SVT_STYLE_BOLD
     Text [ dutch ] = "Vet" ;
     Text [ swedish ] = "Fet" ;
     Text [ danish ] = "Fed" ;
-    Text [ portuguese_brazilian ] = "Bold" ;
+    Text [ portuguese_brazilian ] = "Negrito" ;
     Text [ portuguese ] = "Negrito" ;
     Text[ russian ] = "������";
-    Text[ polish ] = "Pogrubienie";
+    Text[ polish ] = "Pogrubiona";
     Text[ japanese ] = "太字";
     Text[ chinese_simplified ] = "粗体";
     Text[ chinese_traditional ] = "粗體";
@@ -198,6 +210,9 @@ String STR_SVT_STYLE_BOLD
     Text[ catalan ] = "Negreta";
     Text[ finnish ] = "Lihavoitu";
     Text[ thai ] = "หนา";
+    Text[ czech ] = "Tučné";
+    Text[ hebrew ] = "‮עבה‬";
+    Text[ hindi ] = "मोटा";
 };
 
 String STR_SVT_STYLE_BOLD_ITALIC
@@ -211,7 +226,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text [ dutch ] = "Vet Cursief" ;
     Text [ swedish ] = "Fet kursiv" ;
     Text [ danish ] = "Fed kursiv" ;
-    Text [ portuguese_brazilian ] = "Bold Italic" ;
+    Text [ portuguese_brazilian ] = "Negrito It�lico" ;
     Text [ portuguese ] = "It�lico negrito" ;
     Text[ russian ] = "������ ������";
     Text[ polish ] = "Pogrubiona kursywa";
@@ -226,6 +241,9 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text[ catalan ] = "Negreta cursiva";
     Text[ finnish ] = "Lihavoitu ja kursivoitu";
     Text[ thai ] = "หนาเอียง";
+    Text[ czech ] = "Tučná kurzíva";
+    Text[ hebrew ] = "‮איטלקי עבה‬";
+    Text[ hindi ] = "Bold Italic";
 };
 
 String STR_SVT_STYLE_BLACK
@@ -239,10 +257,10 @@ String STR_SVT_STYLE_BLACK
     Text [ dutch ] = "Black" ;
     Text [ swedish ] = "Svart" ;
     Text [ danish ] = "Black" ;
-    Text [ portuguese_brazilian ] = "Black" ;
+    Text [ portuguese_brazilian ] = "Preto" ;
     Text [ portuguese ] = "Preto" ;
     Text[ russian ] = "������";
-    Text[ polish ] = "Czarny";
+    Text[ polish ] = "Czarna";
     Text[ japanese ] = "黒";
     Text[ chinese_simplified ] = "黑体";
     Text[ language_user1 ] = " ";
@@ -254,6 +272,9 @@ String STR_SVT_STYLE_BLACK
     Text[ catalan ] = "Negre";
     Text[ finnish ] = "Musta";
     Text[ thai ] = "ดำ";
+    Text[ czech ] = "Černé";
+    Text[ hebrew ] = "‮שחור‬";
+    Text[ hindi ] = "काला";
 };
 
 String STR_SVT_STYLE_BLACK_ITALIC
@@ -267,7 +288,7 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text [ dutch ] = "Black Cursief" ;
     Text [ swedish ] = "Svart kursiv" ;
     Text [ danish ] = "Black kursiv" ;
-    Text [ portuguese_brazilian ] = "Black Italic" ;
+    Text [ portuguese_brazilian ] = "Preto it�lico" ;
     Text [ portuguese ] = "Preto it�lico" ;
     Text[ russian ] = "������ ������";
     Text[ polish ] = "Czarna kursywa";
@@ -282,6 +303,9 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text[ catalan ] = "Negra cursiva";
     Text[ finnish ] = "Musta kursivoitu";
     Text[ thai ] = "ดำเอียง";
+    Text[ czech ] = "Černá kurzíva";
+    Text[ hebrew ] = "‮איטלקי שחור‬";
+    Text[ hindi ] = "काला टेढ़ा";
 };
 
 /*
@@ -302,7 +326,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT [ English ] = "The same font will be used on both your printer and your screen." ;
     TEXT [ norwegian ] = "The same font will be used on both your printer and your screen." ;
     TEXT [ italian ] = "Questo tipo di carattere verr� utilizzato sia per lo schermo che per la stampante." ;
-    TEXT [ portuguese_brazilian ] = "Esta mesma fonte ser  utilizada na impressora e na tela." ;
+    TEXT [ portuguese_brazilian ] = "Esta fonte ser� utilizada simultaneamente na impressora e na tela." ;
     TEXT [ portuguese ] = "O tipo de letra utilizado para a impressora e para o ecr� � o mesmo." ;
     TEXT [ finnish ] = "Samaa fonttia k�ytet��n sek� tulostimessa ett� n�yt�ss�." ;
     TEXT [ danish ] = "Denne skrifttype vil blive brugt b�de p� sk�rmen og p� printeren." ;
@@ -313,7 +337,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT [ english_us ] = "The same font will be used on both your printer and your screen." ;
     TEXT[ chinese_simplified ] = "屏幕显示和打印使用同一种字体。";
     TEXT[ russian ] = "��� ������ � ������ �� ����� ������������ ���� � ��� �� �����";
-    TEXT[ polish ] = "U�yj tej samej czcionki dla wydruku i ekranu";
+    TEXT[ polish ] = "Ta sama czcionka b�dzie u�yta zar�wno na wydruku, jak i na ekranie.";
     TEXT[ japanese ] = "印刷と画面表示には同じフォントが使用されます。";
     TEXT[ chinese_traditional ] = "螢幕顯示和列印使用統一的字型";
     TEXT[ arabic ] = "��� ��� ������� ��� ���� ������� �������.";
@@ -323,6 +347,9 @@ String STR_SVT_FONTMAP_BOTH
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "S'utilitzar� el mateix tipus de lletra a la impressora i a la pantalla";
     TEXT[ thai ] = "ตัวอักษรเหมือนกันจะถูกใช้บนเครื่องพิมพ์และจอภาพของคุณทั้งคู่";
+    TEXT[ czech ] = "Stejné písmo bude použito jak na tiskárně, tak na vaší obrazovce.";
+    TEXT[ hebrew ] = "‮התוכנית תשתמש באותו גופן למסך ולמדפסת‬";
+    TEXT[ hindi ] = "The same font will be used on both your printer and your screen.";
 };
 
 String STR_SVT_FONTMAP_PRINTERONLY
@@ -331,7 +358,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT [ English ] = "This is a printer font. The screen image may not exactly match." ;
     TEXT [ norwegian ] = "This is a printer font. The screen image may not exactly match." ;
     TEXT [ italian ] = "Il tipo di carattere visualizzato differisce da quello stampato." ;
-    TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de impressora. A imagem na tela pode n?o corresponder exatamente." ;
+    TEXT [ portuguese_brazilian ] = "Esta � uma fonte de impressora. A imagem na tela pode ser diferente." ;
     TEXT [ portuguese ] = "Letra de impressora. A letra vista no ecr� pode apresentar um pequeno desvio." ;
     TEXT [ finnish ] = "T�m� on tulostinfontti. N�ytt�kuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en printerskrifttype. Sk�rmbilledet svarer muligvis ikke helt til printerskrifttypen." ;
@@ -342,7 +369,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT [ english_us ] = "This is a printer font. The screen image may differ." ;
     TEXT[ chinese_simplified ] = "这是打印字体。屏幕显示的字体与其可能会有些偏差。";
     TEXT[ russian ] = "����� ��������. ����������� �� ������ ����� ����������.";
-    TEXT[ polish ] = "Czcionka drukarkowa. Obraz czcionek na ekranie mo�e si� troch� r�ni�.";
+    TEXT[ polish ] = "To jest czcionka drukarkowa. Obraz na ekranie mo�e si� nieco r�ni�.";
     TEXT[ japanese ] = "プリンタ用のフォントです。画面表示とは少し異なります。";
     TEXT[ chinese_traditional ] = "列印字型。螢幕顯示字型可能略微有些偏差。";
     TEXT[ arabic ] = "��� �� �������. �� ����� ������ ��� ������ ��� ����.";
@@ -351,6 +378,9 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT[ turkish ] = "Yaz�c� yaz�tipi. Ekrandaki g�r�nt� biraz farkl� olabilir.";
     TEXT[ catalan ] = "Lletra d'impressora. La imatge de pantalla podria ser diferent.";
     TEXT[ thai ] = "นี้คือเครื่องพิมพ์ตัวอักษร จอภาพจะแตกต่างไป";
+    TEXT[ czech ] = "Toto je písmo pro tiskárnu; na obrazovce se může lišit.";
+    TEXT[ hebrew ] = "‮גופן זה מיועד להדפסה, מראהו במסך שונה.‬";
+    TEXT[ hindi ] = "यह मद्रक का अक्षर है । परदे में चित्र भिन्न प्रकार का हो सकता है ।";
 };
 
 String STR_SVT_FONTMAP_SCREENONLY
@@ -359,7 +389,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ English ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ norwegian ] = "This is a screen font. The printer image may not exactly match." ;
     TEXT [ italian ] = "Questo � un carattere per lo schermo. La stampa pu� essere leggermente diversa." ;
-    TEXT [ portuguese_brazilian ] = "Esta ? uma fonte de tela. A imagem impressa pode n?o corresponder exatamente." ;
+    TEXT [ portuguese_brazilian ] = "Esta � uma fonte de tela. A imagem impressa pode ser diferente." ;
     TEXT [ portuguese ] = "Letra de ecr�. A letra impressa pode apresentar um pequeno desvio." ;
     TEXT [ finnish ] = "T�m� on n�ytt�fontti. Tulostinkuva saattaa olla erilainen." ;
     TEXT [ danish ] = "Dette er en sk�rmskrifttype. Udskriften kan muligvis afvige lidt." ;
@@ -370,7 +400,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT [ english_us ] = "This is a screen font. The printer image may differ." ;
     TEXT[ chinese_simplified ] = "这是屏幕字体。打印出来的字体与其可能会有一些偏差。";
     TEXT[ russian ] = "����� ������. ��� ������ ����� ���� �������.";
-    TEXT[ polish ] = "To jest czcionka ekranowa. Wydruk b�dzie si� troch� r�ni�.";
+    TEXT[ polish ] = "To jest czcionka ekranowa. Wydruk mo�e si� nieco r�ni�.";
     TEXT[ japanese ] = "画面用のフォントです。印刷イメージとは少し異なります。";
     TEXT[ chinese_traditional ] = "螢幕字型。列印出可能會有一些偏差。";
     TEXT[ arabic ] = "��� �� ����. �� ����� ������ ��� ����� ������� ��� ����.";
@@ -379,6 +409,9 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT[ turkish ] = "Ekran yaz�tipi. Yazd�rma biraz farkl� olabilir.";
     TEXT[ catalan ] = "Lletra de pantalla. La imatge a la impressora podria ser diferent.";
     TEXT[ thai ] = "นี้คือจอภาพตัวอักษร  ภาพเครื่องพิมพ์จะอตกต่างออกไป";
+    TEXT[ czech ] = "Toto je písmo pro obrazovku; na tiskárně se může lišit.";
+    TEXT[ hebrew ] = "‮גופן זה מיועד למסך, מראהו בדפוס שונה.‬";
+    TEXT[ hindi ] = "यह परदे का अक्षर है । मुद्रक में चित्र भिन्न प्रकार का हो सकता है ।";
 };
 
 String STR_SVT_FONTMAP_SIZENOTAVAILABLE
@@ -391,12 +424,12 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ greek ] = "�� ������� ��� �������������� ��� ���� ������������. ��������������� �� ����������� �������.";
     TEXT[ dutch ] = "Deze schriftgrootte is niet ge�nstalleerd. De meest overeenkomende beschikbare grootte wordt toegepast.";
     TEXT[ french ] = "Cette taille de police n'a pas �t� install�e. La taille disponible la plus appropri�e va �tre utilis�e.";
-    TEXT[ spanish ] = "Este tama�o de fuente no est� instalado. Se usar� el tama�o disponible m�s adecuado.";
+    TEXT[ spanish ] = "Este tama�o de fuente no est� instalado. Se utilizar� el tama�o disponible m�s adecuado.";
     TEXT[ italian ] = "Il font delle dimensioni indicate non � installato. Il programma utilizzer� le dimensioni disponibili.";
     TEXT[ danish ] = "Denne skriftst�rrelse er ikke installeret. Den tilg�ngelige st�rrelse, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Den h�r teckenstorleken �r inte installerad. Den tillg�ngliga storlek som passar b�st anv�nds.";
-    TEXT[ polish ] = "Dany rozmiar czcionki nie jest zaistalowany. U�yty zostanie najbardziej pasuj�cy, ju� istniej�ca rozmiar.";
-    TEXT[ portuguese_brazilian ] = "This font size is not installed. The closest available size will be used.";
+    TEXT[ polish ] = "Ten rozmiar czcionki nie jest zainstalowany. Zostanie u�yty dost�pny, najbardziej zbli�ony rozmiar.";
+    TEXT[ portuguese_brazilian ] = "Este tamanho de fonte n�o foi instalado. Ser� utilizado o tamanho dispon�vel mais parecido.";
     TEXT[ japanese ] = "このフォントサイズはインストールされていません。最も適切なサイズが選ばれます。";
     TEXT[ korean ] = "이 글꼴의 크기는 설치되지 않았습니다. 기존의 가장 적합한 크기가 사용됩니다.";
     TEXT[ chinese_simplified ] = "没有安装这种字体大小。使用的是现有的最接近的字体大小。";
@@ -406,6 +439,9 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ catalan ] = "Aquesta mida de lletra no est� instal.lada. S'utilitzar� la mida disponible m�s adequada.";
     TEXT[ finnish ] = "T�t� fonttikokoa ei ole asennettu. L�hint� k�ytett�viss� olevaa kokoa k�ytet��n.";
     TEXT[ thai ] = "ยังไม่ได้ติดตั้งขนาดตัวอักษรนี้   ขนาดที่ใกล้ที่สุดจะถูกใช้ได้";
+    TEXT[ czech ] = "Tato velikost písma nebyla nainstalována. Bude použita nejbližší možná velikost.";
+    TEXT[ hebrew ] = "‮הגופן לא מותקן בגודל הזה. התוכנית תבחר גופן דומה.‬";
+    TEXT[ hindi ] = "इस अक्षर परिमाण को स्थापित नहीं किया है । इसके अति समीप अक्षर परिमाण को उपयोग किया जाएगा । ";
 };
 
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
@@ -422,8 +458,8 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ italian ] = "Verr� riprodotto lo stile di questo font oppure verr� utilizzato quello che gli � pi� simile.";
     TEXT[ danish ] = "Denne skrifttype bliver reproduceret eller den type, som passer bedst, vil blive brugt istedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet efterbildas eller n�rmast motsvarande teckensnitt anv�nds.";
-    TEXT[ polish ] = "Dany styl czcionki zostanie skopiowany lub zostanie u�yty najlepiej pasuj�cy styl.";
-    TEXT[ portuguese_brazilian ] = "This font style will be generated or the closest matching style will be used.";
+    TEXT[ polish ] = "Ten styl czcionki b�dzie symulowany lub zostanie u�yty styl najbardziej podobny.";
+    TEXT[ portuguese_brazilian ] = "Este estilo de fonte ser� simulado ou ser� utilizado o estilo dispon�vel mais parecido.";
     TEXT[ japanese ] = "このフォントスタイルは修正されるか、または最も適切なスタイルが使用されます。";
     TEXT[ korean ] = "이 글꼴 스타일을 모의하거나 가장 적합한 글꼴 스타일이 사용됩니다.";
     TEXT[ chinese_simplified ] = "生成这种字体或使用最接近的字体。";
@@ -434,6 +470,9 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ catalan ] = "S'imitar� aquest estil de lletra o s'utilitzar� el m�s adequat.";
     TEXT[ finnish ] = "T�m� fonttityyli simuloidaan tai l�hint� vastaavaa tyyli� k�ytet��n.";
     TEXT[ thai ] = "จำลองลักษณะตัวอักษรนี้หรือลักษณะที่ตรงกันมากที่สุดจะถูกใช้";
+    TEXT[ czech ] = "Tento styl písma bude simulován nebo bude použit nejbližší odpovídající styl.";
+    TEXT[ hebrew ] = "‮התוכנית תסמלץ את הסגנון הנבחר או תבחר סגנון דומה.‬";
+    TEXT[ hindi ] = "This font style will be simulated or the closest matching style will be used.";
 };
 
 String STR_SVT_FONTMAP_NOTAVAILABLE
@@ -450,8 +489,8 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ italian ] = "Questo font non � installato. Il programma utilizzer� il font che gli � pi� simile.";
     TEXT[ danish ] = "Denne skrifttype er ikke installeret. Den tilg�ngelige skrifttype, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet �r inte installerat. Det tillg�ngliga teckensnitt som passar b�st anv�nds.";
-    TEXT[ polish ] = "Dana czcionka nie jest zainstalowana.U�yta zostanie najbardziej pasuj�ca, ju� istniej�ca czcionka.";
-    TEXT[ portuguese_brazilian ] = "This font is not installed. The closest available font will be used.";
+    TEXT[ polish ] = "Ta czcionka nie jest zainstalowana. Zostanie u�yta dost�pna, najbardziej podobna czcionka.";
+    TEXT[ portuguese_brazilian ] = "Esta fonte n�o foi instalada. Ser� utilizada a fonte dispon�vel mais parecida.";
     TEXT[ japanese ] = "このフォントはインストールされていません。最も適切なフォントが選ばれます。";
     TEXT[ korean ] = "이 글꼴은 설치되지 않았습니다. 기존의 가장 적합한 글꼴이 사용됩니다.";
     TEXT[ chinese_simplified ] = "没有安装这种字体。使用的是现有的最接近的字体。";
@@ -461,7 +500,19 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ catalan ] = "Aquest tipus de lletra no est� instal.lat. S'utilitzar� la lletra existent m�s adequada.";
     TEXT[ finnish ] = "T�t� fonttia ei ole asennettu. L�hint� k�ytett�viss� olevaa fonttia k�ytet��n.";
     TEXT[ thai ] = "ยังไม่ได้ติดตั้งตัวอักษรนี้ ตัวอักษรที่ใกล้เคียงมากที่สุดจะถูกใช้";
+    TEXT[ czech ] = "Toto písmo nebylo nainstalováno. Bude použito nejblíže odpovídající písmo.";
+    TEXT[ hebrew ] = "‮גופן זה לא מותקן. התוכנית תבחר בגופן הדומה לו מהגופנים המותקנים.‬";
+    TEXT[ hindi ] = "This font has not been installed. The closest available font will be used.";
 };
+
+
+
+
+
+
+
+
+
 
 
 
