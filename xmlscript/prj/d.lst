@@ -1,3 +1,5 @@
+mkdir: %_DEST%\inc\xmlscript
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\inc\xmlscript\xmldlg_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmldlg_imexp.hxx
