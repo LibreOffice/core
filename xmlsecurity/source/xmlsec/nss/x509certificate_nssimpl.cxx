@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:35:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include "pk11func.h"
 //MM : end
 
-
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
 using ::rtl::OUString ;
@@ -130,7 +129,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
-        return OUString::createFromAscii( m_pCert->issuerName ) ;
+        return OUString(m_pCert->issuerName , PL_strlen(m_pCert->issuerName) , RTL_TEXTENCODING_UTF8) ;
     } else {
         return OUString() ;
     }
@@ -138,7 +137,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
-        return OUString::createFromAscii( m_pCert->subjectName ) ;
+        return OUString(m_pCert->subjectName , PL_strlen(m_pCert->subjectName) , RTL_TEXTENCODING_UTF8);
     } else {
         return OUString() ;
     }
