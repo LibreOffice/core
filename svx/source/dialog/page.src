@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-26 11:59:34 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ TabPage RID_SVXPAGE_PAGE
         StringList [ swedish ] =
         {
             < "Alla" ; Default ; > ;
-            < "Spegelv‰nd" ; Default ; > ;
+            < "Spegelv‰nt" ; Default ; > ;
             < "Hˆger" ; Default ; > ;
             < "V‰nster" ; Default ; > ;
         };
@@ -392,7 +392,7 @@ TabPage RID_SVXPAGE_PAGE
     StringList [ chinese_simplified ] =
     {
             < "»´≤ø" ; Default ; > ;
-        < "∑¥”≥µƒ" ; Default ; > ;
+        < "∑≠◊™µƒ" ; Default ; > ;
         < "”“" ; Default ; > ;
         < "◊Û" ; Default ; > ;
     };
@@ -420,7 +420,7 @@ TabPage RID_SVXPAGE_PAGE
     StringList [ chinese_traditional ] =
     {
             < "•˛≥°" ; Default ; > ;
-        < "§œ¨M™∫" ; Default ; > ;
+        < "¬Ω¬‡™∫" ; Default ; > ;
         < "•k" ; Default ; > ;
         < "•™" ; Default ; > ;
     };
@@ -752,7 +752,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "PrevisualizaciÛn" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_simplified ] = "‘§¿¿";
         Text[ russian ] = "œÓÒÏÓÚ";
         Text[ polish ] = "Podglπd";
         Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
@@ -1125,7 +1125,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ russian ] = "¬ÍÎ˛˜ËÚ¸";
         Text[ polish ] = "W≥πcz";
         Text[ japanese ] = "çáÇÌÇπÇÈ(~A)";
-        Text[ chinese_traditional ] = "øE¨°(~A)";
+        Text[ chinese_traditional ] = "±“∞ (~A)";
         Text[ arabic ] = " ‘€Ì·";
         Text[ greek ] = "~≈ÌÂÒ„ÔÔﬂÁÛÁ";
         Text[ korean ] = "»∞º∫»≠(~A)";
@@ -1932,7 +1932,7 @@ ItemList [ chinese_simplified ] =
         < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
-        < "éËéÜ 8.5x11 ≤›¡" ; PAPERSIZE_LETTER ; > ;
+        < "ïƒçëãKäi 8.5x11 ≤›¡" ; PAPERSIZE_LETTER ; > ;
         < "ãKíËª≤Ωﬁ8.5x14 ≤›¡" ; PAPERSIZE_LEGAL ; > ;
         < "¿Ãﬁ€≤ƒﬁ" ; PAPERSIZE_TABLOID ; > ;
         < "’∞ªﬁ∞" ; PAPERSIZE_USER ; > ;
@@ -2219,7 +2219,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai large 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     itemlist [ portuguese_brazilian ] =
     {
@@ -2249,7 +2249,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
     };
     itemlist [ swedish ] =
     {
-        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A0 841 x 1 189 mm" ; PAPERSIZE_A0 ; > ;
         < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
         < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
         < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
@@ -2257,15 +2257,15 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
-        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Letter 8,5 x 11 tum" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 tum" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "Anv‰ndare" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
         < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
         < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
-        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "Diabild" ; PAPERSIZE_DIA ; > ;
         < "Bildsk‰rm" ; PAPERSIZE_SCREEN ; > ;
@@ -2323,7 +2323,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Schermo" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     itemlist [ spanish ] =
     {
@@ -2335,8 +2335,8 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Carta 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
-        < "Oficio 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
+        < "Letter 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloide" ; PAPERSIZE_TABLOID ; > ;
         < "Usuario" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
@@ -2375,7 +2375,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "…cran" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai grand 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     itemlist [ dutch ] =
     {
@@ -2416,7 +2416,7 @@ ItemList [ chinese_simplified ] =
         < "√¿ ΩπÊ∏Ò 8,5 x 11 ”¢¥Á" ; PAPERSIZE_LETTER ; > ;
         < "√¿ ΩπÊ∏Ò 8,5 x 14 ”¢¥Á" ; PAPERSIZE_LEGAL ; > ;
         < "Œƒ’™" ; PAPERSIZE_TABLOID ; > ;
-        < "”√ªß…Ë∂®" ; PAPERSIZE_USER ; > ;
+        < " π”√’ﬂ" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 ∫¡√◊" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 ∫¡√◊" ; PAPERSIZE_C4 ; > ;
         < "C5 162 x 229 ∫¡√◊" ; PAPERSIZE_C5 ; > ;
@@ -2453,7 +2453,7 @@ ItemList [ chinese_simplified ] =
         < "›Í‡Ì" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 ÏÏ" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 ÏÏ" ; PAPERSIZE_KAI32; > ;
-        < "32 kai ·ÓÎ¸¯ÓÈ 140 x 203 ÏÏ" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 140 x 203 ÏÏ" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ polish ] =
     {
@@ -2479,7 +2479,7 @@ ItemList [ chinese_simplified ] =
         < "Ekran" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai wielkoúÊ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ japanese ] =
     {
@@ -2520,7 +2520,7 @@ ItemList [ chinese_simplified ] =
         < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^§o" ; PAPERSIZE_LETTER ; > ;
         < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^§o" ; PAPERSIZE_LEGAL ; > ;
         < "§Â∫K" ; PAPERSIZE_TABLOID ; > ;
-        < "¶€≠q" ; PAPERSIZE_USER ; > ;
+        < "®œ•Œ™Ã" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 ≤@¶Ã" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 ≤@¶Ã" ; PAPERSIZE_C4 ; > ;
         < "C5 162 x 229 ≤@¶Ã" ; PAPERSIZE_C5 ; > ;
@@ -2543,18 +2543,18 @@ ItemList [ chinese_simplified ] =
         < "A5 (148 ◊ 210 „„)" ; PAPERSIZE_A5 ; > ;
         < "B4 (250 ◊ 353 „„)" ; PAPERSIZE_B4 ; > ;
         < "B5 (176 ◊ 250 „„)" ; PAPERSIZE_B5 ; > ;
-        < "(˛1/2 8 ◊ 11 »Ê’…) Letter" ; PAPERSIZE_LETTER ; > ;
-        < "(˛1/2 8 ◊ 14 »Ê’…) Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Letter (8,5 x 11 »Ê’…)" ; PAPERSIZE_LETTER ; > ;
+        < "Legal (8,5 x 14 »Ê’…)" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "ÕÃ„ „Œ’’" ; PAPERSIZE_USER ; > ;
+        < "„” Œœ„" ; PAPERSIZE_USER ; > ;
         < "B6 (125 ◊ 176 „„)" ; PAPERSIZE_B6 ; > ;
         < "C4 (229 ◊ 324 „„)" ; PAPERSIZE_C4 ; > ;
         < "C5 (162 ◊ 229 „„)" ; PAPERSIZE_C5 ; > ;
         < "C6 (114 ◊ 162 „„)" ; PAPERSIZE_C6 ; > ;
         < "C65 (114 ◊ 227 „„)" ; PAPERSIZE_C65 ; > ;
         < "DL (110 ◊ 220 „„)" ; PAPERSIZE_DL ; > ;
-        < "«·‘—ÌÕ…" ; PAPERSIZE_DIA ; > ;
-        < "«·‘«‘…" ; PAPERSIZE_SCREEN ; > ;
+        < "‘—ÌÕ…" ; PAPERSIZE_DIA ; > ;
+        < "‘«‘…" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai (184 ◊ 260 „„)" ; PAPERSIZE_KAI16; > ;
         < "32 kai (130 ◊ 184 „„)" ; PAPERSIZE_KAI32; > ;
         < "32 kai ﬂ»Ì— (140 ◊ 203 „„)" ; PAPERSIZE_KAI32BIG; > ;
@@ -2568,17 +2568,17 @@ ItemList [ chinese_simplified ] =
         < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
         < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 ˜ÈÎ" ; PAPERSIZE_B5 ; > ;
-        < "≈ÈÛÙÔÎﬁ 8.5 x 11 ÈÌÙÛ." ; PAPERSIZE_LETTER ; > ;
-        < "Legal 8.5 x 14 ÈÌÙÛ." ; PAPERSIZE_LEGAL ; > ;
-        < "ƒÈÛÍﬂÔ" ; PAPERSIZE_TABLOID ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "◊ÒﬁÛÙÁÚ" ; PAPERSIZE_USER ; > ;
-        < "B6 125 x 176 ˜ÈÎ" ; PAPERSIZE_B6 ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
-        < "C5 162 x 229 ˜ÈÎ" ; PAPERSIZE_C5 ; > ;
-        < "C6 114 x 162 ˜ÈÎ" ; PAPERSIZE_C6 ; > ;
-        < "C65 114 x 227 ˜ÈÎ" ; PAPERSIZE_C65 ; > ;
-        < "DL 110 x 220 ˜ÈÎ" ; PAPERSIZE_DL ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
         < "ƒÈ·ˆ‹ÌÂÈ·" ; PAPERSIZE_DIA ; > ;
         < "œË¸ÌÁ" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
