@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:02:43 $
+ *  last change: $Author: gh $ $Date: 2001-08-13 14:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,30 +330,37 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                 else
                 {
                     pDispatcher->SetExecuteMode(EXECUTEMODE_DIALOGASYNCHRON);
-                    if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
+                    if ( pTTProperties->mnSID == SID_NEWDOCDIRECT
+                      || pTTProperties->mnSID == SID_OPENDOC )
                     {
-                        pTTProperties->mnSID = SID_OPENDOC;
+                        pTTProperties->mnSID;
                         SfxPoolItem** pArgs = pTTProperties->mppArgs;
                         SfxAllItemSet aSet( SFX_APP()->GetPool() );
-                        String aFactory = String::CreateFromAscii("private:factory/");
                         if ( pArgs && *pArgs )
                         {
                             for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
                                 aSet.Put( **pArg );
-
-                            SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
-                            if ( pFactoryName )
-                                aFactory += pFactoryName->GetValue();
+                        }
+                        if ( pTTProperties->mnSID == SID_NEWDOCDIRECT )
+                        {
+                            String aFactory = String::CreateFromAscii("private:factory/");
+                            if ( pArgs && *pArgs )
+                            {
+                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
+                                if ( pFactoryName )
+                                    aFactory += pFactoryName->GetValue();
+                                else
+                                    aFactory += String::CreateFromAscii("swriter");
+                            }
                             else
                                 aFactory += String::CreateFromAscii("swriter");
+
+                            aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
+                            aSet.ClearItem( SID_NEWDOCDIRECT );
+                            pTTProperties->mnSID = SID_OPENDOC;
                         }
-                        else
-                            aFactory += String::CreateFromAscii("swriter");
 
                         aSet.Put( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-                        aSet.Put( SfxStringItem( SID_FILE_NAME, aFactory ) );
-                        aSet.ClearItem( SID_NEWDOCDIRECT );
-
                         if ( pDispatcher->ExecuteFunction( pTTProperties->mnSID, aSet, pTTProperties->mnMode )
                                     == EXECUTE_NO )
                             pTTProperties->nActualPR = TT_PR_ERR_NOEXECUTE;
