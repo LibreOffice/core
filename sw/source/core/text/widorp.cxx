@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-26 17:06:59 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,19 @@ inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
  *                  SwTxtFrmBreak::SwTxtFrmBreak()
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
+    : pFrm(pFrm), nRstHeight(nRst)
+#else
 SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
     : pFrm(pFrm), nRstHeight(nRst),
       nOrigin( pFrm->Frm().Top() + pFrm->Prt().Top() )
+#endif
 {
 #ifdef VERTICAL_LAYOUT
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFrmBreak::SwTxtFrmBreak with unswapped frame" );
+    SWAP_IF_SWAPPED( pFrm )
+    SWRECTFN( pFrm )
+    nOrigin = (pFrm->*fnRect->fnGetPrtTop)();
 #endif
     SwSectionFrm* pSct;
     bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm ) ||
@@ -144,10 +150,19 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
     if( !nRstHeight && !pFrm->IsFollow() && pFrm->IsInFtn() && pFrm->HasPara() )
     {
         nRstHeight = pFrm->GetFtnFrmHeight();
+#ifdef VERTICAL_LAYOUT
+        nRstHeight += (pFrm->Prt().*fnRect->fnGetHeight)() -
+                      (pFrm->Frm().*fnRect->fnGetHeight)();
+#else
         nRstHeight += pFrm->Prt().Height() - pFrm->Frm().Height();
+#endif
         if( nRstHeight < 0 )
             nRstHeight = 0;
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
 }
 
 /* BP 18.6.93: Widows.
@@ -180,20 +195,27 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
 
 const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
+    register sal_Bool bFit = sal_False;
+
 #ifdef VERTICAL_LAYOUT
     SWAP_IF_SWAPPED( pFrm )
-#endif
+    SWRECTFN( pFrm )
+    // nOrigin is an absolut value, rLine referes to the swapped situation.
 
-    register sal_Bool bFit = sal_False;
+    SwTwips nTmpY;
+    if ( pFrm->IsVertical() )
+        nTmpY = pFrm->SwitchHorizontalToVertical( rLine.Y() + rLine.GetLineHeight() );
+    else
+        nTmpY = rLine.Y() + rLine.GetLineHeight();
+
+    SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , nOrigin );
+#else
     SwTwips nLineHeight = rLine.Y() - nOrigin + rLine.GetLineHeight();
+#endif
 
     // 7455 und 6114: Raum fuer die Umrandung unten einkalkulieren.
 #ifdef VERTICAL_LAYOUT
-    if ( pFrm->IsVertical() )
-        nLineHeight += pFrm->Prt().Left();
-    else
-        nLineHeight += pFrm->Frm().Height() - pFrm->Prt().Height()
-                       - pFrm->Prt().Top();
+    nLineHeight += (pFrm->*fnRect->fnGetBottomMargin)();
 #else
     nLineHeight += pFrm->Frm().Height() - pFrm->Prt().Height()
                    - pFrm->Prt().Top();
@@ -205,15 +227,8 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
     {
         // Der Frm besitzt eine Hoehe, mit der er auf die Seite passt.
 #ifdef VERTICAL_LAYOUT
-        SwTwips nHeight;
-        if ( pFrm->IsVertical() )
-            nHeight = pFrm->Frm().Left() + pFrm->Frm().Width()
-                    - pFrm->GetUpper()->Frm().Left()
-                    - pFrm->GetUpper()->Prt().Left();
-        else
-            nHeight = pFrm->GetUpper()->Frm().Top()
-                    + pFrm->GetUpper()->Prt().Top()
-                    + pFrm->GetUpper()->Prt().Height() - nOrigin;
+        SwTwips nHeight =
+            (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetLimit)(), nOrigin );
 #else
         SwTwips nHeight = pFrm->GetUpper()->Frm().Top()
                         + pFrm->GetUpper()->Prt().Top()
@@ -250,6 +265,10 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 
 sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pFrm )
+#endif
+
     // bKeep ist staerker als IsBreakNow()
     // Ist noch genug Platz ?
     if( bKeep || IsInside( rLine ) )
@@ -280,6 +299,11 @@ sal_Bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
                 bBreak = sal_False;
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
+
     return bBreak;
 }
 
@@ -313,6 +337,11 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
     sal_Bool bChkKeep   )
     : SwTxtFrmBreak( pFrm, nRst ), nOrphLines( 0 ), nWidLines( 0 )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pFrm )
+    SWRECTFN( pFrm )
+#endif
+
     if( bKeep )
     {
         // 5652: bei Absaetzen, die zusammengehalten werden sollen und
@@ -354,6 +383,11 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
             nWidLines = 0;
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
+
 }
 
 /*************************************************************************
@@ -368,6 +402,10 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
 sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     sal_Bool bHasToFit )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pFrm )
+#endif
+
     sal_Bool bRet = sal_True;
     MSHORT nOldOrphans = nOrphLines;
     if( bHasToFit )
@@ -399,6 +437,11 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
         bRet = bBack;
     }
     nOrphLines = nOldOrphans;
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
+
     return bRet;
 }
 
@@ -414,6 +457,11 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
 sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
+            "WidowsAndOrphans::FindWidows with swapped frame" )
+#endif
+
     if( !nWidLines || !pFrm->IsFollow() )
         return sal_False;
 
@@ -431,10 +479,28 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
         return sal_False;
 
     // Resthoehe des Masters
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+
+    const SwTwips nDocPrtTop = (pFrm->*fnRect->fnGetPrtTop)();
+    SwTwips nOldHeight;
+    SwTwips nTmpY = rLine.Y() + rLine.GetLineHeight();
+
+    if ( bVert )
+    {
+        nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
+        nOldHeight = -(pFrm->Prt().*fnRect->fnGetHeight)();
+    }
+    else
+        nOldHeight = (pFrm->Prt().*fnRect->fnGetHeight)();
+
+    const SwTwips nChg = (*fnRect->fnYDiff)( nTmpY, nDocPrtTop + nOldHeight );
+#else
     const SwTwips nDocPrtTop = pFrm->Frm().Top() + pFrm->Prt().Top();
     const SwTwips nOldHeight = pFrm->Prt().SSize().Height();
     const SwTwips nChg = rLine.Y() + rLine.GetLineHeight()
                          - nDocPrtTop - nOldHeight;
+#endif
 
     // Unterhalb der Widows-Schwelle...
     if( rLine.GetLineNr() >= nWidLines )
@@ -449,6 +515,20 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
             // Wenn der Master gelockt ist, so hat er vermutlich gerade erst
             // eine Zeile an uns abgegeben, diese geben nicht zurueck, nur
             // weil bei uns daraus mehrere geworden sind (z.B. durch Rahmen).
+#ifdef VERTICAL_LAYOUT
+            if( !pMaster->IsLocked() && pMaster->GetUpper() )
+            {
+                const SwTwips nRstHeight = - (pMaster->Frm().*fnRect->fnCheckLimit)
+                            ( (pMaster->GetUpper()->*fnRect->fnGetLimit)() );
+                if ( nRstHeight >=
+                     SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+                {
+                    pMaster->Prepare( PREP_ADJUST_FRM );
+                    pMaster->_InvalidateSize();
+                    pMaster->InvalidatePage();
+                }
+            }
+#else
             if( !pMaster->IsLocked() &&
                 pMaster->GetRstHeight() - pMaster->Frm().Height() >=
                 SwTwips(rLine.GetInfo().GetParaPortion()->Height()) )
@@ -457,6 +537,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
                 pMaster->_InvalidateSize();
                 pMaster->InvalidatePage();
             }
+#endif
             pFrm->SetJustWidow( sal_False );
         }
         return sal_False;
@@ -485,6 +566,21 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
     // (0W, 2O, 2M, 1F) - 1F = 3M, 0F     -> PREP_ADJUST_FRM
     // (0W, 2O, 3M, 2F) - 1F = 2M, 2F     -> PREP_WIDOWS
 
+#ifdef VERTICAL_LAYOUT
+    if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
+    {
+        SwTwips nRstHeight = - (pMaster->Frm().*fnRect->fnCheckLimit)
+                               ( (pMaster->GetUpper()->*fnRect->fnGetLimit)() );
+        if ( nRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+        {
+            pMaster->Prepare( PREP_ADJUST_FRM );
+            pMaster->_InvalidateSize();
+            pMaster->InvalidatePage();
+            pFrm->SetJustWidow( sal_False );
+            return sal_False;
+        }
+    }
+#else
     if( 0 > nChg && !pMaster->IsLocked() &&
         pMaster->GetRstHeight() - pMaster->Frm().Height() >=
         SwTwips(rLine.GetInfo().GetParaPortion()->Height()) )
@@ -495,6 +591,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
         pFrm->SetJustWidow( sal_False );
         return sal_False;
     }
+#endif
     pMaster->Prepare( PREP_WIDOWS, (void*)&nNeed );
     return sal_True;
 }
@@ -505,6 +602,11 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
 
 sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight )
 {
+#ifdef VERTICAL_LAYOUT
+    // Here it does not matter, if pFrm is swapped or not.
+    // IsInside() takes care for itself
+#endif
+
     // Wir erwarten, dass rLine auf der letzten Zeile steht!!
     ASSERT( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
     MSHORT nLineCnt = rLine.GetLineNr();

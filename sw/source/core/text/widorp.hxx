@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,11 @@ class SwTxtFrmBreak
 {
 private:
           SwTwips  nRstHeight;
+#ifdef VERTICAL_LAYOUT
+    SwTwips  nOrigin;
+#else
     const SwTwips  nOrigin;
+#endif
 protected:
     SwTxtFrm *pFrm;
     sal_Bool     bBreak;
@@ -95,7 +99,19 @@ public:
     // anderen Wert zurueckliefert.
     // Es wird dabei davon ausgegangen, dass rLine auf der letzten Zeile
     // steht, die nicht mehr passt.
-    void    SetRstHeight( const SwTxtMargin &rLine ) { nRstHeight = rLine.Y() - nOrigin; }
+
+#ifdef VERTICAL_LAYOUT
+    void SetRstHeight( const SwTxtMargin &rLine )
+    {
+        if ( pFrm->IsVertical() )
+            nRstHeight = nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
+        else
+            nRstHeight = rLine.Y() - nOrigin;
+    }
+#else
+    void SetRstHeight( const SwTxtMargin &rLine ) { nRstHeight = rLine.Y() - nOrigin; }
+#endif
+
     SwTwips GetRstHeight() const { return nRstHeight; }
 };
 
