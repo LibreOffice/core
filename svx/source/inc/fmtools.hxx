@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:15:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -253,6 +256,7 @@
 #include "fmstatic.hxx"
 #endif
 
+#include <set>
 
 class Window;
 
@@ -538,6 +542,11 @@ void    initializeTextFieldLineEnds(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         ) SAL_THROW(());
+
+//==================================================================
+typedef ::std::set  < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                    , ::comphelper::OInterfaceCompare< ::com::sun::star::uno::XInterface >
+                    > InterfaceBag;
 
 #endif // _SVX_FMTOOLS_HXX
 
