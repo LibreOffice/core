@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:53:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // StarCalc Applikations Resource
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-05-04 20:53:10 $ $Revision: 1.5 $
+ // $Author: kz $ $Date: 2001-05-10 06:42:16 $ $Revision: 1.6 $
  // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
  //==================================================================
 
@@ -87,7 +87,7 @@ String RID_APPTITLE
     Text [ italian ] = "%PRODUCTNAME Calc" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 3.1" ;
     Text [ portuguese ] = "%PRODUCTNAME Calc" ;
-    Text [ finnish ] = "StarCalc 4.0" ;
+    Text [ finnish ] = "%PRODUCTNAME! Calc" ;
     Text [ danish ] = "%PRODUCTNAME Calc" ;
     Text [ french ] = "%PRODUCTNAME Calc" ;
     Text [ swedish ] = "%PRODUCTNAME Calc" ;
