@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:12:08 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ inline String ImpGetExtension( const String &rPath )
 {
     String          aExt;
     INetURLObject   aURL( rPath );
-    aExt = aURL.GetFileExtension().ToUpperAscii();
+    aExt = aURL.GetFileExtension().toAsciiUpperCase();
     return aExt;
 }
 
@@ -1641,8 +1641,11 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                         aStartFilterHdlLink.Call( this );
                         nPercent = 50;
                         aUpdatePercentHdlLink.Call( this );
-                        if( !SgfSDrwFilter( rIStream, aMtf, aFilterPath ) )
+                        if( !SgfSDrwFilter( rIStream, aMtf,
+                                INetURLObject(aFilterPath) ) )
+                        {
                             nStatus = GRFILTER_FILTERERROR;
+                        }
                         else
                         {
                             nPercent = 100;
@@ -1795,7 +1798,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         INetURLObject aURL( rPath );
-        String aExt( aURL.GetFileExtension().ToUpperAscii() );
+        String aExt( aURL.GetFileExtension().toAsciiUpperCase() );
 
 
         for( USHORT i = 0; i < nFormatCount; i++ )
