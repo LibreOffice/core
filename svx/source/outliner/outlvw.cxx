@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 14:39:32 $
+ *  last change: $Author: aw $ $Date: 2001-01-19 15:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,15 +378,25 @@ ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix,MouseTarget& reTarget)
 Pointer OutlinerView::ImpGetMousePointer( MouseTarget eTarget )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    // Mapping MouseTarget -> PointerStyle
-    static const PointerStyle pStyles[] =
+
+    switch(eTarget)
     {
-        POINTER_TEXT,       // MouseText
-        POINTER_MOVE,       // MouseBullet
-        POINTER_ARROW,      // MouseNodeButton
-        POINTER_ARROW       // MouseOutside
-    };
-    return Pointer( pStyles[eTarget] );
+        case MouseText:
+        {
+            if(GetOutliner() && GetOutliner()->IsVertical())
+                return Pointer(POINTER_TEXT_VERTICAL);
+            return Pointer(POINTER_TEXT);
+        }
+        case MouseBullet:
+        {
+            return Pointer(POINTER_MOVE);
+        }
+        case MouseNodeButton:
+        case MouseOutside:
+        {
+            return Pointer(POINTER_ARROW);
+        }
+    }
 }
 
 

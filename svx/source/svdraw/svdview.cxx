@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: aw $ $Date: 2001-01-19 16:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,6 +855,10 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     return bRet;
 }
 
+#ifndef _OUTLOBJ_HXX
+#include "outlobj.hxx"
+#endif
+
 Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nModifier, BOOL bLeftDown) const
 {
     // Actions
@@ -884,12 +888,25 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
     }
     USHORT nTol=nHitTolLog;
     // TextEdit, ObjEdit, Macro
-    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/))) {
-        if (pOut==NULL || IsTextEditInSelectionMode()) return Pointer(POINTER_TEXT);
+    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/)))
+    {
+        if(!pOut || IsTextEditInSelectionMode())
+        {
+            if(pTextEditOutliner->IsVertical())
+                return Pointer(POINTER_TEXT_VERTICAL);
+            else
+                return Pointer(POINTER_TEXT);
+        }
         // hier muss besser der Outliner was liefern:
         Point aPos(pOut->LogicToPixel(rMousePos));
         Pointer aPointer(pTextEditOutlinerView->GetPointer(aPos));
-        if (aPointer==POINTER_ARROW) aPointer=POINTER_TEXT;
+        if (aPointer==POINTER_ARROW)
+        {
+            if(pTextEditOutliner->IsVertical())
+                aPointer = POINTER_TEXT_VERTICAL;
+            else
+                aPointer = POINTER_TEXT;
+        }
         return aPointer;
     }
 
@@ -917,12 +934,29 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
             return aVEvt.pObj->GetMacroPointer(aHitRec);
         }
     } // switch
-    switch (eHit) {
-        case SDRHIT_HELPLINE : return aVEvt.pPV->GetHelpLines()[aVEvt.nHlplIdx].GetPointer();
-        case SDRHIT_GLUEPOINT: return Pointer(POINTER_MOVEPOINT);
-        case SDRHIT_TEXTEDIT : return Pointer(POINTER_TEXT);
-        case SDRHIT_TEXTEDITOBJ: return Pointer(POINTER_TEXT);
-    } // switch
+
+    switch(eHit)
+    {
+        case SDRHIT_HELPLINE :
+            return aVEvt.pPV->GetHelpLines()[aVEvt.nHlplIdx].GetPointer();
+        case SDRHIT_GLUEPOINT:
+            return Pointer(POINTER_MOVEPOINT);
+        case SDRHIT_TEXTEDIT :
+        case SDRHIT_TEXTEDITOBJ:
+        {
+            if(aVEvt.pObj && aVEvt.pObj->ISA(SdrTextObj))
+            {
+                SdrTextObj* pText = (SdrTextObj*)aVEvt.pObj;
+                if(pText->HasText())
+                {
+                    OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
+                    if(pParaObj && pParaObj->IsVertical())
+                        return Pointer(POINTER_TEXT_VERTICAL);
+                }
+            }
+            return Pointer(POINTER_TEXT);
+        }
+    }
 
     BOOL bMarkHit=eHit==SDRHIT_MARKEDOBJECT;
     SdrHdl* pHdl=aVEvt.pHdl;

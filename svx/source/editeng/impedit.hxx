@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: aw $ $Date: 2001-01-19 15:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,22 @@ inline void ImpEditView::SetPointer( const Pointer& rPointer )
 inline const Pointer& ImpEditView::GetPointer()
 {
     if ( !pPointer )
-        pPointer = new Pointer( POINTER_TEXT );
+    {
+        pPointer = new Pointer( IsVertical() ? POINTER_TEXT_VERTICAL : POINTER_TEXT );
+        return *pPointer;
+    }
+
+    if(POINTER_TEXT == pPointer->GetStyle() && IsVertical())
+    {
+        delete pPointer;
+        pPointer = new Pointer(POINTER_TEXT_VERTICAL);
+    }
+    else if(POINTER_TEXT_VERTICAL == pPointer->GetStyle() && !IsVertical())
+    {
+        delete pPointer;
+        pPointer = new Pointer(POINTER_TEXT);
+    }
+
     return *pPointer;
 }
 

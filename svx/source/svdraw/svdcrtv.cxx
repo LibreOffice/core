@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: aw $ $Date: 2001-01-19 15:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,18 +371,30 @@ void SdrCreateView::SetCurrentObj(UINT16 nIdent, UINT32 nInvent)
     if (nAktInvent!=nInvent || nAktIdent!=nIdent) {
         nAktInvent=nInvent;
         nAktIdent=nIdent;
-        SdrObject* pObj=SdrObjFactory::MakeNewObject(nInvent,nIdent,NULL,NULL);
-        if (pObj!=NULL) {
+        SdrObject* pObj = SdrObjFactory::MakeNewObject(nInvent,nIdent,NULL,NULL);
+
+        if(pObj)
+        {
             // Auf pers. Wunsch von Marco:
             // Mauszeiger bei Textwerkzeug immer I-Beam. Fadenkreuz
             // mit kleinem I-Beam erst bai MouseButtonDown
-            if (IsTextTool()) aAktCreatePointer=POINTER_TEXT;
-            else aAktCreatePointer=pObj->GetCreatePointer();
+            if(IsTextTool())
+            {
+                // #81944# AW: Here the correct pointer needs to be used
+                // if the default is set to vertical writing
+                aAktCreatePointer = POINTER_TEXT;
+            }
+            else
+                aAktCreatePointer = pObj->GetCreatePointer();
+
             delete pObj;
-        } else {
-            aAktCreatePointer=Pointer(POINTER_CROSS);
+        }
+        else
+        {
+            aAktCreatePointer = Pointer(POINTER_CROSS);
         }
     }
+
     CheckEdgeMode();
     ImpSetGlueVisible3(IsEdgeTool());
 }
