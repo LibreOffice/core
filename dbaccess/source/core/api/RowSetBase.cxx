@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 13:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rM
             , m_bClone(sal_False)
             , m_nPosition(-1)
             , m_bIgnoreResult(sal_False)
+            , m_nLastColumnIndex(-1)
 {
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
@@ -249,7 +250,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_rMutex );
     checkCache();
 
-    return (m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1)m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
