@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:22:56 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,12 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text[ korean ] = "찾기 및 바꾸기";
     Text[ turkish ] = "Ara & De�i�tir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cerca i reempla�a";
+    Text[ thai ] = "Search & Replace";
+    Text[ czech ] = "Hledat a nahradit";
+    Text[ hebrew ] = "‮חיפוש והחלפה‬";
+    Text[ hindi ] = "खोज और प्रतिस्थापन";
+    Text[ slovak ] = "Nájsť a nahradiť";
     Moveable = TRUE ;
     FixedText FT_SEARCH
     {
@@ -254,12 +260,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         WordBreak = TRUE ;
         Hide = TRUE ;
     };
-    Text[ catalan ] = "Cerca i reempla�a";
-    Text[ thai ] = "Search & Replace";
-    Text[ czech ] = "Hledat a nahradit";
-    Text[ hebrew ] = "‮חיפוש והחלפה‬";
-    Text[ hindi ] = "खोज और प्रतिस्थापन";
-    Text[ slovak ] = "Nájsť a nahradiť";
 #if SUPD < 641 || defined( GT_DEBUG )
     MultiLineEdit ED_SEARCH_FORMATS
     {
@@ -269,7 +269,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         IgnoreTab = TRUE ;
         Hide = TRUE ;
     };
-    Text[ slovak ] = "Nájsť a nahradiť";
 #endif
     FixedText FT_SEARCH_FORMATS
     {
