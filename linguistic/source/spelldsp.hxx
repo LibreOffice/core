@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-05 13:54:51 $
+ *  last change: $Author: tl $ $Date: 2001-06-15 11:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,9 @@ public:
 
 inline linguistic::IPRSpellCache & SpellCheckerDispatcher::GetExtCache() const
 {
-    return pExtCache ? *pExtCache : * new linguistic::IPRSpellCache( 997 );
+    if (!pExtCache)
+        ((SpellCheckerDispatcher *) this)->pExtCache = new linguistic::IPRSpellCache( 997 );
+    return *pExtCache;
 }
 
 
