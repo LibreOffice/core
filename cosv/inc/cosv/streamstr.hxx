@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,7 @@ void c_str();   // Dummy needed for StreamStr::operator<<(StreamStr::F_CSTR);
 
 
 
-/** Diese Klasse hat alle Funktionalitaet von strstream.
-    Der Buffer braucht jedoch weder uebergeben noch
-    (nach Gebrauch) geloescht zu werden. Seine Groesse wird
-    mit 'length' im Constructor angegeben.
+/** A string buffer class for all kinds of string manipulation.
 */
 
 class StreamStr : public bostream
@@ -104,6 +101,8 @@ class StreamStr : public bostream
     typedef void (*F_CSTR)();
 
 
+    /** Represents an area within a string.
+    */
     struct Area
     {
         typedef str::size           size_type;
@@ -169,6 +168,16 @@ class StreamStr : public bostream
     self &              operator<<(
                             double              i_n );
 
+    /** This operator is used to finish a sequence of streaming
+        oeprators by returning the c-string of the complete string.
+
+        @return The same as ->c_str().
+
+        @example
+        csv::StreamStr  s(100);
+        const char *
+            fullname =  s << qualifier() << "::" << name() << csv::c_str;
+    */
     const char *        operator<<(
                             F_CSTR              i_f );
 
@@ -192,6 +201,7 @@ class StreamStr : public bostream
     self &              reset()                 { return seekp(0); }
     /** Sets the insertion mode of all and only the operator<<() calls.
 
+        Default is str::overwrite:
         str::overwrite: seekp() always sets the cur end of the string.
                         operator<<() calls push the end of the string forward.
         str::insert:    seekp() only sets the insertion point.
@@ -216,7 +226,7 @@ class StreamStr : public bostream
     void                pop_back(
                             size_type           i_nCount );
 
-    /// Works like operator<<()
+    /// Works like operator<<(). Does the same as Perl's join().
     self &              operator_join(
                             std::vector<String>::const_iterator
                                                 i_rBegin,
@@ -231,10 +241,10 @@ class StreamStr : public bostream
     self &              operator_add_token(
                             const char *        i_sText,
                             char                i_cDelimiter );
+    /// Works like operator<<()
     self &              operator_read_line(
                             bstream &           i_src );
 
-//***********   Not yet implemented    *********************//
     void                strip_front(
                             char                i_cToRemove );
     void                strip_back(
@@ -244,7 +254,6 @@ class StreamStr : public bostream
     void                strip_front_whitespace();    /// removes space, tab and crlf.
     void                strip_back_whitespace();
     void                strip_frontback_whitespace();
-//***********   end - not yet implemented    *****************//
 
     void                replace(
                             position_type       i_nStart,
@@ -310,7 +319,7 @@ class StreamStr : public bostream
                             char *              i_pEnd,
                             seek_type           i_nDiff );
     // DATA
-    size_type           nCapacity1;
+    size_type           nCapacity1;     /// Capacity of characters to contain + 1 for terminating 0.
     DYN char *          dpData;
     char *              pEnd;
     char *              pCur;
