@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-08 09:37:12 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 10:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,8 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( SvStorage* pStg)
 
 {
     // wenn es kein temp. Storage ist, einen anlegen
-    SvStorageRef aTmpMed = new SvStorage(String());
+    SvStorageRef aTmpMed = new SvStorage( (pStg->GetVersion() >= SOFFICE_FILEFORMAT_60), String() );
+
     // nach HandsOff muss der alte Storage wieder eingesetzt werden
     if ( !pStg->CopyTo(aTmpMed) )
     {
