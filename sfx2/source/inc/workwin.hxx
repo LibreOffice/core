@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:56:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>     // SvUShorts
 
-#ifndef _IFACE_HXX //autogen
-#include <so3/iface.hxx>
-#endif
 #ifndef _RTL_USTRING_
 #include <rtl/ustring.hxx>
 #endif
@@ -103,6 +100,7 @@
 #include "minarray.hxx"
 #include "ctrlitem.hxx"
 #include "stbmgr.hxx"
+#include "viewfrm.hxx"
 
 class SfxToolBoxManager;
 class SfxInPlaceEnv_Impl;
@@ -348,6 +346,8 @@ public:
                                     SfxInterface *pIFace, const String* pName=0 );
     Window*                 GetObjectBar_Impl( USHORT nPos, ResId& rResId );
     FASTBOOL                KnowsObjectBar_Impl( USHORT nPos ) const;
+    BOOL                    IsVisible_Impl();
+    void                    MakeVisible_Impl( BOOL );
     void                    SetObjectBarVisibility_Impl( USHORT nVis );
     BOOL                    IsContainer_Impl() const;
     void                    Lock_Impl( BOOL );
@@ -424,9 +424,10 @@ private:
 
 class SfxFrameWorkWin_Impl : public SfxWorkWindow
 {
+    SfxFrame*           pMasterFrame;
     SfxFrame*           pFrame;
 public:
-                        SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pTask );
+                        SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
     virtual void        ArrangeChilds_Impl();
     virtual void        UpdateObjectBars_Impl();
     virtual Rectangle   GetTopRect_Impl();
