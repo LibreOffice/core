@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:48:16 $
+ *  last change: $Author: obo $ $Date: 2001-09-04 11:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,8 @@
 #include <ide_pch.hxx>
 
 #pragma hdrstop
-
+#include <vector>
+#include <algorithm>
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
