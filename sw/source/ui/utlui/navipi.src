@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:53:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Promote Level" ;
                 Text[ chinese_simplified ] = "Éı¼¶";
                 Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
-                Text[ polish ] = "Podnieœ poziom";
+                Text[ polish ] = "Poziom wy¿ej";
                 Text[ japanese ] = "ÚÍŞÙ‚ğã‚°‚é";
                 Text[ chinese_traditional ] = "¤É¯Å";
                 Text[ arabic ] = "ãÓÊæì áÃÚáì";
