@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:58:32 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ TabPage TP_OPTIONS_SNAP
         CustomUnitText [ ITALIAN ] = "Pixel" ;
         CustomUnitText [ DUTCH ] = "Pixels" ;
         CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pixel" ;
-        CustomUnitText [ SWEDISH ] = "Pixel" ;
+        CustomUnitText [ SWEDISH ] = " pixel" ;
         CustomUnitText [ PORTUGUESE ] = "Pixel" ;
         CustomUnitText[ chinese_simplified ] = "ÏñËØ";
         CustomUnitText[ russian ] = "ïèêñåëü";
@@ -482,12 +482,12 @@ TabPage TP_OPTIONS_SNAP
         SpinSize = 500 ;
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " degree" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
@@ -544,12 +544,12 @@ TabPage TP_OPTIONS_SNAP
         SpinSize = 500 ;
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " degree" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
         CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ portuguese ] = "grau" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
