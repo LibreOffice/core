@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ chinese_simplified ] = "³·ÏûÃüÁî(~U)";
             Text[ chinese_traditional ] = "´_­ì(~U)";
             Text[ greek ] = "Áíáß~ñåóç";
-            Text[ korean ] = "ÀÛ¾÷Ãë¼Ò(~U)";
+            Text[ korean ] = "½ÇÇàÃë¼Ò(~U)";
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ turkish ] = "Geri al";
             Text[ language_user1 ] = " ";
