@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-24 11:40:09 $
+ *  last change: $Author: jsc $ $Date: 2001-08-30 10:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
 
     if ( !copyFile(fileName, tmpFile) )
     {
-          fprintf(stderr, "%s: couldn't copy file '%' to '%s'\n",
+          fprintf(stderr, "%s: couldn't copy file '%s' to '%s'\n",
             idlc()->getOptions()->getProgramName().getStr(), fileName.getStr(), tmpFile.getStr());
           exit(99);
     }
@@ -353,14 +353,14 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     if (unlink(tmpFile.getStr()) != 0)
     {
         fprintf(stderr, "%s: Could not remove cpp input file %s\n",
-                 pOptions->getProgramName(), tmpFile.getStr());
+                 pOptions->getProgramName().getStr(), tmpFile.getStr());
         exit(99);
     }
 
     if (unlink(cmdFileName.getStr()) != 0)
     {
         fprintf(stderr, "%s: Could not remove unocpp command file %s\n",
-                   pOptions->getProgramName(), cmdFileName.getStr());
+                   pOptions->getProgramName().getStr(), cmdFileName.getStr());
 
         exit(99);
     }
@@ -370,7 +370,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
         if (unlink(preprocFile) != 0)
         {
             fprintf(stderr, "%s: Could not remove parser input file %s\n",
-                       pOptions->getProgramName(), preprocFile.getStr());
+                       pOptions->getProgramName().getStr(), preprocFile.getStr());
             exit(99);
         }
         exit(0);
@@ -381,7 +381,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     if (yyin == NULL)
     {
         fprintf(stderr, "%s: Could not open cpp output file %s\n",
-                   pOptions->getProgramName(), preprocFile.getStr());
+                   pOptions->getProgramName().getStr(), preprocFile.getStr());
         exit(99);
     }
 
@@ -396,7 +396,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     if (unlink(preprocFile.getStr()) != 0)
     {
         fprintf(stderr, "%s: Could not remove parser input file %s\n",
-                pOptions->getProgramName(), preprocFile.getStr());
+                pOptions->getProgramName().getStr(), preprocFile.getStr());
         exit(99);
     }
 

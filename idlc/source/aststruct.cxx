@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststruct.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
+ *  last change: $Author: jsc $ $Date: 2001-08-30 10:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
-                getFullName().getStr(), rKey.getRegistryName().getStr());
+                getFullName().getStr(), OUStringToOString(rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
