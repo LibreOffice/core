@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: ab $ $Date: 2000-09-25 14:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,18 +142,21 @@ Reference< XContentProviderManager > InitializeUCB( std::vector< ucb::ContentPro
     setProcessServiceFactory( xSMgr );
 
     //////////////////////////////////////////////////////////////////////
-    // Create UCB.
-    Reference< XImplementationRegistration >
-        xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
-    xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                            OUString::createFromAscii( "ucb1.dll" ),
-                                            Reference< XSimpleRegistry >() );
-    xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                    OUString::createFromAscii( "ucpfile1.dll" ),
-                                    Reference< XSimpleRegistry >() );
-    xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                    OUString::createFromAscii( "fileacc.dll" ),
-                                    Reference< XSimpleRegistry >() );
+    // Register libraries, check first if already registered
+    if( !xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ).is() )
+    {
+        Reference< XImplementationRegistration >
+            xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                                OUString::createFromAscii( "ucb1.dll" ),
+                                                Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii( "ucpfile1.dll" ),
+                                        Reference< XSimpleRegistry >() );
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii( "fileacc.dll" ),
+                                        Reference< XSimpleRegistry >() );
+    }
 
     // Create unconfigured Ucb:
     Sequence< Any > aArgs(1);
