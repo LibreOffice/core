@@ -384,6 +384,7 @@ hedabu: ..\inc\sxsoitm.hxx %_DEST%\inc%_EXT%\svx\sxsoitm.hxx
 hedabu: ..\inc\sxtraitm.hxx %_DEST%\inc%_EXT%\svx\sxtraitm.hxx
 #hedabu: ..\inc\tabstpge.hxx %_DEST%\inc%_EXT%\svx\tabstpge.hxx
 hedabu: ..\inc\tbcontrl.hxx %_DEST%\inc%_EXT%\svx\tbcontrl.hxx
+hedabu: ..\inc\formatpaintbrushctrl.hxx %_DEST%\inc%_EXT%\svx\formatpaintbrushctrl.hxx
 hedabu: ..\inc\tbxalign.hxx %_DEST%\inc%_EXT%\svx\tbxalign.hxx
 hedabu: ..\inc\tbxctl.hxx %_DEST%\inc%_EXT%\svx\tbxctl.hxx
 hedabu: ..\inc\tbxdraw.hxx %_DEST%\inc%_EXT%\svx\tbxdraw.hxx
