@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:18:47 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <string.h>
 #include <vector>
+#include <math.h>
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -123,6 +124,13 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <mnemonic.hxx>
 #endif
+#ifndef _SV_GRADIENT_HXX
+#include <gradient.hxx>
+#endif
+#ifndef _SV_MENU_HXX
+#include <menu.hxx>
+#endif
+
 
 // =======================================================================
 
@@ -149,11 +157,10 @@ DBG_NAMEEX( Window );
 
 #define DEF_MIN_WIDTH           8
 #define DEF_MIN_HEIGHT          8
-#define DEF_IMAGE_WIDTH         16
-#define DEF_IMAGE_HEIGHT        15
 #define DEF_TEXT_WIDTH          40
 
 #define TB_TEXTOFFSET           2
+#define TB_IMAGETEXTOFFSET      3
 #define TB_LINESPACING          3
 #define TB_SPIN_SIZE            14
 #define TB_SPIN_OFFSET          2
@@ -184,6 +191,9 @@ DBG_NAMEEX( Window );
 #define DOCK_LINETOP            ((USHORT)0x8000)
 #define DOCK_LINEOFFSET         3
 
+
+// -----------------------------------------------------------------------
+static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines );
 // -----------------------------------------------------------------------
 
 // Hue, 360 degree
@@ -226,7 +236,7 @@ void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri
         nHue = 0; // Default = undefined
     else
     {
-        double dHue;
+        double dHue = 0.0;
 
         if( c[0] == cMax )
         {
@@ -252,7 +262,7 @@ void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri
 
 Color ImplHSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
 {
-    UINT8 cR,cG,cB;
+    UINT8 cR=0,cG=0,cB=0;
     UINT8 nB = (UINT8) ( nBri * 255 / 100 );
 
     if( nSat == 0 )
@@ -300,17 +310,15 @@ struct ImplToolSize
     USHORT          mnLines;
 };
 
-// -----------------------------------------------------------------------
-
-struct ImplButtonData
+struct ImplToolSizeArray
 {
-    VirtualDevice*  mpBtnDev;
-    long            mnWidth;
-    long            mnHeight;
-    USHORT          mnRefCount;
-};
+    long          mnLength;
+    long          mnLastEntry;
+    ImplToolSize* mpSize;
 
-DECLARE_LIST( ImplButtonList, ImplButtonData* );
+    ImplToolSizeArray() { mpSize = NULL; mnLength = 0; mnLastEntry = 0; }
+    ~ImplToolSizeArray() { if( mpSize ) delete [] mpSize; mnLength = 0; }
+};
 
 // -----------------------------------------------------------------------
 
@@ -381,40 +389,381 @@ static void ImplDrawConfigFrame( ToolBox* pThis, const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
-                            long& rRight, long& rBottom )
+static void ImplUpdateDragArea( ToolBox *pThis )
 {
-    if ( eAlign == WINDOWALIGN_TOP )
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+    if( pWrapper )
     {
-        rLeft   = 0;
-        rTop    = 2;
-        rRight  = 0;
-        rBottom = 0;
-    }
-    else if ( eAlign == WINDOWALIGN_LEFT )
-    {
-        rLeft   = 2;
-        rTop    = 2;
-        rRight  = 0;
-        rBottom = 2;
-    }
-    else if ( eAlign == WINDOWALIGN_BOTTOM )
-    {
-        rLeft   = 0;
-        rTop    = 0;
-        rRight  = 0;
-        rBottom = 2;
-    }
-    else
-    {
-        rLeft   = 0;
-        rTop    = 2;
-        rRight  = 2;
-        rBottom = 2;
+        if ( pThis->ImplIsFloatingMode() || pWrapper->IsLocked() )
+            pWrapper->SetDragArea( Rectangle() );
+        else
+        {
+            if( pThis->meAlign == WINDOWALIGN_TOP || pThis->meAlign == WINDOWALIGN_BOTTOM )
+                pWrapper->SetDragArea( Rectangle( 0, 0, TB_DRAGWIDTH, pThis->GetOutputSizePixel().Height() ) );
+            else
+                pWrapper->SetDragArea( Rectangle( 0, 0, pThis->GetOutputSizePixel().Width(), TB_DRAGWIDTH ) );
+        }
     }
 }
 
 // -----------------------------------------------------------------------
+
+static void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
+                            long& rRight, long& rBottom, const ToolBox *pThis )
+{
+    if( pThis->ImplIsFloatingMode() || !(pThis->mnWinStyle & WB_BORDER) )
+    {
+        // no border in floating mode
+        rLeft = rTop = rRight = rBottom = 0;
+        return;
+    }
+
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+
+    // reserve dragarea only for dockable toolbars
+    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? TB_DRAGWIDTH : 0;
+
+    // no shadow border for dockable toolbars
+    int    borderwidth = pWrapper ? 0: 2;
+
+    if ( eAlign == WINDOWALIGN_TOP )
+    {
+        rLeft   = borderwidth+dragwidth;
+        rTop    = borderwidth;
+        rRight  = borderwidth;
+        rBottom = 0;
+    }
+    else if ( eAlign == WINDOWALIGN_LEFT )
+    {
+        rLeft   = borderwidth;
+        rTop    = borderwidth+dragwidth;
+        rRight  = 0;
+        rBottom = borderwidth;
+    }
+    else if ( eAlign == WINDOWALIGN_BOTTOM )
+    {
+        rLeft   = borderwidth+dragwidth;
+        rTop    = 0;
+        rRight  = borderwidth;
+        rBottom = borderwidth;
+    }
+    else
+    {
+        rLeft   = 0;
+        rTop    = borderwidth+dragwidth;
+        rRight  = borderwidth;
+        rBottom = borderwidth;
+    }
+}
+
+
+// -----------------------------------------------------------------------
+
+static void ImplDrawGrip( ToolBox* pThis )
+{
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+    if( pWrapper && !pWrapper->GetDragArea().IsEmpty() )
+    {
+        const StyleSettings&    rStyleSettings = pThis->GetSettings().GetStyleSettings();
+        pThis->SetLineColor( rStyleSettings.GetShadowColor() );
+
+        Size aSz ( pThis->GetOutputSizePixel() );
+
+        if ( pThis->meAlign == WINDOWALIGN_TOP || pThis->meAlign == WINDOWALIGN_BOTTOM )
+        {
+            int height = (int) (0.6 * aSz.Height() + 0.5);
+            int i = (aSz.Height() - height) / 2;
+            height += i;
+            while( i <= height )
+            {
+                pThis->DrawLine( Point(4, i), Point( 4+TB_DRAGWIDTH-6, i) );
+                i += 2;
+            }
+        }
+        else
+        {
+            int width = (int) (0.6 * aSz.Width() + 0.5);
+            int i = (aSz.Width() - width) / 2;
+            width += i;
+            while( i <= width )
+            {
+                pThis->DrawLine( Point(i, 4), Point( i, 4+TB_DRAGWIDTH-6) );
+                i += 2;
+            }
+        }
+    }
+}
+
+static void ImplDrawBorderEffects( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper )
+{
+    // make 'round' corners and provide a special border
+    if( pWrapper && !pThis->ImplIsFloatingMode() )
+    {
+        Color startCol, endCol;
+        startCol = Color( COL_WHITE );
+        endCol = pThis->GetSettings().GetStyleSettings().GetFaceColor();
+        if( endCol.IsDark() )
+            // no 'extreme' gradient when high contrast
+            startCol = endCol;
+
+        Point aPt;
+        Rectangle aRect( aPt, pThis->GetOutputSizePixel() );
+
+        long nTmp = pThis->mbHorz ? aRect.nRight : aRect.nBottom;
+        // draw lines up to the menu button only
+        if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
+            if( pThis->mbHorz )
+                aRect.nRight = pThis->mpData->maMenubuttonItem.maRect.nLeft-1;
+            else
+                aRect.nBottom = pThis->mpData->maMenubuttonItem.maRect.nTop-1;
+
+        pThis->SetLineColor( startCol );    // typically white
+
+        if( pThis->mbHorz )
+            pThis->DrawLine( aRect.TopLeft(),aRect.TopRight() );
+        else
+            pThis->DrawLine( aRect.TopRight(),aRect.BottomRight() );
+
+        pThis->SetLineColor( endCol );
+        if( pThis->mbHorz )
+        {
+            pThis->DrawLine( aRect.TopLeft(),aRect.BottomLeft() );
+            pThis->DrawLine( aRect.BottomLeft(),aRect.BottomRight() );
+        }
+        else
+        {
+            pThis->DrawLine( aRect.TopRight(),aRect.TopLeft() );
+            pThis->DrawLine( aRect.TopLeft(),aRect.BottomLeft() );
+        }
+
+        // this line is placed beyond the menu button
+        if( pThis->mbHorz )
+            aRect.nRight = nTmp;
+        else
+            aRect.nBottom = nTmp;
+
+        //pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
+        pThis->SetLineColor( endCol );
+        if( pThis->mbHorz )
+            pThis->DrawLine( aRect.TopRight(),aRect.BottomRight() );
+        else
+            pThis->DrawLine( aRect.BottomRight(),aRect.BottomLeft() );
+
+        // make 'round' corners
+        if( pThis->mbHorz )
+            { aRect.nLeft++; aRect.nRight--; }
+        else
+            { aRect.nTop++; aRect.nBottom--; }
+        pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetFaceColor() );
+        pThis->DrawLine( aRect.TopLeft(),aRect.TopLeft() );
+        pThis->DrawLine( aRect.TopRight(),aRect.TopRight() );
+        pThis->DrawLine( aRect.BottomLeft(),aRect.BottomLeft() );
+        pThis->DrawLine( aRect.BottomRight(),aRect.BottomRight() );
+    }
+}
+
+static void ImplDrawGradient( ToolBox* pThis, const Rectangle &rRect )
+{
+    if( !(((Window*)pThis)->GetStyle() & WB_3DLOOK) )
+        return;
+
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+
+    Color aColor = pThis->GetSettings().GetStyleSettings().GetFaceColor();
+
+    if( !pWrapper )
+    {
+        // no gradient for ordinary toolbars (not dockable)
+        BOOL bFillColor = pThis->IsFillColor();
+        BOOL bLineColor = pThis->IsLineColor();
+        Color aOldFillCol = pThis->GetFillColor();
+        Color aOldLineCol = pThis->GetLineColor();
+        pThis->SetFillColor( aColor );
+        pThis->SetLineColor();
+        pThis->DrawRect( rRect );
+        if( bFillColor )
+            pThis->SetFillColor( aOldFillCol );
+        if( bLineColor )
+            pThis->SetLineColor( aOldLineCol );
+        return;
+    }
+
+    Color startCol, endCol;
+    startCol = Color( COL_WHITE );
+    endCol = pThis->GetSettings().GetStyleSettings().GetFaceColor();
+    if( endCol.IsDark() )
+        // no 'extreme' gradient when high contrast
+        startCol = endCol;
+
+    Gradient g;
+    g.SetAngle( pThis->mbHorz ? 0 : 900 );
+    g.SetStyle( GRADIENT_LINEAR );
+
+    g.SetStartColor( startCol );
+    g.SetEndColor( endCol );
+
+    BOOL bLineColor = pThis->IsLineColor();
+    Color aOldCol = pThis->GetLineColor();
+    pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
+
+    Size aFullSz( pThis->GetOutputSizePixel() );
+    Size aLineSz( aFullSz );
+
+    // use the linesize only when floating
+    // full window height is used when docked (single line)
+    if( pThis->ImplIsFloatingMode() )
+    {
+        long nLineSize;
+        if( pThis->mbHorz )
+        {
+            nLineSize = pThis->mnMaxItemHeight;
+            if ( pThis->mnWinHeight > pThis->mnMaxItemHeight )
+                nLineSize = pThis->mnWinHeight;
+
+            aLineSz.Height() = nLineSize;
+        }
+        else
+        {
+            nLineSize = pThis->mnMaxItemWidth;
+            aLineSz.Width() = nLineSize;
+        }
+    }
+
+    long nLeft, nTop, nRight, nBottom;
+    ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom, pThis );
+
+    Size aTopLineSz( aLineSz );
+    Size aBottomLineSz( aLineSz );
+
+    if ( pThis->mnWinStyle & WB_BORDER )
+    {
+        if( pThis->mbHorz )
+        {
+            aTopLineSz.Height() += TB_BORDER_OFFSET2 + nTop;
+            aBottomLineSz.Height() += TB_BORDER_OFFSET2 + nBottom;
+
+            if( pThis->mnCurLines == 1 )
+                aTopLineSz.Height() += TB_BORDER_OFFSET2 + nBottom;
+        }
+        else
+        {
+            aTopLineSz.Width() += TB_BORDER_OFFSET1 + nLeft;
+            aBottomLineSz.Width() += TB_BORDER_OFFSET1 + nRight;
+
+            if( pThis->mnCurLines == 1 )
+                aTopLineSz.Width() += TB_BORDER_OFFSET1 + nLeft;
+        }
+    }
+
+    if( pThis->mbHorz )
+    {
+        aTopLineSz.Height() += pThis->mnBorderY;
+        if( pThis->mnCurLines == 1 )
+            aTopLineSz.Height() += pThis->mnBorderY;
+
+        aBottomLineSz.Height() += pThis->mnBorderY;
+    }
+    else
+    {
+        aTopLineSz.Width() += pThis->mnBorderX;
+        if( pThis->mnCurLines == 1 )
+            aTopLineSz.Width() += pThis->mnBorderX;
+
+        aBottomLineSz.Width() += pThis->mnBorderX;
+    }
+
+
+    if ( pThis->mnWinStyle & WB_LINESPACING )
+    {
+        if( pThis->mbHorz )
+        {
+            aLineSz.Height() += TB_LINESPACING;
+            if( pThis->mnCurLines > 1 )
+                aTopLineSz.Height() += TB_LINESPACING;
+        }
+        else
+        {
+            aLineSz.Width() += TB_LINESPACING;
+            if( pThis->mnCurLines > 1 )
+                aTopLineSz.Width() += TB_LINESPACING;
+        }
+    }
+
+    if( pThis->mbHorz )
+    {
+        long y = 0;
+        BOOL bDrawSep = FALSE; // pThis->ImplIsFloatingMode() && ( pThis->mnWinStyle & WB_LINESPACING );
+
+        pThis->DrawGradient( Rectangle( 0, y, aTopLineSz.Width(), y+aTopLineSz.Height()), g );
+        y += aTopLineSz.Height();
+
+        if ( bDrawSep )
+            pThis->DrawLine( Point(0, y-2), Point(aTopLineSz.Width(), y-2) );
+
+        while( y < (pThis->mnDY - aBottomLineSz.Height()) )
+        {
+            pThis->DrawGradient( Rectangle( 0, y, aLineSz.Width(), y+aLineSz.Height()), g);
+            y += aLineSz.Height();
+
+            if ( bDrawSep )
+                pThis->DrawLine( Point(0, y-2), Point(aLineSz.Width(), y-2) );
+        }
+
+        pThis->DrawGradient( Rectangle( 0, y, aBottomLineSz.Width(), y+aBottomLineSz.Height()), g );
+        if ( bDrawSep )
+            pThis->DrawLine( Point(0, y-2), Point(aBottomLineSz.Width(), y-2) );
+    }
+    else
+    {
+        long x = 0;
+
+        pThis->DrawGradient( Rectangle( x, 0, x+aTopLineSz.Width(), aTopLineSz.Height()), g );
+        x += aTopLineSz.Width();
+
+        while( x < (pThis->mnDX - aBottomLineSz.Width()) )
+        {
+            pThis->DrawGradient( Rectangle( x, 0, x+aLineSz.Width(), aLineSz.Height()), g);
+            x += aLineSz.Width();
+        }
+
+        pThis->DrawGradient( Rectangle( x, 0, x+aBottomLineSz.Width(), aBottomLineSz.Height()), g );
+    }
+
+    // round corners etc.
+    ImplDrawBorderEffects( pThis, pWrapper );
+
+    if( bLineColor )
+        pThis->SetLineColor( aOldCol );
+}
+
+static void ImplErase( ToolBox* pThis, const Rectangle &rRect, BOOL bHighlight = FALSE )
+{
+    // no gradient when highlighting items, just use the (white) background
+    if( bHighlight || ! (((Window*) pThis)->GetStyle() & WB_3DLOOK ) )
+    {
+        if( (((Window*) pThis)->GetStyle() & WB_3DLOOK ) )
+        {
+            pThis->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pThis->SetLineColor();
+            pThis->SetFillColor( Color( COL_WHITE ) );
+            pThis->DrawRect( rRect );
+            pThis->Pop();
+        }
+        else
+            pThis->Erase( rRect );
+    }
+    else
+    {
+        BOOL bClipRegion = pThis->IsClipRegion();
+        Region aOldRgn = pThis->GetClipRegion();
+        pThis->SetClipRegion( Region( rRect ) );
+        ImplDrawGradient( pThis, rRect );
+        if( bClipRegion )
+            pThis->SetClipRegion( aOldRgn );
+        else
+            pThis->SetClipRegion();
+    }
+}
 
 static void ImplDrawBorder( ToolBox* pWin )
 {
@@ -422,8 +771,15 @@ static void ImplDrawBorder( ToolBox* pWin )
     long                    nDX = pWin->mnDX;
     long                    nDY = pWin->mnDY;
 
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pWin );
+
+    // draw borders for ordinary toolbars only (not dockable)
+    if( pWrapper )
+        return;
+
     if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
     {
+        // draw bottom border
         pWin->SetLineColor( rStyleSettings.GetShadowColor() );
         pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
         pWin->SetLineColor( rStyleSettings.GetLightColor() );
@@ -431,14 +787,17 @@ static void ImplDrawBorder( ToolBox* pWin )
     }
     else
     {
+        // draw top border
         pWin->SetLineColor( rStyleSettings.GetShadowColor() );
         pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
         pWin->SetLineColor( rStyleSettings.GetLightColor() );
         pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
+
         if ( (pWin->meAlign == WINDOWALIGN_LEFT) || (pWin->meAlign == WINDOWALIGN_RIGHT) )
         {
             if ( pWin->meAlign == WINDOWALIGN_LEFT )
             {
+                // draw left-bottom border
                 pWin->SetLineColor( rStyleSettings.GetShadowColor() );
                 pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
                 pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
@@ -448,6 +807,7 @@ static void ImplDrawBorder( ToolBox* pWin )
             }
             else
             {
+                // draw right-bottom border
                 pWin->SetLineColor( rStyleSettings.GetShadowColor() );
                 pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
                 pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
@@ -457,6 +817,26 @@ static void ImplDrawBorder( ToolBox* pWin )
             }
         }
     }
+
+
+    if ( pWin->meAlign == WINDOWALIGN_BOTTOM || pWin->meAlign == WINDOWALIGN_TOP )
+    {
+        // draw right border
+        pWin->SetLineColor( rStyleSettings.GetShadowColor() );
+        pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-1 ) );
+        pWin->SetLineColor( rStyleSettings.GetLightColor() );
+        pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+static bool ImplIsFixedControl( ImplToolItem *pItem )
+{
+    return ( pItem->mpWindow &&
+            (pItem->mpWindow->GetType() == WINDOW_FIXEDTEXT ||
+             pItem->mpWindow->GetType() == WINDOW_FIXEDLINE ||
+             pItem->mpWindow->GetType() == WINDOW_GROUPBOX) );
 }
 
 // -----------------------------------------------------------------------
@@ -470,60 +850,73 @@ static Size ImplCalcSize( const ToolBox* pThis,
     long            nRight;
     long            nBottom;
     Size            aSize;
-    WindowAlign     eOldAlign;
-    BOOL            bOldHorz;
+    WindowAlign     eOldAlign = pThis->meAlign;
+    BOOL            bOldHorz = pThis->mbHorz;
+    BOOL            bOldAssumeDocked = pThis->mpData->mbAssumeDocked;
+    BOOL            bOldAssumeFloating = pThis->mpData->mbAssumeFloating;
 
-    // Gegebenenfalls neu durchrechnen
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
+
     if ( nCalcMode )
     {
-        eOldAlign   = pThis->meAlign;
-        bOldHorz    = pThis->mbHorz;
+        BOOL bOldFloatingMode = pThis->ImplIsFloatingMode();
+
+        pThis->mpData->mbAssumeDocked = FALSE;
+        pThis->mpData->mbAssumeFloating = FALSE;
 
         if ( nCalcMode == TB_CALCMODE_HORZ )
         {
-            ImplCalcBorder( WINDOWALIGN_TOP, nLeft, nTop, nRight, nBottom );
+            pThis->mpData->mbAssumeDocked = TRUE;   // force non-floating mode during calculation
+            ImplCalcBorder( WINDOWALIGN_TOP, nLeft, nTop, nRight, nBottom, pThis );
             ((ToolBox*)pThis)->mbHorz = TRUE;
             if ( pThis->mbHorz != bOldHorz )
                 ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
         }
+        else if ( nCalcMode == TB_CALCMODE_VERT )
+        {
+            pThis->mpData->mbAssumeDocked = TRUE;   // force non-floating mode during calculation
+            ImplCalcBorder( WINDOWALIGN_LEFT, nLeft, nTop, nRight, nBottom, pThis );
+            ((ToolBox*)pThis)->mbHorz = FALSE;
+            if ( pThis->mbHorz != bOldHorz )
+                ((ToolBox*)pThis)->meAlign = WINDOWALIGN_LEFT;
+        }
         else if ( nCalcMode == TB_CALCMODE_FLOAT )
         {
+            pThis->mpData->mbAssumeFloating = TRUE;   // force non-floating mode during calculation
             nLeft = nTop = nRight = nBottom = 0;
             ((ToolBox*)pThis)->mbHorz = TRUE;
             if ( pThis->mbHorz != bOldHorz )
                 ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
         }
-        else
-        {
-            ImplCalcBorder( WINDOWALIGN_LEFT, nLeft, nTop, nRight, nBottom );
-            ((ToolBox*)pThis)->mbHorz = FALSE;
-            if ( pThis->mbHorz != bOldHorz )
-                ((ToolBox*)pThis)->meAlign = WINDOWALIGN_LEFT;
-        }
 
-        if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) )
+        if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) ||
+             (pThis->ImplIsFloatingMode() != bOldFloatingMode ) )
             ((ToolBox*)pThis)->mbCalc = TRUE;
     }
     else
-        ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom );
+        ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom, pThis );
 
     ((ToolBox*)pThis)->ImplCalcItem();
 
-    if ( pThis->mbHorz )
+    if( !nCalcMode && pThis->ImplIsFloatingMode() )
     {
-        if ( pThis->mnWinHeight > pThis->mnItemHeight )
-            aSize.Height() = nCalcLines * pThis->mnWinHeight;
-        else
-            aSize.Height() = nCalcLines * pThis->mnItemHeight;
-
-        if ( pThis->mnWinStyle & WB_LINESPACING )
-            aSize.Height() += (nCalcLines-1)*TB_LINESPACING;
-
-        if ( pThis->mnWinStyle & WB_BORDER )
-            aSize.Height() += (TB_BORDER_OFFSET2*2) + nTop + nBottom;
-
-        if ( !(pThis->mnWinStyle & WB_SCROLL) )
+        aSize = ImplCalcFloatSize( ((ToolBox*)pThis), nCalcLines );
+    }
+    else
+    {
+        if ( pThis->mbHorz )
         {
+            if ( pThis->mnWinHeight > pThis->mnMaxItemHeight )
+                aSize.Height() = nCalcLines * pThis->mnWinHeight;
+            else
+                aSize.Height() = nCalcLines * pThis->mnMaxItemHeight;
+
+            if ( pThis->mnWinStyle & WB_LINESPACING )
+                aSize.Height() += (nCalcLines-1)*TB_LINESPACING;
+
+            if ( pThis->mnWinStyle & WB_BORDER )
+                aSize.Height() += (TB_BORDER_OFFSET2*2) + nTop + nBottom;
+
             nMax = 0;
             ((ToolBox*)pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
             if ( nMax )
@@ -532,19 +925,16 @@ static Size ImplCalcSize( const ToolBox* pThis,
             if ( pThis->mnWinStyle & WB_BORDER )
                 aSize.Width() += (TB_BORDER_OFFSET1*2) + nLeft + nRight;
         }
-    }
-    else
-    {
-        aSize.Width() = nCalcLines * pThis->mnItemWidth;
-
-        if ( pThis->mnWinStyle & WB_LINESPACING )
-            aSize.Width() += (nCalcLines-1)*TB_LINESPACING;
-
-        if ( pThis->mnWinStyle & WB_BORDER )
-            aSize.Width() += (TB_BORDER_OFFSET2*2) + nLeft + nRight;
-
-        if ( !(pThis->mnWinStyle & WB_SCROLL) )
+        else
         {
+            aSize.Width() = nCalcLines * pThis->mnMaxItemWidth;
+
+            if ( pThis->mnWinStyle & WB_LINESPACING )
+                aSize.Width() += (nCalcLines-1)*TB_LINESPACING;
+
+            if ( pThis->mnWinStyle & WB_BORDER )
+                aSize.Width() += (TB_BORDER_OFFSET2*2) + nLeft + nRight;
+
             nMax = 0;
             ((ToolBox*)pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
             if ( nMax )
@@ -554,10 +944,11 @@ static Size ImplCalcSize( const ToolBox* pThis,
                 aSize.Height() += (TB_BORDER_OFFSET1*2) + nTop + nBottom;
         }
     }
-
-    // Gegebenenfalls wieder alte Werte herstellen
+    // restore previous values
     if ( nCalcMode )
     {
+        pThis->mpData->mbAssumeDocked = bOldAssumeDocked;
+        pThis->mpData->mbAssumeFloating = bOldAssumeFloating;
         if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) )
         {
             ((ToolBox*)pThis)->meAlign  = eOldAlign;
@@ -581,8 +972,8 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
     if ( pThis->mpFloatSizeAry )
         return;
 
-    // min. Groesse berechnen
-    long            nCalcSize = pThis->mnItemWidth;
+    // calculate the minimal size, i.e. where the biggest item just fits
+    long            nCalcSize = 0;
 
     std::vector< ImplToolItem >::const_iterator it;
     it = pThis->mpData->m_aItems.begin();
@@ -596,14 +987,17 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
                 if ( nTempSize > nCalcSize )
                     nCalcSize = nTempSize;
             }
-            else if ( it->mnNonStdSize )
+            else
             {
-                if ( it->mnNonStdSize > nCalcSize )
-                    nCalcSize = it->mnNonStdSize;
+                if( it->maItemSize.Width() > nCalcSize )
+                    nCalcSize = it->maItemSize.Width();
             }
         }
         ++it;
     }
+
+    // calc an upper bound for ImplCalcBreaks below
+    long upperBoundWidth = nCalcSize * pThis->mpData->m_aItems.size();
 
     USHORT  i;
     USHORT  nLines;
@@ -611,37 +1005,33 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
     USHORT  nTempLines;
     long    nHeight;
     long    nMaxLineWidth;
-    long    nDesktopWidth = pThis->GetDesktopRectPixel().GetWidth()-10;
     nCalcLines = pThis->ImplCalcBreaks( nCalcSize, &nMaxLineWidth, TRUE );
-    pThis->mpFloatSizeAry = new ImplToolSize[nCalcLines];
-    memset( pThis->mpFloatSizeAry, 0, sizeof( ImplToolSize )*nCalcLines );
+
+    pThis->mpFloatSizeAry = new ImplToolSizeArray;
+    pThis->mpFloatSizeAry->mpSize = new ImplToolSize[nCalcLines];
+    pThis->mpFloatSizeAry->mnLength = nCalcLines;
+
+    memset( pThis->mpFloatSizeAry->mpSize, 0, sizeof( ImplToolSize )*nCalcLines );
     i = 0;
-    nLines = nCalcLines;
+    nTempLines = nLines = nCalcLines;
     while ( nLines )
     {
-        nHeight = ImplCalcSize( pThis, nLines, TB_CALCMODE_FLOAT ).Height();
-        pThis->mpFloatSizeAry[i].mnHeight = nHeight;
-        pThis->mpFloatSizeAry[i].mnLines  = nLines;
-        if ( nCalcSize >= nDesktopWidth )
+        nHeight = ImplCalcSize( pThis, nTempLines, TB_CALCMODE_FLOAT ).Height();
+        pThis->mpFloatSizeAry->mnLastEntry = i;
+        pThis->mpFloatSizeAry->mpSize[i].mnHeight = nHeight;
+        pThis->mpFloatSizeAry->mpSize[i].mnLines  = nTempLines;
+        pThis->mpFloatSizeAry->mpSize[i].mnWidth = nMaxLineWidth+(TB_BORDER_OFFSET1*2);
+        nLines--;
+        if ( nLines )
         {
-            pThis->mpFloatSizeAry[i].mnWidth = nDesktopWidth;
-            nLines--;
-        }
-        else
-        {
-            pThis->mpFloatSizeAry[i].mnWidth = nMaxLineWidth+(TB_BORDER_OFFSET1*2);
-            nLines--;
-            if ( nLines )
+            do
             {
-                do
-                {
-                    nCalcSize += pThis->mnItemWidth;
-                    nTempLines = pThis->ImplCalcBreaks( nCalcSize, &nMaxLineWidth, TRUE );
-                }
-                while ( (nLines < nTempLines) && (nTempLines != 1) && (nCalcSize < nDesktopWidth) );
-                if ( nTempLines < nLines )
-                    nLines = nTempLines;
+                nCalcSize += pThis->mnMaxItemWidth;
+                nTempLines = pThis->ImplCalcBreaks( nCalcSize, &nMaxLineWidth, TRUE );
             }
+            while ( (nCalcSize < upperBoundWidth) && (nLines < nTempLines) && (nTempLines != 1) );
+            if ( nTempLines < nLines )
+                nLines = nTempLines;
         }
         i++;
     }
@@ -661,12 +1051,13 @@ static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
     }
 
     USHORT i = 0;
-    while ( rLines < pThis->mpFloatSizeAry[i].mnLines )
+    while ( i < pThis->mpFloatSizeAry->mnLastEntry &&
+        rLines < pThis->mpFloatSizeAry->mpSize[i].mnLines )
         i++;
 
-    Size aSize( pThis->mpFloatSizeAry[i].mnWidth,
-                pThis->mpFloatSizeAry[i].mnHeight );
-    rLines = pThis->mpFloatSizeAry[i].mnLines;
+    Size aSize( pThis->mpFloatSizeAry->mpSize[i].mnWidth,
+                pThis->mpFloatSizeAry->mpSize[i].mnHeight );
+    rLines = pThis->mpFloatSizeAry->mpSize[i].mnLines;
     if ( pThis->maNextToolBoxStr.Len() && pThis->mbScroll )
         aSize.Width() += TB_NEXT_SIZE-TB_NEXT_OFFSET;
     return aSize;
@@ -674,19 +1065,44 @@ static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
 
 // -----------------------------------------------------------------------
 
+static Size ImplCalcMinFloatSize( ToolBox* pThis )
+{
+    ImplCalcFloatSizes( pThis );
+
+    USHORT i = 0;
+    Size aMinSize( pThis->mpFloatSizeAry->mpSize[i].mnWidth, pThis->mpFloatSizeAry->mpSize[i].mnHeight );
+    Size aMaxSize( pThis->mpFloatSizeAry->mpSize[i].mnWidth, pThis->mpFloatSizeAry->mpSize[i].mnHeight );
+    while ( ++i <= pThis->mpFloatSizeAry->mnLastEntry )
+    {
+        if( pThis->mpFloatSizeAry->mpSize[i].mnWidth < aMinSize.Width() )
+            aMinSize.Width() = pThis->mpFloatSizeAry->mpSize[i].mnWidth;
+        if( pThis->mpFloatSizeAry->mpSize[i].mnHeight < aMinSize.Height() )
+            aMinSize.Height() = pThis->mpFloatSizeAry->mpSize[i].mnHeight;
+
+        if( pThis->mpFloatSizeAry->mpSize[i].mnWidth > aMaxSize.Width() )
+            aMaxSize.Width() = pThis->mpFloatSizeAry->mpSize[i].mnWidth;
+        if( pThis->mpFloatSizeAry->mpSize[i].mnHeight > aMaxSize.Height() )
+            aMaxSize.Height() = pThis->mpFloatSizeAry->mpSize[i].mnHeight;
+    }
+    return aMinSize;
+}
+
+// -----------------------------------------------------------------------
+
+
 static USHORT ImplCalcLines( ToolBox* pThis, long nToolSize )
 {
     long nLineHeight;
 
     if ( pThis->mbHorz )
     {
-        if ( pThis->mnWinHeight > pThis->mnItemHeight )
+        if ( pThis->mnWinHeight > pThis->mnMaxItemHeight )
             nLineHeight = pThis->mnWinHeight;
         else
-            nLineHeight = pThis->mnItemHeight;
+            nLineHeight = pThis->mnMaxItemHeight;
     }
     else
-        nLineHeight = pThis->mnItemWidth;
+        nLineHeight = pThis->mnMaxItemWidth;
 
     if ( pThis->mnWinStyle & WB_BORDER )
         nToolSize -= TB_BORDER_OFFSET2*2;
@@ -704,7 +1120,7 @@ static USHORT ImplCalcLines( ToolBox* pThis, long nToolSize )
 
 static USHORT ImplTestLineSize( ToolBox* pThis, const Point& rPos )
 {
-    if ( !pThis->IsFloatingMode() &&
+    if ( !pThis->ImplIsFloatingMode() &&
          (!pThis->mbScroll || (pThis->mnLines > 1) || (pThis->mnCurLines > pThis->mnVisLines)) )
     {
         WindowAlign eAlign = pThis->GetAlign();
@@ -761,7 +1177,7 @@ static void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
         nCurSize = rRect.Right() - rPos.X();
         mbHorz = FALSE;
     }
-    else if ( nLineMode & DOCK_LINETOP )
+    else //if ( nLineMode & DOCK_LINETOP )
     {
         nCurSize = rRect.Bottom() - rPos.Y();
         mbHorz = TRUE;
@@ -819,7 +1235,7 @@ static void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
         rRect.Bottom() = rRect.Top()+nSize-1;
     else if ( nLineMode & DOCK_LINELEFT )
         rRect.Left() = rRect.Right()-nSize;
-    else if ( nLineMode & DOCK_LINETOP )
+    else //if ( nLineMode & DOCK_LINETOP )
         rRect.Top() = rRect.Bottom()-nSize;
 
     pThis->mnDockLines = i;
@@ -929,7 +1345,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
          */
         if ( pBox->IsReallyVisible() && pBox->mpFrame == mpDragBox->mpFrame )
         {
-            if ( !pBox->IsFloatingMode() )
+            if ( !pBox->ImplIsFloatingMode() )
             {
                 Point aPos = pBox->GetPosPixel();
                 aPos = pBox->GetParent()->OutputToScreenPixel( aPos );
@@ -1170,15 +1586,6 @@ void ImplTBDragMgr::EndCustomizeMode()
 
 // -----------------------------------------------------------------------
 
-static ImplButtonList* ImplGetButtonList()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maCtrlData.mpButtonList )
-        pSVData->maCtrlData.mpButtonList = new ImplButtonList;
-    return pSVData->maCtrlData.mpButtonList;
-}
-
-// -----------------------------------------------------------------------
 
 static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
                                USHORT nStyle )
@@ -1222,153 +1629,12 @@ static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
     }
 }
 
-// -----------------------------------------------------------------------
-
-static void ImplInitButtonVirDev( const Window* pBox, VirtualDevice* pVirDev )
-{
-    // Farben/Settings vom Window am virtuellen Device setzen
-    pVirDev->SetSettings( pBox->GetSettings() );
-    const Wallpaper& rWallpaper = pBox->GetBackground();
-    if ( rWallpaper.GetStyle() == WALLPAPER_NULL )
-        pVirDev->SetBackground( Wallpaper( pBox->GetSettings().GetStyleSettings().GetFaceColor() ) );
-    else
-        pVirDev->SetBackground( rWallpaper );
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplDrawButtons( VirtualDevice* pVirDev, long nWidth, long nHeight,
-                             USHORT nType )
-{
-    // Button Frames ausgeben
-    long nY = 0;
-    if ( nType & TOOLBOX_STYLE_OUTBUTTON )
-    {
-        for ( USHORT i = 0; i < 6; i++ )
-        {
-            USHORT nStyle = 0;
-            if ( i & 0x01 )
-                nStyle = BUTTON_DRAW_PRESSED;
-            ImplDrawOutButton( pVirDev, Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ), nStyle );
-            nY += nHeight;
-        }
-    }
-    else
-    {
-        DecorationView aDecoView( pVirDev );
-
-        aDecoView.DrawButton( Rectangle( 0, 0, nWidth-1, nHeight-1 ), 0 );
-        nY += nHeight;
-        aDecoView.DrawButton( Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ),
-                              BUTTON_DRAW_PRESSED );
-        nY += nHeight;
-        aDecoView.DrawButton( Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ),
-                              BUTTON_DRAW_CHECKED );
-        nY += nHeight;
-        aDecoView.DrawButton( Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ),
-                              BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-        nY += nHeight;
-        aDecoView.DrawButton( Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ),
-                              BUTTON_DRAW_DONTKNOW );
-        nY += nHeight;
-        aDecoView.DrawButton( Rectangle( 0, nY, nWidth-1, nY+nHeight-1 ),
-                              BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplButtonSysChange( ToolBox* pBox, VirtualDevice* pVirDev, USHORT nType )
-{
-    ImplButtonList* pBtnList = ImplGetButtonList();
-    ImplButtonData* pBtnData;
-
-    pBtnData = pBtnList->First();
-    while ( pBtnData )
-    {
-        if ( pBtnData->mpBtnDev == pVirDev )
-        {
-            ImplInitButtonVirDev( pBox, pVirDev );
-            ImplDrawButtons( pVirDev, pBtnData->mnWidth, pBtnData->mnHeight, nType );
-            break;
-        }
-
-        pBtnData = pBtnList->Next();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-static VirtualDevice* ImplGetButtonDevice( ToolBox* pBox,
-                                           long nWidth, long nHeight, USHORT nType )
-{
-    ImplButtonList* pBtnList = ImplGetButtonList();
-    ImplButtonData* pBtnData;
-
-    pBtnData = pBtnList->First();
-    while ( pBtnData )
-    {
-        if ( (pBtnData->mnWidth == nWidth) &&
-             (pBtnData->mnHeight == nHeight) )
-        {
-            pBtnData->mnRefCount++;
-            return pBtnData->mpBtnDev;
-        }
-
-        pBtnData = pBtnList->Next();
-    }
-
-    VirtualDevice* pVirDev = new VirtualDevice( *pBox );
-
-    // Neue Groesse vom virtuellen Device setzen
-    pVirDev->SetOutputSizePixel( Size( nWidth, nHeight*6 ), TRUE );
-    ImplInitButtonVirDev( pBox, pVirDev );
-    ImplDrawButtons( pVirDev, nWidth, nHeight, nType );
-
-    pBtnData = new ImplButtonData;
-    pBtnData->mpBtnDev   = pVirDev;
-    pBtnData->mnWidth    = nWidth;
-    pBtnData->mnHeight   = nHeight;
-    pBtnData->mnRefCount = 1;
-    pBtnList->Insert( pBtnData, LIST_APPEND );
-
-    return pVirDev;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplFreeButtonDevice( VirtualDevice* pVirDev )
-{
-    ImplButtonList* pBtnList = ImplGetButtonList();
-    ImplButtonData* pBtnData;
-
-    // Virtuelles Device suchen und loeschen
-    pBtnData = pBtnList->First();
-    while ( pBtnData )
-    {
-        if ( pBtnData->mpBtnDev == pVirDev )
-        {
-            pBtnData->mnRefCount--;
-            if ( !pBtnData->mnRefCount )
-            {
-                delete pBtnData->mpBtnDev;
-                delete pBtnData;
-                pBtnList->Remove();
-            }
-
-            return;
-        }
-
-        pBtnData = pBtnList->Next();
-    }
-
-    DBG_ERRORFILE( "ImplFreeButtonDevice(): Button-Device not in list" );
-}
 
 // -----------------------------------------------------------------------
 
 void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
+
     // Variablen initialisieren
     mbToolBox         = TRUE;
     mpBtnDev          = NULL;
@@ -1377,8 +1643,8 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mpFloatWin        = NULL;
     mnDX              = 0;
     mnDY              = 0;
-    mnItemWidth       = 0;
-    mnItemHeight      = 0;
+    mnMaxItemWidth       = 0;
+    mnMaxItemHeight      = 0;
     mnWinHeight       = 0;
     mnBorderX         = 0;
     mnBorderY         = 0;
@@ -1478,12 +1744,16 @@ void ToolBox::ImplInitSettings( BOOL bFont,
     {
         Color aColor;
         if ( IsControlBackground() )
+        {
             aColor = GetControlBackground();
-        else if ( Window::GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetFaceColor();
+            SetBackground( aColor );
+        }
         else
+        {
             aColor = rStyleSettings.GetWindowColor();
-        SetBackground( aColor );
+            SetBackground( aColor );
+        }
+
     }
 }
 
@@ -1560,7 +1830,7 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
 
     // Groesse des FloatingWindows berechnen und umschalten, wenn die
     // ToolBox initial im FloatingModus ist
-    if ( IsFloatingMode() )
+    if ( ImplIsFloatingMode() )
         mbHorz = TRUE;
     else
         Resize();
@@ -1573,6 +1843,10 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
 
 ToolBox::~ToolBox()
 {
+    // custom menu event still running?
+    if( mpData->mnEventId )
+        Application::RemoveUserEvent( mpData->mnEventId );
+
     // #103005# make sure our activate/deactivate balance is right
     while( mnActivateCount > 0 )
         Deactivate();
@@ -1587,7 +1861,7 @@ ToolBox::~ToolBox()
 
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
-        delete[] mpFloatSizeAry;
+        delete mpFloatSizeAry;
 
     // Wenn keine ToolBox-Referenzen mehr auf die Listen bestehen, dann
     // Listen mit wegloeschen
@@ -1602,19 +1876,6 @@ ToolBox::~ToolBox()
         {
             delete pSVData->maCtrlData.mpTBDragMgr;
             pSVData->maCtrlData.mpTBDragMgr = NULL;
-        }
-    }
-
-    // Button-Device freigeben
-    if ( mpBtnDev )
-        ImplFreeButtonDevice( mpBtnDev );
-
-    if ( pSVData->maCtrlData.mpButtonList )
-    {
-        if ( !pSVData->maCtrlData.mpButtonList->Count() )
-        {
-            delete pSVData->maCtrlData.mpButtonList;
-            pSVData->maCtrlData.mpButtonList = NULL;
         }
     }
 }
@@ -1633,6 +1894,21 @@ ImplToolItem* ToolBox::ImplGetItem( USHORT nItemId ) const
 
     return NULL;
 }
+// -----------------------------------------------------------------------
+
+static void ImplAddButtonBorder( long &rWidth, long& rHeight, USHORT aOutStyle )
+{
+    if ( aOutStyle & TOOLBOX_STYLE_OUTBUTTON )
+    {
+        rWidth += OUTBUTTON_SIZE;
+        rHeight += OUTBUTTON_SIZE;
+    }
+    else
+    {
+        rWidth += SMALLBUTTON_HSIZE;
+        rHeight += SMALLBUTTON_VSIZE;
+    }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1640,7 +1916,7 @@ BOOL ToolBox::ImplCalcItem()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    // Muss Itemgroesse ueberhaupt neu berechnet werden
+    // recalc required ?
     if ( !mbCalc )
         return FALSE;
 
@@ -1648,48 +1924,29 @@ BOOL ToolBox::ImplCalcItem()
 
     long            nDefWidth;
     long            nDefHeight;
-    long            nDefLeftWidth;
-    long            nDefLeftHeight;
-    long            nMaxWidth;
-    long            nMaxHeight;
+    long            nMaxWidth = 0;
+    long            nMaxHeight = 0;
     long            nHeight;
-    BOOL            bImage;
-    BOOL            bText;
-    Size            aItemSize;
 
-    if ( meButtonType == BUTTON_SYMBOL )
-    {
-        nDefWidth       = DEF_IMAGE_WIDTH;
-        nDefHeight      = DEF_IMAGE_HEIGHT;
-        nDefLeftWidth   = nDefWidth;
-        nDefLeftHeight  = nDefHeight;
-    }
-    else if ( meButtonType == BUTTON_TEXT )
-    {
-        nDefWidth       = DEF_TEXT_WIDTH;
-        nDefHeight      = GetTextHeight();
-        nDefLeftWidth   = nDefWidth;
-        nDefLeftHeight  = nDefHeight;
-    }
-    else
-    {
-        nDefWidth       = DEF_TEXT_WIDTH;
-        nDefHeight      = DEF_IMAGE_HEIGHT + GetTextHeight();
-        nDefLeftWidth   = nDefWidth;
-        nDefLeftHeight  = nDefHeight-DEF_IMAGE_HEIGHT;
-    }
+    // set defaults if image or text is needed but empty
+    nDefWidth       = ImplGetDefaultImageSize().Width();
+    nDefHeight      = ImplGetDefaultImageSize().Height();
 
     if ( ! mpData->m_aItems.empty() )
     {
-        nMaxWidth  = DEF_MIN_WIDTH;
-        nMaxHeight = DEF_MIN_HEIGHT;
         mnWinHeight = 0;
 
         std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
+            BOOL bImage;
+            BOOL bText;
+
+            it->mbVisibleText = FALSE;  // indicates if text will definitely be drawn, influences dropdown pos
+
             if ( it->meType == TOOLBOXITEM_BUTTON )
             {
+                // check if image and/or text exists
                 if ( !(it->maImage) )
                     bImage = FALSE;
                 else
@@ -1705,95 +1962,54 @@ BOOL ToolBox::ImplCalcItem()
 
                     if ( meButtonType == BUTTON_SYMBOL )
                     {
+                        // we're drawing images only
                         if ( bImage || !bText )
                         {
-                            aItemSize = it->maImage.GetSizePixel();
-                            it->mnNonStdSize = 0;
+                            it->maItemSize = it->maImage.GetSizePixel();
                         }
                         else
                         {
-                            aItemSize.Width() = 0;
-                            aItemSize.Height() = GetTextHeight();
-                            it->mnNonStdSize = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
+                            it->maItemSize = Size( GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET,
+                                                   GetTextHeight() );
+                            it->mbVisibleText = TRUE;
                         }
                     }
                     else if ( meButtonType == BUTTON_TEXT )
                     {
+                        // we're drawing text only
                         if ( bText || !bImage )
                         {
-                            aItemSize.Width() = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
-                            aItemSize.Height() = GetTextHeight();
-                            it->mnNonStdSize = 0;
+                            it->maItemSize = Size( GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET,
+                                                   GetTextHeight() );
+                            it->mbVisibleText = TRUE;
                         }
                         else
                         {
-                            Size aImageSize = it->maImage.GetSizePixel();
-                            if ( mbHorz )
-                            {
-                                aItemSize.Width()  = 0;
-                                aItemSize.Height() = aImageSize.Height();
-                                it->mnNonStdSize = aImageSize.Width();
-                            }
-                            else
-                            {
-                                aItemSize.Width()  = aImageSize.Width();
-                                aItemSize.Height() = 0;
-                                it->mnNonStdSize = aImageSize.Height();
-                            }
+                            it->maItemSize = it->maImage.GetSizePixel();
                         }
                     }
                     else
                     {
-                        aItemSize.Width() = GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET;
-                        aItemSize.Height() = GetTextHeight();
-                        Size aImageSize = it->maImage.GetSizePixel();
-                        if ( it->mnBits & TIB_LEFT )
-                        {
-                            aItemSize.Width() += aImageSize.Width();
-                            if ( aImageSize.Height() > aItemSize.Height() )
-                                aItemSize.Height() = aImageSize.Height();
-                        }
-                        else
-                        {
-                            aItemSize.Height() += aImageSize.Height();
-                            if ( aImageSize.Width() > aItemSize.Width() )
-                                aItemSize.Width() = aImageSize.Width();
-                        }
-                        it->mnNonStdSize = 0;
-                    }
+                        // we're drawing images and text
+                        it->maItemSize.Width() = bText ? GetCtrlTextWidth( it->maText )+TB_TEXTOFFSET : 0;
+                        it->maItemSize.Height() = bText ? GetTextHeight() : 0;
 
-                    if ( !it->mnNonStdSize && (it->mnBits & TIB_AUTOSIZE) )
-                    {
-                        it->mnNonStdSize = aItemSize.Width();
-                        aItemSize.Width() = 0;
+                        // leave space between image and text
+                        if( bText )
+                            it->maItemSize.Width() += TB_IMAGETEXTOFFSET;
+
+                        // image and text side by side
+                        it->maItemSize.Width() += it->maImage.GetSizePixel().Width();
+                        if ( it->maImage.GetSizePixel().Height() > it->maItemSize.Height() )
+                            it->maItemSize.Height() = it->maImage.GetSizePixel().Height();
+
+                        it->mbVisibleText = bText;
                     }
                 }
                 else
-                {
-                    if ( it->mnBits & TIB_LEFT )
-                    {
-                        aItemSize.Width()  = nDefLeftWidth;
-                        aItemSize.Height() = nDefLeftHeight;
-                    }
-                    else
-                    {
-                        aItemSize.Width()  = nDefWidth;
-                        aItemSize.Height() = nDefHeight;
-                    }
+                {   // no image and no text
+                    it->maItemSize = Size( nDefWidth, nDefHeight );
                     it->mbEmptyBtn = TRUE;
-                }
-
-                if ( aItemSize.Width() > nMaxWidth )
-                    nMaxWidth = aItemSize.Width();
-                if ( aItemSize.Height() > nMaxHeight )
-                    nMaxHeight = aItemSize.Height();
-
-                if ( it->mnNonStdSize )
-                {
-                    if ( mbHorz )
-                        it->mnNonStdSize += SMALLBUTTON_HSIZE;
-                    else
-                        it->mnNonStdSize += SMALLBUTTON_VSIZE;
                 }
 
                 // Gegebenenfalls die Fensterhoehe mit beruecksichtigen
@@ -1803,6 +2019,35 @@ BOOL ToolBox::ImplCalcItem()
                     if ( nHeight > mnWinHeight )
                         mnWinHeight = nHeight;
                 }
+
+                // add in drop down arrow
+                if( it->mnBits & TIB_DROPDOWN )
+                    it->maItemSize.Width() += TB_DROPDOWNARROWWIDTH;
+
+                // text items will be rotated in vertical mode
+                // -> swap width and height
+                if( it->mbVisibleText && !mbHorz )
+                {
+                    long tmp = it->maItemSize.Width();
+                    it->maItemSize.Width() = it->maItemSize.Height();
+                    it->maItemSize.Height() = tmp;
+                }
+            }
+            else if ( it->meType == TOOLBOXITEM_SPACE )
+            {
+                it->maItemSize = Size( nDefWidth, nDefHeight );
+            }
+
+            if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
+            {
+                // add borders
+                ImplAddButtonBorder( it->maItemSize.Width(), it->maItemSize.Height(), mnOutStyle );
+
+                // keep track of max item size
+                if ( it->maItemSize.Width() > nMaxWidth )
+                    nMaxWidth = it->maItemSize.Width();
+                if ( it->maItemSize.Height() > nMaxHeight )
+                    nMaxHeight = it->maItemSize.Height();
             }
 
             ++it;
@@ -1812,38 +2057,36 @@ BOOL ToolBox::ImplCalcItem()
     {
         nMaxWidth  = nDefWidth;
         nMaxHeight = nDefHeight;
+
+        ImplAddButtonBorder( nMaxWidth, nMaxHeight, mnOutStyle );
+    }
+
+    if( !ImplIsFloatingMode() && GetToolboxButtonSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
+    {
+        // make sure all vertical toolbars have the same width and horizontal have the same height
+        // this depends on the used button sizes
+        // as this is used for alignement of multiple toolbars
+        // it is only required for docked toolbars
+
+        long nFixedWidth = nDefWidth+TB_DROPDOWNARROWWIDTH;
+        long nFixedHeight = nDefHeight;
+        ImplAddButtonBorder( nFixedWidth, nFixedHeight, mnOutStyle );
+
+        if( mbHorz )
+            nMaxHeight = nFixedHeight;
+        else
+            nMaxWidth = nFixedWidth;
     }
 
     mbCalc = FALSE;
     mbFormat = TRUE;
 
-    // Button-Umrandung dazurechnen
-    if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
+    // do we have to recalc the sizes ?
+    if ( (nMaxWidth != mnMaxItemWidth) || (nMaxHeight != mnMaxItemHeight) )
     {
-        nMaxWidth  += OUTBUTTON_SIZE;
-        nMaxHeight += OUTBUTTON_SIZE;
-    }
-    else
-    {
-        nMaxWidth  += SMALLBUTTON_HSIZE;
-        nMaxHeight += SMALLBUTTON_VSIZE;
-    }
+        mnMaxItemWidth  = nMaxWidth;
+        mnMaxItemHeight = nMaxHeight;
 
-    // Muessen die groessen neu berechnet werden
-    if ( (nMaxWidth != mnItemWidth) || (nMaxHeight != mnItemHeight) )
-    {
-        // Neue Werte zuweisen
-        mnItemWidth  = nMaxWidth;
-        mnItemHeight = nMaxHeight;
-
-        // Button-Device freigeben
-        if ( mpBtnDev )
-        {
-            ImplFreeButtonDevice( mpBtnDev );
-            mpBtnDev = NULL;
-        }
-        if ( !(mnOutStyle & TOOLBOX_STYLE_FLAT) )
-            mpBtnDev = ImplGetButtonDevice( this, mnItemWidth, mnItemHeight, mnOutStyle );
         return TRUE;
     }
     else
@@ -1863,10 +2106,27 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
     USHORT          nLines = 1;
     BOOL            bWindow;
     BOOL            bBreak = FALSE;
+    long            nWidthTotal = nWidth;
+
+
+    // when docked the menubutton will be in the first line
+    // ->initialize first linewidth with button
+    if( IsMenuEnabled() && !ImplIsFloatingMode() )
+        nLineWidth = mpData->maMenubuttonItem.maItemSize.Width();
 
     std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
+    while ( 1 )
     {
+        if( it == mpData->m_aItems.end() )
+        {
+            if( ImplIsFloatingMode() && IsMenuEnabled() )
+                // the menu button will be the last item in floating mode
+                it = &mpData->maMenubuttonItem;
+            else
+                // done
+                break;
+        }
+
         it->mbBreak = bBreak;
         bBreak = FALSE;
 
@@ -1876,22 +2136,17 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
             bBreak      = FALSE;
             nCurWidth   = 0;
 
-            if ( it->meType == TOOLBOXITEM_BUTTON )
+            if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
             {
-                if ( it->mnNonStdSize )
-                    nCurWidth = it->mnNonStdSize;
+                if ( bCalcHorz )
+                    nCurWidth = it->maItemSize.Width();
                 else
-                {
-                    if ( bCalcHorz )
-                        nCurWidth = mnItemWidth;
-                    else
-                        nCurWidth = mnItemHeight;
-                }
+                    nCurWidth = it->maItemSize.Height();
 
                 if ( it->mpWindow && bCalcHorz )
                 {
                     long nWinItemWidth = it->mpWindow->GetSizePixel().Width();
-                    if ( !mbScroll || (nWinItemWidth <= nWidth) )
+                    if ( !mbScroll || (nWinItemWidth <= nWidthTotal) )
                     {
                         nCurWidth = nWinItemWidth;
                         bWindow   = TRUE;
@@ -1905,14 +2160,14 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
                     }
                 }
 
-                if ( (nLineWidth+nCurWidth > nWidth) && mbScroll )
+                // check for line break but never break before the menubutton
+                if ( (nLineWidth+nCurWidth > nWidthTotal) && mbScroll && (it != &mpData->maMenubuttonItem) )
                     bBreak = TRUE;
             }
-            else if ( it->meType == TOOLBOXITEM_SPACE )
-                nCurWidth = mnItemWidth;
             else if ( it->meType == TOOLBOXITEM_SEPARATOR )
                 nCurWidth = it->mnSepSize;
-            else if ( it->meType == TOOLBOXITEM_BREAK )
+            else if ( (it->meType == TOOLBOXITEM_BREAK) &&
+                    (ImplIsFloatingMode() || !IsMenuEnabled() ) )    // ignore breaks completely when being docked single-line
                 bBreak = TRUE;
 
             if ( bBreak )
@@ -1947,29 +2202,39 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
             }
             else
             {
-                if ( (it->meType != TOOLBOXITEM_BUTTON) || bWindow )
+                if( ImplIsFloatingMode() || !IsMenuEnabled() ) // no group breaking when being docked single-line
                 {
-                    nLastGroupLineWidth = nLineWidth;
-                    nGroupStart = it - mpData->m_aItems.begin();
-                    if ( !bWindow )
-                        nGroupStart++;
+                    if ( (it->meType != TOOLBOXITEM_BUTTON) || bWindow )
+                    {
+                        nLastGroupLineWidth = nLineWidth;
+                        nGroupStart = it - mpData->m_aItems.begin();
+                        if ( !bWindow )
+                            nGroupStart++;
+                    }
                 }
             }
 
             nLineWidth += nCurWidth;
         }
 
-        ++it;
+        if( it == &mpData->maMenubuttonItem )
+            // this was definitely the last item
+            break;
+        else
+            ++it;
     }
+
 
     if ( pMaxLineWidth )
     {
         if ( nLineWidth > nMaxLineWidth )
             nMaxLineWidth = nLineWidth;
+
         // Wegen Separatoren kann MaxLineWidth > Width werden, hat aber
         // auf die Umbrueche keine Auswirkung
-        if ( nMaxLineWidth > nWidth )
-            nMaxLineWidth = nWidth;
+        //if ( nMaxLineWidth > nWidth )
+        //    nMaxLineWidth = nWidth;
+
         *pMaxLineWidth = nMaxLineWidth;
     }
 
@@ -1977,6 +2242,7 @@ USHORT ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, BOOL bCalcHorz
 }
 
 // -----------------------------------------------------------------------
+
 namespace
 {
     BOOL ImplFollowedByVisibleButton( std::vector< ImplToolItem >::iterator _aSeparator, std::vector< ImplToolItem >::iterator _aEnd )
@@ -1994,6 +2260,77 @@ namespace
     }
 }
 
+
+// -----------------------------------------------------------------------
+
+Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
+{
+    if( !ImplIsFloatingMode() )
+        return Size();
+
+    Size aCurrentSize( mnDX, mnDY );
+    Size aSize1( aCurrentSize );
+    Size aSize2( aCurrentSize );
+
+    // try to preserve current height
+    if( eMode == FSMODE_AUTO || eMode == FSMODE_FAVOURHEIGHT )
+    {
+        // calc number of floating lines for current window height
+        USHORT nFloatLinesHeight = ImplCalcLines( this, mnDY );
+        // calc window size according to this number
+        aSize1 = ImplCalcFloatSize( this, nFloatLinesHeight );
+
+        if( eMode == FSMODE_FAVOURHEIGHT || aCurrentSize == aSize1 )
+            return aSize1;
+    }
+
+    if( eMode == FSMODE_AUTO || eMode == FSMODE_FAVOURWIDTH )
+    {
+        // try to preserve current width
+        long nLineHeight = ( mnWinHeight > mnMaxItemHeight ) ? mnWinHeight : mnMaxItemHeight;
+        int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder + 2*mnBorderX;
+        int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder + 2*mnBorderY;
+        Size aSz( aCurrentSize );
+        long maxX;
+        USHORT nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
+
+        USHORT manyLines = 1000;
+        Size aMinimalFloatSize = ImplCalcFloatSize( this, manyLines );
+
+        aSz.Height() = nBorderY + nLineHeight * nLines;
+        // line space when more than one line
+        if ( mnWinStyle & WB_LINESPACING )
+            aSz.Height() += (nLines-1)*TB_LINESPACING;
+
+        aSz.Width() = nBorderX + maxX;
+
+        // avoid clipping of any items
+        if( aSz.Width() < aMinimalFloatSize.Width() )
+            aSize2 = ImplCalcFloatSize( this, nLines );
+        else
+            aSize2 = aSz;
+
+        if( eMode == FSMODE_FAVOURWIDTH || aCurrentSize == aSize2 )
+            return aSize2;
+        else
+        {
+            // set the size with the smallest delta as the current size
+            long dx1 = abs( mnDX - aSize1.Width() );
+            long dy1 = abs( mnDY - aSize1.Height() );
+
+            long dx2 = abs( mnDX - aSize2.Width() );
+            long dy2 = abs( mnDY - aSize2.Height() );
+
+            if( dx1*dy1 < dx2*dy2 )
+                aCurrentSize = aSize1;
+            else
+                aCurrentSize = aSize2;
+        }
+    }
+    return aCurrentSize;
+}
+
+
 void ToolBox::ImplFormat( BOOL bResize )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -2008,12 +2345,12 @@ void ToolBox::ImplFormat( BOOL bResize )
     Rectangle       aEmptyRect;
     long            nLineSize;
     long            nLeft;
+    long            nRight;
     long            nTop;
-    long            nMax;
+    long            nBottom;
+    long            nMax;   // width of layoutarea in pixels
     long            nX;
     long            nY;
-    long            nCurWidth;
-    long            nCurHeight;
     USHORT          nFormatLine;
     BOOL            bMustFullPaint;
     BOOL            bLastSep;
@@ -2021,78 +2358,127 @@ void ToolBox::ImplFormat( BOOL bResize )
     std::vector< ImplToolItem >::iterator   it;
     std::vector< ImplToolItem >::iterator   temp_it;
 
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+
     // FloatSizeAry gegebenenfalls loeschen
     if ( mpFloatSizeAry )
     {
-        delete[] mpFloatSizeAry;
+        delete mpFloatSizeAry;
         mpFloatSizeAry = NULL;
     }
 
-    // Borderbreite berechnen
-    if ( IsFloatingMode() || !(mnWinStyle & WB_BORDER) )
-    {
-        mnLeftBorder     = 0;
-        mnTopBorder      = 0;
-        mnRightBorder    = 0;
-        mnBottomBorder   = 0;
-    }
-    else
-        ImplCalcBorder( meAlign, mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
+    // compute border sizes
+    ImplCalcBorder( meAlign, mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder, this );
 
-    // Itemgroesse gegebenenfalls neu berechnet werden
+    // update drag area (where the 'grip' will be placed)
+    Rectangle aOldDragRect;
+    if( pWrapper )
+        aOldDragRect = pWrapper->GetDragArea();
+    ImplUpdateDragArea( this );
+
     if ( ImplCalcItem() )
         bMustFullPaint = TRUE;
     else
         bMustFullPaint = FALSE;
 
-    // Im FloatingMode die Fenstergroesse immer neu setzen oder im Resize
-    // die neue Anzahl der FloatingLines berechnen
-    if ( IsFloatingMode() )
+    // during interactive resizes, check in which direction the window was resized
+    //  and try to keep the other dimension unchanged
+    // but do this only if the delta is smaller than the whole window
+    //  which means it was just showed the first time and the delta is useless
+    if ( ImplIsFloatingMode() && (mpData->m_nDeltaSizeY != mnDY || mpData->m_nDeltaSizeX != mnDX) )
     {
         if ( bResize )
-            mnFloatLines = ImplCalcLines( this, mnDY );
+        {
+            if( mpData->m_nDeltaSizeY != mnDY || mpData->m_nDeltaSizeX != mnDX )
+            {
+                if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
+                {
+                    // favour window height
+                    mnFloatLines = ImplCalcLines( this, mpData->maFloatingSize.Height() );
+                }
+                else
+                {
+                    // favour window width
+                    int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder + 2*mnBorderX;
+                    mnFloatLines = ImplCalcBreaks( mpData->maFloatingSize.Width()-nBorderX, NULL, mbHorz );
+                }
+            }
+        }
         else
-            SetOutputSizePixel( ImplCalcFloatSize( this, mnFloatLines ) );
+        {
+            if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
+                SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_FAVOURHEIGHT ) );
+            else
+                SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_FAVOURWIDTH ) );
+        }
     }
 
     // Horizontal
     if ( mbHorz )
     {
-        nLineSize = mnItemHeight;
+        // nLineSize: height of a single line, will fit highest item
+        nLineSize = mnMaxItemHeight;
 
-        if ( mnWinHeight > mnItemHeight )
+        if ( mnWinHeight > mnMaxItemHeight )
             nLineSize = mnWinHeight;
 
         if ( mbScroll )
         {
-            mnVisLines  = ImplCalcLines( this, mnDY );
             nMax        = mnDX;
+
+            // limit layout to current window size (mnDX,mnDY)
+            // or number of lines while resizing
+            if( ImplIsFloatingMode() && bResize )
+            {
+                mnVisLines = mnFloatLines;
+                if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
+                    // set window width to optimal value for this height
+                    // this will trigger proper repaint during resizing of the height
+                    nMax = ImplCalcFloatSize( this, mnFloatLines ).Width();
+            }
+            else
+                mnVisLines  = ImplCalcLines( this, mnDY );
         }
         else
         {
+            // layout over all lines
             mnVisLines  = mnLines;
             nMax        = TB_MAXNOSCROLL;
         }
 
+        // add in all border offsets
+        // inner border as well as custom border (mnBorderX, mnBorderY)
         if ( mnWinStyle & WB_BORDER )
         {
             nLeft       = TB_BORDER_OFFSET1 + mnLeftBorder;
             nTop        = TB_BORDER_OFFSET2 + mnTopBorder;
+            nBottom     = TB_BORDER_OFFSET1 + mnBottomBorder;
             nMax       -= nLeft + TB_BORDER_OFFSET1 + mnRightBorder;
         }
         else
         {
             nLeft       = 0;
             nTop        = 0;
+            nBottom     = 0;
         }
 
         nLeft += mnBorderX;
         nTop  += mnBorderY;
+        nBottom += mnBorderY;
         nMax  -= mnBorderX*2;
+
+        // adjust linesize if docked in single-line mode (i.e. when using a clipped item menu)
+        // we have to center all items in the window height
+        if( IsMenuEnabled() && !ImplIsFloatingMode() )
+        {
+            long  nWinHeight = mnDY - nTop - nBottom;
+            if( nWinHeight > nLineSize )
+                nLineSize = nWinHeight;
+        }
     }
     else
     {
-        nLineSize = mnItemWidth;
+        nLineSize = mnMaxItemWidth;
 
         if ( mbScroll )
         {
@@ -2109,21 +2495,33 @@ void ToolBox::ImplFormat( BOOL bResize )
         {
             nTop        = TB_BORDER_OFFSET1 + mnTopBorder;
             nLeft       = TB_BORDER_OFFSET2 + mnLeftBorder;
+            nRight      = TB_BORDER_OFFSET2 + mnRightBorder;
             nMax       -= nTop + TB_BORDER_OFFSET1 + mnBottomBorder;
         }
         else
         {
             nLeft       = 0;
             nTop        = 0;
+            nRight      = 0;
         }
 
         nLeft += mnBorderX;
+        nRight+= mnBorderX;
         nTop  += mnBorderY;
         nMax  -= mnBorderY*2;
+
+        // adjust linesize if docked in single-line mode (i.e. when using a clipped item menu)
+        // we have to center all items in the window height
+        if( !ImplIsFloatingMode() && IsMenuEnabled() )
+        {
+            long  nWinWidth = mnDX - nLeft - nRight;
+            if( nWinWidth > nLineSize )
+                nLineSize = nWinWidth;
+        }
     }
 
-    // Wenn Fenster keine Groesse hat, dann nichts berechnen. Fuer alle
-    // ToolBoxen ohne Scroll muss hier schon die Groesse berechnet werden.
+    // no calculation if the window has no size (nMax=0)
+    // non scrolling toolboxes must be computed though
     if ( (nMax <= 0) && mbScroll )
     {
         mnVisLines   = 1;
@@ -2153,20 +2551,23 @@ void ToolBox::ImplFormat( BOOL bResize )
     }
     else
     {
-        // Anfangswerte setzen
-        nX          = nLeft;
+        // init start values
+        nX          = nLeft;    // top-left offset
         nY          = nTop;
         nFormatLine = 1;
         bLastSep    = TRUE;
 
-        // Scroll-Rectangles merken und zuruecksetzen
+        // save old scroll rectangles and reset them
         Rectangle aOldLowerRect = maLowerRect;
         Rectangle aOldUpperRect = maUpperRect;
         Rectangle aOldNextToolRect = maNextToolRect;
+        Rectangle aOldMenubuttonRect = mpData->maMenubuttonItem.maRect;
         maUpperRect = aEmptyRect;
         maLowerRect = aEmptyRect;
         maNextToolRect = aEmptyRect;
+        mpData->maMenubuttonItem.maRect = aEmptyRect;
 
+        // additional toolboxes require a toggle button (maNextToolRect)
         if ( maNextToolBoxStr.Len() && mbScroll )
         {
             nMax -= TB_NEXT_SIZE-TB_NEXT_OFFSET;
@@ -2186,41 +2587,99 @@ void ToolBox::ImplFormat( BOOL bResize )
             }
         }
 
-        // Haben wir ueberhaupt Items
+        // do we have any toolbox items at all ?
         if ( !mpData->m_aItems.empty() )
         {
-            // Umbrueche und sichtbare Zeilen berechnen
+            // compute line breaks and visible lines give the current window width (nMax)
+            // the break indicators will be stored within each item (it->mbBreak)
             mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
-            if ( (mnCurLines > mnVisLines) && mbScroll )
+
+            // check for scrollbar buttons or dropdown menu
+            // (if a menu is enabled, this will be used to store clipped
+            //  items and no scroll buttons will appear)
+            if ( (!ImplIsFloatingMode() && (mnCurLines > mnVisLines) && mbScroll ) ||
+                IsMenuEnabled() )
             {
-                nMax -= TB_SPIN_SIZE+TB_SPIN_OFFSET;
-                mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
-                // Wenn wir umbrechen muessen, dann Scroll-Rectangles neu setzen
+                // compute linebreaks again, incorporating scrollbar buttons
+                if( !IsMenuEnabled() )
+                {
+                    nMax -= TB_SPIN_SIZE+TB_SPIN_OFFSET;
+                    mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
+                }
+
+                // compute scroll rectangles or menu button
                 if ( mbHorz )
                 {
-                    maUpperRect.Left()   = nLeft+nMax+TB_SPIN_OFFSET;
-                    maUpperRect.Right()  = maUpperRect.Left()+TB_SPIN_SIZE-1;
-                    maUpperRect.Top()    = nTop;
-                    maLowerRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
-                    maLowerRect.Left()   = maUpperRect.Left();
-                    maLowerRect.Right()  = maUpperRect.Right();
-                    maUpperRect.Bottom() = maUpperRect.Top() +
-                                           (maLowerRect.Bottom()-maUpperRect.Top())/2;
-                    maLowerRect.Top()    = maUpperRect.Bottom();
+                    if( IsMenuEnabled() )
+                    {
+                        if( !ImplIsFloatingMode() )
+                        {
+                            // when docked paint menu button up to the borders
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX - 2;
+                            mpData->maMenubuttonItem.maRect.Top() = 0;
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-1;
+                        }
+                        else
+                        {
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX - mnRightBorder-mnBorderX-TB_BORDER_OFFSET1-1;
+                            mpData->maMenubuttonItem.maRect.Top() = nTop;
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                        }
+                        mpData->maMenubuttonItem.maRect.Left() = mpData->maMenubuttonItem.maRect.Right() - TB_MENUBUTTON_SIZE;
+                    }
+                    else
+                    {
+                        maUpperRect.Left()   = nLeft+nMax+TB_SPIN_OFFSET;
+                        maUpperRect.Right()  = maUpperRect.Left()+TB_SPIN_SIZE-1;
+                        maUpperRect.Top()    = nTop;
+                        maLowerRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                        maLowerRect.Left()   = maUpperRect.Left();
+                        maLowerRect.Right()  = maUpperRect.Right();
+                        maUpperRect.Bottom() = maUpperRect.Top() +
+                                            (maLowerRect.Bottom()-maUpperRect.Top())/2;
+                        maLowerRect.Top()    = maUpperRect.Bottom();
+                    }
                 }
                 else
                 {
-                    maUpperRect.Top()    = nTop+nMax+TB_SPIN_OFFSET;;
-                    maUpperRect.Bottom() = maUpperRect.Top()+TB_SPIN_SIZE-1;
-                    maUpperRect.Left()   = nLeft;
-                    maLowerRect.Right()  = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
-                    maLowerRect.Top()    = maUpperRect.Top();
-                    maLowerRect.Bottom() = maUpperRect.Bottom();
-                    maUpperRect.Right()  = maUpperRect.Left() +
-                                           (maLowerRect.Right()-maUpperRect.Left())/2;
-                    maLowerRect.Left()   = maUpperRect.Right();
+                    if( IsMenuEnabled() )
+                    {
+                        if( !ImplIsFloatingMode() )
+                        {
+                            // when docked paint menu button up to the borders
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY - 2;
+                            mpData->maMenubuttonItem.maRect.Left() = 0;
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX-1;
+                        }
+                        else
+                        {
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY - mnBottomBorder-mnBorderY-TB_BORDER_OFFSET1-1;
+                            mpData->maMenubuttonItem.maRect.Left() = nLeft;
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                        }
+                        mpData->maMenubuttonItem.maRect.Top() = mpData->maMenubuttonItem.maRect.Bottom() - TB_MENUBUTTON_SIZE;
+                    }
+                    else
+                    {
+                        maUpperRect.Top()    = nTop+nMax+TB_SPIN_OFFSET;;
+                        maUpperRect.Bottom() = maUpperRect.Top()+TB_SPIN_SIZE-1;
+                        maUpperRect.Left()   = nLeft;
+                        maLowerRect.Right()  = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                        maLowerRect.Top()    = maUpperRect.Top();
+                        maLowerRect.Bottom() = maUpperRect.Bottom();
+                        maUpperRect.Right()  = maUpperRect.Left() +
+                                            (maLowerRect.Right()-maUpperRect.Left())/2;
+                        maLowerRect.Left()   = maUpperRect.Right();
+                    }
                 }
             }
+
+            // no scrolling when there is a "more"-menu
+            // anything will "fit" in a single line then
+            if( IsMenuEnabled() )
+                mnCurLines = 1;
+
+            // determine the currently visible line
             if ( mnVisLines >= mnCurLines )
                 mnCurLine = 1;
             else if ( mnCurLine+mnVisLines-1 > mnCurLines )
@@ -2229,15 +2688,25 @@ void ToolBox::ImplFormat( BOOL bResize )
             it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
-                // Doppelte Separatoren hiden
+                // hide double separators
                 if ( it->meType == TOOLBOXITEM_SEPARATOR )
                 {
                     it->mbVisible = FALSE;
                     if ( !bLastSep )
                     {
-                        // Feststellen ob dahinter ueberhaupt noch
-                        // ein Item sichtbar ist
-                        it->mbVisible = ImplFollowedByVisibleButton( it, mpData->m_aItems.end() );
+                        // check if any visible items have to appear behind it
+                        temp_it = it+1;
+                        while ( temp_it != mpData->m_aItems.end() )
+                        {
+                            if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
+                                 ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
+                                  temp_it->mbVisible) )
+                            {
+                                it->mbVisible = TRUE;
+                                break;
+                            }
+                            ++temp_it;
+                        }
                     }
                     bLastSep = TRUE;
                 }
@@ -2246,11 +2715,12 @@ void ToolBox::ImplFormat( BOOL bResize )
 
                 it->mbShowWindow = FALSE;
 
+                // check for line break and advance nX/nY accordingly
                 if ( it->mbBreak )
                 {
                     nFormatLine++;
 
-                    // Ab der zweiten Zeile erhoehen
+                    // increment starting with the second line
                     if ( nFormatLine > mnCurLine )
                     {
                         if ( mbHorz )
@@ -2274,87 +2744,37 @@ void ToolBox::ImplFormat( BOOL bResize )
 
                 if ( !it->mbVisible || (nFormatLine < mnCurLine) ||
                      (nFormatLine > mnCurLine+mnVisLines-1) )
+                     // item is not visible
                     it->maCalcRect = aEmptyRect;
                 else
                 {
-                    if ( (it->meType == TOOLBOXITEM_BUTTON) ||
-                         (it->meType == TOOLBOXITEM_SPACE) )
-                    {
-                        if ( it->mnNonStdSize )
-                        {
-                            if ( mbHorz )
-                            {
-                                nCurWidth   = it->mnNonStdSize;
-                                nCurHeight  = mnItemHeight;
-                            }
-                            else
-                            {
-                                nCurWidth   = mnItemWidth;
-                                nCurHeight  = it->mnNonStdSize;
-                            }
-                        }
-                        else
-                        {
-                            nCurWidth   = mnItemWidth;
-                            nCurHeight  = mnItemHeight;
-                        }
+                    // 1. determine current item width/height
+                    // take window size and orientation into account, because this affects the size of item windows
 
-                        if ( it->mpWindow && mbHorz )
-                        {
-                            Size aWinSize = it->mpWindow->GetSizePixel();
-                            if ( !mbScroll || (aWinSize.Width() <= nMax) )
-                            {
-                                nCurWidth   = aWinSize.Width();
-                                nCurHeight  = aWinSize.Height();
-                                it->mbShowWindow = TRUE;
-                            }
-                            else
-                            {
-                                if ( it->mbEmptyBtn )
-                                {
-                                    nCurWidth   = 0;
-                                    nCurHeight  = 0;
-                                }
-                            }
-                        }
-                    }
-                    else if ( it->meType == TOOLBOXITEM_SEPARATOR )
-                    {
-                        if ( mbHorz )
-                        {
-                            nCurWidth   = it->mnSepSize;
-                            nCurHeight  = mnItemHeight;
-                        }
-                        else
-                        {
-                            nCurWidth   = mnItemWidth;
-                            nCurHeight  = it->mnSepSize;
-                        }
-                    }
-                    else if ( it->meType == TOOLBOXITEM_BREAK )
-                    {
-                        nCurWidth   = 0;
-                        nCurHeight  = 0;
-                    }
+                    Size aCurrentItemSize( it->GetSize( mbHorz, mbScroll, nMax, Size(mnMaxItemWidth, mnMaxItemHeight) ) );
 
+                    // 2. position item rect and use size from step 1
+                    //  items will be centered horizontally (if mbHorz) or vertically
+                    //  advance nX and nY accordingly
                     if ( mbHorz )
                     {
                         it->maCalcRect.Left()     = nX;
-                        it->maCalcRect.Top()      = nY+(nLineSize-nCurHeight)/2;
-                        it->maCalcRect.Right()    = nX+nCurWidth-1;
-                        it->maCalcRect.Bottom()   = it->maCalcRect.Top()+nCurHeight-1;
-                        nX += nCurWidth;
+                        it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
+                        it->maCalcRect.Right()    = nX+aCurrentItemSize.Width()-1;
+                        it->maCalcRect.Bottom()   = it->maCalcRect.Top()+aCurrentItemSize.Height()-1;
+                        nX += aCurrentItemSize.Width();
                     }
                     else
                     {
-                        it->maCalcRect.Left()     = nX+(nLineSize-nCurWidth)/2;;
+                        it->maCalcRect.Left()     = nX+(nLineSize-aCurrentItemSize.Width())/2;
                         it->maCalcRect.Top()      = nY;
-                        it->maCalcRect.Right()    = it->maCalcRect.Left()+nCurWidth-1;
-                        it->maCalcRect.Bottom()   = nY+nCurHeight-1;
-                        nY += nCurHeight;
+                        it->maCalcRect.Right()    = it->maCalcRect.Left()+aCurrentItemSize.Width()-1;
+                        it->maCalcRect.Bottom()   = nY+aCurrentItemSize.Height()-1;
+                        nY += aCurrentItemSize.Height();
                     }
                 }
 
+                // position window items into calculated item rect
                 if ( it->mpWindow )
                 {
                     if ( it->mbShowWindow )
@@ -2369,12 +2789,38 @@ void ToolBox::ImplFormat( BOOL bResize )
                 }
 
                 ++it;
-            }
+            } // end of loop over all items
         }
         else
+            // we have no toolbox items
             mnCurLines = 1;
 
-        // Wenn ToolBox sichtbar, Paint fuer geaenderte Bereiche ausloesen
+
+        if( IsMenuEnabled() && ImplIsFloatingMode() )
+        {
+            // custom menu will be the last button in floating mode
+            it = &mpData->maMenubuttonItem;
+
+            if ( mbHorz )
+            {
+                it->maRect.Left()     = nX+TB_MENUBUTTON_OFFSET;
+                it->maRect.Top()      = nY;
+                it->maRect.Right()    = it->maRect.Left() + TB_MENUBUTTON_SIZE;
+                it->maRect.Bottom()   = nY+nLineSize-1;
+                nX += it->maItemSize.Width();
+            }
+            else
+            {
+                it->maRect.Left()     = nX;
+                it->maRect.Top()      = nY+TB_MENUBUTTON_OFFSET;
+                it->maRect.Right()    = nX+nLineSize-1;
+                it->maRect.Bottom()   = it->maRect.Top() + TB_MENUBUTTON_SIZE;
+                nY += it->maItemSize.Height();
+            }
+        }
+
+
+        // if toolbox visible trigger paint for changed regions
         if ( IsVisible() && !mbFullPaint )
         {
             if ( bMustFullPaint )
@@ -2399,6 +2845,16 @@ void ToolBox::ImplFormat( BOOL bResize )
                     maPaintRect.Union( maNextToolRect );
                     maPaintRect.Union( aOldNextToolRect );
                 }
+                if ( aOldMenubuttonRect != mpData->maMenubuttonItem.maRect )
+                {
+                    maPaintRect.Union( mpData->maMenubuttonItem.maRect );
+                    maPaintRect.Union( aOldMenubuttonRect );
+                }
+                if ( pWrapper && aOldDragRect != pWrapper->GetDragArea() )
+                {
+                    maPaintRect.Union( pWrapper->GetDragArea() );
+                    maPaintRect.Union( aOldDragRect );
+                }
 
                 it = mpData->m_aItems.begin();
                 while ( it != mpData->m_aItems.end() )
@@ -2415,7 +2871,7 @@ void ToolBox::ImplFormat( BOOL bResize )
             Invalidate( maPaintRect );
         }
 
-        // Neu berechnete Rectangles uebertragen
+        // store the new calculated item rects
         maPaintRect = aEmptyRect;
         Rectangle aVisibleRect(Point(0, 0), GetOutputSizePixel());
         it = mpData->m_aItems.begin();
@@ -2437,8 +2893,9 @@ void ToolBox::ImplFormat( BOOL bResize )
         }
     }
 
-    // Es wurde die Leiste neu durchformatiert
+    // indicate formatting is done
     mbFormat = FALSE;
+
 }
 
 // -----------------------------------------------------------------------
@@ -2447,22 +2904,149 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    if( GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
+    PointerState aState = GetPointerState();
+    if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
     {
         mbFormat = TRUE;
         ImplFormat( TRUE );
         maTimer.Start();
+        mpData->m_nUpdateAutoSizeTries = 0;
     }
-    else
+    /*  #i30930# auto sizing will on some desktops result in a too small
+        window size in the window manager's opinion. This will result
+        in being resized back to a larger size again by the WM ...
+        which will in turn trigger autosize -> endless resizing loop.
+        The problem is that it is indistinguishable whether the WM sized
+        our window or the user did. So the only thing we can do is limit
+        the loop.
+     */
+    else if( mpData->m_nUpdateAutoSizeTries < 3 )
     {
         mbFormat = TRUE;
+        if ( ImplIsFloatingMode() && mpData->m_nDeltaSizeY == mnDY && mpData->m_nDeltaSizeX == mnDX )
+        {
+            // an initial and perhaps wrong floating size was set per API
+            // adjust it to an optimal size to make sure no items will be clipped
+            SetSizePixel( ImplGetOptimalFloatingSize( FSMODE_AUTO ) );
+        }
         ImplFormat();
+        mpData->m_nUpdateAutoSizeTries++;
     }
+    else
+        mpData->m_nUpdateAutoSizeTries = 0;
 
     return 0;
 }
 
 // -----------------------------------------------------------------------
+
+static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, BOOL bSetColor, BOOL bRotate )
+{
+    Color aOldFillColor = pBox->GetFillColor();
+    Color aOldLineColor = pBox->GetLineColor();
+    pBox->SetLineColor();
+
+    if ( bSetColor )
+    {
+        if ( pBox->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+            pBox->SetFillColor( Color( COL_WHITE ) );
+        else
+            pBox->SetFillColor( Color( COL_BLACK ) );
+    }
+
+    if( !bRotate )
+    {
+        long width = 8;
+        long height = 5;
+        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
+        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
+        while( height >= 1)
+        {
+            pBox->DrawRect( Rectangle( x, y, x+1, y ) );
+            x+=4;
+            pBox->DrawRect( Rectangle( x, y, x+1, y ) );
+            x-=4;
+            y++;
+            if( height <= 3) x--;
+            else            x++;
+            height--;
+        }
+    }
+    else
+    {
+        long width = 5;
+        long height = 8;
+        long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
+        long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
+        while( width >= 1)
+        {
+            pBox->DrawRect( Rectangle( x, y, x, y+1 ) );
+            y+=4;
+            pBox->DrawRect( Rectangle( x, y, x, y+1 ) );
+            y-=4;
+            x++;
+            if( width <= 3) y--;
+            else           y++;
+            width--;
+        }
+    }
+
+    pBox->SetFillColor( aOldFillColor );
+    pBox->SetLineColor( aOldLineColor );
+}
+
+static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect, BOOL bSetColor, BOOL bRotate )
+{
+    BOOL bLineColor = pBox->IsLineColor();
+    BOOL bFillColor = pBox->IsFillColor();
+    Color aOldFillColor = pBox->GetFillColor();
+    Color aOldLineColor = pBox->GetLineColor();
+    pBox->SetLineColor();
+
+    if ( bSetColor )
+    {
+        if ( pBox->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+            pBox->SetFillColor( Color( COL_WHITE ) );
+        else
+            pBox->SetFillColor( Color( COL_BLACK ) );
+    }
+
+    if( !bRotate )
+    {
+        long width = 5;
+        long height = 3;
+        long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2 + 1;
+        long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2 + 1;
+        while( width >= 1)
+        {
+            pBox->DrawRect( Rectangle( x, y, x+width-1, y ) );
+            y++; x++;
+            width -= 2;
+        }
+    }
+    else
+    {
+        long width = 3;
+        long height = 5;
+        long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2 + 1;
+        long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2 + 1;
+        while( height >= 1)
+        {
+            pBox->DrawRect( Rectangle( x, y, x, y+height-1 ) );
+            y++; x++;
+            height -= 2;
+        }
+    }
+
+    if( bFillColor )
+        pBox->SetFillColor( aOldFillColor );
+    else
+        pBox->SetFillColor();
+    if( bLineColor )
+        pBox->SetLineColor( aOldLineColor );
+    else
+        pBox->SetLineColor( );
+}
 
 static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOOL bColTransform,
                                BOOL bLeft = FALSE, BOOL bTop = FALSE,
@@ -2617,6 +3201,78 @@ static void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
 
 // -----------------------------------------------------------------------
 
+static void ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight )
+{
+    if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
+    {
+        BOOL bFillColor = pThis->IsFillColor();
+        BOOL bLineColor = pThis->IsLineColor();
+        Color aOldFillCol = pThis->GetFillColor();
+        Color aOldLineCol = pThis->GetLineColor();
+
+        ImplErase( pThis, pThis->mpData->maMenubuttonItem.maRect, bHighlight );
+
+        if( bHighlight )
+            pThis->DrawSelectionBackground( pThis->mpData->maMenubuttonItem.maRect, 2, FALSE, FALSE, FALSE );
+        else
+        {
+            // improve visibility by using a dark gradient
+            Gradient g;
+            g.SetAngle( pThis->mbHorz ? 0 : 900 );
+            g.SetStyle( GRADIENT_LINEAR );
+
+            g.SetStartColor( pThis->GetSettings().GetStyleSettings().GetFaceColor() );
+            g.SetEndColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
+
+            pThis->DrawGradient( pThis->mpData->maMenubuttonItem.maRect, g );
+        }
+
+        Rectangle aRect( pThis->mpData->maMenubuttonItem.maRect );
+        if( pThis->mbHorz )
+            aRect.Top() = aRect.Bottom() - aRect.getHeight()/3;
+        else
+            aRect.Left() = aRect.Right() - aRect.getWidth()/3;
+
+        BOOL bSetColor = TRUE;
+        if( !(pThis->mpData->maMenuType & TOOLBOX_MENUTYPE_CUSTOMIZE) )
+        {
+            // customization disabled
+            bSetColor = FALSE;
+            pThis->SetFillColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
+        }
+        ImplDrawDropdownArrow( pThis, aRect, bSetColor, !pThis->mbHorz );
+
+        if( pThis->ImplHasClippedItems() )
+        {
+            aRect = pThis->mpData->maMenubuttonItem.maRect;
+            if( pThis->mbHorz )
+                aRect.Bottom() = aRect.Top() + aRect.getHeight()/3;
+            else
+                aRect.Right() = aRect.Left() + aRect.getWidth()/3;
+
+            ImplDrawMoreIndicator( pThis, aRect, TRUE, !pThis->mbHorz );
+        }
+
+        // the menubutton may have overwritten the 'round' corners, so restore them
+        ImplDrawBorderEffects( pThis, ImplGetDockingManager()->GetDockingWindowWrapper( pThis ) );
+
+        // ugly: store highlight state
+        pThis->mpData->maMenubuttonItem.mpUserData = bHighlight ? (void*)1 : NULL;
+
+        // restore colors
+        if( bFillColor )
+            pThis->SetFillColor( aOldFillCol );
+        else
+            pThis->SetFillColor();
+        if( bLineColor )
+            pThis->SetLineColor( aOldLineCol );
+        else
+            pThis->SetLineColor();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void ToolBox::ImplDrawSpin( BOOL bUpperIn, BOOL bLowerIn )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -2704,6 +3360,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
 
     ImplDisableFlatButtons();
 
+    SetFillColor();
+
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     MetricVector* pVector = bLayout ? &mpData->m_pLayoutData->m_aUnicodeBoundRects : NULL;
     String* pDisplayText = bLayout ? &mpData->m_pLayoutData->m_aDisplayText : NULL;
@@ -2715,19 +3373,19 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     BOOL bHighContrastWhite = FALSE;
-    Wallpaper aWall = GetDisplayBackground();
-    if( aWall.GetColor().IsBright() )
+    // check the face color as highcontrast indicator
+    // because the toolbox itself might have a gradient
+    if( rStyleSettings.GetFaceColor().IsBright() )
         bHighContrastWhite = TRUE;
 
-    // Im flachen Style werden auch Separatoren gezeichnet
+    // draw separators in flat style only
     if ( !bLayout &&
          (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
          (pItem->meType == TOOLBOXITEM_SEPARATOR) &&
          nPos > 0
          )
     {
-        // Strich wird nicht gemalt, wenn vor oder hinter Fenstern
-        // oder bei einem Umbruch
+        // no separator before or after windows or at breaks
         ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
         if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
         {
@@ -2760,14 +3418,12 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         }
     }
 
-    // Ist es kein Button oder wird er als Fenster dargestellt,
-    // dann mache nichts
+    // do nothing if item is no button or will be displayed as window
     if ( (pItem->meType != TOOLBOXITEM_BUTTON) ||
          (pItem->mbShowWindow && !mbCustomizeMode) )
         return;
 
-    // Wenn wir das Configurations-Item zeichen, brauchen wir dazu ein
-    // TBDragMananger
+    // we need a TBDragMananger to draw the configuration item
     ImplTBDragMgr* pMgr;
     if ( pItem->mnId == mnConfigItem )
     {
@@ -2777,8 +3433,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     else
         pMgr = NULL;
 
-    // Im Konfigurationsmodus werden sichtbare Fenster durch eine andere
-    // Darstellung ersetzt
+    // during configuration mode visible windows will be drawn in a special way
     if ( mbCustomizeMode && pItem->mbShowWindow )
     {
         Font    aOldFont = GetFont();
@@ -2824,33 +3479,27 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         return;
     }
 
-    // Button malen
-    Point   aBtnPos;
+    // draw button
     Size    aBtnSize    = pItem->maRect.GetSize();
     long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
     long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
-    long    nTempOffX;
-    long    nTempOffY;
+    long    nImageOffX=0;
+    long    nImageOffY=0;
+    long    nTextOffX=0;
+    long    nTextOffY=0;
     USHORT  nStyle      = 0;
 
     if ( pItem->meState == STATE_CHECK )
     {
-        aBtnPos.Y() = aBtnSize.Height() * 2;
         nStyle |= BUTTON_DRAW_CHECKED;
-        //nOffX = SMALLBUTTON_OFF_CHECKED_X;
-        //nOffY = SMALLBUTTON_OFF_CHECKED_Y;
     }
     else if ( pItem->meState == STATE_DONTKNOW )
     {
-        aBtnPos.Y() = aBtnSize.Height() * 4;
         nStyle |= BUTTON_DRAW_DONTKNOW;
     }
     if ( bHighlight == 1 )
     {
-        aBtnPos.Y() += aBtnSize.Height();
         nStyle |= BUTTON_DRAW_PRESSED;
-        //nOffX = SMALLBUTTON_OFF_PRESSED_X;
-        //nOffY = SMALLBUTTON_OFF_PRESSED_Y;
     }
 
     if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
@@ -2870,29 +3519,17 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         {
             if ( (pItem->meState != STATE_NOCHECK) || !bPaint )
             {
-                if ( pItem->meState != STATE_NOCHECK )
-                {
-                    SetLineColor();
-                    SetFillColor( rStyleSettings.GetCheckedColor() );
-                    DrawRect( pItem->maRect );
-                }
-                else
-                    Erase( pItem->maRect );
+                ImplErase( this, pItem->maRect, bHighlight );
             }
         }
         else
         {
-            if ( !pItem->mnNonStdSize )
-                DrawOutDev( pItem->maRect.TopLeft(), aBtnSize, aBtnPos, aBtnSize, *mpBtnDev );
+            if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
+                ImplDrawOutButton( this, pItem->maRect, nStyle );
             else
             {
-                if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
-                    ImplDrawOutButton( this, pItem->maRect, nStyle );
-                else
-                {
-                    DecorationView aDecoView( this );
-                    aDecoView.DrawButton( pItem->maRect, nStyle );
-                }
+                DecorationView aDecoView( this );
+                aDecoView.DrawButton( pItem->maRect, nStyle );
             }
         }
     }
@@ -2900,42 +3537,12 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     nOffX += pItem->maRect.Left();
     nOffY += pItem->maRect.Top();
 
-    // Feststellen, was gemalt werden soll
+    // determine what has to be drawn on the button: image, text or both
     BOOL bImage;
     BOOL bText;
-    if ( meButtonType == BUTTON_SYMBOL )
-    {
-        if ( pItem->mnNonStdSize )
-        {
-            bImage = FALSE;
-            bText  = TRUE;
-        }
-        else
-        {
-            bImage = TRUE;
-            bText  = FALSE;
-        }
-    }
-    else if ( meButtonType == BUTTON_TEXT )
-    {
-        if ( pItem->mnNonStdSize )
-        {
-            bImage = TRUE;
-            bText  = FALSE;
-        }
-        else
-        {
-            bImage = FALSE;
-            bText  = TRUE;
-        }
-    }
-    else
-    {
-        bImage = TRUE;
-        bText  = TRUE;
-    }
+    pItem->DetermineButtonDrawStyle( meButtonType, bImage, bText );
 
-    // Werte fuer die Ausgabe bestimmen
+    // compute output values
     long    nBtnWidth = aBtnSize.Width()-SMALLBUTTON_HSIZE;
     long    nBtnHeight = aBtnSize.Height()-SMALLBUTTON_VSIZE;
     Size    aImageSize;
@@ -2957,7 +3564,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
 
         aImageSize = pImage->GetSizePixel();
 
-        // Ausgabeflags bestimmen
+        // determine drawing flags
         USHORT nImageStyle = 0;
 
         if ( !pItem->mbEnabled || !IsEnabled() )
@@ -2966,29 +3573,31 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         if ( pItem->meState == STATE_DONTKNOW )
             nImageStyle |= IMAGE_DRAW_DISABLE;
 
-
-        // Image ausgeben
-        nTempOffX = nOffX;
-        nTempOffY = nOffY;
-        if ( pItem->mnBits & TIB_LEFT )
-            nTempOffY += (nBtnHeight-aImageSize.Height())/2;
+        // draw the image
+        nImageOffX = nOffX;
+        nImageOffY = nOffY;
+        if ( (pItem->mnBits & (TIB_LEFT|TIB_DROPDOWN)) || bText )
+        {
+            // left align also to leave space for drop down arrow
+            // and when drawing text+image
+            // just center in y, except for vertical (ie rotated text)
+            if( mbHorz || !bText )
+                nImageOffY += (nBtnHeight-aImageSize.Height())/2;
+        }
         else
         {
-            nTempOffX += (nBtnWidth-aImageSize.Width())/2;
-            if ( bText )
-                nTempOffY += (nBtnHeight-aTxtSize.Height()-aImageSize.Height())/2;
-            else
-                nTempOffY += (nBtnHeight-aImageSize.Height())/2;
+            nImageOffX += (nBtnWidth-aImageSize.Width())/2;
+            nImageOffY += (nBtnHeight-aImageSize.Height())/2;
         }
         if ( bHighlight || (pItem->meState == STATE_CHECK) )
         {
-            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
+            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mbShowWindow ? TRUE : FALSE );
 
             // draw shadows
             if( bHighlight == 2 && pItem->meState != STATE_CHECK )
             {
-                nTempOffX++;
-                nTempOffY++;
+                nImageOffX++;
+                nImageOffY++;
 
                 /* !!!
                 if( pImage->HasMaskBitmap() )
@@ -2999,12 +3608,12 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
                     if( s > 20 ) s=20;
                     if( b > 5 ) b-=5;
                     aMaskCol = ImplHSBtoRGB( h, s, b );
-                    DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(), aMaskCol );
+                    DrawMask( Point( nImageOffX, nImageOffY ), pImage->GetMaskBitmap(), aMaskCol );
                 }
                 */
 
-                nTempOffX-=2;
-                nTempOffY-=2;
+                nImageOffX-=2;
+                nImageOffY-=2;
             }
 
             if( bHighlight )
@@ -3012,65 +3621,64 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
                 if( bHighContrastWhite )
                     nImageStyle |= IMAGE_DRAW_COLORTRANSFORM;
             }
-            DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
-
+            DrawImage( Point( nImageOffX, nImageOffY ), *pImage, nImageStyle );
         }
         else
-            DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
+            DrawImage( Point( nImageOffX, nImageOffY ), *pImage, nImageStyle );
     }
 
-    // Text ausgeben
+    // draw the text
+    BOOL bRotate = FALSE;
     if ( bText )
     {
-        nTempOffX = nOffX;
-        nTempOffY = nOffY;
+        nTextOffX = nOffX;
+        nTextOffY = nOffY;
 
-        // Muss Text gegebenenfalls gedreht werden
+        // rotate text when vertically docked
         Font aOldFont = GetFont();
-        BOOL bRotate = FALSE;
-        if ( pItem->mnNonStdSize && !bImage && !IsFloatingMode() &&
-             ((meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT)) )
+        if( pItem->mbVisibleText && !ImplIsFloatingMode() &&
+            ((meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT)) )
         {
             bRotate = TRUE;
 
             Font aRotateFont = aOldFont;
+            /*
             if ( meAlign == WINDOWALIGN_LEFT )
             {
                 aRotateFont.SetOrientation( 900 );
-                nTempOffX += (nBtnWidth-aTxtSize.Height())/2;
-                nTempOffY += aTxtSize.Width();
-                nTempOffY += (nBtnHeight-aTxtSize.Width())/2;
+                nTextOffX += (nBtnWidth-aTxtSize.Height())/2;
+                nTextOffY += aTxtSize.Width();
+                nTextOffY += (nBtnHeight-aTxtSize.Width())/2;
             }
-            else
+            else*/
             {
                 aRotateFont.SetOrientation( 2700 );
-                nTempOffX += aTxtSize.Height();
-                nTempOffX += (nBtnWidth-aTxtSize.Height())/2;
-                nTempOffY += (nBtnHeight-aTxtSize.Width())/2;
+
+                // center horizontally
+                nTextOffX += aTxtSize.Height();
+                nTextOffX += (nBtnWidth-aTxtSize.Height())/2;
+
+                // add in image offset
+                if( bImage )
+                    nTextOffY = nImageOffY + aImageSize.Height() + TB_IMAGETEXTOFFSET;
             }
 
             SetFont( aRotateFont );
         }
         else
         {
-            if ( pItem->mnBits & TIB_LEFT )
-            {
-                nTempOffX += aImageSize.Width();
-                nTempOffY += (nBtnHeight-aTxtSize.Height())/2;
-            }
-            else
-            {
-                nTempOffX += (nBtnWidth-aTxtSize.Width())/2;
-                if ( bImage )
-                    nTempOffY += nBtnHeight-aTxtSize.Height();
-                else
-                    nTempOffY += (nBtnHeight-aTxtSize.Height())/2;
-            }
+            // center vertically
+            nTextOffY += (nBtnHeight-aTxtSize.Height())/2;
+
+            // add in image offset
+            if( bImage )
+                nTextOffX = nImageOffX + aImageSize.Width() + TB_IMAGETEXTOFFSET;
+            //nTextOffX += TB_TEXTOFFSET/2;
         }
 
-        // draw selection only if not already draw during imgae output (see above)
+        // draw selection only if not already drawn during image output (see above)
         if ( !bLayout && !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
-            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
+            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mbShowWindow ? TRUE : FALSE );
 
         USHORT nTextStyle = 0;
         if ( !pItem->mbEnabled )
@@ -3081,7 +3689,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        DrawCtrlText( Point( nTempOffX, nTempOffY ), pItem->maText,
+        DrawCtrlText( Point( nTextOffX, nTextOffY ), pItem->maText,
                       0, STRING_LEN, nTextStyle, pVector, pDisplayText );
         if ( bRotate )
             SetFont( aOldFont );
@@ -3090,47 +3698,19 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     if( bLayout )
         return;
 
-    // Evt. noch Pfeil rechts/oben in der Ecke zeichnen
+    // paint optional drop down arrow
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
+        BOOL bSetColor = TRUE;
 
-        Point aArrowPos( nOffX, nOffY );
-        // shadows
-        if( bHighlight == 2 )
+        Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz ) );
+        ImplErase( this, aDropDownRect, bHighlight );
+
+        if ( !pItem->mbEnabled || !IsEnabled() )
         {
-            aArrowPos.X() -= 2;
-            aArrowPos.Y() -= 2;
+            bSetColor = FALSE;
+            SetFillColor( rStyleSettings.GetShadowColor() );
         }
-
-        aArrowPos.X() += nBtnWidth-6;
-
-        Color       aOldLineColor = GetLineColor();
-        Color       aOldFillColor = GetFillColor();
-        Rectangle   aClearRect( aArrowPos.X()-1, aArrowPos.Y(),
-                                aArrowPos.X()+3, aArrowPos.Y()+4 );
-        SetLineColor();
-
-        if ( (meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT) )
-        {
-            aArrowPos.X()       += 2;
-            aClearRect.Left()   += 2;
-            aClearRect.Right()  += 2;
-            aClearRect.Bottom() += 2;
-        }
-        else
-            aClearRect.Right()  += 2;
-
-        Region aOldRegion = GetClipRegion();
-
-        // set expanded arrow as clipping region
-        SetToolArrowClipregion( this, aArrowPos.X(), aArrowPos.Y() );
-
-        aClearRect.Right()+=2;
-        aClearRect.Bottom()+=2;
-
-        Erase( aClearRect );
-
-        BOOL bColTransform = FALSE;
         if( bHighlight || (pItem->meState == STATE_CHECK) )
         {
             DrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE, FALSE );
@@ -3155,40 +3735,12 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             }
             SetFillColor( aFillColor );
             bBlack = TRUE;
+            //docking1
+            //DrawSelectionBackground( aDropDownRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, FALSE );
         }
 
-        SetClipRegion( aOldRegion );
-
-        ImplDrawToolArrow( this, aArrowPos.X(), aArrowPos.Y(), bBlack, bColTransform );
-        SetLineColor( aOldLineColor );
-        SetFillColor( aOldFillColor );
+        ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
     }
-
-    /*
-    if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
-    {
-        if ( bHighlight || (pItem->meState == STATE_CHECK) )
-        {
-            Point   aPos( pItem->maRect.TopLeft() );
-            Size    aSize( pItem->maRect.GetSize() );
-
-            if ( bHighlight == 2 )
-                SetLineColor( rStyleSettings.GetLightColor() );
-            else
-                SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( aPos, Point( aPos.X()+aSize.Width()-1, aPos.Y() ) );
-            DrawLine( aPos, Point( aPos.X(), aPos.Y()+aSize.Height()-1 ) );
-            if ( bHighlight == 2 )
-                SetLineColor( rStyleSettings.GetShadowColor() );
-            else
-                SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( Point( aPos.X()+aSize.Width()-1, aPos.Y() ),
-                      Point( aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-1 ) );
-            DrawLine( Point( aPos.X(), aPos.Y()+aSize.Height()-1 ),
-                      Point( aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-1 ) );
-        }
-    }
-    */
 
     // Gegebenenfalls noch Config-Frame zeichnen
     if ( pMgr )
@@ -3587,6 +4139,12 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     }
 
     PointerStyle eStyle = POINTER_ARROW;
+
+    // change mouse cursor over drag area
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( pWrapper && pWrapper->GetDragArea().IsInside( rMEvt.GetPosPixel() ) )
+        eStyle = POINTER_MOVE;
+
     if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
     {
         if ( rMEvt.GetMode() & MOUSE_SIMPLEMOVE )
@@ -3658,6 +4216,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                     ImplDrawItem( nPos );
                                     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
                                 }
+                                if ( mpData->maMenubuttonItem.mpUserData )
+                                {
+                                    // remove highlight from menubutton
+                                    ImplDrawMenubutton( this, FALSE );
+                                }
                                 mnHighItemId = it->mnId;
                                 ImplDrawItem( nTempPos, 2 );
                                 ImplShowFocus();
@@ -3675,17 +4238,32 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
 
         // only clear highlight when focus is not in toolbar
-        if ( bClearHigh && mnHighItemId && !HasChildPathFocus() )
+        BOOL bMenuButtonHit = mpData->maMenubuttonItem.maRect.IsInside( aMousePos );
+        if ( bClearHigh && !HasChildPathFocus() || bMenuButtonHit )
         {
-            USHORT nClearPos = GetItemPos( mnHighItemId );
-            if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
+            if ( !bMenuButtonHit && mpData->maMenubuttonItem.mpUserData )
             {
-                ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? TRUE : FALSE );
-                if( nClearPos != mnCurPos )
-                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
+                // remove highlight from menubutton
+                ImplDrawMenubutton( this, FALSE );
             }
-            ImplHideFocus();
-            mnHighItemId = 0;
+
+            if( mnHighItemId )
+            {
+                USHORT nClearPos = GetItemPos( mnHighItemId );
+                if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
+                {
+                    ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? TRUE : FALSE );
+                    if( nClearPos != mnCurPos )
+                        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
+                }
+                ImplHideFocus();
+                mnHighItemId = 0;
+            }
+
+            if( bMenuButtonHit )
+            {
+                ImplDrawMenubutton( this, TRUE );
+            }
         }
     }
 
@@ -3773,6 +4351,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 return;
             }
 
+
             // Aktuelle Daten setzen
             USHORT nTrackFlags = 0;
             mnCurPos         = i;
@@ -3783,6 +4362,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             if ( it->mnBits & TIB_REPEAT )
                 nTrackFlags |= STARTTRACK_BUTTONREPEAT;
 
+
             if ( mbSelection )
             {
                 ImplDrawItem( mnCurPos, TRUE );
@@ -3790,6 +4370,25 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             else
             {
+                // was dropdown arrow pressed
+                if ( (it->mnBits & TIB_DROPDOWN) && it->GetDropDownRect( mbHorz ).IsInside( aMousePos ) )
+                {
+                    // the drop down arrow should not trigger the item action
+                    GetDropdownClickHdl().Call( this );
+
+                    Deactivate();
+                    ImplDrawItem( mnCurPos, FALSE );
+
+                    mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
+                    mnCurItemId      = 0;
+                    mnDownItemId     = 0;
+                    mnMouseClicks    = 0;
+                    mnMouseModifier  = 0;
+                    mnHighItemId     = 0;
+
+                    return;
+                }
+
                 // Hier schon bDrag setzen, da in EndSelection ausgewertet wird
                 mbDrag = TRUE;
 
@@ -3799,11 +4398,13 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( rMEvt.GetClicks() == 2 )
                     DoubleClick();
 
+
                 if ( mbDrag )
                 {
                     ImplDrawItem( mnCurPos, TRUE );
                     Highlight();
                 }
+
 
                 // Click-Handler aufrufen
                 if ( rMEvt.GetClicks() != 2 )
@@ -3824,6 +4425,17 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         }
 
         Deactivate();
+
+        // menu button hit ?
+        if( mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) )
+        {
+            // handle custom menu asynchronously
+            // to avoid problems if the toolbox is closed during menu execute
+            ImplUpdateCustomMenu();
+            Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
+            return;
+        }
+
 
         // Gegebenenfalls noch Scroll- und Next-Buttons ueberpruefen
         if ( maUpperRect.IsInside( aMousePos ) )
@@ -3887,7 +4499,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             Click();
     }
 
-    if ( !mbDrag && !mbSelection )
+    if ( !mbDrag && !mbSelection && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
         DockingWindow::MouseButtonDown( rMEvt );
 }
 
@@ -3913,11 +4525,18 @@ void ToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ToolBox::Tracking( const TrackingEvent& rTEvt )
 {
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     if ( rTEvt.IsTrackingEnded() )
         ImplHandleMouseButtonUp( rTEvt.GetMouseEvent(), rTEvt.IsTrackingCanceled() );
     else
         ImplHandleMouseMove( rTEvt.GetMouseEvent(), rTEvt.IsTrackingRepeat() );
 
+    if ( aDelData.IsDelete() )
+        // toolbox was deleted
+        return;
+    ImplRemoveDel( &aDelData );
     DockingWindow::Tracking( rTEvt );
 }
 
@@ -3925,13 +4544,33 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
 
 void ToolBox::Paint( const Rectangle& rPaintRect )
 {
+    // check if locking has changed and recalc accordingly
+    if( !ImplIsFloatingMode() )
+    {
+        ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+        if( pWrapper && mpData->mbIsLocked != pWrapper->IsLocked() )
+        {
+            mpData->mbIsLocked = pWrapper->IsLocked();
+            mbCalc = TRUE;
+            SetSizePixel( CalcWindowSizePixel(1) );
+            return;
+        }
+    }
+
     if ( rPaintRect == Rectangle( 0, 0, mnDX-1, mnDY-1 ) )
         mbFullPaint = TRUE;
     ImplFormat();
     mbFullPaint = FALSE;
 
-    if ( (mnWinStyle & WB_BORDER) && !IsFloatingMode() )
+    ImplDrawGradient( this, rPaintRect );
+
+    if ( (mnWinStyle & WB_BORDER) && !ImplIsFloatingMode() )
         ImplDrawBorder( this );
+
+    if( !ImplIsFloatingMode() )
+        ImplDrawGrip( this );
+
+    ImplDrawMenubutton( this, FALSE );
 
     // SpinButtons zeichnen
     if ( mnWinStyle & WB_SCROLL )
@@ -3984,13 +4623,29 @@ void ToolBox::Resize()
     Size aSize = GetOutputSizePixel();
     mnDX = aSize.Width();
     mnDY = aSize.Height();
+    if( ImplIsFloatingMode() )
+    {
+        mpData->m_nDeltaSizeX = abs( mpData->maFloatingSize.Width() - mnDX );
+        mpData->m_nDeltaSizeY = abs( mpData->maFloatingSize.Height() - mnDY );
+        mpData->maFloatingSize = aSize;
+    }
     mnLastResizeDY = 0;
 
     // Evt. neu formatieren oder neu painten
     if ( mbScroll )
     {
         if ( !mbFormat )
+        {
+            if( ImplIsFloatingMode() )
+            {
+                // force reformatting once as the user might have
+                // released the mouse button before the timer elapsed
+                // which would result in no reformatting at all
+                mbFormat = TRUE;
+                ImplFormat( TRUE ); // indicate resize
+            }
             maTimer.Start();
+        }
     }
 
     // Border muss neu ausgegeben werden
@@ -4306,8 +4961,6 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
         mbCalc = TRUE;
         mbFormat = TRUE;
         ImplInitSettings( TRUE, TRUE, TRUE );
-        if ( mpBtnDev )
-            ImplButtonSysChange( this, mpBtnDev, mnOutStyle );
         Invalidate();
     }
 }
@@ -4325,11 +4978,24 @@ void ToolBox::ToggleFloatingMode()
 {
     DockingWindow::ToggleFloatingMode();
 
-    if ( IsFloatingMode() )
+    BOOL mbOldHorz = mbHorz;
+
+    if ( ImplIsFloatingMode() )
     {
         mbHorz   = TRUE;
         meAlign  = WINDOWALIGN_TOP;
         mbScroll = TRUE;
+
+        if( mbOldHorz != mbHorz )
+            mbCalc = TRUE;  // orientation was changed !
+
+        ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+        if( pWrapper )
+            pWrapper->SetMinOutputSizePixel( ImplCalcMinFloatSize( this ) );
+        else
+            // TODO: change SetMinOutputSizePixel to be not inline
+            SetMinOutputSizePixel( ImplCalcMinFloatSize( this ) );
+
         SetOutputSizePixel( ImplCalcFloatSize( this, mnFloatLines ) );
     }
     else
@@ -4344,6 +5010,14 @@ void ToolBox::ToggleFloatingMode()
         ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
     }
 
+    if( mbOldHorz != mbHorz )
+    {
+        // if orientation changes, the toolbox has to be initialized again
+        // to update the direction of the gradient
+        mbCalc = TRUE;
+        ImplInitSettings( TRUE, TRUE, TRUE );
+    }
+
     mbFormat = TRUE;
     ImplFormat();
 }
@@ -4354,7 +5028,7 @@ void ToolBox::StartDocking()
 {
     meDockAlign = meAlign;
     mnDockLines = mnLines;
-    mbLastFloatMode = IsFloatingMode();
+    mbLastFloatMode = ImplIsFloatingMode();
     DockingWindow::StartDocking();
 }
 
@@ -4373,7 +5047,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
     // Befindet sich die Maus ausserhalb des Bereichs befindet, kann es nur ein
     // FloatWindow werden
     Rectangle aDockingRect( rRect );
-    if ( !IsFloatingMode() )
+    if ( !ImplIsFloatingMode() )
     {
         // don't use tracking rectangle for alignment check, because it will be too large
         // to get a floating mode as result - switch to floating size
@@ -4397,20 +5071,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         aInRect.Top()    += aDockSize.Height()/2;
         aInRect.Right()  -= aDockSize.Width()/2;
         aInRect.Bottom() -= aDockSize.Height()/2;
-/*
-        // Auf den Dockbereich eine halbe Breite der ToolBox dazurechnen
-        if ( !IsFloatingMode() )
-        {
-            if ( meAlign == WINDOWALIGN_LEFT )
-                aInRect.Left() -= aDockSize.Width()/2;
-            else  if ( meAlign == WINDOWALIGN_TOP )
-                aInRect.Top() -= aDockSize.Height()/2;
-            else  if ( meAlign == WINDOWALIGN_RIGHT )
-                aInRect.Right() += aDockSize.Width()/2;
-            else
-                aInRect.Bottom() += aDockSize.Height()/2;
-        }
-*/
+
         // Wenn Fenster zu klein, wird das gesammte InDock-Rect genommen
         if ( aInRect.Left() >= aInRect.Right() )
         {
@@ -4492,26 +5153,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             aDockingRect.SetSize( ImplCalcFloatSize( this, nTemp ) );
         }
     }
-/*
-    // Ist Pointer nicht mehr im Rechteck
-    if ( !rRect.IsInside( rPos ) )
-    {
-        Point aMouseOff;
-        aMouseOff.X() = rRect.Left() - rPos.X();
-        aMouseOff.Y() = rRect.Top() - rPos.Y();
 
-        if ( (rPos.X() < rRect.Left()) || (rPos.X() > rRect.Right()) )
-        {
-            rRect.SetPos( rPos );
-            rRect.Move( -5, aMouseOff.Y() );
-        }
-        if ( (rPos.Y() < rRect.Top()) || (rPos.Y() > rRect.Bottom()) )
-        {
-            rRect.SetPos( rPos );
-            rRect.Move( aMouseOff.X(), -5 );
-        }
-    }
-*/
     rRect = aDockingRect;
     mbLastFloatMode = bFloatMode;
 
@@ -4529,7 +5171,7 @@ void ToolBox::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
         if ( meAlign != meDockAlign )
             SetAlign( meDockAlign );
     }
-    if ( bFloatMode || (bFloatMode != IsFloatingMode()) )
+    if ( bFloatMode || (bFloatMode != ImplIsFloatingMode()) )
         DockingWindow::EndDocking( rRect, bFloatMode );
 }
 
@@ -4560,7 +5202,7 @@ void ToolBox::Resizing( Size& rSize )
         nTemp = nCalcLines;
         Size aTempSize = ImplCalcFloatSize( this, nTemp );
         while ( (aTempSize.Width() > rSize.Width()) &&
-                (nCalcLines <= mpFloatSizeAry[0].mnLines) )
+                (nCalcLines <= mpFloatSizeAry->mpSize[0].mnLines) )
         {
             nCalcLines++;
             nTemp = nCalcLines;
@@ -4577,6 +5219,97 @@ void ToolBox::Resizing( Size& rSize )
 Size ToolBox::CalcWindowSizePixel( USHORT nCalcLines ) const
 {
     return ImplCalcSize( this, nCalcLines );
+}
+
+Size ToolBox::CalcWindowSizePixel( USHORT nCalcLines, WindowAlign eAlign ) const
+{
+    return ImplCalcSize( this, nCalcLines,
+        (eAlign == WINDOWALIGN_TOP || eAlign == WINDOWALIGN_BOTTOM) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
+}
+
+Size ToolBox::CalcPopupWindowSizePixel() const
+{
+    // count number of breaks and calc corresponding floating window size
+    USHORT nLines = 0;
+    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
+    while ( it != mpData->m_aItems.end() )
+    {
+        if( it->meType == TOOLBOXITEM_BREAK )
+            nLines++;
+        it++;
+    }
+
+    if( nLines )
+        nLines++;   // add the first line
+    else
+    {
+        // no breaks found: use quadratic layout
+        nLines = (USHORT) ceil( sqrt( GetItemCount() ) );
+    }
+
+    return CalcFloatingWindowSizePixel( nLines );
+}
+
+Size ToolBox::CalcFloatingWindowSizePixel( USHORT nCalcLines ) const
+{
+    BOOL bFloat = mpData->mbAssumeFloating;
+    BOOL bDocking = mpData->mbAssumeDocked;
+
+    // simulate floating mode and force reformat before calculating
+    ToolBox *pThis = (ToolBox*) this;
+    pThis->mpData->mbAssumeFloating = TRUE;
+    pThis->mpData->mbAssumeDocked = FALSE;
+
+    Size aSize = ImplCalcFloatSize( (ToolBox*) this, nCalcLines );
+
+    pThis->mbFormat = TRUE;
+    pThis->mpData->mbAssumeFloating = bFloat;
+    pThis->mpData->mbAssumeDocked = bDocking;
+
+    return aSize;
+}
+
+// -----------------------------------------------------------------------
+
+Size ToolBox::CalcMinimumWindowSizePixel() const
+{
+    if( ImplIsFloatingMode() )
+        return ImplCalcSize( this, mnFloatLines );
+    else
+    {
+        // create dummy toolbox for measurements
+        ToolBox *pToolBox = new ToolBox( GetParent(), GetStyle() );
+
+        // copy until first useful item
+        std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
+        while( it != mpData->m_aItems.end() )
+        {
+            pToolBox->CopyItem( *this, it->mnId );
+            if( (it->meType != TOOLBOXITEM_BUTTON) ||
+                !it->mbVisible || ImplIsFixedControl( &(*it) ) )
+                it++;
+            else
+                break;
+        }
+
+        // add to docking manager if required to obtain a drag area
+        // (which is accounted for in calcwindowsizepixel)
+        if( ImplGetDockingManager()->GetDockingWindowWrapper( this ) )
+            ImplGetDockingManager()->AddWindow( pToolBox );
+
+        // account for menu
+        if( IsMenuEnabled() )
+            pToolBox->SetMenuType( GetMenuType() );
+
+        pToolBox->SetAlign( GetAlign() );
+        Size aSize = pToolBox->CalcWindowSizePixel( 1 );
+
+        ImplGetDockingManager()->RemoveWindow( pToolBox );
+        pToolBox->Clear();
+        delete pToolBox;
+
+        return aSize;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -4742,11 +5475,9 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
     USHORT nCode = aKeyCode.GetCode();
     BOOL bRet = TRUE;
 
-    // arrow keys should work as the direction of the green arrow suggests
-    if ( ( nCode == KEY_LEFT && meAlign != WINDOWALIGN_RIGHT )
-        || ( nCode == KEY_RIGHT && meAlign != WINDOWALIGN_LEFT )
-        || ( nCode == KEY_UP && meAlign != WINDOWALIGN_BOTTOM )
-        || ( nCode == KEY_DOWN && meAlign != WINDOWALIGN_TOP ) )
+    // arrow keys should work only in the opposite direction of alignment (to not break cursor travelling)
+    if ( ((nCode == KEY_LEFT || nCode == KEY_RIGHT) && IsHorizontal())
+      || ((nCode == KEY_UP   || nCode == KEY_DOWN)  && !IsHorizontal()) )
         return FALSE;
 
     if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
@@ -4774,9 +5505,9 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
         mbIsShift = TRUE;
         mbIsKeyEvent = TRUE;
         Activate();
-        Click();
-        if (pItem->mnBits & TIB_REPEAT)
-            Select();
+
+        GetDropdownClickHdl().Call( this );
+
         mbIsKeyEvent = FALSE;
         mbIsShift = FALSE;
         mnMouseModifier = 0;
@@ -4807,81 +5538,42 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         case KEY_UP:
         {
             // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( !IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
-            {
-                ImplDrawNext( TRUE );
-                ImplDrawNext( FALSE );
-                NextToolBox();
-            }
+            if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                break;
+            if( !IsHorizontal() )
+                ImplChangeHighlightUpDn( TRUE );
             else
-            {
-                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
-                    break;
-                if( !IsHorizontal() )
-                    ImplChangeHighlightUpDn( TRUE );
-                else
-                    ImplOpenItem( aKeyCode );
-            }
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_LEFT:
         {
-            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
-            {
-                ImplDrawNext( TRUE );
-                ImplDrawNext( FALSE );
-                NextToolBox();
-            }
+            if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                break;
+            if( IsHorizontal() )
+                ImplChangeHighlightUpDn( TRUE );
             else
-            {
-                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
-                    break;
-                if( IsHorizontal() )
-                    ImplChangeHighlightUpDn( TRUE );
-                else
-                    ImplOpenItem( aKeyCode );
-            }
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_DOWN:
         {
-            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( !IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
-            {
-                ImplDrawNext( TRUE );
-                ImplDrawNext( FALSE );
-                NextToolBox();
-            }
+            if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                break;
+            if( !IsHorizontal() )
+                ImplChangeHighlightUpDn( FALSE );
             else
-            {
-                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
-                    break;
-                if( !IsHorizontal() )
-                    ImplChangeHighlightUpDn( FALSE );
-                else
-                    ImplOpenItem( aKeyCode );
-            }
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_RIGHT:
         {
-            // Ctrl-Cursor activates next toolbox, indicated by a blue arrow pointing to the left/up
-            if( IsHorizontal() && (aKeyCode.IsMod1() || aKeyCode.IsMod2()) && !maNextToolRect.IsEmpty() )
-            {
-                ImplDrawNext( TRUE );
-                ImplDrawNext( FALSE );
-                NextToolBox();
-            }
+            if( aKeyCode.GetModifier() )    // allow only pure cursor keys
+                break;
+            if( IsHorizontal() )
+                ImplChangeHighlightUpDn( FALSE );
             else
-            {
-                if( aKeyCode.GetModifier() )    // allow only pure cursor keys
-                    break;
-                if( IsHorizontal() )
-                    ImplChangeHighlightUpDn( FALSE );
-                else
-                    ImplOpenItem( aKeyCode );
-            }
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_PAGEUP:
@@ -4993,7 +5685,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
     ImplRemoveDel( &aDelData );
 
     // #107251# move focus away if this toolbox was disabled during keyinput
-    if( HasFocus() && mbInputDisabled && (ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL)
+    if( HasFocus() && mpData->mbKeyInputDisabled && (ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL)
     {
         USHORT n = 0;
         Window *pFocusControl = ImplGetParent()->ImplGetDlgWindow( n, DLGWINDOW_FIRST );
@@ -5015,14 +5707,6 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 // -----------------------------------------------------------------------
-
-static bool ImplIsFixedControl( ImplToolItem *pItem )
-{
-    return ( pItem->mpWindow &&
-            (pItem->mpWindow->GetType() == WINDOW_FIXEDTEXT ||
-             pItem->mpWindow->GetType() == WINDOW_FIXEDLINE ||
-             pItem->mpWindow->GetType() == WINDOW_GROUPBOX) );
-}
 
 // returns the current toolbox line of the item
 USHORT ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
@@ -5300,6 +5984,12 @@ void ToolBox::ImplHideFocus()
             pWin->mbDrawSelectionBackground = FALSE;
             pWin->Invalidate( 0 );
         }
+    }
+
+    if ( mpData->maMenubuttonItem.mpUserData )
+    {
+        // remove highlight from menubutton
+        ImplDrawMenubutton( this, FALSE );
     }
 }
 
