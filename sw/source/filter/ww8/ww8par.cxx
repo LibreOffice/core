@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:20:19 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2304,13 +2304,14 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     SetNumberingType(rSection, rPage);
 
     SwFrmFmt &rFmt = rPage.GetMaster();
-    mrReader.SetDocumentGrid(rFmt, rSection);
 
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
     SetPageULSpaceItems(rFmt, aULData);
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
+
+    mrReader.SetDocumentGrid(rFmt, rSection);
 }
 
 void wwSectionManager::SetUseOn(wwSection &rSection)
@@ -3008,81 +3009,68 @@ void SwWW8ImplReader::SetOutLineStyles()
 
     USHORT nOldFlags = nFlagsStyleOutlLevel;
 
-    /*
-    Leave the first 10 styles until after the rest of them are handled to give
-    priority to the non standard styles in the case of a collision between
-    styles that want into the outlinenumbering list. Its an inherited hack
-    which I'm dubious about.
-    */
-    USHORT nIa=10;
-    USHORT nIz=nColls;
-    for (USHORT nJ = 0; nJ < 2; ++nJ)
+    for (USHORT nI = 0; nI < nColls; ++nI)
     {
-        for (USHORT nI = nIa; nI < nIz; ++nI)
+        SwWW8StyInf& rSI = pCollA[nI];
+
+        if ((MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule
+                && rSI.pFmt)
         {
-            SwWW8StyInf& rSI = pCollA[nI];
-
-            if ((MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule
-                    && rSI.pFmt)
+            USHORT nAktFlags = 1 << rSI.nOutlineLevel;
+            if (nAktFlags & nFlagsStyleOutlLevel)
             {
-                USHORT nAktFlags = 1 << rSI.nOutlineLevel;
-                if (nAktFlags & nFlagsStyleOutlLevel)
-                {
-                    /*
-                    If our spot is already taken by something we can't replace
-                    then don't insert and remove our outline level.
-                    */
-                    rSI.pFmt->SetAttr(
-                            SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                    ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
-                }
-                else
-                {
-                    /*
-                    If there is a style already set for this outline
-                    numbering level and its not a style set by us already
-                    then we can remove it outline numbering.
-                    (its one of the default headings in a new document
-                    so we can clobber it)
-                    Of course if we are being inserted into a document that
-                    already has some set we can't do this, thats covered by
-                    the list of level in nFlagsStyleOutlLevel to ignore.
-                    */
-                    outlineeq aCmp(rSI.nOutlineLevel);
-                    myiter aResult = ::std::find_if(aOutLined.begin(),
-                        aOutLined.end(), aCmp);
+                /*
+                If our spot is already taken by something we can't replace
+                then don't insert and remove our outline level.
+                */
+                rSI.pFmt->SetAttr(
+                        SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
+                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+            }
+            else
+            {
+                /*
+                If there is a style already set for this outline
+                numbering level and its not a style set by us already
+                then we can remove it outline numbering.
+                (its one of the default headings in a new document
+                so we can clobber it)
+                Of course if we are being inserted into a document that
+                already has some set we can't do this, thats covered by
+                the list of level in nFlagsStyleOutlLevel to ignore.
+                */
+                outlineeq aCmp(rSI.nOutlineLevel);
+                myiter aResult = ::std::find_if(aOutLined.begin(),
+                    aOutLined.end(), aCmp);
 
-                    myiter aEnd = aOutLined.end();
-                    while (aResult != aEnd  && aCmp(*aResult))
-                    {
-                        (*aResult)->SetOutlineLevel(NO_NUMBERING);
-                        ++aResult;
-                    }
-
-                    /*
-                    #i1886#
-                    I believe that when a list is registered onto a winword
-                    style which is an outline numbering style (i.e.
-                    nOutlineLevel is set) that the style of numbering is for
-                    the level is indexed by the *list* level that was
-                    registered on that style, and not the outlinenumbering
-                    level, which is probably a logical sequencing, and not a
-                    physical mapping into the list style reged on that outline
-                    style.
-                    */
-                    BYTE nFromLevel = rSI.nListLevel;
-                    BYTE nToLevel = rSI.nOutlineLevel;
-                    const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
-                    aOutlineRule.Set(nToLevel, rRule);
-                    // Set my outline level
-                    ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
-                    // If there are more styles on this level ignore them
-                    nFlagsStyleOutlLevel |= nAktFlags;
+                myiter aEnd = aOutLined.end();
+                while (aResult != aEnd  && aCmp(*aResult))
+                {
+                    (*aResult)->SetOutlineLevel(NO_NUMBERING);
+                    ++aResult;
                 }
+
+                /*
+                #i1886#
+                I believe that when a list is registered onto a winword
+                style which is an outline numbering style (i.e.
+                nOutlineLevel is set) that the style of numbering is for
+                the level is indexed by the *list* level that was
+                registered on that style, and not the outlinenumbering
+                level, which is probably a logical sequencing, and not a
+                physical mapping into the list style reged on that outline
+                style.
+                */
+                BYTE nFromLevel = rSI.nListLevel;
+                BYTE nToLevel = rSI.nOutlineLevel;
+                const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
+                aOutlineRule.Set(nToLevel, rRule);
+                // Set my outline level
+                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
+                // If there are more styles on this level ignore them
+                nFlagsStyleOutlLevel |= nAktFlags;
             }
         }
-        nIa = 1;
-        nIz = nColls >= 10 ? 10 : nColls;
     }
     if (nOldFlags != nFlagsStyleOutlLevel)
         rDoc.SetOutlineNumRule(aOutlineRule);
