@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:10:37 $
+ *  last change: $Author: ama $ $Date: 2002-07-01 11:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1384,7 +1384,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
             {
                 if( 2 == nRet )
                     xDocSh->DoClose();
-                else
+                else if( ((SwDocShell*)&xDocSh)->GetDoc() )
                     ((SwDocShell*)&xDocSh)->GetDoc()->SetRedlineMode(
                                 eOldRedlineMode );
             }
