@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:05:08 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
+#ifndef _XMLOFF_CONTEXTID_HXX_
+#include "contextid.hxx"
+#endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include "controlpropertyhdl.hxx"
 #endif
@@ -108,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -165,8 +171,16 @@ namespace xmloff
 
         // add our style family to the export context's style pool
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
-        m_xExportMapper = new SvXMLExportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
+        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr() );
+        m_xExportMapper = new OFormExportPropertyMapper( xStylePropertiesMapper.getBodyPtr() );
+
+        // our style family
+        m_rContext.GetAutoStylePool()->AddFamily(
+            XML_STYLE_FAMILY_CONTROL_ID,
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_NAME ) ),
+            m_xExportMapper.getBodyPtr(),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_PREFIX) )
+        );
 
         // add our event translation table
         m_rContext.GetEventExport().AddTranslationTable(g_pFormsEventTranslation);
@@ -307,6 +321,17 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport_Impl::getObjectStyleName( const Reference< XPropertySet >& _rxObject )
+    {
+        ::rtl::OUString aObjectStyle;
+
+        MapPropertySet2String::const_iterator aObjectStylePos = m_aGridColumnStyles.find( _rxObject );
+        if ( m_aGridColumnStyles.end() != aObjectStylePos )
+            aObjectStyle = aObjectStylePos->second;
+        return aObjectStyle;
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::clear()
     {
         m_aControlIds.clear();
@@ -315,6 +340,7 @@ namespace xmloff
         m_aCurrentPageReferring = m_aReferringControls.end();
 
         m_aControlNumberFormats.clear();
+        m_aGridColumnStyles.clear();
 
         m_aIgnoreList.clear();
     }
@@ -329,8 +355,19 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
     {
-        if (m_pControlNumberStyles)
-            m_pControlNumberStyles->Export(sal_True);
+        if ( m_pControlNumberStyles )
+            m_pControlNumberStyles->Export( sal_True );
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportAutoStyles()
+    {
+        m_rContext.GetAutoStylePool()->exportXML(
+            XML_STYLE_FAMILY_CONTROL_ID,
+            m_rContext.GetDocHandler(),
+            m_rContext.GetMM100UnitConverter(),
+            m_rContext.GetNamespaceMap()
+        );
     }
 
     //---------------------------------------------------------------------
@@ -398,6 +435,18 @@ namespace xmloff
         OSL_ENSURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
         return m_aCurrentPageIds->second[_rxControl];
+    }
+
+    //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport_Impl::getImmediateNumberStyle( const Reference< XPropertySet >& _rxObject )
+    {
+        ::rtl::OUString sNumberStyle;
+
+        sal_Int32 nOwnFormatKey = implExamineControlNumberFormat( _rxObject );
+        if ( -1 != nOwnFormatKey )
+            sNumberStyle = getControlNumberStyleExport()->GetStyleName( nOwnFormatKey );
+
+        return sNumberStyle;
     }
 
     //---------------------------------------------------------------------
@@ -486,15 +535,12 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
     {
-        static const ::rtl::OUString sControlCheck(PROPERTY_CLASSID);
-        static const ::rtl::OUString sReferenceCheck(PROPERTY_CONTROLLABEL);
-        static const ::rtl::OUString sFormatCheck(PROPERTY_FORMATKEY);
         static const ::rtl::OUString sControlId(RTL_CONSTASCII_USTRINGPARAM("control"));
 
         Reference< XPropertySetInfo > xCurrentInfo = _rxObject->getPropertySetInfo();
         OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::checkExamineControl: no property set info");
 
-        sal_Bool bIsControl = xCurrentInfo->hasPropertyByName(sControlCheck);
+        sal_Bool bIsControl = xCurrentInfo->hasPropertyByName( PROPERTY_CLASSID );
         if (bIsControl)
         {
             // ----------------------------------
@@ -519,10 +565,10 @@ namespace xmloff
 
             // ----------------------------------
             // check if this control has a "LabelControl" property referring another control
-            if (xCurrentInfo->hasPropertyByName(sReferenceCheck))
+            if ( xCurrentInfo->hasPropertyByName( PROPERTY_CONTROLLABEL ) )
             {
                 Reference< XPropertySet > xCurrentReference;
-                ::cppu::extractInterface(xCurrentReference, _rxObject->getPropertyValue(sReferenceCheck));
+                ::cppu::extractInterface( xCurrentReference, _rxObject->getPropertyValue( PROPERTY_CONTROLLABEL ) );
                 if (xCurrentReference.is())
                 {
                     ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
@@ -536,9 +582,18 @@ namespace xmloff
 
             // ----------------------------------
             // check if the control needs a number format style
-            if (xCurrentInfo->hasPropertyByName(sFormatCheck))
+            if ( xCurrentInfo->hasPropertyByName( PROPERTY_FORMATKEY ) )
             {
                 examineControlNumberFormat(_rxObject);
+            }
+
+            // ----------------------------------
+            // check if it is a grid control - in this case, we need special handling for the columns
+            sal_Int16 nControlType = FormComponentType::CONTROL;
+            _rxObject->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType;
+            if ( FormComponentType::GRIDCONTROL == nControlType )
+            {
+                collectGridAutoStyles( _rxObject );
             }
         }
 
@@ -546,17 +601,93 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::examineControlNumberFormat(const Reference< XPropertySet >& _rxControl)
+    void OFormLayerXMLExport_Impl::collectGridAutoStyles( const Reference< XPropertySet >& _rxControl )
+    {
+        // loop through all columns of the grid
+        try
+        {
+            Reference< XIndexAccess > xContainer( _rxControl, UNO_QUERY );
+            OSL_ENSURE( xContainer.is(), "OFormLayerXMLExport_Impl::collectGridAutoStyles: grid control not being a container?!" );
+            if ( xContainer.is() )
+            {
+                Reference< XPropertySet > xColumnProperties;
+                Reference< XPropertySetInfo > xColumnPropertiesMeta;
+
+                sal_Int32 nCount = xContainer->getCount();
+                for ( sal_Int32 i=0; i<nCount; ++i )
+                {
+                    if ( xContainer->getByIndex( i ) >>= xColumnProperties )
+                    {
+                        xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
+                        // get the styles of the column
+                        ::std::vector< XMLPropertyState > aPropertyStates = m_xExportMapper->Filter( xColumnProperties );
+
+                        // care for the number format, additionally
+                        ::rtl::OUString sColumnNumberStyle;
+                        if ( xColumnPropertiesMeta.is() && xColumnPropertiesMeta->hasPropertyByName( PROPERTY_FORMATKEY ) )
+                            sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
+
+                        if ( sColumnNumberStyle.getLength() )
+                        {   // the column indeed has a formatting
+                            sal_Int32 nStyleMapIndex = m_xExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
+                                // TODO: move this to the ctor
+                            OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
+
+                            XMLPropertyState aNumberStyleState( nStyleMapIndex, makeAny( sColumnNumberStyle ) );
+                            aPropertyStates.push_back( aNumberStyleState );
+                        }
+
+#ifdef DBG_UTIL
+                        ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
+                        for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
+                        {
+                            sal_Int32 nDummy = 0;
+                        }
+#endif
+
+                        if ( aPropertyStates.size() )
+                        {   // add to the style pool
+                            ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
+
+                            OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
+                                "OFormLayerXMLExport_Impl::collectGridAutoStyles: already have a style for this column!" );
+
+                            m_aGridColumnStyles.insert( MapPropertySet2String::value_type( xColumnProperties, sColumnStyleName ) );
+                        }
+                    }
+                    else
+                        OSL_ENSURE( sal_False, "OFormLayerXMLExport_Impl::collectGridAutoStyles: invalid grid column encountered!" );
+                }
+            }
+        }
+        catch( const Exception& e )
+        {
+            e;  // make compiler happy
+            OSL_ENSURE( sal_False, "OFormLayerXMLExport_Impl::collectGridAutoStyles: error examining the grid colums!" );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    sal_Int32 OFormLayerXMLExport_Impl::implExamineControlNumberFormat( const Reference< XPropertySet >& _rxObject )
     {
         // get the format key relative to our own formats supplier
-        sal_Int32 nOwnFormatKey = ensureTranslateFormat(_rxControl);
+        sal_Int32 nOwnFormatKey = ensureTranslateFormat( _rxObject );
 
-        if (-1 == nOwnFormatKey)
+        if ( -1 != nOwnFormatKey )
+            // tell the exporter that we used this format
+            getControlNumberStyleExport()->SetUsed( nOwnFormatKey );
+
+        return nOwnFormatKey;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::examineControlNumberFormat( const Reference< XPropertySet >& _rxControl )
+    {
+        sal_Int32 nOwnFormatKey = implExamineControlNumberFormat( _rxControl );
+
+        if ( -1 == nOwnFormatKey )
             // nothing to do, the number format of this control is void
             return;
-
-        // tell the exporter that we used this format
-        getControlNumberStyleExport()->SetUsed(nOwnFormatKey);
 
         // remember the format key for this control (we'll be asked in getControlNumberStyle for this)
         OSL_ENSURE(m_aControlNumberFormats.end() == m_aControlNumberFormats.find(_rxControl),
@@ -584,7 +715,7 @@ namespace xmloff
             Reference< XNumberFormats > xControlFormats;
             if (xControlFormatsSupplier.is())
                 xControlFormats = xControlFormatsSupplier->getNumberFormats();
-            OSL_ENSURE(xControlFormats.is(), "OFormLayerXMLExport_Impl::examineControlNumberFormat: formatted control without supplier!");
+            OSL_ENSURE(xControlFormats.is(), "OFormLayerXMLExport_Impl::ensureTranslateFormat: formatted control without supplier!");
 
             // obtain the persistent (does not depend on the formats supplier) representation of the control's format
             Locale aFormatLocale;
@@ -604,10 +735,10 @@ namespace xmloff
                 // -> create a new format
                 nOwnFormatKey = m_xControlNumberFormats->addNew(sFormatDescription, aFormatLocale);
             }
-            OSL_ENSURE(-1 != nOwnFormatKey, "OFormLayerXMLExport_Impl::examineControlNumberFormat: could not translate the controls format key!");
+            OSL_ENSURE(-1 != nOwnFormatKey, "OFormLayerXMLExport_Impl::ensureTranslateFormat: could not translate the controls format key!");
         }
         else
-            OSL_ENSURE(!aControlFormatKey.hasValue(), "OFormLayerXMLExport_Impl::examineControlNumberFormat: invalid number format property value!");
+            OSL_ENSURE(!aControlFormatKey.hasValue(), "OFormLayerXMLExport_Impl::ensureTranslateFormat: invalid number format property value!");
 
         return nOwnFormatKey;
     }
@@ -680,6 +811,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2002/09/25 12:05:08  fs
+ *  #103597# +excludeFromExport/m_aIgnoreList
+ *
  *  Revision 1.16  2001/10/19 18:43:58  dvo
  *  #93467# eliminated (most) direct calls on XDocumentHandler
  *

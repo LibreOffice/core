@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:04:19 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@ namespace xmloff
         MapPropertySet2Int  m_aControlNumberFormats;
             // maps controls to format keys, which are relative to our own formats supplier
 
+        MapPropertySet2String   m_aGridColumnStyles;
+            // style names of grid columns
+
     public:
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
 
@@ -217,6 +220,8 @@ namespace xmloff
         // IFormsExportContext
         virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
         virtual SvXMLExport&                                getGlobalContext();
+        virtual ::rtl::OUString                             getObjectStyleName(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
         virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper();
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
@@ -262,6 +267,10 @@ namespace xmloff
         */
         void    exportAutoControlNumberStyles();
 
+        /** exports the auto-styles collected during the examineForms calls
+        */
+        void exportAutoStyles();
+
     protected:
         sal_Bool implCheckPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
@@ -281,8 +290,20 @@ namespace xmloff
         sal_Bool checkExamineControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
         /** examines the control's number format, so later the format style can be referred
+
+            <p>remembers the format key for the control, so it can later be asked for in getControlNumberStyle</p>
         */
         void examineControlNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+
+        /** examines the control's number format, so later the format style can be referred
+
+            <p>does not remember the information returned in any way</p>
+        */
+        sal_Int32 implExamineControlNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
+
+        /** collects AutoStyles for grid columns
+        */
+        void collectGridAutoStyles( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         /** ensures that the number format of the given control exist in our own formats supplier.
 
@@ -300,6 +321,11 @@ namespace xmloff
 
         /// ensures that the instance exporting our control's number styles exists
         void                ensureControlNumberStyleExport();
+
+        /** determines the number format style for the given object without remembering it
+        */
+        ::rtl::OUString
+                getImmediateNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
 
         /** returns the prefix to be used for control number styles
         */
@@ -324,6 +350,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/09/25 12:04:19  fs
+ *  #103597# +excludeFromExport/m_aIgnoreList
+ *
  *  Revision 1.11  2001/05/29 15:37:44  fs
  *  #86712# no explicit dtor anymore
  *
