@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:28:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@
 
 #include "view/SlsPageObject.hxx"
 #include "view/SlideSorterView.hxx"
-#include "TextLogger.hxx"
+#include "tools/IdleDetection.hxx"
+
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -96,11 +97,13 @@ public:
 protected:
     virtual void ProcessRequest (void) = 0;
 
+    const ULONG mnTimeBetweenHighPriorityRequests;
+    const ULONG mnTimeBetweenLowPriorityRequests;
+    const ULONG mnTimeBetweenRequestsWhenNotIdle;
+
 private:
     /// This time controls when to process the next element from the queue.
     Timer maTimer;
-    const ULONG mnTimeBetweenHighPriorityRequests;
-    const ULONG mnTimeBetweenLowPriorityRequests;
     DECL_LINK(ProcessRequest, Timer*);
 };
 
@@ -183,8 +186,19 @@ template <class Queue,
     Queue, RequestData, BitmapCache, BitmapFactory
     >::ProcessRequest (void)
 {
-    while ( ! (mrQueue.IsEmpty() || GetpApp()->AnyInput()))
+    bool bIsShowingFullScreenShow (false);
+
+    while ( ! mrQueue.IsEmpty())
     {
+        // Determine whether the system is idle.
+        sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
+        if (nIdleState != tools::IdleDetection::IDET_IDLE)
+        {
+            if (nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE != 0)
+                bIsShowingFullScreenShow = true;
+            break;
+        }
+
         RequestData* pRequest = NULL;
         int nPriorityClass = 0;
         bool bRequestIsValid = false;
@@ -210,6 +224,7 @@ template <class Queue,
             {
                 ::osl::MutexGuard aGuard (maMutex);
                 // Create a new preview bitmap and store it in the cache.
+
                 BitmapEx aBitmap (maBitmapFactory.CreateBitmap (*pRequest));
                 mrCache.SetBitmap (
                     pRequest->GetPage(),
@@ -234,7 +249,10 @@ template <class Queue,
     }
 
     if ( ! mrQueue.IsEmpty())
-        Start(mrQueue.GetFrontPriorityClass());
+        if (bIsShowingFullScreenShow)
+            Start(mnTimeBetweenRequestsWhenNotIdle);
+        else
+            Start(mrQueue.GetFrontPriorityClass());
 }
 
 
