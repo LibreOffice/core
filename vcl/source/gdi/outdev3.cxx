@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:53:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,8 @@ static void ImplAddTokenFontNames( String& rName, const OUString& rFontNames )
 Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                                    ULONG nFlags, const OutputDevice* pOutDev )
 {
+    DBG_TRACE( "OutputDevice::GetDefaultFont()" );
+
     if( eLang == LANGUAGE_NONE || eLang == LANGUAGE_SYSTEM || eLang == LANGUAGE_DONTKNOW )
     {
         eLang = Application::GetSettings().GetUILanguage();
@@ -1155,6 +1157,47 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                 aFont.SetName( aSearch );
         }
     }
+
+#if OSL_DEBUG_LEVEL > 1
+    const char* s = "DEFAULTFONT_SANS_UNKNOWN";
+    switch ( nType )
+    {
+    case DEFAULTFONT_SANS_UNICODE:  s = "DEFAULTFONT_SANS_UNICODE"; break;
+    case DEFAULTFONT_UI_SANS:   s = "DEFAULTFONT_UI_SANS"; break;
+
+    case DEFAULTFONT_SANS:  s = "DEFAULTFONT_SANS"; break;
+    case DEFAULTFONT_LATIN_HEADING: s = "DEFAULTFONT_LATIN_HEADING"; break;
+    case DEFAULTFONT_LATIN_SPREADSHEET: s = "DEFAULTFONT_LATIN_SPREADSHEET"; break;
+    case DEFAULTFONT_LATIN_DISPLAY: s = "DEFAULTFONT_LATIN_DISPLAY"; break;
+
+    case DEFAULTFONT_SERIF: s = "DEFAULTFONT_SERIF"; break;
+    case DEFAULTFONT_LATIN_TEXT:    s = "DEFAULTFONT_LATIN_TEXT"; break;
+    case DEFAULTFONT_LATIN_PRESENTATION:    s = "DEFAULTFONT_LATIN_PRESENTATION"; break;
+
+    case DEFAULTFONT_FIXED: s = "DEFAULTFONT_FIXED"; break;
+    case DEFAULTFONT_LATIN_FIXED:   s = "DEFAULTFONT_LATIN_FIXED"; break;
+    case DEFAULTFONT_UI_FIXED:  s = "DEFAULTFONT_UI_FIXED"; break;
+
+    case DEFAULTFONT_SYMBOL:    s = "DEFAULTFONT_SYMBOL"; break;
+
+    case DEFAULTFONT_CJK_TEXT:  s = "DEFAULTFONT_CJK_TEXT"; break;
+    case DEFAULTFONT_CJK_PRESENTATION:  s = "DEFAULTFONT_CJK_PRESENTATION"; break;
+    case DEFAULTFONT_CJK_SPREADSHEET:   s = "DEFAULTFONT_CJK_SPREADSHEET"; break;
+    case DEFAULTFONT_CJK_HEADING:   s = "DEFAULTFONT_CJK_HEADING"; break;
+    case DEFAULTFONT_CJK_DISPLAY:   s = "DEFAULTFONT_CJK_DISPLAY"; break;
+
+    case DEFAULTFONT_CTL_TEXT:  s = "DEFAULTFONT_CTL_TEXT"; break;
+    case DEFAULTFONT_CTL_PRESENTATION:  s = "DEFAULTFONT_CTL_PRESENTATION"; break;
+    case DEFAULTFONT_CTL_SPREADSHEET:   s = "DEFAULTFONT_CTL_SPREADSHEET"; break;
+    case DEFAULTFONT_CTL_HEADING:   s = "DEFAULTFONT_CTL_HEADING"; break;
+    case DEFAULTFONT_CTL_DISPLAY:   s = "DEFAULTFONT_CTL_DISPLAY"; break;
+    }
+    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" FontName=\"%s\"\n",
+         s,
+         OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr()
+         );
+#endif
+
     return aFont;
 }
 
@@ -4850,6 +4893,11 @@ void OutputDevice::SetFont( const Font& rNewFont )
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "   OutputDevice::SetFont() FontName=\"%s\"\n",
+         OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr() );
+#endif
+
     if ( !maFont.IsSameInstance( aFont ) )
     {
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
@@ -5244,6 +5292,11 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
 
     DBG_TRACE( "OutputDevice::DrawText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "   OutputDevice::DrawText(\"%s\")\n",
+         OUStringToOString( rStr, osl_getThreadTextEncoding() ).getStr() );
+#endif
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
