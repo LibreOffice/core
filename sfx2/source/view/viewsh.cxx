@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:05:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     if ( xDocShell.Is() )
                     {
                         // Get PDF Filter
-                        String aPDFExtension = String::CreateFromAscii( ".pdf" );
+                        String aPDFExtension = String::CreateFromAscii( "pdf" );
                         const SfxFilter* pFilter =
                             SfxFilterMatcher( String::CreateFromAscii( xDocShell->GetFactory().GetShortName()) ).GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
                         if ( pFilter != NULL )
