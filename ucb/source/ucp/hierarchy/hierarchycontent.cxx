@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
+ *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,7 @@ sal_Bool HierarchyContent::renameData(
 {
     HierarchyEntry aEntry(
             m_xSMgr, m_pProvider, xOldId->getContentIdentifier() );
-    return aEntry.move( xNewId->getContentIdentifier() );
+    return aEntry.move( xNewId->getContentIdentifier(), m_aProps );
 }
 
 //=========================================================================
@@ -1171,6 +1171,9 @@ void HierarchyContent::setPropertyValues(
                     {
                         osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
                         m_aProps.aTitle = aNewValue;
+                        m_aProps.aName
+                            = HierarchyContentProvider::encodeSegment(
+                                                                aNewValue );
 
                         // modified title -> modified URL -> exchange !
                         if ( m_eState == PERSISTENT )

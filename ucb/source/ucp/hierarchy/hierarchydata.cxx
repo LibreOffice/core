@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,8 @@ sal_Bool HierarchyEntry::setData(
 }
 
 //=========================================================================
-sal_Bool HierarchyEntry::move( const OUString& rNewURL )
+sal_Bool HierarchyEntry::move(
+                const OUString& rNewURL, const HierarchyEntryData& rData )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -698,7 +699,12 @@ sal_Bool HierarchyEntry::move( const OUString& rNewURL )
             return sal_False;
 
         xNewNameReplace->replaceByName(
-                OUString::createFromAscii( "Title" ), makeAny( aNewKey ) );
+                            OUString::createFromAscii( "Title" ),
+                            makeAny( rData.aTitle ) );
+        xNewNameReplace->replaceByName(
+                            OUString::createFromAscii( "TargetURL" ),
+                            makeAny( rData.aTargetURL ) );
+
         xNewNameContainer->insertByName( aNewKey, aEntry );
         xNewParentBatch->commitChanges();
     }

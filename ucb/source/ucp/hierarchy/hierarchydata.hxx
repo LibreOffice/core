@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ public:
 
     sal_Bool setData( const HierarchyEntryData& rData, sal_Bool bCreate );
 
-    sal_Bool move( const ::rtl::OUString& rNewURL );
+    sal_Bool move( const ::rtl::OUString& rNewURL,
+                   const HierarchyEntryData& rData );
 
     sal_Bool remove();
 
