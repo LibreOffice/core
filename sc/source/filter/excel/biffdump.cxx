@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:43:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2358,6 +2358,28 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
             }
                 break;
+            case 0x00CA:        // SXBOOLEAN - cache entry: boolean value
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (boolean): " );
+                nItemCnt++;
+                ADDTEXT( "  " );
+                lcl_AddFlag( t, rIn.ReaduInt16() != 0 );
+                PRINT();
+            }
+            break;
+            case 0x00CB:        // SXERROR - cache entry: error code
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (error): " );
+                nItemCnt++;
+                ADDTEXT( "  " );
+                ADDHEX( 2 );
+                PRINT();
+            }
+            break;
             case 0x00CD:        // SXSTRING - ByteString
             {
                 if( bSubStream )
@@ -2394,6 +2416,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, nMin, 2, '0' );
                 ADDTEXT( ":" );
                 __AddDec( t, nSec, 2, '0' );
+                PRINT();
+            }
+            break;
+            case 0x00CF:        // SXEMPTY - cache entry: empty
+            {
+                ADDTEXT( "#" );
+                __AddDec( t, nItemCnt, 3 );
+                ADDTEXT( " (empty): " );
+                nItemCnt++;
                 PRINT();
             }
             break;
@@ -2506,41 +2537,42 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0x0100:        // SXVDEX
             {
                 LINESTART();
-                UINT32 __nFlags = Read4( rIn );
+                sal_uInt32 __nFlags = Read4( rIn );
                 STARTFLAG();
-                if( __nFlags & 0x009F )
+                if( __nFlags & 0x0000009F )
                 {
-                    ADDFLAG( 0x0001, "fShowAllItems" );
-                    ADDFLAG( 0x0002, "fDragToRow" );
-                    ADDFLAG( 0x0004, "fDragToColumn" );
-                    ADDFLAG( 0x0008, "fDragToPage" );
-                    ADDFLAG( 0x0010, "fDragToHide" );
-                    ADDFLAG( 0x0080, "fServerBased" );
+                    ADDFLAG( 0x00000001, "fShowAllItems" );
+                    ADDFLAG( 0x00000002, "fDragToRow" );
+                    ADDFLAG( 0x00000004, "fDragToColumn" );
+                    ADDFLAG( 0x00000008, "fDragToPage" );
+                    ADDFLAG( 0x00000010, "fDragToHide" );
+                    ADDFLAG( 0x00000080, "fServerBased" );
                     PRINT();
                     LINESTART();
                 }
-                if( __nFlags & 0xBF00 )
+                if( __nFlags & 0x00007E00 )
                 {
                     ADDTEXT( "   " );
-                    ADDFLAG( 0x0200, "fAutoSort" );
-                    ADDFLAG( 0x0400, "fAscendSort" );
-                    ADDFLAG( 0x0800, "fAutoShow" );
-                    ADDFLAG( 0x1000, "fAscendShow" );
-                    ADDFLAG( 0x2000, "fCalculatedField" );
+                    ADDFLAG( 0x00000200, "fAutoSort" );
+                    ADDFLAG( 0x00000400, "fAscendSort" );
+                    ADDFLAG( 0x00000800, "fAutoShow" );
+                    ADDFLAG( 0x00001000, "fAscendShow" );
+                    ADDFLAG( 0x00002000, "fCalculatedField" );
+                    ADDFLAG( 0x00004000, "fLONewPage" );            // undocumented
                     PRINT();
                     LINESTART();
                 }
-                if( __nFlags & 0x00FF4000 )
+                if( __nFlags & 0xFFE00000 )
                 {
                     ADDTEXT( "   " );                               // Layout flags:
-                    ADDFLAG( 0x00004000, "fLONewPage" );            // undocumented
-                    ADDFLAG( 0x00200000, "fLOReport" );         // undocumented
+                    ADDFLAG( 0x00200000, "fLOReport" );             // undocumented
                     ADDFLAG( 0x00400000, "fLOBlankLine" );          // undocumented
                     ADDFLAG( 0x00800000, "fLOSubTotalTop" );        // undocumented
+                    ADDTEXT( " show-items=" );  __AddDec( t, sal_uInt32( __nFlags >> 24 ) );
                     PRINT();
                     LINESTART();
                 }
-                if( __nFlags & 0xFF000060 )
+                if( __nFlags & 0x001F8160 )
                 {
                     ADDTEXT( "    !RESERVED!" );
                     PRINT();
@@ -2548,17 +2580,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 if( !__nFlags )
                     PRINT();
                 LINESTART();
-                ADDTEXT( "reserved = " );
-                __AddHex( t, Read1( rIn ) );
-                ADDTEXT( "  citmShow = " );
-                ADDDEC( 1 );
-                ADDTEXT( "  isxdiSort = " );
-                ADDHEX( 2 );
-                ADDTEXT( "  isxdiShow = " );
-                ADDHEX( 2 );
+                ADDTEXT( "   sort-field=" );
+                ADDDEC( 2 );
+                ADDTEXT( "   show-field=" );
+                ADDDEC( 2 );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "number format = " );
+                ADDTEXT( "format=" );
                 UINT16  n = Read2( rIn );
                 if( n )
                     __AddDec( t, n );
