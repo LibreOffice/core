@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-11 15:08:33 $
+ *  last change: $Author: fs $ $Date: 2001-09-18 15:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,13 +675,14 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool = NULL;
     _rppDefaults = NULL;
 
+    const ::rtl::OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix(DST_JDBC) : String());
-    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US), 1));
+    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_READONLY, sal_False);
@@ -2039,6 +2040,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.74  2001/09/11 15:08:33  fs
+ *  #91304# disableUI before applying the changes in OK
+ *
  *  Revision 1.73  2001/08/30 16:12:08  fs
  *  #88427# +OnValidateName
  *
