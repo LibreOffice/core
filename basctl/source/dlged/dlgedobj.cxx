@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:49:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#include <map>
+#include <algorithm>
+#include <functional>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -141,19 +145,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::rtl;
 
-//----------------------------------------------------------------------------
 
-// helper class for sorting by tabindex
-class TabSortHelper
-{
-public:
-    ::rtl::OUString name;
-    sal_Int16       tabindex;
+typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
 
-    bool operator<(const TabSortHelper& rComp) const { return tabindex < rComp.tabindex ? true : false; }
-};
-
-//----------------------------------------------------------------------------
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
@@ -370,9 +364,6 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
                     xCont->removeByName( aOldName );
                     xCont->insertByName( aNewName , aAny );
                 }
-
-                // sort the controls by tabindex
-                GetDlgEdForm()->SortByTabIndex();
             }
             else
             {
@@ -430,32 +421,54 @@ void DlgEdObj::UpdateStep()
 
 //----------------------------------------------------------------------------
 
-void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
+void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    // stop listening with all childs
+    // stop listening with all children
     ::std::vector<DlgEdObj*> aChildList = GetDlgEdForm()->GetChilds();
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; aIter++ )
+    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
     {
-        (*aIter)->EndListening(sal_False);
+        (*aIter)->EndListening( sal_False );
     }
 
-    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+    Reference< container::XNameAccess > xNameAcc( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
     if ( xNameAcc.is() )
     {
         // get sequence of control names
         Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
         const ::rtl::OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
-        ::std::vector< ::rtl::OUString > aNameList( nCtrls );
 
-        // fill helper list
-        for ( sal_Int16 i = 0; i < nCtrls; i++ )
+        // create a map of tab indices and control names, sorted by tab index
+        IndexToNameMap aIndexToNameMap;
+        for ( sal_Int16 i = 0; i < nCtrls; ++i )
         {
-            aNameList[i] = pNames[i];
+            // get control name
+            ::rtl::OUString aName( pNames[i] );
+
+            // get tab index
+            sal_Int16 nTabIndex = -1;
+            Any aCtrl = xNameAcc->getByName( aName );
+            Reference< beans::XPropertySet > xPSet;
+               aCtrl >>= xPSet;
+            if ( xPSet.is() && xPSet == Reference< beans::XPropertySet >( evt.Source, UNO_QUERY ) )
+                evt.OldValue >>= nTabIndex;
+            else if ( xPSet.is() )
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
+
+            // insert into map
+            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
         }
 
-        // check tabindex
+        // create a helper list of control names, sorted by tab index
+        ::std::vector< ::rtl::OUString > aNameList( aIndexToNameMap.size() );
+        ::std::transform(
+                aIndexToNameMap.begin(), aIndexToNameMap.end(),
+                aNameList.begin(),
+                ::std::select2nd< IndexToNameMap::value_type >( )
+            );
+
+        // check tab index
         sal_Int16 nOldTabIndex;
         evt.OldValue >>= nOldTabIndex;
         sal_Int16 nNewTabIndex;
@@ -470,16 +483,11 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
         aNameList.erase( aNameList.begin() + nOldTabIndex );
         aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
 
-        // sort name container by tabindex
-        Reference< container::XNameContainer > xCont( xNameAcc, UNO_QUERY );
-        for ( i = 0; i < nCtrls; i++ )
+        // set new tab indices
+        for ( i = 0; i < nCtrls; ++i )
         {
-            // get control model
-            ::rtl::OUString aName = aNameList[i];
-            Any aCtrl = xNameAcc->getByName( aName );
-
-            // set new tabindex
-            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+            Any aCtrl = xNameAcc->getByName( aNameList[i] );
+            Reference< beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
             if ( xPSet.is() )
             {
@@ -487,18 +495,14 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
                 aTabIndex <<= (sal_Int16) i;
                 xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
             }
-
-            // sort name container
-            xCont->removeByName( aName );
-            xCont->insertByName( aName , aCtrl );
         }
 
         // reorder objects in drawing page
         GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
     }
 
-    // start listening with all childs
-    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; aIter++ )
+    // start listening with all children
+    for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
     {
         (*aIter)->StartListening();
     }
@@ -1388,13 +1392,13 @@ void DlgEdForm::UpdateStep()
 
 //----------------------------------------------------------------------------
 
-void DlgEdForm::SortByTabIndex()
+void DlgEdForm::UpdateTabIndices()
 {
-    // stop listening with all childs
+    // stop listening with all children
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
     {
-        (*aIter)->EndListening(sal_False);
+        (*aIter)->EndListening( sal_False );
     }
 
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
@@ -1404,57 +1408,44 @@ void DlgEdForm::SortByTabIndex()
         Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
         const ::rtl::OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
-        ::std::vector<TabSortHelper> aTabSortList(nCtrls);
 
-        for ( sal_Int16 i = 0; i < nCtrls; i++ )
+        // create a map of tab indices and control names, sorted by tab index
+        IndexToNameMap aIndexToNameMap;
+        for ( sal_Int16 i = 0; i < nCtrls; ++i )
         {
-            // name
-            TabSortHelper aTabSortHelper;
-            aTabSortHelper.name = pNames[i];
+            // get name
+            ::rtl::OUString aName( pNames[i] );
 
-            // tabindex
-            Any aCtrl = xNameAcc->getByName( pNames[i] );
+            // get tab index
+            sal_Int16 nTabIndex = -1;
+            Any aCtrl = xNameAcc->getByName( aName );
             Reference< ::com::sun::star::beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
-            if (xPSet.is())
-            {
-                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= aTabSortHelper.tabindex;
-            }
+            if ( xPSet.is() )
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
 
-            // insert element into helper list
-            aTabSortList[i] = aTabSortHelper;
+            // insert into map
+            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
         }
 
-        // sort helper list by tabindex
-        ::std::sort( aTabSortList.begin() , aTabSortList.end() );
-
-        // sort name container by tabindex
-        Reference< container::XNameContainer > xCont( xNameAcc, UNO_QUERY );
-
-        for ( i = 0; i < nCtrls; i++ )
+        // set new tab indices
+        sal_Int16 nNewTabIndex = 0;
+        for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
         {
-            // get control model
-            ::rtl::OUString aName = aTabSortList[i].name;
-            Any aCtrl = xNameAcc->getByName( aName );
-
-            // set new tabindex
-            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+            Any aCtrl = xNameAcc->getByName( aIt->second );
+            Reference< beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
-            if (xPSet.is())
+            if ( xPSet.is() )
             {
                 Any aTabIndex;
-                aTabIndex <<= (sal_Int16) i;
+                aTabIndex <<= (sal_Int16) nNewTabIndex++;
                 xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
             }
-
-            // sort name container
-            xCont->removeByName( aName );
-            xCont->insertByName( aName , aCtrl );
         }
     }
 
-    // start listening with all childs
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    // start listening with all children
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
     {
         (*aIter)->StartListening();
     }
