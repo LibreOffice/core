@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-11 13:40:34 $
+ *  last change: $Author: tl $ $Date: 2001-07-19 11:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ one go*/
 #endif
 #ifndef _TOOLS_SOLMATH_H
 #include <tools/solmath.hxx>
+#endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -176,7 +179,8 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
-    const sal_Char* pFilterName )
+    const sal_Char* pFilterName,
+    sal_Bool bEncrypted )
 {
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
@@ -215,6 +219,7 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
 
     // finally, parser the stream
     sal_Bool bRet = sal_True;
+    sal_Bool bCheckEncrypted = sal_False;
     try
     {
         xParser->parseStream( aParserInput );
@@ -230,14 +235,37 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
     catch( xml::sax::SAXParseException& )
     {
         bRet = sal_False;
+        bCheckEncrypted = sal_True;
     }
     catch( xml::sax::SAXException& )
     {
         bRet = sal_False;
+        bCheckEncrypted = sal_True;
     }
     catch( io::IOException& )
     {
         bRet = sal_False;
+    }
+
+    if (!bRet)
+    {
+        // get DocShell
+        uno::Reference< lang::XUnoTunnel > xTunnel( xModel, uno::UNO_QUERY );
+        DBG_ASSERT( xTunnel.is(), "XUnoTunnel interface not supported" );
+        SmModel *pModel = reinterpret_cast<SmModel *>
+                (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+        SmDocShell *pDocShell = 0;
+        if (pModel)
+            pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+        DBG_ASSERT( pDocShell, "DocShell missing" );
+
+        if (pDocShell)
+        {
+            if (bCheckEncrypted  &&  bEncrypted)
+                pDocShell->SetError( ERRCODE_SFX_WRONGPASSWORD );
+            else
+                pDocShell->SetError( ERRCODE_SFX_DOLOADFAILED );
+        }
     }
 
     // success!
@@ -279,9 +307,17 @@ sal_Bool SmXMLWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream =
         new utl::OInputStreamWrapper( *xEventsStream );
 
+    // determine if stream is encrypted or not
+    Any aAny;
+    sal_Bool bEncrypted =
+        xEventsStream->GetProperty(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
+        aAny.getValueType() == ::getBooleanCppuType() &&
+        *(sal_Bool *)aAny.getValue();
+
     // read from the stream
     return ReadThroughComponent(
-        xInputStream, xModelComponent, rFactory, pFilterName );
+        xInputStream, xModelComponent, rFactory, pFilterName, bEncrypted );
 }
 
 sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
@@ -337,7 +373,7 @@ sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
 
         bRet = ReadThroughComponent(
             xInputStream, xModelComp, xServiceFactory,
-            "com.sun.star.comp.Math.XMLImporter" );
+            "com.sun.star.comp.Math.XMLImporter", FALSE );
     }
 
     return bRet;
