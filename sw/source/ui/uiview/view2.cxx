@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 09:03:39 $
+ *  last change: $Author: os $ $Date: 2002-08-05 09:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 {
                     pWrtShell->GetDoc()->SetRedlinePasswd(aNewPasswd);
                 }
-                else if(aNewPasswd == aPasswd)
+                else if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
                 {
                     pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
                     nOn = 0;
