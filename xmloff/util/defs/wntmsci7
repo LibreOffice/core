@@ -10200,3 +10200,7 @@ _real@8@4003a000000000000000
 ?lower_bound@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@PAVPropertyWrapperBase@@@_STL@@U?$_S1st@U?$pair@$$CBVOUString@rtl@@PAVPropertyWrapperBase@@@_STL@@@4@VOUStringComparison@@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVPropertyWrapperBase@@@_STL@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@PAVPropertyWrapperBase@@@_STL@@U?$_N_Tr@U?$pair@$$CBVOUString@rtl@@PAVPropertyWrapperBase@@@_STL@@@2@@2@ABVOUString@rtl@@@Z
 ?__destroy@_STL@@YAXPAUXMLPropertyState@@00@Z
 ?value_type@_STL@@YAPAUXMLPropertyState@@PBU2@@Z
+??YOString@rtl@@QAEAAV01@ABV01@@Z
+??1XMLStarBasicContextFactory@@UAE@XZ
+?CreateChildContext@XMLBitmapStyleContext@@UAEPAVSvXMLImportContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+?EndElement@SdXMLGraphicObjectShapeContext@@UAEXXZ
