@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 06:46:17 $
+ *  last change: $Author: os $ $Date: 2001-02-19 11:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2828,6 +2828,28 @@ sal_Bool SvxKerningItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, cons
 #else
     return sal_False;
 #endif
+}
+/* -----------------------------19.02.01 12:21--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SvxKerningItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Int16 nVal = GetValue();
+    if(nMemberId & CONVERT_TWIPS)
+        nVal = TWIP_TO_MM100(nVal);
+    rVal <<= nVal;
+    return sal_True;
+}
+// -----------------------------------------------------------------------
+sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
+{
+    sal_Int16 nVal;
+    if(!(rVal >>= nVal))
+        return sal_False;
+    if(nMemberId & CONVERT_TWIPS)
+        nVal = MM100_TO_TWIP(nVal);
+    SetValue(nVal);
+    return sal_True;
 }
 
 // class SvxCaseMapItem --------------------------------------------------
