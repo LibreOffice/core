@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-08 11:36:39 $
+#   last change: $Author: cl $ $Date: 2000-11-08 12:03:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ CXXFILES = \
         xmlkywd.cxx		\
         xmltkmap.cxx	\
         xmluconv.cxx	\
-        pkgurl.cxx		\
         PropertySetMerger.cxx
 
 SLOFILES =	\
@@ -111,7 +110,6 @@ SLOFILES =	\
         $(SLO)$/xmlkywd.obj		\
         $(SLO)$/xmltkmap.obj	\
         $(SLO)$/xmluconv.obj	\
-        $(SLO)$/pkgurl.obj		\
         $(SLO)$/PropertySetMerger.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
