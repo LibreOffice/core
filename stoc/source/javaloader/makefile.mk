@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-18 12:08:40 $
+#   last change: $Author: sb $ $Date: 2002-12-06 10:51:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,9 @@ SHL1TARGET= $(TARGET)
 SHL1STDLIBS=\
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)			\
-        $(SALLIB)
+        $(SALLIB) \
+        $(JVMACCESSLIB)
+
 SHL1VERSIONMAP=$(TARGET).map
 SHL1DEPN=		
 SHL1IMPLIB=		i$(TARGET)
