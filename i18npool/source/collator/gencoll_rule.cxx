@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:29:05 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sal/main.h>
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -113,7 +114,8 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
 U_CAPI uint8_t* U_EXPORT2
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
-int SAL_CALL main(int argc, char* argv[]) {
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
     FILE *fp;
 
     if (argc < 4) exit(-1);
