@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:08:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,10 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
             nFamily = XML_TYPE_PROP_PARAGRAPH;
         else if( IsXMLToken( rLocalName, XML_SECTION_PROPERTIES ) )
             nFamily = XML_TYPE_PROP_SECTION;
+        else if( IsDefaultStyle() && IsXMLToken( rLocalName, XML_TABLE_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TABLE;
+        else if( IsDefaultStyle() && IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TABLE_ROW;
         if( nFamily )
         {
             UniReference < SvXMLImportPropertyMapper > xImpPrMap =
@@ -316,7 +320,9 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 
 void XMLTextStyleContext::SetDefaults( )
 {
-    if (GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
+    if( ( GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) ||
+        ( GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE ) ||
+        ( GetFamily() == XML_STYLE_FAMILY_TABLE_ROW ) )
     {
         Reference < XMultiServiceFactory > xFactory ( GetImport().GetModel(), UNO_QUERY);
         if (xFactory.is())
@@ -455,18 +461,20 @@ void XMLTextStyleContext::FillPropertySet(
         // value; if we didn't find one, we'll set to false, the file
         // format default.
         // border-model: same
-        if( IsDefaultStyle() )
+        if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_ROW )
         {
             OUString sIsSplitAllowed =
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSplitAllowed" ) );
-
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ),
                         "property missing?" );
             rPropSet->setPropertyValue( sIsSplitAllowed,
                 (aContextIDs[1].nIndex == -1)
                 ? makeAny( false )
                 : GetProperties()[aContextIDs[1].nIndex].maValue );
+        }
 
+        if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
+        {
             OUString sCollapsingBorders =
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "CollapsingBorders" ) );
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ),
