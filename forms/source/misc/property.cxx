@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD, "Password");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DISPATCHURLINTERNAL, "DispatchURLInternal");
 
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PERSISTENCE_MAXTEXTLENGTH, "PersistenceMaxTextLength");
+IMPLEMENT_CONSTASCII_USTRING( PROPERTY_ENFORCE_FORMAT, "EnforceFormat" );
 
 //.........................................................................
 }
