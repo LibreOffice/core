@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tpf $ $Date: 2002-03-04 17:11:01 $
+#   last change: $Author: tpf $ $Date: 2002-03-05 11:51:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ PACKAGE =com$/sun$/star$/util$/logging
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    Level.idl\
+    LogLevel.idl\
     XLogger.idl\
     XLoggerRemote.idl\
     Logger.idl\
