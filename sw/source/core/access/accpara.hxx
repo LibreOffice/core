@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 09:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,15 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
 
     /// is nBegin...nEnd a valid range? (nEnd points past the last character)
     sal_Bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
+
+    /// Ensure ordered range (i.e. nBegin is smaller then nEnd)
+    inline sal_Bool OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
+    {
+        if( nBegin > nEnd )
+        {
+            sal_Int32 nTmp = nBegin; nBegin = nEnd; nEnd = nTmp;
+        }
+    }
 
 
 public:

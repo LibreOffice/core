@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 09:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,7 +622,7 @@ sal_Bool SwAccessibleParagraph::IsValidPosition(
 sal_Bool SwAccessibleParagraph::IsValidRange(
     sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength)
 {
-    return (nBegin >= 0) && (nBegin <= nEnd) && (nEnd <= nLength);
+    return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
 }
 
 
@@ -1195,6 +1195,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
     if ( IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
     {
+        OrderRange( nStartIndex, nEndIndex );
         return sText.copy(nStartIndex, nEndIndex-nStartIndex+1 );
     }
     else
