@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:54:38 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,14 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
+// xmlsec05, check with SFX team
+// MT: HACK
+#include <storagehelper.hxx>
+
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
@@ -163,6 +170,7 @@ using namespace ::drafts::com::sun::star::script;
 #include <unotools/ucbhelper.hxx>
 #include <tools/inetmime.hxx>
 #include <svtools/inettype.hxx>
+#include <osl/file.hxx>
 
 #include "appdata.hxx"
 #include "request.hxx"
@@ -188,6 +196,9 @@ using namespace ::drafts::com::sun::star::script;
 #include "helper.hxx"
 #include "doc.hrc"
 #include "helpid.hrc"
+// xmlsec05 - think Gunnar shouldn't do that...
+#include "../appl/app.hrc"
+#include "secmacrowarnings.hxx"
 #include "sfxdlg.hxx"
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
@@ -388,8 +399,12 @@ void SfxObjectShell::ModifyChanged()
     if ( pViewFrame )
         pViewFrame->GetBindings().Invalidate( SID_SAVEDOCS );
 
+
+    Invalidate( SID_SIGNATURE );
+    Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
+
     pSfxApp->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
-}
+    }
 
 //--------------------------------------------------------------------
 
@@ -1676,126 +1691,186 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
     }
 
-    /*
-     * take place only in case of api mode
-     * that is now uses NEVER_EXECUTE by default
-    if ( IsPreview() || eCreateMode != SFX_CREATE_MODE_STANDARD )
+    // get setting from configuration if required
+    sal_Int16 nAutoConformation = 0;
+    if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG
+      || pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION
+      || pImp->nMacroMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
     {
-        // no execution, no warnings
-        pImp->nMacroMode = eNEVER_EXECUTE;
-        return;
-    }
-    */
-
-    if( pImp->nMacroMode != MacroExecMode::NEVER_EXECUTE
-     || pImp->nMacroMode != MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-    {
-        SvtSecurityOptions aOpt;
-        sal_Int16 nAutoConformation = 0;
-
-        // get setting from configuration
-        if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
+           SvtSecurityOptions aOpt;
+        switch( aOpt.GetMacroSecurityLevel() )
         {
-            pImp->nMacroMode = aOpt.GetBasicMode();
+            case 3:
+                pImp->nMacroMode = MacroExecMode::FROM_LIST_NO_WARN;
+                break;
+            case 2:
+                pImp->nMacroMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
+                break;
+            case 1:
+                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE;
+                break;
+            case 0:
+                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                break;
+            default:
+                OSL_ENSURE( sal_False, "Unexpected macro security level!\n" );
+                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
         }
-        else if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
-        {
+
+        if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
             nAutoConformation = -1;
-            pImp->nMacroMode = aOpt.GetBasicMode();
-        }
         else if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
-        {
             nAutoConformation = 1;
-            pImp->nMacroMode = aOpt.GetBasicMode();
-        }
+    }
 
-        DBG_ASSERT( pImp->nMacroMode != MacroExecMode::USE_CONFIG
-                 && pImp->nMacroMode != MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION
-                 && pImp->nMacroMode != MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION,
-                    "Configuration should contain explicit value!\n" );
+    if ( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE
+      || pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
+        return;
 
-        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST || pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE )
+    try
+    {
+        uno::Reference< security::XDocumentDigitalSignatures > xSignatures(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ),
+            uno::UNO_QUERY );
+        String aReferer;
+
+        // get document location from medium name and check whether it is a trusted one
+        if ( xSignatures.is() )
         {
-            // user was not asked before
-            // ask one time and store result for all future calls
-            sal_Bool bWarn = aOpt.IsWarningEnabled();
-            sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-
-            // test against list of secure URLs
-            INetURLObject aURL( "macro:" );
-
-            // get referer from medium name
-            String aReferer;
+            ::rtl::OUString aLocation;
             aReferer = GetMedium()->GetName();
             if ( !aReferer.Len() )
             {
                 // for documents made from a template: get the name of the template
-                String aTempl( GetDocInfo().GetTemplateFileName() );
-                if ( aTempl.Len() )
-                    aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
+                aReferer = GetDocInfo().GetTemplateFileName();
             }
+            INetURLObject aURLReferer( aReferer );
+            if ( aURLReferer.removeSegment() )
+                aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
 
-            // no referer means OLE object or new document not from template
-            sal_Bool bIsSecureByList = !aReferer.Len() || aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer );
-            sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || bIsSecureByList;
-            //sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
-
-            if ( bSecure && bWarn || !bSecure && bConfirm )
+            if ( aLocation.getLength() && xSignatures->isLocationTrusted( aLocation ) )
             {
-                if ( !nAutoConformation )
+                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                return;
+            }
+        }
+
+        // at this point it is clear that the document is not in the secure location
+        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_NO_WARN )
+        {
+            pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+            return;
+        }
+
+        // check whether the document is signed with trusted certificate
+        if ( xSignatures.is() && pImp->nMacroMode != MacroExecMode::FROM_LIST )
+        {
+            ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aScriptingSignatureInformations;
+            uno::Reference < embed::XStorage > xStore;
+            sal_uInt16 nSignatureState = GetScriptingSignatureState();
+            if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
+            {
+                if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
-                    QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
-                    aBox.SetHelpId( HID_MACROCHECKDIALOG );
-                    aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
-                    aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
-                    String aText = aBox.GetMessText();
-                    if ( bSecure )
-                    {
-                        aBox.SetFocusButton( aBox.GetButtonId(0) );
-                        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
-                    }
-                    else
-                    {
-                        aBox.SetFocusButton( aBox.GetButtonId(1) );
-                        aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
-                    }
-
-                    aBox.SetMessText( aText );
-
-                    if ( !bIsSecureByList )
-                    {
-                        INetURLObject aObj( aReferer );
-                        if ( aObj.GetProtocol() == INET_PROT_FILE )
-                        {
-                            // for file URLs: possible add directory to list of secure URLs
-                            SfxResId aResId( RID_SVXSTR_SECURITY_ADDPATH );
-                            aObj.removeSegment();
-                            String aText( aResId );
-                            aText += aObj.PathToFileName();
-                            aBox.SetCheckBoxText( aText );
-                        }
-                    }
-
-                    bSecure = ( aBox.Execute() == RET_OK );
-
-                    if ( aBox.GetCheckBoxState() )
-                    {
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString > aURLs = aOpt.GetSecureURLs();
-                        sal_Int32 nLength = aURLs.getLength();
-                        aURLs.realloc( nLength+1 );
-                        INetURLObject aObj( aReferer );
-                        aObj.removeSegment();
-                        aURLs[nLength] = aObj.GetMainURL( INetURLObject::NO_DECODE );
-                        aOpt.SetSecureURLs( aURLs );
-                    }
+                    WarningBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) ).Execute();
+                    pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+                    return;
                 }
-                else
-                    bSecure = ( nAutoConformation > 0 );
+            }
+            else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK )
+            {
+                // HACK: No Storage API befoer CWS MAV09
+                rtl::OUString aDocFileNameURL = GetMedium()->GetName();
+                xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
+                           aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
+                if ( xStore.is() )
+                       aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( xStore );
             }
 
-            pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
+            sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
+
+            // from now on aReferer is the system file path
+            // aReferer = INetURLObject::decode( aReferer, '%', INetURLObject::DECODE_WITH_CHARSET );
+            ::rtl::OUString aSystemFileURL;
+            if ( osl::FileBase::getSystemPathFromFileURL( aReferer, aSystemFileURL ) == osl::FileBase::E_None )
+                aReferer = aSystemFileURL;
+
+            if ( nNumOfInfos )
+            {
+                for ( sal_Int32 nInd = 0; nInd < nNumOfInfos; nInd++ )
+                    if ( xSignatures->isAuthorTrusted( aScriptingSignatureInformations[nInd].Signer ) )
+                    {
+                        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                        return;
+                    }
+
+                if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+                {
+                    MacroWarning aDlg( NULL, true );
+
+                    aDlg.SetDocumentURL( aReferer );
+
+                    if( nNumOfInfos > 1 )
+                        aDlg.SetStorage( xStore, aScriptingSignatureInformations );
+                    else
+                        aDlg.SetCertificate( aScriptingSignatureInformations[ 0 ].Signer );
+
+                    USHORT nRet = aDlg.Execute();
+                    pImp->nMacroMode = ( nRet == RET_OK ) ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
+                    return;
+
+                }
+            }
+            else if( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
+            {
+                MacroWarning aWarning( NULL, false );
+                aWarning.SetDocumentURL( aReferer );
+                if( aWarning.Execute() != RET_OK )
+                    return;
+            }
+        }
+
+        // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
+        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+        {
+            if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+                WarningBox( NULL, SfxResId( RID_WARNING_MACROSDISABLED ) ).Execute();
+               pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+            return;
         }
     }
+    catch ( uno::Exception& )
+    {
+        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_NO_WARN
+          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+        {
+            pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+            return;
+        }
+    }
+
+    // conformation is required
+    sal_Bool bSecure = sal_False;
+    if ( !nAutoConformation )
+    {
+        String aReferer = GetMedium()->GetName();
+        if ( !aReferer.Len() )
+            aReferer = GetDocInfo().GetTemplateFileName();
+        ::rtl::OUString aSystemFileURL;
+        if ( osl::FileBase::getSystemPathFromFileURL( aReferer, aSystemFileURL ) == osl::FileBase::E_None )
+            aReferer = aSystemFileURL;
+
+        MacroWarning aWarning( NULL, false );
+        aWarning.SetDocumentURL( aReferer );
+        bSecure = ( aWarning.Execute() == RET_OK );
+    }
+    else
+        bSecure = ( nAutoConformation > 0 );
+
+    pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
 }
 
 sal_Int16 SfxObjectShell::GetMacroMode()
