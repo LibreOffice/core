@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:52:30 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:41:01 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -149,7 +149,7 @@ CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
-	cd $(OUT_BIN) && $(basename $@)
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
 
 .PHONY: clean
 clean :
