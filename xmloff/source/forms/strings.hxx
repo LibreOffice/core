@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:31:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,    "CellRange");
     XMLFORM_CONSTASCII_STRING( PROPERTY_ADDRESS,            "Address");
     XMLFORM_CONSTASCII_STRING( PROPERTY_FILE_REPRESENTATION,"PersistentRepresentation");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_RICH_TEXT,          "RichText");
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
