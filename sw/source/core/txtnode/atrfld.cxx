@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:34:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,20 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     pField = rFld.Copy();
 }
 
+// #i24434#
+// Since Items are used in ItemPool and in default constructed ItemSets with
+// full pool range, all items need to be clonable. Thus, this one needed to be
+// corrected
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     : SfxPoolItem( RES_TXTATR_FIELD ),
-    SwClient( rAttr.GetFld()->GetTyp() ),
-    pTxtAttr( 0 )
+    pTxtAttr( 0 ),
+    pField( 0 )
 {
-    pField = rAttr.GetFld()->Copy();
+    if(rAttr.GetFld())
+    {
+        rAttr.GetFld()->GetTyp()->Add(this);
+        pField = rAttr.GetFld()->Copy();
+    }
 }
 
 SwFmtFld::~SwFmtFld()
