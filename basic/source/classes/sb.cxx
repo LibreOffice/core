@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-08 13:24:59 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,27 @@ void StarBASIC::InitAllModules( void )
         StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
         if( pBasic )
             pBasic->InitAllModules();
+    }
+}
+
+// #88329 Put modules back to not initialised state to
+// force reinitialisation at next start
+void StarBASIC::DeInitAllModules( void )
+{
+    // Eigene Module initialisieren
+    for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
+    {
+        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        pModule->pImage->bInit = false;
+    }
+    // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
+    // Wenn ja, auch dort initialisieren
+    for ( USHORT nObj = 0; nObj < pObjs->Count(); nObj++ )
+    {
+        SbxVariable* pVar = pObjs->Get( nObj );
+        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
+        if( pBasic )
+            pBasic->DeInitAllModules();
     }
 }
 
