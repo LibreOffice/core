@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: frame_XStorable.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:50:15 $ 
+'*  last change:$Date: 2003-03-05 15:24:21 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -124,7 +124,7 @@ On Error Goto ErrHndl
     Out.Log("New Location: " + cLocation1)
     oDoc.getDocumentInfo().setPropertyValue("Title", "frame_XStorable")
     oObj.storeToURL(cLocation1, DimArray())
-    oDoc1 = StarDesktop.loadComponentFromUrl(cLocation1, "sc.ScModelObj.XStorable.tmp.bak", 40, args() )
+    oDoc1 = StarDesktop.loadComponentFromUrl(cLocation1, "sc.ScModelObj.XStorable.tmp.bak", 40, DimArray() )
     bOK = bOK AND (oDoc1.getDocumentInfo().getPropertyValue("Title") = "frame_XStorable")
     if bOK then Out.Log("Document titles are equal")
     oDoc1.dispose()
@@ -135,7 +135,7 @@ On Error Goto ErrHndl
     oObj.storeAsURL(cLocation1, DimArray())
     oDoc.getDocumentInfo().setPropertyValue("Title", "frame_XStorable12345")
     oObj.store()
-    oDoc1 = StarDesktop.loadComponentFromUrl(cLocation1, "sc.ScModelObj.XStorable.tmp.bak", 40, args() )
+    oDoc1 = StarDesktop.loadComponentFromUrl(cLocation1, "sc.ScModelObj.XStorable.tmp.bak", 40, DimArray() )
     bOK = bOK AND (oDoc1.getDocumentInfo().getPropertyValue("Title") = "frame_XStorable12345")
     if bOK then Out.Log("Document titles are equal")
     oDoc1.dispose()
