@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDefaultNumberingProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:16 $
+ *  last change:$Date: 2003-09-08 11:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.Locale;
 import com.sun.star.text.XDefaultNumberingProvider;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.text.XDefaultNumberingProvider</code>
