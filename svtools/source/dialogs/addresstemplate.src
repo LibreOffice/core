@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:07:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ italian ] = "Sorgente rubrica";
         Text[ danish ] = "Address Book Source";
         Text[ swedish ] = "Adressbokk‰lla";
-        Text[ polish ] = "èrÛd≥o ksiπøki adresowej";
+        Text[ polish ] = "?rÛd≥o ksiπøki adresowej";
         Text[ portuguese_brazilian ] = "Address Book Source";
         Text[ japanese ] = "±ƒﬁ⁄Ωí†ø∞Ω";
         Text[ korean ] = "¡÷º“∑œ º“Ω∫";
@@ -126,7 +126,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ italian ] = "Sorgente dati";
         Text[ danish ] = "Datasource";
         Text[ swedish ] = "Datak‰lla";
-        Text[ polish ] = "èrÛd≥o danych";
+        Text[ polish ] = "?rÛd≥o danych";
         Text[ portuguese_brazilian ] = "Datasource";
         Text[ japanese ] = "√ﬁ∞¿ø∞Ω";
         Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫";
@@ -562,7 +562,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ italian ] = "Localit‡";
     Text[ danish ] = "City";
     Text[ swedish ] = "Ort";
-    Text[ polish ] = "MiejscowoúÊ";
+    Text[ polish ] = "Miejscowo?Ê";
     Text[ portuguese_brazilian ] = "City";
     Text[ japanese ] = "ìsìπï{åßñº";
     Text[ korean ] = "¡ˆø™(µµΩ√)";
