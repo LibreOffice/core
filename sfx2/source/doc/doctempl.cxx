@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:36:23 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2678,7 +2678,10 @@ sal_Bool getTextProperty_Impl( Content& rContent,
         aAnyValue >>= rPropValue;
 
         if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
-            SfxURLRelocator_Impl( ::comphelper::getProcessServiceFactory() ).makeAbsoluteURL( rPropValue );
+        {
+            SfxURLRelocator_Impl aRelocImpl( ::comphelper::getProcessServiceFactory() );
+            aRelocImpl.makeAbsoluteURL( rPropValue );
+        }
 
         bGotProperty = sal_True;
     }
