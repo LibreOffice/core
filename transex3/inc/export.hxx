@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:15:49 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,8 +375,9 @@ private:
 
     bool PairedListFallback( ByteString& sText , ResData& aResData );
 
-        ByteString GetPairedListID( const ByteString& sText );
-    ByteString GetPairedListString( const ByteString& sText );
+    ByteString GetPairedListID      ( const ByteString& sText );
+    ByteString GetPairedListString  ( const ByteString& sText );
+    ByteString Export::StripList    ( const ByteString& sText );
 
     void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
