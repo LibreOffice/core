@@ -70,16 +70,19 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-lnsl -lsocket -ldl -lm -lstlport_gcc
-STDLIBCUIST=-lnsl -lsocket -ldl -lm -lstlport_gcc
-STDLIBGUIMT=-lpthread -ldl -lm -lstlport_gcc
-STDLIBCUIMT=-lpthread -ldl -lm -lstlport_gcc
+STDLIBGUIST=-lnsl -lsocket -ldl -lm
+STDLIBCUIST=-lnsl -lsocket -ldl -lm
+STDLIBGUIMT=-lpthread -ldl -lm
+STDLIBCUIMT=-lpthread -ldl -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm -lstlport_gcc
-STDSHLCUIMT=-lpthread -ldl -lm -lstlport_gcc
+STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm
+STDSHLCUIMT=-lpthread -ldl -lm
 
 STDLIBGUIST+=-lXm -lXt -lX11
 STDLIBGUIMT+=-lXm -lXt -lX11
+
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
 LIBMGR=ar
 LIBFLAGS=-r
