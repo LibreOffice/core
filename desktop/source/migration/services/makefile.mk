@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 15:51:30 $
+#   last change: $Author: rt $ $Date: 2005-01-27 14:27:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/jvmfwk.obj \
-        $(SLO)$/cexports.obj
+        $(SLO)$/cexports.obj \
+        $(SLO)$/basicmigration.obj
 
 SHL1TARGET=$(TARGET)
 SHL1VERSIONMAP = migrationoo2.map
@@ -88,6 +89,8 @@ SHL1STDLIBS= \
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
     $(SALLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB)	\
     $(JVMFWKLIB)
 
 SHL1DEPN=
