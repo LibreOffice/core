@@ -28,38 +28,30 @@
 #ifndef _STYLE_H
 #define _STYLE_H
 #include <libwpd/libwpd.h>
-
-class DocumentElement;
-
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
+#include "DocumentElement.hxx"
 
 class TopLevelElementStyle
 {
 public:
     TopLevelElementStyle() : mpsMasterPageName(NULL) { }
     virtual ~TopLevelElementStyle() { if (mpsMasterPageName) delete mpsMasterPageName; }
-    void setMasterPageName(UTF8String &sMasterPageName) { mpsMasterPageName = new UTF8String(sMasterPageName); }
-    const UTF8String * getMasterPageName() const { return mpsMasterPageName; }
+    void setMasterPageName(WPXString &sMasterPageName) { mpsMasterPageName = new WPXString(sMasterPageName); }
+    const WPXString * getMasterPageName() const { return mpsMasterPageName; }
 
 private:
-    UTF8String *mpsMasterPageName;
+    WPXString *mpsMasterPageName;
 };
 
 class Style
 {
  public:
-    Style(const UTF8String &psName) : msName(psName) {}
+    Style(const WPXString &psName) : msName(psName) {}
     virtual ~Style() {}
 
-    virtual void write(Reference < XDocumentHandler > &xHandler) const {};
-    const UTF8String &getName() const { return msName; }
+    virtual void write(DocumentHandler &xHandler) const {};
+    const WPXString &getName() const { return msName; }
 
  private:
-    UTF8String msName;
+    WPXString msName;
 };
 #endif
