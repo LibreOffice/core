@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import java.net.ConnectException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.helper.Bootstrap;
@@ -170,12 +171,7 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
     {
         Object          object;
         mComponentContext   = Bootstrap.createInitialComponentContext(null);
-        mComponentFactory   = mComponentContext.getServiceManager();
-        object              = mComponentFactory.createInstanceWithContext(
-            "com.sun.star.bridge.UnoUrlResolver", mComponentContext);
-        XUnoUrlResolver urlresolver;
-        urlresolver         = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, object);
+        XUnoUrlResolver urlresolver = UnoUrlResolver.create(mComponentContext);
         object              = urlresolver.resolve(
             "uno:socket,host=localhost,port=" +
             port +
