@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:07:50 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,9 +214,8 @@ namespace xmloff
             m_aValues.push_back(aNewValue);
         }
         else
-#if SUPD<622
-        if (0 != _rLocalName.compareToAscii("style-name"))
-#endif
+        if ( 0 != _rLocalName.compareToAscii("column-style-name") )
+            // TODO: importing the column-style-name not yet implemented
         {
             OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
         }
@@ -558,6 +557,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/07/10 17:07:50  mtg
+ *  updated namespace handling
+ *
  *  Revision 1.12  2001/03/29 09:44:19  fs
  *  enableTrackAttributes to prevent the (expensive) attribute tracking
  *
