@@ -59,8 +59,6 @@ sw	sw\source\core\unocore					nmake	-	all	sw_uco NULL
 sw  sw\source\core\access                   nmake   -   all sw_acc NULL
 sw  sw\source\filter\ascii                  nmake   -   all sw_ascii NULL
 sw	sw\source\filter\basflt					nmake	-	all	sw_bsflt NULL
-sw	sw\source\filter\debug					nmake	-	w	sw_dbugw NULL
-sw	sw\source\filter\debug					nmake	-	u	sw_dbugu NULL
 sw	sw\source\filter\excel					nmake	-	all	sw_excel NULL
 sw	sw\source\filter\html					nmake	-	all	sw_html NULL
 sw	sw\source\filter\lotus					nmake	-	all	sw_lotus NULL
