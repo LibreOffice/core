@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 14:07:25 $
+#   last change: $Author: obo $ $Date: 2004-11-17 14:08:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,10 @@ XCUFILES= \
     ChartWindowState.xcu \
     DbuCommands.xcu \
     BaseWindowState.xcu \
+    DbQueryWindowState.xcu \
+    DbTableWindowState.xcu \
+    DbRelationWindowState.xcu \
+    DbBrowserWindowState.xcu \
     DrawImpressCommands.xcu \
     GenericCommands.xcu \
     MathCommands.xcu \
@@ -104,6 +108,11 @@ LOCALIZEDFILES= \
     ChartCommands.xcu \
     ChartWindowState.xcu \
     DbuCommands.xcu \
+    BaseWindowState.xcu \
+    DbQueryWindowState.xcu \
+    DbTableWindowState.xcu \
+    DbRelationWindowState.xcu \
+    DbBrowserWindowState.xcu \
     DrawImpressCommands.xcu \
     GenericCommands.xcu \
     MathCommands.xcu \
