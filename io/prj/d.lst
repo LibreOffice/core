@@ -4,6 +4,7 @@
 ..\source\connector\connectr.xml %_DEST%\xml%_EXT%\connectr.xml
 ..\source\stm\stm.xml %_DEST%\xml%_EXT%\stm.xml
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
