@@ -6,6 +6,7 @@
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"TableColumnSeparators"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"Height"
 "SwXTextTableRow";"com::sun::star::text::TextTableRow";"IsAutoHeight"
+"SwXTextTableRow";"com::sun::star::text::TextTableRow";"IsSplitAllowed#optional"
 "SwXTextTableRow";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextTableRow";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextTableRow";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

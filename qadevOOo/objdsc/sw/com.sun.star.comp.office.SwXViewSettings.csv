@@ -27,6 +27,7 @@
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ShowOnlineLayout"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ZoomType"
 "SwXViewSettings";"com::sun::star::text::ViewSettings";"ZoomValue"
+"SwXViewSettings";"com::sun::star::text::ViewSettings";"IsExecuteHyperlinks#optional"
 "SwXViewSettings";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXViewSettings";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXViewSettings";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
