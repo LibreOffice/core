@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:04:22 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ public:
     inline const    SwDoc* GetDoc() const;
 
     // liegt der Node im Sichtbarenbereich der Shell ?
-    BOOL IsVisible( ViewShell* pSh = 0 ) const;
+    BOOL IsInVisibleArea( ViewShell* pSh = 0 ) const;
     // befindet sich der Node in einem geschuetzten Bereich?
     BOOL IsInProtectSect() const;
     // befindet sich der Node in irgendetwas geschuetzten ?
