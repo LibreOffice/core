@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,8 @@ void SwRTFParser::Continue( int nToken )
             pDoc->SplitNode( *pPos );
 
             pPam->Move( fnMoveBackward );
-            pDoc->SetTxtFmtColl( *pPam, pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+            pDoc->SetTxtFmtColl( *pPam, pDoc->GetTxtCollFromPoolSimple
+                                 ( RES_POOLCOLL_STANDARD, FALSE ));
 
             // verhinder das einlesen von Tabellen in Fussnoten / Tabellen
             ULONG nNd = pPos->nNode.GetIndex();
@@ -903,7 +904,7 @@ void SwRTFParser::InsertPara()
 
     SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
     if( !pColl )
-        pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+        pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
@@ -1325,7 +1326,8 @@ void SwRTFParser::ReadDocControls( int nToken )
         {
             SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
             if( !pColl )
-                pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+                pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                        FALSE );
             pDoc->SetTxtFmtColl( *pPam, pColl );
         }
     }
@@ -1382,7 +1384,8 @@ SwPageDesc* SwRTFParser::_MakeNewPageDesc( int bFirst )
 {
     USHORT* pNo = bFirst ? &nAktFirstPageDesc : &nAktPageDesc;
     USHORT nNew = pDoc->MakePageDesc( ViewShell::GetShellRes()->
-                    GetPageDescName( pDoc->GetPageDescCnt(), bFirst ), 0 );
+                    GetPageDescName( pDoc->GetPageDescCnt(), bFirst ), 0,
+                                      FALSE );
     SwPageDesc& rAkt = pDoc->_GetPageDesc( nNew );
     SwPageDesc& rOld = pDoc->_GetPageDesc( *pNo );
     pDoc->CopyPageDesc( rOld, rAkt, FALSE );
@@ -2364,7 +2367,7 @@ void SwRTFParser::ReadPageDescTbl()
     // das default-Style schon gleich am ersten Node setzen
     SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
     if( !pColl )
-        pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+        pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     int nToken, bSaveChkStyleAttr = IsChkStyleAttr();
@@ -2425,7 +2428,8 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_PGDSC:
             if( nPos)   // kein && wg MAC
               if (nPos != pDoc->MakePageDesc(
-                                      String::CreateFromInt32( nTokenValue ) ) )
+                                      String::CreateFromInt32( nTokenValue ),
+                                    FALSE ) )
                 ASSERT( FALSE, "PageDesc an falscher Position" );
 
             pPg = &pDoc->_GetPageDesc( nPos );
@@ -3063,7 +3067,8 @@ SwTxtFmtColl* SwRTFParser::MakeColl( const String& rName, USHORT nPos,
     {
         if( !nPos )
         {
-            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                    FALSE);
             pColl->SetOutlineLevel( nOutlineLevel );
             return pColl;
         }
@@ -3089,7 +3094,8 @@ SwTxtFmtColl* SwRTFParser::MakeColl( const String& rName, USHORT nPos,
 
     // Collection neu erzeugen
     pColl = pDoc->MakeTxtFmtColl( aNm,
-                    pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
+                    pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                    FALSE ) );
 
     // sollte es eine Vorlage aus dem Pool sein ??
     USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aNm, GET_POOLID_TXTCOLL );
@@ -3194,7 +3200,8 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle 
             // ist die ueberhaupt als Style vorhanden ?
             pDerivedColl = pDerivedStyle
                     ? MakeStyle( nStyleNo, *pDerivedStyle )
-                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+                    : pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                      FALSE );
         }
 
         if( pColl == pDerivedColl )
@@ -3228,7 +3235,8 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle 
             SvxRTFStyleType* pMkStyle = GetStyleTbl().Get( nStyleNo );
             pNext = pMkStyle
                     ? MakeStyle( nStyleNo, *pMkStyle )
-                    : pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+                    : pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                      FALSE );
         }
         pColl->SetNextTxtFmtColl( *pNext );
     }

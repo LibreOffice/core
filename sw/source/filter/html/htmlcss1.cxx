@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,8 +670,8 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
 const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
 {
-    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML )
-               ->GetMaster().GetBackground();
+    return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE )
+        ->GetMaster().GetBackground();
 }
 
 sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
@@ -1377,7 +1377,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( USHORT nPoolId ) const
 {
     USHORT nOldArrLen = pDoc->GetTxtFmtColls()->Count();
 
-    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( nPoolId );
+    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPoolSimple( nPoolId, FALSE );
 
     if( bIsNewDoc )
     {
@@ -1493,7 +1493,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( USHORT nTxtColl,
 
 SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
 {
-    return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
+    return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
 }
 
 static SwPageDesc *FindPageDesc( SwDoc *pDoc, USHORT nPoolId, USHORT& rPage )
@@ -1509,7 +1509,7 @@ static SwPageDesc *FindPageDesc( SwDoc *pDoc, USHORT nPoolId, USHORT& rPage )
 const SwPageDesc *SwCSS1Parser::GetPageDesc( USHORT nPoolId, BOOL bCreate )
 {
     if( RES_POOLPAGE_HTML == nPoolId )
-        return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
+        return pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
 
     USHORT nPage;
     const SwPageDesc *pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
@@ -1521,10 +1521,12 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( USHORT nPoolId, BOOL bCreate )
         if( RES_POOLPAGE_FIRST == nPoolId )
             pMasterPageDesc = FindPageDesc( pDoc, RES_POOLPAGE_RIGHT, nPage );
         if( !pMasterPageDesc )
-            pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
+            pMasterPageDesc = pDoc->GetPageDescFromPoolSimple
+                ( RES_POOLPAGE_HTML, FALSE );
 
         // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
-        SwPageDesc *pNewPageDesc = pDoc->GetPageDescFromPool( nPoolId );
+        SwPageDesc *pNewPageDesc = pDoc->
+            GetPageDescFromPoolSimple( nPoolId, FALSE );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
         pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
@@ -2010,7 +2012,7 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
         return FALSE;
 
     SwPageDesc *pMasterPageDesc =
-        pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
+        pDoc->GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE );
 
     SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyStr, FALSE );
     if( pPageEntry )

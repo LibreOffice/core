@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,8 @@ void SwRTFParser::ReadTable( int nToken )
         // setze das default Style
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
         if( !pColl )
-            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                    FALSE );
 
         USHORT nStt = 0;
         if( bNewTbl )
@@ -835,7 +836,8 @@ void SwRTFParser::NewTblLine()
     {
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
         if( !pColl )
-            pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                    FALSE );
         pPam->SetMark();
 
         pLine = (*pLns)[ pLns->Count()-1 ];
@@ -883,6 +885,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2002/11/18 12:22:53  cmc
+      #i9243# you can't put tables in footnotes, the unfortunate rtf didn't know that
+
       Revision 1.8  2002/09/26 14:15:58  cmc
       #101746# Add cell padding import and export
 

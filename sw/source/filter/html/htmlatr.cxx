@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,9 +559,11 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // exportiert werden. Fuer Nicht-Styles-Export sollte die der
         // HTML-Vorlage als Referenz dienen
         if( !bOutStyles && pTemplate )
-            pRefFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+            pRefFmt = pTemplate->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
+                                                           FALSE);
         else
-            pRefFmt = pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+            pRefFmt = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
+                                                      FALSE);
     }
 
     if( pRefFmt || nDeep==0 )
@@ -2333,8 +2335,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( nLeft || nRight )
             {
                 const SwFrmFmt& rPgFmt =
-                    rHTMLWrt.pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML )->GetMaster();
-
+                    rHTMLWrt.pDoc->GetPageDescFromPoolSimple
+                    ( RES_POOLPAGE_HTML, FALSE )->GetMaster();
                 const SwFmtFrmSize& rSz   = rPgFmt.GetFrmSize();
                 const SvxLRSpaceItem& rLR = rPgFmt.GetLRSpace();
                 const SwFmtCol& rCol = rPgFmt.GetCol();

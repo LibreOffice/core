@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style
     // that maps to <P>, and that's especially the standard style
-      pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+      pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT, FALSE );
 
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
@@ -1291,7 +1291,8 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
         if( POOLGRP_NOCOLLID & nPoolFmtId )
             pRefFmt = pTemplate->GetCharFmtFromPool( nPoolFmtId );
         else
-            pRefFmt = pTemplate->GetTxtCollFromPool( nPoolFmtId );
+            pRefFmt = pTemplate->GetTxtCollFromPoolSimple( nPoolFmtId,
+                                                           FALSE );
     }
 
     return pRefFmt;
@@ -1964,8 +1965,10 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         else
         {
             if( nPoolFmtId==RES_POOLCOLL_TEXT )
-                rHTMLWrt.aScriptParaStyles.Insert(
-                        new String( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )->GetName() ) );
+                rHTMLWrt.aScriptParaStyles.Insert
+                    (new String( pDoc->GetTxtCollFromPoolSimple
+                                 ( RES_POOLCOLL_STANDARD, FALSE )->GetName()
+                                 ) );
             rHTMLWrt.aScriptParaStyles.Insert( new String( rFmt.GetName() ) );
         }
         bHasScriptDependencies = sal_True;
@@ -1998,9 +2001,9 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     const SwPageDesc* pRefPageDesc = 0;
     if( !bExtRef )
-        pRefPageDesc = pDoc->GetPageDescFromPool( nRefPoolId );
+        pRefPageDesc = pDoc->GetPageDescFromPoolSimple( nRefPoolId, FALSE );
     else if( pTemplate )
-        pRefPageDesc = pTemplate->GetPageDescFromPool( nRefPoolId );
+        pRefPageDesc = pTemplate->GetPageDescFromPoolSimple( nRefPoolId, FALSE );
 
     String aSelector( '@' );
     aSelector.AppendAscii( sCSS1_page );

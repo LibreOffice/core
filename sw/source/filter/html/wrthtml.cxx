@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     nLastLFPos = 0;
     nDefListLvl = 0;
     nDefListMargin = ((pTemplate && !bCfgOutStyles) ? pTemplate : pDoc)
-        ->GetTxtCollFromPool( RES_POOLCOLL_HTML_DD )
+        ->GetTxtCollFromPoolSimple( RES_POOLCOLL_HTML_DD, FALSE )
         ->GetLRSpace().GetTxtLeft();
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
@@ -1183,7 +1183,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
     // und sich geaendert hat.
     OutBodyColor( sHTML_O_text,
-                  pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ),
+                  pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
+                                                  FALSE ),
                   *this );
 
     // Farben fuer (un)besuchte Links

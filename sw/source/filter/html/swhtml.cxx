@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
         if( !rDoc.IsHTMLMode() )
         {
             rDoc.Insert( rPam, SwFmtPageDesc(
-                rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML )) );
+                rDoc.GetPageDescFromPoolSimple( RES_POOLPAGE_HTML, FALSE )) );
         }
     }
 
