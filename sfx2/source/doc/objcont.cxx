@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:50:25 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,7 +1675,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 // but only if template name is set, not if only a template filename is given
                 String aMsg( SfxResId( STR_TEMPL_RESET ) );
                 aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-                if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_NO )
+                if( QueryBox( GetDialogParent(), WB_YES_NO, aMsg ).Execute() == RET_NO )
                 {
                     String aStr;
                     pInfo->SetTemplateFileName( aStr );
@@ -1733,7 +1733,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 if ( aTemplDate > aInfoDate )
                 {
                     // ask user
-                    QueryBox aBox( 0, SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
+                    QueryBox aBox( GetDialogParent(), SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
                     if ( RET_YES == aBox.Execute() )
                         bLoad = TRUE;
                     else

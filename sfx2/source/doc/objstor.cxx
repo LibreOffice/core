@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-14 15:02:58 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
 
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -547,6 +543,15 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             xPer->DoSave();
             xPer->DoSaveCompleted( 0 );
         }
+
+        BOOL bHasMacros = FALSE;
+        if ( xStor->IsOLEStorage() )
+            bHasMacros = BasicManager::HasBasicManager( *xStor );
+        else
+            bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
+
+        if ( bHasMacros )
+            AdjustMacroMode( String() );
 
         // Load
         const String aOldURL( INetURLObject::GetBaseURL() );
@@ -2094,13 +2099,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
 
         // Password
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
-        SfxApplication *pApp = SFX_APP();
-        SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
-        Window* pWindow = NULL;
-        if ( pFrame )
-            pWindow = VCLUnoHelper::GetWindow( pFrame->GetFrameInterface()->getContainerWindow() );
-
-        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( pWindow, pApp->GetPool(), pMedium ) )
+        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( GetDialogParent( &rMedium ), SFX_APP()->GetPool(), pMedium ) )
         {
             String aPasswd;
             if ( GetPasswd_Impl(pMedium->GetItemSet(), aPasswd) )
