@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:31:52 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,10 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OPropertyImport::OPropertyImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::vos::ORef< OAttribute2Property >& _rAttributeMap)
+            OAttribute2Property& _rAttributeMap)
         :SvXMLImportContext(_rImport, _nPrefix, _rName)
-        ,m_xAttributeMap(_rAttributeMap)
+        ,m_rAttributeMap(_rAttributeMap)
     {
-        OSL_ENSURE(m_xAttributeMap.isValid(), "OPropertyImport::OPropertyImport: invalid attribute map (this most probably will crash later)!");
     }
 
     //---------------------------------------------------------------------
@@ -148,7 +147,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        const OAttribute2Property::AttributeAssignment* pProperty = m_xAttributeMap->getAttributeTranslation(_rLocalName);
+        const OAttribute2Property::AttributeAssignment* pProperty = m_rAttributeMap.getAttributeTranslation(_rLocalName);
         if (pProperty)
         {
             // create and store a new PropertyValue
@@ -439,6 +438,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:31:52  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 04.12.00 15:36:58  fs
  ************************************************************************/

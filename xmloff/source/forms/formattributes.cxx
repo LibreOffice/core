@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ namespace xmloff
             case faCommandType:     return "command-type";
             case faEscapeProcessing:return "escape-processing";
             case faDatasource:      return "datasource";
-            case faDetailFiels:     return "detaild-fiels";
+            case faDetailFiels:     return "detail-fiels";
             case faFilter:          return "filter";
             case faIgnoreResult:    return "ignore-result";
             case faMasterFields:    return "master-fields";
@@ -320,6 +320,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

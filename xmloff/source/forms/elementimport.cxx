@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:31:03 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,16 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_ATTRIBLISTMERGE_HXX_
+#include "attriblistmerge.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -88,6 +98,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::xml;
+    using namespace ::com::sun::star::util;
 
     //=====================================================================
     struct PropertyValueLess
@@ -110,30 +121,16 @@ namespace xmloff
     //=====================================================================
     //= OElementNameMap
     //=====================================================================
+    //---------------------------------------------------------------------
+    OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
+
+    //---------------------------------------------------------------------
     const OControlElement::ElementType& operator ++(OControlElement::ElementType& _e)
     {
         sal_Int32 nAsInt = static_cast<sal_Int32>(_e);
         _e = static_cast<OControlElement::ElementType>( ++nAsInt );
         return _e;
     }
-
-    /** helper class which allows fast translation of xml tag names into element types.
-    */
-    class OElementNameMap : public OControlElement
-    {
-    protected:
-        DECLARE_STL_USTRINGACCESS_MAP( ElementType, MapString2Element );
-        static MapString2Element    s_sElementTranslations;
-
-    protected:
-        OElementNameMap() { }
-
-    public:
-        static ElementType getElementType(const ::rtl::OUString& _rName);
-    };
-
-    //---------------------------------------------------------------------
-    OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
 
     //---------------------------------------------------------------------
     OControlElement::ElementType OElementNameMap::getElementType(const ::rtl::OUString& _rName)
@@ -154,16 +151,13 @@ namespace xmloff
     //= OElementImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OElementImport::OElementImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::vos::ORef< OAttribute2Property >& _rAttributeMap,
-            const Reference< XNameContainer >& _rxParentContainer,
-            const Reference< XMultiServiceFactory >& _rxORB)
-        :OPropertyImport(_rImport, _nPrefix, _rName, _rAttributeMap)
+    OElementImport::OElementImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer)
+        :OPropertyImport(_rImport.getGlobalContext(), _nPrefix, _rName, _rImport.getAttributeMap())
         ,m_xParentContainer(_rxParentContainer)
-        ,m_xORB(_rxORB)
+        ,m_rFormImport(_rImport)
     {
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::OElementImport: invalid parent container!");
-        OSL_ENSURE(m_xORB.is(), "OElementImport::OElementImport: invalid service factory!");
     }
 
     //---------------------------------------------------------------------
@@ -333,7 +327,7 @@ namespace xmloff
         Reference< XPropertySet > xReturn;
         if (m_sServiceName.getLength())
         {
-            Reference< XInterface > xPure = m_xORB->createInstance(m_sServiceName);
+            Reference< XInterface > xPure = m_rFormImport.getServiceFactory()->createInstance(m_sServiceName);
             OSL_ENSURE(xPure.is(),
                         ::rtl::OString("OElementImport::createElement: service factory gave me no object (service name: ")
                     +=  ::rtl::OString(m_sServiceName.getStr(), m_sServiceName.getLength(), RTL_TEXTENCODING_ASCII_US)
@@ -350,10 +344,18 @@ namespace xmloff
     //= OControlImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlImport::OControlImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::vos::ORef< OAttribute2Property >& _rAttributeMap,
-            const Reference< XNameContainer >& _rxParentContainer, const Reference< XMultiServiceFactory >& _rxORB)
-        :OElementImport(_rImport, _nPrefix, _rName, _rAttributeMap, _rxParentContainer, _rxORB)
+    OControlImport::OControlImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer)
+        :OElementImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+        ,m_eElementType(OControlElement::UNKNOWN)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OControlImport::OControlImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
+        :OElementImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+        ,m_eElementType(_eType)
     {
     }
 
@@ -369,17 +371,59 @@ namespace xmloff
             OElementImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
 
+    //---------------------------------------------------------------------
+    void OControlImport::EndElement()
+    {
+        OSL_ENSURE(m_xElement.is(), "OControlImport::EndElement: invalid control!");
+        // register our control with it's id
+        if (m_xElement.is() && m_sControlId.getLength())
+            m_rFormImport.getControlIdMap().registerControlId(m_xElement, m_sControlId);
+        // it's allowed to have no control id. In this case we're importing a column
+
+        OElementImport::EndElement();
+    }
+
+    //=====================================================================
+    //= OReferredControlImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OReferredControlImport::OReferredControlImport(
+            IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OReferredControlImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlImport::StartElement(_rxAttrList);
+
+        // the base class should have created the control, so we can register it
+        if (m_sReferringControls.getLength())
+            m_rFormImport.getControlIdMap().registerControlReferences(m_xElement, m_sReferringControls);
+    }
+
+    //---------------------------------------------------------------------
+    void OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
+        const ::rtl::OUString& _rValue)
+    {
+        static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_FOR));
+        if (_rLocalName == s_sReferenceAttributeName)
+            m_sReferringControls = _rValue;
+        else
+            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+    }
+
     //=====================================================================
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OListAndComboImport::OListAndComboImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::vos::ORef< OAttribute2Property >& _rAttributeMap,
-            OControlElement::ElementType _eType,
+    OListAndComboImport::OListAndComboImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
-            const Reference< XMultiServiceFactory >& _rxORB)
-        :OControlImport(_rImport, _nPrefix, _rName, _rAttributeMap, _rxParentContainer, _rxORB)
-        ,m_eElementType(_eType)
+            OControlElement::ElementType _eType)
+        :OControlImport(_rImport, _nPrefix, _rName, _rxParentContainer, _eType)
     {
     }
 
@@ -508,9 +552,9 @@ namespace xmloff
 
         // the current-selected and selected
         const ::rtl::OUString sSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
-            GetPrefix(), ::rtl::OUString::createFromAscii("current-selected"));
+            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
         const ::rtl::OUString sDefaultSelectedAttribute = GetImport().GetNamespaceMap().GetQNameByIndex(
-            GetPrefix(), ::rtl::OUString::createFromAscii("selected"));
+            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
         sal_Bool bSelected;
@@ -545,58 +589,199 @@ namespace xmloff
     }
 
     //=====================================================================
+    //= OColumnWrapperImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OColumnWrapperImport::OColumnWrapperImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer)
+        :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
+        ,m_rFormImport(_rImport)
+        ,m_xParentContainer(_rxParentContainer)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OColumnWrapperImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlElement::ElementType eType = OElementNameMap::getElementType(_rLocalName);
+        OSL_ENSURE( (OControlElement::UNKNOWN != eType)
+                &&  (OControlElement::COLUMN != eType)
+                &&  (OControlElement::GRID != eType)
+                &&  (OControlElement::FRAME != eType)
+                &&  (OControlElement::FIXED_TEXT != eType),
+
+                "OColumnWrapperImport::CreateChildContext: invalid or unrecognized sub element!");
+
+        switch (eType)
+        {
+            case OControlElement::COMBOBOX:
+            case OControlElement::LISTBOX:
+                OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::CreateChildContext: had no form:column element!");
+                return new OColumnImport<OListAndComboImport>(m_rFormImport, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
+
+            default:
+                OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::CreateChildContext: had no form:column element!");
+                return new OColumnImport<OControlImport>(m_rFormImport, _nPrefix, _rLocalName, m_xParentContainer, eType, m_xOwnAttributes);
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OColumnWrapperImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OSL_ENSURE(!m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: aready have the cloned list!");
+
+        // clone the attributes
+        Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);
+        OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not cloneable!");
+        m_xOwnAttributes = Reference< sax::XAttributeList >(xCloneList->createClone(), UNO_QUERY);
+        OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");
+
+        // forward an empty attribute list to the base class
+        // (the attributes are merged into the ones of the upcoming xml element which really describes the column)
+        SvXMLImportContext::StartElement(new OAttribListMerger);
+    }
+
+    //=====================================================================
+    //= OGridImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OGridImport::OGridImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType)
+        :OGridImport_Base(_rImport, _nPrefix, _rName, _rxParentContainer)
+    {
+        setElementType(_eType);
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImportContext* OGridImport::implCreateControlChild(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        OControlElement::ElementType _eType)
+    {
+        switch (_eType)
+        {
+            case OControlElement::COLUMN:
+                // this is the wrapper element.
+                return new OColumnWrapperImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer);
+                break;
+            default:
+                OSL_ENSURE(sal_False, "OGridImport::implCreateControlChild: invalid sub element!");
+                // below a form:grid element, the only allowed "control type" is COLUMN
+                return NULL;
+        }
+        OSL_ENSURE(sal_False, "OGridImport::implCreateControlChild: reached the unreacheable!");
+        return NULL;
+    }
+
+    //=====================================================================
     //= OFormImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormImport::OFormImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            const ::vos::ORef< OAttribute2Property >& _rAttributeMap,
-            const Reference< XNameContainer >& _rxParentContainer, const Reference< XMultiServiceFactory >& _rxORB)
-        :OElementImport(_rImport, _nPrefix, _rName, _rAttributeMap, _rxParentContainer, _rxORB)
+    OFormImport::OFormImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const Reference< XNameContainer >& _rxParentContainer)
+        :OFormImport_Base(_rImport, _nPrefix, _rName, _rxParentContainer)
     {
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OFormImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList)
+    SvXMLImportContext* OFormImport::implCreateControlChild(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        OControlElement::ElementType _eType)
     {
-        // maybe it's a sub control
-        OControlElement::ElementType eType = OElementNameMap::getElementType(_rLocalName);
-        if (OControlElement::UNKNOWN != eType)
+        switch (_eType)
         {
-            if (m_xElement.is())
+            case OControlElement::COMBOBOX:
+            case OControlElement::LISTBOX:
+                return new OListAndComboImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+
+            case OControlElement::FRAME:
+            case OControlElement::FIXED_TEXT:
+                return new OReferredControlImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+
+            case OControlElement::GRID:
+                return new OGridImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+
+            default:
+                return new OControlImport(m_rFormImport, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    {
+        // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
+        static const ::rtl::OUString s_sMasterFieldsAttributeName = ::rtl::OUString::createFromAscii(getFormAttributeName(faMasterFields));
+        static const ::rtl::OUString s_sDetailFieldsAttributeName = ::rtl::OUString::createFromAscii(getFormAttributeName(faDetailFiels));
+        if (s_sMasterFieldsAttributeName == _rLocalName)
+            implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
+        else if (s_sDetailFieldsAttributeName == _rLocalName)
+            implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+        else
+            OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormImport::implTranslateStringListProperty(const ::rtl::OUString& _rPropertyName, const ::rtl::OUString& _rValue)
+    {
+        PropertyValue aProp;
+        aProp.Name = _rPropertyName;
+
+        Sequence< ::rtl::OUString > aList;
+
+        // split up the value string
+        if (_rValue.getLength())
+        {
+            // For the moment, we build a vector instead of a Sequence. It's easier to handle because of it's
+            // push_back method
+            ::std::vector< ::rtl::OUString > aElements;
+            // estimate the number of tokens
+            sal_Int32 nEstimate = 0, nLength = _rValue.getLength();
+            const sal_Unicode* pChars = _rValue.getStr();
+            for (sal_Int32 i=0; i<nLength; ++i, ++pChars)
+                if (*pChars == ',')
+                    ++nEstimate;
+            aElements.reserve(nEstimate + 1);
+                // that's the worst case. If the string contains the separator character _quoted_, we reserved to much ...
+
+
+            SvXMLUnitConverter& rConverter = GetImport().GetMM100UnitConverter();
+            sal_Int32 nElementStart = 0;
+            sal_Int32 nNextSep = 0;
+            sal_Int32 nElementLength;
+            ::rtl::OUString sElement;
+            do
             {
-                switch (eType)
-                {
-                    case OControlElement::COMBOBOX:
-                    case OControlElement::LISTBOX:
-                        return new OListAndComboImport(GetImport(), _nPrefix, _rLocalName,
-                            m_xAttributeMap, eType, Reference< XNameContainer >(m_xElement, UNO_QUERY), m_xORB);
-                    default:
-                        return new OControlImport(GetImport(), _nPrefix, _rLocalName,
-                            m_xAttributeMap, Reference< XNameContainer >(m_xElement, UNO_QUERY), m_xORB);
-                        // we already checked (in createElement) that the element is an XNameContainer
-                }
+                // extract the current element
+                nNextSep = rConverter.indexOfComma(_rValue, nElementStart);
+                if (-1 == nNextSep)
+                    nNextSep = nLength;
+                sElement = _rValue.copy(nElementStart, nNextSep - nElementStart);
+
+                nElementLength = sElement.getLength();
+                // when writing the sequence, we quoted the single elements with " characters
+                OSL_ENSURE( (nElementLength >= 2)
+                        &&  (sElement.getStr()[0] == '"')
+                        &&  (sElement.getStr()[nElementLength - 1] == '"'),
+                        "OFormImport::implTranslateStringListProperty: invalid quoted element name.");
+                sElement = sElement.copy(1, nElementLength - 2);
+
+                aElements.push_back(sElement);
+
+                // swith to the next element
+                nElementStart = 1 + nNextSep;
             }
-            else
-                OSL_ENSURE(sal_False, "OFormImport::CreateChildContext: don't have an element which is a XNameContainer!");
+            while (nElementStart < nLength);
+
+            aList = Sequence< ::rtl::OUString >(aElements.begin(), aElements.size());
+        }
+        else
+        {
+            OSL_ENSURE(sal_False, "OFormImport::implTranslateStringListProperty: invalid value (empty)!");
         }
 
-        return OElementImport::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
-    }
+        aProp.Value <<= aList;
 
-    //---------------------------------------------------------------------
-    Reference< XPropertySet > OFormImport::createElement()
-    {
-        // let the base class create the object
-        Reference< XPropertySet > xReturn = OElementImport::createElement();
-        if (!xReturn.is())
-            return xReturn;
-
-        // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-        if (!Reference< XNameContainer >(xReturn, UNO_QUERY).is())
-            xReturn.clear();
-
-        return xReturn;
+        // add the property to the base class' array
+        implPushBackPropertyValue(aProp);
     }
 
 //.........................................................................
@@ -606,6 +791,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:31:03  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 05.12.00 11:09:36  fs
  ************************************************************************/

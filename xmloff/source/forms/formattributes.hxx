@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,10 +233,10 @@ namespace xmloff
     /** some kind of opposite to the OAttributeMetaData class. Able to translate
         attrbutes into property names/types
 
-        <p>This class is ref-counted, 'cause it's construction is rather expensive, so instances should
-        be shared</p>
+        <p>The construction of this class is rather expensive (or at least it's initialization from outside),
+        so it should be shared</p>
     */
-    class OAttribute2Property : public ::vos::OReference
+    class OAttribute2Property
     {
     public:
         // TODO: maybe the following struct should be used for exports, too. In this case we would not need to
@@ -259,12 +259,9 @@ namespace xmloff
         DECLARE_STL_USTRINGACCESS_MAP( AttributeAssignment, AttributeAssignments );
         AttributeAssignments        m_aKnownProperties;
 
-    protected:
-        virtual ~OAttribute2Property();
-            // deletion not allowed from outside
-
     public:
         OAttribute2Property();
+        virtual ~OAttribute2Property();
 
         /** return the AttributeAssignment which corresponds to the given attribute
 
@@ -352,6 +349,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

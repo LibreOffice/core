@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:32:01 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,15 +98,14 @@ namespace xmloff
 
     protected:
         DECLARE_STL_VECTOR( ::com::sun::star::beans::PropertyValue, PropertyValueArray );
-        PropertyValueArray  m_aValues;
+        PropertyValueArray      m_aValues;
             // the values which the instance collects between StartElement and EndElement
 
-        ::vos::ORef< OAttribute2Property >
-                            m_xAttributeMap;
+        OAttribute2Property&    m_rAttributeMap;
 
     public:
         OPropertyImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-                const ::vos::ORef< OAttribute2Property >& _rAttributeMap);
+                OAttribute2Property& _rAttributeMap);
 
         virtual SvXMLImportContext* CreateChildContext(
             sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
@@ -224,6 +223,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:32:01  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 04.12.00 15:10:13  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:31:31 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,31 +125,30 @@ namespace xmloff
     //---------------------------------------------------------------------
     OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         :m_rImporter(_rImporter)
-        ,m_xAttributeMetaData(new OAttribute2Property)
     {
         // build the attribute2property map
         // string properties which are exported as attributes
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION), PROPERTY_TARGETURL);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_TITLE), PROPERTY_TITLE);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD), PROPERTY_DATAFIELD);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getFormAttributeName(faCommand), PROPERTY_COMMAND);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getFormAttributeName(faDatasource), PROPERTY_DATASOURCENAME);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getFormAttributeName(faFilter), PROPERTY_FILTER);
-        m_xAttributeMetaData->addStringProperty(
+        m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getFormAttributeName(faOrder), PROPERTY_ORDER);
 
         // properties not added because they're already present in another form
@@ -168,88 +167,88 @@ namespace xmloff
             // the same for faName, CCA_NAME and PROPERTY_NAME
 
         // boolean properties which are exported as attributes
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_DISABLED), PROPERTY_ENABLED, sal_False, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_DROPDOWN), PROPERTY_DROPDOWN, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_PRINTABLE), PROPERTY_PRINTABLE, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_READONLY), PROPERTY_READONLY, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED), PROPERTY_DEFAULT_STATE, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_STOP), PROPERTY_TABSTOP, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_MULTI_LINE), PROPERTY_MULTILINE, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_MULTIPLE), PROPERTY_MULTISELECTION, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_DEFAULT_BUTTON), PROPERTY_DEFAULTBUTTON, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_IS_TRISTATE), PROPERTY_TRISTATE, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faAllowInserts), PROPERTY_ALLOWINSERTS, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faAllowUpdates), PROPERTY_ALLOWUPDATES, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faApplyFilter), PROPERTY_APPLYFILTER, sal_False);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faEscapeProcessing), PROPERTY_ESCAPEPROCESSING, sal_True);
-        m_xAttributeMetaData->addBooleanProperty(
+        m_aAttributeMetaData.addBooleanProperty(
             OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, sal_False);
 
         // the int16 attributes
-        m_xAttributeMetaData->addInt16Property(
+        m_aAttributeMetaData.addInt16Property(
             OAttributeMetaData::getCommonControlAttributeName(CCA_MAX_LENGTH), PROPERTY_MAXTEXTLENGTH, 0);
-        m_xAttributeMetaData->addInt16Property(
+        m_aAttributeMetaData.addInt16Property(
             OAttributeMetaData::getCommonControlAttributeName(CCA_SIZE), PROPERTY_LINECOUNT, 5);
-        m_xAttributeMetaData->addInt16Property(
+        m_aAttributeMetaData.addInt16Property(
             OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_INDEX), PROPERTY_TABINDEX, 0);
-        m_xAttributeMetaData->addInt16Property(
+        m_aAttributeMetaData.addInt16Property(
             OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
 
         // the enum attributes
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE), PROPERTY_BUTTONTYPE,
             FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
             &::getCppuType( static_cast<FormButtonType*>(NULL) ));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE), PROPERTY_LISTSOURCETYPE,
             ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
             &::getCppuType( static_cast<ListSourceType*>(NULL) ));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, STATE_NOCHECK,
             OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, STATE_NOCHECK,
             OEnumMapper::getEnumMap(OEnumMapper::epCheckState));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
             FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
             &::getCppuType( static_cast<FormSubmitEncoding*>(NULL) ));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
             FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
             &::getCppuType( static_cast<FormSubmitMethod*>(NULL) ));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
             CommandType::COMMAND, OEnumMapper::getEnumMap(OEnumMapper::epCommandType));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
             NavigationBarMode_NONE, OEnumMapper::getEnumMap(OEnumMapper::epNavigationType),
             &::getCppuType( static_cast<NavigationBarMode*>(NULL) ));
-        m_xAttributeMetaData->addEnumProperty(
+        m_aAttributeMetaData.addEnumProperty(
             OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
             TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
             &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
@@ -262,25 +261,130 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLImport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    IControlIdMap& OFormLayerXMLImport_Impl::getControlIdMap()
+    {
+        return *this;
+    }
+
+    //---------------------------------------------------------------------
+    OAttribute2Property& OFormLayerXMLImport_Impl::getAttributeMap()
+    {
+        return m_aAttributeMetaData;
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XMultiServiceFactory > OFormLayerXMLImport_Impl::getServiceFactory()
+    {
+        return ::comphelper::getProcessServiceFactory();
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLImport& OFormLayerXMLImport_Impl::getGlobalContext()
+    {
+        return m_rImporter;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rId)
+    {
+        OSL_ENSURE(_rId.getLength(), "OFormLayerXMLImport_Impl::registerControlId: invalid (empty) control id!");
+        OSL_ENSURE(m_aControlIds.end() == m_aControlIds.find(_rId), "OFormLayerXMLImport_Impl::registerControlId: control id already used!");
+        m_aControlIds[_rId] = _rxControl;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rReferringControls)
+    {
+        OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
+        OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
+        m_aControlReferences.push_back(ControlReference(_rxControl, _rReferringControls));
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_xForms.clear();
 
-        OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::seekPage: NULL page!");
+        OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::startPage: NULL page!");
         Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
-        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLImport_Impl::seekPage: invalid draw page (no XFormsSupplier)!");
+        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLImport_Impl::startPage: invalid draw page (no XFormsSupplier)!");
         if (!xFormsSupp.is())
             return;
 
         m_xForms = Reference< XNameContainer >(xFormsSupp->getForms(), UNO_QUERY);
-        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::seekPage: invalid forms collection!");
+        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::startPage: invalid forms collection!");
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::endPage()
+    {
+        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::endPage: sure you called startPage before?");
+
+        // do some knittings for the controls which are referring to each other
+        try
+        {
+            static const sal_Unicode s_nSeparator = ',';
+            ::rtl::OUString sReferring;
+            ::rtl::OUString sCurrentReferring;
+            ::rtl::OUString sSeparator(&s_nSeparator, 1);
+            Reference< XPropertySet > xCurrentReferring;
+            sal_Int32 nSeparator, nPrevSep;
+            for (   ConstControlReferenceArrayIterator aReferences = m_aControlReferences.begin();
+                    aReferences != m_aControlReferences.end();
+                    ++aReferences
+                )
+            {
+                // the list of control ids is comma separated
+
+                // in a list of n ids there are only n-1 separators ... have to catch this last id
+                // -> normalize the list
+                sReferring = aReferences->sReferringControls;
+                sReferring += sSeparator;
+
+                nPrevSep = -1;
+                while (-1 != (nSeparator = sReferring.indexOf(s_nSeparator, nPrevSep + 1)))
+                {
+                    sCurrentReferring = sReferring.copy(nPrevSep + 1, nSeparator - nPrevSep - 1);
+                    xCurrentReferring = lookupControlId(sCurrentReferring);
+                    if (xCurrentReferring.is())
+                        // if this condition fails, this is an error, but lookupControlId should have asserted this ...
+                        xCurrentReferring->setPropertyValue(PROPERTY_CONTROLLABEL, makeAny(aReferences->xReferredControl));
+
+                    nPrevSep = nSeparator;
+                }
+            }
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
+        }
+
+        // clear the structures for the control ids.
+        // Speaking strictly, this may not be necessary, but it may allow to find errors (such as controls referring
+        // to controls on other pages) much easier
+        m_aControlIds.clear();
+        m_aControlReferences.clear();
+
+        // TODO: think about remembering this for later use. This would allow the clients to import all pages
+        // before doing their own knittings. But this would make it more expensive, too.
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const ::rtl::OUString& _rControlId)
+    {
+        ConstMapString2PropertySetIterator aPos = m_aControlIds.find(_rControlId);
+        if (m_aControlIds.end() != aPos)
+            return aPos->second;
+
+        OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+        return Reference< XPropertySet >();
     }
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >& _rxAttribs)
     {
-        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::createContext: have no forms collection (did you use seekPage?)!");
+        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::createContext: have no forms collection (did you use startPage?)!");
         OSL_ENSURE(0 == _rLocalName.compareToAscii("form"), "OFormLayerXMLImport_Impl::createContext: don't know the element name (must be \"form\")!");
 
         if (!m_xForms.is() || (0 != _rLocalName.compareToAscii("form")))
@@ -288,8 +392,7 @@ namespace xmloff
             return new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
         }
 
-        return new OFormImport(m_rImporter, _nPrefix, _rLocalName, m_xAttributeMetaData,
-            m_xForms, ::comphelper::getProcessServiceFactory() );
+        return new OFormImport(*this, _nPrefix, _rLocalName, m_xForms );
     }
 
 //.........................................................................
@@ -299,6 +402,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:31:31  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 04.12.00 15:48:46  fs
  ************************************************************************/

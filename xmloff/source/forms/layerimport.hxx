@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:31:42 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #ifndef _XMLOFF_FORMATTRIBUTES_HXX_
 #include "formattributes.hxx"
 #endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 class SvXMLImport;
 class SvXMLImportContext;
@@ -86,25 +92,76 @@ namespace xmloff
     class OAttribute2Property;
 
     //=====================================================================
+    //= ControlReference
+    //=====================================================================
+    /// a structure containing a property set (the referred control) and a string (the list of referring controls)
+    struct ControlReference
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                    xReferredControl;
+        ::rtl::OUString
+                    sReferringControls;
+
+        ControlReference(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxReferredControl,
+                const ::rtl::OUString& _rReferringControls)
+            :xReferredControl(_rxReferredControl)
+            ,sReferringControls(_rReferringControls)
+        {
+        }
+    };
+
+    //=====================================================================
     //= OFormLayerXMLImport_Impl
     //=====================================================================
-    class OFormLayerXMLImport_Impl : public OAttributeMetaData
+    class OFormLayerXMLImport_Impl
+                :public OAttributeMetaData
+                ,public IControlIdMap
+                ,public IFormsImportContext
     {
         friend class OFormLayerXMLImport;
 
+    protected:
         SvXMLImport&                        m_rImporter;
-        ::vos::ORef< OAttribute2Property >  m_xAttributeMetaData;
+        OAttribute2Property                 m_aAttributeMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                             m_xForms;   // the forms of the currently handled page
+
+    protected:
+        DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
+        MapString2PropertySet   m_aControlIds;      // the control ids as got from registerControlId
+
+        DECLARE_STL_VECTOR( ControlReference, ControlReferenceArray );
+        ControlReferenceArray   m_aControlReferences;
+
+    public:
+        // IControlIdMap
+        virtual void    registerControlId(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::rtl::OUString& _rId);
+        virtual void    registerControlReferences(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
+            const ::rtl::OUString& _rReferringControls);
+
+        // IFormsImportContext
+        virtual IControlIdMap&          getControlIdMap();
+        virtual OAttribute2Property&    getAttributeMap();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                                        getServiceFactory();
+        virtual SvXMLImport&            getGlobalContext();
 
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         ~OFormLayerXMLImport_Impl();
 
-        /** initializes some internal structures for fast access to the given page
+        /** start importing the forms of the given page
         */
-        void seekPage(
+        void startPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
+
+        /** end importing the forms of the current page
+        */
+        void endPage();
 
         /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
             element.
@@ -113,6 +170,11 @@ namespace xmloff
             const sal_uInt16 _nPrefix,
             const rtl::OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttribs);
+
+        /** get the control with the given id
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                lookupControlId(const ::rtl::OUString& _rControlId);
     };
 
 //.........................................................................
@@ -124,6 +186,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/06 17:31:42  fs
+ *  initial checkin - implementations for formlayer import/export - still under construction
+ *
  *
  *  Revision 1.0 04.12.00 15:48:40  fs
  ************************************************************************/
