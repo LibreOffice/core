@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-10 12:01:09 $
+ *  last change: $Author: ab $ $Date: 2001-08-22 10:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,6 +960,7 @@ RTLFUNC(Exp)
     {
         double aDouble = rPar.Get( 1 )->GetDouble();
         aDouble = exp( aDouble );
+        checkArithmeticOverflow( aDouble );
         rPar.Get( 0 )->PutDouble( aDouble );
     }
 }
@@ -1165,7 +1166,11 @@ RTLFUNC(Log)
     {
         double aArg = rPar.Get(1)->GetDouble();
         if ( aArg > 0 )
-            rPar.Get( 0 )->PutDouble( log( aArg ));
+        {
+            double d = log( aArg );
+            checkArithmeticOverflow( d );
+            rPar.Get( 0 )->PutDouble( d );
+        }
         else
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }
