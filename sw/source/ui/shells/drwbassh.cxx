@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:08:50 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
 #endif
@@ -151,7 +153,21 @@
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
+#ifndef _SVX_DLG_NAME_HXX
+#include <svx/dlgname.hxx>
+#endif
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 
+#include <doc.hxx>
+#include <shells.hrc>
 #define SwDrawBaseShell
 #ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
@@ -530,6 +546,28 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_FRAME_TO_BOTTOM:
             pSh->SelectionToBottom( bBottomParam );
             break;
+        case FN_NAME_GROUP:
+        {
+            bDone = TRUE;
+            const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+            DBG_ASSERT(rMarkList.GetMarkCount() == 1, "Exactly one object has to be selected" )
+            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            ULONG nMarkCount = rMarkList.GetMarkCount();
+            String sName;
+            String sDesc(SW_RES( STR_NAME_GROUP_LABEL ) );
+            DBG_ASSERT(pObj->ISA(SdrObjGroup),
+                "Object is not a group, graphic or OLE shape")
+            sName = pObj->GetName();
+            SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
+            pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
+            if( pDlg->Execute() == RET_OK )
+            {
+                pDlg->GetName( sName );
+                pObj->SetName(sName);
+            }
+            delete pDlg;
+        }
+        break;
 
         default:
             DBG_ASSERT(!this, "falscher Dispatcher");
@@ -548,12 +586,44 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
     }
 }
-
+/* -----------------------------27.02.2002 15:27------------------------------
+    Checks whether a given name is allowed for a group shape
+ ---------------------------------------------------------------------------*/
+IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, SvxNameDialog*, pNameDialog )
+{
+    SwWrtShell          &rSh = GetShell();
+    SdrView *pSdrView = rSh.GetDrawView();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection")
+    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+    ULONG nMarkCount = rMarkList.GetMarkCount();
+    const String sCurrentName = pObj->GetName();
+    String sNewName;
+    pNameDialog->GetName(sNewName);
+    long nRet = 0;
+    if(!sNewName.Len() || sCurrentName == sNewName)
+        nRet = 1;
+    else
+    {
+        nRet = 1;
+        SdrModel* pModel = rSh.GetDoc()->GetDrawModel();
+        SdrPage* pPage = pModel->GetPage(0);
+        sal_uInt32 nCount = pPage->GetObjCount();
+        for( sal_uInt32 i=0; i< nCount; i++ )
+        {
+            SdrObject* pTemp = pPage->GetObj(i);
+            if(pObj != pTemp &&  (!pTemp->ISA(SdrObjGroup) || pTemp->GetName() == sNewName))
+            {
+                nRet = 0;
+                break;
+            }
+        }
+    }
+    return nRet;
+}
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -610,6 +680,20 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.Put(SfxAllEnumItem(nWhich, USHRT_MAX));
                 }
                 break;
+            case FN_NAME_GROUP :
+            {
+                BOOL bDisable = TRUE;
+                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                if( rMarkList.GetMarkCount() == 1 )
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    if(pObj->ISA(SdrObjGroup))
+                        bDisable = FALSE;
+                }
+                if(bDisable)
+                    rSet.DisableItem( nWhich );
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }

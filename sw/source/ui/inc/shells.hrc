@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:16:02 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,9 @@
 #define STR_REDLINE_REJECT_ALL      (RC_SHELLS_BEGIN + 55)
 #define STR_REDLINE_EDIT            (RC_SHELLS_BEGIN + 56)
 #define STR_REDLINE_AUTOFMT         (RC_SHELLS_BEGIN + 57)
+#define STR_NAME_GROUP_LABEL        (RC_SHELLS_BEGIN + 58)
 
-#define SHELLS_ACT_END              STR_REDLINE_AUTOFMT
+#define SHELLS_ACT_END              STR_NAME_GROUP_LABEL
 
 #if SHELLS_ACT_END > RC_SHELLS_END
 #error Resource-Id Ueberlauf in #file, #line

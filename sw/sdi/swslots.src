@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:25:33 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9538,6 +9538,34 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ turkish ] = "Update Charts";
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
+};
+SfxSlotInfo FN_NAME_GROUP
+{
+    SlotName = "Objekt benennen";
+    SlotName [ english ] =  "Objekt benennen";
+    SlotName[ english_us ] = "Name Object";
+    SlotName[ portuguese ] = "Nomear objecto";
+    SlotName[ russian ] = "Οπθρβξθςό θμÿ ξαϊεκςσ";
+    SlotName[ dutch ] = "Naam object";
+    SlotName[ french ] = "Nommer l'objet";
+    SlotName[ spanish ] = "Nombrar objeto";
+    SlotName[ italian ] = "Nome oggetto";
+    SlotName[ danish ] = "Navngiv objekt";
+    SlotName[ swedish ] = "Namnge objekt";
+    SlotName[ polish ] = "Nazwa obiektu";
+    SlotName[ portuguese_brazilian ] = "Name Object";
+    SlotName[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ«εε‰γ‚’δ»γ‘γ‚‹";
+    SlotName[ chinese_simplified ] = "ε‘½εε―Ήθ±΅";
+    SlotName[ chinese_traditional ] = "ε‘½εη‰©δ»¶";
+    SlotName[ arabic ] = "ΚΣγνΙ ΗαίΗΖδ";
+    SlotName[ dutch ] = "Naam object";
+    SlotName[ chinese_simplified ] = "ε‘½εε―Ήθ±΅";
+    SlotName[ greek ] = "Ονομασία αντικειμένου";
+    SlotName[ korean ] = "κ±”μ²΄ λª…λª…";
+    SlotName[ turkish ] = "Nesneyi adlandύr";
+    SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anomena l'objecte";
+    SlotName[ finnish ] = "Nimeδ objekti";
 };
 
 

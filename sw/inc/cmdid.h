@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 17:33:55 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,23 +408,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* Draw-Objekt an Seite verankern */
 #define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* Draw-Objekt am Absatz verankern */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* Hierarchie aendern */
-//#define FN_TOOL_VMIRROR         (FN_INSERT + 53)    /* Objekt in unteren Layer */
-//#define FN_TOOL_HMIRROR         (FN_INSERT + 54)    /* Objekt in oberen Layer */
-
-//#define FN_QRY_OPEN_DB            (FN_INSERT + 55)    /* Datenbank oeffnen (Basic) */
-//#define FN_QRY_DEFINE_DB      (FN_INSERT + 56)    /* Neue Datenbankdefinition anlegen (Basic) */
-//#define FN_QRY_SELECT         (FN_INSERT + 57)    /* SQL-Statement angeben (Basic) */
-//#define FN_QRY_TO_FIRST_REC       (FN_INSERT + 58)    /* Ersten Datensatz anwaehlen (Basic) */
-//#define FN_QRY_TO_NEXT_REC        (FN_INSERT + 59)    /* Naechsten Datensatz anwaehlen (Basic) */
-//#define FN_QRY_TO_REC         (FN_INSERT + 60)    /* Bestimmten Datensatz anwaehlen (Basic) */
-//#define FN_QRY_GET_RECORD_ID  (FN_INSERT + 61)    /* Datensatznummer erfragen (Basic) */
-//#define FN_QRY_GET_COLUMN_NUM (FN_INSERT + 62)    /* Anzahl der Spalten (Basic) */
-
 
 #define FN_QRY_MERGE            (FN_INSERT + 64)    /* Datensatz einfuegen (Serienbrief) */
 #define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* Datenbank oeffnen (Basic) */
 #define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* Draw-Objekt am Rahmen verankern */
-//#define FN_QRY_SWITCH             (FN_INSERT + 67)    /* Auf eine bestimmte Datenbank umschalten */
 
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* Einfuegen StarMath  */
 
@@ -691,12 +678,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GET_SBXCONTROL            (FN_FORMAT2 + 11)  /* SbxObject rausreichen */
 #define FN_ABSTRACT_NEWDOC           (FN_FORMAT2 + 12)  /* Abstract in neuem Doc */
 #define FN_ABSTRACT_STARIMPRESS      (FN_FORMAT2 + 13)  /* Abstract an StarImpress */
-
-
-
-
-
-
+#define FN_NAME_GROUP                (FN_FORMAT2 + 14)  /* Rename group shapes */
 
 #define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* Boxen/NumberFormatter eistellen */
 #define FN_NUMBER_STANDARD                  (FN_FORMAT2 + 121)

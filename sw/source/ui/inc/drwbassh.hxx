@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2002-02-28 17:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ class SwWrtShell;
 class SwView;
 class SfxItemSet;
 class SwDrawBase;
+class SvxNameDialog;
 
 class SwDrawBaseShell: public SwBaseShell
 {
@@ -76,6 +77,7 @@ class SwDrawBaseShell: public SwBaseShell
     BOOL        bRotate : 1;
     BOOL        bSelMove: 1;
 
+    DECL_LINK( CheckGroupShapeNameHdl, SvxNameDialog* );
 public:
                 SwDrawBaseShell(SwView &rShell);
     virtual     ~SwDrawBaseShell();
@@ -90,11 +92,6 @@ public:
 
     void        StateStatusline(SfxItemSet &rSet);
 
-/*  SwDrawBase* GetDrawFuncPtr()                    { return (pDrawActual); }
-    void        SetDrawFuncPtr(SwDrawBase* pFuncPtr);
-    UINT16      GetDrawMode()                       { return (eDrawMode);   }
-    void        SetDrawMode(UINT16 eDrwMode)        { eDrawMode = eDrwMode; }
-*/
 };
 
 
