@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 20:49:04 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 12:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/langitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <svx/udlnitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -206,7 +207,10 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Font
 
-    pPattern->GetFont( aFont, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
+    if ( bPixelToLogic )
+        pPattern->GetFont( aFont, pFmtDevice, NULL, pCondSet, nScript );
+    else
+        pPattern->GetFont( aFont, pFmtDevice, &pOutput->aZoomY, pCondSet, nScript );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -279,6 +283,13 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     nAscentPixel = aMetric.GetAscent();
     if ( bPixelToLogic )
         nAscentPixel = pRefDevice->LogicToPixel( Size( 0, nAscentPixel ) ).Height();
+
+    Color aULineColor;
+    if ( pCondSet && pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pCondItem ) == SFX_ITEM_SET )
+        aULineColor = ((const SvxUnderlineItem*)pCondItem)->GetColor();
+    else
+        aULineColor = ((const SvxUnderlineItem&)pPattern->GetItem(ATTR_FONT_UNDERLINE)).GetColor();
+    pDev->SetTextLineColor( aULineColor );
 
     //  Ausrichtung
 
