@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-09 15:26:06 $
+ *  last change: $Author: sj $ $Date: 2002-08-12 09:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4470,7 +4470,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
             if ( nPMask & 0x80000 )
                 rIn >> maParaLevel[ nLevel ].mnAsianLineBreak;
             if ( nPMask & 0x100000 )
-                rIn >> nVal16;
+                rIn >> maParaLevel[ nLevel ].mnBiDi;
 
             nPMask >>= 22;
             while( nPMask & 1 )
