@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstyles.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:47:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ ENGLISH ] = "Cell Styles" ;
             Text [ norwegian ] = "Celletyper" ;
             Text [ italian ] = "Modelli di cella" ;
-            Text [ portuguese_brazilian ] = "Estilos da C?lula" ;
+            Text [ portuguese_brazilian ] = "Estilos da célula" ;
             Text [ portuguese ] = "Estilos de células" ;
             Text [ finnish ] = "Solun tyylit" ;
             Text [ danish ] = "Celletypografier" ;
@@ -117,7 +117,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ ENGLISH ] = "Page Styles" ;
             Text [ norwegian ] = "Sidetyper" ;
             Text [ italian ] = "Modelli di pagina" ;
-            Text [ portuguese_brazilian ] = "Estilos da P?gina" ;
+            Text [ portuguese_brazilian ] = "Estilos da página" ;
             Text [ portuguese ] = "Estilos de página" ;
             Text [ finnish ] = "Sivujen tyylit" ;
             Text [ danish ] = "Sidetypografier" ;
@@ -164,6 +164,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         IdCount = 2;
     };
 };
+
 
 
 
