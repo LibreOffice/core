@@ -2,9 +2,9 @@
  *
  *  $RCSfile: composerdialogs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:37:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,12 @@ namespace dbaui
         try
         {
             // the connection the row set is working with
-            Reference< XPropertySet > xRowsetProps( m_xRowSet, UNO_QUERY );
-            if ( xRowsetProps.is() )
-                xRowsetProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xConnection;
+            if ( !::dbtools::isEmbeddedInDatabase( m_xRowSet, xConnection ) )
+            {
+                Reference< XPropertySet > xRowsetProps( m_xRowSet, UNO_QUERY );
+                if ( xRowsetProps.is() )
+                    xRowsetProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xConnection;
+            }
 
             // fallback: if there is a connection and thus a row set, but no composer, create one
             if ( xConnection.is() && !m_xComposer.is() )
