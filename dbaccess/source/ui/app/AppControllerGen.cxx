@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,8 +347,14 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
     m_bNeedToReconnect = sal_True;
-    if ( getContainer() && m_xDataSource.is() )
-        getContainer()->setStatusInformations(m_xDataSource);
+    if ( evt.PropertyName == PROPERTY_USER )
+        InvalidateFeature(SID_DB_APP_STATUS_USERNAME);
+    else if ( evt.PropertyName == PROPERTY_URL )
+    {
+        InvalidateFeature(SID_DB_APP_STATUS_DBNAME);
+        InvalidateFeature(SID_DB_APP_STATUS_TYPE);
+        InvalidateFeature(SID_DB_APP_STATUS_HOSTNAME);
+    }
 
     EventObject aEvt;
     aEvt.Source = m_xDataSource;
@@ -601,7 +607,11 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
 // -----------------------------------------------------------------------------
 void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
-    OGenericUnoController::onLoadedMenu( _xLayoutManager );
+    OGenericUnoController::loadSubToolbar(_xLayoutManager);
+
+    static ::rtl::OUString s_sStatusbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"));
+    _xLayoutManager->createElement( s_sStatusbar );
+    _xLayoutManager->requestElement( s_sStatusbar );
 
     if ( getContainer() )
         getContainer()->createIconAutoMnemonics();
@@ -625,6 +635,8 @@ void OApplicationController::doAction(sal_uInt16 _nId ,sal_Bool _bEdit)
             openElement(*aIter,eType, _bEdit );
     }
 }
+// -----------------------------------------------------------------------------
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
