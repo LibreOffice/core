@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-03 16:20:36 $
+ *  last change: $Author: tbe $ $Date: 2001-03-06 14:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 #include "vcsbxdef.hxx"
@@ -354,7 +358,7 @@ void DlgEdObj::SetPropsFromRect()
 
     if ( !ISA(DlgEdForm) )
     {
-        EndPropertyListening(sal_False);
+        //EndPropertyListening(sal_False);
 
         // get control property set
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -410,11 +414,11 @@ void DlgEdObj::SetPropsFromRect()
             xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
         }
 
-        StartPropertyListening();
+        //StartPropertyListening();
     }
     else if ( ISA(DlgEdForm) )
     {
-        EndPropertyListening(sal_False);
+        //EndPropertyListening(sal_False);
 
         // get control property set
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSetForm(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -460,7 +464,7 @@ void DlgEdObj::SetPropsFromRect()
             xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
         }
 
-        StartPropertyListening();
+        //StartPropertyListening();
     }
 
     /* old method
@@ -745,6 +749,16 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 {
     if (isListening())
     {
+        // dialog model changed
+        if ( ISA(DlgEdForm) )
+        {
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
+        else
+        {
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+        }
+
         // set rectangle, if geometry information in the model changed
         if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")) ||
              evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")) ||
@@ -753,6 +767,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         {
             SetRectFromProps();
         }
+        // change name of control in dialog model
         else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
         {
             SetNameFromProp(evt);
@@ -776,11 +791,17 @@ void DlgEdObj::StartPropertyListening()
             m_xListener = static_cast< ::com::sun::star::beans::XPropertyChangeListener*>( new DlgEdListenerImpl( (DlgEdObj*)this ) );
 
             // register listener to properties
-            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), m_xListener);
-            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), m_xListener);
-            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX")), m_xListener);
-            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY")), m_xListener);
-            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), m_xListener);
+            Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
+            DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::StartPropertyListening: control model has no property info!");
+            Sequence< Property > aProps = xControlModelInfo->getProperties();
+            Property* pProps = aProps.getArray();
+            for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
+            {
+                if ( pProps[i].Attributes & PropertyAttribute::BOUND )
+                {
+                    xControlModel->addPropertyChangeListener( pProps[i].Name , m_xListener );
+                }
+            }
         }
 
         bIsListening = sal_True;
@@ -803,11 +824,17 @@ void DlgEdObj::EndPropertyListening(sal_Bool bRemoveListener)
             if (m_xListener.is() && xControlModel.is())
             {
                 // remove listener
-                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), m_xListener);
-                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), m_xListener);
-                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX")), m_xListener);
-                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY")), m_xListener);
-                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), m_xListener);
+                Reference< XPropertySetInfo > xControlModelInfo( xControlModel->getPropertySetInfo() );
+                DBG_ASSERT(xControlModelInfo.is(), "DlgEdObj::EndPropertyListening: control model has no property info!");
+                Sequence< Property > aProps = xControlModelInfo->getProperties();
+                Property* pProps = aProps.getArray();
+                for ( sal_Int32 i = 0 ; i < aProps.getLength() ; i++ )
+                {
+                    if ( pProps[i].Attributes & PropertyAttribute::BOUND )
+                    {
+                        xControlModel->removePropertyChangeListener( pProps[i].Name , m_xListener );
+                    }
+                }
             }
 
             m_xListener.clear();

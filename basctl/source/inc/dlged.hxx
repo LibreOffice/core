@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 14:36:55 $
+ *  last change: $Author: tbe $ $Date: 2001-03-06 14:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ protected:
     BOOL                bCreateOK;
     Timer               aPaintTimer;
     Rectangle           aPaintRect;
+    BOOL                bDialogModelChanged;
 
     // Data for new library container mechanism
 
@@ -161,6 +162,9 @@ public:
 
     BOOL            UnmarkDialog();
     void            RemarkDialog();
+
+    void            SetDialogModelChanged( BOOL bChanged = TRUE ) { bDialogModelChanged = bChanged; }
+    BOOL            IsDialogModelChanged() const { return bDialogModelChanged; }
 
     BOOL            IsModified() const;
     void            ClearModifyFlag();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 14:54:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-06 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ VCDlgEditor::VCDlgEditor( StarBASIC* pBas ) :
     bGridVisible(FALSE),
     bClipPrivate(FALSE),
     bCreateOK(TRUE),
-    pSdrView(NULL)
+    pSdrView(NULL),
+    bDialogModelChanged(FALSE)
 {
     pWindow     = NULL;
 
@@ -595,47 +596,58 @@ IMPL_LINK( VCDlgEditor, PaintTimeout, Timer *, EMPTYARG )
     {
         bFirstDraw = FALSE;
 
-        if( pDlgEdForm->GetSnapRect().GetSize() == aMacSize )
+        // get property set
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(pDlgEdForm->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+
+        if ( xPSet.is() )
         {
-            Size   aSize = pWindow->PixelToLogic( Size( 400, 300 ) );
+            // get dialog size from properties
+            sal_Int32 nWidth, nHeight;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
 
-            // align with grid
-            Size  aGridSize = pSdrView->GetSnapGrid();
-            aSize.Width()  -= aSize.Width()  % aGridSize.Width();
-            aSize.Height() -= aSize.Height() % aGridSize.Height();
-
-            Point  aPos;
-            Size   aOutSize = pWindow->GetOutputSize();
-            aPos.X() = (aOutSize.Width()>>1)  -  (aSize.Width()>>1);
-            aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
-
-            // align with grid
-            aPos.X() -= aPos.X() % aGridSize.Width();
-            aPos.Y() -= aPos.Y() % aGridSize.Height();
-
-            // don't put in the corner
-            Point aMinPos = pWindow->PixelToLogic( Point( 30, 20 ) );
-            if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
+            if ( nWidth == 0 && nHeight == 0 )
             {
-                aPos = aMinPos;
+                Size   aSize = pWindow->PixelToLogic( Size( 400, 300 ) );
+
+                // align with grid
+                Size  aGridSize = pSdrView->GetSnapGrid();
+                aSize.Width()  -= aSize.Width()  % aGridSize.Width();
+                aSize.Height() -= aSize.Height() % aGridSize.Height();
+
+                Point  aPos;
+                Size   aOutSize = pWindow->GetOutputSize();
+                aPos.X() = (aOutSize.Width()>>1)  -  (aSize.Width()>>1);
+                aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
+
+                // align with grid
                 aPos.X() -= aPos.X() % aGridSize.Width();
                 aPos.Y() -= aPos.Y() % aGridSize.Height();
-            }
 
-            // set dialog position and size
-            pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
-            pDlgEdForm->SetPropsFromRect();
-
-            // set position and size of controls
-            ULONG nObjCount;
-            if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
-            {
-                for ( ULONG i = 1 ; i < nObjCount ; i++ )
+                // don't put in the corner
+                Point aMinPos = pWindow->PixelToLogic( Point( 30, 20 ) );
+                if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
-                    SdrObject* pObj = pSdrPage->GetObj(i);
-                    DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-                    if (pDlgEdObj)
-                        pDlgEdObj->SetRectFromProps();
+                    aPos = aMinPos;
+                    aPos.X() -= aPos.X() % aGridSize.Width();
+                    aPos.Y() -= aPos.Y() % aGridSize.Height();
+                }
+
+                // set dialog position and size
+                pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
+                pDlgEdForm->SetPropsFromRect();
+
+                // set position and size of controls
+                ULONG nObjCount;
+                if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
+                {
+                    for ( ULONG i = 1 ; i < nObjCount ; i++ )
+                    {
+                        SdrObject* pObj = pSdrPage->GetObj(i);
+                        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+                        if (pDlgEdObj)
+                            pDlgEdObj->SetRectFromProps();
+                    }
                 }
             }
         }
@@ -814,7 +826,7 @@ void VCDlgEditor::Delete()
 
 BOOL VCDlgEditor::IsModified() const
 {
-    return pSdrModel->IsChanged();
+    return pSdrModel->IsChanged() || bDialogModelChanged;
 }
 
 //----------------------------------------------------------------------------
@@ -822,6 +834,7 @@ BOOL VCDlgEditor::IsModified() const
 void VCDlgEditor::ClearModifyFlag()
 {
     pSdrModel->SetChanged( FALSE );
+    bDialogModelChanged = FALSE;
 }
 
 //----------------------------------------------------------------------------
