@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
+ *  last change: $Author: mib $ $Date: 2002-03-20 08:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,10 +767,10 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
         if( xAccImpl.isValid() )
             nIndex = xAccImpl->GetChildIndex( GetFrm() );
     }
-    if( -1 == nIndex )
-    {
-        THROW_RUNTIME_EXCEPTION( XAccessibleContext, "child not contained in parent" );
-    }
+//  if( -1 == nIndex )
+//  {
+//      THROW_RUNTIME_EXCEPTION( XAccessibleContext, "child not contained in parent" );
+//  }
 
     return nIndex;
 }
