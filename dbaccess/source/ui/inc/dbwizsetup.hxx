@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:08:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,9 +207,7 @@ protected:
     ApplyResult implApplyChanges();
 
 private:
-    sal_Bool StartTableWizard(); //const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
-    void OpenDatabaseDocument(const ::rtl::OUString& _sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath(OGeneralPage* _pTabpage);
     void createUniqueFileName(INetURLObject* pURL);
