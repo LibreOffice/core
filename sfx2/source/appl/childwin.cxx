@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <vcl/toolbox.hxx>
 #endif
 #ifndef _RCID_H
-#include <vcl/rcid.h>
+#include <tools/rcid.h>
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
