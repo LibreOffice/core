@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 14:59:57 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 16:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     pExcRoot->eGlobalDateiTyp = Biff5;
     pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
+    pExcRoot->nColMax = XCL_COLMAX;
     pExcRoot->nRowMax = EXC5_ANZROW;
     pExcRoot->pFormTable = pDoc->GetFormatTable();
     pExcRoot->pRootStorage = &rRootStorage;

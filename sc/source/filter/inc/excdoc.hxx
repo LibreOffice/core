@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-30 11:38:27 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 16:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #endif
 
 
+#define XCL_COLMAX                  (UINT16(255))
 #define EXC5_ANZROW                 (UINT16(16383))
 #define XCL8_ROWMAX                 (UINT16(65535))
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:15:20 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 16:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ExcPalette2*        pPalette2;
     UsedFontList*       pFontRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
+    UINT16              nColMax;
     UINT16              nRowMax;
     UINT16              nRangeNameIndex;
     // Biff8
