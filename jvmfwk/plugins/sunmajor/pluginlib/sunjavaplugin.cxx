@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-19 08:31:32 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,17 @@
 #include "jni.h"
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/vendorplugin.h"
-#include "javainfo.hxx"
-
+#include "util.hxx"
+#include "sunversion.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SUN_MICRO "Sun Microsystems Inc."
 
 using namespace osl;
+using namespace rtl;
+using namespace std;
+using namespace jfw_plugin;
+
 namespace {
 
 struct Init
@@ -104,83 +108,90 @@ osl::Mutex * getPluginMutex()
 }
 
 #if defined UNX
-rtl::OString getPluginJarPath(const rtl::OUString& sLocation, const rtl::OUString& sVersion)
+OString getPluginJarPath(
+    const OUString & sVendor,
+    const OUString& sLocation,
+    const OUString& sVersion)
 {
-    rtl::OString ret;
-    rtl::OUString sName1(RTL_CONSTASCII_USTRINGPARAM("javaplugin.jar"));
-    rtl::OUString sName2(RTL_CONSTASCII_USTRINGPARAM("plugin.jar"));
-    rtl::OUString sVer1_4_2(RTL_CONSTASCII_USTRINGPARAM("1.4.2"));
-    rtl::OUString sVer1_5_0(RTL_CONSTASCII_USTRINGPARAM("1.5.0"));
-    rtl::OUString sName;
-    if (stoc_javadetect::JavaInfo::compareVersions(
-            sVersion, sVer1_4_2) == -1)
+    OString ret;
+    OUString sName1(RTL_CONSTASCII_USTRINGPARAM("javaplugin.jar"));
+    OUString sName2(RTL_CONSTASCII_USTRINGPARAM("plugin.jar"));
+    OUString sPath;
+    if (sVendor.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SUN_MICRO))))
     {
-        sName = sName1;
-    }
-    else if (stoc_javadetect::JavaInfo::compareVersions(
-                 sVersion, sVer1_5_0) == -1)
-    {
-        sName = sName2;
-    }
+        SunVersion ver142("1.4.2-ea");
+        SunVersion ver150("1.5.0-ea");
+        SunVersion ver(sVersion);
+        OSL_ASSERT(ver142 && ver150 && ver);
 
-    if (sName.getLength() == 0)
-        return ret;
-
-    //try both SDK or Lib
-    rtl::OUString sJarUrl;
-    DirectoryItem item;
-    rtl::OUString jarPath(sLocation + OUSTR("/lib/")
-                          + sName);
-    if(DirectoryItem::get(jarPath, item) == File::E_None)
-    {
-        sJarUrl = jarPath;
+        OUString sName;
+        if (ver < ver142)
+        {
+            sName = sName1;
+        }
+        else if (ver < ver150)
+        {//this will cause ea, beta etc. to have plugin.jar in path.
+            //but this does not harm. 1.5.0-beta < 1.5.0
+            sName = sName2;
+        }
+        if (sName.getLength())
+        {
+            sName = sLocation + OUSTR("/lib/") + sName;
+            OSL_VERIFY(
+                osl_getSystemPathFromFileURL(sName.pData, & sPath.pData)
+                == osl_File_E_None);
+        }
     }
     else
     {
-        rtl::OUString jarPath2(sLocation + OUSTR("/jre/lib/")
-                               + sName);
-        if(DirectoryItem::get(jarPath2, item) == File::E_None)
+        char sep[] =  {SAL_PATHSEPARATOR, 0};
+        OUString sName(sLocation + OUSTR("/lib/") + sName1);
+        OUString sPath1;
+        OUString sPath2;
+        bool bOk = false;
+        if (osl_getSystemPathFromFileURL(sName.pData, & sPath1.pData)
+            == osl_File_E_None)
         {
-            sJarUrl = jarPath2;
+            sName = sLocation + OUSTR("/lib/") + sName2;
+            if (osl_getSystemPathFromFileURL(sName.pData, & sPath2.pData)
+                == osl_File_E_None)
+            {
+                sPath = sPath1 + OUString::createFromAscii(sep) + sPath2;
+            }
         }
+        OSL_ASSERT(sPath.getLength());
     }
-    if (sJarUrl.getLength() == 0)
-        return ret;
-    rtl::OUString sPath;
-    if (osl_getSystemPathFromFileURL(sJarUrl.pData, & sPath.pData)
-        == osl_File_E_None)
-    {
-        ret = rtl::OUStringToOString(sPath, osl_getThreadTextEncoding());
-    }
+    ret = rtl::OUStringToOString(sPath, osl_getThreadTextEncoding());
+
     return ret;
 }
 #endif // UNX
 
-JavaInfo* createJavaInfo(const stoc_javadetect::JavaInfo & info)
+
+JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 {
     JavaInfo* pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (pInfo == NULL)
         return NULL;
-    rtl::OUString sVendor(OUSTR(SUN_MICRO));
+    rtl::OUString sVendor = info->getVendor();
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(sVendor.pData);
-    pInfo->sLocation = info.usJavaHome.pData;
+    rtl::OUString sHome = info->getHome();
+    pInfo->sLocation = sHome.pData;
     rtl_uString_acquire(pInfo->sLocation);
-    pInfo->sVersion = info.getVersion().pData;
+    rtl::OUString sVersion = info->getVersion();
+    pInfo->sVersion = sVersion.pData;
     rtl_uString_acquire(pInfo->sVersion);
-    pInfo->nFeatures = info.supportsAccessibility() ? 1 : 0;
-#ifdef UNX
-    pInfo->nRequirements = JFW_REQUIRE_NEEDRESTART;
-#else
-    pInfo->nRequirements = 0x0l;
-#endif
+    pInfo->nFeatures = info->supportsAccessibility() ? 1 : 0;
+    pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
     rtl::OUStringBuffer buf(1024);
-    buf.append(info.usRuntimeLib);
-#ifdef UNX
-    buf.appendAscii("\n");
-    buf.append(info.usLibLocations);
-    buf.appendAscii("\n");
-#endif
+    buf.append(info->getRuntimeLibrary());
+    if (info->getLibraryPaths().getLength() > 0)
+    {
+        buf.appendAscii("\n");
+        buf.append(info->getLibraryPaths());
+        buf.appendAscii("\n");
+    }
 
     rtl::OUString sVendorData = buf.makeStringAndClear();
     rtl::ByteSequence byteSeq( (sal_Int8*) sVendorData.pData->buffer,
@@ -217,14 +228,16 @@ void abort_handler()
 }
 
 }
-namespace cssu = com::sun::star::uno;
+
 extern "C"
-javaPluginError jfw_plugin_getAllJavaInfos( rtl_uString *sMinVersion,
-                                 rtl_uString *sMaxVersion,
-                                 rtl_uString  * *arExcludeList,
-                                 sal_Int32  nLenList,
-                                 JavaInfo*** parJavaInfo,
-                                 sal_Int32 *nLenInfoList)
+javaPluginError jfw_plugin_getAllJavaInfos(
+    rtl_uString *sVendor,
+    rtl_uString *sMinVersion,
+    rtl_uString *sMaxVersion,
+    rtl_uString  * *arExcludeList,
+    sal_Int32  nLenList,
+    JavaInfo*** parJavaInfo,
+    sal_Int32 *nLenInfoList)
 {
     if (parJavaInfo == NULL || nLenInfoList == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
@@ -232,25 +245,26 @@ javaPluginError jfw_plugin_getAllJavaInfos( rtl_uString *sMinVersion,
     try
     {
         //check if we know all the required features
+        vector<OUString> vecExclude;
+        for (int i = 0; i != nLenList; i++)
+        {
+            vecExclude.push_back(arExcludeList[i]);
+        }
 
-        cssu::Sequence<rtl::OUString> seqExclude((rtl::OUString*)(rtl_uString**)arExcludeList, nLenList);
-
-        rtl::OUString sMin((rtl_uString*) sMinVersion);
-
-        std::vector<stoc_javadetect::JavaInfo> vec =
-            stoc_javadetect::JavaInfo::createAllInfo(sMin, seqExclude, 0);
+        std::vector<rtl::Reference<VendorBase> > vec =
+            getAllJREInfos(sVendor, sMinVersion, sMaxVersion, vecExclude);
 
         arInfo = (JavaInfo**) rtl_allocateMemory(vec.size() * sizeof (JavaInfo*));
 
         int j = 0;
-        typedef std::vector<stoc_javadetect::JavaInfo>::iterator cit;
-        for (cit i = vec.begin(); i != vec.end(); i++, j++)
+        typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
+        for (cit ii = vec.begin(); ii != vec.end(); ii++, j++)
         {
-            arInfo[j] = createJavaInfo(*i);
+            arInfo[j] = createJavaInfo(*ii);
         }
         *nLenInfoList = vec.size();
     }
-    catch(stoc_javadetect::JavaInfo::MalformedVersionException&)
+    catch(MalformedVersionException&)
     {
         return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
     }
@@ -274,50 +288,43 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     try
     {
         rtl::OUString sPath((rtl_uString*)path);
-        stoc_javadetect::JavaInfo info(sPath);
+        rtl::Reference<VendorBase> aVendorInfo =
+            getJREInfoByPath(sPath);
+
+        if (aVendorInfo.is() == sal_False)
+            return JFW_PLUGIN_E_NO_JRE;
         //check if the version meets the requirements
-        const rtl::OUString& sVersion = info.getVersion();
         rtl::OUString sTheMinVersion((rtl_uString*) sMinVersion);
 
-        if (sTheMinVersion.getLength() > 0)
-        {
-            int nRes =
-                stoc_javadetect::JavaInfo::compareVersions(
-                    sVersion, sTheMinVersion);
-            if (nRes < 0)
-                return JFW_PLUGIN_E_FAILED_VERSION;
-        }
+         if (sTheMinVersion.getLength() > 0)
+         {
+             int nRes = aVendorInfo->compareVersions(sTheMinVersion);
+             if (nRes < 0)
+                 return JFW_PLUGIN_E_FAILED_VERSION;
+         }
 
-        rtl::OUString sTheMaxVersion((rtl_uString*) sMaxVersion);
-        if (sTheMaxVersion.getLength() > 0)
-        {
-            int nRes =
-                stoc_javadetect::JavaInfo::compareVersions(
-                    sVersion, sTheMaxVersion);
-            if (nRes > 0)
-                return JFW_PLUGIN_E_FAILED_VERSION;
-        }
+         rtl::OUString sTheMaxVersion((rtl_uString*) sMaxVersion);
+         if (sTheMaxVersion.getLength() > 0)
+         {
+             int nRes = aVendorInfo->compareVersions(sTheMaxVersion);
+             if (nRes > 0)
+                 return JFW_PLUGIN_E_FAILED_VERSION;
+         }
 
-        if (arExcludeList > 0)
-        {
-            for (int i = 0; i < nLenList; i++)
-            {
-                rtl::OUString sExVer((rtl_uString*) arExcludeList[i]);
-                int nRes =
-                    stoc_javadetect::JavaInfo::compareVersions(
-                        sVersion, sExVer);
-                if (nRes == 0)
-                    return JFW_PLUGIN_E_FAILED_VERSION;
-            }
-        }
+         if (arExcludeList > 0)
+         {
+             for (int i = 0; i < nLenList; i++)
+             {
+                 rtl::OUString sExVer((rtl_uString*) arExcludeList[i]);
+                 int nRes = aVendorInfo->compareVersions(sExVer);
+                 if (nRes == 0)
+                     return JFW_PLUGIN_E_FAILED_VERSION;
+             }
+         }
 
-        *ppInfo = createJavaInfo(info);
+         *ppInfo = createJavaInfo(aVendorInfo);
     }
-    catch(stoc_javadetect::JavaInfo::InitException& )
-    {
-        errcode = JFW_PLUGIN_E_NO_JRE;
-    }
-    catch(stoc_javadetect::JavaInfo::MalformedVersionException& )
+    catch(MalformedVersionException& )
     {
         errcode = JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
     }
@@ -446,7 +453,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
             sClassPathOption = sClassPath + rtl::OString(sep) +
-                getPluginJarPath(pInfo->sLocation,pInfo->sVersion);
+                getPluginJarPath(sVendor, pInfo->sLocation,pInfo->sVersion);
             options[i+1].optionString = (char *) sClassPathOption.getStr();
             options[i+1].extraInfo = arOptions[i].extraInfo;
         }
