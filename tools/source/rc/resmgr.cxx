@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:30:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ ResMgr* Resource::GetResManager()
 struct ImpContent
 {
     sal_uInt64   nTypeAndId;
-    ULONG        nOffset;
+    sal_uInt32   nOffset;
 };
 
 struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
@@ -746,15 +746,15 @@ BOOL InternalResMgr::Create()
             if ( pLogFile )
             {
                 pResUseDump = new std::hash_map<sal_uInt64, int>;
-                for( ULONG i = 0; i < nEntries; ++i )
+                for( sal_uInt32 i = 0; i < nEntries; ++i )
                     (*pResUseDump)[pContent[i].nTypeAndId] = 1;
             }
 #endif
             // swap the content to the right endian
             pContent[0].nTypeAndId = ResMgr::GetUInt64( pContentBuf );
             pContent[0].nOffset = ResMgr::GetLong( pContentBuf+8 );
-            ULONG nCount = nEntries - 1;
-            for( ULONG i = 0,j=1; i < nCount; ++i,++j )
+            sal_uInt32 nCount = nEntries - 1;
+            for( sal_uInt32 i = 0,j=1; i < nCount; ++i,++j )
             {
                 // swap the content to the right endian
                 pContent[j].nTypeAndId = ResMgr::GetUInt64( pContentBuf + (12*j) );
@@ -789,9 +789,6 @@ BOOL InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) cons
                                             pContent + nEntries,
                                             nValue,
                                             ImpContentMixLessCompare());
-//    ImpContent * pFind = (ImpContent *)
-//        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
-//                sizeof( ImpContent ), Search );
     return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == nValue);
 }
 
@@ -811,9 +808,6 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                             pEnd,
                                             nValue,
                                             ImpContentMixLessCompare());
-//    ImpContent * pFind = (ImpContent *)
-//        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
-//                sizeof( ImpContent ), Search );
     if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
     {
         if( nRT == RSC_STRING && bEqual2Content )
@@ -1156,7 +1150,8 @@ void ResMgr::decStack()
     }
     else
     {
-        if( (aStack[nCurStack].Flags & RC_FALLBACK_DOWN) )
+        ImpRCStack& rTop = aStack[nCurStack];
+        if( (rTop.Flags & RC_FALLBACK_DOWN) )
         {
             #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "returning from fallback %s\n",
@@ -1164,7 +1159,7 @@ void ResMgr::decStack()
             #endif
             delete pFallbackResMgr;
             pFallbackResMgr = NULL;
-            Resource::SetResManager( this );
+            Resource::SetResManager( rTop.pResMgr );
         }
         nCurStack--;
     }
