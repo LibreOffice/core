@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:24:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "Ìõ¼ş 1";
         Text[ russian ] = "Óñëîâèå 1";
         Text[ polish ] = "Warunek 1";
-        Text[ japanese ] = "ğŒ1";
+        Text[ japanese ] = "ğŒ 1";
         Text[ chinese_traditional ] = "±ø¥ó 1";
         Text[ arabic ] = "ÇáÔÑØ 1";
         Text[ greek ] = "ÓõíèŞêç 1";
@@ -590,7 +590,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "Ìõ¼ş 2";
         Text[ russian ] = "Óñëîâèå 2";
         Text[ polish ] = "Warunek 2";
-        Text[ japanese ] = "ğŒ2";
+        Text[ japanese ] = "ğŒ 2";
         Text[ chinese_traditional ] = "±ø¥ó 2";
         Text[ arabic ] = "ÇáÔÑØ 2";
         Text[ greek ] = "ÓõíèŞêç 2";
@@ -1090,7 +1090,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_simplified ] = "Ìõ¼ş 3";
         Text[ russian ] = "Óñëîâèå 3";
         Text[ polish ] = "Warunek 3";
-        Text[ japanese ] = "ğŒ3";
+        Text[ japanese ] = "ğŒ 3";
         Text[ chinese_traditional ] = "±ø¥ó 3";
         Text[ arabic ] = "ÇáÔÑØ 3";
         Text[ greek ] = "ÓõíèŞêç 3";
