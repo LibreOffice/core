@@ -354,6 +354,22 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-clock-wipe" pres:preset-sub-type="clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="2" smil:type="clockWipe" smil:subtype="clockwiseTwelve"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-clock-wipe" pres:preset-sub-type="counter-clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="2" smil:type="clockWipe" smil:subtype="clockwiseTwelve" smil:direction="reverse"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Spokes" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-wheel" pres:preset-sub-type="1">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:transitionFilter smil:dur="2" smil:type="pinWheelWipe" smil:subtype="oneBlade"/>
@@ -392,6 +408,76 @@
     </anim:par>
     </anim:par>
     </anim:par>
+
+<!-- ooo-entrance-snake-wipe -->
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-snake-wipe" pres:preset-sub-type="from-top-left-horizontal">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="snakeWipe" smil:subtype="topLeftHorizontal"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-snake-wipe" pres:preset-sub-type="from-top-left-vertical">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="snakeWipe" smil:subtype="topLeftVertical"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-snake-wipe" pres:preset-sub-type="from-bottom-right-vertical">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="snakeWipe" smil:subtype="topLeftVertical" smil:direction="reverse"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-snake-wipe" pres:preset-sub-type="from-bottom-right-horizontal">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="snakeWipe" smil:subtype="topLeftHorizontal" smil:direction="reverse"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+
+<!-- ooo-entrance-spiral-wipe -->
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-spiral-wipe" pres:preset-sub-type="from-top-left-clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="spiralWipe" smil:subtype="topLeftClockwise"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-spiral-wipe" pres:preset-sub-type="from-top-right-counter-clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="spiralWipe" smil:subtype="topRightCounterClockwise"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-spiral-wipe" pres:preset-sub-type="from-center-clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="spiralWipe" smil:subtype="topLeftClockwise" smil:direction="reverse"/>/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-spiral-wipe" pres:preset-sub-type="from-center-counter-clockwise">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="spiralWipe" smil:subtype="topRightCounterClockwise" smil:direction="reverse"/>/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+
+<!-- ooo-entrance-wipe -->
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-wipe" pres:preset-sub-type="from-bottom">
@@ -568,6 +654,15 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="downward">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-bottom">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1" pres:additive="base"/>
@@ -606,6 +701,50 @@
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-top-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x+width/2;x" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-bottom-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x+width/2;x" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y+height/2;y" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-top-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-width/2;x" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-stretchy" pres:preset-sub-type="from-bottom-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-width/2;x" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y+height/2;y" smil:keyTimes="0;1" pres:additive="base"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
     </anim:par>
     </anim:par>
