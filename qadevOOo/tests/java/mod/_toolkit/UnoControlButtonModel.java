@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlButtonModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:24 $
+ *  last change:$Date: 2003-05-27 14:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -82,7 +83,7 @@ public class UnoControlButtonModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -103,7 +104,7 @@ public class UnoControlButtonModel extends TestCase {
         Object wat = null;
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance(
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
                                     "com.sun.star.awt.UnoControlButtonModel");
         } catch (Exception e) {
             e.printStackTrace( log );

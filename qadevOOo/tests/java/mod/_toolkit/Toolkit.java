@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:25 $
+ *  last change:$Date: 2003-05-27 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
@@ -90,7 +91,7 @@ public class Toolkit extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -137,7 +138,7 @@ public class Toolkit extends TestCase {
             win = cntrlr.getFrame().getContainerWindow();
             //win = (XWindow) UnoRuntime.queryInterface(XWindow.class, ctrl) ;
             the_win = the_access.getControl(the_Model).getPeer();
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
