@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:32:57 $
+ *  last change: $Author: dvo $ $Date: 2002-08-30 14:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@
 #include <shells.hrc>
 #endif
 
+#include <vector>
+
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 /*------------------------------------------------------------------------
     Beschreibung:
@@ -226,6 +228,9 @@ class SwRedlineAcceptDlg
     BOOL                    bOnlyFormatedRedlines;
     BOOL                    bHasReadonlySel;
     BOOL                    bRedlnAutoFmt;
+
+    // prevent update dialog data during longer operations (cf #102657#)
+    bool                    bInhibitActivate;
 
     DECL_LINK( AcceptHdl,       void* );
     DECL_LINK( AcceptAllHdl,    void* );
@@ -468,7 +473,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
     bOnlyFormatedRedlines( FALSE ),
     bHasReadonlySel ( FALSE ),
-    bRedlnAutoFmt   (bAutoFmt)
+    bRedlnAutoFmt   (bAutoFmt),
+    bInhibitActivate( false )
 {
     aTabPagesCTRL.SetHelpId(HID_REDLINE_CTRL);
     pTPView = aTabPagesCTRL.GetViewPage();
@@ -711,6 +717,10 @@ void SwRedlineAcceptDlg::Resize()
 
 void SwRedlineAcceptDlg::Activate()
 {
+    // prevent update if flag is set (#102547#)
+    if( bInhibitActivate )
+        return;
+
     SwView *pView = ::GetActiveView();
     SwWait aWait( *pView->GetDocShell(), FALSE );
 
@@ -1116,8 +1126,16 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     SvLBoxEntry* pEntry = bSelect ? pTable->FirstSelected() : pTable->First();
     ULONG nPos = LONG_MAX;
-    SvUShortsSort aIdx;
 
+    typedef std::vector<SvLBoxEntry*> ListBoxEntries_t;
+    ListBoxEntries_t aRedlines;
+
+    // don't activate
+    DBG_ASSERT( bInhibitActivate == false,
+                "recursive call of CallAcceptReject?");
+    bInhibitActivate = true;
+
+    // collect redlines-to-be-accepted/rejected in aRedlines vector
     while( pEntry )
     {
         if( !pTable->GetParent( pEntry ) )
@@ -1128,7 +1146,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
             RedlinData *pData = (RedlinData *)pEntry->GetUserData();
 
             if( !pData->bDisabled )
-                aIdx.Insert(GetRedlinePos( *pEntry ));
+                aRedlines.push_back( pEntry );
         }
 
         pEntry = bSelect ? pTable->NextSelected(pEntry) : pTable->Next(pEntry);
@@ -1142,12 +1160,25 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
     pSh->StartAction();
     pSh->StartUndo();
 
-    for( USHORT i = aIdx.Count(); i; )
-        (pSh->*FnAccRej)( aIdx[ --i ] );
+    // accept/reject the the redlines in aRedlines. The absolute
+    // position may change during the process (e.g. when two redlines
+    // are merged in result of another one being deleted), so the
+    // position must be resolved late and checked before using it.
+    // (cf #102547#)
+    ListBoxEntries_t::iterator aEnd = aRedlines.end();
+    for( ListBoxEntries_t::iterator aIter = aRedlines.begin();
+         aIter != aEnd;
+         aIter++ )
+    {
+        USHORT nPos = GetRedlinePos( **aIter );
+        if( nPos != USHRT_MAX )
+            (pSh->*FnAccRej)( nPos );
+    }
 
     pSh->EndUndo();
     pSh->EndAction();
 
+    bInhibitActivate = false;
     Activate();
 
     if( ULONG_MAX != nPos && pTable->GetEntryCount() )
