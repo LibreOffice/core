@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 14:48:16 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,8 +799,6 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
     else
         aPaM = rCurSel.GetEnd();
 
-    TextPaM aCurPaM( aPaM );    // fuers Invalidieren
-
     XubString aText( rStr );
     aText.ConvertLineEnd( LINEEND_LF );
 
@@ -919,13 +917,18 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bP
         FormatAndUpdate();
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
-    TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    //TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
 
     /*
      bSpecial:  Wenn hinter dem letzten Zeichen einer umgebrochenen Zeile,
      am Ende der Zeile bleiben, nicht am Anfang der naechsten.
      Zweck:     - END => wirklich hinter das letzte Zeichen
                 - Selektion....
+      bSpecial: If behind the last character of a made up line, stay at the
+                  end of the line, not at the start of the next line.
+      Purpose:  - really END = > behind the last character
+                  - to selection...
+
     */
 
     long nY = 0;
@@ -2327,7 +2330,7 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             nXWidth = nTmpWidth;
 
         // Portion suchen, die nicht mehr in Zeile passt....
-        TETextPortion* pPortion;
+        TETextPortion* pPortion = 0;
         BOOL bBrokenLine = FALSE;
         bLineBreak = FALSE;
 
