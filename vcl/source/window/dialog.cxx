@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-18 13:58:17 $
+ *  last change: $Author: ssa $ $Date: 2002-10-21 14:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,6 @@ static ByteString ImplGetDialogText( Dialog* pDialog )
 
 static BOOL ImplIsMnemonicCtrl( Window* pWindow )
 {
-    if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
-        return FALSE;
-
     if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
          (pWindow->GetType() == WINDOW_CHECKBOX) ||
          (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
@@ -311,6 +308,7 @@ void Dialog::ImplInitData()
     mbOldSaveBack       = FALSE;
     mbInClose           = FALSE;
     mbModalMode         = FALSE;
+    mnMousePositioned   = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -510,6 +508,14 @@ long Dialog::Notify( NotifyEvent& rNEvt )
                 // do not change modal counter (pSVData->maAppData.mnModalDialog)
                 SetModalInputMode( FALSE );
                 SetModalInputMode( TRUE );
+
+                // #93022# def-button might have changed after show
+                if( !mnMousePositioned )
+                {
+                    mnMousePositioned = 1;
+                    ImplMouseAutoPos( this );
+                }
+
             }
         }
     }
@@ -525,7 +531,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
+        if ( Application::IsAutoMnemonicEnabled() )
             ImplWindowAutoMnemonic( this );
 
         if ( IsDefaultPos() && !mbFrame )
@@ -676,6 +682,7 @@ short Dialog::Execute()
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
     Show();
+
 
     if ( Application::GetAccessHdlCount() )
     {
