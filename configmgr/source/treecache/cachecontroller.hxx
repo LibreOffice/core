@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:52:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,9 @@ namespace configmgr
         std::auto_ptr<ISubtree> loadTemplateData(TemplateRequest const & _aRequest)
             CFG_UNO_THROW_ALL(  );
 
-        void flushPendingUpdates() CFG_NOTHROW();
+        void flushPendingUpdates() CFG_UNO_THROW_ALL();
+
+        void flushCacheWriter() CFG_NOTHROW();
         // add templates componentwise to cache
         data::TreeAddress addTemplates ( backend::ComponentData const & _aComponentInstance );
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
