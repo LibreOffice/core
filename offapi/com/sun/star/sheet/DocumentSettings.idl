@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-09 16:12:20 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 12:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_document_Settings_idl__
+#include <com/sun/star/document/Settings.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -80,6 +84,9 @@ module com {  module sun {  module star {  module sheet {
  */
 service DocumentSettings
 {
+    service com::sun::star::document::Settings;
+
+    //-------------------------------------------------------------------------
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
