@@ -178,6 +178,7 @@ hedabu: ..\inc\zformat.hxx %_DEST%\inc%_EXT%\svtools\zformat.hxx
 hedabu: ..\inc\numuno.hxx %_DEST%\inc%_EXT%\svtools\numuno.hxx
 hedabu: ..\source\misc\filearch.hxx %_DEST%\inc%_EXT%\svtools\filearch.hxx
 hedabu: ..\inc\loginerr.hxx %_DEST%\inc%_EXT%\svtools\loginerr.hxx
+hedabu: ..\inc\logindlg.hxx %_DEST%\inc%_EXT%\svtools\logindlg.hxx
 hedabu: ..\inc\httpcook.hxx %_DEST%\inc%_EXT%\svtools\httpcook.hxx
 hedabu: ..\source\misc\demo.hxx %_DEST%\inc%_EXT%\svtools\svtdemo.hxx
 hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
