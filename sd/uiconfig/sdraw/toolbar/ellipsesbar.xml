@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="helpid:10110" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Circle" toolbar:helpid="helpid:10385" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Pie" toolbar:helpid="helpid:10112" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CirclePie" toolbar:helpid="helpid:10388" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:EllipseCut" toolbar:helpid="helpid:10392" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut" toolbar:helpid="helpid:10115" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse_Unfilled" toolbar:helpid="helpid:10384" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Circle_Unfilled" toolbar:helpid="helpid:10386" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Pie_Unfilled" toolbar:helpid="helpid:10387" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CirclePie_Unfilled" toolbar:helpid="helpid:10389" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:EllipseCut_Unfilled" toolbar:helpid="helpid:10393" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut_Unfilled" toolbar:helpid="helpid:10391" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:helpid="helpid:10114" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CircleArc" toolbar:helpid="helpid:10390" toolbar:text="" toolbar:style="radio" />
+</toolbar:toolbar>
