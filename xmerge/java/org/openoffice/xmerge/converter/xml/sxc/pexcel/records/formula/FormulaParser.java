@@ -61,6 +61,7 @@ import java.io.*;
 import java.util.Vector;
 import java.util.Enumeration;
 
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -81,6 +82,7 @@ public class FormulaParser {
     private int index = 1;
     private TokenFactory tokenFactory;
     private Vector tokenVector;
+    private Workbook wb;
 
      /**
       * Default constructor
@@ -92,6 +94,13 @@ public class FormulaParser {
         tokenVector = new Vector();
     }
 
+    /**
+     *
+     */
+    public void setWorkbook(Workbook wb) {
+
+        this.wb = wb;
+    }
 
     /**
      * Parse method for parsing from a String to a byte[]
@@ -189,7 +198,7 @@ public class FormulaParser {
      * @return A boolean returning the result of the comparison
       */
      private boolean isCellRefSpecialChar(char c) {
-         return (c == ':') || (c == '$');
+         return (c == ':') || (c == '$') || (c == '!');
      }
 
      /**
@@ -238,7 +247,7 @@ public class FormulaParser {
      * @param  c The character which is to be identified
      * @return A boolean returning the result of the comparison
       */
-     private boolean isCellRef(char c) {
+     private boolean isCellRefChar(char c) {
          return(isAlpha(c) || isDigit(c) || isCellRefSpecialChar(c));
      }
 
@@ -358,6 +367,32 @@ public class FormulaParser {
     }
 
      /**
+      * Test to see if we have come across a cell reference or a Name
+     * Definition.
+     */
+     private boolean isCellRef(String s) {
+         char c;
+        boolean result = false;
+
+        for(int i = 0;i<s.length();i++) {
+            c = s.charAt(i);
+            if(isCellRefSpecialChar(c)) {
+                result = true;
+                break;
+            }
+        }
+
+        // if it is a simple cell reference then there will not be a cell
+        // reference 'special char' so we should also look for a digit
+        if(!result) {
+            if(isDigit(s.charAt(1)) || isDigit(s.charAt(2))) {
+                result = true;
+            }
+        }
+        return result;
+     }
+
+     /**
       * Test to see if we have come across a cell reference or a function and
      * add the resulting toek nto the tokenVector.
      */
@@ -375,10 +410,20 @@ public class FormulaParser {
             tokenVector.add(tokenFactory.getOperatorToken(")", 1));
             tokenVector.insertElementAt(tokenFactory.getFunctionToken(cell, numArgs), index);
          } else {
-            if(cell.indexOf(':')!=-1) {
+
+            if(cell.indexOf('!')!=-1) {
+                String cellRef = cell.substring(cell.indexOf('!') + 1, cell.length());
+                if(cellRef.indexOf(':')!=-1) {
+                    tokenVector.add(tokenFactory.getOperandToken(cell, "3D_CELL_AREA_REFERENCE"));
+                } else {
+                    tokenVector.add(tokenFactory.getOperandToken(cell, "3D_CELL_REFERENCE"));
+                }
+            } else if(cell.indexOf(':')!=-1) {
                 tokenVector.add(tokenFactory.getOperandToken(cell, "CELL_AREA_REFERENCE"));
-            } else {
+            } else if(isCellRef(cell)) {
                 tokenVector.add(tokenFactory.getOperandToken(cell, "CELL_REFERENCE"));
+            } else {
+                tokenVector.add(tokenFactory.getOperandToken(cell, "NAME"));
             }
          }
      }
@@ -417,7 +462,7 @@ public class FormulaParser {
              do {
                  cell += look;
                 status = getChar();
-             } while(isCellRef(look) && status);
+             } while(isCellRefChar(look) && status);
              skipWhite();
                         return cell;
            }
