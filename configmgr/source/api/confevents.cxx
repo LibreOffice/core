@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:46:08 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #include "confevents.hxx"
 
 #ifndef CONFIGMGR_API_EVENTHELPERS_HXX_

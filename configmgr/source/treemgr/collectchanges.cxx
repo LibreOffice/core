@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 #include "collectchanges.hxx"
 
 #include "nodechangeinfo.hxx"

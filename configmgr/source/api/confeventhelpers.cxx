@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #include "confeventhelpers.hxx"
 
 #ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
