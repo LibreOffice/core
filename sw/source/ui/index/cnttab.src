@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ french ] = "Styles";
                 Text[ spanish ] = "Estilos";
                 Text[ italian ] = "Modelli";
-                Text[ danish ] = "Typografi";
+                Text[ danish ] = "Typografier";
                 Text[ swedish ] = "Mallar";
                 Text[ polish ] = "Szablony";
                 Text[ portuguese_brazilian ] = "Styles";
@@ -681,7 +681,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "¼öµ¿º¯È¯À¸·Î ºÎÅÍ º¸È£";
         Text[ chinese_simplified ] = "·ÀÖ¹ÊÖ¶¯¸ü¸Ä";
         Text[ chinese_traditional ] = "¤£¤¹³\\¤â¤uÅÜ§ó";
-        Text[ arabic ] = "ãÄãøä ÖÏ ÇáÊÛííÑÇÊ ÇáíÏæíÉ";
+        Text[ arabic ] = "ãÍãí ÖÏ ÇáÊÛííÑÇÊ ÇáíÏæíÉ";
         Text[ turkish ] = "Manüel değişikliklere karşı koru";
         Text[ language_user1 ] = " ";
     };
@@ -846,7 +846,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ arabic ] =
     {
-            < "ãÓÊäÏ ßÇãá" ;    AREA_DOCUMENT       ;> ;
+            < "ÇáãÓÊäÏ ÈÃßãáå" ;    AREA_DOCUMENT       ;> ;
         < "ÇáİÕá" ;                 AREA_CHAPTER        ;> ;
     };
     StringList [ turkish ] =
@@ -932,7 +932,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese ] = "~Esquema";
         Text[ russian ] = "Ñòğóêòóğà";
         Text[ greek ] = "ÄéÜñèñùóç";
-        Text[ dutch ] = "~Overzicht";
+        Text[ dutch ] = "~overzicht";
         Text[ french ] = "~Structure";
         Text[ spanish ] = "~Esquema";
         Text[ italian ] = "Struttura";
@@ -944,7 +944,7 @@ TabPage TP_TOX_SELECT
         Text[ korean ] = "À±°û";
         Text[ chinese_simplified ] = "´ó¸Ù";
         Text[ chinese_traditional ] = "¤jºõ";
-        Text[ arabic ] = "ÊŞÓíã";
+        Text[ arabic ] = "ÇáÊŞÓíã";
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
     };
@@ -994,7 +994,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Styles";
         Text[ spanish ] = "~Estilos";
         Text[ italian ] = "Modelli";
-        Text[ danish ] = "Typografi";
+        Text[ danish ] = "Typografier";
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Szablony";
         Text[ portuguese_brazilian ] = "Styles";
@@ -1133,7 +1133,7 @@ TabPage TP_TOX_SELECT
     {
             < "Texto de referência" ; > ;
         < "Categoria e número" ; > ;
-        < "Texto para legenda" ; > ;
+        < "Texto para etiqueta" ; > ;
     };
     StringList [ russian ] =
     {
@@ -1268,7 +1268,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese ] = "~Marcas do índice";
         Text[ russian ] = "Ìåòêè óêàçàòåëÿ";
         Text[ greek ] = "ÓçìÜíóåéò åõñåôçñßïõ";
-        Text[ dutch ] = "~Indexmarkeringen";
+        Text[ dutch ] = "~indexmarkeringen";
         Text[ french ] = "~Marques d'index";
         Text[ spanish ] = "Mar~cas del índice";
         Text[ italian ] = "Contrasse~gni indice";
@@ -1420,7 +1420,7 @@ TabPage TP_TOX_SELECT
         Text[ portuguese ] = "~Escrever entradas em maiúsculas autom.";
         Text[ russian ] = "İëåìåíòû çàãëàâíûìè áóêâàìè (àâòîì.)";
         Text[ greek ] = "Åããñáöİò áõôïìÜôùò ìå êåöáëáßá ãñÜììáôá";
-        Text[ dutch ] = "Items automatisch in ~hoofdletterss";
+        Text[ dutch ] = "Items automatisch met ~hoofdletter";
         Text[ french ] = "Entrées en majuscules (autom.)";
         Text[ spanish ] = "Escribir entradas automáticamente en ma~yúsculas";
         Text[ italian ] = "Scrivi le voci maiusc~ole";
@@ -1552,8 +1552,8 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Images";
         Text[ spanish ] = "Imágene~s";
         Text[ italian ] = "~Immagini";
-        Text[ danish ] = "Billeder";
-        Text[ swedish ] = "~Grafiker";
+        Text[ danish ] = "Grafik";
+        Text[ swedish ] = "~Grafik";
         Text[ polish ] = "Grafiki";
         Text[ portuguese_brazilian ] = "Graphics";
         Text[ japanese ] = "}";
@@ -2109,7 +2109,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Âûäåëåííûé ôàéë äëÿ ïğåäìåòíîãî óêàçàòåëÿ (*.sdi)";
         Text[ greek ] = "Áñ÷åßï óŞìáíóçò ãéá åõñåôŞñéï ëİîåùí (*.sdi)";
         Text[ dutch ] = "Bestand met markeringen voor trefwoordenregister (*.sdi)";
-        Text[ french ] = "Fichier descriptif pour l'index lexical (*.sdi)";
+        Text[ french ] = "Fichier marque pour l'index lexical (*.sdi)";
         Text[ spanish ] = "Archivo de marcas para índice alfabético (*.sdi)";
         Text[ italian ] = "File di selezione per indice analitico (*.sdi)";
         Text[ danish ] = "Markeringsfil for stikordsregister (*.sdi)";
@@ -3887,7 +3887,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese_brazilian ] = "~Estilos de parágrafo" ;
         Text [ portuguese ] = "Estilo~s de parágrafo" ;
         Text [ finnish ] = "~Kappaletyylit" ;
-        Text [ danish ] = "Afsnitstypografi" ;
+        Text [ danish ] = "Afsnitstypografier" ;
         Text [ french ] = "~Styles de paragraphe" ;
         Text [ swedish ] = "Styckeformatmallar" ;
         Text [ dutch ] = "~Alinea-opmaakprofielen" ;
@@ -4010,7 +4010,7 @@ TabPage TP_TOX_STYLES
         Text[ french ] = "Assignation";
         Text[ spanish ] = "Asignación";
         Text[ italian ] = "Assegnazione";
-        Text[ danish ] = "Tildel";
+        Text[ danish ] = "Tildeling";
         Text[ swedish ] = "Tilldelning";
         Text[ polish ] = "Przypisanie";
         Text[ portuguese_brazilian ] = "Layout";
@@ -4077,7 +4077,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ french ] = "~Styles";
         Text[ spanish ] = "~Estilos";
         Text[ italian ] = "~Modelli";
-        Text[ danish ] = "Typografi";
+        Text[ danish ] = "Typografier";
         Text[ swedish ] = "Mallar";
         Text[ polish ] = "Szablony";
         Text[ portuguese_brazilian ] = "Styles";
