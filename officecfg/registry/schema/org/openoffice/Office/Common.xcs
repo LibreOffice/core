@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: af $ $Date: 2002-07-05 14:18:27 $
+ *  last change: $Author: jl $ $Date: 2002-07-08 10:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2484,19 +2484,25 @@
             </group>
         </group>
         <group oor:name="Java">
-            <group oor:name="Applet">
-                <prop oor:name="Enable" oor:type="xs:boolean">
-                    <!-- OldPath: Java -->
-                    <!-- OldLocation: java.ini -->
-                    <!-- Responsible: JL -->
-                    <!-- UIHints: Tools  Options  Browser  Other  [Section] Applets -->
-                    <value>true</value>
-                    <info>
-                        <desc xml:lang="en-US">Enables/disables Java applets in Office documents.</desc>
-                        <label xml:lang="en-US">Enable Applets</label>
-                    </info>
-                </prop>
-            </group>
+          <!-- Responsible: JL -->
+          <info>
+            <desc xml:lang="en-US">Contains Java related settings.</desc>
+          </info>
+          <group oor:name="Applet">
+            <info>
+              <desc xml:lang="en-US">Contains Applet related settings.</desc>
+            </info>
+            <prop oor:name="Enable" oor:type="xs:boolean">
+              <!-- OldPath: Java -->
+              <!-- OldLocation: java.ini -->
+              <!-- UIHints: Tools  Options  Security Enable Applets -->
+              <value>true</value>
+              <info>
+                <desc xml:lang="en-US">Enables/disables Java applets in Office documents.</desc>
+                <label xml:lang="en-US">Enable Applets</label>
+              </info>
+            </prop>
+          </group>
         </group>
         <group oor:name="Vectorize">
             <prop oor:name="ColorCount" oor:type="xs:short">
