@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:50:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Text representation" ;
         Text [ portuguese ] = "Visualizar texto" ;
         Text [ english_us ] = "Text display" ;
-        Text [ portuguese_brazilian ] = "Exibir texto" ;
+        Text [ portuguese_brazilian ] = "Visualizar texto" ;
         Text [ swedish ] = "Textvisning" ;
         Text [ danish ] = "Tekstvisning" ;
         Text [ italian ] = "Rappresentazione testo" ;
@@ -100,7 +100,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "ε¤‰ζ›΄η®‡ζ‰€γ®ε±¥ζ­΄";
         Text[ chinese_traditional ] = "ζ–‡ε­—ι΅―η¤Ί";
         Text[ arabic ] = "ΨΡνήΙ ΪΡΦ ΗαδΥ";
-        Text[ greek ] = "Προβολή κειμένου";
+        Text[ greek ] = "Εμφάνιση κειμένου";
         Text[ korean ] = "ν…μ¤νΈ ν‘μ‹";
         Text[ turkish ] = "Metin gφsterimi";
         Text[ language_user1 ] = " ";
@@ -226,17 +226,17 @@ TabPage TP_REDLINE_OPT
         };
     StringList [ language_user1 ] =
     {
-            < "[Kei; [Keine]" ; > ;
-        < "Fett" ; > ;
-        < "Kurs; Kursiv" ; > ;
-        < "Unte; Unterstrichen" ; > ;
-        < "Dopp; Doppelt unterstrichen" ; > ;
-        < "Durc; Durchstreichen" ; > ;
-        < "Vers; Versalien" ; > ;
-        < "Geme; Gemeine" ; > ;
-        < "Kapi; Kapitδlchen" ; > ;
-        < "Tite; Titelschrift" ; > ;
-        < "Hint; Hintergrundfarbe" ; > ;
+            < "; [Kei; [Keine]" ; > ;
+        < "; Fett" ; > ;
+        < "; Kurs; Kursiv" ; > ;
+        < "; Unte; Unterstrichen" ; > ;
+        < "; Dopp; Doppelt unterstrichen" ; > ;
+        < "; Durc; Durchstreichen" ; > ;
+        < "; Vers; Versalien" ; > ;
+        < "; Geme; Gemeine" ; > ;
+        < "; Kapi; Kapitδlchen" ; > ;
+        < "; Tite; Titelschrift" ; > ;
+        < "; Hint; Hintergrundfarbe" ; > ;
     };
     StringList [ portuguese ] =
     {
@@ -269,7 +269,7 @@ TabPage TP_REDLINE_OPT
     StringList [ greek ] =
     {
             < "[Κανένα]" ; > ;
-        < "Έντονο" ; > ;
+        < "Έντονα" ; > ;
         < "Πλάγια" ; > ;
         < "Υπογράμμιση" ; > ;
         < "Διπλή υπογράμμιση" ; > ;
@@ -955,7 +955,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "ε¤‰ζ›΄η®‡ζ‰€γ®γ‚γ‚‹θ΅γ‚’η¤Ίγ™";
         Text[ chinese_traditional ] = "ε·²η¶“θ®ζ›΄η„θ΅";
         Text[ arabic ] = "ΓΣΨΡ γΪΟαΙ";
-        Text[ greek ] = "Τροποποιημένες γραμμές";
+        Text[ greek ] = "Τροποποίηση γραμμών";
         Text[ korean ] = "λ³€κ²½λ μ¤„";
         Text[ turkish ] = "Ηizgiler deπiώti";
         Text[ language_user1 ] = " ";
@@ -1338,6 +1338,7 @@ TabPage TP_REDLINE_OPT
         Text[ slovak ] = "[NiΔ]";
     };
 };
+
 
 
 
