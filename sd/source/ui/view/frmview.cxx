@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-13 18:08:52 $
+ *  last change: $Author: aw $ $Date: 2001-12-14 10:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,28 +318,43 @@ SvStream& operator << (SvStream& rOut, const FrameView& rView)
     String aLayerControls(SdResId(STR_LAYER_CONTROLS));
     String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
 
+    sal_Bool bActiveLayerWasChanged(sal_False);
+    String aOldLayerName(rView.GetActiveLayer());
+
     if (aLayerName == aLayerLayout)
     {
         ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
+        bActiveLayerWasChanged = sal_True;
     }
     else if (aLayerName == aLayerBckgrnd)
     {
         ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
+        bActiveLayerWasChanged = sal_True;
     }
     else if (aLayerName == aLayerBckgrndObj)
     {
         ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
+        bActiveLayerWasChanged = sal_True;
     }
     else if (aLayerName == aLayerControls)
     {
         ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
+        bActiveLayerWasChanged = sal_True;
     }
     else if (aLayerName == aLayerMeasurelines)
     {
         ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
+        bActiveLayerWasChanged = sal_True;
     }
 
+    // stream out the view
     rOut << (SdrView&) rView;
+
+    // #95895# when active layer name was changed for export, change it back to original here
+    if(bActiveLayerWasChanged)
+    {
+        ((FrameView&)rView).SetActiveLayer(aOldLayerName);
+    }
 
     // Letzter Parameter ist die aktuelle Versionsnummer des Codes
     SdIOCompat aIO(rOut, STREAM_WRITE, 11);
