@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 08:52:30 $
+ *  last change: $Author: aw $ $Date: 2002-10-10 11:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,22 @@ void SdrObjEditView::ModelHasChanged()
                 aNewColor=ImpGetTextEditBackgroundColor();
                 bColorChg=aOldColor!=aNewColor;
             }
-            if (bAreaChg || bAnchorChg || bColorChg)
+            // #104082# refresh always when it's a contour frame. That
+            // refresh is necessary since it triggers the repaint
+            // which makes the Handles visible. Changes at TakeTextRect()
+            // seem to have resulted in a case where no refresh is executed.
+            // Before that, a refresh must have been always executed
+            // (else this error would have happend earlier), thus i
+            // even think here a refresh should be done always.
+            // Since follow-up problems cannot even be guessed I only
+            // add this one more case to the if below.
+            // BTW: It's VERY bad style that here, inside ModelHasChanged()
+            // the outliner is again massively changed for the text object
+            // in text edit mode. Normally, all necessary data should be
+            // set at BeginTextEdit(). Some changes and value assigns in
+            // BeginTextEdit() are completely useless since they are set here
+            // again on ModelHasChanged().
+            if (bContourFrame || bAreaChg || bAnchorChg || bColorChg)
             {
                 for (ULONG nOV=0; nOV<nOutlViewAnz; nOV++)
                 {
