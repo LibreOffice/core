@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:00 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3024,6 +3024,25 @@ SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
     }
 
     return pResult;
+}
+
+// #i29363#
+const SwNodeNum * SwTxtNode::GetNum() const
+{
+    const SwNumRule * pRule = GetNumRule();
+
+    if (pRule && pRule->IsOutlineRule())
+    {
+        SwTxtFmtColl * pFmtColl = GetTxtColl();
+
+        if (pFmtColl && pNdNum)
+        {
+            pNdNum->SetLevel(pNdNum->GetLevel() - pNdNum->GetRealLevel() +
+                             pFmtColl->GetOutlineLevel());
+        }
+    }
+
+    return pNdNum;
 }
 
 const SwNodeNum * SwTxtNode::GetOutlineNum() const
