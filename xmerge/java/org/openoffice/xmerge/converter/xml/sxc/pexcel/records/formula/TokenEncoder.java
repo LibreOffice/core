@@ -115,8 +115,8 @@ public class TokenEncoder {
                 case TokenConstants.TAREA :
                     tmpByteArray = AreaRefEncoder(t);
                     break;
-                case TokenConstants.TINT :
-                    tmpByteArray = IntEncoder(t);
+                case TokenConstants.TNUM :
+                    tmpByteArray = NumEncoder(t);
                     break;
                 default :
                     Debug.log(Debug.ERROR, "Encoder found unrecognized Token");
@@ -156,7 +156,7 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector IntEncoder(Token t) {
+    private Vector NumEncoder(Token t) {
 
         Vector tmpByteArray = new Vector();
 

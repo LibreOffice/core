@@ -87,7 +87,7 @@ public class OperandLookup implements SymbolLookup {
         idToString = new HashMap();
         addEntry("CELL_REFERENCE", TokenConstants.TREF);
         addEntry("CELL_AREA_REFERENCE", TokenConstants.TAREA);
-        addEntry("INTEGER", TokenConstants.TINT);
+        addEntry("INTEGER", TokenConstants.TNUM);
         addEntry("NUMBER", TokenConstants.TNUM);
     }
 
