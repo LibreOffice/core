@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:11:35 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 07:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,7 +1494,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 #endif
 
 #ifdef BIDI
-    const ULONG nOldLayoutMode = GetInfo().GetOut()->GetLayoutMode();
+    SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
     BYTE nEnvDir, nThisDir, nFrmDir;
     if ( rMulti.IsBidi() )
     {
@@ -1601,11 +1601,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         nOfst = nOldY - rMulti.GetAscent();
 
         // set layout mode
-        if ( nThisDir )
-            GetInfo().GetOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG |
-                                               TEXT_LAYOUT_BIDI_RTL );
-        else
-            GetInfo().GetOut()->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+        aLayoutModeModifier.Modify( nThisDir );
     }
 #endif
     else
@@ -1638,17 +1634,13 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                 SwTwips nAdjustment = 0;
                 if ( rMulti.IsRuby() )
                 {
-                    if ( ( bRubyTop && pLay != &rMulti.GetRoot() ) ||
-                         ( ! bRubyTop && pLay == &rMulti.GetRoot() ) )
-                    {
+                    if ( bRubyTop != ( pLay == &rMulti.GetRoot() ) )
                         // adjust base text
-                        ASSERT( pCurr->Height() - nRubyHeight >= pPor->Height(),
-                                "Wrong adjusting of ruby portion" )
                         nAdjustment = ( pCurr->Height() - nRubyHeight - pPor->Height() ) / 2;
-                    }
-                    else
-                        // adjust ruby text
-                        nAdjustment = ( nRubyHeight - pPor->Height() ) / 2;
+                    else if ( bRubyTop )
+                        // adjust upper ruby text
+                        nAdjustment = nRubyHeight - pPor->Height();
+                    // else adjust lower ruby text
                 }
 
                 GetInfo().Y( nOfst + nAdjustment + pPor->GetAscent() );
@@ -1801,10 +1793,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     GetInfo().SetIdx( nOldIdx );
     GetInfo().Y( nOldY );
 
-#ifdef BIDI
-    GetInfo().GetOut()->SetLayoutMode( nOldLayoutMode );
-#endif
-
     if( rMulti.HasBrackets() )
     {
         xub_StrLen nOldIdx = GetInfo().GetIdx();
@@ -1885,15 +1873,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         pFontSave = NULL;
 
 #ifdef BIDI
-    const ULONG nOldLayoutMode = rInf.GetOut()->GetLayoutMode();
+    SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
     if ( rMulti.IsBidi() )
     {
         // set layout mode
-        if ( rInf.GetTxtFrm()->IsRightToLeft() )
-            rInf.GetOut()->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
-        else
-            rInf.GetOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG |
-                                          TEXT_LAYOUT_BIDI_RTL );
+        aLayoutModeModifier.Modify( ! rInf.GetTxtFrm()->IsRightToLeft() );
     }
 #endif
 
@@ -1922,11 +1906,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
 #ifdef BIDI
     SwMultiPortion* pOldMulti = pMulti;
-    pMulti = &rMulti;
-#else
-    pMulti = &rMulti;
 #endif
 
+    pMulti = &rMulti;
     SwLineLayout *pOldCurr = pCurr;
     xub_StrLen nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
@@ -2210,7 +2192,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         ((SwBidiPortion&)rMulti).SetSpaceCnt( nBlanks );
 
         bRet = rMulti.GetLen() < nMultiLen || pNextFirst;
-        rInf.GetOut()->SetLayoutMode( nOldLayoutMode );
     }
 #endif
 
