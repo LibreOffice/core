@@ -12,7 +12,7 @@ CFLAGS+=-w -c $(INCLUDE)
 CFLAGSCC=-pipe 
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
-CFLAGSCXX=-pipe -fguiding-decls -frtti
+CFLAGSCXX=-pipe -fguiding-decls -fno-for-scope -frtti -fpermissive
 
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
@@ -31,8 +31,8 @@ CFLAGSOPT=-O -fcse-follow-jumps -fcse-skip-blocks -fexpensive-optimizations -fst
 CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
 
-STATIC=			-Bstatic
-DYNAMIC=		-Bdynamic
+STATIC=			-Wl,-Bstatic
+DYNAMIC=		-Wl,-Bdynamic
 
 THREADLIB=
 LINK= gcc
@@ -89,5 +89,4 @@ DLLPRE=			lib
 DLLPOST=		.so.1.0
 
 LDUMP=
-
 
