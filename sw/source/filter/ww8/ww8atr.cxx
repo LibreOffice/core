@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:00:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,7 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
                     SvxLRSpaceItem aLR((SvxLRSpaceItem&)aSet.Get(RES_LR_SPACE));
 
                     aLR.SetTxtLeft( aLR.GetTxtLeft() + rNFmt.GetAbsLSpace() );
-                    aLR.SetTxtFirstLineOfst( rNFmt.GetFirstLineOffset() );
+                    aLR.SetTxtFirstLineOfst( GetWordFirstLineOffset(rNFmt));
 
                     aSet.Put( aLR );
                     SwWW8Writer::CorrTabStopInSet( aSet, rNFmt.GetAbsLSpace() );
