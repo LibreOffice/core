@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:23:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,16 +321,23 @@ Docu_Display::Display_LabelTag( const LabelTag & i_rData )
 void
 Docu_Display::Display_SinceTag( const ary::info::SinceTag & i_rData )
 {
-    if ( i_rData.Version().empty()
-         OR
-         NOT autodoc::CommandLine::Get_().Display_SinceTag() )
+    if ( i_rData.Version().empty() )
     {
          return;
     }
+
     // Transform the value of the @since tag into the text to be displayed.
-    String sDisplay =
-        autodoc::CommandLine::Get_().DisplayOf_SinceTagValue(
-                                                i_rData.Version() );
+    String sDisplay;
+    if ( autodoc::CommandLine::Get_().DoesTransform_SinceTag() )
+    {
+        sDisplay = autodoc::CommandLine::Get_()
+                        .DisplayOf_SinceTagValue( i_rData.Version() );
+    }
+    else
+    {
+        sDisplay = i_rData.Version();
+    }
+
     if (sDisplay.empty())
         return;
 
