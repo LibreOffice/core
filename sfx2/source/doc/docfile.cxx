@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:33:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,8 +772,11 @@ sal_Bool SfxMedium::Commit()
     else if( pInStream  )
         pInStream->Flush();
 
-    if ( ( GetError() == SVSTREAM_OK ) && pImp->pTempFile )
+    if ( GetError() == SVSTREAM_OK )
+    {
+        // does something only in case there is a temporary file ( means aName points to different location than aLogicName )
         Transfer_Impl();
+    }
 
     ClearBackup_Impl();
 
@@ -1464,7 +1467,18 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 //------------------------------------------------------------------
 void SfxMedium::Transfer_Impl()
 {
-    if( pImp->pTempFile && ( !eError || eError & ERRCODE_WARNING_MASK ) )
+    String aNameURL;
+    if ( pImp->pTempFile )
+        aNameURL = pImp->pTempFile->GetURL();
+    else if ( aLogicName.Len() )
+    {
+        // makes sence only in case logic name is set
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aNameURL ) )
+            OSL_ENSURE( sal_False, "The medium name is not convertable!\n" );
+    }
+
+    if ( aNameURL.Len() && !aLogicName.EqualsIgnoreCaseAscii( aNameURL )
+      && ( !eError || eError & ERRCODE_WARNING_MASK ) )
     {
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
@@ -1480,7 +1494,7 @@ void SfxMedium::Transfer_Impl()
                 // write directly to the stream
                 Close();
 
-                INetURLObject aSource( pImp->pTempFile->GetURL() );
+                INetURLObject aSource( aNameURL );
                 ::ucb::Content aTempCont;
                 if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
                 {
@@ -1505,9 +1519,12 @@ void SfxMedium::Transfer_Impl()
                         while ( nRead == nBufferSize );
 
                         // remove temporary file
-                        pImp->pTempFile->EnableKillingFile( sal_True );
-                        delete pImp->pTempFile;
-                        pImp->pTempFile = NULL;
+                        if ( pImp->pTempFile )
+                        {
+                            pImp->pTempFile->EnableKillingFile( sal_True );
+                            delete pImp->pTempFile;
+                            pImp->pTempFile = NULL;
+                        }
                     }
                     catch( Exception& )
                     {}
@@ -1610,7 +1627,7 @@ void SfxMedium::Transfer_Impl()
         INetURLObject aDest( GetURLObject() );
 
         // source is the temp file written so far
-        INetURLObject aSource( pImp->pTempFile->GetURL() );
+        INetURLObject aSource( aNameURL );
 
         // a special case, an interaction handler should be used for
         // authentication in case it is available
