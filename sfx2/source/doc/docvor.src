@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:57:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog DLG_ORGANIZE
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zavrieť";
     };
     PushButton BTN_FILES
     {
@@ -165,6 +166,7 @@ ModalDialog DLG_ORGANIZE
         Text[ czech ] = "Soubor...";
         Text[ hebrew ] = "‮קובץ...‬";
         Text[ hindi ] = "~फाइल...";
+        Text[ slovak ] = "~Súbor...";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
@@ -196,6 +198,7 @@ ModalDialog DLG_ORGANIZE
         Text[ czech ] = "Kontakty...";
         Text[ hebrew ] = "‮ספר כתובות...‬";
         Text[ hindi ] = "~पता पुस्तक...";
+        Text[ slovak ] = "Kont~akty...";
     };
     ListBox LB_LEFT_TYP
     {
@@ -344,6 +347,11 @@ ModalDialog DLG_ORGANIZE
     {
          < "नमूनें" ; Default ; > ;
         < "लेखपत्रें" ; Default ; > ;
+    };
+    StringList [ slovak ] =
+    {
+         < "Šablóny" ; Default ; > ;
+        < "Dokumenty" ; Default ; > ;
     };
     };
     ListBox LB_RIGHT_TYP
@@ -494,6 +502,11 @@ ModalDialog DLG_ORGANIZE
          < "नमूनें" ; Default ; > ;
         < "लेखपत्रें" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Šablóny" ; Default ; > ;
+        < "Dokumenty" ; Default ; > ;
+    };
     };
     Control LB_LEFT
     {
@@ -593,6 +606,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Nový";
                     Text[ hebrew ] = "‮חדש‬";
                     Text[ hindi ] = "~नया";
+                    Text[ slovak ] = "~Nový";
                 };
                 MenuItem
                 {
@@ -632,6 +646,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Smazat";
                     Text[ hebrew ] = "‮מחיקה‬";
                     Text[ hindi ] = "~मिटाओ";
+                    Text[ slovak ] = "~Zmazať";
                 };
                 MenuItem
                 {
@@ -665,6 +680,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Upravit";
                     Text[ hebrew ] = "‮עריכה‬";
                     Text[ hindi ] = "~संपादन";
+                    Text[ slovak ] = "~Upraviť";
                 };
                 MenuItem
                 {
@@ -702,6 +718,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Importovat šablonu...";
                     Text[ hebrew ] = "‮יבוא תבנית...‬";
                     Text[ hindi ] = "नमूने को आयात करो...";
+                    Text[ slovak ] = "Importovať šablónu...";
                 };
                 MenuItem
                 {
@@ -735,6 +752,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Exportovat šablonu...";
                     Text[ hebrew ] = "‮יצוא תבנית...‬";
                     Text[ hindi ] = "नमूने को निर्यात करो...";
+                    Text[ slovak ] = "Exportovať šablónu...";
                 };
                 MenuItem
                 {
@@ -772,6 +790,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Tisk";
                     Text[ hebrew ] = "‮הדפסה‬";
                     Text[ hindi ] = "~छपाई";
+                    Text[ slovak ] = "~Tlač";
                 };
                 MenuItem
                 {
@@ -805,6 +824,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Nastavení tiskárny...";
                     Text[ hebrew ] = "‮הגדרות מדפסת‬";
                     Text[ hindi ] = "मुद्रक निर्धारण...";
+                    Text[ slovak ] = "Nastavenia tlačiarne...";
                 };
                 MenuItem
                 {
@@ -842,6 +862,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Aktualizovat";
                     Text[ hebrew ] = "‮עידכון‬";
                     Text[ hindi ] = "अपडेट् करो";
+                    Text[ slovak ] = "Aktualizácia";
                 };
                 MenuItem
                 {
@@ -876,6 +897,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Nastavit jako výchozí šablonu";
                     Text[ hebrew ] = "‮קביעה כתבנית ברירת המחדל‬";
                     Text[ hindi ] = "अनुपस्थिति नमूने जैसे सेट्ट करो";
+                    Text[ slovak ] = "Nastaviť ako východziu šablónu";
                 };
                 MenuItem
                 {
@@ -906,6 +928,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ czech ] = "Obnovit výchozí šablonu";
                     Text[ hebrew ] = "‮חזרה לתבנית ברירת המחדל המקורית‬";
                     Text[ hindi ] = "अनुपस्थिति नमूने को रिसेट्ट करो";
+                    Text[ slovak ] = "Obnoviť východziu šablónu";
                 };
             };
         };
@@ -924,6 +947,7 @@ ModalDialog DLG_ORGANIZE
         Text[ czech ] = "Příkazy";
         Text[ hebrew ] = "‮פקודות‬";
         Text[ hindi ] = "आज्ञा";
+        Text[ slovak ] = "Príkazy";
     };
     Image IMG_OPENED_FOLDER
     {
@@ -1003,8 +1027,11 @@ ModalDialog DLG_ORGANIZE
     Text[ czech ] = "Správa šablon";
     Text[ hebrew ] = "‮ניהול תבניות‬";
     Text[ hindi ] = "नमूना प्रबन्ध";
+    Text[ slovak ] = "Správa šablón";
 };
  // ********************************************************************** EOF
+
+
 
 
 
