@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:17:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,90 +941,6 @@ void SwWrtShell::ConnectObj( SvInPlaceObjectRef xIPObj, const SwRect &rPrt,
 IMPL_LINK( SwWrtShell, ChartSelectionHdl, ChartSelectionInfo *, pInfo )
 {
     long nRet = 0;
-
-#ifdef USED
-// JP 03.11.98: mit der Selektion kann es nicht gehen, da dann der Cursor
-//              immer sichtbar gemacht wird. Das fuehrt dann aber zu
-//              unbeabsichtigten scrollen. Ausserdem sind 2 Selektionen
-//              vorhanden - TabellenSelektion und die OLE-Rahmenselektion.
-
-    if( pInfo )
-    {
-        if( CHART_SEL_QUERYSUPPORT & pInfo->nSelection )
-            nRet = CHART_SEL_NONE | CHART_SEL_ALL | CHART_SEL_ROW |
-                    CHART_SEL_COL | CHART_SEL_POINT;
-        else
-        {
-            // dann suche mal die Tabelle zu diesem StarChart-Object
-            SfxInPlaceClient* pIPClient = GetView().GetIPClient();
-            SvInPlaceObject* pObj = pIPClient &&
-                                    pIPClient->IsInPlaceActive()
-                                    ? pIPClient->GetIPObj() : 0;
-            String sTable;
-            if( pObj )
-                sTable = GetChartName( pObj );
-
-            if( sTable.Len() )
-            {
-                LockView( TRUE );   //Scrollen im EndAction verhindern
-                StartAction();
-
-                ClearMark();
-                if( GotoTable( sTable ) )
-                {
-                    // !!!!!!!!!!!!!!!
-                    //      im nSelection sind Flags gesetzt, koennen also
-                    //      auch gemischt auftauchen, darum das nICol, nIRow
-                    // !!!!!!!!!!!!!!!!
-                    USHORT nIRow = pInfo->nRow, nICol = pInfo->nCol,
-                            nRow = 0, nCol = 0;
-
-                    SchMemChart* pMemChart = SchDLL::GetChartData( pObj );
-                    if( pMemChart && 2 == pMemChart->SomeData2().Len() )
-                    {
-                        if( '1' == pMemChart->SomeData2().GetChar( 0 ) )
-                            ++nIRow;
-                        if( '1' == pMemChart->SomeData2().GetChar( 1 ))
-                            ++nICol;
-                    }
-
-// ist das default  if( (CHART_SEL_NONE | CHART_SEL_ALL) & pInfo->nSelection )
-                    if( CHART_SEL_ROW & pInfo->nSelection )
-                        nRow = nIRow, nCol = 0;
-                    if( CHART_SEL_COL & pInfo->nSelection )
-                        nCol = nICol, nRow = 0;
-                    if( CHART_SEL_POINT & pInfo->nSelection )
-                        nCol = nICol, nRow = nIRow;
-
-                    if( GotoTblBox( SwTable::GetBoxName( nRow, nCol ) ) )
-                    {
-                        nRet = pInfo->nSelection;
-                        if( ( CHART_SEL_ROW & pInfo->nSelection && !SelTblRow() ) ||
-                            ( CHART_SEL_COL & pInfo->nSelection && !SelTblCol() ) ||
-                            ( CHART_SEL_ALL & pInfo->nSelection &&
-                                ( SetMark(),
-                                    !MoveTable( fnTableCurr, fnTableEnd ))) )
-                                nRet = 0;
-                        else if( CHART_SEL_POINT & pInfo->nSelection )
-                        {
-                            // Selektion der einen Box
-                            SetMark();
-                            if( GoPrevCell() )
-                                GoNextCell( FALSE );
-                            else if( GoNextCell( FALSE ) )
-                                GoPrevCell();
-                            else
-                                ClearMark();
-                        }
-                    }
-                }
-
-                EndAction();
-                LockView( FALSE );
-            }
-        }
-    }
-#endif
     return nRet;
 }
 
@@ -1607,54 +1523,6 @@ SwWrtShell::~SwWrtShell()
         ;
     SwTransferable::ClearSelection( *this );
 }
-
-
-
-
-void SwWrtShell::StartBasicAction()
-{
-    IncBasicAction();
-    StartAllAction();
-}
-
-
-
-void SwWrtShell::SetBasicActionCount(USHORT nSet)
-{
-    DBG_ASSERT(!GetBasicActionCnt(), "Es sind schon Actions offen!")
-    while( nSet )
-    {
-        IncBasicAction();
-        StartAllAction();
-        nSet--;
-    }
-}
-
-
-
-void SwWrtShell::EndBasicAction()
-{
-    if(GetBasicActionCnt())
-    {
-        DecBasicAction();
-        EndAllAction();
-    }
-}
-
-
-
-USHORT SwWrtShell::EndAllBasicActions()
-{
-    USHORT nRet = GetBasicActionCnt();
-    while( GetBasicActionCnt() )
-    {
-        DecBasicAction();
-        EndAllAction();
-    }
-    return nRet;
-}
-
-
 
 FASTBOOL SwWrtShell::Pop( BOOL bOldCrsr )
 {
