@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:16:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,13 +446,15 @@ void AboutDialog::Paint( const Rectangle& rRect )
             if ( nVal )
             {
                 // Versionsnummern gibt es nur in den fetten Zeilen
-                USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
-                String aVersion = String::CreateFromInt32( nProductVersion / 10 );
-                aVersion += '.';
-                aVersion += String::CreateFromInt32( nProductVersion % 10 );
+//              USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
+//              String aVersion = String::CreateFromInt32( nProductVersion / 10 );
+                String aVersion = String::CreateFromInt32( 0 );
+//              aVersion += '.';
+//              aVersion += String::CreateFromInt32( nProductVersion % 10 );
                 USHORT nSPos = aStr.SearchAndReplaceAscii( "$(VER)", aVersion );
-                while ( STRING_NOTFOUND != nSPos )
-                    nSPos = aStr.SearchAndReplaceAscii( "$(VER)", aVersion, nSPos );
+//              while ( STRING_NOTFOUND != nSPos )
+//                  nSPos = aStr.SearchAndReplaceAscii( "$(VER)", aVersion, nSPos );
+                DBG_ASSERT(STRING_NOTFOUND != nSPos, "$(VER) still used?");
             }
             aSize = Size( GetTextWidth( aStr ), GetTextHeight() );
             aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
