@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 12:05:08 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 09:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
     aStr = UniString::CreateFromInt32(nVal);
 
-    if(nK > 0)
+    if(nK > 0 && aStr.Len() <= nK )
     {
         // Komma erforderlich
         xub_StrLen nAnz(nK - aStr.Len());
