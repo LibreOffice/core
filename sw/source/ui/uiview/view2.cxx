@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:51 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,11 +1449,11 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
     if( rFileName.Len() )
     {
         SfxObjectFactory& rFact = pDocSh->GetFactory();
-        const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter( rFilterName );
+        const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
             pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, 0, 0 );
-            SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+            SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, FALSE );
             if ( nErr )
                 DELETEZ(pMed);
@@ -1465,7 +1465,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
     }
     else
     {
-        pMed = SFX_APP()->InsertDocumentDialog(0, pDocSh->GetFactory(), HID_INSERT_FILE );
+        pMed = SFX_APP()->InsertDocumentDialog(0, String::CreateFromAscii(pDocSh->GetFactory().GetShortName()), HID_INSERT_FILE );
     }
     if( !pMed )
         return -1;
