@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 13:58:51 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:19:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ SLOFILES= \
     $(SLO)$/vendorbase.obj \
     $(SLO)$/util.obj \
     $(SLO)$/sunjre.obj \
+    $(SLO)$/gnujre.obj \
     $(SLO)$/vendorlist.obj \
     $(SLO)$/otherjre.obj 
 
