@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:19:22 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4160,6 +4160,8 @@ USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
         nId = eFTN;
     else if (p == pEdn)
         nId = eEDN;
+    else if (p == pAnd)
+        nId = eAND;
     else if (p->nSprmsLen > 0)
         nId = maSprmParser.GetSprmId(p->pMemPos);
     else
@@ -4466,7 +4468,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->pMemPos = p->pMemPos;
     pRes->nSprmId = GetId(p);
     pRes->nCp2OrIdx = p->nCp2OrIdx;
-    if ((p == pFtn) || (p == pEdn))
+    if ((p == pFtn) || (p == pEdn) || (p == pAnd))
         pRes->nMemLen = p->nSprmsLen;
     else if (p->nSprmsLen)  //Normal
     {
@@ -6312,8 +6314,6 @@ WW8Dop::WW8Dop()
     fRMPrint = 1;
     dxaTab = 0x2d0;
     dxaHotZ = 0x168;
-    dttmCreated = 0x45FBAC69;
-    dttmRevised = 0x45FBAC69;
     nRevision = 1;
     nEdn = 1;
 
