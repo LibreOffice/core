@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:01:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         case KEY_ESCAPE:
             rFocusManager.HideFocus();
+            mrController.GetViewShell().GetParentWindow()->GrabFocus();
             bResult = TRUE;
             break;
 
