@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccessibility.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-09-08 11:43:50 $
+ *  last change:$Date: 2004-08-02 17:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,21 +76,37 @@ import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XIsolatedConnection;
 import com.sun.star.sdbc.XStatement;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
+import com.sun.star.util.XCloseable;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.io.File;
+import util.DesktopTools;
+import util.dbg;
+import util.utils;
 
 
 /**
@@ -110,23 +126,23 @@ import com.sun.star.uno.XNamingService;
 * @see ifc.accessibility._XAccessibleEventBroadcaster
 */
 public class TableWindowAccessibility extends TestCase {
-    XAccessibleAction actionCancel = null;
     XWindow xWindow = null;
-    Object[] savedObj = null;
-    String[] elNames = null;
-    XNamingService namingService = null;
+    Object oDBSource = null;
+    String aFile = "";
+    XConnection connection = null;
+    XIsolatedConnection isolConnection = null;
+    XComponent QueryComponent = null;
+    String user = "";
+    String password="";
 
     /**
-     * Creates a new DataSource and registers it.
+     * Creates a new DataSource and stores it.
      * Creates a connection and using it
      * creates two tables in database.
      * Creates a new query and adds it to DefinitionContainer.
-     * Opens a DatasourceAdministration dialog,
-     * selects the tab page 'Query', pushs the button 'Edit query' using
-     * accessibility components. Pushing of the button causes opening of
-     * Query dialog. Then obtains an accessible object with
-     * the role <code>AccessibleRole.PANEL</code>.
-     *
+     * Opens the QueryComponent.with loadComponentFromURL
+     * and gets the object with the role PANEL and the implementation
+     * name that contains TabelViewAccessibility
      * @param Param test parameters
      * @param log writer to log information while testing
      * @return
@@ -141,6 +157,7 @@ public class TableWindowAccessibility extends TestCase {
         Object oDBSource = null;
         Object newQuery = null;
         Object toolkit = null;
+        XStorable store = null;
 
         try {
             oDBContext = ((XMultiServiceFactory) Param.getMSF())
@@ -156,37 +173,34 @@ public class TableWindowAccessibility extends TestCase {
             throw new StatusException(Status.failed("Couldn't create instance"));
         }
 
-        String jdbcURL = (String) Param.get("jdbc.url");
+        String mysqlURL = (String) Param.get("mysql.url");
 
-        if (jdbcURL == null) {
+        if (mysqlURL == null) {
             throw new StatusException(Status.failed(
-                                              "Couldn't get 'jdbc.url' from ini-file"));
+                                              "Couldn't get 'mysql.url' from ini-file"));
         }
 
-        String user = (String) Param.get("jdbc.user");
-        String password = (String) Param.get("jdbc.password");
+        user = (String) Param.get("jdbc.user");
+        password = (String) Param.get("jdbc.password");
 
         if ((user == null) || (password == null)) {
             throw new StatusException(Status.failed(
                                               "Couldn't get 'jdbc.user' or 'jdbc.password' from ini-file"));
         }
 
-        PropertyValue[] info = new PropertyValue[3];
+        PropertyValue[] info = new PropertyValue[2];
         info[0] = new PropertyValue();
-        info[0].Name = "JavaDriverClass";
-        info[0].Value = DBTools.TST_JDBC_DRIVER;
+        info[0].Name = "user";
+        info[0].Value = user;
         info[1] = new PropertyValue();
-        info[1].Name = "user";
-        info[1].Value = user;
-        info[2] = new PropertyValue();
-        info[2].Name = "password";
-        info[2].Value = password;
+        info[1].Name = "password";
+        info[1].Value = password;
 
         XPropertySet propSetDBSource = (XPropertySet) UnoRuntime.queryInterface(
                                                XPropertySet.class, oDBSource);
 
         try {
-            propSetDBSource.setPropertyValue("URL", "jdbc:" + jdbcURL);
+            propSetDBSource.setPropertyValue("URL", mysqlURL);
             propSetDBSource.setPropertyValue("Info", info);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -206,56 +220,19 @@ public class TableWindowAccessibility extends TestCase {
                                               "Couldn't set property value"));
         }
 
-        namingService = (XNamingService) UnoRuntime.queryInterface(
-                                XNamingService.class, oDBContext);
-
-        XNameAccess nameAccess = (XNameAccess) UnoRuntime.queryInterface(
-                                         XNameAccess.class, oDBContext);
-
-        final String sourceName = "AAADBSource for dbu-accessibility";
-
-        if (nameAccess.hasByName(sourceName)) {
-            try {
-                namingService.revokeObject(sourceName);
-            } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace(log);
-                throw new StatusException(Status.failed(
-                                                  "Couldn't revoke object"));
-            }
-        }
-
-
-        //because a bug with selection in ListBox
-        //content of TabControl isn't changed after selecting new list item
-        elNames = nameAccess.getElementNames();
-
-        /*        savedObj = new Object[elNames.length];
-                for(int i = 0; i < elNames.length; i++) {
-                    try {
-                        savedObj[i] = nameAccess.getByName(elNames[i]);
-                    } catch(com.sun.star.lang.WrappedTargetException e) {
-                        e.printStackTrace(log);
-                    } catch(com.sun.star.container.NoSuchElementException e) {
-                        e.printStackTrace(log);
-                    }
-
-                    try {
-                        namingService.revokeObject(elNames[i]);
-                    } catch(com.sun.star.uno.Exception e) {
-                        e.printStackTrace(log);
-                        throw new StatusException(
-                            Status.failed("Couldn't revoke object"));
-                    }
-                }
-        */
         try {
-            namingService.registerObject(sourceName, oDBSource);
+            log.println ("writing database file ...");
+            store = (XStorable) UnoRuntime.queryInterface(XStorable.class, oDBSource);
+            aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"TableWindow.odb";
+            log.println("... filename will be "+aFile);
+            store.storeAsURL(aFile,new PropertyValue[]{});
+            log.println("... done");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException(Status.failed("Couldn't register object"));
         }
 
-        XIsolatedConnection isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface(
+        isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface(
                                                      XIsolatedConnection.class,
                                                      oDBSource);
 
@@ -279,7 +256,6 @@ public class TableWindowAccessibility extends TestCase {
         } catch (com.sun.star.sdbc.SQLException e) {
             try {
                 shortWait();
-                System.out.println("### Try it again");
                 connection = isolConnection.getIsolatedConnection(user,
                                                                   password);
                 statement = connection.createStatement();
@@ -334,6 +310,8 @@ public class TableWindowAccessibility extends TestCase {
 
         try {
             queryContainer.insertByName("Query1", newQuery);
+            store.store();
+            connection.close ();
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(Status.failed("Couldn't insert query"));
@@ -343,13 +321,28 @@ public class TableWindowAccessibility extends TestCase {
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(Status.failed("Couldn't insert query"));
+        } catch (com.sun.star.io.IOException e) {
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
+        } catch (com.sun.star.sdbc.SQLException e) {
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
         }
 
-        DiagThread Diag = new DiagThread(((XMultiServiceFactory) Param.getMSF()));
+        PropertyValue[] loadProps = new PropertyValue[3];
+        loadProps[0] = new PropertyValue();
+        loadProps[0].Name = "QueryDesignView";
+        loadProps[0].Value = Boolean.TRUE;
 
-        Diag.start();
+        loadProps[1] = new PropertyValue();
+        loadProps[1].Name = "CurrentQuery";
+        loadProps[1].Value = "Query1";
 
-        shortWait();
+        loadProps[2] = new PropertyValue();
+        loadProps[2].Name = "DataSource";
+        loadProps[2].Value = oDBSource;
+
+        QueryComponent = DesktopTools.loadDoc((XMultiServiceFactory) Param.getMSF (),".component:DB/QueryDesign",loadProps);
 
         XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
@@ -360,81 +353,35 @@ public class TableWindowAccessibility extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XAccessibleContext accContextCancel = AccessibilityTools.getAccessibleObjectForRole(
-                                                      xRoot,
-                                                      AccessibleRole.PUSH_BUTTON,
-                                                      "Cancel");
-        actionCancel = (XAccessibleAction) UnoRuntime.queryInterface(
-                               XAccessibleAction.class, accContextCancel);
-
-        XAccessibleContext accContextTabList = AccessibilityTools.getAccessibleObjectForRole(
-                                                       xRoot,
-                                                       AccessibleRole.PAGE_TAB_LIST);
-        XAccessibleSelection tabListSelection = (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                        XAccessibleSelection.class,
-                                                        accContextTabList);
-
-        final int queriesChildNum = 3;
-
-        try {
-            tabListSelection.selectAccessibleChild(queriesChildNum);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't select child " + queriesChildNum));
-        }
-
-        shortWait();
-
-        XAccessibleContext acEditQuery = AccessibilityTools.getAccessibleObjectForRole(xRoot,
-                                                                       AccessibleRole.PUSH_BUTTON,
-                                                                       "Edit Query");
-        XAccessibleAction actionEditQuery = (XAccessibleAction) UnoRuntime.queryInterface(
-                                                    XAccessibleAction.class,
-                                                    acEditQuery);
-
-        try {
-            actionEditQuery.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
-                                              "Couldn't do accessible action"));
-        }
-
-        shortWait();
-
-        atw = tk.getActiveTopWindow();
-
-        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
-
-        xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-
-        //at.printAccessibleTree(log, xRoot);
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
                                              "TableWindowAccessibility");
 
         log.println("ImplementationName " + util.utils.getImplName(oObj));
 
-
-        //util.dbg.printInterfaces(oObj);
-        log.println("    creating a new environment for object");
+        log.println("creating TestEnvironment ... done");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleContext accCon = (XAccessibleContext) UnoRuntime.queryInterface(
-                                                  XAccessibleContext.class,
-                                                  oObj);
+        shortWait();
+
+        XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                               XAccessibleComponent.class,
+                                               oObj);
+
+
+              final Point point = accComp.getLocationOnScreen();
 
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
-                    XAccessible child = accCon.getAccessibleChild(1);
-                    XAccessibleComponent childC = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                          XAccessibleComponent.class,
-                                                          child);
-                    childC.grabFocus();
-                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    Robot rob = new Robot();
+                    rob.mouseMove(point.X + 2, point.Y + 7);
+                    rob.mousePress(InputEvent.BUTTON1_MASK);
+                    rob.mouseMove(point.X + 400, point.Y);
+                    rob.mouseRelease (InputEvent.BUTTON1_MASK);
+                } catch (java.awt.AWTException e) {
+                    System.out.println("desired child doesn't exist");
                 }
             }
         });
@@ -443,24 +390,30 @@ public class TableWindowAccessibility extends TestCase {
     } // finish method getTestEnvironment
 
     /**
-     * Closes the DatasourceAdministration dialog and Query Dialog.
+     * Closes all open documents.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        try {
-            actionCancel.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
-                                              "Couldn't do accessible action"));
+        try
+        {
+
+            log.println ("closing QueryComponent ...");
+            DesktopTools.closeDoc (QueryComponent);
+            log.println ("... done");
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
+            Object sfa = xMSF.createInstance ("com.sun.star.comp.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface (XSimpleFileAccess.class, sfa);
+            log.println ("deleting database file");
+            xSFA.kill (aFile);
+            log.println ("Could delete file "+aFile+": "+!xSFA.exists (aFile));
+        } catch (Exception e)
+        {
+            e.printStackTrace ();
         }
-
-        shortWait();
-
-        xWindow.dispose();
     }
 
+
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
+    * Sleeps for 1.5 sec. to allow StarOffice to react on <code>
     * reset</code> call.
     */
     private void shortWait() {
@@ -468,33 +421,6 @@ public class TableWindowAccessibility extends TestCase {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             log.println("While waiting :" + e);
-        }
-    }
-
-    /**
-     * Thread for opening modal dialog 'Datasource Administration Dialog'.
-     */
-    public class DiagThread extends Thread {
-        XMultiServiceFactory msf = null;
-
-        public DiagThread(XMultiServiceFactory msf) {
-            this.msf = msf;
-        }
-
-        public void run() {
-            Object dbAdminDlg = null;
-
-            try {
-                dbAdminDlg = msf.createInstance(
-                                     "com.sun.star.sdb.DatasourceAdministrationDialog");
-            } catch (com.sun.star.uno.Exception e) {
-            }
-
-            XExecutableDialog adminDlg = (XExecutableDialog) UnoRuntime.queryInterface(
-                                                 XExecutableDialog.class,
-                                                 dbAdminDlg);
-
-            adminDlg.execute();
         }
     }
 }
