@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:06:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "pcrcommon.hxx"
 #endif
 
+#include <map>
+
 //............................................................................
 namespace pcr
 {
@@ -88,6 +90,16 @@ namespace pcr
                 IPropertyLineListener*      m_pListener;
                 sal_uInt16                  m_nNextId;
                 Link                        m_aPageActivationHandler;
+
+                struct HiddenPage
+                {
+                    sal_uInt16  nPos;
+                    TabPage*    pPage;
+                    HiddenPage() : nPos( 0 ), pPage( NULL ) { }
+                    HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
+                };
+                ::std::map< sal_uInt16, HiddenPage >
+                                            m_aHiddenPages;
 
     protected:
                 virtual void                Resize();
@@ -111,7 +123,6 @@ namespace pcr
                 virtual void                RemovePage(sal_uInt16 nID);
                 virtual sal_uInt16          GetCurPage();
                 virtual void                ClearAll();
-                virtual void                ClearTable();
 
                 virtual void                SetPropertyValue(const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
                 virtual ::rtl::OUString     GetPropertyValue(const ::rtl::OUString & rEntryName ) const;
@@ -120,6 +131,8 @@ namespace pcr
                 virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
                         void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
                         void                EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton );
+
+                        void                ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
                 virtual sal_uInt16          InsertEntry(const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND);
                 virtual void                ChangeEntry(const OLineDescriptor&, sal_uInt16 nPos);
