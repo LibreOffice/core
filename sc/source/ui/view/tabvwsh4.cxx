@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:52:41 $
+ *  last change: $Author: nn $ $Date: 2001-03-28 19:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,11 @@ void __EXPORT ScTabViewShell::Deactivate(BOOL bMDI)
 
     if( bMDI )
     {
+        //  #85421# during shell deactivation, shells must not be switched, or the loop
+        //  through the shell stack (in SfxDispatcher::DoDeactivate_Impl) will not work
+        BOOL bOldDontSwitch = bDontSwitch;
+        bDontSwitch = TRUE;
+
         DeActivateOlk( GetViewData() );
         ActivateView( FALSE, FALSE );
 
@@ -266,6 +271,8 @@ void __EXPORT ScTabViewShell::Deactivate(BOOL bMDI)
 
         if (pScActiveViewShell == this)
             pScActiveViewShell = NULL;
+
+        bDontSwitch = bOldDontSwitch;
     }
     else
     {
