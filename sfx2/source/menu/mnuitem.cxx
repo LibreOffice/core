@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:25:09 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@
 #include <svtools/menuoptions.hxx>
 #endif
 #include <framework/menuconfiguration.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "appdata.hxx"
 #include "sfx.hrc"
