@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 				<desc xml:lang="th">Contains information for displaying, sorting and ordering of data.</desc>
 				<desc xml:lang="hi-IN">Contains information for displaying, sorting and ordering of data.</desc>
 				<desc xml:lang="x-comment">Contains information for displaying, sorting and ordering of data.</desc>
+				<desc xml:lang="hu">Contains information for displaying, sorting and ordering of data.</desc>
+				<desc xml:lang="sk">Contains information for displaying, sorting and ordering of data.</desc>
+				<desc xml:lang="sl">Contains information for displaying, sorting and ordering of data.</desc>
 			</info>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
@@ -124,6 +127,9 @@
 					<desc xml:lang="th">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
 					<desc xml:lang="hi-IN">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
 					<desc xml:lang="x-comment">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="hu">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="sk">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="sl">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
 				</info>
 				<value/>
 			</prop>
@@ -154,6 +160,9 @@
 					<desc xml:lang="th">Indicates whether the filter is applied.</desc>
 					<desc xml:lang="hi-IN">Indicates whether the filter is applied.</desc>
 					<desc xml:lang="x-comment">Indicates whether the filter is applied.</desc>
+					<desc xml:lang="hu">Indicates whether the filter is applied.</desc>
+					<desc xml:lang="sk">Indicates whether the filter is applied.</desc>
+					<desc xml:lang="sl">Indicates whether the filter is applied.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -184,6 +193,9 @@
 					<desc xml:lang="th">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
 					<desc xml:lang="hi-IN">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
 					<desc xml:lang="x-comment">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="hu">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="sk">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
+					<desc xml:lang="sl">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
 				</info>
 				<value/>
 			</prop>
@@ -214,6 +226,9 @@
 					<desc xml:lang="th">Specifies the height of a data row.</desc>
 					<desc xml:lang="hi-IN">Specifies the height of a data row.</desc>
 					<desc xml:lang="x-comment">Specifies the height of a data row.</desc>
+					<desc xml:lang="hu">Specifies the height of a data row.</desc>
+					<desc xml:lang="sk">Specifies the height of a data row.</desc>
+					<desc xml:lang="sl">Specifies the height of a data row.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TextColor" oor:type="xs:int">
@@ -243,6 +258,9 @@
 					<desc xml:lang="th">Specifies the text color (RGB) for displaying text.</desc>
 					<desc xml:lang="hi-IN">Specifies the text color (RGB) for displaying text.</desc>
 					<desc xml:lang="x-comment">Specifies the text color (RGB) for displaying text.</desc>
+					<desc xml:lang="hu">Specifies the text color (RGB) for displaying text.</desc>
+					<desc xml:lang="sk">Specifies the text color (RGB) for displaying text.</desc>
+					<desc xml:lang="sl">Specifies the text color (RGB) for displaying text.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TextLineColor" oor:type="xs:int">
@@ -272,6 +290,9 @@
 					<desc xml:lang="th">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
 					<desc xml:lang="hi-IN">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
 					<desc xml:lang="x-comment">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
+					<desc xml:lang="hu">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
+					<desc xml:lang="sk">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
+					<desc xml:lang="sl">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
 				</info>
 			</prop>
 			<prop oor:name="CharacterEmphasis" oor:type="xs:short">
@@ -301,6 +322,9 @@
 					<desc xml:lang="th">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
 					<desc xml:lang="hi-IN">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
 					<desc xml:lang="x-comment">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
+					<desc xml:lang="hu">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
+					<desc xml:lang="sk">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
+					<desc xml:lang="sl">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
 				</info>
 			</prop>
 			<prop oor:name="CharacterRelief" oor:type="xs:short">
@@ -330,6 +354,9 @@
 					<desc xml:lang="th">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
 					<desc xml:lang="hi-IN">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
 					<desc xml:lang="x-comment">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
+					<desc xml:lang="hu">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
+					<desc xml:lang="sk">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
+					<desc xml:lang="sl">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
 				</info>
 			</prop>
 			<node-ref oor:name="Font" oor:node-type="Font" oor:component="org.openoffice.Office.Common">
@@ -359,6 +386,9 @@
 					<desc xml:lang="th">Specifies the font attributes for data displaying.</desc>
 					<desc xml:lang="hi-IN">Specifies the font attributes for data displaying.</desc>
 					<desc xml:lang="x-comment">Specifies the font attributes for data displaying.</desc>
+					<desc xml:lang="hu">Specifies the font attributes for data displaying.</desc>
+					<desc xml:lang="sk">Specifies the font attributes for data displaying.</desc>
+					<desc xml:lang="sl">Specifies the font attributes for data displaying.</desc>
 				</info>
 			</node-ref>
 		</group>
@@ -389,6 +419,9 @@
 				<desc xml:lang="th">Contains information for displaying the data of a column.</desc>
 				<desc xml:lang="hi-IN">Contains information for displaying the data of a column.</desc>
 				<desc xml:lang="x-comment">Contains information for displaying the data of a column.</desc>
+				<desc xml:lang="hu">Contains information for displaying the data of a column.</desc>
+				<desc xml:lang="sk">Contains information for displaying the data of a column.</desc>
+				<desc xml:lang="sl">Contains information for displaying the data of a column.</desc>
 			</info>
 			<prop oor:name="FormatKey" oor:type="xs:int">
 				<info>
@@ -417,6 +450,9 @@
 					<desc xml:lang="th">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="hi-IN">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 					<desc xml:lang="x-comment">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
+					<desc xml:lang="hu">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
+					<desc xml:lang="sk">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
+					<desc xml:lang="sl">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can&apos;t be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 				</info>
 			</prop>
 			<prop oor:name="FormatString" oor:type="xs:string">
@@ -446,6 +482,9 @@
 					<desc xml:lang="th">Contains the format which will be used to query the format key when not already set.</desc>
 					<desc xml:lang="hi-IN">Contains the format which will be used to query the format key when not already set.</desc>
 					<desc xml:lang="x-comment">Contains the format which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="hu">Contains the format which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="sk">Contains the format which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="sl">Contains the format which will be used to query the format key when not already set.</desc>
 				</info>
 			</prop>
 			<prop oor:name="FormatLocale" oor:type="xs:string">
@@ -475,6 +514,9 @@
 					<desc xml:lang="th">Contains the locale which will be used to query the format key when not already set.</desc>
 					<desc xml:lang="hi-IN">Contains the locale which will be used to query the format key when not already set.</desc>
 					<desc xml:lang="x-comment">Contains the locale which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="hu">Contains the locale which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="sk">Contains the locale which will be used to query the format key when not already set.</desc>
+					<desc xml:lang="sl">Contains the locale which will be used to query the format key when not already set.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Align" oor:type="xs:int">
@@ -504,6 +546,9 @@
 					<desc xml:lang="th">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
 					<desc xml:lang="hi-IN">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
 					<desc xml:lang="x-comment">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
+					<desc xml:lang="hu">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
+					<desc xml:lang="sk">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
+					<desc xml:lang="sl">Specifies the alignment of a columns text. If the value is a default alignment, it should be applied according to the datatype of the column.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -534,6 +579,8 @@
 							<desc xml:lang="hi-IN">बायाँ</desc>
 							<desc xml:lang="x-comment">left</desc>
 							<desc xml:lang="sk">vľavo</desc>
+							<desc xml:lang="hu">left</desc>
+							<desc xml:lang="sl">left</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -564,6 +611,8 @@
 							<desc xml:lang="hi-IN">मध्य</desc>
 							<desc xml:lang="x-comment">center</desc>
 							<desc xml:lang="sk">Zarovnať</desc>
+							<desc xml:lang="hu">center</desc>
+							<desc xml:lang="sl">center</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -594,6 +643,8 @@
 							<desc xml:lang="hi-IN">दाहिना</desc>
 							<desc xml:lang="x-comment">right</desc>
 							<desc xml:lang="sk">vpravo</desc>
+							<desc xml:lang="hu">right</desc>
+							<desc xml:lang="sl">right</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -625,6 +676,9 @@
 					<desc xml:lang="th">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 					<desc xml:lang="hi-IN">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 					<desc xml:lang="x-comment">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="hu">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="sk">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
+					<desc xml:lang="sl">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name. [UNIT=1/100 mm]</desc>
 				</info>
 			</prop>
 			<prop oor:name="Position" oor:type="xs:int">
@@ -654,6 +708,9 @@
 					<desc xml:lang="th">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
 					<desc xml:lang="hi-IN">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
 					<desc xml:lang="x-comment">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
+					<desc xml:lang="hu">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
+					<desc xml:lang="sk">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
+					<desc xml:lang="sl">Specifies the position of the column within a grid. If the value is NULL, the default position should be used.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Hidden" oor:type="xs:boolean">
@@ -683,6 +740,9 @@
 					<desc xml:lang="th">Determines whether the column is displayed.</desc>
 					<desc xml:lang="hi-IN">Determines whether the column is displayed.</desc>
 					<desc xml:lang="x-comment">Determines whether the column is displayed.</desc>
+					<desc xml:lang="hu">Determines whether the column is displayed.</desc>
+					<desc xml:lang="sk">Determines whether the column is displayed.</desc>
+					<desc xml:lang="sl">Determines whether the column is displayed.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -713,6 +773,9 @@
 					<desc xml:lang="th">Contains information about a control used for displaying and editing the columns data.</desc>
 					<desc xml:lang="hi-IN">Contains information about a control used for displaying and editing the columns data.</desc>
 					<desc xml:lang="x-comment">Contains information about a control used for displaying and editing the columns data.</desc>
+					<desc xml:lang="hu">Contains information about a control used for displaying and editing the columns data.</desc>
+					<desc xml:lang="sk">Contains information about a control used for displaying and editing the columns data.</desc>
+					<desc xml:lang="sl">Contains information about a control used for displaying and editing the columns data.</desc>
 				</info>
 			</prop>
 			<prop oor:name="HelpText" oor:type="xs:string">
@@ -742,6 +805,9 @@
 					<desc xml:lang="th">Describes an optional help text which can be used by UI components when representing this column.</desc>
 					<desc xml:lang="hi-IN">Describes an optional help text which can be used by UI components when representing this column.</desc>
 					<desc xml:lang="x-comment">Describes an optional help text which can be used by UI components when representing this column.</desc>
+					<desc xml:lang="hu">Describes an optional help text which can be used by UI components when representing this column.</desc>
+					<desc xml:lang="sk">Describes an optional help text which can be used by UI components when representing this column.</desc>
+					<desc xml:lang="sl">Describes an optional help text which can be used by UI components when representing this column.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ControlDefault" oor:type="xs:string">
@@ -771,6 +837,9 @@
 					<desc xml:lang="th">Describes the default value which should be displayed by a control when moving to a new row.</desc>
 					<desc xml:lang="hi-IN">Describes the default value which should be displayed by a control when moving to a new row.</desc>
 					<desc xml:lang="x-comment">Describes the default value which should be displayed by a control when moving to a new row.</desc>
+					<desc xml:lang="hu">Describes the default value which should be displayed by a control when moving to a new row.</desc>
+					<desc xml:lang="sk">Describes the default value which should be displayed by a control when moving to a new row.</desc>
+					<desc xml:lang="sl">Describes the default value which should be displayed by a control when moving to a new row.</desc>
 				</info>
 			</prop>
 		</group>
@@ -801,6 +870,9 @@
 				<desc xml:lang="th">Contains information for displaying the data of a table.</desc>
 				<desc xml:lang="hi-IN">Contains information for displaying the data of a table.</desc>
 				<desc xml:lang="x-comment">Contains information for displaying the data of a table.</desc>
+				<desc xml:lang="hu">Contains information for displaying the data of a table.</desc>
+				<desc xml:lang="sk">Contains information for displaying the data of a table.</desc>
+				<desc xml:lang="sl">Contains information for displaying the data of a table.</desc>
 			</info>
 			<node-ref oor:name="Settings" oor:node-type="DataSettings">
 				<info>
@@ -829,6 +901,9 @@
 					<desc xml:lang="th">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 					<desc xml:lang="hi-IN">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 					<desc xml:lang="x-comment">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="hu">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="sk">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="sl">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 				</info>
 			</node-ref>
 			<set oor:name="Columns" oor:node-type="Column">
@@ -858,6 +933,9 @@
 					<desc xml:lang="th">Contains a list of column layout information.</desc>
 					<desc xml:lang="hi-IN">Contains a list of column layout information.</desc>
 					<desc xml:lang="x-comment">Contains a list of column layout information.</desc>
+					<desc xml:lang="hu">Contains a list of column layout information.</desc>
+					<desc xml:lang="sk">Contains a list of column layout information.</desc>
+					<desc xml:lang="sl">Contains a list of column layout information.</desc>
 				</info>
 			</set>
 		</group>
@@ -888,6 +966,9 @@
 				<desc xml:lang="th">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
 				<desc xml:lang="hi-IN">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
 				<desc xml:lang="x-comment">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
+				<desc xml:lang="hu">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
+				<desc xml:lang="sk">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
+				<desc xml:lang="sl">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
@@ -916,6 +997,9 @@
 					<desc xml:lang="th">Specifies the SQL command.</desc>
 					<desc xml:lang="hi-IN">Specifies the SQL command.</desc>
 					<desc xml:lang="x-comment">Specifies the SQL command.</desc>
+					<desc xml:lang="hu">Specifies the SQL command.</desc>
+					<desc xml:lang="sk">Specifies the SQL command.</desc>
+					<desc xml:lang="sl">Specifies the SQL command.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EscapeProcessing" oor:type="xs:boolean">
@@ -945,6 +1029,9 @@
 					<desc xml:lang="th">Determines whether the escape processing should be applied on the command.</desc>
 					<desc xml:lang="hi-IN">Determines whether the escape processing should be applied on the command.</desc>
 					<desc xml:lang="x-comment">Determines whether the escape processing should be applied on the command.</desc>
+					<desc xml:lang="hu">Determines whether the escape processing should be applied on the command.</desc>
+					<desc xml:lang="sk">Determines whether the escape processing should be applied on the command.</desc>
+					<desc xml:lang="sl">Determines whether the escape processing should be applied on the command.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -975,6 +1062,9 @@
 					<desc xml:lang="th">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="hu">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="sk">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
+					<desc xml:lang="sl">Specifies the name of the table which should be updated. This is usually used for queries which relate to more than one table.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UpdateSchemaName" oor:type="xs:string">
@@ -1004,6 +1094,9 @@
 					<desc xml:lang="th">Specifies the name of the update table schema.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the update table schema.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the update table schema.</desc>
+					<desc xml:lang="hu">Specifies the name of the update table schema.</desc>
+					<desc xml:lang="sk">Specifies the name of the update table schema.</desc>
+					<desc xml:lang="sl">Specifies the name of the update table schema.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UpdateCatalogName" oor:type="xs:string">
@@ -1033,6 +1126,9 @@
 					<desc xml:lang="th">Specifies the name of the update table catalog.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the update table catalog.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the update table catalog.</desc>
+					<desc xml:lang="hu">Specifies the name of the update table catalog.</desc>
+					<desc xml:lang="sk">Specifies the name of the update table catalog.</desc>
+					<desc xml:lang="sl">Specifies the name of the update table catalog.</desc>
 				</info>
 			</prop>
 			<prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
@@ -1062,6 +1158,9 @@
 					<desc xml:lang="th">Contains the information for the query design.</desc>
 					<desc xml:lang="hi-IN">Contains the information for the query design.</desc>
 					<desc xml:lang="x-comment">Contains the information for the query design.</desc>
+					<desc xml:lang="hu">Contains the information for the query design.</desc>
+					<desc xml:lang="sk">Contains the information for the query design.</desc>
+					<desc xml:lang="sl">Contains the information for the query design.</desc>
 				</info>
 			</prop>
 			<node-ref oor:name="Settings" oor:node-type="DataSettings">
@@ -1091,6 +1190,9 @@
 					<desc xml:lang="th">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 					<desc xml:lang="hi-IN">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 					<desc xml:lang="x-comment">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="hu">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="sk">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+					<desc xml:lang="sl">Extends the database table with additional display information, sorting and filtering criterias.</desc>
 				</info>
 			</node-ref>
 			<set oor:name="Columns" oor:node-type="Column">
@@ -1120,6 +1222,9 @@
 					<desc xml:lang="th">Contains a list of column layout information.</desc>
 					<desc xml:lang="hi-IN">Contains a list of column layout information.</desc>
 					<desc xml:lang="x-comment">Contains a list of column layout information.</desc>
+					<desc xml:lang="hu">Contains a list of column layout information.</desc>
+					<desc xml:lang="sk">Contains a list of column layout information.</desc>
+					<desc xml:lang="sl">Contains a list of column layout information.</desc>
 				</info>
 			</set>
 		</group>
@@ -1150,6 +1255,9 @@
 				<desc xml:lang="th">Defines the value for database driver specific value.</desc>
 				<desc xml:lang="hi-IN">Defines the value for database driver specific value.</desc>
 				<desc xml:lang="x-comment">Defines the value for database driver specific value.</desc>
+				<desc xml:lang="hu">Defines the value for database driver specific value.</desc>
+				<desc xml:lang="sk">Defines the value for database driver specific value.</desc>
+				<desc xml:lang="sl">Defines the value for database driver specific value.</desc>
 			</info>
 			<prop oor:name="Value" oor:type="oor:any">
 				<info>
@@ -1178,6 +1286,9 @@
 					<desc xml:lang="th">Contains the value of the data source setting item.</desc>
 					<desc xml:lang="hi-IN">Contains the value of the data source setting item.</desc>
 					<desc xml:lang="x-comment">Contains the value of the data source setting item.</desc>
+					<desc xml:lang="hu">Contains the value of the data source setting item.</desc>
+					<desc xml:lang="sk">Contains the value of the data source setting item.</desc>
+					<desc xml:lang="sl">Contains the value of the data source setting item.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1208,6 +1319,9 @@
 				<desc xml:lang="th">Contains a list of bookmarks to documents.</desc>
 				<desc xml:lang="hi-IN">Contains a list of bookmarks to documents.</desc>
 				<desc xml:lang="x-comment">Contains a list of bookmarks to documents.</desc>
+				<desc xml:lang="hu">Contains a list of bookmarks to documents.</desc>
+				<desc xml:lang="sk">Contains a list of bookmarks to documents.</desc>
+				<desc xml:lang="sl">Contains a list of bookmarks to documents.</desc>
 			</info>
 			<prop oor:name="DocumentLocation" oor:type="xs:string">
 				<info>
@@ -1236,6 +1350,9 @@
 					<desc xml:lang="th">Specifies the location of a document.</desc>
 					<desc xml:lang="hi-IN">Specifies the location of a document.</desc>
 					<desc xml:lang="x-comment">Specifies the location of a document.</desc>
+					<desc xml:lang="hu">Specifies the location of a document.</desc>
+					<desc xml:lang="sk">Specifies the location of a document.</desc>
+					<desc xml:lang="sl">Specifies the location of a document.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1266,6 +1383,9 @@
 				<desc xml:lang="th">Describes how to establish a database connection and how to filter and layout the database data.</desc>
 				<desc xml:lang="hi-IN">Describes how to establish a database connection and how to filter and layout the database data.</desc>
 				<desc xml:lang="x-comment">Describes how to establish a database connection and how to filter and layout the database data.</desc>
+				<desc xml:lang="hu">Describes how to establish a database connection and how to filter and layout the database data.</desc>
+				<desc xml:lang="sk">Describes how to establish a database connection and how to filter and layout the database data.</desc>
+				<desc xml:lang="sl">Describes how to establish a database connection and how to filter and layout the database data.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
@@ -1294,6 +1414,9 @@
 					<desc xml:lang="th">Indicates a database URL, which locates a database driver.</desc>
 					<desc xml:lang="hi-IN">Indicates a database URL, which locates a database driver.</desc>
 					<desc xml:lang="x-comment">Indicates a database URL, which locates a database driver.</desc>
+					<desc xml:lang="hu">Indicates a database URL, which locates a database driver.</desc>
+					<desc xml:lang="sk">Indicates a database URL, which locates a database driver.</desc>
+					<desc xml:lang="sl">Indicates a database URL, which locates a database driver.</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsPasswordRequired" oor:type="xs:boolean">
@@ -1323,6 +1446,9 @@
 					<desc xml:lang="th">Indicates that a password is always necessary.</desc>
 					<desc xml:lang="hi-IN">Indicates that a password is always necessary.</desc>
 					<desc xml:lang="x-comment">Indicates that a password is always necessary.</desc>
+					<desc xml:lang="hu">Indicates that a password is always necessary.</desc>
+					<desc xml:lang="sk">Indicates that a password is always necessary.</desc>
+					<desc xml:lang="sl">Indicates that a password is always necessary.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1353,6 +1479,9 @@
 					<desc xml:lang="th">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
 					<desc xml:lang="hi-IN">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
 					<desc xml:lang="x-comment">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
+					<desc xml:lang="hu">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
+					<desc xml:lang="sk">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
+					<desc xml:lang="sl">Defines a list of tables on which the DataSource has its focus. If empty, all the tables are used.</desc>
 				</info>
 				<value oor:separator=";">%</value>
 			</prop>
@@ -1383,6 +1512,9 @@
 					<desc xml:lang="th">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
 					<desc xml:lang="hi-IN">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
 					<desc xml:lang="x-comment">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
+					<desc xml:lang="hu">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
+					<desc xml:lang="sk">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
+					<desc xml:lang="sl">Defines a list of table types, on which the DataSource has its focus. If empty, all the tables types are used.</desc>
 				</info>
 			</prop>
 			<prop oor:name="NumberFormatSettings" oor:type="xs:hexBinary">
@@ -1412,6 +1544,9 @@
 					<desc xml:lang="th">Provides information about number formats used for the columns of queries and tables.</desc>
 					<desc xml:lang="hi-IN">Provides information about number formats used for the columns of queries and tables.</desc>
 					<desc xml:lang="x-comment">Provides information about number formats used for the columns of queries and tables.</desc>
+					<desc xml:lang="hu">Provides information about number formats used for the columns of queries and tables.</desc>
+					<desc xml:lang="sk">Provides information about number formats used for the columns of queries and tables.</desc>
+					<desc xml:lang="sl">Provides information about number formats used for the columns of queries and tables.</desc>
 				</info>
 			</prop>
 			<prop oor:name="User" oor:type="xs:string">
@@ -1441,6 +1576,9 @@
 					<desc xml:lang="th">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
 					<desc xml:lang="hi-IN">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
 					<desc xml:lang="x-comment">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
+					<desc xml:lang="hu">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
+					<desc xml:lang="sk">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
+					<desc xml:lang="sl">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
 				</info>
 			</prop>
 			<prop oor:name="LoginTimeout" oor:type="xs:int">
@@ -1470,6 +1608,9 @@
 					<desc xml:lang="th">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
 					<desc xml:lang="hi-IN">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
 					<desc xml:lang="x-comment">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
+					<desc xml:lang="hu">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
+					<desc xml:lang="sk">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
+					<desc xml:lang="sl">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
 				</info>
 			</prop>
 			<prop oor:name="SuppressVersionColumns" oor:type="xs:boolean">
@@ -1499,6 +1640,9 @@
 					<desc xml:lang="th">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
 					<desc xml:lang="hi-IN">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
 					<desc xml:lang="x-comment">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
+					<desc xml:lang="hu">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
+					<desc xml:lang="sk">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
+					<desc xml:lang="sl">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1529,6 +1673,9 @@
 					<desc xml:lang="th">Contains the information for the relation design.</desc>
 					<desc xml:lang="hi-IN">Contains the information for the relation design.</desc>
 					<desc xml:lang="x-comment">Contains the information for the relation design.</desc>
+					<desc xml:lang="hu">Contains the information for the relation design.</desc>
+					<desc xml:lang="sk">Contains the information for the relation design.</desc>
+					<desc xml:lang="sl">Contains the information for the relation design.</desc>
 				</info>
 			</prop>
 			<set oor:name="DataSourceSettings" oor:node-type="DataSourceSetting">
@@ -1558,6 +1705,9 @@
 					<desc xml:lang="th">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
 					<desc xml:lang="hi-IN">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
 					<desc xml:lang="x-comment">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
+					<desc xml:lang="hu">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
+					<desc xml:lang="sk">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
+					<desc xml:lang="sl">Specifies a list of arbitrary string tag/value pairs as connection arguments; normally at least a &quot;user&quot; and &quot;password&quot; property should be included.</desc>
 				</info>
 			</set>
 			<set oor:name="Tables" oor:node-type="Table">
@@ -1587,6 +1737,9 @@
 					<desc xml:lang="th">Contains filtering and layout settings for specific database tables.</desc>
 					<desc xml:lang="hi-IN">Contains filtering and layout settings for specific database tables.</desc>
 					<desc xml:lang="x-comment">Contains filtering and layout settings for specific database tables.</desc>
+					<desc xml:lang="hu">Contains filtering and layout settings for specific database tables.</desc>
+					<desc xml:lang="sk">Contains filtering and layout settings for specific database tables.</desc>
+					<desc xml:lang="sl">Contains filtering and layout settings for specific database tables.</desc>
 				</info>
 			</set>
 			<set oor:name="Queries" oor:node-type="Query">
@@ -1616,6 +1769,9 @@
 					<desc xml:lang="th">Contains a list of database queries.</desc>
 					<desc xml:lang="hi-IN">Contains a list of database queries.</desc>
 					<desc xml:lang="x-comment">Contains a list of database queries.</desc>
+					<desc xml:lang="hu">Contains a list of database queries.</desc>
+					<desc xml:lang="sk">Contains a list of database queries.</desc>
+					<desc xml:lang="sl">Contains a list of database queries.</desc>
 				</info>
 			</set>
 			<set oor:name="Bookmarks" oor:node-type="Bookmark">
@@ -1645,6 +1801,9 @@
 					<desc xml:lang="th">Contains a list of links to associated documents.</desc>
 					<desc xml:lang="hi-IN">Contains a list of links to associated documents.</desc>
 					<desc xml:lang="x-comment">Contains a list of links to associated documents.</desc>
+					<desc xml:lang="hu">Contains a list of links to associated documents.</desc>
+					<desc xml:lang="sk">Contains a list of links to associated documents.</desc>
+					<desc xml:lang="sl">Contains a list of links to associated documents.</desc>
 				</info>
 			</set>
 		</group>
@@ -1675,6 +1834,9 @@
 				<desc xml:lang="th">Specifies the data source to be used for the bibliography.</desc>
 				<desc xml:lang="hi-IN">Specifies the data source to be used for the bibliography.</desc>
 				<desc xml:lang="x-comment">Specifies the data source to be used for the bibliography.</desc>
+				<desc xml:lang="hu">Specifies the data source to be used for the bibliography.</desc>
+				<desc xml:lang="sk">Specifies the data source to be used for the bibliography.</desc>
+				<desc xml:lang="sl">Specifies the data source to be used for the bibliography.</desc>
 			</info>
 			<prop oor:name="DataSourceName" oor:type="xs:string">
 				<info>
@@ -1703,6 +1865,9 @@
 					<desc xml:lang="th">Specifies the name of the registered data source.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the registered data source.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="hu">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="sk">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="sl">Specifies the name of the registered data source.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Command" oor:type="xs:string">
@@ -1732,6 +1897,9 @@
 					<desc xml:lang="th">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 					<desc xml:lang="hi-IN">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 					<desc xml:lang="x-comment">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="hu">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="sk">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="sl">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 				</info>
 			</prop>
 			<prop oor:name="CommandType" oor:type="xs:short">
@@ -1761,6 +1929,9 @@
 					<desc xml:lang="th">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 					<desc xml:lang="hi-IN">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 					<desc xml:lang="x-comment">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="hu">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="sk">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="sl">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 				</info>
 			</prop>
 			<set oor:name="Fields" oor:node-type="FieldAssignment">
@@ -1790,6 +1961,9 @@
 					<desc xml:lang="th">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 					<desc xml:lang="hi-IN">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 					<desc xml:lang="x-comment">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="hu">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="sk">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="sl">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 				</info>
 			</set>
 		</group>
@@ -1820,6 +1994,9 @@
 				<desc xml:lang="th">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
 				<desc xml:lang="hi-IN">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
 				<desc xml:lang="x-comment">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
+				<desc xml:lang="hu">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
+				<desc xml:lang="sk">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
+				<desc xml:lang="sl">Specifies the mapping between the desired (logical) column titles and the real column titles of the data source.</desc>
 			</info>
 			<prop oor:name="ProgrammaticFieldName" oor:type="xs:string">
 				<info>
@@ -1848,6 +2025,9 @@
 					<desc xml:lang="th">Specifies the desired (logical) column name.</desc>
 					<desc xml:lang="hi-IN">Specifies the desired (logical) column name.</desc>
 					<desc xml:lang="x-comment">Specifies the desired (logical) column name.</desc>
+					<desc xml:lang="hu">Specifies the desired (logical) column name.</desc>
+					<desc xml:lang="sk">Specifies the desired (logical) column name.</desc>
+					<desc xml:lang="sl">Specifies the desired (logical) column name.</desc>
 				</info>
 			</prop>
 			<prop oor:name="AssignedFieldName" oor:type="xs:string">
@@ -1877,6 +2057,9 @@
 					<desc xml:lang="th">Specifies the real column name used in the data source.</desc>
 					<desc xml:lang="hi-IN">Specifies the real column name used in the data source.</desc>
 					<desc xml:lang="x-comment">Specifies the real column name used in the data source.</desc>
+					<desc xml:lang="hu">Specifies the real column name used in the data source.</desc>
+					<desc xml:lang="sk">Specifies the real column name used in the data source.</desc>
+					<desc xml:lang="sl">Specifies the real column name used in the data source.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1907,6 +2090,9 @@
 				<desc xml:lang="th">Specifies the connection pooling of used database drivers.</desc>
 				<desc xml:lang="hi-IN">Specifies the connection pooling of used database drivers.</desc>
 				<desc xml:lang="x-comment">Specifies the connection pooling of used database drivers.</desc>
+				<desc xml:lang="hu">Specifies the connection pooling of used database drivers.</desc>
+				<desc xml:lang="sk">Specifies the connection pooling of used database drivers.</desc>
+				<desc xml:lang="sl">Specifies the connection pooling of used database drivers.</desc>
 			</info>
 			<prop oor:name="DriverName" oor:type="xs:string">
 				<info>
@@ -1935,6 +2121,9 @@
 					<desc xml:lang="th">Specifies the name of the database drivers.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the database drivers.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the database drivers.</desc>
+					<desc xml:lang="hu">Specifies the name of the database drivers.</desc>
+					<desc xml:lang="sk">Specifies the name of the database drivers.</desc>
+					<desc xml:lang="sl">Specifies the name of the database drivers.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Enable" oor:type="xs:boolean">
@@ -1964,6 +2153,9 @@
 					<desc xml:lang="th">Specifies if the pooling for this driver should be enabled.</desc>
 					<desc xml:lang="hi-IN">Specifies if the pooling for this driver should be enabled.</desc>
 					<desc xml:lang="x-comment">Specifies if the pooling for this driver should be enabled.</desc>
+					<desc xml:lang="hu">Specifies if the pooling for this driver should be enabled.</desc>
+					<desc xml:lang="sk">Specifies if the pooling for this driver should be enabled.</desc>
+					<desc xml:lang="sl">Specifies if the pooling for this driver should be enabled.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Timeout" oor:type="xs:int">
@@ -1993,6 +2185,9 @@
 					<desc xml:lang="th">Specifies the time after a connection will be released.</desc>
 					<desc xml:lang="hi-IN">Specifies the time after a connection will be released.</desc>
 					<desc xml:lang="x-comment">Specifies the time after a connection will be released.</desc>
+					<desc xml:lang="hu">Specifies the time after a connection will be released.</desc>
+					<desc xml:lang="sk">Specifies the time after a connection will be released.</desc>
+					<desc xml:lang="sl">Specifies the time after a connection will be released.</desc>
 				</info>
 			</prop>
 		</group>
@@ -2023,6 +2218,9 @@
 				<desc xml:lang="th">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
 				<desc xml:lang="hi-IN">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
 				<desc xml:lang="x-comment">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
+				<desc xml:lang="hu">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
+				<desc xml:lang="sk">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
+				<desc xml:lang="sl">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
 			</info>
 			<prop oor:name="DriverPageDisplayName" oor:type="xs:string">
 				<info>
@@ -2051,6 +2249,9 @@
 					<desc xml:lang="th">Specifies the display name of the database driver page.</desc>
 					<desc xml:lang="hi-IN">Specifies the display name of the database driver page.</desc>
 					<desc xml:lang="x-comment">Specifies the display name of the database driver page.</desc>
+					<desc xml:lang="hu">Specifies the display name of the database driver page.</desc>
+					<desc xml:lang="sk">Specifies the display name of the database driver page.</desc>
+					<desc xml:lang="sl">Specifies the display name of the database driver page.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
@@ -2080,6 +2281,9 @@
 					<desc xml:lang="th">Specifies the display name of the database driver.</desc>
 					<desc xml:lang="hi-IN">Specifies the display name of the database driver.</desc>
 					<desc xml:lang="x-comment">Specifies the display name of the database driver.</desc>
+					<desc xml:lang="hu">Specifies the display name of the database driver.</desc>
+					<desc xml:lang="sk">Specifies the display name of the database driver.</desc>
+					<desc xml:lang="sl">Specifies the display name of the database driver.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DriverDsnPrefix" oor:type="xs:string">
@@ -2109,6 +2313,9 @@
 					<desc xml:lang="th">Specifies the prefix of the URL of the database driver.</desc>
 					<desc xml:lang="hi-IN">Specifies the prefix of the URL of the database driver.</desc>
 					<desc xml:lang="x-comment">Specifies the prefix of the URL of the database driver.</desc>
+					<desc xml:lang="hu">Specifies the prefix of the URL of the database driver.</desc>
+					<desc xml:lang="sk">Specifies the prefix of the URL of the database driver.</desc>
+					<desc xml:lang="sl">Specifies the prefix of the URL of the database driver.</desc>
 				</info>
 			</prop>
 		</group>
@@ -2144,6 +2351,9 @@
 				<desc xml:lang="th">Specifies additional information about the database drivers.</desc>
 				<desc xml:lang="hi-IN">Specifies additional information about the database drivers.</desc>
 				<desc xml:lang="x-comment">Specifies additional information about the database drivers.</desc>
+				<desc xml:lang="hu">Specifies additional information about the database drivers.</desc>
+				<desc xml:lang="sk">Specifies additional information about the database drivers.</desc>
+				<desc xml:lang="sl">Specifies additional information about the database drivers.</desc>
 			</info>
 			<prop oor:name="DriverPrecedence" oor:type="oor:string-list">
 				<info>
@@ -2172,6 +2382,9 @@
 					<desc xml:lang="th">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
 					<desc xml:lang="hi-IN">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
 					<desc xml:lang="x-comment">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
+					<desc xml:lang="hu">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
+					<desc xml:lang="sk">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
+					<desc xml:lang="sl">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
 				</info>
 				<value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
 			</prop>
@@ -2203,6 +2416,9 @@
 				<desc xml:lang="th">Specifies all information which is needed for the global connection pool.</desc>
 				<desc xml:lang="hi-IN">Specifies all information which is needed for the global connection pool.</desc>
 				<desc xml:lang="x-comment">Specifies all information which is needed for the global connection pool.</desc>
+				<desc xml:lang="hu">Specifies all information which is needed for the global connection pool.</desc>
+				<desc xml:lang="sk">Specifies all information which is needed for the global connection pool.</desc>
+				<desc xml:lang="sl">Specifies all information which is needed for the global connection pool.</desc>
 			</info>
 			<prop oor:name="EnablePooling" oor:type="xs:boolean">
 				<info>
@@ -2231,6 +2447,9 @@
 					<desc xml:lang="th">Specifies if the global connection pool is enabled.</desc>
 					<desc xml:lang="hi-IN">Specifies if the global connection pool is enabled.</desc>
 					<desc xml:lang="x-comment">Specifies if the global connection pool is enabled.</desc>
+					<desc xml:lang="hu">Specifies if the global connection pool is enabled.</desc>
+					<desc xml:lang="sk">Specifies if the global connection pool is enabled.</desc>
+					<desc xml:lang="sl">Specifies if the global connection pool is enabled.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -2261,6 +2480,9 @@
 					<desc xml:lang="th">Specifies the connection pooling of used database drivers.</desc>
 					<desc xml:lang="hi-IN">Specifies the connection pooling of used database drivers.</desc>
 					<desc xml:lang="x-comment">Specifies the connection pooling of used database drivers.</desc>
+					<desc xml:lang="hu">Specifies the connection pooling of used database drivers.</desc>
+					<desc xml:lang="sk">Specifies the connection pooling of used database drivers.</desc>
+					<desc xml:lang="sl">Specifies the connection pooling of used database drivers.</desc>
 				</info>
 			</set>
 		</group>
@@ -2291,6 +2513,9 @@
 				<desc xml:lang="th">Contains a list of descriptions for data sources.</desc>
 				<desc xml:lang="hi-IN">Contains a list of descriptions for data sources.</desc>
 				<desc xml:lang="x-comment">Contains a list of descriptions for data sources.</desc>
+				<desc xml:lang="hu">Contains a list of descriptions for data sources.</desc>
+				<desc xml:lang="sk">Contains a list of descriptions for data sources.</desc>
+				<desc xml:lang="sl">Contains a list of descriptions for data sources.</desc>
 			</info>
 		</set>
 		<set oor:name="UserDefinedDriverSettings" oor:node-type="UserDefinedDriver">
@@ -2320,6 +2545,9 @@
 				<desc xml:lang="th">Contains a list of descriptions for user defined drivers.</desc>
 				<desc xml:lang="hi-IN">Contains a list of descriptions for user defined drivers.</desc>
 				<desc xml:lang="x-comment">Contains a list of descriptions for user defined drivers.</desc>
+				<desc xml:lang="hu">Contains a list of descriptions for user defined drivers.</desc>
+				<desc xml:lang="sk">Contains a list of descriptions for user defined drivers.</desc>
+				<desc xml:lang="sl">Contains a list of descriptions for user defined drivers.</desc>
 			</info>
 		</set>
 		<group oor:name="AddressBook">
@@ -2349,6 +2577,9 @@
 				<desc xml:lang="th">Specifies the data source that can be used as an AddressBook.</desc>
 				<desc xml:lang="hi-IN">Specifies the data source that can be used as an AddressBook.</desc>
 				<desc xml:lang="x-comment">Specifies the data source that can be used as an AddressBook.</desc>
+				<desc xml:lang="hu">Specifies the data source that can be used as an AddressBook.</desc>
+				<desc xml:lang="sk">Specifies the data source that can be used as an AddressBook.</desc>
+				<desc xml:lang="sl">Specifies the data source that can be used as an AddressBook.</desc>
 			</info>
 			<prop oor:name="DataSourceName" oor:type="xs:string">
 				<info>
@@ -2377,6 +2608,9 @@
 					<desc xml:lang="th">Specifies the name of the registered data source.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the registered data source.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="hu">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="sk">Specifies the name of the registered data source.</desc>
+					<desc xml:lang="sl">Specifies the name of the registered data source.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2408,6 +2642,9 @@
 					<desc xml:lang="th">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 					<desc xml:lang="hi-IN">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 					<desc xml:lang="x-comment">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="hu">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="sk">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
+					<desc xml:lang="sl">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2439,6 +2676,9 @@
 					<desc xml:lang="th">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 					<desc xml:lang="hi-IN">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 					<desc xml:lang="x-comment">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="hu">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="sk">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
+					<desc xml:lang="sl">Determines the exact meaning of Command. Valid values are: 0 - Command is a table name 1 - Command is a query name 2 - Command is an SQL command.</desc>
 				</info>
 			</prop>
 			<prop oor:name="AutoPilotCompleted" oor:type="xs:boolean">
@@ -2468,6 +2708,9 @@
 					<desc xml:lang="th">Specifies if the auto pilot is completed.</desc>
 					<desc xml:lang="hi-IN">Specifies if the auto pilot is completed.</desc>
 					<desc xml:lang="x-comment">Specifies if the auto pilot is completed.</desc>
+					<desc xml:lang="hu">Specifies if the auto pilot is completed.</desc>
+					<desc xml:lang="sk">Specifies if the auto pilot is completed.</desc>
+					<desc xml:lang="sl">Specifies if the auto pilot is completed.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2498,6 +2741,9 @@
 					<desc xml:lang="th">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 					<desc xml:lang="hi-IN">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 					<desc xml:lang="x-comment">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="hu">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="sk">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+					<desc xml:lang="sl">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
 				</info>
 			</set>
 		</group>
@@ -2529,6 +2775,9 @@
 				<desc xml:lang="th">Specifies settings of the bibliography component</desc>
 				<desc xml:lang="hi-IN">Specifies settings of the bibliography component</desc>
 				<desc xml:lang="x-comment">Specifies settings of the bibliography component</desc>
+				<desc xml:lang="hu">Specifies settings of the bibliography component</desc>
+				<desc xml:lang="sk">Specifies settings of the bibliography component</desc>
+				<desc xml:lang="sl">Specifies settings of the bibliography component</desc>
 			</info>
 			<prop oor:name="BeamerHeight" oor:type="xs:int">
 				<info>
@@ -2557,6 +2806,9 @@
 					<desc xml:lang="th">Specifies the height of the database beamer</desc>
 					<desc xml:lang="hi-IN">Specifies the height of the database beamer</desc>
 					<desc xml:lang="x-comment">Specifies the height of the database beamer</desc>
+					<desc xml:lang="hu">Specifies the height of the database beamer</desc>
+					<desc xml:lang="sk">Specifies the height of the database beamer</desc>
+					<desc xml:lang="sl">Specifies the height of the database beamer</desc>
 				</info>
 			</prop>
 			<prop oor:name="ViewHeight" oor:type="xs:int">
@@ -2586,6 +2838,9 @@
 					<desc xml:lang="th">Specifies the height of the view window</desc>
 					<desc xml:lang="hi-IN">Specifies the height of the view window</desc>
 					<desc xml:lang="x-comment">Specifies the height of the view window</desc>
+					<desc xml:lang="hu">Specifies the height of the view window</desc>
+					<desc xml:lang="sk">Specifies the height of the view window</desc>
+					<desc xml:lang="sl">Specifies the height of the view window</desc>
 				</info>
 			</prop>
 			<prop oor:name="QueryText" oor:type="xs:string">
@@ -2615,6 +2870,9 @@
 					<desc xml:lang="th">Specifies the search text for filtering</desc>
 					<desc xml:lang="hi-IN">Specifies the search text for filtering</desc>
 					<desc xml:lang="x-comment">Specifies the search text for filtering</desc>
+					<desc xml:lang="hu">Specifies the search text for filtering</desc>
+					<desc xml:lang="sk">Specifies the search text for filtering</desc>
+					<desc xml:lang="sl">Specifies the search text for filtering</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2646,6 +2904,9 @@
 					<desc xml:lang="th">Specifies the search field for filtering</desc>
 					<desc xml:lang="hi-IN">Specifies the search field for filtering</desc>
 					<desc xml:lang="x-comment">Specifies the search field for filtering</desc>
+					<desc xml:lang="hu">Specifies the search field for filtering</desc>
+					<desc xml:lang="sk">Specifies the search field for filtering</desc>
+					<desc xml:lang="sl">Specifies the search field for filtering</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2677,6 +2938,9 @@
 					<desc xml:lang="th">Determines whether a non-assigned column results in a warning box.</desc>
 					<desc xml:lang="hi-IN">Determines whether a non-assigned column results in a warning box.</desc>
 					<desc xml:lang="x-comment">Determines whether a non-assigned column results in a warning box.</desc>
+					<desc xml:lang="hu">Determines whether a non-assigned column results in a warning box.</desc>
+					<desc xml:lang="sk">Determines whether a non-assigned column results in a warning box.</desc>
+					<desc xml:lang="sl">Determines whether a non-assigned column results in a warning box.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -2710,6 +2974,9 @@
 					<desc xml:lang="th">Determines the current data source for the bibliography.</desc>
 					<desc xml:lang="hi-IN">Determines the current data source for the bibliography.</desc>
 					<desc xml:lang="x-comment">Determines the current data source for the bibliography.</desc>
+					<desc xml:lang="hu">Determines the current data source for the bibliography.</desc>
+					<desc xml:lang="sk">Determines the current data source for the bibliography.</desc>
+					<desc xml:lang="sl">Determines the current data source for the bibliography.</desc>
 				</info>
 			</node-ref>
 			<set oor:name="DataSourceHistory" oor:node-type="DataSource">
@@ -2742,6 +3009,9 @@
 					<desc xml:lang="th">Specifies the data source that can be used as a bibliography.</desc>
 					<desc xml:lang="hi-IN">Specifies the data source that can be used as a bibliography.</desc>
 					<desc xml:lang="x-comment">Specifies the data source that can be used as a bibliography.</desc>
+					<desc xml:lang="hu">Specifies the data source that can be used as a bibliography.</desc>
+					<desc xml:lang="sk">Specifies the data source that can be used as a bibliography.</desc>
+					<desc xml:lang="sl">Specifies the data source that can be used as a bibliography.</desc>
 				</info>
 			</set>
 		</group>
@@ -2772,6 +3042,9 @@
 				<desc xml:lang="th">Specifies the driver settings that are used.</desc>
 				<desc xml:lang="hi-IN">Specifies the driver settings that are used.</desc>
 				<desc xml:lang="x-comment">Specifies the driver settings that are used.</desc>
+				<desc xml:lang="hu">Specifies the driver settings that are used.</desc>
+				<desc xml:lang="sk">Specifies the driver settings that are used.</desc>
+				<desc xml:lang="sl">Specifies the driver settings that are used.</desc>
 			</info>
 			<group oor:name="com.sun.star.comp.sdbc.MozabDriver">
 				<info>
@@ -2800,6 +3073,9 @@
 					<desc xml:lang="th">Specifies the driver settings for the mozilla database driver.</desc>
 					<desc xml:lang="hi-IN">Specifies the driver settings for the mozilla database driver.</desc>
 					<desc xml:lang="x-comment">Specifies the driver settings for the mozilla database driver.</desc>
+					<desc xml:lang="hu">Specifies the driver settings for the mozilla database driver.</desc>
+					<desc xml:lang="sk">Specifies the driver settings for the mozilla database driver.</desc>
+					<desc xml:lang="sl">Specifies the driver settings for the mozilla database driver.</desc>
 				</info>
 				<group oor:name="MozillaPreferences">
 					<info>
@@ -2828,6 +3104,9 @@
 						<desc xml:lang="th">Specifies the mozilla preferences.</desc>
 						<desc xml:lang="hi-IN">Specifies the mozilla preferences.</desc>
 						<desc xml:lang="x-comment">Specifies the mozilla preferences.</desc>
+						<desc xml:lang="hu">Specifies the mozilla preferences.</desc>
+						<desc xml:lang="sk">Specifies the mozilla preferences.</desc>
+						<desc xml:lang="sl">Specifies the mozilla preferences.</desc>
 					</info>
 					<prop oor:name="ProfileName" oor:type="xs:string">
 						<info>
@@ -2856,6 +3135,9 @@
 							<desc xml:lang="th">Specifies the mozilla profile name.</desc>
 							<desc xml:lang="hi-IN">Specifies the mozilla profile name.</desc>
 							<desc xml:lang="x-comment">Specifies the mozilla profile name.</desc>
+							<desc xml:lang="hu">Specifies the mozilla profile name.</desc>
+							<desc xml:lang="sk">Specifies the mozilla profile name.</desc>
+							<desc xml:lang="sl">Specifies the mozilla profile name.</desc>
 						</info>
 						<value/>
 						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2888,6 +3170,9 @@
 						<desc xml:lang="th">Specifies the column alias names used.</desc>
 						<desc xml:lang="hi-IN">Specifies the column alias names used.</desc>
 						<desc xml:lang="x-comment">Specifies the column alias names used.</desc>
+						<desc xml:lang="hu">Specifies the column alias names used.</desc>
+						<desc xml:lang="sk">Specifies the column alias names used.</desc>
+						<desc xml:lang="sl">Specifies the column alias names used.</desc>
 					</info>
 					<prop oor:name="FirstName" oor:type="xs:string" oor:localized="true">
 						<info>
@@ -2916,6 +3201,9 @@
 							<desc xml:lang="th">Specifies the first name.</desc>
 							<desc xml:lang="hi-IN">Specifies the first name.</desc>
 							<desc xml:lang="x-comment">Specifies the first name.</desc>
+							<desc xml:lang="hu">Specifies the first name.</desc>
+							<desc xml:lang="sk">Specifies the first name.</desc>
+							<desc xml:lang="sl">Specifies the first name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="LastName" oor:type="xs:string" oor:localized="true">
@@ -2945,6 +3233,9 @@
 							<desc xml:lang="th">Specifies the last name.</desc>
 							<desc xml:lang="hi-IN">Specifies the last name.</desc>
 							<desc xml:lang="x-comment">Specifies the last name.</desc>
+							<desc xml:lang="hu">Specifies the last name.</desc>
+							<desc xml:lang="sk">Specifies the last name.</desc>
+							<desc xml:lang="sl">Specifies the last name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true">
@@ -2974,6 +3265,9 @@
 							<desc xml:lang="th">Specifies the display name.</desc>
 							<desc xml:lang="hi-IN">Specifies the display name.</desc>
 							<desc xml:lang="x-comment">Specifies the display name.</desc>
+							<desc xml:lang="hu">Specifies the display name.</desc>
+							<desc xml:lang="sk">Specifies the display name.</desc>
+							<desc xml:lang="sl">Specifies the display name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="NickName" oor:type="xs:string" oor:localized="true">
@@ -3003,6 +3297,9 @@
 							<desc xml:lang="th">Specifies the nickname.</desc>
 							<desc xml:lang="hi-IN">Specifies the nickname.</desc>
 							<desc xml:lang="x-comment">Specifies the nickname.</desc>
+							<desc xml:lang="hu">Specifies the nickname.</desc>
+							<desc xml:lang="sk">Specifies the nickname.</desc>
+							<desc xml:lang="sl">Specifies the nickname.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true">
@@ -3032,6 +3329,9 @@
 							<desc xml:lang="th">Specifies the primary email.</desc>
 							<desc xml:lang="hi-IN">Specifies the primary email.</desc>
 							<desc xml:lang="x-comment">Specifies the primary email.</desc>
+							<desc xml:lang="hu">Specifies the primary email.</desc>
+							<desc xml:lang="sk">Specifies the primary email.</desc>
+							<desc xml:lang="sl">Specifies the primary email.</desc>
 						</info>
 					</prop>
 					<prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true">
@@ -3061,6 +3361,9 @@
 							<desc xml:lang="th">Specifies the first name.</desc>
 							<desc xml:lang="hi-IN">Specifies the first name.</desc>
 							<desc xml:lang="x-comment">Specifies the first name.</desc>
+							<desc xml:lang="hu">Specifies the first name.</desc>
+							<desc xml:lang="sk">Specifies the first name.</desc>
+							<desc xml:lang="sl">Specifies the first name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true">
@@ -3090,6 +3393,9 @@
 							<desc xml:lang="th">Specifies the preferred mail format.</desc>
 							<desc xml:lang="hi-IN">Specifies the preferred mail format.</desc>
 							<desc xml:lang="x-comment">Specifies the preferred mail format.</desc>
+							<desc xml:lang="hu">Specifies the preferred mail format.</desc>
+							<desc xml:lang="sk">Specifies the preferred mail format.</desc>
+							<desc xml:lang="sl">Specifies the preferred mail format.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true">
@@ -3119,6 +3425,9 @@
 							<desc xml:lang="th">Specifies the phone at work.</desc>
 							<desc xml:lang="hi-IN">Specifies the phone at work.</desc>
 							<desc xml:lang="x-comment">Specifies the phone at work.</desc>
+							<desc xml:lang="hu">Specifies the phone at work.</desc>
+							<desc xml:lang="sk">Specifies the phone at work.</desc>
+							<desc xml:lang="sl">Specifies the phone at work.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true">
@@ -3148,6 +3457,9 @@
 							<desc xml:lang="th">Specifies the phone at home.</desc>
 							<desc xml:lang="hi-IN">Specifies the phone at home.</desc>
 							<desc xml:lang="x-comment">Specifies the phone at home.</desc>
+							<desc xml:lang="hu">Specifies the phone at home.</desc>
+							<desc xml:lang="sk">Specifies the phone at home.</desc>
+							<desc xml:lang="sl">Specifies the phone at home.</desc>
 						</info>
 					</prop>
 					<prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true">
@@ -3177,6 +3489,9 @@
 							<desc xml:lang="th">Specifies the fax number.</desc>
 							<desc xml:lang="hi-IN">Specifies the fax number.</desc>
 							<desc xml:lang="x-comment">Specifies the fax number.</desc>
+							<desc xml:lang="hu">Specifies the fax number.</desc>
+							<desc xml:lang="sk">Specifies the fax number.</desc>
+							<desc xml:lang="sl">Specifies the fax number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true">
@@ -3206,6 +3521,9 @@
 							<desc xml:lang="th">Specifies the pager number.</desc>
 							<desc xml:lang="hi-IN">Specifies the pager number.</desc>
 							<desc xml:lang="x-comment">Specifies the pager number.</desc>
+							<desc xml:lang="hu">Specifies the pager number.</desc>
+							<desc xml:lang="sk">Specifies the pager number.</desc>
+							<desc xml:lang="sl">Specifies the pager number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true">
@@ -3235,6 +3553,9 @@
 							<desc xml:lang="th">Specifies the cellular number.</desc>
 							<desc xml:lang="hi-IN">Specifies the cellular number.</desc>
 							<desc xml:lang="x-comment">Specifies the cellular number.</desc>
+							<desc xml:lang="hu">Specifies the cellular number.</desc>
+							<desc xml:lang="sk">Specifies the cellular number.</desc>
+							<desc xml:lang="sl">Specifies the cellular number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true">
@@ -3264,6 +3585,9 @@
 							<desc xml:lang="th">Specifies the home address.</desc>
 							<desc xml:lang="hi-IN">Specifies the home address.</desc>
 							<desc xml:lang="x-comment">Specifies the home address.</desc>
+							<desc xml:lang="hu">Specifies the home address.</desc>
+							<desc xml:lang="sk">Specifies the home address.</desc>
+							<desc xml:lang="sl">Specifies the home address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true">
@@ -3293,6 +3617,9 @@
 							<desc xml:lang="th">Specifies the 2nd home address.</desc>
 							<desc xml:lang="hi-IN">Specifies the 2nd home address.</desc>
 							<desc xml:lang="x-comment">Specifies the 2nd home address.</desc>
+							<desc xml:lang="hu">Specifies the 2nd home address.</desc>
+							<desc xml:lang="sk">Specifies the 2nd home address.</desc>
+							<desc xml:lang="sl">Specifies the 2nd home address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true">
@@ -3322,6 +3649,9 @@
 							<desc xml:lang="th">Specifies the home city.</desc>
 							<desc xml:lang="hi-IN">Specifies the home city.</desc>
 							<desc xml:lang="x-comment">Specifies the home city.</desc>
+							<desc xml:lang="hu">Specifies the home city.</desc>
+							<desc xml:lang="sk">Specifies the home city.</desc>
+							<desc xml:lang="sl">Specifies the home city.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeState" oor:type="xs:string" oor:localized="true">
@@ -3351,6 +3681,9 @@
 							<desc xml:lang="th">Specifies the home state.</desc>
 							<desc xml:lang="hi-IN">Specifies the home state.</desc>
 							<desc xml:lang="x-comment">Specifies the home state.</desc>
+							<desc xml:lang="hu">Specifies the home state.</desc>
+							<desc xml:lang="sk">Specifies the home state.</desc>
+							<desc xml:lang="sl">Specifies the home state.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true">
@@ -3380,6 +3713,9 @@
 							<desc xml:lang="th">Specifies the home ZIP code.</desc>
 							<desc xml:lang="hi-IN">Specifies the home ZIP code.</desc>
 							<desc xml:lang="x-comment">Specifies the home ZIP code.</desc>
+							<desc xml:lang="hu">Specifies the home ZIP code.</desc>
+							<desc xml:lang="sk">Specifies the home ZIP code.</desc>
+							<desc xml:lang="sl">Specifies the home ZIP code.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true">
@@ -3409,6 +3745,9 @@
 							<desc xml:lang="th">Specifies the home country.</desc>
 							<desc xml:lang="hi-IN">Specifies the home country.</desc>
 							<desc xml:lang="x-comment">Specifies the home country.</desc>
+							<desc xml:lang="hu">Specifies the home country.</desc>
+							<desc xml:lang="sk">Specifies the home country.</desc>
+							<desc xml:lang="sl">Specifies the home country.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true">
@@ -3438,6 +3777,9 @@
 							<desc xml:lang="th">Specifies the work address.</desc>
 							<desc xml:lang="hi-IN">Specifies the work address.</desc>
 							<desc xml:lang="x-comment">Specifies the work address.</desc>
+							<desc xml:lang="hu">Specifies the work address.</desc>
+							<desc xml:lang="sk">Specifies the work address.</desc>
+							<desc xml:lang="sl">Specifies the work address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true">
@@ -3467,6 +3809,9 @@
 							<desc xml:lang="th">Specifies the 2nd work address.</desc>
 							<desc xml:lang="hi-IN">Specifies the 2nd work address.</desc>
 							<desc xml:lang="x-comment">Specifies the 2nd work address.</desc>
+							<desc xml:lang="hu">Specifies the 2nd work address.</desc>
+							<desc xml:lang="sk">Specifies the 2nd work address.</desc>
+							<desc xml:lang="sl">Specifies the 2nd work address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true">
@@ -3496,6 +3841,9 @@
 							<desc xml:lang="th">Specifies the work city.</desc>
 							<desc xml:lang="hi-IN">Specifies the work city.</desc>
 							<desc xml:lang="x-comment">Specifies the work city.</desc>
+							<desc xml:lang="hu">Specifies the work city.</desc>
+							<desc xml:lang="sk">Specifies the work city.</desc>
+							<desc xml:lang="sl">Specifies the work city.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkState" oor:type="xs:string" oor:localized="true">
@@ -3525,6 +3873,9 @@
 							<desc xml:lang="th">Specifies the work state.</desc>
 							<desc xml:lang="hi-IN">Specifies the work state.</desc>
 							<desc xml:lang="x-comment">Specifies the work state.</desc>
+							<desc xml:lang="hu">Specifies the work state.</desc>
+							<desc xml:lang="sk">Specifies the work state.</desc>
+							<desc xml:lang="sl">Specifies the work state.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true">
@@ -3554,6 +3905,9 @@
 							<desc xml:lang="th">Specifies the work ZIP code.</desc>
 							<desc xml:lang="hi-IN">Specifies the work ZIP code.</desc>
 							<desc xml:lang="x-comment">Specifies the work ZIP code.</desc>
+							<desc xml:lang="hu">Specifies the work ZIP code.</desc>
+							<desc xml:lang="sk">Specifies the work ZIP code.</desc>
+							<desc xml:lang="sl">Specifies the work ZIP code.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true">
@@ -3583,6 +3937,9 @@
 							<desc xml:lang="th">Specifies the work country.</desc>
 							<desc xml:lang="hi-IN">Specifies the work country.</desc>
 							<desc xml:lang="x-comment">Specifies the work country.</desc>
+							<desc xml:lang="hu">Specifies the work country.</desc>
+							<desc xml:lang="sk">Specifies the work country.</desc>
+							<desc xml:lang="sl">Specifies the work country.</desc>
 						</info>
 					</prop>
 					<prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true">
@@ -3612,6 +3969,9 @@
 							<desc xml:lang="th">Specifies the job title.</desc>
 							<desc xml:lang="hi-IN">Specifies the job title.</desc>
 							<desc xml:lang="x-comment">Specifies the job title.</desc>
+							<desc xml:lang="hu">Specifies the job title.</desc>
+							<desc xml:lang="sk">Specifies the job title.</desc>
+							<desc xml:lang="sl">Specifies the job title.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Department" oor:type="xs:string" oor:localized="true">
@@ -3641,6 +4001,9 @@
 							<desc xml:lang="th">Specifies the department.</desc>
 							<desc xml:lang="hi-IN">Specifies the department.</desc>
 							<desc xml:lang="x-comment">Specifies the department.</desc>
+							<desc xml:lang="hu">Specifies the department.</desc>
+							<desc xml:lang="sk">Specifies the department.</desc>
+							<desc xml:lang="sl">Specifies the department.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Company" oor:type="xs:string" oor:localized="true">
@@ -3670,6 +4033,9 @@
 							<desc xml:lang="th">Specifies the company.</desc>
 							<desc xml:lang="hi-IN">Specifies the company.</desc>
 							<desc xml:lang="x-comment">Specifies the company.</desc>
+							<desc xml:lang="hu">Specifies the company.</desc>
+							<desc xml:lang="sk">Specifies the company.</desc>
+							<desc xml:lang="sl">Specifies the company.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true">
@@ -3699,6 +4065,9 @@
 							<desc xml:lang="th">Specifies the 1st webpage.</desc>
 							<desc xml:lang="hi-IN">Specifies the 1st webpage.</desc>
 							<desc xml:lang="x-comment">Specifies the 1st webpage.</desc>
+							<desc xml:lang="hu">Specifies the 1st webpage.</desc>
+							<desc xml:lang="sk">Specifies the 1st webpage.</desc>
+							<desc xml:lang="sl">Specifies the 1st webpage.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true">
@@ -3728,6 +4097,9 @@
 							<desc xml:lang="th">Specifies the 2nd webpage.</desc>
 							<desc xml:lang="hi-IN">Specifies the 2nd webpage.</desc>
 							<desc xml:lang="x-comment">Specifies the 2nd webpage.</desc>
+							<desc xml:lang="hu">Specifies the 2nd webpage.</desc>
+							<desc xml:lang="sk">Specifies the 2nd webpage.</desc>
+							<desc xml:lang="sl">Specifies the 2nd webpage.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true">
@@ -3757,6 +4129,9 @@
 							<desc xml:lang="th">Specifies the birth year.</desc>
 							<desc xml:lang="hi-IN">Specifies the birth year.</desc>
 							<desc xml:lang="x-comment">Specifies the birth year.</desc>
+							<desc xml:lang="hu">Specifies the birth year.</desc>
+							<desc xml:lang="sk">Specifies the birth year.</desc>
+							<desc xml:lang="sl">Specifies the birth year.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true">
@@ -3786,6 +4161,9 @@
 							<desc xml:lang="th">Specifies the birth month.</desc>
 							<desc xml:lang="hi-IN">Specifies the birth month.</desc>
 							<desc xml:lang="x-comment">Specifies the birth month.</desc>
+							<desc xml:lang="hu">Specifies the birth month.</desc>
+							<desc xml:lang="sk">Specifies the birth month.</desc>
+							<desc xml:lang="sl">Specifies the birth month.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true">
@@ -3815,6 +4193,9 @@
 							<desc xml:lang="th">Specifies the birth day.</desc>
 							<desc xml:lang="hi-IN">Specifies the birth day.</desc>
 							<desc xml:lang="x-comment">Specifies the birth day.</desc>
+							<desc xml:lang="hu">Specifies the birth day.</desc>
+							<desc xml:lang="sk">Specifies the birth day.</desc>
+							<desc xml:lang="sl">Specifies the birth day.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Custom1" oor:type="xs:string" oor:localized="true">
@@ -3844,6 +4225,9 @@
 							<desc xml:lang="th">Specifies the 1st custom field.</desc>
 							<desc xml:lang="hi-IN">Specifies the 1st custom field.</desc>
 							<desc xml:lang="x-comment">Specifies the 1st custom field.</desc>
+							<desc xml:lang="hu">Specifies the 1st custom field.</desc>
+							<desc xml:lang="sk">Specifies the 1st custom field.</desc>
+							<desc xml:lang="sl">Specifies the 1st custom field.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Custom2" oor:type="xs:string" oor:localized="true">
@@ -3873,6 +4257,9 @@
 							<desc xml:lang="th">Specifies the 2nd custom field.</desc>
 							<desc xml:lang="hi-IN">Specifies the 2nd custom field.</desc>
 							<desc xml:lang="x-comment">Specifies the 2nd custom field.</desc>
+							<desc xml:lang="hu">Specifies the 2nd custom field.</desc>
+							<desc xml:lang="sk">Specifies the 2nd custom field.</desc>
+							<desc xml:lang="sl">Specifies the 2nd custom field.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Custom3" oor:type="xs:string" oor:localized="true">
@@ -3902,6 +4289,9 @@
 							<desc xml:lang="th">Specifies the 3rd custom field.</desc>
 							<desc xml:lang="hi-IN">Specifies the 3rd custom field.</desc>
 							<desc xml:lang="x-comment">Specifies the 3rd custom field.</desc>
+							<desc xml:lang="hu">Specifies the 3rd custom field.</desc>
+							<desc xml:lang="sk">Specifies the 3rd custom field.</desc>
+							<desc xml:lang="sl">Specifies the 3rd custom field.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Custom4" oor:type="xs:string" oor:localized="true">
@@ -3931,6 +4321,9 @@
 							<desc xml:lang="th">Specifies the 4th custom field.</desc>
 							<desc xml:lang="hi-IN">Specifies the 4th custom field.</desc>
 							<desc xml:lang="x-comment">Specifies the 4th custom field.</desc>
+							<desc xml:lang="hu">Specifies the 4th custom field.</desc>
+							<desc xml:lang="sk">Specifies the 4th custom field.</desc>
+							<desc xml:lang="sl">Specifies the 4th custom field.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Notes" oor:type="xs:string" oor:localized="true">
@@ -3960,6 +4353,9 @@
 							<desc xml:lang="th">Specifies the notes.</desc>
 							<desc xml:lang="hi-IN">Specifies the notes.</desc>
 							<desc xml:lang="x-comment">Specifies the notes.</desc>
+							<desc xml:lang="hu">Specifies the notes.</desc>
+							<desc xml:lang="sk">Specifies the notes.</desc>
+							<desc xml:lang="sl">Specifies the notes.</desc>
 						</info>
 					</prop>
 				</group>
@@ -3991,6 +4387,8 @@
 					<desc xml:lang="he">Specifies the driver settings for the evolution database driver.</desc>
 					<desc xml:lang="ca">Specifies the driver settings for the evolution database driver.</desc>
 					<desc xml:lang="th">Specifies the driver settings for the evolution database driver.</desc>
+					<desc xml:lang="hu">Specifies the driver settings for the evolution database driver.</desc>
+					<desc xml:lang="sl">Specifies the driver settings for the evolution database driver.</desc>
 				</info>
 				<group oor:name="EvolutionPreferences">
 					<info>
@@ -4019,6 +4417,8 @@
 						<desc xml:lang="he">Specifies the evolution preferences.</desc>
 						<desc xml:lang="ca">Specifies the evolution preferences.</desc>
 						<desc xml:lang="th">Specifies the evolution preferences.</desc>
+						<desc xml:lang="hu">Specifies the evolution preferences.</desc>
+						<desc xml:lang="sl">Specifies the evolution preferences.</desc>
 					</info>
 					<prop oor:name="FullPathExportingCommand" oor:type="xs:string">
 						<info>
@@ -4047,6 +4447,8 @@
 							<desc xml:lang="he">Specifies the evolution full path exporting command name.</desc>
 							<desc xml:lang="ca">Specifies the evolution full path exporting command name.</desc>
 							<desc xml:lang="th">Specifies the evolution full path exporting command name.</desc>
+							<desc xml:lang="hu">Specifies the evolution full path exporting command name.</desc>
+							<desc xml:lang="sl">Specifies the evolution full path exporting command name.</desc>
 						</info>
 						<value/>
 						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -4079,6 +4481,8 @@
 						<desc xml:lang="he">Specifies the column alias names used.</desc>
 						<desc xml:lang="ca">Specifies the column alias names used.</desc>
 						<desc xml:lang="th">Specifies the column alias names used.</desc>
+						<desc xml:lang="hu">Specifies the column alias names used.</desc>
+						<desc xml:lang="sl">Specifies the column alias names used.</desc>
 					</info>
 					<prop oor:name="FirstName" oor:type="xs:string">
 						<info>
@@ -4107,6 +4511,8 @@
 							<desc xml:lang="he">Specifies the first name.</desc>
 							<desc xml:lang="ca">Specifies the first name.</desc>
 							<desc xml:lang="th">Specifies the first name.</desc>
+							<desc xml:lang="hu">Specifies the first name.</desc>
+							<desc xml:lang="sl">Specifies the first name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="LastName" oor:type="xs:string">
@@ -4136,6 +4542,8 @@
 							<desc xml:lang="he">Specifies the last name.</desc>
 							<desc xml:lang="ca">Specifies the last name.</desc>
 							<desc xml:lang="th">Specifies the last name.</desc>
+							<desc xml:lang="hu">Specifies the last name.</desc>
+							<desc xml:lang="sl">Specifies the last name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="DisplayName" oor:type="xs:string">
@@ -4165,6 +4573,8 @@
 							<desc xml:lang="he">Specifies the display name.</desc>
 							<desc xml:lang="ca">Specifies the display name.</desc>
 							<desc xml:lang="th">Specifies the display name.</desc>
+							<desc xml:lang="hu">Specifies the display name.</desc>
+							<desc xml:lang="sl">Specifies the display name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="NickName" oor:type="xs:string">
@@ -4194,6 +4604,8 @@
 							<desc xml:lang="he">Specifies the nickname.</desc>
 							<desc xml:lang="ca">Specifies the nickname.</desc>
 							<desc xml:lang="th">Specifies the nickname.</desc>
+							<desc xml:lang="hu">Specifies the nickname.</desc>
+							<desc xml:lang="sl">Specifies the nickname.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PrimaryEmail" oor:type="xs:string">
@@ -4223,6 +4635,8 @@
 							<desc xml:lang="he">Specifies the primary email.</desc>
 							<desc xml:lang="ca">Specifies the primary email.</desc>
 							<desc xml:lang="th">Specifies the primary email.</desc>
+							<desc xml:lang="hu">Specifies the primary email.</desc>
+							<desc xml:lang="sl">Specifies the primary email.</desc>
 						</info>
 					</prop>
 					<prop oor:name="SecondEmail" oor:type="xs:string">
@@ -4252,6 +4666,8 @@
 							<desc xml:lang="he">Specifies the first name.</desc>
 							<desc xml:lang="ca">Specifies the first name.</desc>
 							<desc xml:lang="th">Specifies the first name.</desc>
+							<desc xml:lang="hu">Specifies the first name.</desc>
+							<desc xml:lang="sl">Specifies the first name.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PreferMailFormat" oor:type="xs:string">
@@ -4281,6 +4697,8 @@
 							<desc xml:lang="he">Specifies the perfered mail format.</desc>
 							<desc xml:lang="ca">Specifies the perfered mail format.</desc>
 							<desc xml:lang="th">Specifies the perfered mail format.</desc>
+							<desc xml:lang="hu">Specifies the perfered mail format.</desc>
+							<desc xml:lang="sl">Specifies the perfered mail format.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkPhone" oor:type="xs:string">
@@ -4310,6 +4728,8 @@
 							<desc xml:lang="he">Specifies the phone at work.</desc>
 							<desc xml:lang="ca">Specifies the phone at work.</desc>
 							<desc xml:lang="th">Specifies the phone at work.</desc>
+							<desc xml:lang="hu">Specifies the phone at work.</desc>
+							<desc xml:lang="sl">Specifies the phone at work.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomePhone" oor:type="xs:string">
@@ -4339,6 +4759,8 @@
 							<desc xml:lang="he">Specifies the phone at home.</desc>
 							<desc xml:lang="ca">Specifies the phone at home.</desc>
 							<desc xml:lang="th">Specifies the phone at home.</desc>
+							<desc xml:lang="hu">Specifies the phone at home.</desc>
+							<desc xml:lang="sl">Specifies the phone at home.</desc>
 						</info>
 					</prop>
 					<prop oor:name="FaxNumber" oor:type="xs:string">
@@ -4368,6 +4790,8 @@
 							<desc xml:lang="he">Specifies the fax number.</desc>
 							<desc xml:lang="ca">Specifies the fax number.</desc>
 							<desc xml:lang="th">Specifies the fax number.</desc>
+							<desc xml:lang="hu">Specifies the fax number.</desc>
+							<desc xml:lang="sl">Specifies the fax number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="PagerNumber" oor:type="xs:string">
@@ -4397,6 +4821,8 @@
 							<desc xml:lang="he">Specifies the pager number.</desc>
 							<desc xml:lang="ca">Specifies the pager number.</desc>
 							<desc xml:lang="th">Specifies the pager number.</desc>
+							<desc xml:lang="hu">Specifies the pager number.</desc>
+							<desc xml:lang="sl">Specifies the pager number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="CellularNumber" oor:type="xs:string">
@@ -4426,6 +4852,8 @@
 							<desc xml:lang="he">Specifies the cellular number.</desc>
 							<desc xml:lang="ca">Specifies the cellular number.</desc>
 							<desc xml:lang="th">Specifies the cellular number.</desc>
+							<desc xml:lang="hu">Specifies the cellular number.</desc>
+							<desc xml:lang="sl">Specifies the cellular number.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeAddress" oor:type="xs:string">
@@ -4455,6 +4883,8 @@
 							<desc xml:lang="he">Specifies the home address.</desc>
 							<desc xml:lang="ca">Specifies the home address.</desc>
 							<desc xml:lang="th">Specifies the home address.</desc>
+							<desc xml:lang="hu">Specifies the home address.</desc>
+							<desc xml:lang="sl">Specifies the home address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeAddress2" oor:type="xs:string">
@@ -4484,6 +4914,8 @@
 							<desc xml:lang="he">Specifies the 2nd home address.</desc>
 							<desc xml:lang="ca">Specifies the 2nd home address.</desc>
 							<desc xml:lang="th">Specifies the 2nd home address.</desc>
+							<desc xml:lang="hu">Specifies the 2nd home address.</desc>
+							<desc xml:lang="sl">Specifies the 2nd home address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeCity" oor:type="xs:string">
@@ -4513,6 +4945,8 @@
 							<desc xml:lang="he">Specifies the home city.</desc>
 							<desc xml:lang="ca">Specifies the home city.</desc>
 							<desc xml:lang="th">Specifies the home city.</desc>
+							<desc xml:lang="hu">Specifies the home city.</desc>
+							<desc xml:lang="sl">Specifies the home city.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeState" oor:type="xs:string">
@@ -4542,6 +4976,8 @@
 							<desc xml:lang="he">Specifies the home state.</desc>
 							<desc xml:lang="ca">Specifies the home state.</desc>
 							<desc xml:lang="th">Specifies the home state.</desc>
+							<desc xml:lang="hu">Specifies the home state.</desc>
+							<desc xml:lang="sl">Specifies the home state.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeZipCode" oor:type="xs:string">
@@ -4571,6 +5007,8 @@
 							<desc xml:lang="he">Specifies the home ZIP code.</desc>
 							<desc xml:lang="ca">Specifies the home ZIP code.</desc>
 							<desc xml:lang="th">Specifies the home ZIP code.</desc>
+							<desc xml:lang="hu">Specifies the home ZIP code.</desc>
+							<desc xml:lang="sl">Specifies the home ZIP code.</desc>
 						</info>
 					</prop>
 					<prop oor:name="HomeCountry" oor:type="xs:string">
@@ -4600,6 +5038,8 @@
 							<desc xml:lang="he">Specifies the home country.</desc>
 							<desc xml:lang="ca">Specifies the home country.</desc>
 							<desc xml:lang="th">Specifies the home country.</desc>
+							<desc xml:lang="hu">Specifies the home country.</desc>
+							<desc xml:lang="sl">Specifies the home country.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkAddress" oor:type="xs:string">
@@ -4629,6 +5069,8 @@
 							<desc xml:lang="he">Specifies the work address.</desc>
 							<desc xml:lang="ca">Specifies the work address.</desc>
 							<desc xml:lang="th">Specifies the work address.</desc>
+							<desc xml:lang="hu">Specifies the work address.</desc>
+							<desc xml:lang="sl">Specifies the work address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkAddress2" oor:type="xs:string">
@@ -4658,6 +5100,8 @@
 							<desc xml:lang="he">Specifies the 2nd work address.</desc>
 							<desc xml:lang="ca">Specifies the 2nd work address.</desc>
 							<desc xml:lang="th">Specifies the 2nd work address.</desc>
+							<desc xml:lang="hu">Specifies the 2nd work address.</desc>
+							<desc xml:lang="sl">Specifies the 2nd work address.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkCity" oor:type="xs:string">
@@ -4687,6 +5131,8 @@
 							<desc xml:lang="he">Specifies the work city.</desc>
 							<desc xml:lang="ca">Specifies the work city.</desc>
 							<desc xml:lang="th">Specifies the work city.</desc>
+							<desc xml:lang="hu">Specifies the work city.</desc>
+							<desc xml:lang="sl">Specifies the work city.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkState" oor:type="xs:string">
@@ -4716,6 +5162,8 @@
 							<desc xml:lang="he">Specifies the work state.</desc>
 							<desc xml:lang="ca">Specifies the work state.</desc>
 							<desc xml:lang="th">Specifies the work state.</desc>
+							<desc xml:lang="hu">Specifies the work state.</desc>
+							<desc xml:lang="sl">Specifies the work state.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkZipCode" oor:type="xs:string">
@@ -4745,6 +5193,8 @@
 							<desc xml:lang="he">Specifies the work ZIP code.</desc>
 							<desc xml:lang="ca">Specifies the work ZIP code.</desc>
 							<desc xml:lang="th">Specifies the work ZIP code.</desc>
+							<desc xml:lang="hu">Specifies the work ZIP code.</desc>
+							<desc xml:lang="sl">Specifies the work ZIP code.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkCountry" oor:type="xs:string">
@@ -4774,6 +5224,8 @@
 							<desc xml:lang="he">Specifies the work country.</desc>
 							<desc xml:lang="ca">Specifies the work country.</desc>
 							<desc xml:lang="th">Specifies the work country.</desc>
+							<desc xml:lang="hu">Specifies the work country.</desc>
+							<desc xml:lang="sl">Specifies the work country.</desc>
 						</info>
 					</prop>
 					<prop oor:name="JobTitle" oor:type="xs:string">
@@ -4803,6 +5255,8 @@
 							<desc xml:lang="he">Specifies the job title.</desc>
 							<desc xml:lang="ca">Specifies the job title.</desc>
 							<desc xml:lang="th">Specifies the job title.</desc>
+							<desc xml:lang="hu">Specifies the job title.</desc>
+							<desc xml:lang="sl">Specifies the job title.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Department" oor:type="xs:string">
@@ -4832,6 +5286,8 @@
 							<desc xml:lang="he">Specifies the department.</desc>
 							<desc xml:lang="ca">Specifies the department.</desc>
 							<desc xml:lang="th">Specifies the department.</desc>
+							<desc xml:lang="hu">Specifies the department.</desc>
+							<desc xml:lang="sl">Specifies the department.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Company" oor:type="xs:string">
@@ -4861,6 +5317,8 @@
 							<desc xml:lang="he">Specifies the company.</desc>
 							<desc xml:lang="ca">Specifies the company.</desc>
 							<desc xml:lang="th">Specifies the company.</desc>
+							<desc xml:lang="hu">Specifies the company.</desc>
+							<desc xml:lang="sl">Specifies the company.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WebPage1" oor:type="xs:string">
@@ -4890,6 +5348,8 @@
 							<desc xml:lang="he">Specifies the 1st webpage.</desc>
 							<desc xml:lang="ca">Specifies the 1st webpage.</desc>
 							<desc xml:lang="th">Specifies the 1st webpage.</desc>
+							<desc xml:lang="hu">Specifies the 1st webpage.</desc>
+							<desc xml:lang="sl">Specifies the 1st webpage.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WebPage2" oor:type="xs:string">
@@ -4919,6 +5379,8 @@
 							<desc xml:lang="he">Specifies the 2nd webpage.</desc>
 							<desc xml:lang="ca">Specifies the 2nd webpage.</desc>
 							<desc xml:lang="th">Specifies the 2nd webpage.</desc>
+							<desc xml:lang="hu">Specifies the 2nd webpage.</desc>
+							<desc xml:lang="sl">Specifies the 2nd webpage.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthYear" oor:type="xs:string">
@@ -4948,6 +5410,8 @@
 							<desc xml:lang="he">Specifies the birth year.</desc>
 							<desc xml:lang="ca">Specifies the birth year.</desc>
 							<desc xml:lang="th">Specifies the birth year.</desc>
+							<desc xml:lang="hu">Specifies the birth year.</desc>
+							<desc xml:lang="sl">Specifies the birth year.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthMonth" oor:type="xs:string">
@@ -4977,6 +5441,8 @@
 							<desc xml:lang="he">Specifies the birth month.</desc>
 							<desc xml:lang="ca">Specifies the birth month.</desc>
 							<desc xml:lang="th">Specifies the birth month.</desc>
+							<desc xml:lang="hu">Specifies the birth month.</desc>
+							<desc xml:lang="sl">Specifies the birth month.</desc>
 						</info>
 					</prop>
 					<prop oor:name="BirthDay" oor:type="xs:string">
@@ -5006,6 +5472,8 @@
 							<desc xml:lang="he">Specifies the birth day.</desc>
 							<desc xml:lang="ca">Specifies the birth day.</desc>
 							<desc xml:lang="th">Specifies the birth day.</desc>
+							<desc xml:lang="hu">Specifies the birth day.</desc>
+							<desc xml:lang="sl">Specifies the birth day.</desc>
 						</info>
 					</prop>
 					<prop oor:name="Notes" oor:type="xs:string">
@@ -5035,6 +5503,8 @@
 							<desc xml:lang="he">Specifies the notes.</desc>
 							<desc xml:lang="ca">Specifies the notes.</desc>
 							<desc xml:lang="th">Specifies the notes.</desc>
+							<desc xml:lang="hu">Specifies the notes.</desc>
+							<desc xml:lang="sl">Specifies the notes.</desc>
 						</info>
 					</prop>
 				</group>
@@ -5067,6 +5537,9 @@
 				<desc xml:lang="th">Specifies the options for searching in forms.</desc>
 				<desc xml:lang="hi-IN">Specifies the options for searching in forms.</desc>
 				<desc xml:lang="x-comment">Specifies the options for searching in forms.</desc>
+				<desc xml:lang="hu">Specifies the options for searching in forms.</desc>
+				<desc xml:lang="sk">Specifies the options for searching in forms.</desc>
+				<desc xml:lang="sl">Specifies the options for searching in forms.</desc>
 			</info>
 			<prop oor:name="SearchType" oor:type="xs:string">
 				<info>
@@ -5095,6 +5568,9 @@
 					<desc xml:lang="th">Specifies the search type.</desc>
 					<desc xml:lang="hi-IN">Specifies the search type.</desc>
 					<desc xml:lang="x-comment">Specifies the search type.</desc>
+					<desc xml:lang="hu">Specifies the search type.</desc>
+					<desc xml:lang="sk">Specifies the search type.</desc>
+					<desc xml:lang="sl">Specifies the search type.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="text">
@@ -5125,6 +5601,8 @@
 							<desc xml:lang="hi-IN">Search for text</desc>
 							<desc xml:lang="x-comment">Search for text</desc>
 							<desc xml:lang="sk">Search for text</desc>
+							<desc xml:lang="hu">Search for text</desc>
+							<desc xml:lang="sl">Search for text</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="null">
@@ -5155,6 +5633,8 @@
 							<desc xml:lang="hi-IN">Search for NULL</desc>
 							<desc xml:lang="x-comment">Search for NULL</desc>
 							<desc xml:lang="sk">Search for NULL</desc>
+							<desc xml:lang="hu">Search for NULL</desc>
+							<desc xml:lang="sl">Search for NULL</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="non-null">
@@ -5185,6 +5665,8 @@
 							<desc xml:lang="hi-IN">Search for non-NULL</desc>
 							<desc xml:lang="x-comment">Search for non-NULL</desc>
 							<desc xml:lang="sk">Search for non-NULL</desc>
+							<desc xml:lang="hu">Search for non-NULL</desc>
+							<desc xml:lang="sl">Search for non-NULL</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -5217,6 +5699,9 @@
 					<desc xml:lang="th">Specifies the search position.</desc>
 					<desc xml:lang="hi-IN">Specifies the search position.</desc>
 					<desc xml:lang="x-comment">Specifies the search position.</desc>
+					<desc xml:lang="hu">Specifies the search position.</desc>
+					<desc xml:lang="sk">Specifies the search position.</desc>
+					<desc xml:lang="sl">Specifies the search position.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="anywhere-in-field">
@@ -5247,6 +5732,8 @@
 							<desc xml:lang="hi-IN">Anywhere</desc>
 							<desc xml:lang="x-comment">Anywhere</desc>
 							<desc xml:lang="sk">Anywhere</desc>
+							<desc xml:lang="hu">Anywhere</desc>
+							<desc xml:lang="sl">Anywhere</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="beginning-of-field">
@@ -5277,6 +5764,8 @@
 							<desc xml:lang="hi-IN">Beginning</desc>
 							<desc xml:lang="x-comment">Beginning</desc>
 							<desc xml:lang="sk">Beginning</desc>
+							<desc xml:lang="hu">Beginning</desc>
+							<desc xml:lang="sl">Beginning</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="end-of-field">
@@ -5307,6 +5796,8 @@
 							<desc xml:lang="hi-IN">अंत</desc>
 							<desc xml:lang="x-comment">End</desc>
 							<desc xml:lang="sk">Koniec</desc>
+							<desc xml:lang="hu">End</desc>
+							<desc xml:lang="sl">End</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="complete-field">
@@ -5337,6 +5828,8 @@
 							<desc xml:lang="hi-IN">समाप्त</desc>
 							<desc xml:lang="x-comment">Complete</desc>
 							<desc xml:lang="sk">Hotovo</desc>
+							<desc xml:lang="hu">Complete</desc>
+							<desc xml:lang="sl">Complete</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -5369,6 +5862,9 @@
 					<desc xml:lang="th">Contains a list of the previous search strings.</desc>
 					<desc xml:lang="hi-IN">Contains a list of the previous search strings.</desc>
 					<desc xml:lang="x-comment">Contains a list of the previous search strings.</desc>
+					<desc xml:lang="hu">Contains a list of the previous search strings.</desc>
+					<desc xml:lang="sk">Contains a list of the previous search strings.</desc>
+					<desc xml:lang="sl">Contains a list of the previous search strings.</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsSearchAllFields" oor:type="xs:boolean">
@@ -5398,6 +5894,9 @@
 					<desc xml:lang="th">Specifies if all fields should be searched.</desc>
 					<desc xml:lang="hi-IN">Specifies if all fields should be searched.</desc>
 					<desc xml:lang="x-comment">Specifies if all fields should be searched.</desc>
+					<desc xml:lang="hu">Specifies if all fields should be searched.</desc>
+					<desc xml:lang="sk">Specifies if all fields should be searched.</desc>
+					<desc xml:lang="sl">Specifies if all fields should be searched.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5428,6 +5927,9 @@
 					<desc xml:lang="th">Specifies that the formatter should be used.</desc>
 					<desc xml:lang="hi-IN">Specifies that the formatter should be used.</desc>
 					<desc xml:lang="x-comment">Specifies that the formatter should be used.</desc>
+					<desc xml:lang="hu">Specifies that the formatter should be used.</desc>
+					<desc xml:lang="sk">Specifies that the formatter should be used.</desc>
+					<desc xml:lang="sl">Specifies that the formatter should be used.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -5458,6 +5960,9 @@
 					<desc xml:lang="th">Specifies that the search starts backward.</desc>
 					<desc xml:lang="hi-IN">Specifies that the search starts backward.</desc>
 					<desc xml:lang="x-comment">Specifies that the search starts backward.</desc>
+					<desc xml:lang="hu">Specifies that the search starts backward.</desc>
+					<desc xml:lang="sk">Specifies that the search starts backward.</desc>
+					<desc xml:lang="sl">Specifies that the search starts backward.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5488,6 +5993,9 @@
 					<desc xml:lang="th">Specifies that the search contains wildcards.</desc>
 					<desc xml:lang="hi-IN">Specifies that the search contains wildcards.</desc>
 					<desc xml:lang="x-comment">Specifies that the search contains wildcards.</desc>
+					<desc xml:lang="hu">Specifies that the search contains wildcards.</desc>
+					<desc xml:lang="sk">Specifies that the search contains wildcards.</desc>
+					<desc xml:lang="sl">Specifies that the search contains wildcards.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5518,6 +6026,9 @@
 					<desc xml:lang="th">Specifies that regular expressions should be used.</desc>
 					<desc xml:lang="hi-IN">Specifies that regular expressions should be used.</desc>
 					<desc xml:lang="x-comment">Specifies that regular expressions should be used.</desc>
+					<desc xml:lang="hu">Specifies that regular expressions should be used.</desc>
+					<desc xml:lang="sk">Specifies that regular expressions should be used.</desc>
+					<desc xml:lang="sl">Specifies that regular expressions should be used.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5548,6 +6059,9 @@
 					<desc xml:lang="th">Specifies that the similarity search should be used.</desc>
 					<desc xml:lang="hi-IN">Specifies that the similarity search should be used.</desc>
 					<desc xml:lang="x-comment">Specifies that the similarity search should be used.</desc>
+					<desc xml:lang="hu">Specifies that the similarity search should be used.</desc>
+					<desc xml:lang="sk">Specifies that the similarity search should be used.</desc>
+					<desc xml:lang="sl">Specifies that the similarity search should be used.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5578,6 +6092,9 @@
 					<desc xml:lang="th">Specifies that the similarity search should be combined.</desc>
 					<desc xml:lang="hi-IN">Specifies that the similarity search should be combined.</desc>
 					<desc xml:lang="x-comment">Specifies that the similarity search should be combined.</desc>
+					<desc xml:lang="hu">Specifies that the similarity search should be combined.</desc>
+					<desc xml:lang="sk">Specifies that the similarity search should be combined.</desc>
+					<desc xml:lang="sl">Specifies that the similarity search should be combined.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5608,6 +6125,9 @@
 					<desc xml:lang="th">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
 					<desc xml:lang="hi-IN">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
 					<desc xml:lang="x-comment">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
+					<desc xml:lang="hu">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
+					<desc xml:lang="sk">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
+					<desc xml:lang="sl">Specifies the number of characters that can be exchanged while searching for similarity.</desc>
 				</info>
 				<value>2</value>
 			</prop>
@@ -5638,6 +6158,9 @@
 					<desc xml:lang="th">Specifies the number of characters that can be deleted while searching for similarity.</desc>
 					<desc xml:lang="hi-IN">Specifies the number of characters that can be deleted while searching for similarity.</desc>
 					<desc xml:lang="x-comment">Specifies the number of characters that can be deleted while searching for similarity.</desc>
+					<desc xml:lang="hu">Specifies the number of characters that can be deleted while searching for similarity.</desc>
+					<desc xml:lang="sk">Specifies the number of characters that can be deleted while searching for similarity.</desc>
+					<desc xml:lang="sl">Specifies the number of characters that can be deleted while searching for similarity.</desc>
 				</info>
 				<value>2</value>
 			</prop>
@@ -5668,6 +6191,9 @@
 					<desc xml:lang="th">Specifies the number of characters that can be added while searching for similarity.</desc>
 					<desc xml:lang="hi-IN">Specifies the number of characters that can be added while searching for similarity.</desc>
 					<desc xml:lang="x-comment">Specifies the number of characters that can be added while searching for similarity.</desc>
+					<desc xml:lang="hu">Specifies the number of characters that can be added while searching for similarity.</desc>
+					<desc xml:lang="sk">Specifies the number of characters that can be added while searching for similarity.</desc>
+					<desc xml:lang="sl">Specifies the number of characters that can be added while searching for similarity.</desc>
 				</info>
 				<value>2</value>
 			</prop>
@@ -5698,6 +6224,9 @@
 					<desc xml:lang="th">Specifies that the searched value should match.</desc>
 					<desc xml:lang="hi-IN">Specifies that the searched value should match.</desc>
 					<desc xml:lang="x-comment">Specifies that the searched value should match.</desc>
+					<desc xml:lang="hu">Specifies that the searched value should match.</desc>
+					<desc xml:lang="sk">Specifies that the searched value should match.</desc>
+					<desc xml:lang="sl">Specifies that the searched value should match.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5728,6 +6257,9 @@
 					<desc xml:lang="th">Specifies that the Asian options for search should be used.</desc>
 					<desc xml:lang="hi-IN">Specifies that the Asian options for search should be used.</desc>
 					<desc xml:lang="x-comment">Specifies that the Asian options for search should be used.</desc>
+					<desc xml:lang="hu">Specifies that the Asian options for search should be used.</desc>
+					<desc xml:lang="sk">Specifies that the Asian options for search should be used.</desc>
+					<desc xml:lang="sl">Specifies that the Asian options for search should be used.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5758,6 +6290,9 @@
 					<desc xml:lang="th">Specifies the Japanese options for searching.</desc>
 					<desc xml:lang="hi-IN">Specifies the Japanese options for searching.</desc>
 					<desc xml:lang="x-comment">Specifies the Japanese options for searching.</desc>
+					<desc xml:lang="hu">Specifies the Japanese options for searching.</desc>
+					<desc xml:lang="sk">Specifies the Japanese options for searching.</desc>
+					<desc xml:lang="sl">Specifies the Japanese options for searching.</desc>
 				</info>
 				<prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean">
 					<info>
@@ -5786,6 +6321,9 @@
 						<desc xml:lang="th">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchFullHalfWidthForms search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5816,6 +6354,9 @@
 						<desc xml:lang="th">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchHiraganaKatakana search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5846,6 +6387,9 @@
 						<desc xml:lang="th">Specifies the MatchContractions search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchContractions search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchContractions search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchContractions search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchContractions search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchContractions search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5876,6 +6420,9 @@
 						<desc xml:lang="th">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchMinusDashCho-on search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5906,6 +6453,9 @@
 						<desc xml:lang="th">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchRepeatCharMarks search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5936,6 +6486,9 @@
 						<desc xml:lang="th">Specifies the MatchVariantFormKanji search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchVariantFormKanji search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchVariantFormKanji search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchVariantFormKanji search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchVariantFormKanji search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchVariantFormKanji search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5966,6 +6519,9 @@
 						<desc xml:lang="th">Specifies the MatchOldKanaForms search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the MatchOldKanaForms search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the MatchOldKanaForms search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the MatchOldKanaForms search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the MatchOldKanaForms search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the MatchOldKanaForms search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5996,6 +6552,9 @@
 						<desc xml:lang="th">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_DiZi_DuZu search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6026,6 +6585,9 @@
 						<desc xml:lang="th">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_BaVa_HaFa search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6056,6 +6618,9 @@
 						<desc xml:lang="th">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_TsiThiChi_DhiZi search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6086,6 +6651,9 @@
 						<desc xml:lang="th">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_HyuIyu_ByuVyu search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6116,6 +6684,9 @@
 						<desc xml:lang="th">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_SeShe_ZeJe search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6146,6 +6717,9 @@
 						<desc xml:lang="th">Specifies the Match_IaIya search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_IaIya search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_IaIya search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_IaIya search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_IaIya search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_IaIya search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6176,6 +6750,9 @@
 						<desc xml:lang="th">Specifies the Match_KiKu search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the Match_KiKu search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the Match_KiKu search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the Match_KiKu search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the Match_KiKu search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the Match_KiKu search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6206,6 +6783,9 @@
 						<desc xml:lang="th">Specifies the IgnorePunctuation search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the IgnorePunctuation search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the IgnorePunctuation search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the IgnorePunctuation search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the IgnorePunctuation search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the IgnorePunctuation search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6236,6 +6816,9 @@
 						<desc xml:lang="th">Specifies the IgnoreWhitespace search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the IgnoreWhitespace search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the IgnoreWhitespace search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the IgnoreWhitespace search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the IgnoreWhitespace search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the IgnoreWhitespace search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6266,6 +6849,9 @@
 						<desc xml:lang="th">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the IgnoreProlongedSoundMark search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6296,6 +6882,9 @@
 						<desc xml:lang="th">Specifies the IgnoreMiddleDot search option is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the IgnoreMiddleDot search option is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the IgnoreMiddleDot search option is enabled.</desc>
+						<desc xml:lang="hu">Specifies the IgnoreMiddleDot search option is enabled.</desc>
+						<desc xml:lang="sk">Specifies the IgnoreMiddleDot search option is enabled.</desc>
+						<desc xml:lang="sl">Specifies the IgnoreMiddleDot search option is enabled.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6303,6 +6892,8 @@
 		</group>
 	</component>
 </oor:component-schema>
+
+
 
 
 
