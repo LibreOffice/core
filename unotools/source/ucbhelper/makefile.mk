@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-26 08:26:12 $
+#   last change: $Author: vg $ $Date: 2003-07-25 11:35:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,8 +99,7 @@ SLOFILES=\
                         $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj		\
                         $(SLO)$/xtempfile.obj		\
-                        $(SLO)$/progresshandlerwrap.obj \
-                        $(SLO)$/condition.obj
+                        $(SLO)$/progresshandlerwrap.obj
 
 # --- Targets ----------------------------------
 
