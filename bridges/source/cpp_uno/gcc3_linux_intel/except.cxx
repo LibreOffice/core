@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-06 16:58:18 $
+ *  last change: $Author: dbo $ $Date: 2001-11-08 12:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,6 @@ public:
     ~RTTI() SAL_THROW( () );
 
     type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW( () );
-private:
-    type_info * generateRTTI( typelib_CompoundTypeDescription *, const char *pRttiName) SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
@@ -156,25 +154,6 @@ RTTI::RTTI() SAL_THROW( () )
 RTTI::~RTTI() SAL_THROW( () )
 {
     dlclose( m_hApp );
-}
-//__________________________________________________________________________________________________
-type_info * RTTI::generateRTTI( typelib_CompoundTypeDescription * pTypeDescr, const char *pRttiName )
-{
-    type_info *rtti = 0;
-
-    if( ! pTypeDescr->pBaseTypeDescription )
-    {
-        // this class has no base class
-        rtti = new __class_type_info( strdup(pRttiName) );
-    }
-    else
-    {
-        // ensure availability of base
-        type_info *baseRtti = getRTTI(
-            (typelib_CompoundTypeDescription*) pTypeDescr->pBaseTypeDescription );
-        rtti = new __si_class_type_info( strdup( pRttiName ), (__class_type_info *) baseRtti );
-    }
-    return rtti;
 }
 
 //__________________________________________________________________________________________________
@@ -202,10 +181,10 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         while (index >= 0);
         buf.append( 'E' );
 
-        OString rttiName( buf.makeStringAndClear() );
-        rtti = (type_info *)dlsym( m_hApp, rttiName.getStr() );
+        OString symName( buf.makeStringAndClear() );
+        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
 
-        if( rtti )
+        if (rtti)
         {
             pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
@@ -220,13 +199,29 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
-                fprintf( stderr,"generated rtti for %s\n" , rttiName.getStr()+4 );
-                rtti = generateRTTI( pTypeDescr , rttiName+4 );
+                char const * rttiName = symName.getStr() +4;
+#ifdef DEBUG
+                fprintf( stderr,"generated rtti for %s\n", rttiName );
+#endif
+                if (pTypeDescr->pBaseTypeDescription)
+                {
+                    // ensure availability of base
+                    type_info * base_rtti = getRTTI(
+                        (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
+                    rtti = new __si_class_type_info(
+                        strdup( rttiName ), (__class_type_info *)base_rtti );
+                }
+                else
+                {
+                    // this class has no base class
+                    rtti = new __class_type_info( strdup( rttiName ) );
+                }
+
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-                OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
+                OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
             }
-            else
+            else // taking already generated rtti
             {
                 rtti = iFind->second;
             }
