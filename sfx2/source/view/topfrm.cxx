@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:09:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,11 @@ void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        SetSizePixel( GetParent()->GetOutputSizePixel() );
+        if ( pFrame->IsInPlace() )
+            // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
+            // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
+            // the resize event never is sent to the component
+            SetSizePixel( GetParent()->GetOutputSizePixel() );
         DoResize();
         if ( pFrame->GetCurrentViewFrame() )
         {
