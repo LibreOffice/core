@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:42:41 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,100 @@ ModalDialog DLG_QRY_JOIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_QRY_JOIN ;
-    Size = MAP_APPFONT ( 203, 107 ) ;
+    Size = MAP_APPFONT ( 265, 205 ) ;
     Text = "Verbundeigenschaften" ;
     Text [ ENGLISH ] = "Join properties" ;
 
     Moveable = TRUE ;
     Closeable = TRUE ;
 
+    Window LB_CONTROL
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 203, 113 );
+        DialogControl = TRUE;
+
+        FixedLine FL_INVOLVED_TABLES
+        {
+            Pos = MAP_APPFONT ( 6 , 3 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text = "beteiligte Tabellen" ;
+            Text [ English ] = "involved tables" ;
+            Text[ english_us ] = "Tables involved";
+            Text[ portuguese ] = "Tabelas consideradas";
+            Text[ russian ] = "âêëş÷åííûå òàáëèöû";
+            Text[ greek ] = "åìğëåêüìåíïé ğßíáêåò";
+            Text[ dutch ] = "betrokken tabellen";
+            Text[ french ] = "Tables impliquées";
+            Text[ spanish ] = "Tablas consideradas";
+            Text[ italian ] = "Tabelle considerate";
+            Text[ danish ] = "involverede tabeller";
+            Text[ swedish ] = "inkluderade tabeller";
+            Text[ polish ] = "implikowane tabele";
+            Text[ portuguese_brazilian ] = "involved tables";
+            Text[ japanese ] = "é–¢é€£ï¾ƒï½°ï¾Œï¾ï¾™";
+            Text[ korean ] = "ê´€ë ¨ í…Œì´ë¸”";
+            Text[ chinese_simplified ] = "æœ‰å…³è”çš„è¡¨æ ¼";
+            Text[ chinese_traditional ] = "ç›¸é—œçš„è¡¨æ ¼";
+            Text[ arabic ] = "ÇáÌÏÇæá ÇáãÚäíÉ";
+            Text[ turkish ] = "İlgili tablolar";
+            Text[ catalan ] = "tablas implicadas";
+            Text[ finnish ] = "beteiligte Tabellen";
+        };
+
+        ListBox LB_LEFT_TABLE
+        {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 12, 14 );
+            Size = MAP_APPFONT( 87, 60 );
+            DropDown = TRUE;
+            TabStop = TRUE;
+        };
+
+        ListBox LB_RIGHT_TABLE
+        {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 104, 14 );
+            Size = MAP_APPFONT( 87, 60 );
+            DropDown = TRUE;
+            TabStop = TRUE;
+        };
+
+        FixedLine FL_INVOLVED_FIELDS
+        {
+            Pos = MAP_APPFONT ( 6 , 29 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text = "beteiligte Felder" ;
+            Text [ English ] = "involved fields" ;
+            Text[ english_us ] = "Fields involved";
+            Text[ portuguese ] = "Campos considerados";
+            Text[ russian ] = "âêëş÷åííûå ïîëÿ";
+            Text[ greek ] = "åìğëåêüìåíá ğåäßá";
+            Text[ dutch ] = "betrokken velden";
+            Text[ french ] = "Champs impliqués";
+            Text[ spanish ] = "Campos considerados";
+            Text[ italian ] = "Campi considerati";
+            Text[ danish ] = "involverede felter";
+            Text[ swedish ] = "inkluderade fält";
+            Text[ polish ] = "implikowane pola";
+            Text[ portuguese_brazilian ] = "involved fields";
+            Text[ japanese ] = "é–¢é€£ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+            Text[ korean ] = "ê´€ë ¨ í•„ë“œ";
+            Text[ chinese_simplified ] = "æœ‰å…³è”çš„å­—æ®µ";
+            Text[ chinese_traditional ] = "ç›¸é—œçš„æ¬„ä½";
+            Text[ arabic ] = "ÇáÍŞæá ÇáãÚäíÉ";
+            Text[ turkish ] = "İlgili alanlar";
+            Text[ catalan ] = "campos implicados";
+            Text[ finnish ] = "beteiligte Felder";
+        };
+    };
+
     FixedLine FL_JOIN
     {
-    Pos = MAP_APPFONT ( 6 , 3 ) ;
-    Size = MAP_APPFONT ( 191 , 8 ) ;
-    Text = "Optionen" ;
-    Text [ ENGLISH ] = "Options" ;
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 191 , 8 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";
         Text[ portuguese ] = "Opções";
         Text[ russian ] = "Ïàğàìåòğû";
@@ -109,160 +190,68 @@ ModalDialog DLG_QRY_JOIN
         Text[ finnish ] = "Asetukset";
     };
 
-    RadioButton RB_INNER
+    FixedText FT_LISTBOXTITLE
     {
-    Pos = MAP_APPFONT ( 12 , 14 ) ;
-    Size = MAP_APPFONT ( 63 , 10 ) ;
-        HelpId = HID_DLG_QRY_INNER ;
-    Text = "~Innerer" ;
-    Text [ ENGLISH ] = "~Inner" ;
-        Text[ english_us ] = "~Inner join";
-        Text[ portuguese ] = "~Interna";
-        Text[ russian ] = "Âíóòğåííÿÿ ñâÿçü";
-        Text[ dutch ] = "~Binnenste";
-        Text[ french ] = "~Interne";
-        Text[ spanish ] = "~Interior";
-        Text[ italian ] = "Rela~zione interna";
-        Text[ danish ] = "~Indre";
-        Text[ swedish ] = "~Inre";
-        Text[ polish ] = "Wewnêtrzne z³¹czenie";
-        Text[ portuguese_brazilian ] = "~Inner";
-        Text[ japanese ] = "å†…éƒ¨çµåˆ(~I)";
-        Text[ chinese_simplified ] = "å†…éƒ¨è¿ç»“(~I)";
-        Text[ chinese_traditional ] = "å…§éƒ¨é€£çµ(~I)";
-        Text[ dutch ] = "~Binnenste";
-        Text[ chinese_simplified ] = "å†…éƒ¨è¿ç»“(~I)";
-        Text[ greek ] = "Åóùôåñ~éêüò";
-        Text[ korean ] = "ë‚´ë¶€ ì¡°ì¸(~I)";
-        Text[ arabic ] = "ÑÈØ ÏÇÎáí";
-        Text[ turkish ] = "~İç";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Unió ~interior";
-        Text[ finnish ] = "~Sisempi liitos";
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Size = MAP_APPFONT ( 89 , 8 ) ;
+
+        Text = "~Art" ;
+        Text [ ENGLISH ] = "~Type" ;
     };
-    RadioButton RB_LEFT
+
+    ListBox LB_JOINTYPE
     {
-    Pos = MAP_APPFONT ( 12 , 30 ) ;
-    Size = MAP_APPFONT ( 63 , 10 ) ;
-        HelpId = HID_DLG_QRY_LEFT ;
-    Text = "~Linker" ;
-    Text [ ENGLISH ] = "~Left" ;
-        Text[ english_us ] = "~Left join";
-        Text[ portuguese ] = "~Esquerda";
-        Text[ russian ] = "Ëåâàÿ ñâÿçü";
-        Text[ dutch ] = "~Linker";
-        Text[ french ] = "~Gauche";
-        Text[ spanish ] = "~Izquierda";
-        Text[ italian ] = "Relazione ~sinistra";
-        Text[ danish ] = "~Venstre";
-        Text[ swedish ] = "~Vänster";
-        Text[ polish ] = "Lewe z³¹czenie";
-        Text[ portuguese_brazilian ] = "~Left";
-        Text[ japanese ] = "å·¦çµåˆ(~L)";
-        Text[ chinese_simplified ] = "å·¦å‘è¿ç»“(~L)";
-        Text[ chinese_traditional ] = "å·¦å‘é€£çµ(~L)";
-        Text[ dutch ] = "~Linker";
-        Text[ chinese_simplified ] = "å·¦å‘è¿ç»“(~L)";
-        Text[ greek ] = "Áñéóôåñüò";
-        Text[ korean ] = "ì™¼ìª½ ì¡°ì¸(~L)";
-        Text[ arabic ] = "ÕáÉ íÓÑì";
-        Text[ turkish ] = "~Sol";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Unió ~esquerra";
-        Text[ finnish ] = "~Vasen liitos";
-    };
-    RadioButton RB_RIGHT
-    {
-    Pos = MAP_APPFONT ( 12 , 46 ) ;
-    Size = MAP_APPFONT ( 63 , 10 ) ;
-        HelpId = HID_DLG_QRY_RIGHT ;
-    Text = "~Rechter" ;
-    Text [ ENGLISH ] = "~Right" ;
-        Text[ english_us ] = "~Right join";
-        Text[ portuguese ] = "~Direita";
-        Text[ russian ] = "Ïğàâàÿ ñâÿçü";
-        Text[ dutch ] = "~Rechter";
-        Text[ french ] = "~Droite";
-        Text[ spanish ] = "~Derecha";
-        Text[ italian ] = "Relazione ~destra";
-        Text[ danish ] = "~Højre";
-        Text[ swedish ] = "~Höger";
-        Text[ polish ] = "Prawe z³¹czenie";
-        Text[ portuguese_brazilian ] = "~Right";
-        Text[ japanese ] = "å³çµåˆ(~R)";
-        Text[ chinese_simplified ] = "å³å‘è¿ç»“(~R)";
-        Text[ chinese_traditional ] = "å³å‘é€£çµ(~R)";
-        Text[ dutch ] = "~Rechter";
-        Text[ chinese_simplified ] = "å³å‘è¿ç»“(~R)";
-        Text[ greek ] = "Äåîéüò";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½ ì¡°ì¸(~R)";
-        Text[ arabic ] = "ÕáÉ íãäì";
-        Text[ turkish ] = "~Sağ";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Unió ~dreta";
-        Text[ finnish ] = "~Oikea liitos";
-    };
-    RadioButton RB_FULL
-    {
-    Pos = MAP_APPFONT ( 12 , 62 ) ;
-    Size = MAP_APPFONT ( 63 , 10 ) ;
-        HelpId = HID_DLG_QRY_FULL ;
-    Text = "~Vollständiger" ;
-    Text [ ENGLISH ] = "~Full" ;
-        Text[ english_us ] = "~Full (outer) join";
-        Text[ portuguese ] = "Co~mpleta";
-        Text[ russian ] = "Ïîëíàÿ ñâÿçü";
-        Text[ dutch ] = "~Volledige";
-        Text[ french ] = "~Complète";
-        Text[ spanish ] = "~Completa";
-        Text[ italian ] = "Relazione ~completa";
-        Text[ danish ] = "~Fuldstændig";
-        Text[ swedish ] = "~Fullständig";
-        Text[ polish ] = "Pe³ne z³¹czenie";
-        Text[ portuguese_brazilian ] = "~Full";
-        Text[ japanese ] = "å®Œå…¨çµåˆ(~F)";
-        Text[ chinese_simplified ] = "å®Œæ•´è¿ç»“(~F)";
-        Text[ chinese_traditional ] = "å®Œæ•´çš„é€£çµ(~F)";
-        Text[ language_user1 ] = " ";
-        Text[ dutch ] = "~Volledige";
-        Text[ chinese_simplified ] = "å®Œæ•´è¿ç»“(~F)";
-        Text[ greek ] = "Ïëüêëçñïò";
-        Text[ korean ] = "í’€ ì¡°ì¸(~F)";
-        Text[ arabic ] = "ÕáÉ ßÇãáÉ";
-        Text[ turkish ] = "Tam";
-        Text[ catalan ] = "Unió ~completa (exterior)";
-        Text[ finnish ] = "~Täydellinen (ulko)liitos";
+        Pos             = MAP_APPFONT ( 101 , 125 ) ;
+        Size            = MAP_APPFONT ( 90 , 60 ) ;
+        HelpId          = HID_DLG_QRY_JOINTYPE ;
+
+        StringList =
+        {
+            < "Innerer" ; Default; > ;
+            < "Linker" ; Default; > ;
+            < "Rechter" ; Default; > ;
+            < "Vollständiger"  ; Default; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Inner" ; Default; > ;
+            < "Left" ; Default; > ;
+            < "Right" ; Default; > ;
+            < "Full"  ; Default; > ;
+        };
+        DropDown        = TRUE;
+        DDExtraWidth    = TRUE;
     };
 
     MultiLineEdit ML_HELPTEXT
     {
-        Pos                     = MAP_APPFONT ( 81 , 14 ) ;
-    Size            = MAP_APPFONT ( 110 , 58 ) ;
+        Pos             = MAP_APPFONT ( 12 , 145 ) ;
+        Size            = MAP_APPFONT ( 179 , 49 ) ;
         HelpId          = HID_DLG_QRY_HELPTEXT ;
         ReadOnly        = TRUE;
         SVLook          = TRUE;
-        Border          = TRUE;
     };
 
     OKButton PB_OK
     {
-    Pos = MAP_APPFONT ( 6 , 87 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-    TabStop = TRUE ;
-    DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-    Pos = MAP_APPFONT ( 59 , 87 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-    TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-    Pos = MAP_APPFONT ( 147 , 87 ) ;
-    Size = MAP_APPFONT ( 50 , 14 ) ;
-    TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 206 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
     };
+
     Text[ english_us ] = "Join Properties";
     Text[ portuguese ] = "Propriedades relacionais";
     Text[ russian ] = "Ñâîéñòâà ñâÿçè";

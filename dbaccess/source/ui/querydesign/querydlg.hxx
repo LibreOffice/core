@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:32:06 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
+#endif
 
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
@@ -78,36 +81,71 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+
+#ifndef DBAUI_RELCONTROLIFACE_HXX
+#include "RelControliFace.hxx"
 #endif
+#ifndef DBAUI_JOINTABLEVIEW_HXX
+#include "JoinTableView.hxx"
+#endif
+
 
 namespace dbaui
 {
     class OQueryTableConnectionData;
-    class DlgQryJoin : public ModalDialog
+    class OTableListBoxControl;
+    class DlgQryJoin :  public ModalDialog
+                        ,public IRelationControlInterface
     {
     protected:
-        FixedLine           aFL_Join;
-        RadioButton         aRB_Inner;
-        RadioButton         aRB_Left;
-        RadioButton         aRB_Right;
-        RadioButton         aRB_Full;
-        MultiLineEdit       aML_HelpText;
-        OKButton            aPB_OK;
-        CancelButton        aPB_CANCEL;
-        HelpButton          aPB_HELP;
+        FixedLine               aFL_Join;
+        FixedText               aFT_Title;
+        ListBox                 aLB_JoinType;
+        MultiLineEdit           aML_HelpText;
+        OKButton                aPB_OK;
+        CancelButton            aPB_CANCEL;
+        HelpButton              aPB_HELP;
 
-        EJoinType           eJoinType;
-        OQueryTableConnectionData*  pConnData; // enth"alt linke und rechte Tabelle
+        OTableListBoxControl*               m_pTableControl;
+        OJoinTableView::OTableWindowMap*    m_pTableMap;
+
+        EJoinType               eJoinType;
+        OQueryTableConnectionData*  m_pConnData; // enth"alt linke und rechte Tabelle
+        OQueryTableConnectionData*  m_pOrigConnData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
         DECL_LINK( OKClickHdl, Button* );
-        DECL_LINK( RBTogleHdl, RadioButton* );
+        DECL_LINK( LBChangeHdl, ListBox* );
+
+        /** setJoinType enables and set the new join type
+            @param  _eNewJoinType   the new jointype
+        */
+        void setJoinType(EJoinType _eNewJoinType);
     public:
-        DlgQryJoin( Window * pParent, OQueryTableConnectionData* pData,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData);
+        DlgQryJoin( Window * pParent,
+                    OQueryTableConnectionData* pData,
+                    OJoinTableView::OTableWindowMap*    _pTableMap,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                    BOOL _bAllowTableSelect);
         virtual ~DlgQryJoin();
         EJoinType GetJoinType() const { return eJoinType; };
+
+        /** getConnectionData returns the current connection data
+            @return the current connectiondata
+        */
+        virtual OTableConnectionData* getConnectionData() const;
+
+        /** setValid set the valid inside, can be used for OK buttons
+            @param  _bValid true when the using control allows an update
+        */
+        virtual void setValid(sal_Bool _bValid);
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() { return m_xConnection; }
+
+        /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
+            @param  _pConnectionData    the connection which exists between the new tables
+        */
+        virtual void notifyConnectionChange(OTableConnectionData* _pConnectionData);
     };
 }
 #endif // DBAUI_QUERYDLG_HXX

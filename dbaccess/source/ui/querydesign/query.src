@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:40:53 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #define MN_EDIT 20
 #define MN_VIEW 21
 #define MN_EXTRA 22
+#define MN_INSERT 23
 #define MN_WIN 30
 #define MN_HELP 31
 
@@ -93,6 +94,10 @@ Menu RID_QUERYCOLPOPUPMENU
     MenuItem
     {
         ITEM_EDIT_DELETE
+    };
+    MenuItem
+    {
+        MID_DBUI_QUERY_EDIT_JOINCONNECTION
     };
     };
 };
@@ -1173,30 +1178,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
     {
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_QUERY_EXECUTE;
-            HelpId = SID_FM_EXECUTE ;
-            Text = "Ausführen" ;
-            Text [ ENGLISH ] = "Execute" ;
-            Text[ english_us ] = "Run";
-            Text[ portuguese ] = "Executar";
-            Text[ russian ] = "Âûïîëíèòü";
-            Text[ greek ] = "Åêôİëåóç";
-            Text[ dutch ] = "Voltooien";
-            Text[ french ] = "Exécuter";
-            Text[ spanish ] = "Ejecutar";
-            Text[ italian ] = "Esegui";
-            Text[ danish ] = "Execute";
-            Text[ swedish ] = "Utför";
-            Text[ polish ] = "Wykonaj";
-            Text[ portuguese_brazilian ] = "Execute";
-            Text[ japanese ] = "å®Ÿè¡Œ";
-            Text[ korean ] = "ì‹¤í–‰";
-            Text[ chinese_simplified ] = "æ‰§è¡Œ";
-            Text[ chinese_traditional ] = "åŸ·è¡Œ";
-            Text[ turkish ] = "Execute";
-            Text[ arabic ] = "ÊäİíĞ";
-            Text[ finnish ] = "Suorita";
-            Text[ catalan ] = "Executa";
+            MID_DBUI_QUERY_EXECUTE
         };
 
         ToolBoxItem
@@ -1205,84 +1187,15 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_CLEAR_QUERY;
-            HelpId = SID_SBA_CLEAR_QUERY ;
-            Text = "Abfrage löschen" ;
-            Text [ ENGLISH ] = "Clear query" ;
-            Text[ english_us ] = "Clear Query";
-            Text[ portuguese ] = "Eliminar consulta";
-            Text[ russian ] = "Óäàëèòü çàïğîñ";
-            Text[ greek ] = "ÄéáãñáöŞ åñùôŞìáôïò";
-            Text[ dutch ] = "Query wissen";
-            Text[ french ] = "Supprimer la requête";
-            Text[ spanish ] = "Eliminar consulta";
-            Text[ italian ] = "Elimina ricerca";
-            Text[ danish ] = "Clear query";
-            Text[ swedish ] = "Radera sökning";
-            Text[ polish ] = "Usuñ kwerendy";
-            Text[ portuguese_brazilian ] = "Clear query";
-            Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ã®å‰Šé™¤";
-            Text[ korean ] = "ì§ˆì˜ ì‚­ì œ";
-            Text[ chinese_simplified ] = "åˆ é™¤æŸ¥è¯¢";
-            Text[ chinese_traditional ] = "æ¸…é™¤æŸ¥è©¢";
-            Text[ turkish ] = "Clear query";
-            Text[ arabic ] = "ÍĞİ ÇáÇÓÊİÓÇÑ";
-            Text[ finnish ] = "Tyhjennä kysely";
-            Text[ catalan ] = "Esborra la consulta";
+            MID_DBUI_CLEAR_QUERY
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_SQL;
-            HelpId = HID_QUERY_SQLMODE;
-            Text = "Design Ansicht an-, ausschalten" ;
-            Text [ ENGLISH ] = "Switch design view on/off" ;
-            Text[ english_us ] = "Switch Design View On/Off";
-            Text[ portuguese ] = "Activar/desactivar modo Esboço";
-            Text[ russian ] = "Âêë./âûêë. âèä äèçàéíà";
-            Text[ greek ] = "ĞñïâïëŞ ó÷åäéáóìïı Íáé/¼÷é";
-            Text[ dutch ] = "Ontwerpmodus in-/uitschakelen";
-            Text[ french ] = "(Dés)activer le mode Ébauche";
-            Text[ spanish ] = "Activar/desactivar vista diseño";
-            Text[ italian ] = "Vista design on/off";
-            Text[ danish ] = "Switch design view on/off";
-            Text[ swedish ] = "Sätt på/stäng av designvy";
-            Text[ polish ] = "W³¹cz / Wy³¹cz tryb projektu";
-            Text[ portuguese_brazilian ] = "Switch design view on/off";
-            Text[ japanese ] = "ãƒ‡ã‚¶ã‚¤ãƒ³ãƒ“ãƒ¥ãƒ¼ã®åˆ‡ã‚Šæ›¿ãˆ ã‚ªãƒ³/ã‚ªãƒ•";
-            Text[ korean ] = "ë””ìì¸ ë³´ê¸° ìŠ¤ìœ„ì¹˜ ì˜¨/ì˜¤í”„";
-            Text[ chinese_simplified ] = "æ‰“å¼€æˆ–å…³é—­è®¾è®¡è§†å›¾";
-            Text[ chinese_traditional ] = "æ‰“é–‹æˆ–é—œé–‰è¨­è¨ˆæª¢è¦–";
-            Text[ turkish ] = "Switch design view on/off";
-            Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÚÑÖ ÇáÊÕãíã";
-            Text[ finnish ] = "Ota suunnittelunäkymä käyttöön/pois käytöstä";
-            Text[ catalan ] = "Activar/desactivar vista diseño";
+            MID_BROWSER_SQL
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_ADDTABLE;
-            HelpId = SID_FM_ADDTABLE ;
-            Text = "Tabellen hinzufügen..." ;
-            Text [ ENGLISH ] = "Add tables..." ;
-            Text[ english_us ] = "Add Tables...";
-            Text[ portuguese ] = "Adicionar tabelas...";
-            Text[ russian ] = "Äîáàâèòü òàáëèöû...";
-            Text[ greek ] = "ĞñïóèŞêç ğßíáêá";
-            Text[ dutch ] = "Tabellen toevoegen";
-            Text[ french ] = "Ajouter des tables...";
-            Text[ spanish ] = "Añadir tablas";
-            Text[ finnish ] = "Lisää taulukoita";
-            Text[ italian ] = "Aggiungi tabelle...";
-            Text[ danish ] = "Add tables";
-            Text[ swedish ] = "Lägg till tabeller...";
-            Text[ polish ] = "Dodaj tabelê...";
-            Text[ portuguese_brazilian ] = "Add tables";
-            Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®è¿½åŠ ...";
-            Text[ korean ] = "ì‹œíŠ¸ ì‚½ì…";
-            Text[ chinese_simplified ] = "æ–°å¢è¡¨æ ¼...";
-            Text[ chinese_traditional ] = "æ–°å¢è¡¨æ ¼...";
-            Text[ turkish ] = "Add tables";
-            Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
-            Text[ catalan ] = "Afegeix les taules";
+            MID_DBUI_JOIN_ADD_TABLE
         };
         ToolBoxItem
         {
@@ -1290,150 +1203,23 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_ESACPEPROCESSING;
-            HelpId = SID_FM_NATIVESQL ;
-            Text = "SQL-Kommando direkt ausführen" ;
-            Text [ ENGLISH ] = "Native SQL command" ;
-            Text[ english_us ] = "Run SQL command directly";
-            Text[ portuguese ] = "Executar comando SQL directamente";
-            Text[ russian ] = "Âûïîëíèòü íåïîñğåäñòâåííî êîìàíäó SQL";
-            Text[ greek ] = "¢ìåóç åêôİëåóç åíôïëŞò SQL";
-            Text[ dutch ] = "SQL-commando onmiddellijk uitvoeren";
-            Text[ french ] = "Exécuter directement l'instruction SQL";
-            Text[ spanish ] = "Ejecutar directamente el comando SQL";
-            Text[ italian ] = "Esegui direttamente comando SQL";
-            Text[ danish ] = "Native sql command";
-            Text[ swedish ] = "Utför SQL-kommando direkt";
-            Text[ polish ] = "Wykonaj bezpoœrednio polecenie SQL";
-            Text[ portuguese_brazilian ] = "Native sql command";
-            Text[ japanese ] = "SQL ã‚³ãƒãƒ³ãƒ‰ã‚’ç›´æ¥å®Ÿè¡Œ";
-            Text[ korean ] = "SQL ëª…ë ¹ ì§ì ‘ ì‹¤í–‰";
-            Text[ chinese_simplified ] = "ç›´æ¥æ‰§è¡ŒSQLæŒ‡ä»¤";
-            Text[ chinese_traditional ] = "ç›´æ¥åŸ·è¡ŒSQLæŒ‡ä»¤";
-            Text[ turkish ] = "Native sql command";
-            Text[ arabic ] = "ÊäİíĞ ÃãÑ SQL ãÈÇÔÑÉ";
-            Text[ finnish ] = "Suorita SQL-komento suoraan";
-            Text[ catalan ] = "Executa l'ordre SQL directament";
+            MID_DBUI_BROWSER_ESACPEPROCESSING
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
-            HelpId = SID_SBA_QUERY_VIEW_FUNCTIONS ;
-            Text = "Funktionen" ;
-            Text [ ENGLISH ] = "Functions" ;
-            Text[ english_us ] = "Functions";
-            Text[ portuguese ] = "Funções";
-            Text[ russian ] = "Ôóíêöèè";
-            Text[ dutch ] = "Functies";
-            Text[ french ] = "Fonctions";
-            Text[ spanish ] = "Funciones";
-            Text[ italian ] = "Funzioni";
-            Text[ danish ] = "Funktioner";
-            Text[ swedish ] = "Funktioner";
-            Text[ polish ] = "Funkcje";
-            Text[ portuguese_brazilian ] = "Functions";
-            Text[ japanese ] = "é–¢æ•°";
-            Text[ chinese_simplified ] = "åŠŸèƒ½";
-            Text[ chinese_traditional ] = "å‡½æ•¸";
-            Text[ dutch ] = "Functies";
-            Text[ chinese_simplified ] = "åŠŸèƒ½";
-            Text[ greek ] = "ÓõíáñôŞóåéò";
-            Text[ korean ] = "ê¸°ëŠ¥";
-            Text[ arabic ] = "ÏÇáÇÊ";
-            Text[ turkish ] = "İşlevler";
-            Text[ language_user1 ] = " ";
-            Text[ finnish ] = "Toiminnot";
-            Text[ catalan ] = "Funcions";
+            MID_DBUI_QUERY_VIEW_FUNCTIONS
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_QUERY_VIEW_TABLES;
-            HelpId = SID_SBA_QUERY_VIEW_TABLES ;
-            Text = "Tabellenname" ;
-            Text [ ENGLISH ] = "Table name" ;
-            Text[ english_us ] = "Table Name";
-            Text[ portuguese ] = "Nome da tabela";
-            Text[ russian ] = "Èìÿ òàáëèöû";
-            Text[ dutch ] = "Tabelnaam";
-            Text[ french ] = "Nom de la table";
-            Text[ spanish ] = "Nombre de la tabla";
-            Text[ italian ] = "Nome tabella";
-            Text[ danish ] = "Tabelnavn";
-            Text[ swedish ] = "Tabellnamn";
-            Text[ polish ] = "Nazwa tabeli";
-            Text[ portuguese_brazilian ] = "Table name";
-            Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«å";
-            Text[ chinese_simplified ] = "è¡¨æ ¼åç§°";
-            Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±";
-            Text[ dutch ] = "Tabelnaam";
-            Text[ chinese_simplified ] = "è¡¨æ ¼åç§°";
-            Text[ greek ] = "¼íïìá ğßíáêá";
-            Text[ korean ] = "ì‹œíŠ¸ ì´ë¦„";
-            Text[ arabic ] = "ÇÓã ÇáÌÏæá";
-            Text[ turkish ] = "Tablo adı";
-            Text[ language_user1 ] = " ";
-            Text[ finnish ] = "Taulukon nimi";
-            Text[ catalan ] = "Nom de la taula";
+            MID_DBUI_QUERY_VIEW_TABLES
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;
-            HelpId = SID_SBA_QUERY_VIEW_ALIASES ;
-            Text = "Aliasname" ;
-            Text [ ENGLISH ] = "Alias name" ;
-            Text[ english_us ] = "Alias";
-            Text[ portuguese ] = "Alias";
-            Text[ russian ] = "Ïñåâäîíèì";
-            Text[ dutch ] = "Aliasnaam";
-            Text[ french ] = "Alias";
-            Text[ spanish ] = "Alias";
-            Text[ italian ] = "Alias";
-            Text[ danish ] = "Aliasnavn";
-            Text[ swedish ] = "Aliasnamn";
-            Text[ polish ] = "Nazwa alias";
-            Text[ portuguese_brazilian ] = "Alias name";
-            Text[ japanese ] = "ã‚¨ã‚¤ãƒªã‚¢ã‚¹å";
-            Text[ chinese_simplified ] = "åˆ«å";
-            Text[ chinese_traditional ] = "ä»£ç”¨å";
-            Text[ dutch ] = "Aliasnaam";
-            Text[ chinese_simplified ] = "åˆ«å";
-            Text[ greek ] = "Øåõäşíõìï";
-            Text[ korean ] = "ë³„ì¹­ ì´ë¦„";
-            Text[ arabic ] = "ÇÓã ãÓÊÚÇÑ";
-            Text[ turkish ] = "Diğer ad";
-            Text[ language_user1 ] = " ";
-            Text[ finnish ] = "Alias";
-            Text[ catalan ] = "Àlies";
+            MID_DBUI_QUERY_VIEW_ALIASES
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_QUERY_DISTINCT_VALUES;
-            HelpId = SID_SBA_QUERY_DISTINCT_VALUES ;
-            Text = "Eindeutige Werte" ;
-            Text [ ENGLISH ] = "Distinct values" ;
-            Text[ english_us ] = "Distinct Values";
-            Text[ portuguese ] = "Valores unívocos";
-            Text[ russian ] = "Îäíîçíà÷íûå çíà÷åíèÿ";
-            Text[ dutch ] = "Duidelijke waarden";
-            Text[ french ] = "Valeurs distinctes";
-            Text[ spanish ] = "Valores unívocos";
-            Text[ italian ] = "Valori univoci";
-            Text[ danish ] = "Entydige værdier";
-            Text[ swedish ] = "Entydiga värden";
-            Text[ polish ] = "Jednoznaczne wartoœci";
-            Text[ portuguese_brazilian ] = "Distinct values";
-            Text[ japanese ] = "æ˜ç­å€¤";
-            Text[ chinese_simplified ] = "æ˜ç¡®çš„æ•°å€¼";
-            Text[ chinese_traditional ] = "æ˜ç¢ºçš„æ•¸å€¼";
-            Text[ dutch ] = "Duidelijke waarden";
-            Text[ chinese_simplified ] = "æ˜ç¡®çš„æ•°å€¼";
-            Text[ greek ] = "Äéáêñéôéêİò ôéìİò";
-            Text[ korean ] = "ê³ ìœ ê°’";
-            Text[ arabic ] = "Şíã æÇÖÍÉ";
-            Text[ turkish ] = "Benzersiz değerler";
-            Text[ language_user1 ] = " ";
-            Text[ finnish ] = "Erityisarvot";
-            Text[ catalan ] = "Valors diferents";
+            MID_DBUI_QUERY_DISTINCT_VALUES
         };
         ToolBoxItem
         {
@@ -2336,6 +2122,25 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     ITEM_EDIT_PASTE
                     Command = ".uno:Paste";
                 };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    MID_DBUI_QUERY_DISTINCT_VALUES
+                    Command = ".uno:DB/DistinctValues";
+                };
+                MenuItem
+                {
+                    MID_DBUI_CLEAR_QUERY
+                    Command = ".uno:DB/ClearQuery";
+                };
+                MenuItem
+                {
+                    MID_DBUI_QUERY_EXECUTE
+                    Command = ".uno:DB/ExecuteQuery";
+                };
             };
         };
         Text[ russian ] = "~Ïğàâêà";
@@ -2349,7 +2154,73 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
+    };
+    MenuItem
+    {
+        Identifier = MN_VIEW ;
+        HelpID = MN_VIEW ;
+        Text = "Ansicht" ;
+        Text [ English ] = "View" ;
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    MID_DBUI_BROWSER_ESACPEPROCESSING
+                    Command = ".uno:DB/EsacpeProcessing";
+                };
+                MenuItem
+                {
+                    MID_DBUI_QUERY_VIEW_FUNCTIONS
+                    Command = ".uno:DB/ViewFunctions";
+                };
+                MenuItem
+                {
+                    MID_DBUI_QUERY_VIEW_TABLES
+                    Command = ".uno:DB/ViewTables";
+                };
+                MenuItem
+                {
+                    MID_DBUI_QUERY_VIEW_ALIASES
+                    Command = ".uno:DB/ViewAliases";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    MID_BROWSER_SQL
+                    Command = ".uno:DB/ChangeDesignMode";
+                };
+            };
         };
+    };
+    MenuItem
+    {
+        Identifier = MN_INSERT ;
+        HelpID = MN_INSERT ;
+        Text = "~Einfügen" ;
+        Text [ English ] = "~Insert" ;
+
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    MID_DBUI_REALTION_ADD_RELATION
+                    Command = ".uno:DB/AddRelation";
+                };
+                MenuItem
+                {
+                    MID_DBUI_JOIN_ADD_TABLE
+                    Command = ".uno:DB/AddTable";
+                };
+            };
+        };
+    };
 
     MenuItem
     {
