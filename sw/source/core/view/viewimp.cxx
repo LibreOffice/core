@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-01 15:33:33 $
+ *  last change: $Author: tl $ $Date: 2002-12-02 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,13 +386,6 @@ Color SwViewImp::GetRetoucheColor() const
             aRet.SetColor(COL_WHITE);
         else
             aRet = SwViewOption::GetDocColor();
-    }
-    else
-    {
-        // added for PDF export
-        OutputDevice *pOut = rSh.GetOut();
-        if (pOut && OUTDEV_VIRDEV == pOut->GetOutDevType())
-            aRet.SetColor( COL_WHITE );
     }
     return aRet;
 }
