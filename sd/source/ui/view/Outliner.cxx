@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:08:44 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 10:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,11 +322,11 @@ void Outliner::PrepareSpelling (void)
     {
         mbPrepareSpellingPending = false;
 
-        SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
-
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
             SetViewShell (pBase->GetSubShellManager().GetMainSubShell());
+
+        SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
         if (mpViewShell != NULL)
         {
@@ -341,29 +341,7 @@ void Outliner::PrepareSpelling (void)
             maSearchStartPosition = ::sd::outliner::Iterator();
             RememberStartPosition();
 
-            if (mpViewShell->ISA(DrawViewShell))
-            {
-                // Create a new outline view to do the search on.
-                mpOutlineView = new OutlinerView( this, mpWindow );
-                mbOwnOutlineView = true;
-                ULONG nStat = mpOutlineView->GetControlWord();
-                nStat &= ~EV_CNTRL_AUTOSCROLL;
-                mpOutlineView->SetControlWord(nStat);
-                InsertView( mpOutlineView );
-                SetUpdateMode(FALSE);
-                mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
-                SetPaperSize( Size(1, 1) );
-                SetText( String(), GetParagraph( 0 ) );
-
-                meOriginalEditMode =
-                    static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
-            }
-            else if (mpViewShell->ISA(OutlineViewShell))
-            {
-                mpOutlineView = GetView(0);
-                mbOwnOutlineView = false;
-            }
-            // else do nothing.
+            ProvideOutlinerView ();
 
             HandleChangedSelection ();
         }
@@ -407,7 +385,7 @@ void Outliner::StartSpelling (void)
             // selection.
             ESelection aSelection;
             bool bPutViewOnStack = false;
-            if (GetView (0) == NULL)
+            if (GetView(0) == NULL)
             {
                 bPutViewOnStack = true;
                 InsertView (mpOutlineView);
@@ -423,32 +401,24 @@ void Outliner::StartSpelling (void)
         // Restore the start position before displaying a dialog.
         RestoreStartPosition ();
 
-        ::Window* pSearchDialog = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(FALSE,TRUE);
         if (eState == EE_SPELL_NOLANGUAGE)
         {
-            ErrorBox (NULL,
-                WB_OK,
-                String(SdResId(STR_NOLANGUAGE))).Execute();
+            ErrorBox aErrorBox (NULL, WB_OK, String(SdResId(STR_NOLANGUAGE)));
+            ShowModalMessageBox (aErrorBox);
         }
         else
         {
             if (mpView->HasMarkedObj())
             {
-                InfoBox(NULL,
-                    String(SdResId(STR_END_SPELLING_OBJ))).Execute();
+                InfoBox aInfoBox (NULL, String(SdResId(STR_END_SPELLING_OBJ)));
+                ShowModalMessageBox (aInfoBox);
             }
             else
             {
-                InfoBox(NULL,
-                    String(SdResId(STR_END_SPELLING))).Execute();
+                InfoBox aInfoBox(NULL, String(SdResId(STR_END_SPELLING)));
+                ShowModalMessageBox (aInfoBox);
             }
         }
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(TRUE,TRUE);
     }
 }
 
@@ -483,12 +453,6 @@ void Outliner::EndSpelling (void)
                 SID_OBJECT_SELECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
-            // Remove and, if previously created by us, delete the outline
-            // view.
-            RemoveView( mpOutlineView );
-            if (mbOwnOutlineView)
-                delete mpOutlineView;
-
             SetUpdateMode(TRUE);
         }
 
@@ -514,7 +478,6 @@ void Outliner::EndSpelling (void)
     mpViewShell = NULL;
     mpView = NULL;
     mpWindow = NULL;
-    mpOutlineView = NULL;
 }
 
 
@@ -1163,16 +1126,8 @@ void Outliner::ShowEndOfSearchDialog (void)
 
         // Show the message in an info box that is modal with respect to the
         // whole application.
-        ::Window* pSearchDialog = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(FALSE,TRUE);
-
-        InfoBox (NULL, aString).Execute();
-
-        if (pSearchDialog)
-            pSearchDialog->EnableInput(TRUE,TRUE);
+        InfoBox aInfoBox (NULL, aString);
+        ShowModalMessageBox (aInfoBox);
     }
 }
 
@@ -1213,20 +1168,13 @@ bool Outliner::ShowWrapArroundDialog (void)
 
         // Pop up question box that asks the user whether to wrap arround.
         // The dialog is made modal with respect to the whole application.
-        ::Window* pSearchDialog = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(FALSE,TRUE);
         QueryBox aQuestionBox (
             NULL,
             WB_YES_NO | WB_DEF_YES,
             String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        USHORT nBoxResult = aQuestionBox.Execute();
+        USHORT nBoxResult = ShowModalMessageBox(aQuestionBox);
         bDoWrapArround = (nBoxResult == BUTTONID_YES);
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(TRUE,TRUE);
     }
 
     return bDoWrapArround;
@@ -1281,18 +1229,10 @@ void Outliner::PrepareSpellCheck (void)
     {
         mbError = TRUE;
         mbEndOfSearch = TRUE;
-        ::Window* pSearchDialog = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(FALSE,TRUE);
-
-        ErrorBox (NULL,
+        ErrorBox aErrorBox (NULL,
             WB_OK,
-            String(SdResId(STR_NOLANGUAGE))).Execute();
-
-        if (pSearchDialog != NULL)
-            pSearchDialog->EnableInput(TRUE,TRUE);
+            String(SdResId(STR_NOLANGUAGE)));
+        ShowModalMessageBox (aErrorBox);
     }
     else if (eState != EE_SPELL_OK)
     {
@@ -1375,7 +1315,6 @@ void Outliner::SetViewMode (PageKind ePageKind)
         // Switching to another view shell has intermediatly called
         // EndSpelling().  A PrepareSpelling() is pending, so call that now.
         PrepareSpelling();
-        //        SetViewShell (mpDrawDocument->GetDocSh()->GetViewShell());
 
         // Update the number of pages so that
         // <member>DetectChange()</member> has the correct value to compare
@@ -1516,16 +1455,9 @@ bool Outliner::HandleFailedSearch (void)
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.  Tell the user.
-            ::Window* pSearchDialog = static_cast<SvxSearchDialog*>(
-                SfxViewFrame::Current()->GetChildWindow(
-                    SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-            if (pSearchDialog != NULL)
-                pSearchDialog->EnableInput(FALSE,TRUE);
             InfoBox aInfoBox (NULL,
                 String(SdResId(STR_SAR_NOT_FOUND)));
-            USHORT nBoxResult = aInfoBox.Execute();
-            if (pSearchDialog != NULL)
-                pSearchDialog->EnableInput(TRUE,TRUE);
+            ShowModalMessageBox (aInfoBox);
         }
 
         else
@@ -1690,28 +1622,7 @@ void Outliner::BeginConversion (void)
         maSearchStartPosition = ::sd::outliner::Iterator();
         RememberStartPosition();
 
-        if ( mpViewShell->ISA(DrawViewShell) )
-        {
-            // Create a new outline view to do the search on.
-            mpOutlineView = new OutlinerView( this, mpWindow );
-            mbOwnOutlineView = true;
-            ULONG nStat = mpOutlineView->GetControlWord();
-            nStat &= ~EV_CNTRL_AUTOSCROLL;
-            mpOutlineView->SetControlWord(nStat);
-            InsertView( mpOutlineView );
-            SetUpdateMode(FALSE);
-            mpOutlineView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
-            SetPaperSize( Size(1, 1) );
-            SetText( String(), GetParagraph( 0 ) );
-
-            meOriginalEditMode = ((DrawViewShell*) mpViewShell)->GetEditMode();
-        }
-        else if ( mpViewShell->ISA(OutlineViewShell) )
-        {
-            mpOutlineView = GetView(0);
-            mbOwnOutlineView = false;
-        }
-        // else do nothing.
+        ProvideOutlinerView();
 
         HandleChangedSelection ();
     }
@@ -1758,6 +1669,98 @@ sal_Bool Outliner::ConvertNextDocument()
     }
 
     return !mbEndOfSearch;
+}
+
+
+
+
+USHORT Outliner::ShowModalMessageBox (Dialog& rMessageBox)
+{
+    // We assume that the parent of the given messge box is NULL, i.e. it is
+    // modal with respect to the top application window. However, this
+    // does not affect the search dialog.  Therefore we have to lock it here
+    // while the message box is being shown.  We also have to take into
+    // account that we are called during a spell check and the search dialog
+    // is not available.
+    ::Window* pSearchDialog = NULL;
+    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+        SvxSearchDialogWrapper::GetChildWindowId());
+    if (pChildWindow != NULL)
+        pSearchDialog = static_cast<SvxSearchDialog*>(
+            pChildWindow->GetWindow());
+    if (pSearchDialog != NULL)
+        pSearchDialog->EnableInput(FALSE,TRUE);
+
+    USHORT nResult = rMessageBox.Execute();
+
+    // Unlock the search dialog.
+    if (pSearchDialog != NULL)
+        pSearchDialog->EnableInput(TRUE,TRUE);
+
+    return nResult;
+}
+
+
+
+
+/** We try to create a new OutlinerView only when there is none available,
+    either from an OutlinerViewShell or a previous call to
+    ProvideOutlinerView().  This is necessary to support the spell checker
+    which can not cope with exchanging the OutlinerView.
+*/
+void Outliner::ProvideOutlinerView (void)
+{
+    switch (mpViewShell->GetShellType())
+    {
+        case ViewShell::ST_DRAW:
+        case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_NOTES:
+        case ViewShell::ST_HANDOUT:
+        {
+            // Create a new outline view to do the search on.
+            bool bInsert = false;
+            if (mpOutlineView!=NULL && !mbOwnOutlineView)
+                mpOutlineView = NULL;
+            if (mpOutlineView == NULL)
+            {
+                mpOutlineView = new OutlinerView( this, mpWindow );
+                mbOwnOutlineView = true;
+                bInsert = true;
+            }
+            else
+                mpOutlineView->SetWindow(mpWindow);
+            ULONG nStat = mpOutlineView->GetControlWord();
+            nStat &= ~EV_CNTRL_AUTOSCROLL;
+            mpOutlineView->SetControlWord(nStat);
+            if (bInsert)
+                InsertView( mpOutlineView );
+            SetUpdateMode(FALSE);
+            mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
+            SetPaperSize( Size(1, 1) );
+            SetText( String(), GetParagraph( 0 ) );
+
+            meOriginalEditMode =
+                static_cast<DrawViewShell*>(mpViewShell)->GetEditMode();
+        }
+        break;
+
+        case ViewShell::ST_OUTLINE:
+        {
+            if (mpOutlineView!=NULL && mbOwnOutlineView)
+                delete mpOutlineView;
+            mpOutlineView = GetView(0);
+            mbOwnOutlineView = false;
+        }
+        break;
+
+        default:
+        case ViewShell::ST_NONE:
+        case ViewShell::ST_SLIDE:
+        case ViewShell::ST_PREVIEW:
+        case ViewShell::ST_PRESENTATION:
+            // Ignored
+            break;
+    }
 }
 
 } // end of namespace sd
