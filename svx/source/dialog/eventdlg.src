@@ -1,0 +1,220 @@
+/*************************************************************************
+ *
+ *  $RCSfile: eventdlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:12:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "helpid.hrc"
+#include "eventdlg.hrc"
+
+ // TP_CONFIG_EVENT -------------------------------------------------------
+TabPage RID_SVXPAGE_EVENTS
+{
+    HelpId = HID_SVX_CONFIG_EVENT ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 244 , 258 ) ;
+    String STR_EVENT
+    {
+        Text = "Ereignis" ;
+        Text [ ENGLISH ] = "Event" ;
+        Text [ english_us ] = "Event" ;
+        Text [ italian ] = "Evento" ;
+        Text [ spanish ] = "AcciÛn" ;
+        Text [ french ] = "…vÈnement" ;
+        Text [ dutch ] = "Gebeurtenis" ;
+        Text [ swedish ] = "H‰ndelse" ;
+        Text [ danish ] = "HÊndelse" ;
+        Text [ portuguese_brazilian ] = "Evento" ;
+        Text [ portuguese ] = "Evento" ;
+        Text[ chinese_simplified ] = "‰∫ã‰ª∂";
+        Text[ russian ] = "—Ó·˚ÚËÂ";
+        Text[ polish ] = "Wydarzenie";
+        Text[ japanese ] = "„Ç§„Éô„É≥„Éà";
+        Text[ chinese_traditional ] = "‰∫ã‰ª∂";
+        Text[ arabic ] = "«·ÕœÀ";
+        Text[ greek ] = "√Â„ÔÌ¸Ú";
+        Text[ korean ] = "Ïù¥Î≤§Ìä∏";
+        Text[ turkish ] = "Olay";
+        Text[ catalan ] = "Acontecimiento";
+        Text[ finnish ] = "Tapahtuma";
+        Text[ thai ] = "‡πÄ‡∏´‡∏ï‡∏∏‡∏Å‡∏≤‡∏£‡∏ì‡πå";
+        Text[ czech ] = "Ud√°lost";
+        Text[ hebrew ] = "‚ÄÆ◊ê◊®◊ï◊¢‚Ä¨";
+        Text[ hindi ] = "‡§ò‡§ü‡§®‡§æ";
+        Text[ slovak ] = "Udalos≈•";
+        Text[ hungarian ] = "Esem√©ny";
+        Text[ slovenian ] = "Dogodek";
+    };
+    String STR_ASSMACRO
+    {
+        Text = "Zugewiesenes Makro";
+        Text[ english ] = "Assigned macro";
+        Text[ english_us ] = "Assigned macro";
+        Text[ portuguese ] = "Assigned macro";
+        Text[ russian ] = "Assigned macro";
+        Text[ greek ] = "Assigned macro";
+        Text[ dutch ] = "Toegewezen macro";
+        Text[ french ] = "Macro assignÈe";
+        Text[ spanish ] = "Macro asignada";
+        Text[ finnish ] = "Assigned macro";
+        Text[ italian ] = "Macro assegnata";
+        Text[ danish ] = "Tildelt makro";
+        Text[ swedish ] = "Tilldelat makro";
+        Text[ polish ] = "Assigned macro";
+        Text[ portuguese_brazilian ] = "Macro atribuÌda";
+        Text[ japanese ] = "Ââ≤„ÇäÂΩì„Å¶„Çâ„Çå„Åü„Éû„ÇØ„É≠";
+        Text[ korean ] = "ÏßÄÏ†ïÎêú Îß§ÌÅ¨Î°ú";
+        Text[ chinese_simplified ] = "ÊåáÂÆöÁöÑÂÆè";
+        Text[ chinese_traditional ] = "ÊåáÂÆöÁöÑÂ∑®ÈõÜ";
+        Text[ turkish ] = "Atanan makro";
+        Text[ arabic ] = "Assigned macro";
+        Text[ catalan ] = "Assigned macro";
+        Text[ thai ] = "Assigned macro";
+        Text[ czech ] = "P≈ôi≈ôazen√© makro";
+        Text[ hebrew ] = "‚ÄÆ◊û◊ß◊®◊ê◊ï ◊û◊ê◊ï◊©◊ù‚Ä¨";
+        Text[ hindi ] = "Assigned macro";
+        Text[ slovak ] = "Priraden√© makro";
+        Text[ hungarian ] = "Hozz√°rendelt makr√≥";
+        Text[ slovenian ] = "Dodeljeni makro";
+    };
+    Control LB_EVENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 178 , 232 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Disable = TRUE ;
+        HelpID = HID_SVX_MACRO_LB_EVENT ;
+    };
+    FixedText TXT_SAVEIN
+    {
+        Pos = MAP_APPFONT ( 6 , 244 ) ;
+        Size = MAP_APPFONT ( 55 , 8 ) ;
+        Group = TRUE ;
+        Text = "Speichern in" ;
+        Text [ ENGLISH ] = "Save In" ;
+        Text [ english_us ] = "Save In" ;
+    };
+    ListBox LB_SAVEIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 244 ) ;
+        Size = MAP_APPFONT ( 130 , 53 ) ;
+        DropDown = TRUE ;
+    };
+    PushButton PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 190 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        Text = "Assign Macro";
+        Text [ English ] = "Assign Macro";
+        Text [ english_us ] = "Assign Macro";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 190 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        Text = "Remove Macro";
+        Text [ English ] = "Remove Macro";
+        Text [ english_us ] = "Remove Macro";
+    };
+    Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
+    Text[ korean ] = "∏≈≈©∑Œ ¡ˆ¡§";
+    Text[ turkish ] = "Makro ata";
+    Text[ catalan ] = "Asignar macro";
+    Text[ english_us ] = "Assign Macro";
+    Text[ portuguese ] = "Atribuir macro";
+    Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
+    Text[ dutch ] = "Macro toewijzen";
+    Text[ french ] = "Assignation de macro";
+    Text[ spanish ] = "Asignar macro";
+    Text[ finnish ] = "M‰‰rit‰ makro";
+    Text[ italian ] = "Assegna macro";
+    Text[ danish ] = "Tildel makro";
+    Text[ swedish ] = "Tilldela makro";
+    Text[ polish ] = "Przypisz makro";
+    Text[ portuguese_brazilian ] = "Makro zuweisen";
+    Text[ japanese ] = "œ∏€ÇÃäÑÇËìñÇƒ";
+    Text[ chinese_simplified ] = "÷∏∂®∫Í";
+    Text[ chinese_traditional ] = "´¸©w•®∂∞";
+    Text[ arabic ] = " ⁄ÌÌ‰ „«ﬂ—Ê";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
