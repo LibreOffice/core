@@ -1,5 +1,5 @@
 <!--
-	$Id: Blocklist.dtd,v 1.1 2001-01-24 11:47:21 mtg Exp $
+	$Id: Blocklist.dtd,v 1.2 2001-01-30 18:45:33 mtg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -53,6 +53,8 @@
 
 -->
 <!ELEMENT block-list:block-list (block-list:block*) >
+<!ATTLIST block-list:block-list
+		  block-list:list-name CDATA #REQUIRED>
 <!ELEMENT block-list:block EMPTY>
 <!ATTLIST block-list:block 
 		  block-list:abbreviated-name CDATA #REQUIRED
