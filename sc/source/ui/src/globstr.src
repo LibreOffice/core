@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:05:18 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,7 +1595,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "ΌΠ°OµL®ΔªΊΈκ®Ζ";
         Text[ arabic ] = "ζΦΪ ΪαΗγΙ Ϊαμ ΗαΘνΗδΗΚ ΗαΫνΡ ΥΗαΝΙ";
         Text[ greek ] = "Σήμανση (με κύκλο) μη έγκυρων δεδομένων";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ µ¥ΐΜΕΈ Η¥±β";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ µ¥ΐΜΕΝ  Έ¶Ε©Η¥½Γ";
         Text[ turkish ] = "Geηersiz verileri iώaretle";
         Text[ language_user1 ] = " ";
     };
@@ -1990,7 +1990,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨ϊ®ψ«OΕ@¤ε¥σ";
         Text[ arabic ] = "ΕÒΗαΙ ΝγΗνΙ ΗαγΣΚδΟ";
         Text[ greek ] = "Κατάργηση προστασίας εγγράφου";
-        Text[ korean ] = "Ή®Ό­ΊΈΘ£ Α¦°Ε";
+        Text[ korean ] = "Ή®Ό­ΊΈΘ£  ΗΨΑ¦";
         Text[ turkish ] = "Belge korumasύnύ kaldύr";
         Text[ language_user1 ] = " ";
     };
@@ -2342,7 +2342,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΚύΎέΏβ '#' ΅£";
         Text[ russian ] = "Νε σδΰεςρÿ ξςκπϋςό αΰησ δΰννϋυ '#'.";
         Text[ polish ] = "Baza danych \"#\" nie mog³a zostaζ otworzona.";
-        Text[ japanese ] = "Γή°ΐΝή°½ '#' ‚πJ‚―‚ά‚Ή‚ρ‚Ε‚µ‚½B";
+        Text[ japanese ] = "Γή°ΐΝή°½u#v‚ªJ‚―‚η‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¶}±ÒΈκ®Ζ®w '#' ΅C";
         Text[ arabic ] = "ΚΪΠΡ έΚΝ ήΗΪΟΙ ΗαΘνΗδΗΚ '#'.";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί η βάση δεδομένων '#'.";
@@ -2366,7 +2366,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΥβΈφ²ιΡ― '#' ΅£";
         Text[ russian ] = "Σδΰλθςό ηΰοπξρ '#' νεβξημξζνξ.";
         Text[ polish ] = "Kwerendy '#' nie moΏna by³o otworzyζ.";
-        Text[ japanese ] = "Έ΄Ψ° '#' ‚πJ‚―‚ά‚Ή‚ρ‚Ε‚µ‚½B";
+        Text[ japanese ] = "Έ΄Ψ°u#v‚ªJ‚―‚η‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¶}±Ò³o­Σ¬dΈί '#' ΅C";
         Text[ arabic ] = "ΚΪΠΡ έΚΝ ΗαΗΣΚέΣΗΡ '#'.";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το ερώτημα '#'.";
@@ -2965,7 +2965,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οπΰβξοθρΰνθε";
         Text[ polish ] = "Pisownia";
         Text[ japanese ] = "½ΝίΩΑª―Έ";
-        Text[ chinese_traditional ] = "«χ¦r";
+        Text[ chinese_traditional ] = "«χΌgΐΛ¬d";
         Text[ arabic ] = "ΗαΚΟήνή ΗαΕγαΗΖν";
         Text[ greek ] = "Ορθογραφία";
         Text[ korean ] = "ΈΒΓγΉύ";
@@ -6344,11 +6344,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Stavekontrollen er ikke tilgζngelig" ;
         Text [ portuguese ] = "A verificaηγo ortogrαfica nγo estα disponνvel" ;
         Text [ portuguese_brazilian ] = "Die Rechtschreibprόfung ist nicht verfόgbar" ;
-        Text[ chinese_simplified ] = "²»ΜαΉ©ΥύΧΦ·¨Όμ²ιΉ¦Δά";
+        Text[ chinese_simplified ] = "²»ΜαΉ©ΥβΈφΖ΄Π΄Όμ²ιΉ¦Δά";
         Text[ russian ] = "Οπξβεπκΰ οπΰβξοθρΰνθÿ νε δξρςσονΰ";
         Text[ polish ] = "Sprawdzanie pisowni jest niemoΏliwe";
         Text[ japanese ] = "½ΝίΩ Αª―Έ‹@”\\‚Ν‚ ‚θ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¤£΄£¨Ρ«χ¦r¥\\―ΰ";
+        Text[ chinese_traditional ] = "¤£΄£¨Ρ³o­Σ«χΌgΐΛ¬d¥\\―ΰ";
         Text[ arabic ] = "ΗαΚΟήνή ΗαΕγαΗΖν ΫνΡ γΚζέΡ";
         Text[ greek ] = "O ορθογραφικός έλεγχος δεν είναι διαθέσιμος";
         Text[ korean ] = "ΈΒΓγΉύ °Λ»η°΅ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.";
@@ -6494,7 +6494,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "ΐx¦s¦¨ DIF ®ζ¦΅";
         Text[ arabic ] = "ΚΥΟνΡ Dif";
         Text[ greek ] = "Εξαγωγή Dif";
-        Text[ korean ] = "Dif ΊΈ³»±β";
+        Text[ korean ] = "Dif  ³»ΊΈ³»±β";
         Text[ turkish ] = "Dύώa aktar (Dif)";
         Text[ language_user1 ] = " ";
     };
@@ -6714,7 +6714,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "δλÿ οπξβεπκθ νεδξρςσοεν. \nΟπξβεπόςε, οξζΰλσιρςΰ, θνρςΰλλÿφθώ θ β ρλσχΰε νεξαυξδθμξρςθ θνρςΰλλθπσιςε \nνεξαυξδθμϋι Βΰμ ÿηϋκ";
         Text[ polish ] = "jest niedostκpny dla sprawdzania pisowni. \nSprawd proszκ instalacjκ i zainstaluj \newentualnie potrzebny jκzyk.";
         Text[ japanese ] = " ½ΝίΩ Αª―Έ‹@”\\‚Ν‚ ‚θ‚ά‚Ή‚ρB\n³‚µ‚­²έ½Δ°Ω‚³‚κ‚Δ‚Ά‚ι‚©Αª―Έ‚µ‚Δ‚­‚Ύ‚³‚ΆB\n•K—v‚Θ‚ηAg‚¤Ύκ‚ΰ²έ½Δ°Ω‚µ‚ά‚·B";
-        Text[ chinese_traditional ] = "¨S¦³ΐΛ¬d«χ¦rªΊ¥\\―ΰ΅C\n½ΠΐΛ¬d±zªΊ¦wΈΛ΅A­Y¦³¥²­n½Π¦wΈΛ©Ò­n¨Ο¥ΞªΊ»y¨¥ª©¥»";
+        Text[ chinese_traditional ] = " ¨S¦³«χΌgΐΛ¬dªΊ¥\\―ΰ΅C\n½ΠΐΛ¬d¦wΈΛ΅A­Y¦³¥²­n½Π¦wΈΛ©Ò­n¨Ο¥ΞªΊ»y¨¥ª©¥»";
         Text[ arabic ] = "ΫνΡ γΚζέΡ ααΚΟήνή ΗαΕγαΗΖν. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
         Text[ greek ] = "δεν είναι διαθέσιμο για τον έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και αν χρειαστεί, να \nγίνει εγκατάσταση της γλώσσας που επιθυμείτε";
         Text[ korean ] = " ΈΒΓγΉύ °Λ»η°΅ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\n»ηΏλΐΪΐΗ Ό³Δ΅Έ¦ Θ®ΐΞΗΡ ΄Ωΐ½ \nΗΚΏδ½Γ Ώδ±ΈµΗ΄Β ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
@@ -6760,11 +6760,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Skal stavekontrollen fortsζttes fra arkets begyndelse?" ;
         Text [ portuguese ] = "Continuar a verificaηγo ortogrαfica no princνpio da folha?" ;
         Text [ portuguese_brazilian ] = "Soll die Rechtschreibprόfung am Tabellenanfang fortgesetzt werden?" ;
-        Text[ chinese_simplified ] = "ΔϊÒª΄ΣΉ¤Χχ±νΚΧ¶ΛΏªΚΌΌΜΠψ½ψΠΠΥύΧΦ·¨Ζ΄Π΄Όμ²ιΒπ£Ώ";
+        Text[ chinese_simplified ] = "ΔϊÒª΄ΣΉ¤Χχ±νΚΧ¶ΛΏªΚΌΌΜΠψ½ψΠΠΖ΄Π΄Όμ²ιΒπ£Ώ";
         Text[ russian ] = "Οπξδξλζθςό οπξβεπκσ οπΰβξοθρΰνθÿ β νΰχΰλε ςΰαλθφϋ?";
         Text[ polish ] = "Czy sprawdzanie pisowni ma byζ kontynuowane na poczΉtku arkusza?";
         Text[ japanese ] = "•\\‚Μn‚ί‚Ι–ί‚Α‚Δ½ΝίΩΑª―Έ‚π‘±s‚µ‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "±z­n¦b¤u§@ªν¤§­Ί¶}©lΐΛ¬d«χ¦r΅H";
+        Text[ chinese_traditional ] = "±z­n¦b¤u§@ªν¤§­Ί¶}©lΐΛ¬d«χΌg΅H";
         Text[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΗαΕγαΗΖν ΪδΟ ΘΟΗνΙ ΗαΜΟζαΏ";
         Text[ greek ] = "Συνέχεια του ορθογραφικού ελέγχου από την αρχή του πίνακα;";
         Text[ korean ] = "Ηφΐη ½ΓΖ®ΐΗ ½ΓΐΫΊΞΊΠΏ΅Ό­ ΈΒΓγΉύ °Λ»ηΈ¦ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -6792,7 +6792,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "µό¨εµLªk¨Ο¥Ξ΅C\n½ΠΐΛ¬d±zªΊ¦wΈΛµ{§Η΅A­Y¦³¥²­n΅A½Π¦wΈΛ­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
         Text[ arabic ] = "ΫνΡ γΚζέΡ αήΗγζΣ ΗαγΡΗΟέΗΚ. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
         Text[ greek ] = "δεν είναι διαθέσιμο για τον θησαυρό λέξεων.\nΠαρακαλώ ελέγξτε την εγκατάσταση και αν χρειαστεί, να \nγίνει εγκατάσταση της γλώσσας που επιθυμείτε";
-        Text[ korean ] = "µΏΐΗΎξ »ηΐόΐΗ »ηΏλΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\n΄η½ΕΐΗ Ό³Δ΅Έ¦ Θ®ΐΞΗΟ½Γ°ν \nΗΚΏδΗΟ΄ΩΈι Ώδ±ΈµΘ ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
+        Text[ korean ] = " µΏΐΗΎξ »ηΐόΐΗ »ηΏλΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\n»ηΏλΐΪΐΗΌ³Δ΅Έ¦ Θ®ΐΞΗΟ½Γ°ν \nΗΚΏδΗΟ΄ΩΈι Ώδ±ΈµΘ ΎπΎξΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "eώanlamlύlar sφzlόπό iηin mevcut deπil. \nKurulumu kontrol edip  \ngerekirse istenilen dili yόkleyin.";
         Text[ language_user1 ] = " ";
     };
@@ -6810,11 +6810,11 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Stavekontrollen er afsluttet for dette ark!" ;
         Text [ portuguese ] = "A verificaηγo ortogrαfica estα concluνda!" ;
         Text [ portuguese_brazilian ] = "Die Rechtschreibprόfung dieser Tabelle ist abgeschlossen!" ;
-        Text[ chinese_simplified ] = "ÒΡΎ­Νκ³Ι¶ΤΥβΈφΉ¤Χχ±νµΔΥύΧΦ·¨Όμ²ι£΅";
+        Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΥβΈφΉ¤Χχ±νµΔΖ΄Π΄Όμ²ι£΅";
         Text[ russian ] = "Οπξβεπκΰ ξπτξγπΰτθθ ύςξγξ λθρςΰ ηΰκξνχενΰ!";
         Text[ polish ] = "Sprawdzanie pisowni w tym arkuszu zosta³o zakoρczone!";
         Text[ japanese ] = "‚±‚Μ•\\‚Μ½ΝίΩΑª―Έ‚Ν®—Ή‚µ‚ά‚µ‚½B";
-        Text[ chinese_traditional ] = "³o­Σ¤u§@ªνªΊ«χ¦rΐΛ¬d¤wΈg§Ή¦¨΅I";
+        Text[ chinese_traditional ] = "³o­Σ¤u§@ªνªΊ«χΌgΐΛ¬d¤wΈg§Ή¦¨΅I";
         Text[ arabic ] = "Κγ ΗαΗδΚεΗΑ γδ ΗαΚΟήνή ΗαΕγαΗΖν έν εΠΗ ΗαΜΟζα!";
         Text[ greek ] = "O ορθογραφικός έλεγχος αυτού του πίνακα ολοκληρώθηκε.";
         Text[ korean ] = "ΐΜ ½ΓΖ®Ώ΅ ΄λΗΡ ΈΒΓγΉύ °Λ»η°΅ ΏΟ·αµΗΎϊ½ΐ΄Ο΄Ω.";
@@ -7251,7 +7251,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Mφchten Sie die Suche am Tabellenende fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νΚΧ¶Λ΅£ÒªΧΤΉ¤Χχ±νΞ²¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰχΰλε λθρςΰ. Οπξδξλζθςό οξθρκ β κξνφε λθρςΰ?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do poczΉtku arkusza. Czy kontynuowaζ wyszukiwanie od koρca arkusza?";
+        Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do poczΉtku. Czy kontynuowaζ wyszukiwanie od koρca arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Ν•\\‚Μn‚ί‚ά‚Ευ‚µ‚ά‚µ‚½B•\\‚ΜI‚θ‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg΄M§δ¨μ¤u§@ªν­ΊΊέ΅C­nΔ~Δς΄M§δ¨μ¤u§@ªν§ΐΊέ΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ ΘΟΗνΙ ΗαΜΟζα. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαΜΟζαΏ";
@@ -7276,7 +7276,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Mφchten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½Ή¤Χχ±νµΔΞ²¶Λ΅£ÒªΧΤΉ¤Χχ±νΚΧ¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β κξνφε λθρςΰ. Οπξδξλζθςό οξθρκ β νΰχΰλε λθρςΰ?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koρca arkusza. Czy kontynuowaζ wyszukiwanie od poczΉtku arkusza?";
+        Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do koρca. Czy kontynuowaζ wyszukiwanie od poczΉtku arkusza?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚Ν•\\‚ΜI‚θ‚ά‚Ευ‚µ‚ά‚µ‚½B•\\‚Μn‚ί‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg΄M§δ¨μ¤u§@ªνªΊ§ΐΊέ΅C­nΔ~Δς¦b¤u§@ªν­ΊΊέ΄M§δ΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ δεΗνΙ ΗαΜΟζα. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ ΘΟΗνΙ ΗαΜΟζαΏ";
@@ -7324,7 +7324,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het begin van het document. Wilt u het zoeken aan het einde van het document voortzetten?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµµΔΚΧ¶Λ΅£ÒªΧΤΞΔµµΞ²¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰοπΰβλενθθ κ νΰχΰλσ δξκσμενςΰ. Οπξδξλζθςό οξθρκ β νΰοπΰβλενθθ κ κξνφσ δξκσμενςΰ?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do poczΉtku dokumentu. Czy kontynuowaζ wyszukiwanie od koρca dokumentu?";
+        Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ dokument do poczΉtku. Czy kontynuowaζ wyszukiwanie od koρca dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ΝΔή·­ÒέΔ‚Μn‚ί‚ά‚Ευ‚µ‚ά‚µ‚½BΔή·­ÒέΔ‚ΜI‚θ‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg΄M§δ¨μ¤ε¥σ­ΊΊέ΅C­nΔ~Δς¦b¤ε¥σ§ΐΊέ΄M§δ΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ ΘΟΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαγΣΚδΟΏ";
@@ -7348,7 +7348,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het einde van het document. Wilt u het zoeken aan het begin van het document voortzetten?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒΡΎ­ΛΡΡ°µ½ΞΔµµµΔΞ²¶Λ΅£ÒªΧΤΞΔµµΚΧ¶ΛΌΜΠψΛΡΡ°Βπ£Ώ";
         Text[ russian ] = "%PRODUCTNAME Calc ξρσωερςβθλ οξθρκ β νΰοπΰβλενθθ κ κξνφσ δξκσμενςΰ. Οπξδξλζθςό οξθρκ β νΰοπΰβλενθθ κ νΰχΰλσ δξκσμενςΰ?";
-        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koρca dokumentu. Czy kontynuowaζ wyszukiwanie od poczΉtku dokumentu?";
+        Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ dokument do koρca. Czy kontynuowaζ wyszukiwanie od poczΉtku dokumentu?";
         Text[ japanese ] = "%PRODUCTNAME Calc ‚ΝΔή·­ÒέΔ‚ΜI‚θ‚ά‚Ευ‚µ‚ά‚µ‚½BΔή·­ÒέΔ‚Μn‚ί‚Ι–ί‚Α‚Δυ‚π‘±‚―‚ά‚·‚©B";
         Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤wΈg΄M§δ¨μ¤ε¥σ§ΐΊέ΅C­nΔ~Δς¦b¤ε¥σ­ΊΊέ΄M§δ΅H";
         Text[ arabic ] = "ΘΝΛ %PRODUCTNAME Calc ΝΚμ δεΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ ΘΟΗνΙ ΗαγΣΚδΟΏ";
@@ -8889,7 +8889,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "Έκ®Ζ§U²z ¤ΐΓώ";
         Text[ arabic ] = "έΖΙ γΡΤΟ ΗαΘνΗδΗΚ";
         Text[ greek ] = "Κατηγορία πιλότου δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝ ΖΔΐΟ·µ ΊΠ·ω ΗΧΈρ";
+        Text[ korean ] = "µ¥ΐΜΕΝΖΔΐΟ·µ ΉόΑΦ";
         Text[ turkish ] = "Veri pilotu kategorisi";
         Text[ language_user1 ] = " ";
     };
@@ -9222,7 +9222,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "µ¥ΤªΈρ #1 ΄Σ '#2' ΈΔ±δ³Ι '#3'";
         Text[ russian ] = "ίχεικΰ #1 θημενενΰ ρ '#2' νΰ '#3'";
         Text[ polish ] = "Komσrka #1 zmieniona z '#2' na '#3' ";
-        Text[ japanese ] = "#1 ΎΩ‚Ν '#2' ‚©‚η '#3' ‚Ι•ΟX‚µ‚ά‚µ‚½B";
+        Text[ japanese ] = "ΎΩ #1 ‚Νu#2v‚©‚ηu#3v‚Ι•ΟX‚Ι‚Θ‚θ‚ά‚µ‚½B";
         Text[ chinese_traditional ] = "ΐx¦s®ζ #1 ±q '#2' Εά§σ¦¨ '#3'";
         Text[ arabic ] = "Κγ ΚΫννΡ ΗαΞανΙ  #1 γδ '#2' Εαμ '#3'";
         Text[ greek ] = "Το κελί #1 άλλαξε από '#2' σε '#3'";
@@ -9246,7 +9246,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "ÒΡΎ­ΌΣΘλ #1";
         Text[ russian ] = "#1 βρςΰβλεν";
         Text[ polish ] = "#1 wstawiony";
-        Text[ japanese ] = "#1 ‘}“ό‚³‚κ‚ά‚µ‚½B";
+        Text[ japanese ] = "#1 ‚Ν‘}“ό‚³‚κ‚ά‚µ‚½B";
         Text[ chinese_traditional ] = "¤wΈg¥[¤J #1";
         Text[ arabic ] = "Κγ ΕΟΡΗΜ #1";
         Text[ greek ] = "#1 εισάχθηκαν";
@@ -9270,7 +9270,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "ÒΡΎ­ΙΎ³ύ #1";
         Text[ russian ] = "#1 σδΰλεν";
         Text[ polish ] = "#1 usuniκty";
-        Text[ japanese ] = "#1 ν‚³‚κ‚ά‚µ‚½B";
+        Text[ japanese ] = "#1 ‚Νν‚³‚κ‚ά‚µ‚½B";
         Text[ chinese_traditional ] = "¤wΈg§R°£ #1";
         Text[ arabic ] = "Κγ ΝΠέ #1";
         Text[ greek ] = "#1 έχει διαγραφεί";
