@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:25:38 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ polish ] = "Ramka tekstu";
         Text[ japanese ] = "Γ·½Δg";
         Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
-        Text[ arabic ] = "ΕΨΗΡ δΥ";
+        Text[ arabic ] = "ίΗΟΡ δΥ";
         Text[ greek ] = "Πλαίσιο κειμένου";
         Text[ korean ] = "ΕΨ½ΊΖ® ΗΑ·ΉΐΣ";
         Text[ turkish ] = "Metin ηerηevesi";
@@ -670,7 +670,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Tekstmarkering" ;
         Text [ portuguese ] = "Marcador de texto" ;
         Text[ chinese_simplified ] = "ΚιΗ©";
-        Text[ russian ] = "Ηΰκλΰδκθ";
+        Text[ russian ] = "Òεκρςξβΰÿ οξμεςκΰ";
         Text[ polish ] = "Zak³adka";
         Text[ japanese ] = "Γ·½ΔΟ°Έ";
         Text[ chinese_traditional ] = "¤Ί¤εΌΠΕÒ";
@@ -1048,7 +1048,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ polish ] = "Nastκpna ramka tekstowa";
     Text[ japanese ] = "‚ΜΓ·½Δg";
     Text[ chinese_traditional ] = "¤U¤@­Σ¤ε¦r¤θ®Ψ";
-    Text[ arabic ] = "ΕΨΗΡ ΗαδΥ ΗαΚΗαν";
+    Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΚΗαν";
     Text[ greek ] = "Επόμενο πλαίσιο κειμένου";
     Text[ korean ] = "΄Ωΐ½ ΕΨ½ΊΖ® ΗΑ·ΉΐΣ";
     Text[ turkish ] = "Sonraki metin ηerηevesi";
@@ -1169,7 +1169,7 @@ String STR_IMGBTN_BKM_DOWN
     Text [ dutch ] = "Volgende tekstmarkering" ;
     Text [ portuguese ] = "Marcador de texto seguinte" ;
     Text[ chinese_simplified ] = "ΟΒÒ»ΈφΚιΗ©";
-    Text[ russian ] = "Ρλεδσώωΰÿ ηΰκλΰδκΰ";
+    Text[ russian ] = "Ρλεδσώωΰÿ ςεκρςξβΰÿ οξμεςκΰ";
     Text[ polish ] = "Nastκpna zak³adka";
     Text[ japanese ] = "‚ΜΓ·½ΔΟ°Έ";
     Text[ chinese_traditional ] = "¤U¤@­Σ®ΡΕÒ";
@@ -1398,7 +1398,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ japanese ] = "‚Μυψ€–Ϊ";
     Text[ chinese_traditional ] = "¤U¤@­Σ¥ΨΏύ¶µ¥Ψ";
     Text[ arabic ] = "ΗαΕΟΞΗα ΗαέεΡΣν ΗαΚΗαν";
-    Text[ greek ] = "Επόμενη εγγραφή ευρετηρίου";
+    Text[ greek ] = "Επόμενη καταχώριση ευρετηρίου";
     Text[ korean ] = "΄Ωΐ½ »φΐΞ ΗΧΈρ";
     Text[ turkish ] = "Sonraki dizin giriώi";
     Text[ language_user1 ] = " ";
@@ -1453,7 +1453,7 @@ String STR_IMGBTN_FRM_UP
     Text[ polish ] = "Poprzednia ramka tekstowa";
     Text[ japanese ] = "‘O‚ΜΓ·½Δg";
     Text[ chinese_traditional ] = "¤W¤@­Σ¤ε¦r¤θ®Ψ";
-    Text[ arabic ] = "ΕΨΗΡ ΗαδΥ ΗαΣΗΘή";
+    Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο πλαίσιο κειμένου";
     Text[ korean ] = "ΐΜΐό ΕΨ½ΊΖ® ΗΑ·ΉΐΣ";
     Text[ turkish ] = "Φnceki metin ηerηevesi";
@@ -1569,7 +1569,7 @@ String STR_IMGBTN_BKM_UP
     Text [ dutch ] = "Vorige tekstmarkering" ;
     Text [ portuguese ] = "Marcador de texto anterior" ;
     Text[ chinese_simplified ] = "ΙΟÒ»ΈφΚιΗ©";
-    Text[ russian ] = "Οπεδϋδσωΰÿ ηΰκλΰδκΰ";
+    Text[ russian ] = "Οπεδϋδσωΰÿ ςεκρςξβΰÿ οξμεςκΰ";
     Text[ polish ] = "Poprzednia zak³adka";
     Text[ japanese ] = "‘O‚ΜΓ·½ΔΟ°Έ";
     Text[ chinese_traditional ] = "¤W¤@­Σ®ΡΕÒ";
@@ -1793,7 +1793,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ japanese ] = "‘O‚Μυψ€–Ϊ";
     Text[ chinese_traditional ] = "¤W¤@­Σ¥ΨΏύ¶µ¥Ψ";
     Text[ arabic ] = "ΗαΕΟΞΗα ΗαέεΡΣν ΗαΣΗΘή";
-    Text[ greek ] = "Προηγούμενη εγγραφή ευρετηρίου";
+    Text[ greek ] = "Προηγούμενη καταχώριση ευρετηρίου";
     Text[ korean ] = "ΐΜΐό »φΐΞ ΗΧΈρ";
     Text[ turkish ] = "Φnceki dizin giriώi";
     Text[ language_user1 ] = " ";
