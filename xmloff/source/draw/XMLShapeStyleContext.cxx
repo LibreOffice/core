@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
 void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet > & rPropSet )
 {
     XMLPropStyleContext::FillPropertySet(rPropSet);
+
+#ifndef SVX_LIGHT
     if (m_sControlDataStyleName.getLength())
     {   // we had a data-style-name attribute
 
@@ -172,6 +174,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             }
         }
     }
+#endif // #ifndef SVX_LIGHT
 }
 
 void XMLShapeStyleContext::Finish( sal_Bool bOverwrite )

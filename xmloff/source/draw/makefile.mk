@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,32 @@ SLOFILES =	\
         $(SLO)$/XMLShapePropertySetContext.obj \
         $(SLO)$/XMLShapeStyleContext.obj \
         $(SLO)$/ximppage.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/XMLNumberStyles.obj\
+        $(OBJ)$/XMLGraphicsDefaultStyle.obj\
+        $(OBJ)$/viewcontext.obj\
+        $(OBJ)$/eventimp.obj\
+        $(OBJ)$/layerimp.obj\
+        $(OBJ)$/ximpshow.obj\
+        $(OBJ)$/animimp.obj\
+        $(OBJ)$/numithdl.obj\
+        $(OBJ)$/sdxmlimp.obj \
+        $(OBJ)$/ximpstyl.obj \
+        $(OBJ)$/ximpbody.obj \
+        $(OBJ)$/ximpshap.obj \
+        $(OBJ)$/ximpgrp.obj \
+        $(OBJ)$/ximp3dscene.obj \
+        $(OBJ)$/ximp3dobject.obj \
+        $(OBJ)$/ximpnote.obj \
+        $(OBJ)$/sdpropls.obj \
+        $(OBJ)$/propimp0.obj \
+        $(OBJ)$/xexptran.obj \
+        $(OBJ)$/shapeimport.obj \
+        $(OBJ)$/XMLImageMapContext.obj \
+        $(OBJ)$/XMLShapePropertySetContext.obj \
+        $(OBJ)$/XMLShapeStyleContext.obj \
+        $(OBJ)$/ximppage.obj
 
 # --- Targets --------------------------------------------------------------
 

@@ -2,6 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
+..\%__SRC%\lib\xol.lib %_DEST%\lib%_EXT%\xol.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\dtd\*.* %_DEST%\bin%_EXT%\*.*
@@ -32,6 +33,7 @@ hedabu: ..\inc\xmlnmspe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnmspe.hxx
 hedabu: ..\inc\xmlnumfi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfi.hxx
 hedabu: ..\inc\xmlnumfe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfe.hxx
 hedabu: ..\inc\xmlexp.hxx %_DEST%\inc%_EXT%\xmloff\xmlexp.hxx
+hedabu: ..\inc\xmlreg.hxx %_DEST%\inc%_EXT%\xmloff\xmlreg.hxx
 hedabu: ..\inc\xmlnumi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumi.hxx
 hedabu: ..\inc\xmlnume.hxx %_DEST%\inc%_EXT%\xmloff\xmlnume.hxx
 hedabu: ..\inc\xmltabi.hxx %_DEST%\inc%_EXT%\xmloff\xmltabi.hxx

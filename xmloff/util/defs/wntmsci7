@@ -9461,3 +9461,4 @@ _real@8@4003a000000000000000
 ?GetAttrPrefix@SvXMLAttrContainerData@@QBE?AVOUString@rtl@@G@Z
 ?exportTextContentEnumeration@XMLTextParagraphExport@@IAEEABV?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@EABV?$Reference@VXTextSection@text@star@sun@com@@@3456@EEPBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z
 ?exportTextRangeEnumeration@XMLTextParagraphExport@@IAEXABV?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@EEE@Z
+?realloc@?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAAXJ@Z

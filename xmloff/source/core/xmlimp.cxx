@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:04:42 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,17 +676,22 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
     return new XMLShapeImportHelper( *this, xModel );
 }
 
+#ifndef SVX_LIGHT
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
     return new SchXMLImportHelper();
 }
+#endif
 
+#ifndef SVX_LIGHT
 #if SUPD>615 || defined(PRIV_DEBUG)
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
 {
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
 #endif
+#endif // #ifndef SVX_LIGHT
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -989,6 +994,7 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
+#ifndef SVX_LIGHT
     if (!pEventImportHelper)
     {
         // construct event helper and register StarBasic handler and standard
@@ -999,6 +1005,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
                                             new XMLStarBasicContextFactory());
         pEventImportHelper->AddTranslationTable(aStandardEventTable);
     }
+#endif
 
     return *pEventImportHelper;
 }
@@ -1045,8 +1052,10 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     xAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
+#ifndef SVX_LIGHT
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
     GetFormImport()->setAutoStyleContext( pAutoStyles );
+#endif
 }
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,16 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                                    rProperties );
         break;
     case CTF_TEXTCOLUMNS:
+#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                                    rLocalName, xAttrList, rProp,
                                                    rProperties );
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         break;
+
     case CTF_DROPCAPFORMAT:
         {
             DBG_ASSERT( rProp.mnIndex >= 2 &&
@@ -160,6 +166,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProp.mnIndex-1,
                                            rProperties );
         break;
+#ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
             GetImport(), nPrefix, rLocalName, rProperties,
@@ -170,6 +177,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
             GetImport(), nPrefix, rLocalName, rProperties,
             xMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
+#endif // #ifndef SVX_LIGHT
     }
 
     if( !pContext )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-09 12:34:23 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1620,6 +1620,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
 
     case XML_TOK_TEXT_ENDNOTE:
     case XML_TOK_TEXT_FOOTNOTE:
+#ifndef SVX_LIGHT
         if (rImport.GetTextImport()->IsInFrame())
         {
             // we must not insert footnotes into text frames
@@ -1632,6 +1633,10 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                      *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName );
         }
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         rIgnoreLeadingSpace = sal_False;
         break;
 

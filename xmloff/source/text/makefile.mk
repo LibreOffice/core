@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,6 +156,44 @@ SLOFILES =	\
         $(SLO)$/XMLStringBufferImportContext.obj \
         $(SLO)$/XMLTrackedChangesImportContext.obj \
         $(SLO)$/XMLCalculationSettingsContext.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/txtdropi.obj \
+        $(OBJ)$/txtfldi.obj \
+        $(OBJ)$/txtimp.obj \
+        $(OBJ)$/txtimppr.obj \
+        $(OBJ)$/txtparai.obj \
+        $(OBJ)$/txtprhdl.obj \
+        $(OBJ)$/txtprmap.obj \
+        $(OBJ)$/txtstyli.obj \
+        $(OBJ)$/txtvfldi.obj \
+        $(OBJ)$/XMLAutoMarkFileContext.obj \
+        $(OBJ)$/XMLAutoTextEventImport.obj \
+        $(OBJ)$/XMLAutoTextContainerEventImport.obj \
+        $(OBJ)$/XMLChangedRegionImportContext.obj \
+        $(OBJ)$/XMLChangeElementImportContext.obj \
+        $(OBJ)$/XMLChangeInfoContext.obj \
+        $(OBJ)$/XMLLineNumberingExport.obj \
+        $(OBJ)$/XMLLineNumberingImportContext.obj \
+        $(OBJ)$/XMLLineNumberingSeparatorImportContext.obj \
+        $(OBJ)$/XMLPropertyBackpatcher.obj \
+        $(OBJ)$/XMLTextFrameContext.obj \
+        $(OBJ)$/XMLTextFrameHyperlinkContext.obj \
+        $(OBJ)$/XMLTextHeaderFooterContext.obj \
+        $(OBJ)$/XMLTextListAutoStylePool.obj \
+        $(OBJ)$/XMLTextListBlockContext.obj \
+        $(OBJ)$/XMLTextListItemContext.obj \
+        $(OBJ)$/XMLTextMarkImportContext.obj \
+        $(OBJ)$/XMLTextMasterPageContext.obj \
+        $(OBJ)$/XMLTextMasterPageExport.obj \
+        $(OBJ)$/XMLTextMasterStylesContext.obj \
+        $(OBJ)$/XMLTextNumRuleInfo.obj \
+        $(OBJ)$/XMLTextPropertySetContext.obj \
+        $(OBJ)$/XMLTextShapeImportHelper.obj \
+        $(OBJ)$/XMLTextShapeStyleContext.obj \
+        $(OBJ)$/XMLTextTableContext.obj \
+        $(OBJ)$/XMLChangeImportContext.obj \
+        $(OBJ)$/XMLStringBufferImportContext.obj
 
 # --- Tagets -------------------------------------------------------
 

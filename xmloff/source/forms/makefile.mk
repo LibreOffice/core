@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-20 13:41:57 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,18 @@ SLOFILES =	\
         $(SLO)$/formenums.obj \
         $(SLO)$/formsimp.obj \
         $(SLO)$/strings.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/controlpropertyhdl.obj \
+        $(OBJ)$/controlpropertymap.obj \
+        $(OBJ)$/attriblistmerge.obj \
+        $(OBJ)$/elementimport.obj \
+        $(OBJ)$/layerimport.obj \
+        $(OBJ)$/propertyimport.obj \
+        $(OBJ)$/formlayerimport.obj \
+        $(OBJ)$/formattributes.obj \
+        $(OBJ)$/formenums.obj \
+        $(OBJ)$/strings.obj
 
 # --- Tagets -------------------------------------------------------
 

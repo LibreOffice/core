@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,8 +1223,10 @@ void SdXMLStylesContext::EndElement()
         // AutoStyles for text import
         GetImport().GetTextImport()->SetAutoStyles( this );
 
+#ifndef SVX_LIGHT
         // AutoStyles for chart
         GetImport().GetChartImport()->SetAutoStylesContext( this );
+#endif
 
         // associate AutoStyles with styles in preparation to setting Styles on shapes
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)

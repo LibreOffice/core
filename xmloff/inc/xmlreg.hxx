@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: formsimp.cxx,v $
+ *  $RCSfile: xmlreg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,45 +59,24 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#ifndef _XMLOFF_XMLREG_HXX
+#define _XMLOFF_XMLREG_HXX
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
-#endif
+/**
+ *  Register subset of UNO services from XML Office library. This is necessary when
+ *  linking against the static "xol.lib".
+ *
+ *  @return returns sal_False if at least one component could not be registered.
+ */
+sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
 
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
-#endif
+#endif  //  _XMLOFF_XMLREG_HXX
 
-#ifndef _XMLOFF_ANIMIMP_HXX
-#include "formsimp.hxx"
-#endif
-
-using namespace ::rtl;
-
-TYPEINIT1( XMLFormsContext, SvXMLImportContext );
-
-XMLFormsContext::XMLFormsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName )
-: SvXMLImportContext(rImport, nPrfx, rLocalName)
-{
-}
-
-XMLFormsContext::~XMLFormsContext()
-{
-}
-
-SvXMLImportContext * XMLFormsContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
-{
-#ifndef SVX_LIGHT
-    return GetImport().GetFormImport()->createContext( nPrefix, rLocalName, xAttrList );
-#else
-    return NULL;
-#endif
-}

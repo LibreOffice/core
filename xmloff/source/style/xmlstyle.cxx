@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-11 09:52:41 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,27 +570,49 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                                                     rLocalName, xAttrList, sal_True );
                 break;
             case XML_TOK_TEXT_FOOTNOTE_CONFIG:
+#ifndef SVX_LIGHT
                 pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
                                                                    nPrefix,
                                                                    rLocalName,
                                                                    xAttrList,
                                                                    sal_False);
+#else
+                // create default context to skip content
+                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+#endif // #ifndef SVX_LIGHT
                 break;
+
             case XML_TOK_TEXT_ENDNOTE_CONFIG:
+#ifndef SVX_LIGHT
                 pStyle = new XMLFootnoteConfigurationImportContext(GetImport(),
                                                                    nPrefix,
                                                                    rLocalName,
                                                                    xAttrList,
                                                                    sal_True);
+#else
+                // create default context to skip content
+                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+#endif // #ifndef SVX_LIGHT
                 break;
+
             case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
+#ifndef SVX_LIGHT
                 pStyle = new XMLIndexBibliographyConfigurationContext(
                     GetImport(), nPrefix, rLocalName, xAttrList);
+#else
+                // create default context to skip content
+                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+#endif // #ifndef SVX_LIGHT
                 break;
 
             case XML_TOK_TEXT_LINENUMBERING_CONFIG:
+#ifndef SVX_LIGHT
                 pStyle = new XMLLineNumberingImportContext(
                     GetImport(), nPrefix, rLocalName, xAttrList);
+#else
+                // create default context to skip content
+                pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList );
+#endif // #ifndef SVX_LIGHT
                 break;
 
             //
@@ -652,9 +674,15 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
                                               xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_SCH_CHART_ID:
+#ifndef SVX_LIGHT
             pStyle = new XMLChartStyleContext( GetImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
+#else
+            // create default context to skip content
+            pStyle = new SvXMLStyleContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily );
+#endif
             break;
+
         case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         case XML_STYLE_FAMILY_SD_PRESENTATION_ID:
         case XML_STYLE_FAMILY_SD_POOL_ID:
@@ -795,6 +823,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = xShapeImpPropMapper;
         break;
+#ifndef SVX_LIGHT
     case XML_STYLE_FAMILY_SCH_CHART_ID:
         if( ! xChartImpPropMapper.is() )
         {
@@ -803,6 +832,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = xChartImpPropMapper;
         break;
+#endif
     case XML_STYLE_FAMILY_PAGE_MASTER:
         if( ! xPageImpPropMapper.is() )
         {
@@ -814,11 +844,13 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         }
         xMapper = xPageImpPropMapper;
         break;
+#ifndef SVX_LIGHT
 #if SUPD>615 || defined(PRIV_DEBUG)
     case XML_STYLE_FAMILY_CONTROL_ID:
         xMapper = const_cast<SvXMLImport&>(GetImport()).GetFormImport()->getStylePropertyMapper().getBodyPtr();
         break;
 #endif
+#endif // #ifndef SVX_LIGHT
     }
 
     return xMapper;

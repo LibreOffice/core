@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,14 +147,11 @@ XMLImageStyle::~XMLImageStyle()
 {
 }
 
+#ifndef SVX_LIGHT
+
 sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
 {
     return ImpExportXML( rStrName, rValue, rExport );
-}
-
-sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
-{
-    return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
 sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rValue, SvXMLExport& rExport )
@@ -197,6 +194,13 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
     }
 
     return bRet;
+}
+
+#endif // #ifndef SVX_LIGHT
+
+sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+{
+    return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
 sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,

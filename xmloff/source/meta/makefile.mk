@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 17:04:38 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,10 @@ SLOFILES =	\
         $(SLO)$/xmlmetai.obj \
         $(SLO)$/MetaExportComponent.obj \
         $(SLO)$/MetaImportComponent.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/xmlmetai.obj \
+        $(OBJ)$/MetaImportComponent.obj
 
 # --- Tagets -------------------------------------------------------
 

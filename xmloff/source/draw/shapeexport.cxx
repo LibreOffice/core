@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,31 +936,8 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 #endif
 #include "xmlnmspe.hxx"
 
-SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
-{
-    { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
-    { XML_TOP,          drawing::Alignment_TOP },
-    { XML_TOP_RIGHT,    drawing::Alignment_TOP_RIGHT },
-    { XML_LEFT,         drawing::Alignment_LEFT },
-    { XML_CENTER,       drawing::Alignment_CENTER },
-    { XML_RIGHT,        drawing::Alignment_RIGHT },
-    { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
-    { XML_BOTTOM,       drawing::Alignment_BOTTOM },
-    { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
-    { XML_TOKEN_INVALID, 0 }
-};
-
-SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
-{
-    { XML_AUTO,         drawing::EscapeDirection_SMART },
-    { XML_LEFT,         drawing::EscapeDirection_LEFT },
-    { XML_RIGHT,        drawing::EscapeDirection_RIGHT },
-    { XML_UP,           drawing::EscapeDirection_UP },
-    { XML_DOWN,         drawing::EscapeDirection_DOWN },
-    { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
-    { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
-    { XML_TOKEN_INVALID, 0 }
-};
+extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
+extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
 
 /** exports all user defined glue points */
 void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape >& xShape )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,69 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
+
+SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[] =
+{
+    { XML_NONE,         EK_none },
+    { XML_FADE,         EK_fade },
+    { XML_MOVE,         EK_move },
+    { XML_STRIPES,      EK_stripes },
+    { XML_OPEN,         EK_open },
+    { XML_CLOSE,        EK_close },
+    { XML_DISSOLVE,     EK_dissolve },
+    { XML_WAVYLINE,     EK_wavyline },
+    { XML_RANDOM,       EK_random },
+    { XML_LINES,        EK_lines },
+    { XML_LASER,        EK_laser },
+    { XML_APPEAR,       EK_appear },
+    { XML_HIDE,         EK_hide },
+    { XML_MOVE_SHORT,   EK_move_short },
+    { XML_CHECKERBOARD, EK_checkerboard },
+    { XML_ROTATE,       EK_rotate },
+    { XML_STRETCH,      EK_stretch },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[] =
+{
+    { XML_NONE,             ED_none },
+    { XML_FROM_LEFT,        ED_from_left },
+    { XML_FROM_TOP,         ED_from_top },
+    { XML_FROM_RIGHT,       ED_from_right },
+    { XML_FROM_BOTTOM,      ED_from_bottom },
+    { XML_FROM_CENTER,      ED_from_center },
+    { XML_FROM_UPPER_LEFT,  ED_from_upperleft },
+    { XML_FROM_UPPER_RIGHT, ED_from_upperright },
+    { XML_FROM_LOWER_LEFT,  ED_from_lowerleft },
+    { XML_FROM_LOWER_RIGHT, ED_from_lowerright },
+    { XML_TO_LEFT,          ED_to_left },
+    { XML_TO_TOP,           ED_to_top },
+    { XML_TO_RIGHT,         ED_to_right },
+    { XML_TO_BOTTOM,        ED_to_bottom },
+    { XML_TO_UPPER_LEFT,    ED_to_upperleft },
+    { XML_TO_UPPER_RIGHT,   ED_to_upperright },
+    { XML_TO_LOWER_RIGHT,   ED_to_lowerright },
+    { XML_TO_LOWER_LEFT,    ED_to_lowerleft },
+    { XML_PATH,             ED_path },
+    { XML_SPIRAL_INWARD_LEFT, ED_spiral_inward_left },
+    { XML_SPIRAL_INWARD_RIGHT,ED_spiral_inward_right },
+    { XML_SPIRAL_OUTWARD_LEFT, ED_spiral_outward_left },
+    { XML_SPIRAL_OUTWARD_RIGHT, ED_spiral_outward_right },
+    { XML_VERTICAL,         ED_vertical },
+    { XML_HORIZONTAL,       ED_horizontal },
+    { XML_TO_CENTER,        ED_to_center },
+    { XML_CLOCKWISE,        ED_clockwise },
+    { XML_COUNTER_CLOCKWISE,ED_cclockwise },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[] =
+{
+    { XML_SLOW,     AnimationSpeed_SLOW },
+    { XML_MEDIUM,   AnimationSpeed_MEDIUM },
+    { XML_FAST,     AnimationSpeed_FAST },
+    { XML_TOKEN_INVALID, 0 }
+};
 
 AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool bIn )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,10 @@ void SdXMLGenericPageContext::StartElement( const ::com::sun::star::uno::Referen
 {
     GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
 
+#ifndef SVX_LIGHT
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -145,8 +147,10 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_FORMS ) )
     {
+#ifndef SVX_LIGHT
         if( GetImport().IsFormsSupported() )
             pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
+#endif
     }
     else
     {
@@ -168,8 +172,10 @@ void SdXMLGenericPageContext::EndElement()
 {
     GetImport().GetShapeImport()->popGroupAndSort();
 
+#ifndef SVX_LIGHT
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->endPage();
+#endif
 }
 
 void SdXMLGenericPageContext::SetLayout()

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 16:14:25 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,11 @@ SLOFILES =	\
         $(SLO)$/XMLEventsImportContext.obj \
         $(SLO)$/XMLStarBasicContextFactory.obj \
         $(SLO)$/XMLStarBasicExportHandler.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/xmlscripti.obj \
+        $(OBJ)$/XMLEventImportHelper.obj \
+        $(OBJ)$/XMLEventsImportContext.obj
 
 
 # --- Tagets -------------------------------------------------------

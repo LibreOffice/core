@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,12 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
     &aSdXML_TimeStyle_7
 };
 
+
+///////////////////////////////////////////////////////////////////////
+// export
+
+#ifndef SVX_LIGHT
+
 static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle )
 {
     OUString sAttrValue;
@@ -466,6 +472,8 @@ OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat
         return OUString();
     }
 }
+
+#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-12 16:58:15 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,31 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-extern SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[];
-extern SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[];
+SvXMLEnumMapEntry aXML_GlueAlignment_EnumMap[] =
+{
+    { XML_TOP_LEFT,     drawing::Alignment_TOP_LEFT },
+    { XML_TOP,          drawing::Alignment_TOP },
+    { XML_TOP_RIGHT,    drawing::Alignment_TOP_RIGHT },
+    { XML_LEFT,         drawing::Alignment_LEFT },
+    { XML_CENTER,       drawing::Alignment_CENTER },
+    { XML_RIGHT,        drawing::Alignment_RIGHT },
+    { XML_BOTTOM_LEFT,  drawing::Alignment_BOTTOM_LEFT },
+    { XML_BOTTOM,       drawing::Alignment_BOTTOM },
+    { XML_BOTTOM_RIGHT, drawing::Alignment_BOTTOM_RIGHT },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXML_GlueEscapeDirection_EnumMap[] =
+{
+    { XML_AUTO,         drawing::EscapeDirection_SMART },
+    { XML_LEFT,         drawing::EscapeDirection_LEFT },
+    { XML_RIGHT,        drawing::EscapeDirection_RIGHT },
+    { XML_UP,           drawing::EscapeDirection_UP },
+    { XML_DOWN,         drawing::EscapeDirection_DOWN },
+    { XML_HORIZONTAL,   drawing::EscapeDirection_HORIZONTAL },
+    { XML_VERTICAL,     drawing::EscapeDirection_VERTICAL },
+    { XML_TOKEN_INVALID, 0 }
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1462,6 +1485,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
         {
+#ifndef SVX_LIGHT
             if( GetImport().IsFormsSupported() )
             {
                 uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
@@ -1473,6 +1497,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                 }
             }
+#endif // #ifndef SVX_LIGHT
         }
 
         SetStyle();
@@ -2118,12 +2143,14 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 aAny <<= aCLSID;
                 xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
 
+#ifndef SVX_LIGHT
                 aAny = xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) );
                 uno::Reference< frame::XModel > xChartModel;
                 if( aAny >>= xChartModel )
                 {
                     mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList );
                 }
+#endif
             }
         }
 

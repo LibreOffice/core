@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:20 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,15 +146,27 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                            rProp.mnIndex-1,
                                            rProperties );
         break;
+
     case CTF_PM_TEXTCOLUMNS:
+#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+#endif // #ifndef SVX_LIGHT
         break;
+
     case CTF_PM_FTN_LINE_WEIGTH:
+#ifndef SVX_LIGHT
         pContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             xMapper->getPropertySetMapper(), rProp.mnIndex);
+#else
+        // create default context to skip content
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName);
+#endif // #ifndef SVX_LIGHT
         break;
     }
 

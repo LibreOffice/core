@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:24 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,6 +1057,7 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 {
 }
 
+#ifndef SVX_LIGHT
 // ----------------------------------------
 
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport ) :
@@ -1509,3 +1510,5 @@ void XMLPageExportPropertyMapper::handleElementItem(
             break;
     }
 }
+
+#endif // #ifndef SVX_LIGHT

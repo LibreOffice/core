@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mib $ $Date: 2001-06-20 05:03:53 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,6 +119,21 @@ SHL1STDLIBS+=-licg617mxp
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
+
+# --- Static-Lib ---------------------------------------------------------
+
+.IF "$(SVXLIGHT)" != "" 
+LIB2TARGET= $(LB)$/xol.lib
+LIB2ARCHIV= $(LB)$/libxol.a
+LIB2FILES=  \
+            $(LB)$/sxl_core.lib\
+            $(LB)$/sxl_draw.lib\
+            $(LB)$/sxl_forms.lib\
+            $(LB)$/sxl_meta.lib\
+            $(LB)$/sxl_script.lib\
+            $(LB)$/sxl_style.lib\
+            $(LB)$/sxl_text.lib
+.ENDIF
 
 # --- Def-File ---------------------------------------------------------
 

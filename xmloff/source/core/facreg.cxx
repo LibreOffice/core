@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:01:58 $
+ *  last change: $Author: thb $ $Date: 2001-07-24 17:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <string.h>
 
+#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
@@ -69,8 +73,10 @@
 #include <osl/diagnose.h>
 #endif
 
+
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
+#include "xmlreg.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -100,6 +106,8 @@ extern uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Settings_getSupport
 extern OUString SAL_CALL SdImpressXMLImport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// for every module, export functionality is disabled for SVX_LIGHT (which means: SOPlayer)
+#ifndef SVX_LIGHT
 // impress export
 extern uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdImpressXMLExport_getImplementationName() throw();
@@ -124,6 +132,7 @@ extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Meta_create
 extern uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Settings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdImpressXMLExport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+#endif // #ifndef SVX_LIGHT
 
 // draw import
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_getSupportedServiceNames() throw();
@@ -150,6 +159,7 @@ extern uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Settings_getSupportedS
 extern OUString SAL_CALL SdDrawXMLImport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+#ifndef SVX_LIGHT
 // draw export
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw();
@@ -174,7 +184,10 @@ extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Meta_createIns
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Settings_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLExport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+#endif // #ifndef SVX_LIGHT
 
+// complete chart is disabled for SVX_LIGHT
+#ifndef SVX_LIGHT
 // chart import
 // ------------
 extern uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw();
@@ -216,28 +229,36 @@ extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createIns
 extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+#endif // #ifndef SVX_LIGHT
 
 
+#ifndef SVX_LIGHT
 // meta export
 extern uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+#endif // #ifndef SVX_LIGHT
 
 // meta import
 extern uno::Sequence< OUString > SAL_CALL XMLMetaImportComponent_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+#ifndef SVX_LIGHT
 // writer autotext event export
 extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+#endif // #ifndef SVX_LIGHT
 
 // writer autotext event import
 extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+
+// component register functionality only for shared lib
+#ifndef SVX_LIGHT
 
 //
 #ifdef __cplusplus
@@ -585,4 +606,96 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     return pRet;
 }
 
+#ifdef __cplusplus
 }
+#endif
+
+#else
+
+// register necessary services manually
+sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory )
+{
+    // ask the MultiServiceFactory for the XSet interface
+    uno::Reference< ::com::sun::star::container::XSet > xSet( xServiceFactory, uno::UNO_QUERY );
+
+    if ( !xSet.is() )
+        return sal_False;
+
+    try
+    {
+        uno::Any    aAny;
+
+        // SdImpressXMLImport
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdImpressXMLImport_getImplementationName(),
+                                              SdImpressXMLImport_createInstance,
+                                              SdImpressXMLImport_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdImpressXMLImport_Style_getImplementationName(),
+                                              SdImpressXMLImport_Style_createInstance,
+                                              SdImpressXMLImport_Style_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdImpressXMLImport_Content_getImplementationName(),
+                                              SdImpressXMLImport_Content_createInstance,
+                                              SdImpressXMLImport_Content_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdImpressXMLImport_Meta_getImplementationName(),
+                                              SdImpressXMLImport_Meta_createInstance,
+                                              SdImpressXMLImport_Meta_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdImpressXMLImport_Settings_getImplementationName(),
+                                              SdImpressXMLImport_Settings_createInstance,
+                                              SdImpressXMLImport_Settings_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        // SdDrawXMLImport
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdDrawXMLImport_getImplementationName(),
+                                              SdDrawXMLImport_createInstance,
+                                              SdDrawXMLImport_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdDrawXMLImport_Style_getImplementationName(),
+                                              SdDrawXMLImport_Style_createInstance,
+                                              SdDrawXMLImport_Style_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdDrawXMLImport_Content_getImplementationName(),
+                                              SdDrawXMLImport_Content_createInstance,
+                                              SdDrawXMLImport_Content_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdDrawXMLImport_Meta_getImplementationName(),
+                                              SdDrawXMLImport_Meta_createInstance,
+                                              SdDrawXMLImport_Meta_getSupportedServiceNames() );
+        xSet->insert( aAny );
+
+        aAny <<= ::cppu::createSingleFactory( xServiceFactory,
+                                              SdDrawXMLImport_Settings_getImplementationName(),
+                                              SdDrawXMLImport_Settings_createInstance,
+                                              SdDrawXMLImport_Settings_getSupportedServiceNames() );
+        xSet->insert( aAny );
+    }
+    catch( uno::Exception& )
+    {
+#ifdef DBG_UTIL
+        DBG_ERROR( "Cannot register XMLOFF services" );
+#endif
+        return sal_False;
+    }
+
+    return sal_True;
+}
+
+#endif // #ifndef SVX_LIGHT

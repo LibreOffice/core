@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mib $ $Date: 2001-06-19 14:49:24 $
+#   last change: $Author: thb $ $Date: 2001-07-24 17:06:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,26 @@ SLOFILES =	\
         $(SLO)$/XMLEmbeddedObjectImportContext.obj \
         $(SLO)$/XMLBase64Export.obj \
         $(SLO)$/XMLBase64ImportContext.obj
+
+SVXLIGHTOBJFILES =	\
+        $(OBJ)$/facreg.obj		\
+        $(OBJ)$/xmlcnitm.obj	\
+        $(OBJ)$/attrlist.obj	\
+        $(OBJ)$/i18nmap.obj		\
+        $(OBJ)$/nmspmap.obj		\
+        $(OBJ)$/unoatrcn.obj	\
+        $(OBJ)$/xmlehelp.obj	\
+        $(OBJ)$/xmlictxt.obj	\
+        $(OBJ)$/xmlimp.obj		\
+        $(OBJ)$/xmlkywd.obj		\
+        $(OBJ)$/xmltkmap.obj	\
+        $(OBJ)$/xmltoken.obj	\
+        $(OBJ)$/xmluconv.obj	\
+        $(OBJ)$/ProgressBarHelper.obj	\
+        $(OBJ)$/PropertySetMerger.obj	\
+        $(OBJ)$/DocumentSettingsContext.obj \
+        $(OBJ)$/XMLEmbeddedObjectImportContext.obj \
+        $(OBJ)$/XMLBase64ImportContext.obj
 
 CPPUMAKERFLAGS=
 UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
