@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:23:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ public:
     void    Select( const String& rDBName, const String& rTableName,
                     const String& rColumnName );
 
-    void    Show();
     void    ShowColumns(BOOL bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
 
