@@ -1,0 +1,614 @@
+/*************************************************************************
+ *
+ *  $RCSfile: helppopupwindow.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: tra $ $Date: 2001-08-03 13:51:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+//------------------------------------------------------------------------
+// includes
+//------------------------------------------------------------------------
+
+#ifndef _HELPPOPUPWINDOW_HXX_
+#include "helppopupwindow.hxx"
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+using rtl::OUString;
+using osl::Mutex;
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+namespace /* private */
+{
+
+    const char* CURRENT_INSTANCE = "CurrInst";
+
+};
+
+//------------------------------------------------------------------------
+// defines
+//------------------------------------------------------------------------
+
+#define HELPPOPUPWND_CLASS_NAME L"hlppopupwnd###"
+
+const sal_Int32 DEFAULT_MINWIDTH = 250;
+
+const sal_Int32 SHADOW_WIDTH  = 6;
+const sal_Int32 SHADOW_HEIGHT = 6;
+const sal_Int32 SHADOW_OFFSET = 6;
+const sal_Int32 YOFFSET   = 20;
+
+const DWORD OUTER_FRAME_COLOR = 0;        // black
+
+// it's the standard windows color of an inactive window border
+const DWORD INNER_FRAME_COLOR = 0xC8D0D4;
+
+//---------------------------------------------------
+// static member initialization
+//---------------------------------------------------
+
+osl::Mutex CHelpPopupWindow::s_Mutex;
+ATOM CHelpPopupWindow::s_ClassAtom = 0;
+sal_Int32 CHelpPopupWindow::s_RegisterWndClassCount = 0;
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+CHelpPopupWindow::CHelpPopupWindow(
+    HINSTANCE hInstance,
+    HWND hwndParent,
+    sal_Int32 minWidth,
+    sal_Int32 hMargins,
+    sal_Int32 vMargins ) :
+    m_minWidth( minWidth ? minWidth : DEFAULT_MINWIDTH ),
+    m_hMargins( hMargins ),
+    m_vMargins( vMargins ),
+    m_hwnd( NULL ),
+    m_hwndParent( hwndParent ),
+    m_hInstance( hInstance ),
+    m_hBitmapShadow( NULL ),
+    m_hBrushShadow( NULL )
+{
+    m_bWndClassRegistered = RegisterWindowClass( ) ? sal_True : sal_False;
+
+    // create a pattern brush for the window shadow
+    int aPattern[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
+
+    m_hBitmapShadow = CreateBitmap( 8, 8, 1, 1, aPattern );
+    m_hBrushShadow  = CreatePatternBrush( m_hBitmapShadow );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+CHelpPopupWindow::~CHelpPopupWindow( )
+{
+    // remember: we don't have to destroy the
+    // preview window because it will be destroyed
+    // by it's parent window (the FileOpen dialog)
+    // but we have to unregister the window class
+    if ( m_bWndClassRegistered )
+        UnregisterWindowClass( );
+
+    DeleteObject( m_hBitmapShadow );
+    DeleteObject( m_hBrushShadow );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::setText( const rtl::OUString& aHelpText )
+{
+    m_HelpText = aHelpText;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
+{
+    OSL_ENSURE( NULL == m_hwnd, "method should not be called twice in sequence" );
+
+    // we create a window with length and heigth of 0
+    // first in order to get a device context of this
+    // window, then we calculate the upper left corner
+    // and the dimensions and resize the window
+
+    m_hwnd = CreateWindowExW(
+        NULL,
+        HELPPOPUPWND_CLASS_NAME,
+        NULL,
+        WS_POPUP,
+        0,
+        0,
+        0,
+        0,
+        m_hwndParent,
+        NULL,
+        m_hInstance,
+        (LPVOID)this );
+
+    OSL_ENSURE( m_hwnd, "creating help popup window failed" );
+
+    sal_Int32 cx_new;
+    sal_Int32 cy_new;
+
+    adjustWindowSize( &cx_new, &cy_new );
+    adjustWindowPos( x, y, cx_new, cy_new );
+
+    UpdateWindow( m_hwnd );
+    ShowWindow( m_hwnd, SW_SHOW );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+HWND SAL_CALL CHelpPopupWindow::setParent( HWND hwndNewParent )
+{
+    HWND oldParent = m_hwndParent;
+
+    m_hwndParent = hwndNewParent;
+
+    return oldParent;
+}
+
+//---------------------------------------------------
+// calculates the necessary dimensions of the popup
+// window including the margins etc.
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
+{
+    OSL_ASSERT( m_hwnd && lprect );
+
+    SetRectEmpty( lprect );
+    SetRect( lprect, 0, 0, ( m_minWidth - 2 * m_hMargins ), 0 );
+
+    HDC hdc = GetDC( m_hwnd );
+
+    int nRet = DrawTextW(
+      hdc,
+      m_HelpText.getStr( ),
+      m_HelpText.getLength( ),
+      lprect,
+      DT_INTERNAL | DT_WORDBREAK | DT_CALCRECT | DT_VCENTER | DT_LEFT );
+
+    lprect->bottom += m_vMargins + SHADOW_HEIGHT;
+
+    if ( lprect->right < m_minWidth )
+        lprect->right = m_minWidth;
+
+    lprect->right += SHADOW_WIDTH;
+
+    ReleaseDC( m_hwnd, hdc );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::adjustWindowSize( sal_Int32* cx_new, sal_Int32* cy_new )
+{
+    OSL_ASSERT( cx_new && cy_new );
+
+    RECT rect;
+    calcWindowRect( &rect );
+
+    // adjust the window size
+    SetWindowPos(
+        m_hwnd,
+        NULL,
+        0,
+        0,
+        rect.right,
+        rect.bottom,
+        SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER );
+
+    *cx_new = rect.right;
+    *cy_new = rect.bottom;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::adjustWindowPos(
+    sal_Int32 x, sal_Int32 y, sal_Int32 cx, sal_Int32 cy )
+{
+    int   popX;
+    int   popY;
+    int   popWidth;
+    int   popHeight;
+
+    OSL_ASSERT( m_hwnd );
+
+    HDC hdc = GetDC( m_hwnd );
+
+    // assuming these are screen coordinates
+    popWidth  = cx;
+    popHeight = cy;
+    popX      = x - ( popWidth / 2 );
+    popY      = y - YOFFSET;
+
+    int xScreen = GetDeviceCaps( hdc, HORZRES );
+    int yScreen = GetDeviceCaps( hdc, VERTRES );
+
+    if (popX < 0)
+        popX = 0;
+
+    if (popY < 0)
+        popY = 0;
+
+    if ((popX + popWidth) > xScreen)
+        popX = xScreen - popWidth;
+
+    if ((popY + popHeight) > yScreen)
+        popY = yScreen - popHeight;
+
+    SetWindowPos(
+        m_hwnd,
+        NULL,
+        popX,
+        popY,
+        0,
+        0,
+        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );
+
+    ReleaseDC( m_hwnd, hdc );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
+{
+    RECT        rc;
+    RECT        rect;
+    HGDIOBJ     hpen, hpenOld;
+    HGDIOBJ     hbrOld;
+    COLORREF    oldBkColor;
+    COLORREF    oldTextColor;
+    HGDIOBJ     oldFont;
+    HGDIOBJ     oldBrush;
+    HGDIOBJ     hBrush;
+
+    GetClientRect( hWnd, &rc );
+
+    // draw the black border
+
+    hBrush   = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
+    oldBrush = SelectObject( hdc, hBrush );
+
+    hpen    = CreatePen( PS_SOLID, 0, OUTER_FRAME_COLOR );
+    hpenOld = SelectObject( hdc, hpen );
+
+    Rectangle(  hdc,
+                rc.left + 1,
+                rc.top + 1,
+                rc.right - SHADOW_WIDTH,
+                rc.bottom - SHADOW_HEIGHT);
+
+    SelectObject( hdc, oldBrush );
+    SelectObject( hdc, hpenOld );
+
+    DeleteObject( hBrush );
+    DeleteObject( hpen );
+
+    // draw a light gray border
+
+    hBrush   = CreateSolidBrush( GetSysColor( COLOR_INFOBK ) );
+    oldBrush = SelectObject( hdc, hBrush );
+
+    hpen    = CreatePen( PS_SOLID, 0, INNER_FRAME_COLOR );
+    hpenOld = SelectObject( hdc, hpen );
+
+    Rectangle(  hdc,
+                rc.left + 2,
+                rc.top + 2,
+                rc.right - SHADOW_WIDTH - 1,
+                rc.bottom - SHADOW_HEIGHT - 1 );
+
+    SelectObject( hdc, oldBrush );
+    SelectObject( hdc, hpenOld );
+
+    DeleteObject( hBrush );
+    DeleteObject( hpen );
+
+    // Write some text to this window
+
+    rect.left   = rc.left + 1 + m_hMargins;
+    rect.top    = rc.top  + 1 + m_vMargins / 2;
+    rect.right  = rc.right  - SHADOW_WIDTH  - m_hMargins;
+    rect.bottom = rc.bottom - SHADOW_HEIGHT - m_vMargins / 2;
+
+    oldBkColor   = SetBkColor( hdc, GetSysColor( COLOR_INFOBK ) );
+    oldTextColor = SetTextColor( hdc, COLOR_INFOTEXT );
+
+    oldFont = SelectObject( hdc, GetStockObject( DEFAULT_GUI_FONT ) );
+
+    DrawTextW(
+        hdc,
+        (LPWSTR)m_HelpText.getStr( ),
+        m_HelpText.getLength( ),
+        &rect,
+        DT_INTERNAL | DT_WORDBREAK | DT_VCENTER | DT_LEFT );
+
+    SelectObject( hdc, oldFont );
+    SetTextColor( hdc, oldTextColor );
+    SetBkColor( hdc, oldBkColor );
+
+    // Get our brush for the shadow
+
+    UnrealizeObject( m_hBrushShadow );
+    hbrOld = SelectObject( hdc, m_hBrushShadow );
+
+    // bottom shadow
+
+    PatBlt(hdc,
+           rc.left + SHADOW_OFFSET,
+           rc.bottom - SHADOW_HEIGHT,
+           rc.right - SHADOW_OFFSET,
+           SHADOW_HEIGHT,
+           0xA000C9);
+
+    // right-side shadow
+
+    PatBlt(hdc,
+           rc.right - SHADOW_WIDTH,
+           rc.top + SHADOW_OFFSET,
+           SHADOW_WIDTH,
+           rc.bottom,
+           0xA000C9);
+
+    SelectObject(hdc, hbrOld);
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::onNcDestroy( HWND hwnd )
+{
+    m_hwnd = NULL;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
+{
+    m_hwnd = hwnd;
+
+    HDC hdc = GetDC( m_hwnd );
+
+    TEXTMETRIC tm;
+
+    GetTextMetrics( hdc, &tm );
+
+    sal_Int32 cxChar = tm.tmAveCharWidth;
+    sal_Int32 cyChar = tm.tmHeight;
+
+    if ( 0 == m_hMargins )
+        m_hMargins = cxChar;
+
+    if ( 0 == m_vMargins )
+        m_vMargins = cyChar;
+
+    ReleaseDC( m_hwnd, hdc );
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+LRESULT CALLBACK CHelpPopupWindow::WndProc(
+    HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+    LRESULT lResult = 0;
+
+    switch ( uMsg )
+    {
+        case WM_CREATE:
+            {
+                LPCREATESTRUCT lpcs =
+                    reinterpret_cast< LPCREATESTRUCT >( lParam );
+
+                OSL_ASSERT( lpcs->lpCreateParams );
+
+                CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
+                    lpcs->lpCreateParams );
+
+                // connect the instance handle to the window
+                SetPropA( hWnd, CURRENT_INSTANCE, pImpl );
+
+                pImpl->onCreate( hWnd );
+
+                // capture mouse and keybord events
+                SetCapture( hWnd );
+             }
+        break;
+
+        case WM_PAINT:
+            {
+                CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
+                GetPropA( hWnd, CURRENT_INSTANCE ) );
+
+                OSL_ASSERT( pImpl );
+
+                PAINTSTRUCT ps;
+
+                BeginPaint(hWnd, &ps);
+                pImpl->onPaint( hWnd, ps.hdc );
+                EndPaint(hWnd, &ps);
+            }
+         break;
+
+         case WM_NCDESTROY:
+            {
+                // RemoveProp returns the saved value on success
+                CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
+                    RemovePropA( hWnd, CURRENT_INSTANCE ) );
+
+                OSL_ASSERT( pImpl );
+
+                pImpl->onNcDestroy( hWnd );
+            }
+         break;
+
+         case WM_KEYDOWN:
+         case WM_SYSKEYDOWN:
+         case WM_LBUTTONDOWN:
+         case WM_MBUTTONDOWN:
+         case WM_RBUTTONDOWN:
+             ReleaseCapture();
+             DestroyWindow(hWnd);
+         break;
+
+         default:
+             return DefWindowProc(hWnd, uMsg, wParam, lParam);
+       }
+
+    return lResult;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
+{
+    osl::MutexGuard aGuard( s_Mutex );
+
+    if ( 0 == s_ClassAtom )
+    {
+        // register the window class
+        WNDCLASSEXW wndClsEx;
+
+        ZeroMemory( &wndClsEx, sizeof( WNDCLASSEXW ) );
+
+        wndClsEx.cbSize        = sizeof( WNDCLASSEXW );
+        wndClsEx.lpfnWndProc   = CHelpPopupWindow::WndProc;
+        wndClsEx.hInstance     = m_hInstance;
+        wndClsEx.hCursor       = LoadCursor(NULL, IDC_ARROW);
+        wndClsEx.hbrBackground = (HBRUSH)GetStockObject( NULL_BRUSH );
+        wndClsEx.lpszClassName = HELPPOPUPWND_CLASS_NAME;
+
+        // register the preview window class
+        // !!! Win95 -   the window class will be unregistered automaticly
+        //               if the dll is unloaded
+        //     Win2000 - the window class must be unregistered manually
+        //               if the dll is unloaded
+        s_ClassAtom = RegisterClassExW( &wndClsEx );
+        OSL_ASSERT( s_ClassAtom );
+    }
+
+    // increment the register class counter
+    // so that we keep track of the number
+    // of class registrations
+    if ( 0 != s_ClassAtom )
+        s_RegisterWndClassCount++;
+
+    return s_ClassAtom;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
+{
+    osl::MutexGuard aGuard( s_Mutex );
+
+    OSL_ASSERT( ( (0 != s_ClassAtom) && (s_RegisterWndClassCount > 0)) ||
+                ( (0 == s_ClassAtom) && (0 == s_RegisterWndClassCount) ) );
+
+    // update the register class counter
+    // and unregister the window class if
+    // counter drops to zero
+    if ( 0 != s_ClassAtom )
+    {
+        s_RegisterWndClassCount--;
+        OSL_ASSERT( s_RegisterWndClassCount >= 0 );
+    }
+
+    if ( 0 == s_RegisterWndClassCount )
+    {
+        bool bRet = UnregisterClass(
+            (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
+
+        OSL_ENSURE( bRet, "unregister window class failed" );
+
+        s_ClassAtom = 0;
+    }
+}
