@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 12:21:02 $
+ *  last change: $Author: os $ $Date: 2001-03-01 12:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,7 +1445,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else if( (nSel & SwWrtShell::SEL_GRF) &&
                                 rSh.IsGrfSwapOut(TRUE))
                     {
-                        bDisable = TRUE;
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(FALSE);  // start the loading
                     }
@@ -2536,6 +2535,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/02/27 12:21:02  os
+    #82741# Enable image map editor also if graphic is swapped out
+
     Revision 1.5  2001/02/02 17:43:37  jp
     use new clipboard
 
