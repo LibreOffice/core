@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:21:56 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 13:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,7 +1036,17 @@ void OPreparedStatement::prepareStatement()
 void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 {
     if( !_parameterIndex || _parameterIndex > numParams)
-        ::dbtools::throwInvalidIndexException(*this);
+    {
+        ::rtl::OUString s_sParameterError = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("You tried to set a parameter at position "));
+        s_sParameterError += ::rtl::OUString::valueOf(_parameterIndex);
+        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" but there is/are only "));
+        s_sParameterError += ::rtl::OUString::valueOf((sal_Int32)numParams);
+        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" parameter(s) allowed."));
+        s_sParameterError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" One reason may be that the property \"ParameterNameSubstitution\" is not set to TRUE in the data source."));
+        static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("07009");
+        SQLException aNext(s_sParameterError,*this,sStatus,0,Any());
+        ::dbtools::throwInvalidIndexException(*this,makeAny(aNext));
+    }
 }
 // -----------------------------------------------------------------------------
 
