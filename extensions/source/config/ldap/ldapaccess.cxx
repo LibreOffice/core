@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:37:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,14 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 }
 //------------------------------------------------------------------------------
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
-   throw (ldap::LdapGenericException)
+   throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
     mLdapDefinition = aDefinition;
     connectSimple();
 }
 //------------------------------------------------------------------------------
 void  LdapConnection::connectSimple()
-   throw (ldap::LdapGenericException)
+   throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
     if (!isValid())
     {
@@ -138,15 +138,15 @@ void  LdapConnection::connectSimple()
 
         // Do the bind
         sal_Int32 retCode = ldap_simple_bind_s(mConnection,
-                                                mLdapDefinition.mAnonUser ,
-                                                mLdapDefinition.mAnonCredentials) ;
+                                               mLdapDefinition.mAnonUser ,
+                                               mLdapDefinition.mAnonCredentials) ;
 
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
 }
 //------------------------------------------------------------------------------
 void LdapConnection::initConnection()
-    throw (backend::BackendSetupException)
+    throw (ldap::LdapConnectionException)
 {
     mConnection = ldap_init(mLdapDefinition.mServer,
                             mLdapDefinition.mPort) ;
@@ -158,20 +158,18 @@ void LdapConnection::initConnection()
         message.appendAscii(mLdapDefinition.mServer) ;
         message.appendAscii(":") ;
         message.append(mLdapDefinition.mPort) ;
-        throw backend::BackendSetupException(message.makeStringAndClear(),
-            NULL, uno::Any()) ;
+        throw ldap::LdapConnectionException(message.makeStringAndClear(),
+                                            NULL) ;
     }
 }
 //------------------------------------------------------------------------------
  void LdapConnection::getUserProfile(const rtl::OUString& aUser,
                                      const LdapUserProfileMap& aUserProfileMap,
                                      LdapUserProfile& aUserProfile)
-    throw (ldap::LdapGenericException)
+    throw (lang::IllegalArgumentException,
+            ldap::LdapConnectionException, ldap::LdapGenericException)
  {
-    if (!isValid())
-    {
-        connectSimple();
-    }
+    if (!isValid()) { connectSimple(); }
     rtl::OString aUserDn =findUserDn(
         rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
     LDAPMessage *result = NULL ;
@@ -194,19 +192,17 @@ void LdapConnection::initConnection()
  }
 //------------------------------------------------------------------------------
  rtl::OString LdapConnection::findUserDn(const rtl::OString& aUser)
-    throw (ldap::LdapGenericException)
+    throw (lang::IllegalArgumentException,
+            ldap::LdapConnectionException, ldap::LdapGenericException)
 {
 
-    if (!isValid())
-    {
-        connectSimple();
-    }
+    if (!isValid()) { connectSimple(); }
     if (aUser.equals(""))
     {
-        throw backend::BackendSetupException(
+        throw lang::IllegalArgumentException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
             ("LdapConnection::findUserDn -User id is empty")),
-                NULL, uno::Any()) ;
+                NULL, 0) ;
     }
 
 
@@ -217,7 +213,7 @@ void LdapConnection::initConnection()
     filter +=  mLdapDefinition.mUserUniqueAttr+ "="+ aUser + "))" ;
     LDAPMessage *result = NULL ;
     sal_Char * attributes [2];
-    attributes[0]= LDAP_NO_ATTRS;
+    attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
     sal_Int32 retCode = ldap_search_s(mConnection,
                                       mLdapDefinition.mBaseDN,
@@ -246,12 +242,9 @@ void LdapConnection::initConnection()
 rtl::OString LdapConnection::getSingleAttribute(
     const rtl::OString& aDn,
     const rtl::OString& aAttribute)
-    throw (ldap::LdapGenericException)
+    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
-    if (!isValid())
-    {
-        connectSimple();
-    }
+    if (!isValid()) { connectSimple(); }
     const sal_Char *attributes [2] ;
     rtl::OString value ;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:37:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef EXTENSIONS_CONFIG__LDAP_LDAPACCESS_HXX_
+#ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
@@ -74,15 +74,20 @@
 #ifndef _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
 #include <com/sun/star/ldap/LdapGenericException.hpp>
 #endif // _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDSETUPEXCEPTION_HPP_
-#include <com/sun/star/configuration/backend/BackendSetupException.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDSETUPEXCEPTION_HPP_
+
+#ifndef _COM_SUN_STAR_LDAP_LDAP_CONNECTIONEXCEPTION_HPP_
+#include <com/sun/star/ldap/LdapConnectionException.hpp>
+#endif // _COM_SUN_STAR_LDAP_LDAP_CONNECTIONEXCEPTION_HPP_
+
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif // _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 
 namespace extensions { namespace config { namespace ldap {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
-namespace backend = css::configuration::backend ;
+namespace lang = css::lang ;
 namespace ldap = css::ldap ;
 //------------------------------------------------------------------------------
 /** Struct containing the information on LDAP connection */
@@ -118,8 +123,8 @@ public:
     ~LdapConnection(void) ;
     /** Make connection to LDAP server */
     void  connectSimple(const LdapDefinition& aDefinition)
-        throw (ldap::LdapGenericException);
-
+        throw (ldap::LdapConnectionException,
+                ldap::LdapGenericException);
     /**
         Gets LdapUserProfile from LDAP repository for specified user
         @param aUser    name of logged on user
@@ -132,7 +137,9 @@ public:
     void getUserProfile(const rtl::OUString& aUser,
                         const LdapUserProfileMap& aUserProfileMap,
                         LdapUserProfile& aUserProfile)
-         throw (ldap::LdapGenericException);
+         throw (lang::IllegalArgumentException,
+                 ldap::LdapConnectionException,
+                 ldap::LdapGenericException);
     /**
           Retrieves a single attribute from a single entry.
           @param aDn            entry DN
@@ -143,20 +150,20 @@ public:
      */
      rtl::OString getSingleAttribute(const rtl::OString& aDn,
                                      const rtl::OString& aAttribute)
-        throw (ldap::LdapGenericException);
-
-
-
+        throw (ldap::LdapConnectionException,
+                ldap::LdapGenericException);
 
     /** finds DN of user
         @return  DN of User
     */
     rtl::OString findUserDn(const rtl::OString& aUser)
-        throw (ldap::LdapGenericException);
+        throw (lang::IllegalArgumentException,
+                ldap::LdapConnectionException,
+                ldap::LdapGenericException);
 private:
 
     void initConnection()
-         throw (backend::BackendSetupException);
+         throw (ldap::LdapConnectionException);
     /**
       Indicates whether the connection is in a valid state.
       @return   sal_True if connection is valid, sal_False otherwise
@@ -164,7 +171,8 @@ private:
     bool isValid(void) const { return mConnection != NULL ; }
 
     void  connectSimple()
-        throw (ldap::LdapGenericException);
+        throw (ldap::LdapConnectionException,
+                ldap::LdapGenericException);
 
     /** LDAP connection object */
     LDAP* mConnection ;
