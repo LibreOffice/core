@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-27 12:21:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ SvxLineEndWindow::SvxLineEndWindow( USHORT nId, const String& rWndTitle, SfxBind
     SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ), rBindings ),
 
     pLineEndList    ( NULL ),
-    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK ) ),
+    aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
