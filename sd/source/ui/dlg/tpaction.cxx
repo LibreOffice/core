@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:54:01 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 07:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _BASOBJ_HXX //autogen
-#include <basctl/basobj.hxx>
-#endif
 #ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
 #endif
@@ -141,6 +138,10 @@
 
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
+#endif
+
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
 #endif
 
 #include "sdview.hxx"
@@ -870,7 +871,7 @@ void SdTPAction::OpenFileDialog()
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
 
-            String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE);
+            String aMacroURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
 
             // aMacroURL has the following format:
             // 'macro:///libname.modulename.macroname(args)'               => Macro via App-BasMgr
