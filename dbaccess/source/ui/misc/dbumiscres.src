@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.64 $
+*  $Revision: 1.65 $
 *
-*  last change: $Author: rt $ $Date: 2004-09-09 09:47:05 $
+*  last change: $Author: hr $ $Date: 2004-11-09 12:36:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -133,6 +133,11 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:evolution";
     };
+    String STR_EMBEDDED
+    {
+        Text = "sdbc:embedded:";
+    };
+
 };
 Resource RSC_DATASOURCE_TYPE_UINAMES
 {
@@ -216,6 +221,11 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     {
         Text [ de ] = "Evolution Adressbuch";
         Text[ en-US ] = "Evolution Address Book";
+    };
+    String STR_EMBEDDED
+    {
+        Text [ de ] = "Interne Datenbank";
+        Text[ en-US ] = "Embedded database";
     };
 };
 
