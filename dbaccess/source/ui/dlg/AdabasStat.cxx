@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:17 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 09:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
     Reference<XResultSet> xRes;
     try
     {
-        ::rtl::OUString sTable = _rUser.toUpperCase();
+        ::rtl::OUString sTable = _rUser.toAsciiUpperCase();
         ::rtl::OUString aStmt(::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM "));
         Reference<XPropertySet> xProp(m_xConnection,UNO_QUERY);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-03 09:24:23 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 09:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ namespace dbaui
                 _rxLivingForm->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
             ::rtl::OUString sSort;
             _rxLivingForm->getPropertyValue(PROPERTY_ORDER) >>= sSort;
-            bHasFilterOrSort = (sFilter.len()>0) || (sSort.len()>0);
+            bHasFilterOrSort = (sFilter.getLength()>0) || (sSort.getLength()>0);
 
             _rxLivingForm->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= sCompleteStatement;
             if (_rxComposer.is())

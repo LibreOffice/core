@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 10:11:57 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 09:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                 if (!m_xParser.is())
                     break;
                 // any filter or sort order set ?
-                aReturn.bEnabled = m_xParser->getFilter().len() || m_xParser->getOrder().len();
+                aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength();
                 break;
 
             case ID_BROWSER_REFRESH:
@@ -1177,7 +1177,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                 aReturn.bEnabled = sal_False;
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
-                if (aFilter.len())
+                if (aFilter.getLength())
                 {
                     aReturn.aState = xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER);
                     aReturn.bEnabled = sal_True;
@@ -2114,7 +2114,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
 
     Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);
     return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ||
-            (m_xParser.is() && (m_xParser->getFilter().len() || m_xParser->getOrder().len()));
+            (m_xParser.is() && (m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength()));
 }
 
 // -------------------------------------------------------------------------

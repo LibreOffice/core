@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 09:53:25 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 09:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,7 +1820,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
         Reference< ::com::sun::star::container::XNameAccess > xTables;
         // xTables will be filled in getCommand
         m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
-        if (!m_aActiveCommand.len())
+        if (!m_aActiveCommand.getLength())
             throwFunctionSequenceException(*this);
 
         {
@@ -2183,7 +2183,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     if (!m_xActiveConnection.is())
     {
         Reference< XConnection > xNewConn;
-        if (m_aDataSourceName.len())
+        if (m_aDataSourceName.getLength())
         {
             // is it a file url?
             Reference< ::com::sun::star::container::XNameAccess >  xNamingContext(m_xServiceManager->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
@@ -2227,7 +2227,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
     // the last use the command as it is
     bEscapeProcessing = m_bUseEscapeProcessing;
     rtl::OUString aQuery;
-    if (m_aCommand.len())
+    if (m_aCommand.getLength())
     {
         // i always need a tables for the querycomposer
         Reference< XTablesSupplier >  xTablesAccess(m_xActiveConnection, UNO_QUERY);
@@ -2328,10 +2328,10 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
 
             if(m_bIgnoreResult)
                 m_xComposer->setFilter(::rtl::OUString::createFromAscii("0=1"));
-            else if (m_aFilter.len() && m_bApplyFilter)
+            else if (m_aFilter.getLength() && m_bApplyFilter)
                 m_xComposer->setFilter(m_aFilter);
 
-            if (m_aOrder.len())
+            if (m_aOrder.getLength())
                 m_xComposer->setOrder(m_aOrder);
 
             aFilterStatement = m_xComposer->getComposedQuery();

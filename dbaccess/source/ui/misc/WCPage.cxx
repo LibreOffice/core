@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 09:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
             while(xRs->next())
             {
                 ::rtl::OUString sValue = xRow->getString(1);
-                if(!xRow->wasNull() && sValue.equalsIgnoreCase(sVIEW))
+                if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
                 {
                     m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
                     break;
