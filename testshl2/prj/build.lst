@@ -1,0 +1,8 @@
+ts  testshl2   :  sal NULL
+ts  testshl2						usr1    -   all ts_mkout NULL
+ts  testshl2\source\cppunit            nmake   -   all ts_tss NULL
+ts  testshl2\source\result             nmake   -   all ts_tsr ts_tss NULL
+ts  testshl2\source                    nmake   -   all ts_tst ts_tsr ts_tss NULL
+ts  testshl2\util                      nmake   -   all ts_tstu ts_tst ts_tsr ts_tss NULL
+ts  testshl2\inc                       get     -   all ts_tsti NULL
+
