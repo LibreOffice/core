@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,14 +123,14 @@ public:
                                     ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL convertNumberToString( sal_Int32 nKey, double fValue )
                             throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::util::color SAL_CALL queryColorForNumber( sal_Int32 nKey,
-                            double fValue, ::com::sun::star::util::color aDefaultColor )
+    virtual ::com::sun::star::util::Color SAL_CALL queryColorForNumber( sal_Int32 nKey,
+                            double fValue, ::com::sun::star::util::Color aDefaultColor )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL formatString( sal_Int32 nKey, const ::rtl::OUString& aString )
                             throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::util::color SAL_CALL queryColorForString( sal_Int32 nKey,
+    virtual ::com::sun::star::util::Color SAL_CALL queryColorForString( sal_Int32 nKey,
                             const ::rtl::OUString& aString,
-                                ::com::sun::star::util::color aDefaultColor )
+                                ::com::sun::star::util::Color aDefaultColor )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getInputString( sal_Int32 nKey, double fValue )
                             throw(::com::sun::star::uno::RuntimeException);
@@ -141,10 +141,10 @@ public:
                             const ::com::sun::star::lang::Locale& nLocale, sal_Bool bAllowEnglish )
                                 throw(::com::sun::star::util::MalformedNumberFormatException,
                                         ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::util::color SAL_CALL queryPreviewColorForNumber(
+    virtual ::com::sun::star::util::Color SAL_CALL queryPreviewColorForNumber(
                             const ::rtl::OUString& aFormat, double fValue,
                             const ::com::sun::star::lang::Locale& nLocale, sal_Bool bAllowEnglish,
-                            ::com::sun::star::util::color aDefaultColor )
+                            ::com::sun::star::util::Color aDefaultColor )
                                 throw(::com::sun::star::util::MalformedNumberFormatException,
                                         ::com::sun::star::uno::RuntimeException);
 

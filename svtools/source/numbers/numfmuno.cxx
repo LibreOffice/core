@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:31:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 12:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,13 +284,13 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString(
     return aRet;
 }
 
-util::color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
-                                    double fValue, util::color aDefaultColor )
+util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32 nKey,
+                                    double fValue, util::Color aDefaultColor )
                             throw(uno::RuntimeException)
 {
     NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
 
-    util::color nRet = aDefaultColor;       // color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = pSupplier ? pSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -326,13 +326,13 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey
     return aRet;
 }
 
-util::color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
-                                    const rtl::OUString& aString,util::color aDefaultColor )
+util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32 nKey,
+                                    const rtl::OUString& aString,util::Color aDefaultColor )
                             throw(uno::RuntimeException)
 {
     NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
 
-    util::color nRet = aDefaultColor;       // color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = pSupplier ? pSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -402,15 +402,15 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString
     return aRet;
 }
 
-util::color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
+util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
                                     const rtl::OUString& aFormat, double fValue,
                                     const lang::Locale& nLocale, sal_Bool bAllowEnglish,
-                                    util::color aDefaultColor )
+                                    util::Color aDefaultColor )
                             throw(util::MalformedNumberFormatException, uno::RuntimeException)
 {
     NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
 
-    util::color nRet = aDefaultColor;       // color = INT32
+    util::Color nRet = aDefaultColor;       // color = INT32
     SvNumberFormatter* pFormatter = pSupplier ? pSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
