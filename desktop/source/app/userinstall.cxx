@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:52:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 15:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include "userinstall.hxx"
 #include "langselect.hxx"
 
+#include <stdio.h>
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -108,9 +110,33 @@
 #include <svtools/syslocaleoptions.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/isolang.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+
+
 using namespace rtl;
 using namespace osl;
 using namespace utl;
+using namespace com::sun::star::container;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::util;
+
 
 namespace desktop {
 
@@ -147,84 +173,6 @@ namespace desktop {
                 break;
             default:
                 return E_Unknown;
-        }
-    }
-
-    // get the installation language for this user:
-    LanguageType UserInstall::getUserInstallLanguage()
-    {
-        static sal_Bool bLanguageFound = sal_False;
-        static LanguageType aLanguage = LANGUAGE_DONTKNOW;
-
-        if (bLanguageFound)
-            return aLanguage;
-
-        LanguageSelection l;
-        aLanguage = l.Execute();
-        bLanguageFound = sal_True;
-        return aLanguage;
-
-    }
-
-    // run a setup in response file mode to do tasks that are not
-    // handled inside the office yet
-    static UserInstall::UserInstallError run_hidden_setup(OUString& aDestinationURL)
-    {
-        // get commandline for setup
-        ::vos::OStartupInfo aInfo;
-        OUString aProgName;
-        OUString aDir;
-        aInfo.getExecutableFile( aProgName );
-        sal_uInt32 lastIndex = aProgName.lastIndexOf('/');
-        if ( lastIndex > 0 )
-        {
-            aProgName = aProgName.copy( 0, lastIndex+1 );
-            aDir      = aProgName;
-            aProgName += OUString( RTL_CONSTASCII_USTRINGPARAM( "setup" ));
-    #ifdef WNT
-            aProgName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".exe" ));
-    #endif
-        }
-
-        /* prepare command line parameters and environment
-        -l selected language
-        -d destination directory
-        -r responsefile
-        -nocopy  (no files and directories are created from the setup)
-        */
-        LanguageType aLanguage = UserInstall::getUserInstallLanguage();
-        OUString aDestinationPath;
-        FileBase::getSystemPathFromFileURL(aDestinationURL, aDestinationPath);
-        OUString aResponsefileURL;
-        Bootstrap::locateSharedData(aResponsefileURL);
-        aResponsefileURL += OUString::createFromAscii("/response/response_workstation.txt");
-        OUString aResponsefilePath;
-        FileBase::getSystemPathFromFileURL(aResponsefileURL, aResponsefilePath);
-        OUString aArgListArray[] = {
-            OUString::createFromAscii("-l"), OUString::createFromAscii(ResMgr::GetLang(aLanguage, 0)),
-            OUString::createFromAscii("-d"), aDestinationPath,
-            OUString::createFromAscii("-r"), aResponsefilePath,
-            OUString::createFromAscii("-noruncheck")
-            //,OUString::createFromAscii("-nocopy")
-        };
-
-        vos::OSecurity aSecurity;
-        vos::OEnvironment aEnv;
-        vos::OArgumentList aArgumentList( aArgListArray, 7 );
-        //vos::OArgumentList aArgumentList( aArgListArray, 7 );
-
-        // launch the setup process
-        vos::OProcess aProcess( aProgName, aDir );
-        vos::OProcess::TProcessError aProcessError = aProcess.execute(
-                vos::OProcess::TOption_Wait, aSecurity, aArgumentList, aEnv );
-
-        // check the result...
-        if ( aProcessError != vos::OProcess::E_None )
-        {
-            // an error occured...
-            return UserInstall::E_SetupFailed;
-        } else {
-            return UserInstall::E_None;
         }
     }
 
@@ -286,10 +234,10 @@ namespace desktop {
     };
 #else
     static const char *pszCopyList[] = {
-//        "/user",
+        "/user",
         "/readme.txt",
         "/readme.html",
-//        "/THIRDPARTYLICENSEREADME.html",
+        "/THIRDPARTYLICENSEREADME.html",
         NULL
     };
 #endif
@@ -297,35 +245,90 @@ namespace desktop {
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {
         OUString aBasePath;
-        if (Bootstrap::locateBaseInstallation(aBasePath) == Bootstrap::PATH_EXISTS)
-        {
-            // create the user directory
-            FileBase::RC rc = Directory::create(aUserPath);
-            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+        if (Bootstrap::locateBaseInstallation(aBasePath) != Bootstrap::PATH_EXISTS)
+            return UserInstall::E_InvalidBaseinstall;
+
+        // create the user directory
+        FileBase::RC rc = Directory::create(aUserPath);
+        if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
             // copy data from shared data directory of base installation
-            for (sal_Int32 i=0; pszCopyList[i]!=NULL; i++)
-            {
-                rc = copy_recursive(
+        for (sal_Int32 i=0; pszCopyList[i]!=NULL; i++)
+        {
+            rc = copy_recursive(
                     aBasePath + OUString::createFromAscii(pszCopyList[i]),
                     aUserPath + OUString::createFromAscii(pszCopyList[i]));
-                if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
-            }
+            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
+        }
 
-            // do tasks that still need setup
-            UserInstall::UserInstallError err = run_hidden_setup(aUserPath);
-            if (err == UserInstall::E_None) {
-                return UserInstall::E_None;
+        try{
+            OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+            OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+
+            // get configuration provider
+            Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+
+            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
+            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
+
+            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
+                theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+
+            // localize the provider to user selection
+            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
+            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
+            localizable->setLocale(aLocale);
+
+            // org.openoffice.Setup/L10N/ooLocale
+            // org.openoffice.Setup/Office/ooSetupInstallPath
+            // org.openoffice.Common/Path/Current/OfficeInstall
+            // org.openoffice.Office.Linguistic/General/DefaultLocale
+            // org.openoffice.Office.Linguistic/General/DefaultLocale_CJK
+
+            Sequence< Any > theArgs(1);
+            NamedValue v;
+            v.Name = OUString::createFromAscii("NodePath");
+            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            theArgs[0] <<= v;
+            Reference< XHierarchicalPropertySet> hpset(
+                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
+            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
+            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstallPath"), makeAny(aUserPath));
+            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
+
+            v.Value <<= OUString::createFromAscii("org.openoffice.Office.Common/Path/Current");
+            theArgs[0] <<= v;
+            Reference< XPropertySet > pset = Reference< XPropertySet >(
+                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            pset->setPropertyValue(OUString::createFromAscii("OfficeInstall"),
+                                   makeAny(aBasePath+OUString::createFromAscii("/program")));
+            Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+
+            v.Value <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+            theArgs[0] <<= v;
+            pset = Reference< XPropertySet >(
+                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+            if (aUserLanguage.equalsAscii("ja") || aUserLanguage.equalsAscii("ko")
+                || aUserLanguage.equalsAscii("zh-CN") || aUserLanguage.equalsAscii("zh-TW"))
+            {
+                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale"), makeAny(OUString::createFromAscii("en-US")));
+                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale_CJK"), makeAny(aUserLanguage));
+            } else
+            {
+                pset->setPropertyValue(OUString::createFromAscii("DefaultLocale"), makeAny(aUserLanguage));
             }
-            else {
-                // XXX rollback?
-                return err;
-            }
-        }
-        else
+            Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+
+        } catch (Exception& e)
         {
-            // cannot locate base installation
-            return UserInstall::E_InvalidBaseinstall;
+            const sal_Char *msg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr();
+            OSL_ENSURE(sal_False, msg);
+            return UserInstall::E_Configuration;
         }
+
+        // everything went well
+        return UserInstall::E_None;
+
     }
 }
