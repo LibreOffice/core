@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:41:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 #include "dialogs.hrc"
+#include "helpid.hrc"
 
 #include <algorithm>
 
@@ -433,6 +434,13 @@ namespace svx
 
         // initial control values
         m_aSimpleConversion.Check();
+
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eClose     )->SetHelpId(HID_HANGULDLG_BUTTON_CLOSE    );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnore    )->SetHelpId(HID_HANGULDLG_BUTTON_IGNORE   );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnoreAll )->SetHelpId(HID_HANGULDLG_BUTTON_IGNOREALL);
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChange    )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGE   );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChangeAll )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGEALL);
+        m_pPlayground->GetWordInputControl().SetHelpId(HID_HANGULDLG_EDIT_NEWWORD);
 
         FreeResource();
     }
