@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextProxy.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-19 09:02:20 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@ import java.net.MalformedURLException;
 
 import java.util.Hashtable;
 import java.util.zip.ZipEntry;
-
-import sun.tools.jar.JarVerifierStream;
-
 
 public final class ClassContextProxy implements ClassContext, Cachable {
     private static int instances;
