@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pb $ $Date: 2000-09-25 10:00:25 $
+#   last change: $Author: mba $ $Date: 2000-09-28 11:19:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ TARGET=config
 SLOFILES = \
     $(SLO)$/pathoptions.obj \
     $(SLO)$/saveopt.obj		\
+        $(SLO)$/undoopt.obj             \
+        $(SLO)$/helpopt.obj             \
     $(SLO)$/useroptions.obj
 
 # --- Targets ------------------------------------------------------
