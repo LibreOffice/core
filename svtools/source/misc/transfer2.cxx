@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-07-31 13:07:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-01 09:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,10 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 
     try
     {
-        const sal_Int8 nRet = mrParent.ExecuteDrop( ExecuteDropEvent( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
+        ExecuteDropEvent aEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
+        aEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+
+        const sal_Int8 nRet = mrParent.ExecuteDrop( aEvt );
 
         if( DNDConstants::ACTION_NONE == nRet )
             rDTDE.Context->rejectDrop();
@@ -251,7 +254,10 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
 
     try
     {
-        const sal_Int8 nRet = mrParent.AcceptDrop( AcceptDropEvent( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
+        AcceptDropEvent aEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
+        aEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+
+        const sal_Int8 nRet = mrParent.AcceptDrop( aEvt );
 
         if( DNDConstants::ACTION_NONE == nRet )
             rDTDE.Context->rejectDrag();
