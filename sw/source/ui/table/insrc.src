@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:02:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ japanese ] = "å¾Œ(~F)";
         Text[ chinese_traditional ] = "ä¹‹å¾Œ(~F)";
         Text[ arabic ] = "ÈÚÏ";
-        Text[ greek ] = "ìåôÜ áðü";
+        Text[ greek ] = "ÌåôÜ áðü";
         Text[ korean ] = "ë’¤(~F)";
         Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
@@ -232,7 +232,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ english_us ] = "Position";
         Text[ portuguese ] = "Posição";
         Text[ russian ] = "Ïîëîæåíèå";
-        Text[ greek ] = "start_num";
+        Text[ greek ] = "ÈÝóç";
         Text[ dutch ] = "Positie";
         Text[ french ] = "Position";
         Text[ spanish ] = "Posición";
@@ -371,6 +371,7 @@ ModalDialog DLG_INS_ROW_COL
     Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
     Text[ slovak ] = "VloÅ¾iÅ¥";
 };
+
 
 
 
