@@ -41,7 +41,7 @@ Dim MaxIndex as Integer
 	sObjectStrings(1) = LocObject.dbg_Methods
 	sObjectStrings(2) = LocObject.dbg_SupportedInterfaces
 	LocUrl = &quot;private:factory/swriter&quot;
-	oLocDocument = StarDesktop.LoadComponentFromURL(LocUrl,&quot;_blank&quot;,0,NoArgs)
+	oLocDocument = StarDesktop.LoadComponentFromURL(LocUrl,&quot;_default&quot;,0,NoArgs)
 	oLocText = oLocDocument.text
 	oLocCursor = oLocText.createTextCursor()
 	oLocCursor.gotoStart(False)
@@ -69,7 +69,7 @@ Dim oLocCursor as Object
 Dim oLocText as Object
 
 	LocUrl = &quot;private:factory/swriter&quot;
-	oLocDocument = StarDesktop.LoadComponentFromURL(LocUrl,&quot;_blank&quot;,0,NoArgs)
+	oLocDocument = StarDesktop.LoadComponentFromURL(LocUrl,&quot;_default&quot;,0,NoArgs)
 	oLocText = oLocDocument.text
 	oLocCursor = oLocText.createTextCursor()
 	oLocCursor.gotoStart(False)

@@ -16,7 +16,6 @@ Dim LocsfileContent(0) as String
 End Sub
 
 
-&apos; Prozedur, die die rekursive Auslesefunktion anwirft
 Function ReadDirectories(ByVal AnchorDir As String, bRecursive as Boolean,  bcheckFileType as Boolean, bGetByTitle as Boolean, Optional sFileContent(), Optional sExtension as String)
 Dim i as integer
 Dim Status as Object
@@ -71,10 +70,10 @@ Dim sFileArray(StartUbound,1) as String
 											&apos; precisely identified by their mimetype and their extension
 											FileExtension = GetFileNameExtension(FileName)
 											If FileExtension = sExtension Then
-												AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)	
+												AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
 											End If
 										Else
-											AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)									
+											AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
 										End If
 									Else
 										AddFileNameToList(sFileArray(), FileName, RealFileContent, bGetByTitle, CurIndex)
@@ -94,7 +93,7 @@ Dim sFileArray(StartUbound,1) as String
 		Loop Until DirIndex &gt;= iDirCount
 		If CurIndex &gt; -1 Then
 			ReDim Preserve sFileArray(CurIndex,1) as String
-		Else 
+		Else
 			ReDim sFileArray() as String
 		End If
 	Else
@@ -123,7 +122,7 @@ Dim FileCount As Integer
 		&apos; Add the documenttitles to the Filearray
 	Else
 		sFileArray(CurIndex,1) = FileContent
-	End If	
+	End If
 End Sub
 
 
@@ -250,7 +249,7 @@ Dim MaxIndex as Integer
 			Redim Preserve DataList(i)
 		End If
 		LoadDataFromFile() = True
-		oOutputStream.CloseInput()
+		oInputStream.CloseInput()
 	Else
 		LoadDataFromFile() = False
 	End If
@@ -267,9 +266,12 @@ Dim oUcb as Object
 	CreateFolder = True
 NOSPACEONDRIVE:
 	If Err &lt;&gt; 0 Then
-		Msgbox &quot;Folder &apos;&quot; &amp; ConvertFromUrl(sNewFolder) &amp; &quot;&apos; could not be created! Probably your harddisk is out of space!&quot;
-		CreateFolder() = False
-		Resume LETSGO
-		LETSGO:
-	End If		
+		If InitResources(&quot;&quot;, &quot;com&quot;) Then
+			ErrMsg = GetResText(1000)
+			Msgbox(ErrMsg, 48, GetProductName())
+		End If
+		CreateFolder = False
+		Resume GOON
+	End If
+GOON:		
 End Function</script:module>

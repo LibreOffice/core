@@ -141,7 +141,7 @@ Dim oComponent as Object
 	If Not IsMissing(bDisposable) Then
 		bDisposable = True
 	End If
-	OpenDocument() = StarDesktop.LoadComponentFromURL(DocPath,&quot;_blank&quot;,0,Args())
+	OpenDocument() = StarDesktop.LoadComponentFromURL(DocPath,&quot;_default&quot;,0,Args())
 End Function
 
 
@@ -718,5 +718,45 @@ Function isHighContrast(oPeer as Object)
 	myLuminance = (( myBlue*28 + myGreen*151 + myRed*77 ) / 256	)
 	isHighContrast = false
 	If myLuminance &lt;= 25 Then isHighContrast = true
+End Function
+
+
+Function CreateNewDocument(sType as String, Optional sAddMsg as String) as Object
+Dim NoArgs() as new com.sun.star.beans.PropertyValue
+Dim oDocument as Object
+Dim sUrl as String
+Dim ErrMsg as String
+	On Local Error Goto NOMODULEINSTALLED
+	sUrl = &quot;private:factory/&quot; &amp; sType
+	oDocument = StarDesktop.LoadComponentFromURL(sUrl,&quot;_default&quot;,0, NoArgs())
+NOMODULEINSTALLED:
+	If (Err &lt;&gt; 0) OR IsNull(oDocument) Then
+		If InitResources(&quot;&quot;, &quot;com&quot;) Then
+			Select Case sType
+				Case &quot;swriter&quot;
+					ErrMsg = GetResText(1001)
+				Case &quot;scalc&quot;
+					ErrMsg = GetResText(1002)
+				Case &quot;simpress&quot;
+					ErrMsg = GetResText(1003)
+				Case &quot;sdraw&quot;
+					ErrMsg = GetResText(1004)
+				Case &quot;smath&quot;
+					ErrMsg = GetResText(1005)
+				Case Else
+					ErrMsg = &quot;Invalid Document Type!&quot;
+			End Select
+			ErrMsg = ReplaceString(ErrMsg, chr(13), &quot;&lt;BR&gt;&quot;)
+			If Not IsMissing(sAddMsg) Then
+				ErrMsg = ErrMsg &amp; chr(13) &amp; sAddMsg
+			End If
+			Msgbox(ErrMsg, 48, GetProductName())
+		End If
+		If Err &lt;&gt; 0 Then
+			Resume GOON
+		End If
+	End If
+GOON:		
+	CreateNewDocument = oDocument	
 End Function
 </script:module>

@@ -43,8 +43,6 @@ Dim BigLen%, PreLen%, PostLen%
 			BigLen = Len(BigString)
 			PostLen = Len(PostString)
 			FindPartString = Mid(BigString,StartPos + PreLen, EndPos - (StartPos + PreLen))
-			&apos; Da diese Funktion dafür programmiert wurde, in einer Schleife abgearbeitet zu werden
-			&apos; muss die initiale Suchposition hinter die Position des gefundenen Teilstrings gesetzt werden.
 			SearchPos = EndPos + PostLen
 		Else
 			Msgbox(&quot;No final tag for &apos;&quot; &amp; PreString &amp; &quot;&apos; existing&quot;, 16, GetProductName())

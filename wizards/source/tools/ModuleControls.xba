@@ -249,7 +249,7 @@ Dim FilterIndex as Integer
 		End If
 		On Local Error Goto NOSAVING
 		If FilterName = &quot;&quot;  Then
-			&apos; Todo: Den Fall abfangen, wenn ein zu überschreibendes Dokument schreibgeschützt ist (weil es z.B. gerade geöffnet ist)
+			&apos; Todo: Catch the case that a document that has to be overwritten is writeportected (e.g. it is open)
 			oDocument.StoreAsUrl(sPath, NoArgs())
 		Else
 			oStoreProperties(0).Name = &quot;FilterName&quot;
