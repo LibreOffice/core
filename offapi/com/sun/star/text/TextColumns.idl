@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextColumns.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/style/VerticalAlignment.idl>
 #endif
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module text {
@@ -100,7 +104,7 @@ service TextColumns
     //------------------------------------------------------------------------
     /** determines the color of the separator lines between the columns.
      */
-    [property]  long SeparatorLineColor;
+    [property]  com::sun::star::util::Color SeparatorLineColor;
     //------------------------------------------------------------------------
     /** determines the relative height of the separator lines between the columns.
      */
