@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestAny.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,25 +137,12 @@ final class TestAny {
                             BaseStruct.class.getName());
         success &= testType(DerivedStruct.class, TypeClass.STRUCT,
                             DerivedStruct.class.getName());
-        success &= testType(Exception.class, TypeClass.EXCEPTION,
-                            Exception.class.getName());
         success &= testType(com.sun.star.uno.Exception.class,
                             TypeClass.EXCEPTION,
                             com.sun.star.uno.Exception.class.getName());
-        success &= testType(BaseException.class, TypeClass.EXCEPTION,
-                            BaseException.class.getName());
-        success &= testType(DerivedException.class, TypeClass.EXCEPTION,
-                            DerivedException.class.getName());
-        success &= testType(RuntimeException.class, TypeClass.EXCEPTION,
-                            RuntimeException.class.getName());
         success &= testType(com.sun.star.uno.RuntimeException.class,
                             TypeClass.EXCEPTION,
                             com.sun.star.uno.RuntimeException.class.getName());
-        success &= testType(BaseRuntimeException.class, TypeClass.EXCEPTION,
-                            BaseRuntimeException.class.getName());
-        success &= testType(DerivedRuntimeException.class,
-                            TypeClass.EXCEPTION,
-                            DerivedRuntimeException.class.getName());
         success &= testType(XInterface.class, TypeClass.INTERFACE,
                             XInterface.class.getName());
         success &= testType(BaseInterface.class, TypeClass.INTERFACE,
@@ -564,31 +551,6 @@ final class TestAny {
                                   new Type(DerivedStruct.class.getName(),
                                            TypeClass.STRUCT),
                                   new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(Exception.class.getName(),
-                                           TypeClass.EXCEPTION),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(BaseException.class.getName(),
-                                           TypeClass.EXCEPTION),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(DerivedException.class.getName(),
-                                           TypeClass.EXCEPTION),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(RuntimeException.class.getName(),
-                                           TypeClass.EXCEPTION),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(BaseRuntimeException.class.getName(),
-                                           TypeClass.EXCEPTION),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Type(
-                                      DerivedRuntimeException.class.getName(),
-                                      TypeClass.EXCEPTION),
-                                  new CompareBoxed());
         }
         success &= testMapAny(transport,
                               new Type(
@@ -598,11 +560,11 @@ final class TestAny {
                               new CompareBoxed());
         if (createTypes) {
             success &= testMapAny(transport,
-                                  new Type(BaseUnoException.class.getName(),
+                                  new Type(BaseException.class.getName(),
                                            TypeClass.EXCEPTION),
                                   new CompareBoxed());
             success &= testMapAny(transport,
-                                  new Type(DerivedUnoException.class.getName(),
+                                  new Type(DerivedException.class.getName(),
                                            TypeClass.EXCEPTION),
                                   new CompareBoxed());
         }
@@ -615,12 +577,12 @@ final class TestAny {
         if (createTypes) {
             success &= testMapAny(transport,
                                   new Type(
-                                      BaseUnoRuntimeException.class.getName(),
+                                      BaseRuntimeException.class.getName(),
                                       TypeClass.EXCEPTION),
                                   new CompareBoxed());
             success &= testMapAny(transport,
                                   new Type(
-                                      DerivedUnoRuntimeException.class.
+                                      DerivedRuntimeException.class.
                                       getName(),
                                       TypeClass.EXCEPTION),
                                   new CompareBoxed());
@@ -910,44 +872,6 @@ final class TestAny {
                                               DerivedStruct.class.getName(),
                                               TypeClass.STRUCT)),
                                   new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(Type.TYPE,
-                                          new Type(Exception.class.getName(),
-                                                   TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(Type.TYPE,
-                                          new Type(
-                                              BaseException.class.getName(),
-                                              TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(Type.TYPE,
-                                          new Type(
-                                              DerivedException.class.getName(),
-                                          TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(Type.TYPE,
-                                          new Type(
-                                              RuntimeException.class.getName(),
-                                              TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(
-                                      Type.TYPE,
-                                      new Type(
-                                          BaseRuntimeException.class.getName(),
-                                          TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(
-                                      Type.TYPE,
-                                      new Type(
-                                          DerivedRuntimeException.class.
-                                          getName(),
-                                          TypeClass.EXCEPTION)),
-                                  new CompareUnboxed());
         }
         success &= testMapAny(transport,
                               new Any(
@@ -961,14 +885,14 @@ final class TestAny {
             success &= testMapAny(transport,
                                   new Any(Type.TYPE,
                                           new Type(
-                                              BaseUnoException.class.getName(),
+                                              BaseException.class.getName(),
                                               TypeClass.EXCEPTION)),
                                   new CompareUnboxed());
             success &= testMapAny(transport,
                                   new Any(
                                       Type.TYPE,
                                       new Type(
-                                          DerivedUnoException.class.getName(),
+                                          DerivedException.class.getName(),
                                           TypeClass.EXCEPTION)),
                                   new CompareUnboxed());
         }
@@ -985,7 +909,7 @@ final class TestAny {
                                   new Any(
                                       Type.TYPE,
                                       new Type(
-                                          BaseUnoRuntimeException.class.
+                                          BaseRuntimeException.class.
                                           getName(),
                                           TypeClass.EXCEPTION)),
                                   new CompareUnboxed());
@@ -993,7 +917,7 @@ final class TestAny {
                                   new Any(
                                       Type.TYPE,
                                       new Type(
-                                          DerivedUnoRuntimeException.class.
+                                          DerivedRuntimeException.class.
                                           getName(),
                                           TypeClass.EXCEPTION)),
                                   new CompareUnboxed());
@@ -2018,33 +1942,28 @@ final class TestAny {
         }
 
         // Exception Types:
+        success &= testMapAny(transport, new com.sun.star.uno.Exception(),
+                              new CompareClass(
+                                  com.sun.star.uno.Exception.class));
+        success &= testMapAny(transport,
+                              new Any(new Type(
+                                          com.sun.star.uno.Exception.class),
+                                      new com.sun.star.uno.Exception()),
+                              new CompareClass(
+                                  com.sun.star.uno.Exception.class));
+        success &= testMapAny(transport,
+                              new Any(new Type(
+                                          com.sun.star.uno.Exception.class),
+                                      new BaseException()),
+                              new CompareClass(
+                                  com.sun.star.uno.Exception.class));
+        success &= testMapAny(transport,
+                              new Any(new Type(
+                                          com.sun.star.uno.Exception.class),
+                                      new DerivedException()),
+                              new CompareClass(
+                                  com.sun.star.uno.Exception.class));
         if (createTypes) {
-            success &= testMapAny(transport, new Exception(),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new Exception()),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new BaseException()),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new DerivedException()),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new com.sun.star.uno.Exception()),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new BaseUnoException()),
-                                  new CompareClass(Exception.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(Exception.class),
-                                          new DerivedUnoException()),
-                                  new CompareClass(Exception.class));
             success &= testMapAny(transport, new BaseException(),
                                   new CompareBoxed());
             success &= testMapAny(transport,
@@ -2060,90 +1979,6 @@ final class TestAny {
             success &= testMapAny(transport,
                                   new Any(new Type(DerivedException.class),
                                           new DerivedException()),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport, new RuntimeException(),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(RuntimeException.class),
-                                          new RuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(RuntimeException.class),
-                                          new BaseRuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(RuntimeException.class),
-                                          new DerivedRuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(
-                                      new Type(RuntimeException.class),
-                                      new com.sun.star.uno.RuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(RuntimeException.class),
-                                          new BaseUnoRuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport,
-                                  new Any(new Type(RuntimeException.class),
-                                          new DerivedUnoRuntimeException()),
-                                  new CompareClass(RuntimeException.class));
-            success &= testMapAny(transport, new BaseRuntimeException(),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(BaseRuntimeException.class),
-                                          new BaseRuntimeException()),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(BaseRuntimeException.class),
-                                          new DerivedRuntimeException()),
-                                  new CompareSpecific(
-                                      new BaseRuntimeException()));
-            success &= testMapAny(transport, new DerivedRuntimeException(),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(
-                                              DerivedRuntimeException.class),
-                                          new DerivedRuntimeException()),
-                                  new CompareUnboxed());
-        }
-        success &= testMapAny(transport, new com.sun.star.uno.Exception(),
-                              new CompareClass(
-                                  com.sun.star.uno.Exception.class));
-        success &= testMapAny(transport,
-                              new Any(new Type(
-                                          com.sun.star.uno.Exception.class),
-                                      new com.sun.star.uno.Exception()),
-                              new CompareClass(
-                                  com.sun.star.uno.Exception.class));
-        success &= testMapAny(transport,
-                              new Any(new Type(
-                                          com.sun.star.uno.Exception.class),
-                                      new BaseUnoException()),
-                              new CompareClass(
-                                  com.sun.star.uno.Exception.class));
-        success &= testMapAny(transport,
-                              new Any(new Type(
-                                          com.sun.star.uno.Exception.class),
-                                      new DerivedUnoException()),
-                              new CompareClass(
-                                  com.sun.star.uno.Exception.class));
-        if (createTypes) {
-            success &= testMapAny(transport, new BaseUnoException(),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(BaseUnoException.class),
-                                          new BaseUnoException()),
-                                  new CompareUnboxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(BaseUnoException.class),
-                                          new DerivedUnoException()),
-                                  new CompareSpecific(new BaseUnoException()));
-            success &= testMapAny(transport, new DerivedUnoException(),
-                                  new CompareBoxed());
-            success &= testMapAny(transport,
-                                  new Any(new Type(DerivedUnoException.class),
-                                          new DerivedUnoException()),
                                   new CompareUnboxed());
         }
         success &= testMapAny(transport,
@@ -2163,7 +1998,7 @@ final class TestAny {
                                   new Type(
                                       com.sun.star.uno.RuntimeException.
                                       class),
-                                  new BaseUnoRuntimeException()),
+                                  new BaseRuntimeException()),
                               new CompareClass(
                                   com.sun.star.uno.RuntimeException.class));
         success &= testMapAny(transport,
@@ -2171,29 +2006,29 @@ final class TestAny {
                                   new Type(
                                       com.sun.star.uno.RuntimeException.
                                       class),
-                                  new DerivedUnoRuntimeException()),
+                                  new DerivedRuntimeException()),
                               new CompareClass(
                                   com.sun.star.uno.RuntimeException.class));
         if (createTypes) {
-            success &= testMapAny(transport, new BaseUnoRuntimeException(),
+            success &= testMapAny(transport, new BaseRuntimeException(),
                                   new CompareBoxed());
             success &= testMapAny(transport,
                                   new Any(new Type(
-                                              BaseUnoRuntimeException.class),
-                                          new BaseUnoRuntimeException()),
+                                              BaseRuntimeException.class),
+                                          new BaseRuntimeException()),
                                   new CompareUnboxed());
             success &= testMapAny(transport,
                                   new Any(new Type(
-                                              BaseUnoRuntimeException.class),
-                                          new DerivedUnoRuntimeException()),
+                                              BaseRuntimeException.class),
+                                          new DerivedRuntimeException()),
                                   new CompareSpecific(
-                                      new BaseUnoRuntimeException()));
-            success &= testMapAny(transport, new DerivedUnoRuntimeException(),
+                                      new BaseRuntimeException()));
+            success &= testMapAny(transport, new DerivedRuntimeException(),
                                   new CompareBoxed());
             success &= testMapAny(transport,
                                   new Any(new Type(
-                                              DerivedUnoRuntimeException.class),
-                                          new DerivedUnoRuntimeException()),
+                                              DerivedRuntimeException.class),
+                                          new DerivedRuntimeException()),
                                   new CompareUnboxed());
         }
 
@@ -2401,7 +2236,7 @@ final class TestAny {
         }
     }
 
-    public static class BaseException extends Exception {
+    public static class BaseException extends com.sun.star.uno.Exception {
         public BaseException() {}
 
         public BaseException(String message) {
@@ -2425,7 +2260,9 @@ final class TestAny {
         }
     }
 
-    public static class BaseRuntimeException extends RuntimeException {
+    public static class BaseRuntimeException
+        extends com.sun.star.uno.RuntimeException
+    {
         public BaseRuntimeException() {}
 
         public BaseRuntimeException(String message) {
@@ -2433,11 +2270,13 @@ final class TestAny {
         }
 
         public boolean equals(Object obj) {
-            return obj != null && obj.getClass() == BaseRuntimeException.class;
+            return obj != null
+                && obj.getClass() == BaseRuntimeException.class;
         }
     }
 
-    public static class DerivedRuntimeException extends BaseRuntimeException {
+    public static class DerivedRuntimeException extends BaseRuntimeException
+    {
         public DerivedRuntimeException() {}
 
         public DerivedRuntimeException(String message) {
@@ -2447,60 +2286,6 @@ final class TestAny {
         public boolean equals(Object obj) {
             return obj != null
                 && obj.getClass() == DerivedRuntimeException.class;
-        }
-    }
-
-    public static class BaseUnoException extends com.sun.star.uno.Exception {
-        public BaseUnoException() {}
-
-        public BaseUnoException(String message) {
-            super(message);
-        }
-
-        public boolean equals(Object obj) {
-            return obj != null && obj.getClass() == BaseUnoException.class;
-        }
-    }
-
-    public static class DerivedUnoException extends BaseUnoException {
-        public DerivedUnoException() {}
-
-        public DerivedUnoException(String message) {
-            super(message);
-        }
-
-        public boolean equals(Object obj) {
-            return obj != null && obj.getClass() == DerivedUnoException.class;
-        }
-    }
-
-    public static class BaseUnoRuntimeException
-        extends com.sun.star.uno.RuntimeException
-    {
-        public BaseUnoRuntimeException() {}
-
-        public BaseUnoRuntimeException(String message) {
-            super(message);
-        }
-
-        public boolean equals(Object obj) {
-            return obj != null
-                && obj.getClass() == BaseUnoRuntimeException.class;
-        }
-    }
-
-    public static class DerivedUnoRuntimeException
-        extends BaseUnoRuntimeException
-    {
-        public DerivedUnoRuntimeException() {}
-
-        public DerivedUnoRuntimeException(String message) {
-            super(message);
-        }
-
-        public boolean equals(Object obj) {
-            return obj != null
-                && obj.getClass() == DerivedUnoRuntimeException.class;
         }
     }
 }
