@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageFolderContent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 13:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ service PackageFolderContent
         changes to the underlying package file. Note that the current
         implementation of PCP contents never flushes automatically! Operations
         which require a flush to get persistent, are:
-        "setPropertyValues( Title |  MediaType | Compressed ) ", "delete",
+        "setPropertyValues( < any_non_read_only_property > ) ", "delete",
         "insert" )
         </li>
         </ul>
@@ -179,9 +179,6 @@ service PackageFolderContent
         </li>
         <li>
         string MediaType
-        </li>
-        <li>
-        string Size ( read-only, always zero )
         </li>
         <li>
         string Title
