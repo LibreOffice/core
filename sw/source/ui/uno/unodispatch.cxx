@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 14:42:59 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include <view.hxx>
 #endif
 #include <cmdid.h>
+#include "wrtsh.hxx"
+#include "dbmgr.hxx"
 
 
 using namespace ::com::sun::star::uno;
@@ -253,7 +255,23 @@ SwXDispatch::~SwXDispatch()
 void SwXDispatch::dispatch(
     const URL& aURL, const Sequence< PropertyValue >& aArgs ) throw(RuntimeException)
 {
-    DBG_ERROR("not implemented")
+    SwWrtShell& rSh = m_rView.GetWrtShell();
+    SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+    if(!aURL.Complete.compareToAscii(cURLInsertContent))
+    {
+        pNewDBMgr->MergeNew(DBMGR_MERGE, rSh, aArgs);
+    }
+    else if(!aURL.Complete.compareToAscii(cURLInsertColumns))
+    {
+        pNewDBMgr->InsertText(rSh, aArgs);
+    }
+    else if(!aURL.Complete.compareToAscii(cURLFormLetter))
+    {
+        pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
+    }
+    else
+        throw RuntimeException();
+
 }
 /*-- 07.11.00 14:26:13---------------------------------------------------
 
@@ -263,8 +281,17 @@ void SwXDispatch::addStatusListener(
 {
     FeatureStateEvent aEvent;
     aEvent.IsEnabled = sal_True;
+    aEvent.Source = *(cppu::OWeakObject*)this;
+    aEvent.FeatureURL = aURL;
     xControl->statusChanged( aEvent );
-    DBG_ERROR("not implemented")
+#ifdef DBG_UTIL
+    static BOOL bShowError = TRUE;
+    if(bShowError)
+    {
+        DBG_ERROR("void SwXDispatch::addStatusListener: not implemented")
+        bShowError=FALSE;
+    }
+#endif
 }
 /*-- 07.11.00 14:26:15---------------------------------------------------
 
@@ -272,5 +299,12 @@ void SwXDispatch::addStatusListener(
 void SwXDispatch::removeStatusListener(
     const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
-    DBG_ERROR("not implemented")
+#ifdef DBG_UTIL
+    static BOOL bShowError = TRUE;
+    if(bShowError)
+    {
+        DBG_ERROR("void SwXDispatch::removeStatusListener: not implemented")
+        bShowError=FALSE;
+    }
+#endif
 }
