@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:15:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                 if( pProperties->Value >>= eClickAction )
                     nFound |= FOUND_CLICKACTION;
             }
-            else if( ( ( nFound & FOUND_MACRO ) == 0 ) && pProperties->Name == msMacroName )
+            else if( ( ( nFound & FOUND_MACRO ) == 0 ) && ( pProperties->Name == msMacroName || pProperties->Name == msScript ) )
             {
                 if( pProperties->Value >>= aStrMacro )
                     nFound |= FOUND_MACRO;
@@ -544,6 +544,19 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 if( nFound & FOUND_LIBRARY )
                     rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LIBRARY, aStrLibrary );
+
+                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT, sal_True, sal_True);
+            }
+        }
+        else if( aStrEventType == msScript )
+        {
+            if( nFound & FOUND_MACRO )
+            {
+                SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, XML_EVENTS, sal_True, sal_True);
+
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, XML_SCRIPT );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, OUString( RTL_CONSTASCII_USTRINGPARAM( "on-click" ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
 
                 SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT, sal_True, sal_True);
             }
