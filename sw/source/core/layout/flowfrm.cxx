@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:44:55 $
+ *  last change: $Author: fme $ $Date: 2002-11-13 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,10 +270,23 @@ BOOL SwFlowFrm::IsKeep( const SwBorderAttrs &rAttrs ) const
             if( 0 != (pNxt = rThis.FindNextCnt()) &&
                 (!pFollow || pNxt != pFollow->GetFrm()))
             {
-                const SwAttrSet &rSet = *pNxt->GetAttrSet();
-                if ( rSet.GetPageDesc().GetPageDesc() )
+                const SwAttrSet* pSet = NULL;
+
+                if ( pNxt->IsInTab() )
+                {
+                    SwTabFrm* pTab = pNxt->FindTabFrm();
+                    if ( ! rThis.IsInTab() || rThis.FindTabFrm() != pTab )
+                        pSet = &pTab->GetFmt()->GetAttrSet();
+                }
+
+                if ( ! pSet )
+                    pSet = pNxt->GetAttrSet();
+
+                ASSERT( pSet, "No AttrSet to check keep attribute" )
+
+                if ( pSet->GetPageDesc().GetPageDesc() )
                     bKeep = FALSE;
-                else switch ( rSet.GetBreak().GetBreak() )
+                else switch ( pSet->GetBreak().GetBreak() )
                 {
                     case SVX_BREAK_COLUMN_BEFORE:
                     case SVX_BREAK_COLUMN_BOTH:
@@ -1600,6 +1613,7 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         if( pNewUpper != rThis.GetUpper() )
         {
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
+
             if ( bFtnMoved && !bSamePage )
             {
                 pOldPage->UpdateFtnNum();
