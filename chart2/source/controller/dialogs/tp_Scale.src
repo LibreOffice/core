@@ -1,0 +1,806 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tp_Scale.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+TabPage TP_SCALE_Y
+{
+    Hide = TRUE ;
+    HelpID = HID_SCH_SCALE_Y ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_SCALE_Y
+    {
+        Pos = MAP_APPFONT ( 5 , 4  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Achsenskalierung" ;
+        Text[ ENGLISH ] = "Scaling Axis" ;
+        Text[ norwegian ] = "Scaling Axis" ;
+        Text[ italian ] = "Scala degli assi" ;
+        Text[ portuguese_brazilian ] = "Escalonar eixos" ;
+        Text[ portuguese ] = "Escala de eixos" ;
+        Text[ finnish ] = "Skaalaa akselit" ;
+        Text[ danish ] = "Akseskalering" ;
+        Text[ french ] = "Échelle de l'axe" ;
+        Text[ swedish ] = "Axelskalning" ;
+        Text[ dutch ] = "As-schaalverdeling" ;
+        Text[ spanish ] = "Escala de los ejes" ;
+        Text[ english_us ] = "Scale axes" ;
+        Text[ chinese_simplified ] = "è½´çš„åˆ»åº¦æ˜¾ç¤º";
+        Text[ russian ] = "Ìàñøòàáèğîâàíèå îñåé";
+        Text[ polish ] = "Skaluj osie";
+        Text[ japanese ] = "è»¸ã®ç›®ç››";
+        Text[ chinese_traditional ] = "è»¸çš„é¡¯ç¤ºæ¯”ä¾‹";
+        Text[ arabic ] = "ãŞíÇÓ ÇáãÍæÑ";
+        Text[ dutch ] = "As-schaalverdeling";
+        Text[ chinese_simplified ] = "è½´çš„åˆ»åº¦æ˜¾ç¤º";
+        Text[ greek ] = "Êëßìáêá áîüíùí";
+        Text[ korean ] = "ì¶• ë°°ìœ¨ ì¡°ì •";
+        Text[ turkish ] = "Eksenleri ölçekle";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mida dels eixos";
+        Text[ thai ] = "à¸ªà¹€à¸à¸¥à¹à¸à¸™";
+        Text[ czech ] = "MÄ›Å™Ã­tka os";
+        Text[ hebrew ] = "Achsenskalierung";
+        Text[ hindi ] = "à¤…à¤•à¥à¤·à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤•à¥‡à¤² à¤•à¤°à¥‹";
+        Text[ slovak ] = "UpraviÅ¥ stupnicu osÃ­";
+    };
+        FixedText TXT_MIN
+        {
+            Pos = MAP_APPFONT ( 11 , 16  ) ;
+            Size = MAP_APPFONT ( 88 , 8 ) ;
+            Text = "~Minimum:" ;
+            Text [ ENGLISH ] = "Min:" ;
+            Text [ dutch ] = "~Minimum:" ;
+            Text [ english_us ] = "~Minimum:" ;
+            Text [ italian ] = "~Minimo:" ;
+            Text [ spanish ] = "Mí~nimo:" ;
+            Text [ french ] = "M~inimum :" ;
+            Text [ swedish ] = "~Minimum:" ;
+            Text [ danish ] = "~Minimum:" ;
+            Text [ portuguese_brazilian ] = "~Mínimo:" ;
+            Text [ portuguese ] = "~Mínimo:" ;
+            Text[ chinese_simplified ] = "æœ€å°å€¼(~M)ï¼š";
+            Text[ russian ] = "Ìèíèìóì:";
+            Text[ polish ] = "~Minimum:";
+            Text[ japanese ] = "æœ€å°å€¤(~M):";
+            Text[ chinese_traditional ] = "æœ€å°å€¼(~M)ï¼š";
+            Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì:";
+            Text[ dutch ] = "~Minimum:";
+            Text[ chinese_simplified ] = "æœ€å°å€¼(~M)ï¼š";
+            Text[ greek ] = "~ÅëÜ÷éóôï:";
+        Text[ korean ] = "ìµœì†Œ(~M):";
+        Text[ turkish ] = "~Minimum:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mí~nim:";
+        Text[ finnish ] = "~Vähintään:";
+        Text[ thai ] = "~à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”:";
+        Text[ czech ] = "Minimum:";
+        Text[ hebrew ] = "~Minimum:";
+        Text[ hindi ] = "~à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®:";
+        Text[ slovak ] = "~Minimum:";
+    };
+        SpinField EDT_MIN
+        {
+            Border = TRUE ;
+            SVLook = TRUE ;
+            Pos = MAP_APPFONT ( 103 , 14  ) ;
+            Size = MAP_APPFONT ( 50 , 12 ) ;
+            TabStop = TRUE ;
+        };
+        CheckBox CBX_AUTO_MIN
+        {
+            Pos = MAP_APPFONT ( 159 , 15  ) ;
+            Size = MAP_APPFONT ( 88 , 10 ) ;
+            Text = "~Automatisch" ;
+            Text [ ENGLISH ] = "~Auto" ;
+            TabStop = TRUE ;
+            Text [ dutch ] = "A~utomatisch" ;
+            Text [ english_us ] = "Automatic" ;
+            Text [ italian ] = "Automatico" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ swedish ] = "~Automatiskt" ;
+            Text [ danish ] = "~Automatisk" ;
+            Text [ portuguese_brazilian ] = "Automático" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ russian ] = "~Àâòîìàòè÷åñêè";
+            Text[ polish ] = "Automatycznie";
+            Text[ japanese ] = "è‡ªå‹•";
+            Text[ chinese_traditional ] = "è‡ªå‹•";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "A~utomatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ greek ] = "~Áõôüìáôá";
+        Text[ korean ] = "ìë™";
+        Text[ turkish ] = "~Otomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "Automaattinen";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
+        Text[ slovak ] = "Automaticky";
+    };
+
+        FixedText TXT_MAX
+        {
+            Pos = MAP_APPFONT ( 11 , 32  ) ;
+            Size = MAP_APPFONT ( 88 , 8 ) ;
+            Text = "Ma~ximum:" ;
+            Text [ ENGLISH ] = "Max:" ;
+            Text [ dutch ] = "Ma~ximum:" ;
+            Text [ english_us ] = "Ma~ximum:" ;
+            Text [ italian ] = "Massimo:" ;
+            Text [ spanish ] = "Má~ximo:" ;
+            Text [ french ] = "M~aximum :" ;
+            Text [ swedish ] = "Ma~ximum:" ;
+            Text [ danish ] = "Maksimum:" ;
+            Text [ portuguese ] = "Má~ximo:" ;
+            Text [ portuguese_brazilian ] = "Má~ximo:" ;
+            Text[ chinese_simplified ] = "æœ€å¤§å€¼(~X)ï¼š";
+            Text[ russian ] = "Ìàêñèìóì:";
+            Text[ polish ] = "Ma~ksimum:";
+            Text[ japanese ] = "æœ€å¤§å€¤(~X):";
+            Text[ chinese_traditional ] = "æœ€å¤§å€¼(~X)ï¼š";
+            Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì:";
+            Text[ dutch ] = "Ma~ximum:";
+            Text[ chinese_simplified ] = "æœ€å¤§å€¼(~X)ï¼š";
+            Text[ greek ] = "Ìİ~ãéóôï:";
+        Text[ korean ] = "ìµœëŒ€(~X):";
+        Text[ turkish ] = "Ma~ksimum:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mà~xim:";
+        Text[ finnish ] = "E~nintään:";
+        Text[ thai ] = "à¸¡à¸²~à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”:";
+        Text[ czech ] = "Maximum:";
+        Text[ hebrew ] = "Ma~ximum:";
+        Text[ hindi ] = "à¤…à¤§à¤¿~à¤•à¤¤à¤®:";
+        Text[ slovak ] = "Ma~ximum:";
+    };
+        SpinField EDT_MAX
+        {
+            Border = TRUE ;
+            SVLook = TRUE ;
+            Pos = MAP_APPFONT ( 103 , 30  ) ;
+            Size = MAP_APPFONT ( 50 , 12 ) ;
+            TabStop = TRUE ;
+        };
+        CheckBox CBX_AUTO_MAX
+        {
+            Pos = MAP_APPFONT ( 159 , 31  ) ;
+            Size = MAP_APPFONT ( 88 , 10 ) ;
+            Text = "A~utomatisch" ;
+            Text [ ENGLISH ] = "~Auto" ;
+            TabStop = TRUE ;
+            Text [ dutch ] = "~Automatisch" ;
+            Text [ english_us ] = "Automatic" ;
+            Text [ italian ] = "A~utomatico" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ swedish ] = "A~utomatiskt" ;
+            Text [ danish ] = "A~utomatisk" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text [ portuguese_brazilian ] = "Automático" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ russian ] = "Àâ~òîìàòè÷åñêè";
+            Text[ polish ] = "Automatycznie";
+            Text[ japanese ] = "è‡ªå‹•";
+            Text[ chinese_traditional ] = "è‡ªå‹•";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "~Automatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ greek ] = "Á~õôüìáôá";
+        Text[ korean ] = "ìë™";
+        Text[ turkish ] = "O~tomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "Automaattinen";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
+        Text[ slovak ] = "Automaticky";
+    };
+
+        FixedText TXT_STEP_MAIN
+        {
+            Pos = MAP_APPFONT ( 11 , 48  ) ;
+            Size = MAP_APPFONT ( 88 , 8 ) ;
+            Text = "Hau~ptintervall:" ;
+            Text [ ENGLISH ] = "Ma~in Interval:" ;
+            Text [ english_us ] = "Major ~interval:" ;
+            Text [ italian ] = "Interv. ~princip." ;
+            Text [ spanish ] = "Intervalo prin~cipal:" ;
+            Text [ french ] = "Intervalle ~principal :" ;
+            Text [ dutch ] = "Hoo~fdinterval:" ;
+            Text [ swedish ] = "Huvudintervall:" ;
+            Text [ danish ] = "Overinterval:" ;
+            Text [ portuguese_brazilian ] = "Intervalo ~Principal:" ;
+            Text [ portuguese ] = "Intervalo ~principal:" ;
+            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼(~I)ï¼š";
+            Text[ russian ] = "Îñíîâíîé èíòåğâàë:";
+            Text[ polish ] = "Przedz~ia³ g³.:";
+            Text[ japanese ] = "ä¸»é–“éš”(~I):";
+            Text[ chinese_traditional ] = "ä¸»å€é–“å€¼(~I)ï¼š";
+            Text[ arabic ] = "İÊÑÉ İÇÕáÉ ÑÆíÓíÉ:";
+            Text[ dutch ] = "Hoo~fdinterval:";
+            Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼(~I)ï¼š";
+            Text[ greek ] = "Êıñéï ~äéÜóôçìá:";
+        Text[ korean ] = "ì£¼ ê°„ê²©(~I):";
+        Text[ turkish ] = "Ana A~ralık:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Interval principal";
+        Text[ finnish ] = "Pää~väli:";
+        Text[ thai ] = "~à¸Šà¹ˆà¸§à¸‡à¸«à¸¥à¸±à¸:";
+        Text[ czech ] = "HlavnÃ­ interval";
+        Text[ hebrew ] = "Hau~ptintervall:";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤§à¤¾à¤¨ ~à¤…à¤‚à¤¤à¤°à¤¾à¤²:";
+        Text[ slovak ] = "VÃ¤ÄÅ¡Ã­ ~interval:";
+    };
+        SpinField EDT_STEP_MAIN
+        {
+            Border = TRUE ;
+            Pos = MAP_APPFONT ( 103 , 46  ) ;
+            Size = MAP_APPFONT ( 50 , 12 ) ;
+            TabStop = TRUE ;
+        };
+        CheckBox CBX_AUTO_STEP_MAIN
+        {
+            Pos = MAP_APPFONT ( 159 , 47  ) ;
+            Size = MAP_APPFONT ( 88 , 10 ) ;
+            Text = "Au~tomatisch" ;
+            Text [ ENGLISH ] = "~Auto" ;
+            TabStop = TRUE ;
+            Text [ english_us ] = "Automatic" ;
+            Text [ italian ] = "Au~tomatico" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ dutch ] = "A~utomatisch" ;
+            Text [ swedish ] = "Au~tomatiskt" ;
+            Text [ danish ] = "Au~tomatisk" ;
+            Text [ portuguese_brazilian ] = "Automático" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ russian ] = "Àâò~îìàòè÷åñêè";
+            Text[ polish ] = "Automatycznie";
+            Text[ japanese ] = "è‡ªå‹•";
+            Text[ chinese_traditional ] = "è‡ªå‹•";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "A~utomatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ greek ] = "Áõ~ôüìáôá";
+        Text[ korean ] = "ìë™";
+        Text[ turkish ] = "Oto~matik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "Automaattinen";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
+        Text[ slovak ] = "Automaticky";
+    };
+
+        FixedText TXT_STEP_HELP
+        {
+            Pos = MAP_APPFONT ( 11 , 64  ) ;
+            Size = MAP_APPFONT ( 88 , 8 ) ;
+            Text = "Teilinte~rvall:" ;
+            Text [ ENGLISH ] = "~Help Interval:" ;
+            Text [ dutch ] = "~Hulpinterval" ;
+            Text [ english_us ] = "Mi~nor interval:" ;
+            Text [ italian ] = "Interv. ausil." ;
+            Text [ spanish ] = "Intervalo a~uxiliar:" ;
+            Text [ french ] = "Intervalle secondaire :" ;
+            Text [ swedish ] = "Delintervall:" ;
+            Text [ danish ] = "Underinterval:" ;
+            Text [ portuguese_brazilian ] = "~Intervalo auxiliar:" ;
+            Text [ portuguese ] = "~Intervalo auxiliar:" ;
+            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼(~N)ï¼š";
+            Text[ russian ] = "Äîïîëíèòåëüíûé èíòåğâàë:";
+            Text[ polish ] = "Przedzia³ pomocn.:";
+            Text[ japanese ] = "è£œåŠ©é–“éš”(~N):";
+            Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼(~N)ï¼š";
+            Text[ arabic ] = "İÊÑÉ İÇÕáÉ ãÓÇÚÏÉ:";
+            Text[ dutch ] = "~Hulpinterval";
+            Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼(~N)ï¼š";
+            Text[ greek ] = "Âïç~è. äéÜóôçìá:";
+        Text[ korean ] = "ë³´ì¡° ê°„ê²©(~N):";
+        Text[ turkish ] = "Kü~çük aralık";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Interval secu~ndari:";
+        Text[ finnish ] = "Pie~ni väli:";
+        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸£~à¸­à¸‡:";
+        Text[ czech ] = "VedlejÅ¡Ã­ interval:";
+        Text[ hebrew ] = "Teilinte~rvall:";
+        Text[ hindi ] = "à¤›à¥‹~à¤Ÿà¤¾ à¤…à¤‚à¤¤à¤°à¤¾à¤²:";
+        Text[ slovak ] = "Me~nÅ¡Ã­ interval:";
+    };
+//      SpinField EDT_STEP_HELP
+//      {
+//          Border = TRUE ;
+//          SVLook = TRUE ;
+//          Pos = MAP_APPFONT ( 103 , 62  ) ;
+//          Size = MAP_APPFONT ( 50 , 12 ) ;
+//          TabStop = TRUE ;
+//      };
+        MetricField MT_STEPHELP
+        {
+            Border = TRUE ;
+            Pos = MAP_APPFONT ( 103 , 62  ) ;
+            Size = MAP_APPFONT ( 50 , 12 ) ;
+            TabStop = TRUE ;
+            Repeat = TRUE ;
+            Spin = TRUE ;
+            Minimum = 1 ;
+            Maximum = 100 ;
+            StrictFormat = TRUE ;
+            Unit = FUNIT_CUSTOM ;
+            First = 1 ;
+            Last = 100 ;
+            SpinSize = 1 ;
+        };
+        CheckBox CBX_AUTO_STEP_HELP
+        {
+            Pos = MAP_APPFONT ( 159 , 63  ) ;
+            Size = MAP_APPFONT ( 88 , 10 ) ;
+            Text = "Aut~omatisch" ;
+            Text [ ENGLISH ] = "~Auto" ;
+            TabStop = TRUE ;
+            Text [ dutch ] = "A~utomatisch" ;
+            Text [ english_us ] = "Automatic" ;
+            Text [ italian ] = "Aut~omatico" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ swedish ] = "Aut~omatiskt" ;
+            Text [ danish ] = "Aut~omatisk" ;
+            Text [ portuguese_brazilian ] = "Automático" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ russian ] = "Àâòî~ìàòè÷åñêè";
+            Text[ polish ] = "Automatycznie";
+            Text[ japanese ] = "è‡ªå‹•";
+            Text[ chinese_traditional ] = "è‡ªå‹•";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "A~utomatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ greek ] = "Áõôüìáôá";
+        Text[ korean ] = "ìë™";
+        Text[ turkish ] = "Otomat~ik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "Automaattinen";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
+        Text[ slovak ] = "Automaticky";
+    };
+
+        FixedText TXT_ORIGIN
+        {
+            Pos = MAP_APPFONT ( 11 , 80  ) ;
+            Size = MAP_APPFONT ( 88 , 8 ) ;
+            Text = "A~chse bei:" ;
+            Text [ ENGLISH ] = "~Axis at:" ;
+            Text [ dutch ] = "~As op:" ;
+            Text [ english_us ] = "~Axis at:" ;
+            Text [ italian ] = "Asse a:" ;
+            Text [ spanish ] = "~Eje en:" ;
+            Text [ french ] = "A~xe à :" ;
+            Text [ swedish ] = "A~xel vid:" ;
+            Text [ danish ] = "Akse ved:" ;
+            Text [ portuguese_brazilian ] = "~Eixo em:" ;
+            Text [ portuguese ] = "~Eixo em:" ;
+            Text[ chinese_simplified ] = "è½´ä½ç½®(~A)ï¼š";
+            Text[ russian ] = "~Îñü äî:";
+            Text[ polish ] = "~Oœ przy:";
+            Text[ japanese ] = "åŸºæº–ç·š(~A):";
+            Text[ chinese_traditional ] = "è»¸ä½ç½®(~A)ï¼š";
+            Text[ arabic ] = "ãÍæÑ ÚäÏ:";
+            Text[ dutch ] = "~As op:";
+            Text[ chinese_simplified ] = "è½´ä½ç½®(~A)ï¼š";
+            Text[ greek ] = "¢~îïíáò óôï:";
+        Text[ korean ] = "ì¶•ì˜ ê¸°ì¤€(~A):";
+        Text[ turkish ] = "E~ksen değeri:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eix a:";
+        Text[ finnish ] = "~Akseli:";
+        Text[ thai ] = "à¹~à¸à¸™à¸—à¸µà¹ˆ:";
+        Text[ czech ] = "Osa na:";
+        Text[ hebrew ] = "A~chse bei:";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ ~à¤…à¤•à¥à¤·:";
+        Text[ slovak ] = "Osi s~a pretÃ­najÃº v:";
+    };
+        SpinField EDT_ORIGIN
+        {
+            Border = TRUE ;
+            SVLook = TRUE ;
+            Pos = MAP_APPFONT ( 103 , 78  ) ;
+            Size = MAP_APPFONT ( 50 , 12 ) ;
+            TabStop = TRUE ;
+        };
+        CheckBox CBX_AUTO_ORIGIN
+        {
+            Pos = MAP_APPFONT ( 159 , 79  ) ;
+            Size = MAP_APPFONT ( 88 , 10 ) ;
+            Text = "Automati~sch" ;
+            Text [ ENGLISH ] = "~Auto" ;
+            TabStop = TRUE ;
+            Text [ dutch ] = "A~utomatisch" ;
+            Text [ english_us ] = "Automatic" ;
+            Text [ italian ] = "Automatico" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ swedish ] = "Automati~skt" ;
+            Text [ danish ] = "Automati~sk" ;
+            Text [ portuguese_brazilian ] = "Automático" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ russian ] = "Àâòîìàòè÷åñêè";
+            Text[ polish ] = "Automatycznie";
+            Text[ japanese ] = "è‡ªå‹•";
+            Text[ chinese_traditional ] = "è‡ªå‹•";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "A~utomatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨";
+            Text[ greek ] = "Áõôüìáôá";
+        Text[ korean ] = "ìë™";
+        Text[ turkish ] = "Otomatik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "Automaattinen";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
+        Text[ slovak ] = "Automaticky";
+    };
+
+        CheckBox CBX_LOGARITHM
+        {
+            Pos = MAP_APPFONT ( 11 , 97  ) ;
+            Size = MAP_APPFONT ( 236 , 10 ) ;
+            Text = "~Logarithmische Skalierung" ;
+            Text [ ENGLISH ] = "~Logarithmic Scaling:" ;
+            Text [ norwegian ] = "~Logarithmic Scaling:" ;
+            Text [ italian ] = "Scala ~logaritmica:" ;
+            Text [ portuguese_brazilian ] = "Escala ~logarítmica" ;
+            Text [ portuguese ] = "Escala de ~logoritmos:" ;
+            Text [ finnish ] = "Logaritmia~steikko" ;
+            Text [ danish ] = "~Logaritmisk skalering" ;
+            Text [ french ] = "~Échelle logarithmique" ;
+            Text [ swedish ] = "~Logaritmisk skalning" ;
+            Text [ dutch ] = "~Logaritmische schaalverdeling" ;
+            Text [ spanish ] = "~Escala logarítmica" ;
+            Text [ english_us ] = "Logarithmic ~scale" ;
+            TabStop = TRUE ;
+            Text[ chinese_simplified ] = "å¯¹æ•°å‹åˆ»åº¦æ˜¾ç¤º(~S)";
+            Text[ russian ] = "Ëîãàğèôìè÷åñêèé ìàñøòàá";
+            Text[ polish ] = "~Skala logarytmiczna";
+            Text[ japanese ] = "å¯¾æ•°ç›®ç››(~S)";
+            Text[ chinese_traditional ] = "å°æ•¸çš„é¡¯ç¤ºæ¯”ä¾‹(~S)";
+            Text[ arabic ] = "ãŞíÇÓ áæÛÇÑíÊãí";
+            Text[ dutch ] = "~Logaritmische schaalverdeling";
+            Text[ chinese_simplified ] = "å¯¹æ•°å‹åˆ»åº¦æ˜¾ç¤º(~S)";
+            Text[ greek ] = "~ËïãáñéèìéêŞ êëßìáêá";
+        Text[ korean ] = "ëŒ€ìˆ˜ì  í™•ëŒ€(~S)";
+        Text[ turkish ] = "~Logaritmik ölçeklendirme";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Escalat logarítmic";
+        Text[ thai ] = "~à¸ªà¹€à¸à¸¥à¹à¸šà¸šà¸¥à¸­à¸à¸²à¸£à¸´à¸˜à¸¶à¸¡";
+        Text[ czech ] = "LogaritmickÃ© mÄ›Å™Ã­tko";
+        Text[ hebrew ] = "~Logarithmische Skalierung";
+        Text[ hindi ] = "à¤²à¤˜à¥à¤—à¤£à¤•à¤µà¤¿à¤§à¤¿ ~à¤¸à¥à¤•à¥‡à¤²";
+        Text[ slovak ] = "~LogaritmickÃ¡ stupnica";
+    };
+
+    FixedLine FL_TICKS
+    {
+        Pos = MAP_APPFONT ( 6 , 116  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Marken für Hauptintervalle" ;
+        Text[ ENGLISH ] = "tick marks" ;
+        Text[ english_us ] = "Major interval marks";
+        Text[ portuguese ] = "Marcas de eixos";
+        Text[ russian ] = "Ïîìåòêè îñåé";
+        Text[ dutch ] = "Asmarkeringen";
+        Text[ french ] = "Marques pour l'intervalle principal";
+        Text[ spanish ] = "Marcas para el intervalo principal";
+        Text[ italian ] = "Contrassegni degli intervalli principali";
+        Text[ danish ] = "Aksemarkeringer";
+        Text[ swedish ] = "Markeringar för huvudintervall";
+        Text[ polish ] = "Znaczniki osi";
+        Text[ portuguese_brazilian ] = "Marcas nos eixos";
+        Text[ japanese ] = "è»¸ã®åŒºåˆ‡ã‚Š";
+        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_traditional ] = "ä¸»å€é–“å€¼æ¨™è¨˜";
+        Text[ arabic ] = "ÚáÇãÇÊ ÇáãÍÇæÑ";
+        Text[ dutch ] = "Asmarkeringen";
+        Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ greek ] = "ÓçìÜíóåéò áîüíùí";
+        Text[ korean ] = "ì£¼ ê°„ê²© í‘œì‹œ";
+        Text[ turkish ] = "Büyük aralık işaretleri";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marques d'eix";
+        Text[ finnish ] = "Akselimerkit";
+        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¹à¸à¸™";
+        Text[ czech ] = "ZnaÄky na osÃ¡ch";
+        Text[ hebrew ] = "Marken fÃ¼r Hauptintervalle";
+        Text[ hindi ] = "à¤…à¤•à¥à¤· à¤¸à¤‚à¤•à¥‡à¤¤";
+        Text[ slovak ] = "ZnaÄky na osi";
+    };
+
+        CheckBox CBX_TICKS_INNER
+        {
+            Pos = MAP_APPFONT ( 11 , 127  ) ;
+            Size = MAP_APPFONT ( 78 , 10 ) ;
+            Text = "~innen";
+            Text[ ENGLISH ] = "~inner";
+            Text[ english_us ] = "inn~er";
+            Text[ portuguese ] = "~interior";
+            Text[ russian ] = "âí~óòğè";
+            Text[ dutch ] = "~binnenste";
+            Text[ french ] = "~Intérieur";
+            Text[ spanish ] = "~interior";
+            Text[ italian ] = "~Interno";
+            Text[ danish ] = "indre";
+            Text[ swedish ] = "~inre";
+            Text[ polish ] = "wewn¹trz";
+            Text[ portuguese_brazilian ] = "~interior";
+            Text[ japanese ] = "å†…å´(~E)";
+            Text[ chinese_simplified ] = "å†…(~E)";
+            Text[ chinese_traditional ] = "å…§(~E)";
+            Text[ arabic ] = "ÏÇÎá";
+            Text[ dutch ] = "~binnenste";
+            Text[ chinese_simplified ] = "å†…(~E)";
+            Text[ greek ] = "Åóùôåñ~éêÜ";
+        Text[ korean ] = "ë‚´ë¶€(~E)";
+        Text[ turkish ] = "~içerde";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "int~erior";
+        Text[ finnish ] = "si~sempi";
+        Text[ thai ] = "à¸ à¸²à¸¢à¹ƒ~à¸™";
+        Text[ czech ] = "vnitÅ™nÃ­";
+        Text[ hebrew ] = "~innen";
+        Text[ hindi ] = "à¤­à¥€à¤¤~à¤°à¥€";
+        Text[ slovak ] = "~vnÃºtornÃ©";
+    };
+        CheckBox CBX_TICKS_OUTER
+        {
+            Pos = MAP_APPFONT ( 93 , 127  ) ;
+            Size = MAP_APPFONT ( 78 , 10 ) ;
+            Text = "au~ßen";
+            Text[ ENGLISH ] = "~outer";
+            Text[ english_us ] = "~outer";
+            Text[ portuguese ] = "~exterior";
+            Text[ russian ] = "ñíàğóæè";
+            Text[ dutch ] = "~buitenste";
+            Text[ french ] = "~Extérieur";
+            Text[ spanish ] = "~exterior";
+            Text[ italian ] = "Esterno";
+            Text[ danish ] = "ydre";
+            Text[ swedish ] = "~yttre";
+            Text[ polish ] = "~na zewn¹trz";
+            Text[ portuguese_brazilian ] = "~exterior";
+            Text[ japanese ] = "å¤–å´(~O)";
+            Text[ chinese_simplified ] = "å¤–(~O)";
+            Text[ chinese_traditional ] = "å¤–(~O)";
+            Text[ arabic ] = "ÎÇÑÌ";
+            Text[ dutch ] = "~buitenste";
+            Text[ chinese_simplified ] = "å¤–(~O)";
+            Text[ greek ] = "Å~îùôåñéêÜ";
+        Text[ korean ] = "ì™¸ë¶€(~O)";
+        Text[ turkish ] = "dı~şarda";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "exteri~or";
+        Text[ finnish ] = "~ulompi";
+        Text[ thai ] = "~à¸ à¸²à¸¢à¸™à¸­à¸";
+        Text[ czech ] = "vnÄ›jÅ¡Ã­";
+        Text[ hebrew ] = "au~ÃŸen";
+        Text[ hindi ] = "~à¤¬à¤¾à¤¹à¤°à¥€";
+        Text[ slovak ] = "v~onkajÅ¡ie";
+    };
+
+    FixedLine FL_HELPTICKS
+    {
+        Pos = MAP_APPFONT ( 6 , 149  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Marken für Teilintervalle" ;
+        Text[ ENGLISH ] = "tick marks" ;
+        Text[ english_us ] = "Minor interval marks";
+        Text[ portuguese ] = "Marcas auxiliares";
+        Text[ russian ] = "Ïğîìåæóòî÷íûå ïîìåòêè";
+        Text[ dutch ] = "Hulpmarkeringen";
+        Text[ french ] = "Marques pour l'intervalle secondaire";
+        Text[ spanish ] = "Marcas para el intervalo auxiliar";
+        Text[ italian ] = "Contrassegni per intervalli ausiliari";
+        Text[ danish ] = "Hjælpemarkeringer";
+        Text[ swedish ] = "Markeringar för delintervall";
+        Text[ polish ] = "Znaczniki podzia³ki";
+        Text[ portuguese_brazilian ] = "Marcas auxiliares";
+        Text[ japanese ] = "è£œåŠ©åŒºåˆ‡ã‚Š";
+        Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼æ¨™è¨˜";
+        Text[ arabic ] = "ÚáÇãÇÊ ÇáãÓÇÚÏÉ";
+        Text[ dutch ] = "Hulpmarkeringen";
+        Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼çš„æ ‡è®°";
+        Text[ greek ] = "ÂïçèçôéêÜ óçìÜäéá";
+        Text[ korean ] = "ë³´ì¡° ì„ íƒ í‘œì‹œ";
+        Text[ turkish ] = "Küçük aralık işaretleri";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marques auxiliars";
+        Text[ finnish ] = "Jakoviivat";
+        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸‚à¸µà¸”";
+        Text[ czech ] = "Stupnice";
+        Text[ hebrew ] = "Marken fÃ¼r Teilintervalle";
+        Text[ hindi ] = "à¤Ÿà¤¿à¤•à¥ à¤®à¤¾à¤°à¥à¤•";
+        Text[ slovak ] = "Stupnica";
+    };
+
+        CheckBox CBX_HELPTICKS_INNER
+        {
+            Pos = MAP_APPFONT ( 11 , 160  );
+            Size = MAP_APPFONT ( 78 , 10 ) ;
+            Text = "inn~en";
+            Text[ ENGLISH ] = "i~nner";
+            Text[ english_us ] = "i~nner";
+            Text[ portuguese ] = "i~nterior";
+            Text[ russian ] = "âíóòğè";
+            Text[ dutch ] = "bi~nnenste";
+            Text[ french ] = "~Intérieur";
+            Text[ spanish ] = "i~nterior";
+            Text[ italian ] = "Int~erno";
+            Text[ danish ] = "indre";
+            Text[ swedish ] = "inr~e";
+            Text[ polish ] = "~wewn¹trz";
+            Text[ portuguese_brazilian ] = "i~nterior";
+            Text[ japanese ] = "å†…å´(~N)";
+            Text[ chinese_simplified ] = "å†…(~N)";
+            Text[ chinese_traditional ] = "å…§(~N)";
+            Text[ arabic ] = "ÏÇÎá";
+            Text[ dutch ] = "bi~nnenste";
+            Text[ chinese_simplified ] = "å†…(~N)";
+            Text[ greek ] = "Åóùô~åñéêÜ";
+        Text[ korean ] = "ë‚´ë¶€(~N)";
+        Text[ turkish ] = "içe~rde";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "i~nterior";
+        Text[ finnish ] = "s~isempi";
+        Text[ thai ] = "à¸ à¸²~à¸¢à¹ƒà¸™";
+        Text[ czech ] = "vnitÅ™nÃ­";
+        Text[ hebrew ] = "inn~en";
+        Text[ hindi ] = "à¤­à¥€~à¤¤à¤°à¥€";
+        Text[ slovak ] = "vnÃº~tornÃ¡";
+    };
+        CheckBox CBX_HELPTICKS_OUTER
+        {
+            Pos = MAP_APPFONT ( 93 , 160  ) ;
+            Size = MAP_APPFONT ( 78 , 10 ) ;
+            Text = "auße~n";
+            Text[ ENGLISH ] = "o~uter";
+            Text[ english_us ] = "o~uter";
+            Text[ portuguese ] = "e~xterior";
+            Text[ russian ] = "ñíàğóæè";
+            Text[ dutch ] = "bu~itenste";
+            Text[ french ] = "~Extérieur";
+            Text[ spanish ] = "e~xterior";
+            Text[ italian ] = "Ester~no";
+            Text[ danish ] = "ydre";
+            Text[ swedish ] = "ytt~re";
+            Text[ polish ] = "na zewn¹trz";
+            Text[ portuguese_brazilian ] = "e~xterior";
+            Text[ japanese ] = "å¤–å´(~U)";
+            Text[ chinese_simplified ] = "å¤–(~U)";
+            Text[ chinese_traditional ] = "å¤–(~U)";
+            Text[ arabic ] = "ÎÇÑÌ";
+            Text[ dutch ] = "bu~itenste";
+            Text[ chinese_simplified ] = "å¤–(~U)";
+            Text[ greek ] = "Åîùôå~ñéêÜ";
+        Text[ korean ] = "ì™¸ë¶€(~U)";
+        Text[ turkish ] = "d~ışarda";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "e~xterior";
+        Text[ finnish ] = "u~lompi";
+        Text[ thai ] = "à¸ à¸²à¸¢à¸™~à¸­à¸";
+        Text[ czech ] = "vnÄ›jÅ¡Ã­";
+        Text[ hebrew ] = "auÃŸe~n";
+        Text[ hindi ] = "à¤¬à¤¾~à¤¹à¤°à¥€";
+        Text[ slovak ] = "von~kajÅ¡ia";
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,482 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlg_ChartType.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/*
+#include "diagrtyp.hrc"
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+#include "app.hrc"
+#include "schhids.h"
+*/
+
+#include "dlg_ChartType.hrc"
+#include "SchSlotIds.hxx"
+#include "HelpIds.hrc"
+
+ModalDialog DLG_DIAGRAM_TYPE
+{
+    HelpID = SID_DIAGRAM_TYPE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 246 ) ;
+    Text = "Diagrammtyp" ;
+    Text [ ENGLISH ] = "Diagram Type" ;
+    Text [ NORWEGIAN ] = "Diagram Type" ;
+    Text [ DANISH ] = "Diagramtype" ;
+    Text [ ENGLISH_US ] = "Chart Type" ;
+    Text [ SPANISH ] = "Tipo de diagrama" ;
+    Text [ FINNISH ] = "Kaaviotyyppi" ;
+    Text [ FRENCH ] = "Type de diagramme" ;
+    Text [ ITALIAN ] = "Tipo di diagramma" ;
+    Text [ DUTCH ] = "Diagramtype" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Tipo de Gr·fico" ;
+    Text [ SWEDISH ] = "Diagramtyp" ;
+    Text [ PORTUGUESE ] = "Tipo de gr·fico" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 204 , 6  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 204 , 23  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 43  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_DIMENSION
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Diagrammkategorie" ;
+        Text [ ENGLISH ] = "Dimension" ;
+        Text [ NORWEGIAN ] = "Dimension" ;
+        Text [ DANISH ] = "Diagramkategori" ;
+        Text [ ENGLISH_US ] = "Chart category" ;
+        Text [ SPANISH ] = "CategorÌa de diagrama" ;
+        Text [ FINNISH ] = "Kaavioluokka" ;
+        Text [ FRENCH ] = "CatÈgorie" ;
+        Text [ ITALIAN ] = "Categoria diagramma" ;
+        Text [ DUTCH ] = "Diagramcategorie" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Categoria de gr·fico" ;
+        Text [ SWEDISH ] = "Diagramkategori" ;
+        Text [ PORTUGUESE ] = "Categoria de gr·fico" ;
+        Text[ chinese_simplified ] = "ÂõæË°®ÂàÜÁ±ª";
+        Text[ russian ] = " ‡ÚÂ„ÓËˇ ‰Ë‡„‡ÏÏ˚";
+        Text[ polish ] = "Kategoria wykresu";
+        Text[ japanese ] = "Ê¨°ÂÖÉ";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "ÂúñË°®ÂàÜÈ°û";
+        Text[ arabic ] = "«·√»⁄«œ";
+        Text[ greek ] = " ·ÙÁ„ÔÒﬂ· ‰È·„Ò‹ÏÏ·ÙÔÚ";
+        Text[ korean ] = "Ï∞®Ìä∏ Î≤îÏ£º";
+        Text[ turkish ] = "«izelge kategorisi";
+        Text[ catalan ] = "DimensiÛ";
+        Text[ thai ] = "‡∏°‡∏¥‡∏ï‡∏¥";
+        Text[ czech ] = "Kategorie grafu";
+        Text[ hebrew ] = "Diagrammkategorie";
+        Text[ hindi ] = "‡§ö‡§æ‡§∞‡•ç‡§ü ‡§µ‡§∞‡•ç‡§ó";
+        Text[ slovak ] = "Kateg√≥ria grafu";
+    };
+    RadioButton RBT_2D
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 88 , 12 ) ;
+        Text = "~2D" ;
+        Text [ ENGLISH ] = "~2D" ;
+        Text [ NORWEGIAN ] = "~2D" ;
+        Text [ DANISH ] = "2D" ;
+        Text [ ENGLISH_US ] = "~2D" ;
+        Text [ SPANISH ] = "~2D" ;
+        Text [ FINNISH ] = "~Kaksiulotteinen" ;
+        Text [ FRENCH ] = "~2D" ;
+        Text [ ITALIAN ] = "2D" ;
+        Text [ DUTCH ] = "~2D" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~2D" ;
+        Text [ SWEDISH ] = "~2D" ;
+        Text [ PORTUGUESE ] = "~2D" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "~2 Áª¥";
+        Text[ russian ] = "ƒ‚ÛÏÂÌ‡ˇ";
+        Text[ polish ] = "~2D";
+        Text[ japanese ] = "~2D";
+        Text[ chinese_traditional ] = "Âπ≥Èù¢";
+        Text[ arabic ] = "À‰«∆Ì";
+        Text[ greek ] = "~2ƒ";
+        Text[ korean ] = "2D";
+        Text[ turkish ] = "~2B";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~2D";
+        Text[ thai ] = "~2‡∏°‡∏¥‡∏ï‡∏¥";
+        Text[ czech ] = "2D";
+        Text[ hebrew ] = "~2D";
+        Text[ hindi ] = "~2D";
+        Text[ slovak ] = "~2D";
+    };
+    RadioButton RBT_3D
+    {
+        Pos = MAP_APPFONT ( 12 , 30  ) ;
+        Size = MAP_APPFONT ( 88 , 12 ) ;
+        Text = "~3D" ;
+        Text [ ENGLISH ] = "~3D" ;
+        Text [ NORWEGIAN ] = "~3D" ;
+        Text [ DANISH ] = "3D" ;
+        Text [ ENGLISH_US ] = "~3D" ;
+        Text [ SPANISH ] = "~3D" ;
+        Text [ FINNISH ] = "~Kolmiulotteinen" ;
+        Text [ FRENCH ] = "~3D" ;
+        Text [ ITALIAN ] = "3D" ;
+        Text [ DUTCH ] = "~3D" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~3D" ;
+        Text [ SWEDISH ] = "~3D" ;
+        Text [ PORTUGUESE ] = "~3D" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "~3 Áª¥";
+        Text[ russian ] = "“ÂıÏÂÌ‡ˇ";
+        Text[ polish ] = "~3D";
+        Text[ japanese ] = "~3D";
+        Text[ chinese_traditional ] = "~3D";
+        Text[ arabic ] = "À·«ÀÌ";
+        Text[ greek ] = "~3ƒ";
+        Text[ korean ] = "3Ôº§";
+        Text[ turkish ] = "~3B";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~3D";
+        Text[ thai ] = "~3‡∏°‡∏¥‡∏ï‡∏¥";
+        Text[ czech ] = "3D";
+        Text[ hebrew ] = "~3D";
+        Text[ hindi ] = "~3D";
+        Text[ slovak ] = "~3D";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 48  ) ;
+        Size = MAP_APPFONT ( 192 , 10 ) ;
+        Text = "~Diagrammtyp" ;
+        Text [ ENGLISH ] = "~Type" ;
+        Text [ NORWEGIAN ] = "~Type:" ;
+        Text [ DANISH ] = "~Diagramtype" ;
+        Text [ ENGLISH_US ] = "Chart ~type" ;
+        Text [ SPANISH ] = "~Tipo de diagrama:" ;
+        Text [ FINNISH ] = "Kaaviot~yyppi" ;
+        Text [ FRENCH ] = "Type" ;
+        Text [ ITALIAN ] = "~Tipo diagramma" ;
+        Text [ DUTCH ] = "~Diagramtype" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Tipo de gr·fico" ;
+        Text [ SWEDISH ] = "~Diagramtyp:" ;
+        Text [ PORTUGUESE ] = "~Tipo de gr·fico" ;
+        Text[ chinese_simplified ] = "ÂõæË°®Á±ªÂûã(~T)";
+        Text[ russian ] = "“ËÔ ‰Ë‡„‡ÏÏ˚";
+        Text[ polish ] = "~Typ wykresu";
+        Text[ japanese ] = "Á®ÆÈ°û(~T)";
+        Text[ chinese_traditional ] = "ÂúñË°®È°ûÂûã(~T)";
+        Text[ arabic ] = "«·‰Ê⁄:";
+        Text[ greek ] = "‘˝ÔÚ ~‰È·„Ò‹ÏÏ·ÙÔÚ";
+        Text[ korean ] = "Ï∞®Ìä∏ Ïú†Ìòï(~T)";
+        Text[ turkish ] = "Karakter ~tipi";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipus:";
+        Text[ thai ] = "~‡∏ä‡∏ô‡∏¥‡∏î:";
+        Text[ czech ] = "Typ grafu";
+        Text[ hebrew ] = "~Diagrammtyp";
+        Text[ hindi ] = "‡§ö‡§æ‡§∞‡•ç‡§ü ‡§µ‡§∞‡•ç‡§ó";
+        Text[ slovak ] = "~Typ grafu";
+    };
+    Control CTL_TYPE
+    {
+        HelpId = HID_SCH_CTL_TYPE ;
+        Border = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 61  ) ;
+        Size = MAP_APPFONT ( 188 , 97 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_VARIANT
+    {
+        Pos = MAP_APPFONT ( 6 , 169  ) ;
+        Size = MAP_APPFONT ( 192 , 10 ) ;
+        Text = "~Variante:" ;
+        Text [ ENGLISH ] = "~Variant:" ;
+        Text [ NORWEGIAN ] = "~Variant:" ;
+        Text [ DANISH ] = "Undertype:" ;
+        Text [ ENGLISH_US ] = "~Variants:" ;
+        Text [ SPANISH ] = "~Variante:" ;
+        Text [ FINNISH ] = "~Vaihtoehdot:" ;
+        Text [ FRENCH ] = "~Variante :" ;
+        Text [ ITALIAN ] = "~Varianti:" ;
+        Text [ DUTCH ] = "~Variantie:" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Variantes:" ;
+        Text [ SWEDISH ] = "~Variant:" ;
+        Text [ PORTUGUESE ] = "Variantes:" ;
+        Text[ chinese_simplified ] = "Âèò‰Ωì(~V)";
+        Text[ russian ] = "¬‡Ë‡ÌÚ˚:";
+        Text[ polish ] = "~Warianty:";
+        Text[ japanese ] = "„Éê„É™„Ç®„Éº„Ç∑„Éß„É≥(~V):";
+        Text[ chinese_traditional ] = "ËÆäÈ´î(~V)";
+        Text[ arabic ] = "√‘ﬂ«· „Œ ·›…:";
+        Text[ greek ] = "–·Ò·ÎÎ·„ﬁ:";
+        Text[ korean ] = "Î≥ÄÏàò(~V):";
+        Text[ turkish ] = "~Varyant:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Variants";
+        Text[ thai ] = "~‡∏ï‡∏±‡∏ß‡πÅ‡∏õ‡∏£‡∏ú‡∏±‡∏ô:";
+        Text[ czech ] = "Varianty:";
+        Text[ hebrew ] = "~Variante:";
+        Text[ hindi ] = "~‡§µ‡•á‡§∞‡§ø‡§è‡§®‡•ç‡§ü‡•ç‡§∏::";
+        Text[ slovak ] = "~Varianty:";
+    };
+    Control CTL_VARIANT
+    {
+        HelpId = HID_SCH_CTL_VARIANT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 182  ) ;
+        Size = MAP_APPFONT ( 188 , 53 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DEEP
+    {
+        Pos = MAP_APPFONT ( 114 , 16  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~St¸tzpunktordnung" ;
+        Text [ ENGLISH ] = "~Order of points" ;
+        Text [ english_us ] = "~Data points order" ;
+        Text [ italian ] = "Ordine dei punti di appoggio" ;
+        Text [ spanish ] = "~Orden de los puntos" ;
+        Text [ french ] = "~Ordre des points d'appui" ;
+        Text [ dutch ] = "~Steunpuntordening" ;
+        Text [ swedish ] = "~Punktordning" ;
+        Text [ danish ] = "St¯ttepunktorden" ;
+        Text [ portuguese_brazilian ] = "Ordem ~dos pontos de dados" ;
+        Text [ portuguese ] = "Ordem dos pontos de apoio" ;
+        Text[ chinese_simplified ] = "Êï∞ÊçÆÁÇπÈ°∫Â∫è(~D)";
+        Text[ russian ] = "œÓˇ‰ÓÍ ÚÓ˜ÂÍ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "KolejnoúÊ punktÛw ~danych";
+        Text[ japanese ] = "„Éá„Éº„Çø„Éù„Ç§„É≥„Éà„ÅÆÈÖçÂàó(~D)";
+        Text[ chinese_traditional ] = "Ë≥áÊñôÈªûÈ†ÜÂ∫è(~D)";
+        Text[ arabic ] = " — Ì» ‰ﬁ«ÿ «·»Ì«‰« ";
+        Text[ greek ] = "ƒÈ‹Ù·ÓÁ ~ÛÁÏÂﬂ˘Ì Í·Ï˝ÎÁÚ";
+        Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ Ìè¨Ïù∏Ìä∏ Î∞∞Ïó¥(~D)";
+        Text[ turkish ] = "~Destek noktas˝ s˝ras˝";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordre dels punts de ~dades";
+        Text[ finnish ] = "~Arvopisteiden j‰rjestys";
+        Text[ thai ] = "‡∏•‡∏≥‡∏î‡∏±‡∏ö‡∏à‡∏∏‡∏î~‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+        Text[ czech ] = "Po≈ôad√≠ datov√Ωch bod≈Ø";
+        Text[ hebrew ] = "~St√ºtzpunktordnung";
+        Text[ hindi ] = "~‡§°‡§º‡•â‡§ü‡§æ ‡§¨‡§ø‡§®‡•ç‡§¶‡•Å ‡§ï‡•ç‡§∞‡§Æ";
+        Text[ slovak ] = "Poradie ~d√°tov√Ωch bodov";
+    };
+    MetricField MTR_FLD_DEEP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_NUM_OF_LINES
+    {
+        Pos = MAP_APPFONT ( 114 , 16  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Anzahl an ~Linien" ;
+        Text[ ENGLISH ] = "~Number of lines" ;
+        Text[ english_us ] = "~Number of lines";
+        Text[ portuguese ] = "~Number of lines";
+        Text[ russian ] = "~Number of lines";
+        Text[ greek ] = "~Number of lines";
+        Text[ dutch ] = "~Number of lines";
+        Text[ french ] = "Nombre de lignes";
+        Text[ spanish ] = "~N˙mero de lÌneas";
+        Text[ finnish ] = "~Number of lines";
+        Text[ italian ] = "~Numero di righe";
+        Text[ danish ] = "~Number of lines";
+        Text[ swedish ] = "Antal ~linjer";
+        Text[ polish ] = "~Number of lines";
+        Text[ japanese ] = "Á∑ö„ÅÆÊú¨Êï∞";
+        Text[ korean ] = "Ï§Ñ Ïàò";
+        Text[ chinese_simplified ] = "Á∫øÊù°ÁöÑÊï∞ÁõÆ";
+        Text[ chinese_traditional ] = "Á∑öÊ¢ùÁöÑÊï∏ÁõÆ(~N)";
+        Text[ turkish ] = "«izgi ~Say˝s˝";
+        Text[ arabic ] = "~Number of lines";
+        Text[ czech ] = "Poƒçet ≈ô√°dk≈Ø";
+        Text[ hebrew ] = "Anzahl an ~Linien";
+        Text[ catalan ] = "~Number of lines";
+        Text[ portuguese_brazilian ] = "~Number of lines";
+        Text[ thai ] = "~Number of lines";
+        Text[ hindi ] = "~Number of lines";
+        Text[ slovak ] = "Poƒçet ria~dkov";
+    };
+    MetricField MTR_FLD_NUM_OF_LINES
+    {
+        HelpId = HID_SCH_NUM_OF_LINES ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+         Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_GRAN
+    {
+        Pos = MAP_APPFONT ( 114 , 31  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Auflˆsung" ;
+        Text [ ENGLISH ] = "~Order of points" ;
+        Text [ english_us ] = "~Resolution" ;
+        Text [ italian ] = "Risoluzione" ;
+        Text [ spanish ] = "~ResoluciÛn" ;
+        Text [ french ] = "~RÈsolution" ;
+        Text [ dutch ] = "~Resolutie" ;
+        Text [ swedish ] = "~Upplˆsning" ;
+        Text [ danish ] = "Opl¯sning" ;
+        Text [ portuguese_brazilian ] = "~ResoluÁ„o" ;
+        Text [ portuguese ] = "ResoluÁ„o" ;
+        Text[ chinese_simplified ] = "ÂàÜËæ®Áéá(~R)";
+        Text[ russian ] = "–‡ÁÂ¯ÂÌËÂ";
+        Text[ polish ] = "~RozdzielczoúÊ";
+        Text[ japanese ] = "‰∏≠ÈñìÁÇπ(~R)";
+        Text[ chinese_traditional ] = "Ëß£ÊûêÂ∫¶(~R)";
+        Text[ arabic ] = "«·«” »«‰…";
+        Text[ greek ] = "¡Ì‹ÎıÛÁ";
+        Text[ korean ] = "Ìï¥ÏÉÅÎèÑ(~R)";
+        Text[ turkish ] = "~«ˆz¸n¸rl¸k";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~ResoluciÛ";
+        Text[ finnish ] = "~Tarkkuus";
+        Text[ thai ] = "~‡∏Ñ‡∏ß‡∏≤‡∏°‡∏•‡∏∞‡πÄ‡∏≠‡∏µ‡∏¢‡∏î";
+        Text[ czech ] = "Rozli≈°en√≠";
+        Text[ hebrew ] = "~Aufl√∂sung";
+        Text[ hindi ] = "~Resolution";
+        Text[ slovak ] = "~Rozl√≠≈°enie";
+    };
+    MetricField MTR_FLD_GRAN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 178 , 30  ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        First = 1 ;
+        Last = 1000 ;
+        SpinSize = 1 ;
+    };
+    Text[ chinese_simplified ] = "ÂõæË°®Á±ªÂûã";
+    Text[ russian ] = "“ËÔ ‰Ë‡„‡ÏÏ˚";
+    Text[ polish ] = "Typ wykresu";
+    Text[ japanese ] = "„Ç∞„É©„Éï„ÅÆÁ®ÆÈ°û";
+    Text[ chinese_traditional ] = "ÂúñË°®È°ûÂûã";
+    Text[ arabic ] = "‰Ê⁄ «·—”„ «·»Ì«‰Ì";
+    Text[ greek ] = "‘˝ÔÚ ‰È·„Ò‹ÏÏ·ÙÔÚ";
+    Text[ korean ] = "Ï∞®Ìä∏ Ïú†Ìòï";
+    Text[ turkish ] = "ﬁema tipi";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipus de diagrama";
+    Text[ thai ] = "‡∏ä‡∏ô‡∏¥‡∏î‡πÅ‡∏ú‡∏ô‡∏†‡∏π‡∏°‡∏¥";
+    Text[ czech ] = "Typ grafu";
+    Text[ hebrew ] = "Diagrammtyp";
+    Text[ hindi ] = "Chart Type";
+    Text[ slovak ] = "Typ grafu";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

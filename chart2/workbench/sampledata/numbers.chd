@@ -1,0 +1,22 @@
+# -*- coding: utf-8; -*-
+# Series Labels
+
+Series1 Series2 Series3
+
+# Categories
+
+a b c d e f g h i j k l m n o p q r s t u v w x y z ä ö ü
+
+# Data
+
+# Series 1
+
+5 8 -1 6 4 2 7 5 9 8 -3 1 5 10 2 4 5 9 1 11 5 7 6 9 5 9 12 5 -1
+
+# Series 2
+
+5 4 2 0 1 6 5 9 8 8 9 -4 5 1 2 3 10 2 5 6 7 8 4 5 1 5 4 11 5
+
+# Series 3
+
+5 8 4 5 8 5 5 4 5 1 2 -1 4 5 7 5 8 9 6 -4 5 1 2 3 5 6 1 1 3

@@ -1,0 +1,31 @@
+ch	chart2	:	apphelper comphelper cppu cppuhelper sal sv svl svtool svx tk tools vcl NULL
+ch	chart2										usr1	-	all	ch_mkout NULL
+ch	chart2\drafts\com\sun\star\chart2			nmake	-	all	ch_uno_chart2 NULL
+ch	chart2\drafts\com\sun\star\layout			nmake	-	all	ch_uno_layout NULL
+ch	chart2\util									nmake	-	all	ch_uno ch_uno_chart2 ch_uno_layout NULL
+ch	chart2\source\inc							get		-	all	ch_source_inc NULL
+ch	chart2\source\inc\chartview					get		-	all	ch_source_inc_chartview NULL
+ch	chart2\source\tools							nmake	-	all	ch_source_tools ch_uno NULL
+ch	chart2\source\model							nmake	-	all	ch_source_model ch_uno ch_source_tools ch_source_model_main ch_source_model_tree ch_source_model_template ch_source_model_oldapi NULL
+ch	chart2\source\model\main					nmake	-	all ch_source_model_main ch_uno NULL
+ch	chart2\source\model\tree					nmake	-	all ch_source_model_tree ch_uno NULL
+ch	chart2\source\model\template				nmake	-	all ch_source_model_template ch_uno NULL
+ch	chart2\source\model\oldapi					nmake	-	all ch_source_model_oldapi ch_uno NULL
+ch	chart2\res									get		-	all	ch_res NULL
+ch	chart2\source\view							nmake	-	all	ch_source_view ch_uno ch_source_tools ch_source_view_charttypes ch_source_view_axes ch_source_view_diagram ch_source_view_main NULL
+ch	chart2\source\view\inc						get		-	all	ch_source_view_inc NULL
+ch	chart2\source\view\axes						nmake	-	all	ch_source_view_axes ch_uno NULL
+ch	chart2\source\view\charttypes				nmake	-	all	ch_source_view_charttypes ch_uno NULL
+ch	chart2\source\view\diagram					nmake	-	all	ch_source_view_diagram ch_uno NULL
+ch	chart2\source\view\main						nmake	-	all	ch_source_view_main ch_uno NULL
+ch	chart2\source\controller					nmake	-	all	ch_source_controller ch_uno ch_source_tools ch_source_view ch_source_controller_drawinglayer ch_source_controller_itemsetwrapper ch_source_controller_dialogs ch_source_controller_menu ch_source_controller_main NULL
+ch	chart2\source\controller\inc				get		-	all	ch_source_controller_inc NULL
+ch	chart2\source\controller\dialogs			nmake	-	all	ch_source_controller_dialogs ch_uno NULL
+ch	chart2\source\controller\menu				nmake	-	all	ch_source_controller_menu ch_uno NULL
+ch	chart2\source\controller\drawinglayer		nmake	-	all	ch_source_controller_drawinglayer ch_uno NULL
+ch	chart2\source\controller\itemsetwrapper		nmake	-	all	ch_source_controller_itemsetwrapper ch_uno NULL
+ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_uno NULL
+ch	chart2\prj									get		-	all	ch_prj NULL
+ch	chart2\genjava								nmake	-	all	ch_java ch_uno NULL
+ch	chart2\genjava\drafts\com\sun\star\layout	nmake	-	all	ch_class_layout ch_java NULL
+ch	chart2\genjava\drafts\com\sun\star\chart2	nmake	-	all	ch_class_chart2 ch_class_layout ch_java NULL

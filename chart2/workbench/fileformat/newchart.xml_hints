@@ -1,0 +1,77 @@
+/*
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
+
+	<office:document-content xmlns:office="http://openoffice.org/2000/office"
+							xmlns:style="http://openoffice.org/2000/style"
+							xmlns:text="http://openoffice.org/2000/text"
+							xmlns:table="http://openoffice.org/2000/table"
+							xmlns:draw="http://openoffice.org/2000/drawing"
+							xmlns:fo="http://www.w3.org/1999/XSL/Format"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							xmlns:number="http://openoffice.org/2000/datastyle"
+							xmlns:svg="http://www.w3.org/2000/svg"
+							xmlns:chart="http://openoffice.org/2000/chart"
+							xmlns:dr3d="http://openoffice.org/2000/dr3d"
+							xmlns:math="http://www.w3.org/1998/Math/MathML"
+							xmlns:form="http://openoffice.org/2000/form"
+							xmlns:script="http://openoffice.org/2000/script"
+
+							office:class="chart" office:version="1.0">
+
+
+*/
+
+// dtd -----------------------------------------------------
+// <!ELEMENT elementname regel>
+// <!ELEMENT elementname (subelement1,subelement2)> subelemente müssen vorhanden sein und 1 muss vor 2 stehen
+// <!ELEMENT elementname (subelement1|subelement2)> subelement 1 oder 2 muss vorhanden sein
+// <!ELEMENT elementname subelement?+*>	?: einmal oder gar nicht;
+										+: mindestens einmal
+										*: keinmal oder mehrmals
+// <!ATTLIST zielelement-name
+//			attribut-name attribut-datentyp defaultwert>
+//
+//										defaultwert: "geeigneter wert"
+//										defaultwert: #REQUIRED
+//										defaultwert: #IMPLIED (kann weggelassen werden)
+//										defaultwert: #FIXED "nicht zu ändernder wert"
+//										attribut-datentyp: CDATA
+//										attribut-datentyp: enumerated (werte aufzählung z.B.)
+//										attribut-datentyp: ENTITY (deklariert in dtd)
+//										attribut-datentyp: ENTITIES (mehrfache durch whitespace getrennte ENTITYs)
+//										attribut-datentyp: ID (eindeutiges elementkennzeichen)
+//										attribut-datentyp: IDREF (wert eines ID-attributes)
+//										attribut-datentyp: IDREFS (mehrfache durch whitespace getrennte IDREFs)
+//										attribut-datentyp: NMTOKEN (xml-namen-token)
+//										attribut-datentyp: NMTOKENS (mehrfache durch whitespace getrennte NMTOKENs)
+//										attribut-datentyp: NOTATION (notation deklariert in dtd)
+
+<!----------------style:style----------------------------------- -->
+
+//<!ELEMENT style:style ( style:properties?,office:events?,style:map*)>
+//<!ELEMENT style:properties ANY>
+//<!ATTLIST style:style style:name %styleName; #REQUIRED>
+//<!ENTITY % styleFamily "(paragraph|text|section|
+//						 table|table-column|table-row|table-cell|table-page|chart|graphics|default|drawing-page|presentation|control|ruby)">
+//<!ATTLIST style:style style:family %styleFamily; #REQUIRED>
+//<!ATTLIST style:style style:parent-style-name %styleName; #IMPLIED>
+//<!ATTLIST style:style style:master-page-name %styleName; #IMPLIED>
+//<!ATTLIST style:style style:next-style-name %styleName; #IMPLIED>
+//<!ATTLIST style:style style:list-style-name %styleName; #IMPLIED>
+//<!ATTLIST style:style style:data-style-name %styleName; #IMPLIED>
+//<!ATTLIST style:style style:auto-update %boolean; "false">
+//<!ATTLIST style:style style:class %string; #IMPLIED>
+
+//---------------- expand styleFamily??:
+<!ENTITY % styleFamily "(...|chart|chart-axis||...)">
+
+an chart-axis style 'contains':
+number:number-style (as attribute style:data-style-name="name of a number:number-style")
+
+!!!!!!!!!!!!!! add chart2.mod to office.dtd
+
+!!!!!!!!!!!!!! remove chart from shape entity in dtypes.mod
+than add chart and chart2 to body entity in office.mod
+
+?????????legend-service name as style??

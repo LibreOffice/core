@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Bitmaps_HC.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+// RID_SCH_START is 30512 (see svtools/solar.hrc)
+
+// chart types
+#define BMP_AREAS_2D_HC                    ( RID_SCH_START + 0 )
+#define BMP_AREAS_2D_1_HC                  ( RID_SCH_START + 1 )
+#define BMP_AREAS_2D_3_HC                  ( RID_SCH_START + 2 )
+#define BMP_AREAS_3D_HC                    ( RID_SCH_START + 3 )
+#define BMP_AREAS_3D_1_HC                  ( RID_SCH_START + 4 )
+#define BMP_AREAS_3D_2_HC                  ( RID_SCH_START + 5 )
+
+#define BMP_BARS_2D_HC                     ( RID_SCH_START + 6 )
+#define BMP_BARS_2D_1_HC                   ( RID_SCH_START + 7 )
+#define BMP_BARS_2D_2_HC                   ( RID_SCH_START + 8 )
+#define BMP_BARS_2D_3_HC                   ( RID_SCH_START + 9 )
+#define BMP_BARS_3D_HC                     ( RID_SCH_START + 10 )
+#define BMP_BARS_3D_1_HC                   ( RID_SCH_START + 11 )
+#define BMP_BARS_3D_2_HC                   ( RID_SCH_START + 12 )
+#define BMP_BARS_3D_3_HC                   ( RID_SCH_START + 13 )
+
+#define BMP_CIRCLES_2D_HC                  ( RID_SCH_START + 14 )
+#define BMP_CIRCLES_2D_1_HC                ( RID_SCH_START + 15 )
+#define BMP_CIRCLES_2D_2_HC                ( RID_SCH_START + 16 )
+#define BMP_CIRCLES_3D_HC                  ( RID_SCH_START + 17 )
+
+#define BMP_COLUMNS_2D_HC                  ( RID_SCH_START + 18 )
+#define BMP_COLUMNS_2D_1_HC                ( RID_SCH_START + 19 )
+#define BMP_COLUMNS_2D_2_HC                ( RID_SCH_START + 20 )
+#define BMP_COLUMNS_2D_3_HC                ( RID_SCH_START + 21 )
+#define BMP_COLUMNS_2D_4_HC                ( RID_SCH_START + 22 )
+#define BMP_COLUMNS_2D_5_HC                ( RID_SCH_START + 80 )
+#define BMP_COLUMNS_3D_HC                  ( RID_SCH_START + 23 )
+#define BMP_COLUMNS_3D_1_HC                ( RID_SCH_START + 24 )
+#define BMP_COLUMNS_3D_2_HC                ( RID_SCH_START + 25 )
+#define BMP_COLUMNS_3D_3_HC                ( RID_SCH_START + 26 )
+
+#define BMP_DONUT1_2D_HC                   ( RID_SCH_START + 27 )
+
+#define BMP_KEGELQ_3D_1_HC                 ( RID_SCH_START + 28 )
+#define BMP_KEGELQ_3D_2_HC                 ( RID_SCH_START + 29 )
+#define BMP_KEGELQ_3D_3_HC                 ( RID_SCH_START + 30 )
+#define BMP_KEGELQ_3D_4_HC                 ( RID_SCH_START + 31 )
+#define BMP_KEGEL_3D_1_HC                  ( RID_SCH_START + 32 )
+#define BMP_KEGEL_3D_2_HC                  ( RID_SCH_START + 33 )
+#define BMP_KEGEL_3D_3_HC                  ( RID_SCH_START + 34 )
+#define BMP_KEGEL_3D_4_HC                  ( RID_SCH_START + 35 )
+
+//#define BMP_LINESYMB_2D_HC                 ( RID_SCH_START + 36 )
+#define BMP_LINESYMB_2D_1_HC               ( RID_SCH_START + 37 )
+#define BMP_LINESYMB_2D_2_HC               ( RID_SCH_START + 38 )
+#define BMP_LINESYMB_2D_3_HC               ( RID_SCH_START + 39 )
+
+#define BMP_LINES_2D_HC                    ( RID_SCH_START + 40 )
+#define BMP_LINES_2D_1_HC                  ( RID_SCH_START + 41 )
+#define BMP_LINES_2D_2_HC                  ( RID_SCH_START + 42 )
+#define BMP_LINES_2D_3_HC                  ( RID_SCH_START + 43 )
+#define BMP_LINES_3D_HC                    ( RID_SCH_START + 44 )
+
+#define BMP_NETSYMB_2D_HC                  ( RID_SCH_START + 45 )
+#define BMP_NETSYMB_2D_PERCENT_HC          ( RID_SCH_START + 46 )
+#define BMP_NETSYMB_2D_STACK_HC            ( RID_SCH_START + 47 )
+#define BMP_NET_2D_HC                      ( RID_SCH_START + 48 )
+#define BMP_NET_2D_PERCENT_HC              ( RID_SCH_START + 49 )
+#define BMP_NET_2D_STACK_HC                ( RID_SCH_START + 50 )
+
+#define BMP_PYRAMIDQ_3D_1_HC               ( RID_SCH_START + 51 )
+#define BMP_PYRAMIDQ_3D_2_HC               ( RID_SCH_START + 52 )
+#define BMP_PYRAMIDQ_3D_3_HC               ( RID_SCH_START + 53 )
+#define BMP_PYRAMIDQ_3D_4_HC               ( RID_SCH_START + 54 )
+
+#define BMP_PYRAMID_3D_1_HC                ( RID_SCH_START + 55 )
+#define BMP_PYRAMID_3D_2_HC                ( RID_SCH_START + 56 )
+#define BMP_PYRAMID_3D_3_HC                ( RID_SCH_START + 57 )
+#define BMP_PYRAMID_3D_4_HC                ( RID_SCH_START + 58 )
+
+#define BMP_ROEHRE_3D_1_HC                 ( RID_SCH_START + 59 )
+#define BMP_ROEHRE_3D_2_HC                 ( RID_SCH_START + 60 )
+#define BMP_ROEHRE_3D_3_HC                 ( RID_SCH_START + 61 )
+#define BMP_ROEHRE_3D_4_HC                 ( RID_SCH_START + 62 )
+
+#define BMP_SAEULE_3D_1_HC                 ( RID_SCH_START + 63 )
+#define BMP_SAEULE_3D_2_HC                 ( RID_SCH_START + 64 )
+#define BMP_SAEULE_3D_3_HC                 ( RID_SCH_START + 65 )
+#define BMP_SAEULE_3D_4_HC                 ( RID_SCH_START + 66 )
+
+#define BMP_SPLINE_B_HC                    ( RID_SCH_START + 67 )
+#define BMP_SPLINE_B_SYMBOL_HC             ( RID_SCH_START + 68 )
+#define BMP_SPLINE_CUBIC_HC                ( RID_SCH_START + 69 )
+#define BMP_SPLINE_CUBIC_SYMBOL_HC         ( RID_SCH_START + 70 )
+
+#define BMP_STOCK_1_HC                     ( RID_SCH_START + 71 )
+#define BMP_STOCK_2_HC                     ( RID_SCH_START + 72 )
+#define BMP_STOCK_3_HC                     ( RID_SCH_START + 73 )
+#define BMP_STOCK_4_HC                     ( RID_SCH_START + 74 )
+
+//#define BMP_SURF_3D_HC                   ( RID_SCH_START + 75 )
+#define BMP_XYSYMB_2D_HC                   ( RID_SCH_START + 76 )
+//#define BMP_XYZSYMB_3D_HC                ( RID_SCH_START + 77 )
+//#define BMP_XYZ_3D_HC                    ( RID_SCH_START + 78 )
+#define BMP_XY_2D_HC                       ( RID_SCH_START + 79 )
+
+//SchStatisticTabPage and SchDataStatisticsDlg
+#define BMP_INDICATE_NONE_HC               ( RID_SCH_START + 81 )
+#define BMP_INDICATE_BOTH_HC               ( RID_SCH_START + 82 )
+#define BMP_INDICATE_UP_HC                 ( RID_SCH_START + 83 )
+#define BMP_INDICATE_DOWN_HC               ( RID_SCH_START + 84 )
+#define BMP_REGRESSION_NONE_HC             ( RID_SCH_START + 85 )
+#define BMP_REGRESSION_LINEAR_HC           ( RID_SCH_START + 86 )
+#define BMP_REGRESSION_LOG_HC              ( RID_SCH_START + 87 )
+#define BMP_REGRESSION_EXP_HC              ( RID_SCH_START + 88 )
+#define BMP_REGRESSION_POWER_HC            ( RID_SCH_START + 89 )

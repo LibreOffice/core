@@ -1,0 +1,1813 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Strings_ChartTypes.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Strings.hrc"
+
+String STR_LINES
+{
+    Text = "Linien" ;
+    Text [ ENGLISH ] = "Lines" ;
+    Text [ norwegian ] = "Linjer" ;
+    Text [ italian ] = "Linee" ;
+    Text [ portuguese_brazilian ] = "Linhas" ;
+    Text [ portuguese ] = "Linhas" ;
+    Text [ finnish ] = "Rivit" ;
+    Text [ danish ] = "Linjer" ;
+    Text [ french ] = "Lignes" ;
+    Text [ swedish ] = "Linjer" ;
+    Text [ dutch ] = "Lijnen" ;
+    Text [ spanish ] = "Líneas" ;
+    Text [ english_us ] = "Lines" ;
+    Text[ chinese_simplified ] = "çº¿æ¡";
+    Text[ russian ] = "Ëèíèè";
+    Text[ polish ] = "Linie";
+    Text[ japanese ] = "æŠ˜ã‚Œç·š";
+    Text[ chinese_traditional ] = "ç·šæ¢";
+    Text[ arabic ] = "ÎØæØ";
+    Text[ greek ] = "Ãñáììİò";
+    Text[ korean ] = "ì„ ";
+    Text[ turkish ] = "Çizgi";
+    Text[ catalan ] = "Línies";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "Å˜Ã¡dky";
+    Text[ hebrew ] = "Linien";
+    Text[ hindi ] = "Lines";
+    Text[ slovak ] = "ÄŒiarovÃ½ graf";
+};
+String STR_COLUMNS
+{
+    Text = "Säulen" ;
+    Text [ ENGLISH ] = "Columns" ;
+    Text [ norwegian ] = "Kolonner" ;
+    Text [ italian ] = "Colonne" ;
+    Text [ portuguese_brazilian ] = "Colunas" ;
+    Text [ portuguese ] = "Barras" ;
+    Text [ finnish ] = "Pylväs" ;
+    Text [ danish ] = "Søjler" ;
+    Text [ french ] = "Colonnes" ;
+    Text [ swedish ] = "Staplar" ;
+    Text [ dutch ] = "kolommen" ;
+    Text [ spanish ] = "Columnas" ;
+    Text [ english_us ] = "Columns" ;
+    Text[ chinese_simplified ] = "æŸ±";
+    Text[ russian ] = "Ãèñòîãğàììà";
+    Text[ polish ] = "Kolumny";
+    Text[ japanese ] = "ç¸¦æ£’";
+    Text[ chinese_traditional ] = "æŸ±";
+    Text[ arabic ] = "ÃÚãÏÉ";
+    Text[ greek ] = "ÓôŞëåò";
+    Text[ korean ] = "ë‹¨";
+    Text[ turkish ] = "Sütun";
+    Text[ catalan ] = "Columnes";
+    Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹Œ";
+    Text[ czech ] = "Sloupce";
+    Text[ hebrew ] = "â€®×˜×•×¨×™×â€¬";
+    Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­";
+    Text[ slovak ] = "StÄºpcovÃ½ graf (zvisle)";
+};
+String STR_BARS
+{
+    Text = "Balken" ;
+    Text [ ENGLISH ] = "Bars" ;
+    Text [ norwegian ] = "Linjer" ;
+    Text [ italian ] = "Barre" ;
+    Text [ portuguese_brazilian ] = "Barras" ;
+    Text [ portuguese ] = "Barras" ;
+    Text [ finnish ] = "Palkit" ;
+    Text [ danish ] = "Liggende søjler" ;
+    Text [ french ] = "Barres" ;
+    Text [ swedish ] = "Liggande staplar" ;
+    Text [ dutch ] = "balken" ;
+    Text [ spanish ] = "Barras" ;
+    Text [ english_us ] = "Bars" ;
+    Text[ chinese_simplified ] = "æ¡";
+    Text[ russian ] = "Ëèíåé÷àòàÿ";
+    Text[ polish ] = "S³upki";
+    Text[ japanese ] = "æ¨ªæ£’";
+    Text[ language_user1 ] = "èëè: Ïîëîñû - -";
+    Text[ chinese_traditional ] = "æ¢";
+    Text[ arabic ] = "ÃÚãÏÉ";
+    Text[ greek ] = "ÑÜâäïé";
+    Text[ korean ] = "ë°”";
+    Text[ turkish ] = "Çubuk";
+    Text[ catalan ] = "Barres";
+    Text[ thai ] = "à¹à¸–à¸š";
+    Text[ czech ] = "Sloupky";
+    Text[ hebrew ] = "Balken";
+    Text[ hindi ] = "à¤ªà¤Ÿà¥à¤Ÿà¥€";
+    Text[ slovak ] = "StÄºpcovÃ½ graf (vodorovne)";
+};
+String STR_AREAS
+{
+    Text = "Flächen" ;
+    Text [ ENGLISH ] = "Areas" ;
+    Text [ norwegian ] = "Områder" ;
+    Text [ italian ] = "Aree" ;
+    Text [ portuguese_brazilian ] = "Áreas" ;
+    Text [ portuguese ] = "Áreas" ;
+    Text [ finnish ] = "Alueet" ;
+    Text [ danish ] = "Områder" ;
+    Text [ french ] = "Zones" ;
+    Text [ swedish ] = "Ytor" ;
+    Text [ dutch ] = "vlakken" ;
+    Text [ spanish ] = "Áreas" ;
+    Text [ english_us ] = "Areas" ;
+    Text[ chinese_simplified ] = "å¹³é¢";
+    Text[ russian ] = "Îáëàñòè";
+    Text[ polish ] = "Obszary";
+    Text[ japanese ] = "ã‚¨ãƒªã‚¢";
+    Text[ chinese_traditional ] = "å¹³é¢";
+    Text[ arabic ] = "ãäÇØŞ";
+    Text[ greek ] = "ÅğéöÜíåéåò";
+    Text[ korean ] = "ë©´";
+    Text[ turkish ] = "Yüzey";
+    Text[ catalan ] = "Àrees";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+    Text[ czech ] = "Oblasti";
+    Text[ hebrew ] = "FlÃ¤chen";
+    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
+    Text[ slovak ] = "PloÅ¡nÃ½ graf";
+};
+String STR_CIRCLES
+{
+    Text = "Kreise" ;
+    Text [ ENGLISH ] = "Pies" ;
+    Text [ norwegian ] = "Sektorer" ;
+    Text [ italian ] = "Torta" ;
+    Text [ portuguese_brazilian ] = "Pizzas" ;
+    Text [ portuguese ] = "Sectores" ;
+    Text [ finnish ] = "Ympyräkaaviot" ;
+    Text [ danish ] = "Cirkler" ;
+    Text [ french ] = "Secteurs" ;
+    Text [ swedish ] = "Cirklar" ;
+    Text [ dutch ] = "cirkels" ;
+    Text [ spanish ] = "Círculos" ;
+    Text [ english_us ] = "Pies" ;
+    Text[ chinese_simplified ] = "åœ†";
+    Text[ russian ] = "Êğóãîâàÿ";
+    Text[ polish ] = "Ko³a";
+    Text[ japanese ] = "å††";
+    Text[ chinese_traditional ] = "åœ“";
+    Text[ arabic ] = "ÏæÇÆÑ";
+    Text[ greek ] = "Êıêëïé";
+    Text[ korean ] = "ì›í˜•";
+    Text[ turkish ] = "Daire";
+    Text[ catalan ] = "Diagrames de sectors";
+    Text[ thai ] = "à¸à¸²à¸¢";
+    Text[ czech ] = "KolÃ¡ÄovÃ½";
+    Text[ hebrew ] = "Kreise";
+    Text[ hindi ] = "à¤µà¥ƒà¤¤à¤–à¤£à¥à¤¡";
+    Text[ slovak ] = "KolÃ¡ÄovÃ½ graf";
+};
+
+String STR_DONUT1
+{
+    Text = "Ringe" ;
+    Text [ ENGLISH ] = "Rings" ;
+    Text [ norwegian ] = "Sektorer" ;
+    Text [ italian ] = "Anelli" ;
+    Text [ portuguese_brazilian ] = "Anéis" ;
+    Text [ portuguese ] = "Anéis" ;
+    Text [ finnish ] = "Renkaat" ;
+    Text [ danish ] = "Kranse" ;
+    Text [ french ] = "Anneaux" ;
+    Text [ swedish ] = "Ringar" ;
+    Text [ dutch ] = "ringen" ;
+    Text [ spanish ] = "Anillos" ;
+    Text [ english_us ] = "Rings" ;
+    Text[ chinese_simplified ] = "ç¯";
+    Text[ russian ] = "Êîëüöåâàÿ";
+    Text[ polish ] = "Pierœcienie";
+    Text[ japanese ] = "ãƒ‰ãƒ¼ãƒŠãƒ„";
+    Text[ chinese_traditional ] = "ç’°";
+    Text[ arabic ] = "ÍáŞÇÊ";
+    Text[ greek ] = "Äáêôıëéïé";
+    Text[ korean ] = "ë§";
+    Text[ turkish ] = "Halka";
+    Text[ catalan ] = "Anells";
+    Text[ thai ] = "à¸§à¸‡";
+    Text[ czech ] = "KruhovÃ½";
+    Text[ hebrew ] = "Ringe";
+    Text[ hindi ] = "à¤°à¤¿à¤‚à¤—";
+    Text[ slovak ] = "PrstencovÃ½ graf";
+};
+/*
+String STR_DONUT2
+{
+    Text = "Ringe" ;
+    Text [ ENGLISH ] = "Rings" ;
+    Text [ norwegian ] = "Sektorer" ;
+    Text [ italian ] = "Anelli" ;
+    Text [ portuguese_brazilian ] = "Anéis" ;
+    Text [ portuguese ] = "Anéis" ;
+    Text [ finnish ] = "Renkaat" ;
+    Text [ danish ] = "Kranse" ;
+    Text [ french ] = "Anneaux" ;
+    Text [ swedish ] = "Ringar" ;
+    Text [ dutch ] = "ringen" ;
+    Text [ spanish ] = "Anillos" ;
+    Text [ english_us ] = "Rings" ;
+    Text[ chinese_simplified ] = "ç¯";
+    Text[ russian ] = "Êîëüöåâàÿ";
+    Text[ polish ] = "Pierœcienie";
+    Text[ japanese ] = "ãƒ‰ãƒ¼ãƒŠãƒ„";
+    Text[ chinese_traditional ] = "ç’°";
+    Text[ arabic ] = "ÍáŞÇÊ";
+    Text[ greek ] = "Äáêôıëéïé";
+    Text[ korean ] = "ë§";
+    Text[ turkish ] = "Halka";
+    Text[ catalan ] = "Anells";
+    Text[ thai ] = "à¸§à¸‡";
+    Text[ czech ] = "KruhovÃ½";
+    Text[ hebrew ] = "Ringe";
+    Text[ hindi ] = "à¤°à¤¿à¤‚à¤—";
+    Text[ slovak ] = "PrstencovÃ½ graf";
+};
+*/
+
+//-----------------------------------------------------------------------------
+
+String STR_NORMAL
+{
+    Text = "Normal" ;
+    Text [ ENGLISH ] = "Normal" ;
+    Text [ norwegian ] = "Normal" ;
+    Text [ italian ] = "Normale" ;
+    Text [ portuguese_brazilian ] = "Normal" ;
+    Text [ portuguese ] = "Normal" ;
+    Text [ french ] = "Normal" ;
+    Text [ dutch ] = "Normaal" ;
+    Text [ spanish ] = "Normal" ;
+    Text [ danish ] = "Normal" ;
+    Text [ swedish ] = "Normal" ;
+    Text [ finnish ] = "Normaali" ;
+    Text [ english_us ] = "Normal" ;
+    Text[ chinese_simplified ] = "ä¸€èˆ¬";
+    Text[ russian ] = "Îáû÷íàÿ";
+    Text[ polish ] = "Zwyk³y";
+    Text[ japanese ] = "æ¨™æº–";
+    Text[ chinese_traditional ] = "ä¸€èˆ¬";
+    Text[ arabic ] = "ÚÇÏíÉ";
+    Text[ greek ] = "ÊáíïíéêÜ";
+    Text[ korean ] = "í‘œì¤€";
+    Text[ turkish ] = "Normal";
+    Text[ catalan ] = "Normal";
+    Text[ thai ] = "à¸›à¸à¸•à¸´";
+    Text[ czech ] = "BÄ›Å¾nÃ½";
+    Text[ hebrew ] = "Normal";
+    Text[ hindi ] = "à¤¨à¥‰à¤°à¥à¤®à¤²à¥";
+    Text[ slovak ] = "NormÃ¡lny graf";
+};
+String STR_STACKED
+{
+    Text = "Gestapelt" ;
+    Text [ ENGLISH ] = "Stacked" ;
+    Text [ norwegian ] = "Stablet" ;
+    Text [ italian ] = "Sovrapposto" ;
+    Text [ portuguese_brazilian ] = "Empilhado" ;
+    Text [ portuguese ] = "Empilhado" ;
+    Text [ french ] = "Empilé" ;
+    Text [ dutch ] = "Gestapeld" ;
+    Text [ spanish ] = "En pilas" ;
+    Text [ danish ] = "Stablet" ;
+    Text [ swedish ] = "Staplat" ;
+    Text [ finnish ] = "Pinottuna" ;
+    Text [ english_us ] = "Stacked" ;
+    Text[ chinese_simplified ] = "é‡å ";
+    Text[ russian ] = "Ñ íàêîïëåíèåì";
+    Text[ polish ] = "Skumulowany";
+    Text[ japanese ] = "ç©ã¿ä¸Šã’";
+    Text[ chinese_traditional ] = "é‡ç–Š";
+    Text[ arabic ] = "ãÊÑÇßãÉ";
+    Text[ greek ] = "Óå óôïßâá";
+    Text[ korean ] = "ëˆ„ì ëœ";
+    Text[ turkish ] = "Yığılmış";
+    Text[ catalan ] = "Apilat";
+    Text[ thai ] = "à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "SklÃ¡danÃ½";
+    Text[ hebrew ] = "Gestapelt";
+    Text[ hindi ] = "Stacked";
+    Text[ slovak ] = "SkladanÃ½ graf";
+};
+String STR_PERCENT
+{
+    Text = "Prozent" ;
+    Text [ ENGLISH ] = "Percent" ;
+    Text [ norwegian ] = "Prosent" ;
+    Text [ italian ] = "Percentuale" ;
+    Text [ portuguese_brazilian ] = "Percentual" ;
+    Text [ portuguese ] = "Percentual" ;
+    Text [ french ] = "Pourcentage" ;
+    Text [ dutch ] = "Procent" ;
+    Text [ spanish ] = "Porcentaje" ;
+    Text [ danish ] = "Procent" ;
+    Text [ swedish ] = "Procent" ;
+    Text [ finnish ] = "Prosenttia" ;
+    Text [ english_us ] = "Percent" ;
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”";
+    Text[ russian ] = "Ïğîöåíòíàÿ";
+    Text[ polish ] = "Procent";
+    Text[ japanese ] = "ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”";
+    Text[ arabic ] = "ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "Ğïóïóôü (%)";
+    Text[ korean ] = "ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Yüzde";
+    Text[ catalan ] = "Percentatge";
+    Text[ thai ] = "à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "ProcentuÃ¡lnÃ­";
+    Text[ hebrew ] = "Prozent";
+    Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤";
+    Text[ slovak ] = "PercentuÃ¡lny graf";
+};
+
+String STR_DEEP
+{
+    Text = "Tief" ;
+    Text [ ENGLISH ] = "Deep" ;
+    Text [ norwegian ] = "Deep" ;
+    Text [ italian ] = "In profondità" ;
+    Text [ portuguese_brazilian ] = "Profundo" ;
+    Text [ portuguese ] = "Fundo" ;
+    Text [ french ] = "Profond" ;
+    Text [ dutch ] = "met diepte" ;
+    Text [ spanish ] = "Profundidad" ;
+    Text [ danish ] = "Dyb" ;
+    Text [ swedish ] = "Djup" ;
+    Text [ finnish ] = "Syvyys" ;
+    Text [ english_us ] = "Deep" ;
+    Text[ chinese_simplified ] = "æ·±åº¦";
+    Text[ russian ] = "Ãëóáèíà";
+    Text[ polish ] = "G³êboki";
+    Text[ japanese ] = "å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_traditional ] = "æ·±åº¦";
+    Text[ arabic ] = "ÚãíŞÉ";
+    Text[ greek ] = "Óå âÜèïò";
+    Text[ korean ] = "ê¹Šì´";
+    Text[ turkish ] = "Derin";
+    Text[ catalan ] = "Profund";
+    Text[ thai ] = "à¸¥à¸¶à¸";
+    Text[ czech ] = "Hloubka";
+    Text[ hebrew ] = "Tief";
+    Text[ hindi ] = "à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "HÄºbkovÃ½ graf";
+};
+
+String STR_OFS
+{
+    // comment
+    Text[ language_user1 ] = "BM: Parameter $(N) is replaced by 1 or 2 for different offset types";
+    // comment
+    Text = "Offset $(N)" ;
+    Text [ ENGLISH ] = "Offset $(N)" ;
+    Text [ english_us ] = "Offset $(N)" ;
+    Text [ italian ] = "Offset $(N)" ;
+    Text [ spanish ] = "Offset $(N)" ;
+    Text [ french ] = "Offset $(N)" ;
+    Text [ dutch ] = "Offset $(N)" ;
+    Text [ swedish ] = "Offset $(N)" ;
+    Text [ danish ] = "Offset $(N)" ;
+    Text [ portuguese ] = "Offset $(N)" ;
+    Text [ portuguese_brazilian ] = "Offset $(N)" ;
+    Text[ chinese_simplified ] = "åç§»$(N)";
+    Text[ russian ] = "Ñìåùåííàÿ $(N)";
+    Text[ polish ] = "Przesuniêcie $(N)";
+    Text[ japanese ] = "ã‚ªãƒ•ã‚»ãƒƒãƒˆ $(N)";
+    Text[ chinese_traditional ] = "åç§» $(N)";
+    Text[ arabic ] = "ÇáÅÒÇÍÉ $(N)";
+    Text[ greek ] = "Ìåôáôüğéóç $(N)";
+    Text[ korean ] = "ì˜¤í”„ì…‹$(N)";
+    Text[ turkish ] = "Ofset $(N)";
+    Text[ catalan ] = "Offset $(N)";
+    Text[ finnish ] = "Siirtymä $(N)";
+    Text[ thai ] = "à¸­à¸­à¸Ÿà¹€à¸‹à¸• $(N)";
+    Text[ czech ] = "Odchylka $(N)";
+    Text[ hebrew ] = "Offset $(N)";
+    Text[ hindi ] = "à¤‘à¤«à¤¼à¤¸à¥‡à¤Ÿà¥ $(N)";
+    Text[ slovak ] = "OfsetovÃ½ (oddelenÃ© kolÃ¡Äe) $(N)";
+};
+
+//-----------------------------------------------------------------------------
+/*
+String STR_LINESYMB
+{
+    Text = "Linien mit Symbolen" ;
+    Text [ ENGLISH ] = "Lines with symbols" ;
+    Text [ english_us ] = "Lines with Symbols" ;
+    Text [ italian ] = "Linee con simboli" ;
+    Text [ spanish ] = "Líneas con símbolos" ;
+    Text [ french ] = "Lignes avec symboles" ;
+    Text [ dutch ] = "Lijnen met symbolen" ;
+    Text [ swedish ] = "Linjer med symboler" ;
+    Text [ danish ] = "Linjer med mærker" ;
+    Text [ portuguese_brazilian ] = "Linhas com Símbolos" ;
+    Text [ portuguese ] = "Linhas com símbolos" ;
+    Text[ chinese_simplified ] = "å¸¦å›¾æ ‡çš„çº¿æ¡";
+    Text[ russian ] = "Ëèíèè ñ ñèìâîëàìè";
+    Text[ polish ] = "Linie z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ãæŠ˜ã‚Œç·š";
+    Text[ chinese_traditional ] = "åœ–ç¤ºç·šæ¢";
+    Text[ arabic ] = "ÎØæØ ÈÑãæÒ";
+    Text[ greek ] = "Ãñáììİò ìå óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ê°€ í¬í•¨ëœ ì„ ";
+    Text[ turkish ] = "Simgeli çizgi";
+    Text[ catalan ] = "Línies amb símbols";
+    Text[ finnish ] = "Viivat ja symbolit";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸à¸±à¸šà¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "ÄŒÃ¡ry se symboly";
+    Text[ hebrew ] = "Linien mit Symbolen";
+    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤ à¤¸à¤¹à¤¿à¤¤ à¤°à¥‡à¤–à¤¾à¤à¤";
+    Text[ slovak ] = "ÄŒiarovÃ½ graf so symbolmi";
+};
+*/
+String STR_XY
+{
+    Text = "XY-Diagramm" ;
+    Text [ ENGLISH ] = "XY diagram" ;
+    Text [ dutch ] = "XY-diagram" ;
+    Text [ english_us ] = "XY Chart" ;
+    Text [ italian ] = "Diagramma XY" ;
+    Text [ spanish ] = "Diagrama XY" ;
+    Text [ french ] = "Diagramme XY" ;
+    Text [ swedish ] = "XY-diagram" ;
+    Text [ danish ] = "XY-diagram" ;
+    Text [ portuguese ] = "Gráfico XY" ;
+    Text [ portuguese_brazilian ] = "Gráfico XY" ;
+    Text[ chinese_simplified ] = "XY å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà XY";
+    Text[ polish ] = "Wykres XY";
+    Text[ japanese ] = "æ•£å¸ƒå›³";
+    Text[ chinese_traditional ] = "XY-åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí Ó Õ";
+    Text[ greek ] = "ÄéÜãñáììá XY";
+    Text[ korean ] = "XY ì°¨íŠ¸";
+    Text[ turkish ] = "XY şeması";
+    Text[ catalan ] = "Diagrama XY";
+    Text[ finnish ] = "XY-kaavio";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´XY ";
+    Text[ czech ] = "Graf XY";
+    Text[ hebrew ] = "XY-Diagramm";
+    Text[ hindi ] = "XY à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "Graf XY";
+};
+/*
+String STR_XYZ
+{
+    Text = "XYZ-Diagramm" ;
+    Text [ ENGLISH ] = "XYZ diagram" ;
+    Text [ dutch ] = "XYZ-diagram" ;
+    Text [ english_us ] = "XYZ Chart" ;
+    Text [ italian ] = "Diagramma XYZ" ;
+    Text [ spanish ] = "Diagrama XYZ" ;
+    Text [ french ] = "Diagramme XYZ" ;
+    Text [ swedish ] = "XYZ-diagram" ;
+    Text [ danish ] = "XYZ-diagram" ;
+    Text [ portuguese ] = "Gráfico XYZ" ;
+    Text [ portuguese_brazilian ] = "Gráfico XYZ" ;
+    Text[ chinese_simplified ] = "XYZ å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà XYZ";
+    Text[ polish ] = "Wykres XYZ";
+    Text[ japanese ] = "XYZè»¸å›³è¡¨";
+    Text[ chinese_traditional ] = "XYZ-åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí Ó Õ Ú";
+    Text[ greek ] = "ÄéÜãñáììá XYZ";
+    Text[ korean ] = "XYZ ì°¨íŠ¸";
+    Text[ turkish ] = "XYZ şeması";
+    Text[ catalan ] = "Diagrama XYZ";
+    Text[ finnish ] = "XYZ-kaavio";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´XYZ ";
+    Text[ czech ] = "Graf XYZ";
+    Text[ hebrew ] = "XYZ-Diagramm";
+    Text[ hindi ] = "XYZ à¤šà¤¾à¤°à¥à¤Ÿ ";
+    Text[ slovak ] = "Graf XYZ";
+};
+*/
+String STR_ONLY_SYMBOLS
+{
+    Text = "Nur Symbole" ;
+    Text [ ENGLISH ] = "Only symbols" ;
+    Text [ english_us ] = "Symbols Only" ;
+    Text [ dutch ] = "Alleen symbolen" ;
+    Text [ italian ] = "Solo simboli" ;
+    Text [ spanish ] = "Sólo símbolos" ;
+    Text [ french ] = "Uniquement symboles" ;
+    Text [ swedish ] = "Endast symboler" ;
+    Text [ danish ] = "Kun mærker" ;
+    Text [ portuguese ] = "Só símbolos" ;
+    Text [ portuguese_brazilian ] = "Somente Símbolos" ;
+    Text[ chinese_simplified ] = "åªæ˜¾ç¤ºå›¾æ ‡";
+    Text[ russian ] = "Òîëüêî ñèìâîëû";
+    Text[ polish ] = "Tylko symbole";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆã®ã¿";
+    Text[ chinese_traditional ] = "åªå…è¨±åœ–ç¤º";
+    Text[ arabic ] = "ÑãæÒ İŞØ";
+    Text[ greek ] = "Ìüíï óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ë§Œ";
+    Text[ turkish ] = "Yalnızca simge";
+    Text[ catalan ] = "Només símbols";
+    Text[ finnish ] = "Vain symbolit";
+    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
+    Text[ czech ] = "Pouze symboly";
+    Text[ hebrew ] = "Nur Symbole";
+    Text[ hindi ] = "à¤•à¥‡à¤µà¤² à¤¸à¤‚à¤•à¥‡à¤¤";
+    Text[ slovak ] = "Iba symboly";
+};
+String STR_ONLY_LINES
+{
+    Text = "Nur Linien" ;
+    Text [ ENGLISH ] = "Only lines" ;
+    Text [ english_us ] = "Lines Only" ;
+    Text [ dutch ] = "Alleen lijnen" ;
+    Text [ italian ] = "Solo linee" ;
+    Text [ spanish ] = "Sólo líneas" ;
+    Text [ french ] = "Uniquement lignes" ;
+    Text [ swedish ] = "Endast linjer" ;
+    Text [ danish ] = "Kun linjer" ;
+    Text [ portuguese ] = "Só linhas" ;
+    Text [ portuguese_brazilian ] = "Somente Linhas" ;
+    Text[ chinese_simplified ] = "åªæ˜¾ç¤ºçº¿æ¡";
+    Text[ russian ] = "Òîëüêî ëèíèè";
+    Text[ polish ] = "Tylko linie";
+    Text[ japanese ] = "ç·šã®ã¿";
+    Text[ chinese_traditional ] = "åªå…è¨±ç·šæ¢";
+    Text[ arabic ] = "ÎØæØ İŞØ";
+    Text[ greek ] = "Ìüíï ãñáììİò";
+    Text[ korean ] = "ì„  ë§Œ";
+    Text[ turkish ] = "Yalnızca çizgi";
+    Text[ catalan ] = "Només línies";
+    Text[ finnish ] = "Vain viivat";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
+    Text[ czech ] = "Pouze ÄÃ¡ry";
+    Text[ hebrew ] = "Nur Linien";
+    Text[ hindi ] = "Lines Only";
+    Text[ slovak ] = "Iba Äiary";
+};
+String STR_LINE_SYMBOLS
+{
+    Text = "Linien mit Symbolen" ;
+    Text [ ENGLISH ] = "Lines with symbols" ;
+    Text [ english_us ] = "Lines with Symbols" ;
+    Text [ dutch ] = "Lijnen met symbolen" ;
+    Text [ italian ] = "Linee con simboli" ;
+    Text [ spanish ] = "Líneas con símbolos" ;
+    Text [ french ] = "Lignes avec symboles" ;
+    Text [ swedish ] = "Linjer med symboler" ;
+    Text [ danish ] = "Linjer med mærker" ;
+    Text [ portuguese ] = "Linhas com símbolos" ;
+    Text [ portuguese_brazilian ] = "Linhas com Símbolos" ;
+    Text[ chinese_simplified ] = "å¸¦å›¾æ ‡çš„çº¿æ¡";
+    Text[ russian ] = "Ëèíèè ñ ñèìâîëàìè";
+    Text[ polish ] = "Linie z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ãæŠ˜ã‚Œç·š";
+    Text[ chinese_traditional ] = "åœ–ç¤ºç·šæ¢";
+    Text[ arabic ] = "ÎØæØ ÈÑãæÒ";
+    Text[ greek ] = "Ãñáììİò ìå óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ê°€ í¬í•¨ëœ ì„ ";
+    Text[ turkish ] = "Simgeli çizgi";
+    Text[ catalan ] = "Línies amb símbols";
+    Text[ finnish ] = "Viivat ja symbolit";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸à¸±à¸šà¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "ÄŒÃ¡ry se symboly";
+    Text[ hebrew ] = "Linien mit Symbolen";
+    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤à¥‹à¤‚ à¤¸à¤¹à¤¿à¤¤ à¤°à¥‡à¤–à¤¾à¤à¤";
+    Text[ slovak ] = "ÄŒiary so symbolmi";
+};
+
+String STR_LINE_COLUMN
+{
+    Text = "Verbunddiagramm: Linie und Säulen" ;
+    Text [ ENGLISH ] = "Combination chart: Line and Columns" ;
+    Text [ english_us ] = "Combination Chart: Lines and Columns" ;
+    Text [ portuguese ] = "Gráfico combinado: linhas e colunas" ;
+    Text [ portuguese_brazilian ] = "Gráfico Combinado: Linhas e Colunas" ;
+    Text [ swedish ] = "Kombinationsdiagram: linjer och staplar" ;
+    Text [ danish ] = "Kombinationsdiagram: Linjer og søjler" ;
+    Text [ italian ] = "Diagramma combinato: linee e colonne" ;
+    Text [ spanish ] = "Diagrama combinado: Líneas y columnas" ;
+    Text [ french ] = "Diagramme combiné : lignes et colonnes" ;
+    Text [ dutch ] = "Combinatiediagram: lijnen en zuilen" ;
+    Text[ chinese_simplified ] = "ç»„åˆå›¾è¡¨ï¼šçº¿æ¡å’ŒæŸ±";
+    Text[ russian ] = "Êîìáèíèğîâàííàÿ äèàãğàììà: ëèíèè è ñòîëáöû";
+    Text[ polish ] = "Wykres z³o¿ony: Linie i s³upki";
+    Text[ japanese ] = "çµ„ã¿åˆã‚ã›:æŠ˜ã‚Œç·šã¨ç¸¦æ£’";
+    Text[ chinese_traditional ] = "é€£çµåœ–è¡¨ï¼šç·šæ¢å’ŒæŸ±å½¢";
+    Text[ arabic ] = "ÑÓã ÈíÇäí ãõÑßøóÈ: ÎØ æÃÚãÏÉ";
+    Text[ greek ] = "ÄéÜãñáììá óõíäõáóìïı: Ãñáììİò êáé óôŞëåò";
+    Text[ korean ] = "ì¡°í•© ì°¨íŠ¸: ì„ ê³¼ ì—´";
+    Text[ turkish ] = "Karma şema: Çizgi ve sütunlar";
+    Text[ catalan ] = "Diagrama combinat: Línies i columnes";
+    Text[ finnish ] = "Yhdistelmäkaavio: Rivit ja sarakkeet";
+    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´: à¸šà¸£à¸£à¸—à¸±à¸”à¹à¸¥à¸°à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹Œ";
+    Text[ czech ] = "KombinovanÃ½ graf: Å™Ã¡dky a sloupce";
+    Text[ hebrew ] = "Verbunddiagramm: Linie und SÃ¤ulen";
+    Text[ hindi ] = "Combination Chart: Lines and Columns";
+    Text[ slovak ] = "KombinovanÃ½ graf: Äiary a stÄºpce";
+};
+String STR_LINE_STACKEDCOLUMN
+{
+    Text = "Verbunddiagramm: Linie und gestapelte Säulen" ;
+    Text [ ENGLISH ] = "Verbunddiagramm: Linie und gestapelte Säulen" ;
+    Text [ english_us ] = "Combination Chart: Lines and stacked columns" ;
+    Text [ portuguese ] = "Gráfico combinado: linha e colunas sobrepostas" ;
+    Text [ portuguese_brazilian ] = "Gráfico Combinado: Linha e colunas empilhadas" ;
+    Text [ swedish ] = "Kombinationsdiagram: linjer och staplade staplar" ;
+    Text [ danish ] = "Kombinationsdiagram: Linjer og stablede søjler" ;
+    Text [ italian ] = "Diagramma composto: linea e colonne impilate" ;
+    Text [ spanish ] = "Diagrama combinado: Línea y columnas sobrepuestas" ;
+    Text [ french ] = "Diagramme combiné : lignes et colonnes empilées" ;
+    Text [ dutch ] = "Combinatiediagram: lijn en gestapelde zuilen" ;
+    Text[ chinese_simplified ] = "ç»„åˆå›¾è¡¨ï¼šçº¿æ¡å’Œé‡å æŸ±";
+    Text[ russian ] = "Êîìáèíèğîâàííàÿ äèàãğàììà: ëèíèè è ñòîëáöû ñ íàêîïëåíèåì";
+    Text[ polish ] = "Wykres z³o¿ony: Linie i s³upki skumulowane";
+    Text[ japanese ] = "çµ„ã¿åˆã‚ã›:ç·šã¨ç©ã¿ä¸Šã’ç¸¦æ£’";
+    Text[ chinese_traditional ] = "é€£çµåœ–è¡¨ï¼šç·šæ¢å’Œé‡ç–ŠæŸ±";
+    Text[ arabic ] = "ÑÓã ÈíÇäí ãõÑßøóÈ: ÎØ æÃÚãÏÉ ãÊÑÇßÈÉ";
+    Text[ greek ] = "ÄéÜãñáììá óõíäõáóìïı: Ãñáììİò êáé óùñåõìİíåò óôŞëåò";
+    Text[ korean ] = "ì¡°í•© ì°¨íŠ¸: ì„ ê³¼ ëˆ„ì ëœ ì—´";
+    Text[ turkish ] = "Karma şema: Çizgi ve yığılmış sütunlar";
+    Text[ catalan ] = "Diagrama combinat: Línia i columnes superposades";
+    Text[ finnish ] = "Yhdistelmäkaavio: Rivit ja pinotut sarakkeet";
+    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´: à¸šà¸£à¸£à¸—à¸±à¸”à¹à¸¥à¸°à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹Œà¹à¸šà¸šà¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "KombinovanÃ½ graf: Å™Ã¡dky a sklÃ¡danÃ© sloupce";
+    Text[ hebrew ] = "Verbunddiagramm: Linie und gestapelte SÃ¤ulen";
+    Text[ hindi ] = "Combination Chart: Lines and stacked columns";
+    Text[ slovak ] = "KombinovanÃ½ graf: Äiary a skladanÃ© stÄºpce";
+};
+String STR_NET
+{
+    Text = "Netz" ;
+    Text [ ENGLISH ] = "Net" ;
+    Text [ english_us ] = "Net" ;
+    Text [ italian ] = "Rete" ;
+    Text [ spanish ] = "Red" ;
+    Text [ french ] = "Toile" ;
+    Text [ dutch ] = "Net" ;
+    Text [ swedish ] = "Polär" ;
+    Text [ danish ] = "Radar" ;
+    Text [ portuguese ] = "Rede" ;
+    Text [ portuguese_brazilian ] = "Rede" ;
+    Text[ chinese_simplified ] = "ç½‘ç»œ";
+    Text[ russian ] = "Ñåò÷àòàÿ";
+    Text[ polish ] = "Sieæ";
+    Text[ japanese ] = "ãƒ¬ãƒ¼ãƒ€ãƒ¼ç¶²";
+    Text[ chinese_traditional ] = "ç¶²è·¯";
+    Text[ arabic ] = "ÔÈßÉ";
+    Text[ greek ] = "Äßêôõï";
+    Text[ korean ] = "ë„¤íŠ¸ì›Œí¬";
+    Text[ turkish ] = "Ağ";
+    Text[ catalan ] = "Xarxa";
+    Text[ finnish ] = "Verkko";
+    Text[ thai ] = "à¹€à¸„à¸£à¸·à¸­à¸‚à¹ˆà¸²à¸¢";
+    Text[ czech ] = "SÃ­Å¥";
+    Text[ hebrew ] = "Netz";
+    Text[ hindi ] = "à¤¨à¥‡à¤Ÿà¥";
+    Text[ slovak ] = "SieÅ¥ovÃ½ graf";
+};
+String STR_SYMBOL
+{
+    Text = "Symbole" ;
+    Text [ ENGLISH ] = "Net with symbols" ;
+    Text [ english_us ] = "Symbols" ;
+    Text [ dutch ] = "Symbolen" ;
+    Text [ italian ] = "Simboli" ;
+    Text [ spanish ] = "Símbolos" ;
+    Text [ french ] = "Symboles" ;
+    Text [ swedish ] = "Symboler" ;
+    Text [ danish ] = "Mærker" ;
+    Text [ portuguese ] = "Símbolos" ;
+    Text [ portuguese_brazilian ] = "Símbolos" ;
+    Text[ chinese_simplified ] = "å›¾æ ‡";
+    Text[ russian ] = "Ñèìâîëû";
+    Text[ polish ] = "Symbole";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "åœ–ç¤º";
+    Text[ arabic ] = "ÑãæÒ";
+    Text[ greek ] = "Óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸";
+    Text[ turkish ] = "Simge";
+    Text[ catalan ] = "Símbols";
+    Text[ finnish ] = "Symbolit";
+    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "Symboly";
+    Text[ hebrew ] = "Symbole";
+    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤";
+    Text[ slovak ] = "SymbolovÃ½ graf";
+};
+
+String STR_SYMBOL_STACK
+{
+    Text = "Gestapelt mit Symbolen" ;
+    Text [ ENGLISH ] = "Stacked net with symbols" ;
+    Text [ english_us ] = "Stacked with symbols" ;
+    Text [ italian ] = "Sovrapposto con simboli" ;
+    Text [ spanish ] = "Apilado con símbolos" ;
+    Text [ french ] = "Empilé avec symboles" ;
+    Text [ dutch ] = "Gestapeld met symbolen" ;
+    Text [ swedish ] = "Staplade med symboler" ;
+    Text [ danish ] = "Stablet med mærker" ;
+    Text [ portuguese ] = "Empilhado com símbolos" ;
+    Text [ portuguese_brazilian ] = "Empilhado com símbolos" ;
+    Text[ chinese_simplified ] = "é‡å å›¾æ ‡";
+    Text[ russian ] = "Ñ íàêîïëåíèåì ñ ñèìâîëàìè";
+    Text[ polish ] = "Skumulowany z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ãç©ã¿ä¸Šã’";
+    Text[ chinese_traditional ] = "é‡ç–Šåœ–ç¤º";
+    Text[ arabic ] = "ãÊÑÇßÈÉ ÈÑãæÒ";
+    Text[ greek ] = "Óå óôïßâá ìå óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ ëˆ„ì ";
+    Text[ turkish ] = "Simgeli yığılmış";
+    Text[ catalan ] = "Apilat amb símbols";
+    Text[ finnish ] = "Pinottu ja symbolit";
+    Text[ thai ] = "à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™à¸”à¹‰à¸§à¸¢à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "SklÃ¡danÃ½ se symboly";
+    Text[ hebrew ] = "Gestapelt mit Symbolen";
+    Text[ hindi ] = "Stacked with symbols";
+    Text[ slovak ] = "SkladanÃ½ graf so symbolmi";
+};
+String STR_SYMBOL_PERCENT
+{
+    Text = "Prozentual mit Symbolen" ;
+    Text [ ENGLISH ] = "Percentage net with symbols" ;
+    Text [ dutch ] = "Procentueel met symbolen" ;
+    Text [ english_us ] = "Percent with symbols" ;
+    Text [ italian ] = "Percentuale con simboli" ;
+    Text [ spanish ] = "Porcentual con símbolos" ;
+    Text [ french ] = "Pourcentage avec symboles" ;
+    Text [ swedish ] = "Procentuellt med symboler" ;
+    Text [ danish ] = "Procent med mærker" ;
+    Text [ portuguese ] = "Percentagem com símbolos" ;
+    Text [ portuguese_brazilian ] = "Percentagem com símbolos" ;
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”å›¾æ ‡";
+    Text[ russian ] = "Ïğîöåíòíàÿ ñ ñèìâîëàìè";
+    Text[ polish ] = "Procentowy z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ããƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "åœ–ç¤ºç™¾åˆ†æ¯”";
+    Text[ arabic ] = "äÓÈ ãÆæíÉ ãÚ ÑãæÒ";
+    Text[ greek ] = "Ğïóïóôéáßá ìå óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ í¬í•¨ ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Simgeli yüzde";
+    Text[ catalan ] = "Percentual amb símbols";
+    Text[ finnish ] = "Prosenttiarvo ja symbolit";
+    Text[ thai ] = "à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œà¸à¸±à¸šà¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "ProcentuÃ¡lnÃ­ se symboly";
+    Text[ hebrew ] = "Prozentual mit Symbolen";
+    Text[ hindi ] = "Percent with symbols";
+    Text[ slovak ] = "PercentuÃ¡lny graf so symbolmi";
+};
+
+String STR_SPLINE_CUBIC
+{
+    Text = "Kubischer Spline" ;
+    Text [ ENGLISH ] = "Cubic spline" ;
+    Text [ english_us ] = "Cubic Spline" ;
+    Text [ italian ] = "Spline cubico" ;
+    Text [ spanish ] = "Spline cúbico" ;
+    Text [ french ] = "Spline cubique" ;
+    Text [ dutch ] = "Kubieke spline" ;
+    Text [ swedish ] = "Kubisk spline" ;
+    Text [ danish ] = "Kubisk spline" ;
+    Text [ portuguese ] = "Spline cúbico" ;
+    Text [ portuguese_brazilian ] = "Spline Cúbico" ;
+    Text[ chinese_simplified ] = "ç«‹æ–¹æ ·æ¡";
+    Text[ russian ] = "Êóáè÷åñêèé ñïëàéí";
+    Text[ polish ] = "Kubiczna krzywa sk³adana";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆãªã—ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³";
+    Text[ chinese_traditional ] = "ç«‹æ–¹å½¢é½’æ¢";
+    Text[ arabic ] = "Spline ÊßÚíÈí";
+    Text[ greek ] = "Spline êıâïõ";
+    Text[ korean ] = "ì…ì²´ ìŠ¤í”Œë¼ì¸";
+    Text[ turkish ] = "Kübik spline";
+    Text[ catalan ] = "Spline cúbic";
+    Text[ finnish ] = "Kuutiosplini";
+    Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸ªà¸¥à¸±à¸à¸¥à¸¹à¸à¸šà¸²à¸¨à¸à¹Œ";
+    Text[ czech ] = "KubickÃ½ splajn";
+    Text[ hebrew ] = "Kubischer Spline";
+    Text[ hindi ] = "à¤˜à¤¨ à¤¸à¥à¤ªà¥à¤²à¤‡à¤¨";
+    Text[ slovak ] = "KubickÃ½ splajn";
+};
+String STR_SPLINE_CUBIC_SYMBOL
+{
+    Text = "Kubischer Spline mit Symbolen" ;
+    Text [ ENGLISH ] = "Cubic spline with symbols" ;
+    Text [ english_us ] = "Cubic Spline with Symbols" ;
+    Text [ italian ] = "Spline cubico con simboli" ;
+    Text [ spanish ] = "Spline cúbico con símbolos" ;
+    Text [ french ] = "Spline cubique avec symboles" ;
+    Text [ dutch ] = "Kubieke spline met symbolen" ;
+    Text [ swedish ] = "Kubisk spline med symboler" ;
+    Text [ danish ] = "Kubisk spline med mærker" ;
+    Text [ portuguese ] = "Spline cúbico com símbolos" ;
+    Text [ portuguese_brazilian ] = "Spline Cúbico com Símbolos" ;
+    Text[ chinese_simplified ] = "å¸¦å›¾æ ‡çš„ç«‹æ–¹æ ·æ¡";
+    Text[ russian ] = "Êóáè÷åñêèé ñïëàéí ñ ñèìâîëàìè";
+    Text[ polish ] = "Kubiczna krzywa sk³adana z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ãã‚¹ãƒ—ãƒ©ã‚¤ãƒ³";
+    Text[ chinese_traditional ] = "åœ–ç¤ºç«‹æ–¹å½¢é½’æ¢";
+    Text[ arabic ] = "Spline ÊßÚíÈí ÈÑãæÒ";
+    Text[ greek ] = "Spline êıâïõ ìå óıìâïëá";
+    Text[ korean ] = "ì…ì²´ ìŠ¤í”„ë¼ì¸ ê¸°í˜¸ í¬í•¨";
+    Text[ turkish ] = "Simgeli kübik spline";
+    Text[ catalan ] = "Spline cúbic amb símbols";
+    Text[ finnish ] = "Kuutiosplini ja symbolit";
+    Text[ thai ] = "à¸ªà¸¥à¸±à¸à¸¥à¸¹à¸à¸šà¸²à¸¨à¸à¹Œà¸”à¹‰à¸§à¸¢à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "KubickÃ½ splajn se symboly";
+    Text[ hebrew ] = "Kubischer Spline mit Symbolen";
+    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤à¥‹à¤‚ à¤¸à¤¹à¤¿à¤¤ à¤˜à¤¨ à¤¸à¥à¤ªà¥à¤²à¤‡à¤¨";
+    Text[ slovak ] = "KubickÃ½ splajn so symbolmi";
+};
+String STR_SPLINE_B
+{
+    Text = "B-Spline" ;
+    Text [ ENGLISH ] = "B-spline" ;
+    Text [ dutch ] = "B-spline" ;
+    Text [ english_us ] = "B-Spline" ;
+    Text [ italian ] = "B-Spline" ;
+    Text [ spanish ] = "B spline" ;
+    Text [ french ] = "Spline B" ;
+    Text [ swedish ] = "B-spline" ;
+    Text [ danish ] = "B-spline" ;
+    Text [ portuguese ] = "B-Spline" ;
+    Text [ portuguese_brazilian ] = "Spline B" ;
+    Text[ chinese_simplified ] = "B æ ·æ¡";
+    Text[ russian ] = "B-ñïëàéí";
+    Text[ polish ] = "Krzywa sk³adana B";
+    Text[ japanese ] = "B ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³";
+    Text[ chinese_traditional ] = "B-é½’æ¢";
+    Text[ arabic ] = "B-Spline";
+    Text[ greek ] = "B-Spline";
+    Text[ korean ] = "B-ìŠ¤í”Œë¼ì¸";
+    Text[ turkish ] = "B-Spline";
+    Text[ catalan ] = "B-Spline";
+    Text[ finnish ] = "B-splini";
+    Text[ thai ] = "B-Spline";
+    Text[ czech ] = "B-splajn";
+    Text[ hebrew ] = "B-Spline";
+    Text[ hindi ] = "B-à¤¸à¥à¤ªà¥à¤²à¤‡à¤¨";
+    Text[ slovak ] = "B-splajn";
+};
+String STR_SPLINE_B_SYMBOL
+{
+    Text = "B-Spline mit Symbolen" ;
+    Text [ ENGLISH ] = "B-spline with symbols" ;
+    Text [ english_us ] = "B-Spline with Symbols" ;
+    Text [ italian ] = "B-Spline con simboli" ;
+    Text [ spanish ] = "B spline con símbolos" ;
+    Text [ french ] = "Spline B avec symboles" ;
+    Text [ dutch ] = "B-spline met symbolen" ;
+    Text [ swedish ] = "B-spline med symboler" ;
+    Text [ danish ] = "B-spline med mærker" ;
+    Text [ portuguese ] = "Spline B com símbolos" ;
+    Text [ portuguese_brazilian ] = "Spline B com Símbolos" ;
+    Text[ chinese_simplified ] = "å¸¦å›¾æ ‡çš„ B ç«‹æ–¹æ ·æ¡";
+    Text[ russian ] = "B-ñïëàéí ñ ñèìâîëàìè";
+    Text[ polish ] = "Krzywa sk³adana B z symbolami";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆä»˜ãBã‚¹ãƒ—ãƒ©ã‚¤ãƒ³";
+    Text[ chinese_traditional ] = "åœ–ç¤º B-é½’æ¢";
+    Text[ arabic ] = "B-Spline ÈÑãæÒ";
+    Text[ greek ] = "B-Spline ìå óıìâïëá";
+    Text[ korean ] = "ê¸°í˜¸ í¬í•¨í•œ B-ìŠ¤í”Œë¼ì¸";
+    Text[ turkish ] = "Simgeli B-Spline";
+    Text[ catalan ] = "B spline amb símbols";
+    Text[ finnish ] = "B-splini ja symbolit";
+    Text[ thai ] = "B-Splineà¸”à¹‰à¸§à¸¢à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œ";
+    Text[ czech ] = "B-splajn se symboly";
+    Text[ hebrew ] = "B-Spline mit Symbolen";
+    Text[ hindi ] = "à¤¸à¤‚à¤•à¥‡à¤¤à¥‹à¤‚ à¤¸à¤¹à¤¿à¤¤ B-à¤¸à¥à¤ªà¥à¤²à¤‡à¤¨ ";
+    Text[ slovak ] = "B-splajn so symbolmi";
+};
+
+String STR_STOCK
+{
+    Text = "Kursdiagramm" ;
+    Text [ ENGLISH ] = "stock chart" ;
+    Text[ italian ] = "diagramma quotazioni";
+    Text[ portuguese_brazilian ] = "Gráfico de cotações";
+    Text[ portuguese ] = "Gráfico de cotações";
+    Text[ danish ] = "Aktiediagram";
+    Text[ french ] = "Diagramme des cours";
+    Text[ swedish ] = "Kursdiagram";
+    Text[ dutch ] = "Koersdiagram";
+    Text[ spanish ] = "Diagrama de curso";
+    Text[ english_us ] = "Stock Chart";
+    Text[ chinese_simplified ] = "è‚¡ç¥¨å›¾è¡¨";
+    Text[ russian ] = "Áèğæåâàÿ äèàãğàììà";
+    Text[ polish ] = "Wykres gie³dowy";
+    Text[ japanese ] = "æ ªä¾¡ãƒãƒ£ãƒ¼ãƒˆ";
+    Text[ chinese_traditional ] = "è‚¡ç¥¨åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí ááÃÓåã";
+    Text[ greek ] = "ÄéÜãñáììá ôéìşí";
+    Text[ korean ] = "ì£¼ê°€ ì°¨íŠ¸";
+    Text[ turkish ] = "Hisse senedi grafiği";
+    Text[ catalan ] = "Diagrama de borsa";
+    Text[ finnish ] = "Pörssikaavio";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸«à¸¸à¹‰à¸™";
+    Text[ czech ] = "BurzovnÃ­ graf";
+    Text[ hebrew ] = "Kursdiagramm";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¯ à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "BurzovÃ½ graf";
+};
+String STR_STOCK_1
+{
+    Text = "Kursdiagramm 1" ;
+    Text [ ENGLISH ] = "stock chart 1" ;
+    Text[ italian ] = "diagramma quotazioni 1";
+    Text[ portuguese_brazilian ] = "Gráfico de cotações 1";
+    Text[ portuguese ] = "Gráfico de cotações 1";
+    Text[ danish ] = "Aktiediagram 1";
+    Text[ french ] = "Diagramme des cours 1";
+    Text[ swedish ] = "Kursdiagram 1";
+    Text[ dutch ] = "Koersdiagram 1";
+    Text[ spanish ] = "Diagrama de curso 1";
+    Text[ english_us ] = "Stock Chart 1";
+    Text[ chinese_simplified ] = "è‚¡ç¥¨å›¾è¡¨ 1";
+    Text[ russian ] = "Áèğæåâàÿ äèàãğàììà 1";
+    Text[ polish ] = "Wykres gie³dowy 1";
+    Text[ japanese ] = "æ ªä¾¡ãƒãƒ£ãƒ¼ãƒˆ 1";
+    Text[ chinese_traditional ] = "è‚¡ç¥¨åœ–è¡¨ 1";
+    Text[ arabic ] = "Ãæá ÑÓã ÈíÇäí ááÃÓåã";
+    Text[ greek ] = "ÄéÜãñáììá ôéìşí 1";
+    Text[ korean ] = "ì£¼ê°€ ì°¨íŠ¸ 1";
+    Text[ turkish ] = "Hisse senedi grafiği 1";
+    Text[ catalan ] = "Diagrama de borsa 1";
+    Text[ finnish ] = "Pörssikaavio 1";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸«à¸¸à¹‰à¸™ 1";
+    Text[ czech ] = "BurzovnÃ­ graf 1";
+    Text[ hebrew ] = "Kursdiagramm 1";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¯ à¤šà¤¾à¤°à¥à¤Ÿ 1 ";
+    Text[ slovak ] = "BurzovÃ½ graf 1";
+};
+String STR_STOCK_2
+{
+    Text = "Kursdiagramm 2" ;
+    Text [ ENGLISH ] = "stock chart 2" ;
+    Text[ italian ] = "diagramma quotazioni 2";
+    Text[ portuguese_brazilian ] = "Gráfico de cotações 2";
+    Text[ portuguese ] = "Gráfico de cotações 2";
+    Text[ danish ] = "Aktiediagram 2";
+    Text[ french ] = "Diagramme des cours 2";
+    Text[ swedish ] = "Kursdiagram 2";
+    Text[ dutch ] = "Koersdiagram 2";
+    Text[ spanish ] = "Diagrama de curso 2";
+    Text[ english_us ] = "Stock Chart 2";
+    Text[ chinese_simplified ] = "è‚¡ç¥¨å›¾è¡¨ 2";
+    Text[ russian ] = "Áèğæåâàÿ äèàãğàììà 2";
+    Text[ polish ] = "Wykres gie³dowy 2";
+    Text[ japanese ] = "æ ªä¾¡ãƒãƒ£ãƒ¼ãƒˆ 2";
+    Text[ chinese_traditional ] = "è‚¡ç¥¨åœ–è¡¨ 2";
+    Text[ arabic ] = "ËÇäí ÑÓã ÈíÇäí ááÃÓåã";
+    Text[ greek ] = "ÄéÜãñáììá ôéìşí 2";
+    Text[ korean ] = "ì£¼ê°€ ì°¨íŠ¸ 2";
+    Text[ turkish ] = "Hisse senedi grafiği 2";
+    Text[ catalan ] = "Diagrama de borsa 2";
+    Text[ finnish ] = "Pörssikaavio 2";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸«à¸¸à¹‰à¸™ 2";
+    Text[ czech ] = "BurzovnÃ­ graf 2";
+    Text[ hebrew ] = "Kursdiagramm 2";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¯ à¤šà¤¾à¤°à¥à¤Ÿ 2";
+    Text[ slovak ] = "BurzovÃ½ graf 2";
+};
+String STR_STOCK_3
+{
+    Text = "Kursdiagramm 3" ;
+    Text [ ENGLISH ] = "stock chart 3" ;
+    Text[ italian ] = "diagramma quotazioni 3";
+    Text[ portuguese_brazilian ] = "Gráfico de cotações 3";
+    Text[ portuguese ] = "Gráfico de cotações 3";
+    Text[ danish ] = "Aktiediagram 3";
+    Text[ french ] = "Diagramme des cours 3";
+    Text[ swedish ] = "Kursdiagram 3";
+    Text[ dutch ] = "Koersdiagram 3";
+    Text[ spanish ] = "Diagrama de curso 3";
+    Text[ english_us ] = "Stock Chart 3";
+    Text[ chinese_simplified ] = "è‚¡ç¥¨å›¾è¡¨ 3";
+    Text[ russian ] = "Áèğæåâàÿ äèàãğàììà 3";
+    Text[ polish ] = "Wykres gie³dowy 3";
+    Text[ japanese ] = "æ ªä¾¡ãƒãƒ£ãƒ¼ãƒˆ 3";
+    Text[ chinese_traditional ] = "è‚¡ç¥¨åœ–è¡¨ 3";
+    Text[ arabic ] = "ËÇáË ÑÓã ÈíÇäí ááÃÓåã";
+    Text[ greek ] = "ÄéÜãñáììá ôéìşí 3";
+    Text[ korean ] = "ì£¼ê°€ ì°¨íŠ¸ 3";
+    Text[ turkish ] = "Hisse senedi grafiği 3";
+    Text[ catalan ] = "Diagrama de borsa 3";
+    Text[ finnish ] = "Pörssikaavio 3";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸«à¸¸à¹‰à¸™ 3";
+    Text[ czech ] = "BurzovnÃ­ graf 3";
+    Text[ hebrew ] = "Kursdiagramm 3";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¯ à¤šà¤¾à¤°à¥à¤Ÿ 3";
+    Text[ slovak ] = "BurzovÃ½ graf 3";
+};
+String STR_STOCK_4
+{
+    Text = "Kursdiagramm 4" ;
+    Text [ ENGLISH ] = "stock chart 4" ;
+    Text[ italian ] = "diagramma quotazioni 4";
+    Text[ portuguese_brazilian ] = "Gráfico de cotações 4";
+    Text[ portuguese ] = "Gráfico de cotações 4";
+    Text[ danish ] = "Aktiediagram 4";
+    Text[ french ] = "Diagramme des cours 4";
+    Text[ swedish ] = "Kursdiagram 4";
+    Text[ dutch ] = "Koersdiagram 4";
+    Text[ spanish ] = "Diagrama de curso 4";
+    Text[ english_us ] = "Stock Chart 4";
+    Text[ chinese_simplified ] = "è‚¡ç¥¨å›¾è¡¨ 4";
+    Text[ russian ] = "Áèğæåâàÿ äèàãğàììà 4";
+    Text[ polish ] = "Wykres gie³dowy 4";
+    Text[ japanese ] = "æ ªä¾¡ãƒãƒ£ãƒ¼ãƒˆ 4";
+    Text[ chinese_traditional ] = "è‚¡ç¥¨åœ–è¡¨ 4";
+    Text[ arabic ] = "ÑÇÈÚ ÑÓã ÈíÇäí ááÃÓåã";
+    Text[ greek ] = "ÄéÜãñáììá ôéìşí 4";
+    Text[ korean ] = "ì£¼ê°€ ì°¨íŠ¸ 4";
+    Text[ turkish ] = "Hisse senedi grafiği 4";
+    Text[ catalan ] = "Diagrama de borsa 4";
+    Text[ finnish ] = "Pörssikaavio 4";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´à¸«à¸¸à¹‰à¸™ 4";
+    Text[ czech ] = "BurzovnÃ­ graf 4";
+    Text[ hebrew ] = "Kursdiagramm 4";
+    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¯ à¤šà¤¾à¤°à¥à¤Ÿ 4";
+    Text[ slovak ] = "BurzovÃ½ graf 4";
+};
+
+//-----------------------------------
+String STR_SAEULE_3D_1
+{
+    Text = "Runde Säulen" ;
+    Text[ ENGLISH ] = "Cylinder";
+    Text[ italian ] = "Colonne rotonde" ;
+    Text[ french ] = "Colonnes arrondies" ;
+    Text[ english_us ] = "Cylinder";
+    Text[ portuguese ] = "Colunas redondas";
+    Text[ russian ] = "Öèëèíäğè÷åñêàÿ";
+    Text[ dutch ] = "cilinders";
+    Text[ spanish ] = "Columnas redondas";
+    Text[ danish ] = "Cylindre";
+    Text[ swedish ] = "Runda pelare";
+    Text[ polish ] = "Okr¹g³e s³upki";
+    Text[ portuguese_brazilian ] = "Cilindro";
+    Text[ japanese ] = "å††æŸ±";
+    Text[ chinese_simplified ] = "åœ†æŸ±ä½“";
+    Text[ chinese_traditional ] = "åœ“æŸ±";
+    Text[ arabic ] = "ÃÓØæÇäÇÊ";
+    Text[ greek ] = "Êıëéíäñïé";
+    Text[ korean ] = "ì‹¤ë¦°ë”";
+    Text[ turkish ] = "Silindir";
+    Text[ catalan ] = "Cilindre";
+    Text[ finnish ] = "Lieriö";
+    Text[ thai ] = "à¸—à¸£à¸‡à¸à¸£à¸°à¸šà¸­à¸";
+    Text[ czech ] = "VÃ¡lec";
+    Text[ hebrew ] = "Runde SÃ¤ulen";
+    Text[ hindi ] = "à¤¬à¥‡à¤²à¤¨";
+    Text[ slovak ] = "Valec";
+};
+String STR_SAEULE_3D_2
+{
+    Text = "Runde, gestapelte Säulen" ;
+    Text[ ENGLISH ] = "Cylinder, stacked";
+    Text[ italian ] = "Colonne rotonde sovrapposte" ;
+    Text[ french ] = "Colonnes arrondies empilées" ;
+    Text[ english_us ] = "Cylinder, stacked";
+    Text[ portuguese ] = "Barras redondas sobrepostas";
+    Text[ russian ] = "Öèëèíäğ, íàêîïëåíèå";
+    Text[ dutch ] = "cilinders, gestapeld";
+    Text[ spanish ] = "Columnas redondas apiladas";
+    Text[ danish ] = "Stablede cylindre";
+    Text[ swedish ] = "Runda, staplade pelare";
+    Text[ polish ] = "Okr¹g³e s³upki skumulowane";
+    Text[ portuguese_brazilian ] = "Cilindro, empilhado";
+    Text[ japanese ] = "ç©ã¿ä¸Šã’å††æŸ±";
+    Text[ chinese_simplified ] = "å †ç§¯å‹åœ†æŸ±ä½“";
+    Text[ chinese_traditional ] = "é‡ç–Šåœ“æŸ±";
+    Text[ arabic ] = "ÃÓØæÇäÇÊ ãÊÑÇßÈÉ";
+    Text[ greek ] = "Êıëéíäñïé, óôñüããõëïé êáé óùñåõìİíïé";
+    Text[ korean ] = "ìŒ“ì•„ ì˜¬ë¦° ì‹¤ë¦°ë”";
+    Text[ turkish ] = "Yığılmış silindir";
+    Text[ catalan ] = "Cilindre, apilat";
+    Text[ finnish ] = "Lieriö, päällekkäiset";
+    Text[ thai ] = "à¸—à¸£à¸‡à¸à¸£à¸°à¸šà¸­à¸, à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "VÃ¡lec, sklÃ¡danÃ½";
+    Text[ hebrew ] = "Runde, gestapelte SÃ¤ulen";
+    Text[ hindi ] = "à¤¬à¥‡à¤²à¤¨, à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¥€ à¤¹à¥à¤¯à¥€";
+    Text[ slovak ] = "Valec, skladanÃ½";
+};
+String STR_SAEULE_3D_3
+{
+    Text = "Runde Säulen, Prozent";
+    Text[ ENGLISH ] = "Cylinder, percent";
+    Text[ italian ] = "Colonne rotonde, percentuale";
+    Text[ french ] = "Colonnes arrondies, pourcentage";
+    Text[ english_us ] = "Cylinder, percent";
+    Text[ portuguese ] = "Colunas redondas, percentuais";
+    Text[ russian ] = "Öèëèíäğ, ïğîöåíò";
+    Text[ dutch ] = "cilinders, procent";
+    Text[ spanish ] = "Columnas redondas, porciento";
+    Text[ danish ] = "Cylindre, procent";
+    Text[ swedish ] = "Runda pelare, procent";
+    Text[ polish ] = "Okr¹g³e s³upki procentowe";
+    Text[ portuguese_brazilian ] = "Cilindro, percentual";
+    Text[ japanese ] = "å††æŸ±ï½¤ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”åœ†æŸ±ä½“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”åœ“æŸ±";
+    Text[ arabic ] = "ÃÓØæÇäÇÊ ãÚ ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "Êıëéíäñïé, ğïóïóôÜ (%)";
+    Text[ korean ] = "ì‹¤ë¦°ë”, ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Silindir, yüzde";
+    Text[ catalan ] = "Cilindre, percentatge";
+    Text[ finnish ] = "Lieriö, prosentti";
+    Text[ thai ] = "à¸—à¸£à¸‡à¸à¸£à¸°à¸šà¸­à¸, à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "VÃ¡lec, procenta";
+    Text[ hebrew ] = "Runde SÃ¤ulen, Prozent";
+    Text[ hindi ] = "Cylinder, percent";
+    Text[ slovak ] = "Valec, percentuÃ¡lny";
+};
+String STR_SAEULE_3D_4
+{
+    Text = "Runde Säulen, Tief" ;
+    Text[ ENGLISH ] = "Cylinder, deep";
+    Text[ italian ] = "Colonne rontonde, in basso" ;
+    Text[ french ] = "Colonnes arrondies, en profondeur" ;
+    Text[ english_us ] = "Cylinder, deep";
+    Text[ portuguese ] = "Colunas redondas, com profundidade";
+    Text[ russian ] = "Öèëèíäğ, ãëóáèíà";
+    Text[ dutch ] = "cilinders, met diepte";
+    Text[ spanish ] = "Columnas redondas, en profundidad";
+    Text[ danish ] = "Cylindre, dyb";
+    Text[ swedish ] = "Runda pelare, djupa";
+    Text[ polish ] = "Okr¹g³e s³upki przestrzenne";
+    Text[ portuguese_brazilian ] = "Cilindro, com profundidade";
+    Text[ japanese ] = "å††æŸ±ï½¤å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„åœ†æŸ±ä½“";
+    Text[ chinese_traditional ] = "æ·±å‘åœ“æŸ±";
+    Text[ arabic ] = "ÃÓØæÇäÇÊ ÚãíŞÉ";
+    Text[ greek ] = "Êıëéíäñïé, âáèı";
+    Text[ korean ] = "ì‹¤ë¦°ë”, ê¹Šì´";
+    Text[ turkish ] = "Silindir, derin";
+    Text[ catalan ] = "Cilindre, profunditat";
+    Text[ finnish ] = "Lieriö, syvä";
+    Text[ thai ] = "à¸—à¸£à¸‡à¸à¸£à¸°à¸šà¸­à¸, à¸¥à¸¶à¸";
+    Text[ czech ] = "VÃ¡lec, hloubka";
+    Text[ hebrew ] = "Runde SÃ¤ulen, Tief";
+    Text[ hindi ] = "à¤¬à¥‡à¤²à¤¨, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "Valec, do hÄºbky";
+};
+//-----------------------------------
+String STR_ROEHRE_3D_1
+{
+    Text = "Röhren" ;
+    Text[ ENGLISH ] = "Tubes";
+    Text[ italian ] = "Tubi" ;
+    Text[ french ] = "Tubes" ;
+    Text[ english_us ] = "Tubes";
+    Text[ portuguese ] = "Tubos";
+    Text[ russian ] = "Òğóáû";
+    Text[ dutch ] = "horizontale cilinders";
+    Text[ spanish ] = "Tubos";
+    Text[ danish ] = "Rør";
+    Text[ swedish ] = "Rör";
+    Text[ polish ] = "Rurki";
+    Text[ portuguese_brazilian ] = "Tubos";
+    Text[ japanese ] = "å††ç­’";
+    Text[ chinese_simplified ] = "ç®¡é“";
+    Text[ chinese_traditional ] = "ç®¡å½¢";
+    Text[ arabic ] = "ÃäÇÈíÈ";
+    Text[ greek ] = "ÓùëŞíåò";
+    Text[ korean ] = "ê´€";
+    Text[ turkish ] = "Tüp";
+    Text[ catalan ] = "Tubs";
+    Text[ finnish ] = "Putket";
+    Text[ thai ] = "à¸—à¹ˆà¸­";
+    Text[ czech ] = "Trubky";
+    Text[ hebrew ] = "RÃ¶hren";
+    Text[ hindi ] = "à¤¨à¤¾à¤²à¤¿à¤¯à¤¾à¤";
+    Text[ slovak ] = "TrÃºbky";
+};
+String STR_ROEHRE_3D_2
+{
+    Text = "Gestapelte Röhren" ;
+    Text[ ENGLISH ] = "Tubes, stacked";
+    Text[ italian ] = "Tubi sovrapposti" ;
+    Text[ french ] = "Tubes empilés" ;
+    Text[ english_us ] = "Tubes, stacked";
+    Text[ portuguese ] = "Tubos, sobrepostos";
+    Text[ russian ] = "Òğóáû, íàêîïëåíèå";
+    Text[ dutch ] = "horizontale cilinders, gestapeld";
+    Text[ spanish ] = "Tubos apilados";
+    Text[ danish ] = "Stablede rør";
+    Text[ swedish ] = "Rör, staplade";
+    Text[ polish ] = "Rurki skumulowane";
+    Text[ portuguese_brazilian ] = "Tubos, empilhados";
+    Text[ japanese ] = "ç©ã¿ä¸Šã’å††ç­’";
+    Text[ chinese_simplified ] = "å †ç§¯å‹ç®¡é“";
+    Text[ chinese_traditional ] = "é‡ç–Šç®¡å½¢";
+    Text[ arabic ] = "ÃäÇÈíÈ ãÊÑÇßÈÉ";
+    Text[ greek ] = "ÓùëŞíåò, óùñåõìİíåò";
+    Text[ korean ] = "íŒŒì´í”„, ëˆ„ì ";
+    Text[ turkish ] = "Yığılmış tüpler";
+    Text[ catalan ] = "Tubs, apilats";
+    Text[ finnish ] = "Putket, pinottuja";
+    Text[ thai ] = "à¸—à¹ˆà¸­, à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "Trubky, sklÃ¡danÃ©";
+    Text[ hebrew ] = "Gestapelte RÃ¶hren";
+    Text[ hindi ] = "à¤¨à¤¾à¤²à¤¿à¤¯à¤¾à¤, à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¥€ à¤¹à¥à¤¯à¥€";
+    Text[ slovak ] = "TrÃºbky, skladanÃ©";
+};
+String STR_ROEHRE_3D_3
+{
+    Text = "Röhren, Prozent";
+    Text[ ENGLISH ] = "Tubes, percent";
+    Text[ italian ] = "Tubi, percentuale";
+    Text[ french ] = "Tubes, pourcentage";
+    Text[ english_us ] = "Tubes, percent";
+    Text[ portuguese ] = "Tubos, percentuais";
+    Text[ russian ] = "Òğóáû, ïğîöåíò";
+    Text[ dutch ] = "horizontale cilinders, procent";
+    Text[ spanish ] = "Tubos, porciento";
+    Text[ danish ] = "Rør, procent";
+    Text[ swedish ] = "Rör, procent";
+    Text[ polish ] = "Rurki procentowe";
+    Text[ portuguese_brazilian ] = "Tubos, percentuais";
+    Text[ japanese ] = "å††ç­’ï½¤ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”ç®¡é“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”ç®¡å½¢";
+    Text[ arabic ] = "ÃäÇÈíÈ ãÚ ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "ÓùëŞíåò, Ğïóïóôü (%)";
+    Text[ korean ] = "ê´€, ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Tüp, yüzde";
+    Text[ catalan ] = "Tubs, percentatge";
+    Text[ finnish ] = "Putket, prosenttia";
+    Text[ thai ] = "à¸—à¹ˆà¸­, à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "Trubky, procenta";
+    Text[ hebrew ] = "RÃ¶hren, Prozent";
+    Text[ hindi ] = "à¤¨à¤¾à¤²à¤¿à¤¯à¤¾à¤, à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤";
+    Text[ slovak ] = "TrÃºbky, percentuÃ¡lne";
+};
+String STR_ROEHRE_3D_4
+{
+    Text = "Röhren, Tief" ;
+    Text[ ENGLISH ] = "Tubes, deep";
+    Text[ italian ] = "Tubi, in basso" ;
+    Text[ french ] = "Tubes, en profondeur" ;
+    Text[ english_us ] = "Tubes, deep";
+    Text[ portuguese ] = "Tubos, com profundidade";
+    Text[ russian ] = "Òğóáû, ãëóáèíà";
+    Text[ dutch ] = "horizontale cilinders, met diepte";
+    Text[ spanish ] = "Tubos, en profundidad";
+    Text[ danish ] = "Rør, dyb";
+    Text[ swedish ] = "Rör, djupa";
+    Text[ polish ] = "Rurki przestrzenne";
+    Text[ portuguese_brazilian ] = "Tubos, com profundidade";
+    Text[ japanese ] = "å††ç­’ï½¤å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„ç®¡é“";
+    Text[ chinese_traditional ] = "æ·±å‘ç®¡å½¢";
+    Text[ arabic ] = "ÃäÇÈíÈ ÚãíŞÉ";
+    Text[ greek ] = "ÓùëŞíåò, âáèı";
+    Text[ korean ] = "ê´€, ê¹Šì´";
+    Text[ turkish ] = "Tüp, derin";
+    Text[ catalan ] = "Tubs, profunditat";
+    Text[ finnish ] = "Putket, syvät";
+    Text[ thai ] = "à¸—à¹ˆà¸­, à¸¥à¸¶à¸";
+    Text[ czech ] = "Trubky, hloubka";
+    Text[ hebrew ] = "RÃ¶hren, Tief";
+    Text[ hindi ] = "à¤¨à¤¾à¤²à¤¿à¤¯à¤¾à¤, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "TrÃºbky, do hÄºbky";
+};
+String STR_PYRAMID_3D_1
+{
+    Text = "Pyramiden" ;
+    Text[ ENGLISH ] = "Pyramids";
+    Text[ italian ] = "Piramidi" ;
+    Text[ french ] = "Pyramides" ;
+    Text[ english_us ] = "Pyramids";
+    Text[ portuguese ] = "Pirâmides";
+    Text[ russian ] = "Ïèğàìèäû";
+    Text[ dutch ] = "Piramiden";
+    Text[ spanish ] = "Pirámides";
+    Text[ danish ] = "Pyramider";
+    Text[ swedish ] = "Pyramider";
+    Text[ polish ] = "Ostros³upowy";
+    Text[ portuguese_brazilian ] = "Pirâmides";
+    Text[ japanese ] = "è§’éŒ";
+    Text[ chinese_simplified ] = "æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã";
+    Text[ greek ] = "Ğõñáìßäåò";
+    Text[ korean ] = "í”¼ë¼ë¯¸ë“œ";
+    Text[ turkish ] = "Piramit";
+    Text[ catalan ] = "Piràmides";
+    Text[ finnish ] = "Pyramidit";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”";
+    Text[ czech ] = "Jehlany";
+    Text[ hebrew ] = "Pyramiden";
+    Text[ hindi ] = "Pyramids";
+    Text[ slovak ] = "Ihlany";
+};
+String STR_PYRAMID_3D_2
+{
+    Text = "Gestapelte Pyramiden" ;
+    Text[ ENGLISH ] = "Pyramids, stacked";
+    Text[ italian ] = "Piramidi sovrapposte" ;
+    Text[ french ] = "Pyramides empilées" ;
+    Text[ english_us ] = "Pyramids, stacked";
+    Text[ portuguese ] = "Pirâmides, sobrepostas";
+    Text[ russian ] = "Ïèğàìèäû, íàêîïëåíèå";
+    Text[ dutch ] = "Piramiden, gestapeld";
+    Text[ spanish ] = "Pirámides apiladas";
+    Text[ danish ] = "Stablede pyramider";
+    Text[ swedish ] = "Staplade pyramider";
+    Text[ polish ] = "Ostros³upy skumulowane";
+    Text[ portuguese_brazilian ] = "Pirâmides, empilhadas";
+    Text[ japanese ] = "ç©ã¿ä¸Šã’ãŸè§’éŒ";
+    Text[ chinese_simplified ] = "å †ç§¯å‹æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "é‡ç–ŠéŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ãÊÑÇßÈÉ";
+    Text[ greek ] = "Ğõñáìßäåò, óùñåõìİíåò";
+    Text[ korean ] = "ìŒ“ì•„ì˜¬ë¦° í”¼ë¼ë¯¸ë“œ";
+    Text[ turkish ] = "Yığılmış piramitler";
+    Text[ catalan ] = "Piràmides apilades";
+    Text[ finnish ] = "Pyramidit, pinotut";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”, à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "Jehlany, sklÃ¡danÃ©";
+    Text[ hebrew ] = "Gestapelte Pyramiden";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­, à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";
+    Text[ slovak ] = "Ihlany, skladanÃ©";
+};
+String STR_PYRAMID_3D_3
+{
+    Text = "Pyramiden, Prozent";
+    Text[ ENGLISH ] = "Pyramids percent";
+    Text[ italian ] = "Piramidi, percentuale";
+    Text[ french ] = "Pyramides, pourcentage";
+    Text[ english_us ] = "Pyramids percent";
+    Text[ portuguese ] = "Pirâmides, percentuais";
+    Text[ russian ] = "Ïèğàìèäû, ïğîöåíò";
+    Text[ dutch ] = "Piramiden, procent";
+    Text[ spanish ] = "Pirámides, porciento";
+    Text[ danish ] = "Pyramider, procent";
+    Text[ swedish ] = "Pyramider, procent";
+    Text[ polish ] = "Ostros³upy procentowe";
+    Text[ portuguese_brazilian ] = "Pirâmides, percentuais";
+    Text[ japanese ] = "è§’éŒã€ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ãÚ ÇáäÓÈÉ ãÆæíÉ";
+    Text[ greek ] = "Ğõñáìßäåò, Ğïóïóôü (%)";
+    Text[ korean ] = "í”¼ë¼ë¯¸ë“œ ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Piramit, yüzde";
+    Text[ catalan ] = "Piràmides, percent";
+    Text[ finnish ] = "Pyramidit prosentteina";
+    Text[ thai ] = "à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œà¸›à¸´à¸£à¸²à¸¡à¸´à¸”";
+    Text[ czech ] = "Procenta jehlanu";
+    Text[ hebrew ] = "Pyramiden, Prozent";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­ à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤";
+    Text[ slovak ] = "Ihlany, percentuÃ¡lne";
+};
+String STR_PYRAMID_3D_4
+{
+    Text = "Pyramiden, Tief" ;
+    Text[ ENGLISH ] = "Pyramids, deep";
+    Text[ italian ] = "Piramidi, in basso" ;
+    Text[ french ] = "Pyramides, en profondeur" ;
+    Text[ english_us ] = "Pyramids, deep";
+    Text[ portuguese ] = "Pirâmides, com profundidade";
+    Text[ russian ] = "Ïèğàìèäû, ãëóáèíà";
+    Text[ dutch ] = "Piramiden, met diepte";
+    Text[ spanish ] = "Pirámides, en profundidad";
+    Text[ danish ] = "Pyramider, dyb";
+    Text[ swedish ] = "Pyramider, djupa";
+    Text[ polish ] = "Ostros³upy przestrzenne";
+    Text[ portuguese_brazilian ] = "Pirâmides, com profundidade";
+    Text[ japanese ] = "è§’éŒã€å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "æ·±å‘éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ÚãíŞÉ";
+    Text[ greek ] = "Ğõñáìßäåò, âáèı";
+    Text[ korean ] = "í”¼ë¼ë¯¸ë“œ, ê¹Šì´";
+    Text[ turkish ] = "Piramit, derin";
+    Text[ catalan ] = "Piràmides, en profunditat";
+    Text[ finnish ] = "Pyramidit, syvät";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”, à¸¥à¸¶à¸";
+    Text[ czech ] = "Jehlany, hloubka";
+    Text[ hebrew ] = "Pyramiden, Tief";
+    Text[ hindi ] = "à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "Ihlany, do hÄºbky";
+};
+//-----------------------------------
+String STR_PYRAMIDQ_3D_1
+{
+    Text = "Horizontale Pyramiden" ;
+    Text[ ENGLISH ] = "Pyramids";
+    Text[ italian ] = "Piramidi orizzontali" ;
+    Text[ french ] = "Pyramides horizontales" ;
+    Text[ english_us ] = "Horizontal pyramids";
+    Text[ portuguese ] = "Pirâmides horizontais";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå ïèğàìèäû";
+    Text[ dutch ] = "Horizontale piramiden";
+    Text[ spanish ] = "Pirámides horizontales";
+    Text[ danish ] = "Liggende pyramider";
+    Text[ swedish ] = "Horisontala pyramider";
+    Text[ polish ] = "Ostros³upy poziome";
+    Text[ portuguese_brazilian ] = "Pirâmides horizontais";
+    Text[ japanese ] = "æ°´å¹³ãªè§’éŒ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ÃİŞíÉ";
+    Text[ greek ] = "Ïñéæüíôéá ğõñáìßäá";
+    Text[ korean ] = "ìˆ˜í‰ í”¼ë¼ë¯¸ë“œ";
+    Text[ turkish ] = "Yatay piramit";
+    Text[ catalan ] = "Piràmides horitzontals";
+    Text[ finnish ] = "Vaakapyramidit";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”à¹à¸™à¸§à¸™à¸­à¸™";
+    Text[ czech ] = "VodorovnÃ© jehlany";
+    Text[ hebrew ] = "Horizontale Pyramiden";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­";
+    Text[ slovak ] = "VodorovnÃ© ihlany";
+};
+String STR_PYRAMIDQ_3D_2
+{
+    Text = "Horizontale ,gestapelte Pyramiden" ;
+    Text[ ENGLISH ] = "Pyramids, stacked";
+    Text[ italian ] = "Piramidi orizzontali sovrapposte";
+    Text[ french ] = "Pyramides horizontales empilées" ;
+    Text[ english_us ] = "Horizontal pyramids, stacked";
+    Text[ portuguese ] = "Pirâmides horizontais, sobrepostas";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå ïèğàìèäû, íàêîïëåíèå";
+    Text[ dutch ] = "Piramiden, gestapeld";
+    Text[ spanish ] = "Pirámides horizontales apiladas";
+    Text[ danish ] = "Stablede liggende pyramider";
+    Text[ swedish ] = "Horisontala, staplade pyramider";
+    Text[ polish ] = "Ostros³upy poziome skumulowane";
+    Text[ portuguese_brazilian ] = "Pirâmides horizontais, empilhadas";
+    Text[ japanese ] = "æ°´å¹³ãªã€ç©ã¿ä¸Šã’ãŸè§’éŒ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘å †ç§¯å‹æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "é‡ç–ŠéŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ÃİŞíÉ ãÊÑÇßÈÉ";
+    Text[ greek ] = "Ïñéæüíôéåò ğõñáìßäåò, óùñåõìİíåò";
+    Text[ korean ] = "ìˆ˜í‰, í”¼ë¼ë¯¸ë“œ ëˆ„ì ";
+    Text[ turkish ] = "Yatay, yığılmış piramitler";
+    Text[ catalan ] = "Piràmides horizontals apilades";
+    Text[ finnish ] = "Vaakapyramidit, päällekkäiset";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”à¹à¸™à¸§à¸™à¸­à¸™, à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "VodorovnÃ½ jehlan, sklÃ¡danÃ½";
+    Text[ hebrew ] = "Horizontale ,gestapelte Pyramiden";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­, à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";
+    Text[ slovak ] = "VodorovnÃ© ihlany, skladanÃ©";
+};
+String STR_PYRAMIDQ_3D_3
+{
+    Text = "Horizontale Pyramiden, Prozent";
+    Text[ ENGLISH ] = "Pyramids, percent";
+    Text[ italian ] = "Piramidi orizzontali, percentuale";
+    Text[ french ] = "Pyramides horizontales, pourcentage";
+    Text[ english_us ] = "Horizontal pyramids, percent";
+    Text[ portuguese ] = "Pirâmides horizontais, percentuais";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå ïèğàìèäû, ïğîöåíò";
+    Text[ dutch ] = "Piramiden, procent";
+    Text[ spanish ] = "Pirámides horizontales, porcentaje";
+    Text[ danish ] = "Liggende pyramider, procent";
+    Text[ swedish ] = "Horisontala pyramider, procent";
+    Text[ polish ] = "Ostros³upy poziome procentowe";
+    Text[ portuguese_brazilian ] = "Pirâmides horizontais, percentuais";
+    Text[ japanese ] = "æ°´å¹³ãªè§’éŒã€ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘ç™¾åˆ†æ¯”æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ÃİŞíÉ ãÚ ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "Ïñéæüíôéåò ğõñáìßäåò, Ğïóïóôü (%)";
+    Text[ korean ] = "ìˆ˜í‰ í”¼ë¼ë¯¸ë“œ, ë°±ë¶„ìœ¨";
+    Text[ turkish ] = "Yatay piramit, yüzde";
+    Text[ catalan ] = "Piràmides horitzontals, percent";
+    Text[ finnish ] = "Vaakapyramidit, prosentti";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”à¹à¸™à¸§à¸™à¸­à¸™, à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "VodorovnÃ½ jehlan, procenta";
+    Text[ hebrew ] = "Horizontale Pyramiden, Prozent";
+    Text[ hindi ] = "Horizontal pyramids, percent";
+    Text[ slovak ] = "VodorovnÃ© ihlany, percentuÃ¡lne";
+};
+String STR_PYRAMIDQ_3D_4
+{
+    Text = "Horizontale Pyramiden, Tief" ;
+    Text[ ENGLISH ] = "Pyramids, deep";
+    Text[ italian ] = "Piramidi orizzontali, in basso" ;
+    Text[ french ] = "Pyramides horizontales, en profondeur" ;
+    Text[ english_us ] = "Horizontal pyramids, deep";
+    Text[ portuguese ] = "Pirâmides horizontais, com profundidade";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå ïèğàìèäû, ãëóáèíà";
+    Text[ dutch ] = "Piramiden, met diepte";
+    Text[ spanish ] = "Pirámides horizontales, en profundidad";
+    Text[ danish ] = "Liggende pyramider, dyb";
+    Text[ swedish ] = "Horisontala pyramider, djupa";
+    Text[ polish ] = "Ostros³upy poziome przestrzenne";
+    Text[ portuguese_brazilian ] = "Pirâmides horizontais, com profundidade";
+    Text[ japanese ] = "æ°´å¹³ãªè§’éŒã€å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„æ°´å¹³å‘æ£±é”¥ä½“";
+    Text[ chinese_traditional ] = "æ·±å‘éŒé«”";
+    Text[ arabic ] = "ÃåÑÇã ÃİŞíÉ ÚãíŞÉ";
+    Text[ greek ] = "Ïñéæüíôéåò ğõñáìßäåò, âáèı";
+    Text[ korean ] = "ìˆ˜í‰ í”¼ë¼ë¯¸ë“œ, ê¹Šì´";
+    Text[ turkish ] = "Yatay piramit, derin";
+    Text[ catalan ] = "Piràmides horizontals, en profunditat";
+    Text[ finnish ] = "Vaakapyramidit, syvät";
+    Text[ thai ] = "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”à¹à¸™à¸§à¸™à¸­à¸™, à¸¥à¸¶à¸";
+    Text[ czech ] = "VodorovnÃ½ jehlan, hloubka";
+    Text[ hebrew ] = "Horizontale Pyramiden, Tief";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¸à¥‚à¤šà¥à¤¯à¤¾à¤•à¤¾à¤° à¤¸à¥à¤¤à¤‚à¤­, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "VodorovnÃ© ihlany, do hÄºbky";
+};
+//-----------------------------------
+
+String STR_KEGEL_3D_1
+{
+    Text = "Kegel" ;
+    Text[ ENGLISH ] = "Cones";
+    Text[ italian ] = "Coni" ;
+    Text[ french ] = "Cônes" ;
+    Text[ english_us ] = "Cones";
+    Text[ portuguese ] = "Cones";
+    Text[ russian ] = "Êîíóñû";
+    Text[ dutch ] = "kegels";
+    Text[ spanish ] = "Conos";
+    Text[ danish ] = "Kegler";
+    Text[ swedish ] = "Kon";
+    Text[ polish ] = "Sto¿ki";
+    Text[ portuguese_brazilian ] = "Cones";
+    Text[ japanese ] = "å††éŒ";
+    Text[ chinese_simplified ] = "åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ";
+    Text[ greek ] = "Kşíïò";
+    Text[ korean ] = "ì›ì¶”í˜•";
+    Text[ turkish ] = "Koni";
+    Text[ catalan ] = "Cons";
+    Text[ finnish ] = "Kartiot";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢";
+    Text[ czech ] = "KuÅ¾ele";
+    Text[ hebrew ] = "Kegel";
+    Text[ hindi ] = "à¤¶à¤‚à¤•à¥";
+    Text[ slovak ] = "KuÅ¾ele";
+};
+String STR_KEGEL_3D_2
+{
+    Text = "Gestapelte Kegel" ;
+    Text[ ENGLISH ] = "Cones, stacked";
+    Text[ italian ] = "Coni sovrapposti" ;
+    Text[ french ] = "Cônes empilés" ;
+    Text[ english_us ] = "Cones, stacked";
+    Text[ portuguese ] = "Cones, sobrepostos";
+    Text[ russian ] = "Êîíóñû, íàêîïëåíèå";
+    Text[ dutch ] = "kegels, gestapeld";
+    Text[ spanish ] = "Conos apilados";
+    Text[ danish ] = "Stablede kegler";
+    Text[ swedish ] = "Staplade koner";
+    Text[ polish ] = "Sto¿ki skumulowane";
+    Text[ portuguese_brazilian ] = "Cones, empilhados";
+    Text[ japanese ] = "ç©ã¿ä¸Šã’å††éŒ";
+    Text[ chinese_simplified ] = "å †ç§¯å‹åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "é‡ç–Šåœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ãÊÑÇßÈÉ";
+    Text[ greek ] = "Êşíïé, óùñåõìİíïé";
+    Text[ korean ] = "ìŒ“ì•„ ì˜¬ë¦° ì›ì¶”í˜•";
+    Text[ turkish ] = "Yığılmış koni";
+    Text[ catalan ] = "Cons, apilats";
+    Text[ finnish ] = "Kartiot, päällekkäiset";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢, à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "KuÅ¾ele, sklÃ¡danÃ©";
+    Text[ hebrew ] = "Gestapelte Kegel";
+    Text[ hindi ] = "à¤¶à¤‚à¤•à¥, à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¥€ à¤¹à¥à¤¯à¥€";
+    Text[ slovak ] = "KuÅ¾ele, skladanÃ©";
+};
+String STR_KEGEL_3D_3
+{
+    Text = "Kegel, Prozent";
+    Text[ ENGLISH ] = "Cones, percent";
+    Text[ italian ] = "Coni, percentuale";
+    Text[ french ] = "Cônes, pourcentage";
+    Text[ english_us ] = "Cones, percent";
+    Text[ portuguese ] = "Cones, percentuais";
+    Text[ russian ] = "Êîíóñû, ïğîöåíò";
+    Text[ dutch ] = "kegels, procent";
+    Text[ spanish ] = "Conos, porciento";
+    Text[ danish ] = "Kegler, procent";
+    Text[ swedish ] = "Kon, procent";
+    Text[ polish ] = "Sto¿ki procentowe";
+    Text[ portuguese_brazilian ] = "Cones, percentuais";
+    Text[ japanese ] = "å††éŒï½¤ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "ç™¾åˆ†æ¯”åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ãÚ ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "Kşíïò. Ğïóïóôü (%)";
+    Text[ korean ] = "ì›ì¶”í˜• í¼ì„¼íŠ¸";
+    Text[ turkish ] = "Koni, yüzde";
+    Text[ catalan ] = "Cons, percentatge";
+    Text[ finnish ] = "Kartiot, prosentti";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢, à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "KuÅ¾ele, procenta";
+    Text[ hebrew ] = "Kegel, Prozent";
+    Text[ hindi ] = "à¤¶à¤‚à¤•à¥, à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤";
+    Text[ slovak ] = "KuÅ¾ele, percentuÃ¡lne";
+};
+String STR_KEGEL_3D_4
+{
+    Text = "Kegel, Tief" ;
+    Text[ ENGLISH ] = "Cones, deep";
+    Text[ italian ] = "Cono, in basso" ;
+    Text[ french ] = "Cônes, en profondeur" ;
+    Text[ english_us ] = "Cones, deep";
+    Text[ portuguese ] = "Cones, com profundidade";
+    Text[ russian ] = "Êîíóñû, ãëóáèíà";
+    Text[ dutch ] = "kegels, met diepte";
+    Text[ spanish ] = "Conos, en profundidad";
+    Text[ danish ] = "Kegler, dyb";
+    Text[ swedish ] = "Kon, djup";
+    Text[ polish ] = "Sto¿ki przestrzenne";
+    Text[ portuguese_brazilian ] = "Cones, com profundidade";
+    Text[ japanese ] = "å††éŒï½¤å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "æ·±å‘åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ÚãíŞÉ";
+    Text[ greek ] = "Êşíïò, âáèı";
+    Text[ korean ] = "ì›ì¶”í˜• ê¹Šì´";
+    Text[ turkish ] = "Koni, derin";
+    Text[ catalan ] = "Cons, profunditat";
+    Text[ finnish ] = "Kartiot, syvät";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢, à¸¥à¸¶à¸";
+    Text[ czech ] = "KuÅ¾ele, hloubka";
+    Text[ hebrew ] = "Kegel, Tief";
+    Text[ hindi ] = "à¤¶à¤‚à¤•à¥, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "KuÅ¾ele, do hÄºbky";
+};
+//-----------------------------------
+String STR_KEGELQ_3D_1
+{
+    Text = "Horizontale Kegel" ;
+    Text[ ENGLISH ] = "Cones";
+    Text[ italian ] = "Coni orizzontali" ;
+    Text[ french ] = "Cônes horizontaux" ;
+    Text[ english_us ] = "Horizontal cones";
+    Text[ portuguese ] = "Cones horizontais";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå êîíóñû";
+    Text[ dutch ] = "horizontale kegels";
+    Text[ spanish ] = "Conos horizontales";
+    Text[ danish ] = "Liggende kegler";
+    Text[ swedish ] = "Horisontal kon";
+    Text[ polish ] = "Sto¿ki poziome";
+    Text[ portuguese_brazilian ] = "Cones horizontais";
+    Text[ japanese ] = "æ°´å¹³ã®å††éŒ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "æ°´å¹³åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ÃİŞíÉ";
+    Text[ greek ] = "Ïñéæüíôéïò êşíïò";
+    Text[ korean ] = "ìˆ˜í‰ ì›ì¶”í˜•";
+    Text[ turkish ] = "Yatay koni";
+    Text[ catalan ] = "Cons horitzontals";
+    Text[ finnish ] = "Vaakakartiot";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢à¹à¸™à¸§à¸™à¸­à¸™";
+    Text[ czech ] = "VodorovnÃ© kuÅ¾ele";
+    Text[ hebrew ] = "Horizontale Kegel";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¶à¤‚à¤•à¥";
+    Text[ slovak ] = "VodorovnÃ© kuÅ¾ele";
+};
+String STR_KEGELQ_3D_2
+{
+    Text = "Horizontale ,gestapelte Kegel" ;
+    Text[ ENGLISH ] = "Cones, stacked";
+    Text[ italian ] = "Coni orizzontali sovrapposti" ;
+    Text[ french ] = "Cônes horizontaux empilés" ;
+    Text[ english_us ] = "Horizontal, stacked cones";
+    Text[ portuguese ] = "Cones horizontais, sobrepostos";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå êîíóñû, íàêîïëåíèå";
+    Text[ dutch ] = "horizontale kegels, gestapeld";
+    Text[ spanish ] = "Conos horizontales apilados";
+    Text[ danish ] = "Stablede liggende kegler";
+    Text[ swedish ] = "Horisontala, staplade koner";
+    Text[ polish ] = "Sto¿ki poziome skumulowane";
+    Text[ portuguese_brazilian ] = "Cones horizontais, empilhados";
+    Text[ japanese ] = "æ°´å¹³ã®ç©ã¿ä¸Šã’å††éŒ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘å †ç§¯å‹åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "é‡ç–Šåœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ÃİŞíÉ ãÊÑÇßÈÉ";
+    Text[ greek ] = "Êşíïé, ïñéæüíôéïé êáé óùñåõìİíïé";
+    Text[ korean ] = "ìˆ˜í‰ìœ¼ë¡œ ìŒ“ì•„ ì˜¬ë¦° ì›ì¶”í˜•";
+    Text[ turkish ] = "Yatay, yığılmış koniler";
+    Text[ catalan ] = "Cons horitzontals, apilats";
+    Text[ finnish ] = "Vaakataso, päällekkäiset kartiot";
+    Text[ thai ] = "à¹à¸™à¸§à¸™à¸­à¸™, à¸à¸£à¸§à¸¢à¸à¸­à¸‡à¸‹à¹‰à¸­à¸™";
+    Text[ czech ] = "VodorovnÃ© kuÅ¾ele, sklÃ¡danÃ©";
+    Text[ hebrew ] = "Horizontale ,gestapelte Kegel";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² , à¤¸à¥à¤Ÿà¥‰à¤• à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¶à¤‚à¤•à¥";
+    Text[ slovak ] = "VodorovnÃ© kuÅ¾ele, skladanÃ©";
+};
+String STR_KEGELQ_3D_3
+{
+    Text = "Horizontale Kegel, Prozent";
+    Text[ ENGLISH ] = "Cones, percent";
+    Text[ italian ] = "Coni orizzontali, percentuale";
+    Text[ french ] = "Cônes horizontaux, pourcentage";
+    Text[ english_us ] = "Horizintal cones, percent";
+    Text[ portuguese ] = "Cones horizontais, percentuais";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå êîíóñû, ïğîöåíò";
+    Text[ dutch ] = "horizontale kegels, procent";
+    Text[ spanish ] = "Conos horizontal, porciento";
+    Text[ danish ] = "Liggende kegler, procent";
+    Text[ swedish ] = "Horisontal kon, procent";
+    Text[ polish ] = "Sto¿ki poziome procentowe";
+    Text[ portuguese_brazilian ] = "Cones horizontais, percentuais";
+    Text[ japanese ] = "æ°´å¹³ã®å††éŒï½¤ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆ";
+    Text[ chinese_simplified ] = "æ°´å¹³å‘ç™¾åˆ†æ¯”åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "ç™¾åˆ†æ¯”åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ÃİŞíÉ ãÚ ÇáäÓÈÉ ÇáãÆæíÉ";
+    Text[ greek ] = "Ïñéæüíôéïò êşíïò, ĞïóïóôÜ (%)";
+    Text[ korean ] = "ìˆ˜í‰ ì›ì¶”í˜• í¼ì„¼íŠ¸";
+    Text[ turkish ] = "Yatay koni, yüzde";
+    Text[ catalan ] = "Cons horitzontals, percentatge";
+    Text[ finnish ] = "Vaakakartiot, prosentti";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢à¹à¸™à¸§à¸™à¸­à¸™, à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "VodorovnÃ© kuÅ¾ele, procenta";
+    Text[ hebrew ] = "Horizontale Kegel, Prozent";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¶à¤‚à¤•à¥, à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤";
+    Text[ slovak ] = "VodorovnÃ© kuÅ¾ele, percentuÃ¡lne";
+};
+String STR_KEGELQ_3D_4
+{
+    Text = "Horizontale Kegel, Tief" ;
+    Text[ ENGLISH ] = "Cones, deep";
+    Text[ italian ] = "Coni orizzontali, in basso" ;
+    Text[ french ] = "Cônes horizontaux, en profondeur" ;
+    Text[ english_us ] = "Horizontal cones, deep";
+    Text[ portuguese ] = "Cones horizontais, com profundidade";
+    Text[ russian ] = "Ãîğèçîíòàëüíûå êîíóñû, ãëóáèíà";
+    Text[ dutch ] = "horizontale kegels, met diepte";
+    Text[ spanish ] = "Conos horizontales, en profundidad";
+    Text[ danish ] = "Liggende kegler, dyb";
+    Text[ swedish ] = "Horisontal kon, djup";
+    Text[ polish ] = "Sto¿ki poziome przestrzenne";
+    Text[ portuguese_brazilian ] = "Cones horizontais, com profundidade";
+    Text[ japanese ] = "æ°´å¹³ã®å††éŒï½¤å¥¥è¡Œãã‚ã‚Š";
+    Text[ chinese_simplified ] = "å¸¦æ·±åº¦çš„æ°´å¹³å‘åœ†é”¥ä½“";
+    Text[ chinese_traditional ] = "æ·±å‘åœ“éŒ";
+    Text[ arabic ] = "ãÎÇÑíØ ÃİŞíÉ ÚãíŞÉ";
+    Text[ greek ] = "Ïñéæüíôéïò êşíïò, âáèı";
+    Text[ korean ] = "ìˆ˜í‰ ì›ì¶”í˜• ê¹Šì´";
+    Text[ turkish ] = "Yatay koni, derin";
+    Text[ catalan ] = "Cons horitzontals, profunditat";
+    Text[ finnish ] = "Vaakakartiot, syvät";
+    Text[ thai ] = "à¸à¸£à¸§à¸¢à¹à¸™à¸§à¸™à¸­à¸™, à¸¥à¸¶à¸";
+    Text[ czech ] = "VodorovnÃ© kuÅ¾ele, hloubka";
+    Text[ hebrew ] = "Horizontale Kegel, Tief";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤¶à¤‚à¤•à¥, à¤—à¤¹à¤°à¤¾";
+    Text[ slovak ] = "VodorovnÃ© kuÅ¾ele, do hÄºbky";
+};
+//-----------------------------------

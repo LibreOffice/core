@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Bitmaps.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SOLAR_HRC
+#include <svtools/solar.hrc>
+#endif
+
+    //#define RID_APP_START 30000
+////#define RID_DRAW_TOOLBOX        (RID_SCH_START + 1)
+////#define RID_DRAW_OBJ_TOOLBOX    (RID_APP_START + 10001)
+////#define RID_STATUSBAR           (RID_APP_START + 10002)
+    //#define RID_ALIGNMENT         (RID_APP_START + 3)
+    //#define RID_ZOOM              (RID_APP_START + 4)
+    //#define RID_CONTROLS          (RID_APP_START + 5)
+    //#define RID_TEXT_TOOLBOX      (RID_APP_START + 6)
+
+////#define RID_DOCWINDOW_ICON      (RID_APP_START + 20)
+////#define RID_DOCTEMPLATE_ICON    (RID_APP_START + 21)
+
+// chart types
+#define BMP_AREAS_2D            (RID_APP_START + 34)
+#define BMP_AREAS_2D_1          (RID_APP_START + 35)
+#define BMP_AREAS_2D_3          (RID_APP_START + 36)
+#define BMP_AREAS_3D            (RID_APP_START + 61)
+#define BMP_AREAS_3D_1          (RID_APP_START + 62)
+#define BMP_AREAS_3D_2          (RID_APP_START + 63)
+
+#define BMP_BARS_2D             (RID_APP_START + 41)
+#define BMP_BARS_2D_1           (RID_APP_START + 42)
+#define BMP_BARS_2D_2           (RID_APP_START + 43)
+#define BMP_BARS_2D_3           (RID_APP_START + 44)
+#define BMP_BARS_3D             (RID_APP_START + 71)
+#define BMP_BARS_3D_1           (RID_APP_START + 72)
+#define BMP_BARS_3D_2           (RID_APP_START + 73)
+#define BMP_BARS_3D_3           (RID_APP_START + 74)
+
+#define BMP_CIRCLES_2D          (RID_APP_START + 45)
+#define BMP_CIRCLES_2D_1        (RID_APP_START + 46)
+#define BMP_CIRCLES_2D_2        (RID_APP_START + 47)
+#define BMP_CIRCLES_3D          (RID_APP_START + 68)
+
+#define BMP_COLUMNS_2D          (RID_APP_START + 37)
+#define BMP_COLUMNS_2D_1        (RID_APP_START + 38)
+#define BMP_COLUMNS_2D_2        (RID_APP_START + 39)
+#define BMP_COLUMNS_2D_3        (RID_APP_START + 40)
+#define BMP_COLUMNS_2D_4        (RID_APP_START + 58)
+#define BMP_COLUMNS_2D_5        (RID_APP_START + 98)
+#define BMP_COLUMNS_3D          (RID_APP_START + 64)
+#define BMP_COLUMNS_3D_1        (RID_APP_START + 65)
+#define BMP_COLUMNS_3D_2        (RID_APP_START + 66)
+#define BMP_COLUMNS_3D_3        (RID_APP_START + 67)
+
+#define BMP_DONUT1_2D           (RID_APP_START + 54)
+//#define BMP_DONUT2_2D           (RID_APP_START + 55)
+
+#define BMP_KEGELQ_3D_1         (RID_APP_START + 124)
+#define BMP_KEGELQ_3D_2         (RID_APP_START + 125)
+#define BMP_KEGELQ_3D_3         (RID_APP_START + 126)
+#define BMP_KEGELQ_3D_4         (RID_APP_START + 127)
+#define BMP_KEGEL_3D_1          (RID_APP_START + 120)
+#define BMP_KEGEL_3D_2          (RID_APP_START + 121)
+#define BMP_KEGEL_3D_3          (RID_APP_START + 122)
+#define BMP_KEGEL_3D_4          (RID_APP_START + 123)
+
+//#define BMP_LINESYMB_2D       (RID_APP_START + 50)
+#define BMP_LINESYMB_2D_1       (RID_APP_START + 51)
+#define BMP_LINESYMB_2D_2       (RID_APP_START + 52)
+#define BMP_LINESYMB_2D_3       (RID_APP_START + 53)
+
+#define BMP_LINES_2D            (RID_APP_START + 30)
+#define BMP_LINES_2D_1          (RID_APP_START + 31)
+#define BMP_LINES_2D_2          (RID_APP_START + 32)
+#define BMP_LINES_2D_3          (RID_APP_START + 33)
+#define BMP_LINES_3D            (RID_APP_START + 60)
+
+#define BMP_NETSYMB_2D                  (RID_APP_START + 57)
+#define BMP_NETSYMB_2D_STACK            (RID_APP_START + 91)
+#define BMP_NETSYMB_2D_PERCENT          (RID_APP_START + 93)
+#define BMP_NET_2D              (RID_APP_START + 56)
+#define BMP_NET_2D_STACK        (RID_APP_START + 90)
+#define BMP_NET_2D_PERCENT      (RID_APP_START + 92)
+
+#define BMP_PYRAMIDQ_3D_1               (RID_APP_START + 116)
+#define BMP_PYRAMIDQ_3D_2               (RID_APP_START + 117)
+#define BMP_PYRAMIDQ_3D_3               (RID_APP_START + 118)
+#define BMP_PYRAMIDQ_3D_4               (RID_APP_START + 119)
+
+#define BMP_PYRAMID_3D_1                (RID_APP_START + 112)
+#define BMP_PYRAMID_3D_2                (RID_APP_START + 113)
+#define BMP_PYRAMID_3D_3                (RID_APP_START + 114)
+#define BMP_PYRAMID_3D_4                (RID_APP_START + 115)
+
+#define BMP_ROEHRE_3D_1                 (RID_APP_START + 108)
+#define BMP_ROEHRE_3D_2                 (RID_APP_START + 109)
+#define BMP_ROEHRE_3D_3                 (RID_APP_START + 110)
+#define BMP_ROEHRE_3D_4                 (RID_APP_START + 111)
+
+#define BMP_SAEULE_3D_1                 (RID_APP_START + 104)
+#define BMP_SAEULE_3D_2                 (RID_APP_START + 105)
+#define BMP_SAEULE_3D_3                 (RID_APP_START + 106)
+#define BMP_SAEULE_3D_4                 (RID_APP_START + 107)
+
+#define BMP_SPLINE_B                    (RID_APP_START + 96)
+#define BMP_SPLINE_B_SYMBOL             (RID_APP_START + 97)
+#define BMP_SPLINE_CUBIC                (RID_APP_START + 94)
+#define BMP_SPLINE_CUBIC_SYMBOL         (RID_APP_START + 95)
+
+#define BMP_STOCK_1                     (RID_APP_START + 99)
+#define BMP_STOCK_2                     (RID_APP_START + 100)
+#define BMP_STOCK_3                     (RID_APP_START + 101)
+#define BMP_STOCK_4                     (RID_APP_START + 102)
+
+//#define BMP_SURF_3D                   (RID_APP_START + 59)
+#define BMP_XYSYMB_2D                   (RID_APP_START + 49)
+//#define BMP_XYZSYMB_3D                (RID_APP_START + 70)
+//#define BMP_XYZ_3D                    (RID_APP_START + 69)
+#define BMP_XY_2D                       (RID_APP_START + 48)
+
+
+
+//SchStatisticTabPage and SchDataStatisticsDlg part 1
+#define BMP_INDICATE_NONE               (RID_APP_START + 75)
+#define BMP_INDICATE_BOTH               (RID_APP_START + 76)
+#define BMP_INDICATE_UP                 (RID_APP_START + 77)
+#define BMP_INDICATE_DOWN               (RID_APP_START + 78)
+
+/*
+#define RID_ACCEL                       (RID_APP_START + 80)
+#define RID_MENU                        (RID_APP_START + 81)
+#define RID_PORTAL_MENU                 (RID_APP_START + 82)
+*/
+
+//SchStatisticTabPage and SchDataStatisticsDlg part 2
+#define BMP_REGRESSION_NONE             (RID_APP_START + 85)
+#define BMP_REGRESSION_LINEAR           (RID_APP_START + 86)
+#define BMP_REGRESSION_LOG              (RID_APP_START + 87)
+#define BMP_REGRESSION_EXP              (RID_APP_START + 88)
+#define BMP_REGRESSION_POWER            (RID_APP_START + 89)
+
+// Popup-Menus
+////#define RID_FORMAT_POPUP        (RID_APP_START + 200)
+////#define RID_3D_POPUP            (RID_APP_START + 201)
+////#define RID_3D_PIE_POPUP        (RID_APP_START + 202)
+////#define RID_2D_POPUP            (RID_APP_START + 203)
+////#define RID_2D_PIE_POPUP        (RID_APP_START + 204)

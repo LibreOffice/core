@@ -1,0 +1,434 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlg_InsertAxis_Grid.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlg_InsertAxis_Grid.hrc"
+#include "SchSlotIds.hxx"
+#include "CommonResources.hrc"
+
+ModalDialog DLG_AXIS_OR_GRID
+{
+    HelpID = SID_INSERT_AXIS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    //Size = MAP_APPFONT ( 160 , 99 ) ;
+    Size = MAP_APPFONT ( 160 , 113 ) ;
+    Text = "Achsen" ;
+    Text [ ENGLISH ] = "Axes";
+    Text [ english_us ] = "Axes" ;
+    Moveable = TRUE ;
+
+    FixedLine FL_PRIMARY_AXIS
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text = "Hauptachse" ;
+        Text [ ENGLISH ] = "Major axis" ;
+        Text [ english_us ] = "Major axis" ;
+        Text[ portuguese ] = "Eixo principal";
+        Text[ russian ] = "ŒÒÌÓ‚Ì‡ˇ ÓÒ¸";
+        Text[ greek ] = " ˝ÒÈÔÚ ‹ÓÔÌ·Ú";
+        Text[ dutch ] = "Hoofdas";
+        Text[ french ] = "Axe principal";
+        Text[ spanish ] = "Eje principal";
+        Text[ italian ] = "Asse principale";
+        Text[ danish ] = "Overordnet akse";
+        Text[ swedish ] = "Huvudaxel";
+        Text[ polish ] = "Oú g≥Ûwna";
+        Text[ portuguese_brazilian ] = "Eixo principal";
+        Text[ japanese ] = "Êï∞ÂÄ§Ëª∏";
+        Text[ korean ] = "Ï£º Ï∂ï";
+        Text[ chinese_simplified ] = "‰∏ªËΩ¥";
+        Text[ chinese_traditional ] = "‰∏ªËª∏";
+        Text[ arabic ] = "«·„ÕÊ— «·—∆Ì”Ì";
+        Text[ turkish ] = "B¸y¸k eksen";
+        Text[ catalan ] = "Eix principal";
+        Text[ finnish ] = "P‰‰akseli";
+        Text[ thai ] = "‡πÅ‡∏Å‡∏ô‡∏´‡∏•‡∏±‡∏Å";
+        Text[ czech ] = "Hlavn√≠ osa";
+        Text[ hebrew ] = "Hauptachse";
+        Text[ hindi ] = "Major axis";
+        Text[ slovak ] = "Hlavn√° os";
+    };
+    FixedLine FL_PRIMARY_GRID
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text = "Hauptgitter" ;
+        Text [ ENGLISH ] = "Major gridlines" ;
+        Text [ italian ] = "Griglia principale" ;
+        Text [ portuguese_brazilian ] = "Grade Principal" ;
+        Text [ portuguese ] = "Grelha principal" ;
+        Text [ finnish ] = "P‰‰ruudukko" ;
+        Text [ danish ] = "Overordnet gitter" ;
+        Text [ french ] = "Grille principale" ;
+        Text [ swedish ] = "Huvudgitter" ;
+        Text [ dutch ] = "Hoofdraster" ;
+        Text [ spanish ] = "CuadrÌcula principal" ;
+        Text [ english_us ] = "Main grid" ;
+        Text[ chinese_simplified ] = "‰∏ªÁΩëÊ†ºÁ∫ø";
+        Text[ russian ] = "ŒÒÌÓ‚Ì˚Â ÎËÌËË ÒÂÚÍË";
+        Text[ polish ] = "G≥Ûwna siatka";
+        Text[ japanese ] = "‰∏ªÁõÆÁõõÁ∑ö";
+        Text[ chinese_traditional ] = "‰∏ªÁ∂≤Ê†º";
+        Text[ arabic ] = "«·‘»ﬂ… «·—∆Ì”Ì…";
+        Text[ greek ] = " ˝ÒÈÔ Î›„Ï·";
+        Text[ korean ] = "Ï£º ÎààÍ∏àÏÑ†";
+        Text[ turkish ] = "Ana ˝zgara";
+        Text[ catalan ] = "Cuadr. principal";
+        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏ï‡∏≤‡∏£‡∏≤‡∏á‡∏´‡∏•‡∏±‡∏Å";
+        Text[ czech ] = "Hlavn√≠ m≈ô√≠≈æka";
+        Text[ hebrew ] = "Hauptgitter";
+        Text[ hindi ] = "‡§™‡•ç‡§∞‡§ß‡§æ‡§® ‡§ú‡§æ‡§≤";
+        Text[ slovak ] = "Hlavn√° mrie≈æka";
+    };
+    CheckBox CB_X_PRIMARY
+    {
+        Pos = MAP_APPFONT ( 12 , 14  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "~X-Achse";
+        Text [ ENGLISH ] = "~X axis";
+        Text [ english_us ] = "~X axis";
+        Text[ portuguese ] = "Eixo ~X";
+        Text[ russian ] = "ŒÒ¸ ~X";
+        Text[ greek ] = "¢ÓÔÌ·Ú X";
+        Text[ dutch ] = "~X-as";
+        Text[ french ] = "Axe X";
+        Text[ spanish ] = "Eje ~X";
+        Text[ italian ] = "Asse ~X";
+        Text[ danish ] = "X-akse";
+        Text[ swedish ] = "~X-axel";
+        Text[ polish ] = "Oú ~X";
+        Text[ portuguese_brazilian ] = "Eixo ~X";
+        Text[ japanese ] = "~X Ëª∏";
+        Text[ korean ] = "~X Ï∂ï";
+        Text[ chinese_simplified ] = "~X ËΩ¥";
+        Text[ chinese_traditional ] = "~X Ëª∏";
+        Text[ arabic ] = "«·„ÕÊ— ”";
+        Text[ turkish ] = "~X ekseni";
+        Text[ catalan ] = "Eix ~X";
+        Text[ finnish ] = "X-akseli";
+        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~X ";
+        Text[ czech ] = "Osa X";
+        Text[ hebrew ] = "~X-Achse";
+        Text[ hindi ] = "~X ‡§Ö‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "Os ~X";
+    };
+    CheckBox CB_Y_PRIMARY
+    {
+        Pos = MAP_APPFONT ( 12 , 28  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "~Y-Achse";
+        Text [ ENGLISH ] = "~Y axis";
+        Text [ english_us ] = "~Y axis";
+        Text[ portuguese ] = "Eixo ~Y";
+        Text[ russian ] = "ŒÒ¸ ~Y";
+        Text[ greek ] = "¢ÓÔÌ·Ú ~’";
+        Text[ dutch ] = "~Y-as";
+        Text[ french ] = "Axe ~Y";
+        Text[ spanish ] = "Eje ~Y";
+        Text[ italian ] = "Asse ~Y";
+        Text[ danish ] = "Y-akse";
+        Text[ swedish ] = "Y-axel";
+        Text[ polish ] = "Oú ~Y";
+        Text[ portuguese_brazilian ] = "Eixo ~Y";
+        Text[ japanese ] = "~Y Ëª∏";
+        Text[ korean ] = "~Y Ï∂ï";
+        Text[ chinese_simplified ] = "~Y ËΩ¥";
+        Text[ chinese_traditional ] = "~Y Ëª∏";
+        Text[ arabic ] = "«·„ÕÊ— ’";
+        Text[ turkish ] = "~Y ekseni";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eix ~Y";
+        Text[ finnish ] = "Y-akseli";
+        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~Y ";
+        Text[ czech ] = "Osa Y";
+        Text[ hebrew ] = "~Y-Achse";
+        Text[ hindi ] = "~Y axis";
+        Text[ slovak ] = "Os ~Y";
+    };
+    CheckBox CB_Z_PRIMARY
+    {
+        Pos = MAP_APPFONT ( 12 , 42  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "~Z-Achse";
+        Text [ ENGLISH ] = "~Z axis";
+        Text [ english_us ] = "~Z axis";
+        Text[ portuguese ] = "Eixo ~Z";
+        Text[ russian ] = "ŒÒ¸ ~Z";
+        Text[ greek ] = "¢ÓÔÌ·Ú Z";
+        Text[ dutch ] = "~Z-as";
+        Text[ french ] = "Axe ~Z";
+        Text[ spanish ] = "Eje ~Z";
+        Text[ italian ] = "Asse ~Z";
+        Text[ danish ] = "Z-akse";
+        Text[ swedish ] = "Z-axel";
+        Text[ polish ] = "Oú ~Z";
+        Text[ portuguese_brazilian ] = "Eixo ~Z";
+        Text[ japanese ] = "~Z Ëª∏";
+        Text[ korean ] = "~Z Ï∂ï";
+        Text[ chinese_simplified ] = "~Z ËΩ¥";
+        Text[ chinese_traditional ] = "~Z Ëª∏";
+        Text[ arabic ] = "«·„ÕÊ— ⁄";
+        Text[ turkish ] = "~Z ekseni";
+        Text[ catalan ] = "Eix ~Z";
+        Text[ finnish ] = "Z-akseli";
+        Text[ thai ] = "‡πÅ‡∏Å‡∏ô~Z ";
+        Text[ czech ] = "Osa Z";
+        Text[ hebrew ] = "~Z-Achse";
+        Text[ hindi ] = "~Z ‡§Ö‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "Os ~Z";
+    };
+
+    FixedLine FL_SECONDARY_AXIS
+    {
+        Pos = MAP_APPFONT ( 6 , 58  ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text = "Sekund‰re Achse" ;
+        Text [ ENGLISH ] = "Secondary axis" ;
+        Text [ english_us ] = "Secondary axis" ;
+        Text[ portuguese ] = "Eixo secund·rio";
+        Text[ russian ] = "ƒÓÔÓÎÌËÚÂÎ¸Ì‡ˇ ÓÒ¸";
+        Text[ greek ] = "ƒÂıÙÂÒÂ˝˘Ì ‹ÓÔÌ·Ú";
+        Text[ dutch ] = "Secundaire as";
+        Text[ french ] = "Axe secondaire";
+        Text[ spanish ] = "Eje secundario";
+        Text[ italian ] = "Asse secondario";
+        Text[ danish ] = "Underordnet akse";
+        Text[ swedish ] = "Sekund‰r axel";
+        Text[ polish ] = "Oú pomocnicza";
+        Text[ portuguese_brazilian ] = "Eixo secund·rio";
+        Text[ japanese ] = "Á¨¨2Êï∞ÂÄ§Ëª∏";
+        Text[ korean ] = "2Ï∞® Ï∂ï";
+        Text[ chinese_simplified ] = "Ê¨°ËΩ¥";
+        Text[ chinese_traditional ] = "ÂâØËª∏";
+        Text[ arabic ] = "„ÕÊ— ›—⁄Ì";
+        Text[ turkish ] = "›kincil eksen";
+        Text[ catalan ] = "Eix secundari";
+        Text[ finnish ] = "Toissijainen akseli";
+        Text[ thai ] = "‡πÅ‡∏Å‡∏ô‡∏ó‡∏∏‡∏ï‡∏¥‡∏¢‡∏†‡∏π‡∏°‡∏¥";
+        Text[ czech ] = "Sekund√°rn√≠ osa";
+        Text[ hebrew ] = "Sekund√§re Achse";
+        Text[ hindi ] = "‡§¶‡•Ç‡§∏‡§∞‡§æ ‡§Ö‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "Sekund√°rna os";
+    };
+    FixedLine FL_SECONDARY_GRID
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 58  ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Text = "Hilfsgitter" ;
+        Text [ ENGLISH ] = "Minor gridlines" ;
+        Text [ italian ] = "Griglia ausiliaria" ;
+        Text [ portuguese_brazilian ] = "Grade auxiliar" ;
+        Text [ portuguese ] = "Grelha auxiliar" ;
+        Text [ danish ] = "Underordnet gitter" ;
+        Text [ french ] = "Grille auxiliaire" ;
+        Text [ swedish ] = "Stˆdgitter" ;
+        Text [ dutch ] = "Hulpraster" ;
+        Text [ spanish ] = "CuadrÌcula auxiliar" ;
+        Text [ english_us ] = "Minor grid" ;
+        Text[ chinese_simplified ] = "Ê¨°ÁΩëÊ†ºÁ∫ø";
+        Text[ russian ] = "ƒÓÔÓÎÌËÚÂÎ¸Ì˚Â ÎËÌËË ÒÂÚÍË";
+        Text[ polish ] = "Pomocnicza siatka";
+        Text[ japanese ] = "Ë£úÂä©ÁõÆÁõõÁ∑ö";
+        Text[ chinese_traditional ] = "ËºîÂä©Á∂≤Ê†º";
+        Text[ arabic ] = "«·‘»ﬂ… «·„”«⁄œ…";
+        Text[ greek ] = "¬ÔÁËÁÙÈÍ¸ Î›„Ï·";
+        Text[ korean ] = "Î≥¥Ï°∞ ÎààÍ∏àÏÑ†";
+        Text[ turkish ] = "K¸Á¸k ˝zgara";
+        Text[ catalan ] = "Cuadr. auxiliar";
+        Text[ finnish ] = "Apuruudukko";
+        Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏ï‡∏≤‡∏£‡∏≤‡∏á‡∏£‡∏≠‡∏á";
+        Text[ czech ] = "Vedlej≈°√≠ m≈ô√≠≈æka";
+        Text[ hebrew ] = "Hilfsgitter";
+        Text[ hindi ] = "‡§õ‡•ã‡§ü‡§æ ‡§ú‡§æ‡§≤";
+        Text[ slovak ] = "Vedƒæaj≈°ia mrie≈æka";
+    };
+    CheckBox CB_X_SECONDARY
+    {
+        Pos = MAP_APPFONT ( 12 , 69  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "X-~Achse";
+        Text [ ENGLISH ] = "X ~axis";
+        Text [ english_us ] = "X ~axis";
+        Text[ portuguese ] = "~Eixo X";
+        Text[ russian ] = "Œ~Ò¸ X";
+        Text[ greek ] = "¢ÓÔÌ·Ú X";
+        Text[ dutch ] = "X~-as";
+        Text[ french ] = "Axe X";
+        Text[ spanish ] = "~Eje X";
+        Text[ italian ] = "~Asse X";
+        Text[ danish ] = "X-akse";
+        Text[ swedish ] = "X-axel";
+        Text[ polish ] = "Oú ~X";
+        Text[ portuguese_brazilian ] = "~Eixo X";
+        Text[ japanese ] = "XËª∏(~A)";
+        Text[ korean ] = "X Ï∂ï(~A)";
+        Text[ chinese_simplified ] = "X ËΩ¥(~A)";
+        Text[ chinese_traditional ] = "X Ëª∏(~A)";
+        Text[ arabic ] = "«·„ÕÊ— ”";
+        Text[ turkish ] = "X ~ekseni";
+        Text[ catalan ] = "~Eix X";
+        Text[ finnish ] = "X-akseli";
+        Text[ thai ] = "‡πÅ~‡∏Å‡∏ôX ";
+        Text[ czech ] = "Osa X";
+        Text[ hebrew ] = "X-~Achse";
+        Text[ hindi ] = "X ~‡§Ö‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "~Os X";
+    };
+    CheckBox CB_Y_SECONDARY
+    {
+        Pos = MAP_APPFONT ( 12 , 83  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "Y-A~chse";
+        Text [ ENGLISH ] = "Y ax~is";
+        Text [ english_us ] = "Y ax~is";
+        Text[ portuguese ] = "Ei~xo Y";
+        Text[ russian ] = "ŒÒ~¸ Y";
+        Text[ greek ] = "¢ÓÔ~Ì·Ú ’";
+        Text[ dutch ] = "Y-a~s";
+        Text[ french ] = "~Axe Y";
+        Text[ spanish ] = "Eje Y";
+        Text[ italian ] = "Asse Y";
+        Text[ danish ] = "Y-akse";
+        Text[ swedish ] = "Y-axel";
+        Text[ polish ] = "Oú ~Y";
+        Text[ portuguese_brazilian ] = "Ei~xo Y";
+        Text[ japanese ] = "YËª∏(~I)";
+        Text[ korean ] = "Y Ï∂ï(~I)";
+        Text[ chinese_simplified ] = "Y ËΩ¥(~I)";
+        Text[ chinese_traditional ] = "Y Ëª∏(~I)";
+        Text[ arabic ] = "«·„ÕÊ— ’";
+        Text[ turkish ] = "Y e~kseni";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~ix Y";
+        Text[ finnish ] = "Y-ak~seli";
+        Text[ thai ] = "‡πÅ‡∏Å~‡∏ôY ";
+        Text[ czech ] = "Osa Y";
+        Text[ hebrew ] = "Y-A~chse";
+        Text[ hindi ] = "Y  ‡§Ö~‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "O~s Y";
+    };
+    CheckBox CB_Z_SECONDARY
+    {
+        Pos = MAP_APPFONT ( 12 , 97  );
+        Size = MAP_APPFONT ( 80 , 10 );
+        TabStop = TRUE;
+        Text= "Z-Ac~hse";
+        Text [ ENGLISH ] = "Z axi~s";
+        Text [ english_us ] = "Z axi~s";
+        Text[ portuguese ] = "Eix~o Z";
+        Text[ russian ] = "ŒÒ¸ Z";
+        Text[ greek ] = "¢ÓÔÌ·Ú Z";
+        Text[ dutch ] = "~Z-as";
+        Text[ french ] = "Ax~e Z";
+        Text[ spanish ] = "Eje Z";
+        Text[ italian ] = "Asse Z";
+        Text[ danish ] = "Z-akse";
+        Text[ swedish ] = "Z-axel";
+        Text[ polish ] = "Oú ~Z";
+        Text[ portuguese_brazilian ] = "Ei~xo Y";
+        Text[ japanese ] = "ZËª∏(~S)";
+        Text[ korean ] = "Z Ï∂ï(~S)";
+        Text[ chinese_simplified ] = "Z ËΩ¥(~S)";
+        Text[ chinese_traditional ] = "Z Ëª∏(~S)";
+        Text[ arabic ] = "«·„ÕÊ— ⁄";
+        Text[ turkish ] = "Z ek~seni";
+        Text[ catalan ] = "Ei~x Z";
+        Text[ finnish ] = "Z-ak~seli";
+        Text[ thai ] = "~‡πÅ‡∏Å‡∏ôZ ";
+        Text[ czech ] = "Osa Z";
+        Text[ hebrew ] = "Z-Ac~hse";
+        Text[ hindi ] = "Z ~‡§Ö‡§ï‡•ç‡§∑";
+        Text[ slovak ] = "Os ~Z";
+    };
+    BUTTONS_OK_CANCEL_HELP_STACKED(104)
+    Text[ portuguese ] = "Eixos";
+    Text[ russian ] = "ŒÒË";
+    Text[ greek ] = "¢ÓÔÌÂÚ";
+    Text[ dutch ] = "Assen";
+    Text[ french ] = "Axes";
+    Text[ spanish ] = "Ejes";
+    Text[ italian ] = "Assi";
+    Text[ danish ] = "Akser";
+    Text[ swedish ] = "Axlar";
+    Text[ polish ] = "Osie";
+    Text[ portuguese_brazilian ] = "Eixos";
+    Text[ japanese ] = "Ëª∏";
+    Text[ korean ] = "Ï∂ï";
+    Text[ chinese_simplified ] = "ËΩ¥";
+    Text[ chinese_traditional ] = "Ëª∏";
+    Text[ arabic ] = "«·„Õ«Ê—";
+    Text[ turkish ] = "Eksen";
+    Text[ catalan ] = "Eixos";
+    Text[ finnish ] = "Akselit";
+    Text[ thai ] = "‡πÅ‡∏Å‡∏ô";
+    Text[ czech ] = "Osy";
+    Text[ hebrew ] = "Achsen";
+    Text[ hindi ] = "‡§Ö‡§ï‡•ç‡§∑ ‡§∞‡•á‡§ñ‡§æ";
+    Text[ slovak ] = "Osi";
+};

@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TabPages.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef CHART_TABPAGES_HRC
+#define CHART_TABPAGES_HRC
+
+//see attrib.hrc in old chart
+
+#define TP_LEGEND_POS 900
+#define GRP_LEGEND 1
+#define RBT_NONE 1
+#define RBT_LEFT 2
+#define RBT_TOP 3
+#define RBT_RIGHT 4
+#define RBT_BOTTOM 5
+
+#define TP_DATA_DESCR 901
+#define CB_VALUE 1
+#define CB_TEXT 2
+#define CB_SYMBOL 3
+#define RB_NUMBER 1
+#define RB_PERCENT 2
+
+#define TP_ALIGNMENT 902
+////#define FL_ORDER 2
+////#define RBT_SIDEBYSIDE 1
+////#define RBT_UPDOWN 2
+////#define RBT_DOWNUP 3
+////#define RBT_AUTOORDER 4
+
+#define TP_STAT                   905
+#define FL_ERROR                    1
+#define RBT_NONE                    1
+#define RBT_VARIANT                 2
+#define RBT_SIGMA                   3
+#define RBT_PERCENT                 4
+#define RBT_BIGERROR                5
+#define RBT_CONST                   6
+#define CBX_AVERAGE                 1
+#define MTR_FLD_PERCENT             1
+#define MTR_FLD_BIGERROR            2
+#define MTR_FLD_PLUS                3
+#define MTR_FLD_MINUS               4
+#define FT_PERCENT_PLUS             1
+#define FT_PERCENT_MINUS            2
+#define FT_INDICATE                 3
+#define FT_REGRESS                  4
+#define CT_INDICATE                 1
+#define CT_REGRESS                  2
+#define FL_TEXTBREAK                3
+#define CBX_TEXTBREAK               2
+#define CBX_TEXTOVERLAP             4
+
+//Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
+// ID's for title rotation tabpage
+#define CTR_DIAL                6030
+#define BTN_TXTSTACKED          6031
+#define FT_DEGREES              6032
+#define NF_ORIENT               6033
+#define CTR_DUMMY               6034
+#define FT_DUMMY                6035
+#define FL_ALIGN                6037
+
+/*
+//Symbol-Tabpage (zum Teil sehr Aehnlich der SVX_AREA_TABPAGE) (obsolete)
+#define TP_SYMBOL                 906
+#define RBT_COLOR                   1
+#define RBT_GRADIENT                2
+#define RBT_HATCHING                3
+#define RBT_BITMAP                  4
+#define RBT_INVISIBLE               5
+#define LB_COLOR                    1
+#define LB_GRADIENT                 2
+#define LB_HATCHING                 3
+#define LB_BITMAP                   4
+
+#define GRP_FILL                    1
+#define CTL_BITMAP_PREVIEW          6
+*/
+#define TP_LAYOUT                 907
+#define FT_LY_SHAPE                 1
+#define LB_LY_SHAPE                 2
+
+#define TP_OPTIONS                 908
+#define GRP_OPT_AXIS                1
+#define RBT_OPT_AXIS_1              2
+#define RBT_OPT_AXIS_2              3
+#define MT_GAP                      4
+#define MT_OVERLAP                  5
+#define FT_GAP                      6
+#define FT_OVERLAP                  7
+#define GB_BAR                      8
+#define CB_CONNECTOR                9
+
+//------------
+//from old chart tplabel.hrc
+
+#define TP_AXIS_LABEL                   920
+
+#define CB_AXIS_LABEL_SCHOW_DESCR       1
+
+//#define FL_AXIS_LABEL_FORMATTING      2
+
+#define FL_AXIS_LABEL_ORIENTATION       3
+#define CT_AXIS_LABEL_DIAL              4
+#define PB_AXIS_LABEL_TEXTSTACKED       5
+#define FT_AXIS_LABEL_DEGREES           6
+#define NF_AXIS_LABEL_ORIENT            7
+#define FT_UNUSED                       8
+#define CT_UNUSED                       9
+
+#define FL_AXIS_LABEL_TEXTFLOW          10
+#define CB_AXIS_LABEL_TEXTOVERLAP       11
+#define CB_AXIS_LABEL_TEXTBREAK         12
+
+#define FL_AXIS_LABEL_ORDER             13
+#define RB_AXIS_LABEL_SIDEBYSIDE        14
+#define RB_AXIS_LABEL_UPDOWN            15
+#define RB_AXIS_LABEL_DOWNUP            16
+#define RB_AXIS_LABEL_AUTOORDER         17
+
+#define FL_SEPARATOR                    18
+
+#define TP_SCALE_Y        903
+
+#define FL_SCALE_Y          1
+#define FL_TICKS            2
+#define FL_HELPTICKS        3
+
+#define TXT_MIN             1
+#define TXT_MAX             2
+#define TXT_STEP_MAIN       3
+#define TXT_STEP_HELP       4
+#define TXT_ORIGIN          5
+
+#define CBX_AUTO_MIN        1
+#define CBX_AUTO_MAX        2
+#define CBX_AUTO_STEP_MAIN  3
+#define CBX_AUTO_STEP_HELP  4
+#define CBX_AUTO_ORIGIN     5
+#define CBX_LOGARITHM       6
+#define CBX_TICKS_INNER     7
+#define CBX_HELPTICKS_INNER 8
+#define CBX_TICKS_OUTER     9
+#define CBX_HELPTICKS_OUTER 10
+
+#define EDT_STEP_MAIN       1
+#define EDT_MAX             2
+#define EDT_MIN             3
+// #define EDT_STEP_HELP        4
+#define EDT_ORIGIN          5
+
+#define MT_STEPHELP         10
+
+#endif

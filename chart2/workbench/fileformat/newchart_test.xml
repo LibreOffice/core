@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd">
+<office:document-content xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="chart" office:version="1.0">
+    <office:automatic-styles>
+        <!-- auto-styles ***************************************************************************************************** -->
+        <!-- ******************************************************************************************************************* -->
+    </office:automatic-styles>
+    <office:body>
+        <!-- body ***************************************************************************************************************** -->
+        <chart2:chart2>
+            <chart2:legend id="legend_0" service="drafts.com.sun.star.chart2.Legend"/>
+            <chart2:legend id="legend_1" service="drafts.com.sun.star.chart2.Legend"/>
+            <chart2:scale id="scale1_x" minimum="0" maximum="10">
+                <chart2:break start="2" end="3"/>
+            </chart2:scale>
+            <chart2:scale id="scale1_y" scaling-service="drafts.com.sun.star.LogarithmicScaling"/>
+            <chart2:increment id="increment1_x" scale="scale1_x">
+                <chart2:subincrement count="2"/>
+                <chart2:subincrement count="5"/>
+            </chart2:increment>
+            <chart2:increment id="increment1_y" scale="scale1_y" pre-offset="0" post-equidistant="true" post-distance="1">
+                <chart2:subincrement count="10" post-equidistant="false"/>
+            </chart2:increment>
+            <!-- *************************************** container ***************************************************************-->
+            <chart2:final-target id="final_1">
+                <chart2:title id="title_1"/>
+                <chart2:logic-target id="logic_1">
+                    <chart2:coordinate-system id="coosys_1" service="drafts.com.sun.star.chart2.ThreeDimCartesian" legend="legend_1">
+                        <chart2:scaleRef scale="scale1_x" direction="reverse"/>
+                        <chart2:scaleRef scale="scale1_y"/>
+                    </chart2:coordinate-system>
+                </chart2:logic-target>
+            </chart2:final-target>
+            <!-- *************************************** axes ********************************************************************-->
+            <chart2:resident id="axis1_x" service="drafts.com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
+                <chart2:axis dimension="1" increment="increment1_x"/>
+            </chart2:resident>
+            <chart2:resident id="axis1_y" service="drafts.com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
+                <chart2:axis dimension="2" increment="increment1_y"/>
+            </chart2:resident>
+            <!-- *************************************** grids *******************************************************************-->
+            <chart2:resident id="grid1_x" service="drafts.com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
+                <chart2:grid dimension="1" increment="increment1_x"/>
+            </chart2:resident>
+            <chart2:resident id="grid1_y" service="drafts.com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
+                <chart2:grid dimension="2" increment="increment1_y"/>
+            </chart2:resident>
+            <!-- *************************************** renderer ***************************************************************-->
+            <chart2:resident id="barchart_1" service="drafts.com.sun.star.chart2.BarChart" coordinate-system="coosys_1">
+                <chart2:renderer/>
+            </chart2:resident>
+        </chart2:chart2>
+        <!-- ************************************************************************************************************************ -->
+    </office:body>
+</office:document-content>

@@ -1,0 +1,202 @@
+#*************************************************************************
+#
+#  The Contents of this file are made available subject to the terms of
+#  either of the following licenses
+#
+#		  - GNU Lesser General Public License Version 2.1
+#		  - Sun Industry Standards Source License Version 1.1
+#
+#  Sun Microsystems Inc., October, 2000
+#
+#  GNU Lesser General Public License Version 2.1
+#  =============================================
+#  Copyright 2000 by Sun Microsystems, Inc.
+#  901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Lesser General Public
+#  License version 2.1, as published by the Free Software Foundation.
+#
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with this library; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#  MA  02111-1307  USA
+#
+#
+#  Sun Industry Standards Source License Version 1.1
+#  =================================================
+#  The contents of this file are subject to the Sun Industry Standards
+#  Source License Version 1.1 (the "License"); You may not use this file
+#  except in compliance with the License. You may obtain a copy of the
+#  License at http://www.openoffice.org/license.html.
+#
+#  Software provided under this License is provided on an "AS IS" basis,
+#  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#  See the License for the specific provisions governing your rights and
+#  obligations concerning the Software.
+#
+#  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#  Copyright: 2002 by Sun Microsystems, Inc.
+#
+#  All Rights Reserved.
+#
+#  Contributor(s): _______________________________________
+#
+#*************************************************************************
+
+Directory Structure
+-------------------
+
++--drafts
++--genjava
++--inc
++--prj
++--res
++--source
+|  +--controller
+|  |  +---dialogs
+|  |  +---drawinglayer
+|  |  +---itemsetwrapper
+|  |  +---main
+|  |  +---menu
+|  +--inc
+|  +--model
+|  |  +---inc
+|  |  +---main
+|  |  +---oldapi
+|  |  +---template
+|  |  +---tree
+|  +--tools
+|  +--view
+|  |  +---axes
+|  |  +---charttypes
+|  |  +---diagram
+|  |  +---inc
+|  |  +---main
++--qa
++--util
++--workbench
+   +--anyperformance
+   +--fileformat
+   +--officeintegration
+   +--prj
+   +--sampledata
+   +--stub
+
+
+makefile.mk
+-----------
+
+The top-level makefile is for generating a jar-file containing all compiled
+java-files that were generated from the chart-idl files.  The jar is necessary
+for test-programs (see qa subdirectory)
+
+prj
+---
+
+Contains the build.lst, which determines in which order the subdirectories have
+to be built.
+
+Also contains the d.lst which tells the deliver command which files to export
+into the output tree, so that other modules have access.  These are currently
+only C++-headers of project-specific UNO-classes.
+
+source
+------
+
+   inc
+   ---
+
+   Contains header files that have to be shared between files of model, view and
+   controller.  Apart from tools-headers, this should only include headers for
+   model objects, not view objects.
+
+   controller
+   ----------
+
+   Contains files concerning the controller.  All dialogs used in the UI of the
+   component are in the dialogs subfolder.  In drawinglayer, there is code that
+   builds the bridge to the drawing-layer via non-UNO code.  Itemsetwrapper
+   offers classes that convert XPropertySets of chart objects into non-UNO
+   SfxItemSets that are used to feed dialogs.
+
+   model
+   -----
+
+   Contains files concerning the model.  In oldapi there is code that implements
+   the old UNO-API (com.sun.star.chart.*) and wraps the new objects, thus it is
+   possible to talk to the new objects via the old API.  Until the XML-filter is
+   adapted to the new API it will use this wrapper to communicate via the old
+   API.
+
+   In the tree-subfolder, there are all classes that have to do with the
+   data-series tree provided by the XDiagram.  Template contains code that
+   provides templates for all different chart-types.
+
+    view
+	----
+
+	Axes, charttypes and diagram implement the respective view-objects.
+
+drafts
+------
+
+Contains idl files for chart specific idl interface and type definitions.
+
+util
+----
+
+Contains the makefile to assemble the idl files into an rdb, and to generate C++
+headers for them.
+
+workbench
+---------
+
+Contains files for testing and files needed during prototyping.
+
+    officeintegration
+    -----------------
+
+    Contains the install.pl script that installs the chart once it is build into
+    an existing office installation.  This should become deprecated soon, when
+    the new chart will be a package.
+
+
+   sampledata
+   ----------
+
+   Contains sample files of data to feed a chart with.  The files are loaded via
+   the FileDataSource and is thought for testing only.
+
+   stub
+   ----
+
+   Contains some templates for newly created files.
+
+genjava
+-------
+
+Contains a makefile for creating java-files out of the idl-files.  The
+java-files are generated out of the chart.rdb, which therefore must be ready
+before this makefile is called.
+
+Its subdirectories reflect the directory-structure of the drafts/com directories
+and contain a makefile in each leave of the tree.  These makefiles compile
+class-files out of the java-files.
+
+qa
+--
+
+Contains java-programs that execute so-called complex-testcases.  Type dmake in
+this directory to build the tests (they are not automatically built) and then
+type dmake runtest to execute all tests.  For most tests you will have to have a
+running office in the background that listens to requests on port 8100.
+

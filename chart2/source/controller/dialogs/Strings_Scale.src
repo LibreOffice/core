@@ -1,0 +1,283 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Strings_Scale.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Strings.hrc"
+
+String STR_INVALID_NUMBER
+{
+    Text = "Ungültige Zahl." ;
+    Text [ ENGLISH ] = "Invalid number." ;
+    Text [ norwegian ] = "Ugyldig tall." ;
+    Text [ italian ] = "Numero non valido." ;
+    Text [ portuguese_brazilian ] = "Número invalido" ;
+    Text [ portuguese ] = "Número incorrecto" ;
+    Text [ finnish ] = "Virheellinen numero" ;
+    Text [ danish ] = "Ugyldigt tal." ;
+    Text [ french ] = "Nombre incorrect" ;
+    Text [ swedish ] = "Ogiltigt tal" ;
+    Text [ dutch ] = "Ongeldig getal" ;
+    Text [ spanish ] = "Número no válido" ;
+    Text [ english_us ] = "Invalid number" ;
+    Text[ chinese_simplified ] = "æ— æ•ˆçš„æ•°å­—";
+    Text[ russian ] = "Íåäîïóñòèìîå ÷èñëî";
+    Text[ polish ] = "Nieprawid³owa liczba";
+    Text[ japanese ] = "ç„¡åŠ¹æ•°";
+    Text[ chinese_traditional ] = "ç„¡æ•ˆçš„æ•¸å­—";
+    Text[ arabic ] = "ÑŞã ÛíÑ ÕÇáÍ.";
+    Text[ greek ] = "Ìç İãêõñïò áñéèìüò.";
+    Text[ korean ] = "ì˜ëª»ëœ ìˆ«ì";
+    Text[ turkish ] = "Geçersiz sayı.";
+    Text[ catalan ] = "Número no vàlid.";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+    Text[ czech ] = "NeplatnÃ© ÄÃ­slo";
+    Text[ hebrew ] = "UngÃ¼ltige Zahl.";
+    Text[ hindi ] = "Invalid number";
+    Text[ slovak ] = "NeplatnÃ© ÄÃ­slo";
+};
+String STR_MINVALUE_LT_MAXVALUE
+{
+    Text = "Minimum muss kleiner als Maximum sein." ;
+    Text [ ENGLISH ] = "Minimum must be lower than Maximum." ;
+    Text [ norwegian ] = "Minimum må være lavere enn Maksimum." ;
+    Text [ italian ] = "Il minimo deve essere inferiore al massimo." ;
+    Text [ portuguese_brazilian ] = "O mínimo deve ser menor que o máximo." ;
+    Text [ portuguese ] = "O mínimo deve ser menor que o máximo." ;
+    Text [ finnish ] = "Vähimmäismäärän on oltava pienempi kuin enimmäismäärän." ;
+    Text [ danish ] = "Minimum skal være mindre end maksimum." ;
+    Text [ french ] = "Le minimum doit être inférieur au maximum !" ;
+    Text [ swedish ] = "Minimum måste vara mindre än maximum." ;
+    Text [ dutch ] = "Minimum moet lager zijn dan maximum." ;
+    Text [ spanish ] = "El mínimo tiene que ser menor que el máximo." ;
+    Text [ english_us ] = "Minimum must be lower than maximum." ;
+    Text[ chinese_simplified ] = "æœ€å°å€¼å¿…é¡»å°äºæœ€å¤§å€¼ã€‚";
+    Text[ russian ] = "Ìèíèìóì äîëæåí áûòü ìåíüøå, ÷åì ìàêñèìóì.";
+    Text[ polish ] = "Minimum musi byæ mniejsze ni¿ maksimum.";
+    Text[ japanese ] = "æœ€å°å€¤ã¯æœ€å¤§å€¤ã‚ˆã‚Šå°ã•ããªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "æœ€å°å€¼å¿…é ˆå°æ–¼æœ€å¤§å€¼ã€‚";
+    Text[ arabic ] = "íÌÈ Ãä íßæä ÇáÍÏ ÇáÃÏäì ÃŞá ãä ÇáÍÏ ÇáÃŞÕì.";
+    Text[ greek ] = "ÅëÜ÷éóôï ğñİğåé íá åßíáé ìéêñüôåñï áğü ìİãéóôï.";
+    Text[ korean ] = "ìµœì†Œê°’ì€ ë°˜ë“œì‹œ ìµœëŒ€ê°’ë³´ë‹¤ ì‘ì•„ì•¼ í•©ë‹ˆë‹¤.";
+    Text[ turkish ] = "Minimum, maksimumdan daha küçük olmalıdır.";
+    Text[ catalan ] = "El mínim ha de ser menor que el màxim.";
+    Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”à¸•à¹‰à¸­à¸‡à¸•à¹ˆà¸³à¸à¸§à¹ˆà¸²à¸ˆà¸³à¸™à¸§à¸™à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+    Text[ czech ] = "Minimum musÃ­ bÃ½t niÅ¾Å¡Ã­ neÅ¾ maximum.";
+    Text[ hebrew ] = "Minimum muss kleiner als Maximum sein.";
+    Text[ hindi ] = "Minimum must be lower than maximum.";
+    Text[ slovak ] = "Minimum musÃ­ byÅ¥ menÅ¡ie ako maximum.";
+};
+String STR_STEP_GT_ZERO
+{
+    Text = "Intervall muss größer als 0 sein." ;
+    Text [ ENGLISH ] = "Step must be greater than 0." ;
+    Text [ english_us ] = "Interval must be greater than 0." ;
+    Text [ italian ] = "L'intervallo deve essere maggiore di 0." ;
+    Text [ spanish ] = "El intervalo tiene que ser mayor que 0." ;
+    Text [ french ] = "L'intervalle doit être supérieur à 0" ;
+    Text [ dutch ] = "Interval moet groter dan 0 zijn" ;
+    Text [ swedish ] = "Intervall måste vara större än 0." ;
+    Text [ danish ] = "Intervallet skal være større end 0." ;
+    Text [ portuguese ] = "O intervalo deve ser maior que 0." ;
+    Text [ portuguese_brazilian ] = "O intervalo deve ser maior que 0." ;
+    Text[ chinese_simplified ] = "åŒºé—´å€¼å¿…é¡»å¤§äºé›¶ã€‚";
+    Text[ russian ] = "Èíòåğâàë äîëæåí áûòü áîëüøå íóëÿ.";
+    Text[ polish ] = "Przedzia³ musi byæ wiêkszy od 0.";
+    Text[ japanese ] = "ç›®ç››é–“éš”ã¯ã€0ã‚ˆã‚Šå¤§ãããªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "å€é–“å€¼å¿…é ˆå¤§æ–¼é›¶ã€‚";
+    Text[ arabic ] = "íÌÈ Ãä íßæä ÇáİÇÕá ÃßÈÑ ãä 0.";
+    Text[ greek ] = "Ôï äéÜóôçìá ğñİğåé íá åßíáé ìåãáëıôåñï áğü 0.";
+    Text[ korean ] = "ê°„ê²©ì€ ë°˜ë“œì‹œ 0ë³´ë‹¤ ì»¤ì•¼ í•©ë‹ˆë‹¤.";
+    Text[ turkish ] = "Aralık, 0'dan büyük olmalıdır.";
+    Text[ catalan ] = "L'intèrval ha de ser més gran de 0.";
+    Text[ finnish ] = "Välin on oltava suurempi kuin 0.";
+    Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸•à¹‰à¸­à¸‡à¸¡à¸²à¸à¸à¸§à¹ˆà¸² 0.";
+    Text[ czech ] = "Interval musÃ­ bÃ½t vyÅ¡Å¡Ã­ neÅ¾ 0.";
+    Text[ hebrew ] = "Intervall muss grÃ¶ÃŸer als 0 sein.";
+    Text[ hindi ] = "à¤…à¤‚à¤¤à¤°à¤¾à¤² 0 à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤¹à¥‹à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤ à¥¤";
+    Text[ slovak ] = "Interval musÃ­ byÅ¥ vÃ¤ÄÅ¡Ã­ ako 0.";
+};
+/*
+String STR_STEPMAIN_LT_MAXVALUE
+{
+    Text = "Das Hauptintervall darf nicht größer als der Wertebereich sein." ;
+    Text [ ENGLISH ] = "The Main step must not be greater than the value range.";
+    Text [ english_us ] = "Major interval must not be larger than the range definition.";
+    Text [ norwegian ] = "Hovedtrinnet  må være lavere enn Maksimum." ;
+    Text [ italian ] = "L'intervallo principale deve essere inferiore all'area dei valori." ;
+    Text [ portuguese_brazilian ] = "O intervalo principal não pode ser maior que o intervalo definido." ;
+    Text [ portuguese ] = "O intervalo principal não pode ser maior que a área de valores." ;
+    Text [ finnish ] = "Pääväli ei saa olla suurempi kuin aluemääritys." ;
+    Text [ danish ] = "Hovedintervallet må ikke være større end værdiområdet." ;
+    Text [ french ] = "L'intervalle principal ne peut pas être supérieur à la plage de valeurs." ;
+    Text [ swedish ] = "Huvudintervallet får inte vara större än värdeområdet." ;
+    Text [ dutch ] = "Hoofdinterval mag niet groter zijn dan het waardebereik" ;
+    Text [ spanish ] = "El intervalo principal no debe ser mayor que el área de valores." ;
+    Text [ english_us ] = "Major interval must not be larger than the range definition." ;
+    Text[ chinese_simplified ] = "ä¸»åŒºé—´å€¼ä¸èƒ½å¤§äºæ•°å€¼åŒºåŸŸèŒƒå›´ã€‚";
+    Text[ russian ] = "Îñíîâíîé èíòåğâàë íå äîëæåí áûòü áîëüøå îáëàñòè çíà÷åíèÿ.";
+    Text[ polish ] = "Przedzia³ g³ówny nie mo¿e byæ wiêkszy od zdefiniowanego zakresu.";
+    Text[ japanese ] = "ä¸»ç›®ç››é–“éš”ã¯æ•°å€¤ç¯„å›²ã‚’è¶…ãˆã¦ã¯ã„ã‘ã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ä¸»å€é–“å€¼å¿…é ˆå°æ–¼å®šç¾©çš„æœ€å¤§å€¼ã€‚";
+    Text[ arabic ] = "íÌÈ ÃáÇ íßæä ÇáİÇÕá ÇáÑÆíÓí ÃßÈÑ ãä äØÇŞ ÇáŞíã.";
+    Text[ greek ] = "Ôï êıñéï äéÜóôçìá äåí åğéôñİğåôáé íá åßíáé ìåãáëıôåñï áğü ôç ğåñéï÷Ş ôéìşí.";
+    Text[ korean ] = "ì£¼ ê°„ê²©ì´ ê°’ ë²”ìœ„ë³´ë‹¤ ì‘ê±°ë‚˜ ê°™ì•„ì•¼ í•©ë‹ˆë‹¤.";
+    Text[ turkish ] = "Ana aralık, değer aralığından daha büyük olmamalıdır.";
+    Text[ catalan ] = "L'intèrval principal no ha de ser més gran que l'àrea de valors.";
+    Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸«à¸¥à¸±à¸à¸•à¹‰à¸­à¸‡à¹„à¸¡à¹ˆà¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸„à¸³à¸ˆà¸³à¸à¸±à¸”à¸„à¸§à¸²à¸¡à¸‚à¸­à¸‡à¸Šà¹ˆà¸§à¸‡";
+    Text[ czech ] = "HlavnÃ­ interval musÃ­ bÃ½t vÄ›tÅ¡Ã­ neÅ¾ urÄenÃ­ okrajÅ¯.";
+    Text[ hebrew ] = "Das Hauptintervall darf nicht grÃ¶ÃŸer als der Wertebereich sein.";
+    Text[ hindi ] = "Main interval must not be larger than the range definition.";
+    Text[ slovak ] = "HlavnÃ½ interval nesmie byÅ¥ vÃ¤ÄÅ¡Ã­ ako definovanÃ¡ oblasÅ¥.";
+};
+*/
+// String STR_STEPHELP_LT_STEPMAIN
+// {
+//  Text = "Teilintervall muss kleiner als Hauptintervall sein." ;
+//  Text [ ENGLISH ] = "Help step must be lower than Main Step." ;
+//  Text [ norwegian ] = "Hjelpetrinnet må være lavere enn Hovedtrinnet." ;
+//  Text [ italian ] = "L'intervallo ausiliario deve essere inferiore all'intervallo principale." ;
+//  Text [ portuguese_brazilian ] = "O intervalo auxiliar deve ser menor que o intervalo principal." ;
+//  Text [ portuguese ] = "O intervalo auxiliar deve ser menor que o intervalo principal." ;
+//  Text [ finnish ] = "Ohjevälin on oltava pienempi kuin päävälin." ;
+//  Text [ danish ] = "Underintervallet skal være større end hovedintervallet." ;
+//  Text [ french ] = "L'intervalle secondaire doit être inférieur à l'intervalle principal." ;
+//  Text [ swedish ] = "Delintervall måste vara mindre än huvudintervall." ;
+//  Text [ dutch ] = "Hulpinverval moet kleiner zijn dan hoofdinterval" ;
+//  Text [ spanish ] = "El intervalo auxiliar debe ser inferior al intervalo principal." ;
+//  Text [ english_us ] = "Minor interval must be smaller than the major interval." ;
+//  Text[ chinese_simplified ] = "æ¬¡åŒºé—´å€¼å¿…é¡»å°äºä¸»åŒºé—´å€¼ã€‚";
+//  Text[ russian ] = "Äîïîëíèòåëüíûé èíòåğâàë äîëæåí áûòü ìåíüøå îñíîâíîãî èíòåğâàëà.";
+//  Text[ polish ] = "Przedzia³ pomocniczy musi byæ mniejszy ni¿ przedzia³ g³ówny.";
+//  Text[ japanese ] = "è£œåŠ©ç›®ç››é–“éš”ã¯ã€ä¸»ç›®ç››é–“éš”ã‚ˆã‚Šå°ã•ããªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚";
+//  Text[ chinese_traditional ] = "æ¬¡å€é–“å€¼å¿…é ˆå°æ–¼ä¸»å€é–“å€¼ã€‚";
+//  Text[ arabic ] = "íÌÈ Ãä íßæä ÇáİÇÕá ÇáãÓÇÚÏ ÃÕÛÑ ãä ÇáİÇÕá ÇáÑÆíÓí.";
+//  Text[ greek ] = "Ôï âïçèçôéêü äéÜóôçìá ğñİğåé íá åßíáé ìéêñüôåñï áğü ôï êıñéï äéÜóôçìá.";
+//  Text[ korean ] = "ë³´ì¡° ê°„ê²©ì€ ì£¼ ê°„ê²©ë³´ë‹¤ ì‘ì•„ì•¼ í•©ë‹ˆë‹¤.";
+//  Text[ turkish ] = "Küçük zaman aralığı büyük zaman aralığından küçük olmalıdır.";
+//  Text[ catalan ] = "L'intèrval auxiliar ha de ser més petit que l'intèrval principal.";
+//  Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­à¸•à¹‰à¸­à¸‡à¸™à¹‰à¸­à¸¢à¸à¸§à¹ˆà¸²à¸Šà¹ˆà¸§à¸‡à¸«à¸¥à¸±à¸";
+//  Text[ czech ] = "PomocnÃ½ interval musÃ­ bÃ½t menÅ¡Ã­ neÅ¾ hlavnÃ­ interval.";
+//  Text[ hebrew ] = "Teilintervall muss kleiner als Hauptintervall sein.";
+//  Text[ hindi ] = "Help interval must be smaller than the main interval.";
+//  Text[ slovak ] = "PomocnÃ½ interval musÃ­ byÅ¥ menÅ¡Ã­ ako hlavnÃ½ interval.";
+// };
+/*
+String STR_WRONG_ORIGIN
+{
+    Text = "Der Koordinatenursprung ist kleiner/größer als das\nWerteminimum/-maximum." ;
+    Text [ ENGLISH ] = "Origin is less/greater than Minimum/Maximum." ;
+    Text [ english_us ] = "The coordinate origin is less/greater than the\nminimum/maximum value." ;
+    Text [ italian ] = "L'origine delle coordinate è maggiore / minore del \nvalore minimo/valore massimo" ;
+    Text [ spanish ] = "El origen de las coordenadas es mayor/menor que el\nmínimo/máximo del valor." ;
+    Text [ french ] = "L'origine de la coordonnée est inférieure/supérieure\nau minimum/maximum des valeurs." ;
+    Text [ dutch ] = "Het origineel is kleiner/groter dan de \nminimum-/maximumwaarde" ;
+    Text [ swedish ] = "Koordinatursprunget är större/mindre än\nminimi/maximi-värdet." ;
+    Text [ danish ] = "Koordinatoprindelsen er mindre/større end\nmininimum-/maksimumværdien." ;
+    Text [ portuguese ] = "A origem das coordenadas é maior/menor que o mínimo/máximo dos valores." ;
+    Text [ portuguese_brazilian ] = "A origem das coordenadas é menor/maior que o valor mínimo/máximo." ;
+    Text[ chinese_simplified ] = "åŸç‚¹å€¼å¤§äº/å°äºè¿™ä¸ª\næœ€å¤§å€¼/æœ€å°å€¼ã€‚";
+    Text[ russian ] = "Òî÷êà îòñ÷åòà êîîğäèíàò ìåíüøå/áîëüøå, ÷åì\nìèíèìàëüíîå/ìàêñèìàëüíîå çíà÷åíèå.";
+    Text[ polish ] = "Pocz¹tek uk³adu wspó³rzêdnych jest mniejszy/wiêkszy ni¿ \nwartoœæ minimalna/maksymalna.";
+    Text[ japanese ] = "åº§æ¨™è»¸ã®åŸç‚¹ã¯ã€æœ€å°å€¤/æœ€å¤§å€¤ã‚ˆã‚Š\nå¤§ãã„/å°ã•ã„ã§ã™ã€‚";
+    Text[ chinese_traditional ] = "åŸé»å€¼å¤§æ–¼/å°æ–¼é€™å€‹\n\næœ€å¤§å€¼/æœ€å°å€¼ã€‚";
+    Text[ arabic ] = "ÇáÃÕá ÃßÈÑ/ÃÕÛÑ ãä\nÇáŞíãÉ ÇáÏäíÇ/ÇáÚÙãì.";
+    Text[ greek ] = "Ïé óõíôåôáãìİíåò ôçò áñ÷Şò ôùí áîüíùí åßíáé \n ìéêñüôåñåò/ìåãáëıôåñåò áğü ôï åëÜ÷éóôï/ìİãéóôï ôùí ôéìşí.";
+    Text[ korean ] = "ì¢Œí‘œ ì‹œì‘ ê°’ì´ ìµœëŒ€/ìµœì†Œ ê°’ë³´ë‹¤ ì‘ê±°ë‚˜/í½ë‹ˆë‹¤.";
+    Text[ turkish ] = "Kordinat kaynağı \nasgari/azami değerinden fazla/eksik.";
+    Text[ catalan ] = "L'origen de les coordenades és major/menor que el\nmínim/màxim del valor.";
+    Text[ finnish ] = "Koordinaatiston origo on pienempi/suurempi kuin \nvähimmäis-/enimmäisarvo.";
+    Text[ thai ] = "à¸à¸´à¸à¸±à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸™à¹‰à¸­à¸¢à¸à¸§à¹ˆà¸²/à¸¡à¸²à¸à¸à¸§à¹ˆà¸²\nà¸„à¹ˆà¸²à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”/à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+    Text[ czech ] = "PoÄÃ¡tek souÅ™adnic je menÅ¡Ã­/vÄ›tÅ¡Ã­ neÅ¾\nminimÃ¡lnÃ­/maximÃ¡lnÃ­ hodnota.";
+    Text[ hebrew ] = "Der Koordinatenursprung ist kleiner/grÃ¶ÃŸer als das\nWerteminimum/-maximum.";
+    Text[ hindi ] = "The coordinate origin is less/greater than the\nminimum/maximum value.";
+    Text[ slovak ] = "ZaÄiatok sÃºradnice je menÅ¡Ã­/vÃ¤ÄÅ¡Ã­ ako\nminimum/maximum.";
+};
+*/
+/*
+String STR_BAD_LOGARITHM
+{
+    Text = "In logarithmischer Darstellung müssen Nullpunkt und Minimum\ngrößer als 0 sein." ;
+    Text [ ENGLISH ] = "Origin or Minimum must be greater than 0 in\nlogarithm view." ;
+    Text [ english_us ] = "In logarithm view, the origin and minimum must be greater than 0\n." ;
+    Text [ dutch ] = "In logaritmische weergave moeten nulpunt en minimum\ngroter dan 0 zijn." ;
+    Text [ italian ] = "Nella rappresentazione logaritmica il punto zero e minimo devono essere\nmaggiori di 0." ;
+    Text [ spanish ] = "En una representación logarítmica el origen y el mínimo\ntienen que ser mayor que 0." ;
+    Text [ french ] = "Dans la représentation logarithmique, l'origine et le minimum\ndoivent être supérieurs à 0." ;
+    Text [ swedish ] = "I logaritmisk visning måste ursprunget och minimum vara\nstörre än 0." ;
+    Text [ danish ] = "I en logaritmisk visning skal nulpunkt og minimum\nvære større end 0." ;
+    Text [ portuguese ] = "Numa apresentação logarítmica os pontos zero e o \n mínimo devem ser maiores que 0." ;
+    Text [ portuguese_brazilian ] = "Numa gráfico logarítmico, a origem e o mínimo devem ser maiores que 0\n." ;
+    Text[ chinese_simplified ] = "å¯¹æ•°è¡¨è¾¾å¼ä¸­çš„åŸç‚¹å’Œæ•°å€¼ä¸å…è®¸å°äºé›¶ã€‚";
+    Text[ russian ] = "Â ëîãàğèôìè÷åñêîì ïğåäñòàâëåíèè òî÷êà îòñ÷åòà è ìèíèìóì äîëæíû áûòü\náîëüøå íóëÿ.";
+    Text[ polish ] = "W widoku logarytmicznym pocz¹tek i minimum musz¹ byæ wiêksze od zera.\n";
+    Text[ japanese ] = "å¯¾æ•°è¡¨ç¤ºã«ãŠã„ã¦é›¶ç‚¹ã¨æœ€å°å€¤ã¯\n0ã‚ˆã‚Šã‚‚å¤§ãããªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "å°æ•¸é¡¯ç¤ºä¸­çš„æ•¸å€¼ä¸å…è¨±å°æ–¼é›¶ã€‚";
+    Text[ arabic ] = "İí ÇáÚÑÖ ÇááæÛÇÑíÊãí¡ íÌÈ Ãä íßæä ÇáÃÕá æÇáÍÏ ÇáÃÏäì\nÃßÈÑ ãä 0.";
+    Text[ greek ] = "Óôç ëïãáñéèìéêŞ ğñïâïëŞ ğñİğåé ôï ìçäåíéêü óçìåßï êáé ç åëÜ÷éóôç ôéìŞ\n íá åßíáé ìåãáëıôåñá ôïõ 0.";
+    Text[ korean ] = "ë¡œê·¸ ë³´ê¸°ì—ì„œëŠ” ì›ì ê³¼ ê·¹ì†Œì ì´\n 0ë³´ë‹¤ ì»¤ì•¼ í•©ë‹ˆë‹¤.";
+    Text[ turkish ] = "Logaritmik görünümde, sıfır noktası ve minimum 0'dan\nbüyük olmalıdır.";
+    Text[ catalan ] = "En una representació logarítmica l'origen i el mínim\nhan de ser més grans que 0.";
+    Text[ finnish ] = "Logaritminäkymässä aloitusarvo ja pienin arvo eivät saa olla suurempia kuin 0.\n";
+    Text[ thai ] = "à¹ƒà¸™à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸¥à¸­à¸à¸²à¸£à¸´à¸˜à¸¶à¸¡ à¸ˆà¸¸à¸”à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹à¸¥à¸°à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”à¸•à¹‰à¸­à¸‡à¸¡à¸²à¸à¸à¸§à¹ˆà¸² 0\n.";
+    Text[ czech ] = "V logaritmickÃ©m pohledu musÃ­ bÃ½t minimum a originÃ¡l vyÅ¡Å¡Ã­ neÅ¾ 0\n.";
+    Text[ hebrew ] = "In logarithmischer Darstellung mÃ¼ssen Nullpunkt und Minimum\ngrÃ¶ÃŸer als 0 sein.";
+    Text[ hindi ] = "In logarithm view, the origin and minimum must be greater than 0\n.";
+    Text[ slovak ] = "V logaritmickom zobrazenÃ­ musÃ­ byÅ¥ zaÄiatok aj minimum vÃ¤ÄÅ¡ie ako 0.";
+};
+*/

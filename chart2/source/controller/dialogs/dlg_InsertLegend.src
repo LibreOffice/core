@@ -1,0 +1,211 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlg_InsertLegend.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlg_InsertLegend.hrc"
+#include "SchSlotIds.hxx"
+#include "CommonResources.hrc"
+#include "res_LegendPosition.hrc"
+
+ModalDialog DLG_LEGEND
+{
+    HelpID = SID_INSERT_CHART_LEGEND ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 135 , 90 ) ;
+    Text = "Legende" ;
+    Text [ ENGLISH ] = "Legend" ;
+    Text [ norwegian ] = "Legend" ;
+    Text [ italian ] = "Legenda" ;
+    Text [ portuguese_brazilian ] = "Legenda" ;
+    Text [ portuguese ] = "Legenda" ;
+    Text [ finnish ] = "Selite" ;
+    Text [ danish ] = "Forklaring" ;
+    Text [ french ] = "LÈgende" ;
+    Text [ swedish ] = "Fˆrklaring" ;
+    Text [ dutch ] = "Legenda" ;
+    Text [ spanish ] = "Leyenda" ;
+    Text [ english_us ] = "Legend" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
+    BUTTONS_OK_CANCEL_HELP_STACKED( 79 )
+    FixedLine FL_LEGEND
+    {
+        Pos = MAP_APPFONT ( 6 , 21  ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text = "Position" ;
+        Text [ ENGLISH ] = "Show" ;
+        Text [ norwegian ] = "Show" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ portuguese_brazilian ] = "PosiÁ„o" ;
+        Text [ portuguese ] = "PosiÁ„o" ;
+        Text [ finnish ] = "Sijainti" ;
+        Text [ danish ] = "Stilling" ;
+        Text [ french ] = "Position" ;
+        Text [ swedish ] = "Placering" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ spanish ] = "PosiciÛn" ;
+        Text [ english_us ] = "Position" ;
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "Ë°®Á§∫‰ΩçÁΩÆ";
+        Text[ chinese_traditional ] = "‰ΩçÁΩÆ";
+        Text[ arabic ] = "≈ŸÂ«—";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "ÌëúÏãú ÏúÑÏπò";
+        Text[ turkish ] = "Konum";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostra";
+        Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏ú‡∏•";
+        Text[ czech ] = "Um√≠stƒõn√≠";
+        Text[ hebrew ] = "‚ÄÆ◊û◊ô◊ß◊ï◊ù‚Ä¨";
+        Text[ hindi ] = "‡§∏‡•ç‡§•‡§æ‡§®";
+        Text[ slovak ] = "Umiestnenie";
+    };
+    CheckBox CBX_SHOW
+    {
+        Pos = MAP_APPFONT ( 6 , 6  ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Text = "~Anzeigen" ;
+        Text [ ENGLISH ] = "~None" ;
+        Text [ norwegian ] = "~Ingen " ;
+        Text [ italian ] = "~Mostra" ;
+        Text [ portuguese_brazilian ] = "~Exibir" ;
+        Text [ portuguese ] = "~Mostrar" ;
+        Text [ finnish ] = "~N‰yt‰" ;
+        Text [ danish ] = "~Vis" ;
+        Text [ french ] = "~Afficher" ;
+        Text [ swedish ] = "Vis~a" ;
+        Text [ dutch ] = "~Weergeven" ;
+        Text [ spanish ] = "~Mostrar" ;
+        Text [ english_us ] = "~Display" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÊòæÁ§∫(~D)";
+        Text[ russian ] = "~œÓÍ‡Á‡Ú¸";
+        Text[ polish ] = "~Wyúwietl";
+        Text[ japanese ] = "Ë°®Á§∫„Åô„Çã(~D)";
+        Text[ chinese_traditional ] = "È°ØÁ§∫(~D)";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ greek ] = "–ÒÔ‚ÔÎﬁ";
+        Text[ korean ] = "ÌëúÏãú(~D)";
+        Text[ turkish ] = "~Gˆster";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cap";
+        Text[ thai ] = "‡πÑ~‡∏°‡πà‡∏°‡∏µ";
+        Text[ czech ] = "Displej";
+        Text[ hebrew ] = "~Anzeigen";
+        Text[ hindi ] = "~‡§¶‡§ø‡§ñ‡§æ‡§ì";
+        Text[ slovak ] = "~Displej";
+    };
+    RESOURCE_LEGENDPOSITION( 32 )
+    Text[ chinese_simplified ] = "Âõæ‰æã";
+    Text[ russian ] = "ÀÂ„ÂÌ‰‡";
+    Text[ polish ] = "Legenda";
+    Text[ japanese ] = "Âá°‰æã";
+    Text[ chinese_traditional ] = "Âúñ‰æã";
+    Text[ arabic ] = "„› «Õ —”„ »Ì«‰Ì";
+    Text[ greek ] = "’¸ÏÌÁÏ·";
+    Text[ korean ] = "Î≤îÎ°Ä";
+    Text[ turkish ] = "AÁ˝klama";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Llegenda";
+    Text[ thai ] = "‡∏Ñ‡∏≥‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢";
+    Text[ czech ] = "Legenda";
+    Text[ hebrew ] = "Legende";
+    Text[ hindi ] = "‡§≤‡•á‡§ú‡•á‡§®‡•ç‡§°‡§º";
+    Text[ slovak ] = "Legenda";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

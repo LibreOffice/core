@@ -1,0 +1,589 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tp_AxisLabel.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
+
+TabPage TP_AXIS_LABEL
+{
+    HelpID  = HID_SCH_TP_AXIS_LABEL;
+    Size    = MAP_APPFONT ( 260 , 185 ) ;
+    Hide    = TRUE;
+
+    Text = "Beschriftung" ;
+    Text [ ENGLISH ] = "Labelling" ;
+    Text [ english_us ] = "Label" ;
+
+    CheckBox CB_AXIS_LABEL_SCHOW_DESCR
+    {
+        Pos = MAP_APPFONT ( 6 , 6  ) ;
+        Size    = MAP_APPFONT ( 104 , 12 ) ;
+
+        Text = "~Beschriftung anzeigen";
+        Text [ ENGLISH ] = "s~how labels";
+        Text [ english_us ] = "Sho~w labels";
+        Text[ portuguese ] = "Mostrar ~rótulos";
+        Text[ russian ] = "Ïîêàçàòü ïîäïèñè";
+        Text[ greek ] = "ÅìöÜíéóç åğéãñáöŞò";
+        Text[ dutch ] = "O~pschriften weergeven";
+        Text[ french ] = "Afficher l'é~tiquette";
+        Text[ spanish ] = "Mostrar ~etiqueta";
+        Text[ italian ] = "Mostra dicitura";
+        Text[ danish ] = "Vis etiketter";
+        Text[ swedish ] = "Visa etikett";
+        Text[ polish ] = "Pok~a¿ etykiety";
+        Text[ portuguese_brazilian ] = "Mostrar ~rótulos";
+        Text[ japanese ] = "ãƒ©ãƒ™ãƒ«ã®è¡¨ç¤º(~W)";
+        Text[ korean ] = "ë ˆì´ë¸” í‘œì‹œ(~W)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ•°æ®æ ‡å¿—(~W)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºæ¨™ç±¤(~W)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÚäæÇä";
+        Text[ turkish ] = "~Etiketleri görüntüle";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mos~tra les etiquetes";
+        Text[ finnish ] = "Näytä ~selitteet";
+        Text[ thai ] = "à¹à¸ªà¸”~à¸‡à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
+        Text[ czech ] = "Zobrazit popisky";
+        Text[ hebrew ] = "~Beschriftung anzeigen";
+        Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²à¥‹à¤‚ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾~à¤“ ";
+        Text[ slovak ] = "~ZobraziÅ¥ popisy";
+    };
+
+    FixedLine FL_AXIS_LABEL_ORIENTATION
+    {
+        Pos = MAP_APPFONT ( 6 , 91  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+
+        Text = "Beschriftung drehen" ;
+        Text [ ENGLISH ] = "Orientation" ;
+        Text [ norwegian ] = "Orientation" ;
+        Text [ italian ] = "Orientamento" ;
+        Text [ portuguese_brazilian ] = "Girar texto" ;
+        Text [ portuguese ] = "Rodar texto" ;
+        Text [ finnish ] = "Kierrä teksti" ;
+        Text [ danish ] = "Roter etiket" ;
+        Text [ french ] = "Orientation" ;
+        Text [ swedish ] = "Rotera etikett" ;
+        Text [ dutch ] = "Opschrift draaien" ;
+        Text [ spanish ] = "Girar etiqueta" ;
+        Text [ english_us ] = "Rotate text" ;
+        Text[ chinese_simplified ] = "ä¹¦å†™æ–¹å‘";
+        Text[ russian ] = "Ïîâåğíóòü òåêñò";
+        Text[ polish ] = "Obróæ tekst";
+        Text[ japanese ] = "æ–‡å­—æ–¹å‘";
+        Text[ chinese_traditional ] = "æ›¸å¯«æ–¹å‘";
+        Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ";
+        Text[ dutch ] = "Opschrift draaien";
+        Text[ chinese_simplified ] = "ä¹¦å†™æ–¹å‘";
+        Text[ greek ] = "ĞåñéóôñïöŞ êåéìİíïõ";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ íšŒì „";
+        Text[ turkish ] = "Metni çevir";
+        Text[ catalan ] = "Direcció d'escriptura";
+        Text[ thai ] = "à¸—à¸´à¸¨à¸—à¸²à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "OtoÄit text";
+        Text[ hebrew ] = "Beschriftung drehen";
+        Text[ hindi ] = "à¤Ÿà¥ˆà¤•à¥à¤¸à¥à¤Ÿà¥ à¤˜à¥à¤®à¤¾à¤“";
+        Text[ slovak ] = "OtoÄiÅ¥ text";
+    };
+        Control CT_AXIS_LABEL_DIAL
+        {
+            HelpId  = HID_SCH_ALIGNMENT_CTR_DIAL ;
+            Pos     = MAP_APPFONT ( 30 , 105  ) ;
+            Size    = MAP_APPFONT ( 42 , 43 ) ;
+            Text    = "ABCD" ;
+        };
+        ImageButton PB_AXIS_LABEL_TEXTSTACKED
+        {
+            HelpId  = HID_SCH_ALIGNMENT_STACKED ;
+            Pos     = MAP_APPFONT ( 12 , 105  ) ;
+            Size    = MAP_APPFONT ( 12 , 43 ) ;
+            TabStop = TRUE ;
+            ButtonImage = Image
+            {
+                ImageBitmap = Bitmap { File = "txtstk.bmp" ; };
+                MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; } ;
+//              MASKCOLOR ;
+            };
+        };
+        FixedText FT_AXIS_LABEL_DEGREES
+        {
+            Pos = MAP_APPFONT ( 110 , 122  ) ;
+            Size = MAP_APPFONT ( 35 , 8 ) ;
+
+            Text = "~Grad" ;
+            Text [ ENGLISH ] = "~Degrees" ;
+            Text [ english_us ] = "~Degrees" ;
+            Text [ portuguese_brazilian ] = "Gr~aus" ;
+            Text [ swedish ] = "grader" ;
+            Text [ danish ] = "grader" ;
+            Text [ italian ] = "~Grado" ;
+            Text [ spanish ] = "~Grado" ;
+            Text [ french ] = "Degr~és" ;
+            Text [ dutch ] = "~Graden" ;
+            Text [ portuguese ] = "Gr~aus" ;
+            Text[ chinese_simplified ] = "åº¦(~D)";
+            Text[ russian ] = "Ãğàäóñîâ";
+            Text[ polish ] = "~Stopnie";
+            Text[ japanese ] = "åº¦(~D)";
+            Text[ chinese_traditional ] = "åº¦(~D)";
+            Text[ arabic ] = "ÏÑÌÉ";
+            Text[ dutch ] = "~Graden";
+            Text[ chinese_simplified ] = "åº¦(~D)";
+            Text[ greek ] = "Ìïßñåò";
+        Text[ korean ] = "ë„(~D)";
+        Text[ turkish ] = "~Derece";
+        Text[ catalan ] = "~Graus";
+        Text[ finnish ] = "~Asteet";
+        Text[ thai ] = "~à¸­à¸‡à¸¨à¸²";
+        Text[ czech ] = "stupÅˆÅ¯";
+        Text[ hebrew ] = "~Grad";
+        Text[ hindi ] = "~Degrees";
+        Text[ slovak ] = "Stup~ne";
+    };
+        NumericField NF_AXIS_LABEL_ORIENT
+        {
+            HelpId = HID_SCH_ALIGNMENT_DEGREES ;
+            Border = TRUE ;
+            Pos = MAP_APPFONT ( 78 , 120  ) ;
+            Size = MAP_APPFONT ( 28 , 12 ) ;
+            TabStop = TRUE ;
+            Repeat = TRUE ;
+            Spin = TRUE ;
+            StrictFormat = TRUE ;
+        };
+        FixedText FT_UNUSED
+        {
+            //only necessary for constructor of SvxWinOrientation
+            Hide = TRUE ;
+            Pos = MAP_APPFONT ( 204 , 117  ) ;
+            Size = MAP_APPFONT ( 50 , 10 ) ;
+            Text = "unbenutzt" ;
+            //  This text is never displayed and does therefore not have to be translated!
+        };
+        Control CT_UNUSED
+        {
+            //only necessary for constructor of SvxWinOrientation
+            Hide    = TRUE ;
+            Pos = MAP_APPFONT ( 204 , 133  ) ;
+            Size    = MAP_APPFONT ( 50 , 15 ) ;
+            //TabStop   = TRUE ;
+        };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 128 , 33  ) ;
+        Size = MAP_APPFONT ( 4 , 52 ) ;
+    };
+
+    FixedLine FL_AXIS_LABEL_TEXTFLOW
+    {
+        Pos = MAP_APPFONT ( 133 , 22  ) ;
+        Size    = MAP_APPFONT ( 121 , 8 ) ;
+
+        Text = "Textfluss" ;
+        Text [ ENGLISH ] = "Textflow" ;
+        Text [ english_us ] = "Text flow" ;
+        Text[ portuguese ] = "Fluxo de texto";
+        Text[ russian ] = "Íà ñòğàíèöå";
+        Text[ greek ] = "ÑïŞ êåéìİíïõ";
+        Text[ dutch ] = "Tekstverloop";
+        Text[ french ] = "Enchaînements";
+        Text[ spanish ] = "Flujo del texto";
+        Text[ italian ] = "Testo";
+        Text[ danish ] = "Tekstretning";
+        Text[ swedish ] = "Textflöde";
+        Text[ polish ] = "Przep³yw tekstu";
+        Text[ portuguese_brazilian ] = "Fluxo do texto";
+        Text[ japanese ] = "ä½“è£";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ íë¦„";
+        Text[ chinese_simplified ] = "æ¢è¡Œå’Œåˆ†é¡µ";
+        Text[ chinese_traditional ] = "æ›è¡Œå’Œåˆ†é ";
+        Text[ arabic ] = "ÇäÓíÇÈ ÇáäÕ";
+        Text[ turkish ] = "Metin akışı";
+        Text[ catalan ] = "Flux de text";
+        Text[ finnish ] = "Tekstin rivitys";
+        Text[ thai ] = "à¸à¸²à¸£à¹„à¸«à¸¥à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "Tok textu";
+        Text[ hebrew ] = "Textfluss";
+        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤§à¤¾à¤°à¤¾";
+        Text[ slovak ] = "Tok textu";
+    };
+        CheckBox CB_AXIS_LABEL_TEXTOVERLAP
+        {
+            Pos = MAP_APPFONT ( 139 , 33  ) ;
+            Size = MAP_APPFONT ( 76 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Überlappend" ;
+            Text [ ENGLISH ] = "~Overlap" ;
+            Text [ english_us ] = "O~verlap" ;
+            Text [ portuguese_brazilian ] = "Sobr~epor" ;
+            Text [ swedish ] = "Överlappande" ;
+            Text [ danish ] = "Overlappet" ;
+            Text [ italian ] = "Sovrapponi" ;
+            Text [ spanish ] = "So~breponer" ;
+            Text [ french ] = "~Chevauchement" ;
+            Text [ dutch ] = "~Overlappend" ;
+            Text [ portuguese ] = "Em ~cascata" ;
+            Text [ chinese_simplified ] = "é‡å (~V)";
+            Text [ russian ] = "Ïåğåêğûòèå";
+            Text [ polish ] = "Nak³adanie";
+            Text [ japanese ] = "é‡ã­åˆã‚ã›(~V)";
+            Text [ chinese_traditional ] = "é‡ç–Š(~V)";
+            Text [ arabic ] = "ÊÑÇßÈ";
+            Text [ dutch ] = "~Overlappend";
+            Text [ chinese_simplified ] = "é‡å (~V)";
+            Text[ greek ] = "ÅğéêÜëõøç";
+        Text[ korean ] = "ê²¹ì¹¨(~V)";
+        Text[ turkish ] = "B~asamakla";
+        Text[ catalan ] = "~Superposa";
+        Text[ finnish ] = "~Päällekkäisyys";
+        Text[ thai ] = "à¸‹à¹‰~à¸­à¸™à¸—à¸±à¸š";
+        Text[ czech ] = "PÅ™esah";
+        Text[ hebrew ] = "~Ãœberlappend";
+        Text[ hindi ] = "à¤‘~à¤µà¤°à¤²à¤¾à¤ªà¥";
+        Text[ slovak ] = "P~resah";
+    };
+        CheckBox CB_AXIS_LABEL_TEXTBREAK
+        {
+            Pos = MAP_APPFONT ( 139 , 47  ) ;
+            Size = MAP_APPFONT ( 76 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Umbruch" ;
+            Text [ ENGLISH ] = "~Break" ;
+            Text [ english_us ] = "~Break" ;
+            Text [ portuguese_brazilian ] = "~Quebrar" ;
+            Text [ swedish ] = "Brytning" ;
+            Text [ danish ] = "Skift" ;
+            Text [ italian ] = "A capo" ;
+            Text [ spanish ] = "~Salto" ;
+            Text [ french ] = "~Saut" ;
+            Text [ dutch ] = "~Afbreking" ;
+            Text [ portuguese ] = "~Quebra" ;
+            Text [ chinese_simplified ] = "æ¢è¡Œ(~B)";
+            Text [ russian ] = "Ğàçğ~ûâ";
+            Text [ polish ] = "~Podzia³";
+            Text [ japanese ] = "æŠ˜ã‚Šè¿”ã—(~B)";
+            Text [ chinese_traditional ] = "æ›è¡Œ(~B)";
+            Text [ arabic ] = "İÇÕá";
+            Text [ dutch ] = "~Afbreking";
+            Text [ chinese_simplified ] = "æ¢è¡Œ(~B)";
+            Text[ greek ] = "ÁëëáãŞ";
+        Text[ korean ] = "ë‚˜ëˆ„ê¸°(~B)";
+        Text[ turkish ] = "~Kesme";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Salta";
+        Text[ finnish ] = "~Vaihto";
+        Text[ thai ] = "à¹~à¸šà¹ˆà¸‡";
+        Text[ czech ] = "ZalomenÃ­";
+        Text[ hebrew ] = "~Umbruch";
+        Text[ hindi ] = "~à¤–à¤£à¥à¤¡à¤¨";
+        Text[ slovak ] = "~Zalomenie";
+    };
+
+
+    FixedLine FL_AXIS_LABEL_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 22  ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+
+        Text = "Anordnung" ;
+        Text [ ENGLISH ] = "Order" ;
+        Text [ norwegian ] = "Rekkefølge" ;
+        Text [ italian ] = "Disponi" ;
+        Text [ portuguese_brazilian ] = "Ordem" ;
+        Text [ portuguese ] = "Disposição" ;
+        Text [ english_us ] = "Order" ;
+        Text [ spanish ] = "Organizar" ;
+        Text [ french ] = "Disposition" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ swedish ] = "Placering" ;
+        Text [ danish ] = "Placering" ;
+        Text[ chinese_simplified ] = "æ’åº";
+        Text[ russian ] = "Ïîğÿäîê";
+        Text[ polish ] = "Kolejnoœæ";
+        Text[ japanese ] = "é…ç½®";
+        Text[ chinese_traditional ] = "æ’åº";
+        Text[ arabic ] = "ÇáÊÑÊíÈ";
+        Text[ dutch ] = "Positie";
+        Text[ chinese_simplified ] = "æ’åº";
+        Text[ greek ] = "Ôáêôïğïßçóç";
+        Text[ korean ] = "ë°°ì—´ ìˆœì„œ";
+        Text[ turkish ] = "Düzenle";
+        Text[ catalan ] = "Organitzar";
+        Text[ finnish ] = "Järjestys";
+        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸š";
+        Text[ czech ] = "PoÅ™adÃ­";
+        Text[ hebrew ] = "Anordnung";
+        Text[ hindi ] = "à¤•à¥à¤°à¤®";
+        Text[ slovak ] = "Poradie";
+    };
+        RadioButton RB_AXIS_LABEL_SIDEBYSIDE
+        {
+            Pos = MAP_APPFONT ( 12 , 33  ) ;
+            Size = MAP_APPFONT ( 98 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Nebeneinander" ;
+            Text [ ENGLISH ] = "~Side by Side" ;
+            Text [ norwegian ] = "~Side by Side" ;
+            Text [ italian ] = "Affianca" ;
+            Text [ portuguese_brazilian ] = "~Lado a Lado" ;
+            Text [ portuguese ] = "~Lado a lado" ;
+            Text [ english_us ] = "~Tile" ;
+            Text [ spanish ] = "~Mosaico" ;
+            Text [ french ] = "~Juxtaposer" ;
+            Text [ dutch ] = "~Naast elkaar" ;
+            Text [ swedish ] = "Bredvid vara~ndra" ;
+            Text [ danish ] = "Side om side" ;
+            Text[ chinese_simplified ] = "å¹¶æ’(~T)";
+            Text[ russian ] = "Ğÿäîì";
+            Text[ polish ] = "~S¹siaduj¹co";
+            Text[ japanese ] = "1åˆ—ã«ä¸¦ã¹ã‚‹(~T)";
+            Text[ chinese_traditional ] = "ä¸¦æ’(~T)";
+            Text[ arabic ] = "ÊÌÇäÈ";
+            Text[ dutch ] = "~Naast elkaar";
+            Text[ chinese_simplified ] = "å¹¶æ’(~T)";
+            Text[ greek ] = "Óå ğáñÜèåóç";
+        Text[ korean ] = "ë°”ë‘‘íŒì‹ ë°°ì¹˜(~T)";
+        Text[ turkish ] = "~Döşe";
+        Text[ catalan ] = "~Mosaic";
+        Text[ finnish ] = "~Vierekkäin";
+        Text[ thai ] = "à¹~à¸šà¸šà¸à¸£à¸°à¹€à¸šà¸·à¹‰à¸­à¸‡";
+        Text[ czech ] = "DlaÅ¾dice";
+        Text[ hebrew ] = "~Nebeneinander";
+        Text[ hindi ] = "~à¤ªà¤Ÿà¤¿à¤¯à¤¾";
+        Text[ slovak ] = "~DlaÅ¾dice";
+    };
+        RadioButton RB_AXIS_LABEL_UPDOWN
+        {
+            Pos = MAP_APPFONT ( 12 , 47  ) ;
+            Size = MAP_APPFONT ( 98 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Hoch-tief versetzt" ;
+            Text [ ENGLISH ] = "~Up-down transposed" ;
+            Text [ norwegian ] = "~Up-down transposed" ;
+            Text [ italian ] = "Sposta pari/dispari" ;
+            Text [ portuguese_brazilian ] = "~Ímpares em cima" ;
+            Text [ portuguese ] = "~Ímpares em cima" ;
+            Text [ english_us ] = "St~agger odd" ;
+            Text [ spanish ] = "~Organización impar" ;
+            Text [ french ] = "Transposer ~haut-bas" ;
+            Text [ dutch ] = "Laag-h~oog verzet" ;
+            Text [ swedish ] = "Upphöjt/nedsänkt" ;
+            Text [ danish ] = "Ulige tal forskudt" ;
+            Text[ chinese_simplified ] = "ä¸Šä¸‹ç§»åŠ¨(~A)";
+            Text[ russian ] = "Çèãçàãîì (íå÷åòíûå âû~øå)";
+            Text[ polish ] = "Roz~m. przest. (góra-dó³)";
+            Text[ japanese ] = "ä¸Šä¸‹äº¤äº’(~A)";
+            Text[ chinese_traditional ] = "ä¸Šä¸‹ç§»å‹•(~A)";
+            Text[ arabic ] = "Úáæí Ëã Óİáí";
+            Text[ dutch ] = "Laag-h~oog verzet";
+            Text[ chinese_simplified ] = "ä¸Šä¸‹ç§»åŠ¨(~A)";
+            Text[ greek ] = "Ìåôáôüğéó~ç ğÜíù-êÜôù";
+        Text[ korean ] = "ìœ„ ì•„ë˜ ì—‡ê°ˆë¦¼(~A)";
+        Text[ turkish ] = "Yukarı/aşağı hizalama";
+        Text[ catalan ] = "Esc~alonament senar";
+        Text[ finnish ] = "Lo~mita parittomat";
+        Text[ thai ] = "à¸ªà¸¥à¸±~à¸šà¹€à¸¥à¸‚à¸„à¸µà¹ˆ";
+        Text[ czech ] = "PÅ™edsunout lichÃ©";
+        Text[ hebrew ] = "~Hoch-tief versetzt";
+        Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾~à¤—à¥à¤—à¥‡à¤°à¥ à¤‘à¤¡à¤¼";
+        Text[ slovak ] = "~PosunÃºÅ¥ nepÃ¡rne";
+    };
+        RadioButton RB_AXIS_LABEL_DOWNUP
+        {
+            Pos = MAP_APPFONT ( 12 , 61  ) ;
+            Size = MAP_APPFONT ( 98 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Tief-hoch versetzt" ;
+            Text [ ENGLISH ] = "~Down-up transposed" ;
+            Text [ norwegian ] = "~Down-up transposed" ;
+            Text [ italian ] = "Sposta dispari/pari" ;
+            Text [ portuguese_brazilian ] = "~Pares em cima" ;
+            Text [ portuguese ] = "~Pares em cima" ;
+            Text [ english_us ] = "Stagger ~even" ;
+            Text [ dutch ] = "~Hoog-laag verzet" ;
+            Text [ spanish ] = "Orga~nización par" ;
+            Text [ french ] = "Transposer ~bas-haut" ;
+            Text [ swedish ] = "Nedsänkt/upphöjt" ;
+            Text [ danish ] = "Lige tal forskudt" ;
+            Text[ chinese_simplified ] = "ä¸‹ä¸Šç§»åŠ¨(~E)";
+            Text[ russian ] = "Çèãçàãîì (÷åòíûå âûøå)";
+            Text[ polish ] = "~Rozm. przest. (dó³-góra)";
+            Text[ japanese ] = "ä¸‹ä¸Šäº¤äº’(~E)";
+            Text[ chinese_traditional ] = "ä¸‹ä¸Šç§»å‹•(~E)";
+            Text[ arabic ] = "Óİáí Ëã Úáæí";
+            Text[ dutch ] = "~Hoog-laag verzet";
+            Text[ chinese_simplified ] = "ä¸‹ä¸Šç§»åŠ¨(~E)";
+            Text[ greek ] = "Ìåôáôüğéóç êÜ~ôù-ğÜíù";
+        Text[ korean ] = "ì•„ë˜ ìœ„ ì—‡ê°ˆë¦¼(~E)";
+        Text[ turkish ] = "Aşağı/yukarı hizalama";
+        Text[ catalan ] = "Escalonament ~parell ";
+        Text[ finnish ] = "Lomita ~parilliset";
+        Text[ thai ] = "à¸ªà¸¥à¸±à¸šà¹€à¸¥à¸‚~à¸„à¸¹à¹ˆ";
+        Text[ czech ] = "PÅ™edsunout sudÃ©";
+        Text[ hebrew ] = "~Tief-hoch versetzt";
+        Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤—à¥à¤—à¥‡à¤°à¥ ~à¤‡à¤µà¤¨";
+        Text[ slovak ] = "Po~sunÃºÅ¥ pÃ¡rne";
+    };
+        RadioButton RB_AXIS_LABEL_AUTOORDER
+        {
+            Pos = MAP_APPFONT ( 12 , 75  ) ;
+            Size = MAP_APPFONT ( 98 , 10 ) ;
+            TabStop = TRUE ;
+
+            Text = "~Automatisch" ;
+            Text [ ENGLISH ] = "~Automatic" ;
+            Text [ norwegian ] = "~Automatisk" ;
+            Text [ italian ] = "Automatico" ;
+            Text [ portuguese_brazilian ] = "~Automático" ;
+            Text [ portuguese ] = "~Automático" ;
+            Text [ english_us ] = "A~utomatic" ;
+            Text [ spanish ] = "Automático" ;
+            Text [ french ] = "Automatique" ;
+            Text [ dutch ] = "A~utomatisch" ;
+            Text [ swedish ] = "Automatiskt" ;
+            Text [ danish ] = "Automatisk" ;
+            Text[ chinese_simplified ] = "è‡ªåŠ¨(~U)";
+            Text[ russian ] = "Àâòîìàòè÷åñêè";
+            Text[ polish ] = "A~utomatycznie";
+            Text[ japanese ] = "è‡ªå‹•(~U)";
+            Text[ chinese_traditional ] = "è‡ªå‹•(~U)";
+            Text[ arabic ] = "ÊáŞÇÆí";
+            Text[ dutch ] = "A~utomatisch";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨(~U)";
+            Text[ greek ] = "~Áõôüìáôá";
+        Text[ korean ] = "ìë™(~U)";
+        Text[ turkish ] = "~Otomatik";
+        Text[ catalan ] = "Automàtic";
+        Text[ finnish ] = "A~utomaattinen";
+        Text[ thai ] = "à¸­à¸±~à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "A~utomatic";
+        Text[ slovak ] = "A~utomaticky";
+    };
+    Text[ portuguese ] = "Legenda";
+    Text[ russian ] = "Ïîäïèñü";
+    Text[ greek ] = "ÅğéãñáöŞ";
+    Text[ dutch ] = "Opschrift";
+    Text[ french ] = "Étiquette";
+    Text[ spanish ] = "Etiqueta";
+    Text[ italian ] = "Dicitura";
+    Text[ danish ] = "Etiket";
+    Text[ swedish ] = "Etikett";
+    Text[ polish ] = "Etykieta";
+    Text[ portuguese_brazilian ] = "Rótulo";
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«";
+    Text[ korean ] = "ë ˆì´ë¸”";
+    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
+    Text[ chinese_traditional ] = "æ¨™ç±¤";
+    Text[ arabic ] = "ÚäæäÉ";
+    Text[ turkish ] = "Etiket";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Etiqueta";
+    Text[ finnish ] = "Selite";
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "Popisek";
+    Text[ hebrew ] = "Beschriftung";
+    Text[ hindi ] = "à¤²à¥‡à¤¬à¤¿à¤²";
+    Text[ slovak ] = "OznaÄenie";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

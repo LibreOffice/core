@@ -1,0 +1,493 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Bitmaps.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Bitmaps.hrc"
+
+/*
+#include "sfx2/sfx.hrc"
+#include "svtools/style.hrc"
+*/
+/*
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem
+        {
+            StyleBitmap = Bitmap { File = "sco206.bmp" ; };
+            Text = "Grafikobjektvorlagen" ;
+            Text [ ENGLISH ] = "Graphic Objects Styles" ;
+            Text [ english_us ] = "Graphics Styles" ;
+            Text [ italian ] = "Modelli di oggetti grafici" ;
+            Text [ spanish ] = "Estilos de objeto gr·fico" ;
+            Text [ french ] = "Styles d'objet graphique" ;
+            Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
+            Text [ swedish ] = "Grafikobjektformatmallar" ;
+            Text [ danish ] = "Grafikobjekttypografier" ;
+            Text [ portuguese_brazilian ] = "Estilos de Figuras" ;
+            Text [ portuguese ] = "Modelos de objectos gr·ficos" ;
+            Text[ chinese_simplified ] = "ÂõæÂΩ¢ÂØπË±°Ê†∑Âºè";
+            Text[ russian ] = "—ÚËÎË „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚";
+            Text[ polish ] = "Style grafiki";
+            Text[ japanese ] = "Âõ≥„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà„Çπ„Çø„Ç§„É´";
+            Text[ chinese_traditional ] = "ÂúñÂΩ¢Áâ©‰ª∂Ê®£Âºè";
+            Text[ arabic ] = "√‰„«ÿ ﬂ«∆‰«  ’Ê—…";
+            Text[ greek ] = "”ÙıÎ ·ÌÙÈÍÂÈÏ›Ì˘Ì „Ò·ˆÈÍ˛Ì";
+            Text[ korean ] = "Í∑∏Î¶º Ïä§ÌÉÄÏùº ";
+            Text[ czech ] = "Grafick√© styly" ;
+            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            FilterList =
+            {
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+        };
+    };
+};
+*/
+
+Bitmap BMP_AREAS_2D
+{
+    File = "areas2d.bmp" ;
+};
+Bitmap BMP_AREAS_2D_1
+{
+    File = "areas2d1.bmp" ;
+};
+Bitmap BMP_AREAS_2D_3
+{
+    File = "areas2d3.bmp" ;
+};
+Bitmap BMP_AREAS_3D
+{
+    File = "areas3d.bmp" ;
+};
+Bitmap BMP_AREAS_3D_1
+{
+    File = "areas3d1.bmp" ;
+};
+Bitmap BMP_AREAS_3D_2
+{
+    File = "areas3d2.bmp" ;
+};
+//---------------------
+Bitmap BMP_BARS_2D
+{
+    File = "bars2d.bmp" ;
+};
+Bitmap BMP_BARS_2D_1
+{
+    File = "bars2d1.bmp" ;
+};
+Bitmap BMP_BARS_2D_2
+{
+    File = "bars2d2.bmp" ;
+};
+Bitmap BMP_BARS_2D_3
+{
+    File = "bars2d3.bmp" ;
+};
+Bitmap BMP_BARS_3D
+{
+    File = "bars3d.bmp" ;
+};
+Bitmap BMP_BARS_3D_1
+{
+    File = "bars3d1.bmp" ;
+};
+Bitmap BMP_BARS_3D_2
+{
+    File = "bars3d2.bmp" ;
+};
+Bitmap BMP_BARS_3D_3
+{
+    File = "bars3d3.bmp" ;
+};
+//---------------------
+Bitmap BMP_CIRCLES_2D
+{
+    File = "circl2d.bmp" ;
+};
+Bitmap BMP_CIRCLES_2D_1
+{
+    File = "circl2d1.bmp" ;
+};
+Bitmap BMP_CIRCLES_2D_2
+{
+    File = "circl2d2.bmp" ;
+};
+Bitmap BMP_CIRCLES_3D
+{
+    File = "circl3d.bmp" ;
+};
+//---------------------
+Bitmap BMP_COLUMNS_2D
+{
+    File = "cols2d.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_1
+{
+    File = "cols2d1.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_2
+{
+    File = "cols2d2.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_3
+{
+    File = "cols2d3.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_4
+{
+    File = "cols2d4.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_5
+{
+    File = "cols2d5.bmp" ;
+};
+//---------------------
+Bitmap BMP_COLUMNS_3D
+{
+    File = "cols3d.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_1
+{
+    File = "cols3d1.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_2
+{
+    File = "cols3d2.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_3
+{
+    File = "cols3d3.bmp" ;
+};
+//---------------------
+Bitmap BMP_DONUT1_2D
+{
+    File = "donut12d.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_1
+{
+    File = "kegel1q.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_2
+{
+    File = "kegel2q.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_3
+{
+    File = "kegel3q.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_4
+{
+    File = "kegel4q.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_1
+{
+    File = "kegel1.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_2
+{
+    File = "kegel2.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_3
+{
+    File = "kegel3.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_4
+{
+    File = "kegel4.bmp" ;
+};
+//---------------------
+/*
+Bitmap BMP_LINESYMB_2D
+{
+    File = "lnsym2d.bmp" ;
+};
+*/
+Bitmap BMP_LINESYMB_2D_1
+{
+    File = "lnsym2d1.bmp" ;
+};
+Bitmap BMP_LINESYMB_2D_2
+{
+    File = "lnsym2d2.bmp" ;
+};
+Bitmap BMP_LINESYMB_2D_3
+{
+    File = "lnsym2d3.bmp" ;
+};
+//---------------------
+Bitmap BMP_LINES_2D
+{
+    File = "lines2d.bmp" ;
+};
+Bitmap BMP_LINES_2D_1
+{
+    File = "lines2d1.bmp" ;
+};
+Bitmap BMP_LINES_2D_2
+{
+    File = "lines2d2.bmp" ;
+};
+Bitmap BMP_LINES_2D_3
+{
+    File = "lines2d3.bmp" ;
+};
+Bitmap BMP_LINES_3D
+{
+    File = "lines3d.bmp" ;
+};
+//---------------------
+Bitmap BMP_NETSYMB_2D
+{
+    File = "net2dsym.bmp" ;
+};
+Bitmap BMP_NETSYMB_2D_PERCENT
+{
+    File = "n2dsympr.bmp" ;
+};
+Bitmap BMP_NETSYMB_2D_STACK
+{
+    File = "n2dsymst.bmp" ;
+};
+Bitmap BMP_NET_2D
+{
+    File = "net2d.bmp" ;
+};
+Bitmap BMP_NET_2D_PERCENT
+{
+    File = "net2dpr.bmp" ;
+};
+Bitmap BMP_NET_2D_STACK
+{
+    File = "net2dst.bmp" ;
+};
+//---------------------
+Bitmap BMP_PYRAMIDQ_3D_1
+{
+    File = "pyra1q.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_2
+{
+    File = "pyra2q.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_3
+{
+    File = "pyra3q.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_4
+{
+    File = "pyra4q.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_1
+{
+    File = "pyra1.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_2
+{
+    File = "pyra2.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_3
+{
+    File = "pyra3.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_4
+{
+    File = "pyra4.bmp" ;
+};
+//---------------------
+Bitmap BMP_ROEHRE_3D_1
+{
+    File = "roehre1.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_2
+{
+    File = "roehre2.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_3
+{
+    File = "roehre3.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_4
+{
+    File = "roehre4.bmp" ;
+};
+//---------------------
+Bitmap BMP_SAEULE_3D_1
+{
+    File = "saeule1.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_2
+{
+    File = "saeule2.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_3
+{
+    File = "saeule3.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_4
+{
+    File = "saeule4.bmp" ;
+};
+//---------------------
+Bitmap BMP_SPLINE_B
+{
+    File = "splineb.bmp" ;
+};
+Bitmap BMP_SPLINE_B_SYMBOL
+{
+    File = "splnbsym.bmp" ;
+};
+Bitmap BMP_SPLINE_CUBIC
+{
+    File = "spline.bmp" ;
+};
+Bitmap BMP_SPLINE_CUBIC_SYMBOL
+{
+    File = "splnesym.bmp" ;
+};
+//---------------------
+Bitmap BMP_STOCK_1
+{
+    File = "stock2d1.bmp" ;
+};
+Bitmap BMP_STOCK_2
+{
+    File = "stock2d2.bmp" ;
+};
+Bitmap BMP_STOCK_3
+{
+    File = "stock2d3.bmp" ;
+};
+Bitmap BMP_STOCK_4
+{
+    File = "stock2d4.bmp" ;
+};
+//---------------------
+/*
+Bitmap BMP_SURF_3D
+{
+    File = "surf3d.bmp" ;
+};
+*/
+Bitmap BMP_XYSYMB_2D
+{
+    File = "xysym2d.bmp" ;
+};
+/*
+Bitmap BMP_XYZSYMB_3D
+{
+    File = "xyzsym3d.bmp" ;
+};
+Bitmap BMP_XYZ_3D
+{
+    File = "xyz3d.bmp" ;
+};
+*/
+Bitmap BMP_XY_2D
+{
+    File = "xy2d.bmp" ;
+};
+//---------------------
+//---------------------
+//---------------------
+//error indicator
+Bitmap BMP_INDICATE_NONE
+{
+    File = "indinone.bmp" ;
+};
+Bitmap BMP_INDICATE_BOTH
+{
+    File = "indiboth.bmp" ;
+};
+Bitmap BMP_INDICATE_DOWN
+{
+    File = "indidown.bmp" ;
+};
+Bitmap BMP_INDICATE_UP
+{
+    File = "indiup.bmp" ;
+};
+//---------------------
+//regression curves
+Bitmap BMP_REGRESSION_NONE
+{
+    File = "regno.bmp" ;
+};
+Bitmap BMP_REGRESSION_LINEAR
+{
+    File = "reglin.bmp" ;
+};
+Bitmap BMP_REGRESSION_LOG
+{
+    File = "reglog.bmp" ;
+};
+Bitmap BMP_REGRESSION_EXP
+{
+    File = "regexp.bmp" ;
+};
+Bitmap BMP_REGRESSION_POWER
+{
+    File = "regpow.bmp" ;
+};
+//---------------------

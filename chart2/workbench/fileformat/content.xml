@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-content PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "office.dtd"><office:document-content xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="chart" office:version="1.0">
+
+<office:automatic-styles>
+    <number:number-style style:name="N0" style:family="data-style">
+            <number:number number:min-integer-digits="1"/>
+            </number:number-style>
+    <style:style style:name="ch1" style:family="chart">
+            <style:properties draw:stroke="none" draw:fill-color="#ffffff"/>
+            </style:style>
+    <style:style style:name="ch2" style:family="chart">
+        <style:properties fo:direction="ltr" draw:stroke="none" draw:fill="none" fo:color="#000000" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="23.2000007629395pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="23.2000007629395pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="23.2000007629395pt"/>
+        </style:style>
+    <style:style style:name="ch3" style:family="chart">
+            <style:properties draw:fill="none" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10.6999998092651pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="10.6999998092651pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="10.6999998092651pt"/>
+            </style:style>
+    <style:style style:name="ch4" style:family="chart">
+            <style:properties chart:stock-updown-bars="false" chart:stock-with-volume="false" chart:three-dimensional="false" chart:deep="false" chart:lines="false" chart:splines="0" chart:symbol="-3" chart:vertical="false" chart:lines-used="0" chart:connect-bars="false" chart:series-source="columns" chart:mean-value="false" chart:error-margin="0" chart:error-lower-limit="0" chart:error-upper-limit="0" chart:error-category="none" chart:error-percentage="0" chart:regression-type="none" chart:data-label-number="none" chart:data-label-text="false" chart:data-label-symbol="false"/>
+            </style:style>
+    <style:style style:name="ch5" style:family="chart" style:data-style-name="N0">
+            <style:properties chart:display-label="true" chart:tick-marks-major-inner="false" chart:tick-marks-major-outer="true" chart:logarithmic="false" chart:text-overlap="false" text:line-break="true" chart:label-arrangement="side-by-side" chart:visible="true" fo:direction="ltr" draw:stroke="solid" svg:stroke-width="0.051cm" svg:stroke-color="#000000" draw:marker-start-width="0.279cm" draw:marker-end-width="0.279cm" fo:color="#000000" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10.8999996185303pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="10.8999996185303pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="10.8999996185303pt"/>
+            </style:style>
+    <style:style style:name="ch6" style:family="chart" style:data-style-name="N0">
+            <style:properties chart:display-label="true" chart:tick-marks-major-inner="false" chart:tick-marks-major-outer="true" chart:logarithmic="false" chart:origin="0" chart:gap-width="100" chart:overlap="0" chart:text-overlap="false" text:line-break="false" chart:label-arrangement="side-by-side" chart:visible="true" fo:direction="ltr"
+            draw:stroke="solid" svg:stroke-width="0cm" svg:stroke-color="#000000" fo:color="#000000" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12.5pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="12.5pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="12.5pt"/>
+            </style:style>
+    <style:style style:name="ch7" style:family="chart" style:data-style-name="N0">
+            <style:properties chart:display-label="true" chart:tick-marks-major-inner="false" chart:tick-marks-major-outer="true" chart:logarithmic="false" chart:text-overlap="false" text:line-break="false" chart:label-arrangement="side-by-side" chart:visible="true" fo:direction="ltr" draw:stroke="solid" svg:stroke-width="0cm" svg:stroke-color="#000000" fo:color="#000000" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="12.5pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="12.5pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="12.5pt"/>
+            </style:style>
+    <style:style style:name="ch8" style:family="chart">
+            <style:properties draw:fill-color="#9999ff" fo:font-family="Albany" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="10.6999998092651pt" style:font-family-asian="&apos;Andale Sans UI&apos;" style:font-pitch-asian="variable" style:font-size-asian="10.6999998092651pt" style:font-family-complex="&apos;Arial Unicode MS&apos;" style:font-pitch-complex="variable" style:font-size-complex="10.6999998092651pt"/>
+            </style:style>
+    <style:style style:name="ch9" style:family="chart">
+            <style:properties draw:stroke="none" draw:fill="none"/>
+            </style:style>
+    <style:style style:name="ch10" style:family="chart">
+            <style:properties draw:stroke="none" draw:fill-color="#999999"/>
+            </style:style>
+</office:automatic-styles>
+
+<office:body>
+ <chart:chart svg:width="20.088cm" svg:height="12.514cm" chart:class="bar" chart:style-name="ch1">
+    <chart:title svg:x="8.318cm" svg:y="0.25cm" chart:style-name="ch2">
+        <text:p>Haupttitel</text:p>
+    </chart:title>
+    <chart:legend chart:legend-position="right" svg:x="17.516cm" svg:y="5.92cm" chart:style-name="ch3"/>
+    <chart:plot-area chart:style-name="ch4" table:cell-range-address="Tabelle1.$A$6:.$A$7" chart:table-number-list="0" svg:x="0.4cm" svg:y="1.656cm" svg:width="16.317cm" svg:height="10.608cm">
+        <chart:axis chart:class="category" chart:name="primary-x" chart:style-name="ch5"/>
+        <chart:axis chart:class="value" chart:name="primary-y" chart:style-name="ch6"/>
+        <chart:axis chart:class="series" chart:name="primary-z" chart:style-name="ch7"/>
+        <chart:series chart:style-name="ch8">
+            <chart:data-point chart:repeated="2"/>
+        </chart:series>
+        <chart:wall chart:style-name="ch9"/>
+        <chart:floor chart:style-name="ch10"/>
+    </chart:plot-area>
+    <table:table table:name="local-table">
+        <table:table-header-columns>
+            <table:table-column/>
+        </table:table-header-columns>
+        <table:table-columns>
+            <table:table-column table:number-columns-repeated="1"/>
+        </table:table-columns>
+        <table:table-header-rows>
+            <table:table-row>
+                <table:table-cell/>
+                <table:table-cell table:value-type="string">
+                    <text:p>Spalte A</text:p>
+                </table:table-cell>
+            </table:table-row>
+        </table:table-header-rows>
+        <table:table-rows>
+            <table:table-row>
+            <table:table-cell table:value-type="string">
+            <text:p>Zeile 6</text:p>
+            </table:table-cell>
+            <table:table-cell table:value-type="float" table:value="-2">
+            <text:p>-2
+            </text:p>
+            </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+            <table:table-cell table:value-type="string">
+            <text:p>Zeile 7
+            </text:p>
+            </table:table-cell>
+            <table:table-cell table:value-type="float" table:value="2">
+            <text:p>2
+            </text:p>
+            </table:table-cell>
+            </table:table-row>
+        </table:table-rows>
+    </table:table>
+</chart:chart>
+</office:body>
+
+</office:document-content>

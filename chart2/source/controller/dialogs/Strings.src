@@ -1,0 +1,3188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Strings.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Strings.hrc"
+
+String STR_TITLE_GRID
+{
+    Text = "Gitter" ;
+    Text [ ENGLISH ] = "Grid" ;
+    Text [ norwegian ] = "Grid" ;
+    Text [ italian ] = "Griglia" ;
+    Text [ portuguese_brazilian ] = "Grade" ;
+    Text [ portuguese ] = "Grelha" ;
+    Text [ finnish ] = "Ruudukko" ;
+    Text [ danish ] = "Gitter" ;
+    Text [ french ] = "Grille" ;
+    Text [ swedish ] = "Gitter" ;
+    Text [ dutch ] = "Raster" ;
+    Text [ spanish ] = "Cuadrícula" ;
+    Text [ english_us ] = "Grid" ;
+    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ñåòêà";
+    Text[ polish ] = "Siatka";
+    Text[ japanese ] = "ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ";
+    Text[ dutch ] = "Raster";
+    Text[ chinese_simplified ] = "ç½‘æ ¼çº¿";
+    Text[ greek ] = "Ğëİãìá";
+    Text[ korean ] = "ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "Kılavuz çizgiler";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Graella";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "MÅ™Ã­Å¾ka";
+    Text[ hebrew ] = "Gitter";
+    Text[ hindi ] = "à¤œà¤¾à¤²";
+    Text[ slovak ] = "MrieÅ¾ka";
+};
+
+/*
+String RID_BUILDVERSION
+{
+    Text = UPDVER ;
+    Text [ ENGLISH ] = UPDVER ;
+    Text [ norwegian ] = UPDVER ;
+    Text [ italian ] = UPDVER ;
+    Text [ portuguese_brazilian ] = UPDVER ;
+    Text [ portuguese ] = UPDVER ;
+    Text [ finnish ] = UPDVER ;
+    Text [ danish ] = UPDVER ;
+    Text [ french ] = UPDVER ;
+    Text [ swedish ] = UPDVER ;
+    Text [ dutch ] = UPDVER ;
+    Text [ spanish ] = UPDVER ;
+    Text [ english_us ] = UPDVER ;
+};
+String STR_NULL
+{
+    Text = "Kein" ;
+    Text [ ENGLISH ] = "None" ;
+    Text [ norwegian ] = "Ingen" ;
+    Text [ italian ] = "Senza" ;
+    Text [ portuguese_brazilian ] = "Nenhum" ;
+    Text [ portuguese ] = "Nenhum" ;
+    Text [ finnish ] = "Ei mitään" ;
+    Text [ danish ] = "Ingen" ;
+    Text [ french ] = "Aucun(e)" ;
+    Text [ swedish ] = "Ingen" ;
+    Text [ dutch ] = "Geen" ;
+    Text [ spanish ] = "Ninguno" ;
+    Text [ english_us ] = "None" ;
+    Text[ chinese_simplified ] = "æ— ";
+    Text[ russian ] = "Íåò";
+    Text[ polish ] = "Brak";
+    Text[ japanese ] = "ãªã—";
+    Text[ chinese_traditional ] = "ç„¡";
+    Text[ arabic ] = "ÈÏæä";
+    Text[ greek ] = "Êáìßá";
+    Text[ korean ] = "ì—†ìŒ";
+    Text[ turkish ] = "Yok";
+    Text[ catalan ] = "Cap";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "Å½Ã¡dnÃ©";
+    Text[ hebrew ] = "â€®×œ×œ×â€¬";
+    Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
+    Text[ slovak ] = "Å½iadne";
+};
+String STR_BASIC_IDE
+{
+    Text = "Basic-IDE" ;
+    Text [ ENGLISH ] = "Basic-IDE" ;
+    Text [ norwegian ] = "Basic-IDE" ;
+    Text [ italian ] = "%PRODUCTNAME Basic-IDE" ;
+    Text [ portuguese_brazilian ] = "IDE Básico" ;
+    Text [ portuguese ] = "Basic-IDE" ;
+    Text [ finnish ] = "Basic IDE" ;
+    Text [ danish ] = "Basic-IDE" ;
+    Text [ french ] = "Basic-IDE" ;
+    Text [ swedish ] = "Basic-IDE" ;
+    Text [ dutch ] = "Basic-IDE" ;
+    Text [ spanish ] = "Basic-IDE" ;
+    Text [ english_us ] = "Basic IDE" ;
+    Text[ chinese_simplified ] = "Basic-IDE";
+    Text[ russian ] = "èíòåãğèğîâàííàÿ ñğåäà ğàçğàáîòêè Basic";
+    Text[ polish ] = "Œrodowisko programowania w jêzyku Basic";
+    Text[ japanese ] = "Basic IDE";
+    Text[ chinese_traditional ] = "Basic-IDE";
+    Text[ arabic ] = "Basic IDE";
+    Text[ greek ] = "Basic IDE";
+    Text[ korean ] = "Basic IDE";
+    Text[ turkish ] = "Basic-IDE";
+    Text[ catalan ] = "Basic-IDE";
+    Text[ thai ] = "à¹€à¸šà¸ªà¸´à¸„ IDE";
+    Text[ czech ] = "ZÃ¡kladnÃ­ IDE";
+    Text[ hebrew ] = "Basic-IDE";
+    Text[ hindi ] = "à¤®à¥‚à¤² IDE";
+    Text[ slovak ] = "ZÃ¡kladnÃ½ IDE";
+};
+String STR_INVISIBLE
+{
+    Text = "Unsichtbar" ;
+    Text [ ENGLISH ] = "Invisible" ;
+    Text [ norwegian ] = "Usynlig" ;
+    Text [ italian ] = "Invisibile" ;
+    Text [ portuguese_brazilian ] = "Invisível" ;
+    Text [ portuguese ] = "Invisível" ;
+    Text [ finnish ] = "Näkymätön" ;
+    Text [ danish ] = "Usynlig" ;
+    Text [ french ] = "Invisible" ;
+    Text [ swedish ] = "Osynlig" ;
+    Text [ dutch ] = "Onzichtbaar" ;
+    Text [ spanish ] = "Invisible" ;
+    Text [ english_us ] = "Invisible" ;
+    Text[ chinese_simplified ] = "éšå…¥çš„";
+    Text[ russian ] = "Íåâèäèìûé";
+    Text[ polish ] = "Niewidoczny";
+    Text[ japanese ] = "éè¡¨ç¤º";
+    Text[ chinese_traditional ] = "éš±å…¥çš„";
+    Text[ arabic ] = "ÛíÑ ãÑÆí";
+    Text[ greek ] = "Ìç ïñáôÜ";
+    Text[ korean ] = "ìˆ¨ê¹€";
+    Text[ turkish ] = "Gizle";
+    Text[ catalan ] = "Invisible";
+    Text[ thai ] = "à¸¡à¸­à¸‡à¹„à¸¡à¹ˆà¹€à¸«à¹‡à¸™";
+    Text[ czech ] = "NeviditelnÃ½";
+    Text[ hebrew ] = "Unsichtbar";
+    Text[ hindi ] = "à¤…à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿à¤—à¥‹à¤šà¤°";
+    Text[ slovak ] = "NeviditeÄ¾nÃ¡";
+};
+String STR_SOLID
+{
+    Text = "Durchgängig" ;
+    Text [ ENGLISH ] = "Solid" ;
+    Text [ norwegian ] = "Solid" ;
+    Text [ italian ] = "Piena" ;
+    Text [ portuguese_brazilian ] = "Contínuo" ;
+    Text [ portuguese ] = "Contínuo" ;
+    Text [ finnish ] = "Jatkuva" ;
+    Text [ danish ] = "Gennemgående" ;
+    Text [ french ] = "Continu" ;
+    Text [ swedish ] = "Genomgående" ;
+    Text [ dutch ] = "Gesloten" ;
+    Text [ spanish ] = "Continuo" ;
+    Text [ english_us ] = "Continuous" ;
+    Text[ chinese_simplified ] = "æŒç»­çš„";
+    Text[ russian ] = "Ñïëîøíàÿ";
+    Text[ polish ] = "Ci¹g³y";
+    Text[ japanese ] = "å®Ÿç·š";
+    Text[ chinese_traditional ] = "æŒçºŒçš„";
+    Text[ arabic ] = "ãÊæÇÕá";
+    Text[ language_user1 ] = "nk 07.08.99 : Hat es mit Linienstil zu tun? Bitte mich informieren! Danke - - - -";
+    Text[ greek ] = "Óõíå÷üìåíá";
+    Text[ korean ] = "ê³„ì†";
+    Text[ turkish ] = "Sürekli";
+    Text[ catalan ] = "Continu";
+    Text[ thai ] = "à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡";
+    Text[ czech ] = "SpojitÃ½";
+    Text[ hebrew ] = "â€®×¨×¦×™×£â€¬";
+    Text[ hindi ] = "à¤¨à¤¿à¤°à¤¨à¥à¤¤à¤°";
+    Text[ slovak ] = "SpojitÃ½";
+};
+String STR_AREA
+{
+    Text = "Fläche" ;
+    Text [ ENGLISH ] = "Object fill" ;
+    Text [ norwegian ] = "Objekt fyll" ;
+    Text [ italian ] = "Area" ;
+    Text [ portuguese_brazilian ] = "Área" ;
+    Text [ portuguese ] = "Preenchimento" ;
+    Text [ finnish ] = "Alue" ;
+    Text [ danish ] = "Område" ;
+    Text [ french ] = "Remplissage" ;
+    Text [ swedish ] = "Yta" ;
+    Text [ dutch ] = "Vlak" ;
+    Text [ spanish ] = "Área" ;
+    Text [ english_us ] = "Area" ;
+    Text[ chinese_simplified ] = "å……å¡«å¹³é¢";
+    Text[ russian ] = "Îáëàñòü";
+    Text[ polish ] = "Obszar";
+    Text[ japanese ] = "ã‚¨ãƒªã‚¢";
+    Text[ chinese_traditional ] = "å……å¡«å¹³é¢";
+    Text[ arabic ] = "ÊÚÈÆÉ ÇáßÇÆä";
+    Text[ greek ] = "ÅğéöÜíåéá";
+    Text[ korean ] = "ì˜ì—­";
+    Text[ turkish ] = "Yüzey";
+    Text[ catalan ] = "Àrea";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
+    Text[ czech ] = "Oblast";
+    Text[ hebrew ] = "FlÃ¤che";
+    Text[ hindi ] = "à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
+    Text[ slovak ] = "OblasÅ¥";
+};
+String STR_LINE
+{
+    Text = "Linie" ;
+    Text [ ENGLISH ] = "Line" ;
+    Text [ norwegian ] = "Linje" ;
+    Text [ italian ] = "Linea" ;
+    Text [ portuguese_brazilian ] = "Linha" ;
+    Text [ portuguese ] = "Linha" ;
+    Text [ finnish ] = "Viiva" ;
+    Text [ danish ] = "Linje" ;
+    Text [ french ] = "Ligne" ;
+    Text [ swedish ] = "Linje" ;
+    Text [ dutch ] = "Lijn" ;
+    Text [ spanish ] = "Línea" ;
+    Text [ english_us ] = "Line" ;
+    Text[ chinese_simplified ] = "çº¿æ¡";
+    Text[ russian ] = "Ëèíèÿ";
+    Text[ polish ] = "Linia";
+    Text[ japanese ] = "æŠ˜ã‚Œç·š";
+    Text[ chinese_traditional ] = "ç·šæ¢";
+    Text[ arabic ] = "ÎØ";
+    Text[ greek ] = "ÃñáììŞ";
+    Text[ korean ] = "ì„ ";
+    Text[ turkish ] = "Çizgi";
+    Text[ catalan ] = "Línia";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "Å˜Ã¡dek";
+    Text[ hebrew ] = "Linie";
+    Text[ hindi ] = "Line";
+    Text[ slovak ] = "ÄŒiara";
+};
+
+
+
+String STR_NORMAL_LINES
+{
+    Text = "Normal mit Linien" ;
+    Text [ ENGLISH ] = "Normal with lines" ;
+    Text [ dutch ] = "Normaal met lijnen" ;
+    Text [ english_us ] = "Normal with lines" ;
+    Text [ italian ] = "Normale con liee" ;
+    Text [ spanish ] = "Normal con líneas" ;
+    Text [ french ] = "Normal avec lignes" ;
+    Text [ swedish ] = "Normal med linjer" ;
+    Text [ danish ] = "Normal med linjer" ;
+    Text [ portuguese ] = "Padrão com linhas" ;
+    Text [ portuguese_brazilian ] = "Padrão com linhas" ;
+    Text[ chinese_simplified ] = "æ™®é€šçº¿æ¡";
+    Text[ russian ] = "Îáû÷íàÿ ñ ëèíèÿìè";
+    Text[ polish ] = "Zwyk³y z liniami";
+    Text[ japanese ] = "ç·šä»˜ãæ¨™æº–";
+    Text[ chinese_traditional ] = "æ™®é€šç·šæ¢";
+    Text[ arabic ] = "ÚÇÏíÉ ÈÎØæØ";
+    Text[ greek ] = "ÊáíïíéêÜ ìå ãñáììİò";
+    Text[ korean ] = "ì„  í¬í•¨ í‘œì¤€";
+    Text[ turkish ] = "Çizgili normal";
+    Text[ catalan ] = "Normal amb línies";
+    Text[ finnish ] = "Tavallinen ja viivat";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸›à¸à¸•à¸´";
+    Text[ czech ] = "BÄ›Å¾nÃ¡ s ÄÃ¡rami";
+    Text[ hebrew ] = "Normal mit Linien";
+    Text[ hindi ] = "à¤°à¥‡à¤–à¥‹à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤¨à¥‰à¤°à¥à¤®à¤²à¥";
+    Text[ slovak ] = "NormÃ¡lny graf s Äiarami";
+};
+
+
+
+
+
+String STR_2D
+{
+    Text = "2D-" ;
+    Text [ ENGLISH ] = "2D-" ;
+    Text [ english_us ] = "2D " ;
+    Text [ italian ] = "2D-" ;
+    Text [ spanish ] = "2D-" ;
+    Text [ french ] = "2D-" ;
+    Text [ dutch ] = "2D-" ;
+    Text [ swedish ] = "2D-" ;
+    Text [ danish ] = "2D-" ;
+    Text [ portuguese ] = "2D-" ;
+    Text [ portuguese_brazilian ] = "2D-" ;
+    Text[ chinese_simplified ] = "2 ç»´";
+    Text[ russian ] = "Äâóìåğíàÿ";
+    Text[ polish ] = "2D";
+    Text[ japanese ] = "2D";
+    Text[ chinese_traditional ] = "å¹³é¢";
+    Text[ arabic ] = "ËäÇÆí ÇáÃÈÚÇÏ";
+    Text[ greek ] = "2Ä-";
+    Text[ korean ] = "2D";
+    Text[ turkish ] = "2B-";
+    Text[ catalan ] = "2D ";
+    Text[ finnish ] = "Kaksiulotteinen ";
+    Text[ thai ] = "2à¸¡à¸´à¸•à¸´ ";
+    Text[ czech ] = "2D";
+    Text[ hebrew ] = "2D-";
+    Text[ hindi ] = "2D ";
+    Text[ slovak ] = "2D";
+};
+String STR_3D
+{
+    Text = "3D-" ;
+    Text [ ENGLISH ] = "3D-" ;
+    Text [ english_us ] = "3D " ;
+    Text [ italian ] = "3D-" ;
+    Text [ spanish ] = "3D-" ;
+    Text [ french ] = "3D-" ;
+    Text [ dutch ] = "3D-" ;
+    Text [ swedish ] = "3D-" ;
+    Text [ danish ] = "3D-" ;
+    Text [ portuguese ] = "3D-" ;
+    Text [ portuguese_brazilian ] = "3D-" ;
+    Text[ chinese_simplified ] = "3 ç»´";
+    Text[ russian ] = "Òğåõìåğíàÿ";
+    Text[ polish ] = "3D";
+    Text[ japanese ] = "3D";
+    Text[ chinese_traditional ] = "3D";
+    Text[ arabic ] = "ËáÇËí ÇáÃÈÚÇÏ";
+    Text[ greek ] = "3Ä-";
+    Text[ korean ] = "3D";
+    Text[ turkish ] = "3B-";
+    Text[ catalan ] = "3D ";
+    Text[ finnish ] = "Kolmiulotteisuus ";
+    Text[ thai ] = "3à¸¡à¸´à¸•à¸´ ";
+    Text[ czech ] = "3D";
+    Text[ hebrew ] = "3D-";
+    Text[ hindi ] = "3D ";
+    Text[ slovak ] = "3D";
+};
+String STR_DIAGRAM_AREA
+{
+    Text = "Diagrammfläche" ;
+    Text [ ENGLISH ] = "Diagram Area" ;
+    Text [ english_us ] = "Chart Area" ;
+    Text [ italian ] = "Area del diagramma" ;
+    Text [ spanish ] = "Superficie del diagrama" ;
+    Text [ french ] = "Arrière-plan du diagramme" ;
+    Text [ dutch ] = "Diagramoppervlak" ;
+    Text [ swedish ] = "Diagramområde" ;
+    Text [ danish ] = "Diagramområde" ;
+    Text [ portuguese ] = "Área do gráfico" ;
+    Text [ portuguese_brazilian ] = "Área do Gráfico" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨åŒº";
+    Text[ russian ] = "Îáëàñòü äèàãğàììû";
+    Text[ polish ] = "Obszar wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã‚¨ãƒªã‚¢";
+    Text[ chinese_traditional ] = "åœ–è¡¨å¹³é¢";
+    Text[ arabic ] = "ãÓÇÍÉ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "ÅğéöÜíåéá äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ì˜ì—­";
+    Text[ turkish ] = "Şema yüzeyi";
+    Text[ catalan ] = "Àrea del diagrama";
+    Text[ finnish ] = "Kaavioalue";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Plocha grafu";
+    Text[ hebrew ] = "DiagrammflÃ¤che";
+    Text[ hindi ] = "Chart Area";
+    Text[ slovak ] = "Plocha grafu";
+};
+String STR_DIAGRAM
+{
+    Text = "Diagramm" ;
+    Text [ ENGLISH ] = "Diagram" ;
+    Text [ dutch ] = "Diagram" ;
+    Text [ english_us ] = "Chart" ;
+    Text [ italian ] = "Diagramma" ;
+    Text [ spanish ] = "Diagrama" ;
+    Text [ french ] = "Diagramme" ;
+    Text [ swedish ] = "Diagram" ;
+    Text [ danish ] = "Diagram" ;
+    Text [ portuguese ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà";
+    Text[ polish ] = "Wykres";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí";
+    Text[ greek ] = "ÄéÜãñáììá";
+    Text[ korean ] = "ì°¨íŠ¸";
+    Text[ turkish ] = "Şema";
+    Text[ catalan ] = "Diagrama";
+    Text[ finnish ] = "Kaavio";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Graf";
+    Text[ hebrew ] = "â€®×ª×¨×©×™×â€¬";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ ";
+    Text[ slovak ] = "Graf";
+};
+String STR_DIAGRAM_WALL
+{
+    Text = "Diagrammwand" ;
+    Text [ ENGLISH ] = "Diagram Wall" ;
+    Text [ english_us ] = "Chart Wall" ;
+    Text [ italian ] = "Pareti del diagramma" ;
+    Text [ spanish ] = "Plano lateral" ;
+    Text [ french ] = "Paroi du diagramme" ;
+    Text [ dutch ] = "Diagramwand" ;
+    Text [ swedish ] = "Diagramvägg" ;
+    Text [ danish ] = "Diagramvæg" ;
+    Text [ portuguese ] = "Parede do gráfico" ;
+    Text [ portuguese_brazilian ] = "Parede do Gráfico" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨èƒŒæ™¯å¢™";
+    Text[ russian ] = "Îáëàñòü ïîñòğîåíèÿ äèàãğàììû";
+    Text[ polish ] = "Œciana wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®å£é¢";
+    Text[ chinese_traditional ] = "åœ–è¡¨èƒŒæ™¯ç‰†";
+    Text[ arabic ] = "ÌÏÇÑ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Ôïß÷ïò äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ì˜†ë©´";
+    Text[ turkish ] = "Şema duvarı";
+    Text[ catalan ] = "Pla lateral del diagrama";
+    Text[ finnish ] = "Kaavioseinä";
+    Text[ thai ] = "à¸œà¸™à¸±à¸‡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "StÄ›na grafu";
+    Text[ hebrew ] = "Diagrammwand";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤µà¥‰à¤²";
+    Text[ slovak ] = "Bok grafu";
+};
+String STR_DIAGRAM_FLOOR
+{
+    Text = "Diagrammboden" ;
+    Text [ ENGLISH ] = "Diagram Floor" ;
+    Text [ dutch ] = "Diagrambodem" ;
+    Text [ english_us ] = "Chart Floor" ;
+    Text [ italian ] = "Pavimento del diagramma" ;
+    Text [ spanish ] = "Base del diagrama" ;
+    Text [ french ] = "Plancher du diagramme" ;
+    Text [ swedish ] = "Diagramgolv" ;
+    Text [ danish ] = "Diagramgulv" ;
+    Text [ portuguese ] = "Base do gráfico" ;
+    Text [ portuguese_brazilian ] = "Piso do Gráfico" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨åŸºåº•";
+    Text[ russian ] = "Îñíîâàíèå äèàãğàììû";
+    Text[ polish ] = "Podstawa wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®åºŠé¢";
+    Text[ chinese_traditional ] = "åº§æ¨™è»¸";
+    Text[ arabic ] = "ÃÑÖíÉ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "ÄÜğåäï äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ë°‘ë©´";
+    Text[ turkish ] = "Şema tabanı";
+    Text[ catalan ] = "Base del diagrama";
+    Text[ finnish ] = "Kaavion perusta";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Pata grafu";
+    Text[ hebrew ] = "Diagrammboden";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤«à¥à¤²à¥‹à¤°";
+    Text[ slovak ] = "PÃ¤ta grafu";
+};
+String STR_DIAGRAM_X_AXIS
+{
+    Text = "X-Achse" ;
+    Text [ ENGLISH ] = "X-Axis" ;
+    Text [ english_us ] = "X axis" ;
+    Text [ italian ] = "Asse X" ;
+    Text [ spanish ] = "Eje X" ;
+    Text [ french ] = "Axe X" ;
+    Text [ dutch ] = "X-as" ;
+    Text [ swedish ] = "X-axel" ;
+    Text [ danish ] = "X-akse" ;
+    Text [ portuguese ] = "Eixo X" ;
+    Text [ portuguese_brazilian ] = "Eixo X" ;
+    Text[ chinese_simplified ] = "X è½´";
+    Text[ russian ] = "Îñü X";
+    Text[ polish ] = "Oœ X";
+    Text[ japanese ] = "Xè»¸";
+    Text[ chinese_traditional ] = "X-è»¸";
+    Text[ arabic ] = "ÇáãÍæÑ Ó";
+    Text[ greek ] = "¢îïíáò X";
+    Text[ korean ] = "X ì¶•";
+    Text[ turkish ] = "X ekseni";
+    Text[ catalan ] = "Eix X";
+    Text[ finnish ] = "X-akseli";
+    Text[ thai ] = "à¹à¸à¸™X ";
+    Text[ czech ] = "Osa X";
+    Text[ hebrew ] = "X-Achse";
+    Text[ hindi ] = "X à¤…à¤•à¥à¤·";
+    Text[ slovak ] = "Os X";
+};
+String STR_DIAGRAM_Y_AXIS
+{
+    Text = "Y-Achse" ;
+    Text [ ENGLISH ] = "Y-Axis" ;
+    Text [ english_us ] = "Y axis" ;
+    Text [ italian ] = "Asse Y" ;
+    Text [ spanish ] = "Eje Y" ;
+    Text [ french ] = "Axe Y" ;
+    Text [ dutch ] = "Y-as" ;
+    Text [ swedish ] = "Y-axel" ;
+    Text [ danish ] = "Y-akse" ;
+    Text [ portuguese ] = "Eixo Y" ;
+    Text [ portuguese_brazilian ] = "Eixo Y" ;
+    Text[ chinese_simplified ] = "Y è½´";
+    Text[ russian ] = "Îñü Y";
+    Text[ polish ] = "Oœ Y";
+    Text[ japanese ] = "Yè»¸";
+    Text[ chinese_traditional ] = "Y-è»¸";
+    Text[ arabic ] = "ÇáãÍæÑ Õ";
+    Text[ greek ] = "¢îïíáò Y";
+    Text[ korean ] = "Y ì¶•";
+    Text[ turkish ] = "Y ekseni";
+    Text[ catalan ] = "Eix Y";
+    Text[ finnish ] = "Y-akseli";
+    Text[ thai ] = "à¹à¸à¸™Y ";
+    Text[ czech ] = "Osa Y";
+    Text[ hebrew ] = "Y-Achse";
+    Text[ hindi ] = "Y à¤…à¤•à¥à¤·";
+    Text[ slovak ] = "Os Y";
+};
+String STR_DIAGRAM_Z_AXIS
+{
+    Text = "Z-Achse" ;
+    Text [ ENGLISH ] = "Z-Axis" ;
+    Text [ english_us ] = "Z axis" ;
+    Text [ italian ] = "Asse Z" ;
+    Text [ spanish ] = "Eje Z" ;
+    Text [ french ] = "Axe Z" ;
+    Text [ dutch ] = "Z-as" ;
+    Text [ swedish ] = "Z-axel" ;
+    Text [ danish ] = "Z-akse" ;
+    Text [ portuguese ] = "Eixo Z" ;
+    Text [ portuguese_brazilian ] = "Eixo Z" ;
+    Text[ chinese_simplified ] = "Z è½´æ•°å€¼";
+    Text[ russian ] = "Îñü Z";
+    Text[ polish ] = "Oœ Z";
+    Text[ japanese ] = "Zè»¸";
+    Text[ chinese_traditional ] = "Z-è»¸";
+    Text[ arabic ] = "ÇáãÍæÑ Ú";
+    Text[ greek ] = "¢îïíáò Z";
+    Text[ korean ] = "Z ì¶•";
+    Text[ turkish ] = "Z ekseni";
+    Text[ catalan ] = "Eix Z";
+    Text[ finnish ] = "Z-akseli";
+    Text[ thai ] = "à¹à¸à¸™Z ";
+    Text[ czech ] = "Osa Z";
+    Text[ hebrew ] = "Z-Achse";
+    Text[ hindi ] = "Z à¤…à¤•à¥à¤·";
+    Text[ slovak ] = "Os Z";
+};
+String STR_DIAGRAM_X_GRID_MAIN
+{
+    Text = "X-Hauptgitter" ;
+    Text [ ENGLISH ] = "Main X-Grid" ;
+    Text [ dutch ] = "X-hoofdraster" ;
+    Text [ english_us ] = "X axis main grid" ;
+    Text [ italian ] = "Griglia principale X" ;
+    Text [ spanish ] = "Cuadrícula principal X" ;
+    Text [ french ] = "Grille principale X" ;
+    Text [ swedish ] = "X-huvudgitter" ;
+    Text [ danish ] = "Overordnet X-aksegitter" ;
+    Text [ portuguese ] = "Grelha X principal" ;
+    Text [ portuguese_brazilian ] = "Grade principal do eixo X" ;
+    Text[ chinese_simplified ] = "X è½´ç½‘æ ¼";
+    Text[ russian ] = "Îñíîâíàÿ ñåòêà îñè X";
+    Text[ polish ] = "G³ówna siatka osi X";
+    Text[ japanese ] = "Xè»¸ä¸»ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "X-è»¸ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ ÑÆíÓíÉ Ó";
+    Text[ greek ] = "Êıñéï ğëİãìá Üîïíá ×";
+    Text[ korean ] = "X ì¶• ì£¼ ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "X ana kılavuz çizgileri";
+    Text[ catalan ] = "Graella principal de l'eix X";
+    Text[ finnish ] = "X-akselin pääruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸«à¸¥à¸±à¸X ";
+    Text[ czech ] = "HlavnÃ­ mÅ™Ã­Å¾ka osy X";
+    Text[ hebrew ] = "X-Hauptgitter";
+    Text[ hindi ] = "X à¤…à¤•à¥à¤· à¤•à¤¾ à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤œà¤¾à¤²";
+    Text[ slovak ] = "HlavnÃ¡ mrieÅ¾ka osi X";
+};
+String STR_DIAGRAM_Y_GRID_MAIN
+{
+    Text = "Y-Hauptgitter" ;
+    Text [ ENGLISH ] = "Main Y-Grid" ;
+    Text [ english_us ] = "Y main grid" ;
+    Text [ italian ] = "Griglia principale Y" ;
+    Text [ spanish ] = "Cuadrícula principal Y" ;
+    Text [ french ] = "Grille principale Y" ;
+    Text [ dutch ] = "Y-hoofdraster" ;
+    Text [ swedish ] = "Y-huvudgitter" ;
+    Text [ danish ] = "Overordnet Y-aksegitter" ;
+    Text [ portuguese ] = "Grelha Y principal" ;
+    Text [ portuguese_brazilian ] = "Grade principal do eixo Y" ;
+    Text[ chinese_simplified ] = "Y è½´ä¸»ç½‘æ ¼çº¿";
+    Text[ russian ] = "Îñíîâíàÿ ñåòêà îñè Y";
+    Text[ polish ] = "G³ówna siatka osi Y";
+    Text[ japanese ] = "Yè»¸ä¸»ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "Y-è»¸ä¸»ç¶²æ ¼ç·š";
+    Text[ arabic ] = "ÔÈßÉ ÑÆíÓíÉ Õ";
+    Text[ greek ] = "Êıñéï ğëİãìá Üîïíá Y";
+    Text[ korean ] = "Y ì£¼ ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "Y ana kılavuz çizgileri";
+    Text[ catalan ] = "Graella principal Y";
+    Text[ finnish ] = "Y-pääruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸«à¸¥à¸±à¸Y ";
+    Text[ czech ] = "HlavnÃ­ mÅ™Ã­Å¾ka osy Y";
+    Text[ hebrew ] = "Y-Hauptgitter";
+    Text[ hindi ] = "Y à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤œà¤¾à¤²";
+    Text[ slovak ] = "HlavnÃ¡ mrieÅ¾ka osi Y";
+};
+String STR_DIAGRAM_Z_GRID_MAIN
+{
+    Text = "Z-Hauptgitter" ;
+    Text [ ENGLISH ] = "Main Z-Grid" ;
+    Text [ english_us ] = "Z main grid" ;
+    Text [ italian ] = "Griglia principale Z" ;
+    Text [ spanish ] = "Cuadrícula principal Z" ;
+    Text [ french ] = "Grille principale Z" ;
+    Text [ dutch ] = "Z-hoofdraster" ;
+    Text [ swedish ] = "Z-huvudgitter" ;
+    Text [ danish ] = "Overordnet Z-aksegitter" ;
+    Text [ portuguese ] = "Grelha Z principal" ;
+    Text [ portuguese_brazilian ] = "Grade principal do eixo Z" ;
+    Text[ chinese_simplified ] = "Z è½´ä¸»ç½‘æ ¼çº¿";
+    Text[ russian ] = "Îñíîâíàÿ ñåòêà îñè Z";
+    Text[ polish ] = "G³ówna siatka osi Z";
+    Text[ japanese ] = "Zè»¸ä¸»ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "Z-è»¸ä¸»ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ ÑÆíÓíÉ Ú";
+    Text[ greek ] = "Êıñéï ğëİãìá Üîïíá Z";
+    Text[ korean ] = "Z ì£¼ ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "Z ana kılavuz çizgileri";
+    Text[ catalan ] = "Graella principal Z";
+    Text[ finnish ] = "Z-pääruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸«à¸¥à¸±à¸Z ";
+    Text[ czech ] = "HlavnÃ­ mÅ™Ã­Å¾ka osy Z";
+    Text[ hebrew ] = "Z-Hauptgitter";
+    Text[ hindi ] = "Z à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤œà¤¾à¤²";
+    Text[ slovak ] = "HlavnÃ¡ mrieÅ¾ka osi Z";
+};
+String STR_DIAGRAM_X_GRID_HELP
+{
+    Text = "X-Hilfsgitter" ;
+    Text [ ENGLISH ] = "Help X-Grid" ;
+    Text [ dutch ] = "X-hulpraster" ;
+    Text [ english_us ] = "Minor X Grid" ;
+    Text [ italian ] = "Griglia ausiliaria X" ;
+    Text [ spanish ] = "Cuadrícula auxiliar X" ;
+    Text [ french ] = "Grille auxiliaire X" ;
+    Text [ swedish ] = "X-stödgitter" ;
+    Text [ danish ] = "Underordnet X-aksegitter" ;
+    Text [ portuguese ] = "Grelha X auxiliar" ;
+    Text [ portuguese_brazilian ] = "Grade X segundária" ;
+    Text[ chinese_simplified ] = "X è½´æ¬¡ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ïğîìåæóòî÷íàÿ ñåòêà îñè X";
+    Text[ polish ] = "Pomocnicza siatka osi X";
+    Text[ japanese ] = "Xè»¸è£œåŠ©ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "X-æ¬¡ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ ãÓÇÚÏÉ Ó";
+    Text[ greek ] = "Âïçèçôéêü ğëİãìá ×";
+    Text[ korean ] = "X ë³´ì¡° ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "X yardımcı kılavuz çizgileri";
+    Text[ catalan ] = "Cuadrícula auxiliar X";
+    Text[ finnish ] = "X-apuruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸£à¸­à¸‡ X ";
+    Text[ czech ] = "VedlejÅ¡Ã­ mÅ™Ã­Å¾ka osy X";
+    Text[ hebrew ] = "X-Hilfsgitter";
+    Text[ hindi ] = "à¤›à¥‹à¤Ÿà¤¾ X à¤œà¤¾à¤²";
+    Text[ slovak ] = "VedÄ¾ajÅ¡ia mrieÅ¾ka osi X";
+};
+String STR_DIAGRAM_Y_GRID_HELP
+{
+    Text = "Y-Hilfsgitter" ;
+    Text [ ENGLISH ] = "Help Y-Grid" ;
+    Text [ english_us ] = "Y minor grid" ;
+    Text [ italian ] = "Griglia ausiliaria Y" ;
+    Text [ spanish ] = "Cuadrícula auxiliar Y" ;
+    Text [ french ] = "Grille auxiliaire Y" ;
+    Text [ dutch ] = "Y-hulpraster" ;
+    Text [ swedish ] = "Y-stödgitter" ;
+    Text [ danish ] = "Underordnet Y-aksegitter" ;
+    Text [ portuguese ] = "Grelha Y auxiliar" ;
+    Text [ portuguese_brazilian ] = "Grade Y segundária" ;
+    Text[ chinese_simplified ] = "Y è½´æ¬¡ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ïğîìåæóòî÷íàÿ ñåòêà îñè Y";
+    Text[ polish ] = "Pomocnicza siatka osi Y";
+    Text[ japanese ] = "Yè»¸è£œåŠ©ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "Y-æ¬¡ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ ãÓÇÚÏÉ Õ";
+    Text[ greek ] = "Âïçèçôéêü ğëİãìá Üîïíá Y";
+    Text[ korean ] = "Y ë³´ì¡° ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "Y yardımcı kılavuz çizgileri";
+    Text[ catalan ] = "Cuadrícula auxiliar Y";
+    Text[ finnish ] = "Y-apuruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸£à¸­à¸‡Y ";
+    Text[ czech ] = "VedlejÅ¡Ã­ mÅ™Ã­Å¾ka osy Y";
+    Text[ hebrew ] = "Y-Hilfsgitter";
+    Text[ hindi ] = "Y à¤›à¥‹à¤Ÿà¤¾ à¤œà¤¾à¤²";
+    Text[ slovak ] = "VedÄ¾ajÅ¡ia mrieÅ¾ka osi Y";
+};
+String STR_DIAGRAM_Z_GRID_HELP
+{
+    Text = "Z-Hilfsgitter" ;
+    Text [ ENGLISH ] = "Help Z-Grid" ;
+    Text [ english_us ] = "Z minor grid" ;
+    Text [ italian ] = "Griglia ausiliaria Z" ;
+    Text [ spanish ] = "Cuadrícula auxiliar Z" ;
+    Text [ french ] = "Grille auxiliaire Z" ;
+    Text [ dutch ] = "Z-hulpraster" ;
+    Text [ swedish ] = "Z-stödgitter" ;
+    Text [ danish ] = "Underordnet Z-aksegitter" ;
+    Text [ portuguese ] = "Grelha Z auxiliar" ;
+    Text [ portuguese_brazilian ] = "Grade Z segundária" ;
+    Text[ chinese_simplified ] = "Z è½´æ¬¡ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ïğîìåæóòî÷íàÿ ñåòêà îñè Z";
+    Text[ polish ] = "Pomocnicza siatka osi Z";
+    Text[ japanese ] = "Zè»¸è£œåŠ©ç›®ç››ç·š";
+    Text[ chinese_traditional ] = "Z-æ¬¡ç¶²æ ¼";
+    Text[ arabic ] = "ÔÈßÉ ãÓÇÚÏÉ Ú";
+    Text[ greek ] = "Âïçèçôéêü ğëİãìá Üîïíá Z";
+    Text[ korean ] = "Z ë³´ì¡° ëˆˆê¸ˆì„ ";
+    Text[ turkish ] = "Z yardımcı kılavuz çizgileri";
+    Text[ catalan ] = "Cuadrícula auxiliar Z";
+    Text[ finnish ] = "Z-apuruudukko";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¸£à¸­à¸‡Z ";
+    Text[ czech ] = "VedlejÅ¡Ã­ mÅ™Ã­Å¾ka osy Z";
+    Text[ hebrew ] = "Z-Hilfsgitter";
+    Text[ hindi ] = "Z à¤›à¥‹à¤Ÿà¤¾ à¤œà¤¾à¤²";
+    Text[ slovak ] = "VedÄ¾ajÅ¡ia mrieÅ¾ka osi Z";
+};
+String STR_DIAGRAM_ROW
+{
+    // $(ROW) can be a number or the caption of the row in quotes
+
+    Text = "Datenreihe $(ROW)" ;
+    Text [ english_us ] = "Data Series $(ROW)" ;
+    Text[ portuguese ] = "Série de dados $(ROW)";
+    Text[ russian ] = "Ğÿä äàííûõ $(ROW)";
+    Text[ greek ] = "ÃñáììŞ äåäïìİíùí $(ROW)";
+    Text[ dutch ] = "Gegevensreeks $(ROW)";
+    Text[ french ] = "Série de données $(ROW)";
+    Text[ spanish ] = "Serie de datos $(ROW)";
+    Text[ italian ] = "Serie di dati $(ROW)";
+    Text[ danish ] = "Dataserie $(ROW)";
+    Text[ swedish ] = "Dataserie $(ROW)";
+    Text[ polish ] = "Seria danych $(ROW)";
+    Text[ portuguese_brazilian ] = "Série de Dados $(ROW)";
+    Text[ japanese ] = "ç³»åˆ—$(ROW)";
+    Text[ korean ] = "ì—°ì† ë°ì´í„° $(ROW)";
+    Text[ chinese_simplified ] = "æ•°æ®ç»„ $(ROW)";
+    Text[ chinese_traditional ] = "è³‡æ–™æ¬„ $(ROW)";
+    Text[ arabic ] = "Õİ ÇáÈíÇäÇÊ $(ROW)";
+    Text[ turkish ] = "Veri dizisi $(ROW)";
+    Text[ catalan ] = "Sèrie de dades $(ROW)";
+    Text[ finnish ] = "Tietojoukot $(ROW)";
+    Text[ thai ] = "à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ $(ROW)";
+    Text[ czech ] = "DatovÃ¡ Å™ada $(ROW)";
+    Text[ hebrew ] = "Datenreihe $(ROW)";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ $(à¤ªà¤•à¥à¤¤à¤¿à¤‚)";
+    Text[ slovak ] = "DÃ¡tovÃ½ rad $(ROW)";
+};
+String STR_DIAGRAM_DESCRGROUP
+{
+    Text = "Datenbeschriftungen" ;
+    Text [ ENGLISH ] = "Data Descriptions" ;
+    Text [ english_us ] = "Data Labels" ;
+    Text [ italian ] = "Diciture dati" ;
+    Text [ spanish ] = "Etiqueta de datos" ;
+    Text [ french ] = "Étiquettes des données" ;
+    Text [ dutch ] = "Gegevenslabels" ;
+    Text [ swedish ] = "Dataetiketter" ;
+    Text [ danish ] = "Dataetiketter" ;
+    Text [ portuguese ] = "Rótulos para dados" ;
+    Text [ portuguese_brazilian ] = "Rótulos dos Dados" ;
+    Text[ chinese_simplified ] = "æ•°æ®æ ‡å¿—";
+    Text[ russian ] = "Ïîäïèñè äàííûõ";
+    Text[ polish ] = "Etykiety danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«";
+    Text[ chinese_traditional ] = "è³‡æ–™æ¨™ç±¤";
+    Text[ arabic ] = "ÚäÇæíä ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÅğéãñáöŞ äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸”";
+    Text[ turkish ] = "Veri etiketleri";
+    Text[ catalan ] = "Etiquetes de dades";
+    Text[ finnish ] = "Tietoselitteet";
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Popisky dat";
+    Text[ hebrew ] = "Datenbeschriftungen";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
+    Text[ slovak ] = "Popisy dÃ¡t";
+};
+String STR_DIAGRAM_DESCR_ROW
+{
+    Text = "Datenzeilen-Beschriftung" ;
+    Text [ ENGLISH ] = "Data Description" ;
+    Text [ english_us ] = "Data rows label" ;
+    Text [ italian ] = "Dicitura righe di dati" ;
+    Text [ spanish ] = "Etiqueta fila de datos" ;
+    Text [ french ] = "Étiquette de lignes de données" ;
+    Text [ dutch ] = "Rijlabels" ;
+    Text [ swedish ] = "Dataradetikett" ;
+    Text [ danish ] = "Datarækkeetiketter" ;
+    Text [ portuguese ] = "Legendar série de dados" ;
+    Text [ portuguese_brazilian ] = "Rótulo das linhas de dados" ;
+    Text[ chinese_simplified ] = "æ•°æ®è¡Œæ ‡å¿—";
+    Text[ russian ] = "Ïîäïèñü ñòğîêè äàííûõ";
+    Text[ polish ] = "Etykiety wierszy danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿è¡Œãƒ©ãƒ™ãƒ«";
+    Text[ chinese_traditional ] = "æ•¸æ“šåˆ—æ¨™ç±¤";
+    Text[ arabic ] = "ÚäæÇä Õİæİ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÅğéãñáöŞ ãñáììşí äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° í–‰ ë ˆì´ë¸”";
+    Text[ turkish ] = "Veri satırı etiketi";
+    Text[ catalan ] = "Etiqueta de les files de dades";
+    Text[ finnish ] = "Tietorivien selite";
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹à¸–à¸§à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Popisek Å™Ã¡dku dat";
+    Text[ hebrew ] = "Datenzeilen-Beschriftung";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¤¾ à¤²à¥‡à¤¬à¤¿à¤²";
+    Text[ slovak ] = "Popisok riadkov dÃ¡t";
+};
+String STR_DIAGRAM_DESCR_COL
+{
+    Text = "Datenspalten-Beschriftung" ;
+    Text [ ENGLISH ] = "Data Description" ;
+    Text [ dutch ] = "Kolomlabels" ;
+    Text [ english_us ] = "Data columns label" ;
+    Text [ italian ] = "Dicitura colonne di dati" ;
+    Text [ spanish ] = "Etiqueta de columnas de datos" ;
+    Text [ french ] = "Étiquette de colonnes de données" ;
+    Text [ swedish ] = "Datakolumnetikett" ;
+    Text [ danish ] = "Datakolonneetiketter" ;
+    Text [ portuguese ] = "Rótulos para colunas de dados" ;
+    Text [ portuguese_brazilian ] = "Rótulo das colunas de dados" ;
+    Text[ chinese_simplified ] = "æ•°æ®åˆ—æ ‡å¿—";
+    Text[ russian ] = "Ïîäïèñü ñòîëáöà äàííûõ";
+    Text[ polish ] = "Etykiety kolumn danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿åˆ—ãƒ©ãƒ™ãƒ«";
+    Text[ chinese_traditional ] = "è³‡æ–™åˆ—æ¨™ç±¤";
+    Text[ arabic ] = "ÚäæÇä ÃÚãÏÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÅğéãñáöŞ óôçëşí äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° ì—´ ë ˆì´ë¸”";
+    Text[ turkish ] = "Veri sütunü etiketi";
+    Text[ catalan ] = "Etiqueta de les columnes de dades";
+    Text[ finnish ] = "Tietosarakkeiden selite";
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Popisky sloupcÅ¯ dat";
+    Text[ hebrew ] = "Datenspalten-Beschriftung";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¸à¥à¤¤à¤‚à¤­à¥‹à¤‚ à¤•à¤¾ à¤²à¥‡à¤¬à¤¿à¤²";
+    Text[ slovak ] = "Popisok stÄºpcov dÃ¡t";
+};
+String STR_LEGEND
+{
+    Text = "Legende" ;
+    Text [ ENGLISH ] = "Legend" ;
+    Text [ english_us ] = "Legend" ;
+    Text [ italian ] = "Legenda" ;
+    Text [ spanish ] = "Leyenda" ;
+    Text [ french ] = "Légende" ;
+    Text [ dutch ] = "Legenda" ;
+    Text [ swedish ] = "Förklaring" ;
+    Text [ danish ] = "Forklaring" ;
+    Text [ portuguese ] = "Legenda" ;
+    Text [ portuguese_brazilian ] = "Legenda" ;
+    Text[ chinese_simplified ] = "å›¾ä¾‹";
+    Text[ russian ] = "Ëåãåíäà";
+    Text[ polish ] = "Legenda";
+    Text[ japanese ] = "å‡¡ä¾‹";
+    Text[ chinese_traditional ] = "åœ–ä¾‹";
+    Text[ arabic ] = "ãİÊÇÍ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Õğüìíçìá";
+    Text[ korean ] = "ë²”ë¡€";
+    Text[ turkish ] = "Açıklama";
+    Text[ catalan ] = "Llegenda";
+    Text[ finnish ] = "Selite";
+    Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
+    Text[ czech ] = "Legenda";
+    Text[ hebrew ] = "Legende";
+    Text[ hindi ] = "à¤²à¥‡à¤œà¥‡à¤¨à¥à¤¡à¤¼";
+    Text[ slovak ] = "Legenda";
+};
+String STR_LEGEND_SYMBOL_ROW
+{
+    Text = "Datenreihen-Symbol" ;
+    Text [ ENGLISH ] = "Data Row Symbol" ;
+    Text [ english_us ] = "Data series symbol" ;
+    Text [ italian ] = "Simbolo serie di dati" ;
+    Text [ spanish ] = "Símbolo de series de datos" ;
+    Text [ french ] = "Symbole de série de données" ;
+    Text [ dutch ] = "Gegevensreekssymbool" ;
+    Text [ swedish ] = "Dataseriesymbol" ;
+    Text [ danish ] = "Dataserie-symbol" ;
+    Text [ portuguese ] = "Símbolo de séries de dados" ;
+    Text [ portuguese_brazilian ] = "Símbolo da série de dados" ;
+    Text[ chinese_simplified ] = "æ•°æ®è¡Œå›¾æ ‡";
+    Text[ russian ] = "Ñèìâîë ñòğîêè äàííûõ";
+    Text[ polish ] = "Symbol serii danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—ã®ã‚·ãƒ³ãƒœãƒ«";
+    Text[ chinese_traditional ] = "è³‡æ–™æ¬„åœ–ç¤º";
+    Text[ arabic ] = "ÑãÒ Õİæİ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "Óıìâïëï óåéñşí äåäïìİíùí";
+    Text[ korean ] = "ì—°ì† ë°ì´í„° ê¸°í˜¸";
+    Text[ turkish ] = "Veri dizisi simgesi";
+    Text[ catalan ] = "Símbol de sèries de dades";
+    Text[ finnish ] = "Tietojoukon symboli";
+    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Symbol datovÃ© Å™ady";
+    Text[ hebrew ] = "Datenreihen-Symbol";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ à¤¸à¤‚à¤•à¥‡à¤¤";
+    Text[ slovak ] = "Symbol dÃ¡tovÃ©ho radu";
+};
+String STR_LEGEND_SYMBOL_COL
+{
+    Text = "Datenspalten-Symbol" ;
+    Text [ ENGLISH ] = "Data Column Symbol" ;
+    Text [ dutch ] = "Kolomsymbool" ;
+    Text [ english_us ] = "Data column symbol" ;
+    Text [ italian ] = "Simbolo dati colonna" ;
+    Text [ spanish ] = "Símbolo de columnas de datos" ;
+    Text [ french ] = "Symbole de colonne de données" ;
+    Text [ swedish ] = "Datakolumnsymbol" ;
+    Text [ danish ] = "Datakolonnesymbol" ;
+    Text [ portuguese ] = "Símbolo de colunas de dados" ;
+    Text [ portuguese_brazilian ] = "Símbolo da coluna de dados" ;
+    Text[ chinese_simplified ] = "æ•°æ®åˆ—å›¾æ ‡";
+    Text[ russian ] = "Ñèìâîë ñòîëáöà äàííûõ";
+    Text[ polish ] = "Symbol kolumny danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿åˆ—ã®ã‚·ãƒ³ãƒœãƒ«";
+    Text[ chinese_traditional ] = "è³‡æ–™åˆ—åœ–ç¤º";
+    Text[ arabic ] = "ÑãÒ ÃÚãÏÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "Óıìâïëï óôçëşí äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° ì—´ ê¸°í˜¸";
+    Text[ turkish ] = "Veri sütunu simgesi";
+    Text[ catalan ] = "Símbol de columnes de dades";
+    Text[ finnish ] = "Tietosarakkeen symboli";
+    Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Symbol sloupce dat";
+    Text[ hebrew ] = "Datenspalten-Symbol";
+    Text[ hindi ] = "Data column symbol";
+    Text[ slovak ] = "Symbol stÄºpca dÃ¡t";
+};
+
+String STR_MARKED
+{
+    // $(OBJ) is any chart object, like 'x axis', 'data point', 'grid', etc.
+    // this string is for the status bar.
+    Text = "$(OBJ) markiert" ;
+    Text [ english_us ] = "$(OBJ) selected" ;
+    Text[ portuguese ] = "$(OBJ) marcado(s)";
+    Text[ russian ] = "$(OBJ)";
+    Text[ greek ] = "ÓŞìáíóç $(OBJ)";
+    Text[ dutch ] = "$(OBJ) gemarkeerd";
+    Text[ french ] = "$(OBJ) marqué";
+    Text[ spanish ] = "$(OBJ) marcado";
+    Text[ italian ] = "$(OBJ) evidenziato";
+    Text[ danish ] = "$(OBJ) markeret";
+    Text[ swedish ] = "$(OBJ) markerat";
+    Text[ polish ] = "Zaznaczono $(OBJ) ";
+    Text[ portuguese_brazilian ] = "$(OBJ) selecionado";
+    Text[ japanese ] = "$(OBJ)é¸æŠ";
+    Text[ korean ] = "$(OBJ) ì„ íƒí‘œì‹œë¨";
+    Text[ chinese_simplified ] = "$(OBJ) è¢«é€‰ä¸­";
+    Text[ chinese_traditional ] = "$(OBJ) å·²è¢«é¸å–";
+    Text[ arabic ] = "$(OBJ)ãÍÏÏ";
+    Text[ turkish ] = "$(OBJ) işaretli";
+    Text[ catalan ] = "$(OBJ) seleccionat";
+    Text[ finnish ] = "$(OBJ) valittu";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸ $(OBJ) ";
+    Text[ czech ] = "VybrÃ¡no: $(OBJ)";
+    Text[ hebrew ] = "$(OBJ) markiert";
+    Text[ hindi ] = "$(OBJ) à¤•à¥‹ à¤šà¥à¤¨à¤¾ à¤¹à¥ˆ";
+    Text[ slovak ] = "VybranÃ©: $(OBJ)";
+};
+
+String STR_UNDO_DRAGDROP
+{
+    Text = "Drag&Drop" ;
+    Text [ ENGLISH ] = "Drag&Drop" ;
+    Text [ norwegian ] = "Dra&Slipp" ;
+    Text [ italian ] = "Drag&Drop" ;
+    Text [ portuguese_brazilian ] = "Arrastar e Soltar" ;
+    Text [ portuguese ] = "Arrastar&Largar" ;
+    Text [ finnish ] = "Vedä ja pudota" ;
+    Text [ danish ] = "Træk-og-slip" ;
+    Text [ french ] = "Glisser-Déposer" ;
+    Text [ swedish ] = "Dra-och-släpp" ;
+    Text [ dutch ] = "Slepen & neerzetten" ;
+    Text [ spanish ] = "Arrastrar y colocar" ;
+    Text [ english_us ] = "Drag and Drop" ;
+    Text[ chinese_simplified ] = "æ‹–æ”¾";
+    Text[ russian ] = "Ïåğåòàñêèâàíèå";
+    Text[ polish ] = "Przeci¹gnij i upuœæ";
+    Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚¯ & ãƒ‰ãƒ­ãƒƒãƒ—";
+    Text[ chinese_traditional ] = "æ‹–æ›³";
+    Text[ arabic ] = "ÓÍÈ æ ÅÓŞÇØ";
+    Text[ greek ] = "Ìåôáêßíçóç êáé Ağüèåóç";
+    Text[ korean ] = "ëŒì–´ ë†“ê¸°";
+    Text[ turkish ] = "Sürükle ve bırak";
+    Text[ catalan ] = "Arrossega i deixa anar";
+    Text[ thai ] = "à¸¥à¸²à¸à¹à¸¥à¸°à¸›à¸¥à¹ˆà¸­à¸¢";
+    Text[ czech ] = "TÃ¡hni a pusÅ¥";
+    Text[ hebrew ] = "Drag&Drop";
+    Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¤¾ à¤”à¤° à¤—à¤¿à¤°à¤¾à¤¨à¤¾";
+    Text[ slovak ] = "Å¤ahaj a pusÅ¥";
+};
+String STR_UNDO_DIAGRAM_LINE
+{
+    Text = "Linenart" ;
+    Text [ ENGLISH ] = "Linetype" ;
+    Text [ dutch ] = "Lijntype" ;
+    Text [ english_us ] = "Line Type" ;
+    Text [ italian ] = "Tipo di linea" ;
+    Text [ spanish ] = "Tipo de línea" ;
+    Text [ french ] = "Type de ligne" ;
+    Text [ swedish ] = "Linjetyp" ;
+    Text [ danish ] = "Linjetype" ;
+    Text [ portuguese ] = "Tipo de linha" ;
+    Text [ portuguese_brazilian ] = "Tipo da Linha" ;
+    Text[ chinese_simplified ] = "çº¿æ¡ç±»å‹";
+    Text[ russian ] = "Òèï ëèíèè";
+    Text[ polish ] = "Typ linii";
+    Text[ japanese ] = "ç·šã®ã‚¹ã‚¿ã‚¤ãƒ«";
+    Text[ chinese_traditional ] = "ç·šæ¢é¡å‹";
+    Text[ arabic ] = "äæÚ ÇáÎØæØ";
+    Text[ greek ] = "Ôığïò ãñáììŞò";
+    Text[ korean ] = "ì„  í˜•íƒœ";
+    Text[ turkish ] = "Çizgi türü";
+    Text[ catalan ] = "Tipus de línia";
+    Text[ finnish ] = "Viivatyyppi";
+    Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸šà¸£à¸£à¸—à¸±à¸”";
+    Text[ czech ] = "Typ ÄÃ¡ry";
+    Text[ hebrew ] = "Linenart";
+    Text[ hindi ] = "Line Type";
+    Text[ slovak ] = "Typ Äiary";
+};
+String STR_UNDO_CUT
+{
+    Text = "Ausschneiden" ;
+    Text [ ENGLISH ] = "Cut" ;
+    Text [ norwegian ] = "Cut" ;
+    Text [ italian ] = "Taglia" ;
+    Text [ portuguese_brazilian ] = "Cortar" ;
+    Text [ portuguese ] = "Cortar" ;
+    Text [ finnish ] = "Leikkaa" ;
+    Text [ danish ] = "Klip" ;
+    Text [ french ] = "Couper" ;
+    Text [ swedish ] = "Klipp ut" ;
+    Text [ dutch ] = "Knippen" ;
+    Text [ spanish ] = "Cortar" ;
+    Text [ english_us ] = "Cut" ;
+    Text[ chinese_simplified ] = "å‰ªåˆ‡";
+    Text[ russian ] = "Âûğåçàòü";
+    Text[ polish ] = "Wytnij";
+    Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š";
+    Text[ chinese_traditional ] = "å‰ªä¸‹";
+    Text[ arabic ] = "ŞÕ";
+    Text[ greek ] = "ÁğïêïğŞ";
+    Text[ korean ] = "ì˜ë¼ë‚´ê¸°";
+    Text[ turkish ] = "Kes";
+    Text[ catalan ] = "Retalla";
+    Text[ thai ] = "à¸•à¸±à¸”";
+    Text[ czech ] = "Vyjmout";
+    Text[ hebrew ] = "â€®×’×–×™×¨×”â€¬";
+    Text[ hindi ] = "à¤•à¤¾à¤Ÿà¥‹";
+    Text[ slovak ] = "VybraÅ¥";
+};
+String STR_UNDO_DELETE
+{
+    Text = "Löschen" ;
+    Text [ ENGLISH ] = "Delete" ;
+    Text [ english_us ] = "Delete" ;
+    Text [ italian ] = "Elimina" ;
+    Text [ spanish ] = "Borrar" ;
+    Text [ french ] = "Supprimer" ;
+    Text [ dutch ] = "Wissen" ;
+    Text [ swedish ] = "Radera" ;
+    Text [ danish ] = "Slet" ;
+    Text [ portuguese ] = "Eliminar" ;
+    Text [ portuguese_brazilian ] = "Excluir" ;
+    Text[ chinese_simplified ] = "åˆ é™¤";
+    Text[ russian ] = "Óäàëèòü";
+    Text[ polish ] = "Usuñ";
+    Text[ japanese ] = "å‰Šé™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤";
+    Text[ arabic ] = "ÍĞİ";
+    Text[ greek ] = "ÄéáãñáöŞ";
+    Text[ korean ] = "ì‚­ì œ";
+    Text[ turkish ] = "Sil";
+    Text[ catalan ] = "Suprimeix";
+    Text[ finnish ] = "Poista";
+    Text[ thai ] = "à¸¥à¸š";
+    Text[ czech ] = "Smazat";
+    Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+    Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
+    Text[ slovak ] = "ZmazaÅ¥";
+};
+String STR_UNDO_DIAGRAM_DATA
+{
+    Text = "Diagrammdaten bearbeiten" ;
+    Text [ ENGLISH ] = "Modify diagram data" ;
+    Text [ english_us ] = "Edit chart data" ;
+    Text [ italian ] = "Modifica dati di diagramma" ;
+    Text [ spanish ] = "Editar datos del diagrama" ;
+    Text [ french ] = "Éditer les données du diagramme" ;
+    Text [ dutch ] = "Diagramgegevens bewerken" ;
+    Text [ swedish ] = "Redigera diagramdata" ;
+    Text [ danish ] = "Rediger diagramdata" ;
+    Text [ portuguese ] = "Editar dados do gráfico" ;
+    Text [ portuguese_brazilian ] = "Editar dados do gráfico" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾è¡¨æ•°æ®";
+    Text[ russian ] = "Ïğàâêà äàííûõ äèàãğàììû";
+    Text[ polish ] = "Edytuj dane wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ• ãƒ‡ãƒ¼ã‚¿ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åœ–è¡¨è³‡æ–™";
+    Text[ arabic ] = "ÊÍÑíÑ ÈíÇäÇÊ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá äåäïìİíùí äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ë°ì´í„° í¸ì§‘";
+    Text[ turkish ] = "Şema verileri düzenle";
+    Text[ catalan ] = "Edita les dades del diagrama";
+    Text[ finnish ] = "Muokkaa kaaviotietoja";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Upravit data grafu";
+    Text[ hebrew ] = "Diagrammdaten bearbeiten";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ dÃ¡ta grafu";
+};
+String STR_UNDO_EDIT_TITLE
+{
+    Text = "Titel editieren" ;
+    Text [ ENGLISH ] = "Edit Title" ;
+    Text [ english_us ] = "Edit title" ;
+    Text [ italian ] = "Editare titolo" ;
+    Text [ spanish ] = "Editar título" ;
+    Text [ french ] = "Éditer le titre" ;
+    Text [ dutch ] = "Titel bewerken" ;
+    Text [ swedish ] = "Redigera rubrik" ;
+    Text [ danish ] = "Rediger titel" ;
+    Text [ portuguese ] = "Editar título" ;
+    Text [ portuguese_brazilian ] = "Editar título" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ ‡é¢˜";
+    Text[ russian ] = "Ïğàâêà çàãîëîâêà";
+    Text[ polish ] = "Edytuj tytu³";
+    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ¨™é¡Œ";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÚäæÇä";
+    Text[ greek ] = "Åğåîåñãáóßá ôßôëïõ";
+    Text[ korean ] = "ì œëª© í¸ì§‘";
+    Text[ turkish ] = "Başlık düzenle";
+    Text[ catalan ] = "Edita títol";
+    Text[ finnish ] = "Muokkaa otsikkoa";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "Upravit titul";
+    Text[ hebrew ] = "Titel editieren";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ nadpis";
+};
+String STR_UNDO_STATISTICS
+{
+    Text = "Statistik" ;
+    Text [ ENGLISH ] = "Statistics" ;
+    Text [ english_us ] = "Statistics" ;
+    Text [ italian ] = "Statistiche" ;
+    Text [ spanish ] = "Estadística" ;
+    Text [ french ] = "Statistiques" ;
+    Text [ dutch ] = "Statistiek" ;
+    Text [ swedish ] = "Statistik" ;
+    Text [ danish ] = "Statistik" ;
+    Text [ portuguese ] = "Estatística" ;
+    Text [ portuguese_brazilian ] = "Estatísticas" ;
+    Text[ chinese_simplified ] = "ç»Ÿè®¡";
+    Text[ russian ] = "Ñòàòèñòèêà";
+    Text[ polish ] = "Statystyka";
+    Text[ japanese ] = "è©³ç´°æƒ…å ±";
+    Text[ chinese_traditional ] = "çµ±è¨ˆ";
+    Text[ arabic ] = "ÅÍÕÇÆíÇÊ";
+    Text[ greek ] = "ÓôáôéóôéêÜ";
+    Text[ korean ] = "í†µê³„";
+    Text[ turkish ] = "İstatistik";
+    Text[ catalan ] = "Estadística";
+    Text[ finnish ] = "Tilastotiedot";
+    Text[ thai ] = "à¸ªà¸–à¸´à¸•à¸´";
+    Text[ czech ] = "Statistika";
+    Text[ hebrew ] = "×¡×˜×˜×™×¡×˜×™×§×•×ª";
+    Text[ hindi ] = "à¤…à¤à¤•à¤¡à¤¼à¥‡";
+    Text[ slovak ] = "Å tatistika";
+};
+String STR_UNDO_INSERT_TITLE
+{
+    Text = "Titel einfügen" ;
+    Text [ ENGLISH ] = "Insert Title" ;
+    Text [ norwegian ] = "Sett inn Tittel" ;
+    Text [ italian ] = "Inserisci titolo" ;
+    Text [ portuguese_brazilian ] = "Inserir título" ;
+    Text [ portuguese ] = "Inserir título" ;
+    Text [ finnish ] = "Lisää otsikko" ;
+    Text [ danish ] = "Indsæt titel" ;
+    Text [ french ] = "Insérer un titre" ;
+    Text [ swedish ] = "Infoga rubrik" ;
+    Text [ dutch ] = "Titel invoegen" ;
+    Text [ spanish ] = "Insertar título" ;
+    Text [ english_us ] = "Insert title" ;
+    Text[ chinese_simplified ] = "æ’å…¥æ ‡é¢˜";
+    Text[ russian ] = "Âñòàâèòü ëåãåíäó";
+    Text[ polish ] = "Wstaw tytu³";
+    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥æ¨™é¡Œ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÚäæÇä";
+    Text[ greek ] = "ÅéóáãùãŞ ôßôëïõ";
+    Text[ korean ] = "ì œëª© ì‚½ì…";
+    Text[ turkish ] = "Başlık ekle";
+    Text[ catalan ] = "Insereix títol";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "VloÅ¾it titulek";
+    Text[ hebrew ] = "Titel einfÃ¼gen";
+    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤• à¤œà¥‹à¤¡à¤¼à¥‹";
+    Text[ slovak ] = "VloÅ¾iÅ¥ titulok";
+};
+String STR_UNDO_INSERT_LEGEND
+{
+    Text = "Legende einfügen" ;
+    Text [ ENGLISH ] = "Insert legend" ;
+    Text [ norwegian ] = "Setter inn tegnforklaring" ;
+    Text [ italian ] = "Inserisci legenda" ;
+    Text [ portuguese_brazilian ] = "Inserir legenda" ;
+    Text [ portuguese ] = "Inserir legenda" ;
+    Text [ finnish ] = "Lisää selite" ;
+    Text [ danish ] = "Indsæt forklaring" ;
+    Text [ french ] = "Insérer une légende" ;
+    Text [ swedish ] = "Infoga förklaring" ;
+    Text [ dutch ] = "Legenda invoegen" ;
+    Text [ spanish ] = "Insertar leyenda" ;
+    Text [ english_us ] = "Insert legend" ;
+    Text[ chinese_simplified ] = "æ’å…¥å›¾ä¾‹";
+    Text[ russian ] = "Âñòàâèòü ëåãåíäó";
+    Text[ polish ] = "Wstaw legendê";
+    Text[ japanese ] = "å‡¡ä¾‹ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥åœ–ä¾‹";
+    Text[ arabic ] = "ÅÏÑÇÌ ãİÊÇÍ ÑÓã ÈíÇäí";
+    Text[ greek ] = "ÅéóáãùãŞ õğïìíŞìáôïò";
+    Text[ korean ] = "ë²”ë¡€ ì‚½ì…";
+    Text[ turkish ] = "Açıklama ekle";
+    Text[ catalan ] = "Insereix una llegenda";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
+    Text[ czech ] = "VloÅ¾it legendu";
+    Text[ hebrew ] = "Legende einfÃ¼gen";
+    Text[ hindi ] = "à¤²à¥‡à¤œà¤¨à¥à¤¡ à¤œà¥‹à¤¡à¤¼à¥‹";
+    Text[ slovak ] = "VloÅ¾iÅ¥ legendu";
+};
+String STR_UNDO_INSERT_DESCR
+{
+    Text = "Datenbeschriftung einfügen" ;
+    Text [ ENGLISH ] = "Insert data description" ;
+    Text [ norwegian ] = "Setter inn data beskrivelse" ;
+    Text [ italian ] = "Inserisci dicitura dati" ;
+    Text [ portuguese_brazilian ] = "Inserir rótulo dos dados" ;
+    Text [ portuguese ] = "Inserir legenda para dados" ;
+    Text [ finnish ] = "Lisää tietoselite" ;
+    Text [ danish ] = "Indsæt dataetiket" ;
+    Text [ french ] = "Insérer des étiquettes de données" ;
+    Text [ swedish ] = "Infoga dataetikett" ;
+    Text [ dutch ] = "Gegevenslabels invoegen" ;
+    Text [ spanish ] = "Insertar etiqueta de datos" ;
+    Text [ english_us ] = "Insert data label" ;
+    Text[ chinese_simplified ] = "æ’å…¥æ•°æ®æ ‡å¿—";
+    Text[ russian ] = "Âñòàâèòü ïîäïèñü äàííûõ";
+    Text[ polish ] = "Wstaw etykietê danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ©ãƒ™ãƒ«ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™æ¨™ç±¤";
+    Text[ arabic ] = "ÅÏÑÇÌ ÚäæäÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÅéóáãùãŞ åğéãñáöŞò äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° ë ˆì´ë¸” ì‚½ì…";
+    Text[ turkish ] = "Veri etiketi ekle";
+    Text[ catalan ] = "Insereix l'etiqueta de les dades";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "VloÅ¾it popis dat";
+    Text[ hebrew ] = "Datenbeschriftung einfÃ¼gen";
+    Text[ hindi ] = "Insert data label";
+    Text[ slovak ] = "VloÅ¾iÅ¥ dÃ¡tovÃ© znaÄky";
+};
+String STR_UNDO_INSERT_AXIS
+{
+    Text = "Achsen einfügen" ;
+    Text [ ENGLISH ] = "Insert axes" ;
+    Text [ english_us ] = "Insert axes" ;
+    Text[ portuguese ] = "Inserir eixos";
+    Text[ russian ] = "Âñòàâèòü îñè";
+    Text[ greek ] = "ÅéóáãùãŞ áîüíùí";
+    Text[ dutch ] = "Assen invoegen";
+    Text[ french ] = "Insérer des axes";
+    Text[ spanish ] = "Insertar ejes";
+    Text[ italian ] = "Inserisci assi";
+    Text[ danish ] = "Indsæt akser";
+    Text[ swedish ] = "Infoga axlar";
+    Text[ polish ] = "Wstaw osie";
+    Text[ portuguese_brazilian ] = "Inserir eixos";
+    Text[ japanese ] = "è»¸ã¨ç›®ç››ç·šã®æŒ¿å…¥";
+    Text[ korean ] = "ì¶• ì‚½ì…";
+    Text[ chinese_simplified ] = "æ’å…¥è½´";
+    Text[ chinese_traditional ] = "æ’å…¥è»¸";
+    Text[ arabic ] = "ÅÏÑÇÌ ãÍÇæÑ";
+    Text[ turkish ] = "Eksen ekle";
+    Text[ catalan ] = "Insereix els eixos";
+    Text[ finnish ] = "Lisää akselit";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸à¸™";
+    Text[ czech ] = "VloÅ¾it osy";
+    Text[ hebrew ] = "Achsen einfÃ¼gen";
+    Text[ hindi ] = "Insert axes";
+    Text[ slovak ] = "VloÅ¾iÅ¥ osi";
+};
+String STR_UNDO_INSERT_GRID
+{
+    Text = "Gitter einfügen" ;
+    Text [ ENGLISH ] = "Insert grids" ;
+    Text [ english_us ] = "Insert grids" ;
+    Text[ portuguese ] = "Inserir grelhas";
+    Text[ russian ] = "Âñòàâèòü ñåòêó";
+    Text[ greek ] = "ÅéóáãùãŞ ğëİãìáôïò";
+    Text[ dutch ] = "Raster invoegen";
+    Text[ french ] = "Insérer des grilles";
+    Text[ spanish ] = "Insertar cuadrículas";
+    Text[ italian ] = "Inserisci griglie";
+    Text[ danish ] = "Indsæt gitre";
+    Text[ swedish ] = "Infoga gitter";
+    Text[ polish ] = "Wstaw siatki";
+    Text[ portuguese_brazilian ] = "Inserir grades";
+    Text[ japanese ] = "ç›®ç››ç·šã®æŒ¿å…¥";
+    Text[ korean ] = "ëˆˆê¸ˆì„  ì‚½ì…";
+    Text[ chinese_simplified ] = "æ’å…¥ç½‘æ ¼çº¿";
+    Text[ chinese_traditional ] = "æ’å…¥ç¶²æ ¼";
+    Text[ arabic ] = "ÅÏÑÇÌ ÔÈßÇÊ";
+    Text[ turkish ] = "Kılavuz ekle";
+    Text[ catalan ] = "Insereix les graelles";
+    Text[ finnish ] = "Lisää ruudukot";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "VloÅ¾it mÅ™Ã­Å¾ky";
+    Text[ hebrew ] = "Gitter einfÃ¼gen";
+    Text[ hindi ] = "Insert grids";
+    Text[ slovak ] = "VloÅ¾iÅ¥ mrieÅ¾ky";
+};
+String STR_UNDO_DATA_ROW
+{
+    Text = "Datenreihe bearbeiten" ;
+    Text [ ENGLISH ] = "Modify dataline" ;
+    Text [ norwegian ] = "Endrer datalinje" ;
+    Text [ italian ] = "Modifica serie di dati" ;
+    Text [ portuguese_brazilian ] = "Editar série de dados" ;
+    Text [ portuguese ] = "Editar linha de dados" ;
+    Text [ finnish ] = "Muokkaa tietojoukkoja" ;
+    Text [ danish ] = "Rediger dataserie" ;
+    Text [ french ] = "Éditer la série de données" ;
+    Text [ swedish ] = "Redigera dataserie" ;
+    Text [ dutch ] = "Gegevensreeks wijzigen" ;
+    Text [ spanish ] = "Editar serie de datos" ;
+    Text [ english_us ] = "Edit data series" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ•°æ®ç»„";
+    Text[ russian ] = "Ïğàâêà ğÿäà äàííûõ";
+    Text[ polish ] = "Edytuj seriê danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯è³‡æ–™æ¬„";
+    Text[ arabic ] = "ÊÍÑíÑ Õİ ÈíÇäÇÊ";
+    Text[ greek ] = "Åğåîåñãáóßá óåéñÜò äåäïìİíùí";
+    Text[ korean ] = "ì—°ì† ë°ì´í„° í¸ì§‘";
+    Text[ turkish ] = "Veri dizisi düzenle";
+    Text[ catalan ] = "Edita sèrie de dades";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Upravit datovou Å™adu";
+    Text[ hebrew ] = "Datenreihe bearbeiten";
+    Text[ hindi ] = "à¤¡à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ dÃ¡tovÃ½ rad";
+};
+String STR_UNDO_DATA_POINT
+{
+    Text = "Datenpunkt bearbeiten" ;
+    Text [ ENGLISH ] = "Modify datapoint" ;
+    Text [ norwegian ] = "Endrer datapunkt" ;
+    Text [ italian ] = "Modifica punto dati" ;
+    Text [ portuguese_brazilian ] = "Editar ponto dos dados" ;
+    Text [ portuguese ] = "Editar ponto de dados" ;
+    Text [ finnish ] = "Muokkaa arvopistettä" ;
+    Text [ danish ] = "Rediger datapunkt" ;
+    Text [ french ] = "Éditer le point de données" ;
+    Text [ swedish ] = "Redigera datapunkt" ;
+    Text [ dutch ] = "Gegevenspunt bewerken" ;
+    Text [ spanish ] = "Editar punto de datos" ;
+    Text [ english_us ] = "Edit data point" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ•°æ®ç‚¹";
+    Text[ russian ] = "Ïğàâêà òî÷êè äàííûõ";
+    Text[ polish ] = "Edytuj punkt danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯è³‡æ–™é»";
+    Text[ arabic ] = "ÊÍÑíÑ äŞØÉ ÈíÇäÇÊ";
+    Text[ greek ] = "Åğåîåñãáóßá óçìåßïõ äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° í¬ì¸íŠ¸ í¸ì§‘";
+    Text[ turkish ] = "Veri noktası düzenle";
+    Text[ catalan ] = "Edita el punt de dades";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Upravit datovÃ½ bod";
+    Text[ hebrew ] = "Datenpunkt bearbeiten";
+    Text[ hindi ] = "à¤¡à¥‰à¤Ÿà¤¾ à¤¬à¤¿à¤¨à¥à¤¦à¥ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ dÃ¡tovÃ½ bod";
+};
+String STR_UNDO_TITLE
+{
+    Text = "Titel bearbeiten" ;
+    Text [ ENGLISH ] = "Modify title" ;
+    Text [ norwegian ] = "Endrer tittel" ;
+    Text [ italian ] = "Modifica titolo" ;
+    Text [ portuguese_brazilian ] = "Editar título" ;
+    Text [ portuguese ] = "Editar título" ;
+    Text [ finnish ] = "Muokkaa otsikkoa" ;
+    Text [ danish ] = "Rediger titel" ;
+    Text [ french ] = "Éditer le titre" ;
+    Text [ swedish ] = "Redigera rubrik" ;
+    Text [ dutch ] = "Titel bewerken" ;
+    Text [ spanish ] = "Editar título" ;
+    Text [ english_us ] = "Edit title" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ ‡é¢˜";
+    Text[ russian ] = "Ïğàâêà çàãîëîâêà";
+    Text[ polish ] = "Edytuj tytu³";
+    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ¨™é¡Œ";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÚäæÇä";
+    Text[ greek ] = "Åğåîåñãáóßá ôßôëïõ";
+    Text[ korean ] = "ì œëª© í¸ì§‘";
+    Text[ turkish ] = "Başlık düzenle";
+    Text[ catalan ] = "Edita títol";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸·à¹ˆà¸­";
+    Text[ czech ] = "Upravit titul";
+    Text[ hebrew ] = "Titel bearbeiten";
+    Text[ hindi ] = "Edit title";
+    Text[ slovak ] = "UpraviÅ¥ nadpis";
+};
+String STR_UNDO_LEGEND
+{
+    Text = "Legende bearbeiten" ;
+    Text [ ENGLISH ] = "Modify legend" ;
+    Text [ norwegian ] = "Endrer tegnforklaring" ;
+    Text [ italian ] = "Modifica legenda" ;
+    Text [ portuguese_brazilian ] = "Editar legenda" ;
+    Text [ portuguese ] = "Editar legenda" ;
+    Text [ finnish ] = "Muokkaa selitettä" ;
+    Text [ danish ] = "Rediger forklaring" ;
+    Text [ french ] = "Éditer la légende" ;
+    Text [ swedish ] = "Redigera förklaring" ;
+    Text [ dutch ] = "Legenda bewerken" ;
+    Text [ spanish ] = "Editar leyenda" ;
+    Text [ english_us ] = "Edit legend" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾ä¾‹";
+    Text[ russian ] = "Ïğàâêà ëåãåíäû";
+    Text[ polish ] = "Edytuj legendê";
+    Text[ japanese ] = "å‡¡ä¾‹ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åœ–ä¾‹";
+    Text[ arabic ] = "ÊÍÑíÑ ãİÊÇÍ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá õğïìíŞìáôïò";
+    Text[ korean ] = "ë²”ë¡€ í¸ì§‘";
+    Text[ turkish ] = "Açıklama düzenle";
+    Text[ catalan ] = "Edita la llegenda";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
+    Text[ czech ] = "Upravit legendu";
+    Text[ hebrew ] = "Legende bearbeiten";
+    Text[ hindi ] = "à¤²à¥‡à¤œà¤¨à¥à¤¡à¤¼ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ legendu";
+};
+String STR_UNDO_DIAGRAM_AXIS
+{
+    Text = "Achse bearbeiten" ;
+    Text [ ENGLISH ] = "Modify axis" ;
+    Text [ norwegian ] = "Endrer akse" ;
+    Text [ italian ] = "Modifica asse" ;
+    Text [ portuguese_brazilian ] = "Editar eixo" ;
+    Text [ portuguese ] = "Editar eixo" ;
+    Text [ finnish ] = "Muokkaa akselia" ;
+    Text [ danish ] = "Rediger akse" ;
+    Text [ french ] = "Éditer l'axe" ;
+    Text [ swedish ] = "Redigera axel" ;
+    Text [ dutch ] = "As wijzigen" ;
+    Text [ spanish ] = "Modificar ejes" ;
+    Text [ english_us ] = "Edit axis" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘è½´æ•°å€¼";
+    Text[ russian ] = "Èçìåíåíèå îñåé";
+    Text[ polish ] = "Edytuj osie";
+    Text[ japanese ] = "è»¸ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯è»¸";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáãÍÇæÑ";
+    Text[ greek ] = "Åğåîåñãáóßá Üîïíá";
+    Text[ korean ] = "ì¶• í¸ì§‘";
+    Text[ turkish ] = "Ekseni düzenle";
+    Text[ catalan ] = "Edita l'eix";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹à¸à¸™";
+    Text[ czech ] = "Upravit osu";
+    Text[ hebrew ] = "Achse bearbeiten";
+    Text[ hindi ] = "à¤…à¤•à¥à¤· à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ os";
+};
+String STR_UNDO_DIAGRAM_GRID
+{
+    Text = "Gitter bearbeiten" ;
+    Text [ ENGLISH ] = "Modify grid" ;
+    Text [ norwegian ] = "Endrer rutenett" ;
+    Text [ italian ] = "Modifica griglia" ;
+    Text [ portuguese_brazilian ] = "Editar grade" ;
+    Text [ portuguese ] = "Editar grelha" ;
+    Text [ finnish ] = "Muokkaa ruudukkoa" ;
+    Text [ danish ] = "Rediger gitter" ;
+    Text [ french ] = "Éditer la grille" ;
+    Text [ swedish ] = "Redigera gitter" ;
+    Text [ dutch ] = "Raster bewerken" ;
+    Text [ spanish ] = "Editar cuadrícula" ;
+    Text [ english_us ] = "Edit grid" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ïğàâêà ñåòêè";
+    Text[ polish ] = "Edytuj siatkê";
+    Text[ japanese ] = "ç›®ç››ç·šã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯ç¶²æ ¼ç·š";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÔÈßÉ";
+    Text[ greek ] = "Åğåîåñãáóßá ğëİãìáôïò";
+    Text[ korean ] = "ëˆˆê¸ˆì„  í¸ì§‘";
+    Text[ turkish ] = "Kılavuz çizgileri düzenle";
+    Text[ catalan ] = "Edita la graella";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
+    Text[ czech ] = "Upravit mÅ™Ã­Å¾ku";
+    Text[ hebrew ] = "Gitter bearbeiten";
+    Text[ hindi ] = "à¤œà¤¾à¤² à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ mrieÅ¾ku";
+};
+String STR_UNDO_DIAGRAM_WALL
+{
+    Text = "Diagrammwand bearbeiten" ;
+    Text [ ENGLISH ] = "Modify diagram wall" ;
+    Text [ norwegian ] = "Endrer diagram vegg" ;
+    Text [ italian ] = "Modifica parete del diagramma" ;
+    Text [ portuguese_brazilian ] = "Editar parede do gráfico" ;
+    Text [ portuguese ] = "Editar parede do gráfico" ;
+    Text [ finnish ] = "Muokkaa kaavioseinää" ;
+    Text [ danish ] = "Rediger diagramvæg" ;
+    Text [ french ] = "Éditer la paroi du diagramme" ;
+    Text [ swedish ] = "Redigera diagramvägg" ;
+    Text [ dutch ] = "Diagramwand bewerken" ;
+    Text [ spanish ] = "Editar plano lateral" ;
+    Text [ english_us ] = "Edit chart wall" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾è¡¨èƒŒæ™¯å¢™";
+    Text[ russian ] = "Ïğàâêà ñòåíêè äèàãğàììû";
+    Text[ polish ] = "Edytuj œcianê wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®å£é¢ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åœ–è¡¨èƒŒæ™¯ç‰†";
+    Text[ arabic ] = "ÊÍÑíÑ ÍÇÆØ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá ôïß÷ïõ äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ì˜†ë©´ ìˆ˜ì •";
+    Text[ turkish ] = "Şema duvarını düzenle";
+    Text[ catalan ] = "Edita el pla lateral del diagrama";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸œà¸™à¸±à¸‡à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Upravit stÄ›nu grafu";
+    Text[ hebrew ] = "Diagrammwand bearbeiten";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤µà¥‰à¤² à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ bok grafu";
+};
+String STR_UNDO_DIAGRAM_FLOOR
+{
+    Text = "Diagrammboden bearbeiten" ;
+    Text [ ENGLISH ] = "Modify diagram floor" ;
+    Text [ norwegian ] = "Endrer diagram gulv" ;
+    Text [ italian ] = "Modifica pavimento del diagramma" ;
+    Text [ portuguese_brazilian ] = "Editar piso do gráfico" ;
+    Text [ portuguese ] = "Editar base do gráfico" ;
+    Text [ finnish ] = "Muokkaa kaavioperustaa" ;
+    Text [ danish ] = "Rediger diagramgulv" ;
+    Text [ french ] = "Éditer le plancher du diagramme" ;
+    Text [ swedish ] = "Redigera diagramgolv" ;
+    Text [ dutch ] = "Diagrambodem bewerken" ;
+    Text [ spanish ] = "Editar plano inferior" ;
+    Text [ english_us ] = "Edit chart floor" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾è¡¨åŸºåº•";
+    Text[ russian ] = "Ïğàâêà îñíîâàíèÿ äèàãğàììû";
+    Text[ polish ] = "Edytuj podstawê wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®åºŠé¢ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åº§æ¨™è»¸";
+    Text[ arabic ] = "ÊÍÑíÑ ÃÑÖíÉ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá äáğİäïõ äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ë°‘ë©´ í¸ì§‘";
+    Text[ turkish ] = "Şema tabanını düzenle";
+    Text[ catalan ] = "Edita la base del diagrama";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸·à¹‰à¸™à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Upravit patu grafu";
+    Text[ hebrew ] = "Diagrammboden bearbeiten";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤«à¤¼à¥à¤²à¥‰à¤° à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ pÃ¤tu grafu";
+};
+String STR_UNDO_DIAGRAM_AREA
+{
+    Text = "Diagrammfläche bearbeiten" ;
+    Text [ ENGLISH ] = "Modify diagram area" ;
+    Text [ norwegian ] = "Endrer diagram område" ;
+    Text [ italian ] = "Modifica area diagramma" ;
+    Text [ portuguese_brazilian ] = "Editar área do gráfico" ;
+    Text [ portuguese ] = "Editar área do gráfico" ;
+    Text [ finnish ] = "Muokkaa kaavioaluetta" ;
+    Text [ danish ] = "Rediger diagramområde" ;
+    Text [ french ] = "Éditer l'arrière-plan du diagramme" ;
+    Text [ swedish ] = "Redigera diagramområde" ;
+    Text [ dutch ] = "Diagramoppervlak wijzigen" ;
+    Text [ spanish ] = "Editar la superficie del diagrama" ;
+    Text [ english_us ] = "Edit chart area" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾è¡¨åŒº";
+    Text[ russian ] = "Ïğàâêà îáëàñòè äèàãğàììû";
+    Text[ polish ] = "Edytuj obszar wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã‚¨ãƒªã‚¢ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åœ–è¡¨å¹³é¢";
+    Text[ arabic ] = "ÊÍÑíÑ äØÇŞ ÑÓã ÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá åğéöÜíåéáò äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ì˜ì—­ í¸ì§‘";
+    Text[ turkish ] = "Şema yüzeyini düzenle";
+    Text[ catalan ] = "Edita àrea de diagrama";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Upravit oblast grafu";
+    Text[ hebrew ] = "DiagrammflÃ¤che bearbeiten";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ plochu grafu";
+};
+String STR_UNDO_DIAGRAM_TYPE
+{
+    Text = "Diagrammtyp bearbeiten" ;
+    Text [ ENGLISH ] = "Modify diagram type" ;
+    Text [ norwegian ] = "Endrer diagram type" ;
+    Text [ italian ] = "Modifica tipo di diagramma" ;
+    Text [ portuguese_brazilian ] = "Editar tipo do gráfico" ;
+    Text [ portuguese ] = "Editar tipo de gráfico" ;
+    Text [ finnish ] = "Muokkaa kaaviotyyppiä" ;
+    Text [ danish ] = "Rediger diagramtype" ;
+    Text [ french ] = "Éditer le type de diagramme" ;
+    Text [ swedish ] = "Redigera diagramtyp" ;
+    Text [ dutch ] = "Diagramtype wijzigen" ;
+    Text [ spanish ] = "Editar tipo de diagrama" ;
+    Text [ english_us ] = "Edit chart type" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘å›¾è¡¨ç±»å‹";
+    Text[ russian ] = "Èçìåíåíèå òèïà äèàãğàììû";
+    Text[ polish ] = "Edytuj typ wykresu";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•ã®ç¨®é¡ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯åœ–è¡¨é¡å‹";
+    Text[ arabic ] = "ÊÍÑíÑ äæÚ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Åğåîåñãáóßá ôığïõ äéáãñÜììáôïò";
+    Text[ korean ] = "ì°¨íŠ¸ ìœ í˜• í¸ì§‘";
+    Text[ turkish ] = "Şema tipini düzenle";
+    Text[ catalan ] = "Edita el tipus de diagrama";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸™à¸´à¸”à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Upravit typ grafu";
+    Text[ hebrew ] = "Diagrammtyp bearbeiten";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ à¤µà¤°à¥à¤— à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ typ grafu";
+};
+String STR_UNDO_AUTOFORMAT
+{
+    Text = "AutoFormat" ;
+    Text [ ENGLISH ] = "AutoFormat" ;
+    Text [ dutch ] = "AutoOpmaak" ;
+    Text [ english_us ] = "AutoFormat" ;
+    Text [ italian ] = "Formattazione automatica" ;
+    Text [ spanish ] = "Formateado automático" ;
+    Text [ french ] = "AutoFormat" ;
+    Text [ swedish ] = "Autoformat" ;
+    Text [ danish ] = "AutoFormat" ;
+    Text [ portuguese ] = "AutoFormato" ;
+    Text [ portuguese_brazilian ] = "AutoFormatação" ;
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
+    Text[ russian ] = "Àâòîôîğìàò";
+    Text[ polish ] = "Autoformatowanie";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
+    Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
+    Text[ greek ] = "ÁõôïÌïñöŞ";
+    Text[ korean ] = "ìë™ ì„œì‹";
+    Text[ turkish ] = "Otomatik formatlama";
+    Text[ catalan ] = "AutoFormat";
+    Text[ finnish ] = "Automaattinen muotoilu";
+    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+    Text[ czech ] = "AutomatickÃ½ formÃ¡t";
+    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ××•×˜×•××˜×™â€¬";
+    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤°à¤šà¤¨à¤¾";
+    Text[ slovak ] = "AutomatickÃ½ formÃ¡t";
+};
+String STR_UNDO_3D_VIEW
+{
+    Text = "3D-Ansicht bearbeiten" ;
+    Text [ ENGLISH ] = "Modify 3D view" ;
+    Text [ norwegian ] = "Endrer vis 3D " ;
+    Text [ italian ] = "Modifica vista 3D" ;
+    Text [ portuguese_brazilian ] = "Editar visualização 3D" ;
+    Text [ portuguese ] = "Editar vista 3D" ;
+    Text [ finnish ] = "Muokkaa kolmiulotteista näkymää" ;
+    Text [ danish ] = "Rediger 3D-visning" ;
+    Text [ french ] = "Éditer l'affichage 3D" ;
+    Text [ swedish ] = "Redigera 3D-vy" ;
+    Text [ dutch ] = "3D-weergave bewerken" ;
+    Text [ spanish ] = "Editar la visualización en 3D" ;
+    Text [ english_us ] = "Edit 3D view" ;
+    Text[ chinese_simplified ] = "ç¼–è¾‘ 3 ç»´è§†å›¾";
+    Text[ russian ] = "Èçìåíåíèå òğåõìåğíîãî ïğåäñòàâëåíèÿ";
+    Text[ polish ] = "Edytuj widok 3D";
+    Text[ japanese ] = "3D è¡¨ç¤ºã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯ 3D æª¢è¦–";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÚÑÖ ËáÇËí ÇáÃÈÚÇÏ";
+    Text[ greek ] = "Åğåîåñãáóßá ğñïâïëŞò 3Ä";
+    Text[ korean ] = "3D ë³´ê¸° í¸ì§‘";
+    Text[ turkish ] = "3B görünümünü düzenle";
+    Text[ catalan ] = "Edita la vista 3D";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸¡à¸¸à¸¡à¸¡à¸­à¸‡ 3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "Upravit 3D pohled";
+    Text[ hebrew ] = "3D-Ansicht bearbeiten";
+    Text[ hindi ] = "3D à¤¦à¥ƒà¤¶à¥à¤¯ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ 3D zobrazenie";
+};
+String STR_UNDO_LIGHTING
+{
+    Text = "3D-Beleuchtung einstellen" ;
+    Text [ ENGLISH ] = "Modify 3D lighting..." ;
+    Text [ norwegian ] = "Endrer belysning 3D..." ;
+    Text [ italian ] = "Modifica illuminazione tridimensionale..." ;
+    Text [ portuguese_brazilian ] = "Definir iluminação 3D" ;
+    Text [ portuguese ] = "Definir iluminação 3D..." ;
+    Text [ finnish ] = "Määritä 3D-valaistus" ;
+    Text [ danish ] = "Indstil 3D-belysning" ;
+    Text [ french ] = "Régler l'éclairage 3D..." ;
+    Text [ swedish ] = "Ställ in 3D-belysning" ;
+    Text [ dutch ] = "3D-belichting instellen" ;
+    Text [ spanish ] = "Ajustar iluminación 3D" ;
+    Text [ english_us ] = "Set 3D illumination" ;
+    Text[ chinese_simplified ] = "è®¾å®š 3 ç»´ç…§æ˜";
+    Text[ russian ] = "Óñòàíîâèòü òğåõìåğíîå îñâåùåíèå";
+    Text[ polish ] = "Ustaw oœwietlenie 3D";
+    Text[ japanese ] = "3D ä½“ç…§æ˜ã®è¨­å®š";
+    Text[ chinese_traditional ] = "è¨­å®š 3D ç…§æ˜";
+    Text[ arabic ] = "ÖÈØ ÇáÅÖÇÁÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
+    Text[ greek ] = "Êáèïñéóìüò öùôéóìïı 3Ä";
+    Text[ korean ] = "3D ì¡°ëª… ì„¤ì •";
+    Text[ turkish ] = "3B aydınlatmasını ayarla";
+    Text[ catalan ] = "Ajusta il.luminació 3D";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸£à¸°à¸”à¸±à¸šà¸„à¸§à¸²à¸¡à¸ªà¸§à¹ˆà¸²à¸‡ 3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "Nastavit 3D osvÄ›tlenÃ­";
+    Text[ hebrew ] = "3D-Beleuchtung einstellen";
+    Text[ hindi ] = "3D à¤šà¤®à¤• à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
+    Text[ slovak ] = "NastaviÅ¥ 3D osvetlenie";
+};
+String STR_UNDO_TOGGLE_TITLE
+{
+    Text = "Titel ein/aus" ;
+    Text [ ENGLISH ] = "Title on/off" ;
+    Text [ english_us ] = "Title on/off" ;
+    Text [ italian ] = "Mostra/nascondi il titolo" ;
+    Text [ spanish ] = "Mostrar/ocultar título" ;
+    Text [ french ] = "Afficher/masquer le titre" ;
+    Text [ dutch ] = "Titel aan/uit" ;
+    Text [ swedish ] = "Rubrik på/av" ;
+    Text [ danish ] = "Titel til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar título" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar Titulo" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥æ ‡é¢˜";
+    Text[ russian ] = "Çàãîëîâîê";
+    Text[ polish ] = "W³¹cz/Wy³¹cz tytu³";
+    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ« ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥æ¨™é¡Œ";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÇáÚäæÇä";
+    Text[ greek ] = "Ôßôëïò Íáé/¼÷é";
+    Text[ korean ] = "ì œëª© ì ìš©/í•´ì œ";
+    Text[ turkish ] = "Başlığı görüntüle/gizle";
+    Text[ catalan ] = "Mostra/oculta títol";
+    Text[ finnish ] = "Otsikko käytössä / poissa käytöstä";
+    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "Titul zap/vyp";
+    Text[ hebrew ] = "Titel ein/aus";
+    Text[ hindi ] = "Title on/off";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ nadpis";
+};
+String STR_UNDO_TOGGLE_LEGEND
+{
+    Text = "Legende ein/aus" ;
+    Text [ ENGLISH ] = "Legend on/off" ;
+    Text [ dutch ] = "Legenda aan/uit" ;
+    Text [ english_us ] = "Legend on/off" ;
+    Text [ italian ] = "Mostra/nascondi legenda" ;
+    Text [ spanish ] = "Mostrar/ocultar leyenda" ;
+    Text [ french ] = "Afficher/masquer la légende" ;
+    Text [ swedish ] = "Förklaring på/av" ;
+    Text [ danish ] = "Forklaring til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar legenda" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar Legenda" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥å›¾ä¾‹";
+    Text[ russian ] = "Ëåãåíäà";
+    Text[ polish ] = "W³¹cz/wy³¹cz legendê";
+    Text[ japanese ] = "å‡¡ä¾‹ ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥åœ–ä¾‹";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ãİÊÇÍ ÇáÑÓã ÇáÈíÇäí";
+    Text[ greek ] = "Õğüìíçìá Íáé/¼÷é";
+    Text[ korean ] = "ë²”ë¡€ ì ìš©/ì ìš©ì•ˆí•¨";
+    Text[ turkish ] = "Açıklamayı görüntüle/gizle";
+    Text[ catalan ] = "Llegenda activada/desactivada";
+    Text[ finnish ] = "Selite käytössä / poissa käytöstä";
+    Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "Legenda zap/vyp";
+    Text[ hebrew ] = "Legende ein/aus";
+    Text[ hindi ] = "à¤²à¥‡à¤œà¤¨à¥à¤¡ à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ legendu";
+};
+String STR_UNDO_TOGGLE_AXIS_TITLE
+{
+    Text = "Achsentitel ein/aus" ;
+    Text [ ENGLISH ] = "Axis Title on/off" ;
+    Text [ dutch ] = "Astitels aan/uit" ;
+    Text [ english_us ] = "Axis titles on/off" ;
+    Text [ italian ] = "Mostra/nascondi il titolo degli assi" ;
+    Text [ spanish ] = "Mostrar/ocultar los títulos de ejes" ;
+    Text [ french ] = "Afficher/masquer les titres des axes" ;
+    Text [ swedish ] = "Axelrubrik på/av" ;
+    Text [ danish ] = "Aksetitler til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar título dos eixos" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar títulos do eixo" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥è½´æ ‡é¢˜";
+    Text[ russian ] = "Çàãîëîâêè îñåé";
+    Text[ polish ] = "W³¹cz/wy³¹cz tytu³y osi";
+    Text[ japanese ] = "è»¸ã®ã‚¿ã‚¤ãƒˆãƒ« ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥è»¸æ¨™é¡Œ";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÚäÇæíä ÇáãÍÇæÑ";
+    Text[ greek ] = "Ôßôëïé áîüíùí Íáé/¼÷é";
+    Text[ korean ] = "ì¶• ì œëª© í‘œì‹œï¼ìˆ¨ê¸°ê¸°";
+    Text[ turkish ] = "Eksen başlıklarını görüntüle/gizle";
+    Text[ catalan ] = "Mostra/oculta títol d'eixos";
+    Text[ finnish ] = "Akseliotsikot käytössä / poissa käytöstä";
+    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸à¸™ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "Titulky os zap/vyp";
+    Text[ hebrew ] = "Achsentitel ein/aus";
+    Text[ hindi ] = "à¤…à¤•à¥à¤· à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚ à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ nÃ¡zvy osÃ­";
+};
+String STR_UNDO_TOGGLE_AXIS_DESCR
+{
+    Text = "Achsenbeschriftung ein/aus" ;
+    Text [ ENGLISH ] = "Axis Description on/off" ;
+    Text [ dutch ] = "Asbijschriften aan/uit" ;
+    Text [ english_us ] = "Axis labels on/off" ;
+    Text [ italian ] = "Mostra/nascondi dicitura assi" ;
+    Text [ spanish ] = "Mostrar/ocultar etiqueta de ejes" ;
+    Text [ french ] = "Afficher/masquer les étiquettes des axes" ;
+    Text [ swedish ] = "Axeletiketter på/av" ;
+    Text [ danish ] = "Akseetiketter til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar legenda dos eixos" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar rótulos do eixo" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥è½´æ•°æ®æ ‡å¿—";
+    Text[ russian ] = "Ïîäïèñè îñåé";
+    Text[ polish ] = "W³¹cz/wy³¹cz etykiety osi";
+    Text[ japanese ] = "è»¸ãƒ©ãƒ™ãƒ« ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥è»¸æ•¸å€¼æ¨™ç±¤";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÚäæäÉ ÇáãÍÇæÑ";
+    Text[ greek ] = "ÅğéãñáöŞ Üîïíá Íáé/¼÷é";
+    Text[ korean ] = "ì¶• ë ˆì´ë¸” í‘œì‹œï¼ìˆ¨ê¸°ê¸°";
+    Text[ turkish ] = "Eksen etiketlerini görüntüle/gizle";
+    Text[ catalan ] = "Etiquetes de l'eix activades/desactivades";
+    Text[ finnish ] = "Akseliselitteet käytössä / poissa käytöstä";
+    Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹à¸à¸™ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "Popisy os zap/vyp";
+    Text[ hebrew ] = "Achsenbeschriftung ein/aus";
+    Text[ hindi ] = "à¤…à¤•à¥à¤· à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚ à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ popisy osÃ­";
+};
+String STR_UNDO_TOGGLE_GRID_HORZ
+{
+    Text = "Gitter horizontal ein/aus" ;
+    Text [ ENGLISH ] = "Grid horizontal on/off" ;
+    Text [ english_us ] = "Horizontal grid on/off" ;
+    Text [ italian ] = "Mostra/nascondi griglia orizzontale" ;
+    Text [ spanish ] = "Mostrar/ocultar cuadrícula horizontal" ;
+    Text [ french ] = "Afficher/masquer la grille horizontale " ;
+    Text [ dutch ] = "Horizontaal raster aan/uit" ;
+    Text [ swedish ] = "Horisontellt gitter på/av" ;
+    Text [ danish ] = "Vandret gitter til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar grelha horizontal" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar grade horizontal" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥æ¨ªå‘ç½‘æ ¼çº¿";
+    Text[ russian ] = "Ãîğèçîíòàëüíàÿ ñåòêà";
+    Text[ polish ] = "W³¹cz/Wy³¹cz siatkê poziom¹";
+    Text[ japanese ] = "ç›®ç››ç·š(æ¨ª) ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥æ©«å‘ç¶²æ ¼";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÇáÔÈßÉ ÇáÃİŞíÉ";
+    Text[ greek ] = "Ïñéæüíôéï ğëİãìá Íáé/¼÷é";
+    Text[ korean ] = "ê°€ë¡œ ëˆˆê¸ˆì„  í‘œì‹œ/ìˆ¨ê¸°ê¸°";
+    Text[ turkish ] = "Yatay kılavuz çizgilerini görüntüle/gizle";
+    Text[ catalan ] = "Graella horitzontal activada/desactivada";
+    Text[ finnish ] = "Vaakaruudukko käytössä / poissa käytöstä";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¹à¸™à¸§à¸™à¸­à¸™ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "VodorovnÃ¡ mÅ™Ã­Å¾ka zap/vyp";
+    Text[ hebrew ] = "Gitter horizontal ein/aus";
+    Text[ hindi ] = "à¤¸à¤®à¤¤à¤² à¤œà¤¾à¤² à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ vodorovnÃº mrieÅ¾ku";
+};
+String STR_UNDO_TOGGLE_GRID_VERT
+{
+    Text = "Gitter vertikal ein/aus" ;
+    Text [ ENGLISH ] = "Grid vertical on/off" ;
+    Text [ english_us ] = "Vertical grid on/off" ;
+    Text [ italian ] = "Mostra/nascondi griglia verticale" ;
+    Text [ spanish ] = "Conmutar cuadrícula vertical" ;
+    Text [ french ] = "Afficher/masquer la grille verticale" ;
+    Text [ dutch ] = "Verticaal raster aan/uit" ;
+    Text [ swedish ] = "Vertikalt gitter på/av" ;
+    Text [ danish ] = "Lodret gitter til/fra" ;
+    Text [ portuguese ] = "Activar/Desactivar grelha vertical" ;
+    Text [ portuguese_brazilian ] = "Ativar/desativar grade vertical" ;
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæˆ–éšå…¥çºµå‘ç½‘æ ¼";
+    Text[ russian ] = "Âåğòèêàëüíàÿ ñåòêà";
+    Text[ polish ] = "W³¹cz/Wy³¹cz siatkê pionow¹";
+    Text[ japanese ] = "ç›®ç››ç·š(ç¸¦) ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥ç¸±å‘ç¶²æ ¼";
+    Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÇáÔÈßÉ ÇáÑÃÓíÉ";
+    Text[ greek ] = "Êáôáêüñõöï ğëİãìá Íáé/¼÷é";
+    Text[ korean ] = "ì„¸ë¡œ ëˆˆê¸ˆì„  í‘œì‹œï¼ìˆ¨ê¸°ê¸°";
+    Text[ turkish ] = "Dikey kılavuz çizgilerini görüntüle/gizle";
+    Text[ catalan ] = "Graella vertical activada/desactivada";
+    Text[ finnish ] = "Pystyruudukko käytössä / poissa käytöstä";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡à¹à¸™à¸§à¸•à¸±à¹‰à¸‡ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
+    Text[ czech ] = "SvislÃ¡ mÅ™Ã­Å¾ka zap/vyp";
+    Text[ hebrew ] = "Gitter vertikal ein/aus";
+    Text[ hindi ] = "à¤²à¤‚à¤¬à¤°à¥‚à¤ª à¤œà¤¾à¤² à¤¶à¥à¤°à¥/à¤¬à¤‚à¤¦";
+    Text[ slovak ] = "ZapnÃºÅ¥/vypnÃºÅ¥ zvislÃº mrieÅ¾ku";
+};
+String STR_UNDO_DATA_IN_ROWS
+{
+    Text = "Daten in Zeilen" ;
+    Text [ ENGLISH ] = "Data in Rows" ;
+    Text [ dutch ] = "Gegevens in rijen" ;
+    Text [ english_us ] = "Data in Rows" ;
+    Text [ italian ] = "Dati nelle righe" ;
+    Text [ spanish ] = "Datos en filas" ;
+    Text [ french ] = "Données en lignes" ;
+    Text [ swedish ] = "Data i rader" ;
+    Text [ danish ] = "Data i rækker" ;
+    Text [ portuguese ] = "Dados em linhas" ;
+    Text [ portuguese_brazilian ] = "Dados nas Linhas" ;
+    Text[ chinese_simplified ] = "æ•°æ®æ’å…¥è¡Œ";
+    Text[ russian ] = "Äàííûå â ñòğîêàõ";
+    Text[ polish ] = "Dane w wierszach";
+    Text[ japanese ] = "ç³»åˆ—ã‚’è¡Œæ–¹å‘ã«å®šç¾©";
+    Text[ chinese_traditional ] = "è³‡æ–™æ’å…¥æ¬„";
+    Text[ arabic ] = "ÈíÇäÇÊ İí ÇáÕİæİ";
+    Text[ greek ] = "Äåäïìİíá óå ãñáììİò";
+    Text[ korean ] = "í–‰ ê³„ì—´";
+    Text[ turkish ] = "Satırlardaki veriler";
+    Text[ catalan ] = "Dades en files";
+    Text[ finnish ] = "Rivien tiedot";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸™à¹à¸–à¸§";
+    Text[ czech ] = "Data v Å™Ã¡dcÃ­ch";
+    Text[ hebrew ] = "Daten in Zeilen";
+    Text[ hindi ] = "Data in Rows";
+    Text[ slovak ] = "DÃ¡ta v riadkoch";
+};
+String STR_UNDO_DATA_IN_COLUMNS
+{
+    Text = "Daten in Spalten" ;
+    Text [ ENGLISH ] = "Data in Columns" ;
+    Text [ dutch ] = "Gegevens in kolommen" ;
+    Text [ english_us ] = "Data in Columns" ;
+    Text [ italian ] = "Dati nelle colonne" ;
+    Text [ spanish ] = "Datos en columnas" ;
+    Text [ french ] = "Données en colonnes" ;
+    Text [ swedish ] = "Data i kolumner" ;
+    Text [ danish ] = "Data i kolonner" ;
+    Text [ portuguese ] = "Dados em colunas" ;
+    Text [ portuguese_brazilian ] = "Dados nas Colunas" ;
+    Text[ chinese_simplified ] = "åˆ—æ•°æ®";
+    Text[ russian ] = "Äàííûå â ñòîëáöàõ";
+    Text[ polish ] = "Dane w kolumnach";
+    Text[ japanese ] = "ç³»åˆ—ã‚’åˆ—æ–¹å‘ã«å®šç¾©";
+    Text[ chinese_traditional ] = "è³‡æ–™æ’å…¥æ¬„";
+    Text[ arabic ] = "ÈíÇäÇÊ İí ÇáÃÚãÏÉ";
+    Text[ greek ] = "Äåäïìİíá óå óôŞëåò";
+    Text[ korean ] = "ì—´ ê³„ì—´";
+    Text[ turkish ] = "Sütunlardaki veriler";
+    Text[ catalan ] = "Dades en columnes";
+    Text[ finnish ] = "Sarakkeiden tiedot";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸™à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+    Text[ czech ] = "Data ve sloupcÃ­ch";
+    Text[ hebrew ] = "Daten in Spalten";
+    Text[ hindi ] = "Data in Columns";
+    Text[ slovak ] = "DÃ¡ta v stÄºpcoch";
+};
+String STR_DEFAULTVIEW
+{
+    Text = "Default" ;
+    Text [ ENGLISH ] = "Default" ;
+    Text [ norwegian ] = "Standard" ;
+    Text [ italian ] = "Predefinito" ;
+    Text [ portuguese_brazilian ] = "Padrão" ;
+    Text [ portuguese ] = "Padrão" ;
+    Text [ finnish ] = "Oletus" ;
+    Text [ danish ] = "Standard" ;
+    Text [ french ] = "Défaut" ;
+    Text [ swedish ] = "Standard" ;
+    Text [ dutch ] = "Standaard" ;
+    Text [ spanish ] = "Predeterminado" ;
+    Text [ english_us ] = "Default" ;
+    Text[ chinese_simplified ] = "é»˜è®¤";
+    Text[ russian ] = "Ñòàíäàğò";
+    Text[ polish ] = "Domyœlnie";
+    Text[ japanese ] = "æ¨™æº–";
+    Text[ chinese_traditional ] = "é»˜èª";
+    Text[ arabic ] = "ÇİÊÑÇÖí";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ korean ] = "ê¸°ë³¸ê°’";
+    Text[ turkish ] = "Standart";
+    Text[ catalan ] = "Per defecte";
+    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­";
+    Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
+    Text[ slovak ] = "VÃ½chodzie";
+};
+
+
+String STR_OPEN_DOCUMENT
+{
+    Text = "Dokument laden" ;
+    Text [ ENGLISH ] = "Open document" ;
+    Text [ norwegian ] = "Open document" ;
+    Text [ italian ] = "Apri documento" ;
+    Text [ portuguese_brazilian ] = "Carregar documento" ;
+    Text [ portuguese ] = "Carregar documento" ;
+    Text [ english_us ] = "Load document" ;
+    Text [ finnish ] = "Lataa asiakirja" ;
+    Text [ danish ] = "Indlæs dokument" ;
+    Text [ french ] = "Charger un document" ;
+    Text [ swedish ] = "Ladda dokument" ;
+    Text [ dutch ] = "Document laden" ;
+    Text [ spanish ] = "Cargar documento" ;
+    Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£";
+    Text[ russian ] = "Çàãğóçèòü äîêóìåíò";
+    Text[ polish ] = "£aduj dokument";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’èª­ã¿è¾¼ã‚€";
+    Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶";
+    Text[ arabic ] = "ÊÍãíá ÇáãÓÊäÏ";
+    Text[ greek ] = "Öüñôùóç åããñÜöïõ";
+    Text[ korean ] = "ë¬¸ì„œ ë¡œë“œ";
+    Text[ turkish ] = "Belge yükle";
+    Text[ catalan ] = "Carrega el document";
+    Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "NaÄÃ­st dokument";
+    Text[ hebrew ] = "â€®×˜×¢×™× ×ª ××¡××šâ€¬";
+    Text[ hindi ] = "Load document";
+    Text[ slovak ] = "NaÄÃ­tavam dokument";
+};
+String STR_SAVE_DOCUMENT
+{
+    Text[ italian ] = "Salva documento";
+    Text[ portuguese_brazilian ] = "Salvar documento";
+    Text[ portuguese ] = "Guardar documento";
+    Text[ danish ] = "Gem dokument";
+    Text[ french ] = "Enregistrer le document";
+    Text[ swedish ] = "Spara dokument";
+    Text[ dutch ] = "Document opslaan";
+    Text[ spanish ] = "Guardar documento";
+    Text[ english_us ] = "Save document";
+    Text[ chinese_simplified ] = "å­˜ç›˜æ–‡æ¡£";
+    Text[ russian ] = "Ñîõğàíèòü äîêóìåíò";
+    Text[ polish ] = "Zapisz dokument";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ä¿å­˜";
+    Text[ chinese_traditional ] = "å„²å­˜æ–‡ä»¶";
+    Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ";
+    Text = "Dokument speichern" ;
+    Text [ ENGLISH ] = "Save document" ;
+    Text [ norwegian ] = "Save document" ;
+    Text [ italian ] = "Salva documento" ;
+    Text [ portuguese_brazilian ] = "Salvar documento" ;
+    Text [ portuguese ] = "Guardar documento" ;
+    Text [ english_us ] = "Save document" ;
+    Text [ finnish ] = "Tallenna asiakirja" ;
+    Text [ danish ] = "Gem dokument" ;
+    Text [ french ] = "Enregistrer le document" ;
+    Text [ swedish ] = "Spara dokument" ;
+    Text [ dutch ] = "Document opslaan" ;
+    Text [ spanish ] = "Guardar documento" ;
+    Text = "Dokument speichern" ;
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ";
+    Text[ korean ] = "ë¬¸ì„œ ì €ì¥";
+    Text[ turkish ] = "Belgeyi kaydet";
+    Text[ catalan ] = "Desa el document";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£";
+    Text[ czech ] = "uloÅ¾it dokument";
+    Text[ hebrew ] = "Dokument speichern";
+    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
+    Text[ slovak ] = "UkladÃ¡m dokument";
+};
+String STR_ACTION_NOTPOSSIBLE
+{
+    Text = "Die Funktion kann mit den selektierten \nObjekten nicht ausgeführt werden." ;
+    Text [ ENGLISH ] = "Action could not completed with selected objects." ;
+    Text [ norwegian ] = "Action could not completed with selected objects." ;
+    Text [ italian ] = "La funzione non può essere eseguita con l'oggetto scelto" ;
+    Text [ portuguese_brazilian ] = "Esta função não pode ser completada com os objetos selecionados." ;
+    Text [ portuguese ] = "Esta função não pode ser executada \n com os objectos seleccionados." ;
+    Text [ finnish ] = "Tätä toimintoa ei voi käyttää valittujen objektien kanssa." ;
+    Text [ danish ] = "Denne funktion kan ikke udføres \nmed de markerede objekter." ;
+    Text [ french ] = "La fonction ne peut être exécutée avec les objets sélectionnés." ;
+    Text [ swedish ] = "Funktionen kan inte utföras med \nde markerade objekten" ;
+    Text [ dutch ] = "Deze functie kan met de gekozen\nobjecten niet worden voltooid." ;
+    Text [ spanish ] = "No es posible ejecutar la acción\ncon los objetos seleccionados." ;
+    Text [ english_us ] = "This function cannot be completed with the selected objects." ;
+    Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œé€‰ä¸­å¯¹è±¡çš„åŠŸèƒ½ã€‚";
+    Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü ôóíêöèş \nñ âûäåëåííûìè îáúåêòàìè.";
+    Text[ polish ] = "Funkcja nie mo¿e zostaæ wykonana \nz zaznaczonymi obiektami.";
+    Text[ japanese ] = "ã“ã®æ©Ÿèƒ½ã¯é¸æŠã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã¯\nå®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œé¸å–ç‰©ä»¶çš„åŠŸèƒ½ã€‚";
+    Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáãåãÉ\nÈÇáßÇÆäÇÊ ÇáÊí Êã ÊÍÏíÏåÇ.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß áõôŞ ç \nëåéôïõñãßá ìå ôá åğéëåãìİíá áíôéêåßìåíá.";
+    Text[ korean ] = "ì´ ê¸°ëŠ¥ì€ ì„ íƒëœ \nê°œì²´ì™€ í•¨ê»˜ ì‹¤í–‰ë  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    Text[ turkish ] = "Bu fonksiyon, seçilen nesneler ile \nyürütülemez..";
+    Text[ catalan ] = "No es pot executar l'acció\namb els objectes seleccionats.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸—à¸³à¹ƒà¸«à¹‰à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¸™à¸µà¹‰à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œà¸”à¹‰à¸§à¸¢à¸§à¸±à¸•à¸–à¸¸à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸";
+    Text[ czech ] = "Tato funkce nemÅ¯Å¾e bÃ½t dokonÄena s vybranÃ½mi objekty.";
+    Text[ hebrew ] = "Die Funktion kann mit den selektierten \nObjekten nicht ausgefÃ¼hrt werden.";
+    Text[ hindi ] = "à¤‡à¤¸ à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤•à¥‹ à¤šà¥à¤¨à¥‡ à¤¹à¥à¤¯à¥‡ à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‡ à¤¸à¤¹à¤¿à¤¤ à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
+    Text[ slovak ] = "TÃ¡to funkcia nemÃ´Å¾e byÅ¥ dokonÄenÃ¡ s vybranÃ½mi objektami.";
+};
+String STR_GRAPHIC
+{
+    Text = "Chart" ;
+    Text [ ENGLISH ] = "Chart" ;
+    Text [ norwegian ] = "Chart" ;
+    Text [ italian ] = "Diagramma" ;
+    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese ] = "Chart" ;
+    Text [ french ] = "Diagramme" ;
+    Text [ dutch ] = "Chart" ;
+    Text [ spanish ] = "Diagrama" ;
+    Text [ danish ] = "Diagram" ;
+    Text [ swedish ] = "Chart" ;
+    Text [ finnish ] = "Kaavio" ;
+    Text [ english_us ] = "Chart" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà";
+    Text[ polish ] = "Wykres";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí";
+    Text[ greek ] = "ÄéÜãñáììá";
+    Text[ korean ] = "ì°¨íŠ¸";
+    Text[ turkish ] = "Şema";
+    Text[ catalan ] = "Diagrama";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Graf";
+    Text[ hebrew ] = "â€®×ª×¨×©×™×â€¬";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "Graf";
+};
+String STR_CHART_DOCUMENT
+{
+    Text = "Diagramm" ;
+    Text [ ENGLISH ] = "Chart" ;
+    Text [ english_us ] = "Chart" ;
+    Text [ dutch ] = "Diagram" ;
+    Text [ swedish ] = "Diagram" ;
+    Text [ danish ] = "Diagram" ;
+    Text [ italian ] = "Diagramma" ;
+    Text [ spanish ] = "Diagrama" ;
+    Text [ french ] = "Diagramme" ;
+    Text [ portuguese ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text[ chinese_simplified ] = "å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà";
+    Text[ polish ] = "Wykres";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí";
+    Text[ greek ] = "ÄéÜãñáììá";
+    Text[ korean ] = "ì°¨íŠ¸";
+    Text[ turkish ] = "Şema";
+    Text[ catalan ] = "Diagrama";
+    Text[ finnish ] = "Kaavio";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´";
+    Text[ czech ] = "Graf";
+    Text[ hebrew ] = "â€®×ª×¨×©×™×â€¬";
+    Text[ hindi ] = "à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "Graf";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_60
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION Diagramm" ;
+    Text [ ENGLISH ] = "StarOffice 6.0 Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME 6.0 Diagram" ;
+    Text [ swedish ] = "%PRODUCTNAME 6.0 Diagram" ;
+    Text [ danish ] = "%PRODUCTNAME 6.0-diagram" ;
+    Text [ italian ] = "%PRODUCTNAME 6.0 Diagramma" ;
+    Text [ spanish ] = "%PRODUCTNAME 6.0 Diagrama" ;
+    Text [ french ] = "%PRODUCTNAME 6.0 Diagramme" ;
+    Text [ portuguese ] = "%PRODUCTNAME 6.0 Gráfico" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Chart" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà %PRODUCTNAME 6.0";
+    Text[ polish ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí %PRODUCTNAME 6.0";
+    Text[ greek ] = "%PRODUCTNAME 6.0 ÄéÜãñáììá";
+    Text[ korean ] = "%PRODUCTNAME 6.0 ì°¨íŠ¸";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Çizelgesi";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Diagrama";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´%PRODUCTNAME 6.0 ";
+    Text[ czech ] = "%PRODUCTNAME 6.0 Graf";
+    Text[ hebrew ] = "%PRODUCTNAME 6.0 Diagramm";
+    Text[ hindi ] = "%PRODUCTNAME 6.0 à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "%PRODUCTNAME 6.0 Graf";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_50
+{
+    Text = "%PRODUCTNAME 5.0 Diagramm" ;
+    Text [ ENGLISH ] = "StarOffice 5.0 Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME 5.0 Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 diagram" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 Diagram" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 diagram" ;
+    Text [ italian ] = "Diagramma %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 Diagrama" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Diagramme" ;
+    Text [ portuguese ] = "Gráfico (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Chart" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà %PRODUCTNAME 5.0";
+    Text[ polish ] = "%PRODUCTNAME 5.0 Chart";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí %PRODUCTNAME 5.0";
+    Text[ greek ] = "ÄéÜãñáììá (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ì°¨íŠ¸";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 şeması";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 Diagrama";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 Chart";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´%PRODUCTNAME 5.0 ";
+    Text[ czech ] = "%PRODUCTNAME 5.0 Graf";
+    Text[ hebrew ] = "%PRODUCTNAME 5.0 Diagramm";
+    Text[ hindi ] = "%PRODUCTNAME 5.0 à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "%PRODUCTNAME 5.0 Graf";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_40
+{
+    Text = "%PRODUCTNAME 4.0 Diagramm" ;
+    Text [ ENGLISH ] = "StarOffice 4.0 Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME 4.0 Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME 4.0 diagram" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 Diagram" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 diagram" ;
+    Text [ italian ] = "Diagramma %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 Diagrama" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 Diagramme" ;
+    Text [ portuguese ] = "Gráfico (%PRODUCTNAME 4.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Chart" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà %PRODUCTNAME 4.0";
+    Text[ polish ] = "%PRODUCTNAME 4.0 Chart";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí %PRODUCTNAME 4.0";
+    Text[ greek ] = "ÄéÜãñáììá (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "%PRODUCTNAME 4.0 ì°¨íŠ¸";
+    Text[ turkish ] = "%PRODUCTNAME 4.0 şeması";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 Diagrama";
+    Text[ finnish ] = "%PRODUCTNAME 4.0 Chart";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´%PRODUCTNAME 4.0 ";
+    Text[ czech ] = "%PRODUCTNAME 4.0 Graf";
+    Text[ hebrew ] = "%PRODUCTNAME 4.0 Diagramm";
+    Text[ hindi ] = "%PRODUCTNAME 4.0 à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "%PRODUCTNAME 4.0 Graf";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_31
+{
+    Text = "%PRODUCTNAME 3.0 Diagramm" ;
+    Text [ ENGLISH ] = "StarOffice 3.0 Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME 3.0 Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME 3.0 diagram" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0 Diagram" ;
+    Text [ danish ] = "%PRODUCTNAME 3.0 diagram" ;
+    Text [ italian ] = "Diagramma %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 3.0 Diagrama" ;
+    Text [ french ] = "%PRODUCTNAME 3.0 Diagramme" ;
+    Text [ portuguese ] = "Gráfico (%PRODUCTNAME 3.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Chart" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 å›¾è¡¨";
+    Text[ russian ] = "Äèàãğàììà %PRODUCTNAME 3.0";
+    Text[ polish ] = "%PRODUCTNAME 3.0 Chart";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 ã‚°ãƒ©ãƒ•";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 åœ–è¡¨";
+    Text[ arabic ] = "ÑÓã ÈíÇäí %PRODUCTNAME 3.0";
+    Text[ greek ] = "ÄéÜãñáììá (%PRODUCTNAME 3.0)";
+    Text[ korean ] = "%PRODUCTNAME 3.0 ì°¨íŠ¸";
+    Text[ turkish ] = "%PRODUCTNAME 3.0 şeması";
+    Text[ catalan ] = "%PRODUCTNAME 3.0 Diagrama";
+    Text[ finnish ] = "%PRODUCTNAME 3.0 Chart";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´%PRODUCTNAME 3.0 ";
+    Text[ czech ] = "%PRODUCTNAME 3.0 Graf";
+    Text[ hebrew ] = "%PRODUCTNAME 3.0 Diagramm";
+    Text[ hindi ] = "%PRODUCTNAME 3.0 à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "%PRODUCTNAME 3.0 Graf";
+};
+String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
+{
+    Text = "Das Kennwort ist falsch oder die Datei beschädigt." ;
+    Text [ ENGLISH ] = "The password is wrong or the file is corrupted." ;
+    Text [ norwegian ] = "The password is wrong or the file is corrupted." ;
+    Text [ italian ] = "La password è errata o il file è danneggiato." ;
+    Text [ portuguese_brazilian ] = "A senha é invalida ou o arquivo está corrompido." ;
+    Text [ portuguese ] = "Ou a senha está incorrecta ou o ficheiro danificado." ;
+    Text [ french ] = "Le mot de passe est incorrect ou le fichier est défectueux." ;
+    Text [ dutch ] = "Het wachtwoord is niet juist of het bestand is beschadigd" ;
+    Text [ spanish ] = "La contraseña no es válida o el archivo está dañado." ;
+    Text [ danish ] = "Adgangskoden er forkert eller filen er beskadiget." ;
+    Text [ swedish ] = "Lösenordet är felaktigt eller filen skadad." ;
+    Text [ finnish ] = "Salasana on virheellinen tai tiedosto on vahingoittunut." ;
+    Text [ english_us ] = "The password is incorrect or the file is damaged." ;
+    Text[ chinese_simplified ] = "æ— æ•ˆçš„å¯†ç æˆ–æ–‡ä»¶å·²ç»è¢«æŸåã€‚";
+    Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü èëè ôàéë ïîâğåæäåí.";
+    Text[ polish ] = "Nieprawid³owe has³o lub uszkodzony plik.";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé–“é•ã£ã¦ã„ã‚‹ã‹ã€ã¾ãŸã¯ãƒ•ã‚¡ã‚¤ãƒ«ã«å•é¡ŒãŒã‚ã‚Šã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ•ˆçš„å¯†ç¢¼æˆ–æª”æ¡ˆå·²ç¶“è¢«æå£ã€‚";
+    Text[ arabic ] = "ÅãÇ Ãä ßáãÉ ÇáÓÑ ÛíÑ ÕÍíÍÉ Ãæ Ãä Çáãáİ ÊÇáİ.";
+    Text[ greek ] = "Ï êùäéêüò ğñüóâáóçò åßíáé åóöáëìİíïò Ş ôï áñ÷åßï åëáôôùìáôéêü.";
+    Text[ korean ] = "ì•”í˜¸ê°€ í‹€ë¦¬ê±°ë‚˜ íŒŒì¼ì´ ì†ìƒë˜ì—ˆìŠµë‹ˆë‹¤.";
+    Text[ turkish ] = "Şifre yanlış veya dosya zarar görmüş.";
+    Text[ catalan ] = "La contrasenya no és correcta o el fitxer està danyat.";
+    Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸«à¸£à¸·à¸­à¹à¸Ÿà¹‰à¸¡à¹€à¸ªà¸µà¸¢à¸«à¸²à¸¢";
+    Text[ czech ] = "Heslo je neplatnÃ© nebo soubor je poÅ¡kozen.";
+    Text[ hebrew ] = "Das Kennwort ist falsch oder die Datei beschÃ¤digt.";
+    Text[ hindi ] = "The password is incorrect or the file is damaged.";
+    Text[ slovak ] = "Heslo je nesprÃ¡vne alebo je poÅ¡kodenÃ½ sÃºbor.";
+};
+String RID_PLUGINTOOLBOX
+{
+    Text = "PlugInleiste" ;
+    Text [ ENGLISH ] = "Plugin toolbox" ;
+    Text [ english_us ] = "Plug-in Bar" ;
+    Text [ italian ] = "Barra degli oggetti per i PlugIn" ;
+    Text [ spanish ] = "Barra de Plug-ins" ;
+    Text [ french ] = "Barre de Plug-ins" ;
+    Text [ dutch ] = "PlugIn-balk" ;
+    Text [ swedish ] = "Funktionslist för plug-ins" ;
+    Text [ danish ] = "PlugInlinje" ;
+    Text [ portuguese_brazilian ] = "Barra de Plugins" ;
+    Text [ portuguese ] = "Barra de Plugins" ;
+    Text[ chinese_simplified ] = "Plug-In æ ";
+    Text[ russian ] = "Ïàíåëü ïîäêëş÷àåìûõ ìîäóëåé";
+    Text[ polish ] = "Pasek wtyczek plug-in";
+    Text[ japanese ] = "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒãƒ¼";
+    Text[ chinese_traditional ] = "Plug-In åˆ—";
+    Text[ arabic ] = "ÔÑíØ Plug-In";
+    Text[ greek ] = "ÃñáììŞ óõíäåüìåíçò õğïìïíÜäáò";
+    Text[ korean ] = "í”ŒëŸ¬ê·¸ì¸ ëª¨ìŒ";
+    Text[ turkish ] = "Plug-In çubuğu";
+    Text[ catalan ] = "Barra de connectors";
+    Text[ finnish ] = "Lisäosapalkki";
+    Text[ thai ] = "à¹à¸–à¸šà¸›à¸¥à¸±à¹Šà¸à¸­à¸´à¸™";
+    Text[ czech ] = "Panel zÃ¡suvnÃ½ch modulÅ¯";
+    Text[ hebrew ] = "PlugInleiste";
+    Text[ hindi ] = "à¤ªà¥à¤²à¤—-à¤‡à¤¨à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
+    Text[ slovak ] = "Panel zÃ¡suvnÃ½ch modulov";
+};
+
+
+String STR_SURFACE
+{
+    Text = "Oberflächen" ;
+    Text [ ENGLISH ] = "Surface" ;
+    Text [ english_us ] = "Surfaces" ;
+    Text [ italian ] = "Superfici" ;
+    Text [ spanish ] = "Superficies" ;
+    Text [ french ] = "Superficies" ;
+    Text [ dutch ] = "Vlakken" ;
+    Text [ swedish ] = "Ytor" ;
+    Text [ danish ] = "Overflader" ;
+    Text [ portuguese ] = "Superfícies" ;
+    Text [ portuguese_brazilian ] = "Superfícies" ;
+    Text[ chinese_simplified ] = "å¹³é¢";
+    Text[ russian ] = "Ïîâåğõíîñòè";
+    Text[ polish ] = "Powierzchnie";
+    Text[ japanese ] = "è¡¨é¢";
+    Text[ chinese_traditional ] = "å¹³é¢";
+    Text[ arabic ] = "ÃÓØÍ";
+    Text[ greek ] = "ÅğéöÜíåéåò";
+    Text[ korean ] = "í‘œë©´";
+    Text[ turkish ] = "Yüzey";
+    Text[ catalan ] = "Superficies";
+    Text[ finnish ] = "Pinnat";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸œà¸´à¸§";
+    Text[ czech ] = "Povrchy";
+    Text[ hebrew ] = "OberflÃ¤chen";
+    Text[ hindi ] = "à¤¸à¤¤à¤¹";
+    Text[ slovak ] = "Povrchy";
+};
+
+
+String STR_STATISTICS_IN_LEGEND
+{
+    // comment
+    Text[ language_user1 ] = "BM: This determines how a statistics string (STR_REGRESSION_...) appears in the legend, e.g. in german \"Lineare Regression, Spalte 3\" will appear for \"$(STATTYP), $(ROWNAME)\"";
+    // comment
+    Text = "$(STATTYP), $(ROWNAME)";
+    Text [ ENGLISH ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ english_us ] = "$(STATTYP), $(ROWNAME) " ;
+    Text [ italian ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ spanish ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ french ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ dutch ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ swedish ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ danish ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ portuguese ] = "$(STATTYP), $(ROWNAME)" ;
+    Text [ portuguese_brazilian ] = "$(STATTYP), $(ROWNAME)" ;
+    Text[ chinese_simplified ] = "$(STATTYP)ï¼Œ $(ROWNAME)";
+    Text[ russian ] = "$(STATTYP), $(ROWNAME)";
+    Text[ polish ] = "$(STATTYP), $(ROWNAME)";
+    Text[ japanese ] = "$(STATTYP)ã€$(ROWNAME)";
+    Text[ chinese_traditional ] = "$(STATTYP), $(ROWNAME)";
+    Text[ arabic ] = "$(STATTYP), $(ROWNAME)";
+    Text[ greek ] = "$(STATTYP), $(ROWNAME)";
+    Text[ korean ] = "$(STATTYP), $(ROWNAME)";
+    Text[ turkish ] = "$(STATTYP), $(ROWNAME)";
+    Text[ catalan ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ finnish ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ thai ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ czech ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ hebrew ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ hindi ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ slovak ] = "$(STATTYP), $(ROWNAME) ";
+};
+
+String STR_UNDO_SCALE
+{
+    Text = "Texte skalieren" ;
+    Text [ ENGLISH ] = "Scale Text" ;
+    Text [ english_us ] = "Scale Text" ;
+    Text [ italian ] = "Scala testi" ;
+    Text [ spanish ] = "Redimensionar texto" ;
+    Text [ french ] = "Redimensionner les textes" ;
+    Text [ dutch ] = "Teksten op schaal brengen" ;
+    Text [ swedish ] = "Skala texter" ;
+    Text [ danish ] = "Skaler tekst" ;
+    Text [ portuguese ] = "Redimensionar textos" ;
+    Text [ portuguese_brazilian ] = "Escalonar o Texto" ;
+    Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡å­—æ˜¾ç¤ºæ¯”ä¾‹";
+    Text[ russian ] = "Ìàñøòàá òåêñòîâ";
+    Text[ polish ] = "Skaluj tekst";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ã‚¹ã‚±ãƒ¼ãƒ«";
+    Text[ chinese_traditional ] = "ä½¿ç”¨æ–‡å­—é¡¯ç¤ºæ¯”ä¾‹";
+    Text[ arabic ] = "ÊÍÌíã ÇáäÕ";
+    Text[ greek ] = "Êëßìáêá êåéìİíùí";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ë°°ìœ¨ ì¡°ì •";
+    Text[ turkish ] = "Metin ölçeklendir";
+    Text[ catalan ] = "Redimensiona el text";
+    Text[ finnish ] = "Skaalaa teksti";
+    Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+    Text[ czech ] = "Å kÃ¡lovat text";
+    Text[ hebrew ] = "Texte skalieren";
+    Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²à¥ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿ";
+    Text[ slovak ] = "UpraviÅ¥ mierku textu";
+};
+String STR_QUERY_SORT
+{
+    Text = "Die Werte für die X-Achse müssen sortiert vorliegen\nMit Sortierung fortfahren ?" ;
+    Text [ ENGLISH ] = "Values on X-axis should be sorted.\nContinue sorted ?" ;
+    Text [ dutch ] = "De waarden voor de X-as moeten gesorteerd zijn.\nSorteren?" ;
+    Text [ english_us ] = "X axis values must be sorted.\nSort them now?" ;
+    Text [ italian ] = "I valori dell'asse X devono essere ordinati.\nIniziare ad ordinare ?" ;
+    Text [ spanish ] = "Los valores del eje x tienen que ser organizados.\n¿Desea continuar con la organización?" ;
+    Text [ french ] = "Les valeurs pour l'axe X doivent être triées. \nPoursuivre le tri ?" ;
+    Text [ swedish ] = "Värdena för X-axeln måste vara sorterade.\nVill du fortsätta att sortera?" ;
+    Text [ danish ] = "X-aksens værdier skal være sorteret\nVil du sortere dem nu?" ;
+    Text [ portuguese ] = "Os valores para o eixo X têm de estar ordenados\n Começar a ordenar?" ;
+    Text [ portuguese_brazilian ] = "Os valores para o eixo X devem ser ordenados\n Ordená-los agora?" ;
+    Text[ chinese_simplified ] = "X è½´æ•°å€¼å¿…é¡»æ˜¯æ’åºå¥½çš„ã€‚\nè¦ç°åœ¨æ’åºï¼Ÿ";
+    Text[ russian ] = "Çíà÷åíèÿ îñè X äîëæíû áûòü ñîğòèğîâàíû\nÑîğòèğîâàòü?";
+    Text[ polish ] = "Wartoœci na osi X musz¹ zostaæ posortowane.\nCzy zrobiæ to teraz?";
+    Text[ japanese ] = "Xè»¸ã®æ•°å€¤ã‚’ä¸¦ã¹æ›¿ãˆã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™\nä¸¦ã¹æ›¿ãˆã¾ã™ã‹ï¼Ÿ";
+    Text[ chinese_traditional ] = "X-è»¸å¿…é ˆæ˜¯æ’åºå¥½çš„ã€‚\nç¾åœ¨è¦æ’åºï¼Ÿ";
+    Text[ arabic ] = "íÌÈ İÑÒ Şíã ÇáãÍæÑ Ó.\nåá ÊÑíÏ İÑÒåÇ ÇáÂä¿";
+    Text[ greek ] = "Ïé ôéìİò ôïõ Üîïíá X ğñİğåé íá åßíáé ôáîéíïìçìİíåò.\nÍá ãßíåé ôáîéíüìçóŞ ôïõò;";
+    Text[ korean ] = "X ì¶• ê°’ì„ ì •ë ¬í•´ì•¼ í•©ë‹ˆë‹¤.\nì§€ê¸ˆ ì •ë ¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ turkish ] = "X ekseni değerleri sıralanmış olmalıdır\nSıralamaya devam edilsin mi ?";
+    Text[ catalan ] = "Els valors de l'eix X s'han d'ordenar.\\Voleu ordenar-los ara?";
+    Text[ finnish ] = "X-akselin arvot on lajiteltava.\nLajitellaanko nyt?";
+    Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¸„à¹ˆà¸²à¹à¸à¸™X \nà¹€à¸£à¸µà¸¢à¸‡à¹€à¸”à¸µà¹‹à¸¢à¸§à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "Hodnoty osy X musÃ­ bÃ½t seÅ™azeny.\nSeÅ™adit nynÃ­?";
+    Text[ hebrew ] = "Die Werte fÃ¼r die X-Achse mÃ¼ssen sortiert vorliegen\nMit Sortierung fortfahren ?";
+    Text[ hindi ] = "X à¤…à¤•à¥à¤· à¤•à¥‡ à¤®à¥‚à¤²à¥à¤¯à¥‹à¤‚ à¤•à¥‹ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤ à¥¤\nà¤…à¤­à¥€ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
+    Text[ slovak ] = "Hodnoty na osi X musia byÅ¥ zoradenÃ©.\nZoradiÅ¥ ich teraz?";
+};
+String STR_UNDO_REMOVEPOINTATTRS
+{
+    Text = "Datenpunkt-Attribute entfernen" ;
+    Text [ ENGLISH ] = "Remove data point attributes" ;
+    Text [ english_us ] = "Remove data point attributes" ;
+    Text [ italian ] = "Elimina attributi del punto dati" ;
+    Text [ spanish ] = "Borrar atributos del punto de datos" ;
+    Text [ french ] = "Supprimer des attributs de point de données" ;
+    Text [ dutch ] = "Gegevenspunt-attributen verwijderen" ;
+    Text [ swedish ] = "Ta bort datapunktattribut" ;
+    Text [ danish ] = "Fjern datapunktattributter" ;
+    Text [ portuguese ] = "Remover atributos do ponto de dados" ;
+    Text [ portuguese_brazilian ] = "Remover atributos do ponto de dados" ;
+    Text[ chinese_simplified ] = "åˆ é™¤æ•°æ®ç‚¹å±æ€§";
+    Text[ russian ] = "Óäàëèòü àòğèáóòû òî÷êè äàííûõ";
+    Text[ polish ] = "Usuñ atrybuty punktu danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆã®å±æ€§ã‚’è§£é™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤è³‡æ–™é»å±¬æ€§";
+    Text[ arabic ] = "ÅÒÇáÉ ÓãÇÊ äŞØÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÊáôÜñãçóç éäéïôŞôùí óçìåßùí äåäïìİíùí";
+    Text[ korean ] = "ë°ì´í„° í¬ì¸í„° ì†ì„± ì œê±°";
+    Text[ turkish ] = "Veri noktası özniteliklerini kaldır";
+    Text[ catalan ] = "Suprimeix els atributs del punt de dades";
+    Text[ finnish ] = "Poista arvopisteiden määritteet";
+    Text[ thai ] = "à¹€à¸­à¸²à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸­à¸";
+    Text[ czech ] = "Odstranit atributy datovÃ©ho bodu";
+    Text[ hebrew ] = "Datenpunkt-Attribute entfernen";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¬à¤¿à¤¨à¥à¤¦à¥à¤“à¤‚ à¤•à¥‡ à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥‹à¤‚ à¤•à¥‹ à¤¹à¤Ÿà¤¾à¤“";
+    Text[ slovak ] = "OdstrÃ¡niÅ¥ atribÃºty dÃ¡tovÃ©ho bodu";
+};
+String STR_APPNAME
+{
+    Text = "StarChart" ;
+    Text [ ENGLISH ] = "StarChart" ;
+    Text [ english_us ] = "%PRODUCTNAME Chart" ;
+    Text [ dutch ] = "%PRODUCTNAME Chart" ;
+    Text [ swedish ] = "%PRODUCTNAME Chart" ;
+    Text [ danish ] = "%PRODUCTNAME Chart" ;
+    Text [ italian ] = "%PRODUCTNAME Chart" ;
+    Text [ spanish ] = "%PRODUCTNAME Chart" ;
+    Text [ french ] = "%PRODUCTNAME Chart" ;
+    Text [ portuguese ] = "%PRODUCTNAME Chart" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Chart" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME Chart";
+    Text[ russian ] = "Äèàãğàììà %PRODUCTNAME";
+    Text[ polish ] = "%PRODUCTNAME Chart";
+    Text[ japanese ] = "%PRODUCTNAME Chart";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Chart";
+    Text[ arabic ] = "%PRODUCTNAME Chart";
+    Text[ greek ] = "StarChart";
+    Text[ korean ] = "StarChart";
+    Text[ turkish ] = "%PRODUCTNAME Chart";
+    Text[ catalan ] = "%PRODUCTNAME Chart";
+    Text[ finnish ] = "%PRODUCTNAME Chart";
+    Text[ thai ] = "à¹à¸œà¸™à¸ à¸¹à¸¡à¸´%PRODUCTNAME ";
+    Text[ czech ] = "%PRODUCTNAME Graf";
+    Text[ hebrew ] = "StarChart";
+    Text[ hindi ] = "%PRODUCTNAME à¤šà¤¾à¤°à¥à¤Ÿ";
+    Text[ slovak ] = "%PRODUCTNAME Graf";
+};
+
+String STR_UNDO_MOREBACK
+{
+    Text = "Datenreihe verschieben" ;
+    Text [ ENGLISH ] = "Move Datarow" ;
+    Text[ italian ] = "Sposta serie di dati";
+    Text[ portuguese_brazilian ] = "Mover série de dados";
+    Text[ portuguese ] = "Mover série de dados";
+    Text[ danish ] = "Flyt dataserie";
+    Text[ french ] = "Déplacer la série de données";
+    Text[ swedish ] = "Flytta dataserie";
+    Text[ dutch ] = "Gegevensreeks verplaatsen";
+    Text[ spanish ] = "Desplazar fila de datos";
+    Text[ english_us ] = "Move data series";
+    Text[ chinese_simplified ] = "ç§»åŠ¨æ•°æ®ç»„";
+    Text[ russian ] = "Ïåğåìåñòèòü ğÿä äàííûõ";
+    Text[ polish ] = "Przenieœ seriê danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—ã®ç§»å‹•";
+    Text[ chinese_traditional ] = "ç§»å‹•è³‡æ–™æ¬„";
+    Text[ arabic ] = "ÊÍÑíß ÓáÓáÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "Ìåôáêßíçóç óåéñÜò äåäïìİíùí";
+    Text[ korean ] = "ì—°ì† ë°ì´í„° ì´ë™";
+    Text[ turkish ] = "Veri dizisi taşı";
+    Text[ catalan ] = "Mou la fila de dades";
+    Text[ finnish ] = "Siirrä tietojoukot";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "PÅ™esunout datovou Å™adu";
+    Text[ hebrew ] = "Datenreihe verschieben";
+    Text[ hindi ] = "à¤¡à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤‚à¤¤à¤° à¤•à¤°à¥‹";
+    Text[ slovak ] = "PresunÃºÅ¥ dÃ¡tovÃ© rady";
+};
+String STR_UNDO_MOREFRONT
+{
+    Text = "Datenreihe verschieben" ;
+    Text [ ENGLISH ] = "Move Datarow" ;
+    Text[ italian ] = "Sposta serie di dati";
+    Text[ portuguese_brazilian ] = "Mover série de dados";
+    Text[ portuguese ] = "Mover série de dados";
+    Text[ danish ] = "Flyt dataserie";
+    Text[ french ] = "Déplacer la série de données";
+    Text[ swedish ] = "Flytta dataserie";
+    Text[ dutch ] = "Gegevensreeks verplaatsen";
+    Text[ spanish ] = "Desplazar fila de datos";
+    Text[ english_us ] = "Move data series";
+    Text[ chinese_simplified ] = "ç§»åŠ¨æ•°æ®ç»„";
+    Text[ russian ] = "Ïåğåìåñòèòü ğÿä äàííûõ";
+    Text[ polish ] = "Przenieœ seriê danych";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—ã®ç§»å‹•";
+    Text[ chinese_traditional ] = "ç§»å‹•è³‡æ–™æ¬„";
+    Text[ arabic ] = "ÊÍÑíß ÓáÓáÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "Ìåôáêßíçóç óåéñÜò äåäïìİíùí";
+    Text[ korean ] = "ì—°ì† ë°ì´í„° ì´ë™";
+    Text[ turkish ] = "Veri dizisi taşı";
+    Text[ catalan ] = "Mou la fila de dades";
+    Text[ finnish ] = "Siirrä tietojoukot";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "PÅ™esunout datovou Å™adu";
+    Text[ hebrew ] = "Datenreihe verschieben";
+    Text[ hindi ] = "à¤¡à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤‚à¤¤à¤° à¤•à¤°à¥‹";
+    Text[ slovak ] = "PresunÃºÅ¥ dÃ¡tovÃ© rady";
+};
+
+String STR_UNDO_DIAGRAM_STOCK_LOSS
+{
+    Text = "Negative Abweichung bearbeiten" ;
+    Text [ ENGLISH ] = "Modify negative deviation";
+    Text[ italian ] = "Modifica deviazione negativa";
+    Text[ portuguese_brazilian ] = "Editar desvio negativo";
+    Text[ portuguese ] = "Modificar desvio negativo";
+    Text[ danish ] = "Rediger negativ afvigelse";
+    Text[ french ] = "Éditer la déviation négative";
+    Text[ swedish ] = "Redigera negativ avvikelse";
+    Text[ dutch ] = "Negatieve deviatie bewerken";
+    Text[ spanish ] = "Modificar desviación negativa";
+    Text[ english_us ] = "Edit negative deviation";
+    Text[ chinese_simplified ] = "ç¼–è¾‘è´Ÿå€¼åå·®";
+    Text[ russian ] = "Èçìåíèòü îòğèöàòåëüíîå îòêëîíåíèå";
+    Text[ polish ] = "Edytuj odchylenie ujemne";
+    Text[ japanese ] = "ãƒã‚¤ãƒŠã‚¹åå·®ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯è² å€¼åå·®";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÇäÍÑÇİ ÇáÓÇáÈ";
+    Text[ greek ] = "Åğåîåñãáóßá áñíçôéêŞò áğüêëéóçò";
+    Text[ korean ] = "ìŒìˆ˜ í¸ì°¨ í¸ì§‘";
+    Text[ turkish ] = "Negatif sapmayı düzenle";
+    Text[ catalan ] = "Modifica la desviació negativa";
+    Text[ finnish ] = "Muokkaa negatiivista poikkeamaa";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¹€à¸šà¸µà¹ˆà¸¢à¸‡à¹€à¸šà¸™à¸¥à¸š";
+    Text[ czech ] = "Upravit negativnÃ­ odchylku";
+    Text[ hebrew ] = "Negative Abweichung bearbeiten";
+    Text[ hindi ] = "à¤•à¥à¤·à¤¯à¤°à¤¾à¤¶à¤¿ à¤…à¤¤à¤¿à¤•à¥à¤°à¤® à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ zÃ¡pornÃº odchÃ½lku";
+};
+String STR_UNDO_DIAGRAM_STOCK_PLUS
+{
+    Text = "positive Abweichung bearbeiten" ;
+    Text [ ENGLISH ] = "Modify positive deviation";
+    Text[ italian ] = "Modifica deviazione positiva";
+    Text[ portuguese_brazilian ] = "Editar desvio positivo";
+    Text[ portuguese ] = "Modificar desvio positivo";
+    Text[ danish ] = "Rediger positiv afvigelse";
+    Text[ french ] = "Éditer la déviation positive";
+    Text[ swedish ] = "Redigera positiv avvikelse";
+    Text[ dutch ] = "Positieve deviatie bewerken";
+    Text[ spanish ] = "Editar la desviación positiva";
+    Text[ english_us ] = "Edit positive deviation";
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ­£å€¼åå·®";
+    Text[ russian ] = "Èçìåíèòü ïîëîæèòåëüíîå îòêëîíåíèå";
+    Text[ polish ] = "Edytuj odchylenie dodatnie";
+    Text[ japanese ] = "ãƒ—ãƒ©ã‚¹åå·®ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ­£å€¼åå·®";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÇäÍÑÇİ ÇáãæÌÈ";
+    Text[ greek ] = "Åğåîåñãáóßá èåôéêŞò áğüêëéóçò";
+    Text[ korean ] = "ì–‘ìˆ˜ í¸ì°¨ í¸ì§‘";
+    Text[ turkish ] = "Pozitif sapmayı düzenle";
+    Text[ catalan ] = "Modifica la desviació positiva";
+    Text[ finnish ] = "Muokkaa positiivista poikkeamaa";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¹€à¸šà¸µà¹ˆà¸¢à¸‡à¹€à¸šà¸™à¸šà¸§à¸";
+    Text[ czech ] = "Upravit pozitivnÃ­ odchylku";
+    Text[ hebrew ] = "positive Abweichung bearbeiten";
+    Text[ hindi ] = "à¤§à¤¨à¤°à¤¾à¤¶à¤¿ à¤…à¤¤à¤¿à¤•à¥à¤°à¤® à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
+    Text[ slovak ] = "UpraviÅ¥ kladnÃº odchÃ½lku";
+};
+//-----------------------------------
+
+
+String STR_UNDO_INSERT_SPECCHAR
+{
+    Text = "Sonderzeichen einfügen" ;
+    Text [ ENGLISH ] = "Insert special character" ;
+    Text [ english_us ] = "Insert special character" ;
+    Text [ italian ] = "Inserisci carattere speciale" ;
+    Text [ spanish ] = "Insertar símbolo" ;
+    Text [ french ] = "Insérer des caractères spéciaux" ;
+    Text [ dutch ] = "Speciale tekens invoegen" ;
+    Text [ swedish ] = "Infoga specialtecken" ;
+    Text [ danish ] = "Indsæt specialtegn" ;
+    Text [ portuguese ] = "Inserir caracteres especiais" ;
+    Text [ portuguese_brazilian ] = "Inserir caracter especial" ;
+    Text[ chinese_simplified ] = "æ’å…¥ç‰¹æ®Šå­—ç¬¦";
+    Text[ russian ] = "Âñòàâèòü ñèìâîëû";
+    Text[ polish ] = "Wstaw znak specjalny";
+    Text[ japanese ] = "ç‰¹æ®Šæ–‡å­—ã®æŒ¿å…¥";
+    Text[ greek ] = "ÅéóáãùãŞ åéäéêïı ÷áñáêôŞñá";
+    Text[ korean ] = "íŠ¹ìˆ˜ ë¬¸ì ì‚½ì…";
+    Text[ chinese_traditional ] = "æ’å…¥ç‰¹æ®Šå­—å…ƒ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
+    Text[ turkish ] = "Özel karakter ekle";
+    Text[ catalan ] = "Insereix símbol";
+    Text[ finnish ] = "Lisää erikoismerkki";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸à¸´à¹€à¸¨à¸©";
+    Text[ czech ] = "VloÅ¾it zvlÃ¡Å¡tnÃ­ znak";
+    Text[ hebrew ] = "Sonderzeichen einfÃ¼gen";
+    Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤· à¤…à¤•à¥à¤·à¤° à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
+    Text[ slovak ] = "VloÅ¾iÅ¥ Å¡peciÃ¡lny znak";
+};
+
+// some strings merged using arguments now
+
+String STR_STATUS_DATAPOINT_MARKED
+{
+    // this string is displayed in the status bar whenever a data point is selected
+
+    Text = "Datenpunkt $(PT_NUM) in Reihe $(ROW_NUM) markiert, Wert: $(VALUE)";
+    Text [ english_us ] = "Data Point $(PT_NUM) in row $(ROW_NUM) selected, value: $(VALUE)";
+    Text[ portuguese ] = "Ponto de dados $(PT_NUM) na série $(ROW_NUM) seleccionado, valor: $(VALUE)";
+    Text[ russian ] = "Òî÷êà äàííûõ $(PT_NUM) â ñòğîêå $(ROW_NUM) âûäåëåíà, çíà÷åíèå: $(VALUE)";
+    Text[ greek ] = "ÅğéëïãŞ óçìåßïõ äåäïìİíùí $(PT_NUM) óôéò óåéñİò $(ROW_NUM), ôéìŞ: $(VALUE)";
+    Text[ dutch ] = "Gegevenspunt $(PT_NUM) in rij $(ROW_NUM) gemarkeerd, waarde: $(VALUE)";
+    Text[ french ] = "Point de données $(PT_NUM) dans la série $(ROW_NUM) marqué, valeur : $(VALUE)";
+    Text[ spanish ] = "Punto de datos $(PT_NUM) en fila $(ROW_NUM) seleccionado, valor: $(VALUE)";
+    Text[ italian ] = "Punto dati $(PT_NUM) in serie $(ROW_NUM) selezionato, valore: $(VALUE)";
+    Text[ danish ] = "Datapunkt $(PT_NUM) i serie $(ROW_NUM) markeret, værdi: $(VALUE)";
+    Text[ swedish ] = "Datapunkt $(PT_NUM) i serie $(ROW_NUM) markerad, värde: $(VALUE)";
+    Text[ polish ] = "Zaznaczono punkt danych $(PT_NUM) w wierszu $(ROW_NUM), wartoœæ: $(VALUE)";
+    Text[ portuguese_brazilian ] = "Ponto de dados $(PT_NUM) na linha $(ROW_NUM) selecionado, valor: $(VALUE)";
+    Text[ japanese ] = "ç³»åˆ—$(ROW_NUM)ã®ãƒ‡ãƒ¼ã‚¿ ãƒã‚¤ãƒ³ãƒˆ$(PT_NUM)ã‚’é¸æŠã€æ•°å€¤: $(VALUE)";
+    Text[ korean ] = "ì—´ $(ROW_NUM)ì˜ ë°ì´í„° í¬ì¸íŠ¸ $(PT_NUM) í‘œì‹œë¨, ê°’:$(VALUE)";
+    Text[ chinese_simplified ] = "é€‰ä¸­æ•°æ®ç³»åˆ—$(ROW_NUM)ä¸­çš„æ•°æ®ç‚¹$(PT_NUM)ï¼Œæ•°å€¼ï¼š$(VALUE)";
+    Text[ chinese_traditional ] = "é¸å– $(ROW_NUM)æ¬„çš„è³‡æ–™é» $(PT_NUM)ï¼Œæ•¸å€¼ï¼š$(VALUE)";
+    Text[ arabic ] = "äŞØÉ ÇáÈíÇäÇÊ $(PT_NUM) İí ÇáÕİ $(ROW_NUM) ãÍÏÏÉ¡ ÇáŞíãÉ: $(VALUE)";
+    Text[ turkish ] = "$(ROW_NUM) dizisindeki $(PT_NUM) veri noktası işaretlendi. Değeri: $(VALUE)";
+    Text[ catalan ] = "S'ha seleccionat el punt de dades $(PT_NUM) de la fila $(ROW_NUM), valor: $(VALUE)";
+    Text[ finnish ] = "Valittu arvopiste $(PT_NUM) riviltä $(ROW_NUM), arvo: $(VALUE)";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ $(PT_NUM) à¹ƒà¸™à¹à¸–à¸§ $(ROW_NUM) , à¸„à¹ˆà¸²: $(VALUE)";
+    Text[ czech ] = "Byl zvolen datovÃ½ bod $(PT_NUM) na Å™Ã¡dku $(ROW_NUM), jehoÅ¾ hodnota je: $(VALUE)";
+    Text[ hebrew ] = "Datenpunkt $(PT_NUM) in Reihe $(ROW_NUM) markiert, Wert: $(VALUE)";
+    Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ $(ROW_NUM) à¤®à¥‡à¤‚ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¬à¤¿à¤¨à¥à¤¦à¥ $(PT_NUM) à¤•à¥‹ à¤šà¥à¤¨à¤¾ à¤¹à¥ˆ, à¤®à¥‚à¤²à¥à¤¯: $(VALUE)";
+    Text[ slovak ] = "DÃ¡tovÃ½ bod $(PT_NUM) na riadku $(ROW_NUM) vybranÃ½, hodnota: $(VALUE)";
+};
+
+String STR_QUICKHELP_DATAPOINT
+{
+    Text = "Datenpunkt $(PT_NUM), Reihe $(ROW_NUM), Wert: $(VALUE)";
+    Text [ english_us ] = "Data Point $(PT_NUM), row $(ROW_NUM), value: $(VALUE)";
+    Text[ portuguese ] = "Ponto de dados $(PT_NUM), série $(ROW_NUM), valor: $(VALUE)";
+    Text[ russian ] = "Òî÷êà äàííûõ $(PT_NUM), ñòğîêà $(ROW_NUM), çíà÷åíèå: $(VALUE)";
+    Text[ greek ] = "Óçìåßï äåäïìİíùí $(PT_NUM),óåéñİò $(ROW_NUM), ôéìŞ: $(VALUE)";
+    Text[ dutch ] = "Gegevenspunt $(PT_NUM), rij $(ROW_NUM), waarde: $(VALUE)";
+    Text[ french ] = "Point de données $(PT_NUM), série $(ROW_NUM), valeur : $(VALUE)";
+    Text[ spanish ] = "Punto de dato $(PT_NUM), fila $(ROW_NUM), valor: $(VALUE)";
+    Text[ italian ] = "Punto dati $(PT_NUM), serie $(ROW_NUM), valore: $(VALUE)";
+    Text[ danish ] = "Datapunkt $(PT_NUM), serie $(ROW_NUM), værdi: $(VALUE)";
+    Text[ swedish ] = "Datapunkt $(PT_NUM), serie $(ROW_NUM), värde: $(VALUE)";
+    Text[ polish ] = "Punkt danych $(PT_NUM), wiersz $(ROW_NUM), wartoœæ: $(VALUE)";
+    Text[ portuguese_brazilian ] = "Ponto de dados $(PT_NUM), linha $(ROW_NUM), valor: $(VALUE)";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ ãƒã‚¤ãƒ³ãƒˆ$(PT_NUM)ã€ç³»åˆ—$(ROW_NUM)ã€æ•°å€¤: $(VALUE)";
+    Text[ korean ] = "ì—´ $(ROW_NUM)ì˜ ë°ì´í„° í¬ì¸íŠ¸ $(PT_NUM), ê°’: $(VALUE)";
+    Text[ chinese_simplified ] = "æ•°æ®ç‚¹$(PT_NUM)ï¼Œæ•°æ®ç³»åˆ—$(ROW_NUM)ï¼Œæ•°å€¼ï¼š$(VALUE)";
+    Text[ chinese_traditional ] = "è³‡æ–™é» $(PT_NUM)ï¼Œæ¬„ $(ROW_NUM)ï¼Œæ•¸å€¼ï¼š$(VALUE)";
+    Text[ arabic ] = "äŞØÉ ÇáÈíÇäÇÊ $(PT_NUM)¡ ÇáÕİ $(ROW_NUM)¡ ÇáŞíãÉ: $(VALUE)";
+    Text[ turkish ] = "$(ROW_NUM) dizisindeki $(PT_NUM) veri noktası işaretlendi. Değeri: $(VALUE)";
+    Text[ catalan ] = "Punt de dades $(PT_NUM), fila $(ROW_NUM), valor: $(VALUE)";
+    Text[ finnish ] = "Arvopiste $(PT_NUM), rivi $(ROW_NUM), arvo: $(VALUE)";
+    Text[ thai ] = "à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ $(PT_NUM), à¹à¸–à¸§ $(ROW_NUM), à¸„à¹ˆà¸²: $(VALUE)";
+    Text[ czech ] = "DatovÃ½ bod $(PT_NUM), Å™Ã¡dek $(ROW_NUM), hodnota: $(VALUE)";
+    Text[ hebrew ] = "Datenpunkt $(PT_NUM), Reihe $(ROW_NUM), Wert: $(VALUE)";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¬à¤¿à¤¨à¥à¤¦à¥ $(PT_NUM), à¤ªà¤‚à¤•à¥à¤¤à¤¿ $(ROW_NUM), à¤®à¥‚à¤²à¥à¤¯: $(VALUE)";
+    Text[ slovak ] = "DÃ¡tovÃ½ bod $(PT_NUM), riadok $(ROW_NUM), hodnota: $(VALUE)";
+};
+
+String STR_BALLOONHELP_DATAPOINT
+{
+    // $(NEWLINE) begins a new line, $(PT_STR) and $(ROW_STR) are the
+    // row/column captions
+
+    Text = "Datenpunkt $(PT_STR)$(NEWLINE)Reihe $(ROW_STR)$(NEWLINE)Wert: $(VALUE)";
+    Text [ english_us ] = "Data Point $(PT_STR)$(NEWLINE)row $(ROW_STR)$(NEWLINE)value: $(VALUE)";
+    Text[ portuguese ] = "Ponto de dados $(PT_STR)$(NEWLINE)série $(ROW_STR)$(NEWLINE)valor: $(VALUE)";
+    Text[ russian ] = "Òî÷êà äàííûõ $(PT_STR)$(NEWLINE)ñòğîêà $(ROW_STR)$(NEWLINE)çíà÷åíèå: $(VALUE)";
+    Text[ greek ] = "Óçìåßï äåäïìİíùí $(PT_STR)$(NEWLINE)óåéñÜ $(ROW_NUM)ôéìŞ: $(VALUE)";
+    Text[ dutch ] = "Gegevenspunt $(PT_STR)$(NEWLINE)rij $(ROW_STR)$(NEWLINE)waarde: $(VALUE)";
+    Text[ french ] = "Point de données $(PT_STR)$(NEWLINE)série $(ROW_STR)$(NEWLINE)valeur : $(VALUE)";
+    Text[ spanish ] = "Punto de dato $(PT_STR)$(NEWLINE)fila $(ROW_STR)$(NEWLINE)valor: $(VALUE)";
+    Text[ italian ] = "Punto dati $(PT_STR)$(NEWLINE)serie $(ROW_STR)$(NEWLINE)valore: $(VALUE)";
+    Text[ danish ] = "Datapunkt $(PT_STR)$(NEWLINE)serie $(ROW_STR)$(NEWLINE)værdi: $(VALUE)";
+    Text[ swedish ] = "Datapunkt $(PT_STR)$(NEWLINE)serie $(ROW_STR)$(NEWLINE)värde: $(VALUE)";
+    Text[ polish ] = "Punkt danych $(PT_STR)$(NEWLINE)wiersz $(ROW_STR)$(NEWLINE)wartoœæ: $(VALUE)";
+    Text[ portuguese_brazilian ] = "Ponto de dados $(PT_STR)$(NEWLINE)linha $(ROW_STR)$(NEWLINE)valor: $(VALUE)";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒã‚¤ãƒ³ãƒˆ$(PT_STR)$(NEWLINE)ç³»åˆ— $(ROW_STR)$(NEWLINE)æ•°å€¤: $(VALUE)";
+    Text[ korean ] = "ë°ì´í„° í¬ì¸íŠ¸ $(PT_STR)$(NEWLINE) ì—´ $(ROW_STR)$(NEWLINE) ê°’: $(VALUE)";
+    Text[ chinese_simplified ] = "æ•°æ®ç‚¹$(PT_STR)$(NEWLINE)æ•°æ®ç³»åˆ—$(ROW_STR)$(NEWLINE)æ•°å€¼ï¼š$(VALUE)";
+    Text[ chinese_traditional ] = "è³‡æ–™é» $(PT_STR)$(NEWLINE)æ¬„$(ROW_STR)$(NEWLINE)æ•¸å€¼ï¼š$(VALUE)";
+    Text[ arabic ] = "äŞØÉ ÇáÈíÇäÇÊ $(PT_STR)$(NEWLINE)ÇáÕİ $(ROW_STR)$(NEWLINE)ÇáŞíãÉ: $(VALUE)";
+    Text[ turkish ] = "Veri noktası $(PT_STR)$(NEWLINE)Dizi $(ROW_STR)$(NEWLINE)Değer: $(VALUE)";
+    Text[ catalan ] = "Punt de dades $(PT_STR)$(NEWLINE)fila $(ROW_STR)$(NEWLINE)valor: $(VALUE)";
+    Text[ finnish ] = "Arvopiste $(PT_STR)$(NEWLINE)rivi $(ROW_STR)$(NEWLINE)arvo: $(VALUE)";
+    Text[ thai ] = "à¸ˆà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ $(PT_STR)$(NEWLINE)à¹à¸–à¸§ $(ROW_STR)$(NEWLINE)à¸„à¹ˆà¸²: $(VALUE)";
+    Text[ czech ] = "DatovÃ½ bod $(PT_STR)$(NEWLINE)Å™Ã¡dek $(ROW_STR)$(NEWLINE)hodnota: $(VALUE)";
+    Text[ hebrew ] = "Datenpunkt $(PT_STR)$(NEWLINE)Reihe $(ROW_STR)$(NEWLINE)Wert: $(VALUE)";
+    Text[ hindi ] = "Data Point $(PT_STR)$(NEWLINE)row $(ROW_STR)$(NEWLINE)value: $(VALUE)";
+    Text[ slovak ] = "DÃ¡tovÃ½ bod $(PT_STR)$(NEWLINE)riadok $(ROW_STR)$(NEWLINE)hodnota: $(VALUE)";
+};
+
+// some more strings for QuickHelp
+
+String STR_AVERAGEVALUE
+{
+    Text = "Mittelwertlinie";
+    Text [ english_us ] = "average value line";
+    Text[ portuguese ] = "Linha de média";
+    Text[ russian ] = "ëèíèÿ ñğåäíåãî çíà÷åíèÿ";
+    Text[ greek ] = "ÃñáììŞ ìİóçò ôéìŞò";
+    Text[ dutch ] = "Gemiddelde waarde lijn";
+    Text[ french ] = "Ligne de moyenne";
+    Text[ spanish ] = "Línea de valor medio";
+    Text[ italian ] = "Linea di valore medio";
+    Text[ danish ] = "Middelværdilinje";
+    Text[ swedish ] = "Medelvärdeslinje";
+    Text[ polish ] = "Linia œredniej";
+    Text[ portuguese_brazilian ] = "Linha de valor médio";
+    Text[ japanese ] = "å¹³å‡å€¤ç·š";
+    Text[ korean ] = "í‰ê· ê°’ ì„ ";
+    Text[ chinese_simplified ] = "å¹³å‡å€¼çº¿";
+    Text[ chinese_traditional ] = "å¹³å‡å€¼ç·š";
+    Text[ arabic ] = "ÎØ ÇáãÚÏá";
+    Text[ turkish ] = "Ortalama değer çizgisi";
+    Text[ catalan ] = "Línia de promig";
+    Text[ finnish ] = "rivin keskiarvo";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸„à¹ˆà¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢";
+    Text[ czech ] = "ÄÃ¡ra prÅ¯mÄ›ru";
+    Text[ hebrew ] = "Mittelwertlinie";
+    Text[ hindi ] = "à¤®à¤§à¥à¤¯à¤® à¤®à¥‚à¤²à¥à¤¯ à¤°à¥‡à¤–à¤¾";
+    Text[ slovak ] = "Äiara priemernej hodnoty";
+};
+
+String STR_DIAGRAM_ERROR
+{
+    Text = "Fehlerindikator";
+    Text [ english_us ] = "error indicator";
+    Text[ portuguese ] = "Indicador de erro";
+    Text[ russian ] = "Èíäèêàòîğ îøèáêè";
+    Text[ greek ] = "Äåßêôçò óöÜëìáôïò";
+    Text[ dutch ] = "Foutindicator";
+    Text[ french ] = "Indicateur d'erreurs";
+    Text[ spanish ] = "Indicador de error";
+    Text[ italian ] = "Indicatore di errore";
+    Text[ danish ] = "Fejlindikator";
+    Text[ swedish ] = "Felindikator";
+    Text[ polish ] = "WskaŸnik b³êdu";
+    Text[ portuguese_brazilian ] = "indicador de erro";
+    Text[ japanese ] = "èª¤å·®ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿";
+    Text[ korean ] = "ì˜¤ë¥˜ í‘œì‹œê¸°";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºé”™è¯¯";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºéŒ¯èª¤";
+    Text[ arabic ] = "ãÄÔÑ ÇáÃÎØÇÁ";
+    Text[ turkish ] = "Hata göstergesi";
+    Text[ catalan ] = "indicador d'error";
+    Text[ finnish ] = "virheilmaisin";
+    Text[ thai ] = "à¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+    Text[ czech ] = "chybovÃ½ indikÃ¡tor";
+    Text[ hebrew ] = "Fehlerindikator";
+    Text[ hindi ] = "à¤—à¤²à¤¤ à¤¨à¤¿à¤¦à¤°à¥à¤¶à¤•";
+    Text[ slovak ] = "indikÃ¡tor chÃ½b";
+};
+
+String STR_DIAGRAM_REGRESSION
+{
+    Text = "Regressionskurve";
+    Text [ english_us ] = "regression curve";
+    Text[ portuguese ] = "Curva regressiva";
+    Text[ russian ] = "êğèâàÿ ğåãğåññèè";
+    Text[ greek ] = "Êáìğıëç ğáëéíäñüìçóçò";
+    Text[ dutch ] = "Regressieboog";
+    Text[ french ] = "Courbe de régression";
+    Text[ spanish ] = "Curva de regresión";
+    Text[ italian ] = "Curva di regressione";
+    Text[ danish ] = "Regressionskurve";
+    Text[ swedish ] = "Regressionskurva";
+    Text[ polish ] = "Krzywa regresji";
+    Text[ portuguese_brazilian ] = "Curva de regressão";
+    Text[ japanese ] = "å›å¸°æ›²ç·š";
+    Text[ korean ] = "íšŒê·€ ê³¡ì„ ";
+    Text[ chinese_simplified ] = "å›å½’æ›²çº¿";
+    Text[ chinese_traditional ] = "è¿´æ­¸æ›²ç·š";
+    Text[ arabic ] = "ãäÍäì ÇáÇäÍÏÇÑ";
+    Text[ turkish ] = "Regresyon eğrisi";
+    Text[ catalan ] = "Corba de regressió";
+    Text[ finnish ] = "regressiokäyrä";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹‚à¸„à¹‰à¸‡à¸–à¸”à¸–à¸­à¸¢";
+    Text[ czech ] = "regresnÃ­ kÅ™ivka";
+    Text[ hebrew ] = "Regressionskurve";
+    Text[ hindi ] = "à¤°à¤¿à¤—à¥à¤°à¥‡à¤¶à¥à¤¯à¤¨ à¤µà¤•à¥à¤°";
+    Text[ slovak ] = "regresnÃ¡ krivka";
+};
+
+String STR_CFG_DEFAULT_COLORS
+{
+    Text = "Grundfarben";
+    Text [ english_us ] = "Default colors";
+    Text[ portuguese ] = "Cores padrão";
+    Text[ russian ] = "Îñíîâíûå öâåòà";
+    Text[ greek ] = "ÂáóéêÜ ÷ñşìáôá";
+    Text[ dutch ] = "Basiskleuren";
+    Text[ french ] = "Couleurs par défaut";
+    Text[ spanish ] = "Colores predeterminados";
+    Text[ italian ] = "Colori di base";
+    Text[ danish ] = "Standardfarver";
+    Text[ swedish ] = "Grundfärger";
+    Text[ polish ] = "Kolory domyœlne";
+    Text[ portuguese_brazilian ] = "Cores padrão";
+    Text[ japanese ] = "åŸºæœ¬è‰²";
+    Text[ korean ] = "ê¸°ë³¸ ìƒ‰ìƒ";
+    Text[ chinese_simplified ] = "åŸºæœ¬è‰²";
+    Text[ chinese_traditional ] = "åŸºè‰²";
+    Text[ arabic ] = "ÇáÃáæÇä ÇáÇİÊÑÇÖíÉ";
+    Text[ turkish ] = "Temel renkler";
+    Text[ catalan ] = "Colors per defecte";
+    Text[ finnish ] = "Oletusvärit";
+    Text[ thai ] = "à¸„à¹ˆà¸²à¸ªà¸µà¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ czech ] = "VÃ½chozÃ­ barvy";
+    Text[ hebrew ] = "Grundfarben";
+    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤°à¤‚à¤—";
+    Text[ slovak ] = "VÃ½chodzie farby";
+};
+
+String STR_PIE_SEGMENT_EXPLODED
+{   // shown in status bar. Parameter $(PERCENT) becomes a floating point number
+    Text = "Tortenstück $(PERCENT) Prozent explodiert";
+    Text[ ENGLISH ] = "Pie exploded $(PERCENT) percent";
+    Text[ english ] = "Pie exploded $(PERCENT) percent";
+    Text[ english_us ] = "Pie exploded by $(PERCENT) percent";
+    Text[ portuguese ] = "Sector explodiu a $(PERCENT) por cento";
+    Text[ russian ] = "Äğîáëåíèå íà ñåêòîğà ïî $(PERCENT) ïğîöåíòîâ";
+    Text[ greek ] = "Ğßôá $(PERCENT) ğïóïóôü ìå áğïìáêñõóìİíá ôìŞìáôá";
+    Text[ dutch ] = "Taartstuk $(PERCENT) percent geëxplodeerd";
+    Text[ french ] = "Secteur éclaté à $(PERCENT) pour cent";
+    Text[ spanish ] = "Sector separado: $(PERCENT) porciento ";
+    Text[ italian ] = "Settore esploso del $(PERCENT) percento";
+    Text[ danish ] = "Lagkagestykke $(PERCENT) procent eksploderet";
+    Text[ swedish ] = "Tårtbit exploderat $(PERCENT) procent";
+    Text[ polish ] = "Wykres ko³owy rozsuniêty o $(PERCENT) procent";
+    Text[ portuguese_brazilian ] = "Pizza explodida em $(PERCENT) por cento";
+    Text[ japanese ] = "åˆ‡ç‰‡ã‚’ $(PERCENT)ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆåˆ‡ã‚Šé–‹ã";
+    Text[ korean ] = "ì¼€ì´í¬ ì¡°ê°$(PERCENT) ë°±ë¶„ìœ¨ ë¶„í• ";
+    Text[ chinese_simplified ] = "åœ†é¥¼åˆ†è£‚æˆ $(PERCENT)(ç™¾åˆ†æ¯”)";
+    Text[ chinese_traditional ] = "åœ“å½¢åˆ†è£‚æˆ $(PERCENT)ç™¾åˆ†æ¯”";
+    Text[ arabic ] = "ÇäİÕáÊ ŞØÚÉ $(PERCENT) İí ÇáãÆÉ";
+    Text[ turkish ] = "Yüzde oranlarına $(PERCENT) göre ayrılmış pasta grafiği";
+    Text[ catalan ] = "El diagrama de sectors s'ha ampliat d'un $(PERCENT) per cent";
+    Text[ finnish ] = "Kaavio-osuuden laajennus $(PERCENT) %";
+    Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¸à¸²à¸¢à¹à¸•à¸à¹‚à¸”à¸¢ $(PERCENT) à¹€à¸›à¸­à¸£à¹Œà¹€à¸‹à¹‡à¸™à¸•à¹Œ";
+    Text[ czech ] = "KolÃ¡Ä vytaÅ¾enÃ½ o $(PERCENT) procent";
+    Text[ hebrew ] = "TortenstÃ¼ck $(PERCENT) Prozent explodiert";
+    Text[ hindi ] = "$(PERCENT) à¤ªà¥à¤°à¤¤à¤¿à¤¶à¤¤ à¤µà¥ƒà¤¤à¤–à¤£à¥à¤¡ à¤«à¥‚à¤Ÿ à¤ªà¤¡à¤¼à¤¾ à¤¹à¥ˆ";
+    Text[ slovak ] = "KolÃ¡Ä roztiahnutÃ½ o (PERCENT) percent";
+};
+
+String STR_DIAGRAM_DATA_SAFETY_QUERY
+{
+    Text = "Die Daten wurden geändert.\Sollen die Änderungen übernommen werden?" ;
+    Text[ English ] = "The data has been modified.\n Do you want to apply the changes?" ;
+    Text[ english_us ] = "Data has been changed.\n Do you want to apply the changes?" ;
+    Text[ portuguese ] = "Os dados foram modificados.\n Aplicar as modificações?";
+    Text[ russian ] = "Äàííûå áûëè èçìåíåíû.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
+    Text[ greek ] = "Ôá äåäïìİíá ôñïğïğïéŞèçêáí.\n Èİëåôå íá åöáñìïóôïıí ïé áëëáãİò;";
+    Text[ dutch ] = "Gegevens zijn gewijzigd.\nWijzigingen overnemen?";
+    Text[ french ] = "Les données ont été modifiées.\nVoulez-vous appliquer les modifications ?";
+    Text[ spanish ] = "Los datos han sido modificados.\n ¿Desea aplicar las modificaciones?";
+    Text[ italian ] = "I dati sono stai modificati.\\Volete applicare le modifiche?";
+    Text[ danish ] = "Dataene er blevet ændret.\nSkal ændringerne overtages?";
+    Text[ swedish ] = "Data har ändrats.\nSkall ändringarna övertas?";
+    Text[ polish ] = "Dane zosta³y zmienione.\nCzy chcesz zastosowaæ zmiany?";
+    Text[ portuguese_brazilian ] = "Os dados foram modificados.\n Aplicar as modificações?";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’é©ç”¨ã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "ë°ì´í„°ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\n ë³€ê²½ ë‚´ìš©ì„ ì ìš©í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "æ•°æ®å·²ç»è¢«æ›´æ”¹ã€‚\n è¦é‡‡ç”¨æ›´æ”¹åçš„æ•°æ®å†…å®¹å—ï¼Ÿ";
+    Text[ chinese_traditional ] = "è³‡æ–™å·²ç¶“è®Šæ›´ã€‚\n æ¥å—è®Šæ›´çš„è³‡æ–™ï¼Ÿ";
+    Text[ turkish ] = "Veri değiştirildi.\n Değişiklikleri uygulamak ister misiniz?";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÈíÇäÇÊ.\nåá ÊÑíÏ  ÊØÈíŞ ÇáÊÛííÑÇÊ¿";
+    Text[ catalan ] = "Les dades han canviat.\n Voleu aplicar els canvis?";
+    Text[ finnish ] = "Tietoja on muutettu.\nHaluatko ottaa muutokset käyttöön?";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸”à¹‰à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¹à¸¥à¹‰à¸§.\n à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸Šà¹‰à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Text[ czech ] = "Data byla zmÄ›nÄ›na.\nChcete zmÄ›ny pouÅ¾Ã­t?";
+    Text[ hebrew ] = "Die Daten wurden geÃ¤ndert.\\Sollen die Ã„nderungen Ã¼bernommen werden?";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ à¤—à¤¯à¤¾ à¤¹à¥ˆ à¥¤\n à¤†à¤ª à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
+    Text[ slovak ] = "DÃ¡ta sa zmenili.\nChcete pouÅ¾iÅ¥ tieto zmeny?";
+};
+
+String STR_UNDO_TRANSFORM
+{
+    Text = "%O transformieren" ;
+    Text [ ENGLISH ] = "Transform %O" ;
+    Text [ norwegian ] = "Omform %O" ;
+    Text [ italian ] = "Trasforma %O" ;
+    Text [ portuguese_brazilian ] = "Transformar %O" ;
+    Text [ portuguese ] = "Transformar %O" ;
+    Text [ finnish ] = "Muunna %O" ;
+    Text [ danish ] = "Transformer %O" ;
+    Text [ french ] = "Transformer %O" ;
+    Text [ swedish ] = "Omvandla %O" ;
+    Text [ dutch ] = "%O transformeren" ;
+    Text [ spanish ] = "Transformar %O" ;
+    Text [ english_us ] = "Transform %O" ;
+    Text[ chinese_simplified ] = "è½¬æ¢ %O";
+    Text[ russian ] = "Ïğåîáğàçîâàòü %O";
+    Text[ polish ] = "Przekszta³æ %O";
+    Text[ japanese ] = "%Oã‚’å¤‰æ›";
+    Text[ chinese_traditional ] = "è½‰æ› %O";
+    Text[ arabic ] = "ÊÍæíá %O";
+    Text[ dutch ] = "%O transformeren";
+    Text[ chinese_simplified ] = "è½¬æ¢ %O";
+    Text[ greek ] = "Ìåôáó÷çìáôéóìüò %O";
+    Text[ korean ] = "%O ë³€í˜•";
+    Text[ turkish ] = "Dönüşüm %O";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Transformar %O";
+    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸£à¸¹à¸› %O";
+    Text[ czech ] = "Transformuj %O";
+    Text[ hebrew ] = "%O transformieren";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ %O";
+    Text[ slovak ] = "TransformovaÅ¥ %O";
+};
+
+String STR_UNDO_MOVE
+//== svx STR_EditMove
+{
+    Text = "%O verschieben" ;
+    Text [ ENGLISH ] = "Move %O" ;
+    Text [ norwegian ] = "Flytt %O" ;
+    Text [ italian ] = "Sposta %O" ;
+    Text [ portuguese_brazilian ] = "Mover %O" ;
+    Text [ portuguese ] = "Mover %O" ;
+    Text [ finnish ] = "Siirrä %O" ;
+    Text [ danish ] = "Flyt %O" ;
+    Text [ french ] = "Déplacer %O" ;
+    Text [ swedish ] = "Flytta %O" ;
+    Text [ dutch ] = "%O verplaatsen" ;
+    Text [ spanish ] = "Desplazar %O" ;
+    Text [ english_us ] = "Move %O" ;
+    Text[ chinese_simplified ] = "ç§»åŠ¨ %O";
+    Text[ russian ] = "Ïåğåìåñòèòü %O";
+    Text[ polish ] = "Przenieœ %O";
+    Text[ japanese ] = "%Oã‚’ç§»å‹•";
+    Text[ chinese_traditional ] = "ç§»å‹• %O";
+    Text[ arabic ] = "ÅÒÇÍÉ %O";
+    Text[ dutch ] = "%O verplaatsen";
+    Text[ chinese_simplified ] = "ç§»åŠ¨ %O";
+    Text[ greek ] = "Ìåôáêßíçóç %O";
+    Text[ korean ] = "%O ì´ë™";
+    Text[ turkish ] = "Taşı  %O";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢ %O";
+    Text[ czech ] = "PosuÅˆ %O";
+    Text[ hebrew ] = "%O verschieben";
+    Text[ hindi ] = "%O à¤•à¥‹ à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¥‹";
+    Text[ slovak ] = "PresunÃºÅ¥ %O";
+};
+
+String STR_UNDO_RESIZE
+//== svx STR_EditResize
+{
+    Text = "Größe von %O ändern" ;
+    Text [ ENGLISH ] = "Resize %O" ;
+    Text [ norwegian ] = "Endre størrelse på %O" ;
+    Text [ italian ] = "Ridimensiona %O" ;
+    Text [ portuguese_brazilian ] = "Redimensionar %O" ;
+    Text [ portuguese ] = "Redimensionar %O" ;
+    Text [ finnish ] = "Muuta kohteen %O kokoa" ;
+    Text [ danish ] = "Modificer størrelse på %O" ;
+    Text [ french ] = "Redimensionner %O" ;
+    Text [ swedish ] = "Förändra storleken på %O" ;
+    Text [ dutch ] = "Grootte van %O wijzigen" ;
+    Text [ spanish ] = "Modificar el tamaño de %O" ;
+    Text [ english_us ] = "Resize %O" ;
+    Text[ chinese_simplified ] = "æ›´æ”¹ %O å¤§å°";
+    Text[ russian ] = "Èçìåíèòü ğàçìåğ %O";
+    Text[ polish ] = "Zmieñ rozmiar %O";
+    Text[ japanese ] = "%Oã®ã‚µã‚¤ã‚ºã‚’å¤‰æ›´";
+    Text[ chinese_traditional ] = "è®Šæ›´ %O å¤§å°";
+    Text[ arabic ] = "ÊÛííÑ ÍÌã %O";
+    Text[ dutch ] = "Grootte van %O wijzigen";
+    Text[ chinese_simplified ] = "æ›´æ”¹ %O å¤§å°";
+    Text[ greek ] = "Ôñïğïğïßçóç ìåãİèïõò %O";
+    Text[ korean ] = "%Oì˜ í¬ê¸° ë³€ê²½";
+    Text[ turkish ] = "%0 'yu yendein boyutlandır";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar tamaño de %O";
+    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸‚à¸™à¸²à¸” %O";
+    Text[ czech ] = "ZmÄ›Åˆ velikost %O";
+    Text[ hebrew ] = "GrÃ¶ÃŸe von %O Ã¤ndern";
+    Text[ hindi ] = "%O à¤•à¥‹ à¤ªà¥à¤¨à¤ƒ à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤¦à¥‹";
+    Text[ slovak ] = "ZmeniÅ¥ veÄ¾kosÅ¥ %O";
+};
+
+String STR_UNDO_ROTATE
+//== svx STR_EditRotate
+{
+    Text = "%O drehen" ;
+    Text [ ENGLISH ] = "Rotate %O" ;
+    Text [ norwegian ] = "Roter %O" ;
+    Text [ italian ] = "Ruota %O" ;
+    Text [ portuguese_brazilian ] = "Rotar %O" ;
+    Text [ portuguese ] = "Rodar %O" ;
+    Text [ finnish ] = "Kierrä kohdetta %O" ;
+    Text [ danish ] = "Roter %O" ;
+    Text [ french ] = "Pivoter %O" ;
+    Text [ swedish ] = "Rotera %O" ;
+    Text [ dutch ] = "%O draaien" ;
+    Text [ spanish ] = "Rodar %O" ;
+    Text [ english_us ] = "Rotate %O" ;
+    Text[ chinese_simplified ] = "æ—‹è½¬ %O";
+    Text[ russian ] = "Ïîâåğíóòü %O";
+    Text[ polish ] = "Obróæ %O";
+    Text[ japanese ] = "%Oã‚’å›è»¢";
+    Text[ chinese_traditional ] = "æ—‹è½‰ %O";
+    Text[ arabic ] = "ÇÓÊÏÇÑÉ %O";
+    Text[ dutch ] = "%O draaien";
+    Text[ chinese_simplified ] = "æ—‹è½¬ %O";
+    Text[ greek ] = "ĞåñéóôñïöŞ %O";
+    Text[ korean ] = "%O íšŒì „";
+    Text[ turkish ] = "%O 'yu Çevir";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rodar %O";
+    Text[ thai ] = "à¸«à¸¡à¸¸à¸™ %O";
+    Text[ czech ] = "OtoÄ %0";
+    Text[ hebrew ] = "%O drehen";
+    Text[ hindi ] = "%O à¤•à¥‹ à¤˜à¥à¤®à¤¾à¤“";
+    Text[ slovak ] = "OtoÄiÅ¥ %O";
+};
+*/
+//-----------------------------------

@@ -1,0 +1,449 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Bitmaps_HC.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Bitmaps_HC.hrc"
+
+Bitmap BMP_AREAS_2D_HC
+{
+    File = "areas2d_h.bmp" ;
+};
+Bitmap BMP_AREAS_2D_1_HC
+{
+    File = "areas2d1_h.bmp" ;
+};
+Bitmap BMP_AREAS_2D_3_HC
+{
+    File = "areas2d3_h.bmp" ;
+};
+Bitmap BMP_AREAS_3D_HC
+{
+    File = "areas3d_h.bmp" ;
+};
+Bitmap BMP_AREAS_3D_1_HC
+{
+    File = "areas3d1_h.bmp" ;
+};
+Bitmap BMP_AREAS_3D_2_HC
+{
+    File = "areas3d2_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_BARS_2D_HC
+{
+    File = "bars2d_h.bmp" ;
+};
+Bitmap BMP_BARS_2D_1_HC
+{
+    File = "bars2d1_h.bmp" ;
+};
+Bitmap BMP_BARS_2D_2_HC
+{
+    File = "bars2d2_h.bmp" ;
+};
+Bitmap BMP_BARS_2D_3_HC
+{
+    File = "bars2d3_h.bmp" ;
+};
+Bitmap BMP_BARS_3D_HC
+{
+    File = "bars3d_h.bmp" ;
+};
+Bitmap BMP_BARS_3D_1_HC
+{
+    File = "bars3d1_h.bmp" ;
+};
+Bitmap BMP_BARS_3D_2_HC
+{
+    File = "bars3d2_h.bmp" ;
+};
+Bitmap BMP_BARS_3D_3_HC
+{
+    File = "bars3d3_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_CIRCLES_2D_HC
+{
+    File = "circl2d_h.bmp" ;
+};
+Bitmap BMP_CIRCLES_2D_1_HC
+{
+    File = "circl2d1_h.bmp" ;
+};
+Bitmap BMP_CIRCLES_2D_2_HC
+{
+    File = "circl2d2_h.bmp" ;
+};
+Bitmap BMP_CIRCLES_3D_HC
+{
+    File = "circl3d_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_COLUMNS_2D_HC
+{
+    File = "cols2d_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_1_HC
+{
+    File = "cols2d1_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_2_HC
+{
+    File = "cols2d2_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_3_HC
+{
+    File = "cols2d3_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_4_HC
+{
+    File = "cols2d4_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_2D_5_HC
+{
+    File = "cols2d5_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_COLUMNS_3D_HC
+{
+    File = "cols3d_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_1_HC
+{
+    File = "cols3d1_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_2_HC
+{
+    File = "cols3d2_h.bmp" ;
+};
+Bitmap BMP_COLUMNS_3D_3_HC
+{
+    File = "cols3d3_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_DONUT1_2D_HC
+{
+    File = "donut12d_h.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_1_HC
+{
+    File = "kegel1q_h.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_2_HC
+{
+    File = "kegel2q_h.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_3_HC
+{
+    File = "kegel3q_h.bmp" ;
+};
+Bitmap BMP_KEGELQ_3D_4_HC
+{
+    File = "kegel4q_h.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_1_HC
+{
+    File = "kegel1_h.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_2_HC
+{
+    File = "kegel2_h.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_3_HC
+{
+    File = "kegel3_h.bmp" ;
+};
+Bitmap BMP_KEGEL_3D_4_HC
+{
+    File = "kegel4_h.bmp" ;
+};
+//---------------------
+/*
+Bitmap BMP_LINESYMB_2D_HC
+{
+    File = "lnsym2d_h.bmp" ;
+};
+*/
+Bitmap BMP_LINESYMB_2D_1_HC
+{
+    File = "lnsym2d1_h.bmp" ;
+};
+Bitmap BMP_LINESYMB_2D_2_HC
+{
+    File = "lnsym2d2_h.bmp" ;
+};
+Bitmap BMP_LINESYMB_2D_3_HC
+{
+    File = "lnsym2d3_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_LINES_2D_HC
+{
+    File = "lines2d_h.bmp" ;
+};
+Bitmap BMP_LINES_2D_1_HC
+{
+    File = "lines2d1_h.bmp" ;
+};
+Bitmap BMP_LINES_2D_2_HC
+{
+    File = "lines2d2_h.bmp" ;
+};
+Bitmap BMP_LINES_2D_3_HC
+{
+    File = "lines2d3_h.bmp" ;
+};
+Bitmap BMP_LINES_3D_HC
+{
+    File = "lines3d_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_NETSYMB_2D_HC
+{
+    File = "net2dsym_h.bmp" ;
+};
+Bitmap BMP_NETSYMB_2D_PERCENT_HC
+{
+    File = "n2dsympr_h.bmp" ;
+};
+Bitmap BMP_NETSYMB_2D_STACK_HC
+{
+    File = "n2dsymst_h.bmp" ;
+};
+Bitmap BMP_NET_2D_HC
+{
+    File = "net2d_h.bmp" ;
+};
+Bitmap BMP_NET_2D_PERCENT_HC
+{
+    File = "net2dpr_h.bmp" ;
+};
+Bitmap BMP_NET_2D_STACK_HC
+{
+    File = "net2dst_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_PYRAMIDQ_3D_1_HC
+{
+    File = "pyra1q_h.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_2_HC
+{
+    File = "pyra2q_h.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_3_HC
+{
+    File = "pyra3q_h.bmp" ;
+};
+Bitmap BMP_PYRAMIDQ_3D_4_HC
+{
+    File = "pyra4q_h.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_1_HC
+{
+    File = "pyra1_h.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_2_HC
+{
+    File = "pyra2_h.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_3_HC
+{
+    File = "pyra3_h.bmp" ;
+};
+Bitmap BMP_PYRAMID_3D_4_HC
+{
+    File = "pyra4_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_ROEHRE_3D_1_HC
+{
+    File = "roehre1_h.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_2_HC
+{
+    File = "roehre2_h.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_3_HC
+{
+    File = "roehre3_h.bmp" ;
+};
+Bitmap BMP_ROEHRE_3D_4_HC
+{
+    File = "roehre4_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_SAEULE_3D_1_HC
+{
+    File = "saeule1_h.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_2_HC
+{
+    File = "saeule2_h.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_3_HC
+{
+    File = "saeule3_h.bmp" ;
+};
+Bitmap BMP_SAEULE_3D_4_HC
+{
+    File = "saeule4_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_SPLINE_B_HC
+{
+    File = "splineb_h.bmp" ;
+};
+Bitmap BMP_SPLINE_B_SYMBOL_HC
+{
+    File = "splnbsym_h.bmp" ;
+};
+Bitmap BMP_SPLINE_CUBIC_HC
+{
+    File = "spline_h.bmp" ;
+};
+Bitmap BMP_SPLINE_CUBIC_SYMBOL_HC
+{
+    File = "splnesym_h.bmp" ;
+};
+//---------------------
+Bitmap BMP_STOCK_1_HC
+{
+    File = "stock2d1_h.bmp" ;
+};
+Bitmap BMP_STOCK_2_HC
+{
+    File = "stock2d2_h.bmp" ;
+};
+Bitmap BMP_STOCK_3_HC
+{
+    File = "stock2d3_h.bmp" ;
+};
+Bitmap BMP_STOCK_4_HC
+{
+    File = "stock2d4_h.bmp" ;
+};
+//---------------------
+/*
+Bitmap BMP_SURF_3D_HC
+{
+    File = "surf3d_h.bmp" ;
+};
+*/
+Bitmap BMP_XYSYMB_2D_HC
+{
+    File = "xysym2d_h.bmp" ;
+};
+/*
+Bitmap BMP_XYZSYMB_3D_HC
+{
+    File = "xyzsym3d_h.bmp" ;
+};
+Bitmap BMP_XYZ_3D_HC
+{
+    File = "xyz3d_h.bmp" ;
+};
+*/
+Bitmap BMP_XY_2D_HC
+{
+    File = "xy2d_h.bmp" ;
+};
+//---------------------
+//---------------------
+//---------------------
+//error indicator
+Bitmap BMP_INDICATE_NONE_HC
+{
+    File = "indinone_h.bmp" ;
+};
+Bitmap BMP_INDICATE_BOTH_HC
+{
+    File = "indiboth_h.bmp" ;
+};
+Bitmap BMP_INDICATE_UP_HC
+{
+    File = "indiup_h.bmp" ;
+};
+Bitmap BMP_INDICATE_DOWN_HC
+{
+    File = "indidown_h.bmp" ;
+};
+//---------------------
+//regression curves
+Bitmap BMP_REGRESSION_NONE_HC
+{
+    File = "regno_h.bmp" ;
+};
+Bitmap BMP_REGRESSION_LINEAR_HC
+{
+    File = "reglin_h.bmp" ;
+};
+Bitmap BMP_REGRESSION_LOG_HC
+{
+    File = "reglog_h.bmp" ;
+};
+Bitmap BMP_REGRESSION_EXP_HC
+{
+    File = "regexp_h.bmp" ;
+};
+Bitmap BMP_REGRESSION_POWER_HC
+{
+    File = "regpow_h.bmp" ;
+};
+//---------------------

@@ -1,0 +1,360 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tp_SeriesToAxis.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+TabPage TP_OPTIONS
+{
+    Hide = TRUE ;
+//    HelpID = HID_LAYOUT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine 1
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Datenreihe ausrichten an" ;
+        Text [ ENGLISH ]= "Assign Data Row To";
+        Text[ english_us ] = "Align data series to";
+        Text[ portuguese ] = "Alinhar série de dados em";
+        Text[ russian ] = "Âûğîâíÿòü ğÿä äàííûõ ïî:";
+        Text[ dutch ] = "Gegevensreeks uitlijnen aan";
+        Text[ french ] = "Aligner la série de données sur";
+        Text[ spanish ] = "Alinear línea de datos a";
+        Text[ italian ] = "Allinea serie di dati a";
+        Text[ danish ] = "Juster dataserie til";
+        Text[ swedish ] = "Justera dataserie till";
+        Text[ polish ] = "Wyrównaj seriê danych do";
+        Text[ portuguese_brazilian ] = "Alinhar a série de dados em";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç³»åˆ—ã®æ–¹å‘";
+        Text[ chinese_simplified ] = "æ•°æ®ç»„å¯¹é½æŒ‰ç…§";
+        Text[ chinese_traditional ] = "è³‡æ–™åˆ—å°æº–ä¾ç…§";
+        Text[ arabic ] = "ãÍÇĞÇÉ Õİ ÇáÈíÇäÇÊ Úáì:";
+        Text[ dutch ] = "Gegevensreeks uitlijnen aan";
+        Text[ chinese_simplified ] = "æ•°æ®ç»„å¯¹é½æŒ‰ç…§";
+        Text[ greek ] = "Óôïß÷éóç åããñáöŞò ùò ğñïò";
+        Text[ korean ] = "ì—°ì† ë°ì´í„° ë§ì¶¤:";
+        Text[ turkish ] = "Veri serilerini buna hizala";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Alinea la línia de dades a:";
+        Text[ finnish ] = "Tietolähteiden tasaus:";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸›à¸¢à¸±à¸‡:";
+        Text[ czech ] = "Zarovnat sÃ©rie dat na";
+        Text[ hebrew ] = "Datenreihe ausrichten an";
+        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¶à¥à¤°à¥ƒà¤‚à¤–à¤²à¤¾ à¤•à¥‹ à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£ à¤•à¤°à¥‹:";
+        Text[ slovak ] = "ZarovnaÅ¥ sÃ©rie dÃ¡t na";
+    };
+    RadioButton RBT_OPT_AXIS_1
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Primärer Y-Achse" ;
+        Text [ ENGLISH ]= "~Primary Y axis";
+        TabStop = TRUE ;
+        Text[ english_us ] = "Primary Y axis";
+        Text[ portuguese ] = "Eixo Y ~primário";
+        Text[ russian ] = "Îñíîâíàÿ îñü Y";
+        Text[ dutch ] = "~Primaire Y-as";
+        Text[ french ] = "Axe Y ~primaire";
+        Text[ spanish ] = "~Eje primario Y";
+        Text[ italian ] = "Asse Y primario";
+        Text[ danish ] = "~Primær Y-akse";
+        Text[ swedish ] = "~Primär Y-axel";
+        Text[ polish ] = "G³ówna oœ Y";
+        Text[ portuguese_brazilian ] = "Eixo Y Primário";
+        Text[ japanese ] = "ç¬¬1Yè»¸";
+        Text[ chinese_simplified ] = "Y ä¸»è½´";
+        Text[ chinese_traditional ] = "ä¸» Y è»¸";
+        Text[ arabic ] = "ãÍæÑ Õ ÃÓÇÓí";
+        Text[ dutch ] = "~Primaire Y-as";
+        Text[ chinese_simplified ] = "Y ä¸»è½´";
+        Text[ greek ] = "~Ğñùôåıùí Üîïíáò Y";
+        Text[ korean ] = "1ì°¨ Y ì¶•";
+        Text[ turkish ] = "~Birincil Y ekseni";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eix Y primari";
+        Text[ finnish ] = "Ensisijainen Y-akseli";
+        Text[ thai ] = "à¹à¸à¸™ Y à¸›à¸à¸¡à¸ à¸¹à¸¡à¸´";
+        Text[ czech ] = "PrimÃ¡rnÃ­ osa Y";
+        Text[ hebrew ] = "~PrimÃ¤rer Y-Achse";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤¥à¤®à¥ Y à¤…à¤•à¥à¤·";
+        Text[ slovak ] = "PrimÃ¡rna os Y";
+    };
+    RadioButton RBT_OPT_AXIS_2
+    {
+        Pos = MAP_APPFONT ( 12 , 28  ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Sekundärer Y-Achse" ;
+        Text [ ENGLISH ]= "~Secondary Y axis";
+        TabStop = TRUE ;
+        Text[ english_us ] = "2nd Y axis";
+        Text[ portuguese ] = "Eixo Y ~secundário";
+        Text[ russian ] = "Äîïîëíèòåëüíàÿ îñü Y";
+        Text[ dutch ] = "~Secundaire Y-as";
+        Text[ french ] = "Axe Y ~secondaire";
+        Text[ spanish ] = "Eje ~secundario Y";
+        Text[ italian ] = "Asse Y secondario";
+        Text[ danish ] = "~Sekundær Y-akse";
+        Text[ swedish ] = "~Sekundär Y-axel";
+        Text[ polish ] = "Pomocniczej osi Y";
+        Text[ portuguese_brazilian ] = "Eixo Y secundário";
+        Text[ japanese ] = "ç¬¬2Yè»¸";
+        Text[ chinese_simplified ] = "Y æ¬¡è½´";
+        Text[ chinese_traditional ] = "æ¬¡ Y è»¸";
+        Text[ arabic ] = "ÇáãÍæÑ Õ ÇáİÑÚí";
+        Text[ dutch ] = "~Secundaire Y-as";
+        Text[ chinese_simplified ] = "Y æ¬¡è½´";
+        Text[ greek ] = "Äåõôåñåıùí Üîïíá~ò Y";
+        Text[ korean ] = "2ì°¨ Y ì¶•";
+        Text[ turkish ] = "~İkincil Y ekseni";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "2on eix Y";
+        Text[ finnish ] = "Toinen Y-akseli";
+        Text[ thai ] = "à¹à¸à¸™ Y à¹à¸à¸™à¸—à¸µà¹ˆà¸ªà¸­à¸‡";
+        Text[ czech ] = "Upravit druhou osu Y";
+        Text[ hebrew ] = "~SekundÃ¤rer Y-Achse";
+        Text[ hindi ] = "à¤¦à¥‚à¤¸à¤°à¤¾ Y à¤…à¤•à¥à¤·";
+        Text[ slovak ] = "DruhÃ¡ os Y";
+    };
+
+    FixedLine GB_BAR
+    {
+        Pos = MAP_APPFONT ( 6 , 44  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ]= "Settings";
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "Definições";
+        Text[ russian ] = "Íàñòğîéêè";
+        Text[ dutch ] = "Instellingen";
+        Text[ french ] = "Paramètres";
+        Text[ spanish ] = "Configuración";
+        Text[ italian ] = "Impostazioni:";
+        Text[ danish ] = "Indstillinger";
+        Text[ swedish ] = "Inställningar";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Definições";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_simplified ] = "è®¾å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ:";
+        Text[ dutch ] = "Instellingen";
+        Text[ chinese_simplified ] = "è®¾å®š";
+        Text[ greek ] = "Ñõèìßóåéò";
+        Text[ korean ] = "ì„¤ì •:";
+        Text[ turkish ] = "Tercihler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuració:";
+        Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
+        Text[ czech ] = "NastavenÃ­";
+        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
+        Text[ slovak ] = "Nastavenia";
+    };
+    FixedText FT_OVERLAP
+    {
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 47 , 8 ) ;
+        Text = "~Überlapp" ;
+        Text [ ENGLISH ]= "~Overlap" ;
+        Text[ english_us ] = "~Overlap";
+        Text[ portuguese ] = "~Sobrepor";
+        Text[ russian ] = "Ïåğåñå÷åíèå";
+        Text[ dutch ] = "~Overlappend";
+        Text[ french ] = "~Chevauchement";
+        Text[ spanish ] = "~Sobreponer";
+        Text[ italian ] = "Sovrapponi";
+        Text[ danish ] = "Overlap";
+        Text[ swedish ] = "~Överlappning";
+        Text[ polish ] = "~Nak³adanie";
+        Text[ portuguese_brazilian ] = "~Sobrepor";
+        Text[ japanese ] = "é‡ã­åˆã‚ã›ã‚‹(~O)";
+        Text[ chinese_simplified ] = "é‡å (~O)";
+        Text[ chinese_traditional ] = "é‡ç–Š(~O)";
+        Text[ arabic ] = "ÊÑÇßÈ";
+        Text[ dutch ] = "~Overlappend";
+        Text[ chinese_simplified ] = "é‡å (~O)";
+        Text[ greek ] = "Å~ğéêÜëõøç";
+        Text[ korean ] = "ê²¹ì¹¨(~O)";
+        Text[ turkish ] = "~Basamakla";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Superposa";
+        Text[ finnish ] = "~Päällekkäin";
+        Text[ thai ] = "~à¸‹à¹‰à¸­à¸™à¸—à¸±à¸š";
+        Text[ czech ] = "PÅ™esah";
+        Text[ hebrew ] = "~Ãœberlapp";
+        Text[ hindi ] = "~Overlap";
+        Text[ slovak ] = "~Presah";
+    };
+
+    MetricField MT_OVERLAP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 63 , 71 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -100 ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        DecimalDigits = 0 ;
+    };
+
+    FixedText FT_GAP
+    {
+        Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Size = MAP_APPFONT ( 47 , 8 ) ;
+        Text = "~Abstand";
+        Text [ ENGLISH ] = "~Gap";
+        Text[ english_us ] = "~Spacing";
+        Text[ portuguese ] = "~Espaçamento";
+        Text[ russian ] = "Èíòåğâàë";
+        Text[ dutch ] = "~Afstand";
+        Text[ french ] = "Écart";
+        Text[ spanish ] = "~Espacio";
+        Text[ italian ] = "Dist~anza";
+        Text[ danish ] = "~Afstand";
+        Text[ swedish ] = "~Avstånd";
+        Text[ polish ] = "~Odstêp";
+        Text[ portuguese_brazilian ] = "A~fastamento";
+        Text[ japanese ] = "é–“éš”(~S)";
+        Text[ chinese_simplified ] = "é—´éš”(~S)";
+        Text[ chinese_traditional ] = "é–“éš”(~S)";
+        Text[ arabic ] = "ÊÈÇÚÏ";
+        Text[ dutch ] = "~Afstand";
+        Text[ chinese_simplified ] = "é—´éš”(~S)";
+        Text[ greek ] = "~Áğüóôáóç";
+        Text[ korean ] = "ê°„ê²©(~S)";
+        Text[ turkish ] = "~Uzaklık";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Espaiat";
+        Text[ finnish ] = "~Objektivälit";
+        Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Mezery";
+        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
+        Text[ hindi ] = "~à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
+        Text[ slovak ] = "~Medzery";
+    };
+
+    MetricField MT_GAP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 63 , 55 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 600 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        First = 1 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+        DecimalDigits = 0 ;
+    };
+
+    CheckBox CB_CONNECTOR
+    {
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text = "~Verbindungslinien" ;
+        Text [ ENGLISH ]= "Connection Lines";
+        TabStop = TRUE ;
+        Text[ english_us ] = "Connection Lines";
+        Text[ portuguese ] = "~Linhas de ligação";
+        Text[ russian ] = "Ñîåäèíèòåëüíûå ëèíèè";
+        Text[ dutch ] = "~Verbindingslijnen";
+        Text[ french ] = "Lignes de ~connexion";
+        Text[ spanish ] = "Líneas ~conectoras";
+        Text[ italian ] = "Linee di collegamento";
+        Text[ danish ] = "Forbindelseslinjer";
+        Text[ swedish ] = "~Förbindelselinjer";
+        Text[ polish ] = "Linie po³¹czeñ";
+        Text[ portuguese_brazilian ] = "Linhas Conectoras";
+        Text[ japanese ] = "æ¥ç¶šç·š";
+        Text[ chinese_simplified ] = "è¿æ¥çº¿";
+        Text[ chinese_traditional ] = "é€£çµç·šæ¢";
+        Text[ arabic ] = "ÎØæØ æÕá";
+        Text[ dutch ] = "~Verbindingslijnen";
+        Text[ chinese_simplified ] = "è¿æ¥çº¿";
+        Text[ greek ] = "Ãñáììİò óı~íäåóçò";
+        Text[ korean ] = "ì—°ê²°ì„ ";
+        Text[ turkish ] = "~Bağlantı çizgileri";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línies ~connectoras";
+        Text[ finnish ] = "Yhteysviivat";
+        Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸šà¸£à¸£à¸—à¸±à¸”";
+        Text[ czech ] = "SpojovacÃ­ ÄÃ¡ry";
+        Text[ hebrew ] = "~Verbindungslinien";
+        Text[ hindi ] = "à¤®à¤¿à¤²à¤¾à¤µ à¤°à¥‡à¤–à¤¾à¤à¤";
+        Text[ slovak ] = "Spojovacie Äiary";
+    };
+
+};

@@ -1,0 +1,35 @@
+# -*-  coding: utf-8; -*-
+#
+# Simple File-Data Format:
+#  all empty lines and lines beginning with a hash '#' are ignored
+#  then the following is read:
+#    - labels, one for each series
+#    - categories, for each element of all series
+#    - the series data
+#
+
+# Series Labels
+
+Müsli Brot Milch
+
+# Categories
+
+Morgens Mittags Nachmittags Abends Nachts
+
+# Data
+
+# Series Müsli
+
+1 10 30
+
+# Series Brot
+
+1 1 2 2 1
+
+# Series Milch
+
+-3.5 6 4 1
+
+# Series Marmelade
+
+-5 2 3 4 5 6 7 8 9 10

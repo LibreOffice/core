@@ -1,0 +1,338 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Strings_Statistic.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "Strings.hrc"
+
+//SchStatisticTabPage and SchDataStatisticsDlg
+String STR_INDICATE_NONE
+{
+    Text = "Keine Indikatoren" ;
+    Text [ ENGLISH ] = "No indicators" ;
+    Text [ english_us ] = "No Indicators" ;
+    Text [ italian ] = "Senza indicatori" ;
+    Text [ spanish ] = "Sin indicadores" ;
+    Text [ french ] = "Aucun indicateur" ;
+    Text [ dutch ] = "Geen indicatoren" ;
+    Text [ swedish ] = "Inga indikatorer" ;
+    Text [ danish ] = "Ingen indikatorer" ;
+    Text [ portuguese ] = "Nenhum Indicador" ;
+    Text [ portuguese_brazilian ] = "Nenhum Indicador" ;
+    Text[ chinese_simplified ] = "æ— æ ‡ç¤º";
+    Text[ russian ] = "Áåç èíäèêàòîğîâ";
+    Text[ polish ] = "Brak wskaŸników";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿ãªã—";
+    Text[ chinese_traditional ] = "ä¸é¡¯ç¤º";
+    Text[ arabic ] = "ÈÏæä ãÄÔÑÇÊ";
+    Text[ greek ] = "×ùñßò äåßêôåò";
+    Text[ korean ] = "í‘œì‹œê¸° ì—†ìŒ";
+    Text[ turkish ] = "Gösterge yok";
+    Text[ catalan ] = "Sense indicadors";
+    Text[ finnish ] = "Ei ilmaisimia";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰";
+    Text[ czech ] = "Bez indikÃ¡torÅ¯";
+    Text[ hebrew ] = "Keine Indikatoren";
+    Text[ hindi ] = "No Indicators";
+    Text[ slovak ] = "Bez indikÃ¡torov";
+};
+String STR_INDICATE_BOTH
+{
+    Text = "Indikatoren beidseitig" ;
+    Text [ ENGLISH ] = "Indicators on both sides" ;
+    Text [ dutch ] = "Indicatoren aan beide kanten" ;
+    Text [ english_us ] = "Indicators Top and Bottom" ;
+    Text [ italian ] = "Indicatore su ambedue i lati" ;
+    Text [ spanish ] = "Indicadores a ambos lados" ;
+    Text [ french ] = "Indicateurs des deux côtés" ;
+    Text [ swedish ] = "Indikatorer på båda sidor" ;
+    Text [ danish ] = "Indikatorer på begge sider" ;
+    Text [ portuguese ] = "Indicadores em ambos os lados" ;
+    Text [ portuguese_brazilian ] = "Indicadores em cima e em baixo" ;
+    Text[ chinese_simplified ] = "ä¸Šä¸‹æ–¹å‘çš„æŒ‡ç¤º";
+    Text[ russian ] = "Âåğõíèé è íèæíèé èíäèêàòîğ";
+    Text[ polish ] = "WskaŸniki górne i dolne";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿ä¸Šä¸‹";
+    Text[ language_user1 ] = "èëè: Âåğõíèé è íèæíèé èíäèêàòîğ - -";
+    Text[ chinese_traditional ] = "ä¸Šä¸‹æ–¹å‘çš„æŒ‡ç¤º";
+    Text[ arabic ] = "ãÄÔÑÇÊ İí ßáÇ ÇáÌÇäÈíä";
+    Text[ greek ] = "Äåßêôåò äßğëåõñá";
+    Text[ korean ] = "ìœ„ì™€ ì•„ë˜ í‘œì‹œê¸°";
+    Text[ turkish ] = "Alt ve üst gösterge";
+    Text[ catalan ] = "Indicadors superiors i inferiors";
+    Text[ finnish ] = "Ilmaisimet ylä- ja alareunassa";
+    Text[ thai ] = "à¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰à¸šà¸™à¹à¸¥à¸°à¸¥à¹ˆà¸²à¸‡";
+    Text[ czech ] = "IndikÃ¡tory nahoÅ™e a dole";
+    Text[ hebrew ] = "Indikatoren beidseitig";
+    Text[ hindi ] = "à¤¨à¤¿à¤¦à¤°à¥à¤¶à¤•à¥‡à¤‚ à¤Šà¤ªà¤° à¤”à¤° à¤¨à¥€à¤šà¥‡";
+    Text[ slovak ] = "IndikÃ¡tory hore a dole";
+};
+String STR_INDICATE_DOWN
+{
+    Text = "Unterer Indikator" ;
+    Text [ ENGLISH ] = "Lower indicator" ;
+    Text [ english_us ] = "Lower Indicator" ;
+    Text [ italian ] = "Indicatore inferiore" ;
+    Text [ spanish ] = "Indicador inferior" ;
+    Text [ french ] = "Indicateur inférieur" ;
+    Text [ dutch ] = "Indicator beneden" ;
+    Text [ swedish ] = "Undre indikator" ;
+    Text [ danish ] = "Nederste indikator" ;
+    Text [ portuguese ] = "Indicador inferior" ;
+    Text [ portuguese_brazilian ] = "Indicador inferior" ;
+    Text[ chinese_simplified ] = "ä¸‹æ ‡ç¤º";
+    Text[ russian ] = "Íèæíèé èíäèêàòîğ";
+    Text[ polish ] = "Dolny wskaŸnik";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿ä¸‹";
+    Text[ chinese_traditional ] = "ä¸‹æ–¹é¡¯ç¤º";
+    Text[ arabic ] = "ÇáãÄÔÑ ÇáÓİáí";
+    Text[ greek ] = "ÊÜôù äåßêôçò";
+    Text[ korean ] = "ì•„ë˜ìª½ í‘œì‹œê¸°";
+    Text[ turkish ] = "Alt gösterge";
+    Text[ catalan ] = "Indicador inferior";
+    Text[ finnish ] = "Alempi ilmaisin";
+    Text[ thai ] = "à¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰à¸•à¹ˆà¸³à¸à¸§à¹ˆà¸²";
+    Text[ czech ] = "DolnÃ­ indikÃ¡tor";
+    Text[ hebrew ] = "Unterer Indikator";
+    Text[ hindi ] = "Lower Indicator";
+    Text[ slovak ] = "DolnÃ½ indikÃ¡tor";
+};
+String STR_INDICATE_UP
+{
+    Text = "Oberer Indikator" ;
+    Text [ ENGLISH ] = "Upper indicator" ;
+    Text [ english_us ] = "Upper Indicator" ;
+    Text [ italian ] = "Indicatore superiore" ;
+    Text [ spanish ] = "Indicador superior" ;
+    Text [ french ] = "Indicateur supérieur" ;
+    Text [ dutch ] = "Indicator boven" ;
+    Text [ swedish ] = "Övre indikator" ;
+    Text [ danish ] = "Øverste indikator" ;
+    Text [ portuguese ] = "Indicador superior" ;
+    Text [ portuguese_brazilian ] = "Indicador superior" ;
+    Text[ chinese_simplified ] = "ä¸Šæ ‡ç¤º";
+    Text[ russian ] = "Âåğõíèé èíäèêàòîğ";
+    Text[ polish ] = "Górny wskaŸnik";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿ä¸Š";
+    Text[ chinese_traditional ] = "ä¸Šæ–¹é¡¯ç¤º";
+    Text[ arabic ] = "ÇáãÄÔÑ ÇáÚáæí";
+    Text[ greek ] = "ĞÜíù äåßêôçò";
+    Text[ korean ] = "ìœ„ìª½ í‘œì‹œê¸°";
+    Text[ turkish ] = "Üst gösterge";
+    Text[ catalan ] = "Indicador superior";
+    Text[ finnish ] = "Ylempi ilmaisin";
+    Text[ thai ] = "à¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰à¸ªà¸¹à¸‡à¸à¸§à¹ˆà¸²";
+    Text[ czech ] = "HornÃ­ indikÃ¡tor";
+    Text[ hebrew ] = "Oberer Indikator";
+    Text[ hindi ] = "à¤Šà¤ªà¤°à¥€ à¤¨à¤¿à¤¦à¤°à¥à¤¶à¤•";
+    Text[ slovak ] = "HornÃ½ indikÃ¡tor";
+};
+
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
+String STR_REGRESSION_NONE
+{
+    Text = "Keine Regression" ;
+    Text [ ENGLISH ] = "No regression" ;
+    Text [ dutch ] = "Geen regressie" ;
+    Text [ english_us ] = "No Regression" ;
+    Text [ italian ] = "Nessuna regressione" ;
+    Text [ spanish ] = "Ninguna regresión" ;
+    Text [ french ] = "Aucune régression" ;
+    Text [ swedish ] = "Ingen regression" ;
+    Text [ danish ] = "Ingen regression" ;
+    Text [ portuguese ] = "Sem regressão" ;
+    Text [ portuguese_brazilian ] = "Sem Regressão" ;
+    Text[ chinese_simplified ] = "æ— å›å½’";
+    Text[ russian ] = "Áåç ğåãğåññèè";
+    Text[ polish ] = "Brak regresji";
+    Text[ japanese ] = "å›å¸°ãªã—";
+    Text[ chinese_traditional ] = "ç„¡å›æ­¸";
+    Text[ arabic ] = "ÈÏæä ÇäÍÏÇÑ";
+    Text[ greek ] = "×ùñßò ğáëéíäñüìçóç";
+    Text[ korean ] = "íšŒê·€ì„  ì—†ìŒ";
+    Text[ turkish ] = "Regresyon yok";
+    Text[ catalan ] = "Cap regressió";
+    Text[ finnish ] = "Ei regressiota";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸–à¸”à¸–à¸­à¸¢";
+    Text[ czech ] = "Bez regrese";
+    Text[ hebrew ] = "Keine Regression";
+    Text[ hindi ] = "No Regression";
+    Text[ slovak ] = "Bez regresie";
+};
+String STR_REGRESSION_LINEAR
+{
+    Text = "Lineare Regression" ;
+    Text [ ENGLISH ] = "Linear regression" ;
+    Text [ dutch ] = "Lineaire regressie" ;
+    Text [ english_us ] = "Linear regression" ;
+    Text [ italian ] = "Regressione lineare" ;
+    Text [ spanish ] = "Regresión lineal" ;
+    Text [ french ] = "Régression linéaire" ;
+    Text [ swedish ] = "Linjär regression" ;
+    Text [ danish ] = "Lineær regression" ;
+    Text [ portuguese ] = "Regressão linear" ;
+    Text [ portuguese_brazilian ] = "Regressão linear" ;
+    Text[ chinese_simplified ] = "ç­‰å·®å›å½’";
+    Text[ russian ] = "Ëèíåéíàÿ ğåãğåññèÿ";
+    Text[ polish ] = "Regresja liniowa";
+    Text[ japanese ] = "ç·šå½¢å›å¸°";
+    Text[ chinese_traditional ] = "ç­‰å·®å›æ­¸";
+    Text[ arabic ] = "ÇäÍÏÇÑ ÎØí";
+    Text[ greek ] = "ÃñáììéêŞ ğáëéíäñüìçóç";
+    Text[ korean ] = "ì„  íšŒê·€ì„ ";
+    Text[ turkish ] = "Doğrusal regresyon";
+    Text[ catalan ] = "Regressió lineal";
+    Text[ finnish ] = "Lineaarinen regressio";
+    Text[ thai ] = "à¸–à¸”à¸–à¸­à¸¢à¹à¸šà¸šà¹€à¸ªà¹‰à¸™à¸•à¸£à¸‡";
+    Text[ czech ] = "LineÃ¡rnÃ­ regrese";
+    Text[ hebrew ] = "Lineare Regression";
+    Text[ hindi ] = "Linear regression";
+    Text[ slovak ] = "LineÃ¡rna regresia";
+};
+String STR_REGRESSION_LOG
+{
+    Text = "Logarithmische Regression" ;
+    Text [ ENGLISH ] = "Logarithm regression" ;
+    Text [ english_us ] = "Logarithm regression" ;
+    Text [ italian ] = "Regressione logaritmica" ;
+    Text [ spanish ] = "Regresión logarítmica" ;
+    Text [ french ] = "Régression logarithmique" ;
+    Text [ dutch ] = "Logaritmische regressie" ;
+    Text [ swedish ] = "Logaritmisk regression" ;
+    Text [ danish ] = "Logaritmisk regression" ;
+    Text [ portuguese ] = "Regressão logarítmica" ;
+    Text [ portuguese_brazilian ] = "Regressão logarítmica" ;
+    Text[ chinese_simplified ] = "å¯¹æ•°å›å½’";
+    Text[ russian ] = "Ëîãàğèôìè÷åñêàÿ ğåãğåññèÿ";
+    Text[ polish ] = "Regresja logarytmiczna";
+    Text[ japanese ] = "å¯¾æ•°ã®å›å¸°";
+    Text[ chinese_traditional ] = "å°æ•¸å›æ­¸";
+    Text[ arabic ] = "ÇäÍÏÇÑ áæÛÇÑíÊãí";
+    Text[ greek ] = "ËïãáñéèìéêŞ ğáëéíäñüìçóç";
+    Text[ korean ] = "ë¡œê·¸ íšŒê·€ì„ ";
+    Text[ turkish ] = "Logaritmik regresyon";
+    Text[ catalan ] = "Regressió logarítmica";
+    Text[ finnish ] = "Logaritminen regressio";
+    Text[ thai ] = "à¸–à¸”à¸–à¸­à¸¢à¹à¸šà¸šà¸¥à¸­à¸à¸²à¸£à¸´à¸˜à¸¶à¸¡";
+    Text[ czech ] = "LogaritmickÃ¡ regrese";
+    Text[ hebrew ] = "Logarithmische Regression";
+    Text[ hindi ] = "à¤²à¤˜à¥à¤—à¤£à¤• à¤°à¤¿à¤—à¥à¤°à¥‡à¤¶à¥à¤¯à¤¨";
+    Text[ slovak ] = "LogaritmickÃ¡ regresia";
+};
+String STR_REGRESSION_EXP
+{
+    Text = "Exponentielle Regression" ;
+    Text [ ENGLISH ] = "Exponential regression" ;
+    Text [ dutch ] = "Exponentiële regressie" ;
+    Text [ english_us ] = "Exponential Regression" ;
+    Text [ italian ] = "Regressione esponenziale" ;
+    Text [ spanish ] = "Regresión exponencial" ;
+    Text [ french ] = "Régression exponentielle" ;
+    Text [ swedish ] = "Exponentiell regression" ;
+    Text [ danish ] = "Eksponentiel regression" ;
+    Text [ portuguese ] = "Regressão exponencial" ;
+    Text [ portuguese_brazilian ] = "Regressão exponencial" ;
+    Text[ chinese_simplified ] = "æŒ‡æ•°å›å½’";
+    Text[ russian ] = "İêñïîíåíöèàëüíàÿ ğåãğåññèÿ";
+    Text[ polish ] = "Regresja wyk³adnicza";
+    Text[ japanese ] = "æŒ‡æ•°ã®å›å¸°";
+    Text[ chinese_traditional ] = "æŒ‡æ•¸å›æ­¸";
+    Text[ arabic ] = "ÇäÍÏÇÑ ÃÓí";
+    Text[ greek ] = "ÅêèåôéêŞ ğáëéíäñüìçóç";
+    Text[ korean ] = "ì§€ìˆ˜ íšŒê·€ì„ ";
+    Text[ turkish ] = "Üstel regresyon";
+    Text[ catalan ] = "Regressió exponencial";
+    Text[ finnish ] = "Eksponentiaalinen regressio";
+    Text[ thai ] = "à¸–à¸”à¸–à¸­à¸¢à¹à¸šà¸šà¹€à¸­à¹‡à¸à¸‹à¹Œà¹‚à¸›à¹€à¸™à¸™à¹€à¸Šà¸µà¸¢à¸¥";
+    Text[ czech ] = "ExponenciÃ¡lnÃ­ regrese";
+    Text[ hebrew ] = "Exponentielle Regression";
+    Text[ hindi ] = "Exponential Regression";
+    Text[ slovak ] = "ExponenciÃ¡lna regresia";
+};
+String STR_REGRESSION_POWER
+{
+    Text = "Potenzielle Regression" ;
+    Text [ ENGLISH ] = "Power regression" ;
+    Text [ english_us ] = "Power regression" ;
+    Text [ italian ] = "Regressione potenziale" ;
+    Text [ spanish ] = "Regresión potencial" ;
+    Text [ french ] = "Régression potentielle" ;
+    Text [ dutch ] = "Potentiële regressie" ;
+    Text [ swedish ] = "Potentiell regression" ;
+    Text [ danish ] = "Potentiel regression" ;
+    Text [ portuguese ] = "Regressão potencial" ;
+    Text [ portuguese_brazilian ] = "Regressão de potência" ;
+    Text[ chinese_simplified ] = "ä½èƒ½å›å½’";
+    Text[ russian ] = "Ïîòåíöèàëüíàÿ ğåãğåññèÿ";
+    Text[ polish ] = "Regresja potêgowa";
+    Text[ japanese ] = "ä¹—ç¾ƒã®å›å¸°";
+    Text[ chinese_traditional ] = "æŒ‡æ•¸å›æ­¸";
+    Text[ arabic ] = "ÇäÍÏÇÑ ÇáŞÏÑÉ";
+    Text[ greek ] = "ÄõíáìéêŞ ğáëéíäñüìçóç";
+    Text[ korean ] = "í¼í…ì…œíšŒê·€ì„ ";
+    Text[ turkish ] = "Kuvvet regresyonu";
+    Text[ catalan ] = "Regressió potencial";
+    Text[ finnish ] = "Polynomiregressio";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸²à¸£à¸–à¸”à¸–à¸­à¸¢";
+    Text[ czech ] = "MocninnÃ¡ regrese";
+    Text[ hebrew ] = "Potenzielle Regression";
+    Text[ hindi ] = "à¤ªà¤µà¤° à¤°à¤¿à¤—à¥à¤°à¥‡à¤¶à¥à¤¯à¤¨";
+    Text[ slovak ] = "MocninovÃ¡ regresia";
+};

@@ -1,0 +1,329 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tp_PointGeometry.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "TabPages.hrc"
+
+TabPage TP_LAYOUT
+{
+    Hide = TRUE ;
+//    HelpID = HID_LAYOUT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_LY_SHAPE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Balken/Säulen Form" ;
+        Text [ ENGLISH ] = "Bar/Column Shape";
+        Text[ italian ] = "Forma barre/colonne";
+        Text[ portuguese_brazilian ] = "Forma da  barra/coluna";
+        Text[ portuguese ] = "Forma: barras/colunas";
+        Text[ danish ] = "Liggende søjler/Søjler Form";
+        Text[ french ] = "Barres/colonnes : forme";
+        Text[ swedish ] = "Form på staplar";
+        Text[ dutch ] = "Balken-/zuilenvorm";
+        Text[ spanish ] = "Barras/columnas: forma";
+        Text[ english_us ] = "Bar/column shape";
+        Text[ chinese_simplified ] = "æ¡å—/åœ“æŸ±å½¢";
+        Text[ russian ] = "Ôîğìà ãîğèç./âåğò. ñòîëáöîâ";
+        Text[ polish ] = "Kszta³t s³upka/kolumny";
+        Text[ japanese ] = "å½¢çŠ¶";
+        Text[ chinese_traditional ] = "æ¢å¡Š/åœ“æŸ±é«”";
+        Text[ arabic ] = "ÇáÔßá";
+        Text[ dutch ] = "Balken-/zuilenvorm";
+        Text[ chinese_simplified ] = "æ¡å—/åœ“æŸ±å½¢";
+        Text[ greek ] = "ÌïñöŞ óôçëşí/ãñáììşí";
+        Text[ korean ] = "í˜•íƒœ";
+        Text[ turkish ] = "Bar/Sutün şekli";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Forma";
+        Text[ finnish ] = "Palkin/sarakkeen muoto";
+        Text[ thai ] = "à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Profil sloupkÅ¯/sloupcÅ¯";
+        Text[ hebrew ] = "Balken/SÃ¤ulen Form";
+        Text[ hindi ] = "à¤ªà¤Ÿà¥à¤Ÿà¥€/à¤¸à¥à¤¤à¤‚à¤­ à¤†à¤•à¤¾à¤°";
+        Text[ slovak ] = "Tvar stÄºpca/pÃ¡su";
+    };
+    ListBox LB_LY_SHAPE
+    {
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 100 , 38 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=FALSE;
+        DDExtraWidth = TRUE ;
+
+        StringList =
+        {
+          "Quader";
+          "Zylinder";
+          "Kegel";
+          "Pyramiden";
+         // "Turm von Hanoi";
+        };
+        StringList [ ENGLISH ] =
+        {
+          "Cube";
+          "Cylinder";
+          "Cone";
+          "Pyramid";
+        //  "Tower of Hanoi";
+        };
+    StringList [ language_user1 ] =
+    {
+             "Quader" ;
+         "Zylinder" ;
+         "Kegel" ;
+         "Pyramiden" ;
+    };
+    StringList [ english_us ] =
+    {
+             "Rectangular parallelepiped" ;
+         "Cylinder" ;
+         "Cone" ;
+         "Pyramid" ;
+    };
+    StringList [ portuguese ] =
+    {
+             "Paralelepípedo" ;
+         "Cilindro" ;
+         "Cone" ;
+         "Pirâmides" ;
+    };
+    StringList [ russian ] =
+    {
+             "Ïàğàëëåëåïèïåä" ;
+         "Öèëèíäğ" ;
+         "Êîíóñ" ;
+         "Ïèğàìèäà" ;
+    };
+    StringList [ dutch ] =
+    {
+             "blokken" ;
+         "cilinders" ;
+         "kegels" ;
+         "piramiden" ;
+    };
+    StringList [ french ] =
+    {
+             "Parallélépipède" ;
+         "Cylindre" ;
+         "Cône" ;
+         "Pyramides" ;
+    };
+    StringList [ spanish ] =
+    {
+             "Paralelepípedo" ;
+         "Cilindro" ;
+         "Cono" ;
+         "Pirámides" ;
+    };
+    StringList [ italian ] =
+    {
+             "Parallelepipedo" ;
+         "Cilindro" ;
+         "Cono" ;
+         "Piramide" ;
+    };
+    StringList [ danish ] =
+    {
+             "Kasser" ;
+         "Cylindre" ;
+         "Kegler" ;
+         "Pyramider" ;
+    };
+    StringList [ swedish ] =
+    {
+             "Kvader" ;
+         "Cylinder" ;
+         "Kon" ;
+         "Pyramider" ;
+    };
+    StringList [ polish ] =
+    {
+             "Prostopad³oœcian" ;
+         "Walec" ;
+         "Sto¿ek" ;
+         "Ostros³up" ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+             "Paralelepípedo retangular" ;
+         "Cilindro" ;
+         "Cone" ;
+         "Pirâmide" ;
+    };
+    StringList [ japanese ] =
+    {
+             "ç›´æ–¹ä½“" ;
+         "å††æŸ±" ;
+         "å††éŒ" ;
+         "è§’éŒ" ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+             "ç›´è§’å¹³è¡Œå…­é¢ä½“" ;
+         "åœ†æŸ±ä½“" ;
+         "åœ†é”¥ä½“" ;
+         "æ£±é”¥ä½“" ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+             "ç›´è§’å¹³è¡Œå…­é¢é«”" ;
+         "åœ“æŸ±é«”" ;
+         "åœ“éŒé«”" ;
+         "æ£±éŒé«”" ;
+    };
+    StringList [ arabic ] =
+    {
+             "ÑÈÇÚí ÇáÒæÇíÇ" ;
+         "ÃÓØæÇäí" ;
+         "ÈæŞí" ;
+         "åÑãí" ;
+    };
+    StringList [ dutch ] =
+    {
+            "blokken" ;
+        "cilinders" ;
+        "kegels" ;
+        "piramiden" ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            "ç›´è§’å¹³è¡Œå…­é¢ä½“" ;
+        "åœ†æŸ±ä½“" ;
+        "åœ†é”¥ä½“" ;
+        "æ£±é”¥ä½“" ;
+    };
+    StringList [ greek ] =
+    {
+             "Ïñèïãşíéï ğáñáëëçëåğßğåäï" ;
+         "Êıëéíäñïò" ;
+         "Kşíïò" ;
+         "Ğõñáìßäåò" ;
+    };
+    StringList [ korean ] =
+    {
+             "ì§ìœ¡ë©´ì²´" ;
+         "ì‹¤ë¦°ë”" ;
+         "ì›ì¶”í˜•" ;
+         "í”¼ë¼ë¯¸ë“œ" ;
+    };
+    StringList [ turkish ] =
+    {
+        "Dikdörtgen prizma" ;
+        "Silindir" ;
+        "Koni" ;
+        "Piramit" ;
+    };
+    StringList [ catalan ] =
+    {
+        "Paralelepípede" ;
+        "Cilindre" ;
+        "Con" ;
+        "Piràmides" ;
+    };
+    StringList [ finnish ] =
+    {
+        "Suorakulmainen suuntaissärmiö" ;
+        "Lieriö" ;
+        "Kartio" ;
+        "Pyramidi" ;
+    };
+    StringList [ thai ] =
+    {
+        "à¸£à¸¹à¸›à¸›à¸£à¸´à¸¡à¸²à¸•à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸”à¹‰à¸²à¸™ 6 à¸”à¹‰à¸²à¸™" ;
+        "à¸—à¸£à¸‡à¸à¸£à¸°à¸šà¸­à¸" ;
+        "à¸à¸£à¸§à¸¢" ;
+        "à¸›à¸´à¸£à¸²à¸¡à¸´à¸”" ;
+    };
+    StringList [ czech ] =
+    {
+        "KvÃ¡dr" ;
+        "VÃ¡lec" ;
+        "KuÅ¾el" ;
+        "Jehlan" ;
+    };
+    StringList [ hebrew ] =
+    {
+        "Quader" ;
+        "Zylinder" ;
+        "Kegel" ;
+        "Pyramiden" ;
+    };
+    StringList [ hindi ] =
+    {
+        "à¤šà¤¤à¥à¤°à¥à¤­à¥à¤œ" ;
+        "à¤µà¤°à¥à¤¤à¥à¤²à¤¾à¤•à¤¾à¤°" ;
+        "à¤¶à¤‚à¤•à¥" ;
+        "à¤¸à¥à¤¤à¥‚à¤ª" ;
+    };
+    StringList [ slovak ] =
+    {
+        "KvÃ¡der" ;
+        "Valec" ;
+        "KuÅ¾eÄ¾" ;
+        "Ihlan" ;
+    };
+    };
+};
