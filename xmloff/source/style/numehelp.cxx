@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 09:41:48 $
+ *  last change: $Author: sab $ $Date: 2001-10-29 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,11 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
     if (bExportTypeAttribute)
         rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_STRING);
     if (bExportValue && (rValue != rCharacters))
-        rXMLExport.AddAttribute(nNamespace, XML_STRING_VALUE, rValue);
+    {
+        rtl::OUString sTemp;
+        SvXMLUnitConverter::clearUndefinedChars(sTemp, rValue);
+        if (sTemp.getLength())
+            rXMLExport.AddAttribute(nNamespace, XML_STRING_VALUE, sTemp);
+    }
 }
 
