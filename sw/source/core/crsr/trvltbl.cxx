@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-07 11:04:58 $
+ *  last change: $Author: fme $ $Date: 2002-11-01 13:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,7 @@ FASTBOOL SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
     {
         SwCrsrSaveState aSaveState( *this );
         bRet = (*fnWhichTbl)( *this, fnPosTbl, IsReadOnlyAvailable() ) &&
-                !IsSelOvr();
+                !IsSelOvr( SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE );
     }
     return bRet;
 }
