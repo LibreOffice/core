@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:32:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ using namespace ::com::sun::star::uno;
 
 sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent )
 {
-    return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLExporter" );
+    return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLOasisExporter" );
 }
 
 sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent, const char* pExportService )
@@ -252,7 +252,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
 
 sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent )
 {
-    return SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
+    return SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
 }
 
 sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent, const char* pImportService  )
