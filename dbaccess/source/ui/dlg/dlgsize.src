@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 21:01:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2001-08-13 21:01:33 $ $Revision: 1.14 $
+ // $Author: kz $ $Date: 2001-08-21 22:22:47 $ $Revision: 1.15 $
  //
  //---------------------------------------------------------------------------
 
@@ -316,6 +316,7 @@ ModalDialog DLG_COLWIDTH
     Text[ catalan ] = "Ancho de columna";
     Text[ finnish ] = "Sarakkeen leveys";
 };
+
 
 
 
