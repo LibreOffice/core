@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,18 +186,11 @@ SvxFrameSelector::SvxFrameSelector( Window* pParent,
         bIsDontCare     ( bDontCare ),
         bIsClicked      ( FALSE )
 {
-    Size aSzBmp( ( eSel == SVX_FRMSELTYPE_TABLE )
-                    ? Size( 60, 42 )
-                    : Size( 50, 50 ) );
-    aSzBmp = pParent->LogicToPixel(aSzBmp, MAP_APPFONT);
     Size aSzParent( pParent->GetSizePixel() );
-    long nXCenter = ( aSzParent.Width()  - aSzBmp.Width()  ) / 2;
-    long nYCenter = ( aSzParent.Height() - aSzBmp.Height() ) / 2;
-    Point atPos( ( nXCenter < 0 ) ? 0 : nXCenter,
-                 ( nYCenter < 0 ) ? 0 : nYCenter );
-
-    InitBitmap_Impl( aSzBmp );
-    SetPosSizePixel( atPos, theBmp.GetSizePixel() );
+    aSzParent.Width() -= 4;
+    aSzParent.Height() -= 4;
+    InitBitmap_Impl( aSzParent );
+    SetPosSizePixel( Point(), theBmp.GetSizePixel() );
     Show();
 }
 
@@ -214,7 +207,7 @@ void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
     /*
      * Berechnen des Frame-Rects und der Linie-Mittelpunkte
      */
-    theBoundingRect = aRectFrame = Rectangle( 21, 21, nX-21, nY-21 );
+    theBoundingRect = aRectFrame = Rectangle( 21, 21, nX - 21, nY - 21 );
 
     theLeftLine.aStartPos   = Point( 21, 21 );
     theLeftLine.aEndPos     = Point( 21, nY - 21 );
@@ -264,7 +257,7 @@ void SvxFrameSelector::InitBitmap_Impl( const Size& rSize )
      * Initialisieren der Bitmap:
      */
     aVirDev.SetOutputSizePixel( rSize );
-    aVirDev.SetLineColor( Color( COL_BLACK ) );
+    aVirDev.SetLineColor();
     aVirDev.SetFillColor( Color( COL_WHITE ) );
     aVirDev.DrawRect( Rectangle( Point( 0, 0 ), rSize ) );
 
@@ -687,9 +680,9 @@ void SvxFrameSelector::ShowLines()
 
     theBmp = aVirDev.GetBitmap( Point(0,0), theBmp.GetSizePixel() );
 
-    if ( eShadow != SVX_FRMSHADOW_NONE )
-        ShowShadow();
-    else
+//    if ( eShadow != SVX_FRMSHADOW_NONE )
+//        ShowShadow();
+//    else
         Invalidate( INVALIDATE_NOERASE );
 }
 
@@ -992,58 +985,58 @@ void SvxFrameSelector::SetShadowPos( SvxFrameShadow eShadowPos )
 
 //------------------------------------------------------------------------
 
-void SvxFrameSelector::ShowShadow()
-{
-    VirtualDevice aVirDev;
-    Bitmap theFrameBmp;
-    Color aWhiteCol( COL_WHITE );
-    Color theDrawCol =
-        eShadow != SVX_FRMSHADOW_NONE ? theShadowCol : aWhiteCol;
-    long nX = theBmp.GetSizePixel().Width();
-    long nY = theBmp.GetSizePixel().Height();
-    Point theOldPos;
-    Rectangle theFrameRect = theBoundingRect;
-    Rectangle theEraseRect( Point( 16, 16 ), Size( nX - 31, nY - 31 ) );
-
-    aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
-    aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
-
-    // Rahmen-Bitmap sichern
-    theFrameBmp = aVirDev.GetBitmap( theFrameRect.TopLeft(),
-                                     theFrameRect.GetSize() );
-    // aktuellen Schatten entfernen:
-    aVirDev.SetLineColor( aWhiteCol );
-    aVirDev.SetFillColor( aWhiteCol );
-    aVirDev.DrawRect( theEraseRect );
-    aVirDev.SetLineColor( theDrawCol );
-    aVirDev.SetFillColor( theDrawCol );
-
-    if ( eShadow != SVX_FRMSHADOW_NONE )
-    {
-        Point aDeltaPnt( 3, 3 );
-
-        switch ( eShadow )
-        {
-            case SVX_FRMSHADOW_TOP_RIGHT:
-                aDeltaPnt.Y() *= -1; break;
-
-            case SVX_FRMSHADOW_BOT_LEFT:
-                aDeltaPnt.X() *= -1;
-                break;
-
-            case SVX_FRMSHADOW_TOP_LEFT:
-                aDeltaPnt.X() *= -1; aDeltaPnt.Y() *= -1;
-                break;
-        }
-        Rectangle aTempRect( Point( theFrameRect.Left()+aDeltaPnt.X(),
-                                    theFrameRect.Top()+aDeltaPnt.Y() ),
-                             theFrameRect.GetSize() );
-        aVirDev.DrawRect( aTempRect );
-    }
-    aVirDev.DrawBitmap( theFrameRect.TopLeft(), theFrameBmp );
-    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), theBmp.GetSizePixel() );
-    Invalidate( INVALIDATE_NOERASE );
-}
+//void SvxFrameSelector::ShowShadow()
+//{
+//    VirtualDevice aVirDev;
+//    Bitmap theFrameBmp;
+//    Color aWhiteCol( COL_WHITE );
+//    Color theDrawCol =
+//        eShadow != SVX_FRMSHADOW_NONE ? theShadowCol : aWhiteCol;
+//    long nX = theBmp.GetSizePixel().Width();
+//    long nY = theBmp.GetSizePixel().Height();
+//    Point theOldPos;
+//    Rectangle theFrameRect = theBoundingRect;
+//    Rectangle theEraseRect( Point( 16, 16 ), Size( nX - 31, nY - 31 ) );
+//
+//    aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
+//    aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
+//
+//    // Rahmen-Bitmap sichern
+//    theFrameBmp = aVirDev.GetBitmap( theFrameRect.TopLeft(),
+//                                     theFrameRect.GetSize() );
+//    // aktuellen Schatten entfernen:
+//    aVirDev.SetLineColor( aWhiteCol );
+//    aVirDev.SetFillColor( aWhiteCol );
+//    aVirDev.DrawRect( theEraseRect );
+//    aVirDev.SetLineColor( theDrawCol );
+//    aVirDev.SetFillColor( theDrawCol );
+//
+//    if ( eShadow != SVX_FRMSHADOW_NONE )
+//    {
+//        Point aDeltaPnt( 3, 3 );
+//
+//        switch ( eShadow )
+//        {
+//            case SVX_FRMSHADOW_TOP_RIGHT:
+//                aDeltaPnt.Y() *= -1; break;
+//
+//            case SVX_FRMSHADOW_BOT_LEFT:
+//                aDeltaPnt.X() *= -1;
+//                break;
+//
+//            case SVX_FRMSHADOW_TOP_LEFT:
+//                aDeltaPnt.X() *= -1; aDeltaPnt.Y() *= -1;
+//                break;
+//        }
+//        Rectangle aTempRect( Point( theFrameRect.Left()+aDeltaPnt.X(),
+//                                    theFrameRect.Top()+aDeltaPnt.Y() ),
+//                             theFrameRect.GetSize() );
+//        aVirDev.DrawRect( aTempRect );
+//    }
+//    aVirDev.DrawBitmap( theFrameRect.TopLeft(), theFrameBmp );
+//    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), theBmp.GetSizePixel() );
+//    Invalidate( INVALIDATE_NOERASE );
+//}
 
 //------------------------------------------------------------------------
 

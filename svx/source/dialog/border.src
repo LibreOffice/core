@@ -1,10 +1,11 @@
+
 /*************************************************************************
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:23:08 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +101,19 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_PRESETS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 14 ) ;
-        Size = MAP_APPFONT ( 63 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
         TabStop = TRUE ;
     };
     Window WIN_FRAMESEL
     {
-        Pos = MAP_APPFONT ( 7 , 31 ) ;
-        Size = MAP_APPFONT ( 63 , 55 ) ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 61 , 61 ) ;
     };
     FixedLine FL_BORDER
     {
-        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Linienanordnung" ;
         Text [ ENGLISH ] = "Line positions" ;
@@ -138,24 +140,29 @@ TabPage RID_SVXPAGE_BORDER
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marco";
     };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 79 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 104 ) ;
+    };
     ListBox LB_LINESTYLE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 62 , 70 ) ;
+        Size = MAP_APPFONT ( 74 , 88 ) ;
     };
     ListBox LB_LINECOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 88 ) ;
-        Size = MAP_APPFONT ( 62 , 68 ) ;
+        Pos = MAP_APPFONT ( 88 , 106 ) ;
+        Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedLine FL_LINE
     {
-        Pos = MAP_APPFONT ( 84 , 3 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Pos = MAP_APPFONT ( 82 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "Linie" ;
         Text [ ENGLISH ] = "Lines" ;
         Text [ norwegian ] = "Linjer" ;
@@ -182,10 +189,15 @@ TabPage RID_SVXPAGE_BORDER
         Text[ catalan ] = "Línea";
     };
 
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 168 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 104 ) ;
+    };
     FixedText FT_LEFT
     {
-        Pos = MAP_APPFONT ( 168 , 17 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 177 , 16 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "Left" ;
         Text[ english_us ] = "~Left";
@@ -213,8 +225,8 @@ TabPage RID_SVXPAGE_BORDER
     MetricField MF_LEFT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 206 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 213 , 14 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
         SpinSize = 10 ;
@@ -227,10 +239,10 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_RIGHT
     {
-        Pos = MAP_APPFONT ( 168 , 33 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 177 , 32 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "R~echts" ;
-        Text [ ENGLISH ] = "Right" ;
+        Text [ ENGLISH ] = "R~ight" ;
         Text[ english_us ] = "Right";
         Text[ portuguese ] = "~Direita";
         Text[ russian ] = "Ñïðàâà";
@@ -256,8 +268,8 @@ TabPage RID_SVXPAGE_BORDER
     MetricField MF_RIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 206 , 30 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 213 , 30 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
         SpinSize = 10 ;
@@ -270,8 +282,8 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_TOP
     {
-        Pos = MAP_APPFONT ( 168 , 49 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 177 , 48 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
         Text[ english_us ] = "~Top";
@@ -299,8 +311,8 @@ TabPage RID_SVXPAGE_BORDER
     MetricField MF_TOP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 206 , 46 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 213 , 46 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
         SpinSize = 10 ;
@@ -313,8 +325,8 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_BOTTOM
     {
-        Pos = MAP_APPFONT ( 168 , 65 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 177 , 64 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Unten" ;
         Text [ ENGLISH ] = "Bottom" ;
         Text[ english_us ] = "~Bottom";
@@ -341,8 +353,8 @@ TabPage RID_SVXPAGE_BORDER
     MetricField MF_BOTTOM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 206 , 62 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 213 , 62 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
         SpinSize = 10 ;
@@ -355,8 +367,8 @@ TabPage RID_SVXPAGE_BORDER
     };
     CheckBox CB_SYNC
     {
-        Pos = MAP_APPFONT ( 168 , 78 ) ;
-        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Pos = MAP_APPFONT ( 177 , 78 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "S~ynchronisieren" ;
         Text [ ENGLISH ] = "Synchronize" ;
         Text[ english_us ] = "Synchronize";
@@ -383,8 +395,8 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedLine FL_DISTANCE
     {
-        Pos = MAP_APPFONT ( 164 , 3 ) ;
-        Size = MAP_APPFONT ( 96 , 8 ) ;
+        Pos = MAP_APPFONT ( 171 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "Abstand zum Inhalt" ;
         Text [ ENGLISH ] = "Distance to Content" ;
         Text[ english_us ] = "Spacing to contents";
@@ -412,8 +424,8 @@ TabPage RID_SVXPAGE_BORDER
 
     FixedText FT_SHADOWPOS
     {
-        Pos = MAP_APPFONT ( 7 , 117 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
@@ -443,43 +455,21 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_SHADOWS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 116 ) ;
-        Size = MAP_APPFONT ( 65 , 15 ) ;
+        Pos = MAP_APPFONT ( 76 , 135 ) ;
+        Size = MAP_APPFONT ( 74 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_SHADOWSIZE
     {
-        Pos = MAP_APPFONT ( 7 , 133 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Größe" ;
-        Text [ ENGLISH ] = "Si~ze" ;
-        Text [ norwegian ] = "Si~ze" ;
-        Text [ italian ] = "~Dimensione" ;
-        Text [ portuguese_brazilian ] = "Ta~manho" ;
-        Text [ portuguese ] = "~Tamanho" ;
-        Text [ finnish ] = "~Koko" ;
-        Text [ danish ] = "Størrelse" ;
-        Text [ french ] = "~Taille" ;
-        Text [ swedish ] = "St~orlek" ;
-        Text [ dutch ] = "~Grootte" ;
-        Text [ spanish ] = "~Tamaño" ;
-        Text [ english_us ] = "Si~ze" ;
-        Text[ chinese_simplified ] = "´óÐ¡(~Z)";
-        Text[ russian ] = "Ðàçìåð";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Þ(~Z)";
-        Text[ chinese_traditional ] = "¤j¤p(~Z)";
-        Text[ arabic ] = "ÇáÍÌã";
-        Text[ greek ] = "ÌÝãåèïò";
-        Text[ korean ] = "Å©±â(~Z)";
-        Text[ turkish ] = "~Büyüklük";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tamaño";
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "~Distanz" ;
+        Text [ ENGLISH ] = "~Distance" ;
     };
     MetricField ED_SHADOWSIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 130 ) ;
+        Pos = MAP_APPFONT ( 76 , 151 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -493,9 +483,9 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_SHADOWCOLOR
     {
-        Pos = MAP_APPFONT ( 7 , 149 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Fa~rbe" ;
+        Pos = MAP_APPFONT ( 12 , 169 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Far~be" ;
         Text [ ENGLISH ] = "C~olor" ;
         Text [ norwegian ] = "C~olor" ;
         Text [ italian ] = "Colore" ;
@@ -523,14 +513,14 @@ TabPage RID_SVXPAGE_BORDER
     ListBox LB_SHADOWCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 146 ) ;
-        Size = MAP_APPFONT ( 62 , 68 ) ;
+        Pos = MAP_APPFONT ( 76 , 167 ) ;
+        Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedLine FL_SHADOW
     {
-        Pos = MAP_APPFONT ( 4 , 103 ) ;
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Schatten" ;
         Text [ ENGLISH ] = "Shadow" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
     aWinSize.Height() -= aTmp.Height() /2;
 
     aSize = Size( 11905, 16837 );
+
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 // -----------------------------------------------------------------------
@@ -225,10 +227,6 @@ void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
         aPnt.X() = DEF_MARGIN / 2;
         aSiz = aLineSiz;
     }
-
-    SetLineColor( Color( COL_BLACK ) );
-    SetFillColor();
-    DrawRect( Rectangle( Point(), aWinSize ) );
 }
 
 #undef DEF_MARGIN

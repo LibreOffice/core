@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-23 08:10:36 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,32 +225,35 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     :   SfxTabPage( pParent, ResId( RID_SVXPAGE_BORDER, DIALOG_MGR() ), rCoreAttrs ),
 
+        aFlBorder       ( this, ResId( FL_BORDER ) ),
         aWndPresets     ( this, ResId( WIN_PRESETS ) ),
         aWndFrameSel    ( this, ResId( WIN_FRAMESEL ) ),
-        aFlBorder       ( this, ResId( FL_BORDER ) ),
 
+        aFlSep1         ( this, ResId( FL_SEPARATOR1 ) ),
+        aFlLine         ( this, ResId( FL_LINE ) ),
         aLbLineStyle    ( this, ResId( LB_LINESTYLE ) ),
         aLbLineColor    ( this, ResId( LB_LINECOLOR ) ),
-        aFlLine         ( this, ResId( FL_LINE ) ),
 
-        aDistanceFL(    this, ResId(FL_DISTANCE)),
-        aLeftFT(        this, ResId(FT_LEFT)),
-        aLeftMF(        this, ResId(MF_LEFT)),
-        aRightFT(       this, ResId(FT_RIGHT)),
-        aRightMF(       this, ResId(MF_RIGHT)),
-        aTopFT(         this, ResId(FT_TOP)),
-        aTopMF(         this, ResId(MF_TOP)),
-        aBottomFT(      this, ResId(FT_BOTTOM)),
-        aBottomMF(      this, ResId(MF_BOTTOM)),
-        aSynchronizeCB( this, ResId(CB_SYNC     )),
+        aFlSep2         ( this, ResId( FL_SEPARATOR2 ) ),
+        aDistanceFL     ( this, ResId( FL_DISTANCE ) ),
+        aLeftFT         ( this, ResId( FT_LEFT ) ),
+        aLeftMF         ( this, ResId( MF_LEFT ) ),
+        aRightFT        ( this, ResId( FT_RIGHT ) ),
+        aRightMF        ( this, ResId( MF_RIGHT ) ),
+        aTopFT          ( this, ResId( FT_TOP ) ),
+        aTopMF          ( this, ResId( MF_TOP ) ),
+        aBottomFT       ( this, ResId( FT_BOTTOM ) ),
+        aBottomMF       ( this, ResId( MF_BOTTOM ) ),
+        aSynchronizeCB  ( this, ResId( CB_SYNC ) ),
 
+        aFlShadow       ( this, ResId( FL_SHADOW ) ),
         aFtShadowPos    ( this, ResId( FT_SHADOWPOS ) ),
         aWndShadows     ( this, ResId( WIN_SHADOWS ) ),
         aFtShadowSize   ( this, ResId( FT_SHADOWSIZE ) ),
         aEdShadowSize   ( this, ResId( ED_SHADOWSIZE ) ),
         aFtShadowColor  ( this, ResId( FT_SHADOWCOLOR ) ),
         aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
-        aFlShadow       ( this, ResId( FL_SHADOW ) ),
+
         nMinValue(0),
         bIsTableBorder  ( FALSE ),
         nSWMode(0)
@@ -296,6 +299,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         }
         else
         {
+            aFlSep2.Hide();
             aDistanceFL.Hide();
             aLeftFT.Hide();
             aLeftMF.Hide();
@@ -317,6 +321,9 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aBottomMF.SetDecimalDigits(1);
         aEdShadowSize.SetDecimalDigits(1);
     }
+
+    aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
+    aFlSep2.SetStyle( aFlSep1.GetStyle() | WB_VERT );
 
     pFrameSel = new SvxFrameSelector( &aWndFrameSel,
                                       bIsTableBorder
@@ -812,7 +819,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     //---------------------------------
     // Schatten im Selektor darstellen:
     //---------------------------------
-    pFrameSel->ShowShadow();
+//    pFrameSel->ShowShadow();
 
     aWndPresets.SetNoSelection();
 
@@ -1159,7 +1166,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
     {
         case 1: // keine Linien
         {
-            pFrameSel->ShowShadow();
+//            pFrameSel->ShowShadow();
             pFrameSel->HideLines();
             pFrameSel->SelectLine( SVX_FRMSELLINE_NONE );
         }
@@ -1273,7 +1280,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
     pFrameSel->SetCurLineColor( aLbLineColor.GetSelectEntryColor() );
     pFrameSel->SetShadowColor( aLbShadowColor.GetSelectEntryColor() );
     pFrameSel->ShowLines();
-    pFrameSel->ShowShadow();
+//    pFrameSel->ShowShadow();
     aWndPresets.SetNoSelection(); // Nur Auswahl, kein Status
     LinesChanged_Impl(0);
     return 0;
@@ -1297,7 +1304,7 @@ IMPL_LINK( SvxBorderTabPage, SelSdwHdl_Impl, void *, EMPTYARG )
         case 5: ePos = SVX_FRMSHADOW_TOP_LEFT;  break;
     }
     pFrameSel->SetShadowPos( ePos );
-    pFrameSel->ShowShadow();
+//    pFrameSel->ShowShadow();
 
     return 0;
 }
@@ -1317,7 +1324,7 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
     else if ( pLb == &aLbShadowColor )
     {
         pFrameSel->SetShadowColor( pColLb->GetSelectEntryColor() );
-        pFrameSel->ShowShadow();
+//        pFrameSel->ShowShadow();
     }
 
     return 0;
@@ -1352,10 +1359,7 @@ void SvxBorderTabPage::FillValueSets_Impl()
 
     ImageList   aIlPre( ResId( IL_PRE_BITMAPS ) );
 
-    Point aWndPosSize( aWndPresets.GetPosPixel() );
-    aWndPresets.SetPosSizePixel(
-                    Point( aWndPosSize.X() + pFrameSel->GetPosPixel().X(), aWndPosSize.Y() ),
-                    aWndPresets.CalcWindowSizePixel( aIlPre.GetImage(IID_PRENONE).GetSizePixel() ) );
+    aWndPresets.SetSizePixel( aWndPresets.CalcWindowSizePixel( aIlPre.GetImage(IID_PRENONE).GetSizePixel() ) );
 
     aWndPresets.InsertItem( 1, aIlPre.GetImage(IID_PRENONE) );
     if ( bIsTableBorder )
@@ -1489,8 +1493,8 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
         aRightMF.Enable(bLineSet && 0 != (nValid&VALID_RIGHT));
         aTopMF.Enable(bLineSet && 0 != (nValid&VALID_TOP));
         aBottomMF.Enable(bLineSet && 0 != (nValid&VALID_BOTTOM));
-        aSynchronizeCB.Enable( aRightMF.IsEnabled() && aTopMF.IsEnabled() &&
-                               aBottomMF.IsEnabled()&& aLeftMF.IsEnabled() );
+        aSynchronizeCB.Enable( aRightMF.IsEnabled() || aTopMF.IsEnabled() ||
+                               aBottomMF.IsEnabled() || aLeftMF.IsEnabled() );
     }
     return 0;
 }
