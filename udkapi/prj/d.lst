@@ -20,6 +20,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\util\logging
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\security
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\task
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
 
 ..\%__SRC%\misc\udkapi.autodoc %_DEST%\idl%_EXT%\udkapi.autodoc
 ..\%__SRC%\ucr\udkapi.db %_DEST%\bin%_EXT%\udkapi.rdb
@@ -46,6 +47,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\task
 ..\com\sun\star\util\logging\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\util\logging
 ..\com\sun\star\security\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\security
 ..\com\sun\star\task\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\task
+..\com\sun\star\uri\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
