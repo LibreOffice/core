@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:00:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,8 @@ void SwIndexMarkDlg::InitControls()
 
     // Benutzerverzeichnisse
     sal_uInt16 nCount = pSh->GetTOXTypeCount(TOX_USER);
-    for(sal_uInt16 i=0; i< nCount; ++i)
+    sal_uInt16 i;
+    for( i = 0; i < nCount; ++i )
         aTypeDCB.InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // KeyWords Primary einlesen
