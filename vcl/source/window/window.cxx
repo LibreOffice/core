@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-09 16:28:20 $
+ *  last change: $Author: tbe $ $Date: 2002-09-10 10:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8156,6 +8156,7 @@ String Window::GetAccessibleDescription() const
     }
     else
     {
+        aAccessibleDescription = GetHelpText();
     }
 
     return aAccessibleDescription;
