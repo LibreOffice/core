@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 13:58:54 $
+ *  last change: $Author: ama $ $Date: 2002-03-22 15:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,10 +218,21 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     ::lcl_GetLayTree( pMyFrm, aArr );
 
     USHORT nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
+#ifdef VERTICAL_LAYOUT
+    BOOL bVert = FALSE;
+    BOOL bR2L = FALSE;
+#endif
 
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
+    {
+#ifdef VERTICAL_LAYOUT
+        const SwFrm* pFrm = (const SwFrm*)aArr[ nCnt ];
+        bVert = pFrm->IsVertical();
+        bR2L = pFrm->IsRightToLeft();
+#endif
         --nCnt, --nRefCnt;
+    }
 
     // sollte einer der Counter ueberlaeufen?
     if( aRefArr[ nRefCnt ] == aArr[ nCnt ] )
@@ -243,9 +254,31 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
         if( pFldFrm->GetType() == pRefFrm->GetType() )
         {
             // hier ist die X-Pos wichtiger!
+#ifdef VERTICAL_LAYOUT
+            if( bVert )
+            {
+                if( bR2L )
+                    bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
+                            ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
+                              pRefFrm->Frm().Left() < pFldFrm->Frm().Left() );
+                else
+                    bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
+                            ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
+                              pRefFrm->Frm().Left() > pFldFrm->Frm().Left() );
+            }
+            else if( bR2L )
+                bRefIsLower = pRefFrm->Frm().Left() > pFldFrm->Frm().Left() ||
+                            ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
+                              pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
+            else
+                bRefIsLower = pRefFrm->Frm().Left() < pFldFrm->Frm().Left() ||
+                            ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
+                              pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
+#else
             bRefIsLower = pRefFrm->Frm().Left() < pFldFrm->Frm().Left() ||
                     ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
                         pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
+#endif
             pRefFrm = 0;
         }
         else if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() )
@@ -255,9 +288,33 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     }
 
     if( pRefFrm )               // als Flag missbrauchen
+#ifdef VERTICAL_LAYOUT
+    {
+        if( bVert )
+        {
+            if( bR2L )
+                bRefIsLower = pRefFrm->Frm().Left() < pFldFrm->Frm().Left() ||
+                            ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
+                                pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
+            else
+                bRefIsLower = pRefFrm->Frm().Left() > pFldFrm->Frm().Left() ||
+                            ( pRefFrm->Frm().Left() == pFldFrm->Frm().Left() &&
+                                pRefFrm->Frm().Top() < pFldFrm->Frm().Top() );
+        }
+        else if( bR2L )
+            bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
+                        ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
+                            pRefFrm->Frm().Left() > pFldFrm->Frm().Left() );
+        else
+            bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
+                        ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
+                            pRefFrm->Frm().Left() < pFldFrm->Frm().Left() );
+    }
+#else
         bRefIsLower = pRefFrm->Frm().Top() < pFldFrm->Frm().Top() ||
                     ( pRefFrm->Frm().Top() == pFldFrm->Frm().Top() &&
                         pRefFrm->Frm().Left() < pFldFrm->Frm().Left() );
+#endif
     return bRefIsLower;
 }
 
