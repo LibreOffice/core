@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-09 13:30:00 $
+ *  last change: $Author: jbu $ $Date: 2001-12-07 15:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,57 @@ static OUString regsmgr_getImplementationName()
     return *pImplName;
 }
 
+static Sequence< OUString > retrieveAsciiValueList(
+    const Reference< XSimpleRegistry > &xReg, const OUString &keyName )
+{
+    Reference< XEnumerationAccess > xAccess( xReg, UNO_QUERY );
+    Sequence< OUString > seq;
+    if( xAccess.is() )
+    {
+        Reference< XEnumeration > xEnum = xAccess->createEnumeration();
+        while( xEnum.is() && xEnum->hasMoreElements() )
+        {
+            Reference< XSimpleRegistry > xTempReg;
+            xEnum->nextElement() >>= xTempReg;
+            if( xTempReg.is() )
+            {
+                Sequence< OUString > seq2 = retrieveAsciiValueList( xTempReg, keyName );
+
+                if( seq2.getLength() )
+                {
+                    sal_Int32 n1Len = seq.getLength();
+                    sal_Int32 n2Len = seq2.getLength();
+
+                    seq.realloc( n1Len + n2Len );
+                    const OUString *pSource = seq2.getConstArray();
+                    OUString *pTarget = seq.getArray();
+                    for( int i = 0 ; i < n2Len ; i ++ )
+                    {
+                        pTarget[i+n1Len] = pSource[i];
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        try
+        {
+            Reference< XRegistryKey > rRootKey = xReg->getRootKey();
+            if( rRootKey.is() )
+            {
+                Reference<XRegistryKey > xKey = rRootKey->openKey(keyName);
+                if( xKey.is() )
+                {
+                    seq = xKey->getAsciiListValue();
+                }
+            }
+        }
+        catch( InvalidRegistryException & )
+        {}
+    }
+    return seq;
+}
 
 
 /*****************************************************************************
@@ -1348,25 +1399,10 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 Sequence<OUString> ORegistryServiceManager::getFromServiceName(
     const OUString& serviceName )
 {
-    Reference<XRegistryKey > xRootKey = getRootKey();
-    if( !xRootKey.is() )
-        return Sequence<OUString>();
-
-    try
-    {
-        OUString regName = OUString( RTL_CONSTASCII_USTRINGPARAM("/SERVICES/") ) + serviceName;
-        Reference<XRegistryKey > xServKey = m_xRootKey->openKey(regName);
-
-        if( xServKey.is() && xServKey->getValueType() == RegistryValueType_ASCIILIST )
-        {
-            return xServKey->getAsciiListValue();
-        }
-    }
-    catch (InvalidRegistryException &)
-    {
-    }
-
-    return Sequence<OUString>();
+    OUStringBuffer buf;
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/SERVICES/" ) );
+    buf.append( serviceName );
+    return retrieveAsciiValueList( m_xRegistry, buf.makeStringAndClear() );
 }
 
 /**
