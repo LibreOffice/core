@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:25:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ static int ReportCrash( int Signal )
     if ( !bCrashReporterExecuted )
     {
         int i;
-        struct sigaction act;
+        /* struct sigaction act; */
 
         for (i = 0; i < NoSignals; i++)
         {
@@ -446,11 +446,11 @@ static int ReportCrash( int Signal )
                         char buffer[MAX_PATH_LEN];
 
                         fprintf( stackout, "0x%x:",
-                            stackframes[iFrame] );
+                            (unsigned int)stackframes[iFrame] );
 
                         fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
                             iFrame,
-                            stackframes[iFrame]
+                            (unsigned int)stackframes[iFrame]
                             );
 
                         memset( &dl_info, 0, sizeof(dl_info) );
