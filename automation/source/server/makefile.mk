@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-18 15:27:48 $
+#   last change: $Author: obo $ $Date: 2004-07-06 12:04:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,12 +81,14 @@ SLOFILES = \
     $(SLO)$/editwin.obj \
     $(SLO)$/server.obj \
     $(SLO)$/retstrm.obj \
-    $(SLO)$/profiler.obj
+    $(SLO)$/profiler.obj \
+    $(SLO)$/smartid.obj
 
 
 OBJFILES = \
     $(OBJ)$/cmdbasestream.obj \
-    $(OBJ)$/svcommstream.obj
+    $(OBJ)$/svcommstream.obj \
+    $(OBJ)$/smartid.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/server.obj \
