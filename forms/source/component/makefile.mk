@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:15:02 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:41:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/RadioButton.obj \
             $(SLO)$/FixedText.obj \
             $(SLO)$/FormComponent.obj \
-            $(SLO)$/Image.obj \
+            $(SLO)$/clickableimage.obj \
             $(SLO)$/Button.obj \
             $(SLO)$/ImageButton.obj \
             $(SLO)$/ImageControl.obj \
@@ -119,6 +119,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/formfiltermanager.obj \
             $(SLO)$/navigationbar.obj \
             $(SLO)$/formcontrolfont.obj \
+            $(SLO)$/refvaluecomponent.obj \
 
 # --- Targets ----------------------------------
 
