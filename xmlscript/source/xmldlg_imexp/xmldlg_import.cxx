@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:00:29 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,21 +1216,24 @@ void ImportContext::importEvents(
                                           "attribute(s) of event!") ),
                             Reference< XInterface >(), Any() );
                     }
-
-                    OUString aLocation;
-                    if (getStringAttr( &aLocation,
-                                       OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                     "location") ),
-                                       xAttributes,
-                                       _pImport->XMLNS_SCRIPT_UID ))
+                    if ( descr.ScriptType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ) ) )
                     {
-                        // prepend location
-                        OUStringBuffer buf( 48 );
-                        buf.append( aLocation );
-                        buf.append( (sal_Unicode)':' );
-                        buf.append( descr.ScriptCode );
-                        descr.ScriptCode = buf.makeStringAndClear();
+                        OUString aLocation;
+                        if (getStringAttr( &aLocation,
+                                           OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                         "location") ),
+                                           xAttributes,
+                                           _pImport->XMLNS_SCRIPT_UID ))
+                        {
+                            // prepend location
+                            OUStringBuffer buf( 48 );
+                            buf.append( aLocation );
+                            buf.append( (sal_Unicode)':' );
+                            buf.append( descr.ScriptCode );
+                            descr.ScriptCode = buf.makeStringAndClear();
+                        }
                     }
+
 
                     // script:event element
                     if (aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
