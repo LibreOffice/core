@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-14 16:14:49 $
+ *  last change: $Author: mtg $ $Date: 2001-06-05 14:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,6 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_PRINTER_SETUP,
     HANDLE_IS_KERN_ASIAN_PUNCTUATION,
     HANDLE_CHARACTER_COMPRESSION_TYPE,
-    HANDLE_AUTOMATIC_CONTROL_FOCUS,
-    HANDLE_APPLY_FORM_DESIGN_MODE,
     HANDLE_APPLY_USER_DATA,
     HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,
     HANDLE_CURRENT_DATABASE_DATA_SOURCE,
@@ -153,8 +151,6 @@ PropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"), HANDLE_IS_KERN_ASIAN_PUNCTUATION,       &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      &::getCppuType((sal_Int16*)0),          0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AutomaticControlFocus"),  HANDLE_AUTOMATIC_CONTROL_FOCUS,         &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ApplyFormDesignMode"),        HANDLE_APPLY_FORM_DESIGN_MODE,          &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),          HANDLE_APPLY_USER_DATA,                 &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      &::getBooleanCppuType(),                0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"), HANDLE_CURRENT_DATABASE_DATA_SOURCE,     &::getCppuType((const OUString*)0),     0,   0},
@@ -344,45 +340,6 @@ void SwXDocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries
                     pEditSh->ChgHyphenation();
             }
             break;
-            case HANDLE_AUTOMATIC_CONTROL_FOCUS:
-            {
-                SwDrawDocument * pDrawDoc;
-                sal_Bool bAuto = *(sal_Bool*)(*pValues).getValue();
-
-                if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->GetDrawModel() ) ) )
-                    pDrawDoc->SetAutoControlFocus( bAuto );
-                else if (bAuto)
-                {
-                    // if setting to true, and we don't have an
-                    // SdrModel, then we are changing the default and
-                    // must thus create an SdrModel, if we don't have an
-                    // SdrModel and we are leaving the default at false,
-                    // we don't need to make an SdrModel and can do nothing
-                    pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->MakeDrawModel() );
-                    pDrawDoc->SetAutoControlFocus ( bAuto );
-                }
-            }
-            break;
-            case HANDLE_APPLY_FORM_DESIGN_MODE:
-            {
-                SwDrawDocument * pDrawDoc;
-                sal_Bool bMode = *(sal_Bool*)(*pValues).getValue();
-
-                if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->GetDrawModel() ) ) )
-                    pDrawDoc->SetOpenInDesignMode( bMode );
-                else if (!bMode)
-                {
-                    // if setting to false, and we don't have an
-                    // SdrModel, then we are changing the default and
-                    // must thus create an SdrModel, if we don't have an
-                    // SdrModel and we are leaving the default at true,
-                    // we don't need to make an SdrModel and can do
-                    // nothing
-                    pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->MakeDrawModel() );
-                    pDrawDoc->SetOpenInDesignMode ( bMode );
-                }
-            }
-            break;
             case HANDLE_APPLY_USER_DATA:
             {
                 SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
@@ -498,28 +455,6 @@ void SwXDocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries
             {
                 sal_Bool bParaSpace = pDoc->IsKernAsianPunctuation();
                 (*pValue).setValue(&bParaSpace, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_AUTOMATIC_CONTROL_FOCUS:
-            {
-                SwDrawDocument * pDrawDoc;
-                sal_Bool bAuto;
-                if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->GetDrawModel() ) ) )
-                    bAuto = pDrawDoc->GetAutoControlFocus();
-                else
-                    bAuto = sal_False;
-                (*pValue).setValue(&bAuto, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_APPLY_FORM_DESIGN_MODE:
-            {
-                SwDrawDocument * pDrawDoc;
-                sal_Bool bMode;
-                if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDoc->GetDrawModel() ) ) )
-                    bMode = pDrawDoc->GetOpenInDesignMode();
-                else
-                    bMode = sal_True;
-                (*pValue).setValue(&bMode, ::getBooleanCppuType());
             }
             break;
             case HANDLE_APPLY_USER_DATA:
