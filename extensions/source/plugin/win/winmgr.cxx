@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-06 09:44:46 $
+ *  last change: $Author: dbo $ $Date: 2002-03-06 10:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,15 @@ typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
 
 #ifdef DEBUG
-static void logPlugin(
-    OUString const & name_, OUString const & path_ )
+#include <stdio.h>
+
+static void logPlugin( OUString const & path_ )
 {
-    OString name( OUStringToOString( name_, RTL_TEXTENCODING_ASCII_US ) );
-    OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
     static FILE * s_file = 0;
-    if (s_file)
-        s_file = fopen( "f:\\plugins.log" );
-    fprintf( s_file, "%s[ $s ]\n", name.getStr(), path.getStr() );
+    if (! s_file)
+        s_file = fopen( "f:\\plugins.log", "a+" );
+    OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( s_file, "%s\n", path.getStr() );
 }
 #endif
 
@@ -171,13 +171,13 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
             ::lstrcat( arComplete, aFindData.cFileName );
 
 #ifdef UNICODE
-            OUString item( arComplete );
+            OUString path( arComplete );
 #else
-            OUString item( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
+            OUString path( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
 #endif
-            rPlugins[ aName ] = item;
+            rPlugins[ aName ] = path;
 #ifdef DEBUG
-            logPlugin( aName, item );
+            logPlugin( path );
 #endif
         }
 
@@ -270,6 +270,8 @@ static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
 //--------------------------------------------------------------------------------------------------
 static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
 {
+    add_NS_keys( hKey, rPlugins );
+
     TCHAR keyName[MAX_PATH];
     DWORD dwIndex = 0, size = sizeof (keyName);
 
@@ -279,7 +281,7 @@ static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
         HKEY hSubKey;
         if (::RegOpenKeyEx( hKey, keyName, 0, KEY_READ, &hSubKey ) == ERROR_SUCCESS)
         {
-            add_NS_keys( hSubKey, rPlugins );
+            add_NS_lookupRecursive( hSubKey, rPlugins );
             ::RegCloseKey( hSubKey );
         }
         ++dwIndex;
