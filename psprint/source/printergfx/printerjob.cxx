@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cp $ $Date: 2002-04-08 16:38:40 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 15:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,11 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
+#endif
+#ifdef MACOSX
+#include <unxmacxp_protos.h>
 #endif
 
 #include <stdio.h>
@@ -94,7 +97,6 @@
 #include <pwd.h>
 
 #include <algorithm>
-
 
 using namespace psp ;
 
@@ -346,7 +348,11 @@ createSpoolDir ()
     }
 
     /* create a subdirectory in the tmp directory */
+#ifdef MACOSX
+    char* pName = macxp_tempnam( pTmpDir, "psp" );
+#else
     char* pName = tempnam (pTmpDir, "psp");
+#endif
     rtl::OUString aSubDir = rtl::OUString::createFromAscii (pName);
     rtl::OUString aUNCSubDir;
     osl::File::getFileURLFromSystemPath (aSubDir, aUNCSubDir);
