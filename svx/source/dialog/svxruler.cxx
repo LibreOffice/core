@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 13:46:37 $
+ *  last change: $Author: os $ $Date: 2001-09-26 09:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,6 @@ void SvxRuler::DragBorders()
 */
 {
     BOOL bLeftIndentsCorrected = FALSE, bRightIndentsCorrected = FALSE;
-    const long lPos = NEG_FLAG ? GetDragPos() : GetCorrectedDragPos();
     int nIdx;
 
     if(GetDragType()==RULER_TYPE_BORDER)
@@ -1910,6 +1909,9 @@ void SvxRuler::DragBorders()
 
     USHORT nRightCol = GetActRightColumn( FALSE, nIdx );
     USHORT nLeftCol = GetActLeftColumn( FALSE, nIdx );
+    // the drag position has to be corrected to be able to prevent borders from passing each other
+    long lPos = GetCorrectedDragPos();
+
 
     switch(nDragSize)
     {
