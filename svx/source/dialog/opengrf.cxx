@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 17:54:34 $
+ *  last change: $Author: thb $ $Date: 2001-07-09 14:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,51 +385,9 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 
 int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
-    GraphicFilter*  pFilter = GetGrfFilter();
-    String          aPath( GetPath() );
+    rGraphic = mpImpl->aFileDlg.GetGraphic();
 
-    // select graphic filter from dialog filter selection
-    String  aCurFilter( mpImpl->aFileDlg.GetCurrentFilter() );
-
-    const int nFilter = aCurFilter.Len() && pFilter->GetImportFormatCount()
-                    ? pFilter->GetImportFormatNumber( aCurFilter )
-                    : GRFILTER_FORMAT_DONTKNOW;
-
-    INetURLObject   aURL( aPath );
-    int             nRes(GRFILTER_OPENERROR);
-
-    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( aPath );
-    }
-
-    // non-local?
-    if ( INET_PROT_FILE != aURL.GetProtocol() )
-    {
-        SfxMedium       aMed( aPath, STREAM_READ, TRUE );
-        SvStream*       pStream = NULL;
-
-        aMed.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
-        aMed.DownLoad();
-
-        if( (pStream = aMed.GetInStream()) )
-            nRes = pFilter->ImportGraphic( rGraphic, aPath, *pStream, nFilter );
-        else
-            nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter );
-    }
-    else
-    {
-        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter );
-    }
-
-    if( nRes )
-    {
-        WarningBox aWarningBox( NULL, WB_3DLOOK | WB_OK, SVX_RESSTR( SvxOpenGrfErr2ResId(nRes) ) );
-        aWarningBox.Execute();
-    }
-
-    return nRes;
+    return rGraphic.IsSupportedGraphic() ? 0 : 1;
 }
 
 
