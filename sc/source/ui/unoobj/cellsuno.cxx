@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:30:25 $
+ *  last change: $Author: nn $ $Date: 2001-04-25 18:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,10 +2246,11 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
+        const SfxItemPropertyMap* pMap = pPropertyMap;
         for(sal_Int32 i = 0; i < nCount; i++)
         {
             String aNameString = pNames[i];
-            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( pPropertyMap, aNameString );
+            pMap = SfxItemPropertyMap::GetByName( pPropertyMap, aNameString );
             if ( pMap )
             {
                 if ( IsScItemWid( pMap->nWID ) )    // can be handled by SfxItemPropertySet
@@ -2277,7 +2278,11 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
                     //  call virtual method to set a single property
                     SetOnePropertyValue( pMap, pValues[i] );
                 }
+
+                pMap++;
             }
+            else
+                pMap = pPropertyMap;
         }
 
         if ( pNewPattern && aRanges.Count() )
