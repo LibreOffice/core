@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:33:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,7 +1400,7 @@ String STR_EDIT_IN_READONLY
     Text[ dutch ] = "editeerbaar in schrijfbeveiligd document";
     Text[ chinese_simplified ] = "ΔάΉ»±ΰΌ­Κά±£»¤µΔΞΔµµ";
     Text[ greek ] = "δυνατότητα επεξεργασίας σε έγγραφο 'μόνο για ανάγνωση'";
-    Text[ korean ] = "Ύ²±β ΊΈΘ£µΘ Ή®Ό­Ώ΅Ό­  ΖνΑύ °΅΄Ι";
+    Text[ korean ] = "ΐΠ±β ΐόΏλ Ή®Ό­Ώ΅Ό­  ΖνΑύ °΅΄Ι";
     Text[ turkish ] = "Salt okunur belgede dόzenlenebilir";
     Text[ language_user1 ] = " ";
 };
@@ -1798,7 +1798,7 @@ String STR_INVERT
     Text[ polish ] = "Odwrσζ";
     Text[ portuguese_brazilian ] = "Invert";
     Text[ japanese ] = "‹t“]";
-    Text[ korean ] = "ΏªΐΈ·Ξ";
+    Text[ korean ] = "Ήέΐό";
     Text[ chinese_simplified ] = "»¥²ΉΙ«Χª»»";
     Text[ chinese_traditional ] = "¤¬ΈΙ¦βΒΰ΄«";
     Text[ turkish ] = "Invert";
@@ -1821,7 +1821,7 @@ String STR_INVERT_NOT
     Text[ polish ] = "nie odwracaj";
     Text[ portuguese_brazilian ] = "not invert";
     Text[ japanese ] = "‹t“]‚Θ‚µ";
-    Text[ korean ] = "»πΐΤΗΟΑφ ΎΚΐ½";
+    Text[ korean ] = "Ήέΐό ΎΚΐ½";
     Text[ chinese_simplified ] = "²»Χª»»»¥²ΉΙ«";
     Text[ chinese_traditional ] = "¤£Βΰ΄«¤¬ΈΙ¦β";
     Text[ turkish ] = "not invert";
