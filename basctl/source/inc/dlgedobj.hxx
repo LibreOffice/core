@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 15:20:34 $
+ *  last change: $Author: tbe $ $Date: 2001-05-15 13:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ protected:
               const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
     DlgEdForm();
 
+    virtual void NbcMove( const Size& rSize );
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 11:23:57 $
+ *  last change: $Author: tbe $ $Date: 2001-05-15 13:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,18 +969,11 @@ void DlgEdObj::NbcMove( const Size& rSize )
     // set geometry properties
     SetPropsFromRect();
 
-    // dialog model changed
-    if ( ISA(DlgEdForm) )
-    {
-        ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
-    }
-    else
-    {
-        GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
-    }
-
     // start listening
     StartListening();
+
+    // dialog model changed
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
 }
 
 //----------------------------------------------------------------------------
@@ -995,18 +988,11 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     // set geometry properties
     SetPropsFromRect();
 
-    // dialog model changed
-    if ( ISA(DlgEdForm) )
-    {
-        ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
-    }
-    else
-    {
-        GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
-    }
-
     // start listening
     StartListening();
+
+    // dialog model changed
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
 }
 
 //----------------------------------------------------------------------------
@@ -1461,6 +1447,54 @@ SdrObject* DlgEdForm::CheckHit( const Point& rPnt, USHORT nTol,
         return (SdrObject*)this;
     else
         return 0;
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::NbcMove( const Size& rSize )
+{
+    SdrUnoObj::NbcMove( rSize );
+
+    // set geometry properties of form
+    EndListening(sal_False);
+    SetPropsFromRect();
+    StartListening();
+
+    // set geometry properties of all childs
+    ::std::vector<DlgEdObj*>::iterator aIter;
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    {
+        (*aIter)->EndListening(sal_False);
+        (*aIter)->SetPropsFromRect();
+        (*aIter)->StartListening();
+    }
+
+    // dialog model changed
+    GetDlgEditor()->SetDialogModelChanged(TRUE);
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+{
+    SdrUnoObj::NbcResize( rRef, xFract, yFract );
+
+    // set geometry properties of form
+    EndListening(sal_False);
+    SetPropsFromRect();
+    StartListening();
+
+    // set geometry properties of all childs
+    ::std::vector<DlgEdObj*>::iterator aIter;
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    {
+        (*aIter)->EndListening(sal_False);
+        (*aIter)->SetPropsFromRect();
+        (*aIter)->StartListening();
+    }
+
+    // dialog model changed
+    GetDlgEditor()->SetDialogModelChanged(TRUE);
 }
 
 //----------------------------------------------------------------------------
