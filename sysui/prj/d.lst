@@ -9,7 +9,14 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
 ..\%__SRC%\misc\dtappintegrate.sh %_DEST%\bin%_EXT%\dtappintegrate
 
-..\%__SRC%\bin\gnomeint %_DEST%\bin%_EXT%\gnomeint
+..\%__SRC%\bin\gnomeint %_DEST%\bin%_EXT%\gnomeint.bin
+..\%__SRC%\bin\gnomeint.sh %_DEST%\bin%_EXT%\gnomeint
+..\%__SRC%\bin\viewdoc.sh %_DEST%\bin%_EXT%\viewdoc
+..\%__SRC%\bin\functions.sh %_DEST%\bin%_EXT%\functions
+..\%__SRC%\bin\update-user-mime-data.sh %_DEST%\bin%_EXT%\update-user-mime-data
+..\%__SRC%\bin\update-user-menus.sh %_DEST%\bin%_EXT%\update-user-menus
+..\%__SRC%\bin\update-redhat-user-menus.sh %_DEST%\bin%_EXT%\update-redhat-user-menus
+..\%__SRC%\bin\update-suse-user-menus.sh %_DEST%\bin%_EXT%\update-suse-user-menus
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
 ..\%__SRC%\bin\01\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
