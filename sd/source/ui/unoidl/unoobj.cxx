@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-21 10:00:33 $
+ *  last change: $Author: cl $ $Date: 2001-08-21 13:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,10 @@ SdXShape::SdXShape(uno::Reference< drawing::XShape > & xShape, SdXImpressDocumen
         aAny >>= mxShapeAgg;
     }
 
-    if( mxShapeAgg.is() )
-        mxShapeAgg->setDelegator( (::cppu::OWeakObject*)this );
+    {
+        if( mxShapeAgg.is() )
+            mxShapeAgg->setDelegator( (::cppu::OWeakObject*)this );
+    }
 
     {
         uno::Any aAny = mxShapeAgg->queryInterface( ITYPE( drawing::XShape ) );
@@ -327,6 +329,8 @@ SdXShape::SdXShape(uno::Reference< drawing::XShape > & xShape, SdXImpressDocumen
 
 SdXShape::~SdXShape() throw()
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+    mxShapeAgg.clear();
 }
 
 // XInterface
