@@ -447,6 +447,11 @@ UDK_2_0_0 {
         rtl_getUriCharClass;
         rtl_uriEncode;
         rtl_uriDecode;
+
+        rtl_bootstrap_get;
+        rtl_bootstrap_setIniFileName;
+        rtl_getCommandArgCount;
+        rtl_getCommandArg;
     local:
         *;
 };

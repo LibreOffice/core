@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2001-05-09 12:51:08 $
+#   last change: $Author: jbu $ $Date: 2001-05-17 09:14:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,18 +65,28 @@ PRJ=..
 PRJNAME=sal
 TARGET=saltest
 TARGETTYPE=CUI
-
+LIBTARGET=NO
 USE_LDUMP2=TRUE
 #LDUMP2=LDUMP3
 
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
-
-
 # ------------------------------------------------------------------
 
-OBJFILES= \
+.IF "$(GUI)"=="WNT"
+BOOTSTRAPSCRIPT=bootstrap.bat
+BOOTSTRAPINI=testbootstrap.ini
+MY_SCRIPTCAT=cat
+.ELSE
+BOOTSTRAPSCRIPT=bootstrap
+BOOTSTRAPINI=testbootstraprc
+MY_SCRIPTCAT=tr -d "\015" <
+.ENDIF
+
+APP2OBJS = $(OBJ)$/testbootstrap.obj
+
+APP1OBJS=	\
                 $(OBJ)$/testprofile.obj		\
                 $(OBJ)$/teststring.obj		\
                 $(OBJ)$/testuuid.obj		\
@@ -84,22 +94,38 @@ OBJFILES= \
                 $(OBJ)$/testbyteseq.obj		\
                 $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj
-#				$(OBJ)$/testint64.obj		\
-#				$(OBJ)$/testowstring.obj	\
+OBJFILES= \
+    $(APP1OBJS) \
+    $(APP2OBJS) 
 
-APP2TARGET=	test
-APP2OBJS=	$(OBJFILES)
-APP2STDLIBS=$(SALLIB) $(TSLLIB)
-# APP2DEPN=	$(SLB)$/sal.lib
+APP1TARGET=	test
+APP1STDLIBS=$(SALLIB) $(TSLLIB)
+
+APP2TARGET = testbootstrap
+APP2STDLIBS = $(SALLIB)
 
 
 # --- Targets ------------------------------------------------------
 
+.IF "$(depend)" == ""
+ALL : $(BIN)$/$(BOOTSTRAPSCRIPT) $(BIN)$/$(BOOTSTRAPINI) ALLTAR 
+.ELSE
+ALL: 	ALLDEP
+.ENDIF
+
 .INCLUDE :  target.mk
 
+
+$(BIN)$/$(BOOTSTRAPSCRIPT) : $(BOOTSTRAPSCRIPT)
+    $(MY_SCRIPTCAT) $(BOOTSTRAPSCRIPT) > $@
+.IF "$(GUI)"!="WNT"
+    chmod ug+x $@
+.ENDIF
+
+$(BIN)$/$(BOOTSTRAPINI) : testbootstrap.ini
+    $(MY_SCRIPTCAT) testbootstrap.ini > $@	
+
 # --- SO2-Filter-Datei ---
-
-
 $(MISC)$/tsl$(UPD)$(DLLPOSTFIX).flt:
     @echo ------------------------------
     @echo Making: $@
