@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgrditem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 15:50:40 $
+ *  last change: $Author: fme $ $Date: 2002-02-13 08:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-
-class SvXMLUnitConverter;
-class OUString;
 
 // class SvxParaGridItem -------------------------------------------------
 
