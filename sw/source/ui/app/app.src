@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ String STR_PRINT_MERGE_MACRO
     Text[ arabic ] = "ΨΘΗΪΙ ΞΨΗΘΗΚ γΣαΣαΙ";
     Text[ dutch ] = "Standaardbrieven afdrukken";
     Text[ chinese_simplified ] = "΄ςΣ΅ΣΚΌώΊΟ²Ά";
-    Text[ greek ] = "Εκτύπωση ομαδικής επιστολής";
+    Text[ greek ] = "Εκτύπωση εγκυκλίου επιστολής";
     Text[ korean ] = "Ώ¬ΌΣΖνΑφ ΐΞΌβ";
     Text[ turkish ] = "Standart mektup yazdύr";
 };
@@ -2145,7 +2145,7 @@ String STR_STATSTR_REFORMAT
     TEXT [ portuguese ] = "Nova formataηγo do documento..." ;
     TEXT [ finnish ] = "Sivutus..." ;
     TEXT [ danish ] = "Genformatering af dokumentet..." ;
-    TEXT [ french ] = "Repagination du document..." ;
+    TEXT [ french ] = "Nouveau formatage du document..." ;
     TEXT [ swedish ] = "Omformatering av dokumentet..." ;
     TEXT [ dutch ] = "Bezig met nieuwe opmaak..." ;
     TEXT [ spanish ] = "Reformateado del documento..." ;
@@ -2202,7 +2202,7 @@ String STR_STATSTR_IMPGRF
     Text [ portuguese_brazilian ] = "Importando figura..." ;
     Text [ portuguese ] = "A importar imagem..." ;
     Text [ finnish ] = "Kuvan tuonti..." ;
-    Text [ danish ] = "Importerer billede..." ;
+    Text [ danish ] = "Importerer grafik..." ;
     Text [ french ] = "Import de l'image en cours..." ;
     Text [ swedish ] = "Grafik importeras..." ;
     Text [ dutch ] = "Afbeelding wordt geοmporteerd..." ;
