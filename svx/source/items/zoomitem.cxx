@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case 0 :
         case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
