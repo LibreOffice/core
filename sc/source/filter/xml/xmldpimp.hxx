@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:09:12 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,15 +141,17 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     ScAddress       aFilterOutputPosition;
     ScQueryParam    aSourceQueryParam;
     ScMySourceType  nSourceType;
-    sal_Bool        bIsNative : 1;
-    sal_Bool        bIgnoreEmptyRows : 1;
-    sal_Bool        bIdentifyCategories : 1;
-    sal_Bool        bUseRegularExpression : 1;
-    sal_Bool        bIsCaseSensitive : 1;
-    sal_Bool        bSkipDuplicates : 1;
-    sal_Bool        bFilterCopyOutputData : 1;
-    sal_Bool        bTargetRangeAddress : 1;
-    sal_Bool        bSourceCellRange : 1;
+    sal_Bool        bIsNative;
+    sal_Bool        bIgnoreEmptyRows;
+    sal_Bool        bIdentifyCategories;
+    sal_Bool        bUseRegularExpression;
+    sal_Bool        bIsCaseSensitive;
+    sal_Bool        bSkipDuplicates;
+    sal_Bool        bFilterCopyOutputData;
+    sal_Bool        bTargetRangeAddress;
+    sal_Bool        bSourceCellRange;
+    sal_Bool        bShowFilter;
+    sal_Bool        bDrillDown;
 
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
