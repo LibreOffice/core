@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:45:24 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,8 @@
 #define PROPERTY_MAP_REDLINE_PORTION                    88
 #define PROPERTY_MAP_MAILMERGE                          89
 #define PROPERTY_MAP_FLDTYP_DROPDOWN                    90
-#define PROPERTY_MAP_END                                91
+#define PROPERTY_MAP_TEXT_VIEW                          91
+#define PROPERTY_MAP_END                                92
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
@@ -312,6 +313,13 @@
 #define WID_OUT_SERVER_PASSWORD                 1099
 #define WID_SAVE_FILTER_OPTIONS                 1100
 #define WID_SAVE_FILTER_DATA                    1101
+
+#define WID_PAGE_COUNT                          1100
+#define WID_LINE_COUNT                          1101
+#define WID_IS_CONSTANT_SPELLCHECK              1102
+#define WID_IS_HIDE_SPELL_MARKS                 1103
+
+
 
 //AutoText
 #define WID_GROUP_PATH                          0
