@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDocument.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,36 +114,5 @@ service DatabaseDocument
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.3.24.2  2002/02/18 12:53:58  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.3.24.1  2002/02/18 10:21:53  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.3  2000/11/08 12:43:31  mi
-    moved from api
-
-    Revision 1.2  2000/10/17 08:42:32  fs
-    removed the obsolete chaos::XDataStreamSupplier
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.6  2000/09/11 11:52:39  mi
-    documentation merged from XML
-
-    Revision 1.4  2000/06/05 13:20:27  dg
-    services changed
-
-    Revision 1.3  1999/12/20 16:32:42  dg
-    #70278# files removed and new doc
-
-    Revision 1.2  1999/11/29 16:18:08  dg
-    Documentation
-
-    Revision 1.1  1999/11/24 08:39:00  dg
-    new Star Data Beans
-
 ===========================================================================*/
 #endif

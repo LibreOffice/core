@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialogModel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,15 +129,4 @@ service UnoControlDialogModel
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/12/14 10:19:50  mt
-    #95841# UnoControlDialogModel doesn't support the border property
-
-    Revision 1.1  2001/05/17 15:14:46  mt
-    #86320# new idl...
-
-
-=============================================================================*/
 #endif

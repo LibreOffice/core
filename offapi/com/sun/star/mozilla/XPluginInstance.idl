@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstance.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,66 +177,4 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2002/10/03 13:06:12  mi
-    #94968# IDL reviews merged
-
-    Revision 1.8.2.1  2002/06/27 10:50:22  mav
-    fix comments
-
-    Revision 1.8  2001/11/15 16:04:57  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.7  2001/04/25 16:09:34  ssa
-    #83025# documentation update
-
-    Revision 1.6  2001/03/16 16:41:29  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/19 14:59:01  mi
-    documentation sytax errors fixed
-
-    Revision 1.4  2000/11/14 11:42:10  as
-    add new parameter filter for newStream/newURL
-
-    Revision 1.3  2000/11/08 12:43:25  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:28  hjs
-    initial import
-
-    Revision 1.11  2000/09/11 11:52:34  mi
-    documentation merged from XML
-
-    Revision 1.9  2000/08/18 13:07:05  ssa
-    #77515# destroy oneway again
-
-    Revision 1.8  2000/08/17 12:42:47  as
-    #77592# new method for loadbalancer
-
-    Revision 1.7  2000/08/14 10:11:06  cd
-    #77515# save modified documents
-
-    Revision 1.6  2000/07/30 08:38:49  cd
-    session information changed
-
-    Revision 1.5  2000/07/21 10:59:24  ssa
-    added sessionid parameter
-
-    Revision 1.4  2000/06/29 16:05:45  obr
-    interfaces splitted
-
-    Revision 1.3  2000/06/29 05:45:16  obr
-    api redesign
-
-    Revision 1.2  2000/06/23 12:46:02  obr
-    handleEvent added
-
-    Revision 1.1  2000/06/19 09:36:45  obr
-    initial release
-
-
-=============================================================================*/
 #endif

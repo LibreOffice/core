@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InstallationCheck.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,33 +95,4 @@ service InstallationCheck
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2002/10/03 13:05:58  mi
-    #94968# IDL reviews merged
-
-    Revision 1.5.2.1  2002/07/29 09:53:09  mi
-    review -> module is deprecated
-
-    Revision 1.5  2001/11/15 15:56:10  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2000/12/14 12:53:37  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:18  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:23  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:30  mi
-    documentation merged from XML
-
-    Revision 1.1  1999/11/24 14:31:54  obr
-    initial release
-
-
-=============================================================================*/
 #endif

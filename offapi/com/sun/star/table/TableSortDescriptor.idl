@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableSortDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ service TableSortDescriptor
     /** specifies the sorting orientation (sort rows or columns).
 
         <p>Some implementations may not support sorting columns.</p>
+
+        @deprecated
      */
     [property] com::sun::star::table::TableOrientation Orientation;
 

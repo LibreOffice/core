@@ -10,13 +10,9 @@ oa      offapi\drafts\com\sun\star\formula              nmake   -       all     
 oa	offapi\drafts\com\sun\star\frame		nmake	-	all	oa_frame_drafts NULL
 oa	offapi\drafts\com\sun\star\i18n	    	nmake	-	all	oa_i18n_drafts NULL
 oa	offapi\drafts\com\sun\star\sheet		nmake	-	all	oa_sheet_drafts NULL
-oa	offapi\drafts\com\sun\star\sync			nmake	-	all	oa_sync_drafts NULL
-oa	offapi\drafts\com\sun\star\script\framework			nmake	-	all	oa_scriptf_drafts NULL
-oa	offapi\drafts\com\sun\star\script\framework\security			nmake	-	all	oa_sfsecurity_drafts NULL
-oa	offapi\drafts\com\sun\star\script\framework\provider			nmake	-	all	oa_sfprovider_drafts NULL
-oa	offapi\drafts\com\sun\star\script\framework\storage			nmake	-	all	oa_sfstorage_drafts NULL
 oa	offapi\drafts\com\sun\star\table		nmake	-	all	oa_table_drafts NULL
 oa	offapi\drafts\com\sun\star\text 		nmake	-	all	oa_text_drafts NULL
+oa  offapi\drafts\com\sun\star\chart        nmake   -   all oa_chart_drafts NULL
 oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
 oa	offapi\com\sun\star\chart				nmake	-	all	oa_chart NULL
 oa	offapi\com\sun\star\configuration		nmake	-	all	oa_config NULL
@@ -65,4 +61,5 @@ oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
 oa	offapi\com\sun\star\image				nmake	-	all	oa_image NULL
 oa	offapi\com\sun\star\ui  				nmake	-	all	oa_ui NULL
 oa	offapi\com\sun\star\ui\dialogs			nmake	-	all	oa_ui_dialogs NULL
-oa  offapi\util                             nmake   -   all oa_util oa_accessbridge_drafts oa_awt oa_chart oa_config oa_configbackend_drafts oa_auth_drafts oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_sync_drafts oa_formula_drafts oa_frame_drafts oa_i18n_drafts oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility_drafts oa_awt_drafts oa_drawing_drafts oa_sheet_drafts oa_table_drafts oa_text_drafts oa_scriptf_drafts oa_sfprovider_drafts oa_sfstorage_drafts oa_sfsecurity_drafts NULL
+oa	offapi\com\sun\star  				nmake	-	all	- NULL
+oa  offapi\util                             nmake   -   all oa_util oa_accessbridge_drafts oa_awt oa_chart oa_config oa_configbackend_drafts oa_auth_drafts oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_formula_drafts oa_frame_drafts oa_i18n_drafts oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility_drafts oa_awt_drafts oa_drawing_drafts oa_sheet_drafts oa_table_drafts oa_text_drafts oa_chart_drafts NULL

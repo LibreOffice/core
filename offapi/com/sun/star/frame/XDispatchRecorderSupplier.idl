@@ -1,0 +1,163 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDispatchRecorderSupplier.idl,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDispatchRecorderSupplier_idl__
+#define __com_sun_star_frame_XDispatchRecorderSupplier_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatch_idl__
+#include <com/sun/star/frame/XDispatch.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatchRecorder_idl__
+#include <com/sun/star/frame/XDispatchRecorder.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** provides access to the record mechanism of dispatches
+
+    <p>
+    With a <type>XDispatchRecorder</type> it's possible to record calls
+    of <member>XDispatch::dispatch()</member>. The recorded data (may a script)
+    can be used to automate recorded dispatch and start it at later time again.
+    This supplier provides access to the recorder and supports some functionality
+    to work with the mcaro recording mechanism in an easy manner.
+    </p>
+
+    @see XDispatchRecorder
+ */
+interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** set a dispatch recorder on this supplier
+
+        <p>
+        Setting of a new recorder make it possible to change recording mode.
+        May there can exist different implementations of a recorder (e.g. to
+        generate Java, Basic or other formats). Changing between local recording
+        inside one <type>Frame</type> or global one by using more then ones can be
+        forced too.
+        </p>
+
+        @param Recorder
+            the new recorder for this supplier
+     */
+    void setDispatchRecorder( [in] com::sun::star::frame::XDispatchRecorder Recorder );
+
+    //-------------------------------------------------------------------------
+    /** provides access on the recorder of this supplier
+
+        <p>
+        Returned recorder can be used to record dispatches manualy or to get
+        recorded data for further using e.g. saving. He is internaly used too
+        due to the method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>.
+        </p>
+
+        @returns
+            the dispatch recorder of this supplier
+
+        @see XDispatchRecorder
+     */
+    com::sun::star::frame::XDispatchRecorder getDispatchRecorder();
+
+    //-------------------------------------------------------------------------
+    /** dispatch given URL and record it if recording is enabled
+
+        <p>
+        Parameter <var>Dispatcher</var> is used internaly to make the dispatch.
+        If recording isn't enabled it will be a normal <member>XDispatch::dispatch()</member>
+        call. Otherwise follow algorithm is used:
+        <ul>
+            <li>If <var>Dispatcher</var> doesn't support the interface
+                <type>XRecordableDispatch</type> a normal dispatch() call
+                will be made and depend from the result state of that
+                the request will be recorded. In this case it's possible
+                to record the incoming parameter (<var>URL</var> and
+                <var>Arguments</var>) only. Parameters of internal processes
+                can't be recorded then and will be lost.
+            </li>
+            <li>If <var>Dispatcher</var> support the interface
+                <type>XRecordableDispatch</type> it will be used
+                to dispatch and record all neccessary parameters of
+                the whole process.
+            </li>
+        </ul>
+        </p>
+
+        @see XRecordableDispatch
+     */
+    void dispatchAndRecord(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments,
+        [in] XDispatch Dispatcher);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowSetApproveListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,33 +111,5 @@ interface XRowSetApproveListener: com::sun::star::lang::XEventListener
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.5.2.1  2002/02/18 10:27:43  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.5  2001/10/25 15:00:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2001/03/16 16:41:32  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:31  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:38  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:41  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/01/10 09:48:36  dg
-    #70278# Event changes
-
-    Revision 1.2  1999/12/21 20:14:02  dg
-    #70278# ChangeEvent moved to sdbc
-
-    Revision 1.1  1999/11/24 08:39:05  dg
-    new Star Data Beans
-
 ===========================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlGroupBox.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,41 +72,15 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoGroupBoxControl
 /** specifies a group box control.
  */
 service UnoControlGroupBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2001/03/30 16:34:50  mt
-    #82889# Changed IDL file name and service name
-
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:51  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:07  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/05/16 12:19:52  mi
-    documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

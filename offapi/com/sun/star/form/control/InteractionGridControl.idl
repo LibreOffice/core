@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionGridControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,34 +112,8 @@ service InteractionGridControl
 
 /*=============================================================================
 
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/10/03 13:05:09  mi
-    #94968# IDL reviews merged
-
-    Revision 1.1.14.1  2002/07/26 11:03:17  fs
-    IDL review form layer
-
-    Revision 1.1  2001/04/19 11:51:55  fs
-    initial checkin
-
-
 =============================================================================*/
 
 #endif
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/10/03 13:05:09  mi
- *  #94968# IDL reviews merged
- *
- *  Revision 1.1.14.1  2002/07/26 11:03:17  fs
- *  IDL review form layer
- *
- *  Revision 1.1  2001/04/19 11:51:55  fs
- *  initial checkin
- *
- *
- *  Revision 1.0 19.04.01 09:21:55  fs
- ************************************************************************/
 

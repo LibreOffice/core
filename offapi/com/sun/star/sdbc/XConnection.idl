@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,48 +487,5 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.7.2.1  2002/02/18 09:00:56  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.7  2001/11/01 16:46:46  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.6  2001/03/16 16:41:35  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.5  2000/12/19 16:03:44  mi
-    documentations syntax errors fixed
-
-    Revision 1.4  2000/12/14 12:53:39  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:35  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:41  hjs
-    initial import
-
-    Revision 1.8  2000/09/11 11:52:43  mi
-    documentation merged from XML
-
-    Revision 1.6  2000/01/28 15:42:27  dg
-    #72175# documentation of getTypeMap
-
-    Revision 1.5  2000/01/18 15:42:29  dg
-    #70278# Documentation completed
-
-    Revision 1.4  1999/12/20 16:11:35  dg
-    #70278# changes in API
-
-    Revision 1.3  1999/12/13 13:47:55  dg
-    #70278# XSQLErrorBroadcaster removed
-
-    Revision 1.2  1999/11/24 11:33:26  dg
-    chk includes
-
-    Revision 1.1  1999/11/24 08:41:04  dg
-    new StarDataBaseConnectivity
-
 ===========================================================================*/
 #endif

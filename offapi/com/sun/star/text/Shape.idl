@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-10 16:14:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,10 @@ service Shape
      method of the <type scope="com::sun::star::drawing">XShapes</type> interface.
      To be able to determine an anchor position for shape that are anchored at a certain
      text position the property TextRange is used.</p>
+
+     <p>This property is used when the shape gets inserted/added
+     and becomes invalid after that.</p>
+
      */
     [property] com::sun::star::text::XTextRange TextRange;
 };

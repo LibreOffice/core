@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartRegressionCurveType.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:41:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,30 +129,4 @@ enum ChartRegressionCurveType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/10/03 13:02:20  mi
-    #94968# IDL reviews merged
-
-    Revision 1.3.24.2  2002/06/05 12:49:39  bm
-    #96984# semicolon missing for named HTML character middot
-
-    Revision 1.3.24.1  2002/01/28 17:02:24  bm
-    #96984# IDL Review
-
-    Revision 1.3  2000/11/08 12:42:35  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:02  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:15  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

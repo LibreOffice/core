@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontEmphasisMark.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,4 @@ constants FontEmphasisMark
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/06/07 11:53:37  fs
-    #86096# added ABOVE/BELOW constants
-
-    Revision 1.1  2001/06/01 10:38:23  mt
-    EmphasisMark
-
-
-=============================================================================*/
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:41:44 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:53:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,70 +73,63 @@ PACKAGE=com$/sun$/star$/drawing
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-        AppletShape.idl\
-        BitmapTable.idl\
-        CaptionEscapeDirection.idl\
-        CaptionShape.idl\
-        CaptionType.idl\
-        DashTable.idl\
-        DrawingDocumentFactory.idl\
-        GradientTable.idl\
-        HatchTable.idl\
-        MarkerTable.idl\
-        PluginShape.idl\
-        ShapeCollection.idl\
-        TransparencyGradientTable.idl\
-        GraphicExportFilter.idl\
-    ConnectorProperties.idl\
-    MeasureProperties.idl\
-    FillProperties.idl\
-    LineProperties.idl\
-    ShadowProperties.idl\
-    TextProperties.idl\
-    Defaults.idl\
-    BitmapMode.idl\
-    CameraGeometry.idl\
-    BoundVolume.idl\
-    Background.idl\
     Alignment.idl\
+    AppletShape.idl\
     Arrangement.idl\
+    Background.idl\
     BezierPoint.idl\
+    BitmapMode.idl\
+    BitmapTable.idl\
+    BoundVolume.idl\
+    CameraGeometry.idl\
+    CaptionEscapeDirection.idl\
+    CaptionShape.idl\
+    CaptionType.idl\
     CircleKind.idl\
     ClosedBezierShape.idl\
     color.idl\
     ColorMode.idl\
     ConnectionType.idl\
+    ConnectorProperties.idl\
     ConnectorShape.idl\
     ConnectorType.idl\
     ControlShape.idl\
     CoordinateSequence.idl\
     CoordinateSequenceSequence.idl\
     DashStyle.idl\
-    MeasureShape.idl\
+    DashTable.idl\
+    Defaults.idl\
     Direction3D.idl\
+    DocumentSettings.idl\
     DoubleSequence.idl\
     DoubleSequenceSequence.idl\
-    DocumentSettings.idl\
     DrawingDocument.idl\
     DrawingDocumentDrawView.idl\
+    DrawingDocumentFactory.idl\
     DrawPage.idl\
     DrawPages.idl\
     DrawViewMode.idl\
     EllipseShape.idl\
+    EscapeDirection.idl\
+    FillProperties.idl\
     FillStyle.idl\
     FlagSequence.idl\
     FlagSequenceSequence.idl\
     GenericDrawPage.idl\
     GluePoint.idl\
+    GluePoint2.idl\
+    GradientTable.idl\
+    GraphicExportFilter.idl\
     GraphicObjectShape.idl\
     GroupShape.idl\
     Hatch.idl\
     HatchStyle.idl\
+    HatchTable.idl\
     HomogenMatrix.idl\
-    HomogenMatrixLine.idl\
     HomogenMatrix3.idl\
-    HomogenMatrixLine3.idl\
     HomogenMatrix4.idl\
+    HomogenMatrixLine.idl\
+    HomogenMatrixLine3.idl\
     HomogenMatrixLine4.idl\
     HorizontalDimensioning.idl\
     Layer.idl\
@@ -144,12 +137,16 @@ IDLFILES=\
     LayerType.idl\
     LineDash.idl\
     LineEndType.idl\
+    LineJoint.idl\
+    LineProperties.idl\
     LineShape.idl\
     LineStyle.idl\
-    LineJoint.idl\
+    MarkerTable.idl\
     MasterPage.idl\
     MasterPages.idl\
     MeasureKind.idl\
+    MeasureProperties.idl\
+    MeasureShape.idl\
     MeasureTextHorzPos.idl\
     MeasureTextVertPos.idl\
     MirrorAxis.idl\
@@ -157,6 +154,7 @@ IDLFILES=\
     OLE2Shape.idl\
     OpenBezierShape.idl\
     PageShape.idl\
+    PluginShape.idl\
     PointSequence.idl\
     PointSequenceSequence.idl\
     PolygonFlags.idl\
@@ -174,20 +172,25 @@ IDLFILES=\
     RectangleShape.idl\
     RotationDescriptor.idl\
     ShadeMode.idl\
+    ShadowProperties.idl\
     Shape.idl\
-    Shapes.idl\
     ShapeCollection.idl\
+    Shapes.idl\
     SnapObjectType.idl\
     Text.idl\
     TextAdjust.idl\
     TextAnimationDirection.idl\
     TextAnimationKind.idl\
     TextFitToSizeType.idl\
+    TextHorizontalAdjust.idl\
+    TextProperties.idl\
     TextShape.idl\
     TextureKind.idl\
     TextureKind2.idl\
     TextureMode.idl\
     TextureProjectionMode.idl\
+    TextVerticalAdjust.idl\
+    TransparencyGradientTable.idl\
     VerticalDimensioning.idl\
     XConnectableShape.idl\
     XConnectorShape.idl\
@@ -200,6 +203,7 @@ IDLFILES=\
     XDrawPageSummarizer.idl\
     XDrawPageSupplier.idl\
     XDrawView.idl\
+    XGluePointsSupplier.idl\
     XLayer.idl\
     XLayerManager.idl\
     XLayerSupplier.idl\
@@ -215,16 +219,10 @@ IDLFILES=\
     XShapeGrouper.idl\
     XShapeMirror.idl\
     XShapes.idl\
-    XUniversalShapeDescriptor.idl\
-    ColorMode.idl\
-    GluePoint2.idl\
-    XGluePointsSupplier.idl\
-    EscapeDirection.idl\
-    TextVerticalAdjust.idl\
-    TextHorizontalAdjust.idl\
-    Background.idl
+    XUniversalShapeDescriptor.idl
 
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/target.pmk
+

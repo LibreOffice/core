@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdvancedTextDocument.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,33 +193,4 @@ service AdvancedTextDocument
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/11/02 11:57:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2001/05/09 14:06:21  mi
-    HypertextDocument and AdvancedTextDocument now deprecated, all members now optional in TextDocument
-
-    Revision 1.3  2000/11/08 12:44:26  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:58  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:58  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:18:12  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/01/28 17:22:18  mi
-    #72210# Locale instead of Language in NumberFormatter
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

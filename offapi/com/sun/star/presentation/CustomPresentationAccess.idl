@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomPresentationAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,34 +102,4 @@ service CustomPresentationAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2002/10/03 13:06:21  mi
-    #94968# IDL reviews merged
-
-    Revision 1.4.20.1  2002/02/07 07:53:10  cl
-    idl review
-
-    Revision 1.4  2000/12/19 14:59:03  mi
-    documentation sytax errors fixed
-
-    Revision 1.3  2000/11/08 12:43:28  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:30  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:35  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/07 11:24:43  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1  1999/11/24 16:44:42  cl
-    type custumpresentationaccess -> CustomPresentationAccess
-
-
-
-=============================================================================*/
 #endif

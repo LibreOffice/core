@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentIndex.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-16 09:26:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 
     <p>Use <type scope="com::sun::star::util">XRefreshable</type> and
-    <type scope="com::sun::star::lang>XServiceInfo</type> instead, if available.
+    <type scope="com::sun::star::lang">XServiceInfo</type> instead, if available.
 
     </p>
 

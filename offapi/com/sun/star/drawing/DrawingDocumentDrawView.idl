@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:41:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,14 @@
 #include <com/sun/star/drawing/XDrawPage.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+
 
 //=============================================================================
 
@@ -103,6 +111,12 @@ service DrawingDocumentDrawView
         desktop.
     */
     service com::sun::star::frame::Controller;
+
+    //-------------------------------------------------------------------------
+
+    /** lets you access the window for this view
+    */
+    [optional] interface com::sun::star::awt::XWindow;
 
     //-------------------------------------------------------------------------
 
@@ -160,6 +174,34 @@ service DrawingDocumentDrawView
     /** This is the area that is currently visible.
      */
     [readonly, property] com::sun::star::awt::Rectangle VisibleArea;
+
+    //-------------------------------------------------------------------------
+
+    /** This property defines the zoom type for the document.
+        @see com::sun::star::view::DocumentZoomType
+
+        Note: After setting other types then
+        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>,
+        implementations may calculate the required zoom value and set the type
+        to <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>
+        afterwards.
+    */
+       [optional, property] short ZoomType;
+
+       //-------------------------------------------------------------------------
+
+       /** Defines the zoom value to use.
+        Valid only if the ZoomType is set to
+        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+    */
+       [optional, property] short ZoomValue;
+
+       //-------------------------------------------------------------------------
+
+    /** defines the offset from the top left position of the displayed page
+        to the top left position of the view area in 100th/mm.
+    */
+    [optional, property] com::sun::star::awt::Point ViewOffset;
 
 };
 

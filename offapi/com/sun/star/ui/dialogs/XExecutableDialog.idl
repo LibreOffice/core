@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExecutableDialog.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,44 +104,6 @@ interface XExecutableDialog: com::sun::star::uno::XInterface
 
 }; }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/10/03 13:10:42  mi
-    #94968# IDL reviews merged
-
-    Revision 1.1.10.1  2002/01/30 11:44:29  tra
-    #97073#reviewd
-
-    Revision 1.1  2001/07/03 09:02:08  tra
-    moved from drafts
-
-    Revision 1.1  2001/06/06 15:01:02  tra
-    new dialogs interfaces
-
-    Revision 1.5  2001/03/16 16:41:51  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/19 13:59:42  mi
-    syntax errors in documentation fixed
-
-    Revision 1.3  2000/11/08 12:45:14  mi
-    moved from api
-
-    Revision 1.2  2000/11/01 16:26:30  fs
-    no 'raises RuntimeException', cause the RuntimeException is added automatically
-
-    Revision 1.1  2000/10/20 07:55:59  tra
-    According to the proposal of mi added
-
-    Revision 1.1.1.1  2000/09/18 23:36:17  hjs
-    initial import
-
-    Revision 1.1  2000/09/05 14:55:11  tra
-    initial version filepicker interface
-
-
-=============================================================================*/
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SymbolDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,16 +118,16 @@ struct SymbolDescriptor
         @see   <type scope="com::sun::star::awt">FontWeight</type>
 
         The allowed integer values correspond as follows:
-        0 : <type member="com::sun::star::awt">FontWeight::DONTKNOW</member>
-        1 : <type member="com::sun::star::awt">FontWeight::THIN</member>
-        2 : <type member="com::sun::star::awt">FontWeight::ULTRALIGHT</member>
-        3 : <type member="com::sun::star::awt">FontWeight::LIGHT</member>
-        4 : <type member="com::sun::star::awt">FontWeight::SEMILIGHT</member>
-        5 : <type member="com::sun::star::awt">FontWeight::NORMAL</member>
-        7 : <type member="com::sun::star::awt">FontWeight::SEMIBOLD</member>
-        8 : <type member="com::sun::star::awt">FontWeight::BOLD</member>
-        9 : <type member="com::sun::star::awt">FontWeight::ULTRABOLD</member>
-        10 : <type member="com::sun::star::awt">FontWeight::BLACK</member>
+        0 : <member scope="com::sun::star::awt">FontWeight::DONTKNOW</member>
+        1 : <member scope="com::sun::star::awt">FontWeight::THIN</member>
+        2 : <member scope="com::sun::star::awt">FontWeight::ULTRALIGHT</member>
+        3 : <member scope="com::sun::star::awt">FontWeight::LIGHT</member>
+        4 : <member scope="com::sun::star::awt">FontWeight::SEMILIGHT</member>
+        5 : <member scope="com::sun::star::awt">FontWeight::NORMAL</member>
+        7 : <member scope="com::sun::star::awt">FontWeight::SEMIBOLD</member>
+        8 : <member scope="com::sun::star::awt">FontWeight::BOLD</member>
+        9 : <member scope="com::sun::star::awt">FontWeight::ULTRABOLD</member>
+        10 : <member scope="com::sun::star::awt">FontWeight::BLACK</member>
 
     */
     short nWeight;
@@ -137,8 +137,8 @@ struct SymbolDescriptor
         @see   <type scope="com::sun::star::awt">FontSlant</type>
 
         The values
-        <type member="com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and
-        <type member="com::sun::star::awt">FontSlant::REVERSE_ITALIC</member>
+        <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and
+        <member scope="com::sun::star::awt">FontSlant::REVERSE_ITALIC</member>
         may not be used.
     */
     short nItalic;

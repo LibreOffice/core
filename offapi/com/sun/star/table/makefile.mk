@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:42:44 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:56:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,6 @@ PACKAGE=com$/sun$/star$/table
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    TableChartsEnumeration.idl \
-    TableColumnsEnumeration.idl \
-    TableRowsEnumeration.idl \
     BorderLine.idl\
     Cell.idl\
     CellAddress.idl\
@@ -92,11 +89,14 @@ IDLFILES=\
     TableBorder.idl\
     TableChart.idl\
     TableCharts.idl\
+    TableChartsEnumeration.idl\
     TableColumn.idl\
     TableColumns.idl\
+    TableColumnsEnumeration.idl\
     TableOrientation.idl\
     TableRow.idl\
     TableRows.idl\
+    TableRowsEnumeration.idl\
     TableSortDescriptor.idl\
     XAutoFormattable.idl\
     XCell.idl\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,11 @@ service CharacterProperties
         [property] boolean CharUnderlineHasColor;
 
         //-------------------------------------------------------------------------
+        /** specifies the names of the all styles applied to the font.
+            <p> It is not guaranteed that the order in the sequence reflects
+            the order of the evaluation of the character style attributes.</p>
+         */
+        [optional, property] sequence<string> CharStyleNames;
 };
 
 //=============================================================================

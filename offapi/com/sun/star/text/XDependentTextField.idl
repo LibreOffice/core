@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDependentTextField.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XDependentTextField
 /** makes it possible to attach this <type>TextField</type> to a
     <type>TextFieldMaster</type>.
  */
@@ -88,44 +87,39 @@ interface XDependentTextField: com::sun::star::text::XTextField
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XDependentTextField::attachTextFieldMaster
     /** method must be called to attach the
         <type>TextFieldMaster</type> to this <type>TextField</type>.
-
-
-
         <p>A <type>TextFieldMaster</type> can only be assigned once.
-
         </p>
 
-
-
-
-
         @example Create and insert a user field (with a
-        <code>TextUserField</code>):
+                <code>UserField</code>):
 
         <listing>
-
-        xMaster = xDoc.createInstanceByServiceName(
-        "com.sun.star.text.UserFieldMaster" )
-
-        xMaster.Value = 42
-        xDoc.TextFieldMasters.insertElementByName( "MyMaster", xMaster )
-
-        xField = xDoc.createInstanceByServiceName(
-        "com.sun.star.text.UserField" )
-
-        xField.attachTextFieldMaster( xMaster )
-        xDoc.Text.insertTextContent( xCursor, xField, false )
-        </listing>
+                // Create a fieldmaster for our newly created User Text field, and access it's
+                // XPropertySet interface
+                XPropertySet xMasterPropSet = (XPropertySet) UnoRuntime.queryInterface(
+                                XPropertySet.class, mxDocFactory.createInstance(
+                                                "com.sun.star.text.FieldMaster.User"));
+                // Set the name and value of the FieldMaster
+                xMasterPropSet.setPropertyValue ("Name", "UserEmperor");
+                xMasterPropSet.setPropertyValue ("Value", new Integer(42));
+                // Attach the field master to the user field
+                xUserField.attachTextFieldMaster (xMasterPropSet);
+                // Move the cursor to the end of the document
+                mxDocCursor.gotoEnd(false);
+                // insert a paragraph break using the XSimpleText interface
+                mxDocText.insertControlCharacter(
+                                mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false);
+                // Insert the user field at the end of the document
+                mxDocText.insertTextContent(mxDocText.getEnd(), xUserField, false);
+                </listing>
      */
     void attachTextFieldMaster( [in] com::sun::star::beans::XPropertySet xFieldMaster )
             raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XDependentTextField::getTextFieldMaster
     /** @returns
                 the previously attached <type>TextFieldMaster</type>
                 or <NULL/> if nothing is attached.
@@ -138,27 +132,5 @@ interface XDependentTextField: com::sun::star::text::XTextField
 
 }; }; }; };
 
-/*=============================================================================
 
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/16 16:41:45  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:04  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:53:02  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/07 11:25:03  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

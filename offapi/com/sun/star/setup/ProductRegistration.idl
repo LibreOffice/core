@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ProductRegistration.idl,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_setup_ProductRegistration_idl__
+#define __com_sun_star_setup_ProductRegistration_idl__
+
+#ifndef __com_sun_star_task_JobExecutor_idl__
+#include <com/sun/star/task/JobExecutor.idl>
+#endif
+
+#ifndef __com_sun_star_task_XJob_idl__
+#include <com/sun/star/task/XJob.idl>
+#endif
+
+module com {  module sun {  module star {  module setup {
+
+/** provides a mechanism for registering the product.
+
+    <p>Two main functionalities are covered by this service:
+    <ul><il><em>Triggering Online Registration</em><br/>
+            If, by any user interface of your choice, the user tells she wants to register
+            their product copy, ProductRegistration is the service of your choice.
+        </il><br/>
+        <il><em>Executing Registration Requests</em><br/>
+            ProductRegistration allows to remind your users to register, using a dialog with various
+            choices.
+        </il>
+    </ul></p>
+*/
+service ProductRegistration
+{
+    /** allows to trigger certain events.
+
+        <p>The string argument of <method scope="com::sun::star::task">XJobExecutor::trigger</method> is
+            used to determine the type of the event. Currently supported events are:<br/>
+            <ul><li><b>RegistrationRequired</b><br/>
+                    Determines that the the registration is required to be executed.<br/>
+                    This is usually triggered by some user interaction, for instance upon choosing a menu item
+                    called <em>Registration</em>.</p>
+                </li>
+            </ul>
+        </p>
+    */
+    service com::sun::star::task::JobExecutor;
+
+    /** allows the registration request to be scheduled automatically.
+
+        <p>There are processes which allow to schedule events and jobs, for instance there
+        can be configuration settings scheduling which operations are to be executed upon an program
+        startup. Such processes usually require the jobs to be executed to support the
+        <type scope="com::sun::star::task">XJob</type> interface.</p>
+
+        <p>That's why this service supports the <type scope="com::sun::star::task">XJob</type>, too.<br/>
+        Calling the <method scope="com::sun::star::task">XJob::execute</method> method results in displaying a
+        dialog which asks the user to register. This is done once per session, means you need to restart the
+        process which called this.</p>
+
+        <p>At the moment, there is no specification about how to use the arguments given in the
+        <method scope="com::sun::star::task">XJob::execute</method> method, but this may change in future versions of the service
+        descriptions, so to keep your implementation compatible, you should not use these arguments.</p>
+    */
+    interface com::sun::star::task::XJob;
+};
+
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,42 +394,5 @@ interface XResultSet: com::sun::star::uno::XInterface
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.5.16.1  2002/02/18 08:58:22  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.5  2001/03/16 16:41:35  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.4  2000/12/19 13:46:04  mi
-    syntax errors in documentation fixed
-
-    Revision 1.3  2000/11/08 12:43:35  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:42  hjs
-    initial import
-
-    Revision 1.8  2000/09/11 11:52:43  mi
-    documentation merged from XML
-
-    Revision 1.6  2000/03/30 12:20:39  dg
-    #74028# missing documentation completed
-
-    Revision 1.5  2000/03/16 11:29:22  mi
-    UCB complient documentation (optional)
-
-    Revision 1.4  2000/02/07 11:24:53  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.3  2000/01/06 07:27:42  dg
-    #70278# rowDeleted moved to XResultSet
-
-    Revision 1.2  1999/12/13 13:47:55  dg
-    #70278# XSQLErrorBroadcaster removed
-
-    Revision 1.1  1999/11/24 08:41:08  dg
-    new StarDataBaseConnectivity
-
 ===========================================================================*/
 #endif

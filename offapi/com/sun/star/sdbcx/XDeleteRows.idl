@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteRows.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,33 +99,5 @@ interface XDeleteRows: com::sun::star::uno::XInterface
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.5.2.1  2002/02/18 10:00:22  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.5  2001/10/25 15:35:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2001/03/16 16:41:36  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:43:40  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:45  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:45  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/01/10 09:45:18  dg
-    #70278# return value change
-
-    Revision 1.1  1999/12/20 16:27:19  dg
-    #70278# new files from sdbc
-
-    Revision 1.1  1999/11/24 08:41:05  dg
-    new StarDataBaseConnectivity
-
 ===========================================================================*/
 #endif

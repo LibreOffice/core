@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPages.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     the index.
 
     You usualy get this interface if you use the
-    <type>XDrawPagesSupplier<type> or the <type>XMasterPagesSupplier</type>
+    <type>XDrawPagesSupplier</type> or the <type>XMasterPagesSupplier</type>
     at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
 */
 interface XDrawPages: com::sun::star::container::XIndexAccess

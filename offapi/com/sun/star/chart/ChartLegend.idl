@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartLegend.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:41:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/chart/ChartLegendPosition.idl>
 #endif
 
+#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+#endif
+
 
 //=============================================================================
 
@@ -93,6 +97,12 @@ service ChartLegend
     service com::sun::star::drawing::Shape;
     service com::sun::star::style::CharacterProperties;
 
+    /** If a <type>ChartLegend</type> may be stored as XML file,
+        this service should be supported in order to preserve unparsed
+        XML attributes.
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
     //-------------------------------------------------------------------------
 
     /** determines the alignment of the legend relative
@@ -106,30 +116,4 @@ service ChartLegend
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/10/03 13:02:19  mi
-    #94968# IDL reviews merged
-
-    Revision 1.3.24.1  2002/01/28 17:02:24  bm
-    #96984# IDL Review
-
-    Revision 1.3  2000/11/08 12:42:35  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:02  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:15  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/02/07 11:24:23  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
-    new
-
-
-=============================================================================*/
 #endif

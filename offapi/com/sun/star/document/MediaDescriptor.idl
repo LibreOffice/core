@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:41:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,16 @@ service MediaDescriptor
     [optional,property] string Referer;
 
     //-------------------------------------------------------------------------
+    /** let the document be opened in repair mode
+
+        <p>
+        For loading of corrupted zip packages: Setting this to <TRUE/> let the document
+        be opened in repair mode, so as much as possible information will be retrieved.
+        </p>
+     */
+    [optional,property] boolean RepairPackage;
+
+    //-------------------------------------------------------------------------
     /** can be used for status informations
 
         <p>
@@ -510,6 +520,19 @@ service MediaDescriptor
      */
     [optional,property] short ViewId;
 
+    //-------------------------------------------------------------------------
+    /** should the macro be executed.
+        the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
+        constant list
+     */
+    [optional,property] short MacroExecutionMode;
+
+    //-------------------------------------------------------------------------
+    /** can the document be updated depending from links.
+        the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
+        constant list
+     */
+    [optional,property] short UpdateDocMode;
 };
 
 //=============================================================================

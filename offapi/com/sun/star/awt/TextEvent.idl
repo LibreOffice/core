@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,30 +90,4 @@ struct TextEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/10/03 13:00:37  mi
-    #94968# IDL reviews merged
-
-    Revision 1.3  2000/11/08 12:42:10  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:05  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:51  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:13  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

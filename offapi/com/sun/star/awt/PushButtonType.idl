@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PushButtonType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,4 @@ enum PushButtonType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/10/03 13:00:31  mi
-    #94968# IDL reviews merged
-
-    Revision 1.1  2001/10/17 08:02:38  mt
-    #91616# PushButtonType
-
-
-=============================================================================*/
 #endif

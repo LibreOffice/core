@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WordType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-11-14 16:36:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ constants WordType
     const short ANYWORD_IGNOREWHITESPACES= 1;
 
     /** "words" - in the meaning of a collection of alphanumeric
-        characters.
+        characters and some punctuations, like dot for abbreviation.
     */
     const short DICTIONARY_WORD          = 2;
 
-    /** The mode for counting words, it will ignore punctuations and
-        space.
+    /** The mode for counting words, it will combine punctuations and
+        spaces as word trail.
      */
     const short WORD_COUNT               = 3;
 };

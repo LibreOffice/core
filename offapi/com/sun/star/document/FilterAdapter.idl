@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterAdapter.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2002-04-18 16:18:06 $ 
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #include <com/sun/star/document/XFilterAdapter.idl>
 #endif
 
-//=============================================================================  
-  
-module com {   module sun {   module star {   module document {   
-  
-//=============================================================================  
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
     /* Provides access to user to filters written to use the FilterAdapter
         @author Aidan Butler
     */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlComboBox.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,47 +76,17 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoComboBoxControl
-/** specifies a control for a combo-box (list box plus edit field).
+/** specifies a combo box control.
  */
 service UnoControlComboBox
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlEdit;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XComboBox;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/04/09 15:20:00  mt
-    #82889# Changed IDL file name and service name
-
-    Revision 1.1  2001/03/30 16:33:59  mt
-    #82889# Changed IDL file name and service name
-
-    Revision 1.3  2000/11/08 12:42:10  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:06  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/05/16 12:19:51  mi
-    documentation
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif

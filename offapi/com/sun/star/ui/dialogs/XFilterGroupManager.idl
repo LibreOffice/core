@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilterGroupManager.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,20 +111,4 @@ interface XFilterGroupManager : com::sun::star::uno::XInterface
 //.............................................................................
 }; }; }; }; };
 //.............................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/10/03 13:10:44  mi
- *  #94968# IDL reviews merged
- *
- *  Revision 1.1.6.1  2002/01/30 11:44:29  tra
- *  #97073#reviewd
- *
- *  Revision 1.1  2001/09/14 09:51:18  fs
- *  initial checkin - specification of an interface for adding filter _groups_ to a file picker component
- *
- *
- *  Revision 1.0 13.09.01 17:36:43  fs
- ************************************************************************/
 

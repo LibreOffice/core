@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mtg $ $Date: 2001-07-04 14:09:54 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:54:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PACKAGE=com$/sun$/star$/packages
 IDLFILES=\
         ZipEntry.idl\
         ZipException.idl \
+        ZipIOException.idl \
         ZipConstants.idl
 
 # ------------------------------------------------------------------

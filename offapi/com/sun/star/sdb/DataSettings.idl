@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSettings.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,34 +123,5 @@ service DataSettings
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.5.2.2  2002/06/27 12:34:27  oj
-    information corrected
-
-    Revision 1.5.2.1  2002/02/18 10:22:00  oj
-    #97563# parameter,return value and exception description
-
-    Revision 1.5  2001/10/25 15:00:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.4  2000/12/14 12:53:38  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:43:30  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:39  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/06/05 13:35:37  dg
-    services changed
-
-    Revision 1.1  2000/06/05 13:19:53  dg
-    new services
-
-
 ===========================================================================*/
 #endif

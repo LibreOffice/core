@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,26 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_text_XBookmarksSupplier_idl__
+#include <com/sun/star/text/XBookmarksSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XDocumentIndexesSupplier_idl__
+#include <com/sun/star/text/XDocumentIndexesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextFieldsSupplier_idl__
+#include <com/sun/star/text/XTextFieldsSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextFramesSupplier_idl__
+#include <com/sun/star/text/XTextFramesSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextSectionsSupplier_idl__
+#include <com/sun/star/text/XTextSectionsSupplier.idl>
+#endif
+
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -145,55 +165,49 @@
  */
 service TextDocument
 {
-    // DocMerge: empty anyway
     service com::sun::star::document::OfficeDocument;
 
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextDocument;
 
-    // DocMerge: empty anyway
     interface com::sun::star::util::XSearchable;
 
-    // DocMerge: empty anyway
     interface com::sun::star::util::XRefreshable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XFootnotesSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XEndnotesSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::util::XReplaceable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XPagePrintable;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XReferenceMarksSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XLineNumberingSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XChapterNumberingSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::beans::XPropertySet;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextGraphicObjectsSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextEmbeddedObjectsSupplier;
 
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XTextTablesSupplier;
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    //
-    interface com::sun::star::util::XNumberFormatsSupplier;
+    [optional] interface com::sun::star::text::XBookmarksSupplier;
+
+    [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
+
+    [optional] interface com::sun::star::text::XTextFieldsSupplier;
+
+    [optional] interface com::sun::star::text::XTextFramesSupplier;
+
+    [optional] interface com::sun::star::text::XTextSectionsSupplier;
+
+    [optional] interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharLocale
@@ -237,48 +251,34 @@ service TextDocument
      */
     [optional, property] string WordSeparator;
 
+        //-------------------------------------------------------------------------
+        /** specifies the concordance file taken into account when
+         *  creating an index.
+         *
+         *  When no concordance file should be used the string is empty.
+         *  Used for text documents only.
+         */
+        [optional, property] string IndexAutoMarkFileURL;
+
+        //-------------------------------------------------------------------------
+        /** specifies if change recording is active.
+         */
+        [optional, property] boolean RecordChanges;
+
+        //-------------------------------------------------------------------------
+        /** specifies the first 4 digit year to be used when years
+         *  are given in 2 digits.
+         *
+         *  Example: if set to 1930
+         *    Oct-12-29 will be interpreted as Oct-12-2029
+         *    Oct-12-30 will be interpreted as Oct-12-1930
+         *    Oct-12-02 will be interpreted as Oct-12-2002
+         */
+        [optional, property] short TwoDigitYear;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2002/10/03 13:10:05  mi
-    #94968# IDL reviews merged
-
-    Revision 1.6.2.1  2002/02/26 08:31:56  os
-    XNumberFormatsSupplier added
-
-    Revision 1.6  2001/12/10 17:42:31  mi
-    #94538# XStyleFamiliesSupplier added
-
-    Revision 1.5  2001/05/15 10:29:08  kz
-    add. some missing headers
-
-    Revision 1.4  2001/05/09 14:06:21  mi
-    HypertextDocument and AdvancedTextDocument now deprecated, all members now optional in TextDocument
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:00  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/04/20 08:39:04  os
-    #73237# include
-
-    Revision 1.2  2000/04/20 08:37:27  os
-    #73237# ::com::sun::star::util::XRefreshable implemented
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

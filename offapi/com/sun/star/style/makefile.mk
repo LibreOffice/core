@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:42:43 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:56:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,6 @@ PACKAGE=com$/sun$/star$/style
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    XDefaultsSupplier.idl\
     BreakType.idl\
     CaseMap.idl\
     CellStyle.idl\
@@ -95,16 +94,18 @@ IDLFILES=\
     PageStyle.idl\
     PageStyleLayout.idl\
     ParagraphAdjust.idl\
-    ParagraphStyle.idl\
-    ParagraphStyleCategory.idl\
     ParagraphProperties.idl\
     ParagraphPropertiesAsian.idl\
+    ParagraphPropertiesComplex.idl\
+    ParagraphStyle.idl\
+    ParagraphStyleCategory.idl\
     Style.idl\
     StyleFamilies.idl\
     StyleFamily.idl\
     TabAlign.idl\
     TabStop.idl\
     VerticalAlignment.idl\
+    XDefaultsSupplier.idl\
     XStyle.idl\
     XStyleCondition.idl\
     XStyleFamiliesSupplier.idl\

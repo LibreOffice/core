@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateDisplayFormat.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,15 +127,4 @@ constants DateDisplayFormat
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/11/02 11:57:32  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.1  2000/11/14 13:24:37  cl
-    #80284# added constants for date formating in editengine applications
-
-
-=============================================================================*/
 #endif

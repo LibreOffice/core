@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonFilePickerElementIds.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,20 @@ constants CommonFilePickerElementIds
     */
     const short CONTROL_FILEVIEW = 4;
 
-
     //---------------------------------------------------------------------
     /** Is used to refer to the edit line where a file or path can be entered by the user.
     */
     const short EDIT_FILEURL = 5;
+
+    //---------------------------------------------------------------------
+    /** The label of the filter listbox of a FilePicker dialog.
+    */
+    const short LISTBOX_FILTER_LABEL = 6;
+
+    //---------------------------------------------------------------------
+    /** The label of the file name listbox of a FilePicker dialog.
+    */
+    const short EDIT_FILEURL_LABEL = 7;
 };
 
 //=============================================================================

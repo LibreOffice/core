@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionTriggerContainer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,10 @@ module com {  module sun {  module star {  module ui {
 service ActionTriggerContainer
 {
     /** provides access to the entries of a menu. The element type
-     is <type scope="com::sun::star::beans">XPropertySet<type>.
+     is <type scope="com::sun::star::beans">XPropertySet</type>.
      The property set contains attributes like CommandURL, HelpURL
-     as defined in the service <type scope="com::sun::star::ui">ActionTrigger<type>
-     and optional a <type scope="com::sun::star::ui">ActionTriggerContainer<type>.
+     as defined in the service <type scope="com::sun::star::ui">ActionTrigger</type>
+     and optional a <type scope="com::sun::star::ui">ActionTriggerContainer</type>.
      */
 
     interface ::com::sun::star::container::XIndexContainer;

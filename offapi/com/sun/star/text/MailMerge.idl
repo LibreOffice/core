@@ -1,0 +1,268 @@
+/*************************************************************************
+ *
+ *  $RCSfile: MailMerge.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2003 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_MailMerge_idl__
+#define __com_sun_star_text_MailMerge_idl__
+
+#ifndef __com_sun_star_task_XJob_idl__
+#include <com/sun/star/task/XJob.idl>
+#endif
+#ifndef __com_sun_star_sdbc_XResultSet_idl__
+#include <com/sun/star/sdbc/XResultSet.idl>
+#endif
+#ifndef __com_sun_star_sdbc_XConnection_idl__
+#include <com/sun/star/sdbc/XConnection.idl>
+#endif
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+#ifndef __com_sun_star_text_XMailMergeBroadcaster_idl__
+#include <com/sun/star/text/XMailMergeBroadcaster.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** Gives access to mail merge functionality.
+ */
+service MailMerge
+{
+    /** interface to execute the mail merge action.
+
+        <p>The <member scope="com::sun::star::task::XJob">execute</member>
+        method of the interface accepts exactly the same properties
+        provided by this service in its argument sequence.</p>
+
+        <p>The default values for the properties to be used in the method
+        call are those given by this service. If a property is also listed
+        in the argument sequence that value will be used for the call.
+        The value of the property in this service will remain unchanged
+        by that.</p>
+     */
+    interface com::sun::star::task::XJob;
+
+    /** interface to access the services properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** interface to notify mail merge listeners.
+     */
+    [optional] interface com::sun::star::text::XMailMergeBroadcaster;
+
+    //=============================================================================
+
+    /* database properties */
+
+    //=============================================================================
+
+    /** contains the name of the data source that is to be used for merging.
+
+        <p>This property must be set.</p>
+     */
+    [property] string DataSourceName;
+
+    //=============================================================================
+
+    /** determines the type of the database command as
+        described in
+        <type scope="com::sun::star::sdb">CommandType</type>
+
+        <p>This property must be set.</p>
+     */
+    [property] long DataCommandType;
+
+    //=============================================================================
+
+    /** contains the database command.
+
+        <p>This property must be set.</p>
+     */
+    [property] string DataCommand;
+
+    //=============================================================================
+
+    /** provides access to a
+        <type scope="com::sun::star::sdbc">XResultSet</type> of
+        a <type scope="com::sun::star::sdbc">ResultSet</type> service.
+     */
+    [property] com::sun::star::sdbc::XResultSet ResultSet;
+
+    //=============================================================================
+
+    /** contains the connection to the database.
+     */
+    [property] com::sun::star::sdbc::XConnection Connection;
+
+    //=============================================================================
+
+    /** contains a selection that refers to bookmarks of the ResultSet.
+     */
+    [property] sequence< any > Selection;
+
+    //=============================================================================
+
+    /** returns if escape processing is on or off.
+
+        <p>If escape scanning is on (the default), the driver will do
+        escape substitution before sending the SQL to the database.
+        This is only evaluated, if the CommandType is
+        <type scope="com::sun::star::sdb::CommandType">COMMAND</type>.
+        </p>
+     */
+    [property] boolean EscapeProcessing;
+
+    //=============================================================================
+
+    /** contains a filter expression for an SQL statement.
+
+        <p>This is only evaluated, if the CommandType is
+        <type scope="com::sun::star::sdb::CommandType">COMMAND</type>.</p>
+     */
+    [property] string Filter;
+
+    //=============================================================================
+
+    /* input properties */
+
+    //=============================================================================
+
+    /** contains the URL of a text document that is to be processed.
+
+        <p>If this property is not set an empty document is created.</p>
+     */
+    [property] string DocumentURL;
+
+    //=============================================================================
+
+    /** provides access to the model of the document to be processed.
+
+        <p>This property will automatically be set to the documents model
+        if a document URL was set.</p>
+     */
+    [property, readonly] com::sun::star::frame::XModel Model;
+
+    //=============================================================================
+
+    /* output properties */
+
+    //=============================================================================
+
+    /** determines the destination of the mail merge action.
+
+        @see com::sun::star::text::MailMergeType
+     */
+    [property] short OutputType;
+
+    //=============================================================================
+
+    /** determines whether single print jobs will be generated per output document.
+
+        <p>This property is only evaluated for printer output.</p>
+     */
+    [property] boolean SinglePrintJobs;
+
+    //=============================================================================
+
+    /** contains the path where generated files are created.
+
+        <p>If "OutputURL" or "FileNamePrefix" are empty the missing value is
+        generated from the location or title of the source documents.</p>
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] string OutputURL;
+
+    //=============================================================================
+
+    /** determines whether file names of created files are generated using
+        the content of a database column.
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] boolean FileNameFromColumn;
+
+    //=============================================================================
+
+    /** contains the name of the column to generate the output file names.
+
+        <p>If FileNameFromColumn is true the content of the related column
+        is added to the OutputURL.</p>
+        <p>If "OutputURL" or "FileNamePrefix" are empty the missing value is
+        generated from the location or title of the source documents.</p>
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] string FileNamePrefix;
+
+    //=============================================================================
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:42:41 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:56:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,30 +73,30 @@ PACKAGE=com$/sun$/star$/sheet
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    CellAnnotationsEnumeration.idl \
-    CellAreaLinksEnumeration.idl \
-    DatabaseRangesEnumeration.idl \
-    DataPilotFieldsEnumeration.idl \
-    DataPilotTablesEnumeration.idl \
-    DDELinksEnumeration.idl \
-    FunctionCategory.idl \
-    FunctionDescriptionEnumeration.idl \
-    LabelRangesEnumeration.idl \
-    MoveDirection.idl \
-    NamedRangesEnumeration.idl \
-    ScenariosEnumeration.idl \
-    SheetCellRangesEnumeration.idl \
-    SheetLinksEnumeration.idl \
-    SpreadsheetsEnumeration.idl \
-    SpreadsheetViewPanesEnumeration.idl \
-    StatusBarFunction.idl \
-    SubTotalFieldsEnumeration.idl \
-    TableAutoFormatEnumeration.idl \
-    TableAutoFormatsEnumeration.idl \
-    TableCellStyle.idl \
-    TableConditionalEntryEnumeration.idl \
-    UniqueCellFormatRangesEnumeration.idl \
-    UniqueCellFormatRanges.idl \
+    CellAnnotationsEnumeration.idl\
+    CellAreaLinksEnumeration.idl\
+    DatabaseRangesEnumeration.idl\
+    DataPilotFieldsEnumeration.idl\
+    DataPilotTablesEnumeration.idl\
+    DDELinksEnumeration.idl\
+    FunctionCategory.idl\
+    FunctionDescriptionEnumeration.idl\
+    LabelRangesEnumeration.idl\
+    MoveDirection.idl\
+    NamedRangesEnumeration.idl\
+    ScenariosEnumeration.idl\
+    SheetCellRangesEnumeration.idl\
+    SheetLinksEnumeration.idl\
+    SpreadsheetsEnumeration.idl\
+    SpreadsheetViewPanesEnumeration.idl\
+    StatusBarFunction.idl\
+    SubTotalFieldsEnumeration.idl\
+    TableAutoFormatEnumeration.idl\
+    TableAutoFormatsEnumeration.idl\
+    TableCellStyle.idl\
+    TableConditionalEntryEnumeration.idl\
+    UniqueCellFormatRanges.idl\
+    UniqueCellFormatRangesEnumeration.idl\
     RangeSelectionArguments.idl\
     RangeSelectionEvent.idl\
     XRangeSelection.idl\
@@ -121,6 +121,7 @@ IDLFILES=\
     DatabaseRange.idl\
     DatabaseRanges.idl\
     DataImportMode.idl\
+    DataPilotDescriptor.idl\
     DataPilotField.idl\
     DataPilotFieldOrientation.idl\
     DataPilotFields.idl\
@@ -134,13 +135,12 @@ IDLFILES=\
     DataPilotSourceMember.idl\
     DataPilotSourceMembers.idl\
     DataPilotTable.idl\
-    DataPilotDescriptor.idl\
     DataPilotTables.idl\
     DataResult.idl\
     DataResultFlags.idl\
-    DocumentSettings.idl\
     DDELink.idl\
     DDELinks.idl\
+    DocumentSettings.idl\
     FillDateMode.idl\
     FillDirection.idl\
     FillMode.idl\
@@ -180,6 +180,7 @@ IDLFILES=\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
+        SpreadsheetDrawPage.idl\
     Spreadsheets.idl\
     SpreadsheetView.idl\
     SpreadsheetViewPane.idl\
@@ -209,6 +210,7 @@ IDLFILES=\
     XCellFormatRangesSupplier.idl\
     XCellRangeAddressable.idl\
     XCellRangeData.idl\
+    XCellRangeFormula.idl\
     XCellRangeMovement.idl\
     XCellRangeReferrer.idl\
     XCellRangesQuery.idl\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,31 +196,5 @@ service GridControl
 
 }; }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2002/10/03 13:05:08  mi
-    #94968# IDL reviews merged
-
-    Revision 1.2.14.4  2002/08/29 15:00:41  fs
-    corrected references
-
-    Revision 1.2.14.3  2002/07/26 11:03:15  fs
-    IDL review form layer
-
-    Revision 1.2.14.2  2002/05/23 15:38:15  fs
-    #99490# removed the XContainer interface - the same functionality can be obtained from the model (the control itself does not even allow container actions, it _always_ reacts on model container actions)
-
-    Revision 1.2.14.1  2002/02/19 08:13:16  oj
-    #96946# parameter,return value and exception description
-
-    Revision 1.2  2001/05/16 15:15:33  fs
-    #84686# added the XSelectionSupplier to the GridControl service
-
-    Revision 1.1  2001/04/19 10:53:59  fs
-    initial checkin
-
-
-=============================================================================*/
 
 #endif

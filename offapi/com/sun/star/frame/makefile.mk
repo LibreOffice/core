@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mi $ $Date: 2003-01-21 13:42:14 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:54:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -45,7 +45,8 @@
 #   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
 #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific provisions governing your rights and
+#   See the License for the specific p	XTypeDetection.idl\
+rovisions governing your rights and
 #   obligations concerning the Software.
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -74,14 +75,21 @@ PACKAGE=com$/sun$/star$/frame
 
 IDLFILES=\
     Components.idl\
-    Controller.idl\
     ContentHandler.idl\
+    ContentHandlerFactory.idl\
+    Controller.idl\
     Desktop.idl\
     DesktopTask.idl\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
+    DispatchHelper.idl\
     DispatchProvider.idl\
-        DocumentTemplates.idl\
+    DispatchRecorder.idl\
+    DispatchRecorderSupplier.idl\
+    DispatchResultState.idl\
+    DispatchResultEvent.idl\
+    DispatchStatement.idl\
+    DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
     FrameAction.idl\
@@ -91,10 +99,12 @@ IDLFILES=\
     FrameLoaderFactory.idl\
     FramesContainer.idl\
     FrameSearchFlag.idl\
+    IllegalArgumentIOException.idl\
     MediaTypeDetectionHelper.idl\
     ProtocolHandler.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
+    Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
     WindowArrange.idl\
@@ -106,9 +116,13 @@ IDLFILES=\
     XDesktop.idl\
     XDesktopTask.idl\
     XDispatch.idl\
+    XDispatchHelper.idl\
     XDispatchProvider.idl\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
+    XDispatchRecorder.idl\
+    XDispatchRecorderSupplier.idl\
+    XDispatchResultListener.idl\
     XDocumentTemplates.idl\
     XExtendedFilterDetection.idl\
     XFilterDetect.idl\
@@ -122,6 +136,8 @@ IDLFILES=\
     XInterceptorInfo.idl\
     XLoadEventListener.idl\
     XModel.idl\
+    XNotifyingDispatch.idl\
+    XRecordableDispatch.idl\
     XStatusListener.idl\
     XStorable.idl\
     XSynchronousFrameLoader.idl\
@@ -130,14 +146,6 @@ IDLFILES=\
     XTerminateListener.idl\
     XUrlList.idl\
     XWindowArranger.idl\
-        DispatchResultState.idl\
-        DispatchResultEvent.idl\
-        XDispatchResultListener.idl\
-        XNotifyingDispatch.idl\
-        ContentHandlerFactory.idl\
-        ContentHandler.idl\
-        DispatchProvider.idl
-
 
 # ------------------------------------------------------------------
 

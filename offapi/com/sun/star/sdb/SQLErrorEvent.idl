@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLErrorEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,21 +87,5 @@ struct SQLErrorEvent: com::sun::star::lang::EventObject
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:37  hjs
-    initial import
-
-    Revision 1.4  2000/09/11 11:52:40  mi
-    documentation merged from XML
-
-    Revision 1.2  2000/03/02 15:23:53  fs
-    #73812#
-
-    Revision 1.1  1999/12/20 16:34:33  dg
-    #70278# new files
-
-    Revision 1.1  1999/11/24 08:41:02  dg
-    new StarDataBaseConnectivity
-
 ===========================================================================*/
 #endif

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cl $ $Date: 2002-04-12 08:52:54 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:57:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ IDLFILES=\
     DatabaseNumberOfSet.idl\
     DatabaseSetNumber.idl\
     DateTime.idl\
+    DDE.idl\
     EmbeddedObjectCount.idl\
     ExtendedUser.idl\
     FileName.idl\

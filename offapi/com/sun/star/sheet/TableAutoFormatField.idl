@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormatField.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 
 #ifndef __com_sun_star_table_CellOrientation_idl__
 #include <com/sun/star/table/CellOrientation.idl>
+#endif
+
+#ifndef __com_sun_star_table_TableBorder_idl__
+#include <com/sun/star/table/TableBorder.idl>
 #endif
 
 //=============================================================================
@@ -336,6 +340,11 @@ service TableAutoFormatField
      */
     [optional, property] long ParaRightMargin;
 
+    //-------------------------------------------------------------------------
+
+    /** property containing a description of the cell border.
+     */
+    [optional, property] com::sun::star::table::TableBorder TableBorder;
 };
 
 //=============================================================================

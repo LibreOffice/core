@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexColumnDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,5 @@ service IndexColumnDescriptor
 }; }; }; };
 
 /*===========================================================================
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:43:39  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:44  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/06/05 13:01:38  dg
-    new Services
-
-
 ===========================================================================*/
 #endif

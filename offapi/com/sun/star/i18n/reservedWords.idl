@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reservedWords.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,26 +78,34 @@ module com {  module sun {  module star {  module i18n {
 constants reservedWords
 {
     /// "true"
-    const short TRUE_WORD     = 0;
+    const short TRUE_WORD             = 0;
     /// "false"
-    const short FALSE_WORD    = 1;
+    const short FALSE_WORD            = 1;
     /// "1st quarter"
-    const short QUARTER1_WORD = 2;
+    const short QUARTER1_WORD         = 2;
     /// "2nd quarter"
-    const short QUARTER2_WORD = 3;
+    const short QUARTER2_WORD         = 3;
     /// "3rd quarter"
-    const short QUARTER3_WORD = 4;
+    const short QUARTER3_WORD         = 4;
     /// "4th quarter"
-    const short QUARTER4_WORD = 5;
+    const short QUARTER4_WORD         = 5;
     /// "above"
-    const short ABOVE_WORD    = 6;
+    const short ABOVE_WORD            = 6;
     /// "below"
-    const short BELOW_WORD    = 7;
+    const short BELOW_WORD            = 7;
+    /// "Q1"
+    const short QUARTER1_ABBREVIATION = 8;
+    /// "Q2"
+    const short QUARTER2_ABBREVIATION = 9;
+    /// "Q3"
+    const short QUARTER3_ABBREVIATION = 10;
+    /// "Q4"
+    const short QUARTER4_ABBREVIATION = 11;
 
     //! Yes, this must be the count of known reserved words and one more than
     //! the maximum number used above!
     /// Count of known reserved words.
-    const short COUNT         = 8;
+    const short COUNT                 = 12;
 };
 
 //============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSVGPrinter.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,30 +92,4 @@ interface XSVGPrinter: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2002/10/03 13:09:21  mi
-    #94968# IDL reviews merged
-
-    Revision 1.4.16.1  2002/02/08 13:21:07  cl
-    idl review
-
-    Revision 1.4  2001/03/16 16:41:43  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:44:16  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:54  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:56  mi
-    documentation merged from XML
-
-    Revision 1.1  2000/03/06 11:57:32  ka
-    initial revision
-
-
-=============================================================================*/
 #endif

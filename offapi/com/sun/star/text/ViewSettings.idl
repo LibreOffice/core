@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:43:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,36 +289,4 @@ service ViewSettings
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2002/09/23 10:05:59  vg
-    #100000# typo
-
-    Revision 1.7  2002/09/20 11:56:32  os
-    #103376# Property 'ShowRulers' added
-
-    Revision 1.6  2002/08/19 12:02:07  tl
-    #101597# ShowOnlineLayout, ZoomType and Zoomvalue added.
-
-    Revision 1.5  2002/03/07 10:51:54  os
-    #96678# enable right alignment of the vertical ruler
-
-    Revision 1.4  2000/12/14 12:53:44  mi
-    <true></true> -> <TRUE/> and same with FALSE
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:36:04  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:53:01  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif

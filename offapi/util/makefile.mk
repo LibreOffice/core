@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-27 14:34:21 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:59:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,23 +130,19 @@ UNOIDLDBFILES= \
     $(UCR)$/cssimage.db\
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
-    $(UCR)$/dcsssync.db \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
     $(UCR)$/dcssawt.db\
     $(UCR)$/dcssabridge.db\
+    $(UCR)$/dcsscbackend.db\
     $(UCR)$/dcssi18n.db\
     $(UCR)$/dcssauth.db\
-    $(UCR)$/dcsscbackend.db\
     $(UCR)$/dcssdrawing.db\
-        $(UCR)$/dcssformula.db \
+    $(UCR)$/dcssformula.db \
     $(UCR)$/dcsssheet.db\
     $(UCR)$/dcsstable.db\
     $(UCR)$/dcsstext.db \
-    $(UCR)$/dcssscriptframework.db \
-    $(UCR)$/dcsssfprovider.db \
-    $(UCR)$/dcsssfsecurity.db \
-    $(UCR)$/dcsssfstorage.db 
+    $(UCR)$/dcsschart.db
 
 
 REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
@@ -156,7 +152,6 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
 ALLTAR : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
@@ -168,26 +163,16 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
-.ELSE
-ALL : ALLDEP
-.ENDIF
-
 .INCLUDE :  target.mk
 
 .IF "$(BUILD_SOSL)"==""
 
-ALLTAR: $(REGISTRYCHECKFLAG) autodoc
+ALLTAR: $(REGISTRYCHECKFLAG)
 
 # special work necessary for i18n reservedWords
 # ATTENTION: no special handling for other types is allowed.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
     +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords && echo > $@
-
-autodoc: $(OUT)$/misc$/offapi.autodoc 
-
-$(OUT)$/misc$/offapi.autodoc: 
-    $(shell sed "p" $(OUT)$/misc$/*.idls | tr "[:cntrl:] " "\n\n" | sed -f autodoc.sed >$@)
-    echo "$@ done"
+    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF

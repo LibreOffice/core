@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:42:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatchRecorderSupplier_idl__
+#include <com/sun/star/frame/XDispatchRecorderSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
@@ -173,6 +177,31 @@ service Frame
         </p>
      */
     [property] string Title;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the dispatch recorder of the frame
+
+        <p>
+        Such recorder can be used to record dispatch requests.
+        The supplier contains a dispatch recorder and provide the functionality
+        to use it for any dispatch object from outside which supports the interface
+        <type>XDispatch</type>. A supplier is available only, if recording was enabled.
+        That means: if somewhere whish to enable recoding on a frame he must set
+        a supplier with a recorder object inside of it. Every user of dispatches
+        has to check then if such supplier is available at this frame property.
+        If value of this property is <NULL/> he must call <member>XDispatch::dispatch()</member>
+        on the original dispatch object. If it's a valid value he must use the supplier
+        by calling his method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>
+        with the original dispatch object as argument.
+        </p>
+
+        <p>
+        Note:<br>
+        It's not recommended to cache an already getted supplier. Because there exist
+        no possibility to check for enabled/disabled recording then.
+        </p>
+     */
+    [optional, property] XDispatchRecorderSupplier RecorderSupplier;
 };
 
 //=============================================================================

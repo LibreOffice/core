@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetSortDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_sheet_SheetSortDescriptor_idl__
 #define __com_sun_star_sheet_SheetSortDescriptor_idl__
 
-#ifndef __com_sun_star_util_SortDescriptor_idl__
-#include <com/sun/star/util/SortDescriptor.idl>
+#ifndef __com_sun_star_table_TableSortDescriptor_idl__
+#include <com/sun/star/table/TableSortDescriptor.idl>
 #endif
 
 #ifndef __com_sun_star_table_CellAddress_idl__
@@ -77,14 +77,16 @@ module com {  module sun {  module star {  module sheet {
 
 /** a description of how a cell range is to be sorted.
 
-    <p>This service extends the <type scope="com::sun::star::util">SortDescriptor</type>
+    <p>This service extends the <type scope="com::sun::star::table">TableSortDescriptor</type>
     service with spreadsheet specific properties.</p>
  */
 service SheetSortDescriptor
 {
     //-------------------------------------------------------------------------
 
-    /** provides common sorting properties.
+    /** <p>provides common sorting properties.</p>
+        <p>The base service is com::sun:star::table::TableSortDescriptor,
+        but it is not changed in this documentation because compatibility reasons.</p>
      */
     service com::sun::star::util::SortDescriptor;
 

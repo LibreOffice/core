@@ -1,0 +1,134 @@
+/*************************************************************************
+ *
+ *  $RCSfile: QueryDesign.idl,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:55:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_QueryDesign_idl__
+#define __com_sun_star_sdb_QueryDesign_idl__
+
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+#ifndef __com_sun_star_frame_XDispatchProvider_idl__
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#endif
+#ifndef __com_sun_star_form_FormController_idl__
+#include <com/sun/star/form/FormController.idl>
+#endif
+
+module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+/** implements a component which allows the creation of SQL statements.
+
+    <p>This service implements a user interface for creating SQL statements either through a graphical design
+    interface or simply to enter the SQL statement directly.</p>
+
+    <p>The design view of the QueryDesign is divided into two parts. The first part contains the table windows
+    where columns can be selected for the SQL statement. The second part contains the columns which should appear
+    in the selection of the SQL statement or criterias which narrow the query.</p>
+
+    @see com::sun::star::sdb::ContentLoader
+    @see com::sun::star::frame::XDispatch
+    @see com::sun::star::frame::XDispatchProviderInterceptor
+*/
+
+service QueryDesign
+{
+    /** allows the component to be plugged into frames.
+    */
+    interface com::sun::star::frame::XController;
+
+    /** is used to initialize the QueryDesign.
+
+        <p>Parameters (passed to the method
+        <member scope="com::sun::star::lang">XInitialization::initialize</member>)
+        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
+        <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
+        with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
+        to be used.<br>
+        Recognized parameters are:
+        <ul>
+            <li><b>Frame</b><br>
+            has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+            QueryDesign component into.
+            </li>
+            <li><b>DataSourceName</b><br>
+            The name of the globally registered <service>DataSource</service> to be used for initial display. It is only
+            meaningful together with the other parameters specifying the object to display.
+            </li>
+            <li><b>CurrentQuery</b><br>
+            This is a string giving the name of the object to display initially.
+            </li>
+            <li><b>QueryDesignView</b><br>
+            This value indicates if the QueryDesign should be opened in the design view or in the text view.
+            If set to </TRUE> than the design view will be displayed otherwise the text view will appear.
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenu.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2003-01-21 13:40:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,37 +184,7 @@ interface XMenu: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2002/10/03 13:01:04  mi
-    #94968# IDL reviews merged
-
-    Revision 1.4  2001/03/16 16:41:13  jsc
-    remove interfaceheader with uik and remove [const] in method definitions
-
-    Revision 1.3  2000/11/08 12:42:11  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:34:53  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:09  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/05/16 12:19:53  mi
-    documentation
-
-    Revision 1.2  2000/02/07 11:24:16  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
-    new
-
-
-=============================================================================*/
 #endif
