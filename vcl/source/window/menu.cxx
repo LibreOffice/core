@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-22 09:08:41 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 08:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2990,8 +2990,12 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             ImplCursorUpDown( nCode == KEY_END, TRUE );
         }
         break;
+        case KEY_F6:
         case KEY_ESCAPE:
         {
+            // Ctrl-F6 acts like ESC here, the menu bar however will then put the focus in the document
+            if( nCode == KEY_F6 && !rKEvent.GetKeyCode().IsMod1() )
+                break;
             if ( !pMenu->pStartedFrom )
             {
                 StopExecute();
@@ -3579,7 +3583,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             }
             bDone = TRUE;
         }
-        else if ( nCode == KEY_ESCAPE)
+        else if ( nCode == KEY_ESCAPE || ( nCode == KEY_F6 && rKEvent.GetKeyCode().IsMod1() ) )
         {
             if( pActivePopup )
             {
@@ -3595,6 +3599,22 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             }
             else
                 ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+
+            if( nCode == KEY_F6 && rKEvent.GetKeyCode().IsMod1() )
+            {
+                // put focus into document
+                Window *pWin = this;
+                while( pWin )
+                {
+                    if( !pWin->GetParent() )
+                    {
+                        pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+                        break;
+                    }
+                    pWin = pWin->GetParent();
+                }
+            }
+
             bDone = TRUE;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-28 18:31:33 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 08:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,15 +169,33 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
     // capture KeyEvents for taskpane cycling
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        TaskPaneList *pTList = mpTaskPaneList;
-        if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        if( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F6 &&
+            rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() )
         {
-            SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
-            if ( pW )
-                pTList = pW->mpTaskPaneList;
+            // Ctrl-F6 goes directly to the document
+            Window *pWin = this;
+            while( pWin )
+            {
+                if( !pWin->GetParent() )
+                {
+                    pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+                    return TRUE;
+                }
+                pWin = pWin->GetParent();
+            }
         }
-        if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
-            return TRUE;
+        else
+        {
+            TaskPaneList *pTList = mpTaskPaneList;
+            if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+            {
+                SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
+                if ( pW )
+                    pTList = pW->mpTaskPaneList;
+            }
+            if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
+                return TRUE;
+        }
     }
     return Window::PreNotify( rNEvt );
 }
