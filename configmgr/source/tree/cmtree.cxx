@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,21 +155,37 @@ namespace configmgr
         m_aAttributes.setState(_eNewState);
     }
 
-    void INode::modifyAccess(bool _bWritable,bool _bFinalized)
+    void INode::modifyAccess(node::Access _aAccessLevel)
     {
-        // this state can only occurs a s a result of (?)
-        OSL_ENSURE( _bWritable || !_bFinalized,"Invalid access state: Node is both read-only and finalized");
+        OSL_ENSURE( node::accessWritable <= _aAccessLevel && _aAccessLevel <= node::accessReadonly,"Invalid access level for Node");
 
-        m_aAttributes.bWritable  = _bWritable;
-        m_aAttributes.bFinalized = _bFinalized;
+        m_aAttributes.setAccess(_aAccessLevel);
     }
 
-      void INode::forceWritableToFinalized()
+    void INode::markMandatory()
+    {
+        m_aAttributes.markMandatory();
+    }
+
+    void INode::markRemovable()
+    {
+        m_aAttributes.markRemovable();
+    }
+
+    void INode::promoteAccessToDefault()
       {
-        if (!m_aAttributes.bWritable)
+        if (m_aAttributes.isFinalized())
+            m_aAttributes.setAccess(node::accessReadonly);
+
+        if ( m_aAttributes.isMandatory())
+            m_aAttributes.setRemovability(false,false);
+    }
+
+    void INode::forceReadonlyToFinalized()
+      {
+        if (m_aAttributes.isReadonly())
         {
-            m_aAttributes.bFinalized = true;
-            m_aAttributes.bWritable  = true;
+            m_aAttributes.setAccess(node::accessFinal);
         }
     }
 
