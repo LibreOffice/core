@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 16:17:45 $
+ *  last change: $Author: fs $ $Date: 2001-12-13 09:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
@@ -124,6 +127,9 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 /*************************************************************************/
 //========================================================================
@@ -255,7 +261,7 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     DBG_CTOR(FmPropBrw,NULL);
 
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
-    SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
+    SetMinOutputSizePixel( Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y) );
     SetOutputSizePixel(aPropWinSize);
     SetUniqueId(UID_FORMPROPBROWSER_FRAME);
 
@@ -315,6 +321,13 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
                     xAsXController->attachFrame(m_xMeAsFrame);
                     m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
                     DBG_ASSERT(m_xBrowserComponentWindow.is(), "FmPropBrw::FmPropBrw: attached the controller, but have no component window!");
+
+                    Reference< awt::XLayoutConstrains > xLayoutInfo( m_xBrowserController, UNO_QUERY );
+                    if ( xLayoutInfo.is() )
+                    {
+                        awt::Size aSize = xLayoutInfo->getMinimumSize( );
+                        SetMinOutputSizePixel( Size( aSize.Width, aSize.Height ) );
+                    }
                 }
             }
         }
