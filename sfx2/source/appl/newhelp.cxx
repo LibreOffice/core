@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-29 13:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,11 +715,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aType = aRow.GetToken( 0, '\t', nIdx );
         aURL = aRow.GetToken( 0, '\t', nIdx );
-        aURL.Erase( aURL.Len() - 1 );
-        ::rtl::OUString aTemp( aURL );
-        sal_Int32 nCharPos = aTemp.lastIndexOf( '/' );
-        String* pFactory = new String( aTemp.copy( nCharPos + 1 ) );
-
+        String* pFactory = new String( INetURLObject( aURL ).GetHost() );
         USHORT nPos = aActiveLB.InsertEntry( aTitle );
         aActiveLB.SetEntryData( nPos, (void*)(ULONG)pFactory );
     }
