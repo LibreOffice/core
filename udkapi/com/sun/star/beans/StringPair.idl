@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StringPair.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 /** specifies a pair of two strings.
  */
-struct StringPair
+published struct StringPair
 {
     /** specifies the first of the two strings.
      */
