@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-04-06 17:12:33 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,45 @@ static PyObject * absolutize( PyObject *self, PyObject * args )
     return 0;
 }
 
+static PyObject * invoke ( PyObject *self, PyObject * args )
+{
+    PyObject *ret = 0;
+    if( PyTuple_Check( args ) && PyTuple_Size( args ) == 3 )
+    {
+        PyObject *object = PyTuple_GetItem( args, 0 );
+
+        if( PyString_Check( PyTuple_GetItem( args, 1 ) ) )
+        {
+            const char *name = PyString_AsString( PyTuple_GetItem( args, 1 ) );
+            if( PyTuple_Check( PyTuple_GetItem( args , 2 )))
+            {
+                ret = PyUNO_invoke( object, name , PyTuple_GetItem( args, 2 ) );
+            }
+            else
+            {
+                OStringBuffer buf;
+                buf.append( "uno.invoke expects a tuple as 3rd argument, got " );
+                buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 2) ) ) );
+                PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+            }
+        }
+        else
+        {
+            OStringBuffer buf;
+            buf.append( "uno.invoke expected a string as 2nd argument, got " );
+            buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 1) ) ) );
+            PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+        }
+    }
+    else
+    {
+        OStringBuffer buf;
+        buf.append( "uno.invoke expects object, name, (arg1, arg2, ... )\n" );
+        PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+    }
+    return ret;
+}
+
 }
 
 using namespace pyuno;
@@ -611,6 +650,7 @@ static struct PyMethodDef PyUNOModule_methods [] =
     {"fileUrlToSystemPath",fileUrlToSystemPath,1},
     {"absolutize",absolutize,2},
     {"isInterface",isInterface,1},
+    {"invoke",invoke, 2},
     {NULL, NULL}
 };
 
