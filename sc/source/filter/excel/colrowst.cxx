@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-27 14:53:00 $
+ *  last change: $Author: gt $ $Date: 2001-04-17 12:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,16 +565,19 @@ inline void FltColumn::InsertBefore( FltColumnItem* pA, FltColumnItem* pP )
 }
 
 
-inline void FltColumn::InsertIn( FltColumnItem* pA, FltColumnItem* pI )
+void FltColumn::InsertIn( FltColumnItem* pA, FltColumnItem* pI )
 {   //
     DBG_ASSERT( pA->nStart <= pI->nStart && pA->nEnd >= pI->nEnd, "*FltColumn::InsertIn(): wrong use" );
     DBG_ASSERT( pA->pPrev, "*FltColumn::InsertIn(): old can't be the first" );
-    DBG_ASSERT( pA->pNext, "*FltColumn::InsertIn(): old can't be the last" );
 
     if( pA->nEnd == pI->nStart )
     {   // at the end of old
         pA->nEnd--;
-        InsertBefore( pA->pNext, pI );
+        if( pA->pNext )
+            InsertBefore( pA->pNext, pI );
+        else
+            // only after, no insert!
+            Append( pI );
     }
     else if( pA->nStart == pI->nStart )
     {   // at the begining of old

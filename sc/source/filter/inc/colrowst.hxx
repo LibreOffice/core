@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-27 14:53:32 $
+ *  last change: $Author: gt $ $Date: 2001-04-17 12:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ private:
 
     inline void             Append( FltColumnItem* );
     inline void             InsertBefore( FltColumnItem* pActual, FltColumnItem* pPreAct );
-    inline void             InsertIn( FltColumnItem* pActual, FltColumnItem* pInAct );
+    void                    InsertIn( FltColumnItem* pActual, FltColumnItem* pInAct );
     BOOL                    Merge( FltColumnItem* pActual, UINT16 nRow );   // return = TRUE if row could be merged
     BOOL                    Insert( FltColumnItem* pActual, UINT16 nRow, UINT16 nXF );
                                                                             // return = TRUE if row could be inserted
