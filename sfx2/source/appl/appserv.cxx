@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-12 08:00:40 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( 0 ); // show start page
+                pHelp->Start( 0, NULL ); // show start page
                 bDone = TRUE;
             }
             break;

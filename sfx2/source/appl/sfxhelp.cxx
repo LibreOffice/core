@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-18 14:06:55 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
     return aModuleName;
 }
 
-BOOL SfxHelp_Impl::Start( ULONG nHelpId )
+BOOL SfxHelp_Impl::Start( ULONG nHelpId, const Window* pWindow )
 {
     Reference < XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
