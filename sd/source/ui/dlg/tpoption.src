@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:32:41 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_traditional ] = "Α`¬O―ΰ°χ²Ύ°Κª«¥σ";
         Text[ arabic ] = "ΗαίΗΖδΗΚ ήΗΘαΙ ααΕÒΗΝΙ ΟΗΖγΗπ";
         Text[ greek ] = "~Πάντα δυνατότητα μετακίνησης αντικειμένων";
-        Text[ korean ] = "°³ΓΌ΄Β ΗΧ»σ ΐΜµΏΐΜ °΅΄Ι";
+        Text[ korean ] = "°³ΓΌ΄Β ΗΧ»σ ΐΜµΏΐΜ °΅΄Ι(~)";
         Text[ turkish ] = "Nesneler hep taώύnabilir";
         Text[ language_user1 ] = " ";
     };
