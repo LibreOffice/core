@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-06 10:34:16 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@
 #ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
 #endif
+#include "svdstr.hrc"
+
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
@@ -136,7 +138,7 @@ AccessibleShape::AccessibleShape (
     : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
       mpChildrenManager(NULL),
       mxShape (rShapeInfo.mxShape),
-      mrShapeTreeInfo (rShapeTreeInfo),
+      mShapeTreeInfo (rShapeTreeInfo),
       mnIndex (rShapeInfo.mnIndex),
       mpText (NULL),
       mpParent (rShapeInfo.mpChildrenManager)
@@ -199,7 +201,7 @@ void AccessibleShape::Init (void)
     Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
     if (xShapes.is() && xShapes->getCount() > 0)
         mpChildrenManager = new ChildrenManager (
-            this, xShapes, mrShapeTreeInfo, *this);
+            this, xShapes, mShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
         mpChildrenManager->Update();
 
@@ -211,8 +213,9 @@ void AccessibleShape::Init (void)
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
-    SdrView* pView = mrShapeTreeInfo.GetSdrView ();
-    const Window* pWindow = mrShapeTreeInfo.GetWindow ();
+#if 0
+    SdrView* pView = mShapeTreeInfo.GetSdrView ();
+    const Window* pWindow = mShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL)
     {
         SvxEditSource* pEditSource = new SvxTextEditSource (
@@ -221,6 +224,7 @@ void AccessibleShape::Init (void)
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
+#endif
 }
 
 
@@ -343,9 +347,9 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     CheckDisposedState ();
     awt::Rectangle aBoundingBox;
 
-    // Get the shape's bounding box in internal coordinates.  Use the
-    // property BoundRect.  Only if that is not supported ask the shape for
-    // its position and size directly.
+    // Get the shape's bounding box in internal coordinates (in 100th of
+    // mm).  Use the property BoundRect.  Only if that is not supported ask
+    // the shape for its position and size directly.
     Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
     if (xSet.is())
     {
@@ -368,9 +372,9 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     }
 
     // Transform coordinates from internal to pixel.
-    ::Size aPixelSize = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Size aPixelSize = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Size (aBoundingBox.Width, aBoundingBox.Height));
-    ::Point aPixelPosition = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Point aPixelPosition = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Point (aBoundingBox.X, aBoundingBox.Y));
 
     // Clip the shape's bounding box with the bounding box of its parent.
@@ -877,47 +881,49 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     switch (nShapeType)
     {
         case DRAWING_3D_CUBE:
-            aDG.Initialize (OUString::createFromAscii("3D Cube"));
+            aDG.Initialize (STR_ObjNameSingulCube3d);
             aDG.Add3DProperties ();
             break;
         case DRAWING_3D_EXTRUDE:
-            aDG.Initialize (OUString::createFromAscii("3D Extrusion Object"));
+            aDG.Initialize (STR_ObjNameSingulExtrude3d);
             aDG.Add3DProperties ();
             break;
         case DRAWING_3D_LATHE:
-            aDG.Initialize (OUString::createFromAscii("3D Lathe Object"));
+            aDG.Initialize (STR_ObjNameSingulLathe3d);
             aDG.Add3DProperties ();
             break;
         case DRAWING_3D_POLYGON:
-            aDG.Initialize (OUString::createFromAscii("3D Polygon"));
+            aDG.Initialize (STR_ObjNameSingulPoly3d);
             aDG.Add3DProperties ();
             break;
         case DRAWING_3D_SCENE:
-            aDG.Initialize (OUString::createFromAscii("3D Scene"));
+            aDG.Initialize (STR_ObjNameSingulScene3d);
             break;
         case DRAWING_3D_SPHERE:
-            aDG.Initialize (OUString::createFromAscii("3D Sphere"));
+            aDG.Initialize (STR_ObjNameSingulSphere3d);
             aDG.Add3DProperties ();
             break;
         case DRAWING_CAPTION:
-            aDG.Initialize (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionShape")));
+            aDG.Initialize (STR_ObjNameSingulCAPTION);
+            aDG.AddLineProperties ();
+            aDG.AddFillProperties ();
             break;
         case DRAWING_CLOSED_BEZIER:
-            aDG.Initialize (OUString::createFromAscii("Closed Bezier Curve"));
+            aDG.Initialize (STR_ObjNameSingulPATHFILL);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_CLOSED_FREEHAND:
-            aDG.Initialize (OUString::createFromAscii("Closed Freehand Curve"));
+            aDG.Initialize (STR_ObjNameSingulFREEFILL);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_CONNECTOR:
-            aDG.Initialize (OUString::createFromAscii("Connector"));
+            aDG.Initialize (STR_ObjNameSingulEDGE);
             aDG.AddLineProperties ();
             break;
         case DRAWING_CONTROL:
-            aDG.Initialize (OUString::createFromAscii("Control"));
+            aDG.Initialize (STR_ObjNameSingulUno);
             aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
                 DescriptionGenerator::COLOR,
                 OUString());
@@ -926,57 +932,57 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
                 OUString());
             break;
         case DRAWING_ELLIPSE:
-            aDG.Initialize (RID_SVXSTR_A11Y_ST_ELLIPSE);
+            aDG.Initialize (STR_ObjNameSingulCIRCE);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_GROUP:
-            aDG.Initialize (OUString::createFromAscii("Group"));
+            aDG.Initialize (STR_ObjNameSingulGRUP);
             break;
         case DRAWING_LINE:
-            aDG.Initialize (OUString::createFromAscii("Line"));
+            aDG.Initialize (STR_ObjNameSingulLINE);
             aDG.AddLineProperties ();
             break;
         case DRAWING_MEASURE:
-            aDG.Initialize (OUString::createFromAscii("Dimension Line"));
+            aDG.Initialize (STR_ObjNameSingulMEASURE);
             aDG.AddLineProperties ();
             break;
         case DRAWING_OPEN_BEZIER:
-            aDG.Initialize (RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE);
+            aDG.Initialize (STR_ObjNameSingulPATHLINE);
             aDG.AddLineProperties ();
             break;
         case DRAWING_OPEN_FREEHAND:
-            aDG.Initialize (OUString::createFromAscii("Open Freehand Curve"));
+            aDG.Initialize (STR_ObjNameSingulFREELINE);
             aDG.AddLineProperties ();
             break;
         case DRAWING_PAGE:
-            aDG.Initialize (OUString::createFromAscii("Page"));
+            aDG.Initialize (STR_ObjNameSingulPAGE);
             break;
         case DRAWING_POLY_LINE:
-            aDG.Initialize (OUString::createFromAscii("Poly Line"));
+            aDG.Initialize (STR_ObjNameSingulPLIN);
             aDG.AddLineProperties ();
             break;
         case DRAWING_POLY_LINE_PATH:
-            aDG.Initialize (OUString::createFromAscii("Poly Line Path"));
+            aDG.Initialize (STR_ObjNameSingulPLIN);
             aDG.AddLineProperties ();
             break;
         case DRAWING_POLY_POLYGON:
-            aDG.Initialize (OUString::createFromAscii("Poly Polygon"));
+            aDG.Initialize (STR_ObjNameSingulPOLY);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_POLY_POLYGON_PATH:
-            aDG.Initialize (OUString::createFromAscii("Poly Polygon Path"));
+            aDG.Initialize (STR_ObjNameSingulPOLY);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_RECTANGLE:
-            aDG.Initialize (RID_SVXSTR_A11Y_ST_RECTANGLE);
+            aDG.Initialize (STR_ObjNameSingulRECT);
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
         case DRAWING_TEXT:
-            aDG.Initialize (OUString::createFromAscii("Text"));
+            aDG.Initialize (STR_ObjNameSingulTEXT);
             aDG.AddTextProperties ();
             break;
         default:
@@ -997,6 +1003,7 @@ uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
 {
     return( mxShape );
 }
+
 
 
 // protected
