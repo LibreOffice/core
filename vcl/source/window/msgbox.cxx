@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 17:39:40 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,9 @@ void MessBox::ImplPosControls()
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
                                        aImageSize );
         mpFixedImage->SetImage( maImage );
+        // forward the HC image
+        if( !!maImageHC )
+            mpFixedImage->SetModeImage( maImageHC, BMP_COLOR_HIGHCONTRAST );
         mpFixedImage->Show();
         nMaxWidth -= aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
     }
@@ -468,14 +471,27 @@ void MessBox::SetDefaultCheckBoxText()
     maCheckBoxText = rText;
 }
 
+// -----------------------------------------------------------------------
+
 BOOL MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+        maImageHC = rImage;
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 const Image& MessBox::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------

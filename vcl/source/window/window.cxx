@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-16 11:31:03 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7516,4 +7516,36 @@ String Window::GetAccessibleDescription() const
     }
 
     return aAccessibleDescription;
+}
+
+
+// returns background color used in this control
+// false: could not determine color
+BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
+{
+    BOOL bRet = TRUE;
+
+    switch ( GetType() )
+    {
+        // peform special handling here
+        case WINDOW_PUSHBUTTON:
+        case WINDOW_OKBUTTON:
+        case WINDOW_CANCELBUTTON:
+        // etc.
+        default:
+            if( IsControlBackground() )
+                rCol = GetControlBackground();
+            else if( IsBackground() )
+                {
+                    Wallpaper aWall = GetBackground();
+                    if( !aWall.IsGradient() && !aWall.IsBitmap() )
+                        rCol = aWall.GetColor();
+                    else
+                        bRet = FALSE;
+                }
+            else
+                rCol = GetSettings().GetStyleSettings().GetFaceColor();
+            break;
+    }
+    return bRet;
 }
