@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 13:23:52 $
+#   last change: $Author: hjs $ $Date: 2001-11-15 16:11:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 .IF "$(GUI)"!="UNX"
 .IF "$(GUI)"!="MAC"
 AWK*=awk
+SORT*=sort
 SED*=sed
 TYPE*=type
 RENAME*=ren
@@ -103,6 +104,7 @@ MKDIRHIER=echo v | xcopy nul
 .ELSE
 SED*=sed
 AWK=awk
+SORT*=sort
 PERL=perl
 TYPE=cat
 COPY=cp -f
@@ -120,6 +122,7 @@ ECHON=echo -n
 .ELSE
 SED*=sed
 AWK=awk
+SORT*=sort
 PERL=perl
 TYPE=cat
 COPY=cp -f
