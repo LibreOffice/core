@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_rbmp.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: hdu $ $Date: 2001-08-10 16:41:48 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: hdu $ $Date: 2001-12-13 14:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ bool RawBitmap::Rotate( int nAngle )
             return false;
         case 1800:  // rotate by 180 degrees
             mnXOffset = -(mnXOffset + mnWidth);
-            mnYOffset += mnHeight;
+            mnYOffset = -(mnYOffset + mnHeight);
             if( mnBitCount == 8 )
             {
                 ImplRotate8_180( mpBits, mnWidth, mnHeight, mnScanlineSize-mnWidth );
