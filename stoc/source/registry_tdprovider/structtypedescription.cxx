@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structtypedescription.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:32:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 
 #include "base.hxx"
 
-#include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -86,11 +85,12 @@ StructTypeDescription::StructTypeDescription(
     css::uno::Reference< css::container::XHierarchicalNameAccess > const &
         manager,
     rtl::OUString const & name, rtl::OUString const & baseTypeName,
-    css::uno::Sequence< sal_Int8 > const & data):
+    css::uno::Sequence< sal_Int8 > const & data, bool published):
     m_data(data),
     m_base(
         new stoc_rdbtdp::CompoundTypeDescriptionImpl(
-            manager, css::uno::TypeClass_STRUCT, name, baseTypeName, data))
+            manager, css::uno::TypeClass_STRUCT, name, baseTypeName, data,
+            published))
 {}
 
 StructTypeDescription::~StructTypeDescription()
@@ -162,4 +162,9 @@ StructTypeDescription::getTypeArguments() throw (css::uno::RuntimeException)
 {
     return css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >();
+}
+
+sal_Bool StructTypeDescription::isPublished() throw (css::uno::RuntimeException)
+{
+    return m_base->isPublished();
 }
