@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 #include <vcl/svapp.hxx>
 #include <vos/timer.hxx>
 
+#ifdef UNX
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
+
 #ifdef DEBUG
 #include <stdio.h>
 #endif
@@ -147,11 +152,6 @@ XPlugin_Impl::XPlugin_Impl( const Reference< ::com::sun::star::lang::XMultiServi
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
-#ifdef UNX
-    m_aAppContext = NULL;
-    m_pDisplay = NULL;
-    memset( &m_aWSInfo, 0, sizeof( m_aWSInfo ) );
-#endif
 
     m_xModel = new PluginModel();
     Reference< ::com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
@@ -428,10 +428,16 @@ void XPlugin_Impl::loadPlugin()
     if( ! getPluginComm() )
     {
 #ifdef UNX
-        m_pDisplay      = (Display*)pEnvData->pDisplay;
-        m_aAppContext   = (XtAppContext)pEnvData->pAppContext;
         // need a new PluginComm
-        PluginComm* pComm = new UnxPluginComm( ::rtl::OUStringToOString( m_aDescription.PluginName, gsl_getSystemTextEncoding() ) );
+        PluginComm* pComm = NULL;
+        int sv[2];
+        if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
+            pComm = new UnxPluginComm( m_aDescription.Mimetype,
+                                       m_aDescription.PluginName,
+                                       (XLIB_Window)pEnvData->aWindow,
+                                       sv[0],
+                                       sv[1]
+                                       );
 #elif (defined WNT || defined OS2)
         PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                  m_aDescription.PluginName,
@@ -455,13 +461,7 @@ void XPlugin_Impl::loadPlugin()
 #endif
 #ifdef UNX
     m_aNPWindow.window      = (void*)pEnvData->aWindow;
-    m_aNPWindow.ws_info     = &m_aWSInfo;
-
-    m_aWSInfo.type          = NP_SETWINDOW;
-    m_aWSInfo.display       = (Display*)pEnvData->pDisplay;
-    m_aWSInfo.visual        = (Visual*)pEnvData->pVisual;
-    m_aWSInfo.colormap      = (Colormap)pEnvData->aColormap;
-    m_aWSInfo.depth         = pEnvData->nDepth;
+    m_aNPWindow.ws_info     = NULL;
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
 #endif

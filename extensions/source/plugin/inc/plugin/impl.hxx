@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,6 @@ private:
     NPP_t                       m_aInstance;
     NPWindow                    m_aNPWindow;
     rtl_TextEncoding            m_aEncoding;
-#ifdef UNX
-    NPSetWindowCallbackStruct   m_aWSInfo;
-    Display*                    m_pDisplay;
-    XtAppContext                m_aAppContext;
-#endif
 
     const char**                m_pArgv;
     const char**                m_pArgn;
@@ -252,10 +247,6 @@ public:
                 m_pPluginComm->addRef();
             }
         }
-#ifdef UNX
-    Display*        getAppDisplay() { return m_pDisplay; }
-    XtAppContext    getAppContext() { return m_aAppContext; }
-#endif
     Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
     NPP             getNPPInstance() { return &m_aInstance; }

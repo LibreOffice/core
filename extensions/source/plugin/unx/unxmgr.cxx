@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-07 09:56:27 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,26 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
-#include <limits>
-#endif
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
 #include <dlfcn.h>
+#include <osl/thread.h>
 
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
-#include <dirent.h>
+using namespace com::sun::star::uno;
+using namespace com::sun::star::plugin;
 
 // Unix specific implementation
-static ::com::sun::star::plugin::PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescriptions )
+static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescriptions )
 {
-    ::com::sun::star::plugin::PluginDescription** pRet = NULL;
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    PluginDescription** pRet = NULL;
     rDescriptions = 0;
 
-    struct stat aStat;
-    if( stat( rPath.GetBuffer(), &aStat ) )
-        return NULL;
     void *pLib = dlopen( rPath.GetBuffer(), RTLD_LAZY );
     if( ! pLib )
         return NULL;
@@ -99,94 +94,121 @@ static ::com::sun::star::plugin::PluginDescription** CheckPlugin( const ByteStri
             cTok = ':';
         ByteString aExtension = aMIME.GetToken( 1, cTok );
         int nExtensions = aExtension.GetTokenCount( ',' );
-        pRet = new ::com::sun::star::plugin::PluginDescription*[ nExtensions ];
+        pRet = new PluginDescription*[ nExtensions ];
         for( int i = 0; i < nExtensions; i++ )
         {
-            pRet[i] = new ::com::sun::star::plugin::PluginDescription;
-            pRet[i]->PluginName = String( rPath, gsl_getSystemTextEncoding() );
-            pRet[i]->Mimetype   = String( aMIME.GetToken( 0, cTok ), gsl_getSystemTextEncoding() );
-            String aExt( RTL_CONSTASCII_USTRINGPARAM(  "*." ) );
-            aExt += String( aExtension.GetToken( i, ',' ).EraseLeadingChars().EraseTrailingChars(), gsl_getSystemTextEncoding() );
-            pRet[i]->Extension  = aExt;
-            pRet[i]->Description= String( aMIME.GetToken( 2, cTok ), gsl_getSystemTextEncoding() );
+            pRet[i] = new PluginDescription;
+            pRet[i]->PluginName = String( rPath, aEncoding );
+            pRet[i]->Mimetype   = String( aMIME.GetToken( 0, cTok ), aEncoding );
+            ByteString aExt( "*." );
+            aExt += aExtension.GetToken( i, ',' ).EraseLeadingChars().EraseTrailingChars();
+            pRet[i]->Extension  = String( aExt, aEncoding );
+            pRet[i]->Description= String( aMIME.GetToken( 2, cTok ), aEncoding );
         }
         rDescriptions = nExtensions;
     }
     // some libraries register atexit handlers when loaded
     // (e.g. g++ made libraries register global destructors)
-    // not closing them does prevent them to be called when already unloaded
+    // not closing them does prevent this
 //  dlclose( pLib );
     return pRet;
 }
 
-Sequence< ::com::sun::star::plugin::PluginDescription > XPluginManager_Impl::getPluginDescriptions()
+Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
 {
-    static Sequence< ::com::sun::star::plugin::PluginDescription > aDescriptions;
+    static Sequence<PluginDescription> aDescriptions;
     static BOOL bHavePlugins = FALSE;
     if( ! bHavePlugins )
     {
-        NAMESPACE_STD(list)< ::com::sun::star::plugin::PluginDescription* > aPlugins;
+        rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+        NAMESPACE_STD(list)<PluginDescription*> aPlugins;
         int i;
 
         // unix: search for plugins in /usr/lib/netscape/plugins,
         //       ~/.netscape/plugins und NPX_PLUGIN_PATH
         // additionally: search in PluginsPath
+        static const char* pHome = getenv( "HOME" );
+        static const char* pNPXPluginPath = getenv( "NPX_PLUGIN_PATH" );
 
-        const char* pEnv = getenv( "HOME" );
+        ByteString aSearchPath( "/usr/lib/netscape/plugins" );
+        if( pHome )
+        {
+            aSearchPath.Append( ':' );
+            aSearchPath.Append( pHome );
+            aSearchPath += "/.netscape/plugins";
+        }
+        if( pNPXPluginPath )
+        {
+            aSearchPath.Append( ':' );
+            aSearchPath += pNPXPluginPath;
+        }
 
-        String aSearchPath( RTL_CONSTASCII_USTRINGPARAM( "/usr/lib/netscape/plugins:" ) );
-        aSearchPath += String( pEnv ? pEnv : "", gsl_getSystemTextEncoding() );
-        aSearchPath += String(  RTL_CONSTASCII_USTRINGPARAM( "/.netscape/plugins:" ) );
-        pEnv = getenv( "NPX_PLUGIN_PATH" );
-        aSearchPath += String( pEnv ? pEnv : "", gsl_getSystemTextEncoding() );
-
-        const Sequence< ::rtl::OUString >& rPaths = PluginManager::getAdditionalSearchPaths();
+        const Sequence< ::rtl::OUString >& rPaths( PluginManager::getAdditionalSearchPaths() );
         for( i = 0; i < rPaths.getLength(); i++ )
         {
-            aSearchPath += ':';
-            aSearchPath += String( rPaths.getConstArray()[i] );
+            aSearchPath += ":";
+            aSearchPath += ByteString( String( rPaths.getConstArray()[i] ), aEncoding );
         }
 
 
+        long aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
         int nPaths = aSearchPath.GetTokenCount( ':' );
         for( i = 0; i < nPaths; i++ )
         {
-            ByteString aPath( aSearchPath.GetToken( i, ':' ), gsl_getSystemTextEncoding() );
+            ByteString aPath( aSearchPath.GetToken( i, ':' ) );
             if( aPath.Len() )
             {
                 DIR* pDIR = opendir( aPath.GetBuffer() );
-                struct dirent aEntry;
-                struct dirent* pEntry;
-
-                while( pDIR && readdir_r( pDIR, &aEntry, &pEntry ) )
+                struct dirent* pDirEnt = NULL;
+                while( pDIR && ! readdir_r( pDIR, (struct dirent*)aBuffer, &pDirEnt ) && pDirEnt )
                 {
-                    if( strncmp( aEntry.d_name, "libnullplugin", 13 )   &&
-                        strcmp( aEntry.d_name, "npnrvp.so" )            &&
-                        strcmp( aEntry.d_name, "libnprvp.so" ) )
+                    struct stat aStat;
+                    ByteString aFileName( aPath );
+                    aFileName += "/";
+                    aFileName += ((struct dirent*)aBuffer)->d_name;
+                    if( ! stat( aFileName.GetBuffer(), &aStat )
+                        && S_ISREG( aStat.st_mode )
+                        && strncmp( ((struct dirent*)aBuffer)->d_name, "libnullplugin", 13 )
+                        )
                     {
-                        struct stat aStat;
-                        ByteString aFile( aPath );
-                        aFile += '/';
-                        aFile += aEntry.d_name;
-                        if( ! stat( aFile.GetBuffer(), &aStat )             &&
-                            S_ISREG( aStat.st_mode ) )
+#if defined DEBUG
+                        fprintf( stderr, "Trying plugin %s ... ", aFileName.GetBuffer() );
+#endif
+                        int nStructs;
+                        PluginDescription** pStructs =
+                            CheckPlugin( aFileName, nStructs );
+                        if( pStructs )
                         {
-                            int nStructs;
-                            ::com::sun::star::plugin::PluginDescription** pStructs =
-                                  CheckPlugin( aFile, nStructs );
-                            if( pStructs )
+#if defined DEBUG
+                            fprintf( stderr, "success: %d\n", nStructs );
+#endif
+                            for( int i = 0; i < nStructs; i++ )
                             {
-                                for( int i = 0; i < nStructs; i++ )
-                                    aPlugins.push_back( pStructs[i] );
-                                delete pStructs;
+                                aPlugins.push_back( pStructs[i] );
+#if defined DEBUG
+                                fprintf( stderr, "Mimetype: %s\nExtension: %s\n"
+                                         "Description: %s\n",
+                                         ::rtl::OUStringToOString( pStructs[i]->Mimetype, aEncoding ).getStr(),
+                                         ::rtl::OUStringToOString( pStructs[i]->Extension, aEncoding ).getStr(),
+                                         ::rtl::OUStringToOString( pStructs[i]->Description, aEncoding ).getStr()
+                                         );
+#endif
                             }
+                            delete pStructs;
                         }
+#if defined DEBUG
+                        else
+                            fprintf(stderr, "failed\n" );
+#endif
                     }
                 }
+                if( pDIR )
+                    closedir( pDIR );
             }
         }
-        aDescriptions = Sequence< ::com::sun::star::plugin::PluginDescription >( aPlugins.size() );
-        NAMESPACE_STD(list)< ::com::sun::star::plugin::PluginDescription* >::iterator iter;
+        aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
+        DBG_ASSERT( aPlugins.size(), "No Plugins Found !!\n" );
+        NAMESPACE_STD(list)<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )
         {
             aDescriptions.getArray()[ i ] = **iter;

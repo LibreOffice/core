@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,212 +58,74 @@
  *
  *
  ************************************************************************/
+#include <cstdarg>
 
-#include <string>   // workaround for SUNPRO workshop include conflicts
+#include <sys/types.h>
+#include <signal.h>
+#include <osl/thread.h>
 
 #include <plugin/impl.hxx>
 
-#include <dlfcn.h>
+int UnxPluginComm::nConnCounter = 0;
 
-extern NPNetscapeFuncs aNPNFuncs;
-
-UnxPluginComm::UnxPluginComm( const ::rtl::OString& library ) :
-        PluginComm( library ),
-        m_pLibrary( NULL ),
-        m_bInit( FALSE )
+UnxPluginComm::UnxPluginComm(
+                             const String& mimetype,
+                             const String& library,
+                             XLIB_Window aParent,
+                             int nDescriptor1,
+                             int nDescriptor2
+                             ) :
+        PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ) ),
+        PluginConnector( nDescriptor2 )
 {
-    m_pLibrary = dlopen( library.getStr(), RTLD_NOW );
+    char pDesc[32];
+    char pWindow[32];
+    sprintf( pWindow, "%d", aParent );
+    sprintf( pDesc, "%d", nDescriptor1 );
+    ByteString aLib( library, osl_getThreadTextEncoding() );
 
-    // initialize plugin function table
-    memset( &m_aFuncs, 0, sizeof( m_aFuncs ) );
-    m_aFuncs.size       = sizeof( m_aFuncs );
-    m_aFuncs.version    = (NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR;
+    char* pArgs[5];
+    pArgs[0] = "pluginapp.bin";
+    pArgs[1] = pDesc;
+    pArgs[2] = const_cast<char*>(aLib.GetBuffer());
+    pArgs[3] = pWindow;
+    pArgs[4] = NULL;
 
-    if( m_pLibrary )
-    {
-        NPError (*initFunc)(NPNetscapeFuncs*, NPPluginFuncs* );
-        NPError (*initPlugin)();
-
-        initFunc = (NPError(*)(NPNetscapeFuncs*,NPPluginFuncs*))dlsym( m_pLibrary, "NP_Initialize" );
-        initPlugin = (NPError(*)())dlsym( m_pLibrary, "NPP_Initialize" );
 #ifdef DEBUG
-        if( ! initFunc )
-            fprintf( stderr, "could not get Symbol NP_Initialize\n" );
-        if( ! initPlugin )
-            fprintf( stderr, "could not get Symbol NPP_Initialize\n" );
+    m_nCommPID = 10;
+    fprintf( stderr, "Try to launch: %s %s %s %s, descriptors are %d, %d\n", pArgs[0], pArgs[1], pArgs[2], pArgs[3], nDescriptor1, nDescriptor2 );
 #endif
-        if( initFunc && initPlugin )
+
+    if( ! ( m_nCommPID = fork() ) )
+      {
+          execvp( pArgs[0], pArgs );
+          fprintf( stderr, "Error: could not exec %s\n", pArgs[0] );
+          exit(255);
+      }
+
+    if( m_nCommPID != -1 )
+    {
+        // wait for pluginapp.bin to start up
+        if( ! WaitForMessage( 5000 ) )
         {
-            NPError aErr = initFunc( &aNPNFuncs, &m_aFuncs );
-#ifdef DEBUG
-            fprintf( stderr, "NP_Initialize returns %d\n", aErr );
-#endif
-            if( aErr )
-            {
-                aErr = initPlugin();
-#ifdef DEBUG
-                fprintf( stderr, "NPP_Initialize returns %d\n", aErr );
-#endif
-            }
-
-            m_aFuncs.newp           = (NPP_NewUPP)dlsym( m_pLibrary, "NPP_New" );
-            m_aFuncs.destroy        = (NPP_DestroyUPP)dlsym( m_pLibrary, "NPP_Destroy" );
-            m_aFuncs.setwindow      = (NPP_SetWindowUPP)dlsym( m_pLibrary, "NPP_SetWindow" );
-            m_aFuncs.newstream      = (NPP_NewStreamUPP)dlsym( m_pLibrary, "NPP_NewStream" );
-            m_aFuncs.destroystream  = (NPP_DestroyStreamUPP)dlsym( m_pLibrary, "NPP_DestroyStream" );
-            m_aFuncs.asfile         = (NPP_StreamAsFileUPP)dlsym( m_pLibrary, "NPP_StreamAsFile" );
-            m_aFuncs.writeready     = (NPP_WriteReadyUPP)dlsym( m_pLibrary, "NPP_WriteReady" );
-            m_aFuncs.write          = (NPP_WriteUPP)dlsym( m_pLibrary, "NPP_Write" );
-            m_aFuncs.print          = (NPP_PrintUPP)dlsym( m_pLibrary, "NPP_Print" );
-            m_aFuncs.event          = NULL;
-            m_aFuncs.javaClass      = NULL;
-            m_aFuncs.urlnotify      = (NPP_URLNotifyUPP)dlsym( m_pLibrary, "NPP_URLNotify" );
-            m_aFuncs.getvalue       =(NPP_GetValueUPP)dlsym( m_pLibrary, "NPP_GetValue" );
-            m_aFuncs.setvalue       =(NPP_SetValueUPP)dlsym( m_pLibrary, "NPP_SetValue" );
-
-            m_bInit = TRUE;
+            fprintf( stderr, "Timeout on command: %s %s %s %s\n", pArgs[0], pArgs[1], pArgs[2], pArgs[3] );
+            invalidate();
         }
-    }
-    if( ! m_bInit )
-    {
-        dlclose( m_pLibrary );
-        m_pLibrary = NULL;
+        else
+        {
+            MediatorMessage* pMessage = GetNextMessage( TRUE );
+            Respond( pMessage->m_nID,
+                     "init ack",8,
+                     NULL );
+            delete pMessage;
+            NPP_Initialize();
+        }
     }
 }
 
 UnxPluginComm::~UnxPluginComm()
 {
-    if( m_bInit && m_pLibrary )
-    {
-        NPP_ShutdownUPP pFunc = (NPP_ShutdownUPP)dlsym( m_pLibrary,"NPP_Shutdown");
-        if( pFunc)
-            pFunc();
-        dlclose( m_pLibrary );
-    }
+    NPP_Shutdown();
+    if( m_nCommPID != -1 && m_nCommPID != 0 )
+        kill( m_nCommPID, 9 );
 }
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
-{
-    DBG_ASSERT( m_aFuncs.destroy, "### NPP_Destroy(): null pointer in NPP functions table!" );
-    return (m_aFuncs.destroy
-            ? m_aFuncs.destroy( instance, save )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason )
-{
-    DBG_ASSERT( m_aFuncs.destroystream, "### NPP_DestroyStream(): null pointer in NPP functions table!" );
-    return (m_aFuncs.destroystream
-            ? m_aFuncs.destroystream( instance, stream, reason )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode, int16 argc,
-                                  char* argn[], char* argv[], NPSavedData *saved )
-{
-    DBG_ASSERT( m_aFuncs.newp, "### NPP_New(): null pointer in NPP functions table!" );
-    return (m_aFuncs.newp
-            ? m_aFuncs.newp( pluginType, instance, mode, argc, argn, argv, saved )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* stream,
-                                        NPBool seekable, uint16* stype )
-{
-    DBG_ASSERT( m_aFuncs.newstream, "### NPP_NewStream(): null pointer in NPP functions table!" );
-    return (m_aFuncs.newstream
-            ? m_aFuncs.newstream( instance, type, stream, seekable, stype )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UnxPluginComm::NPP_Print( NPP instance, NPPrint* platformPrint )
-{
-    DBG_ASSERT( m_aFuncs.print, "### NPP_Print(): null pointer in NPP functions table!" );
-    if (m_aFuncs.print)
-        m_aFuncs.print( instance, platformPrint );
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
-{
-    DBG_ASSERT( m_aFuncs.setwindow, "### NPP_SetWindow(): null pointer in NPP functions table!" );
-    return (m_aFuncs.setwindow
-            ? m_aFuncs.setwindow( instance, window )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UnxPluginComm::NPP_StreamAsFile( NPP instance, NPStream* stream, const char* fname )
-{
-    DBG_ASSERT( m_aFuncs.asfile, "### NPP_StreamAsFile(): null pointer in NPP functions table!" );
-    if (m_aFuncs.asfile)
-        m_aFuncs.asfile( instance, stream, fname );
-}
-
-//--------------------------------------------------------------------------------------------------
-void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reason, void* notifyData )
-{
-    DBG_ASSERT( m_aFuncs.urlnotify, "### NPP_URLNotify(): null pointer in NPP functions table!" );
-    if (m_aFuncs.urlnotify)
-        m_aFuncs.urlnotify( instance, url, reason, notifyData );
-}
-
-//--------------------------------------------------------------------------------------------------
-int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
-{
-    DBG_ASSERT( m_aFuncs.write, "### NPP_Write(): null pointer in NPP functions table!" );
-    return (m_aFuncs.write
-            ? m_aFuncs.write( instance, stream, offset, len, buffer )
-            : 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-int32 UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
-{
-    DBG_ASSERT( m_aFuncs.writeready, "### NPP_WriteReady(): null pointer in NPP functions table!" );
-    return (m_aFuncs.writeready
-            ? m_aFuncs.writeready( instance, stream )
-            : 0);
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_GetValue( NPP instance, NPPVariable variable, void *ret_alue )
-{
-    DBG_ASSERT( m_aFuncs.getvalue, "### NPP_GetValue(): null pointer in NPP functions table!" );
-    return (m_aFuncs.getvalue
-            ? m_aFuncs.getvalue( instance, variable, ret_alue )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *ret_alue )
-{
-    DBG_ASSERT( m_aFuncs.setvalue, "### NPP_SetValue(): null pointer in NPP functions table!" );
-    return (m_aFuncs.setvalue
-            ? m_aFuncs.setvalue( instance, variable, ret_alue )
-            : NPERR_GENERIC_ERROR);
-}
-
-//--------------------------------------------------------------------------------------------------
-void* UnxPluginComm::NPP_GetJavaClass()
-{
-    DBG_ERROR( "no java class available!" );
-    return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-NPError UnxPluginComm::NPP_Initialize()
-{
-    return NPERR_NO_ERROR;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UnxPluginComm::NPP_Shutdown()
-{
-}
-

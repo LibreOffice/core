@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-07 19:29:01 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,30 +500,6 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
 {
     TRACE( "NPN_GetValue" );
     XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
-
-#ifdef UNX
-    // some special unix variables
-    XPlugin_Impl* pInstance = pImpl ? pImpl : XPluginManager_Impl::getFirstXPlugin();
-    if( ! pInstance )
-        return NULL;
-
-    switch( variable )
-    {
-        case NPNVxDisplay:
-            *((Display**)value) = pInstance->getAppDisplay();
-#ifdef DEBUG
-            fprintf( stderr, "NPN_GetValue of display\n" );
-#endif
-            return NPERR_NO_ERROR;
-            break;
-        case NPNVxtAppContext:
-            *((XtAppContext*)value) = pInstance->getAppContext();
-#ifdef DEBUG
-            fprintf( stderr, "NPN_GetValue of application context\n" );
-#endif
-            return NPERR_NO_ERROR;
-    }
-#endif
 
     if( ! pImpl )
         return 0;

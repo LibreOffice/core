@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+#   last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,29 @@ TARGETTYPE=CUI
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/nppapi.obj		\
     $(SLO)$/sysplug.obj		\
+    $(SLO)$/mediator.obj	\
+    $(SLO)$/plugcon.obj		\
     $(SLO)$/unxmgr.obj
 
+OBJFILES=\
+    $(OBJ)$/npwrap.obj		\
+    $(OBJ)$/npnapi.obj		\
+    $(OBJ)$/mediator.obj	\
+    $(OBJ)$/plugcon.obj
+
+APP1TARGET=pluginapp.bin
+APP1OBJS=$(OBJFILES)
+APP1STDLIBS=\
+    $(TOOLSLIB) 				\
+    $(VOSLIB)					\
+    $(SALLIB)
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"
+APP1STDLIBS+=-lXm -lXt -lX11 -ldl
+.ELSE
+APP1STDLIBS+=-lXaw -lXt -lX11 -ldl
+.ENDIF
 
 APP1DEF=	$(MISC)$/$(TARGET).def
 

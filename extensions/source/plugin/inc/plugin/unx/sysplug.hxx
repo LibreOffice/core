@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,31 +61,31 @@
 #ifndef __PLUGIN_INC_UNXPLUG_HXX
 #define __PLUGIN_INC_UNXPLUG_HXX
 
-#include <cstdio>
+#include <unistd.h>
 
-#include <prex.h>
-#define XP_UNIX
-#include <npsdk/npupp.h>
-#include <npsdk/npapi.h>
-#include <postx.h>
-
+#include <plugin/unx/plugcon.hxx>
 #include <plugin/plcom.hxx>
 #include <vcl/sysdata.hxx>
 
-class UnxPluginComm : public PluginComm
+class UnxPluginComm : public PluginComm, public PluginConnector
 {
 private:
-    void*                       m_pLibrary;
-    NPPluginFuncs               m_aFuncs;
-    BOOL                        m_bInit;
+    static int  nConnCounter;
+
+    pid_t       m_nCommPID;
 public:
-    UnxPluginComm( const ::rtl::OString& library );
+    UnxPluginComm( const String& mimetype,
+                   const String& library,
+                   XLIB_Window aParent,
+                   int nDescriptor1,
+                   int nDescriptor2
+                   );
     virtual ~UnxPluginComm();
 
     virtual NPError NPP_Destroy( NPP instance, NPSavedData** save );
     virtual NPError NPP_DestroyStream( NPP instance, NPStream* stream,
                                        NPError reason );
-    virtual void* NPP_GetJavaClass();
+    virtual jref NPP_GetJavaClass();
     virtual NPError NPP_Initialize();
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
                              uint16 mode, int16 argc,
@@ -103,6 +103,7 @@ public:
     virtual int32 NPP_Write( NPP instance, NPStream* stream, int32 offset,
                              int32 len, void* buffer );
     virtual int32 NPP_WriteReady( NPP instance, NPStream* stream );
+    virtual char* NPP_GetMIMEDescription();
     virtual NPError NPP_GetValue( NPP instance, NPPVariable variable, void* value );
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value);
