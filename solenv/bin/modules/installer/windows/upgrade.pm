@@ -2,9 +2,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:35:07 $
+#   last change: $Author: rt $ $Date: 2005-04-04 10:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,13 +74,17 @@ use installer::windows::idtglobal;
 
 sub create_upgrade_table
 {
-    my ($basedir) = @_;
+    my ($basedir, $allvariableshashref) = @_;
 
     my @upgradetable = ();
 
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
-    # still no content
+    # preventing downgrading
+
+    my $nodowngradeline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+
+    push(@upgradetable, $nodowngradeline);
 
     # Saving the file
 
