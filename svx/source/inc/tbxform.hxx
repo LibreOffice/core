@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:22:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public:
 public:
     FmInputRecordNoDialog(Window * pParent);
 
-    void SetValue(double dNew) { m_aRecordNo.SetValue(dNew); }
+    void SetValue( long dNew ) { m_aRecordNo.SetValue(dNew); }
     long GetValue() const { return m_aRecordNo.GetValue(); }
 };
 */ //CHINA001
