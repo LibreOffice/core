@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:19 $
+ *  last change: $Author: ssa $ $Date: 2002-08-30 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5393,10 +5393,13 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
     ImplInitResolutionSettings();
 
-    if ( mnStyle & WB_3DLOOK )
-        SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
-    else
-        SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+    if( nChangeFlags & SETTINGS_STYLE )
+    {
+        if ( mnStyle & WB_3DLOOK )
+            SetBackground( Wallpaper( rSettings.GetStyleSettings().GetFaceColor() ) );
+        else
+            SetBackground( Wallpaper( rSettings.GetStyleSettings().GetWindowColor() ) );
+    }
 
     if ( nChangeFlags )
     {
