@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnidx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 15:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class SwFtnIdxs : public _SwFtnIdxs
 public:
     SwFtnIdxs() {}
 
-    void UpdateFtn( SwNodeIndex& rStt );    // ab Pos. alle Updaten
+    void UpdateFtn( const SwNodeIndex& rStt );      // ab Pos. alle Updaten
     void UpdateAllFtn();                    // alle Fussnoten updaten
     void UpdateFtnInSections();
 
