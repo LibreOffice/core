@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:31:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <com/sun/star/embed/EmbedMisc.hpp>
+
+#include <toolkit/helper/vclunohelper.hxx>
+#include <svx/svxdlg.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/svditer.hxx>
@@ -85,27 +89,14 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <so3/ipenv.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/linkdlg.hxx>
-#include <so3/svstor.hxx>
-#include <so3/soerr.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svtools/soerr.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <sot/exchange.hxx>
-
-
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
 
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
@@ -118,41 +109,40 @@ SO2_DECL_REF(SvStorage)
 #include "chartarr.hxx"
 #include "drawview.hxx"
 
+using namespace com::sun::star;
+
 // STATIC DATA -----------------------------------------------------------
 
 void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 {
     //  wird aus dem Paint gerufen
 
-    SvInPlaceObjectRef xIPObj = pObj->GetObjRef();
+    uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
 
     //  #41412# wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
 
-    SfxInPlaceClientRef xClient = FindIPClient( xIPObj, pWin );
-    if ( !xClient.Is() )
+    SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
+    if ( !pClient )
     {
-        xClient = new ScClient( this, pWin, GetSdrView()->GetModel() );
-
-        ErrCode nErr = xIPObj->DoConnect( xClient );
-        if (nErr != ERRCODE_NONE)
-            ErrorHandler::HandleError(nErr);
-
+        pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
-        Size aOleSize = xIPObj->GetVisArea().GetSize();
+
+        awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+        Size aOleSize( aSz.Width, aSz.Height );
 
                 // sichtbarer Ausschnitt wird nur inplace veraendert!
         aRect.SetSize( aOleSize );
-        xClient->GetEnv()->SetObjArea( aRect );
+        pClient->SetObjArea( aRect );
 
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
         aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
-        xClient->GetEnv()->SetSizeScale(aScaleWidth,aScaleHeight);
+        pClient->SetSizeScale(aScaleWidth,aScaleHeight);
 
-        ((ScClient*)(SfxInPlaceClient*)xClient)->SetGrafEdit( NULL );
+        ((ScClient*)pClient)->SetGrafEdit( NULL );
     }
 }
 
@@ -161,7 +151,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
 
-    SvInPlaceObjectRef xIPObj = pObj->GetObjRef();
+    uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
     BOOL bErrorShown = FALSE;
@@ -171,36 +161,40 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 //      nErr = xIPObj->DoVerb(nVerb);           // gelinkt -> ohne Client etc.
 //  else
     {
-        SfxInPlaceClientRef xClient = FindIPClient( xIPObj, pWin );
-        if ( !xClient.Is() )
-            xClient = new ScClient( this, pWin, GetSdrView()->GetModel() );
-        nErr = xIPObj->DoConnect( xClient );
+        SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
+        if ( !pClient )
+            pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
 
         if ( !(nErr & ERRCODE_ERROR_MASK) )
         {
             Rectangle aRect = pObj->GetLogicRect();
             Size aDrawSize = aRect.GetSize();
-            Rectangle aVisArea = xIPObj->GetVisArea();
-            Size aOleSize = aVisArea.GetSize();
+
+            awt::Size aSz = xObj->getVisualAreaSize( pClient->GetAspect() );
+            Size aOleSize( aSz.Width, aSz.Height );
+            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pClient->GetAspect() ) );
+
             aOleSize = OutputDevice::LogicToLogic( aOleSize,
-                                                   xIPObj->GetMapUnit(), MAP_100TH_MM );
+                                                   aUnit, MAP_100TH_MM );
 
-                    // sichtbarer Ausschnitt wird nur inplace veraendert!
+            // sichtbarer Ausschnitt wird nur inplace veraendert!
             aRect.SetSize( aOleSize );
-            xClient->GetEnv()->SetObjArea( aRect );
+            pClient->SetObjArea( aRect );
 
-            if ( xIPObj->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE )
+            if ( xObj->getStatus( pClient->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
             {
                 //  scale must always be 1 - change VisArea if different from client size
 
                 if ( aDrawSize != aOleSize )
                 {
-                    aVisArea.SetSize( OutputDevice::LogicToLogic( aDrawSize,
-                                            MAP_100TH_MM, xIPObj->GetMapUnit() ) );
-                    xIPObj->SetVisArea( aVisArea );
+                    aOleSize = OutputDevice::LogicToLogic( aDrawSize,
+                                            MAP_100TH_MM, aUnit );
+                    aSz.Width = aOleSize.Width();
+                    aSz.Height = aOleSize.Height();
+                    xObj->setVisualAreaSize( pClient->GetAspect(), aSz );
                 }
                 Fraction aOne( 1, 1 );
-                xClient->GetEnv()->SetSizeScale( aOne, aOne );
+                pClient->SetSizeScale( aOne, aOne );
             }
             else
             {
@@ -210,18 +204,18 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                 Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
                 aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
                 aScaleHeight.ReduceInaccurate(10);
-                xClient->GetEnv()->SetSizeScale(aScaleWidth,aScaleHeight);
+                pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
 
-            ((ScClient*)(SfxInPlaceClient*)xClient)->SetGrafEdit( NULL );
+            ((ScClient*)pClient)->SetGrafEdit( NULL );
 
             //  Link fuer Daten-Highlighting im Chart setzen
             if ( SvtModuleOptions().IsChart() )
             {
-                SvGlobalName aObjClsId = *xIPObj->GetSvFactory();
+                SvGlobalName aObjClsId ( xObj->getClassID() );
                 if (SotExchange::IsChart( aObjClsId ))
                 {
-                    SchMemChart* pMemChart = SchDLL::GetChartData(xIPObj);
+                    SchMemChart* pMemChart = SchDLL::GetChartData(xObj);
                     if (pMemChart)
                     {
                         // set handler for highlighting cell ranges
@@ -254,12 +248,14 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                         // SchMemChart, but not at the corresponding
                         // ChartModel. Therefore, an Update is needed, because
                         // the MemChart doesn't know its ChartModel.
-                        SchDLL::Update( xIPObj, pMemChart );
+
+                        // TODO/LATER: Looks like there is no need to update the replacement, since the object will be activated.
+                        SchDLL::Update( xObj, pMemChart );
                     }
                 }
             }
 
-            nErr = SfxViewShell::DoVerb( xClient, nVerb );
+            nErr = pClient->DoVerb( nVerb );
             bErrorShown = TRUE;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
         }
@@ -268,7 +264,8 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
         ErrorHandler::HandleError(nErr);
 
     //! SetDocumentName sollte schon im Sfx passieren ???
-    xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );
+    //TODO/LATER: how "SetDocumentName"?
+    //xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );
 
     return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
@@ -300,60 +297,6 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
     {
         ActivateObject( pOle2Obj, nVerb );
     }
-#if 0
-    //! remove this along with pGrafEdit member of ScClient
-    else if ( pGrafObj && SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE) )
-    {
-        /**********************************************************
-        * OLE-Objekt erzeugen, StarImage starten
-        * Grafik-Objekt loeschen (durch OLE-Objekt ersetzt)
-        **********************************************************/
-
-        pView->HideMarkHdl(NULL);
-
-        String aEmtpyString;
-        SvStorageRef aStor = new SvStorage(String());
-        SvInPlaceObjectRef aNewIPObj =
-#ifndef SO3
-                    &SvInPlaceObject::ClassFactory()->CreateAndInit(
-                    *SIM_MOD()->pSimDrawDocShellFactory, aStor );
-#else
-                    &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                    *SIM_MOD()->pSimDrawDocShellFactory, aStor );
-#endif
-        if ( aNewIPObj.Is() )
-        {
-            SdrGrafObj* pTempSdrGrafObj = (SdrGrafObj*) pObj->Clone ();
-            pView->BegUndo( ScGlobal::GetRscString( STR_UNDO_GRAFEDIT ) );
-
-            SvEmbeddedInfoObject* pInfo =
-                    GetViewFrame()->GetObjectShell()->
-                                   InsertObject( aNewIPObj, String() );
-            String aName;
-            if( pInfo )
-                aName = pInfo->GetObjName();
-
-            Rectangle aRect = pObj->GetLogicRect();
-            SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( aNewIPObj, aName, aRect );
-
-            SdrPageView* pPV = pView->GetPageViewPvNum(0);
-            pView->ReplaceObject(pObj, *pPV, pSdrOle2Obj);
-            pSdrOle2Obj->SetLogicRect(aRect);   // erst nach InsertObject !!!
-            aNewIPObj->SetVisAreaSize( aRect.GetSize() );
-
-            const Graphic& rGraphic = pTempSdrGrafObj->GetGraphic();
-            SimDLL::Update(aNewIPObj, rGraphic, GetActiveWin() );
-
-//                          pView->EndUndo();
-            //  passendes EndUndo in ScDrawView::MarkListHasChanged
-
-            ActivateObject( pSdrOle2Obj, SVVERB_SHOW );
-
-            ScClient* pClient = (ScClient*) GetIPClient();
-            pClient->SetGrafEdit( pTempSdrGrafObj );
-        }
-    }
-#endif
     else
         DBG_ERROR("kein Objekt fuer Verb gefunden");
 
@@ -418,7 +361,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                 SfxInPlaceClient* pIPClient = GetIPClient();
 
-                if ( pIPClient && pIPClient->IsInPlaceActive() )
+                if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
                 {
                     const SfxRectangleItem& rRect =
                         (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
@@ -437,10 +380,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                             if (nSdrObjKind == OBJ_OLE2)
                             {
-                                SvInPlaceObjectRef aIPObj =
-                                ( (SdrOle2Obj*) pObj)->GetObjRef();
-
-                                if ( aIPObj.Is() )
+                                if ( ( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                                 {
                                     pObj->SetLogicRect(aRect);
                                 }
@@ -453,10 +393,15 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_LINKS:
             {
-                ::so3::SvBaseLinksDialog( pWin, pDoc->GetLinkManager() ).Execute();
-                rBindings.Invalidate( nSlot );
-                SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
-                rReq.Done();
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pWin, pDoc->GetLinkManager() );
+                if ( pDlg )
+                {
+                    pDlg->Execute();
+                    rBindings.Invalidate( nSlot );
+                    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+                    rReq.Done();
+                }
             }
             break;
 
@@ -519,7 +464,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    BOOL bOle = GetViewFrame()->ISA(SfxInPlaceFrame);
+    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     SfxApplication* pSfxApp = SFX_APP();
 
