@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 12:09:48 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 16:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,7 @@ BOOL Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String& rNe
         {
             // copy the entire storage
             BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
-            BaseStorage* p2 = pDest->OpenStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
+            BaseStorage* p2 = pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
             p2->SetClassId( p1->GetClassId() );
             p1->CopyTo( p2 );
             SetError( p1->GetError() );
