@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:54:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ public:
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
 private:
+    bool    mbIgnorePaint;
+
     /** appends the given effect to the list*/
     void append( CustomAnimationEffectPtr pEffect );
 
