@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:27:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5308,17 +5308,17 @@ String STR_POOLCHR_RUBYTEXT
     Text[ greek ] = "ÖùíçôéêÜ óýìâïëá";
     Text[ dutch ] = "Fonetische tekens";
     Text[ french ] = "Symboles phonétiques";
-    Text[ spanish ] = "Símbolos fonéticos";
+    Text[ spanish ] = "Rubys";
     Text[ finnish ] = "Foneettiset merkit";
-    Text[ italian ] = "Simboli fonetici";
+    Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Phonetic Symbols";
     Text[ swedish ] = "Fonetiska symboler";
-    Text[ polish ] = "Symbole fonetyczne";
+    Text[ polish ] = "Znaki Ruby";
     Text[ portuguese_brazilian ] = "Phonetic Symbols";
     Text[ japanese ] = "‚Ó‚è‚ª‚È";
     Text[ korean ] = "¹ßÀ½ ±âÈ£";
-    Text[ chinese_simplified ] = "×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "µù­µ¦r¤¸";
+    Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
+    Text[ chinese_traditional ] = "µù­µ²Å¸¹";
     Text[ turkish ] = "Phonetic Symbols";
     Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Símbolos fonéticos";
@@ -5328,6 +5328,7 @@ String STR_POOLCHR_PRGM_RUBYTEXT
 {
     Text  = "Rubies" ;
 };
+
 
 
 
