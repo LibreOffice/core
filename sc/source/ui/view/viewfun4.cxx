@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:55:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,8 +460,7 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
     {
         case SC_CONVERSION_SPELLCHECK:
             pEngine = new ScSpellingEngine(
-                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, pEditSel,
-               nCol, nRow, nTab, bMarked, LinguMgr::GetSpellChecker() );
+                pDoc->GetEnginePool(), rViewData, pUndoDoc, pRedoDoc, LinguMgr::GetSpellChecker() );
         break;
         case SC_CONVERSION_HANGULHANJA:
             pEngine = new ScTextConversionEngine(
@@ -513,7 +512,7 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord, co
             SCROW nNewRow = rViewData.GetCurY();
             rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
                 new ScUndoConversion(
-                        rViewData.GetDocShell(), rMark,
+                        pDocSh, rMark,
                         nCol, nRow, nTab, pUndoDoc,
                         nNewCol, nNewRow, nTab, pRedoDoc, eConvType ) );
         }
