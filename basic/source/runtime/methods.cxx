@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:36:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2154,7 +2154,7 @@ RTLFUNC(IsNull)
         if( !bNull && pArg->GetType() == SbxOBJECT )
         {
             SbxBase* pObj = pArg->GetObject();
-            if( !pObj || pObj->ISA(TypeHolderObject) )
+            if( !pObj )
                 bNull = TRUE;
         }
         rPar.Get( 0 )->PutBool( bNull );
