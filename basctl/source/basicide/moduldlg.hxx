@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:39:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ class StarBASIC;
 #define NEWOBJECTMODE_LIB       1
 #define NEWOBJECTMODE_MOD       2
 #define NEWOBJECTMODE_DLG       3
+#define NEWOBJECTMODE_METH      4
 
 class NewObjectDialog : public ModalDialog
 {
@@ -215,7 +216,7 @@ private:
     TabControl      aTabCtrl;
 
 public:
-                    OrganizeDialog( Window* pParent );
+                    OrganizeDialog( Window* pParent, INT16 tabId );
                     ~OrganizeDialog();
 
     void            SetCurrentModule( const String& rMacroDescr );
@@ -257,7 +258,7 @@ protected:
     virtual void        DeactivatePage();
 
 public:
-                        ObjectPage( Window* pParent );
+                        ObjectPage( Window* pParent, USHORT nMode );
 
     void                SetCurrentModule( const String& rMacroDescr ) { aCurEntryDescr = rMacroDescr; ImplMarkCurrentModule(); }
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
