@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-20 12:16:19 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,7 @@ EditLine* EditLine::Clone() const
     pL->nStartPortion   = nStartPortion;
     pL->nEndPortion     = nEndPortion;
     pL->nHeight         = nHeight;
+    pL->nTxtWidth       = nTxtWidth;
     pL->nTxtHeight      = nTxtHeight;
     pL->nCrsrHeight     = nCrsrHeight;
     pL->nMaxAscent      = nMaxAscent;
