@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 14:01:21 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:45:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ TARGET=dialogs
 
 SRS1NAME=$(TARGET)
 SRC1FILES=		filedlg2.src	\
+                                so3res.src    \
+                                formats.src    \
                 prnsetup.src	\
                 printdlg.src	\
                 colrdlg.src		\
@@ -83,11 +85,13 @@ SRC1FILES=		filedlg2.src	\
 
 
 EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
+                                $(SLO)$/insdlg.obj       \
                     $(SLO)$/printdlg.obj \
                     $(SLO)$/wizardmachine.obj
 
 
 SLOFILES=		$(SLO)$/registrationdlg.obj 	\
+                $(SLO)$/insdlg.obj       \
                 $(SLO)$/roadmapwizard.obj 	\
                 $(SLO)$/wizardmachine.obj 	\
                 $(SLO)$/addresstemplate.obj 	\
