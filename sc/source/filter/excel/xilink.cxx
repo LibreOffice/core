@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:02:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,8 @@ public:
     /** Reads an EXTERNNAME record. */
     void                        ReadExternname( XclImpStream& rStrm );
 
-    /** Returns true, if this SUPBOOK contains internal 3D references. */
-    inline bool                 IsSelfRef() const { return mbSelf; }
-    /** Returns true, if this SUPBOOK contains add-in function names. */
-    inline bool                 IsAddIn() const { return mbAddIn; }
+    /** Returns the SUPBOOK record type. */
+    inline XclSupbookType       GetType() const { return meType; }
 
     /** Returns the URL of the external document. */
     inline const String&        GetXclUrl() const { return maXclUrl; }
@@ -199,9 +197,8 @@ private:
     String                      maXclUrl;           /// URL of the external document (Excel mode).
     String                      maFilterName;       /// Detected filer name.
     String                      maFilterOpt;        /// Detected filer options.
+    XclSupbookType              meType;             /// Type of the supbook record.
     sal_uInt16                  mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
-    bool                        mbSelf;             /// true = internal 3D references.
-    bool                        mbAddIn;            /// true = Add-in function names.
 };
 
 
@@ -650,26 +647,29 @@ void XclImpSupbookTab::CreateAndFillTable(
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     mnSBTab( EXC_EXTSH_DELETED ),
-    mbSelf( false ),
-    mbAddIn( false )
+    meType( EXC_SBTYPE_UNKNOWN )
 {
     sal_uInt16 nSBTabCnt;
     rStrm >> nSBTabCnt;
 
     if( rStrm.GetRecLeft() == 2 )
     {
-        sal_uInt16 nType = rStrm.ReaduInt16();
-        mbSelf = (nType == EXC_SUPB_SELF);
-        mbAddIn = (nType == EXC_SUPB_ADDIN);
-        DBG_ASSERT( mbSelf || mbAddIn, "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
+        switch( rStrm.ReaduInt16() )
+        {
+            case EXC_SUPB_SELF:     meType = EXC_SBTYPE_SELF;   break;
+            case EXC_SUPB_ADDIN:    meType = EXC_SBTYPE_ADDIN;  break;
+            default:    DBG_ERRORFILE( "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
+        }
         return;
     }
 
     String aEncUrl( rStrm.ReadUniString() );
-    XclImpUrlHelper::DecodeUrl( maXclUrl, mbSelf, rStrm.GetRoot(), aEncUrl );
+    bool bSelf = false;
+    XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, rStrm.GetRoot(), aEncUrl );
 
     if( nSBTabCnt )
     {
+        meType = EXC_SBTYPE_EXTERN;
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
             String aTabName( rStrm.ReadUniString() );
@@ -678,8 +678,11 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         }
     }
     else
+    {
+        meType = EXC_SBTYPE_SPECIAL;
         // create dummy list entry
         maSupbTabList.Append( new XclImpSupbookTab( maXclUrl ) );
+    }
 }
 
 void XclImpSupbook::ReadXct( XclImpStream& rStrm )
@@ -703,12 +706,12 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 
 void XclImpSupbook::ReadExternname( XclImpStream& rStrm )
 {
-    maExtNameList.Append( new XclImpExtName( rStrm, mbAddIn ) );
+    maExtNameList.Append( new XclImpExtName( rStrm, meType == EXC_SBTYPE_ADDIN ) );
 }
 
 SCTAB XclImpSupbook::GetScTabNum( sal_uInt16 nXclTab ) const
 {
-    if( mbSelf )
+    if( meType == EXC_SBTYPE_SELF )
         return static_cast< SCTAB >( nXclTab );
     const XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nXclTab );
     return pSBTab ? pSBTab->GetScTab() : SCNOTAB;
@@ -725,17 +728,17 @@ SCTAB XclImpSupbook::GetScTabNum( const String& rTabName ) const
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 {
     DBG_ASSERT( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
-    return mbSelf ? NULL : maExtNameList.GetObject( nXclIndex - 1 );
+    return (meType == EXC_SBTYPE_SELF) ? 0 : maExtNameList.GetObject( nXclIndex - 1 );
 }
 
 bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
 {
-    return !mbSelf && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
+    return (meType == EXC_SBTYPE_SPECIAL) && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
 }
 
 void XclImpSupbook::CreateTables( const XclImpRoot& rRoot, sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast )
 {
-    if( !mbSelf && (rRoot.GetExtDocOptions().nLinkCnt < 1) && rRoot.GetDocShell() )
+    if( (meType == EXC_SBTYPE_EXTERN) && (rRoot.GetExtDocOptions().nLinkCnt < 1) && rRoot.GetDocShell() )
     {
         String aAbsUrl( ScGlobal::GetAbsDocName( maXclUrl, rRoot.GetDocShell() ) );
 
@@ -802,7 +805,7 @@ void XclImpLinkManager_Impl::ReadExternname( XclImpStream& rStrm )
 bool XclImpLinkManager_Impl::IsSelfRef( sal_uInt16 nXtiIndex ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( nXtiIndex );
-    return pSupbook && pSupbook->IsSelfRef();
+    return pSupbook && (pSupbook->GetType() == EXC_SBTYPE_SELF);
 }
 
 bool XclImpLinkManager_Impl::GetScTabRange(
