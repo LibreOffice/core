@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,10 @@ class SbiParser : public SbiTokenizer
 
     SbiSymDef*  VarDecl( SbiDimList**,BOOL,BOOL );// Variablen-Deklaration
     SbiProcDef* ProcDecl(BOOL bDecl);// Prozedur-Deklaration
-    void DefProc( BOOL bStatic );   // Prozedur einlesen
+    void DefStatic( BOOL bPrivate );
+    void DefProc( BOOL bStatic, BOOL bPrivate ); // Prozedur einlesen
     void DefVar( SbiOpcode eOp, BOOL bStatic ); // DIM/REDIM einlesen
-    void TypeDecl( SbiSymDef& );    // AS-Deklaration
+    void TypeDecl( SbiSymDef&, BOOL bAsNewAlreadyParsed=FALSE );    // AS-Deklaration
     void OpenBlock( SbiToken, SbiExprNode* = NULL );    // Block oeffnen
     void CloseBlock();              // Block aufloesen
     BOOL Channel( BOOL=FALSE );     // Kanalnummer parsen
@@ -118,6 +119,7 @@ public:
 
     // AB 31.3.1996, Symbol in Runtime-Library suchen
     SbiSymDef* CheckRTLForSym( const String& rSym, SbxDataType eType );
+    void AddConstants( void );
 
     BOOL HasGlobalCode();           // Globaler Code definiert?
 
