@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:40:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,7 @@ WarningBox MSG_WARNING_BACKUP
     Message[ russian ] = "Ñîçäàòü çàïàñíóş êîïèş íå óäàåòñÿ.";
     Message[ polish ] = "Kopii zapasowej nie mo¿na by³o utworzyæ.";
     Message[ japanese ] = "ÊŞ¯¸±¯Ìß ºËß°‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Message[ chinese_traditional ] = "µLªk«Ø¥ß¦w¥ş³Æ¥ó¡C";
+    Message[ chinese_traditional ] = "µLªk²£¥Í¦w¥ş³Æ¥÷¡C";
     Message[ arabic ] = "ÊÚĞÑ Úãá äÓÎÉ ÇÍÊíÇØíÉ.";
     Message[ dutch ] = "Reservekopie kon niet worden gemaakt.";
     Message[ chinese_simplified ] = "ÎŞ·¨½¨Á¢°²È«±¸¼ş¡£";
@@ -602,7 +602,7 @@ String STR_TEMPLATE_FILTER
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
     Text[ russian ] = "Øàáëîíû äîêóìåíòîâ";
     Text[ polish ] = "Szablony dokumentów";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÃİÌßÚ°Ä";
+    Text[ japanese ] = "ÄŞ·­ÒİÄÃİÌßÚ°Ä";
     Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
     Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
     Text[ dutch ] = "Sjablonen";
