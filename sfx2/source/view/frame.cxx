@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:39:46 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 17:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,8 +327,7 @@ sal_Bool SfxFrame::DoClose()
         // leider nicht auf dem MAC
         Window *pWin = NULL;
         SfxViewShell *pViewSh;
-        if ( pImp->pCurrentViewFrame &&
-             0 != ( pViewSh = pImp->pCurrentViewFrame->GetViewShell() ) )
+        if ( pImp->pCurrentViewFrame && 0 != ( pViewSh = pImp->pCurrentViewFrame->GetViewShell() ) )
         {
             pWin = pViewSh->GetWindow();
             if ( pWin )
@@ -351,7 +350,8 @@ sal_Bool SfxFrame::DoClose()
             DELETEZ( pImp->pWorkWin );
         }
 
-        bRet = pImp->pCurrentViewFrame->Close();
+        if ( pImp->pCurrentViewFrame )
+            bRet = pImp->pCurrentViewFrame->Close();
 
         if ( pImp->bOwnsBindings )
             delete pBindings;
