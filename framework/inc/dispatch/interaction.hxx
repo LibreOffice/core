@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 11:57:56 $
+ *  last change: $Author: rt $ $Date: 2001-11-14 16:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,8 @@ class RequestFilterSelect : public ::cppu::WeakImplHelper1< css::task::XInteract
         //---------------------------------------------------------------------------------------------------------
         RequestFilterSelect( const ::rtl::OUString& sURL )
         {
-            css::document::NoSuchFilterRequest aFilterRequest( ::rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), sURL );
+            ::rtl::OUString aStr;
+            css::document::NoSuchFilterRequest aFilterRequest( aStr, css::uno::Reference< css::uno::XInterface >(), sURL );
             m_aRequest <<= aFilterRequest;
 
             m_pAbort  = new ContinuationAbort       ;
