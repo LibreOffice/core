@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-12 15:40:09 $
+ *  last change: $Author: kr $ $Date: 2001-04-19 15:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.17 $ $ $Date: 2001-03-12 15:40:09 $
+ * @version     $Revision: 1.18 $ $ $Date: 2001-04-19 15:56:19 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -764,10 +764,24 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                     // THIS IS A ***WORKAROUND*** FOR LINUX SUN JDK1.3 PROBLEM:
                     // THE MESSAGEDISPATCHER STAYS IN THE SOCKET READ METHOD,
                     // EVEN IF THE SOCKET HAS BEEN CLOSED.
-                    // SUSPENDING AND RESUMING THE MESSAGEDISPATCHER LET IT
+                    // SUSPENDING AND RESUMING THE MESSAGEDISPATCHER LETS IT
                     // NOTICE THE CLOSED SOCKET
-                    _messageDispatcher.suspend();
-                    _messageDispatcher.resume();
+
+                    // NOTE!NOTE!NOTE! ONLY USE THIS WORKAROUND FOR LINUX JDK1.3.0
+                    // NOTE!NOTE!NOTE! FROM SUN OR BLACKDOWN
+                    // NOTE!NOTE!NOTE! THIS WORKAROUND IS DANGEROUSE AND MAY HARDLOCK
+                    // NOTE!NOTE!NOTE! THE VM
+                    if(System.getProperty("os.name", "notlinux").toLowerCase().equals("linux")
+                    && System.getProperty("java.version", "not1.3").startsWith("1.3.0")
+                    && (System.getProperty("java.vendor", "notsun").toLowerCase().indexOf("sun") != -1
+                     || System.getProperty("java.vendor", "notblackdown").toLowerCase().indexOf("blackdown") != -1))
+                    {
+                        if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - using linux workaround for SUN or BLACKDOWN jdk1.3.0");
+                        _messageDispatcher.suspend();
+                        _messageDispatcher.resume();
+                    }
+                      else
+                        if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - not using linux workaround");
 
                     _messageDispatcher.join(1000); // wait for thread to die
 
