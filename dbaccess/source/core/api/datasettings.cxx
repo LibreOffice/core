@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:04:57 $
+ *  last change: $Author: oj $ $Date: 2001-02-20 09:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,8 @@ using namespace ::cppu;
 namespace dbaccess
 {
 //........................................................................
-::com::sun::star::awt::FontDescriptor ODataSettings::m_aAppFont;
+::com::sun::star::awt::FontDescriptor ODataSettings_Base::m_aAppFont;
+
 float ConvertFontWeight( ::FontWeight eWeight )
 {
     if( eWeight == WEIGHT_DONTKNOW )
