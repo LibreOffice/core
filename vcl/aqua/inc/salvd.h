@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:27 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,15 @@
 
 struct SalVirDevData
 {
-    SalGraphics*            mpGraphics;             // current VirDev graphics
-    USHORT                  mnBitCount;             // GWorld pixel depth
-    long                    mnWidth;                // GWorld width
-    long                    mnHeight;               // GWorld height
-    BOOL                    mbGraphics;             // is Graphics used?
+    SalGraphics  *mpGraphics;    // current VirDev graphics
+    USHORT        mnBitCount;    // GWorld pixel depth
+    long          mnWidth;       // GWorld width
+    long          mnHeight;      // GWorld height
+    BOOL          mbGraphics;    // is Graphics used?
 };
+
+typedef struct SalVirDevData   SalVirDevData;
+typedef SalVirDevData         *SalVirDevDataPtr;
+typedef SalVirDevDataPtr      *SalVirDevDataHandle;
 
 #endif // _SV_SALVD_H
