@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:42:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,10 @@ namespace connectivity
             MDatabaseMetaDataHelper( );
             ~MDatabaseMetaDataHelper();
 
+            //PROXIED_FUNCTION
             sal_Bool getTableStrings( OConnection*                        _pCon,
                                       ::std::vector< ::rtl::OUString >&   _rStrings,
-                                      ::std::vector< ::rtl::OUString >&   _rTypes,
-                                      sal_Bool                            forceLoad = sal_False );
+                                      ::std::vector< ::rtl::OUString >&   _rTypes);
 
             sal_Bool getTables( OConnection* _pCon,
                                 const ::rtl::OUString& tableNamePattern,
@@ -143,14 +143,14 @@ namespace connectivity
 
             const ::rtl::OUString& getErrorString() { return m_aErrorString; }
 
-            sal_Bool    testLDAPConnection( OConnection* _pCon );
+            sal_Bool   testLDAPConnection( OConnection* _pCon );
+            sal_Bool   NewAddressBook( OConnection* _pCon,const ::rtl::OUString & aTableName);
 
         private:
             sal_Bool                            m_bProfileExists ;
             ::std::vector< ::rtl::OUString >    m_aTableNames;
             ::std::vector< ::rtl::OUString >    m_aTableTypes;
             ::rtl::OUString                     m_aErrorString;
-
             void setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI );
         };
     }
