@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:53:25 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                                         RTL_CONSTASCII_STRINGPARAM( "  - " ));
                         sPageStr.Insert( aCnt.sStr, 0, 80 );
                         sPageStr.SearchAndReplaceAll( '\t', ' ' );
+                        sPageStr.SearchAndReplaceAll( 0x0a, ' ' );
                     }
 
                     Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
