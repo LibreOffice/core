@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:07:14 $
+ *  last change: $Author: dl $ $Date: 2001-06-29 13:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ static USHORT SidArray[] = {
     SID_STYLE_FAMILY5,                //    5545
     SID_CUT,                          //    5710
     SID_COPY,                         //    5711
-//  SID_ATTR_TABSTOP,                 //   10002
+    SID_ATTR_TABSTOP,                 //   10002
     SID_ATTR_CHAR_FONT,               //   10007
     SID_ATTR_CHAR_POSTURE,            //   10008
     SID_ATTR_CHAR_WEIGHT,             //   10009
