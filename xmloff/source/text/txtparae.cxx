@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:34:54 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                                  GetExport() );
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
     xParaDefaultPropMapper->ChainExportMapper(
-        new XMLTextExportPropertySetMapper( xPropMapper, GetExport() ) );
+        new SvXMLExportPropertyMapper( xPropMapper ) );
 
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
