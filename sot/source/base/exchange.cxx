@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:34:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,12 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+#include <tools/globname.hxx>
 #include <tools/string.hxx>
 #include <sotdata.hxx>
 #include <exchange.hxx>
 #include <formats.hxx>
+#include <clsids.hxx>
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
@@ -565,4 +567,18 @@ String SotExchange::GetFormatStaticName( ULONG nFormat )
 ULONG SotExchange::GetMaxFormat( void )
 {
     return( SOT_FORMATSTR_ID_USER_END + InitFormats_Impl().Count() );
+}
+
+BOOL SotExchange::IsInternal( const SvGlobalName& rName )
+{
+    if ( rName == SvGlobalName(SO3_SW_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SC_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SIMPRESS_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SDRAW_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SCH_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SM_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SWWEB_CLASSID_60) ||
+         rName == SvGlobalName(SO3_SWGLOB_CLASSID_60) )
+        return TRUE;
+    return FALSE;
 }
