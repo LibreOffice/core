@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:08:13 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:45:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,13 @@ PRJ=..$/..
 
 PRJNAME=cpputools
 TARGET=uno
-TARGETTYPE=CUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -106,11 +103,10 @@ UNOTYPES= \
 
 # --- Files --------------------------------------------------------
 
-CXXFILES= \
-    unoexe.cxx
+DEPOBJFILES=$(OBJ)$/unoexe.obj
 
 APP1TARGET=$(TARGET)
-APP1OBJS=$(OBJ)$/unoexe.obj 
+APP1OBJS=$(DEPOBJFILES)  
 
 APP1STDLIBS= \
     $(SALLIB)		\
