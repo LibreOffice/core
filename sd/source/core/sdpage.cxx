@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: dl $ $Date: 2000-09-22 08:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
         String aString = GetPresObjText(eObjKind);
         pSdrObj->SetEmptyPresObj(TRUE);
         pSdrObj->SetLogicRect(rRect);
+        InsertObject(pSdrObj);
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
@@ -439,7 +440,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
         }
 
         pSdrObj->SetUserCall(this);
-        InsertObject(pSdrObj);
         pSdrObj->RecalcBoundRect();
 
         if (bMaster)
