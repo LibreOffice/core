@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:11:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         xub_StrLen nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
-        nError = po->Read( *pDoc, *pPam, aFileName );
+        nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
 
         if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
         {
@@ -514,7 +514,7 @@ ULONG SwReader::Read( const Reader& rOptions )
 
 // Initiales Einlesben
 
-
+                                       /*
 SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
     : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
     aFileName(rFileName)
@@ -525,31 +525,34 @@ SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String&
     : SwDocFac(pDoc), pStrm(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
 {
 }
-
+                                         */
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
     : SwDocFac(pDoc), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
 {
+    SetBaseURL( rMedium.GetBaseURL() );
 }
 
 // In ein existierendes Dokument einlesen
 
-SwReader::SwReader(SvStream& rStrm, const String& rFileName, SwPaM& rPam)
+SwReader::SwReader(SvStream& rStrm, const String& rFileName, const String& rBaseURL, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(0), pCrsr(&rPam),
     aFileName(rFileName)
 {
+    SetBaseURL( rBaseURL );
 }
-
+/*
 SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(&rPam),
     aFileName(rFileName)
 {
 }
-
+*/
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
 {
+    SetBaseURL( rMedium.GetBaseURL() );
 }
 
 Reader::Reader()
@@ -582,7 +585,9 @@ SwDoc* Reader::GetTemplateDoc()
         ClearTemplate();
     else
     {
-        INetURLObject aTDir( URIHelper::SmartRelToAbs(aTemplateNm) );
+        INetURLObject aTDir( aTemplateNm );
+        String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
+        DBG_ASSERT( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime;
         BOOL bLoad = FALSE;
 
@@ -613,27 +618,6 @@ SwDoc* Reader::GetTemplateDoc()
             ClearTemplate();
             ASSERT( !pTemplate, "Who holds the template doc?" );
 
-            SvStorageRef xStor( new SvStorage( aTDir.GetFull(), STREAM_READ ));
-            ULONG nFormat = xStor->GetFormat();
-            long nVersion = SOFFICE_FILEFORMAT_60;
-            switch( nFormat )
-            {
-            case SOT_FORMATSTR_ID_STARWRITER_50:
-            case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
-            case SOT_FORMATSTR_ID_STARWRITERWEB_50:
-                nVersion = SOFFICE_FILEFORMAT_50;
-                break;
-            case SOT_FORMATSTR_ID_STARWRITER_40:
-            case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
-            case SOT_FORMATSTR_ID_STARWRITERWEB_40:
-                nVersion = SOFFICE_FILEFORMAT_40;
-                break;
-            case SOT_FORMATSTR_ID_STARWRITER_30:
-                nVersion = SOFFICE_FILEFORMAT_31;
-                break;
-            }
-            if( nVersion >= SOFFICE_FILEFORMAT_60 )
-            {
                 // #95605#: If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
                 // SwWebDocShell however, because this exists always
@@ -653,18 +637,17 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( TRUE );
-                        SwReader aRdr( *xStor, aEmptyStr, pTemplate );
+                        SfxMedium aMedium( aFileName, FALSE );
+                        SwReader aRdr( aMedium, aEmptyStr, pTemplate );
                         aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( FALSE );
 
                         pTemplate->AddLink();
                     }
                 }
-            }
         }
 
-        ASSERT( !pTemplate || FStatHelper::IsDocument(
-                aTDir.GetMainURL( INetURLObject::NO_DECODE ) ) ||
+        ASSERT( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
                 aTemplateNm.EqualsAscii( "$$Dummy$$" ),
                 "TemplatePtr but no template exist!" );
     }
@@ -767,27 +750,6 @@ void Reader::SetFltName( const String& )
 void Reader::SetNoOutlineNum( SwDoc& rDoc )
 {
     // JP 10.03.96: jetzt wieder keine Nummerierung in den Vorlagen
-
-#if 0
-    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
-    //              Kapitelnummer. Darum hier explizit abschalten
-    //              weil das Default jetzt wieder auf AN ist.
-    SwNumRules aRules( OUTLINE_RULES );
-    if( rDoc.GetOutlineNumRules() )
-        aRules = *rDoc.GetOutlineNumRules();
-    for( BYTE n = 0; n < MAXLEVEL; ++n )
-    {
-        SwNumFmt aFmt( aRules.Get( n ) );
-        aFmt.eType = NUMBER_NONE;
-        aRules.Set( n, aFmt );
-    }
-    rDoc.SetOutlineNumRules( aRules );
-
-    // und UeberschirftBasis ohne Einrueckung!
-    SwTxtFmtColl* pCol = rDoc.GetTxtCollFromPoolSimple
-        ( RES_POOLCOLL_HEADLINE_BASE, FALSE );
-    pCol->ResetAttr( RES_LR_SPACE );
-#endif
 }
 
 
