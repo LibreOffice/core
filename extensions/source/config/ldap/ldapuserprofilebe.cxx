@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprofilebe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:38:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,10 @@ static rtl::OUString getCurrentModuleDirectory() // URL excluding terminating sl
 
     return aFileURL.copy(0, aFileURL.lastIndexOf('/') );
 }
+
+bool LdapUserProfileBe::mCanReadConfiguration = true ;
+osl::Mutex LdapUserProfileBe::mReadConfigurationLock ;
+
 //------------------------------------------------------------------------------
 LdapUserProfileBe::LdapUserProfileBe(
         const uno::Reference<uno::XComponentContext>& xContext)
@@ -143,46 +147,64 @@ LdapUserProfileBe::LdapUserProfileBe(
           mUserProfileMap(),
           mLdapConnection()
 {
-    static bool isInitializing =false;
-    if (!isInitializing)
+    LdapDefinition aDefinition;
+    bool result = false ;
+
+    // This whole rigmarole is to prevent an infinite recursion where reading
+    // the configuration for the backend would create another instance of the
+    // backend, which would try and read the configuration which would...
+    mReadConfigurationLock.acquire() ;
+    try
     {
-        isInitializing=true;
-
-        LdapDefinition aDefinition;
-        if (isLdapConfigured(aDefinition))
+        if (mCanReadConfiguration)
         {
-
-            try
-            {
-                connectToLdapServer(aDefinition);
-                //Set the UserDN
-                mUserDN = mLdapConnection.findUserDn(
-                    rtl::OUStringToOString(mLoggedOnUser, RTL_TEXTENCODING_ASCII_US));
-            }
-            catch(ldap::LdapGenericException& exception)
-            {
-                mapGenericException(exception) ;
-            }
-            initializeMappingTable(
-                rtl::OStringToOUString(aDefinition.mMapping,
-                RTL_TEXTENCODING_ASCII_US));
+            mCanReadConfiguration = false ;
+            result = isLdapConfigured(aDefinition) ;
+            mCanReadConfiguration = true ;
         }
-        else
+    }
+    catch (uno::Exception& exception)
+    {
+        mReadConfigurationLock.release() ;
+        throw ;
+    }
+    mReadConfigurationLock.release() ;
+    if (result)
+    {
+        try
         {
-            throw backend::BackendSetupException(
-                rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
-                NULL, uno::Any());
+            mLdapConnection.connectSimple(aDefinition);
+            //Set the UserDN
+            mUserDN = mLdapConnection.findUserDn(
+                rtl::OUStringToOString(mLoggedOnUser, RTL_TEXTENCODING_ASCII_US));
         }
+        catch (lang::IllegalArgumentException& exception)
+        {
+            throw backend::BackendSetupException(exception.Message, NULL,
+                                                 uno::makeAny(exception)) ;
+        }
+        catch (ldap::LdapConnectionException& exception)
+        {
+            throw backend::BackendSetupException(exception.Message, NULL,
+                                                 uno::makeAny(exception)) ;
+        }
+        catch(ldap::LdapGenericException& exception)
+        {
+            mapGenericException(exception) ;
+        }
+        initializeMappingTable(
+            rtl::OStringToOUString(aDefinition.mMapping,
+            RTL_TEXTENCODING_ASCII_US));
+    }
+    else
+    {
+        throw backend::BackendSetupException(
+            rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
+            NULL, uno::Any());
     }
 }
 //------------------------------------------------------------------------------
 LdapUserProfileBe::~LdapUserProfileBe(void) {
-}
-//------------------------------------------------------------------------------
-void LdapUserProfileBe::connectToLdapServer(const LdapDefinition& aDefinition)
-{
-    mLdapConnection.connectSimple(aDefinition);
-
 }
 //------------------------------------------------------------------------------
 
