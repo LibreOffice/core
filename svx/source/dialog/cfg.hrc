@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cfg.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:10:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define CFG_OFFSET 300
+
+#define GRP_MENUS (9 + CFG_OFFSET)
+#define FT_MENUS (10 + CFG_OFFSET)
+#define LB_MENUS (11 + CFG_OFFSET)
+#define BTN_NEW (12 + CFG_OFFSET)
+#define BTN_CHANGE (14 + CFG_OFFSET)
+#define GRP_MENU_SEPARATOR (15 + CFG_OFFSET)
+#define GRP_MENU_ENTRIES (16 + CFG_OFFSET)
+#define BOX_ENTRIES (17 + CFG_OFFSET)
+#define BTN_CHANGE_ENTRY (18 + CFG_OFFSET)
+#define BTN_UP (19 + CFG_OFFSET)
+#define BTN_DOWN (20 + CFG_OFFSET)
+#define GRP_DESCRIPTION (22 + CFG_OFFSET)
+#define TXT_SAVEIN (23 + CFG_OFFSET)
+#define LB_SAVEIN (24 + CFG_OFFSET)
+#define TXT_DESCRIPTION (25 + CFG_OFFSET)
+#define BTN_ADD_COMMANDS (26 + CFG_OFFSET)
+
+#define MODIFY_MENU (40 + CFG_OFFSET)
+#define MODIFY_ENTRY (41 + CFG_OFFSET)
+#define ID_RENAME (42 + CFG_OFFSET)
+#define ID_MOVE (43 + CFG_OFFSET)
+#define ID_DELETE (44 + CFG_OFFSET)
+#define ID_ADD_SUBMENU (45 + CFG_OFFSET)
+#define ID_BEGIN_GROUP (46 + CFG_OFFSET)
+#define ID_DEFAULT_STYLE (47 + CFG_OFFSET)
+#define ID_ICONS_ONLY (48 + CFG_OFFSET)
+#define ID_ICONS_AND_TEXT (49 + CFG_OFFSET)
+#define ID_ICON_ONLY (50 + CFG_OFFSET)
+#define ID_ICON_AND_TEXT (51 + CFG_OFFSET)
+#define ID_TEXT_ONLY (52 + CFG_OFFSET)
+#define ID_CHANGE_SYMBOL (53 + CFG_OFFSET)
+#define ID_RESET_SYMBOL (54 + CFG_OFFSET)
+
+#define MODIFY_TOOLBAR (60 + CFG_OFFSET)
+#define MODIFY_TOOLBAR_CONTENT (61 + CFG_OFFSET)
+
+#define IBX_MNUCFG_ALREADY_INCLUDED (63 + CFG_OFFSET)
+#define QBX_CONFIRM_RESET (64 + CFG_OFFSET)
+#define QBX_CONFIRM_DELETE_MENU (65 + CFG_OFFSET)
+#define QBX_CONFIRM_RESTORE_DEFAULT (66 + CFG_OFFSET)
+
+#define MD_MENU_ORGANISER (79 + CFG_OFFSET)
+#define TXT_MENU (80 + CFG_OFFSET)
+#define BOX_MAIN_MENUS (81 + CFG_OFFSET)
+#define BTN_MENU_UP (82 + CFG_OFFSET)
+#define BTN_MENU_DOWN (83 + CFG_OFFSET)
+#define BTN_MENU_ADD (84 + CFG_OFFSET)
+#define BTN_MENU_CLOSE (85 + CFG_OFFSET)
+#define BTN_MENU_HELP (86 + CFG_OFFSET)
+#define TXT_MENU_NAME (87 + CFG_OFFSET)
+#define EDIT_MENU_NAME (88 + CFG_OFFSET)
+
+#define MD_ICONSELECTOR (90 + CFG_OFFSET)
+#define FT_SYMBOLS (91 + CFG_OFFSET)
+#define TB_SYMBOLS (92 + CFG_OFFSET)
+#define FT_NOTE (93 + CFG_OFFSET)
+#define BTN_IMPORT (97 + CFG_OFFSET)
+#define IMAGE_BTN_COLOR (98 + CFG_OFFSET)
+
+#define MD_NEW_TOOLBAR (101 + CFG_OFFSET)
+#define EDT_STRING (102 + CFG_OFFSET)
+#define BTN_OK (103 + CFG_OFFSET)
+#define BTN_CANCEL (104 + CFG_OFFSET)
+#define BTN_HELP (105 + CFG_OFFSET)
+#define FT_DESCRIPTION (106 + CFG_OFFSET)
