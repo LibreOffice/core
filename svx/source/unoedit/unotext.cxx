@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-24 13:58:31 $
+ *  last change: $Author: sab $ $Date: 2000-10-30 11:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,11 +442,19 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
             uno::Reference< container::XIndexReplace > xNumRule;
             if(aValue >>= xNumRule)
             {
-                SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
-
-                if( pNumRules && pNumRules->GetNumBulletItem())
+                if( xNumRule.is())
                 {
-                    rNewSet.Put(*pNumRules->GetNumBulletItem());
+                    SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
+
+                    if( pNumRules && pNumRules->GetNumBulletItem())
+                    {
+                        rNewSet.Put(*pNumRules->GetNumBulletItem());
+                        return sal_True;
+                    }
+                }
+                else
+                {
+                    rNewSet.ClearItem(EE_PARA_NUMBULLET);
                     return sal_True;
                 }
             }
