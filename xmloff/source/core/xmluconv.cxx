@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:52:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,11 @@
 #include <vcl/fldunit.hxx>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
@@ -150,15 +152,17 @@ void SvXMLUnitConverter::initXMLStrings()
 
 void SvXMLUnitConverter::createNumTypeInfo() const
 {
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
-    OSL_ENSURE( xServiceFactory.is(),
-            "XMLUnitConverter: got no service factory" );
-    if( xServiceFactory.is() )
+    // #110680#
+    //Reference< lang::XMultiServiceFactory > xServiceFactory =
+    //        comphelper::getProcessServiceFactory();
+    //OSL_ENSURE( xServiceFactory.is(),
+    //        "XMLUnitConverter: got no service factory" );
+
+    if( mxServiceFactory.is() )
     {
         ((SvXMLUnitConverter *)this)->xNumTypeInfo =
             Reference < XNumberingTypeInfo > (
-                xServiceFactory->createInstance(
+                mxServiceFactory->createInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider") ) ), UNO_QUERY );
     }
 }
@@ -167,10 +171,19 @@ void SvXMLUnitConverter::createNumTypeInfo() const
     default unit for numerical measures, the XML measure unit is
     the default unit for textual measures
 */
-SvXMLUnitConverter::SvXMLUnitConverter( MapUnit eCoreMeasureUnit,
-                                        MapUnit eXMLMeasureUnit ) :
-    aNullDate(30, 12, 1899)
+
+// #110680#
+//SvXMLUnitConverter::SvXMLUnitConverter( MapUnit eCoreMeasureUnit,
+//                                        MapUnit eXMLMeasureUnit ) :
+SvXMLUnitConverter::SvXMLUnitConverter(
+    MapUnit eCoreMeasureUnit,
+    MapUnit eXMLMeasureUnit,
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory ) :
+    aNullDate(30, 12, 1899),
+    mxServiceFactory( xServiceFactory )
 {
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+
     meCoreMeasureUnit = eCoreMeasureUnit;
     meXMLMeasureUnit = eXMLMeasureUnit;
 }
