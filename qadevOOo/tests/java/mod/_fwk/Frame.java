@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:53:06 $
+ *  last change:$Date: 2003-10-06 13:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
 /**
 * Test for object that implements the following interfaces :
@@ -136,6 +137,7 @@ public class Frame extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
+
     /**
      * Disposes the document created and finally disposes
      * the frame containing the document (for case when the frame
@@ -143,8 +145,8 @@ public class Frame extends TestCase {
      */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
-            xTextDoc.dispose();
-            frame.dispose();
+            XCloseable xTextClose = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
+            xTextClose.close(true);
         } catch(Exception e){}
 
     }
