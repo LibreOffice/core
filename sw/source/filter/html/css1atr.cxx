@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:40:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3497,7 +3497,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
-                sGrfNm = URIHelper::SmartRelToAbs( sGrfNm );
+                sGrfNm = URIHelper::SmartRel2Abs(
+                    INetURLObject(rWrt.GetBaseURL()), sGrfNm,
+                    URIHelper::GetMaybeFileHdl() );
                 pLink = &sGrfNm;
             }
             else
@@ -3599,9 +3601,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
             sOut.AppendAscii( sCSS1_url );
             sOut.Append( '(' );
-            sOut.Append( String(INetURLObject::AbsToRel( *pLink,
-                                    INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS)));
+            sOut.Append( String(URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+              *pLink)));
+
             sOut.Append( ')' );
 
             if( pRepeat )
