@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:41:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,12 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();
     const SfxPoolItem* pItem;
 
-    USHORT i;
-    USHORT nX;
-    USHORT nY;
-    USHORT nStartCol = 0;
-    USHORT nStartRow = 0;
-    USHORT nEndCol = MAXCOL;
-    USHORT nEndRow = MAXROW;
+    SCCOL nX;
+    SCROW nY;
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCCOL nEndCol = MAXCOL;
+    SCROW nEndRow = MAXROW;
     if (pUserArea)
     {
         nStartCol = pUserArea->aStart.Col();
@@ -172,14 +171,14 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     for (nY=0; nY<nStartRow; nY++)
         pRowFlags[nY] &= ~CR_PAGEBREAK;
 
-    if (nStartCol)
+    if (nStartCol > 0)
         pColFlags[nStartCol] |= CR_PAGEBREAK;           //! AREABREAK
-    if (nStartRow)
+    if (nStartRow > 0)
         pRowFlags[nStartRow] |= CR_PAGEBREAK;           //! AREABREAK
 
         //  Mittelteil: Breaks verteilen
 
-    BOOL bRepeatCol = ( nRepeatStartX != REPEAT_NONE );
+    BOOL bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     BOOL bColFound = FALSE;
     long nSizeX = 0;
     for (nX=nStartCol; nX<=nEndCol; nX++)
@@ -200,7 +199,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         if ( bStartOfPage && bRepeatCol && nX>nRepeatStartX && !bColFound )
         {
             // subtract size of repeat columns from page size
-            for (i=nRepeatStartX; i<=nRepeatEndX; i++)
+            for (SCCOL i=nRepeatStartX; i<=nRepeatEndX; i++)
                 nPageSizeX -= ( pColFlags[i] & CR_HIDDEN ) ? 0 : pColWidth[i];
             while (nX<=nRepeatEndX)
                 pColFlags[++nX] &= ~CR_PAGEBREAK;
@@ -210,7 +209,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeX += nThisX;
     }
 
-    BOOL bRepeatRow = ( nRepeatStartY != REPEAT_NONE );
+    BOOL bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
     BOOL bRowFound = FALSE;
     long nSizeY = 0;
     for (nY=nStartRow; nY<=nEndRow; nY++)
@@ -231,7 +230,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
             // subtract size of repeat rows from page size
-            for (i=nRepeatStartY; i<=nRepeatEndY; i++)
+            for (SCROW i=nRepeatStartY; i<=nRepeatEndY; i++)
                 nPageSizeY -= ( pRowFlags[i] & CR_HIDDEN ) ? 0 : pRowHeight[i];
             while (nY<=nRepeatEndY)
                 pRowFlags[++nY] &= ~CR_PAGEBREAK;
@@ -260,23 +259,23 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 void ScTable::RemoveManualBreaks()
 {
     if (pColFlags)
-        for (USHORT nCol = 0; nCol <= MAXCOL; nCol++)
+        for (SCCOL nCol = 0; nCol <= MAXCOL; nCol++)
             pColFlags[nCol] &= ~CR_MANUALBREAK;
 
     if (pRowFlags)
-        for (USHORT nRow = 0; nRow <= MAXROW; nRow++)
+        for (SCROW nRow = 0; nRow <= MAXROW; nRow++)
             pRowFlags[nRow] &= ~CR_MANUALBREAK;
 }
 
 BOOL ScTable::HasManualBreaks() const
 {
     if (pColFlags)
-        for (USHORT nCol = 0; nCol <= MAXCOL; nCol++)
+        for (SCCOL nCol = 0; nCol <= MAXCOL; nCol++)
             if ( pColFlags[nCol] & CR_MANUALBREAK )
                 return TRUE;
 
     if (pRowFlags)
-        for (USHORT nRow = 0; nRow <= MAXROW; nRow++)
+        for (SCROW nRow = 0; nRow <= MAXROW; nRow++)
             if ( pRowFlags[nRow] & CR_MANUALBREAK )
                 return TRUE;
 
@@ -302,7 +301,7 @@ Size ScTable::GetPageSize() const
         return Size();  // leer
 }
 
-void ScTable::SetRepeatArea( USHORT nStartCol, USHORT nEndCol, USHORT nStartRow, USHORT nEndRow )
+void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
 {
     nRepeatStartX = nStartCol;
     nRepeatEndX   = nEndCol;
@@ -310,12 +309,12 @@ void ScTable::SetRepeatArea( USHORT nStartCol, USHORT nEndCol, USHORT nStartRow,
     nRepeatEndY   = nEndRow;
 }
 
-void ScTable::StartListening( const ScAddress& rAddress, SfxListener* pListener )
+void ScTable::StartListening( const ScAddress& rAddress, SvtListener* pListener )
 {
     aCol[rAddress.Col()].StartListening( *pListener, rAddress.Row() );
 }
 
-void ScTable::EndListening( const ScAddress& rAddress, SfxListener* pListener )
+void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
 {
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
@@ -392,16 +391,16 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom,
     }
     else
     {
-        const USHORT nColStart = pAdrFrom ? pAdrFrom->Col() : 0;
-        const USHORT nRowStart = pAdrFrom ? pAdrFrom->Row() : 0;
-        const USHORT nColEnd   = pAdrTo   ? pAdrTo->Col()   : MAXCOL;
-        const USHORT nRowEnd   = pAdrTo   ? pAdrTo->Row()   : MAXROW;
+        const SCCOL nColStart = pAdrFrom ? pAdrFrom->Col() : 0;
+        const SCROW nRowStart = pAdrFrom ? pAdrFrom->Row() : 0;
+        const SCCOL nColEnd   = pAdrTo   ? pAdrTo->Col()   : MAXCOL;
+        const SCROW nRowEnd   = pAdrTo   ? pAdrTo->Row()   : MAXROW;
 
-        for ( USHORT nCol=nColStart; nCol<=nColEnd; nCol++ )
+        for ( SCCOL nCol=nColStart; nCol<=nColEnd; nCol++ )
         {
             ScColumnIterator aIter( &aCol[nCol], nRowStart, nRowEnd );
             ScBaseCell*      pCell = NULL;
-            USHORT           nRow  = nRowStart;
+            SCROW            nRow  = nRowStart;
 
             while ( aIter.Next( nRow, pCell ) )
             {
