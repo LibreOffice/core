@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Events.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:14:40 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,8 @@ package com.sun.star.wizards.web;
 
 import javax.swing.ListModel;
 
-import com.sun.star.awt.Key;
 import com.sun.star.awt.KeyEvent;
-import com.sun.star.awt.KeyFunction;
+import com.sun.star.awt.XControl;
 import com.sun.star.awt.XKeyListener;
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.NoSuchElementException;
@@ -83,6 +82,7 @@ import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSession;
+import com.sun.star.wizards.web.data.CGSessionName;
 
 /**
  * This class implements the ui-events of the
@@ -94,6 +94,16 @@ import com.sun.star.wizards.web.data.CGSession;
  * session methods.
  */
 public abstract class WWD_Events extends WWD_Startup {
+
+    private static final short[] EMPTY_SHORT_ARRAY = new short[0];
+
+
+    /**
+     * Tracks the current loaded session.
+     * If "" - it means the current session is the default one (empty)
+     * If a session is loaded, this will be the name of the loaded session.
+     */
+    protected String currentSession = "";
 
     /**
      * He - my constructor !
@@ -117,10 +127,28 @@ public abstract class WWD_Events extends WWD_Startup {
      *  *******************************************************
      * *********************************************************/
 
-    protected void enterStep(int old, int newStep) {
-        if ((old == 1) && (newStep == 2))
-            checkDocList();
+    protected void leaveStep(int nOldStep, int nNewStep) {
+        if (nOldStep == 1 && nNewStep == 2) {
+            // 1. check if the selected session is the same as the current one.
+        }
+    }
 
+
+    protected void enterStep(int old, int newStep) {
+        if ((old == 1)) {
+            String sessionToLoad = "";
+            short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
+            if ( s.length == 0 || s[0] == 0 )
+                sessionToLoad = "";
+            else
+                sessionToLoad = ((CGSessionName)settings.cp_SavedSessions.getElementAt(s[0])).cp_Name;
+            if ( !sessionToLoad.equals(currentSession))
+                loadSession(sessionToLoad);
+
+        }
+        if (newStep == 5) {
+
+        }
     }
 
     /* *********************************
@@ -133,17 +161,14 @@ public abstract class WWD_Events extends WWD_Startup {
      */
     public void sessionSelected() {
         short[] s = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
-        setEnabled(btnDelSession, s.length > 0);
-        setEnabled(btnLoadSession, s.length > 0);
+        setEnabled(btnDelSession, s.length > 0 && s[0] > 0);
     }
 
     /**
-     * Ha ! the user clicked the
-     * Load button !
+     * Ha ! the session should be loaded :-)
      */
-    public void loadSession() {
-        StatusDialog sd = getStatusDialog();
-        sd.setLabel(resources.resLoadingSession);
+    public void loadSession(final String sessionToLoad) {
+        final StatusDialog sd = getStatusDialog();
 
         final Task task = new Task("LoadDocs", "", 10);
 
@@ -151,19 +176,34 @@ public abstract class WWD_Events extends WWD_Startup {
             public void run() {
                 try {
                     task.start();
-                    short[] selected = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
-                    String name = (String) settings.cp_SavedSessions.getKey(selected[0]);
 
-                    Object view = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/SavedSessions", false);
-                    view = Configuration.getNode(name, view);
+                    setSelectedDoc(EMPTY_SHORT_ARRAY);
+                    Helper.setUnoPropertyValue(getModel(lstDocuments), "SelectedItems", EMPTY_SHORT_ARRAY);
+                    Helper.setUnoPropertyValue(getModel(lstDocuments),"StringItemList", EMPTY_STRING_ARRAY);
+
+                    Object view = null;
+
+                    if (sessionToLoad.equals(""))
+                        view=  Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/DefaultSession", false);
+                    else {
+                        view = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/SavedSessions", false);
+                        view = Configuration.getNode(sessionToLoad, view);
+                    }
+
                     CGSession session = new CGSession();
                     session.setRoot(settings);
                     session.readConfiguration(view, CONFIG_READ_PARAM);
-                    task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 5);
+                    task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7);
                     task.advance(true);
 
-                    mount(session, task);
+                    if (sessionToLoad.equals(""))
+                          setSaveSessionName(session);
+
+                    mount(session, task, false, sd.xControl);
+
                     checkSteps();
+                    currentSession = sessionToLoad;
+
                 } catch (Exception ex) {
                     unexpectedError(ex);
                 }
@@ -171,17 +211,31 @@ public abstract class WWD_Events extends WWD_Startup {
                 while (task.getStatus() <= task.getMax())
                     task.advance(false);
             }
-        });
+        }, resources.resLoadingSession );
+
+        System.out.println("finished load session");
+
+        try {
+            refreshStylePreview();
+            updateIconsetText();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
      * hmm. the user clicked the delete button.
      */
     public void delSession() {
+        short[] selected = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
+        if (selected.length == 0)
+            return;
+        if (selected[0] == 0)
+            return;
         boolean confirm = AbstractErrorHandler.showMessage(xMSF,xControl.getPeer(), resources.resDelSessionConfirm, ErrorHandler.ERROR_QUESTION_NO);
         if (confirm) {
             try {
-                short[] selected = (short[]) Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems");
                 String name = (String) settings.cp_SavedSessions.getKey(selected[0]);
                 // first delete the session from the registry/configuration.
 
@@ -189,11 +243,26 @@ public abstract class WWD_Events extends WWD_Startup {
 
                 // then delete the session from the java-set (settings.cp_SavedSessions)
                 settings.cp_SavedSessions.remove(selected[0]);
-                //disable buttons
-                Helper.setUnoPropertyValue(getModel(btnDelSession), "Enabled", Boolean.FALSE);
-                Helper.setUnoPropertyValue(getModel(btnLoadSession), "Enabled", Boolean.FALSE);
+                settings.savedSessions.remove(selected[0] - 1);
 
-                ListModelBinder.fillComboBox(cbSaveSettings, settings.cp_SavedSessions.items(), null);
+                short[] nextSelected = new short[] {(short) 0 };
+                // We try to select the same item index again, if possible
+                if (settings.cp_SavedSessions.getSize() > selected[0])
+                    nextSelected[0] = selected[0];
+                else
+                    // this will always be available because
+                    // the user can not remove item 0.
+                    nextSelected[0] = (short)(selected[0] - 1);
+
+                // if the <none> session will be selected, disable the remove button...
+                if (nextSelected[0] == 0)
+                    Helper.setUnoPropertyValue(getModel(btnDelSession), "Enabled", Boolean.FALSE);
+
+                // select...
+                Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", nextSelected);
+
+                //ListModelBinder.fillComboBox(cbSaveSettings, settings.savedSessions.items(), null);
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -266,69 +335,6 @@ public abstract class WWD_Events extends WWD_Startup {
 
         final Task task = new Task("", "", files.length * 5);
 
-
-        Runnable loadDocs = new Runnable() {
-            public void run() {
-                //LogTaskListener lts = new LogTaskListener();
-                //task.addTaskListener(lts);
-
-                task.start();
-
-                // where the documents are added to in the list (offset)
-                int offset = (getSelectedDoc().length > 0 ? selectedDoc[0] + 1 : getDocsCount());
-
-                /* if the user chose one file, the list starts at 0,
-                 * if he chose more than one, the first entry is a directory name,
-                 * all the others are filenames.
-                 */
-                int start = (files.length > 1 ? 1 : 0);
-                /*
-                 * Number of documents failed to validate.
-                 */
-                int failed = 0;
-
-                // store the directory
-                settings.cp_DefaultSession.cp_InDirectory = start == 1 ? files[0] : FileAccess.getParentDir(files[0]);
-
-                /*
-                 * Here i go through each file, and validate it.
-                 * If its ok, I add it to the ListModel/ConfigSet
-                 */
-                for (int i = start; i < files.length; i++) {
-                    CGDocument doc = new CGDocument();
-                    doc.setRoot(settings);
-
-                    doc.cp_URL = (start == 0) ? files[i] : FileAccess.connectURLs(files[0], files[i]);
-
-                    /* so - i check each document and if it is ok I add it.
-                     * The failed variable is used only to calculate the place to add -
-                     * Error reporting to the user is (or should (-:  )done in the checkDocument(...) method
-                     */
-                    if (checkDocument(doc, task))
-                        settings.cp_DefaultSession.cp_Content.cp_Documents.add(offset + i - failed - start, doc);
-                    else
-                        failed++;
-
-                }
-
-                // if any documents where added,
-                // set the first one to be the current-selected document.
-                if (files.length > start + failed) {
-                    setSelectedDoc(new short[] {(short) offset });
-                }
-                // update the ui...
-                docListDA.updateUI();
-                // this enables/disables the next steps.
-                // when no documents in the list, all next steps are disabled
-                checkSteps();
-                /* a small insurance that the status dialog will
-                 * really close...
-                 */
-                while(task.getStatus() < task.getMax())
-                    task.advance(false);
-            }
-        };
-
         /*
          * If more than a certain number
          * of documents have been added,
@@ -338,20 +344,23 @@ public abstract class WWD_Events extends WWD_Startup {
             StatusDialog sd = getStatusDialog();
             sd.setLabel(resources.resValidatingDocuments);
 
-            sd.execute(this, task, loadDocs);
+            sd.execute(this, task, new LoadDocs( sd.xControl, files, task ), resources.prodName);
         }
         /*
          * When adding a single document, do not use a
          * status dialog...
          */
         else
-            loadDocs.run();
+            new LoadDocs( this.xControl, files, task ).run();
     }
 
     /**
      * The user clicked delete.
      */
     public void removeDocument() {
+        if (selectedDoc.length == 0)
+            return;
+
         settings.cp_DefaultSession.cp_Content.cp_Documents.remove(selectedDoc[0]);
 
         // update the selected document
@@ -360,7 +369,7 @@ public abstract class WWD_Events extends WWD_Startup {
 
         // if there are no documents...
         if (selectedDoc[0] == -1)
-            selectedDoc = new short[0];
+            selectedDoc = EMPTY_SHORT_ARRAY;
 
         // update the list to show the right selection.
         docListDA.updateUI();
@@ -407,8 +416,8 @@ public abstract class WWD_Events extends WWD_Startup {
      * the user clicked the "backgrounds" button
      */
     public void chooseBackground() {
-        new Thread() {
-            public void run() {
+        //new Thread() {
+            //public void run() {
                 try {
                     setEnabled(btnBackgrounds, false);
                     if (bgDialog == null) {
@@ -424,9 +433,9 @@ public abstract class WWD_Events extends WWD_Startup {
                 } finally {
                     setEnabled(btnBackgrounds, true);
                 }
-            }
-        }
-        .start();
+            //}
+        //}
+        //.start();
 
     }
 
@@ -447,8 +456,8 @@ public abstract class WWD_Events extends WWD_Startup {
      *
      */
     public void chooseIconset() {
-        new Thread() {
-            public void run() {
+        //new Thread() {
+            //public void run() {
                 try {
                     setEnabled(btnIconSets, false);
                     if (iconsDialog == null) {
@@ -466,55 +475,19 @@ public abstract class WWD_Events extends WWD_Startup {
                 } finally {
                     setEnabled(btnIconSets, true);
                 }
-            }
-        }
-        .start();
+            //}
+        //}
+        //.start();
     }
 
     /**
         * invoked when the Iconsets Dialog is OKed.
         */
     public void setIconset(String icon) {
-        settings.cp_DefaultSession.cp_Design.cp_BackgroundImage = icon;
+        settings.cp_DefaultSession.cp_Design.cp_IconSet = icon;
+        updateIconsetText();
     }
 
-    /* ******************************
-     * STEP 6
-     */
-    public void chooseFavIcon() {
-        String[] files = getFavIconDialog().callOpenDialog(false, settings.cp_DefaultSession.cp_InDirectory);
-        if (files == null) //if user canceled.
-            return;
-
-        //store the directory.
-        settings.cp_DefaultSession.cp_InDirectory = FileAccess.getParentDir(files[0]);
-
-        //store the fav icon
-        settings.cp_DefaultSession.cp_GeneralInfo.cp_Icon = files[0];
-
-        //and display it...
-        favIconDA.updateUI();
-    }
-
-    public void setIcon(String icon) { /*dummy - neverCalled*/
-    }
-
-    /**
-     * When the user presses "delete" or "backspace"
-     * on the FavIcon textbox, the content is deleted,
-     * @param event
-     */
-    public void removeFavIcon(KeyEvent event) {
-        if (event.KeyFunc == KeyFunction.DELETE || event.KeyCode == Key.BACKSPACE) {
-            settings.cp_DefaultSession.cp_GeneralInfo.cp_Icon = "";
-            //and display it...
-            favIconDA.updateUI();
-        }
-    }
-
-    public String getIcon() {
-        return getFileAccess().getPath(settings.cp_DefaultSession.cp_GeneralInfo.cp_Icon, "");
-    }
 
     /* ******************************
      * STEP 7
@@ -531,6 +504,7 @@ public abstract class WWD_Events extends WWD_Startup {
         p.cp_URL = url;
         p.cp_Publish = true;
         updatePublishUI(number);
+        p.overwriteApproved = true;
         return p;
     }
 
@@ -553,6 +527,7 @@ public abstract class WWD_Events extends WWD_Startup {
         String dir = showFolderDialog("Local destination directory", "", settings.cp_DefaultSession.cp_OutDirectory);
         //if ok was pressed...
         setPublishUrl(LOCAL_PUBLISHER, dir, 0);
+
     }
 
     /**
@@ -560,15 +535,15 @@ public abstract class WWD_Events extends WWD_Startup {
      *
      */
     public void setFTPPublish() {
-        new Thread(new Runnable() {
-            public void run() {
+        //new Thread(new Runnable() {
+            //public void run() {
                 if (showFTPDialog(getPublisher(FTP_PUBLISHER))) {
                     getPublisher(FTP_PUBLISHER).cp_Publish = true;
                     updatePublishUI(2);
                 }
 
-            }
-        }).start();
+            //}
+        //}).start();
     }
 
     /**
@@ -593,6 +568,7 @@ public abstract class WWD_Events extends WWD_Startup {
         SystemDialog sd = getZipDialog();
         String zipFile = sd.callStoreDialog(settings.cp_DefaultSession.cp_OutDirectory, resources.resDefaultArchiveFilename);
         setPublishUrl(ZIP_PUBLISHER, zipFile, 4);
+        getPublisher(ZIP_PUBLISHER).overwriteApproved = true;
     }
 
     private TOCPreview docPreview;
@@ -621,56 +597,164 @@ public abstract class WWD_Events extends WWD_Startup {
      * be replaced.
      * @return true if "create" should continue. false if "create" should abort.
      */
-    private boolean publishTargetExists(String publisher) {
-        CGPublish p = getPublisher(publisher);
-        //well, if this publisher does not publish, then its ok...
-        if (!p.cp_Publish)
-            return true;
+    private boolean publishTargetApproved() {
+        boolean result = true;
+        // 1. check local publish target
 
-        String path = p.url;
+        CGPublish p = getPublisher(LOCAL_PUBLISHER);
 
-        // if the target exists we're in trouble...
-        if (getFileAccess().exists(path, false)) {
-            //if its a directory
-            if (getFileAccess().isDirectory(path)) {
-                //check if its empty
-                String[] files = getFileAccess().listFiles(path, true);
-                if (files.length > 0) {
+        // should publish ?
+        if (p.cp_Publish) {
+            String path = getFileAccess().getPath(p.url, null);
+            // target exists?
+            if (getFileAccess().exists(p.url, false)) {
+                //if its a directory
+                if (getFileAccess().isDirectory(p.url)) {
+                    //check if its empty
+                    String[] files = getFileAccess().listFiles(p.url, true);
+                    if (files.length > 0) {
                     /* it is not empty :-(
                      * it either a local publisher or an ftp (zip uses no directories
                      * as target...)
                      */
-                    String message = getExistsMessage(publisher);
+                    String message = JavaTools.replaceSubString(resources.resLocalTragetNotEmpty,
+                            path, "%FILENAME");
+                    result = AbstractErrorHandler.showMessage(
+                                xMSF, xControl.getPeer(), message,
+                                ErrorHandler.MESSAGE_WARNING, ErrorHandler.BUTTONS_YES_NO,
+                                 ErrorHandler.DEF_NO, ErrorHandler.RESULT_YES);
 
-                    return AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message, ErrorHandler.ERROR_QUESTION_CANCEL);
+                    if (!result)
+                        return result;
+                    }
                 }
-            } else //not a directory, but still exists
-                {
-                if (publisher.equals(ZIP_PUBLISHER))
-                    return AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resZipTargetExists, ErrorHandler.ERROR_QUESTION_CANCEL);
-                /*
-                 * This is an interessting option:
-                 * a file exists with the name of the directory that
-                 * should be created - so we can't really go on...
-                 */
-                else if (publisher.equals(LOCAL_PUBLISHER))
-                    return AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resLocalTargetExistsAsfile, ErrorHandler.ERROR_PROCESS_FATAL);
-                else if (publisher.equals(FTP_PUBLISHER))
-                    return AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resFTPTargetExistsAsfile, ErrorHandler.ERROR_PROCESS_FATAL);
-                else throw new IllegalArgumentException("Illegal publisher name");
+                else {//not a directory, but still exists
+                    String message = JavaTools.replaceSubString(resources.resLocalTargetExistsAsfile,
+                            path, "%FILENAME");
+                    AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message, ErrorHandler.
+                            ERROR_PROCESS_FATAL);
+                    return false;
+                }
+
+                // try to write to the path...
+            }
+            else {
+                // the local target directory does not exist.
+                String message = JavaTools.replaceSubString(resources.resLocalTargetCreate,
+                        path, "%FILENAME");
+                try {
+                    result = AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message,
+                            ErrorHandler.ERROR_QUESTION_YES);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                if (!result)
+                    return result;
+                // try to create the directory...
+                try {
+                    getFileAccess().fileAccess.createFolder(p.cp_URL);
+                }
+                catch (Exception ex) {
+                    message = JavaTools.replaceSubString(resources.resLocalTargetCouldNotCreate,
+                            path, "%FILENAME");
+                    AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message ,
+                            ErrorHandler.ERROR_PROCESS_FATAL);
+                    return false;
+                }
+            }
+        }
+
+        // 2. Check ZIP
+        // should publish ?
+        p = getPublisher(ZIP_PUBLISHER);
+
+        if (p.cp_Publish) {
+
+            String path = getFileAccess().getPath(p.cp_URL,null);
+            // target exists?
+            if (getFileAccess().exists(p.cp_URL, false)) {
+                //if its a directory
+                if (getFileAccess().isDirectory(p.cp_URL)) {
+                    String message = JavaTools.replaceSubString(resources.resZipTargetIsDir,
+                            path, "%FILENAME");
+                    AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message,
+                            ErrorHandler.ERROR_PROCESS_FATAL);
+                    return false;
+                }
+                else {//not a directory, but still exists ( a file...)
+                    if (!p.overwriteApproved) {
+                        String message = JavaTools.replaceSubString(resources.resZipTargetExists,
+                                path, "%FILENAME");
+                        result = AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),message ,
+                                ErrorHandler.ERROR_QUESTION_YES);
+                        if (!result)
+                            return false;
+                    }
+                }
+            }
+        }
+
+        // 3. check FTP
+        p = getPublisher(FTP_PUBLISHER);
+
+        // should publish ?
+        if (p.cp_Publish) {
+
+            String path = getFileAccess().getPath(p.cp_URL,null);
+
+            // target exists?
+            if (getFileAccess().exists(p.url, false)) {
+                //if its a directory
+                if (getFileAccess().isDirectory(p.url)) {
+                    //check if its empty
+                    String[] files = getFileAccess().listFiles(p.url, true);
+                    if (files.length > 0) {
+                    /* it is not empty :-(
+                     * it either a local publisher or an ftp (zip uses no directories
+                     * as target...)
+                     */
+                    String message = JavaTools.replaceSubString(resources.resFTPTargetNotEmpty,
+                                path, "%FILENAME");
+                    result = AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message,
+                            ErrorHandler.ERROR_QUESTION_CANCEL);
+                    if (!result)
+                        return result;
+                    }
+                }
+                else {//not a directory, but still exists (as a file)
+                    String message = JavaTools.replaceSubString(resources.resFTPTargetExistsAsfile,
+                            path, "%FILENAME");
+                    AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),message,
+                            ErrorHandler.ERROR_PROCESS_FATAL);
+                    return false;
+                }
+
+                // try to write to the path...
+            }
+            else {
+                // the ftp target directory does not exist.
+                String message = JavaTools.replaceSubString(resources.resFTPTargetCreate,
+                        path, "%FILENAME");
+                result = AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message,
+                        ErrorHandler.ERROR_QUESTION_YES);
+                if (!result)
+                    return result;
+                // try to create the directory...
+                try {
+                    getFileAccess().fileAccess.createFolder(p.url);
+                }
+                catch (Exception ex) {
+                    message = JavaTools.replaceSubString(resources.resFTPTargetCouldNotCreate,
+                            path, "%FILENAME");
+                    AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message,
+                            ErrorHandler.ERROR_PROCESS_FATAL);
+                    return false;
+                }
             }
         }
         return true;
-    }
-
-    private String getExistsMessage(String publisher) {
-        if (publisher.equals(LOCAL_PUBLISHER))
-            return resources.resLocalTragetNotEmpty;
-        else if (publisher.equals(ZIP_PUBLISHER))
-            return resources.resZipTargetExists;
-        else if (publisher.equals(FTP_PUBLISHER))
-            return resources.resFTPTargetNotEmpty;
-        else throw new IllegalArgumentException("Illegal publisher name");
     }
 
     /*
@@ -682,7 +766,6 @@ public abstract class WWD_Events extends WWD_Startup {
             String name = getSessionSaveName();
 
             //set documents index field.
-
             ListModel docs = settings.cp_DefaultSession.cp_Content.cp_Documents;
 
             for (int i = 0; i < docs.getSize(); i++)
@@ -712,21 +795,37 @@ public abstract class WWD_Events extends WWD_Startup {
             Configuration.commit(conf);
 
             // now I reload the sessions to actualize the list/combo boxes load/save sessions.
-            while (settings.cp_SavedSessions.getSize() > 0)
-                settings.cp_SavedSessions.remove(0);
+            settings.cp_SavedSessions.clear();
 
             Object confView = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/SavedSessions", false);
             settings.cp_SavedSessions.readConfiguration(confView,CONFIG_READ_PARAM);
 
-            Object[] o = settings.cp_SavedSessions.items();
-            ListModelBinder.fillList(lstLoadSettings,o, null);
-            ListModelBinder.fillComboBox(cbSaveSettings,o, null);
+            settings.cp_LastSavedSession = name;
+            currentSession = name;
+            // now save the name of the last saved session...
+
+            settings.cp_LastSavedSession = name;
+
+            // TODO add the <none> session...
+            prepareSessionLists();
+            ListModelBinder.fillList(lstLoadSettings, settings.cp_SavedSessions.items() , null);
+            ListModelBinder.fillComboBox(cbSaveSettings, settings.savedSessions.items(), null);
+            selectSession();
+
+            currentSession = settings.cp_LastSavedSession;
 
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    private String targetStringFor(String publisher) {
+        CGPublish p = getPublisher(publisher);
+        if (p.cp_Publish)
+                return "\n" + getFileAccess().getPath(p.cp_URL,null);
+        else return "";
     }
 
     /**
@@ -737,7 +836,13 @@ public abstract class WWD_Events extends WWD_Startup {
      */
     public void finishWizardFinished() {
         if (process.getResult()) {
-            AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),resources.resFinishedSuccess, ErrorHandler.ERROR_MESSAGE);
+            String targets =
+                targetStringFor(LOCAL_PUBLISHER) +
+                targetStringFor(ZIP_PUBLISHER) +
+                targetStringFor(FTP_PUBLISHER);
+            String message = JavaTools.replaceSubString( resources.resFinishedSuccess, targets, "%FILENAME");
+
+            AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message , ErrorHandler.ERROR_MESSAGE);
             if (exitOnCreate)
                 this.xDialog.endExecute();
         } else
@@ -777,16 +882,17 @@ public abstract class WWD_Events extends WWD_Startup {
          */
         final CGPublish p = getPublisher(FTP_PUBLISHER);
         // if ftp is checked, and no proxies are set, and password is empty...
-        if (p.cp_Publish && (!proxies) && (p.password == null || p.password.equals("")))
-            new Thread(new Runnable() {
-                public void run() {
+        if (p.cp_Publish && (!proxies) && (p.password == null || p.password.equals(""))) {
+            //new Thread(new Runnable() {
+                //public void run() {
                     if (showFTPDialog(p)) {
                         updatePublishUI(2);
                         //now continue...
                         finishWizard2();
                     }
-                }
-            }).start();
+                //}
+            //}).start();
+        }
         else
             finishWizard2();
     }
@@ -800,11 +906,10 @@ public abstract class WWD_Events extends WWD_Startup {
      *
      */
     private void finishWizard2() {
-        /* local publisher is publishing on a subdirectory of
-         * the chosen directory.
-         */
+
         CGPublish p = getPublisher(LOCAL_PUBLISHER);
-        p.url = FileAccess.connectURLs(p.cp_URL , resources.resPublishDir);
+        p.url = p.cp_URL;
+
         /*
          * zip publisher is using another url form...
          */
@@ -822,19 +927,11 @@ public abstract class WWD_Events extends WWD_Startup {
         p = getPublisher(FTP_PUBLISHER);
         p.url = FTPDialog.getFullURL(p);
 
-        /*
-         * Now, if proxies disable ftp,
-         * I save the cp_Publish value, so it will be saved correctly, and disable
-         * it for the target check that follows.
-         */
-        boolean ftp__ = p.cp_Publish;
-        if (proxies)
-            p.cp_Publish = false;
 
         /* first we check the publishing targets. If they exist we warn and ask
          * what to do. a False here means the user said "cancel" (or rather: clicked...)
          */
-        if (!(publishTargetExists(LOCAL_PUBLISHER) && publishTargetExists(ZIP_PUBLISHER) && publishTargetExists(FTP_PUBLISHER)))
+        if (!publishTargetApproved())
             return;
 
         /*
@@ -842,13 +939,26 @@ public abstract class WWD_Events extends WWD_Startup {
          * I return the value of the ftp publisher cp_Publish
          * property to its original value...
          */
-        p.cp_Publish = ftp__;
+        p.cp_Publish = __ftp;
 
         //if the "save settings" checkbox is on...
-        if (isSaveSession())
+        if (isSaveSession()) {
             // if canceled by user
             if (!saveSession())
                 return;
+        }
+        else settings.cp_LastSavedSession = "";
+
+        try {
+            Object conf = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH , true);
+            Configuration.set(
+                        settings.cp_LastSavedSession ,
+                        "LastSavedSession", conf);
+            Configuration.commit(conf);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         /*
          * again, if proxies are on, I disable ftp before the creation process
@@ -878,7 +988,7 @@ public abstract class WWD_Events extends WWD_Startup {
             pd.setFinishedMethod(new MethodInvocation("finishWizardFinished", this));
 
 
-            pd.execute(this, process.myTask, process);
+            pd.execute(this, process.myTask, process, resources.prodName);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -921,6 +1031,7 @@ public abstract class WWD_Events extends WWD_Startup {
      */
     public void cleanup() {
 
+
         try {
             dpStylePreview.dispose();
         }
@@ -947,20 +1058,93 @@ public abstract class WWD_Events extends WWD_Startup {
         catch (Exception ex) {ex.printStackTrace();}
 
         try {
-            if (statusDialog != null)
-                statusDialog.xComponent.dispose();
-        }
-        catch (Exception ex) {ex.printStackTrace();}
-
-        try {
             xComponent.dispose();
         }
         catch (Exception ex) {ex.printStackTrace();}
 
         try {
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myOwnFrame);
-            xCloseable.close(false);
+            //XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myDocument);
+            //if (xCloseable != null)
+            //    xCloseable.close(false);
+
+            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myFrame);
+            if (xCloseable != null)
+                xCloseable.close(false);
         }
         catch (Exception ex) {ex.printStackTrace();}
+
     }
+
+    class LoadDocs implements Runnable {
+        private XControl xC;
+        String[] files;
+        Task task;
+
+        public LoadDocs(XControl xC_, String[] files_, Task task_) {
+            xC = xC_;
+            files = files_;
+            task = task_;
+        }
+
+        public void run() {
+            //LogTaskListener lts = new LogTaskListener();
+            //task.addTaskListener(lts);
+
+            task.start();
+
+            // where the documents are added to in the list (offset)
+            int offset = (getSelectedDoc().length > 0 ? selectedDoc[0] + 1 : getDocsCount());
+
+            /* if the user chose one file, the list starts at 0,
+             * if he chose more than one, the first entry is a directory name,
+             * all the others are filenames.
+             */
+            int start = (files.length > 1 ? 1 : 0);
+            /*
+             * Number of documents failed to validate.
+             */
+            int failed = 0;
+
+            // store the directory
+            settings.cp_DefaultSession.cp_InDirectory = start == 1 ? files[0] : FileAccess.getParentDir(files[0]);
+
+            /*
+             * Here i go through each file, and validate it.
+             * If its ok, I add it to the ListModel/ConfigSet
+             */
+            for (int i = start; i < files.length; i++) {
+                CGDocument doc = new CGDocument();
+                doc.setRoot(settings);
+
+                doc.cp_URL = (start == 0) ? files[i] : FileAccess.connectURLs(files[0], files[i]);
+
+                /* so - i check each document and if it is ok I add it.
+                 * The failed variable is used only to calculate the place to add -
+                 * Error reporting to the user is (or should (-:  )done in the checkDocument(...) method
+                 */
+                if (checkDocument(doc, task, xC))
+                    settings.cp_DefaultSession.cp_Content.cp_Documents.add(offset + i - failed - start, doc);
+                else
+                    failed++;
+
+            }
+
+            // if any documents where added,
+            // set the first one to be the current-selected document.
+            if (files.length > start + failed) {
+                setSelectedDoc(new short[] {(short) offset });
+            }
+            // update the ui...
+            docListDA.updateUI();
+            // this enables/disables the next steps.
+            // when no documents in the list, all next steps are disabled
+            checkSteps();
+            /* a small insurance that the status dialog will
+             * really close...
+             */
+            while(task.getStatus() < task.getMax())
+                task.advance(false);
+        }
+    };
 }
+
