@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-14 16:17:46 $
+ *  last change: $Author: nn $ $Date: 2001-01-24 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,10 +388,10 @@ void ScDocument::StoreDrawLayer(SvStream& rStream) const
         SvtSaveOptions aSaveOpt;
         SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
 
-        BOOL bCompr = ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
-        pDrawLayer->SetSaveCompressed( bCompr );
-
         BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
+        BOOL bCompr = bNative || ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
+
+        pDrawLayer->SetSaveCompressed( bCompr );
         pDrawLayer->SetSaveNative( bNative );
 
         pDrawLayer->GetItemPool().SetFileFormatVersion( (USHORT)rStream.GetVersion() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-22 14:09:21 $
+ *  last change: $Author: nn $ $Date: 2001-01-24 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3644,11 +3644,13 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
 
     USHORT nComprMode = rStream.GetCompressMode() & ~(COMPRESSMODE_ZBITMAP | COMPRESSMODE_NATIVE);
     SvtSaveOptions aSaveOpt;
-    if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 &&
-            aSaveOpt.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed )
+    SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
+    BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
+    BOOL bCompr = bNative || ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
+
+    if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 && bCompr )
         nComprMode |= COMPRESSMODE_ZBITMAP;             //  komprimiert ab 4.0
-    if ( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 &&
-            aSaveOpt.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal )
+    if ( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 && bNative )
         nComprMode |= COMPRESSMODE_NATIVE;              //  Originalformat ab 5.0
     rStream.SetCompressMode( nComprMode );
 
