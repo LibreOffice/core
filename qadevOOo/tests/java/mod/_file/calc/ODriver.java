@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:49 $
+ *  last change:$Date: 2003-05-27 12:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import java.io.PrintWriter;
 import lib.TestEnvironment;
 import lib.StatusException;
 import lib.Status;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
 import com.sun.star.beans.PropertyValue;
 
@@ -107,7 +108,8 @@ public class ODriver extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)Param.getMSF().createInstance(
+            oObj = (XInterface)(
+                (XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.sdbc.calc.ODriver");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
