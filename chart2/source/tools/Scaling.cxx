@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Scaling.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,12 @@ LogarithmicScaling::~LogarithmicScaling()
 LogarithmicScaling::doScaling( double value )
     throw (uno::RuntimeException)
 {
-    return log( value ) / m_fLogOfBase;
+    double fResult;
+    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+        ::rtl::math::setNan( & fResult );
+    else
+        fResult = log( value ) / m_fLogOfBase;
+    return fResult;
 }
 
     uno::Reference< XScaling > SAL_CALL
@@ -143,7 +148,12 @@ ExponentialScaling::~ExponentialScaling()
 ExponentialScaling::doScaling( double value )
     throw (uno::RuntimeException)
 {
-    return pow( m_fBase, value );
+    double fResult;
+    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+        ::rtl::math::setNan( & fResult );
+    else
+        fResult = pow( m_fBase, value );
+    return fResult;
 }
 
     uno::Reference< XScaling > SAL_CALL
@@ -173,7 +183,12 @@ LinearScaling::~LinearScaling()
 double SAL_CALL LinearScaling::doScaling( double value )
     throw (uno::RuntimeException)
 {
-    return m_fOffset + m_fSlope * value;
+    double fResult;
+    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+        ::rtl::math::setNan( & fResult );
+    else
+        fResult = m_fOffset + m_fSlope * value;
+    return fResult;
 }
 
 uno::Reference< XScaling > SAL_CALL
@@ -206,7 +221,12 @@ PowerScaling::~PowerScaling()
 double SAL_CALL PowerScaling::doScaling( double value )
     throw (uno::RuntimeException)
 {
-    return pow( value, m_fExponent );
+    double fResult;
+    if( ::rtl::math::isNan( value ) || ::rtl::math::isInf( value ) )
+        ::rtl::math::setNan( & fResult );
+    else
+        fResult = pow( value, m_fExponent );
+    return fResult;
 }
 
 uno::Reference< XScaling > SAL_CALL
