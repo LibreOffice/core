@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 06:24:22 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #include <memory>
 
+#ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
+#endif
 
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
@@ -727,9 +729,13 @@ SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( sal_
 {
     if (bCreate)
     {
-        if (!mpEditViewForwarder)
+        if (!mpEditView && mpEditViewForwarder)
+        {
+            DELETEZ(mpEditViewForwarder);
+        }
+        else if (!mpEditViewForwarder && mpEditView)
             mpEditViewForwarder = new ScEditViewForwarder(mpEditView, mpWindow);
-        else
+        else if (mpEditViewForwarder)
             mpEditViewForwarder->GrabFocus();
     }
     return mpEditViewForwarder;
@@ -753,10 +759,19 @@ ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, 
     ScAccessibleEditObjectTextData(pEditView, pWin),
     mbEditEngineCreated(sal_False)
 {
+    ScTextWnd* pTxtWnd = (ScTextWnd*)pWin;
+
+    if (pTxtWnd)
+        pTxtWnd->SetAccessibleTextData(this);
 }
 
 ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
 {
+    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+    if (pTxtWnd)
+        pTxtWnd->SetAccessibleTextData(NULL);
+
     if (mbEditEngineCreated && mpEditEngine)
     {
         mpEditEngine->SetNotifyHdl(Link());
@@ -818,6 +833,29 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
         }
     }
     return mpForwarder;
+}
+
+SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bool bCreate )
+{
+    DBG_ASSERT(!bCreate, "the focus should switch no into the editline, but this is not implemented yet");
+
+    ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+    if (pTxtWnd)
+        mpEditView = pTxtWnd->GetEditView();
+
+    return ScAccessibleEditObjectTextData::GetEditViewForwarder(bCreate);
+}
+
+void ScAccessibleEditLineTextData::TextChanged()
+{
+    if (mbEditEngineCreated && mpEditEngine)
+    {
+        ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
+
+        if (pTxtWnd)
+            mpEditEngine->SetText(pTxtWnd->GetTextString());
+    }
 }
 
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object

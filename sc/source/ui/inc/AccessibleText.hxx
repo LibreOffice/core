@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 06:23:24 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 15:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@ public:
     virtual ScAccessibleTextData* Clone() const;
 
     virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+
+    void TextChanged();
 private:
     sal_Bool mbEditEngineCreated;
 };
