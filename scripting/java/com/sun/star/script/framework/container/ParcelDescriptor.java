@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelDescriptor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:21:44 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.script.framework.container;
 
 import java.io.File;
@@ -86,7 +85,7 @@ import org.w3c.dom.*;
 public class ParcelDescriptor {
 
     // File name to be used for parcel descriptor files
-    private static final String
+    public static final String
         PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
 
     // Collection of all ParcelDescriptor created for files
