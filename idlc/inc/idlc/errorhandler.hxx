@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:43:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,13 @@ enum ErrorCode
     EIDL_REST_PARAMETER_NOT_LAST,
     EIDL_REST_PARAMETER_NOT_ANY,
     EIDL_METHOD_HAS_REST_PARAMETER,
-    EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS
+    EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS,
+    EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS,
+    EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF,
+    EIDL_IDENTICAL_TYPE_PARAMETERS,
+    EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE,
+    EIDL_PUBLISHED_FORWARD,
+    EIDL_PUBLISHED_USES_UNPUBLISHED
 };
 
 enum WarningCode
@@ -188,6 +194,8 @@ public:
 
     // Report a failed enumerator lookup in an enum
     void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name);
+
+    bool checkPublished(AstDeclaration const * decl);
 };
 
 #endif // _IDLC_ERRORHANDLER_HXX_
