@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-13 09:57:32 $
+ *  last change: $Author: ama $ $Date: 2000-12-14 14:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ void SwLayAction::InternalAction()
     //Cntnt's
     if ( !IsComplete() )
         pPage = CheckFirstVisPage( pPage );
-    const USHORT nFirstPageNum = pPage->GetPhyPageNum();
+    USHORT nFirstPageNum = pPage->GetPhyPageNum();
 
     while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
         pPage = (SwPageFrm*)pPage->GetNext();
@@ -866,6 +866,17 @@ void SwLayAction::InternalAction()
 
                 if ( nPreInvaPage != USHRT_MAX )
                 {
+                    if( !IsComplete() && nPreInvaPage + 2 < nFirstPageNum )
+                    {
+                        pImp->SetFirstVisPageInvalid();
+                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage();
+                        nFirstPageNum = pTmpPage->GetPhyPageNum();
+                        if( nPreInvaPage < nFirstPageNum )
+                        {
+                            nPreInvaPage = nFirstPageNum;
+                            pPage = pTmpPage;
+                        }
+                    }
                     while ( pPage->GetPrev() && pPage->GetPhyPageNum() > nPreInvaPage )
                         pPage = (SwPageFrm*)pPage->GetPrev();
                     nPreInvaPage = USHRT_MAX;
