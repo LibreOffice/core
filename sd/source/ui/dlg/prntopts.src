@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:14:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,12 +124,12 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Tegning" ;
         Text [ portuguese ] = "~Desenho" ;
         Text [ portuguese_brazilian ] = "Ze~ichnung" ;
-        Text [ chinese_simplified ] = "»æÍ¼(~W)";
+        Text [ chinese_simplified ] = "»æÍ¼(~D)";
         Text [ russian ] = "Ğèñóíîê";
         Text [ polish ] = "Rysun~ek";
-        Text [ chinese_traditional ] = "Ã¸¹Ï(~W)";
+        Text [ chinese_traditional ] = "Ã¸¹Ï(~D)";
         Text [ arabic ] = "ÑÓã";
-        Text [ japanese ] = "}Œ`•`‰æ(~W)";
+        Text [ japanese ] = "}Œ`•`‰æ(~D)";
         Text[ greek ] = "Ó÷İäéï";
         Text[ korean ] = "±×¸®±â(~D)";
         Text[ turkish ] = "Çizim";
@@ -158,7 +158,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ chinese_traditional ] = "³Æµù(~N)";
         Text[ arabic ] = "ÇáãáÇÍÙÇÊ";
         Text[ greek ] = "Óçìåéşóåéò";
-        Text[ korean ] = "¸Ş¸ğ";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
         Text[ turkish ] = "Notlar";
         Text[ language_user1 ] = " ";
     };
@@ -398,11 +398,11 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "~Fecha" ;
         Text [ english_us ] = "D~ate" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÈÕÆÚ(~D)";
+        Text[ chinese_simplified ] = "ÈÕÆÚ(~A)";
         Text[ russian ] = "Äàòà";
         Text[ polish ] = "Data";
-        Text[ japanese ] = "“ú•t(~D)";
-        Text[ chinese_traditional ] = "¤é´Á(~D)";
+        Text[ japanese ] = "“ú•t(~A)";
+        Text[ chinese_traditional ] = "¤é´Á(~A)";
         Text[ arabic ] = "ÇáÊÇÑíÎ";
         Text[ greek ] = "Çìåñïìçíßá";
         Text[ korean ] = "³¯Â¥(~A)";
@@ -455,11 +455,11 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Skjulte sider" ;
         Text [ portuguese ] = "Páginas ~ocultas" ;
         Text [ portuguese_brazilian ] = "Ausge~blendeten Seiten" ;
-        Text[ chinese_simplified ] = "ÒşÈëµÄÒ³Ãæ(~H)";
+        Text[ chinese_simplified ] = "ÒşÈëµÄÒ³Ãæ(~I)";
         Text[ russian ] = "Ñêğûòûå ñòğàíèöû";
         Text[ polish ] = "Ukryte strony";
-        Text[ japanese ] = "”ñ•\\¦‚ÌÍß°¼Ş(~H)";
-        Text[ chinese_traditional ] = "Áô¤Jªº­¶­±(~H)";
+        Text[ japanese ] = "”ñ•\\¦‚ÌÍß°¼Ş(~I)";
+        Text[ chinese_traditional ] = "Áô¤Jªº­¶­±(~I)";
         Text[ arabic ] = "ÇáÕİÍÇÊ ÇáãÎİíÉ";
         Text[ greek ] = "Êñõöİò óåëßäåò";
         Text[ korean ] = "¼û°ÜÁø ÂÊ(~I)";
@@ -593,11 +593,11 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Brochure" ;
         Text [ portuguese ] = "~Prospecto" ;
         Text [ portuguese_brazilian ] = "~Prospekt" ;
-        Text[ chinese_simplified ] = "ÊÖ²á(~B)";
+        Text[ chinese_simplified ] = "ÊÖ²á(~R)";
         Text[ russian ] = "~Áğîøşğà";
         Text[ polish ] = "Broszura";
-        Text[ japanese ] = "ÊßİÌÚ¯Ä(~B)";
-        Text[ chinese_traditional ] = "¤â¥U(~B)";
+        Text[ japanese ] = "ÊßİÌÚ¯Ä(~R)";
+        Text[ chinese_traditional ] = "¤â¥U(~R)";
         Text[ arabic ] = "äÔÑÉ";
         Text[ greek ] = "Ğñïóğİêôïõò";
         Text[ korean ] = "ÆÊÇÃ·¿(~R)";
@@ -620,11 +620,11 @@ TabPage TP_PRINT_OPTIONS
         Text [ danish ] = "Forside" ;
         Text [ portuguese ] = "~Verso" ;
         Text [ portuguese_brazilian ] = "~Vorderseite" ;
-        Text[ chinese_simplified ] = "ÕıÃæ(~I)";
+        Text[ chinese_simplified ] = "ÕıÃæ(~O)";
         Text[ russian ] = "Ïåğåäíÿÿ ñòîğîíà";
         Text[ polish ] = "Przednia st~rona";
-        Text[ japanese ] = "‚¨‚à‚Ä(~I)";
-        Text[ chinese_traditional ] = "¥¿­±(~I)";
+        Text[ japanese ] = "‚¨‚à‚Ä(~O)";
+        Text[ chinese_traditional ] = "¥¿­±(~O)";
         Text[ arabic ] = "ÇáÕİÍÉ ÇáÃãÇãíÉ";
         Text[ greek ] = "Ìğñïóô. ğëå~õñÜ";
         Text[ korean ] = "¾Õ ÂÊ(~O)";
