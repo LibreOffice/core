@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:58:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,6 +1294,10 @@ sal_Bool SdrTextObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
                 Rectangle aPaintRect;
                 Fraction aFitXKorreg(1,1);
 
+                // the outliner needs the paint info so that CalcFieldValueHdl knows the context for
+                // calculating field values
+                rOutliner.SetPaintInfoRec( &rInfoRec );
+
                 // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
                 ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
                 OutputDevice* pOutDev=rXOut.GetOutDev();
@@ -1387,8 +1391,10 @@ sal_Bool SdrTextObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
                 }
 
                 rOutliner.Clear();
+                rOutliner.ClearPaintInfoRec();
             }
         } // if (pPara!=NULL)
+/*
         if (bEmptyPresObj)
         {
             // leere Praesentationsobjekte bekommen einen grauen Rahmen
@@ -1417,6 +1423,7 @@ sal_Bool SdrTextObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec
                 }
             }
         } // if pOutlParaObj!=NULL
+*/
     }
     else
     { // sonst SDRPAINTMODE_DRAFTTEXT
@@ -1805,6 +1812,18 @@ void SdrTextObj::ImpCheckMasterCachable()
     if (!bNotVisibleAsMaster && pOutlinerParaObject!=NULL && pOutlinerParaObject->IsEditDoc()) {
         const EditTextObject& rText=pOutlinerParaObject->GetTextObject();
         bNotMasterCachable=rText.HasField(SvxPageField::StaticType());
+        if( !bNotMasterCachable )
+        {
+            bNotMasterCachable=rText.HasField(SvxHeaderField::StaticType());
+            if( !bNotMasterCachable )
+            {
+                bNotMasterCachable=rText.HasField(SvxFooterField::StaticType());
+                if( !bNotMasterCachable )
+                {
+                    bNotMasterCachable=rText.HasField(SvxDateTimeField::StaticType());
+                }
+            }
+        }
     }
 }
 
