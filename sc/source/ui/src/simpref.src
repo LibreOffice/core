@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:52:34 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   simpref.src  $
- //   $Author: rt $
- //     $Date: 2000-11-15 21:52:34 $
- // $Revision: 1.2 $
+ //   $Author: kz $
+ //     $Date: 2001-02-12 09:25:34 $
+ // $Revision: 1.3 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
         QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "√‡º“!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
