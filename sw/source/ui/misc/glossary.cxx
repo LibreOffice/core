@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:35:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             sal_uInt16 i = 0;
 
-            const SfxFactoryFilterContainer* pFltCnt =
+            const SfxFilterContainer* pFltCnt =
                     SwDocShell::Factory().GetFilterContainer();
             if( pFltCnt )
             {
