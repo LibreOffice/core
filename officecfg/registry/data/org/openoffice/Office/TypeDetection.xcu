@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:12:19 $
+ *  last change: $Author: sj $ $Date: 2002-07-08 15:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,10 +1993,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseite</value>
-        <value xml:lang="x-translate">Webseite</value>
-        <value xml:lang="x-comment">Webseite</value>
-        <value xml:lang="en-US">Web Page</value>
+        <value xml:lang="de">HTML-Dokument (%productname% Draw)</value>
+        <value xml:lang="x-translate">HTML-Document (%productname% Draw)</value>
+        <value xml:lang="x-comment">HTML-Document (%productname% Draw)</value>
+        <value xml:lang="en-US">HTML Document (%productname% Draw)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,graphic_HTML,com.sun.star.drawing.DrawingDocument,,2,,0,,</value>
@@ -2007,10 +2007,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseite</value>
-        <value xml:lang="x-translate">Webseite</value>
-        <value xml:lang="x-comment">Webseite</value>
-        <value xml:lang="en-US">Web Page</value>
+        <value xml:lang="de">HTML-Dokument (%productname% Impress)</value>
+        <value xml:lang="x-translate">HTML-Document (%productname% Impress)</value>
+        <value xml:lang="x-comment">HTML-Document (%productname% Impress)</value>
+        <value xml:lang="en-US">HTML Document (%productname% Impress)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,graphic_HTML,com.sun.star.presentation.PresentationDocument,,2,,0,,</value>
