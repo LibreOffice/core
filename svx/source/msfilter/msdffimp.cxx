@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-19 16:59:51 $
+ *  last change: $Author: mtg $ $Date: 2001-11-21 17:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5013,9 +5013,6 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                                     STREAM_READWRITE| STREAM_SHARE_DENYALL));
 
                             xDoc->DoLoad( pMed );
-                            xDoc->DoSaveAs( xObjStor );
-                            xDoc->DoSaveCompleted( xObjStor );
-                            pMed = 0;
 
                             //JP 26.10.2001: Bug 93374 / 91928
                             // the writer objects need the correct visarea
@@ -5032,6 +5029,11 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                                     xIPObj->GetVisArea().TopLeft(), aSz ) );
                                 xIPObj->EnableSetModified( TRUE );
                             }
+
+                            xDoc->DoSaveAs( xObjStor );
+                            xDoc->DoSaveCompleted( xObjStor );
+                            pMed = 0;
+
                         }
                     }
                     delete pMed;
