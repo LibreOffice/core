@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:14:02 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text[ russian ] = "Ğó÷íàÿ ïîäà÷à áóìàãè";
     Text[ polish ] = "Rêczne podawanie papieru";
     Text[ japanese ] = "è“®‚Å—p†‹Ÿ‹‹";
-    Text[ chinese_traditional ] = "¤â¤u°e¯È";
+    Text[ chinese_traditional ] = "¤â°Ê°e¯È";
     Text[ arabic ] = "ÇáÅãÏÇÏ ÈÇáæÑŞ íÏæíÇğ";
     Text[ greek ] = "×åéñïêßíçôïò åöïäéáóìüò ÷áñôéïı";
     Text[ korean ] = "¼öµ¿ ±ŞÁö";
@@ -462,7 +462,7 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text[ russian ] = "Àêòèâíûé Âõîä/Âûõîä";
     Text[ polish ] = "We/Wy aktywne";
     Text[ japanese ] = "I/O ±¸Ã¨ÌŞ";
-    Text[ chinese_traditional ] = "¿E¬¡¿é¤J/¿é¥X";
+    Text[ chinese_traditional ] = "±Ò°Ê¿é¤J/¿é¥X";
     Text[ arabic ] = "ÇáÅÏÎÇá/ÇáÅÎÑÇÌ äÔØ";
     Text[ greek ] = "Åéó/Åî åíåñãÜ";
     Text[ korean ] = "I/O È°¼º";
