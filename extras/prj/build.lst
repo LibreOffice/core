@@ -2,7 +2,6 @@ er      extras                                                  usr30073        
 er      extras                                                  usr1    -       all     er_mkout NULL
 er	extras\source\autotext\lang				nmake	-	all	er_atxt NULL
 er	extras\source\database					nmake	-	all	er_datbs NULL
-er	extras\source\database\lang				nmake	-	all	er_datal NULL
 er	extras\source\gallery					nmake	-	all	er_gal NULL
 er      extras\source\gallery\bullets                           nmake   -       all     er_gbull NULL
 er      extras\source\gallery\gallery_sound                     nmake   -       all     er_gsnd NULL
