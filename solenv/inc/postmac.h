@@ -3,8 +3,8 @@
 #*    $Workfile:   svpm.h  $
 #*
 #*    Ersterstellung    DV 01.10.97
-#*    Letzte Aenderung  $Author: patrick.luby $ $Date: 2000-09-27 22:52:33 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-11-28 19:13:56 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/tools/os2/inc/svpm.h_v  $
 #*
@@ -14,11 +14,14 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/postmac.h,v 1.2 2000-09-27 22:52:33 patrick.luby Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/postmac.h,v 1.3 2000-11-28 19:13:56 pluby Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/27 22:52:33  patrick.luby
+      Updates to handle <AppKit/AppKit.h> includes
+
       Revision 1.1.1.1  2000/09/20 14:43:16  hr
       initial import
 
@@ -56,3 +59,4 @@
 #undef DirInfo
 #undef BOOL
 #undef ULONG
+#undef Line
