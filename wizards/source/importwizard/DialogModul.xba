@@ -351,9 +351,9 @@ Sub	SetupMSConfiguration()
 	MSFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
 	MSFilterName(1,2) = &quot;sxc&quot;
 
-	MSFilterName(2,0) = &quot;ppt&quot;
-	MSFilterName(2,1) = &quot;StarOffice XML (Impress)&quot;
-	MSFilterName(2,2) = &quot;sxi&quot;
+	MSFilterName(2,0) = &quot;ppt|pps&quot;
+	MSFilterName(2,1) = &quot;StarOffice XML (Impress)|StarOffice XML (Impress)&quot;
+	MSFilterName(2,2) = &quot;sxi|sxi&quot;
 
 	MSFilterName(3,0) = &quot;dot&quot;
 	MSFilterName(3,1) = &quot;writer_StarOffice_XML_Writer_Template&quot;
