@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:41:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,13 +835,13 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -854,12 +854,12 @@ sal_Bool OCX_CommandButton::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
 
     return WriteContents(xContents,rPropSet,rSize);
 }
@@ -937,13 +937,13 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -956,12 +956,12 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents,rPropSet,rSize);
 }
 
@@ -1129,13 +1129,13 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1148,12 +1148,12 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
             };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1409,13 +1409,13 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1427,12 +1427,12 @@ sal_Bool OCX_TextBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1558,13 +1558,13 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1576,12 +1576,12 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -1897,13 +1897,13 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -1915,12 +1915,12 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2106,13 +2106,13 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2124,12 +2124,12 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2621,13 +2621,13 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -2638,7 +2638,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
@@ -2655,7 +2655,7 @@ sal_Bool OCX_Label::Export(SvStorageRef &rObj,
         0x77, 0x20, 0x52, 0x6F, 0x6D, 0x61, 0x6E, 0x00,
         };
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -2807,10 +2807,10 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
 {
     sal_Bool bRet=sal_False;
 
-    SvStorageStreamRef xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR("\3OCXNAME") );
+    SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("\3OCXNAME") );
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR("contents") );
+    xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
     pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     /*Get Class Id of this object, see if it is one of the types
@@ -3130,13 +3130,13 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
     };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -3147,7 +3147,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
         0x31, 0x00, 0x00, 0x00, 0x00, 0x00
         };
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
@@ -3166,7 +3166,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
         0x73, 0x20, 0x4E, 0x65, 0x77, 0x20, 0x52, 0x6F,
         0x6D, 0x61, 0x6E, 0x00,
     };
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -3434,13 +3434,13 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+    SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
     xStor->Write(aCompObj,sizeof(aCompObj));
     DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-    SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+    SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
     xStor3->Write(aObjInfo,sizeof(aObjInfo));
     DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -3451,12 +3451,12 @@ sal_Bool OCX_Image::Export(SvStorageRef &rObj,
         };
 
     {
-    SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+    SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
     xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
     DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -3637,13 +3637,13 @@ sal_Bool OCX_SpinButton::Export(
     };
 
     {
-        SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+        SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
         DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-        SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
         xStor3->Write(aObjInfo,sizeof(aObjInfo));
         DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -3657,12 +3657,12 @@ sal_Bool OCX_SpinButton::Export(
     };
 
     {
-        SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
         xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
         DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
@@ -3876,13 +3876,13 @@ sal_Bool OCX_ScrollBar::Export(
     };
 
     {
-        SvStorageStreamRef xStor( rObj->OpenStream( C2S("\1CompObj")));
+        SvStorageStreamRef xStor( rObj->OpenSotStream( C2S("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
         DBG_ASSERT((xStor.Is() && (SVSTREAM_OK == xStor->GetError())),"damn");
     }
 
     {
-        SvStorageStreamRef xStor3( rObj->OpenStream( C2S("\3ObjInfo")));
+        SvStorageStreamRef xStor3( rObj->OpenSotStream( C2S("\3ObjInfo")));
         xStor3->Write(aObjInfo,sizeof(aObjInfo));
         DBG_ASSERT((xStor3.Is() && (SVSTREAM_OK == xStor3->GetError())),"damn");
     }
@@ -3895,12 +3895,12 @@ sal_Bool OCX_ScrollBar::Export(
     };
 
     {
-        SvStorageStreamRef xStor2( rObj->OpenStream( C2S("\3OCXNAME")));
+        SvStorageStreamRef xStor2( rObj->OpenSotStream( C2S("\3OCXNAME")));
         xStor2->Write(aOCXNAME,sizeof(aOCXNAME));
         DBG_ASSERT((xStor2.Is() && (SVSTREAM_OK == xStor2->GetError())),"damn");
     }
 
-    SvStorageStreamRef xContents( rObj->OpenStream( C2S("contents")));
+    SvStorageStreamRef xContents( rObj->OpenSotStream( C2S("contents")));
     return WriteContents(xContents, rPropSet, rSize);
 }
 
