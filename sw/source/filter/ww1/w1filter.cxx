@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:02:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,15 +342,6 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         bLIsTtp = IsInTtp();
         bLHasTtp = HasTtp();
     }
-#if 0
-    ULONG uLlMan = Where();
-    BOOL bLStop = IsStopAll();
-    BOOL bLIsT = rOut.IsInTable();
-    BOOL bLHasT = HasInTable();
-    BOOL bLIsTtp = IsInTtp();
-    BOOL bLHasTtp = HasTtp();
-    BOOL bLNextHasTtp = NextHasTtp();
-#endif
 
     OutStop( rOut, cUnknown );      // Attrs ggfs. beenden
 
@@ -362,24 +353,8 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
             // dontknow
         break;
         case 0x07: // table
-#if 0
-{
-    ULONG ulMan = Where();
-    BOOL bStop = IsStopAll();
-    BOOL bIsT = rOut.IsInTable();
-    BOOL bHasT = HasInTable();
-    BOOL bIsTtp = IsInTtp();
-    BOOL bHasTtp = HasTtp();
-    BOOL bNextHasTtp = NextHasTtp();
-#endif
-            if (rOut.IsInTable() && HasInTable() && !bLIsTtp && !bLHasTtp){
-//          if (rOut.IsInTable() && HasInTable() && !IsInTtp() && !HasTtp()){
-//          if (rOut.IsInTable() && HasInTable() && !HasTtp() && !NextHasTtp()){
-//              rOut << 'X';
+            if (rOut.IsInTable() && HasInTable() && !bLIsTtp && !bLHasTtp)
                 rOut.NextTableCell();
-            }else{
-//              rOut << 'O';
-            }
         break;
         case 0x09: // tab
             rOut.NextTab();
@@ -409,111 +384,6 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 
     OutStart( rOut );   // Attrs ggfs. starten und Naechste Pos berechnen
 }
-
-#if 0
-void Ww1Manager::Out(Ww1Shell& rOut, BYTE cUnknown)
-{
-// Je nach modus wird hier mit feldern, fusznoten, zeichenattributen,
-// absatzatributen und sektionen wie folgt verfahren: von allen wird
-// zuallererst die stop-methoden gerufen. stellt das objekt fest, dasz
-// etwas zu beenden ist (natuerlich nicht im ersten durchgang) beendet
-// es dies, ansonsten ist der aufruf wirkungslos.  dann werden
-// unbehandelte sonderzeichen augegeben. das werden genauso alle
-// start-methoden gerufen und danach per where festgestellt, an
-// welcher stelle die naechste aktion zu erwarten ist.
-//
-// ist der manager in einem ge'push'ten mode, werden bestimmte
-// elemente ausgeklammert. felder werden wiederum nur in besonderen
-// faellen augeklammert, wenn naemlich bereiche ausgegeben werden, die
-// keine felder enthalten koennen. charakterattribute und
-// paragraphenattribute werden jedoch nie ausgeklammert. die if (1)
-// wurden zur verdeutlichung der einheitlichkeit eingefuegt.
-    if (pFld)
-        pFld->Stop(rOut, *this, cUnknown);
-    if (!Pushed())
-        aFtn.Stop(rOut, *this, cUnknown);
-    if (1)
-        aChp.Stop(rOut, *this, cUnknown);
-    if (1)
-        aPap.Stop(rOut, *this, cUnknown);
-    if (!Pushed())
-        aSep.Stop(rOut, *this, cUnknown);
-// meta-zeichen interpretieren:
-    if (!Ww1PlainText::IsChar(cUnknown))
-        switch (cUnknown)
-        {
-        case 0x02:
-            // dontknow
-        break;
-        case 0x07: // table
-//  hier muesste etwa stehen:
-// ich probiere es mal in den Sprm::Stop von InTable und Ttp
-//          if (IsInTable()){
-//              if(IsInDummyCell())
-//                  if (NextInTable())
-//                      rOut.NextTableRow();
-//              else
-//                  rOut.NextTableCell();
-//          rOut.NextTableCell();
-        break;
-        case 0x09: // tab
-            rOut.NextTab();
-        break;
-        case 0x0a: // linefeed
-            rOut.NextParagraph();
-        break;
-        case 0x0b: // linebreak
-            if (IsInTable())
-//              rOut.NextBand();    // war Stuss
-                ;
-            else
-                rOut.NextLine();
-        break;
-        case 0x0d: // carriage return
-            // ignore
-        break;
-        case 0x0c: // pagebreak
-            rOut.NextPage();
-        break;
-        case 0x14: // sectionendchar
-            // ignore here
-        break;
-        default:
-        break;
-        }
-// alle attribute, die's brauchen beginnen
-    if (!Pushed())
-        aSep.Start(rOut, *this);
-    if (1)
-        aPap.Start(rOut, *this);
-    if (1)
-        aChp.Start(rOut, *this);
-    if (!Pushed())
-        aFtn.Start(rOut, *this);
-    if (pFld)
-        pFld->Start(rOut, *this);
-// bestimmen, wo das naechste Ereigniss ist:
-    ULONG ulEnd = pDoc->Count(); // spaetestens am textende
-    if (!Pushed())
-        if (ulEnd > aSep.Where()) // naechster Sep vorher?
-            ulEnd = aSep.Where();
-    if (1)
-        if (ulEnd > aPap.Where()) // naechster Pap vorher?
-            ulEnd = aPap.Where();
-    if (1)
-        if (ulEnd > aChp.Where()) // naechster Chp vorher?
-            ulEnd = aChp.Where();
-    if (!Pushed())
-        if (ulEnd > aFtn.Where()) // naechster Ftn vorher?
-            ulEnd = aFtn.Where();
-    if (pFld)
-        if (ulEnd > pFld->Where()) // naechster Fld vorher?
-            ulEnd = pFld->Where();
-    *pSeek = Where(); // momentane position
-    if (*pSeek < ulEnd) // sind wir bereits weiter?
-        *pSeek = ulEnd;
-}
-#endif  // 0
 
 SvxFontItem Ww1Manager::GetFont(USHORT nFCode)
 {
@@ -900,36 +770,6 @@ oncemore:
             // das Ignorieren des Bookmarks ist nicht implementiert
         }
         break;
-#if 0               // noch nicht fertig, daher disabled
-        case 8: // create index
-        case 13: // create table of contents
-        {
-            TOXTypes eTox;                              // Baue ToxBase zusammen
-            switch( rbType ){
-                case  8: eTox = TOX_INDEX; break;
-                case 13: eTox = TOX_CONTENT; break;
-                default: eTox = TOX_USER; break;
-            }
-            USHORT nCreateOf = ( eTox == TOX_CONTENT ) ? ( TOX_MARK | TOX_OUTLINELEVEL )
-                                                    : TOX_MARK;
-            BYTE nNum = 0;      // wird z.Zt. nicht ausgewertet
-            const SwTOXType* pType = rOut.GetDoc().GetTOXType( eTox, nNum );
-            SwForm aForm( eTox );
-            SwTOXBase* pBase = new SwTOXBase( pType, aForm, nCreateOf, aEmptyStr );
-                                        // Name des Verzeichnisses
-            switch( eTox ){
-            case TOX_INDEX:   pBase->SetOptions( TOI_SAME_ENTRY | TOI_FF | TOI_CASE_SENSITIVE );
-                            break;
-            case TOX_CONTENT: break;
-            case TOX_USER:    break;
-            }                                           // ToxBase fertig
-
-            rOut.GetDoc().SetUpdateTOX( TRUE );         // Update fuer TOX anstossen
-            rOut << SwFltTOX( pBase );
-            rOut.EndItem(RES_FLTR_TOX);
-        }
-        break;
-#endif
         case 14: // info var
         {
             pos = aStr.Search(' ');
