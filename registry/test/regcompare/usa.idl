@@ -1,0 +1,1 @@
+module M { struct N { long m; }; };
