@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-09-26 11:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
 #endif
@@ -305,12 +304,11 @@ static sal_uInt16 nBCTitleNo = 0;
     SwNewDBMgr* pNewDBMgr = new SwNewDBMgr;
 
     // SwLabItem aus Config lesen
-    SwLabCfgItem aLabCfg;
-    aLabCfg.Initialize();
+    SwLabCfgItem aLabCfg(bLabel);
 
     // Dialog hochfahren
     SfxItemSet aSet( GetPool(), FN_LABEL, FN_LABEL, 0 );
-    aSet.Put( bLabel ? aLabCfg.GetLabItem(): aLabCfg.GetBusinessItem() );
+    aSet.Put( aLabCfg.GetItem() );
 
     SwLabDlg* pDlg = new SwLabDlg(0, aSet, pNewDBMgr, bLabel);
 
@@ -319,13 +317,9 @@ static sal_uInt16 nBCTitleNo = 0;
         // Dialog auslesen, Item in Config speichern
         const SwLabItem& rItem = (const SwLabItem&) pDlg->
                                             GetOutputItemSet()->Get(FN_LABEL);
-        if(bLabel)
-            aLabCfg.GetLabItem() = rItem;
-        else
-            aLabCfg.GetBusinessItem() = rItem;
-        pDlg->MakeConfigItem( bLabel ? aLabCfg.GetLabItem() : aLabCfg.GetBusinessItem() );
-        aLabCfg.SetDefault(sal_False);
-        aLabCfg.StoreConfig();
+        aLabCfg.GetItem() = rItem;
+        pDlg->MakeConfigItem( aLabCfg.GetItem());
+        aLabCfg.Commit();
 
         // Neues Dokument erzeugen.
         SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
@@ -543,7 +537,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pSh->SetLabelDoc(rItem.bSynchron);
         }
 
-        if( STRING_NOTFOUND != rItem.aWriting.Search( '<' ) )
+        if( rItem.aWriting.indexOf( '<' ) >= 0 )
         {
             // Datenbankbrowser mit zuletzt verwendeter Datenbank oeffnen
             ShowDBObj( *pSh, pSh->GetDBName() );
@@ -561,199 +555,5 @@ static sal_uInt16 nBCTitleNo = 0;
     if( pNewDBMgr )
         delete pNewDBMgr;
 }
-
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.111  2000/09/18 16:05:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.110  2000/07/18 12:50:07  os
-    replace ofadbmgr
-
-    Revision 1.109  2000/06/30 08:52:03  os
-    #76541# string assertions removed
-
-    Revision 1.108  2000/06/13 09:56:09  os
-    using UCB
-
-    Revision 1.107  2000/05/23 17:52:08  jp
-    Bugfixes for Unicode
-
-    Revision 1.106  2000/04/20 12:49:35  os
-    GetName() returns String&
-
-    Revision 1.105  2000/04/11 08:01:30  os
-    UNICODE
-
-    Revision 1.104  2000/03/21 15:47:50  os
-    UNOIII
-
-    Revision 1.103  2000/03/08 17:21:49  os
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.102  2000/02/14 14:50:56  os
-    #70473# Unicode
-
-    Revision 1.101  2000/02/10 22:40:27  jp
-    Bug #72760#: InsertLab - dont leave the fly of the first card or label
-
-    Revision 1.100  2000/02/04 15:13:08  os
-    #72715# document title of business cards corrected
-
-    Revision 1.99  1999/12/01 09:45:27  os
-    #70151# text blocks should always have content
-
-    Revision 1.98  1999/11/29 14:56:12  os
-    #70227# business card position corrected
-
-    Revision 1.97  1999/11/19 16:40:21  os
-    modules renamed
-
-    Revision 1.96  1999/11/11 14:34:40  hr
-    #65293# STLPORT 3.2.1
-
-    Revision 1.95  1999/10/20 10:52:16  jp
-    Bug #67821#: InsertLab - execute on not locked dispatcher
-
-    Revision 1.94  1999/10/01 13:37:02  os
-    apply AutoText to business cards
-
-    Revision 1.93  1999/09/30 07:51:33  os
-    Label config item and LabItem contain business information
-
-    Revision 1.92  1999/09/28 13:17:45  os
-    #67382# separate dialog for business cards
-
-    Revision 1.91  1999/07/08 13:59:32  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.90   08 Jul 1999 15:59:32   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.89   10 Jun 1999 10:52:08   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.88   10 Feb 1999 14:33:56   MA
-   #61674# Direktdruck fuer Etiketten entfernt
-
-      Rev 1.87   17 Nov 1998 10:49:44   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.86   04 Nov 1998 19:43:04   MA
-   #58858# Format fuer MakeNewFly durchreichen
-
-      Rev 1.85   07 Sep 1998 16:59:58   OM
-   #55930# Einzelnes Etikett an der korrekten Position drucken
-
-      Rev 1.84   19 Mar 1998 18:30:32   JP
-   die neue Poolvorlage fuer Etiketten benutzen
-
-      Rev 1.83   19 Mar 1998 13:32:08   OM
-   Etiketten: Rahmenattribute synchronisieren
-
-      Rev 1.82   18 Mar 1998 12:35:26   OM
-   Rahmenvorlagen automatisch aktualisieren
-
-      Rev 1.81   16 Mar 1998 16:19:30   OM
-   Aktualisieren-Button kontextsensitiv
-
-      Rev 1.80   15 Mar 1998 15:13:30   OM
-   Synchron-Button
-
-      Rev 1.79   14 Mar 1998 17:18:14   OM
-   Gelinkte Etiketten
-
-      Rev 1.78   14 Mar 1998 17:05:14   OM
-   Gelinkte Etiketten
-
-      Rev 1.77   05 Feb 1998 16:34:34   OS
-   Change: hidden ViewFrame anlegen
-
-      Rev 1.76   24 Nov 1997 14:22:38   MA
-   includes
-
-      Rev 1.75   30 Sep 1997 08:43:24   OS
-   include
-
-      Rev 1.74   12 Sep 1997 10:38:32   OS
-   ITEMID_* definiert
-
-      Rev 1.73   03 Sep 1997 11:54:00   JP
-   zusaetzliches include von fmtcol
-
-      Rev 1.72   02 Sep 1997 09:56:50   OM
-   SDB-Headeranpassung
-
-      Rev 1.71   01 Sep 1997 13:06:38   OS
-   DLL-Umstellung
-
-      Rev 1.70   15 Aug 1997 11:45:04   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.69   12 Aug 1997 15:58:36   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.68   08 Aug 1997 17:26:46   OM
-   Headerfile-Umstellung
-
-      Rev 1.67   07 Aug 1997 14:59:22   OM
-   Headerfile-Umstellung
-
-      Rev 1.66   21 Jul 1997 17:16:58   AMA
-   Fix #38434#: Das FontListen-Update wird jetzt von SetPrt angestossen
-
-      Rev 1.65   08 Jul 1997 14:04:10   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.64   20 Jun 1997 14:23:38   OM
-   Cursor in erstes Etikett stellen
-
-      Rev 1.63   07 Apr 1997 15:30:36   MH
-   chg: header
-
-      Rev 1.62   21 Feb 1997 09:28:52   MA
-   #36621# neue Umrandungstechnik beruecksichtigen
-
-      Rev 1.61   20 Feb 1997 16:09:18   MA
-   fix: PoolColl per RES_ und nicht STR_
-
-      Rev 1.60   11 Feb 1997 16:51:54   OM
-   Eingabefeld ueber Basic ohne Dialog einfuegen
-
-      Rev 1.59   11 Dec 1996 09:26:16   MA
-   Entschlackt
-
-      Rev 1.58   05 Dec 1996 15:23:54   OM
-   Nach Briefumschlag und Etiketten DB-Browser oeffnen
-
-      Rev 1.57   03 Dec 1996 17:41:30   AMA
-   Chg: Der Drucker wird nur im !Browsemodus angelegt.
-
-      Rev 1.56   08 Nov 1996 19:39:36   MA
-   ResMgr
-
-      Rev 1.55   08 Nov 1996 17:38:14   OM
-   DB-Mode fuer Serienbriefe und Etiketten zum Teil wiederbelebt
-
-      Rev 1.54   24 Oct 1996 13:36:06   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.53   18 Oct 1996 12:12:56   MA
-   fixes und opts
-
-      Rev 1.52   26 Sep 1996 09:03:30   MA
-   defautls fuer Rahmen + Aufraeumarbeiten
-
-      Rev 1.51   25 Sep 1996 14:10:24   OM
-   Neue Datenbanktrenner
-
-      Rev 1.50   02 Sep 1996 16:20:22   OS
-   GetViewShell() und Show() statt GetShell() und Appear()
-
-      Rev 1.49   21 Aug 1996 10:53:24   OM
-   Umstellung 322: CreateViewFrame
-
- -------------------------------------------------------------------------*/
 
 
