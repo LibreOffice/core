@@ -1,4 +1,4 @@
-ju	jurt	:	codemaker ridljar sandbox NULL
+ju	jurt	:	ridljar sandbox NULL
 ju	jurt									usr1	-	all	ju_mkout NULL
 ju	jurt\com\sun\star\lib\util				nmake	-	all	ju_libutil NULL
 ju	jurt\com\sun\star\uno					nmake	-	all	ju_uno ju_libutil NULL
