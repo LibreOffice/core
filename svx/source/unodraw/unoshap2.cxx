@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:00:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2135,6 +2135,12 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     if ( bCustomShapeGeometry )
     {
         Rectangle aRect( pObj->GetSnapRect() );
+
+        // #i38892#
+        const SdrGluePointList* pList = pObj->GetGluePointList();
+        SdrGluePointList* pListCopy = (pList && pList->GetCount()) ? new SdrGluePointList(*pList) : 0L;
+        bool bGluePointListChanged(false);
+
         if ( ((SdrObjCustomShape*)pObj)->IsMirroredX() != bMirroredX )
         {
             Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
@@ -2143,6 +2149,9 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
             ((SdrObjCustomShape*)pObj)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+
+            // #i38892#
+            bGluePointListChanged = true;
         }
         if ( ((SdrObjCustomShape*)pObj)->IsMirroredY() != bMirroredY )
         {
@@ -2152,6 +2161,25 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
             ((SdrObjCustomShape*)pObj)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+
+            // #i38892#
+            bGluePointListChanged = true;
+        }
+
+        // #i38892#
+        if(pListCopy)
+        {
+            if(bGluePointListChanged)
+            {
+                SdrGluePointList* pNewList = pObj->GetGluePointList();
+
+                if(pNewList)
+                {
+                    *pNewList = *pListCopy;
+                }
+            }
+
+            delete pListCopy;
         }
     }
 }
