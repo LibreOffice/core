@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 11:25:35 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 15:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,13 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
-#include <com/sun/star/lang/INDEXOUTOFBOUNDSEXCEPTION.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
+#include <com/sun/star/lang/UnknownPropertyException.hpp>
 #endif
 
 #ifndef _BREAKIT_HXX
@@ -191,8 +194,10 @@ using namespace ::rtl;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XMultiPropertySet;
+using ::com::sun::star::beans::UnknownPropertyException;
 using std::max;
 using std::min;
+using std::sort;
 
 namespace com { namespace sun { namespace star {
     namespace text {
@@ -560,6 +565,36 @@ void SwAccessibleParagraph::ExecuteAtViewShell( UINT16 nSlot )
     {
         pSfxShell->GetDispatcher()->Execute( nSlot );
     }
+}
+
+SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
+    sal_Int32 nStartIndex,
+    sal_Int32 nEndIndex )
+{
+    DBG_ASSERT( (IsValidChar(nStartIndex, GetString().getLength()) &&
+                 (nEndIndex == -1)) ||
+                IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
+                "please check parameters before calling this method" );
+
+    USHORT nStart = GetPortionData().GetModelPosition( nStartIndex );
+    USHORT nEnd = (nEndIndex == -1) ? (nStart + 1) :
+                        GetPortionData().GetModelPosition( nEndIndex );
+
+    // create UNO cursor
+    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>( GetTxtNode() );
+    SwIndex aIndex( pTxtNode, nStart );
+    SwPosition aStartPos( *pTxtNode, aIndex );
+    SwUnoCrsr* pUnoCursor = pTxtNode->GetDoc()->CreateUnoCrsr( aStartPos );
+    pUnoCursor->SetMark();
+    pUnoCursor->GetMark()->nContent = nEnd;
+
+    // create a (dummy) text portion to be returned
+    Reference<com::sun::star::text::XText> aEmpty;
+    SwXTextPortion* pPortion =
+        new SwXTextPortion ( pUnoCursor, aEmpty, PORTION_TEXT);
+    delete pUnoCursor;
+
+    return pPortion;
 }
 
 
@@ -943,20 +978,9 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     if( ! IsValidChar( nIndex, rText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    // create UNO cursor
-    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>( GetTxtNode() );
-    SwIndex aIndex( pTxtNode, GetPortionData().GetModelPosition( nIndex ) );
-    SwPosition aStartPos( *pTxtNode, aIndex );
-    SwUnoCrsr* pUnoCursor = pTxtNode->GetDoc()->CreateUnoCrsr( aStartPos );
-    pUnoCursor->SetMark();
-    pUnoCursor->Right(1, CRSR_SKIP_CHARS);
-
     // create a (dummy) text portion for the sole purpose of calling
     // getPropertyValues on it
-    Reference<com::sun::star::text::XText> aEmpty;
-    Reference<XMultiPropertySet> xPortion =
-        new SwXTextPortion ( pUnoCursor, aEmpty, PORTION_TEXT);
-    delete pUnoCursor;
+    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex );
 
     // get values
     Sequence<OUString> aNames = getAttributeNames();
@@ -1332,12 +1356,71 @@ sal_Bool SwAccessibleParagraph::replaceText(
         throw IndexOutOfBoundsException();
 }
 
-sal_Bool SwAccessibleParagraph::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex,
-                        const Sequence<PropertyValue>& aAttributeSet )
+struct IndexCompare
+{
+    const PropertyValue* pValues;
+    IndexCompare( const PropertyValue* pVals ) : pValues(pVals) {}
+    bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
+    {
+        return (pValues[a].Name < pValues[b].Name) ? true : false;
+    }
+};
+
+
+sal_Bool SwAccessibleParagraph::setAttributes(
+    sal_Int32 nStartIndex,
+    sal_Int32 nEndIndex,
+    const Sequence<PropertyValue>& rAttributeSet )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    return sal_False;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    const OUString& rText = GetString();
+
+    if( ! IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    // create a (dummy) text portion for the sole purpose of calling
+    // setPropertyValue on it
+    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nStartIndex,
+                                                              nEndIndex );
+
+    // build sort index array
+    sal_Int32 nLength = rAttributeSet.getLength();
+    const PropertyValue* pPairs = rAttributeSet.getConstArray();
+    sal_Int32* pIndices = new sal_Int32[nLength];
+    sal_Int32 i;
+    for( i = 0; i < nLength; i++ )
+        pIndices[i] = i;
+    sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
+
+    // create sorted sequences accoring to index array
+    Sequence<OUString> aNames( nLength );
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues( nLength );
+    Any* pValues = aValues.getArray();
+    for( i = 0; i < nLength; i++ )
+    {
+        const PropertyValue& rVal = pPairs[pIndices[i]];
+        pNames[i]  = rVal.Name;
+        pValues[i] = rVal.Value;
+    }
+    delete[] pIndices;
+
+    // now set the values
+    sal_Bool bRet = sal_True;
+    try
+    {
+        xPortion->setPropertyValues( aNames, aValues );
+    }
+    catch( UnknownPropertyException e )
+    {
+        // error handling through return code!
+        bRet = sal_False;
+    }
+
+    return bRet;
 }
 
 sal_Bool SwAccessibleParagraph::setText( const OUString& sText )

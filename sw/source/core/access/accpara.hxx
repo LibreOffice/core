@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 15:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class SwTxtNode;
 class SwPaM;
 class SwCrsrShell;
 class SwAccessiblePortionData;
+class SwXTextPortion;
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
@@ -121,6 +122,11 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
 
     /// for cut/copy/paste: execute a particular slot at the view shell
     void ExecuteAtViewShell( UINT16 nSlot );
+
+    /// helper method for get/setAttributes
+    /// (for the special case of (nEndIndex==-1) a single character will
+    ///  be selected)
+    SwXTextPortion* CreateUnoPortion( sal_Int32 nStart, sal_Int32 nEnd );
 
 
     // methods for checking the parameter range:
