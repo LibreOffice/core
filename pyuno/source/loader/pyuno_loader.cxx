@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:46:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,9 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
                 OUString systemPath;
                 osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
                 bufPYTHONPATH.append( systemPath );
-                bufPYTHONPATH.append( (sal_Unicode) SAL_PATHSEPARATOR );
                 if( nNew == -1 )
                     break;
+                bufPYTHONPATH.append( (sal_Unicode) SAL_PATHSEPARATOR );
                 nIndex = nNew + 1;
             }
         }
