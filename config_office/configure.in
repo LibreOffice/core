@@ -865,6 +865,13 @@ if test -z "$FLEX"; then
    AC_MSG_WARN([no flex found in \$PATH, install flex]) >> warn
 fi
 dnl ***************************************
+dnl testing that patch exists
+dnl ***************************************
+AC_PATH_PROG(PATCH, patch)
+if test -z "$PATCH"; then
+   AC_MSG_WARN([\"patch\" not found in \$PATH, install the development tool named\"patch"\]) >> warn
+fi
+dnl ***************************************
 dnl testing bash tools path on Windows
 dnl ***************************************
 if test "$_os" = "WINNT"; then
@@ -999,3 +1006,5 @@ else
    echo
 fi   
 AC_OUTPUT()
+
+
