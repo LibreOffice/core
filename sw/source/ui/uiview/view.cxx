@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:57:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,8 +838,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
 
-    bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
-    bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
+    bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc = bTabRowFromDoc =
+    bSetTabColFromDoc = bSetTabRowFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel = bInInnerResizePixel =
     bPasteState = bPasteSpecialState = sal_False;
 
