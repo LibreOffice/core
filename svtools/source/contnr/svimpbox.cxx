@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:01:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 14:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,7 @@ BOOL SvImpLBox::EntryReallyHit(SvLBoxEntry* pEntry,const Point& rPosPixel,long n
         return TRUE;
 
     Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
+    aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
     if( pView->IsA() == SV_LISTBOX_ID_TREEBOX )
     {
         SvLBoxContextBmp* pBmp = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
