@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-25 13:41:14 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,6 +1102,31 @@ sal_Int32 SvXMLNumFormatContext::GetKey()
     }
 }
 
+void SvXMLNumFormatContext::GetFormat(rtl::OUString& rFormatString, lang::Locale& rLocale)
+{
+    if (bHasMap)
+    {
+        rtl::OUString sFormat;
+        lang::Locale aLoc;
+        for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
+        {
+            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+            if (pStyle)
+            {
+                pStyle->GetFormat(sFormat, aLoc);
+                AddCondition(i, sFormat, aLoc);
+            }
+        }
+    }
+    aFormatCode.insert( 0, aConditions.makeStringAndClear() );
+    rFormatString = aFormatCode.makeStringAndClear();
+    String aLanguage, aCountry;
+    ConvertLanguageToIsoNames(nFormatLang, aLanguage, aCountry);
+    rLocale.Language = rtl::OUString(aLanguage);
+    rLocale.Country = rtl::OUString(aCountry);
+}
+
 void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 {
     if (!(nKey > -1))
@@ -1468,6 +1493,39 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         const SvNumberformat* pFormat = pFormatter->GetEntry(nKey);
         if ( pFormat )
             aConditions.append( OUString( pFormat->GetFormatstring() ) );
+
+        aConditions.append( (sal_Unicode) ';' );
+    }
+}
+
+void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const lang::Locale& rLocale )
+{
+    rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
+    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    sal_Int32 nValLen = sValue.getLength();
+
+    if ( rCondition.copy( 0, nValLen ) == sValue )
+    {
+        //! test for valid conditions
+        //! test for default conditions
+
+        OUString sRealCond = rCondition.copy( nValLen, rCondition.getLength() - nValLen );
+        sal_Bool bDefaultCond = sal_False;
+
+        //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
+        //! allow blanks in conditions
+        sal_Bool bFirstCond = ( aConditions.getLength() == 0 );
+        if ( bFirstCond && sRealCond.compareToAscii( ">=0" ) == 0 )
+            bDefaultCond = sal_True;
+
+        if (!bDefaultCond)
+        {
+            aConditions.append( (sal_Unicode) '[' );
+            aConditions.append( sRealCond );
+            aConditions.append( (sal_Unicode) ']' );
+        }
+
+        aConditions.append( rFormat );
 
         aConditions.append( (sal_Unicode) ';' );
     }
