@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 13:47:41 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 12:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,6 +714,7 @@ ULONG SwASCIIParser::ReadChars()
 
     BOOL bSwapUnicode;
     rtl_TextToUnicodeConverter hConverter;
+    rtl_TextToUnicodeContext hContext;
     if( RTL_TEXTENCODING_UCS2 != rOpt.GetCharSet() )
     {
         hConverter = rtl_createTextToUnicodeConverter( rOpt.GetCharSet() );
@@ -721,6 +722,7 @@ ULONG SwASCIIParser::ReadChars()
         if( !hConverter )
             return ERR_W4W_DLL_ERROR | ERROR_SW_READ_BASE;
         bSwapUnicode = FALSE;
+        hContext = rtl_createTextToUnicodeContext( hConverter );
     }
     else
     {
@@ -751,7 +753,7 @@ ULONG SwASCIIParser::ReadChars()
                 sal_Size nNewLen = lGCount, nCntBytes;
                 sal_Unicode* pBuf = sWork.AllocBuffer( nNewLen );
 
-                nNewLen = rtl_convertTextToUnicode( hConverter, 0,
+                nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
                                 pArr, lGCount, pBuf, nNewLen,
                                 (
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
@@ -915,8 +917,10 @@ ULONG SwASCIIParser::ReadChars()
     } while( TRUE );
 
     if( hConverter )
+    {
         rtl_destroyTextToUnicodeConverter( hConverter );
-
+        rtl_destroyTextToUnicodeContext( hConverter, hContext );
+    }
     return 0;
 }
 
