@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: tl $ $Date: 2002-02-05 14:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,10 +1105,12 @@ void SwXTextCursor::collapseToStart(void) throw( uno::RuntimeException )
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
-            pUnoCrsr->Exchange();
         if(pUnoCrsr->HasMark())
+        {
+            if(*pUnoCrsr->GetPoint() > *pUnoCrsr->GetMark())
+                pUnoCrsr->Exchange();
             pUnoCrsr->DeleteMark();
+        }
     }
     else
     {
