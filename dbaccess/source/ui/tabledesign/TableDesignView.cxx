@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 13:01:03 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 10:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,19 +343,35 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
             if (rCode.GetCode() != KEY_F6)
                 break;
 
-            if (GetDescWin() && GetDescWin()->HasChildPathFocus())
+            Window* pLeft   = GetEditorCtrl();
+            Window* pRight  = getToolBox();
+            if ( rCode.IsShift() )
             {
-                if (GetEditorCtrl())
-                {
-                    GetEditorCtrl()->GrabFocus();
-                    bHandled = TRUE;
-                }
+                pLeft   = getToolBox();
+                pRight  = GetEditorCtrl();
             }
-            else if (GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus())
+
+            if (pLeft && pLeft->HasChildPathFocus())
             {
                 if (GetDescWin())
                 {
                     GetDescWin()->GrabFocus();
+                    bHandled = TRUE;
+                }
+            }
+            else if (GetDescWin() && GetDescWin()->HasChildPathFocus())
+            {
+                if (pRight)
+                {
+                    pRight->GrabFocus();
+                    bHandled = TRUE;
+                }
+            }
+            else if (pRight && pRight->HasChildPathFocus())
+            {
+                if (pLeft)
+                {
+                    pLeft->GrabFocus();
                     bHandled = TRUE;
                 }
             }
