@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:33 $
+ *  last change: $Author: er $ $Date: 2001-01-29 11:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,11 +370,11 @@ constants KParseType
     and <member>XCharacterClassification::parsePredefinedToken</member>.
  */
 struct ParseResult {
-    /// Number of leading whitespace characters, not codepoints.
+    /// Count of ignored leading whitespace, in code points, not characters.
     long    LeadingWhiteSpace;
     /// Code point index of first unprocessed character.
     long    EndPos;
-    /// Number of characters that are processed.
+    /// Number of characters (not code points) of the parsed token, not including leading whitespace.
     long    CharLen;
     /// Value of token in case of numeric.
     double  Value;
