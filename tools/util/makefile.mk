@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: th $ $Date: 2001-07-06 13:59:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-29 09:15:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..
 PRJNAME=TOOLS
 TARGET=tools
 VERSION=$(UPD)
-
-USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -217,6 +215,7 @@ SHL1OBJS=       $(SLO)\memmgr.obj
 SHL1STDLIBS+=   shell32.lib     \
                 mpr.lib         \
                 ole32.lib       \
+                user32.lib       \
                 uuid.lib        \
                 advapi32.lib
 .ENDIF
