@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
+ *  last change: $Author: sb $ $Date: 2001-02-08 14:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef _COM_SUN_STAR_UCB_FETCHERROR_HPP_
 #include <com/sun/star/ucb/FetchError.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_RESULTSETEXCEPTION_HPP_
+#include <com/sun/star/ucb/ResultSetException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -1470,7 +1474,18 @@ sal_Bool SAL_CALL CachedContentResultSet
         //unknown final count:
         aGuard.clear();
 
-        sal_Bool bValid = m_xResultSetOrigin->absolute( row );
+        // Solaris has problems catching or propagating derived exceptions
+        // when only the base class is known, so make ResultSetException
+        // (derived from SQLException) known here:
+        sal_Bool bValid;
+        try
+        {
+            bValid = m_xResultSetOrigin->absolute( row );
+        }
+        catch (ResultSetException &)
+        {
+            throw;
+        }
 
         aGuard.reacquire();
         if( m_bFinalCount )
