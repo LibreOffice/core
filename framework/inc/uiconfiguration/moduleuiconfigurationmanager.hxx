@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:50:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,32 +122,32 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
+#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
-#include <drafts/com/sun/star/ui/ConfigurationEvent.hpp>
+#ifndef _COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
+#include <com/sun/star/ui/ConfigurationEvent.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
@@ -181,10 +181,10 @@ namespace framework
                                            public com::sun::star::lang::XServiceInfo                        ,
                                            public com::sun::star::lang::XComponent                          ,
                                            public com::sun::star::lang::XInitialization                     ,
-                                           public drafts::com::sun::star::ui::XUIConfiguration              ,
-                                           public drafts::com::sun::star::ui::XUIConfigurationManager       ,
-                                           public drafts::com::sun::star::ui::XModuleUIConfigurationManager ,
-                                           public drafts::com::sun::star::ui::XUIConfigurationPersistence   ,
+                                           public ::com::sun::star::ui::XUIConfiguration              ,
+                                           public ::com::sun::star::ui::XUIConfigurationManager       ,
+                                           public ::com::sun::star::ui::XModuleUIConfigurationManager ,
+                                           public ::com::sun::star::ui::XUIConfigurationPersistence   ,
                                            private ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                            public ::cppu::OWeakObject
     {
@@ -206,8 +206,8 @@ namespace framework
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
             // XUIConfiguration
-            virtual void SAL_CALL addConfigurationListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL removeConfigurationListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL addConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
             // XUIConfigurationManager
             virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException);
@@ -275,7 +275,7 @@ namespace framework
 
             struct UIElementType
             {
-                UIElementType() : nElementType( drafts::com::sun::star::ui::UIElementType::UNKNOWN ), bLoaded( false ), bModified( false ), bDefaultLayer( false ) {}
+                UIElementType() : nElementType( ::com::sun::star::ui::UIElementType::UNKNOWN ), bLoaded( false ), bModified( false ), bDefaultLayer( false ) {}
 
                 bool                                                              bModified;
                 bool                                                              bLoaded;
@@ -286,12 +286,12 @@ namespace framework
             };
 
             typedef ::std::vector< UIElementType > UIElementTypesVector;
-            typedef ::std::vector< drafts::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+            typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
             typedef ::std::hash_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
 
             // private methods
             void            impl_Initialize();
-            void            implts_notifyContainerListener( const drafts::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
+            void            implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             void            impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType );
             void            impl_preloadUIElementTypeList( Layer eLayer, sal_Int16 nElementType );
             UIElementData*  impl_findUIElementData( const rtl::OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
@@ -301,7 +301,7 @@ namespace framework
             void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
             UIElementTypesVector                                                            m_aUIElements[LAYER_COUNT];
-            PresetHandler*                                                                  m_pStorageHandler[drafts::com::sun::star::ui::UIElementType::COUNT];
+            PresetHandler*                                                                  m_pStorageHandler[::com::sun::star::ui::UIElementType::COUNT];
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xDefaultConfigStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
             bool                                                                            m_bReadOnly;
