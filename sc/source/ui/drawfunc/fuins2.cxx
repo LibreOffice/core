@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:14:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,20 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 //------------------------------------------------------------------------
 
+#include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
-#include <so3/outplace.hxx>
 #include <svtools/globalnameitem.hxx>
-#include <sfx2/frameobj.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/stritem.hxx>
-#include <so3/insdlg.hxx>
-#include <so3/svstor.hxx>
-#include <so3/plugin.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <svx/svdoole2.hxx>
@@ -87,11 +90,15 @@
 #include <svtools/urihelper.hxx>
 #endif
 #include <svtools/moduleoptions.hxx>
+#include <svtools/insdlg.hxx>
+#include <svtools/soerr.hxx>
+#include <svx/svxdlg.hxx>
 #include <sot/clsids.hxx>
 
 // BM --
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -126,7 +133,7 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
-void lcl_ChartInit( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pWin )
+void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& aIPObj, ScViewData* pViewData, Window* pWin )
 {
     SCCOL nCol1 = 0;
     SCROW nRow1 = 0;
@@ -145,12 +152,7 @@ void lcl_ChartInit( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pW
         PutInOrder( nRow1, nRow2 );
         if ( nCol2>nCol1 || nRow2>nRow1 )
         {
-            String aChartName;
-            SvInfoObject* pInfoObj = pViewData->GetDocShell()->Find( aIPObj );
-            if ( pInfoObj )
-                aChartName = pInfoObj->GetObjName();
-            else
-                DBG_ERROR( "IP-Object not found :-/" );
+            String aChartName = pViewData->GetDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( aIPObj );
 
             ScDocument* pDoc = pViewData->GetDocument();
             pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
@@ -164,6 +166,7 @@ void lcl_ChartInit( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pW
 
             ScChartArray aParam( pDoc, nTab1, nCol1,nRow1, nCol2,nRow2, String() );
             SchMemChart* pMemChart = aParam.CreateMemChart();
+            // TODO/LATER: looks like there is no need to update replacement, but it should be checked.
             SchDLL::Update( aIPObj, pMemChart, pWin );
             delete pMemChart;
         }
@@ -174,7 +177,7 @@ void lcl_ChartInit( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pW
 #pragma optimize("",off)
 #endif
 
-void lcl_ChartInit2( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* pWin,
+void lcl_ChartInit2( const uno::Reference < embed::XEmbeddedObject >& aIPObj, ScViewData* pViewData, Window* pWin,
                         const SfxItemSet* pReqArgs, const String& rChartName )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -236,6 +239,7 @@ void lcl_ChartInit2( SvInPlaceObjectRef aIPObj, ScViewData* pViewData, Window* p
     }
     pDoc->GetChartListenerCollection()->Insert( pChartListener );
     pChartListener->StartListeningTo();
+    // TODO/LATER: looks like there is no need to update replacement, but it should be checked.
     SchDLL::Update( aIPObj, pMemChart, *pReqArgs, pWin );
     delete pMemChart;
 }
@@ -259,139 +263,133 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
 
     //! hier DLL's initalisieren, damit die Factories existieren?
 
-    SvInPlaceObjectRef aIPObj;
-    SvStorageRef aStor = new SvStorage( String() );
+    uno::Reference < embed::XEmbeddedObject > xObj;
+    uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     BOOL bIsFromFile = FALSE;
+    ::rtl::OUString aName;
 
     USHORT nSlot = rReq.GetSlot();
-    if (nSlot == SID_INSERT_FLOATINGFRAME)
+    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+    if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
-        SfxInsertFloatingFrameDialog aDlg( pWin );
-//      aDlg.SetHelpId(nSlot);
-        aIPObj = aDlg.Execute( aStor );
-
-        // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
-        bIsFromFile = TRUE;
+        SvGlobalName aClassName = pNameItem->GetValue();
+        xObj = pViewShell->GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
     }
-    else if (nSlot == SID_INSERT_SMATH)
+    else if ( nSlot == SID_INSERT_SMATH )
     {
         if ( SvtModuleOptions().IsMath() )
         {
             nSlot = SID_INSERT_OBJECT;
+            xObj = pViewShell->GetViewFrame()->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
             rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
-//          aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-//                                      *OFF_APP()->GetSmDLL()->pSmDocShellFactory,
-//                                      *SM_MOD()->pSmDocShellFactory,
-//                                      aStor );
         }
     }
-    else if (nSlot == SID_INSERT_PLUGIN)
+    else
     {
-        SvInsertPlugInDialog aDlg;
-        aDlg.SetHelpId(nSlot);
-        aIPObj = aDlg.Execute( pWin, aStor );
-        bIsFromFile = TRUE;                                 // nicht aktivieren
-    }
-    else if (nSlot == SID_INSERT_SOUND || nSlot == SID_INSERT_VIDEO)
-    {
-        // create special filedialog for plugins
-        SvxPluginFileDlg aPluginFileDialog(pWin, nSlot);
-
-        // open filedlg
-        if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
+        SvObjectServerList aServerLst;
+        switch ( nSlot )
         {
-            // get URL
-            String aStrURL(aPluginFileDialog.GetPath());
-            aStrURL = URIHelper::SmartRelToAbs( aStrURL );
-
-            INetURLObject aURL;
-            aURL.SetSmartProtocol( INET_PROT_FILE );
-
-            if ( aURL.SetURL( aStrURL ) )
+            case SID_INSERT_OBJECT :
+                aServerLst.FillInsertObjects();
+                aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
+                //TODO/LATER: currently no inserting of ClassId into SfxRequest!
+            case SID_INSERT_PLUGIN :
+            case SID_INSERT_APPLET :
+            case SID_INSERT_FLOATINGFRAME :
             {
-                // create plugin, initialize, etc.
-                SvFactory *pPlugIn = (SvFactory*) SvPlugInObject::ClassFactory();
-                SvStorageRef aStor = new SvStorage( EMPTY_STRING, STREAM_STD_READWRITE );
-                SvPlugInObjectRef xObj = &pPlugIn->CreateAndInit( *pPlugIn, aStor );
-                xObj->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-                xObj->SetURL( aURL );
-                aIPObj = (SvInPlaceObject*)&xObj;
-            }
-            else
-            {
-                //! error message
-                //! can this happen???
-            }
-        }
-    }
-    else if (nSlot == SID_INSERT_APPLET)
-    {
-        SvInsertAppletDialog aDlg;
-        aDlg.SetHelpId(nSlot);
-        aIPObj = aDlg.Execute( pWin, aStor );
-        bIsFromFile = TRUE;                                 // nicht aktivieren
-    }
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                SfxAbstractInsertObjectDialog* pDlg =
+                        pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), nSlot,
+                        xStorage, &aServerLst );
+                if ( pDlg )
+                {
+                    pDlg->Execute();
+                    bIsFromFile = !pDlg->IsCreateNew();
+                    xObj = pDlg->GetObject();
+                    if ( xObj.is() )
+                        pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                    // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
+                    bIsFromFile = !pDlg->IsCreateNew();
+                    DELETEZ( pDlg );
+                }
 
-    if ( nSlot == SID_INSERT_OBJECT )
-    {
-        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
-        if ( pNameItem )
-        {
-            SvGlobalName aName = pNameItem->GetValue();
-            aIPObj = SvInPlaceObject::CreateObject( aName );
-        }
-        else
-        {
-            SvInsertOleObjectDialog aDlg;
-            aDlg.SetHelpId(nSlot);
-            SvObjectServerList aServerLst;
-            aDlg.FillObjectServerList(&aServerLst);
-            aServerLst.Remove( *ScDocShell::ClassFactory() );   // Starcalc nicht anzeigen
-            aIPObj = aDlg.Execute(pWin, aStor, &aServerLst );
-            bIsFromFile = !aDlg.IsCreateNew();
+                break;
+            }
+            case SID_INSERT_SOUND :
+            case SID_INSERT_VIDEO :
+            {
+                // create special filedialog for plugins
+                SvxPluginFileDlg aPluginFileDialog(pWin, nSlot);
+
+                // open filedlg
+                if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
+                {
+                    // get URL
+                    String aStrURL(aPluginFileDialog.GetPath());
+                    aStrURL = URIHelper::SmartRelToAbs( aStrURL );
+
+                    INetURLObject aURL;
+                    aURL.SetSmartProtocol( INET_PROT_FILE );
+
+                    if ( aURL.SetURL( aStrURL ) )
+                    {
+                        // create a plugin object
+                        ::rtl::OUString aName;
+                        SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
+                        comphelper::EmbeddedObjectContainer aCnt( xStorage );
+                        xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
+                        if ( xObj.is() )
+                        {
+                            // set properties from dialog
+                            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                            if ( xSet.is() )
+                            {
+                                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                        uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //! error message
+                        //! can this happen???
+                    }
+                }
+            }
         }
     }
 
     //  SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
-
-    if( aIPObj.Is() )
+    if (xObj.is())
     {
         pView->UnmarkAll();
 
-        SvEmbeddedInfoObject* pInfoObj = pViewSh->GetViewFrame()->GetObjectShell()->
-                                            InsertObject(aIPObj, String());
-        if ( !pInfoObj )
-        {
-            pViewSh->ErrorMessage( STR_ERR_INSERTOBJ );
-            rReq.Ignore();
-        }
-        else
-        {
-            String aName = pInfoObj->GetObjName();
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+            awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+            Size aSize( aSz.Width, aSz.Height );
 
-            //  aSize immer in 1/100mm, egal was das Ole-Objekt hat
-
-            Size aSize = aIPObj->GetVisArea().GetSize();
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             if (aSize.Height() == 0 || aSize.Width() == 0)
             {
+                // Rechteck mit ausgewogenem Kantenverhaeltnis
                 aSize.Width() = 5000;
                 aSize.Height() = 5000;
-                Size aObjSize = Window::LogicToLogic( aSize,
-                                MapMode( MAP_100TH_MM ), MapMode( aIPObj->GetMapUnit() ) );
-                aIPObj->SetVisAreaSize(aObjSize);
+                Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
+                aSz.Width = aTmp.Width();
+                aSz.Height = aTmp.Height();
+                xObj->setVisualAreaSize( nAspect, aSz );
 
                 //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
-                aSize = Window::LogicToLogic( aObjSize,
-                                MapMode( aIPObj->GetMapUnit() ), MapMode( MAP_100TH_MM ) );
+                aSize = Window::LogicToLogic( aTmp,
+                                MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
             }
             else
                 aSize = Window::LogicToLogic( aSize,
-                                MapMode( aIPObj->GetMapUnit() ), MapMode( MAP_100TH_MM ) );
+                                MapMode( aMapUnit ), MapMode( MAP_100TH_MM ) );
 
             //  Chart initialisieren ?
-
-            if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( aIPObj->GetClassName() ) )
-                lcl_ChartInit( aIPObj, pViewSh->GetViewData(), pWin );
+            if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
+                lcl_ChartInit( xObj, pViewSh->GetViewData(), pWin );
 
             ScViewData* pData = pViewSh->GetViewData();
 
@@ -399,7 +397,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
                 aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
-            SdrOle2Obj* pObj = new SdrOle2Obj(aIPObj, aName, aRect);
+            SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
 
                 // Dieses Objekt nicht vor dem Aktivieren zeichnen
                 // (in MarkListHasChanged kommt ein Update)
@@ -413,8 +411,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             //  New size must be set in SdrObject, or a wrong scale will be set at
             //  ActivateObject.
 
-            Size aNewSize = Window::LogicToLogic( aIPObj->GetVisArea().GetSize(),
-                            MapMode( aIPObj->GetMapUnit() ), MapMode( MAP_100TH_MM ) );
+            aSz = xObj->getVisualAreaSize( nAspect );
+            Size aNewSize( aSz.Width, aSz.Height );
+            aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MAP_100TH_MM );
+
             if ( aNewSize != aSize )
             {
                 aRect.SetSize( aNewSize );
@@ -437,7 +437,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             }
 
             rReq.Done();
-        }
     }
     else
         rReq.Ignore();
@@ -541,29 +540,29 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
     }
     else
     {
-        SvInPlaceObjectRef aIPObj;
         if ( SvtModuleOptions().IsChart() )
-            aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-        if( aIPObj.Is() )
         {
             pView->UnmarkAll();
+            ::rtl::OUString aName;
 
-            SvEmbeddedInfoObject* pInfoObj = pViewSh->GetViewFrame()->GetObjectShell()->
-                InsertObject(aIPObj, String());
-            if ( !pInfoObj )
+            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+            uno::Reference < embed::XEmbeddedObject > xObj =
+                pViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID_60 ).GetByteSequence(), aName );
+            if ( !xObj.is() )
                 pViewSh->ErrorMessage( STR_ERR_INSERTOBJ );
             else
             {
-                String aName = pInfoObj->GetObjName();
-
                 ScRangeListRef aDummy;
                 Rectangle aMarkDest;
                 SCTAB nMarkTab;
                 BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
                 //  Objekt-Groesse
+                awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+                Size aSize( aSz.Width, aSz.Height );
 
-                Size aSize = aIPObj->GetVisArea().GetSize();
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+
                 BOOL bSizeCh = FALSE;
                 if (bDrawRect && !aMarkDest.IsEmpty())
                 {
@@ -578,8 +577,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                 }
                 if (bSizeCh)
                 {
-                    aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aIPObj->GetMapUnit() ) );
-                    aIPObj->SetVisAreaSize(aSize);
+                    aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+                    aSz.Width = aSize.Width();
+                    aSz.Height = aSize.Height();
+                    xObj->setVisualAreaSize( nAspect, aSz );
                 }
 
                 ScViewData* pData = pViewSh->GetViewData();
@@ -589,7 +590,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
 
                 if( pReqArgs )
                 {
-                    lcl_ChartInit2( aIPObj, pData, pWin, pReqArgs, aName );
+                    lcl_ChartInit2( xObj, pData, pWin, pReqArgs, aName );
                     const SfxPoolItem* pItem;
                     UINT16 nToTable = 0;
 
@@ -650,7 +651,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     }
                 }
                 else
-                    lcl_ChartInit( aIPObj, pData, pWin );
+                    lcl_ChartInit( xObj, pData, pWin );
 
                 //  Objekt-Position
 
@@ -719,7 +720,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                 }
 
                 Rectangle aRect (aStart, aSize);
-                SdrOle2Obj* pObj = new SdrOle2Obj(aIPObj, aName, aRect);
+                SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
 
                 // Dieses Objekt nicht vor dem Aktivieren zeichnen
                 // (in MarkListHasChanged kommt ein Update)
@@ -732,7 +733,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                 //SvData aEmpty;
 
                 //aIPObj->SendDataChanged( aEmpty );
-                aIPObj->SendViewChanged();
 
                 if (!rReq.IsAPI())
                 {
