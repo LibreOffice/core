@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>
-#include <transliteration_commonclass.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 //      ----------------------------------------------------
 //      class Collator_Unicode
@@ -107,7 +107,7 @@ public:
 
 protected:
     sal_Char *implementationName;
-    transliteration_commonclass* ignore;
+    com::sun::star::lang::Locale aLocale;
     TransliterationModules tranModules;
 };
 
