@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:38:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,8 +848,7 @@ BaseContent::getParent(
 
     try
     {
-        Reference< XInterface > content = m_pMyShell->m_pProvider->queryContent( Identifier );
-        return content;
+            return Reference< XInterface >( m_pMyShell->m_pProvider->queryContent( Identifier ) );
     }
     catch( IllegalIdentifierException )
     {
@@ -1187,15 +1186,6 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( m_nState & Deleted )
         return;
 
-    // Never write access to virtual root in case of access restrictions
-    if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
-    {
-        m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_TRANSFER_ACCESSINGROOT );
-        return;
-    }
-
-
     if( aTransferInfo.SourceURL.compareToAscii( "file:",5 ) != 0 )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
@@ -1211,13 +1201,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         return;
     }
 
-    rtl::OUString srcUncPath;
-    if( ! m_pMyShell->checkMountPoint( srcUnc,srcUncPath ) )
-    {
-        m_pMyShell->installError( nMyCommandIdentifier,
-                                  TASKHANDLING_TRANSFER_MOUNTPOINTS );
-        return;
-    }
+    rtl::OUString srcUncPath = srcUnc;
 
     // Determine the new title !
     rtl::OUString NewTitle;
