@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,12 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_pKeysMngr( NULL ) , m_xServiceManager( aFactory ) , m_xSecurityEnvironment( NULL ) {
+XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory )
+    ://i39448 : m_pKeysMngr( NULL ) ,
+    m_nDefaultEnvIndex(-1) ,
+    m_xServiceManager( aFactory )//,
+    //m_xSecurityEnvironment( NULL )
+{
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
         throw RuntimeException() ;
@@ -113,15 +118,78 @@ XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMult
 }
 
 XMLSecurityContext_NssImpl :: ~XMLSecurityContext_NssImpl() {
+#if 0 //i39448
     if( m_pKeysMngr != NULL ) {
         xmlSecKeysMngrDestroy( m_pKeysMngr ) ;
     }
+#endif
 
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
     xmlSecShutdown() ;
 }
 
+//i39448 : new methods
+sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
+    throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException)
+{
+    if( !aSecurityEnvironment.is() )
+    {
+        throw RuntimeException() ;
+    }
+
+    m_vSecurityEnvironments.push_back( aSecurityEnvironment );
+
+    return m_vSecurityEnvironments.size() - 1 ;
+}
+
+
+sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getSecurityEnvironmentNumber(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_vSecurityEnvironments.size();
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+    XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnvironment;
+
+    if (index >= 0 && index < ( sal_Int32 )m_vSecurityEnvironments.size())
+    {
+        xSecurityEnvironment = m_vSecurityEnvironments[index];
+    }
+    else
+        throw RuntimeException() ;
+
+    return xSecurityEnvironment;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+    XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    if (m_nDefaultEnvIndex >= 0 && m_nDefaultEnvIndex < ( sal_Int32 )m_vSecurityEnvironments.size())
+        return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
+    else
+        throw RuntimeException() ;
+}
+
+sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getDefaultSecurityEnvironmentIndex(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nDefaultEnvIndex ;
+}
+
+void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    m_nDefaultEnvIndex = nDefaultEnvIndex;
+}
+
+#if 0 //i39448 : old methods should be deleted
 /* XXMLSecurityContext */
 void SAL_CALL XMLSecurityContext_NssImpl :: setSecurityEnvironment( const Reference< XSecurityEnvironment >& aSecurityEnvironment ) throw( com::sun::star::security::SecurityInfrastructureException ) {
     PK11SlotInfo* slot ;
@@ -199,6 +267,8 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_NssImpl :: getSecu
 {
     return  m_xSecurityEnvironment ;
 }
+#endif
+
 
 /* XInitialization */
 void SAL_CALL XMLSecurityContext_NssImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
@@ -250,6 +320,7 @@ Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFact
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+#if 0 //not useful any longer
 /* XUnoTunnel */
 sal_Int64 SAL_CALL XMLSecurityContext_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
 throw (RuntimeException)
@@ -288,3 +359,4 @@ xmlSecKeysMngrPtr XMLSecurityContext_NssImpl :: keysManager() throw( Exception, 
     return m_pKeysMngr ;
 }
 
+#endif

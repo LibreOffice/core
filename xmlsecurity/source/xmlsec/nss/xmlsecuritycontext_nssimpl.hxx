@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_nssimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
@@ -110,30 +110,52 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #endif
 
-#include "xmlsec/xmlsec.h"
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
 
-class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper4<
+class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,
     ::com::sun::star::lang::XInitialization ,
-    ::com::sun::star::lang::XServiceInfo ,
-    ::com::sun::star::lang::XUnoTunnel >
+    ::com::sun::star::lang::XServiceInfo >
 {
     private :
-        xmlSecKeysMngrPtr m_pKeysMngr ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
+        //xmlSecKeysMngrPtr m_pKeysMngr ;
+        //::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
+        std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
+
+        sal_Int32 m_nDefaultEnvIndex;
 
     public :
         XMLSecurityContext_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~XMLSecurityContext_NssImpl() ;
 
         //Methods from XXMLSecurityContext
-        virtual void SAL_CALL setSecurityEnvironment(
+        virtual sal_Int32 SAL_CALL addSecurityEnvironment(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
-        ) throw( com::sun::star::security::SecurityInfrastructureException) ;
+            ) throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL getSecurityEnvironment()
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+            getSecurityEnvironmentByIndex( ::sal_Int32 index )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+            getSecurityEnvironment(  )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual ::sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex(  )
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
+            throw (::com::sun::star::uno::RuntimeException);
 
         //Methods from XInitialization
         virtual void SAL_CALL initialize(
@@ -159,6 +181,10 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper4<
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 
+        /*
+         * Because of the issue of multi-securityenvironment, so the keyManager method is not useful any longer.
+         *
+
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw (com::sun::star::uno::RuntimeException);
@@ -168,6 +194,8 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper4<
 
         //Native mehtods
         virtual xmlSecKeysMngrPtr keysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
+
+        */
 } ;
 
 #endif  // _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
