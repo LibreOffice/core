@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:39:26 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,14 +168,15 @@ std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _a
 
 class OInvalidateTreeThread: public vos::OThread
 {
-    typedef CacheController CacheManager;
+    typedef backend::ICachedDataProvider CacheManager;
+    typedef rtl::Reference< CacheManager > CacheManagerRef;
     RequestOptions      m_aOptions;
-    CacheManager&       m_rTreeManager;
+    CacheManagerRef     m_rTreeManager;
     Name                m_aComponentName;
 
 public:
-    OInvalidateTreeThread(CacheManager& _rTreeManager,  Name const & _aComponentName,
-                            const RequestOptions& _aOptions)
+    OInvalidateTreeThread(CacheManager* _rTreeManager,  Name const & _aComponentName,
+                          const RequestOptions& _aOptions)
     : m_rTreeManager(_rTreeManager)
     , m_aComponentName(_aComponentName)
     , m_aOptions(_aOptions)
@@ -201,7 +202,7 @@ void CacheController::invalidateComponent(ComponentRequest const & _aComponent) 
     {
         // start the InvalidateTreeThread only, if we are not at disposemode
         if (OInvalidateTreeThread *pThread =
-            new OInvalidateTreeThread(*this, _aComponent.getComponentName(), _aComponent.getOptions()))
+            new OInvalidateTreeThread(this, _aComponent.getComponentName(), _aComponent.getOptions()))
         {
             pThread->create();
         }
@@ -288,7 +289,7 @@ void OInvalidateTreeThread::run()
     try
     {
         ComponentRequest aRequest(m_aComponentName, m_aOptions);
-        m_rTreeManager.refreshComponent(aRequest);
+        m_rTreeManager->refreshComponent(aRequest);
     }
     catch(uno::Exception&)
     {
