@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-03 05:33:42 $
+ *  last change: $Author: cd $ $Date: 2002-04-08 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,10 +187,11 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
     {
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
-        String aPhysicalName;
-        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+        String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        ::rtl::OUString aSystemPath( aPhysicalName );
+//      ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+
+        ::rtl::OUString aSystemPath( aFileSystemPath );
         ::rtl::OUString aCompactedSystemPath;
 
         aTipHelpText = aSystemPath;
@@ -198,7 +199,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
         if ( !nError )
             aPickEntry += String( aCompactedSystemPath );
         else
-            aPickEntry += aPhysicalName;
+            aPickEntry += aFileSystemPath;
 
         if ( aPickEntry.Len() > 50 )
         {
