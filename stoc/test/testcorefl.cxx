@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:14:13 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,18 +395,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     return sal_True;
 }
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#ifdef MACOSX
-#define DLL_POSTFIX     ".dylib"
-#else
-#define DLL_POSTFIX     ".so"
-#endif
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
@@ -416,11 +404,8 @@ int __cdecl main( int argc, char * argv[] )
     sal_Bool bSucc = sal_False;
     try
     {
-        OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
-        aLibName += OUString::createFromAscii("corefl");
-#ifndef OS2
-        aLibName += OUString::createFromAscii(DLL_POSTFIX);
-#endif
+        OUString aLibName( RTL_CONSTASCII_USTRINGPARAM(
+                               "corereflection.uno" SAL_DLLEXTENSION) );
 
         Reference< XMultiServiceFactory > xMgr(
             createRegistryServiceFactory(
@@ -429,12 +414,18 @@ int __cdecl main( int argc, char * argv[] )
         Reference< beans::XPropertySet > xProps( xMgr, UNO_QUERY );
         OSL_ASSERT( xProps.is() );
         xProps->getPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+            OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>=
+            xContext;
         OSL_ASSERT( xContext.is() );
 
         Reference< XIdlReflection > xRefl;
-        xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) ) >>= xRefl;
-        OSL_ENSURE( xRefl.is(), "### CoreReflection singleton not accessable!?" );
+        xContext->getValueByName(
+            OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "/singletons/com.sun.star.reflection.theCoreReflection")) )
+                        >>= xRefl;
+        OSL_ENSURE(
+            xRefl.is(), "### CoreReflection singleton not accessable!?" );
 
         bSucc = test_corefl( xRefl );
 
@@ -443,7 +434,8 @@ int __cdecl main( int argc, char * argv[] )
     catch (Exception & rExc)
     {
         OSL_ENSURE( sal_False, "### exception occured!" );
-        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OString aMsg(
+            OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### exception occured: " );
         OSL_TRACE( aMsg.getStr() );
         OSL_TRACE( "\n" );
