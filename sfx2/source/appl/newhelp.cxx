@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-26 09:56:45 $
+ *  last change: $Author: gt $ $Date: 2001-09-26 10:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
 using namespace ::ucb;
@@ -545,7 +546,8 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 void IndexTabPage_Impl::InitializeIndex()
 {
-    EnterWait();
+    WaitObject( this );
+
     aIndexCB.SetUpdateMode( FALSE );
 
     try
@@ -665,7 +667,6 @@ void IndexTabPage_Impl::InitializeIndex()
     }
 
     aIndexCB.SetUpdateMode( TRUE );
-    LeaveWait();
 }
 
 // -----------------------------------------------------------------------
@@ -2129,13 +2130,20 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
     if ( pListener->IsSuccessful() )
     {
         // set some view settings: "prevent help tips" and "helpid == 68245"
-        Reference < XController > xController = pTextWin->getFrame()->getController();
-        if ( xController.is() )
+        try
         {
-            Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
-            Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
-            xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), makeAny( sal_Bool( sal_True ) ) );
-            xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
+            Reference < XController > xController = pTextWin->getFrame()->getController();
+            if ( xController.is() )
+            {
+                Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
+                Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), makeAny( sal_Bool( sal_True ) ) );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
