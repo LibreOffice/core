@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-30 13:49:32 $
+ *  last change: $Author: iha $ $Date: 2002-09-26 10:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
     while( nPage < nMaxPages )
     {
         pPage = (SdPage*) pDoc->GetPage( nPage );
-        if( bAllPages || pPage->GetPageKind() == PK_STANDARD )
+        if(  (bAllPages || pPage->GetPageKind() == PK_STANDARD)
+             && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
             BOOL bPageExluded = pPage->IsExcluded();
 
