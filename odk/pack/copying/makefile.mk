@@ -366,7 +366,7 @@ DOCUFILES+= \
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
-    $(DESTDIR)$/configureUnix \
+    $(DESTDIR)$/configure \
     $(DESTDIR)$/setsdkenv_unix.in
 .ELSE
 INSTALLSCRIPT= \
@@ -418,7 +418,7 @@ $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $? $@
 
-$(DESTDIR)$/configureUnix : $(PRJ)$/configureUnix
+$(DESTDIR)$/configure : $(PRJ)$/configure
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX"
