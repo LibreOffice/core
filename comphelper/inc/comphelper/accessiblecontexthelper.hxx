@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:21:46 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 16:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,13 @@ namespace comphelper
 
     public:
         // helper struct for granting selective access rights
-        struct OAccessControl { friend class OContextEntryGuard; };
+        struct OAccessControl
+        {
+            friend class OContextEntryGuard;
+            friend class OContextHelper_Impl;
+        private:
+            OAccessControl() { }
+        };
 
         // ensures that the object is alive
         inline  void            ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
@@ -275,6 +281,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/04/26 14:21:46  fs
+ *  #98750# +getAccessibleCreator
+ *
  *  Revision 1.2  2002/04/26 05:51:23  fs
  *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
  *
