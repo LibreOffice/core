@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:23:35 $
+ *  last change: $Author: mtg $ $Date: 2001-10-26 21:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@ using namespace std;
 
 ZipPackageFolder::ZipPackageFolder (void)
 : ZipPackageEntry ( true )
-, mbHasReleased  ( false )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -139,12 +138,6 @@ ZipPackageFolder::ZipPackageFolder (void)
 
 ZipPackageFolder::~ZipPackageFolder( void )
 {
-    ContentHash::iterator aIter = maContents.begin();
-    while ( aIter != maContents.end() )
-    {
-        delete (*aIter).second;
-        aIter++;
-    }
 }
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
 {
@@ -278,9 +271,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
           aCI != aEnd;
           aCI++)
     {
-        // pTempEntry is stored in a vector by ZipOutputStream and will
-        // be deleted by the ZipOutputStream destructor
-        ZipEntry * pTempEntry = new ZipEntry;
         const OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
@@ -305,6 +295,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
         else
         {
+            // pTempEntry is stored in a vector by ZipOutputStream and will
+            // be deleted by the ZipOutputStream destructor
+            ZipEntry * pTempEntry = new ZipEntry;
+
             // In case the entry we are reading is also the entry we are writing, we will
             // store the ZipEntry data in pTempEntry
 
@@ -449,18 +443,18 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
 void ZipPackageFolder::releaseUpwardRef( void )
 {
-    mbHasReleased = true;
     for ( ContentHash::const_iterator aCI = maContents.begin();
           aCI!=maContents.end();
           aCI++)
     {
         ContentInfo &rInfo = * (*aCI).second;
-        if ( rInfo.bFolder && ! rInfo.pFolder->HasReleased () )
+        if ( rInfo.bFolder )// && ! rInfo.pFolder->HasReleased () )
             rInfo.pFolder->releaseUpwardRef();
-        else
+        else //if ( !rInfo.bFolder && !rInfo.pStream->HasReleased() )
             rInfo.pStream->clearParent();
     }
     clearParent();
+    VOS_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
 }
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier )
@@ -485,7 +479,6 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
 Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    Any aAny;
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
         return makeAny ( sMediaType );
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
@@ -504,7 +497,7 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetPa
     else
         pInfo = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
 
-    maContents[pEntry->aEntry.sName] = pInfo;
+    maContents[pEntry->aEntry.sName] = auto_ptr < ContentInfo > ( pInfo );
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
