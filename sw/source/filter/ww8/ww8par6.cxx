@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-26 12:23:38 $
+ *  last change: $Author: khz $ $Date: 2000-11-28 15:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2842,7 +2842,10 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( USHORT nWhich )
         return &pAktColl->GetAttr( nWhich );
     else
     if( pAktItemSet )
-        return pAktItemSet->GetItem( nWhich );
+    {
+        const SfxPoolItem* pRet = pAktItemSet->GetItem( nWhich );
+        return pRet ? pRet : &pStandardFmtColl->GetAttr( nWhich );
+    }
     else
         return pCtrlStck->GetFmtAttr( *pPaM->GetPoint(), nWhich );
 }
@@ -3524,7 +3527,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
 
     short nPara = SVBT16ToShort( pData );
 
-    SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)GetFmtAttr( RES_LR_SPACE ));
+    SvxLRSpaceItem aLR;
+    const SfxPoolItem* pLR = GetFmtAttr( RES_LR_SPACE );
+    if( pLR )
+        aLR = *(const SvxLRSpaceItem*)pLR;
 
     switch( nId )
     {
@@ -4756,12 +4762,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.4 2000-10-26 12:23:38 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.5 2000-11-28 15:22:49 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/10/26 12:23:38  khz
+      add paragraph's left border to TabStops (as WW does)
+
       Revision 1.3  2000/10/25 14:10:36  khz
       Now supporting negative horizontal indentation of paragrahps and tables
 
