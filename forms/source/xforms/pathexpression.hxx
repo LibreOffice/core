@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathexpression.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:55:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,6 @@ public:
     /// evaluate the expression relative to the content node.
     bool evaluate( const xforms::EvaluationContext& rContext );
 
-    /// determine whether the expression can be considered as just an
-    /// element name
-    bool isElementName() const;
 
     // get the result of this expression as node/node list/...
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> getNode() const;
