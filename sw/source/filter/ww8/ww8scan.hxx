@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:28:55 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace SL
     DEFCONSTSTRINGARRAY(0Table);
     DEFCONSTSTRINGARRAY(Data);
     DEFCONSTSTRINGARRAY(CheckBox);
+    DEFCONSTSTRINGARRAY(ListBox);
     DEFCONSTSTRINGARRAY(TextBox);
     DEFCONSTSTRINGARRAY(TextField);
     DEFCONSTSTRINGARRAY(MSMacroCmds);
