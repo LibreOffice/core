@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:18:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,116 +69,31 @@ ModalDialog RID_SVXDLG_ZOOM
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 142 ) ;
-    Text = "Maßstab" ;
-    Text [ ENGLISH ] = "Zoom" ;
+    Text [ de ] = "Maßstab" ;
     Moveable = TRUE ;
     RadioButton BTN_WHOLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Ganze Seite" ;
-        Text [ ENGLISH ] = "~Whole page" ;
-        Text [ norwegian ] = "~Hele siden" ;
-        Text [ italian ] = "~Pagina intera" ;
-        Text [ portuguese_brazilian ] = "~Página Inteira" ;
-        Text [ portuguese ] = "~Página inteira" ;
-        Text [ finnish ] = "~Koko sivu" ;
-        Text [ danish ] = "H~ele siden" ;
-        Text [ french ] = "Page entière" ;
-        Text [ swedish ] = "Hela sidan" ;
-        Text [ dutch ] = "H~ele pagina" ;
-        Text [ spanish ] = "~Toda la página" ;
-        Text [ english_us ] = "~Entire Page" ;
-        Text[ chinese_simplified ] = "æ•´é¡µ(~E)";
-        Text[ russian ] = "Íà âñş ñòğàíèöó";
-        Text[ polish ] = "~Ca³a strona";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸å…¨ä½“(~E)";
-        Text[ chinese_traditional ] = "æ•´é (~E)";
-        Text[ arabic ] = "ÕİÍÉ ßÇãáÉ";
-        Text[ greek ] = "Ïëüêëçñç óåëßäá";
-        Text[ korean ] = "ì „ì²´ í˜ì´ì§€(~E)";
-        Text[ turkish ] = "Tam sayfa";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tota la pàgina";
-        Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "CelÃ¡ strÃ¡nka";
-        Text[ hebrew ] = "â€®×“×£ ×©×œ×â€¬";
-        Text[ hindi ] = "~à¤¸à¤®à¥à¤ªà¥‚à¤°à¥à¤£ à¤ªà¥ƒà¤·à¥à¤ ";
-        Text[ slovak ] = "~CelÃ¡ strÃ¡nka";
-        Text[ hungarian ] = "~Teljes oldal";
-        Text[ slovenian ] = "~Cela stran";
+        Text [ de ] = "~Ganze Seite" ;
+        Text [ en-US ] = "~Entire Page" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_PAGE_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "Seiten~breite" ;
-        Text [ ENGLISH ] = "~Page width" ;
-        Text [ norwegian ] = "~Sidebredde" ;
-        Text [ italian ] = "Larg~h. pagina" ;
-        Text [ portuguese_brazilian ] = "~Largura da Página" ;
-        Text [ portuguese ] = "~Larg. de página" ;
-        Text [ finnish ] = "~Sivun leveys" ;
-        Text [ danish ] = "Side~bredde" ;
-        Text [ french ] = "~Largeur de page" ;
-        Text [ swedish ] = "Sidbredd" ;
-        Text [ dutch ] = "~Paginabreedte" ;
-        Text [ spanish ] = "~Ancho de página" ;
-        Text [ english_us ] = "~Page Width" ;
-        Text[ chinese_simplified ] = "é¡µé¢å®½åº¦(~P)";
-        Text[ russian ] = "Ïî øèğèíå ñòğàíèöû";
-        Text[ polish ] = "Szerokoœæ ~strony";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸å¹…(~P)";
-        Text[ chinese_traditional ] = "é é¢å¯¬åº¦(~P)";
-        Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
-        Text[ greek ] = "ĞëÜôïò óåëßäáò";
-        Text[ korean ] = "í˜ì´ì§€ ë„ˆë¹„(~P)";
-        Text[ turkish ] = "Sayfa genişliği";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ample de pàgina";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸‚à¸­à¸‡~à¸«à¸™à¹‰à¸²";
-        Text[ czech ] = "Å Ã­Å™ka strÃ¡nky";
-        Text[ hebrew ] = "â€®×œ×¤×™ ×¨×•×—×‘ ×”×“×£â€¬";
-        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤  à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ";
-        Text[ slovak ] = "Å Ã­rka ~strÃ¡nky";
-        Text[ hungarian ] = "~OldalszÃ©lessÃ©g";
-        Text[ slovenian ] = "Å irina s~trani";
+        Text [ de ] = "Seiten~breite" ;
+        Text [ en-US ] = "~Page Width" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_OPTIMAL
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Optimal" ;
-        Text [ English ] = "~Optimal" ;
-        Text [ norwegian ] = "~Optimal" ;
-        Text [ italian ] = "~Ottimale" ;
-        Text [ portuguese_brazilian ] = "~Otimizado" ;
-        Text [ portuguese ] = "~Optimizar" ;
-        Text [ finnish ] = "O~ptimaalinen" ;
-        Text [ danish ] = "~Optimal" ;
-        Text [ french ] = "~Optimal" ;
-        Text [ swedish ] = "Optimal" ;
-        Text [ dutch ] = "~Optimaal" ;
-        Text [ spanish ] = "Ó~ptimo" ;
-        Text [ english_us ] = "~Optimal" ;
-        Text[ chinese_simplified ] = "æœ€ä½³(~O)";
-        Text[ russian ] = "Îïòèìàëüíûé";
-        Text[ polish ] = "~Optymalnie";
-        Text[ japanese ] = "æœ€é©(~O)";
-        Text[ chinese_traditional ] = "æœ€åˆé©(~O)";
-        Text[ arabic ] = "ÇáÃãËá";
-        Text[ greek ] = "Âİëôéóôç";
-        Text[ korean ] = "ìµœì ìœ¼ë¡œ(~O)";
-        Text[ turkish ] = "Optimum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ò~ptim";
-        Text[ thai ] = "à¹€~à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
-        Text[ czech ] = "OptimÃ¡lnÃ­";
-        Text[ hebrew ] = "â€®××•×¤×˜×™××œ×™â€¬";
-        Text[ hindi ] = "~à¤¯à¥‹à¤—à¥à¤¯";
-        Text[ slovak ] = "~OptimÃ¡lny";
-        Text[ hungarian ] = "S~zÃ¶veghatÃ¡r";
-        Text[ slovenian ] = "~Optimalno";
+        Text [ de ] = "~Optimal" ;
+        Text [ en-US ] = "~Optimal" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_200
     {
@@ -214,37 +129,9 @@ ModalDialog RID_SVXDLG_ZOOM
     {
         Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "~Stufenlos" ;
-        Text [ ENGLISH ] = "~Custom" ;
-        Text [ norwegian ] = "~Tilpass" ;
-        Text [ italian ] = "~Variabile" ;
-        Text [ portuguese_brazilian ] = "~Variável" ;
-        Text [ portuguese ] = "~Variável" ;
-        Text [ finnish ] = "~Vaihtuva" ;
-        Text [ danish ] = "~Variabel" ;
-        Text [ french ] = "~Autre" ;
-        Text [ swedish ] = "~Steglös" ;
-        Text [ dutch ] = "~Traploos" ;
-        Text [ spanish ] = "~Variable" ;
-        Text [ english_us ] = "~Variable" ;
-        Text[ chinese_simplified ] = "æ— çº§ç¼©æ”¾(~V)";
-        Text[ russian ] = "Ïåğåìåííûé";
-        Text[ polish ] = "~Inne";
-        Text[ japanese ] = "ä»»æ„(~V)";
-        Text[ chinese_traditional ] = "ç„¡ç´šç¸®æ”¾(~V)";
-        Text[ arabic ] = "ãÊÛíÑ";
-        Text[ greek ] = "Ğñï~óáñìïãŞ";
-        Text[ korean ] = "ì„ì˜(~V)";
-        Text[ turkish ] = "Değişken";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Variable";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸›à¸£";
-        Text[ czech ] = "PromÄ›nnÃ½";
-        Text[ hebrew ] = "â€®××©×ª× ×”â€¬";
-        Text[ hindi ] = "~à¤µà¥‡à¤°à¤¿à¤à¤¬à¤²";
-        Text[ slovak ] = "~PremennÃ½";
-        Text[ hungarian ] = "~Egyedi";
-        Text[ slovenian ] = "~Po meri";
+        Text [ de ] = "~Stufenlos" ;
+        Text [ en-US ] = "~Variable" ;
+        Text [ x-comment ] = " ";
     };
     MetricField ED_USER
     {
@@ -263,35 +150,8 @@ ModalDialog RID_SVXDLG_ZOOM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "Zoomfaktor" ;
-        Text [ ENGLISH ] = "Zoom" ;
-        Text[ english_us ] = "Zoom factor";
-        Text[ portuguese ] = "Factor de zoom";
-        Text[ russian ] = "Êîıôôèöèåíò ìàñøòàáà";
-        Text[ greek ] = "ÓõíôåëåóôŞò åóôßáóçò";
-        Text[ dutch ] = "Zoomfactor";
-        Text[ french ] = "Facteur";
-        Text[ spanish ] = "Escala";
-        Text[ finnish ] = "Zoomauskerroin";
-        Text[ italian ] = "Zoom";
-        Text[ danish ] = "Zoomfaktor";
-        Text[ swedish ] = "Zoomfaktor";
-        Text[ polish ] = "Powiêkszenie";
-        Text[ portuguese_brazilian ] = "Fator de Zoom";
-        Text[ japanese ] = "ã‚ºãƒ¼ãƒ ç‡";
-        Text[ korean ] = "ì¶•ì†Œ/í™•ëŒ€ìœ¨";
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
-        Text[ turkish ] = "Yakınlaşırma Faktörü";
-        Text[ arabic ] = "Zoom";
-        Text[ catalan ] = "Zoom";
-        Text[ thai ] = "à¸›à¸±à¸ˆà¸ˆà¸±à¸¢à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
-        Text[ czech ] = "Faktor zvÄ›tÅ¡enÃ­";
-        Text[ hebrew ] = "â€®×–×•× ×¤×§×˜×•×¨â€¬";
-        Text[ hindi ] = "à¤à¥‚à¤® à¤«à¥‰à¤•à¥à¤Ÿà¤°";
-        Text[ slovak ] = "Faktor zvÃ¤ÄÅ¡enia";
-        Text[ hungarian ] = "NagyÃ­tÃ¡s mÃ©rtÃ©ke";
-        Text[ slovenian ] = "Faktor poveÄave";
+        Text [ de ] = "Zoomfaktor" ;
+        Text [ en-US ] = "Zoom factor";
     };
     OKButton BTN_ZOOM_OK
     {
@@ -309,34 +169,8 @@ ModalDialog RID_SVXDLG_ZOOM
         Pos = MAP_APPFONT ( 104 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ greek ] = "Åóôßáóç";
-    Text[ korean ] = "ì¶•ì†Œ/í™•ëŒ€";
-    Text[ turkish ] = "Yakınlaştır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Zoom";
-    Text[ english_us ] = "Zoom";
-    Text[ portuguese ] = "Zoom";
-    Text[ russian ] = "Ìàñøòàá";
-    Text[ dutch ] = "Maatstaf";
-    Text[ french ] = "Zoom";
-    Text[ spanish ] = "Escala";
-    Text[ finnish ] = "Zoomaus";
-    Text[ italian ] = "Zoom";
-    Text[ danish ] = "Zoom";
-    Text[ swedish ] = "Skala";
-    Text[ polish ] = "Skala";
-    Text[ portuguese_brazilian ] = "Zoom";
-    Text[ japanese ] = "ã‚ºãƒ¼ãƒ ";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
-    Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";
-    Text[ thai ] = "à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
-    Text[ czech ] = "Lupa";
-    Text[ hebrew ] = "â€®×–×•×â€¬";
-    Text[ hindi ] = "à¤à¥‚à¤®";
-    Text[ slovak ] = "Lupa";
-    Text[ hungarian ] = "NagyÃ­tÃ¡s";
-    Text[ slovenian ] = "Zoom";
+    Text [ x-comment ] = " ";
+    Text [ en-US ] = "Zoom";
 };
  // ********************************************************************** EOF
 
