@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:19:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ INT32 OSaxWriterTest::test( const UString& TestName,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.xml.sax.Writer" == TestName )  {
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -537,13 +537,12 @@ INT32 OSaxWriterTest::test( const UString& TestName,
                 }
             }
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -696,14 +695,13 @@ void OSaxWriterTest::testExceptions( const XExtendedDocumentHandlerRef & r )
 
     { // startDocument must be called before start element
         BOOL bException = TRUE;
-        TRY {
+        try {
             r->startElement( L"huhu" , rList );
             bException = FALSE;
         }
-        CATCH( SAXException ,e ) {
+        catch( SAXException& e ) {
 
         }
-        END_CATCH;
         ERROR_ASSERT( bException , "expected exception not thrown !" );
     }
 
@@ -714,14 +712,13 @@ void OSaxWriterTest::testExceptions( const XExtendedDocumentHandlerRef & r )
 
     {
         BOOL bException = TRUE;
-        TRY{
+        try {
             r->startElement( L"huhu" , rList );
             bException = FALSE;
         }
-        CATCH( SAXException ,e ) {
+        catch( SAXException& e ) {
 
         }
-        END_CATCH;
         ERROR_ASSERT( bException , "expected exception not thrown !" );
     }
 
