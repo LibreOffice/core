@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 15:04:25 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,12 +285,12 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
     return aNumberingRulesMap_Impl;
 }
 #define WID_NUM_ON                      0
-#define WID_SEPARATOR_LINE_DISTANCE     1
+#define WID_SEPARATOR_INTERVAL          1
 #define WID_NUMBERING_TYPE              2
 #define WID_NUMBER_POSITION             3
 #define WID_DISTANCE                    4
-#define WID_LINE_INTERVAL               5
-#define WID_LINE_SEPARATOR              6
+#define WID_INTERVAL                    5
+#define WID_SEPARATOR_TEXT              6
 //#define WID_CHARACTER_STYLE             7
 #define WID_COUNT_EMPTY_LINES           8
 #define WID_COUNT_LINES_IN_FRAMES       9
@@ -305,12 +305,12 @@ const SfxItemPropertyMap* GetLineNumberingMap()
         { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES),   WID_COUNT_LINES_IN_FRAMES, &::getBooleanCppuType(),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_DISTANCE       ),         WID_DISTANCE       ,    &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_IS_ON),                     WID_NUM_ON,             &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_LINE_INTERVAL  ),         WID_LINE_INTERVAL  ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_LINE_SEPARATOR ),         WID_LINE_SEPARATOR,     &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_INTERVAL  ),              WID_INTERVAL  ,       &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT ),         WID_SEPARATOR_TEXT,   &::getCppuType((const OUString*)0), PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION),         WID_NUMBER_POSITION,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),          WID_NUMBERING_TYPE ,    &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),      WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,        PROPERTY_NONE,     0},
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_DISTANCE), WID_SEPARATOR_LINE_DISTANCE, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE),    WID_RESTART_AT_EACH_PAGE, &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL),      WID_SEPARATOR_INTERVAL, &::getCppuType((const sal_Int16*)0),PROPERTY_NONE,     0},
         {0,0,0,0}
     };
     return aLineNumberingMap_Impl;
@@ -1102,24 +1102,24 @@ void SwXLineNumberingProperties::setPropertyValue(
                 {
                     INT32 nVal;
                     aValue >>= nVal;
-                    aInfo.SetPosFromLeft(Min(nVal, sal_Int32(0xffff)));
+                    aInfo.SetPosFromLeft(Min(MM100_TO_TWIP(nVal), sal_Int32(0xffff)));
                 }
                 break;
-                case WID_LINE_INTERVAL   :
+                case WID_INTERVAL   :
                 {
                     INT16 nTmp;
                     aValue >>= nTmp;
                     aInfo.SetCountBy(nTmp);
                 }
                 break;
-                case WID_LINE_SEPARATOR  :
+                case WID_SEPARATOR_TEXT  :
                 {
                     OUString uTmp;
                     aValue >>= uTmp;
                     aInfo.SetDivider(uTmp);
                 }
                 break;
-                case WID_SEPARATOR_LINE_DISTANCE:
+                case WID_SEPARATOR_INTERVAL:
                 {
                     INT16 nTmp;
                     aValue >>= nTmp;
@@ -1177,7 +1177,8 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case WID_CHARACTER_STYLE :
-                    aRet <<= OUString(rInfo.GetCharFmt(*pDoc)->GetName());
+                    aRet <<= OUString(SwXStyleFamilies::GetProgrammaticName( rInfo.GetCharFmt(*pDoc)->GetName(),
+                                                      SFX_STYLE_FAMILY_CHAR ));
                 break;
                 case WID_NUMBERING_TYPE  :
                     aRet <<= (sal_Int16)rInfo.GetNumType().eType;
@@ -1208,16 +1209,16 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     sal_uInt32 nPos = rInfo.GetPosFromLeft();
                     if(USHRT_MAX == nPos)
                         nPos = 0;
-                    aRet <<= nPos;
+                    aRet <<= TWIP_TO_MM100(nPos);
                 }
                 break;
-                case WID_LINE_INTERVAL   :
+                case WID_INTERVAL   :
                     aRet <<= (sal_Int16)rInfo.GetCountBy();
                 break;
-                case WID_LINE_SEPARATOR  :
+                case WID_SEPARATOR_TEXT  :
                     aRet <<= OUString(rInfo.GetDivider());
                 break;
-                case WID_SEPARATOR_LINE_DISTANCE:
+                case WID_SEPARATOR_INTERVAL:
                     aRet <<= (sal_Int16)rInfo.GetDividerCountBy();
                 break;
                 case WID_COUNT_EMPTY_LINES :

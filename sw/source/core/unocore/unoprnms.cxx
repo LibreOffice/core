@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_KEY_AS_ENTRY                           
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_KEEP_TOGETHER                     (MAP_CHAR_LEN("ParaKeepTogether"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_KEEP_TOGETHER                          (MAP_CHAR_LEN("KeepTogether"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_LANDSCAPE                           (MAP_CHAR_LEN("IsLandscape"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_LINE_SEPARATOR                         (MAP_CHAR_LEN("LineSeparator"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_SEPARATOR_TEXT                         (MAP_CHAR_LEN("SeparatorText"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_MARKS                                  (MAP_CHAR_LEN("Marks"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_NUMBER_POSITION                        (MAP_CHAR_LEN("NumberPosition"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_OUTLINES                               (MAP_CHAR_LEN("Outlines"));
@@ -269,7 +269,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SEARCH_SIMILARITY_REMOVE               
 const SwPropNameLen __FAR_DATA  UNO_NAME_SEARCH_REGULAR_EXPRESSION              (MAP_CHAR_LEN("SearchRegularExpression"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SEARCH_SIMILARITY_EXCHANGE             (MAP_CHAR_LEN("SearchSimilarityExchange"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SECONDARY_KEY                          (MAP_CHAR_LEN("SecondaryKey"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_SEPARATOR_LINE_DISTANCE                (MAP_CHAR_LEN("SeparatorLineDistance"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_SEPARATOR_INTERVAL                     (MAP_CHAR_LEN("SeparatorInterval"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_BREAKS                            (MAP_CHAR_LEN("ShowBreaks"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_SPACES                            (MAP_CHAR_LEN("ShowSpaces"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TABLES                            (MAP_CHAR_LEN("ShowTables"));
@@ -348,7 +348,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_INFO_TYPE                              
 const SwPropNameLen __FAR_DATA  UNO_NAME_INFO_FORMAT                            (MAP_CHAR_LEN("InfoFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_INPUT                               (MAP_CHAR_LEN("Input"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LEVEL                                  (MAP_CHAR_LEN("Level"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_LINE_INTERVAL                          (MAP_CHAR_LEN("LineInterval"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_INTERVAL                               (MAP_CHAR_LEN("Interval"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LINK_REGION                            (MAP_CHAR_LEN("LinkRegion"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_MACRO                                  (MAP_CHAR_LEN("Macro"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SPLIT                                  (MAP_CHAR_LEN("Split"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:04:51 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 20:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_KEY_AS_ENTRY                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_KEEP_TOGETHER             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_KEEP_TOGETHER                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_LANDSCAPE                      ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_LINE_SEPARATOR                 ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_TEXT                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_MARKS                          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_NUMBER_POSITION                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_OUTLINES                       ;
@@ -276,7 +276,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SEARCH_SIMILARITY_REMOVE       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEARCH_REGULAR_EXPRESSION      ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEARCH_SIMILARITY_EXCHANGE     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SECONDARY_KEY                  ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_DISTANCE        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_INTERVAL             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_BREAKS                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_SPACES                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_TABLES                    ;
@@ -355,7 +355,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_INFO_TYPE                        
 extern const SwPropNameLen __FAR_DATA UNO_NAME_INFO_FORMAT                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_INPUT                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LEVEL                            ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_LINE_INTERVAL                    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_INTERVAL                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LINK_REGION                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_MACRO                            ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SPLIT                        ;
