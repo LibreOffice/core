@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:17:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 14:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text = "Um die neue Datenquelle einzurichten, sind noch Weiter gehende Angaben notwendig.\n\n"
+        Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
             "Dafür wird, sobald Sie die unten befindlichen Schaltfläche betätigen, ein weiterer Dialog geöffnet. "
             "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
@@ -551,8 +551,8 @@ TabPage RID_PAGE_FIELDMAPPING
 
         Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche "
             "konkreten Daten enthalten.\n\n"
-            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"E-Mail\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
-            "Sobald sie die unten befindliche schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
+            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
+            "Sobald Sie die unten befindliche Schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
             "für Ihre Datenquelle vornehmen können.";
         Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
             "do contain which concrete data.\n\n"
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/17 20:17:31  kz
+ *  Merge SRC638: 17.08.01 - 22:23:52
+ *
  *  Revision 1.6  2001/08/10 14:14:28  fs
  *  #90480# small changes to some texts
  *
