@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:49:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#include "rtl/ustrbuf.hxx"
 
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
@@ -100,8 +101,10 @@
 #include <com/sun/star/reflection/XArrayTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
+#include "com/sun/star/reflection/XStructTypeDescription.hpp"
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -213,6 +216,8 @@ class ManagerImpl
     ProviderVector                      _aProviders;
 
     inline Any getSimpleType( const OUString & rName );
+
+    Reference< XTypeDescription > getInstantiatedStruct(OUString const & name);
 
 protected:
     virtual void SAL_CALL disposing();
@@ -795,6 +800,180 @@ inline Any ManagerImpl::getSimpleType( const OUString & rName )
     return aRet;
 }
 
+namespace {
+
+Reference< XTypeDescription > resolveTypedefs(
+    Reference< XTypeDescription > const & type)
+{
+    Reference< XTypeDescription > resolved(type);
+    while (resolved->getTypeClass() == TypeClass_TYPEDEF) {
+        resolved = Reference< XIndirectTypeDescription >(
+            type, UNO_QUERY_THROW)->getReferencedType();
+    }
+    return resolved;
+}
+
+bool isNonVoidNonExceptionType(Reference< XTypeDescription > const & type) {
+    switch (type->getTypeClass()) {
+    case TypeClass_BOOLEAN:
+    case TypeClass_BYTE:
+    case TypeClass_SHORT:
+    case TypeClass_UNSIGNED_SHORT:
+    case TypeClass_LONG:
+    case TypeClass_UNSIGNED_LONG:
+    case TypeClass_HYPER:
+    case TypeClass_UNSIGNED_HYPER:
+    case TypeClass_FLOAT:
+    case TypeClass_DOUBLE:
+    case TypeClass_CHAR:
+    case TypeClass_STRING:
+    case TypeClass_TYPE:
+    case TypeClass_ANY:
+    case TypeClass_SEQUENCE:
+    case TypeClass_ENUM:
+    case TypeClass_STRUCT:
+    case TypeClass_INTERFACE:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+class InstantiatedStruct: public WeakImplHelper1< XStructTypeDescription > {
+public:
+    InstantiatedStruct(
+        Reference< XStructTypeDescription > const & structType,
+        std::vector< Reference< XTypeDescription > > const & arguments);
+
+    virtual TypeClass SAL_CALL getTypeClass() throw (RuntimeException)
+    { return TypeClass_STRUCT; }
+
+    virtual OUString SAL_CALL getName() throw (RuntimeException);
+
+    virtual Reference< XTypeDescription > SAL_CALL getBaseType()
+        throw (RuntimeException)
+    { return m_struct->getBaseType(); }
+
+    virtual Sequence< Reference< XTypeDescription > > SAL_CALL getMemberTypes()
+        throw (RuntimeException);
+
+    virtual Sequence< OUString > SAL_CALL getMemberNames()
+        throw (RuntimeException)
+    { return m_struct->getMemberNames(); }
+
+    virtual Sequence< OUString > SAL_CALL getTypeParameters()
+        throw (RuntimeException)
+    { return Sequence< OUString >(); }
+
+    virtual Sequence< Reference< XTypeDescription > > SAL_CALL
+    getTypeArguments() throw (RuntimeException)
+    { return m_arguments; }
+
+private:
+    Reference< XStructTypeDescription > m_struct;
+    Sequence< Reference< XTypeDescription > > m_arguments;
+};
+
+InstantiatedStruct::InstantiatedStruct(
+    Reference< XStructTypeDescription > const & structType,
+    std::vector< Reference< XTypeDescription > > const & arguments):
+    m_struct(structType),
+    m_arguments(static_cast< sal_Int32 >(arguments.size()))
+{
+    for (std::vector< Reference< XTypeDescription > >::size_type i = 0;
+         i < arguments.size(); ++i)
+    {
+        m_arguments[static_cast< sal_Int32 >(i)] = arguments[i];
+    }
+}
+
+OUString InstantiatedStruct::getName() throw (RuntimeException) {
+    OUStringBuffer buf(m_struct->getName());
+    buf.append(static_cast< sal_Unicode >('<'));
+    for (sal_Int32 i = 0; i < m_arguments.getLength(); ++i) {
+        if (i != 0) {
+            buf.append(static_cast< sal_Unicode >(','));
+        }
+        buf.append(m_arguments[i]->getName());
+    }
+    buf.append(static_cast< sal_Unicode >('>'));
+    return buf.makeStringAndClear();
+}
+
+Sequence< Reference< XTypeDescription > > InstantiatedStruct::getMemberTypes()
+    throw (RuntimeException)
+{
+    Sequence< Reference< XTypeDescription > > types(m_struct->getMemberTypes());
+    for (sal_Int32 i = 0; i < types.getLength(); ++i) {
+        if (types[i]->getTypeClass() == TypeClass_UNKNOWN) {
+            Sequence< OUString > parameters(m_struct->getTypeParameters());
+            OSL_ASSERT(parameters.getLength() == m_arguments.getLength());
+            for (sal_Int32 j = 0; j < parameters.getLength(); ++j) {
+                if (parameters[j] == types[i]->getName()) {
+                    types[i] = m_arguments[j];
+                    break;
+                }
+            }
+        }
+    }
+    return types;
+}
+
+}
+
+Reference< XTypeDescription > ManagerImpl::getInstantiatedStruct(
+    OUString const & name)
+{
+    sal_Int32 i = name.indexOf('<');
+    OSL_ASSERT(i >= 0);
+    Reference< XStructTypeDescription > structType(
+        getByHierarchicalName(name.copy(0, i)), UNO_QUERY);
+    std::vector< Reference< XTypeDescription > > args;
+    bool good = structType.is();
+    if (good) {
+        do {
+            ++i; // skip '<' or ','
+            sal_Int32 j = i;
+            for (sal_Int32 level = 0; j != name.getLength(); ++j) {
+                sal_Unicode c = name[j];
+                if (c == ',') {
+                    if (level == 0) {
+                        break;
+                    }
+                } else if (c == '<') {
+                    ++level;
+                } else if (c == '>') {
+                    if (level == 0) {
+                        break;
+                    }
+                    --level;
+                }
+            }
+            if (j != name.getLength()) {
+                Reference< XTypeDescription > type(
+                    getByHierarchicalName(name.copy(i, j - i)), UNO_QUERY);
+                if (isNonVoidNonExceptionType(resolveTypedefs(type))) {
+                    args.push_back(type);
+                } else {
+                    good = false;
+                    break;
+                }
+            }
+            i = j;
+        } while (i != name.getLength() && name[i] != '>');
+        good = good && i == name.getLength() - 1
+            && name[i] == '>' && !args.empty();
+    }
+    // args.size() cannot exceed SAL_MAX_INT32, as each argument consumes at
+    // least one position within an rtl::OUString (which is no longer than
+    // SAL_MAX_INT32):
+    if (!good || args.size() != structType->getTypeParameters().getLength()) {
+        throw NoSuchElementException(name, static_cast< OWeakObject * >(this));
+    }
+    return new InstantiatedStruct(structType, args);
+}
+
 // XHierarchicalNameAccess
 //__________________________________________________________________________________________________
 Any ManagerImpl::getByHierarchicalName( const OUString & rName )
@@ -853,6 +1032,11 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
                 throw NoSuchElementException(
                     rName, static_cast< OWeakObject * >(this) );
             }
+        }
+        // test for instantiated polymorphic struct types:
+        else if (rName.indexOf('<') >= 0)
+        {
+            aRet <<= getInstantiatedStruct(rName);
         }
         else if (rName.indexOf( '.' ) < 0) // test for simple/ build in types
         {
