@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-30 10:12:48 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,24 @@
  ************************************************************************/
 
 #include <stdio.h>
-#ifndef CONFIGMGR_BOOTSTRAP_HXX_
+
 #include "bootstrap.hxx"
+
+#ifndef CONFIGMGR_SESSIONFACTORY_HXX_
+#include "sessionfactory.hxx"
+#endif
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
 #endif
 
-#ifndef _OSL_PROFILE_HXX_
-#include <osl/profile.hxx>
+#ifndef _CONFIGMGR_TRACER_HXX_
+#include "tracer.hxx"
 #endif
+
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -76,15 +87,20 @@
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
+
+#ifndef _OSL_PROFILE_HXX_
+#include <osl/profile.hxx>
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _CONFIGMGR_TRACER_HXX_
-#include "tracer.hxx"
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
 #endif
@@ -100,40 +116,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef CONFIGMGR_SESSIONFACTORY_HXX_
-#include "sessionfactory.hxx"
-#endif
-#include "matchlocale.hxx"
 
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-
-#ifndef _OSL_SECURITY_H_
-#include <osl/security.h>
-#endif
-#undef INI_FILE_NAME
-
-#ifdef UNX
-#define INI_FILE_NAME( name ) #name "rc"
-#else
-#define INI_FILE_NAME( name ) #name ".ini"
-#endif
-
-#define BOOTSTRAP_FILE                  INI_FILE_NAME( bootstrap )
-#define CONFIGURATION_PROFILE_NAME      INI_FILE_NAME( sregistry )
-
-#define BOOSTRAP_SECTION            "Bootstrap"
-#define BOOSTRAP_ITEM_PRODUCT_KEY   "ProductKey"
-#define BOOSTRAP_ITEM_LOCATION      "Location"
-#define BOOSTRAP_ITEM_SECTION       "Section"
-
-#define BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT     "StarOffice 6.0"
-#define BOOTSTRAP_VALUE_SECTION_DEFAULT         "Versions"
+// ---------------------------------------------------------------------------------------
+#define CONFIGURATION_PROFILE_NAME      SAL_CONFIGFILE( "sregistry" )
 
 #define SREGISTRY_SECTION_CONFIGURATION     "configuration"
 #define SREGISTRY_KEY_SERVERTYPE            "servertype"
@@ -148,6 +133,7 @@
 #define SREGISTRY_SECTION_AUTHENTICATION    "Authentication"
 #define SREGISTRY_KEY_USER                  "User"
 #define SREGISTRY_KEY_PASSWORD              "Password"
+// ---------------------------------------------------------------------------------------
 
 // general settings
 #define SETTING_SERVERTYPE                  "servertype"
@@ -168,6 +154,7 @@
 #define SETTING_ASYNC                       "lazywrite"
 // deprecated and obsolete
 #define SETTING_ROOTPATH                    "rootpath"
+// ---------------------------------------------------------------------------------------
 
 namespace configmgr
 {
@@ -206,98 +193,6 @@ namespace configmgr
 //      { PLUGIN_SESSION_IDENTIFIER,        createPluginSession }
     };
     int const nSessionClasses = sizeof(aSessionClasses)/sizeof(aSessionClasses[0]);
-
-// ---------------------------------------------------------------------------------------
-    namespace
-    {
-    // ---------------------------------------------------------------------------------------
-        enum RetVal
-        {
-            BOOTSTRAP_OK = 0,
-            BOOTSTRAP_INI_NOT_FOUND,
-            BOOTSTRAP_INI_INVALID,
-            SVERSION_INI_NOT_FOUND,
-            SVERSION_INI_NO_ENTRY,
-            SVERSION_INI_INVALID,
-            SREGISTRY_INI_NOT_FOUND,
-            SREGISTRY_INI_INVALID
-        };
-
-    // ---------------------------------------------------------------------------------------
-
-        RetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfilePath);
-
-    // ---------------------------------------------------------------------------------------
-
-        inline bool oslOK(::osl::FileBase::RC code) { return code == ::osl::FileBase::E_None; }
-        inline bool oslOK(oslFileError code) { return code == osl_File_E_None; }
-
-    // ---------------------------------------------------------------------------------------
-        BootstrapResult const mapBootstrapResult[/*RetVal*/] =
-        {
-            BOOTSTRAP_DATA_OK,      //  BOOTSTRAP_OK,
-            MISSING_BOOTSTRAP_FILE, //  BOOTSTRAP_INI_NOT_FOUND,
-            INVALID_BOOTSTRAP_DATA, //  BOOTSTRAP_INI_INVALID,
-            INVALID_INSTALLATION,   //  SVERSION_INI_NOT_FOUND,
-            INVALID_INSTALLATION,   //  SVERSION_INI_NO_ENTRY,
-            INVALID_BOOTSTRAP_DATA, //  SVERSION_INI_INVALID,
-            MISSING_BOOTSTRAP_FILE, //  SREGISTRY_INI_NOT_FOUND
-            INVALID_BOOTSTRAP_DATA, //  SREGISTRY_INI_INVALID
-        };
-
-    // ---------------------------------------------------------------------------------------
-    }
-
-// ---------------------------------------------------------------------------------------
-    OUString getBootstrapErrorMessage( BootstrapResult rc )
-    {
-        sal_Char const * const mapErrMsg[/*BootstrapResult*/] =
-        {
-            "Bootstrap OK",                     // BOOTSTRAP_DATA_OK,
-            "A bootstrap file is missing",      // MISSING_BOOTSTRAP_FILE,
-            "Invalid bootstrap data",           // INVALID_BOOTSTRAP_DATA,
-            "Invalid user installation",        // INVALID_INSTALLATION
-            "An unexpected failure occurred while bootstrapping" // BOOTSTRAP_FAILURE
-        };
-        OSL_ENSURE(0 <= rc && rc < (sizeof mapErrMsg/sizeof 0[mapErrMsg]), "FATAL ERROR: Result code out of range in getBootstrapErrorMessage()");
-
-        return OUString::createFromAscii( mapErrMsg[rc] );
-    }
-
-// ---------------------------------------------------------------------------------------
-    void raiseBootstrapException( BootstrapResult rc, OUString const& sURL, Reference< XInterface > xContext )
-    {
-        using namespace ::com::sun::star::configuration;
-
-        sal_Char const sBaseMessage[] = "Cannot locate Configuration: ";
-
-        OUString sMessage = OUString::createFromAscii(sBaseMessage);
-        sMessage += getBootstrapErrorMessage( rc );
-
-        switch (rc)
-        {
-        case MISSING_BOOTSTRAP_FILE:
-            throw MissingBootstrapFileException(sMessage, xContext, sURL);
-
-        case INVALID_BOOTSTRAP_DATA:
-            throw InvalidBootstrapFileException(sMessage, xContext, sURL);
-
-        case INVALID_INSTALLATION:
-            throw InstallationIncompleteException(sMessage, xContext);
-
-        default: OSL_ENSURE(false, "Undefined BootstrapResult code");
-        case BOOTSTRAP_FAILURE:
-            throw CannotLoadConfigurationException(sMessage, xContext);
-
-        case BOOTSTRAP_DATA_OK:     break;
-        }
-    }
-
-// ---------------------------------------------------------------------------------------
-    void raiseBootstrapException( BootstrapSettings const& rBootstrapData, Reference< XInterface > xContext )
-    {
-        raiseBootstrapException(rBootstrapData.status,rBootstrapData.url,xContext);
-    }
 
 // ---------------------------------------------------------------------------------------
     OUString Settings::Setting::toString() const
@@ -596,8 +491,10 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     static inline bool isValidFileURL(OUString const& _sFileURL)
     {
+        using osl::File;
+
         OUString sSystemPath;
-        return _sFileURL.getLength() && oslOK(osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
+        return _sFileURL.getLength() && (File::E_None == File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
    }
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::isValidPathSetting(Settings::Name const& _sSetting) const
@@ -621,9 +518,11 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin)
     {
+        using osl::File;
+
         OUString sFileURL;
 
-        bool bOK = _sSystemPath.getLength() &&  oslOK(osl::File::getFileURLFromSystemPath(_sSystemPath, sFileURL));
+        bool bOK = _sSystemPath.getLength() &&  (File::E_None == File::getFileURLFromSystemPath(_sSystemPath, sFileURL));
 
         if (!bOK)
         {
@@ -648,6 +547,8 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::implNormalizePathSetting(Settings::Name const& _pSetting)
     {
+        using osl::File;
+
         sal_Bool bOK = haveSetting(_pSetting);
         if (bOK)
         {
@@ -656,7 +557,7 @@ namespace configmgr
             OUString sRawPath = aSetting.toString();
             OUString sNormalized;
 
-            bOK = oslOK(osl::File::getFileURLFromSystemPath(sRawPath, sNormalized));
+            bOK = (File::E_None == File::getFileURLFromSystemPath(sRawPath, sNormalized));
             if (bOK)
             {
                 putSetting(_pSetting, Settings::Setting(sNormalized,aSetting.origin()) );
@@ -689,81 +590,6 @@ namespace configmgr
         loadFromInifile(rProfile,_eOrigin);
 
         mergeOverrides(aOldValues);
-    }
-
-// ---------------------------------------------------------------------------------------
-    BootstrapResult ConnectionSettings::findInifile(OUString& _rsInifile)
-    {
-        OUString sOfficeInstall, sUserInstall;
-
-        RetVal rv = locateBootstrapFiles( sOfficeInstall, sUserInstall, _rsInifile );
-
-        if (rv == BOOTSTRAP_OK)
-        {
-            CFG_TRACE_INFO("provider bootstrapping: located an ini file: %s", OUSTRING2ASCII(_rsInifile));
-        }
-
-        else
-        {
-            CFG_TRACE_WARNING("provider bootstrapping: could not locate ini file. File %s was missing or invalid.", OUSTRING2ASCII(_rsInifile));
-        }
-
-        return mapBootstrapResult[rv];
-    }
-
-// ---------------------------------------------------------------------------------------
-    ConnectionSettings ConnectionSettings::bootstrap(BootstrapResult& rc, OUString& _rsInifile)
-    {
-        // try to locate the sregistry.ini
-        OUString sOfficeInstall, sUserInstall, sIniFile;
-
-        CFG_TRACE_INFO("provider bootstrapping: trying to locate the installation and the ini file");
-        RetVal rv = locateBootstrapFiles( sOfficeInstall, sUserInstall, _rsInifile );
-
-        ConnectionSettings aBootstrapSettings;
-
-        if (BOOTSTRAP_OK == rv)
-        {
-            CFG_TRACE_INFO_NI("provider bootstrapping: located an ini file: %s", OUSTRING2ASCII( _rsInifile));
-            try
-            {
-                osl::Profile aSRegistryIni( _rsInifile );
-
-                aBootstrapSettings.loadFromInifile( aSRegistryIni );
-            }
-            catch (std::exception& e)
-            {
-                CFG_TRACE_ERROR_NI("provider bootstrapping: Opening %s failed unexpectedly due to ERROR: \"%s\"", OUSTRING2ASCII(_rsInifile), e.what());
-                rv = SREGISTRY_INI_NOT_FOUND;
-            }
-
-            // try to locate the local stuff anyways
-            aBootstrapSettings.implAdjustToInstallation(sOfficeInstall,sUserInstall);
-        }
-        else
-        {
-            CFG_TRACE_INFO_NI("provider bootstrapping: could not locate ini file - using fallback bootstrap [File %s was missing or invalid].", OUSTRING2ASCII( _rsInifile));
-
-            if (rv >= SREGISTRY_INI_NOT_FOUND) // but found all up to user install
-            {
-                CFG_TRACE_INFO_NI("provider bootstrapping: found an office installation");
-                // .. so try to locate the local stuff anyways
-                aBootstrapSettings.implAdjustToInstallation(sOfficeInstall,sUserInstall);
-            }
-        }
-
-        if (BOOTSTRAP_OK == rv)
-        {
-            if (!aBootstrapSettings.isComplete())
-            {
-                CFG_TRACE_WARNING_NI("provider bootstrapping: data from ini file is incomplete or corrupt");
-                rv = SREGISTRY_INI_INVALID;
-            }
-        }
-
-        rc = mapBootstrapResult[rv];
-
-        return aBootstrapSettings;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -876,9 +702,9 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath, const sal_Char* _pRelative)
+    sal_Bool ConnectionSettings::ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath)
     {
-        // ensure that the existing setting value is a valid path
+        // check if the existing setting value is a valid path
         if (isValidPathSetting(_pSetting))
             // nothing to do
             return true;
@@ -889,13 +715,10 @@ namespace configmgr
             return false;
         }
 
-        // append the name given, plus config/registry
+        // use the name given, plus config/registry
         OUString sDirectory(_rBasePath);
 
-        if (_pRelative != NULL)
-            sDirectory  += OUString::createFromAscii("/").concat( OUString::createFromAscii(_pRelative) );
-
-        sDirectory += OUString::createFromAscii("/config/registry");
+        sDirectory += OUString(RTL_CONSTASCII_USTRINGPARAM("/config/registry"));
 
         putSetting(_pSetting, Settings::Setting(sDirectory, Settings::SO_FALLBACK));
 
@@ -905,16 +728,18 @@ namespace configmgr
 
 // ---------------------------------------------------------------------------------------
     // if we do not already have path settings, ensure that they exists (in an office install)
-    void ConnectionSettings::implAdjustToInstallation(const OUString& _sOfficeInstallPath, const OUString& _sUserInstallPath)
+    sal_Bool ConnectionSettings::implAdjustToInstallation(const OUString& _sShareDataPath, const OUString& _sUserDataPath)
     {
-        // if we do not already have a share path setting, create one from the user install path
-        if (ensureConfigPath(SETTING_SOURCEPATH, _sOfficeInstallPath, "share"))
+        // if we do not already have a source path setting, create one from the base install path
+        sal_Bool bSuccess = ensureConfigPath(SETTING_SOURCEPATH, _sShareDataPath);
+        if (bSuccess)
         {
             // set update path only if source path could be set
 
             // if we do not already have a update path setting, create one from the user install path
-            ensureConfigPath(SETTING_UPDATEPATH, _sUserInstallPath, "user");
+            ensureConfigPath(SETTING_UPDATEPATH, _sUserDataPath);
         }
+        return bSuccess;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -1029,6 +854,8 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::implClearIrrelevantItems()
     {
+        if (!isSessionTypeKnown()) return;
+
         if (m_aSettings.getOrigin(SETTING_SERVERTYPE) == Settings::SO_OVERRIDE)
         {   // the session type is a runtime override
             // clear the user if it's origin is SREGISTRY
@@ -1192,13 +1019,6 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
-    BootstrapSettings::BootstrapSettings()
-    : url()
-    , status(BOOTSTRAP_FAILURE)
-    , settings(ConnectionSettings::bootstrap(status,url))
-    {}
-
-// ---------------------------------------------------------------------------------------
 // caching helpers
 //---------------------------------------------------------------------------------------
     OUString buildConnectString(const ConnectionSettings& _rSettings)
@@ -1207,12 +1027,13 @@ namespace configmgr
 
         rtl::OUStringBuffer sConnect = _rSettings.getSessionType();
 
+#if 0 // disabled: service may not be set
         if (_rSettings.isServiceRequired() && _rSettings.hasService())
         {
             sConnect.append(sal_Unicode(':'));
             sConnect.append(_rSettings.getService());
         }
-
+#endif
         if (_rSettings.isLocalSession())
         {
             if (_rSettings.isSourcePathValid())
@@ -1285,319 +1106,277 @@ namespace configmgr
         return sConnect.makeStringAndClear();
     }
 // ---------------------------------------------------------------------------------------
-// - helper
+// - bootstrapping helper
 // ---------------------------------------------------------------------------------------
 namespace {
-
-// normalizeAndSubstitutePathVariables
-// ---------------------------------------------------------------------------------------
-    typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
-
-    bool normalizeAndSubstitutePathVariables(OUString& _rPath)
-    {
-        OSL_PRECOND(_rPath.getLength() != 0 , "Invalid parameter: Empty path in normalizeAndSubstitutePathVariables" );
-
-        // recognized variables and methods to retrieve their substitute pathes
-        // Note: variables are expected to be a system path and thus must be at the beginning of _rPath
-        struct
-        {
-            sal_Char const *            pattern;
-            getSystemDirectoryFunction  getPath;
-        }
-        aPathVariables[] =
-        {
-            { "$(SYSUSERHOME)",   ::osl_getHomeDir    },
-            { "$(SYSUSERCONFIG)", ::osl_getConfigDir  }
-        };
-
-        bool bIsNormalized = false;
-
-        // check for all variables
-        for (sal_Int32 i=0; i < sizeof(aPathVariables)/sizeof(aPathVariables[0]); ++i)
-        {
-            OUString sVariable = OUString::createFromAscii(aPathVariables[i].pattern);
-            sal_Int32 nVariablePos = _rPath.indexOf(sVariable);
-
-            OSL_ENSURE( 0 >= nVariablePos, "Unexpected: System directory variable in the middle of a path");
-            if (0 == nVariablePos)
-            {
-                OSL_ENSURE( !bIsNormalized, "Found duplicate path variable");
-
-                oslSecurity aCurrentUserSec = osl_getCurrentSecurity();
-
-                OUString sSubstitute;
-                aPathVariables[i].getPath(aCurrentUserSec, &sSubstitute.pData);
-                _rPath = _rPath.replaceAt(nVariablePos, sVariable.getLength(), sSubstitute);
-
-                bIsNormalized = true;
-
-            #ifndef DBG_UTIL
-                break; // in debug builds continue for additional checks
-            #endif // DBG_UTIL
-            }
-        }
-
-        if ( !bIsNormalized)
-        {
-            OUString sOther;
-
-            // make a normalized path
-            if ( oslOK(osl::File::getFileURLFromSystemPath(_rPath, sOther)))
-            {
-                _rPath = sOther;
-
-            }
-            // check if it already was normalized
-            else if ( !oslOK(osl::File::getSystemPathFromFileURL(_rPath, sOther)) )
-                return false;
-        }
-
-
-        #ifdef _DEBUG
-        OUString sSystemPathCheck; // check that this has become a file url for a local path
-        #endif // _DEBUG
-        OSL_POSTCOND( oslOK( osl::File::getSystemPathFromFileURL(_rPath, sSystemPathCheck) ),
-                      "Unexpected: System path variable substitution did not result in valid file URL");
-
-        return true;
-    }
-
-
-// ----------------------------------------------------------------------------------
-    sal_Unicode const cURLSeparator = '/';
-
-// ----------------------------------------------------------------------------------
-    static inline void moveUpOneDirectory(OUString& _rsPath, bool leaveSlash = false)
-    {
-        sal_Int32 nSepIndex = _rsPath.lastIndexOf(cURLSeparator);
-
-        OSL_ENSURE(nSepIndex > 0, "Cannot move up one directory - path has at most one component");
-        if (nSepIndex > 0)
-        {
-            OSL_ENSURE(nSepIndex+1 != _rsPath.getLength(), "Cannot move up one directory: Unexpected path format - path must not be slash-terminated");
-            if (leaveSlash) ++nSepIndex;
-            _rsPath = _rsPath.copy(0, nSepIndex);
-        }
-        else
-            _rsPath = OUString();
-    }
-
-// ----------------------------------------------------------------------------------
-// locate the office install and bootstrap ini
-
-    static bool locateBootstrapProfile(OUString& _rOfficeInstallPath, OUString& _rProfileFile)
-    {
-        // get the bootstrap.ini file, where we find basic informations about the version of the product
-        // we're running in
-        // the bootstrap.ini resides in the same dir as our executable
-        OUString sBootstrap;
-        osl_getExecutableFile(&sBootstrap.pData);
-
-        // take care for the office install path
-        _rOfficeInstallPath = sBootstrap;
-        // for this, cut two levels from the executable (the executable name and the program directory)
-        moveUpOneDirectory(_rOfficeInstallPath);
-        moveUpOneDirectory(_rOfficeInstallPath);
-        CFG_TRACE_INFO("provider bootstrapping: calculated office install path: %s", OUSTRING2ASCII(_rOfficeInstallPath));
-
-        // cut the executable file name and append the bootstrap ini file name
-        moveUpOneDirectory(sBootstrap,true);
-        sBootstrap += OUString::createFromAscii(BOOTSTRAP_FILE);
-
-        CFG_TRACE_INFO_NI("provider bootstrapping: bootstrap file to find: %s", OUSTRING2ASCII(sBootstrap));
-        _rProfileFile = sBootstrap;
-
-        osl::DirectoryItem aCheckPath;
-        return oslOK(aCheckPath.get(sBootstrap, aCheckPath));
-    }
-
-// ----------------------------------------------------------------------------------
-// locate the user path
-
-    RetVal locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath)
-    {
-        rtl_TextEncoding const nCvtEncoding = osl_getThreadTextEncoding();
-
-        RetVal nStatus = BOOTSTRAP_INI_NOT_FOUND;
-
-        try
-        {
-            if ( !locateBootstrapProfile(_rOfficeInstallPath,_sIniPath) )
-            {
-                CFG_TRACE_WARNING_NI("provider bootstrapping: bootstrap file not found");
-
-                return BOOTSTRAP_INI_NOT_FOUND;
-            }
-
-            // get the path to the sversion.ini file from the bootstrap file
-            ::osl::Profile aBootstrapFile(_sIniPath);
-
-            // get the path to the sversion.ini
-            OString sConvertable = aBootstrapFile.readString(
-                    OString(BOOSTRAP_SECTION),
-                    OString(BOOSTRAP_ITEM_LOCATION),
-                    OString());
-
-            OUString sProductVersionFile = rtl::OStringToOUString(sConvertable, nCvtEncoding);
-
-            if (sProductVersionFile.getLength() == 0)
-            {
-                CFG_TRACE_ERROR_NI("provider bootstrapping: bootstrap file does not have expected entry");
-                return BOOTSTRAP_INI_INVALID;
-            }
-            CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find: %s", OUSTRING2ASCII(sProductVersionFile));
-
-            nStatus = SVERSION_INI_NOT_FOUND;
-
-            // in the path to the product, replace the reference to the user system directory, make it a file URL
-            if ( ! normalizeAndSubstitutePathVariables(sProductVersionFile) )
-            {
-                CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize the product version file name from the bootstrap file");
-                return BOOTSTRAP_INI_INVALID;
-            }
-            CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find (after substituting and normalizing): %s", OUSTRING2ASCII(sProductVersionFile));
-
-            _sIniPath = sProductVersionFile;
-
-            osl::DirectoryItem aCheckPath;
-            if (!oslOK(aCheckPath.get(sProductVersionFile, aCheckPath)))
-            {
-                CFG_TRACE_ERROR_NI("provider bootstrapping: product version file not found");
-
-                return SVERSION_INI_NOT_FOUND;
-            }
-
-            // open the product version profile
-            ::osl::Profile aProductVersionFile(sProductVersionFile);
-
-            // get the section/key name of the entry in the product version file
-            OString sVersionFileSection = aBootstrapFile.readString(
-                    OString(BOOSTRAP_SECTION),
-                    OString(BOOSTRAP_ITEM_SECTION),
-                    OString(BOOTSTRAP_VALUE_SECTION_DEFAULT));
-            OString sVersionFileProductKey = aBootstrapFile.readString(
-                    OString(BOOSTRAP_SECTION),
-                    OString(BOOSTRAP_ITEM_PRODUCT_KEY),
-                    OString(BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT));
-            CFG_TRACE_INFO_NI("provider bootstrapping: section to lookup the product version: %s", sVersionFileSection.getStr());
-            CFG_TRACE_INFO_NI("provider bootstrapping: key to lookup the product version: %s", sVersionFileProductKey.getStr());
-
-            // get the user path from the product version file
-            sConvertable = aProductVersionFile.readString(
-                sVersionFileSection,
-                sVersionFileProductKey,
-                OString());
-
-
-            OUString sUserPath = OUString(sConvertable.getStr(), sConvertable.getLength(), nCvtEncoding);
-            if (sUserPath.getLength() == 0)
-            {
-                CFG_TRACE_ERROR_NI("provider bootstrapping: product version file does not have expected entry");
-
-                return SVERSION_INI_NO_ENTRY;
-            }
-            CFG_TRACE_INFO_NI("provider bootstrapping: raw user installation directory: %s", OUSTRING2ASCII(sUserPath));
-
-            nStatus = BOOTSTRAP_OK; //every ini read ok
-            {
-                // normalize the path
-                OUString sNormalized;
-                // normalize the user directory path
-                if (!oslOK(osl::File::getFileURLFromSystemPath(sUserPath, sNormalized)))
-                {
-                    CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize the user path from the product version file");
-
-                    return SVERSION_INI_INVALID;
-                }
-                sUserPath = sNormalized;
-            }
-
-            CFG_TRACE_INFO_NI("provider bootstrapping: user install directory (normalized): %s", OUSTRING2ASCII(sUserPath));
-            _rUserInstallPath = sUserPath;
-            _sIniPath = OUString();
-            OSL_ASSERT(nStatus == BOOTSTRAP_OK);
-        }
-        catch (::std::exception& e)
-        {   // this exception may be thrown by the Profile ctor - though we checked the arguments we passed to
-            // this ctor (thus preventing exceptions), this is just to be sure ...
-            CFG_TRACE_ERROR("provider bootstrapping: exception craeting ini file. Error message: %s", e.what());
-
-            OSL_ASSERT(nStatus != BOOTSTRAP_OK);
-        }
-
-        return nStatus;
-    }
-
-// locateBootstrapFiles
 // ---------------------------------------------------------------------------------------
 
-    static bool locateConfigProfile(OUString const& _sBasePath, OUString& _rProfileFile)
+    static
+    utl::Bootstrap::PathStatus locateConfigProfile(OUString& _rProfileFile)
     {
-        if ( !isValidFileURL(_sBasePath) ) // do we have a location ?
-            return false;
+        using utl::Bootstrap;
+        using namespace osl;
 
-        // the name of our very personal ini file
-        const OUString sIniName(RTL_CONSTASCII_USTRINGPARAM(CONFIGURATION_PROFILE_NAME));
+        Bootstrap::PathStatus eResult = Bootstrap::locateUserData(_rProfileFile);
 
-         // the composed name of the user dir and the ini file name
-        OUString sProfileFile = _sBasePath;
+        if (eResult <= Bootstrap::PATH_VALID)
+        {
+            // the name of our very personal ini file
+            const OUString sIniName(RTL_CONSTASCII_USTRINGPARAM("/"CONFIGURATION_PROFILE_NAME));
 
-        sProfileFile += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/"));
-        sProfileFile += sIniName;
+            _rProfileFile += sIniName;
 
-        CFG_TRACE_INFO("provider bootstrapping: composed name (ini file to lookup): %s", OUSTRING2ASCII(sProfileFile));
+            if (eResult == Bootstrap::PATH_EXISTS)
+            {
+                DirectoryItem aItem;
+                if (DirectoryItem::E_None != DirectoryItem::get(_rProfileFile,aItem))
+                    eResult = Bootstrap::PATH_VALID; // at least that should be the case
+            }
+        }
 
-        // does our ini file exist in the user directory ?
-        ::osl::DirectoryItem aItem;
-        bool bExists = oslOK( aItem.get(sProfileFile, aItem) );
+        return eResult;
+    }
+// ---------------------------------------------------------------------------------------
 
-        if (bExists) _rProfileFile = sProfileFile;
-
-        return bExists;
+    static
+    bool locateBootstrapFiles(OUString& _rShareDataURL, OUString& _rUserDataURL, OUString& _rProfileFile)
+    {
+        using utl::Bootstrap;
+        Bootstrap::locateSharedData(_rShareDataURL);
+        Bootstrap::locateUserData(_rUserDataURL);
+        return locateConfigProfile(_rProfileFile) == Bootstrap::PATH_EXISTS;
     }
 
-    // ----------------------------------------------------------------------------------
-    RetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfileFile)
+// ---------------------------------------------------------------------------------------
+
+// error handling
+// ---------------------------------------------------------------------------------------
+    enum BootstrapResult
     {
-        // get the office/user install directories (the latter may be empty resp. unknown)
-        RetVal nLocateError = locateUserInstallationPath(_rOfficeInstall, _rUserInstallPath, _rProfileFile);
+        BOOTSTRAP_DATA_OK,
+        INCOMPLETE_INSTALLATION,
+        MISSING_BOOTSTRAP_FILE,
+        INVALID_BOOTSTRAP_DATA,
+        BOOTSTRAP_FAILURE
+    };
+// ---------------------------------------------------------------------------------------
 
-        switch (nLocateError)
+    static
+    OUString buildConfigBootstrapError( OUString const& _sIniName, sal_Char const* _sWhat)
+    {
+        rtl::OUStringBuffer sMessage;
+
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("A main configuration file ")).appendAscii(_sWhat);
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM(". (")).append(_sIniName).append(sal_Unicode(')'));
+
+        return sMessage.makeStringAndClear();
+    }
+// ---------------------------------------------------------------------------------------
+
+    static
+    BootstrapResult getConfigBootstrapError( OUString& _rMessage, OUString& _rIniFile )
+    {
+        using utl::Bootstrap;
+
+        BootstrapResult eResult = BOOTSTRAP_DATA_OK;
+
+       // this is called only for invalid config bootstrap; if we got here, sregistry must be the cause
+        Bootstrap::PathStatus eStatus = locateConfigProfile(_rIniFile);
+
+        switch( eStatus )
         {
-        case BOOTSTRAP_OK: // check if we have a sregistry.ini
-            OSL_ASSERT( isValidFileURL(_rUserInstallPath) );
-            OSL_ASSERT( _rProfileFile.getLength() == 0 );
-
-            if ( !locateConfigProfile(_rUserInstallPath,_rProfileFile) )
-            {
-                nLocateError = SREGISTRY_INI_NOT_FOUND;
-            }
+        case Bootstrap::PATH_EXISTS:
+            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is invalid");
+            eResult = INVALID_BOOTSTRAP_DATA;
             break;
 
-        case BOOTSTRAP_INI_NOT_FOUND: // support installations without bootstrap.ini and sversion.ini
-            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
-            {
-                OUString sProfile;
-                if ( locateConfigProfile(_rOfficeInstall,sProfile) )
-                {
-                    nLocateError = BOOTSTRAP_OK;
-                    _rUserInstallPath = _rOfficeInstall;
-                    _rProfileFile = sProfile;
-                }
-            }
+        case Bootstrap::PATH_VALID:
+            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is missing");
+            eResult = MISSING_BOOTSTRAP_FILE;
+            break;
+
+        case Bootstrap::DATA_INVALID:
+            _rMessage = buildConfigBootstrapError(_rIniFile,"cannot be located");
+            eResult = BOOTSTRAP_FAILURE;
             break;
 
         default:
-            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
+            OSL_ENSURE(false, "Unexpected error state in configuration ");
+            eResult = BOOTSTRAP_DATA_OK;
+        }
+
+        return eResult;
+    }
+// ---------------------------------------------------------------------------------------
+
+    static
+    BootstrapResult getBootstrapErrorMessage( OUString& _rMessage, OUString& _rIniFile )
+    {
+        using utl::Bootstrap;
+
+        BootstrapResult eResult = BOOTSTRAP_FAILURE;
+
+        switch ( Bootstrap::checkBootstrapStatus( _rMessage ) )
+        {
+        case Bootstrap::MISSING_USER_INSTALL:
+            eResult = INCOMPLETE_INSTALLATION;
+            break;
+
+        case Bootstrap::INVALID_USER_INSTALL:
+        case Bootstrap::INVALID_BASE_INSTALL:
+            switch ( Bootstrap::locateBootstrapFile(_rIniFile) )
+            {
+            case Bootstrap::PATH_EXISTS:
+                {
+                    OUString sVersionFile;
+                    switch ( Bootstrap::locateVersionFile(sVersionFile)  )
+                    {
+                    case Bootstrap::PATH_EXISTS:
+                        _rIniFile = sVersionFile;
+                        eResult = INVALID_BOOTSTRAP_DATA;
+                        break;
+
+                    case Bootstrap::PATH_VALID: OSL_ASSERT(false); // should be MISSING_USER_INSTALL
+                        _rIniFile = sVersionFile;
+                        eResult = MISSING_BOOTSTRAP_FILE;
+                        break;
+
+                    default:
+                        eResult = INVALID_BOOTSTRAP_DATA;
+                        break;
+                    }
+                }
+                break;
+
+            case Bootstrap::PATH_VALID:
+                eResult = MISSING_BOOTSTRAP_FILE;
+                break;
+
+            default:
+                eResult = BOOTSTRAP_FAILURE;
+                break;
+            }
+            break;
+
+        case Bootstrap::DATA_OK:
+            eResult = getConfigBootstrapError(_rMessage,_rIniFile);
             break;
         }
-        return nLocateError;
+
+        return eResult;
+    }
+// ---------------------------------------------------------------------------------------
+
+    static
+    void impl_raiseBootstrapException( BootstrapResult _rc, OUString const& _sMessage, OUString const& _sURL, Reference< XInterface > _xContext )
+    {
+        OUString sMessage(_sMessage);
+        // ensure a message
+        if (sMessage.getLength()== 0)
+        {
+            OSL_ENSURE(false, "Bootstrap error message missing");
+
+            switch (_rc)
+            {
+            case MISSING_BOOTSTRAP_FILE:
+                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is missing"));
+                break;
+
+            case INVALID_BOOTSTRAP_DATA:
+                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is corrupted"));
+                break;
+
+            case INCOMPLETE_INSTALLATION:
+                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("The personal configuration is missing"));
+                break;
+
+            default:
+                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected bootstrap failure"));
+                break;
+
+            case BOOTSTRAP_DATA_OK:
+                break;
+            }
+            sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" (No detailed error message available.)"));
+        }
+
+        using namespace com::sun::star::configuration;
+
+        // raise the error
+        switch (_rc)
+        {
+        case MISSING_BOOTSTRAP_FILE:
+            throw MissingBootstrapFileException(sMessage, _xContext, _sURL);
+
+        case INVALID_BOOTSTRAP_DATA:
+            throw InvalidBootstrapFileException(sMessage, _xContext, _sURL);
+
+        case INCOMPLETE_INSTALLATION:
+            throw InstallationIncompleteException(sMessage, _xContext);
+
+        default: OSL_ENSURE(false, "Undefined BootstrapResult code");
+        case BOOTSTRAP_FAILURE:
+            throw CannotLoadConfigurationException(sMessage, _xContext);
+
+        case BOOTSTRAP_DATA_OK:
+            break;
+        }
+    }
+// ---------------------------------------------------------------------------------------
+} // anonymous namespace
+
+// ---------------------------------------------------------------------------------------
+// bootstrapping
+// ---------------------------------------------------------------------------------------
+    void raiseBootstrapException( BootstrapSettings const& _rBootstrapData, Reference< XInterface > _xContext )
+    {
+        if (!_rBootstrapData.valid)
+        {
+            OUString sMessage,sURL;
+            BootstrapResult rc = getBootstrapErrorMessage(sMessage,sURL);
+
+            impl_raiseBootstrapException(rc,sMessage,sURL,_xContext);
+
+            OSL_ASSERT(rc == BOOTSTRAP_DATA_OK);
+
+            // could not discover what went wrong => no exception here
+            OSL_ENSURE(false, "cannot detect bootstrap error");
+        }
     }
 
-    // -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
+    void BootstrapSettings::bootstrap()
+    {
+        // try to locate the sregistry.ini
+        OUString sShareURL, sUserURL, sInifile;
 
-} // anon namespace
+        CFG_TRACE_INFO("provider bootstrapping: trying to locate the installation and the ini file");
 
+        if ( locateBootstrapFiles( sShareURL, sUserURL, sInifile ) )
+        {
+            CFG_TRACE_INFO_NI("provider bootstrapping: located an ini file: %s", OUSTRING2ASCII( sInifile));
+
+            osl::Profile aSRegistryIni( sInifile );
+
+            this->settings.loadFromInifile( aSRegistryIni );
+
+            // try to locate the local stuff anyways
+            this->settings.implAdjustToInstallation(sShareURL,sUserURL);
+
+            this->valid = settings.isComplete();
+
+            if (!this->valid)
+                CFG_TRACE_WARNING_NI("provider bootstrapping: data from ini file is incomplete or corrupt");
+        }
+        else
+        {
+            CFG_TRACE_WARNING_NI("provider bootstrapping: could not locate ini file - using fallback bootstrap ['%s' was missing or invalid].", OUSTRING2ASCII( sInifile));
+
+            this->settings.implAdjustToInstallation(sShareURL,sUserURL);
+
+            this->valid = false;
+        }
+    }
 // ---------------------------------------------------------------------------------------
 } // namespace configmgr
 

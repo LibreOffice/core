@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lla $ $Date: 2001-08-01 12:16:00 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ namespace configmgr
                 OSL_ASSERT(m_pPureSettings);
                 raiseBootstrapException(*m_pPureSettings, *this);
 
-                OSL_ASSERT(m_pPureSettings->status == BOOTSTRAP_DATA_OK);
+                OSL_ASSERT(m_pPureSettings->valid);
             }
 
             sal_Char const sConnectionFailure[] = "Cannot open Configuration: ";
@@ -423,6 +423,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/08/01 12:16:00  lla
+ *  #90434# some logging code implemented.
+ *
  *  Revision 1.11  2001/06/22 08:26:18  jb
  *  Correct argument-dependent caching of providers
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-23 06:58:46 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,22 +105,6 @@ namespace configmgr
     #define SETUP_SESSION_IDENTIFIER            "setup"
     #define PLUGIN_SESSION_IDENTIFIER           "plugin"
 
-    // ===================================================================================
-
-    enum BootstrapResult
-    {
-        BOOTSTRAP_DATA_OK = 0,
-        MISSING_BOOTSTRAP_FILE,
-        INVALID_BOOTSTRAP_DATA,
-        INVALID_INSTALLATION,
-        BOOTSTRAP_FAILURE
-    };
-
-    // ===================================================================================
-
-    extern OUString getBootstrapErrorMessage( BootstrapResult rc );
-    extern void raiseBootstrapException( BootstrapResult rc, OUString const& sURL, uno::Reference< uno::XInterface > xContext );
-    extern void raiseBootstrapException( class BootstrapSettings const& rBootstrapData, uno::Reference< uno::XInterface > xContext );
 
     // ===================================================================================
     // = Settings
@@ -203,14 +187,12 @@ namespace configmgr
 
     class ConnectionSettings
     {
+        friend class BootstrapSettings;
+
         Settings m_aSettings;
 
         ConnectionSettings() : m_aSettings() {};
     public:
-        static BootstrapResult findInifile(OUString& _rsInifile);
-
-        static ConnectionSettings bootstrap(BootstrapResult& rc, OUString& _rsInifile);
-
         ConnectionSettings(const uno::Sequence< uno::Any >& _rOverrides,
                             Settings::Origin _eOrigin = Settings::SO_OVERRIDE);
 
@@ -306,10 +288,10 @@ namespace configmgr
         void implTranslateCompatibilitySettings();
 
         // if we do not already have the given config path setting, ensure that it exists (calculated relative to a given path)
-        sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath, const sal_Char* _pRelative = NULL);
+        sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath);
 
         // if we do not already have path settings, ensure that they exists (in an office install)
-        void implAdjustToInstallation(const OUString& _rOfficeInstallPath, const OUString& _rUserInstallPath);
+        sal_Bool implAdjustToInstallation(const OUString& _rShareDataPath, const OUString& _rUserDataPath);
 
     private:
 
@@ -340,22 +322,27 @@ namespace configmgr
         void        clearSetting(Settings::Name const& _pName)
         { m_aSettings.clearSetting(_pName); }
     };
-    /*  sal_Bool            hasRegistry() const { return m_bFoundRegistry; }
-        ::osl::Profile*     m_pSRegistry;
-        sal_Bool            m_bFoundRegistry;
-*/
+
+// ===================================================================================
+
     class BootstrapSettings
     {
     public:
-        OUString            url;
-        BootstrapResult     status;
-        // order dependency - settings must be last
-        ConnectionSettings  settings;
+        ConnectionSettings  settings; /// the settings collected from bootstrapping (may work even if !valid)
+        bool                valid;    /// indicates whether the whole bootstrap process was executed successfully
 
-        BootstrapSettings();
+        BootstrapSettings()
+        : settings()
+        , valid(false)
+        {
+            bootstrap();
+        }
 
-        bool hasBootstrapData() const;
+        void bootstrap();
     };
+
+    extern void raiseBootstrapException( class BootstrapSettings const& rBootstrapData, uno::Reference< uno::XInterface > xContext );
+// ===================================================================================
 }
 
 #endif // CONFIGMGR_BOOTSTRAP_HXX_

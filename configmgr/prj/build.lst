@@ -1,4 +1,4 @@
-cg	configmgr	:	comphelper cppuhelper vos drafts NULL
+cg	configmgr	:	unotools comphelper cppuhelper vos drafts NULL
 cg	configmgr								usr1	-	all	cg_mkout NULL
 cg	configmgr\source\cmdtools				nmake	-	all	cg_cmdtools NULL
 cg	configmgr\source\cppugen				nmake	-	all	cg_cppugen NULL
