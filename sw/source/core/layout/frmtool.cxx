@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:00:18 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,10 +198,8 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     pFrm( pF ),
     aFrm( pF->Frm() ),
     aPrt( pF->Prt() ),
-    bInvaKeep( FALSE )
-#ifdef ACCESSIBLE_LAYOUT
-    ,bValidSize( pF->GetValidSizeFlag() )
-#endif
+    bInvaKeep( FALSE ),
+    bValidSize( pF->GetValidSizeFlag() )
 {
     if ( pF->IsTxtFrm() )
     {
@@ -795,6 +793,9 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
     // OD 08.01.2004 #i11859#
     mbChkHeightOfLastLine( false ),
     mnHeightOfLastLine( 0L )
+    // OD 2004-02-26 #i25029#
+    mbInvalidatePrevPrtArea( false ),
+    mbBordersJoinedWithPrev( false )
 {
     // OD 08.01.2004 #i11859#
     if ( pCntntFrm->IsTxtFrm() )
@@ -829,20 +830,6 @@ SwCntntNotify::~SwCntntNotify()
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
 
-
-    //Wenn sich meine PrtArea in der Fix-Size geaendert hat, so muss mein
-    //Nachfolger dazu angeregt werden sich auch neu zu Formatieren.
-
-//MA: Ist das wirklich noetig? Auf keinen Fall sollte das doch notwendig sein,
-//wenn der Frm das erste Mal formatiert wurde (alte PrtArea == 0).
-/*  if ( pCnt->GetNext() &&
-         pCnt->Prt().Width() != aPrt.Width() )
-    {
-        pCnt->GetNext()->Prepare( PREP_FIXSIZE_CHG );
-        pCnt->GetNext()->_InvalidatePrt();
-        pCnt->GetNext()->InvalidateSize();
-    }
-*/
     SWRECTFN( pCnt )
     if ( pCnt->IsInTab() && ( POS_DIFF( pCnt->Frm(), aFrm ) ||
                              pCnt->Frm().SSize() != aFrm.SSize()))
@@ -853,6 +840,53 @@ SwCntntNotify::~SwCntntNotify()
         ASSERT( pCell->IsCellFrm(), "Where's my cell?" );
         if ( VERT_NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
             pCell->InvalidatePrt(); //fuer vertikale Ausrichtung.
+    }
+
+    // OD 2004-02-26 #i25029#
+    if ( mbInvalidatePrevPrtArea && mbBordersJoinedWithPrev &&
+         pCnt->IsTxtFrm() &&
+         !pCnt->IsFollow() && !pCnt->GetIndPrev() )
+    {
+        // determine previous frame
+        SwFrm* pPrevFrm = pCnt->FindPrev();
+        // skip empty section frames and hidden text frames
+        {
+            while ( pPrevFrm &&
+                    ( ( pPrevFrm->IsSctFrm() &&
+                        !static_cast<SwSectionFrm*>(pPrevFrm)->GetSection() ) ||
+                      ( pPrevFrm->IsTxtFrm() &&
+                        static_cast<SwTxtFrm*>(pPrevFrm)->IsHiddenNow() ) ) )
+            {
+                pPrevFrm = pPrevFrm->FindPrev();
+            }
+        }
+
+        // Invalidate printing area of found previous frame
+        if ( pPrevFrm )
+        {
+            if ( pPrevFrm->IsSctFrm() )
+            {
+                if ( pCnt->IsInSct() )
+                {
+                    // Note: found previous frame is a section frame and
+                    //       <pCnt> is also inside a section.
+                    //       Thus due to <mbBordersJoinedWithPrev>,
+                    //       <pCnt> had joined its borders/shadow with the
+                    //       last content of the found section.
+                    // Invalidate printing area of last content in found section.
+                    SwFrm* pLstCntntOfSctFrm =
+                            static_cast<SwSectionFrm*>(pPrevFrm)->FindLastCntnt();
+                    if ( pLstCntntOfSctFrm )
+                    {
+                        pLstCntntOfSctFrm->InvalidatePrt();
+                    }
+                }
+            }
+            else
+            {
+                pPrevFrm->InvalidatePrt();
+            }
+        }
     }
 
     FASTBOOL bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
@@ -2054,23 +2088,38 @@ BOOL SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
 
 // OD 21.05.2003 #108789# - method to determine, if borders are joined with
 // previous frame. Calculated value saved in cached value <bJoinedWithPrev>
-void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm )
+// OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrm>
+void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm,
+                                         const SwFrm* _pPrevFrm )
 {
     // set default
     bJoinedWithPrev = FALSE;
 
-    // text frame can potentially join with previous text frame, if
-    // corresponding attribute set is set at previous text frame.
-    if ( _rFrm.GetPrev() &&
-         _rFrm.IsTxtFrm() && _rFrm.GetPrev()->IsTxtFrm() &&
-         _rFrm.GetPrev()->GetAttrSet()->GetParaConnectBorder().GetValue()
-       )
+    if ( _rFrm.IsTxtFrm() )
     {
-        bJoinedWithPrev = _JoinWithCmp( _rFrm, *(_rFrm.GetPrev()) );
+        // text frame can potentially join with previous text frame, if
+        // corresponding attribute set is set at previous text frame.
+        // OD 2004-02-26 #i25029# - If parameter <_pPrevFrm> is set, take this
+        // one as previous frame.
+        const SwFrm* pPrevFrm = _pPrevFrm ? _pPrevFrm : _rFrm.GetPrev();
+        // OD 2004-02-13 #i25029# - skip hidden text frames.
+        while ( pPrevFrm && pPrevFrm->IsTxtFrm() &&
+                static_cast<const SwTxtFrm*>(pPrevFrm)->IsHiddenNow() )
+        {
+            pPrevFrm = pPrevFrm->GetPrev();
+        }
+        if ( pPrevFrm && pPrevFrm->IsTxtFrm() &&
+             pPrevFrm->GetAttrSet()->GetParaConnectBorder().GetValue()
+           )
+        {
+            bJoinedWithPrev = _JoinWithCmp( _rFrm, *(pPrevFrm) );
+        }
     }
 
     // valid cache status, if demanded
-    bCachedJoinedWithPrev = bCacheGetLine;
+    // OD 2004-02-26 #i25029# - Do not validate cache, if parameter <_pPrevFrm>
+    // is set.
+    bCachedJoinedWithPrev = bCacheGetLine && !_pPrevFrm;
 }
 
 // OD 21.05.2003 #108789# - method to determine, if borders are joined with
@@ -2080,14 +2129,23 @@ void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
     // set default
     bJoinedWithNext = FALSE;
 
-    // text frame can potentially join with next text frame, if
-    // corresponding attribute set is set at current text frame.
-    if ( _rFrm.GetNext() &&
-         _rFrm.IsTxtFrm() && _rFrm.GetNext()->IsTxtFrm() &&
-         _rFrm.GetAttrSet()->GetParaConnectBorder().GetValue()
-       )
+    if ( _rFrm.IsTxtFrm() )
     {
-        bJoinedWithNext = _JoinWithCmp( _rFrm, *(_rFrm.GetNext()) );
+        // text frame can potentially join with next text frame, if
+        // corresponding attribute set is set at current text frame.
+        // OD 2004-02-13 #i25029# - get next frame, but skip hidden text frames.
+        const SwFrm* pNextFrm = _rFrm.GetNext();
+        while ( pNextFrm && pNextFrm->IsTxtFrm() &&
+                static_cast<const SwTxtFrm*>(pNextFrm)->IsHiddenNow() )
+        {
+            pNextFrm = pNextFrm->GetNext();
+        }
+        if ( pNextFrm && pNextFrm->IsTxtFrm() &&
+             _rFrm.GetAttrSet()->GetParaConnectBorder().GetValue()
+           )
+        {
+            bJoinedWithNext = _JoinWithCmp( _rFrm, *(pNextFrm) );
+        }
     }
 
     // valid cache status, if demanded
@@ -2095,11 +2153,15 @@ void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
 }
 
 // OD 21.05.2003 #108789# - accessor for cached values <bJoinedWithPrev>
-BOOL SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm ) const
+// OD 2004-02-26 #i25029# - add 2nd parameter <_pPrevFrm>, which is passed to
+// method <_CalcJoindWithPrev(..)>.
+BOOL SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm,
+                                    const SwFrm* _pPrevFrm ) const
 {
-    if ( !bCachedJoinedWithPrev )
+    if ( !bCachedJoinedWithPrev || _pPrevFrm )
     {
-        const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithPrev( _rFrm );
+        // OD 2004-02-26 #i25029# - pass <_pPrevFrm> as 2nd parameter
+        const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithPrev( _rFrm, _pPrevFrm );
     }
 
     return bJoinedWithPrev;
@@ -2115,64 +2177,35 @@ BOOL SwBorderAttrs::JoinedWithNext( const SwFrm& _rFrm ) const
     return bJoinedWithNext;
 }
 
-void SwBorderAttrs::_GetTopLine( const SwFrm *pFrm )
+// OD 2004-02-26 #i25029# - added 2nd parameter <_pPrevFrm>, which is passed to
+// method <JoinedWithPrev>
+void SwBorderAttrs::_GetTopLine( const SwFrm& _rFrm,
+                                 const SwFrm* _pPrevFrm )
 {
     USHORT nRet = CalcTopLine();
 
     // OD 21.05.2003 #108789# - use new method <JoinWithPrev()>
-    if ( JoinedWithPrev( *(pFrm) ) )
+    // OD 2004-02-26 #i25029# - add 2nd parameter
+    if ( JoinedWithPrev( _rFrm, _pPrevFrm ) )
     {
         nRet = 0;
     }
-    /*
-    if ( nRet && pFrm->GetPrev() && pFrm->IsCntntFrm() && pFrm->GetPrev()->IsCntntFrm() )
-    {
-        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm->GetPrev() );
-        const SwBorderAttrs &rAttrs = *aAccess.Get();
-        if ( nRet == rAttrs.CalcTopLine() )
-        {
-            if ( (GetBox().GetLeft() || GetBox().GetRight() || GetBox().GetBottom()) &&
-                 rAttrs.GetShadow() == rShadow   &&
-                 CmpLines( rAttrs.GetBox().GetTop(), rBox.GetTop() ) &&
-                 CmpLeftRight( rAttrs, pFrm, pFrm->GetPrev() ) )
-            {
-                nRet = 0;
-            }
-        }
-    }
-    */
 
     bCachedGetTopLine = bCacheGetLine;
 
     nGetTopLine = nRet;
 }
 
-void SwBorderAttrs::_GetBottomLine( const SwFrm *pFrm )
+void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
 {
     USHORT nRet = CalcBottomLine();
 
     // OD 21.05.2003 #108789# - use new method <JoinWithPrev()>
-    if ( JoinedWithNext( *(pFrm) ) )
+    if ( JoinedWithNext( _rFrm ) )
     {
         nRet = 0;
     }
-    /*
-    if ( nRet && pFrm->GetNext() && pFrm->IsCntntFrm() && pFrm->GetNext()->IsCntntFrm() )
-    {
-        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm->GetNext() );
-        const SwBorderAttrs &rAttrs = *aAccess.Get();
-        if ( nRet == rAttrs.CalcBottomLine() )
-        {
-            if ( (GetBox().GetLeft() || GetBox().GetRight() || GetBox().GetTop()) &&
-                 rAttrs.GetShadow() == rShadow   &&
-                 CmpLines( rAttrs.GetBox().GetBottom(), rBox.GetBottom() ) &&
-                 CmpLeftRight( rAttrs, pFrm, pFrm->GetNext() ) )
-            {
-                nRet = 0;
-            }
-        }
-    }
-    */
+
     bCachedGetBottomLine = bCacheGetLine;
 
     nGetBottomLine = nRet;
