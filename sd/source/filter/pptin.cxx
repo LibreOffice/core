@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:55:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ sal_Bool ImplSdPPTImport::Import()
     if ( !bOk )
         return FALSE;
 
+    pSdrModel->setLock( sal_True );
     SetStarDraw();
     SdrOutliner& rOutl = pDoc->GetDrawOutliner();
     sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
@@ -1401,6 +1402,7 @@ sal_Bool ImplSdPPTImport::Import()
     SfxDocumentInfo& rOldInfo = pDoc->GetObjectShell()->GetDocInfo();
     rOldInfo = *pNewDocInfo;
     delete( pNewDocInfo );
+    pSdrModel->setLock( sal_False );
     return bOk;
 }
 
