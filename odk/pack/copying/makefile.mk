@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 07:41:14 $
+#   last change: $Author: obo $ $Date: 2004-05-28 15:50:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,8 @@ EXELIST = \
     $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/xml2cmp$(EXEPOSTFIX)	\
     $(DESTDIRBIN)$/uno$(EXEPOSTFIX) \
-    $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX)
+    $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX) \
+    $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX)
 
 .IF "$(GUI)"=="WNT"
 LIBLIST = \
@@ -141,14 +142,14 @@ LIBLIST = \
 .ENDIF
 .ENDIF
 
+# note, that inner class files are copied implicitly
 DESTCLASSESLIST= \
     $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/Loader.class \
-    $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/Loader$CustomURLClassLoader.class \
     $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/InstallationFinder.class \
-    $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/InstallationFinder$StreamGobbler.class \
     $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/WinRegKey.class \
     $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/WinRegKeyException.class
-
+#	$(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/Loader$$CustomURLClassLoader.class \
+#	$(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/InstallationFinder$$StreamGobbler.class \
 
 SETTINGSLIST= \
     $(DESTDIRSETTINGS)$/settings.mk \
