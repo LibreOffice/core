@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: aw $ $Date: 2001-06-15 14:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,12 +653,11 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         }
     }
 
-    // #82003# count all draw objects for use with progress bar. Do this
-    // at META export to also export hint value.
-    if(getExportFlags() & EXPORT_META)
+    // #82003# count all draw objects for use with progress bar.
+    // #88245# init mnObjectCount once, use counter itself as flag. It
+    // is initialized to 0.
+    if(!mnObjectCount)
     {
-        mnObjectCount = 0L;
-
         if(mxDocMasterPages.is())
         {
             for(sal_Int32 a(0); a < mnDocMasterPageCount; a++)
