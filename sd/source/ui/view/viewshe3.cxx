@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:24:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #pragma hdrstop
 
 #include "ViewShell.hxx"
+#include "GraphicViewShell.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -73,6 +74,12 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "glob.hrc"
+#include "new_foil.hrc"
+#include "sdabstdlg.hxx"
+
+#include "new_foil.hxx"
+#include "fupoor.hxx"
 
 #ifndef _SV_PRINTDLG_HXX
 #include <svtools/printdlg.hxx>
@@ -93,7 +100,7 @@
 #ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
 #endif
-#
+
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
@@ -214,6 +221,9 @@
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
 #endif
+#include <sfx2/request.hxx>
+#include <svtools/aeitem.hxx>
+#include <basic/sbstar.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -405,8 +415,8 @@ void ViewShell::AssignFromSlideChangeWindow()
                               eNewEffect != presentation::FadeEffect_NONE))  &&
                             (this->ISA(SlideViewShell)))
                         {
-                            pView->InvalidateAllWin (
-                                static_cast<SlideView*>(pView)
+                            GetView()->InvalidateAllWin (
+                                static_cast<SlideView*>(GetView())
                                 ->GetFadeIconArea(nPage));
                         }
                     }
@@ -706,7 +716,7 @@ void ViewShell::PrintHandout (
         (!pPrintOpts || pPrintOpts->IsWarningOrientation()) )
     {
         // eine Warnung anzeigen
-        WarningBox aWarnBox(pWindow,(WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
+        WarningBox aWarnBox(GetActiveWindow(),(WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
                             String(SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
         nDlgResult = aWarnBox.Execute();
     }
@@ -931,7 +941,7 @@ void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
         (!pPrintOpts || pPrintOpts->IsWarningOrientation()) )
     {
         // eine Warnung anzeigen
-        WarningBox aWarnBox(pWindow,(WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
+        WarningBox aWarnBox(GetActiveWindow(),(WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
                             String(SdResId(STR_WARN_PRINTFORMAT_FAILURE)));
         nDlgResult = aWarnBox.Execute();
     }
@@ -1192,7 +1202,7 @@ void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 
                                     if (this->ISA(DrawViewShell) && bPrintMarkedOnly )
                                     {
-                                        pView->DrawAllMarked( rPrinter, aPtZero );
+                                        GetView()->DrawAllMarked( rPrinter, aPtZero );
                                     }
                                     else
                                         pPrintView->CompleteRedraw( &rPrinter, Rectangle( aPtZero,
@@ -1258,7 +1268,7 @@ void ViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                             pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
                             if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
-                                pView->DrawAllMarked( rPrinter, aPtZero );
+                                GetView()->DrawAllMarked( rPrinter, aPtZero );
                             else
                                 pPrintView->CompleteRedraw(&rPrinter, Rectangle(Point(0,0),
                                                         pPage->GetSize()));
@@ -1304,7 +1314,7 @@ void ViewShell::PrintPage (
     pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
     if (this->ISA(DrawViewShell) && bPrintMarkedOnly)
-        pView->DrawAllMarked( rPrinter, aPtZero );
+        GetView()->DrawAllMarked( rPrinter, aPtZero );
     else
         pPrintView->CompleteRedraw( &rPrinter, Rectangle( aPtZero,
                                 pPage->GetSize() ) );
@@ -1431,18 +1441,22 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 void ViewShell::SetPreview( bool bVisible )
 {
     DBG_ASSERT( GetViewFrame(), "FATAL: no viewframe?" );
-    DBG_ASSERT( pWindow, "FATAL: no window?" );
+    DBG_ASSERT( GetActiveWindow(), "FATAL: no window?" );
 
-    if( GetViewFrame() && pWindow )
+    if( GetViewFrame() && GetActiveWindow() )
     {
         if ( ! bVisible)
             mpWindowUpdater->UnregisterPreview ();
-        GetViewFrame()->SetChildWindow(
-            PreviewChildWindow::GetChildWindowId(), bVisible,false);
+        if (GetViewFrame()->KnowsChildWindow(
+            PreviewChildWindow::GetChildWindowId()))
+        {
+            GetViewFrame()->SetChildWindow(
+                PreviewChildWindow::GetChildWindowId(), bVisible,false);
+        }
         if (bVisible)
             mpWindowUpdater->RegisterPreview ();
 
-        const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+        const StyleSettings& rStyleSettings = GetActiveWindow()->GetSettings().GetStyleSettings();
 
         sal_uInt16 nPreviewSlot;
 
@@ -1475,6 +1489,284 @@ void ViewShell::SetPreview( bool bVisible )
     }
 }
 
+
+
+
+/** This method consists basically of three parts:
+    1. Process the arguments of the SFX request.
+    2. Use the model to create a new page or duplicate an existing one.
+    3. Update the tab control and switch to the new page.
+*/
+void ViewShell::CreateOrDuplicatePage (
+    SfxRequest& rRequest,
+    PageKind ePageKind,
+    SdPage* pPage)
+{
+    USHORT nSId = rRequest.GetSlot();
+    SdDrawDocument* pDocument = GetDoc();
+    USHORT nPageCount = pDocument->GetSdPageCount(ePageKind);
+    SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
+    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+    USHORT nPos = 0;
+    SetOfByte aVisibleLayers;
+    // Determine the page from which to copy some values, such as layers,
+    // size, master page, to the new page.  This is usually the given page.
+    // When the given page is NULL then use the first page of the document.
+    SdPage* pTemplatePage = pPage;
+    if (pTemplatePage == NULL)
+        if (pDocument->GetSdPage(0, ePageKind) > 0)
+            pTemplatePage = pDocument->GetSdPage(0, ePageKind);
+    if (pTemplatePage != NULL)
+        aVisibleLayers = pTemplatePage->GetMasterPageVisibleLayers(nPos);
+    else
+        aVisibleLayers.SetAll();
+
+    String aStandardPageName;
+    String aNotesPageName;
+    AutoLayout eStandardLayout;
+    AutoLayout eNotesLayout;
+    BOOL bIsPageBack;
+    BOOL bIsPageObj;
+
+    // 1. Process the arguments.
+    const SfxItemSet* pArgs = rRequest.GetArgs();
+    if (! pArgs)
+    {
+        SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
+        String aStr;
+        aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aStr ) );
+        aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
+                aVisibleLayers.IsSet(aBckgrnd) ) );
+        aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
+                aVisibleLayers.IsSet(aBckgrndObj) ) );
+
+        AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
+        if (pTemplatePage != NULL)
+            eAutoLayout = pTemplatePage->GetAutoLayout();
+
+        if (eAutoLayout == AUTOLAYOUT_TITLE && pPage->GetPageNum() == 1)
+        {
+            // 1.Seite ist TitelDia
+            eAutoLayout = AUTOLAYOUT_ENUM;
+        }
+
+        aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
+                eAutoLayout ) );
+
+        AbstractSdNewFoilDlg* pDlg = NULL; //CHINA001 SdNewFoilDlg* pDlg = NULL;
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+
+        if (nSId == SID_INSERTPAGE && !this->ISA(GraphicViewShell))
+        { //add by CHINA001
+            //CHINA001 pDlg = new SdNewFoilDlg(GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE);
+            pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        }
+        if (pDlg && pDlg->Execute () != RET_OK)
+        {
+            Cancel();
+
+            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+            delete pDlg;
+            rRequest.Ignore ();
+            return;
+        }
+        else
+        {
+            // AutoLayouts muessen fertig sein
+            pDocument->StopWorkStartupDelay();
+
+            if (pDlg)
+            {
+                pDlg->GetAttr( aAttrSet );
+            }
+
+            if (ePageKind == PK_NOTES)
+            {
+                aNotesPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
+                eNotesLayout   = (AutoLayout) ((const SfxAllEnumItem &)
+                    aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
+            }
+            else
+            {
+                aStandardPageName = ((const SfxStringItem &) aAttrSet.Get (ATTR_PAGE_NAME)).GetValue ();
+                eStandardLayout   = (AutoLayout) ((const SfxAllEnumItem &)
+                    aAttrSet.Get (ATTR_PAGE_LAYOUT)).GetValue ();
+            }
+
+            bIsPageBack = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_BACKGROUND)).GetValue ();
+            bIsPageObj  = ((const SfxBoolItem &) aAttrSet.Get (ATTR_PAGE_OBJECTS)).GetValue();
+
+            pDocument->SetChanged(TRUE);
+        }
+
+        delete pDlg;
+    }
+    else if (pArgs->Count () != 4)
+    {
+        Cancel();
+
+        if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+        StarBASIC::FatalError (SbERR_WRONG_ARGS);
+        rRequest.Ignore ();
+        return;
+    }
+    else
+    {
+        // AutoLayouts muessen fertig sein
+        pDocument->StopWorkStartupDelay();
+
+        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
+        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
+
+        if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
+        {
+            if (ePageKind == PK_NOTES)
+            {
+                aNotesPageName = pPageName->GetValue ();
+                eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+            else
+            {
+                aStandardPageName = pPageName->GetValue ();
+                eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+
+            bIsPageBack = pIsPageBack->GetValue ();
+            bIsPageObj  = pIsPageObj->GetValue ();
+        }
+        else
+        {
+            Cancel();
+
+            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+            StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+            rRequest.Ignore ();
+            return;
+        }
+    }
+
+    // 2. Create a new page or duplicate an existing one.
+    View* pDrView = GetView();
+    pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+
+    USHORT nNewPageIndex;
+    switch (nSId)
+    {
+        case SID_INSERTPAGE:
+        case SID_INSERTPAGE_QUICK:
+            // There are three cases.  a) pPage is not NULL: we use it as a
+            // template and create a new slide behind it. b) pPage is NULL
+            // but the document is not empty: we use the first slide/notes
+            // page as template, create a new slide after it and move it
+            // then to the head of the document. c) pPage is NULL and the
+            // document is empty: We use CreateFirstPages to create the
+            // first page of the document.
+            if (pPage == NULL)
+                if (pTemplatePage == NULL)
+                {
+                    pDocument->CreateFirstPages();
+                    nNewPageIndex = 0;
+                }
+                else
+                {
+                    // Create a new page with the first page as template and
+                    // insert it after the first page.
+                    nNewPageIndex = pDocument->CreatePage (
+                        pTemplatePage,
+                        ePageKind,
+                        aStandardPageName,
+                        aNotesPageName,
+                        eStandardLayout,
+                        eNotesLayout,
+                        bIsPageBack,
+                        bIsPageObj);
+                    // Select exactly the new page.
+                    USHORT nPageCount (pDocument->GetSdPageCount(ePageKind));
+                    for (USHORT i=0; i<nPageCount; i++)
+                    {
+                        pDocument->GetSdPage(i, PK_STANDARD)->SetSelected(
+                            i == nNewPageIndex);
+                        pDocument->GetSdPage(i, PK_NOTES)->SetSelected(
+                            i == nNewPageIndex);
+                    }
+                    // Move the selected page to the head of the document
+                    pDocument->MovePages ((USHORT)-1);
+                    nNewPageIndex = 0;
+                }
+            else
+                nNewPageIndex = pDocument->CreatePage (
+                    pPage,
+                    ePageKind,
+                    aStandardPageName,
+                    aNotesPageName,
+                    eStandardLayout,
+                    eNotesLayout,
+                    bIsPageBack,
+                    bIsPageObj);
+            break;
+
+        case SID_DUPLICATE_PAGE:
+            // Duplication makes no sense when pPage is NULL.
+            if (pPage != NULL)
+                nNewPageIndex = pDocument->DuplicatePage (
+                    pPage,
+                    ePageKind,
+                    aStandardPageName,
+                    aNotesPageName,
+                    eStandardLayout,
+                    eNotesLayout,
+                    bIsPageBack,
+                    bIsPageObj);
+            break;
+
+        default:
+            DBG_WARNING("wrong slot id given to CreateOrDuplicatePage");
+            // Try to handle another slot id gracefully.
+            nNewPageIndex = 0xffff;
+    }
+    if (nNewPageIndex != 0xffff)
+    {
+        pDrView->AddUndo (new SdrUndoNewPage (
+            *pDocument->GetSdPage (nNewPageIndex, PK_STANDARD)));
+        pDrView->AddUndo (new SdrUndoNewPage (
+            *pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+    }
+
+    pDrView->EndUndo();
+#if 0
+    // 3. Update the tab control.
+    aTabControl.Clear();
+
+    SdPage* pPage;
+    String aPageName;
+    USHORT nPageCnt = pDocument->GetSdPageCount(ePageKind);
+
+    for (USHORT i = 0; i < nPageCnt; i++)
+    {
+        pPage = pDocument->GetSdPage(i, ePageKind);
+
+        aPageName = pPage->GetName();
+        aTabControl.InsertPage(i + 1, aPageName);
+    }
+
+    aTabControl.SetCurPageId (nNewPageIndex + 1);
+
+    GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
+        (rRequest.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON)
+        | SFX_CALLMODE_RECORD);
+#endif
+}
 
 
 } // end of namespace sd
