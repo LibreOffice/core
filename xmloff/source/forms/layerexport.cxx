@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 16:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ namespace xmloff
         // the control id (should already have been created in examineForms)
         ::rtl::OUString sControlId;
         ConstMapPropertySet2StringIterator aControlId = m_aCurrentPageIds->second.find(_rxControl);
-        OSL_ENSHURE(aControlId != m_aCurrentPageIds->second.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
+        OSL_ENSURE(aControlId != m_aCurrentPageIds->second.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
         if (aControlId != m_aCurrentPageIds->second.end())
             sControlId = aControlId->second;
 
@@ -223,7 +223,7 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportForm(const Reference< XPropertySet >& _rxProps,
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
-        OSL_ENSHURE(_rxProps.is(), "OFormLayerXMLExport_Impl::exportForm: invalid property set!");
+        OSL_ENSURE(_rxProps.is(), "OFormLayerXMLExport_Impl::exportForm: invalid property set!");
         OFormExport aAttributeHandler(*this, _rxProps, _rEvents);
         aAttributeHandler.doExport();
     }
@@ -258,13 +258,13 @@ namespace xmloff
             {
                 // extract the current element
                 ::cppu::extractInterface(xCurrentProps, _rxCollection->getByIndex(i));
-                OSL_ENSHURE(xCurrentProps.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: invalid child element, skipping!");
+                OSL_ENSURE(xCurrentProps.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: invalid child element, skipping!");
                 if (!xCurrentProps.is())
                     continue;
 
                 // check if there is a ClassId property on the current element. If so, we assume it to be a control
                 xPropsInfo = xCurrentProps->getPropertySetInfo();
-                OSL_ENSHURE(xPropsInfo.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: no property set info!");
+                OSL_ENSURE(xPropsInfo.is(), "OFormLayerXMLExport_Impl::exportCollectionElements: no property set info!");
                 if (!xPropsInfo.is())
                     // without this, a lot of stuff in the export routines may fail
                     continue;
@@ -287,7 +287,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSHURE(sal_False, "OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
+                OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
                 continue;
             }
         }
@@ -365,7 +365,7 @@ namespace xmloff
     ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLExport_Impl::getControlId: invalid current page!");
-        OSL_ENSHURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
+        OSL_ENSURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
         return m_aCurrentPageIds->second[_rxControl];
     }
@@ -480,6 +480,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.10  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *

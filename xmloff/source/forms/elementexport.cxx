@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,7 +1244,7 @@ namespace xmloff
                     // we always should be able to export events - this is not control type dependent
                 break;
             default:
-                OSL_ENSHURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
+                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
                 break;
         }
 
@@ -1471,6 +1471,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.10  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
