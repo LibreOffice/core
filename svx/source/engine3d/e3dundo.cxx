@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dundo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,8 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 \************************************************************************/
 void E3dAttributesUndoAction::Undo()
 {
-    pObject->SetItemSetAndBroadcast(aOldSet);
+    //pObject->SetItemSetAndBroadcast(aOldSet);
+    pObject->SetMergedItemSetAndBroadcast(aOldSet);
 
     if(pObject->ISA(E3dObject))
     {
@@ -206,7 +207,8 @@ void E3dAttributesUndoAction::Undo()
 \************************************************************************/
 void E3dAttributesUndoAction::Redo()
 {
-    pObject->SetItemSetAndBroadcast(aNewSet);
+    //pObject->SetItemSetAndBroadcast(aNewSet);
+    pObject->SetMergedItemSetAndBroadcast(aNewSet);
 
     if(pObject->ISA(E3dObject))
     {
