@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:36:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HPP_
 #include <com/sun/star/media/ZoomLevel.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -2764,6 +2768,14 @@ void SdXMLAppletShapeContext::EndElement()
     {
         uno::Any aAny;
 
+        if ( maSize.Width && maSize.Height )
+        {
+            // the visual area for applet must be set on loading
+            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            aAny <<= aRect;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
+        }
+
         if( maParams.getLength() )
         {
             aAny <<= maParams;
@@ -2935,6 +2947,14 @@ void SdXMLPluginShapeContext::EndElement()
     if( xProps.is() )
     {
         uno::Any aAny;
+
+        if ( maSize.Width && maSize.Height )
+        {
+            // the visual area for a plugin must be set on loading
+            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            aAny <<= aRect;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
+        }
 
         if( !mbMedia )
         {
@@ -3148,6 +3168,20 @@ void SdXMLFloatingFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const
 
 void SdXMLFloatingFrameShapeContext::EndElement()
 {
+    uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
+    if( xProps.is() )
+    {
+        if ( maSize.Width && maSize.Height )
+        {
+            // the visual area for a floating frame must be set on loading
+            awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
+            uno::Any aAny;
+            aAny <<= aRect;
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), aAny );
+        }
+    }
+
     SetThumbnail();
     SdXMLShapeContext::EndElement();
 }
