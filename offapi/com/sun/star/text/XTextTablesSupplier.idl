@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextTablesSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:14 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::text::XTextTablesSupplier
 /** enables the object to handle text tables.
  */
 interface XTextTablesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::text::XTextTablesSupplier::getTextTables
     /** @returns
                 the collection of "TextTables" currently contained in the object.
+
+        @see    com::sun::star::text::TextTables
+        @see    com::sun::star::text::TextTable
      */
     com::sun::star::container::XNameAccess getTextTables();
 
