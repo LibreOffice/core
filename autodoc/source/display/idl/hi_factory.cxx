@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:41:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@ const char C_sSpace[92] = "                              "
 }
 
 
+void
+HtmlFactory_Idl::produce_SummaryDeclaration( Xml::Element &      o_row,
+                                             const client &      i_ce ) const
+{
+    produce_InternalLink(o_row, i_ce);
+}
 
 void
 HtmlFactory_Idl::produce_InternalLink( Xml::Element &  o_screen,
@@ -121,13 +127,13 @@ HtmlFactory_Idl::produce_ShortDoc( Xml::Element &   o_screen,
     aLinkDoc.Produce_byData( i_ce );
 }
 
+// KORR MI: Does not belong here (implementation inheritance)!
 void
 HtmlFactory_Idl::produce_Bases( Xml::Element &   o_screen,
                                 const client &   i_ce,
                                 const String &   i_sLabel ) const
 {
     ary::idl::Type_id nBaseT = baseOf(i_ce);
-        // ary::idl::ifc_interface::attr::Base(i_ce);
     if ( nBaseT.IsValid() )
     {
         HF_DocEntryList
@@ -176,14 +182,15 @@ HtmlFactory_Idl::produce_Members( ce_list &           it_list,
                     i_detailsTitle,
                     1 );
 
-    for ( ; BOOL_OF(it_list); ++it_list )
+    for ( ; it_list.operator bool(); ++it_list )
     {
         const ary::idl::CodeEntity &
             rCe = Env().Data().Find_Ce(*it_list);
 
         Xml::Element &
             rSummaryRow = aSummary.Add_Row();
-        produce_InternalLink(rSummaryRow, rCe);
+        produce_SummaryDeclaration(rSummaryRow, rCe);
+//        produce_InternalLink(rSummaryRow, rCe);
         produce_ShortDoc(rSummaryRow, rCe);
 
         produce_MemberDetails(aDetails, rCe);
