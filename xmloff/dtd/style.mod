@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.30 2001-02-11 13:41:04 cl Exp $
+	$Id: style.mod,v 1.31 2001-04-02 11:04:15 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -301,6 +301,9 @@
 
 <!ATTLIST style:properties text:number-lines %boolean; "false">
 <!ATTLIST style:properties text:line-number %nonNegativeInteger; #IMPLIED>
+
+<!ATTLIST style:properties style:decimal-places %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:properties style:tab-stop-distance %nonNegativeLength; #IMPLIED>
 
 <!-- table properties -->
 <!ATTLIST style:properties style:width %positiveLength; #IMPLIED>
