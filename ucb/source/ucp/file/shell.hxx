@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: kso $ $Date: 2000-11-30 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,10 @@ namespace fileaccess {
                const rtl::OUString& aUnqPath,
                sal_Bool OverWrite,
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream );
+
+
+        sal_Bool SAL_CALL                                 // Creates whole path
+        ensuredir( const rtl::OUString& aDirectoryName ); // returns success
 
 
         void SAL_CALL InsertDefaultProperties( const rtl::OUString& aUnqPath );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-22 12:26:41 $
+ *  last change: $Author: kso $ $Date: 2000-11-30 11:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2527,23 +2527,40 @@ shell::remove( sal_Int32 CommandId,
 
 
 
+sal_Bool SAL_CALL
+shell::ensuredir( const rtl::OUString& aUnqPath )
+{
+    sal_Int32 nPos = 4; // start after "//./"
+
+    while ( nPos != - 1 )
+    {
+        nPos = aUnqPath.indexOf( '/', nPos + 1 );
+
+        rtl::OUString aPath = ( nPos == -1 )
+                            ? aUnqPath
+                            : aUnqPath.copy( 0, nPos );
+
+        osl::FileBase::RC nError = osl::Directory::create( aPath );
+        if ( nError == osl::FileBase::E_None )
+        {
+            // created.
+            rtl::OUString aPrtPath = getParentName( aPath );
+            notifyInsert( getContentEventListeners( aPrtPath ),aPath );
+        }
+        else if ( nError != osl::FileBase::E_EXIST )
+            return false;
+    }
+
+    return true;
+}
+
 
 
 sal_Bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
               const rtl::OUString& aUnqPath )
 {
-    // Copy the Listener to be ThreadSave
-
-    sal_Bool bSuccess = osl::FileBase::E_None == osl::Directory::create( aUnqPath );
-
-    if( bSuccess )
-    {
-        rtl::OUString aPrtPath = getParentName( aUnqPath );
-        notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
-    }
-
-    return bSuccess;
+    return ensuredir( aUnqPath );
 }
 
 
@@ -2582,6 +2599,11 @@ shell::write( sal_Int32 CommandId,
     osl::File aFile( aUnqPath );
 
     sal_Bool bSuccess;
+
+    // Create parent path, if necessary.
+    if ( !ensuredir( getParentName( aUnqPath ) ) )
+        return false;
+
     if( OverWrite )
     {
         bSuccess = osl::FileBase::E_None == aFile.open( OpenFlag_Write | OpenFlag_Create );
