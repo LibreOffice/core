@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: bc $ $Date: 2002-12-05 15:22:51 $
+#   last change: $Author: kz $ $Date: 2004-05-19 12:48:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,21 +70,26 @@ PACKAGE = com$/sun$/star$/wizards$/report
 .INCLUDE : settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-JARFILES= unoil.jar jurt.jar ridl.jar sandbox.jar juh.jar jut.jar java_uno.jar common.jar
+JARFILES= unoil.jar jurt.jar ridl.jar sandbox.jar juh.jar jut.jar java_uno.jar commonwizards.jar
 
 CUSTOMMANIFESTFILE= MANIFEST.MF
 
-JARCLASSDIRS	= com
+JARCLASSDIRS	= com$/sun$/star$/wizards$/report
 JARTARGET		= $(TARGET).jar
 
 # --- Files --------------------------------------------------------
 
 JAVAFILES=						\
-    DBMetaData.java		\
     ReportDocument.java		\
     ReportWizard.java		\
     CallReportWizard.java	\
+    DBColumn.java	\
+    RecordTable.java	\
+    Finalizer.java			\
+    ReportLayouter.java			\
+    GroupFieldHandler.java	\
     Dataimport.java
+
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
