@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opageenv.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 // USED SERVICES
     // BASE CLASSES
     // COMPONENTS
-#include <slist>
 #include <cosv/ploc.hxx>
     // PARAMETERS
 
