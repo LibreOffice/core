@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: mtg $ $Date: 2001-11-20 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
+#endif
+#ifndef __com_sun_star_text_XTextColumns_idl__
+#include <com/sun/star/text/XTextColumns.idl>
 #endif
 
 
@@ -258,6 +261,10 @@ service TextSection
     /** determins if a DDE link is updated automatically.
     */
     [property] boolean IsAutomaticUpdate;
+    //-------------------------------------------------------------------------
+    /** allows columns to be set into the text section
+    */
+    [property] com::sun::star::text::XTextColumns TextColumns;
 
 };
 
