@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:09:37 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ public:
     }
     ~StackHack()
     {
-        if ( --StackHack::nCnt == 0 )
+        if ( --StackHack::nCnt < 5 )
             StackHack::bLocked = FALSE;
     }
 
