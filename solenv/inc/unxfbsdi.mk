@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:01:53 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:07:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ AFLAGS=-x assembler-with-cpp -c $(CDEFS)
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # this is a platform with JAVA support
+SOLAR_JAVA*=TRUE
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
 .IF "$(debug)"==""
@@ -156,7 +157,7 @@ STATIC=	-Wl,-Bstatic
 DYNAMIC= -Wl,-Bdynamic
 
 # name of linker
-LINK=$(CXX)
+LINK=$(CC)
 
 # default linker flags
 # LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
@@ -200,12 +201,12 @@ STDSLOCUI=
 # libraries for linking applications
 STDLIBCUIST=-lm
 STDLIBGUIST=-lXaw -lXt -lX11 -lm
-STDLIBGUIMT=-lXaw -lXt -lX11 $(PTHREAD_LIBS) -lm -lstlport_gcc
-STDLIBCUIMT=$(PTHREAD_LIBS) -lm -lstlport_gcc
+STDLIBGUIMT=-lXaw -lXt -lX11 $(PTHREAD_LIBS) -lm
+STDLIBCUIMT=$(PTHREAD_LIBS) -lm
 
 # libraries for linking shared libraries
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext $(PTHREAD_LIBS) -lm -lstlport_gcc
-STDSHLCUIMT=$(PTHREAD_LIBS) -lm -lstlport_gcc
+STDSHLGUIMT=-lXaw -lXt -lX11 -lXext $(PTHREAD_LIBS) -lm
+STDSHLCUIMT=$(PTHREAD_LIBS) -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
