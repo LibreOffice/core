@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:05 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,6 @@ ImplDevFontList::~ImplDevFontList()
 void ImplDevFontList::ImplClear()
 {
     // clear all entries in the device font list
-    ImplFontSelectData aIFSD;
     for( ImplDevFontListData* pEntry = First(); pEntry; pEntry = Next() )
     {
         for( ImplFontData* pFontData = pEntry->mpFirst; pFontData; )
@@ -2696,10 +2695,10 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
         return;
 
     // delete least-recently-used unreferenced entries
-    int mnRef0Index = 0;
+    int nRef0Index = 0;
     for( ImplFontEntry** pNextPtr = &mpFirstEntry; pEntry = *pNextPtr; )
     {
-        if( (pEntry->mnRefCount > 0) || (++mnRef0Index < FONTCACHE_MAX) )
+        if( (pEntry->mnRefCount > 0) || (++nRef0Index <= FONTCACHE_MIN) )
             pNextPtr = &pEntry->mpNext;
         else
         {
@@ -2709,7 +2708,7 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
         }
     }
 
-    DBG_ASSERT( (mnRef0Index<=FONTCACHE_MAX), "ImplFontCache::Release() - mismatch" );
+    DBG_ASSERT( (mnRef0Count<=FONTCACHE_MIN), "ImplFontCache::Release() - mismatch" );
 }
 
 // -----------------------------------------------------------------------
@@ -2729,6 +2728,9 @@ void ImplFontCache::Clear()
             --mnRef0Count;
         }
     }
+
+    // #112304# make sure the font cache is really clean
+    mpFirstEntry = NULL;
 
     DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Clear() - mnRef0Count non-zero" );
 }
