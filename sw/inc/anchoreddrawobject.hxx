@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:00:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,23 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // boolean changes its state.
         bool mbNotYetPositioned;
 
+        /** method for the intrinsic positioning of a at-paragraph|at-character
+            anchored drawing object
+
+            OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+
+            @author OD
+        */
+        void _MakeObjPosAnchoredAtPara();
+
+        /** method for the intrinsic positioning of a at-page|at-frame anchored
+            drawing object
+
+            OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+
+            @author OD
+        */
+        void _MakeObjPosAnchoredAtLayout();
         /** method to convert positioning attributes from horizontal
             left-to-right layout to the layout direction of its anchor frame
 
@@ -172,10 +189,19 @@ class SwAnchoredDrawObject : public SwAnchoredObject
             new anchor frame and the current absolute drawing object position.
             Note: For correct Undo/Redo method should only be called inside a
             Undo-/Redo-action.
+            OD 2004-08-24 #i33313# - add second optional parameter <_pNewObjRect>
 
             @author OD
+
+            @param <_pNewAnchorFrm>
+            input parameter - new anchor frame for the anchored object.
+
+            @param <_pNewObjRect>
+            optional input parameter - proposed new object rectangle. If not
+            provided the current object rectangle is taken.
         */
-        void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm );
+        void AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
+                                    const SwRect* _pNewObjRect = 0L );
 
         /** anchored drawing object not yet attached to a anchor frame
 
