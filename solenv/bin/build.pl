@@ -91,7 +91,9 @@ sub BuildAll {
             RemoveFromDependencies($DeadPrj, \%ParentDepsHash);
         };
         while ($Prj = PickPrjToBuild(\%ParentDepsHash)) {
-            print "\nBuild project $Prj\n";
+            print "\n-------------\n";
+            print "Building project $Prj\n";
+            print "-------------\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
             system ("deliver");
@@ -138,7 +140,6 @@ sub GetParentsString {
     while (<PrjBuildFile>) {
         s/\r\n//;
         if ($_ =~ /([\:]+)([\t | \s]+)/) {
-            $ParentPrjs = $';
             close PrjBuildFile;
             return $';
         };
