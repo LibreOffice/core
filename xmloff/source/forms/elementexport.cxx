@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:13:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,14 @@
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
 #include "txtprmap.hxx"
 #endif
+
+#ifndef XMLOFF_FORMS_FORMCELLBINDING
+#include "formcellbinding.hxx"
+#endif
+#ifndef _XMLOFF_XFORMSEXPORT_HXX
+#include "xformsexport.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
@@ -970,6 +978,32 @@ namespace xmloff
         #endif
         }
 
+        if ( m_nIncludeBindings & BA_XFORMS_BIND )
+        {
+            exportXFormsBindAttributes();
+        #if OSL_DEBUG_LEVEL > 0
+            //  reset the bit for later checking
+            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_BIND;
+        #endif
+        }
+
+        if ( m_nIncludeBindings & BA_XFORMS_LISTBIND )
+        {
+            exportXFormsListAttributes();
+        #if OSL_DEBUG_LEVEL > 0
+            //  reset the bit for later checking
+            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_LISTBIND;
+        #endif
+        }
+
+        if ( m_nIncludeBindings & BA_XFORMS_SUBMISSION )
+        {
+            exportXFormsSubmissionAttributes();
+        #if OSL_DEBUG_LEVEL > 0
+            //  reset the bit for later checking
+            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_SUBMISSION;
+        #endif
+        }
 
         OSL_ENSURE( 0 == nIncludeBinding,
             "OControlExport::exportBindingAtributes: forgot some flags!");
@@ -1691,6 +1725,24 @@ namespace xmloff
                     m_nIncludeBindings |= BA_LIST_CELL_RANGE;
             }
         }
+
+        // is control bound to XForms?
+        if( getXFormsBindName( m_xProps ).getLength() > 0 )
+        {
+            m_nIncludeBindings |= BA_XFORMS_BIND;
+        }
+
+        // is (list-)control bound to XForms list?
+        if( getXFormsListBindName( m_xProps ).getLength() > 0 )
+        {
+            m_nIncludeBindings |= BA_XFORMS_LISTBIND;
+        }
+
+        // does the control have an XForms submission?
+        if( getXFormsSubmissionName( m_xProps ).getLength() > 0 )
+        {
+            m_nIncludeBindings |= BA_XFORMS_SUBMISSION;
+        }
     }
 
     //---------------------------------------------------------------------
@@ -1737,6 +1789,24 @@ namespace xmloff
         }
     }
 
+    //---------------------------------------------------------------------
+    void OControlExport::exportXFormsBindAttributes()
+    {
+        rtl::OUString sBindName = getXFormsBindName( m_xProps );
+        AddAttribute( XML_NAMESPACE_XFORMS, "bind", sBindName );
+    }
+    //---------------------------------------------------------------------
+    void OControlExport::exportXFormsListAttributes()
+    {
+        rtl::OUString sBindName = getXFormsListBindName( m_xProps );
+        AddAttribute( XML_NAMESPACE_FORM, "xforms-list-source", sBindName );
+    }
+    //---------------------------------------------------------------------
+    void OControlExport::exportXFormsSubmissionAttributes()
+    {
+        rtl::OUString sSubmission = getXFormsSubmissionName( m_xProps );
+        AddAttribute( XML_NAMESPACE_XFORMS, "submission", sSubmission );
+    }
     //---------------------------------------------------------------------
     void OControlExport::exportCellListSourceRange( )
     {
