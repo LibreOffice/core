@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2003-09-08 13:02:34 $
+ *  last change:$Date: 2004-01-05 20:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -82,6 +71,18 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -120,7 +121,6 @@ import com.sun.star.util.XCloseable;
  * @see ifc.accessibility.XAccessibleValue
  */
 public class AccessibleToolBoxItem extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
 
@@ -128,15 +128,16 @@ public class AccessibleToolBoxItem extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
@@ -167,61 +168,68 @@ public class AccessibleToolBoxItem extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
-
-        if (xTextDoc != null) closeDoc();
-
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
-
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+        if (xTextDoc != null) {
+            closeDoc();
         }
 
-        XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        // get a soffice factory object
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
+
+        try {
+            log.println("creating a text document");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
+            // Some exception occures.FAILED
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
+        }
+
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xTextDoc);
 
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(
+                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
+
         //at.printAccessibleTree(log,xRoot);
-
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.TOGGLE_BUTTON, "Bold");
+                                             AccessibleRole.TOGGLE_BUTTON,
+                                             "Bold");
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this dialog");
+                            "This method isn't supported in this dialog");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        final XAccessibleAction oAction = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        final XAccessibleAction oAction = (XAccessibleAction) UnoRuntime.queryInterface(
+                                                  XAccessibleAction.class,
+                                                  oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    try {
-                        oAction.doAccessibleAction(0);
-                    } catch(com.sun.star.lang.IndexOutOfBoundsException e) {}
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    oAction.doAccessibleAction(0);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                 }
-            });
+            }
+        });
 
         tEnv.addObjRelation("XAccessibleText.Text", "Bold");
 
@@ -229,13 +237,6 @@ public class AccessibleToolBoxItem extends TestCase {
     }
 
     protected void closeDoc() {
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
-        try {
-            closer.close(true);
-        } catch(com.sun.star.util.CloseVetoException e) {
-            log.println("Couldn't close document "+e.getMessage());
-        } catch(com.sun.star.lang.DisposedException e) {
-            log.println("Couldn't close document "+e.getMessage());
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 }
