@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 15:21:33 $
+ *  last change: $Author: fs $ $Date: 2002-08-07 10:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ public:
 
     OUString                getPath() const;
     OUString                getFilter() const;
-    OUString                getRealFilter() const;
+    void                    getRealFilter( String& _rFilter ) const;
 
     ErrCode                 getGraphic( Graphic& rGraphic ) const;
     void                    createMatcher( const SfxObjectFactory& rFactory );
@@ -1400,7 +1400,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         }
 
         // set the filter
-        rFilter = getRealFilter();
+        getRealFilter( rFilter );
 
         // fill the rpURLList
         Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
@@ -1488,26 +1488,25 @@ OUString FileDialogHelper_Impl::getFilter() const
 }
 
 // ------------------------------------------------------------------------
-OUString FileDialogHelper_Impl::getRealFilter() const
+void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 {
-    OUString aFilter;
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if ( xFltMgr.is() )
-        aFilter = xFltMgr->getCurrentFilter();
+        _rFilter = xFltMgr->getCurrentFilter();
 
-    if ( ! aFilter.getLength() )
-        aFilter = maCurFilter;
+    if ( ! _rFilter.Len() )
+        _rFilter = maCurFilter;
 
-    if ( aFilter.getLength() && mpMatcher )
+    if ( _rFilter.Len() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
-                                        aFilter, m_nMustFlags, m_nDontFlags );
+                                        _rFilter, m_nMustFlags, m_nDontFlags );
         if ( pFilter )
-            aFilter = pFilter->GetFilterName();
+            _rFilter = pFilter->GetFilterName();
+        else
+            _rFilter = String();
     }
-
-    return aFilter;
 }
 
 // ------------------------------------------------------------------------
