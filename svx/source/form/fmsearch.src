@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-19 21:16:13 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ portuguese ] = "qualquer posição dentro do campo; no início do campo; no fim do campo; no campo inteiro";
     Text[ danish ] = "vilkårlig i feltet;ved feltets begyndelse;ved feltets slutning;hele feltet";
     Text[ french ] = "à un endroit quelconque du champ;en début de champ;en fin de champ;le champ entier";
-    Text[ swedish ] = "var Du vill i fältet;i fältets början;i fältets slut;i hela fältet";
+    Text[ swedish ] = "var du vill i fältet;i fältets början;i fältets slut;i hela fältet";
     Text[ dutch ] = "willekeurige plaats in veld;aan veldeinde;aan veldbegin;compleet veld";
     Text[ spanish ] = "cualquier parte en campo;al principio del campo;al final del campo;todo el campo";
     Text[ english_us ] = "anywhere in the field;beginning of field;end of field;entire field";
@@ -1003,7 +1003,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text = "Überlauf, Suche wurde am Anfang fortgesetzt;Überlauf, Suche wurde am Ende fortgesetzt" ;
     Text [ ENGLISH ] = "Überlauf, Suche wurde am Anfang fortgesetzt;Überlauf, Suche wurde am Ende fortgesetzt" ;
     Text[ italian ] = "Overflow, la ricerca è stata proseguita dall'inizio;Overflow, la ricerca è stata proseguita dalla fine";
-    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang fortgesetzt;?berlauf, Suche wurde am Ende fortgesetzt";
+    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
     Text[ portuguese ] = "Transbordo - Localizar continua pelo início;Transbordo - Localizar continua pelo final.";
     Text[ danish ] = "Overløb, søgning blev fortsat ved begyndelsen;Overløb, søgningen blev fortsat ved slutningen";
     Text[ french ] = "Débordement - la recherche a continué au début;Débordement - la recherche a continué à la fin";
@@ -1030,7 +1030,7 @@ String RID_STR_SEARCH_COUNTING
     Text = "zähle Datensätze" ;
     Text [ ENGLISH ] = "zähle Datensätze" ;
     Text[ italian ] = "Overflow, la ricerca è stata proseguita dall'inizio, la ricerca è stata proseguita dalla fine";
-    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang fortgesetzt;?berlauf, Suche wurde am Ende fortgesetzt";
+    Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
     Text[ portuguese ] = "Contar registos de dados";
     Text[ danish ] = "tæller dataposter";
     Text[ french ] = "Compter les enregistrements";
