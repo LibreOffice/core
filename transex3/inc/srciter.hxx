@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srciter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,11 @@ private:
 
     void ExecuteDirectory( SourceDirectory *pDirectory );
 
+protected:
+    bool bLocal;
+
 public:
-    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion );
+    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal = false);
     ~SourceTreeIterator();
 
     BOOL StartExecute();
