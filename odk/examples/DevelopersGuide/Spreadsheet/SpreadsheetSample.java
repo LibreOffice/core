@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetSample.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:46:09 $
+ *  last change: $Author: vg $ $Date: 2003-07-23 08:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -1188,10 +1188,12 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
 
 
         // --- sort by second column, ascending ---
-        com.sun.star.util.SortField[] aSortFields = new com.sun.star.util.SortField[1];
-        aSortFields[0] = new com.sun.star.util.SortField();
+        com.sun.star.table.TableSortField[] aSortFields = new com.sun.star.table.TableSortField[1];
+        aSortFields[0] = new com.sun.star.table.TableSortField();
         aSortFields[0].Field         = 1;
-        aSortFields[0].SortAscending = true;
+        aSortFields[0].IsAscending = false;
+        aSortFields[0].IsCaseSensitive = false;
+
 
         com.sun.star.beans.PropertyValue[] aSortDesc = new com.sun.star.beans.PropertyValue[2];
         aSortDesc[0] = new com.sun.star.beans.PropertyValue();
