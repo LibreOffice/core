@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 15:28:33 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 11:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,29 +1222,38 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // Position geschuetzt
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS,TRUE,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS,TRUE,&pPoolItem))
+    {
         BOOL bProtPos=((const SfxBoolItem*)pPoolItem)->GetValue();
         for (ULONG i=0; i<nMarkCount; i++) {
             pObj=rMarkList.GetMark(i)->GetObj();
             pObj->SetMoveProtect(bProtPos);
+            if( bProtPos )
+                pObj->SetResizeProtect(true);
         }
         // BugFix 13897: hier muesste besser ein Broadcast her!
         // Ausserdem fehlt Undo
         // oder -> bProtPos/Size als Item (Interface)
         bMoveProtect=bProtPos;
+        if( bProtPos )
+            bResizeProtect=true;
     }
 
-    // Groesse geschuetzt
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE,TRUE,&pPoolItem)) {
-        BOOL bProtSize=((const SfxBoolItem*)pPoolItem)->GetValue();
-        for (ULONG i=0; i<nMarkCount; i++) {
-            pObj=rMarkList.GetMark(i)->GetObj();
-            pObj->SetResizeProtect(bProtSize);
+    if( !bMoveProtect )
+    {
+        // Groesse geschuetzt
+        if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE,TRUE,&pPoolItem))
+        {
+            BOOL bProtSize=((const SfxBoolItem*)pPoolItem)->GetValue();
+            for (ULONG i=0; i<nMarkCount; i++) {
+                pObj=rMarkList.GetMark(i)->GetObj();
+                pObj->SetResizeProtect(bProtSize);
+            }
+            // BugFix 13897: hier muesste besser ein Broadcast her!
+            // Ausserdem fehlt Undo
+            // oder -> bProtPos/Size als Item (Interface)
+            bResizeProtect=bProtSize;
         }
-        // BugFix 13897: hier muesste besser ein Broadcast her!
-        // Ausserdem fehlt Undo
-        // oder -> bProtPos/Size als Item (Interface)
-        bResizeProtect=bProtSize;
     }
     EndUndo();
 }
