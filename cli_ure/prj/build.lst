@@ -1,7 +1,7 @@
 ure	cli_ure	:	cppuhelper cppu sal codemaker offapi NULL
-ure	cli_ure						usr1	-	all	tt_mkout NULL
-ure	cli_ure\source\climaker				nmake	-	all	ure_source_climaker NULL
-ure	cli_ure\unotypes				nmake	-	all	ure_unotypes ure_source_climaker NULL
-ure	cli_ure\source\ure				nmake	-	all	ure_source_ure ure_unotypes NULL
-ure	cli_ure\source\native				nmake	-	all	ure_source_native ure_source_ure ure_unotypes NULL
-#ure	cli_ure\util					nmake	-	all	ure_util ure_source_ure ure_source_native NULL
+ure	cli_ure						usr1	-	all	ure_mkout NULL
+ure	cli_ure\source\climaker				nmake	-	w,vc7	ure_source_climaker NULL
+ure	cli_ure\unotypes				nmake	-	w,vc7	ure_unotypes ure_source_climaker.w NULL
+ure	cli_ure\source\ure				nmake	-	w,vc7	ure_source_ure ure_unotypes.w NULL
+ure	cli_ure\source\native				nmake	-	w,vc7	ure_source_native ure_source_ure.w ure_unotypes.w NULL
+#ure	cli_ure\util					nmake	-	w,vc7	ure_util ure_source_ure ure_source_native NULL
