@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-08 15:55:09 $
+ *  last change: $Author: jbu $ $Date: 2001-10-29 12:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,16 +70,18 @@ extern "C" {
  * Thread identifier administration.
  ***/
 /**
-  Establishs an association between the current thread an the given thread identifier.
+  Establishs an association between the current thread and the given thread identifier.
   There can be only one association at a time. The association must be broken by
-  uno_releaseIdFromCurrentThread.
+  uno_releaseIdFromCurrentThread().
   This method is in general called by a bridge, that wants to bind a remote threadId
   to a new thread.
 
   @param pThreadId a byte sequence, that contains the identifier of the current thread.
-  @return true, when the identifier was registered. <br>
+  @return true, when the identifier was registered.
           false, when the thread has already an identifier. The identifier was not
-          altered. ( This is in general a bug ). <br>
+          altered. ( This is in general a bug ).
+
+  @see uno_releaseIdFromCurrentThread()
  */
 sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C();
@@ -89,10 +91,11 @@ sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
   Get the identifier of the current thread.
   If no id has been bound for the thread before, a new one is generated and bound
   to the thread.
-  For each call to uno_getIdOfCurrentThread, a call to uno_releaseIdFromCurrentThread
+  For each call to uno_getIdOfCurrentThread(), a call to uno_releaseIdFromCurrentThread()
   must be done.
 
   @param ppThreadId [out] Contains the (acquired) ThreadId.
+  @see uno_releaseIdFromCurrentThread()
  */
 void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
     SAL_THROW_EXTERN_C();
@@ -137,7 +140,8 @@ uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
   @param hPool the handle that was previously created by uno_threadpool_create().
   @param ppJob [out] the pointer, that was given by uno_threadpool_putJob
-               0, when uno_threadpool_dispose was the reason to fall off from threadpool.
+  0, when uno_threadpool_dispose() was the reason to fall off from threadpool.
+  @see uno_threadpool_dispose()
  **/
 void SAL_CALL
 uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
@@ -195,8 +199,10 @@ uno_threadpool_putJob(
   return immeadiatly with *ppJob == 0.
 
   @param hPool The handle to be disposed.
-               In case, hPool is 0, this function joins on all threads created
-               by the threadpool administration.
+  In case, hPool is 0, this function joins on all threads created
+  by the threadpool administration. This may e.g. used to ensure, that
+  no threads are inside the cppu library anymore, in case it needs to get
+  unloaded.
 
   This function is called i.e. by a bridge, that is forced to dispose itself.
  */
@@ -207,6 +213,7 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 /** Releases the previously with uno_threadpool_create() created handle.
     The handle thus becomes invalid. It is an error to use the handle after
     uno_threadpool_destroy().
+    @see uno_threadpool_create()
  */
 void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
