@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:30:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,12 @@
 				<desc xml:lang="sv">Defines the general properties of the graphical object representation.</desc>
 				<desc xml:lang="pl">Defines the general properties of the graphical object representation.</desc>
 				<desc xml:lang="pt-BR">Defines the general properties of the graphical object representation.</desc>
-				<desc xml:lang="ja">Defines the general properties of the graphical object representation.</desc>
+				<desc xml:lang="ja">グラフィカルなオブジェクト表現の一般的なプロパティを定義します。</desc>
 				<desc xml:lang="ko">Defines the general properties of the graphical object representation.</desc>
 				<desc xml:lang="tr">Defines the general properties of the graphical object representation.</desc>
 				<desc xml:lang="th">Defines the general properties of the graphical object representation.</desc>
 				<desc xml:lang="hi-IN">Defines the general properties of the graphical object representation.</desc>
+				<desc xml:lang="x-comment">Defines the general properties of the graphical object representation.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -115,11 +116,12 @@
 					<desc xml:lang="sv">Defines the general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="pl">Defines the general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="pt-BR">Defines the general properties of the graphical object representation of screen displays.</desc>
-					<desc xml:lang="ja">Defines the general properties of the graphical object representation of screen displays.</desc>
+					<desc xml:lang="ja">画面表示のグラフィカルなオブジェクト表現の全般的なプロパティを定義します。</desc>
 					<desc xml:lang="ko">Defines the general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="tr">Defines the general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="th">Defines the general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="hi-IN">Defines the general properties of the graphical object representation of screen displays.</desc>
+					<desc xml:lang="x-comment">Defines the general properties of the graphical object representation of screen displays.</desc>
 				</info>
 				<prop oor:name="Ruler" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Layout/Display -->
@@ -146,11 +148,12 @@
 							<desc xml:lang="sv">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="pl">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
-							<desc xml:lang="ja">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
+							<desc xml:lang="ja">作業領域の左側および上側にルーラーを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="tr">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="th">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 						<label xml:lang="en-US">Rulers visible</label>
 						<label xml:lang="el">Rulers visible</label>
 						<label xml:lang="nl">Rulers visible</label>
@@ -170,11 +173,12 @@
 						<label xml:lang="sv">Rulers visible</label>
 						<label xml:lang="pl">Rulers visible</label>
 						<label xml:lang="pt-BR">Rulers visible</label>
-						<label xml:lang="ja">Rulers visible</label>
+						<label xml:lang="ja">ルーラーを表示</label>
 						<label xml:lang="ko">Rulers visible</label>
 						<label xml:lang="tr">Rulers visible</label>
 						<label xml:lang="th">Rulers visible</label>
 						<label xml:lang="hi-IN">Rulers visible</label>
+						<label xml:lang="x-comment">Rulers visible</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -203,11 +207,12 @@
 							<desc xml:lang="sv">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="pl">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
-							<desc xml:lang="ja">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
+							<desc xml:lang="ja">ルーラーからドラッグすることで作成可能な補助線を表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="tr">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="th">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 						<label xml:lang="en-US">Helplines visible</label>
 						<label xml:lang="el">Helplines visible</label>
 						<label xml:lang="nl">Helplines visible</label>
@@ -227,11 +232,12 @@
 						<label xml:lang="sv">Helplines visible</label>
 						<label xml:lang="pl">Helplines visible</label>
 						<label xml:lang="pt-BR">Helplines visible</label>
-						<label xml:lang="ja">Helplines visible</label>
+						<label xml:lang="ja">補助線を表示</label>
 						<label xml:lang="ko">Helplines visible</label>
 						<label xml:lang="tr">Helplines visible</label>
 						<label xml:lang="th">Helplines visible</label>
 						<label xml:lang="hi-IN">Helplines visible</label>
+						<label xml:lang="x-comment">Helplines visible</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -260,11 +266,12 @@
 							<desc xml:lang="sv">Indicates whether to show help lines when moving an object.</desc>
 							<desc xml:lang="pl">Indicates whether to show help lines when moving an object.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show help lines when moving an object.</desc>
-							<desc xml:lang="ja">Indicates whether to show help lines when moving an object.</desc>
+							<desc xml:lang="ja">オブジェクトを移動するときに、補助線を表示すべきかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show help lines when moving an object.</desc>
 							<desc xml:lang="tr">Indicates whether to show help lines when moving an object.</desc>
 							<desc xml:lang="th">Indicates whether to show help lines when moving an object.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show help lines when moving an object.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show help lines when moving an object.</desc>
 						<label xml:lang="en-US">Guides when moving</label>
 						<label xml:lang="el">Βοηθητικές γραμμές κατά την μετακίνηση</label>
 						<label xml:lang="nl">Hulplijnen bij verplaatsen</label>
@@ -284,11 +291,13 @@
 						<label xml:lang="sv">Hjälplinjer vid förflyttning</label>
 						<label xml:lang="pl">Linie pomocnicze przy przesuwaniu</label>
 						<label xml:lang="pt-BR">Guias ao Mover</label>
-						<label xml:lang="ja">移動時の補助線</label>
+						<label xml:lang="ja">移動時に補助線を表示</label>
 						<label xml:lang="ko">이동시 안내선</label>
 						<label xml:lang="tr">Taşıma sırasında yardımcı çizgiler</label>
 						<label xml:lang="th">คำแนะนำขณะย้าย</label>
 						<label xml:lang="hi-IN">स्थान परिवर्तन के समय सलाह देना</label>
+						<label xml:lang="x-comment">Guides when moving</label>
+						<label xml:lang="sk">Vodiace čiary</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -317,11 +326,12 @@
 							<desc xml:lang="sv">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="pl">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show all control points in the Bezier curve editor.</desc>
-							<desc xml:lang="ja">Indicates whether to show all control points in the Bezier curve editor.</desc>
+							<desc xml:lang="ja">ベジェ曲線エディタ内ですべての制御点を表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="tr">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="th">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show all control points in the Bezier curve editor.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show all control points in the Bezier curve editor.</desc>
 						<label xml:lang="en-US">All control points in Bezier editor</label>
 						<label xml:lang="el">All control points in Bezier editor</label>
 						<label xml:lang="nl">All control points in Bezier editor</label>
@@ -341,11 +351,12 @@
 						<label xml:lang="sv">All control points in Bezier editor</label>
 						<label xml:lang="pl">All control points in Bezier editor</label>
 						<label xml:lang="pt-BR">All control points in Bezier editor</label>
-						<label xml:lang="ja">All control points in Bezier editor</label>
+						<label xml:lang="ja">ベジェエディタ内ですべての制御点を表示</label>
 						<label xml:lang="ko">All control points in Bezier editor</label>
 						<label xml:lang="tr">All control points in Bezier editor</label>
 						<label xml:lang="th">All control points in Bezier editor</label>
 						<label xml:lang="hi-IN">All control points in Bezier editor</label>
+						<label xml:lang="x-comment">All control points in Bezier editor</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -374,11 +385,12 @@
 							<desc xml:lang="sv">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 							<desc xml:lang="pl">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
-							<desc xml:lang="ja">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
+							<desc xml:lang="ja">複数のオブジェクトを同時に移動するときに、すべての移動オブジェクトのアウトラインを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 							<desc xml:lang="tr">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 							<desc xml:lang="th">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 						<label xml:lang="en-US">Contour of each individual object</label>
 						<label xml:lang="el">Contour of each individual object</label>
 						<label xml:lang="nl">Contour of each individual object</label>
@@ -398,11 +410,12 @@
 						<label xml:lang="sv">Contour of each individual object</label>
 						<label xml:lang="pl">Contour of each individual object</label>
 						<label xml:lang="pt-BR">Contour of each individual object</label>
-						<label xml:lang="ja">Contour of each individual object</label>
+						<label xml:lang="ja">個別オブジェクトの輪郭線を表示</label>
 						<label xml:lang="ko">Contour of each individual object</label>
 						<label xml:lang="tr">Contour of each individual object</label>
 						<label xml:lang="th">Contour of each individual object</label>
 						<label xml:lang="hi-IN">Contour of each individual object</label>
+						<label xml:lang="x-comment">Contour of each individual object</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -428,11 +441,12 @@
 					<desc xml:lang="sv">Defines other properties regarding device independent graphical object representation.</desc>
 					<desc xml:lang="pl">Defines other properties regarding device independent graphical object representation.</desc>
 					<desc xml:lang="pt-BR">Defines other properties regarding device independent graphical object representation.</desc>
-					<desc xml:lang="ja">Defines other properties regarding device independent graphical object representation.</desc>
+					<desc xml:lang="ja">グラフィカルなオブジェクト表現に依存しないデバイスに関するその他のプロパティを定義します。</desc>
 					<desc xml:lang="ko">Defines other properties regarding device independent graphical object representation.</desc>
 					<desc xml:lang="tr">Defines other properties regarding device independent graphical object representation.</desc>
 					<desc xml:lang="th">Defines other properties regarding device independent graphical object representation.</desc>
 					<desc xml:lang="hi-IN">Defines other properties regarding device independent graphical object representation.</desc>
+					<desc xml:lang="x-comment">Defines other properties regarding device independent graphical object representation.</desc>
 				</info>
 				<group oor:name="TabStop">
 					<!-- OldPath: Draw/Layout -->
@@ -460,11 +474,12 @@
 							<desc xml:lang="sv">Specifies the distance between adjacent tab stops.</desc>
 							<desc xml:lang="pl">Specifies the distance between adjacent tab stops.</desc>
 							<desc xml:lang="pt-BR">Specifies the distance between adjacent tab stops.</desc>
-							<desc xml:lang="ja">Specifies the distance between adjacent tab stops.</desc>
+							<desc xml:lang="ja">隣接するタブストップ間の距離を指定します。</desc>
 							<desc xml:lang="ko">Specifies the distance between adjacent tab stops.</desc>
 							<desc xml:lang="tr">Specifies the distance between adjacent tab stops.</desc>
 							<desc xml:lang="th">Specifies the distance between adjacent tab stops.</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between adjacent tab stops.</desc>
+							<desc xml:lang="x-comment">Specifies the distance between adjacent tab stops.</desc>
 						<label xml:lang="en-US">Tab stops</label>
 						<label xml:lang="el">Στηλοθέτες</label>
 						<label xml:lang="nl">Tabstops</label>
@@ -489,6 +504,8 @@
 						<label xml:lang="tr">Sekme durakları</label>
 						<label xml:lang="th">ตัวหยุดระยะกั้น</label>
 						<label xml:lang="hi-IN">टॉब रुकावट</label>
+						<label xml:lang="x-comment">Tab stops</label>
+						<label xml:lang="sk">Kroky tabulátora</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -511,11 +528,12 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="hi-IN">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="x-comment">[UNIT=1/100 mm]</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1250</value>
@@ -541,11 +559,12 @@
 								<desc xml:lang="sv">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pl">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="pt-BR">[UNIT=1/100 mm]</desc>
-								<desc xml:lang="ja">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="ja">[単位=1/100 mm]</desc>
 								<desc xml:lang="ko">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="th">[UNIT=1/100 mm]</desc>
 								<desc xml:lang="hi-IN">[UNIT=1/100 mm]</desc>
+								<desc xml:lang="x-comment">[UNIT=1/100 mm]</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -576,11 +595,12 @@
 							<desc xml:lang="sv">Contains the specification of distances and sizes.</desc>
 							<desc xml:lang="pl">Contains the specification of distances and sizes.</desc>
 							<desc xml:lang="pt-BR">Contains the specification of distances and sizes.</desc>
-							<desc xml:lang="ja">Contains the specification of distances and sizes.</desc>
+							<desc xml:lang="ja">距離およびサイズの基準情報が含まれます。</desc>
 							<desc xml:lang="ko">Contains the specification of distances and sizes.</desc>
 							<desc xml:lang="tr">Contains the specification of distances and sizes.</desc>
 							<desc xml:lang="th">Contains the specification of distances and sizes.</desc>
 							<desc xml:lang="hi-IN">Contains the specification of distances and sizes.</desc>
+							<desc xml:lang="x-comment">Contains the specification of distances and sizes.</desc>
 						<label xml:lang="en-US">Measurement unit</label>
 						<label xml:lang="el">~Μονάδα μέτρησης</label>
 						<label xml:lang="nl">~Maateenheid</label>
@@ -600,11 +620,13 @@
 						<label xml:lang="sv">~Måttenhet</label>
 						<label xml:lang="pl">Jednostka miary</label>
 						<label xml:lang="pt-BR">~Unidade de medida</label>
-						<label xml:lang="ja">使う単位</label>
+						<label xml:lang="ja">単位</label>
 						<label xml:lang="ko">수치 단위</label>
 						<label xml:lang="tr">Ölçü birimi</label>
 						<label xml:lang="th">หน่วยมาตรวัด</label>
 						<label xml:lang="hi-IN">नाप यूनिट्</label>
+						<label xml:lang="x-comment">Measurement unit</label>
+						<label xml:lang="sk">Jednotka miery</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -627,11 +649,12 @@
 							<desc xml:lang="sv">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 							<desc xml:lang="pl">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 							<desc xml:lang="pt-BR">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
-							<desc xml:lang="ja">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
+							<desc xml:lang="ja">メートル環境において距離およびサイズの指定で使用される単位です。</desc>
 							<desc xml:lang="ko">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 							<desc xml:lang="tr">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 							<desc xml:lang="th">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 							<desc xml:lang="hi-IN">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
+							<desc xml:lang="x-comment">Specifies the unit used for specification of distances and sizes in a metric environment.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -660,6 +683,8 @@
 									<desc xml:lang="tr">Milimetre</desc>
 									<desc xml:lang="th">มิลลิเมตร</desc>
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
+									<desc xml:lang="x-comment">Millimeter</desc>
+									<desc xml:lang="sk">Milimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -688,6 +713,7 @@
 									<desc xml:lang="tr">Santimetre</desc>
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
+									<desc xml:lang="x-comment">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -716,6 +742,8 @@
 									<desc xml:lang="tr">Nokta</desc>
 									<desc xml:lang="th">พ้อยนท์</desc>
 									<desc xml:lang="hi-IN">बिन्दु</desc>
+									<desc xml:lang="x-comment">Point</desc>
+									<desc xml:lang="sk">Bod</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -744,6 +772,8 @@
 									<desc xml:lang="tr">Pika</desc>
 									<desc xml:lang="th">พิคา</desc>
 									<desc xml:lang="hi-IN">पिका</desc>
+									<desc xml:lang="x-comment">Pica</desc>
+									<desc xml:lang="sk">Pika</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -772,6 +802,8 @@
 									<desc xml:lang="tr">Inç</desc>
 									<desc xml:lang="th">นิ้ว</desc>
 									<desc xml:lang="hi-IN">इंच</desc>
+									<desc xml:lang="x-comment">Inch</desc>
+									<desc xml:lang="sk">Palec</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -798,11 +830,12 @@
 								<desc xml:lang="sv">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 								<desc xml:lang="pl">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 								<desc xml:lang="pt-BR">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
-								<desc xml:lang="ja">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
+								<desc xml:lang="ja">非メートル環境において距離およびサイズの指定で使用される単位です。</desc>
 								<desc xml:lang="ko">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 								<desc xml:lang="tr">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 								<desc xml:lang="th">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 								<desc xml:lang="hi-IN">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
+								<desc xml:lang="x-comment">Specifies the unit used for specification of distances and sizes in a non metric environment.</desc>
 							<label xml:lang="en-US">Measurement unit</label>
 							<label xml:lang="el">~Μονάδα μέτρησης</label>
 							<label xml:lang="nl">~Maateenheid</label>
@@ -822,11 +855,13 @@
 							<label xml:lang="sv">~Måttenhet</label>
 							<label xml:lang="pl">Jednostka miary</label>
 							<label xml:lang="pt-BR">~Unidade de medida</label>
-							<label xml:lang="ja">使う単位</label>
+							<label xml:lang="ja">単位</label>
 							<label xml:lang="ko">수치 단위</label>
 							<label xml:lang="tr">Ölçü birimi</label>
 							<label xml:lang="th">หน่วยมาตรวัด</label>
 							<label xml:lang="hi-IN">नाप यूनिट्</label>
+							<label xml:lang="x-comment">Measurement unit</label>
+							<label xml:lang="sk">Jednotka miery</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -855,6 +890,8 @@
 									<desc xml:lang="tr">Milimetre</desc>
 									<desc xml:lang="th">มิลลิเมตร</desc>
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
+									<desc xml:lang="x-comment">Millimeter</desc>
+									<desc xml:lang="sk">Milimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -883,6 +920,7 @@
 									<desc xml:lang="tr">Santimetre</desc>
 									<desc xml:lang="th">เซนติเมตร</desc>
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
+									<desc xml:lang="x-comment">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -911,6 +949,8 @@
 									<desc xml:lang="tr">Nokta</desc>
 									<desc xml:lang="th">พ้อยนท์</desc>
 									<desc xml:lang="hi-IN">बिन्दु</desc>
+									<desc xml:lang="x-comment">Point</desc>
+									<desc xml:lang="sk">Bod</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -939,6 +979,8 @@
 									<desc xml:lang="tr">Pika</desc>
 									<desc xml:lang="th">พิคา</desc>
 									<desc xml:lang="hi-IN">पिका</desc>
+									<desc xml:lang="x-comment">Pica</desc>
+									<desc xml:lang="sk">Pika</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -967,6 +1009,8 @@
 									<desc xml:lang="tr">Inç</desc>
 									<desc xml:lang="th">นิ้ว</desc>
 									<desc xml:lang="hi-IN">इंच</desc>
+									<desc xml:lang="x-comment">Inch</desc>
+									<desc xml:lang="sk">Palec</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -996,11 +1040,12 @@
 				<desc xml:lang="sv">Contains the specification of how to display the content of Draw documents.</desc>
 				<desc xml:lang="pl">Contains the specification of how to display the content of Draw documents.</desc>
 				<desc xml:lang="pt-BR">Contains the specification of how to display the content of Draw documents.</desc>
-				<desc xml:lang="ja">Contains the specification of how to display the content of Draw documents.</desc>
+				<desc xml:lang="ja">Draw ドキュメントの内容の表示方法を指定する情報が含まれます。</desc>
 				<desc xml:lang="ko">Contains the specification of how to display the content of Draw documents.</desc>
 				<desc xml:lang="tr">Contains the specification of how to display the content of Draw documents.</desc>
 				<desc xml:lang="th">Contains the specification of how to display the content of Draw documents.</desc>
 				<desc xml:lang="hi-IN">Contains the specification of how to display the content of Draw documents.</desc>
+				<desc xml:lang="x-comment">Contains the specification of how to display the content of Draw documents.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -1023,11 +1068,12 @@
 					<desc xml:lang="sv">Contains the specification of how to display the content of Draw documents on screen.</desc>
 					<desc xml:lang="pl">Contains the specification of how to display the content of Draw documents on screen.</desc>
 					<desc xml:lang="pt-BR">Contains the specification of how to display the content of Draw documents on screen.</desc>
-					<desc xml:lang="ja">Contains the specification of how to display the content of Draw documents on screen.</desc>
+					<desc xml:lang="ja">画面上で Draw ドキュメントの内容をどのように表示するか、その方法を指定する情報が含まれます。</desc>
 					<desc xml:lang="ko">Contains the specification of how to display the content of Draw documents on screen.</desc>
 					<desc xml:lang="tr">Contains the specification of how to display the content of Draw documents on screen.</desc>
 					<desc xml:lang="th">Contains the specification of how to display the content of Draw documents on screen.</desc>
 					<desc xml:lang="hi-IN">Contains the specification of how to display the content of Draw documents on screen.</desc>
+					<desc xml:lang="x-comment">Contains the specification of how to display the content of Draw documents on screen.</desc>
 				</info>
 				<prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Contents/Display -->
@@ -1054,11 +1100,12 @@
 							<desc xml:lang="sv">Indicates whether to show only outlines of graphical objects.</desc>
 							<desc xml:lang="pl">Indicates whether to show only outlines of graphical objects.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show only outlines of graphical objects.</desc>
-							<desc xml:lang="ja">Indicates whether to show only outlines of graphical objects.</desc>
+							<desc xml:lang="ja">グラフィカルなオブジェクトのアウトラインだけを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show only outlines of graphical objects.</desc>
 							<desc xml:lang="tr">Indicates whether to show only outlines of graphical objects.</desc>
 							<desc xml:lang="th">Indicates whether to show only outlines of graphical objects.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only outlines of graphical objects.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show only outlines of graphical objects.</desc>
 						<label xml:lang="en-US">Picture placeholders</label>
 						<label xml:lang="el">Υποδήλωση εξωτερικών γραφικών</label>
 						<label xml:lang="nl">Externe afbeeldingen aanduiden</label>
@@ -1078,11 +1125,13 @@
 						<label xml:lang="sv">Antyd extern grafik</label>
 						<label xml:lang="pl">Symbol zastępczy obrazów</label>
 						<label xml:lang="pt-BR">Marcador de posição de figuras</label>
-						<label xml:lang="ja">イメージ枠の表示</label>
+						<label xml:lang="ja">画像のプレースホルダを表示</label>
 						<label xml:lang="ko">외부 그래픽 표시</label>
 						<label xml:lang="tr">Harici grafik için yer tutucu</label>
 						<label xml:lang="th">ตัวยึดตำแหน่งรูปภาพ</label>
 						<label xml:lang="hi-IN">चित्र स्थानधारक</label>
+						<label xml:lang="x-comment">Picture placeholders</label>
+						<label xml:lang="sk">Zástupca za obrázok</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1111,11 +1160,12 @@
 							<desc xml:lang="sv">Indicates whether to show only outlines of draw objects.</desc>
 							<desc xml:lang="pl">Indicates whether to show only outlines of draw objects.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show only outlines of draw objects.</desc>
-							<desc xml:lang="ja">Indicates whether to show only outlines of draw objects.</desc>
+							<desc xml:lang="ja">図形描画オブジェクトのアウトラインだけを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show only outlines of draw objects.</desc>
 							<desc xml:lang="tr">Indicates whether to show only outlines of draw objects.</desc>
 							<desc xml:lang="th">Indicates whether to show only outlines of draw objects.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only outlines of draw objects.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show only outlines of draw objects.</desc>
 						<label xml:lang="en-US">Contour mode</label>
 						<label xml:lang="el">Κατάσταση περιγράμματος</label>
 						<label xml:lang="nl">Contour mode</label>
@@ -1140,6 +1190,8 @@
 						<label xml:lang="tr">Kontur kipi</label>
 						<label xml:lang="th">โหมดเส้นรอบวง</label>
 						<label xml:lang="hi-IN">परिवेश प्रकार</label>
+						<label xml:lang="x-comment">Contour mode</label>
+						<label xml:lang="sk">Obrysový režim</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1168,11 +1220,12 @@
 							<desc xml:lang="sv">Indicates whether to use placeholders for text in draw objects.</desc>
 							<desc xml:lang="pl">Indicates whether to use placeholders for text in draw objects.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to use placeholders for text in draw objects.</desc>
-							<desc xml:lang="ja">Indicates whether to use placeholders for text in draw objects.</desc>
+							<desc xml:lang="ja">図形描画オブジェクト内のテキストに対してプレースホルダを使用するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to use placeholders for text in draw objects.</desc>
 							<desc xml:lang="tr">Indicates whether to use placeholders for text in draw objects.</desc>
 							<desc xml:lang="th">Indicates whether to use placeholders for text in draw objects.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to use placeholders for text in draw objects.</desc>
+							<desc xml:lang="x-comment">Indicates whether to use placeholders for text in draw objects.</desc>
 						<label xml:lang="en-US">Text placeholders</label>
 						<label xml:lang="el">Υποδήλωση κειμένου</label>
 						<label xml:lang="nl">Tekst aanduiden</label>
@@ -1197,6 +1250,8 @@
 						<label xml:lang="tr">Metin için yer tutucu kullan</label>
 						<label xml:lang="th">ตัวยึดข้อความ</label>
 						<label xml:lang="hi-IN">टेक्स्ट् स्थानधारक</label>
+						<label xml:lang="x-comment">Text placeholders</label>
+						<label xml:lang="sk">Zástupné znaky v texte</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1225,11 +1280,12 @@
 							<desc xml:lang="sv">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 							<desc xml:lang="pl">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
-							<desc xml:lang="ja">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
+							<desc xml:lang="ja">オブジェクトの線スタイルの代わりにヘアラインのみを表示するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 							<desc xml:lang="tr">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 							<desc xml:lang="th">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
+							<desc xml:lang="x-comment">Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 						<label xml:lang="en-US">Line contour only</label>
 						<label xml:lang="el">Εμφάνιση μόνο πολύ λεπτών γραμμών</label>
 						<label xml:lang="nl">Alleen contourlijnen weergeven</label>
@@ -1249,11 +1305,13 @@
 						<label xml:lang="sv">Visa bara fina linjer</label>
 						<label xml:lang="pl">Tylko kontur</label>
 						<label xml:lang="pt-BR">Mostrar apenas linhas do contorno</label>
-						<label xml:lang="ja">輪郭線のみ表示</label>
+						<label xml:lang="ja">線の輪郭のみ</label>
 						<label xml:lang="ko">가는선만 표시</label>
 						<label xml:lang="tr">Kontur çizgilerini göster</label>
 						<label xml:lang="th">เส้นรอบวงอย่างเดียว</label>
 						<label xml:lang="hi-IN">केवल रेखा परिवेश</label>
+						<label xml:lang="x-comment">Line contour only</label>
+						<label xml:lang="sk">Iba čiarové obrysy</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1280,11 +1338,12 @@
 				<desc xml:lang="sv">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 				<desc xml:lang="pl">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 				<desc xml:lang="pt-BR">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
-				<desc xml:lang="ja">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
+				<desc xml:lang="ja">他方のカテゴリーに属さない Draw アプリケーションの設定項目のコレクションが含まれます。</desc>
 				<desc xml:lang="ko">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 				<desc xml:lang="tr">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 				<desc xml:lang="th">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 				<desc xml:lang="hi-IN">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
+				<desc xml:lang="x-comment">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 			</info>
 			<prop oor:name="BackgroundCache" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
@@ -1311,11 +1370,12 @@
 						<desc xml:lang="sv">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="pl">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="pt-BR">Indicates whether to store master pages in a cache to speed up drawing.</desc>
-						<desc xml:lang="ja">Indicates whether to store master pages in a cache to speed up drawing.</desc>
+						<desc xml:lang="ja">描画速度を向上させるために、マスターページをキャッシュに格納するかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="tr">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="th">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="hi-IN">Indicates whether to store master pages in a cache to speed up drawing.</desc>
+						<desc xml:lang="x-comment">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 					<label xml:lang="en-US">Use background cache</label>
 					<label xml:lang="el">Χρήση κρυφής μνήμης φόντου</label>
 					<label xml:lang="nl">~Cache voor achtergrond gebruiken</label>
@@ -1335,11 +1395,13 @@
 					<label xml:lang="sv">Använd ~cache för bakgrund</label>
 					<label xml:lang="pl">Użyj pamięci podręcznej dla tła</label>
 					<label xml:lang="pt-BR">Usar cache para plano de fundo</label>
-					<label xml:lang="ja">マスター処理でキャッシュを使用する</label>
+					<label xml:lang="ja">背景キャッシュを使用する</label>
 					<label xml:lang="ko">배경 캐시 사용</label>
 					<label xml:lang="tr">Artalan için önbellek kullan</label>
 					<label xml:lang="th">ใช้แคชพื้นหลัง</label>
 					<label xml:lang="hi-IN">पृष्टभूमि कॉश का उपयोग करो</label>
+					<label xml:lang="x-comment">Use background cache</label>
+					<label xml:lang="sk">Použiť background cache</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1368,11 +1430,12 @@
 						<desc xml:lang="sv">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="pl">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="pt-BR">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
-						<desc xml:lang="ja">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
+						<desc xml:lang="ja">Control キーを押しながらオブジェクトを移動することで、そのコピーを作成するかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="tr">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="th">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="hi-IN">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
+						<desc xml:lang="x-comment">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 					<label xml:lang="en-US">Copy while moving</label>
 					<label xml:lang="el">Copy while moving</label>
 					<label xml:lang="nl">Copy while moving</label>
@@ -1392,11 +1455,12 @@
 					<label xml:lang="sv">Copy while moving</label>
 					<label xml:lang="pl">Copy while moving</label>
 					<label xml:lang="pt-BR">Copy while moving</label>
-					<label xml:lang="ja">Copy while moving</label>
+					<label xml:lang="ja">移動中にコピー</label>
 					<label xml:lang="ko">Copy while moving</label>
 					<label xml:lang="tr">Copy while moving</label>
 					<label xml:lang="th">Copy while moving</label>
 					<label xml:lang="hi-IN">Copy while moving</label>
+					<label xml:lang="x-comment">Copy while moving</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1425,11 +1489,12 @@
 						<desc xml:lang="sv">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="pl">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="pt-BR">Indicates whether objects can still be moved while in rotating mode.</desc>
-						<desc xml:lang="ja">Indicates whether objects can still be moved while in rotating mode.</desc>
+						<desc xml:lang="ja">回転モードであっても、依然としてオブジェクトの移動が可能であるかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="tr">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="th">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether objects can still be moved while in rotating mode.</desc>
+						<desc xml:lang="x-comment">Indicates whether objects can still be moved while in rotating mode.</desc>
 					<label xml:lang="en-US">Objects always moveable</label>
 					<label xml:lang="el">~Πάντα δυνατότητα μετακίνησης αντικειμένων</label>
 					<label xml:lang="nl">~Objecten altijd verschuifbaar</label>
@@ -1454,6 +1519,8 @@
 					<label xml:lang="tr">Nesneler hep taşınabilir</label>
 					<label xml:lang="th">สามารถย้ายวัตถุได้เสมอ</label>
 					<label xml:lang="hi-IN">वस्तु हमेशा स्थान परिवर्तन करने योग्य</label>
+					<label xml:lang="x-comment">Objects always moveable</label>
+					<label xml:lang="sk">Vždy presúvateľné objekty</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1482,11 +1549,12 @@
 						<desc xml:lang="sv">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="pl">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="pt-BR">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
-						<desc xml:lang="ja">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
+						<desc xml:lang="ja">オブジェクトを円の上に配置する場合に、オブジェクトの元の形を維持するかどうかを示します。つまり、オブジェクトの移動や回転は許可しても、サイズの変更や変形は許可しません。</desc>
 						<desc xml:lang="ko">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="tr">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="th">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="hi-IN">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
+						<desc xml:lang="x-comment">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 					<label xml:lang="en-US">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="el">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="nl">Don&amp;apos;t distort objects in curve</label>
@@ -1506,11 +1574,12 @@
 					<label xml:lang="sv">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="pl">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="pt-BR">Don&amp;apos;t distort objects in curve</label>
-					<label xml:lang="ja">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="ja">円形にする、ゆがめない</label>
 					<label xml:lang="ko">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="tr">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="th">Don&amp;apos;t distort objects in curve</label>
 					<label xml:lang="hi-IN">Don&amp;apos;t distort objects in curve</label>
+					<label xml:lang="x-comment">Don&amp;apos;t distort objects in curve</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1539,11 +1608,12 @@
 						<desc xml:lang="sv">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 						<desc xml:lang="pl">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 						<desc xml:lang="pt-BR">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
-						<desc xml:lang="ja">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
+						<desc xml:lang="ja">テキストオブジェクトをダブルクリックしたときに、編集モードをアクティブ化 (変更) するかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 						<desc xml:lang="tr">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 						<desc xml:lang="th">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
+						<desc xml:lang="x-comment">Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 					<label xml:lang="en-US">Double-Click Text to Edit</label>
 					<label xml:lang="el">Double-Click Text to Edit</label>
 					<label xml:lang="nl">Double-Click Text to Edit</label>
@@ -1563,11 +1633,12 @@
 					<label xml:lang="sv">Double-Click Text to Edit</label>
 					<label xml:lang="pl">Double-Click Text to Edit</label>
 					<label xml:lang="pt-BR">Double-Click Text to Edit</label>
-					<label xml:lang="ja">Double-Click Text to Edit</label>
+					<label xml:lang="ja">テキストをダブルクリックして編集する</label>
 					<label xml:lang="ko">Double-Click Text to Edit</label>
 					<label xml:lang="tr">Double-Click Text to Edit</label>
 					<label xml:lang="th">Double-Click Text to Edit</label>
 					<label xml:lang="hi-IN">Double-Click Text to Edit</label>
+					<label xml:lang="x-comment">Double-Click Text to Edit</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1596,11 +1667,12 @@
 						<desc xml:lang="sv">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="pl">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="pt-BR">Indicates whether a double-click on an object activates the rotation mode.</desc>
-						<desc xml:lang="ja">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="ja">オブジェクトをダブルクリックしたときに、回転モードをアクティブ化するかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="tr">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="th">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="x-comment">Indicates whether a double-click on an object activates the rotation mode.</desc>
 					<label xml:lang="en-US">Rotation Mode after clicking object</label>
 					<label xml:lang="el">Κατάσταση περιστροφής μετά από κλικ στο αντικείμενο</label>
 					<label xml:lang="nl">Draaimodus na klikken op object</label>
@@ -1620,11 +1692,13 @@
 					<label xml:lang="sv">Rotation Mode after clicking object</label>
 					<label xml:lang="pl">Tryb obrotowy po kliknięciu na obiekt</label>
 					<label xml:lang="pt-BR">Modo de Rotação após clicar no objeto</label>
-					<label xml:lang="ja">オブジェクトをクリックして回転モード</label>
+					<label xml:lang="ja">オブジェクトをクリックしたときに回転モードにする</label>
 					<label xml:lang="ko">개체에 클릭한 후 회전 모드</label>
 					<label xml:lang="tr">Nesneyi tıkladıktan sonra döndürme kipi</label>
 					<label xml:lang="th">หมุนโหมดหลังจากคลิ๊กที่วัตถุ</label>
 					<label xml:lang="hi-IN">वस्तु को क्लिक करने के पश्चात् का घुमाव प्रकार</label>
+					<label xml:lang="x-comment">Rotation Mode after clicking object</label>
+					<label xml:lang="sk">Kliknutím vstúpite do rotačného režimu</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1653,11 +1727,12 @@
 						<desc xml:lang="sv">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="pl">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="pt-BR">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
-						<desc xml:lang="ja">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="ja">プレビューの色品質を指定する。0 - 色、868 - Grayscale、5381 - 黒/白。</desc>
 						<desc xml:lang="ko">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="tr">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="th">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="hi-IN">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="x-comment">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 					<label xml:lang="en-US">Preview-Mode</label>
 					<label xml:lang="el">Preview-Mode</label>
 					<label xml:lang="nl">Preview-Mode</label>
@@ -1677,11 +1752,12 @@
 					<label xml:lang="sv">Preview-Mode</label>
 					<label xml:lang="pl">Preview-Mode</label>
 					<label xml:lang="pt-BR">Preview-Mode</label>
-					<label xml:lang="ja">Preview-Mode</label>
+					<label xml:lang="ja">プレビューモード</label>
 					<label xml:lang="ko">Preview-Mode</label>
 					<label xml:lang="tr">Preview-Mode</label>
 					<label xml:lang="th">Preview-Mode</label>
 					<label xml:lang="hi-IN">Preview-Mode</label>
+					<label xml:lang="x-comment">Preview-Mode</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1710,6 +1786,8 @@
 							<desc xml:lang="tr">Renk</desc>
 							<desc xml:lang="th">สี</desc>
 							<desc xml:lang="hi-IN">रंग</desc>
+							<desc xml:lang="x-comment">Color</desc>
+							<desc xml:lang="sk">Farba</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="868">
@@ -1738,6 +1816,8 @@
 							<desc xml:lang="tr">Gri tonlama</desc>
 							<desc xml:lang="th">สเกลสีเทา</desc>
 							<desc xml:lang="hi-IN">ग्रेस्केल</desc>
+							<desc xml:lang="x-comment">Grayscale</desc>
+							<desc xml:lang="sk">Stupne šedej</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5381">
@@ -1766,6 +1846,8 @@
 							<desc xml:lang="tr">Siyah/Beyaz</desc>
 							<desc xml:lang="th">ดำ/ขาว</desc>
 							<desc xml:lang="hi-IN">काला/सफेद</desc>
+							<desc xml:lang="x-comment">Black/White</desc>
+							<desc xml:lang="sk">Čiernobiela</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1796,11 +1878,12 @@
 						<desc xml:lang="sv">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="pl">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="pt-BR">Indicates whether to show simple (true) or 3D-handles (false).</desc>
-						<desc xml:lang="ja">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="ja">シンプル (true) または 3D ハンドル (false) のいずれの表示を行うかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="tr">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="th">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="hi-IN">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="x-comment">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 					<label xml:lang="en-US">Simple Handles</label>
 					<label xml:lang="el">Απλές λαβές</label>
 					<label xml:lang="nl">Eenvoudige handvatten</label>
@@ -1825,6 +1908,8 @@
 					<label xml:lang="tr">Basit çekme noktaları</label>
 					<label xml:lang="th">ตัวควบคุมอย่างง่าย</label>
 					<label xml:lang="hi-IN">सामान्य हान्डलें</label>
+					<label xml:lang="x-comment">Simple Handles</label>
+					<label xml:lang="sk">Jednoduché úchytky</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1853,11 +1938,12 @@
 						<desc xml:lang="sv">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="pl">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="pt-BR">Indicates whether to show big (true) or small (false) handles.</desc>
-						<desc xml:lang="ja">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="ja">大きなハンドル (true) または小さなハンドル (false) のいずれの表示を行うかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="tr">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="th">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="hi-IN">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="x-comment">Indicates whether to show big (true) or small (false) handles.</desc>
 					<label xml:lang="en-US">Big Handles</label>
 					<label xml:lang="el">Big Handles</label>
 					<label xml:lang="nl">Big Handles</label>
@@ -1877,11 +1963,12 @@
 					<label xml:lang="sv">Big Handles</label>
 					<label xml:lang="pl">Big Handles</label>
 					<label xml:lang="pt-BR">Big Handles</label>
-					<label xml:lang="ja">Big Handles</label>
+					<label xml:lang="ja">大きなハンドル</label>
 					<label xml:lang="ko">Big Handles</label>
 					<label xml:lang="tr">Big Handles</label>
 					<label xml:lang="th">Big Handles</label>
 					<label xml:lang="hi-IN">Big Handles</label>
+					<label xml:lang="x-comment">Big Handles</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1910,11 +1997,12 @@
 						<desc xml:lang="sv">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="pl">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="pt-BR">Indicates whether the current attributes will be assigned to newly created objects.</desc>
-						<desc xml:lang="ja">Indicates whether the current attributes will be assigned to newly created objects.</desc>
+						<desc xml:lang="ja">新たに作成されるオブジェクトに現在の属性を割り当てるかどうかを示します。</desc>
 						<desc xml:lang="ko">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="tr">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="th">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="hi-IN">Indicates whether the current attributes will be assigned to newly created objects.</desc>
+						<desc xml:lang="x-comment">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 					<label xml:lang="en-US">Create with attributes</label>
 					<label xml:lang="el">Create with attributes</label>
 					<label xml:lang="nl">Create with attributes</label>
@@ -1934,11 +2022,12 @@
 					<label xml:lang="sv">Create with attributes</label>
 					<label xml:lang="pl">Create with attributes</label>
 					<label xml:lang="pt-BR">Create with attributes</label>
-					<label xml:lang="ja">Create with attributes</label>
+					<label xml:lang="ja">属性とともに作成</label>
 					<label xml:lang="ko">Create with attributes</label>
 					<label xml:lang="tr">Create with attributes</label>
 					<label xml:lang="th">Create with attributes</label>
 					<label xml:lang="hi-IN">Create with attributes</label>
+					<label xml:lang="x-comment">Create with attributes</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1963,11 +2052,12 @@
 					<desc xml:lang="sv">Defines text editing related configuration items.</desc>
 					<desc xml:lang="pl">Defines text editing related configuration items.</desc>
 					<desc xml:lang="pt-BR">Defines text editing related configuration items.</desc>
-					<desc xml:lang="ja">Defines text editing related configuration items.</desc>
+					<desc xml:lang="ja">テキスト編集に関連する設定項目を定義します。</desc>
 					<desc xml:lang="ko">Defines text editing related configuration items.</desc>
 					<desc xml:lang="tr">Defines text editing related configuration items.</desc>
 					<desc xml:lang="th">Defines text editing related configuration items.</desc>
 					<desc xml:lang="hi-IN">Defines text editing related configuration items.</desc>
+					<desc xml:lang="x-comment">Defines text editing related configuration items.</desc>
 				</info>
 				<prop oor:name="QuickEditing" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Other/Text_Objects -->
@@ -1994,11 +2084,12 @@
 							<desc xml:lang="sv">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="pl">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="pt-BR">Indicates whether a simple click on a text object changes it to edit mode.</desc>
-							<desc xml:lang="ja">Indicates whether a simple click on a text object changes it to edit mode.</desc>
+							<desc xml:lang="ja">テキストオブジェクトを1回クリックしたときに、編集モードをアクティブ化 (変更) するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="tr">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="th">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="hi-IN">Indicates whether a simple click on a text object changes it to edit mode.</desc>
+							<desc xml:lang="x-comment">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 						<label xml:lang="en-US">Allow quick editing</label>
 						<label xml:lang="el">Με γρήγορη επεξεργασία</label>
 						<label xml:lang="nl">Snelbewerking toestaan</label>
@@ -2018,11 +2109,13 @@
 						<label xml:lang="sv">Tillåt snabbredigering</label>
 						<label xml:lang="pl">Dopuść szybką edycję</label>
 						<label xml:lang="pt-BR">Permitir edição rápida</label>
-						<label xml:lang="ja">クイック編集を行う</label>
+						<label xml:lang="ja">クイック編集を許可する</label>
 						<label xml:lang="ko">빠른 편집 허용</label>
 						<label xml:lang="tr">Hızlı düzenlemeye izin ver</label>
 						<label xml:lang="th">ให้มีการแก้ไขอย่างเร็ว</label>
 						<label xml:lang="hi-IN">शीघ्र संपादन स्वीकृत</label>
+						<label xml:lang="x-comment">Allow quick editing</label>
+						<label xml:lang="sk">Povoliť rýchlu editáciu</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2051,11 +2144,12 @@
 							<desc xml:lang="sv">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="pl">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="pt-BR">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
-							<desc xml:lang="ja">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
+							<desc xml:lang="ja">この設定が示すのは、テキストをクリックしたときにのみテキストフレームを選択できるようにするか、あるいはフレーム内のどこかをクリックしたときにもテキストフレームを選択できるようにするか、そのいずれかです。</desc>
 							<desc xml:lang="ko">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="tr">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="th">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="hi-IN">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
+							<desc xml:lang="x-comment">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 						<label xml:lang="en-US">Only text area selectable</label>
 						<label xml:lang="el">Επιλογή μό~νο περιοχής κειμένου</label>
 						<label xml:lang="nl">~Alleen tekstbereik selecteerbaar</label>
@@ -2075,11 +2169,13 @@
 						<label xml:lang="sv">Bara textområde ka~n markeras</label>
 						<label xml:lang="pl">Selekcja możliwa tylko w obszarze tekstu</label>
 						<label xml:lang="pt-BR">Somente a  área do texto é selecionável</label>
-						<label xml:lang="ja">テキスト領域だけ選択可能</label>
+						<label xml:lang="ja">テキスト領域のみ選択可能</label>
 						<label xml:lang="ko">텍스트 영역만 선택 가능</label>
 						<label xml:lang="tr">Yalnızca metin bölümü seçilebilir</label>
 						<label xml:lang="th">สามารถเลือกพื้นที่ข้อความได้อย่างเดียว</label>
 						<label xml:lang="hi-IN">केवल टेक्स्ट् विस्तीर्ण चुनने योग्य है</label>
+						<label xml:lang="x-comment">Only text area selectable</label>
+						<label xml:lang="sk">Možné vybrať iba textovú oblasť</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2105,11 +2201,12 @@
 					<desc xml:lang="sv">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 					<desc xml:lang="pl">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 					<desc xml:lang="pt-BR">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
-					<desc xml:lang="ja">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
+					<desc xml:lang="ja">オブジェクト間のモーフィングの方法について指定する情報が含まれます (たとえば、ステップ数や、オブジェクトの属性に従うかどうかなど)。</desc>
 					<desc xml:lang="ko">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 					<desc xml:lang="tr">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 					<desc xml:lang="th">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 					<desc xml:lang="hi-IN">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
+					<desc xml:lang="x-comment">Contains a specification of how to morph between objects (e.g. how many steps and whether to regard the object&apos;s attributes).</desc>
 				</info>
 				<prop oor:name="Steps" oor:type="xs:short">
 					<!-- OldPath: Draw/Cross_fading -->
@@ -2136,11 +2233,12 @@
 							<desc xml:lang="sv">Specifies the number of intermediate morphing steps between two objects.</desc>
 							<desc xml:lang="pl">Specifies the number of intermediate morphing steps between two objects.</desc>
 							<desc xml:lang="pt-BR">Specifies the number of intermediate morphing steps between two objects.</desc>
-							<desc xml:lang="ja">Specifies the number of intermediate morphing steps between two objects.</desc>
+							<desc xml:lang="ja">２つのオブジェクト間の、モーフィングの中間ステップ数を指定します。</desc>
 							<desc xml:lang="ko">Specifies the number of intermediate morphing steps between two objects.</desc>
 							<desc xml:lang="tr">Specifies the number of intermediate morphing steps between two objects.</desc>
 							<desc xml:lang="th">Specifies the number of intermediate morphing steps between two objects.</desc>
 							<desc xml:lang="hi-IN">Specifies the number of intermediate morphing steps between two objects.</desc>
+							<desc xml:lang="x-comment">Specifies the number of intermediate morphing steps between two objects.</desc>
 						<label xml:lang="en-US">Steps</label>
 						<label xml:lang="el">Steps</label>
 						<label xml:lang="nl">Steps</label>
@@ -2165,6 +2263,7 @@
 						<label xml:lang="tr">Steps</label>
 						<label xml:lang="th">Steps</label>
 						<label xml:lang="hi-IN">Steps</label>
+						<label xml:lang="x-comment">Steps</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="1">
@@ -2176,7 +2275,7 @@
 								<desc xml:lang="fi">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="cs">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="da">Specifies that there has to be at least one morphing step.</desc>
-								<desc xml:lang="zh-CN">Specifies that there has to be at least one morphing step.</desc>
+								<desc xml:lang="zh-CN">指定必须有的至少一个形态步。</desc>
 								<desc xml:lang="zh-TW">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="ar">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="he">Specifies that there has to be at least one morphing step.</desc>
@@ -2188,11 +2287,12 @@
 								<desc xml:lang="sv">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="pl">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="pt-BR">Specifies that there has to be at least one morphing step.</desc>
-								<desc xml:lang="ja">Specifies that there has to be at least one morphing step.</desc>
+								<desc xml:lang="ja">1 つ以上のモーフィング手順が必要であることを指定します。</desc>
 								<desc xml:lang="ko">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="tr">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="th">Specifies that there has to be at least one morphing step.</desc>
 								<desc xml:lang="hi-IN">Specifies that there has to be at least one morphing step.</desc>
+								<desc xml:lang="x-comment">Specifies that there has to be at least one morphing step.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="256">
@@ -2204,7 +2304,7 @@
 								<desc xml:lang="fi">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="cs">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="da">Specifies that there may be at least this many morphing steps.</desc>
-								<desc xml:lang="zh-CN">Specifies that there may be at least this many morphing steps.</desc>
+								<desc xml:lang="zh-CN">指定必须有的至少多个形态步。</desc>
 								<desc xml:lang="zh-TW">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="ar">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="he">Specifies that there may be at least this many morphing steps.</desc>
@@ -2216,11 +2316,12 @@
 								<desc xml:lang="sv">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="pl">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="pt-BR">Specifies that there may be at least this many morphing steps.</desc>
-								<desc xml:lang="ja">Specifies that there may be at least this many morphing steps.</desc>
+								<desc xml:lang="ja">少なくともこの程度に多数のモーフィング手順が存在する場合があることを指定します。</desc>
 								<desc xml:lang="ko">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="tr">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="th">Specifies that there may be at least this many morphing steps.</desc>
 								<desc xml:lang="hi-IN">Specifies that there may be at least this many morphing steps.</desc>
+								<desc xml:lang="x-comment">Specifies that there may be at least this many morphing steps.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -2251,11 +2352,12 @@
 							<desc xml:lang="sv">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 							<desc xml:lang="pl">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 							<desc xml:lang="pt-BR">Indicates whether two objects to be morphed shall have the same orientation.</desc>
-							<desc xml:lang="ja">Indicates whether two objects to be morphed shall have the same orientation.</desc>
+							<desc xml:lang="ja">モーフィングを行う２つのオブジェクトの向きを同じにするかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 							<desc xml:lang="tr">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 							<desc xml:lang="th">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 							<desc xml:lang="hi-IN">Indicates whether two objects to be morphed shall have the same orientation.</desc>
+							<desc xml:lang="x-comment">Indicates whether two objects to be morphed shall have the same orientation.</desc>
 						<label xml:lang="en-US">Orientation</label>
 						<label xml:lang="el">Κατεύθυνση ροής</label>
 						<label xml:lang="nl">Looprichting</label>
@@ -2280,6 +2382,7 @@
 						<label xml:lang="tr">Metin yönü</label>
 						<label xml:lang="th">การวางแนว</label>
 						<label xml:lang="hi-IN">~पोरट्रैट</label>
+						<label xml:lang="x-comment">Orientation</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2308,11 +2411,12 @@
 							<desc xml:lang="sv">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 							<desc xml:lang="pl">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 							<desc xml:lang="pt-BR">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
-							<desc xml:lang="ja">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
+							<desc xml:lang="ja">あるオブジェクトを別のオブジェクトにモーフィングするときに、オブジェクトの属性 (たとえば色) を考慮するかどうかを示します。</desc>
 							<desc xml:lang="ko">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 							<desc xml:lang="tr">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 							<desc xml:lang="th">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
+							<desc xml:lang="x-comment">Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 						<label xml:lang="en-US">Attributes</label>
 						<label xml:lang="el">Ιδιό~τητες</label>
 						<label xml:lang="nl">~Attributen</label>
@@ -2337,6 +2441,8 @@
 						<label xml:lang="tr">Öznitelikler</label>
 						<label xml:lang="th">คุณลักษณะ</label>
 						<label xml:lang="hi-IN">ऐट्रिब्यूट्स</label>
+						<label xml:lang="x-comment">Attributes</label>
+						<label xml:lang="sk">Atribúty</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2366,11 +2472,12 @@
 						<desc xml:lang="sv">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 						<desc xml:lang="pl">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 						<desc xml:lang="pt-BR">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
-						<desc xml:lang="ja">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
+						<desc xml:lang="ja">(CTRL) + (Return) を押すか、CTRL キーを押しながらオブジェクトの作成ボタンをクリックすることにより、新しく作成されるオブジェクトの標準サイズを定義します。</desc>
 						<desc xml:lang="ko">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 						<desc xml:lang="tr">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 						<desc xml:lang="th">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 						<desc xml:lang="hi-IN">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
+						<desc xml:lang="x-comment">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 					<label xml:lang="el">Default Object Size</label>
 					<label xml:lang="nl">Default Object Size</label>
@@ -2390,11 +2497,12 @@
 					<label xml:lang="sv">Default Object Size</label>
 					<label xml:lang="pl">Default Object Size</label>
 					<label xml:lang="pt-BR">Default Object Size</label>
-					<label xml:lang="ja">Default Object Size</label>
+					<label xml:lang="ja">標準のオブジェクトサイズ</label>
 					<label xml:lang="ko">Default Object Size</label>
 					<label xml:lang="tr">Default Object Size</label>
 					<label xml:lang="th">Default Object Size</label>
 					<label xml:lang="hi-IN">Default Object Size</label>
+					<label xml:lang="x-comment">Default Object Size</label>
 				</info>
 				<prop oor:name="Width" oor:type="xs:int">
 					<info>
@@ -2417,11 +2525,12 @@
 							<desc xml:lang="sv">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="pl">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="pt-BR">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ja">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ja">新しいオブジェクトの標準の幅を指定します。[単位=1/100 mm]</desc>
 							<desc xml:lang="ko">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="tr">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="th">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>8000</value>
@@ -2447,11 +2556,12 @@
 							<desc xml:lang="sv">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="pl">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="pt-BR">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
-							<desc xml:lang="ja">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="ja">新しいオブジェクトの標準の高さを指定します。[単位=1/100 mm]</desc>
 							<desc xml:lang="ko">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="tr">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="th">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
+							<desc xml:lang="x-comment">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>5000</value>
@@ -2461,8 +2571,12 @@
 				<info>
 					<desc xml:lang="en-US">Contains the group of options that control the compatibility to other applications.</desc>
 						<desc xml:lang="zh-CN">含有用于控制与其他应用程序的兼容性的选项组。</desc>
+						<desc xml:lang="x-comment">Contains the group of options that control the compatibility to other applications.</desc>
+						<desc xml:lang="ja">他のアプリケーションとの互換性を制御するオプションのグループ。</desc>
 					<label xml:lang="en-US">Compatibility options.</label>
 					<label xml:lang="zh-CN">兼容性选项。</label>
+					<label xml:lang="x-comment">Compatibility options.</label>
+					<label xml:lang="ja">互換性オプション。</label>
 				</info>
 				<prop oor:name="PrinterIndependentLayout" oor:type="xs:short">
 					<!-- UIHints: Tools - Options - Draw - Other - [Section] Compatibility -->
@@ -5317,6 +5431,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
