@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:55:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 10:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include "view.hxx"
 #include "itabenum.hxx"
 #include "instable.hxx"
-#include "tautofmt.hxx"
+//CHINA001 #include "tautofmt.hxx"
 #include "tblafmt.hxx"
 #include "modcfg.hxx"
 #include "swmodule.hxx"
@@ -84,7 +84,7 @@
 #include "table.hrc"
 #include "instable.hrc"
 
-
+#include "swabstdlg.hxx" //CHINA001
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
@@ -244,9 +244,15 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 
 IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
-    SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    if( RET_OK == aDlg.Execute())
-        aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell,ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if( RET_OK == pDlg->Execute()) //CHINA001  if( RET_OK == aDlg.Execute())
+        pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001 aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    delete pDlg; //CHINA001
     return 0;
 }
 
