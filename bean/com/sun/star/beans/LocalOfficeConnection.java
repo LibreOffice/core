@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
  * This class reprecents a connection to the local office application.
+ * @deprecated
  */
 public class LocalOfficeConnection
     implements OfficeConnection
@@ -612,6 +613,7 @@ public class LocalOfficeConnection
 
     /**
      * @para This is an implementation of the native office service.
+     * @deprecated
      */
     private class OfficeService
         implements NativeService
