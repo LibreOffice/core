@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:37:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ namespace abp
         m_aSettings.eType = AST_OE;
 #endif
         m_aSettings.sDataSourceName = String(ModuleRes(RID_STR_DEFAULT_NAME));
+        m_aSettings.bRegisterDataSource = sal_False;
 
         defaultButton(WZB_NEXT);
         enableButtons(WZB_FINISH, sal_False);
@@ -224,12 +225,16 @@ namespace abp
             m_aNewDataSource.rename( m_aSettings.sDataSourceName );
 
         // 1. the data source
-        // nothing to do anymore, it already exists
+        m_aNewDataSource.store();
 
-        // 2. write the data source / table names into the configuration
-        addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
+        // 2. check if we need to register the data source
+        if ( m_aSettings.bRegisterDataSource )
+            m_aNewDataSource.registerDataSource(m_aSettings.sRegisteredDataSourceName);
 
-        // write the field mapping
+        // 3. write the data source / table names into the configuration
+        addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
+
+        // 4. write the field mapping
         fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
@@ -274,9 +279,6 @@ namespace abp
         implCommitAll();
 
         addressconfig::markPilotSuccess( getORB() );
-
-        MessBox aSuccessMessage( GetParent(), WB_OK, GetText(), String( ModuleRes( RID_STR_ABP_SUCCESS ) ) );
-        aSuccessMessage.Execute();
 
         return sal_True;
     }
@@ -573,12 +575,8 @@ namespace abp
 
             case STATE_MANUAL_FIELD_MAPPING:
                 return STATE_FINAL_CONFIRM;
-
-            default:
-                DBG_ERROR("OAddessBookSourcePilot::determineNextState: invalid current state!");
         }
 
-        DBG_ERROR("OAddessBookSourcePilot::determineNextState: no next state available!");
         return WZS_INVALID_STATE;
     }
 #endif
