@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:50:02 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabDialog DLG_PARA
                 Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringing en afstanden" ;
@@ -121,6 +121,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie & vzdialenosť";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
             PageItem
             {
@@ -154,6 +156,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -166,7 +170,7 @@ TabDialog DLG_PARA
                 Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
                 Text [ finnish ] = "Tekstin rivitys" ;
-                Text [ danish ] = "Tekstretning" ;
+                Text [ danish ] = "Tekstforl�b" ;
                 Text [ french ] = "Encha�nements" ;
                 Text [ swedish ] = "Textfl�de" ;
                 Text [ dutch ] = "Tekstverloop" ;
@@ -189,6 +193,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮זרימת טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् धारा";
                 Text[ slovak ] = "Tok textu";
+                Text[ hungarian ] = "Szövegbeosztás";
+                Text[ slovenian ] = "Potek besedila";
             };
             PageItem
             {
@@ -220,6 +226,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -252,6 +260,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮מיספור‬";
                 Text[ hindi ] = "संख्या देना";
                 Text[ slovak ] = "Číslovanie";
+                Text[ hungarian ] = "Számozás";
+                Text[ slovenian ] = "Oštevilčevanje";
             };
             PageItem
             {
@@ -286,6 +296,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
                 Text[ slovak ] = "Tabulátory";
+                Text[ hungarian ] = "Tabulátorok";
+                Text[ slovenian ] = "Tabulatorji";
             };
             PageItem
             {
@@ -297,7 +309,7 @@ TabDialog DLG_PARA
                 Text [ portuguese_brazilian ] = "Capitular" ;
                 Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
-                Text [ danish ] = "Initialer" ;
+                Text [ danish ] = "Uncialer" ;
                 Text [ french ] = "Lettrines" ;
                 Text [ swedish ] = "Anfanger" ;
                 Text [ dutch ] = "Initialen" ;
@@ -320,6 +332,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
                 Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
                 Text[ slovak ] = "Stránkovanie veľkými písmenami";
+                Text[ hungarian ] = "Iniciálék";
+                Text[ slovenian ] = "Ozaljšana začetnica";
             };
             PageItem
             {
@@ -331,7 +345,7 @@ TabDialog DLG_PARA
                 Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -354,6 +368,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -388,6 +404,8 @@ TabDialog DLG_PARA
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
         };
     };
@@ -407,6 +425,8 @@ TabDialog DLG_PARA
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
+    Text[ hungarian ] = "Bekezdés";
+    Text[ slovenian ] = "Odstavek";
 };
 TabDialog DLG_DRAWPARA
 {
@@ -442,7 +462,7 @@ TabDialog DLG_DRAWPARA
                 Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
@@ -465,6 +485,8 @@ TabDialog DLG_DRAWPARA
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie & vzdialenosť";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
 #if SUPD>352
             PageItem
@@ -499,6 +521,8 @@ TabDialog DLG_DRAWPARA
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
 #endif
             PageItem
@@ -531,6 +555,8 @@ TabDialog DLG_DRAWPARA
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -565,6 +591,8 @@ TabDialog DLG_DRAWPARA
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
                 Text[ slovak ] = "Tabulátory";
+                Text[ hungarian ] = "Tabulátorok";
+                Text[ slovenian ] = "Tabulatorji";
             };
         };
     };
@@ -584,7 +612,10 @@ TabDialog DLG_DRAWPARA
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
+    Text[ hungarian ] = "Bekezdés";
+    Text[ slovenian ] = "Odstavek";
 };
+
 
 
 
