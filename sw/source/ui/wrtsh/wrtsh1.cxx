@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:29:15 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,12 +125,6 @@
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef SMDLL0_HXX //autogen
-#include <starmath/smdll0.hxx>
-#endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
 #endif
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
@@ -524,19 +518,7 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName,
         BOOL bDoVerb = TRUE;
         if ( pName )
         {
-            const SotFactory* pFact = SvFactory::Find( *pName );
-            if ( pFact )
-            {
-                SvStorageRef aStor = new SvStorage( aEmptyStr );
-                xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( *pName,aStor );
-            }
-            else
-            {
-                SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
-                String aFileName;
-                BOOL bOk;
-                xIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, *pName, aFileName );
-            }
+            xIPObj = SvInPlaceObject::CreateObject( *pName );
         }
         else
         {
@@ -687,7 +669,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         String aDummy;
         // determine source CLSID
         aRef->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
-        bStarMath = 0 != SmModuleDummy::HasID( *aRef->GetSvFactory() );
+        bStarMath = SotExchange::IsMath( *aRef->GetSvFactory() );
 
         if( IsSelection() )
         {
@@ -770,7 +752,7 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         {
             SvGlobalName aObjClsId( *xRef->GetSvFactory() );
             SchMemChart* pMemChart;
-            if( SchModuleDummy::HasID( aObjClsId ) &&
+            if( SotExchange::IsChart( aObjClsId ) &&
                 0 != (pMemChart = SchDLL::GetChartData( xRef ) ))
             {
                 pMemChart->SetSelectionHdl( LINK( this, SwWrtShell,
