@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-15 06:56:28 $
+ *  last change: $Author: jl $ $Date: 2001-08-15 07:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,10 @@
 #include "Fetc.hxx"
 #endif
 
+
+#if(_MSC_VER < 1300)
 #include <olestd.h>
+#endif
 
 #define STR2(x) #x
 #define STR(x) STR2(x)
