@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 13:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2352,7 +2352,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
             aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_embed));
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_show, aStr );
 
-            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_onRequest));
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_onLoad));
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_actuate, aStr );
         }
         // write graphic object
