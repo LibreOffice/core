@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:10:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@
 //  XRenderable
 #define SC_UNONAME_PAGESIZE         "PageSize"
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
+#define SC_UNONAME_SOURCERANGE      "SourceRange"
 
 #endif
 
