@@ -50,7 +50,6 @@ hedabu: ..\inc\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
 hedabu: ..\inc\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
 hedabu: ..\inc\button.hxx %_DEST%\inc%_EXT%\vcl\button.hxx
 hedabu: ..\inc\button.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
-hedabu: ..\inc\clip.hxx %_DEST%\inc%_EXT%\vcl\clip.hxx
 hedabu: ..\inc\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
 hedabu: ..\inc\cmdevt.hxx %_DEST%\inc%_EXT%\vcl\cmdevt.hxx
 hedabu: ..\inc\color.hxx %_DEST%\inc%_EXT%\vcl\color.hxx
@@ -64,10 +63,8 @@ hedabu: ..\inc\cvtsvm.hxx %_DEST%\inc%_EXT%\vcl\cvtsvm.hxx
 hedabu: ..\inc\decoview.hxx %_DEST%\inc%_EXT%\vcl\decoview.hxx
 hedabu: ..\inc\dialog.hxx %_DEST%\inc%_EXT%\vcl\dialog.hxx
 hedabu: ..\inc\dockwin.hxx %_DEST%\inc%_EXT%\vcl\dockwin.hxx
-hedabu: ..\inc\drag.hxx %_DEST%\inc%_EXT%\vcl\drag.hxx
 hedabu: ..\inc\edit.hxx %_DEST%\inc%_EXT%\vcl\edit.hxx
 hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\vcl\event.hxx
-hedabu: ..\inc\exchange.hxx %_DEST%\inc%_EXT%\vcl\exchange.hxx
 hedabu: ..\inc\field.hxx %_DEST%\inc%_EXT%\vcl\field.hxx
 hedabu: ..\inc\fildlg.hxx %_DEST%\inc%_EXT%\vcl\fildlg.hxx
 hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\vcl\filedlg.hxx
