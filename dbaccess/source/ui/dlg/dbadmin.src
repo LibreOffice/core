@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:16:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 13:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,28 +488,28 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 7 , 7 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text = "~Name:";
-        Text [ english ] = "~Name:";
-        Text [ english_us ] = "~Name:";
-        Text [ portuguese ] = "~Nome:";
-        Text [ russian ] = "~»Ïˇ:";
-        Text [ greek ] = "ºÌÔ~Ï·:";
-        Text [ dutch ] = "~Naam:";
-        Text [ french ] = "~Nom :";
-        Text [ spanish ] = "~Nombre:";
-        Text [ italian ] = "~Nome:";
-        Text [ danish ] = "Navn:";
-        Text [ swedish ] = "~Namn:";
-        Text [ polish ] = "~Nazwa:";
-        Text [ portuguese_brazilian ] = "~Name:";
-        Text [ japanese ] = "ñºëO(~N):";
-        Text [ korean ] = "¿Ã∏ß(~N):";
+        Text = "~Name";
+        Text [ english ] = "~Name";
+        Text [ english_us ] = "~Name";
+        Text [ portuguese ] = "~Nome";
+        Text [ russian ] = "~»Ïˇ";
+        Text [ greek ] = "ºÌÔ~Ï·";
+        Text [ dutch ] = "~Naam";
+        Text [ french ] = "~Nom ";
+        Text [ spanish ] = "~Nombre";
+        Text [ italian ] = "~Nome";
+        Text [ danish ] = "Navn";
+        Text [ swedish ] = "~Namn";
+        Text [ polish ] = "~Nazwa";
+        Text [ portuguese_brazilian ] = "~Name";
+        Text [ japanese ] = "ñºëO(~N)";
+        Text [ korean ] = "¿Ã∏ß(~N)";
         Text [ chinese_simplified ] = "√˚≥∆(~N)£∫";
         Text [ chinese_traditional ] = "¶W∫Ÿ(~N)°G";
-        Text [ turkish ] = "Ad:";
-        Text [ arabic ] = "«·«”„:";
-        Text[ finnish ] = "~Nimi:";
-        Text[ catalan ] = "~Nombre:";
+        Text [ turkish ] = "Ad";
+        Text [ arabic ] = "«·«”„";
+        Text[ finnish ] = "~Nimi";
+        Text[ catalan ] = "~Nombre";
     };
 
     Edit ET_DATASOURCENAME
@@ -553,29 +553,29 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 7 , 35 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "Datenbank~typ:" ;
-        Text [ english ] = "Database ~type:" ;
-        Text [ english_us ] = "Database ~type:" ;
-        Text [ dutch ] = "Database~type:" ;
-        Text [ italian ] = "Tipo di database:" ;
-        Text [ spanish ] = "Tipo de base de datos:" ;
-        Text [ french ] = "~Type de BD :" ;
-        Text [ swedish ] = "Databas~typ:" ;
-        Text [ danish ] = "Databasetype:" ;
-        Text [ portuguese ] = "~Tipo da base de dados:" ;
-        Text [ portuguese_brazilian ] = "Datenbanktyp:" ;
+        Text = "Datenbank~typ ";
+        Text [ english ] = "Database ~type ";
+        Text [ english_us ] = "Database ~type ";
+        Text [ dutch ] = "Database~type ";
+        Text [ italian ] = "Tipo di database ";
+        Text [ spanish ] = "Tipo de base de datos ";
+        Text [ french ] = "~Type de BD  ";
+        Text [ swedish ] = "Databas~typ ";
+        Text [ danish ] = "Databasetype ";
+        Text [ portuguese ] = "~Tipo da base de dados ";
+        Text [ portuguese_brazilian ] = "Datenbanktyp ";
         Text [ chinese_simplified ] = " ˝æ›ø‚¿‡–Õ(~T)£∫";
         Text [ russian ] = "“ËÔ ·‡Á˚ ‰‡ÌÌ˚ı";
         Text [ polish ] = "Typ bazy danych";
-        Text [ japanese ] = "√ﬁ∞¿Õﬁ∞ΩÇÃéÌóﬁ(~T):";
+        Text [ japanese ] = "√ﬁ∞¿Õﬁ∞ΩÇÃéÌóﬁ(~T)";
         Text [ chinese_traditional ] = "∏ÍÆ∆Æw√˛´¨(~T)°G";
-        Text [ arabic ] = "‰Ê⁄ ﬁ«⁄œ… «·»Ì«‰« :";
+        Text [ arabic ] = "‰Ê⁄ ﬁ«⁄œ… «·»Ì«‰« ";
         Text [ greek ] = "~‘˝ÔÚ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
         Text [ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ≈∏¿‘(~T)";
         Text [ turkish ] = "Veritaban˝ tipi";
         Text [ language_user1 ] = " ";
-        Text[ finnish ] = "Tietokannan ~tyyppi:";
-        Text[ catalan ] = "Tipo de base de datos:";
+        Text[ finnish ] = "Tietokannan ~tyyppi";
+        Text[ catalan ] = "Tipo de base de datos";
     };
     ListBox LB_DATATYPE
     {
@@ -591,28 +591,28 @@ TabPage PAGE_GENERAL
         HelpId = HID_DSADMIN_URL_GENERAL;
         Pos = MAP_APPFONT ( 7 , 54 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "D~atenquelle URL:" ;
-        Text [ english ] = "~Data source URL:" ;
-        Text [ english_us ] = "~Data source URL:" ;
-        Text [ portuguese ] = "~Fonte de dados URL:";
-        Text [ russian ] = "~»ÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı URL:";
-        Text [ greek ] = "URL ÙÁÚ ÒÔ›ÎÂıÛÁÚ ‰Â‰ÔÏ›Ì˘Ì:";
-        Text [ dutch ] = "~Gegevensbron URL:";
-        Text [ french ] = "URL de la ~source de donnÈes :";
-        Text [ spanish ] = "~Fuente de datos URL:";
-        Text [ italian ] = "Fonte di dati URL:";
-        Text [ danish ] = "Datakilde URL:";
-        Text [ swedish ] = "D~atak‰lla URL:";
+        Text = "D~atenquelle URL" ;
+        Text [ english ] = "~Data source URL" ;
+        Text [ english_us ] = "~Data source URL" ;
+        Text [ portuguese ] = "~Fonte de dados URL";
+        Text [ russian ] = "~»ÒÚÓ˜ÌËÍ ‰‡ÌÌ˚ı URL";
+        Text [ greek ] = "URL ÙÁÚ ÒÔ›ÎÂıÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text [ dutch ] = "~Gegevensbron URL";
+        Text [ french ] = "URL de la ~source de donnÈes" ;
+        Text [ spanish ] = "~Fuente de datos URL";
+        Text [ italian ] = "Fonte di dati URL";
+        Text [ danish ] = "Datakilde URL";
+        Text [ swedish ] = "D~atak‰lla URL";
         Text [ polish ] = "èrÛd≥o danych URL";
-        Text [ portuguese_brazilian ] = "~Data source URL:";
-        Text [ japanese ] = "√ﬁ∞¿ø∞Ω URL(~D):";
-        Text [ korean ] = "µ•¿Ã≈Õ º“Ω∫ URL(~D):";
+        Text [ portuguese_brazilian ] = "~Data source URL";
+        Text [ japanese ] = "√ﬁ∞¿ø∞Ω URL(~D)";
+        Text [ korean ] = "µ•¿Ã≈Õ º“Ω∫ URL(~D)";
         Text [ chinese_simplified ] = " ˝æ›‘¥ URL(~D)£∫";
         Text [ chinese_traditional ] = "∏ÍÆ∆®”∑Ω URL(~D)°G";
-        Text [ turkish ] = "~Data source URL:";
-        Text [ arabic ] = " URL „’œ— «·»Ì«‰« :";
-        Text[ finnish ] = "~Tietol‰hteen URL-osoite:";
-        Text[ catalan ] = "~Fuente de datos URL:";
+        Text [ turkish ] = "~Data source URL";
+        Text [ arabic ] = " URL „’œ— «·»Ì«‰« ";
+        Text[ finnish ] = "~Tietol‰hteen URL-osoite";
+        Text[ catalan ] = "~Fuente de datos URL";
     };
     Edit ET_CONNECTURL
     {
@@ -1966,6 +1966,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Pos = MAP_APPFONT ( 7 , 122 ) ;
         Size    = MAP_APPFONT ( 246 , 16 ) ;
         HelpId = HID_DSADMIN_FILTER_EXPLANATION;
+        WordBreak = TRUE;
         Text = "Kreuzen Sie bitte in der obigen Liste diejenigen Tabellen an, die f¸r die Applikationen sichtbar sein sollen.";
         Text [ english ] = "In the list above, please check the tables which should be visible for the applications.";
         Text [ english_us ] = "In the list above, please check the tables which should be visible for the applications.";
@@ -2720,6 +2721,9 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2001/05/11 05:16:20  kz
+ *  Merge SRC631: 11.05.01 - 07:15:43 (NoBranch)
+ *
  *  Revision 1.44  2001/05/10 13:37:57  fs
  *  #86223# table create invoked from table administration page / toolbox in query administration page
  *
