@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 17:10:32 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,7 +971,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Krypterar text eller omvandlar krypterad text till klartext med hj�lp av ROT13-algoritmen.";
             Text[ polish ] = "Szyfruje i deszyfruje teksty za pomoc� algorytmu ROT13.";
             Text[ portuguese_brazilian ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
-            Text[ japanese ] = "ROT13 アルゴリズムを使用したテキストの暗号化、または複合化。";
+            Text[ japanese ] = "ROT13 アルゴリズムを使ってテキストを暗号処理、または複合処理します。";
             Text[ korean ] = "ROT13 알고리즘을 사용하여 텍스트를 암호화하거나 해독합니다.";
             Text[ chinese_simplified ] = "借助 ROT13 运算法则加密或者解密一个文本。";
             Text[ chinese_traditional ] = "透過ROT13程式加密或解密一個文字。";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
