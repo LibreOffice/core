@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 13:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rA
 
             uno::Sequence< double > aOldTicks(rTicks);
             rTicks.realloc(nNewCount);
-            for(sal_Int32 nTick = 0; nTick<nNewCount; nTick++)
+            for(nTick = 0; nTick<nNewCount; nTick++)
                 rTicks[nTick] = aOldTicks[nInvisibleAtLowerBorder+nTick];
         }
     }
