@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ Resource STRRES_NUMTYPES
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "Vi�eta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Ninguno" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     ItemList [ italian ] =
     {
@@ -225,11 +225,11 @@ Resource STRRES_NUMTYPES
     ItemList [ polish ] =
     {
             < "1,2,3, ..." ;                4/*SVX_NUM_ARABIC              */; > ;
-        < "A,B,C, ..." ;                0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a,b,c, ..." ;                1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I,II,III, ..." ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i,ii,iii, ..." ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, ..,AAA, ..." ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
         < "Znak wypunktowania" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
@@ -237,16 +237,16 @@ Resource STRRES_NUMTYPES
     };
     ItemList [ portuguese_brazilian ] =
     {
-            < "A, B, C, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "a, b, c, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "I, II, III, ..." ;               1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "i, ii, iii, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "1, 2, 3, ..." ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "Keine" ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "Bullet" ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Grafik" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "A, .., AA, .., AAA, ..." ;                   8/*SVX_NUM_BITMAP              */; > ;
-        < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Marca" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Figura" ;                    8/*SVX_NUM_BITMAP              */; > ;
+        < "Nenhum" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     ItemList [ japanese ] =
     {
@@ -322,9 +322,9 @@ Resource STRRES_NUMTYPES
         < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
         < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Madde i�aretleri" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Madde �mi" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Yok" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        < "Hi�biri" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     ItemList [ language_user1 ] =
     {
@@ -378,8 +378,56 @@ Resource STRRES_NUMTYPES
         < "ก, ข, ค, ..." ;                    8/*SVX_NUM_BITMAP              */; > ;
         < "ก, .., กก, .., กกก, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Odrážka" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Obrázky" ;                  8/*SVX_NUM_BITMAP              */; > ;
+        < "Žádné" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "‮גרפיקה‬" ;                    8/*SVX_NUM_BITMAP              */; > ;
+        < "‮ללא‬" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "बुल्लेट्" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "सुचित्र" ;                     8/*SVX_NUM_BITMAP              */; > ;
+        < "कोई नहीं" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
