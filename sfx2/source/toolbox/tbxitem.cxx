@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:19:57 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,24 +679,37 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
     GetToolBox().SetItemImage( SID_NEWDOCDIRECT, SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE ) );
 }
 
+void SfxAppToolBoxControl_Impl::StateChanged
+(
+    USHORT              nId,
+    SfxItemState        eState,
+    const SfxPoolItem*  pState
+)
+{
+    if ( !aLastURL.Len() && pState && pState->ISA(SfxStringItem) )
+        SetImage( ((const SfxStringItem*)pState)->GetValue() );
+    else
+        SfxToolBoxControl::StateChanged( nId, eState, pState );
+}
+
 //--------------------------------------------------------------------
 
 void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
 {
     aTimer.Stop();
-    SfxApplication* pApp = SFX_APP();
-    String aLastNewURL( pApp->Get_Impl()->aLastNewURL );
-    if( aLastNewURL.Len() )
+    if( aLastURL.Len() )
     {
-        SfxStringItem aName( SID_FILE_NAME, aLastNewURL );
+        SfxStringItem aName( SID_FILE_NAME, aLastURL );
         SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_NEWMENU) );
         SfxBoolItem aTemplate( SID_TEMPLATE, TRUE );
+        SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
 
-        const SfxPoolItem* aItems[4];
-        aItems[3] = 0;
+        const SfxPoolItem* aItems[5];
+        aItems[4] = 0;
         aItems[0] = &aName;
         aItems[1] = &aReferer;
         aItems[2] = &aTemplate;
+        aItems[3] = &aTarget;
         GetBindings().Execute( SID_OPENDOC, aItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
     }
     else
@@ -710,7 +723,6 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
     SfxApplication* pApp = SFX_APP();
     ToolBox& rBox = GetToolBox();
     Rectangle aRect(  rBox.GetItemRect( GetId() ) );
-//    aRect.SetPos( rBox.OutputToScreenPixel( aRect.TopLeft() ) );
 
     USHORT nId = GetId();
     BOOL bNew = FALSE;
@@ -722,7 +734,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
         USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );
         if( nId == SID_NEWDOCDIRECT )
         {
-            pApp->Get_Impl()->aLastNewURL = pMenu->GetItemCommand( nSelected );
+            aLastURL = pMenu->GetItemCommand( nSelected );
             SetImage( pMenu->GetItemCommand( nSelected ) );
         }
 

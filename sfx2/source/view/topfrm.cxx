@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 14:51:18 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ class SfxTopViewFrame_Impl
 public:
     sal_Bool            bActive;
     Window*             pWindow;
+    const char*         pFactoryName;
 
                         SfxTopViewFrame_Impl()
                             : bActive( sal_False )
@@ -327,6 +328,30 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     return pFrame;
 }
 
+SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, Window* pWindow, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
+{
+    Reference < ::com::sun::star::lang::XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+    Reference < XFramesSupplier > xDesktop ( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < XFrame > xFrame( xFact->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
+
+    xFrame->initialize( VCLUnoHelper::GetInterface ( pWindow ) );
+    if ( xDesktop.is() )
+        xDesktop->getFrames()->append( xFrame );
+
+    SfxTopFrame* pFrame = new SfxTopFrame( pWindow );
+    pFrame->SetFrameInterface_Impl( xFrame );
+    pFrame->pImp->bHidden = bHidden;
+
+    pFrame->SetItemSet_Impl( pSet );
+    if ( pDoc )
+    {
+        if ( nViewId )
+            pDoc->GetMedium()->GetItemSet()->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+        pFrame->InsertDocument( pDoc );
+    }
+
+    return pFrame;
+}
 
 SfxTopFrame* SfxTopFrame::Create( Reference < XFrame > xFrame )
 {
@@ -686,6 +711,8 @@ String SfxTopViewFrame::UpdateTitle()
 {
     DBG_CHKTHIS(SfxTopViewFrame, 0);
 
+    pImp->pFactoryName = GetObjectShell()->GetFactory().GetShortName();
+
     String aTitle = SfxViewFrame::UpdateTitle();
     aTitle += String::CreateFromAscii( " - " );
     aTitle += Application::GetDisplayName();
@@ -923,11 +950,23 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_WIN_POSSIZE:
             break;
 
+        case SID_NEWDOCDIRECT :
+        {
+            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
+            String aFact = String::CreateFromAscii("private:factory/");
+            aFact += String::CreateFromAscii( pImp->pFactoryName );
+            aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
+            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
+            SFX_APP()->ExecuteSlot( aReq );
+            break;
+        }
+
         case SID_CLOSEWIN:
         {
             if ( GetViewShell()->PrepareClose() )
             {
-                // weitere ::com::sun::star::sdbcx::View auf dasselbe Doc?
+                // weitere Views auf dasselbe Doc?
                 SfxObjectShell *pDocSh = GetObjectShell();
                 int bOther = sal_False;
                 for ( const SfxTopViewFrame *pFrame =
@@ -982,6 +1021,14 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
         {
             switch(nWhich)
             {
+            case SID_NEWDOCDIRECT :
+            {
+                String aFact = String::CreateFromAscii("private:factory/");
+                aFact += String::CreateFromAscii( pImp->pFactoryName );
+                rSet.Put( SfxStringItem( nWhich, aFact ) );
+                break;
+            }
+
             case SID_OPTIMIZEWIN:
             case SID_NEWWINDOW:
                 rSet.DisableItem(nWhich);

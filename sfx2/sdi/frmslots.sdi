@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2001-06-21 13:56:03 $ $Revision: 1.5 $
+    $Author: mba $ $Date: 2001-06-27 12:30:14 $ $Revision: 1.6 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -269,120 +269,6 @@ interface Window : Object
     [
         StateMethod = GetState_Impl ;
     ]
-
-    // F"ur slots.sdc-Macros eingebaut
-    SfxStringItem ConvertString SID_CONVERTSTRING
-    (
-        SfxStringItem Which SID_CONVERTSTRING
-    )
-    [
-        ExecMethod = ExecView_Impl ;
-        AutoUpdate = FALSE,
-        Cachable = Cachable,
-        FastCall = FALSE,
-        HasCoreId = FALSE,
-        HasDialog = FALSE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Synchron;
-        Container = TRUE,
-        PlugComm = FALSE,
-        Export = TRUE,
-        Hidden = TRUE,
-        IsCollection = FALSE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-        StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-        GroupId = GID_APPLICATION;
-    ]
-/*
-    SfxStringItem GetHelpText SID_HELP_STRING
-    (
-        SfxUInt16Item Which SID_CONFIGITEMID
-    )
-    [
-        ExecMethod = ExecView_Impl ;
-        AutoUpdate = FALSE,
-        Cachable = Cachable,
-        FastCall = FALSE,
-        HasCoreId = FALSE,
-        HasDialog = FALSE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Synchron;
-        Container = TRUE,
-        PlugComm = FALSE,
-        Export = TRUE,
-        Hidden = TRUE,
-        IsCollection = FALSE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-        StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-        GroupId = GID_APPLICATION;
-    ]
-
-    SfxStringItem GetFunctionName SID_METHODNAME
-    (
-        SfxUInt16Item Which SID_CONFIGITEMID
-    )
-    [
-        ExecMethod = ExecView_Impl ;
-        AutoUpdate = FALSE,
-        Cachable = Cachable,
-        FastCall = FALSE,
-        HasCoreId = FALSE,
-        HasDialog = FALSE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Synchron;
-        Container = TRUE,
-        PlugComm = FALSE,
-        Export = TRUE,
-        Hidden = TRUE,
-        IsCollection = FALSE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-        StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-        GroupId = GID_APPLICATION;
-    ]
-
-    SfxBoolItem IsToolboxConfig SID_CONFIGITEMID
-    (
-        SfxUInt16Item Which SID_CONFIGITEMID
-    )
-    [
-        ExecMethod = ExecView_Impl ;
-        AutoUpdate = FALSE,
-        Cachable = Cachable,
-        FastCall = FALSE,
-        HasCoreId = FALSE,
-        HasDialog = FALSE,
-        ReadOnlyDoc = TRUE,
-        Toggle = FALSE,
-        Synchron;
-        Container = TRUE,
-        PlugComm = FALSE,
-        Export = TRUE,
-        Hidden = TRUE,
-        IsCollection = FALSE,
-        RecordAbsolute = FALSE,
-        RecordPerSet;
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-        StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-        GroupId = GID_APPLICATION;
-    ]
-*/
 }
 
 interface BrowseWindow : Window
@@ -455,6 +341,12 @@ interface TopWindow : BrowseWindow
     Automation = FALSE ;
 ]
 {
+    SID_NEWDOCDIRECT // ole(no) api(no)
+    [
+                ExecMethod = Exec_Impl ;
+                StateMethod = GetState_Impl ;
+    ]
+
     SID_WIN_FULLSCREEN // ole(no) api(final/play/rec)
     [
         ExecMethod = MiscExec_Impl ;
@@ -573,6 +465,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/06/21 13:56:03  mba
+    #88527#: SID_TOGGLE_MENUBAR
+
     Revision 1.4  2001/06/20 16:04:59  mba
     #82371#: new slot for DataSourceBrowser
 
