@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ namespace dbaccess
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xIndexes;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
