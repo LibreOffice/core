@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-10-20 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,6 @@
 #endif
 
 class   BibGeneralPage;
-class   BibBusinessAddress;
-class   BibBusinessPhone;
 class   BibDataManager;
 
 namespace com{ namespace sun{ namespace star{ namespace awt{ class XFocusListener;}}}}
