@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:00:41 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ XML_CONSTASCII_ACTION( sXML_align, "align" );
 XML_CONSTASCII_ACTION( sXML_all, "all" );
 XML_CONSTASCII_ACTION( sXML_allow_empty_cell, "allow-empty-cell" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index, "alphabetical-index" );
+XML_CONSTASCII_ACTION( sXML_alphabetical_index_auto_mark_file, "alphabetical-index-auto-mark-file" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_entry_template, "alphabetical-index-entry-template" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark, "alphabetical-index-mark" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark_end, "alphabetical-index-mark-end" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 04:58:07 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2474,6 +2474,31 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
 void XMLTextParagraphExport::exportTextDeclarations()
 {
     pFieldExport->ExportFieldDeclarations();
+
+    // get XPropertySet from the document and ask for AutoMarkFileURL.
+    // If it exists, export the auto-mark-file element.
+    Reference<XPropertySet> xPropertySet( GetExport().GetModel(), UNO_QUERY );
+    if (xPropertySet.is())
+    {
+        OUString sUrl;
+        OUString sIndexAutoMarkFileURL(
+            RTL_CONSTASCII_USTRINGPARAM("IndexAutoMarkFileURL"));
+        if (xPropertySet->getPropertySetInfo()->hasPropertyByName(
+            sIndexAutoMarkFileURL))
+        {
+            Any aAny = xPropertySet->getPropertyValue(sIndexAutoMarkFileURL);
+            aAny >>= sUrl;
+            if (sUrl.getLength() > 0)
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href,
+                                          sUrl );
+                SvXMLElementExport aAutoMarkElement(
+                    GetExport(), XML_NAMESPACE_TEXT,
+                    sXML_alphabetical_index_auto_mark_file,
+                    sal_True, sal_True );
+            }
+        }
+    }
 }
 
 void XMLTextParagraphExport::exportTextDeclarations(

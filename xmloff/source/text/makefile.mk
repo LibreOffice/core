@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: mtg $ $Date: 2001-03-30 14:59:17 $
+#   last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES =	\
         $(SLO)$/txtstyle.obj \
         $(SLO)$/txtstyli.obj \
         $(SLO)$/txtvfldi.obj \
+        $(SLO)$/XMLAutoMarkFileContext.obj \
         $(SLO)$/XMLAutoTextEventExport.obj \
         $(SLO)$/XMLAutoTextEventImport.obj \
         $(SLO)$/XMLAutoTextContainerEventImport.obj \

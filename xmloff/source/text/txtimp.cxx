@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-10 09:07:23 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,9 @@
 #ifndef _XMLOFF_XMLCHANGEIMPORTCONTEXT_HXX
 #include "XMLChangeImportContext.hxx"
 #endif
+#ifndef _XMLOFF_XMLAUTOMARKFILECONTEXT_HXX_
+#include "XMLAutoMarkFileContext.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLCALCULATION_SETTINGS_CONTEXT_HXX
 #include "XMLCalculationSettingsContext.hxx"
@@ -251,6 +254,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_change,          XML_TOK_TEXT_CHANGE },
     { XML_NAMESPACE_OFFICE, sXML_forms,         XML_TOK_TEXT_FORMS },
     { XML_NAMESPACE_TABLE, sXML_calculation_settings,   XML_TOK_TEXT_CALCULATION_SETTINGS },
+    { XML_NAMESPACE_TEXT, sXML_alphabetical_index_auto_mark_file, XML_TOK_TEXT_AUTOMARK },
 
     XML_TOKEN_MAP_END
 };
@@ -1551,14 +1555,24 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
         bContent = sal_False;
         break;
+
+    case XML_TOK_TEXT_AUTOMARK:
+        if( XML_TEXT_TYPE_BODY == eType )
+        {
+            pContext = new XMLAutoMarkFileContext(rImport, nPrefix,rLocalName);
+        }
+        bContent = sal_False;
+        break;
+
     case XML_TOK_TEXT_CALCULATION_SETTINGS:
         pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
         bContent = sal_False;
     break;
+
     default:
         if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_TEXTBOX == eType ||
-             XML_TEXT_TYPE_CHANGED_REGION  )
+             XML_TEXT_TYPE_CHANGED_REGION == eType )
         {
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
