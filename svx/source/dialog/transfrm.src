@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:11:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,38 +615,10 @@ TabPage RID_SVXPAGE_SLANT
     Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
+
 #define _POS_SIZE_TEXT \
-    Text = "Position und Größe" ;                       \
-    Text [ ENGLISH ] = "Position and Size" ;            \
-    Text [ norwegian ] = "Posisjon og størrelse" ;      \
-    Text [ italian ] = "Posizione e dimensione" ;       \
-    Text [ portuguese_brazilian ] = "Posição e Tamanho" ;\
-    Text [ portuguese ] = "Posição e tamanho" ;          \
-    Text [ finnish ] = "Sijainti ja koko" ;              \
-    Text [ danish ] = "Placering og størrelse" ;         \
-    Text [ french ] = "Position et taille" ;             \
-    Text [ swedish ] = "Position och storlek" ;          \
-    Text [ dutch ] = "Positie en grootte" ;              \
-    Text [ spanish ] = "Posición y tamaño" ;             \
-    Text [ english_us ] = "Position and Size" ;          \
-    Text[ chinese_simplified ] = "ä½ç½®å’Œå¤§å°";      \
-    Text[ russian ] = "Ïîçèöèÿ è ğàçìåğ";                \
-    Text[ polish ] = "Pozycja i rozmiar";                \
-    Text[ japanese ] = "ä½ç½®ã¨ã‚µã‚¤ã‚º";             \
-    Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";     \
-    Text[ arabic ] = "ÇáãæÖÚ æÇáÍÌã";                    \
-    Text[ greek ] = "Èİóç êáé ìİãåèïò";                  \
-    Text[ korean ] = "ìœ„ì¹˜ ë° í¬ê¸°";                \
-    Text[ turkish ] = "Konum ve boyut";                  \
-    Text[ language_user1 ] = " ";                        \
-    Text[ catalan ] = "Position and Size";               \
-    Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹à¸¥à¸°à¸‚à¸™à¸²à¸”";\
-    Text[ czech ] = "UmÃ­stÄ›nÃ­ a velikost";                   \
-    Text[ hebrew ] = "Position und GrÃ¶ÃŸe";                    \
-    Text[ hindi ] = "Position and Size";                        \
-    Text[ slovak ] = "Umiestnenie a veÄ¾kosÅ¥";                 \
-    Text[ hungarian ] = "PozÃ­ciÃ³ Ã©s mÃ©ret";                 \
-    Text[ slovenian ] = "PoloÅ¾aj in velikost";                 \
+    Text [ de ] = "Position und Größe" ;                       \
+    Text [ en-US ] = "Position and Size" ;          \
 
 
 TabDialog RID_SVXDLG_TRANSFORM
