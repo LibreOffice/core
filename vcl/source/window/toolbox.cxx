@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:32:32 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,7 +2505,6 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-//#ifndef REMOTE_APPSERVER
     if( GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
     {
         mbFormat = TRUE;
@@ -2513,7 +2512,6 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
         maTimer.Start();
     }
     else
-//#endif
     {
         mbFormat = TRUE;
         ImplFormat();
