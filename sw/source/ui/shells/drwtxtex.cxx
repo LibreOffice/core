@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:05:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+
+#include <tools/shl.hxx>
 
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
