@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: cd $ $Date: 2001-04-10 15:04:28 $
+#   last change: $Author: as $ $Date: 2001-04-19 12:38:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,6 @@ TARGET=				framework
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
-COMP1TYPELIST=		fwk
-COMP2TYPELIST=		fwl
-COMP3TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
