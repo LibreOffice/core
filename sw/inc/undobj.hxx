@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:13:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ public:
     virtual ~SwUndo();
 
     USHORT GetId() const { return nId; }
+    virtual USHORT GetEffectiveId() const;
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;
     virtual void Repeat( SwUndoIter& );
@@ -344,6 +345,7 @@ public:
     virtual SwRewriter GetRewriter() const;
     // <- #111827#
 
+    virtual USHORT GetEffectiveId() const;
     USHORT GetUserId() const { return nUserId; }
     // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
     USHORT GetEndOffset() const { return nEndOffset; }
@@ -374,10 +376,12 @@ public:
     virtual SwRewriter GetRewriter() const;
     // <- #111827#
 
+    virtual USHORT GetEffectiveId() const;
     USHORT GetUserId() const { return nUserId; }
+
     // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
+    void SetSttOffset(USHORT _nSttOffSet) { nSttOffset = _nSttOffSet; }
     USHORT GetSttOffset() const { return nSttOffset; }
-    void SetSttOffset( USHORT n ) { nSttOffset = n; }
     OUT_UNDOBJ( End )
 };
 
