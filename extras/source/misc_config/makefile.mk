@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2000-09-29 13:42:39 $
+#   last change: $Author: tv $ $Date: 2000-10-05 11:59:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,11 @@ TARGET=miscconfiggeneral
 ZIP1TARGET      = $(CONFIG_SERVER_NOLANG_TARGET)
 ZIP1LIST        = alarm.wav                     \
                 = SOFFICE.CFG                   \
-                = ssimport.ini                  \
                 = srcheng.ini
 
 
 ZIP2TARGET      = $(CONFIG_USER_TARGET)
 ZIP2LIST        = autotbl.fmt                   \
-                = ssprsize.ini                  \
                 = dbtitle.rdb
 
 
