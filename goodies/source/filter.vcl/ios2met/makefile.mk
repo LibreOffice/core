@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:28:16 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:11:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=goodies
 TARGET=ios2met
 DEPTARGET=vios2met
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -87,7 +82,7 @@ SLOFILES =  $(SLO)$/ios2met.obj
 
 SHL1TARGET=     ime$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ios2met
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(CPPULIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
 
 SHL1DEPN=       $(LB)$/ios2met.lib
 SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
@@ -96,20 +91,12 @@ SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
 SHL1OBJS=       $(SLO)$/ios2met.obj
 .ENDIF
 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
+
+# ==========================================================================
 
 .INCLUDE :  target.mk
 
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-    @echo LIBRARY     $(DLLNAME)                    >$@
-    @echo DESCRIPTION 'Svx RTF DLL'                 >>$@
-    @echo DATA                READ WRITE NONSHARED  >>$@
-    @echo EXPORTS                                   >>$@
-    @echo     GraphicImport                         >>$@
-
-.ENDIF
