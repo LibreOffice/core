@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:21:17 $
+ *  last change: $Author: ka $ $Date: 2001-05-18 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8588,6 +8588,11 @@ String STR_EFFECT_PATH
     Text[ turkish ] = "Eðriyi izle";
     Text[ catalan ] = "Siguiendo la curva";
     Text[ finnish ] = "Käyrää pitkin";
+};
+String STR_EFFECT_MOVE
+{
+    Text = "Bewegen" ;
+    Text [ ENGLISH ] = "Move" ;
 };
 String STR_EFFECT_MOVE_TO_L
 {
