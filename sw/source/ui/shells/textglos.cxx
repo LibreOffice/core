@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textglos.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:36:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, FALSE, &pItem ))
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
-                //CHINA001 SwGlossaryDlg::SetActGroup(aGroup);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
@@ -148,7 +147,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             if(pItem)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
-                //CHINA001 SwGlossaryDlg::SetActGroup(aGroup);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
@@ -166,7 +164,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 String aName;
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
-                //CHINA001 SwGlossaryDlg::SetActGroup(aGroup);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
