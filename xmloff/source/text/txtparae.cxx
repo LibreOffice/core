@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 08:58:19 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 13:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,7 +1185,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         sal_Bool bAutoStyles,
         const Reference < XTextSection > & rBaseSection,
         sal_Bool bProgress,
-        sal_Bool bExportParagraph )
+        sal_Bool bExportParagraph,
+        const Reference < XPropertySet > *pRangePropSet )
 {
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
@@ -1263,19 +1264,19 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         }
         else if( xServiceInfo->supportsService( sTextFrameService ) )
         {
-            exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
+            exportTextFrame( xTxtCntnt, bAutoStyles, bProgress, pRangePropSet );
         }
         else if( xServiceInfo->supportsService( sTextGraphicService ) )
         {
-            exportTextGraphic( xTxtCntnt, bAutoStyles );
+            exportTextGraphic( xTxtCntnt, bAutoStyles, pRangePropSet );
         }
         else if( xServiceInfo->supportsService( sTextEmbeddedService ) )
         {
-            exportTextEmbedded( xTxtCntnt, bAutoStyles );
+            exportTextEmbedded( xTxtCntnt, bAutoStyles, pRangePropSet );
         }
         else if( xServiceInfo->supportsService( sShapeService ) )
         {
-            exportShape( xTxtCntnt, bAutoStyles );
+            exportShape( xTxtCntnt, bAutoStyles, pRangePropSet );
         }
         else
         {
@@ -1456,8 +1457,11 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 // frames are never in sections
                 Reference<XTextSection> xSection;
                 if( xContentEnum.is() )
-                    exportTextContentEnumeration( xContentEnum, bAutoStyles,
-                                                  xSection, bProgress );
+                    exportTextContentEnumeration( xContentEnum,
+                                                    bAutoStyles,
+                                                    xSection, bProgress, sal_True,
+                                                     &xPropSet  );
+
                 bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sFootnote))
@@ -1606,6 +1610,23 @@ void XMLTextParagraphExport::exportTextMark(
     // else: no styles. (see above)
 }
 
+sal_Bool lcl_txtpara_isBoundAsChar(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    sal_Bool bIsBoundAsChar = sal_False;
+    OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+    if( rPropSetInfo->hasPropertyByName( sAnchorType ) )
+    {
+        Any aAny =
+            rPropSet->getPropertyValue( sAnchorType );
+        TextContentAnchorType eAnchor;
+        aAny >>= eAnchor;
+        bIsBoundAsChar = TextContentAnchorType_AS_CHARACTER == eAnchor;
+    }
+
+    return bIsBoundAsChar;
+}
 
 sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,
@@ -1848,7 +1869,8 @@ void XMLTextParagraphExport::_exportTextFrame(
 void XMLTextParagraphExport::exportTextFrame(
         const Reference < XTextContent > & rTxtCntnt,
         sal_Bool bAutoStyles,
-        sal_Bool bProgress )
+        sal_Bool bProgress,
+        const Reference < XPropertySet > *pRangePropSet)
 {
     Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
 
@@ -1857,6 +1879,10 @@ void XMLTextParagraphExport::exportTextFrame(
         Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
         Reference < XText > xTxt = xTxtFrame->getText();
         Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
+                                            xPropSet->getPropertySetInfo() ) )
+            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
+
         exportText( xTxt, bAutoStyles, bProgress, sal_True );
     }
     else
@@ -1864,15 +1890,18 @@ void XMLTextParagraphExport::exportTextFrame(
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                                      sXML_a, sal_False, sal_False );
-            _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
-        }
-        else
-        {
-            _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
+            SvXMLElementExport aElem( GetExport(),
+                pRangePropSet &&
+                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
+                addTextStyleAttribute( *pRangePropSet ),
+                XML_NAMESPACE_TEXT, sXML_span, sal_False, sal_False );
+            {
+                SvXMLElementExport aElem( GetExport(),
+                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
+                    XML_NAMESPACE_DRAW, sXML_a, sal_False, sal_False );
+                _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
+            }
         }
     }
 }
@@ -2054,45 +2083,63 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
 void XMLTextParagraphExport::exportTextGraphic(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        const Reference < XPropertySet > *pRangePropSet )
 {
     Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
 
     if( bAutoStyles )
     {
         Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+
+        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
+                                            xPropSet->getPropertySetInfo() ) )
+            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
     }
     else
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                                      sXML_a, sal_False, sal_False );
-            _exportTextGraphic( xPropSet, xPropSetInfo );
-        }
-        else
-        {
-            _exportTextGraphic( xPropSet, xPropSetInfo );
+            SvXMLElementExport aElem( GetExport(),
+                pRangePropSet &&
+                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
+                addTextStyleAttribute( *pRangePropSet ),
+                XML_NAMESPACE_TEXT, sXML_span, sal_False, sal_False );
+            {
+                SvXMLElementExport aElem( GetExport(),
+                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
+                    XML_NAMESPACE_DRAW, sXML_a, sal_False, sal_False );
+                _exportTextGraphic( xPropSet, xPropSetInfo );
+            }
         }
     }
 }
 
 void XMLTextParagraphExport::exportShape(
         const Reference < XTextContent > & rTxtCntnt,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        const Reference < XPropertySet > *pRangePropSet )
 {
     Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
+    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
 
     if( bAutoStyles )
     {
         GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
+        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
+                                            xPropSet->getPropertySetInfo() ) )
+            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
     }
     else
     {
-        Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
+        SvXMLElementExport aElem( GetExport(),
+            pRangePropSet &&
+            lcl_txtpara_isBoundAsChar( xPropSet,
+                xPropSet->getPropertySetInfo() ) &&
+            addTextStyleAttribute( *pRangePropSet ),
+            XML_NAMESPACE_TEXT, sXML_span, sal_False, sal_False );
         sal_Int32 nFeatures = addTextFrameAttributes( xPropSet, sal_True );
         GetExport().GetShapeExport()->exportShape( xShape, nFeatures );
     }
@@ -2142,28 +2189,35 @@ void XMLTextParagraphExport::exportAlternativeText(
 }
 void XMLTextParagraphExport::exportTextEmbedded(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        const Reference < XPropertySet > *pRangePropSet )
 {
     Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
 
     if( bAutoStyles )
     {
         _collectTextEmbeddedAutoStyles( xPropSet );
+        if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
+                                            xPropSet->getPropertySetInfo() ) )
+            Add( XML_STYLE_FAMILY_TEXT_TEXT, *pRangePropSet );
     }
     else
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                                      sXML_a, sal_False, sal_False );
-            _exportTextEmbedded( xPropSet, xPropSetInfo );
-        }
-        else
-        {
-            _exportTextEmbedded( xPropSet, xPropSetInfo );
+            SvXMLElementExport aElem( GetExport(),
+                pRangePropSet &&
+                lcl_txtpara_isBoundAsChar( xPropSet, xPropSetInfo ) &&
+                addTextStyleAttribute( *pRangePropSet ),
+                XML_NAMESPACE_TEXT, sXML_span, sal_False, sal_False );
+            {
+                SvXMLElementExport aElem( GetExport(),
+                    addHyperlinkAttributes( xPropSet, xPropState,xPropSetInfo ),
+                    XML_NAMESPACE_DRAW, sXML_a, sal_False, sal_False );
+                _exportTextEmbedded( xPropSet, xPropSetInfo );
+            }
         }
     }
 }
@@ -2301,6 +2355,21 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
     }
 
     return bExport;
+}
+
+sal_Bool XMLTextParagraphExport::addTextStyleAttribute(
+        const Reference < XPropertySet > & rPropSet )
+{
+    sal_Bool bRet = sal_False;
+    OUString sStyle = FindTextStyle( rPropSet );
+    if( sStyle.getLength() )
+    {
+        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                  sXML_style_name, sStyle );
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 void XMLTextParagraphExport::exportTextRange(
