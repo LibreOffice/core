@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:35:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-
+#ifndef _CTRLBOX_HXX //add CHINA001
+#include <svtools/ctrlbox.hxx> //CHINA001
+#endif //CHINA001
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
