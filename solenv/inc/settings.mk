@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-07 09:57:36 $
+#   last change: $Author: hjs $ $Date: 2001-06-08 15:13:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -304,7 +304,7 @@ TF_CHAOS=TRUE
 tf_chaos=TRUE
 .ENDIF
 
-DMAKE_WORK_DIR*:=$(PWD)
+DMAKE_WORK_DIR*:=$(subst,/,$/ $(PWD))
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
