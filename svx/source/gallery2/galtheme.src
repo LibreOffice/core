@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:22:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ chinese_simplified ] = "ζƒ…η»ªε›Ύζ΅";
     Text[ chinese_traditional ] = "ζƒ…η·’ε–ζ΅";
     Text[ arabic ] = "ΓΤίΗα";
-    Text[ greek ] = "Emoticons";
+    Text[ greek ] = "Εικονίδια Emoticon";
     Text[ korean ] = "κ°μ • ν‘ν„ κΈ°νΈ";
     Text[ turkish ] = "Yόz simgeleri";
     Text[ language_user1 ] = " ";
@@ -738,7 +738,7 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[english_us] = "Balloons";
     Text[ portuguese ] = "Balυes";
     Text[ russian ] = "Οξδρκΰηκθ";
-    Text[ greek ] = "Πεδία διαλόγου";
+    Text[ greek ] = "Συννεφάκια κειμένου";
     Text[ dutch ] = "Tekstballonnen";
     Text[ french ] = "Bulles";
     Text[ spanish ] = "Llamadas";
@@ -1035,7 +1035,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[english_us] = "Climate";
     Text[ portuguese ] = "Clima";
     Text[ russian ] = "Κλθμΰς";
-    Text[ greek ] = "Climate";
+    Text[ greek ] = "Κλίμα";
     Text[ dutch ] = "Klimaat";
     Text[ french ] = "Climat";
     Text[ spanish ] = "Clima";
@@ -1068,7 +1068,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[english_us] = "School & University";
     Text[ portuguese ] = "Escola & Universidade";
     Text[ russian ] = "Ψκξλΰ θ σνθβεπρθςες";
-    Text[ greek ] = "School & University";
+    Text[ greek ] = "Σχολείο & Πανεπιστήμιο";
     Text[ dutch ] = "School & Universiteit";
     Text[ french ] = "Ιcole & universitι";
     Text[ spanish ] = "Escuela y universidad";
@@ -1101,7 +1101,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[english_us] = "Problem Solving";
     Text[ portuguese ] = "Soluηγo de problemas";
     Text[ russian ] = "Πεψενθÿ οπξαλεμ";
-    Text[ greek ] = "Problem Solving";
+    Text[ greek ] = "Επίλυση προβλημάτων";
     Text[ dutch ] = "Probleemoplossingen";
     Text[ french ] = "Solutions";
     Text[ spanish ] = "Soluciones de problemas";
@@ -1132,10 +1132,10 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text = "ScreenBeans";
     Text[ENGLISH] = "ScreenBeans";
     Text[english_us] = "Screen Beans";
-    Text[ language_user1 ] = "EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
+    Text[ language_user1 ] = "; EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
     Text[ portuguese ] = "Screen Beans";
     Text[ russian ] = "Χελξβεχκθ";
-    Text[ greek ] = "Screen Beans";
+    Text[ greek ] = "Κόκκοι οθόνης";
     Text[ dutch ] = "Screen Beans";
     Text[ french ] = "ScreenBeans";
     Text[ spanish ] = "Screen Beans";
@@ -1166,6 +1166,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
