@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:09:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,14 +666,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             if ( nSId != SID_DRAW_CS_ID )
             {
-                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nSId, sal_False );
-                if ( pEnumCommand )
-                {
-                    aCurrShapeEnumCommand[ nSId-SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
-                    SfxBindings& rBind = GetViewFrame()->GetBindings();
-                    rBind.Invalidate( nSId );
-                    rBind.Update( nSId );
-                }
+                SfxBindings& rBind = GetViewFrame()->GetBindings();
+                rBind.Invalidate( nSId );
+                rBind.Update( nSId );
             }
         }
         break;
@@ -881,14 +876,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 (pFuActual->ISA(FuSelection)
                     || pFuActual->ISA(FuConstructBezierPolygon)))
             {
-                USHORT nObjectBarId = RID_DRAW_OBJ_TOOLBOX;
-
-                if (pDrView->HasMarkablePoints())
-                {
-                    nObjectBarId = RID_BEZIER_TOOLBOX;
-                }
-
-                GetObjectBarManager().SwitchObjectBar (nObjectBarId);
+                GetObjectBarManager().SelectionHasChanged(pDrView);//context has changed
             }
 
             Invalidate(SID_BEZIER_EDIT);
