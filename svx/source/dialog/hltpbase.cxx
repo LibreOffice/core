@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:30:12 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 16:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include "hltpbase.hxx"
 
 #include "svxdlg.hxx" //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <dialogs.hrc> //CHINA001
 
 using namespace ucb;
 
