@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-12-08 12:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ inline sal_Bool __equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BOOLEAN:
-            return (*(sal_Bool *)pDest == *(sal_Bool *)pSource);
+            return ((*(sal_Bool *)pDest != sal_False) == (*(sal_Bool *)pSource != sal_False));
         }
         return sal_False;
     case typelib_TypeClass_BYTE:
@@ -430,153 +430,161 @@ inline sal_Bool __equalData(
         case typelib_TypeClass_BYTE:
             return (*(sal_Int8 *)pDest == *(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int8 *)pDest == *(sal_Int16 *)pSource);
+            return ((sal_Int16)*(sal_Int8 *)pDest == *(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int8 *)pDest == *(sal_uInt16 *)pSource);
+            return ((sal_Int32)*(sal_Int8 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_Int8 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*(sal_Int8 *)pDest == *(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_Int8 *)pDest == *(sal_uInt32 *)pSource);
+            return ((sal_Int64)*(sal_Int8 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_Int8 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*(sal_Int8 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int8 *)pDest == *(sal_uInt64 *)pSource);
+            return (*(sal_Int8 *)pDest >= 0 &&
+                    (sal_Int64)*(sal_Int8 *)pDest == *(sal_Int64 *)pSource); // same size
         case typelib_TypeClass_FLOAT:
-            return (*(sal_Int8 *)pDest == *(float *)pSource);
+            return ((float)*(sal_Int8 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_Int8 *)pDest == *(double *)pSource);
+            return ((double)*(sal_Int8 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_SHORT:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int16 *)pDest == *(sal_Int8 *)pSource);
+            return (*(sal_Int16 *)pDest == (sal_Int16)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
             return (*(sal_Int16 *)pDest == *(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int16 *)pDest == *(sal_uInt16 *)pSource);
+            return ((sal_Int32)*(sal_Int16 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_Int16 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*(sal_Int16 *)pDest == *(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_Int16 *)pDest == *(sal_uInt32 *)pSource);
+            return ((sal_Int64)*(sal_Int16 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_Int16 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*(sal_Int16 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int16 *)pDest == *(sal_uInt64 *)pSource);
+            return (*(sal_Int16 *)pDest >= 0 &&
+                    (sal_Int64)*(sal_Int16 *)pDest == *(sal_Int64 *)pSource); // same size
         case typelib_TypeClass_FLOAT:
-            return (*(sal_Int16 *)pDest == *(float *)pSource);
+            return ((float)*(sal_Int16 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_Int16 *)pDest == *(double *)pSource);
+            return ((double)*(sal_Int16 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_UNSIGNED_SHORT:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_uInt16 *)pDest == *(sal_Int8 *)pSource);
+            return ((sal_Int32)*(sal_uInt16 *)pDest == (sal_Int32)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_uInt16 *)pDest == *(sal_Int16 *)pSource);
+            return ((sal_Int32)*(sal_uInt16 *)pDest == (sal_Int32)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
             return (*(sal_uInt16 *)pDest == *(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_uInt16 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*(sal_uInt16 *)pDest == *(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_uInt16 *)pDest == *(sal_uInt32 *)pSource);
+            return ((sal_uInt32)*(sal_uInt16 *)pDest == *(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_uInt16 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*(sal_uInt16 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_uInt16 *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*(sal_uInt16 *)pDest == *(sal_uInt64 *)pSource);
         case typelib_TypeClass_FLOAT:
-            return (*(sal_uInt16 *)pDest == *(float *)pSource);
+            return ((float)*(sal_uInt16 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_uInt16 *)pDest == *(double *)pSource);
+            return ((double)*(sal_uInt16 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_LONG:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int32 *)pDest == *(sal_Int8 *)pSource);
+            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int32 *)pDest == *(sal_Int16 *)pSource);
+            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int32 *)pDest == *(sal_uInt16 *)pSource);
+            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
             return (*(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_Int32 *)pDest == *(sal_uInt32 *)pSource);
+            return ((sal_Int64)*(sal_Int32 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_Int32 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*(sal_Int32 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int32 *)pDest == *(sal_uInt64 *)pSource);
+            return (*(sal_Int32 *)pDest >= 0 &&
+                    (sal_Int64)*(sal_Int32 *)pDest == *(sal_Int64 *)pSource); // same size
         case typelib_TypeClass_FLOAT:
-            return (*(sal_Int32 *)pDest == *(float *)pSource);
+            return ((float)*(sal_Int32 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_Int32 *)pDest == *(double *)pSource);
+            return ((double)*(sal_Int32 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_UNSIGNED_LONG:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_uInt32 *)pDest == *(sal_Int8 *)pSource);
+            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_uInt32 *)pDest == *(sal_Int16 *)pSource);
+            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_uInt32 *)pDest == *(sal_uInt16 *)pSource);
+            return (*(sal_uInt32 *)pDest == (sal_uInt32)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_uInt32 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
             return (*(sal_uInt32 *)pDest == *(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_uInt32 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*(sal_uInt32 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_uInt32 *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*(sal_uInt32 *)pDest == *(sal_uInt64 *)pSource);
         case typelib_TypeClass_FLOAT:
-            return (*(sal_uInt32 *)pDest == *(float *)pSource);
+            return ((float)*(sal_uInt32 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_uInt32 *)pDest == *(double *)pSource);
+            return ((double)*(sal_uInt32 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_HYPER:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int64 *)pDest == *(sal_Int8 *)pSource);
+            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int64 *)pDest == *(sal_Int16 *)pSource);
+            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int64 *)pDest == *(sal_uInt16 *)pSource);
+            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_Int64 *)pDest == *(sal_Int32 *)pSource);
+            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_Int64 *)pDest == *(sal_uInt32 *)pSource);
+            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
             return (*(sal_Int64 *)pDest == *(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int64 *)pDest == *(sal_uInt64 *)pSource);
+            return (*(sal_Int64 *)pDest >= 0 &&
+                    *(sal_Int64 *)pDest == *(sal_Int64 *)pSource); // same size
         case typelib_TypeClass_FLOAT:
-            return (*(sal_Int64 *)pDest == *(float *)pSource);
+            return ((float)*(sal_Int64 *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(sal_Int64 *)pDest == *(double *)pSource);
+            return ((double)*(sal_Int64 *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_UNSIGNED_HYPER:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_uInt64 *)pDest == *(sal_Int8 *)pSource);
+            return (*(sal_Int8 *)pSource >= 0 &&
+                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(sal_uInt64 *)pDest == *(sal_Int16 *)pSource);
+            return (*(sal_Int16 *)pSource >= 0 &&
+                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_uInt64 *)pDest == *(sal_uInt16 *)pSource);
+            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(sal_uInt64 *)pDest == *(sal_Int32 *)pSource);
+            return (*(sal_Int32 *)pSource >= 0 &&
+                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_uInt64 *)pDest == *(sal_uInt32 *)pSource);
+            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(sal_uInt64 *)pDest == *(sal_Int64 *)pSource);
+            return (*(sal_Int64 *)pSource >= 0 &&
+                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
             return (*(sal_uInt64 *)pDest == *(sal_uInt64 *)pSource);
         case typelib_TypeClass_FLOAT:
@@ -593,17 +601,17 @@ inline sal_Bool __equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(float *)pDest == *(sal_Int8 *)pSource);
+            return (*(float *)pDest == (float)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(float *)pDest == *(sal_Int16 *)pSource);
+            return (*(float *)pDest == (float)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(float *)pDest == *(sal_uInt16 *)pSource);
+            return (*(float *)pDest == (float)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(float *)pDest == *(sal_Int32 *)pSource);
+            return (*(float *)pDest == (float)*(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(float *)pDest == *(sal_uInt32 *)pSource);
+            return (*(float *)pDest == (float)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(float *)pDest == *(sal_Int64 *)pSource);
+            return (*(float *)pDest == (float)*(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
             if (::floor( *(float *)pDest ) != *(float *)pDest || *(float *)pDest < 0)
                 return sal_False;
@@ -611,30 +619,30 @@ inline sal_Bool __equalData(
         case typelib_TypeClass_FLOAT:
             return (*(float *)pDest == *(float *)pSource);
         case typelib_TypeClass_DOUBLE:
-            return (*(float *)pDest == *(double *)pSource);
+            return ((double)*(float *)pDest == *(double *)pSource);
         }
         return sal_False;
     case typelib_TypeClass_DOUBLE:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(double *)pDest == *(sal_Int8 *)pSource);
+            return (*(double *)pDest == (double)*(sal_Int8 *)pSource);
         case typelib_TypeClass_SHORT:
-            return (*(double *)pDest == *(sal_Int16 *)pSource);
+            return (*(double *)pDest == (double)*(sal_Int16 *)pSource);
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(double *)pDest == *(sal_uInt16 *)pSource);
+            return (*(double *)pDest == (double)*(sal_uInt16 *)pSource);
         case typelib_TypeClass_LONG:
-            return (*(double *)pDest == *(sal_Int32 *)pSource);
+            return (*(double *)pDest == (double)*(sal_Int32 *)pSource);
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(double *)pDest == *(sal_uInt32 *)pSource);
+            return (*(double *)pDest == (double)*(sal_uInt32 *)pSource);
         case typelib_TypeClass_HYPER:
-            return (*(double *)pDest == *(sal_Int64 *)pSource);
+            return (*(double *)pDest == (double)*(sal_Int64 *)pSource);
         case typelib_TypeClass_UNSIGNED_HYPER:
             if (::floor( *(double *)pDest ) != *(double *)pDest || *(double *)pDest < 0)
                 return sal_False;
             return ((sal_uInt64)*(double *)pDest == *(sal_uInt64 *)pSource);
         case typelib_TypeClass_FLOAT:
-            return (*(double *)pDest == *(float *)pSource);
+            return (*(double *)pDest == (double)*(float *)pSource);
         case typelib_TypeClass_DOUBLE:
             return (*(double *)pDest == *(double *)pSource);
         }
