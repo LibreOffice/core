@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:08:45 $
+ *  last change: $Author: gt $ $Date: 2000-11-27 15:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ void XclCrnString::SaveCont( SvStream& rStrm )
 
 UINT16 XclCrnString::GetLen() const
 {
-    return 8 + sText.GetByteCount();
+    return 8 + ( UINT16 ) sText.GetByteCount();
 }
 
 
@@ -412,7 +412,7 @@ UINT16 XclSupbook::AddTableName( const String& rTabName )
     nLen += pXct->GetTableBytes();
     List::Insert( pXct, LIST_APPEND );
 
-    UINT16 nTabNum = List::Count() - 1;
+    UINT16 nTabNum = ( UINT16 ) List::Count() - 1;
     pXct->SetTableNum( nTabNum );
     return nTabNum;
 }
@@ -455,7 +455,7 @@ UINT16 XclSupbook::GetNum() const
 
 UINT16 XclSupbook::GetLen() const
 {
-    return nLen;
+    return ( UINT16 ) nLen;
 }
 
 
@@ -530,12 +530,12 @@ void XclSupbookList::AddExt( UINT16 nScTab )
         if( pBook )
             bFound = (rExtDoc == pBook->GetName());
         if( bFound )
-            nPos = nSB;
+            nPos = ( UINT16 ) nSB;
     }
     if( !bFound )
     {
         pBook = new XclSupbook( rExtDoc );
-        nPos = Append( pBook );
+        nPos = ( UINT16 ) Append( pBook );
     }
     UINT16 nInd = pExcRoot->pTabBuffer->GetExcTable( nScTab );
     DBG_ASSERT( nInd < nRefdCnt,
@@ -2270,7 +2270,7 @@ UINT16 XclDConRef::GetNum() const
 
 UINT16 XclDConRef::GetLen() const
 {
-    return 10 + pWorkbook->GetByteCount();
+    return 10 + ( UINT16 ) pWorkbook->GetByteCount();
 }
 
 
@@ -2370,7 +2370,7 @@ UINT16 XclCodename::GetNum() const
 
 UINT16 XclCodename::GetLen() const
 {
-    return aName.GetByteCount();
+    return ( UINT16 ) aName.GetByteCount();
 }
 
 
@@ -2511,12 +2511,12 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
 
     rDoc.GetName( nTab, sTmpName );
     sName.Assign( sTmpName, EXC_SCEN_MAXSTRINGLEN );
-    nRecLen = 8 + sName.GetByteCount();
+    nRecLen = 8 + ( UINT16 ) sName.GetByteCount();
 
     rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nDummyFlags );
     sComment.Assign( sTmpComm, EXC_SCEN_MAXSTRINGLEN );
     if( sComment.GetLen() )
-        nRecLen += 3 + sComment.GetByteCount();
+        nRecLen += 3 + ( UINT16 ) sComment.GetByteCount();
 
     if( !sUsername.GetLen() )
     {
@@ -2525,7 +2525,7 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
     }
     if( !sUsername.GetLen() )
         sUsername.Assign( String::CreateFromAscii( "SC" ) );
-    nRecLen += 3 + sUsername.GetByteCount();
+    nRecLen += 3 + ( UINT16 ) sUsername.GetByteCount();
 
     const ScRangeList* pRList = rDoc.GetScenarioRanges( nTab );
     if( !pRList )

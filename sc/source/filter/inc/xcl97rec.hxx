@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
+ *  last change: $Author: gt $ $Date: 2000-11-27 15:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
                                     sTable( rTab )  {   }
     virtual                     ~XclXct();
 
-    inline UINT16               GetTableBytes() const   { return sTable.GetByteCount(); }
+    inline UINT16               GetTableBytes() const   { return ( UINT16 ) sTable.GetByteCount(); }
     inline const XclUnicodeString& GetTableName() const { return sTable; }
 
     inline void                 SetTableNum( UINT16 nTab )  { nTabNum = nTab; }
