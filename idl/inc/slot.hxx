@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:53:06 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 11:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aFastCall;
     SvBOOL          aContainer;
     SvBOOL          aImageRotation;
+    SvBOOL          aImageReflection;
     SvIdentifier    aPseudoPrefix;
     SvString        aDisableFlags;
     SvMetaSlot*     pLinkedSlot;
@@ -210,6 +211,8 @@ protected:
             { aContainer = bSet; }
     void    SetImageRotation( BOOL bSet )
             { aImageRotation = bSet; }
+    void    SetImageReflection( BOOL bSet )
+            { aImageReflection = bSet; }
 
 public:
             SV_DECL_META_FACTORY1( SvMetaSlot, SvMetaReference, 11 )
@@ -258,6 +261,7 @@ public:
     BOOL                GetFastCall() const;
     BOOL                GetContainer() const;
     BOOL                GetImageRotation() const;
+    BOOL                GetImageReflection() const;
     SvMetaSlot*         GetLinkedSlot() const
                         { return pLinkedSlot; }
     SvMetaSlot*         GetNextSlot() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:53:07 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 11:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ char* SyntaxStrings[] = {
 "\t\tHasDialog",
 "\t\tIsCollection",
 "\t\tImageRotation",
+"\t\tImageReflection",
 "\t\tPseudoPrefix   = Identifier",
 "\t\tPseudoSlots",
 "\t\tReadOnly",
