@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-22 14:54:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SV_RC_H
 #include <rc.h>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <mnemonic.hxx>
 #endif
 
 #pragma hdrstop
@@ -410,15 +413,33 @@ void MessBox::ImplPosControls()
             aMinCheckboxSize.Width() += 80;
         }
 
+        // #104492# auto mnemonics for CJK strings may increase the length, so measure the
+        // checkbox length including a temporary mnemonic, the correct auto mnemonic will be
+        // generated later in the dialog (see init_show)
+
+        String aMnemonicString( maCheckBoxText );
+        if( GetSettings().GetStyleSettings().GetAutoMnemonic() )
+        {
+            if( aMnemonicString == GetNonMnemonicString( maCheckBoxText ) )
+            {
+                // no mnemonic found -> create one
+                MnemonicGenerator aMnemonicGenerator;
+                aMnemonicGenerator.CreateMnemonic( aMnemonicString );
+            }
+        }
 
         mpCheckBox = new CheckBox( this );
         mpCheckBox->Check( mbCheck );
-        mpCheckBox->SetText( maCheckBoxText );
+        mpCheckBox->SetText( aMnemonicString );
         mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
         mpCheckBox->SetHelpId( GetHelpId() );   // DR: Check box and dialog have same HID
 
         // align checkbox with message text
         Size aSize = mpCheckBox->CalcMinimumSize( aMinCheckboxSize.Width() );
+
+        // now set the original non-mnemonic string
+        mpCheckBox->SetText( maCheckBoxText );
+
         Point aPos( aTextPos );
         aPos.Y() += aFixedSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
 
