@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 17:27:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,20 @@
 #endif
 
 class ScXMLImport;
+class OutlinerParaObject;
 
 struct ScMyImportAnnotation
 {
     rtl::OUString sAuthor;
     rtl::OUString sCreateDate;
     rtl::OUString sText;
-    sal_Bool bDisplay : 1;
+    Rectangle* pRect;
+    SfxItemSet* pItemSet;
+    OutlinerParaObject* pOPO;
+    sal_Bool bDisplay;
+
+    ScMyImportAnnotation() : pItemSet(NULL), pOPO(NULL), pRect(NULL) {}
+    ~ScMyImportAnnotation();
 };
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
