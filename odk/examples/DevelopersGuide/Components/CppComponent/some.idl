@@ -1,0 +1,22 @@
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+module my_module
+{
+
+interface XSomething : com::sun::star::uno::XInterface
+{
+    string methodOne( [in] string val );
+};
+
+service MyService1
+{
+    interface XSomething;
+};
+service MyService2
+{
+    interface XSomething;
+    interface com::sun::star::lang::XInitialization;
+};
+
+};
