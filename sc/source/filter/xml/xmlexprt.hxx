@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 13:10:46 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@ protected:
 public:
     ScXMLExport( const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xTempModel, const ::rtl::OUString& rFileName,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XDocumentHandler>& rHandler,
+                 ::com::sun::star::xml::sax::XDocumentHandler>& rHandler,
+                 const ::com::sun::star::uno::Reference<
+                 ::com::sun::star::container::XIndexContainer >& rGrfContainer,
                  sal_Bool bShowProgr );
     virtual ~ScXMLExport();
 

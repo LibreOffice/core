@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,8 +750,9 @@ public:
     rtl::OUString sSC_string;
     rtl::OUString sSC_boolean;
 
-    ScXMLImport(    com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel, sal_Bool bLoadDoc,
-                 sal_uInt16 nStyleFamMask );
+    ScXMLImport( com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel,
+                 com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
+                 sal_Bool bLoadDoc, sal_uInt16 nStyleFamMask );
     ~ScXMLImport();
 
     // namespace office
