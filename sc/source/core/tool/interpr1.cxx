@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:36:25 $
+ *  last change: $Author: er $ $Date: 2001-09-06 13:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,25 +859,25 @@ void ScInterpreter::ScRad()
 
 void ScInterpreter::ScSin()
 {
-    PushDouble(sin(GetDouble()));
+    PushDouble(SolarMath::Sin(GetDouble()));
 }
 
 
 void ScInterpreter::ScCos()
 {
-    PushDouble(cos(GetDouble()));
+    PushDouble(SolarMath::Cos(GetDouble()));
 }
 
 
 void ScInterpreter::ScTan()
 {
-    PushDouble(tan(GetDouble()));
+    PushDouble(SolarMath::Tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScCot()
 {
-    PushDouble(1.0 / tan(GetDouble()));
+    PushDouble(1.0 / SolarMath::Tan(GetDouble()));
 }
 
 

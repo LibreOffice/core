@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
+ *  last change: $Author: er $ $Date: 2001-09-06 13:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ double ScInterpreter::GetGamma(double x)
     double G = GammaHelp(x, bReflect);
     G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
     if (bReflect)
-        G = F_PI*x/(G*sin(F_PI*x));
+        G = F_PI*x/(G*SolarMath::Sin(F_PI*x));
     return G;
 }
 
@@ -387,7 +387,7 @@ double ScInterpreter::GetLogGamma(double x)
     double G = GammaHelp(x, bReflect);
     G = (x+0.5)*log(x+5.5)+log(G)-(x+5.5);
     if (bReflect)
-        G = log(F_PI*x)-G-log(sin(F_PI*x));
+        G = log(F_PI*x)-G-log(SolarMath::Sin(F_PI*x));
     return G;
 }
 
