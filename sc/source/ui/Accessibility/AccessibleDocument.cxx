@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,8 @@ sal_Bool ScChildrenShapes::ReplaceChild (accessibility::AccessibleShape* pCurren
                 aEvent.OldValue <<= uno::makeAny(uno::Reference<XAccessible>(pCurrentChild));
 
                 mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
+
+                pCurrentChild->dispose();
             }
             (*aItr)->pAccShape = pReplacement;
             AccessibleEventObject aEvent;
