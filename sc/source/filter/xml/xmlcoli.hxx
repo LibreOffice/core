@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,33 @@ public:
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableColContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLTableColsContext : public SvXMLImportContext
+{
+    sal_Int32   nStartCol;
+    sal_Int32   nEndCol;
+    sal_Bool    bHeader;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLTableColsContext( ScXMLImport& rImport, USHORT nPrfx,
+                       const NAMESPACE_RTL(OUString)& rLName,
+                       const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const sal_Bool bHeader);
+
+    virtual ~ScXMLTableColsContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const NAMESPACE_RTL(OUString)& rLocalName,
