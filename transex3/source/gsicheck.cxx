@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:51:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public:
     BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine );
 
     BOOL WriteError( SvStream &aErrOut );
-    void WriteCorrect( SvStream &aOkOut );
+    void WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine );
 };
 
 
@@ -221,6 +221,8 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
             aLineType = sTmp.Copy( nStart, nPos - nStart );
             nStart = nPos + 4;  // + length of the delemiter
             nPos = sTmp.Search( "($$)", nStart );
+            aUniqId.Append( "/" );
+            aUniqId.Append( aLineType );
         }
         if ( nPos != STRING_NOTFOUND )
         {
@@ -438,9 +440,9 @@ BOOL GSIBlock::WriteError( SvStream &aErrOut )
     return bHasError;
 }
 
-void GSIBlock::WriteCorrect( SvStream &aOkOut )
+void GSIBlock::WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine )
 {
-    if ( !pSourceLine )
+    if ( !pSourceLine && bRequireSourceLine )
         return;
 
     BOOL bHasOK = FALSE;
@@ -471,7 +473,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.6.1 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.7.2 (c)1999 - 2001 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
@@ -485,7 +487,7 @@ void Help()
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
     fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
     fprintf( stdout, "-l    Numerical 2 digits Identifier of the source language. Default = 1\n" );
-    fprintf( stdout, "      Use "" (empty string) to disable source language dependent checks\n" );
+    fprintf( stdout, "      Use \"\" (empty string) to disable source language dependent checks\n" );
     fprintf( stdout, "-r    Reference filename to check that source language has not been changed\n" );
        fprintf( stdout, "\n" );
 }
@@ -694,7 +696,7 @@ int _cdecl main( int argc, char *argv[] )
                         if ( bWriteError )
                             bFileHasError |= pBlock->WriteError( aErrOut );
                         if ( bWriteCorrect )
-                            pBlock->WriteCorrect( aOkOut );
+                            pBlock->WriteCorrect( aOkOut, aSourceLang.Len() );
 
                         delete pBlock;
                     }
@@ -762,7 +764,7 @@ int _cdecl main( int argc, char *argv[] )
         if ( bWriteError )
             bFileHasError |= pBlock->WriteError( aErrOut );
         if ( bWriteCorrect )
-            pBlock->WriteCorrect( aOkOut );
+            pBlock->WriteCorrect( aOkOut, aSourceLang.Len() );
 
         delete pBlock;
     }
