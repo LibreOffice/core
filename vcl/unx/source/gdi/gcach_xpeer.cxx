@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-05 07:39:17 $
+ *  last change: $Author: hdu $ $Date: 2001-04-09 14:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     aXVisualInfo.visualid = _pVisual->visualid;
     int nVisuals = 0;
     XVisualInfo* pXVisualInfo = XGetVisualInfo( mpDisplay, VisualIDMask, &aXVisualInfo, &nVisuals );
-    for( int i = nVisuals; --i >= 0; ++pXVisualInfo )
-        if( ((pXVisualInfo->c_class==PseudoColor) || (pXVisualInfo->depth<24))
-        && ((pXVisualInfo->c_class>GrayScale) || (pXVisualInfo->depth!=8) ) )
+    for( int i = nVisuals; --i >= 0; )
+        if( ((pXVisualInfo[i].c_class==PseudoColor) || (pXVisualInfo[i].depth<24))
+        && ((pXVisualInfo[i].c_class>GrayScale) || (pXVisualInfo[i].depth!=8) ) )
             mbForcedAA = false;
     if( pXVisualInfo != NULL )
         XFree( pXVisualInfo );
