@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
 #endif
-#if defined DEBUG && defined TEST_MIB
+#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -143,7 +143,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #endif
 
-#if defined DEBUG && defined TEST_MIB
+#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #define DBG_MSG( _msg ) \
     lcl_SwAccessibleContext_DbgMsg( this, _msg, 0, sal_False );
 #define DBG_MSG_CD( _msg ) \
@@ -1456,8 +1456,7 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 }
 
 
-
-#if defined DEBUG && defined TEST_MIB
+#if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
                                      const char *pMsg,
                                      SwAccessibleContext *pChildAcc,
