@@ -11,11 +11,11 @@ include $(SETTINGS)/dk.mk
 COMPONENT1_NAME=PropTest
 OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT1_NAME)
 OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT1_NAME)
-COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).zip
-COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).zip")
-COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).jar
+COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).uno.zip
+COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).uno.zip")
+COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).uno.jar
 COMPONENT1_JAR=$(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
-COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).Manifest
+COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
 
 REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
 
@@ -44,13 +44,13 @@ $(OUT_COMP_GEN) : $(OUT)
 	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_CLASS))
 
 $(OUT_COMP_CLASS)/%.Manifest : $(OUT_COMP_GEN)
-	@echo RegistrationClassName: $(basename $(@F))> $@
+	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
 $(CLASSFILES) : $(OUT_COMP_GEN) $(JAVAFILES)
 	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
-	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(@F))_CLASSFILES)
+	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
 	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
@@ -71,8 +71,8 @@ endif
 JavaPropertySetExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The PropTest was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Load the PropertySet.sxw document to see how this component works. You can use 
-	@echo this component inside your office installation, see the example description.
+	@echo Load the "$(QM)PropertySet.sxw$(QM)" document to see how this component works. You can
+	@echo use this component inside your office installation, see the example description.
 	@echo --------------------------------------------------------------------------------
 
 .PHONY: clean
