@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 11:32:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,12 +754,10 @@ const SwPropNameTab aPropNameTab = {
 /* 0672 DATA_BASE_RESOURCE */       {MAP_CHAR_LEN("DataBaseResource")}
 };
 
-#ifndef PRODUCT
 const SwPropNameLen& GetPropName( USHORT nId )
 {
     DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );
     return aPropNameTab[ nId - SW_PROPNAME_BEGIN];
 }
-#endif
 
