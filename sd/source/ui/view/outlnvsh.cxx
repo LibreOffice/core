@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:06:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2362,6 +2362,8 @@ void OutlineViewShell::SetCurrentPage (SdPage* pPage)
     // Tell the controller to notify its listeners.
     if (pController != NULL)
         pController->FireSwitchCurrentPage (pPage);
+
+    pOlView->SetActualPage(pPage);
 }
 
 
