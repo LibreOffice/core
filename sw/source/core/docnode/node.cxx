@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:02:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
+#endif
+
 using namespace ::com::sun::star::i18n;
 
 TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
@@ -344,7 +348,7 @@ SwTableNode* SwNode::FindTableNode()
 
 
 // liegt der Node im Sichtbarenbereich der Shell ?
-BOOL SwNode::IsVisible( ViewShell* pSh ) const
+BOOL SwNode::IsInVisibleArea( ViewShell* pSh ) const
 {
     BOOL bRet = FALSE;
     const SwCntntNode* pNd;
@@ -1056,7 +1060,14 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             }
             if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
                 RES_PARATR_NUMRULE, FALSE, &pItem ))
+            {
                 sOldNumRule = ((SwNumRuleItem*)pItem)->GetValue();
+            }
+            if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
+                RES_CHRATR_HIDDEN, FALSE, &pItem ) )
+            {
+                ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
+            }
         }
         break;
 
@@ -1070,6 +1081,18 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             }
             if( pOldValue )
                 sOldNumRule = ((SwNumRuleItem*)pOldValue)->GetValue();
+        }
+        break;
+
+    case RES_UPDATE_ATTR:
+        if( GetNodes().IsDocNodes() && IsTxtNode() )
+        {
+            const USHORT nTmp = ((SwUpdateAttr*)pNewValue)->nWhichAttr;
+            if ( RES_ATTRSET_CHG == nTmp )
+            {
+                // anybody wants to do some optimization here?
+                ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
+            }
         }
         break;
     }
@@ -1219,12 +1242,23 @@ BOOL SwCntntNode::GoNext(SwIndex * pIdx, USHORT nMode ) const
             if( pBreakIt->xBreak.is() )
             {
                 sal_Int32 nDone = 0;
-                sal_uInt16 nItrMode = CRSR_SKIP_CHARS == nMode
-                                    ? CharacterIteratorMode::SKIPCONTROLCHARACTER
-                                    : CharacterIteratorMode::SKIPCELL;
+                sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+                                        CharacterIteratorMode::SKIPCELL :
+                                        CharacterIteratorMode::SKIPCONTROLCHARACTER;
                 nPos = pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
                                 pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                 nItrMode, 1, nDone );
+
+                // Check if nPos is inside hidden text range:
+                if ( CRSR_SKIP_HIDDEN & nMode )
+                {
+                    xub_StrLen nHiddenStart;
+                    xub_StrLen nHiddenEnd;
+                    SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
+                    if ( nHiddenStart != STRING_LEN && nHiddenStart != nPos )
+                         nPos = nHiddenEnd;
+                }
+
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
@@ -1256,12 +1290,23 @@ BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
             if( pBreakIt->xBreak.is() )
             {
                 sal_Int32 nDone = 0;
-                sal_uInt16 nItrMode = CRSR_SKIP_CHARS == nMode
-                                ? CharacterIteratorMode::SKIPCONTROLCHARACTER
-                                : CharacterIteratorMode::SKIPCELL;
+                sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+                                        CharacterIteratorMode::SKIPCELL :
+                                        CharacterIteratorMode::SKIPCONTROLCHARACTER;
                 nPos = pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
                                 pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                 nItrMode, 1, nDone );
+
+                // Check if nPos is inside hidden text range:
+                if ( CRSR_SKIP_HIDDEN & nMode )
+                {
+                    xub_StrLen nHiddenStart;
+                    xub_StrLen nHiddenEnd;
+                    SwScriptInfo::GetBoundsOfHiddenRange( rTNd, nPos, nHiddenStart, nHiddenEnd );
+                    if ( nHiddenStart != STRING_LEN  )
+                         nPos = nHiddenStart;
+                }
+
                 if( 1 == nDone )
                     *pIdx = nPos;
                 else
