@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:49 $
+ *  last change: $Author: os $ $Date: 2000-11-16 15:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
+#endif
+#ifndef _SECTION_HXX //autogen
+#include <section.hxx>
 #endif
 
 #ifndef _UNOCRSR_HXX //autogen
@@ -3125,6 +3128,21 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 break;
                 case RES_ANCHOR:
                     //AnchorType ist readonly und maybevoid und wird nicht geliefert
+                break;
+                case FN_UNO_TEXT_SECTION:
+                {
+                    SwDoc* pDoc = pFmt->GetDoc();
+                    SwTable* pTable = SwTable::FindTable( pFmt );
+                    SwTableNode* pTblNode = pTable->GetTableNode();
+                    SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
+                    if(pSectionNode)
+                    {
+                        const SwSection& rSect = pSectionNode->GetSection();
+                        Reference< XTextSection >  xSect =
+                                        SwXTextSections::GetObject( *rSect.GetFmt() );
+                        aRet <<= xSect;
+                    }
+                }
                 break;
                 default:
                 {
