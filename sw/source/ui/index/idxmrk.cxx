@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 14:30:41 $
+ *  last change: $Author: os $ $Date: 2002-02-22 11:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1467,8 +1467,7 @@ void SwAuthMarkDlg::InitControls()
         return;
 
     const SwAuthEntry* pEntry = ((SwAuthorityFieldType*)pField->GetTyp())->
-            GetEntryByIdentifier(((SwAuthorityField*)pField)->
-                                    GetFieldText(AUTH_FIELD_IDENTIFIER));
+            GetEntryByHandle(((SwAuthorityField*)pField)->GetHandle());
 
     DBG_ASSERT(pEntry, "No authority entry found")
     if(!pEntry)
