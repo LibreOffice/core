@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
+ *  last change: $Author: ka $ $Date: 2001-02-19 17:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ BOOL XColorTable::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ERROR( "invalid URL" );
+            DBG_ASSERT( !aPath.Len(), "invalid URL" );
             return FALSE;
         }
 
@@ -180,7 +180,7 @@ BOOL XColorTable::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ERROR( "invalid URL" );
+        DBG_ASSERT( !aPath.Len(), "invalid URL" );
         return FALSE;
     }
 
@@ -850,7 +850,7 @@ SvStream& XColorList::ImpRead( SvStream& rIn )
             rIn >> nGreen;
             rIn >> nBlue;
 
-            pEntry = new XColorEntry (Color(nRed, nGreen, nBlue), aName);
+            pEntry = new XColorEntry (Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue), aName);
             Insert (pEntry, nIndex);
         }
     }

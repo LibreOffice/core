@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:17:44 $
+ *  last change: $Author: ka $ $Date: 2001-02-19 17:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ BOOL XLineEndList::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ERROR( "invalid URL" );
+            DBG_ASSERT( !aPath.Len(), "invalid URL" );
             return FALSE;
         }
 
@@ -434,7 +434,7 @@ BOOL XLineEndList::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ERROR( "invalid URL" );
+        DBG_ASSERT( !aPath.Len(), "invalid URL" );
         return FALSE;
     }
 
