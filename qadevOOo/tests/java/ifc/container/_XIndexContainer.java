@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XIndexContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:37 $
+ *  last change:$Date: 2003-09-08 10:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.container;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.lang.IndexOutOfBoundsException;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.container.XIndexContainer</code>
