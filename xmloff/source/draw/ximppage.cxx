@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:21:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
@@ -97,9 +99,19 @@
 #include "ximpstyl.hxx"
 #endif
 
+#ifndef _XMLOFF_PRSTYLEI_HXX_
+#include "prstylei.hxx"
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+
+using ::com::sun::star::uno::Reference;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -108,8 +120,8 @@ TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
+    const Reference< xml::sax::XAttributeList>& xAttrList,
+    Reference< drawing::XShapes >& rShapes)
 :   SvXMLImportContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes )
 {
@@ -123,13 +135,13 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLGenericPageContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
 
 #ifndef SVX_LIGHT
     if( GetImport().IsFormsSupported() )
-        GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
+        GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
 #endif
 }
 
@@ -137,7 +149,7 @@ void SdXMLGenericPageContext::StartElement( const ::com::sun::star::uno::Referen
 
 SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+    const Reference< xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = 0L;
 
@@ -178,6 +190,71 @@ void SdXMLGenericPageContext::EndElement()
 #endif
 }
 
+void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
+{
+    // set PageProperties?
+    if(rStyleName.getLength())
+    {
+        try
+        {
+            const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
+
+            if( pContext && pContext->ISA( SvXMLStyleContext ) )
+            {
+                const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+                if(pStyles)
+                {
+                    const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
+                        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
+
+                    if(pStyle && pStyle->ISA(XMLPropStyleContext))
+                    {
+                        XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
+
+                        Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
+                        if(xPropSet1.is())
+                        {
+                            Reference< beans::XPropertySet > xPropSet( xPropSet1 );
+                            Reference< beans::XPropertySet > xBackgroundSet;
+
+                            const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                            if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
+                            {
+                                Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                                if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                                {
+                                    Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                                    if(xServiceFact.is())
+                                    {
+                                        xBackgroundSet = Reference< beans::XPropertySet >::query(
+                                            xServiceFact->createInstance(
+                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
+                                    }
+                                }
+
+                                if( xBackgroundSet.is() )
+                                    xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
+                            }
+
+                            if(xPropSet.is())
+                            {
+                                pPropStyle->FillPropertySet(xPropSet);
+
+                                if( xBackgroundSet.is() )
+                                    xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( uno::Exception )
+        {
+            DBG_ERROR( "SdXMLGenericPageContext::SetStyle(): uno::Exception catched!" );
+        }
+    }
+}
+
 void SdXMLGenericPageContext::SetLayout()
 {
     // set PresentationPageLayout?
@@ -204,7 +281,7 @@ void SdXMLGenericPageContext::SetLayout()
         }
         if( -1 == nType )
         {
-            uno::Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
+            Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
             if( xPageLayouts.is() )
             {
                 if( xPageLayouts->hasByName( maPageLayoutName ) )
@@ -215,11 +292,11 @@ void SdXMLGenericPageContext::SetLayout()
 
         if( -1 != nType )
         {
-            uno::Reference <beans::XPropertySet> xPropSet(mxShapes, uno::UNO_QUERY);
+            Reference <beans::XPropertySet> xPropSet(mxShapes, uno::UNO_QUERY);
             if(xPropSet.is())
             {
                 OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("Layout"));
-                uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+                Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
                 if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
                     xPropSet->setPropertyValue(aPropName, uno::makeAny( (sal_Int16)nType ) );
             }
@@ -233,7 +310,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     // when setting the presentation page layout.
     while(mxShapes->getCount())
     {
-        uno::Reference< drawing::XShape > xShape;
+        Reference< drawing::XShape > xShape;
         uno::Any aAny(mxShapes->getByIndex(0L));
 
         aAny >>= xShape;
@@ -263,11 +340,11 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 
             if(pPageMasterContext)
             {
-                uno::Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
+                Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xMasterPage.is())
                 {
                     // set sizes for this masterpage
-                    uno::Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
+                    Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
                     if(xPropSet.is())
                     {
                         uno::Any aAny;
