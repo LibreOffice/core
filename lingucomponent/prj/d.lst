@@ -6,4 +6,9 @@
 ..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
+..\%__SRC%\bin\lexps* %_DEST%\bin%_EXT%\lexps*
+..\%__SRC%\lib\ilexps* %_DEST%\lib%_EXT%\illexps*
+..\%__SRC%\lib\liblexps.a %_DEST%\lib%_EXT%\liblexps.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\liblexps*.so %_DEST%\lib%_EXT%\liblexps*.so
 
