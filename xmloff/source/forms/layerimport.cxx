@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,12 +278,6 @@ namespace xmloff
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
 
-//      m_rContext.GetAutoStylePool()->AddFamily(
-//          XML_STYLE_FAMILY_CONTROL_ID,
-//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
-//          m_xExportMapper.getBodyPtr(),
-//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
-
         // 'initialize'
         m_aCurrentPageIds = m_aControlIds.end();
     }
@@ -482,6 +476,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

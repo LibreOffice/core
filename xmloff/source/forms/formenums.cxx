@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 08:42:19 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,11 @@
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
-
 #ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>     // for check states
+#endif
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include "xmlkywd.hxx"
 #endif
 
 //.........................................................................
@@ -243,22 +245,30 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aTextAlignMap[] =
                     {
-                        { "default", -1 },
-                        { "left", TextAlign::LEFT },
-                        { "center", TextAlign::CENTER },
-                        { "right", TextAlign::RIGHT },
+                        { sXML_start,       TextAlign::LEFT },
+                        { sXML_center,      TextAlign::CENTER },
+                        { sXML_end,         TextAlign::RIGHT },
+                        { sXML_justify,     -1 },
+                        { sXML_justified,   -1 },
                         { NULL, 0 }
                     };
                     rReturn = aTextAlignMap;
                 };
                 break;
-                case epBorderType:
+                case epBorderWidth:
                 {
                     static SvXMLEnumMapEntry aBorderTypeMap[] =
                     {
-                        { "none", 0 },
-                        { "3D", 1 },
-                        { "flat", 2 },
+                        { sXML_none,    0 },
+                        { sXML_hidden,  0 },
+                        { sXML_solid,   2 },
+                        { sXML_double,  2 },
+                        { sXML_dotted,  2 },
+                        { sXML_dashed,  2 },
+                        { sXML_groove,  1 },
+                        { sXML_ridge,   1 },
+                        { sXML_inset,   1 },
+                        { sXML_outset,  1 },
                         { NULL, 0 }
                     };
                     rReturn = aBorderTypeMap;
@@ -277,6 +287,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/19 08:42:19  fs
+ *  removed the epFontWidth
+ *
  *  Revision 1.3  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 12:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace xmloff
         friend class OFormLayerXMLExport;
 
     protected:
-        SvXMLExport&                        m_rContext;
+        SvXMLExport&        m_rContext;
 
         // style handling
         ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
@@ -224,6 +224,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.5  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *
