@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:35:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 09:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,11 +1399,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
 
-<<<<<<< appcfg.cxx
     if ( bSynchron )
-=======
-    if ( bSynchron )
->>>>>>> 1.58.76.1
     {
 #ifdef DBG_UTIL
         ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
