@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,11 @@ public:
 
     virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void Click();
+    virtual SfxPopupWindow* CreatePopupWindow();
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAnchor( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTbxAnchor();
 };
 
