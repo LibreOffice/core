@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-28 11:27:08 $
+ *  last change: $Author: nn $ $Date: 2000-12-15 20:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2617,7 +2617,7 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
 }
 
 void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
-                                   BOOL                   bForce )
+                                   BOOL bForce, ScTabViewShell* pSourceSh )
 {
     //  #62806# Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
     //  gleich abbrechen und nicht den Status durcheinander bringen
@@ -2636,7 +2636,10 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     BOOL bHadObject = pLastState && pLastState->GetEditData();
 
     //! Before EditEngine gets eventually created (so it gets the right pools)
-    pActiveViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
+    if ( pSourceSh )
+        pActiveViewSh = pSourceSh;
+    else
+        pActiveViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
 
     ImplCreateEditEngine();
 
