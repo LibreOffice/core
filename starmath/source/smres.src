@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-16 14:55:16 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,10 @@
 #include <svx/globlmn.hrc>
 #include "starmath.hrc"
 #include "dialog.hrc"
+#include "toolbox.hrc"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+#define IMAGE_STDBTN_COLOR_HC Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 
 #define MN_SUB_TOOLBAR 32
 
@@ -4580,37 +4582,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 4 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "un_op.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_PLUSX ;
-                RID_MINUSX ;
-                RID_PLUSMINUSX ;
-                RID_MINUSPLUSX ;
-                RID_XPLUSY ;
-                RID_XCDOTY ;
-                RID_XTIMESY ;
-                RID_XSYMTIMESY ;
-                RID_XMINUSY ;
-                RID_XOVERY ;
-                RID_XDIVY ;
-                RID_XSYMDIVIDEY ;
-                RID_NEGX ;
-                RID_XANDY ;
-                RID_XORY ;
-                RID_XCIRCY ;
-            };
-            IdCount =
-            {
-                16 ;
-            };
-        };
+
         ItemList =
         {
             ToolBoxItem
@@ -5100,42 +5072,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "bi_op.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_XEQY ;
-                RID_XNEQY ;
-                RID_XEQUIVY ;
-                RID_XORTHOY ;
-                RID_XLTY ;
-                RID_XGTY ;
-                RID_XAPPROXY ;
-                RID_XPARALLELY ;
-                RID_XLESLANTY ;
-                RID_XGESLANTY ;
-                RID_XSIMEQY ;
-                RID_XPROPY ;
-                RID_XLEY ;
-                RID_XGEY ;
-                RID_XSIMY ;
-                RID_XTOWARDY ;
-                RID_XDIVIDESY ;
-                RID_XNDIVIDESY;
-                RID_DLARROW ;
-                RID_DLRARROW ;
-                RID_DRARROW ;
-            };
-            IdCount =
-            {
-                21 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -5784,43 +5720,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "op_er.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_XINY ;
-                RID_XNOTINY ;
-                RID_XOWNSY ;
-                RID_XINTERSECTIONY ;
-                RID_XUNIONY ;
-                RID_XSETMINUSY ;
-                RID_XSLASHY ;
-                RID_XSUBSETY ;
-                RID_XSUBSETEQY ;
-                RID_XSUPSETY ;
-                RID_XSUPSETEQY ;
-                RID_XNSUBSETY ;
-                RID_XNSUBSETEQY ;
-                RID_XNSUPSETY ;
-                RID_XNSUPSETEQY ;
-                RID_EMPTYSET ;
-                RID_ALEPH ;
-                RID_SETN ;
-                RID_SETZ ;
-                RID_SETQ ;
-                RID_SETR ;
-                RID_SETC ;
-            };
-            IdCount =
-            {
-                22 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -6500,46 +6399,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "fu_nc.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_ABSX ;
-                RID_FACTX ;
-                RID_SQRTX ;
-                RID_NROOTXY ;
-                RID_EX ;
-                RID_LNX ;
-                RID_EXPX ;
-                RID_LOGX ;
-                RID_SINX ;
-                RID_COSX ;
-                RID_TANX ;
-                RID_COTX ;
-                RID_SINHX ;
-                RID_COSHX ;
-                RID_TANHX ;
-                RID_COTHX ;
-                RID_ARCSINX ;
-                RID_ARCCOSX ;
-                RID_ARCTANX ;
-                RID_ARCCOTX ;
-                RID_ARSINHX ;
-                RID_ARCOSHX ;
-                RID_ARTANHX ;
-                RID_ARCOTHX ;
-                RID_RSUPX ;
-            };
-            IdCount =
-            {
-                25 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -7295,34 +7154,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 3 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "fo_rm.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_LIMX ;
-                RID_SUMX ;
-                RID_PRODX ;
-                RID_COPRODX ;
-                RID_INTX ;
-                RID_IINTX ;
-                RID_IIINTX ;
-                RID_LINTX ;
-                RID_LLINTX ;
-                RID_LLLINTX ;
-                RID_FROMXTOY ;
-                RID_FROMX ;
-                RID_TOX ;
-            };
-            IdCount =
-            {
-                13 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -7729,44 +7560,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "at_tr.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_ACUTEX ;
-                RID_GRAVEX ;
-                RID_CHECKX ;
-                RID_BREVEX ;
-                RID_BARX ;
-                RID_VECX ;
-                RID_HATX ;
-                RID_TILDEX ;
-                RID_CIRCLEX ;
-                RID_DOTX ;
-                RID_DDOTX ;
-                RID_DDDOTX ;
-                RID_OVERLINEX ;
-                RID_UNDERLINEX ;
-                RID_OVERSTRIKEX ;
-                RID_PHANTOMX ;
-                RID_BOLDX ;
-                RID_ITALX ;
-                RID_SIZEXY ;
-                RID_FONTXY ;
-                RID_WIDEHATX ;
-                RID_WIDETILDEX ;
-                RID_WIDEVECX ;
-            };
-            IdCount =
-            {
-                23 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -8469,40 +8262,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 5 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "al_gn.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_LRPARENTX ;
-                RID_LRBRACKETX ;
-                RID_LRANGLEX ;
-                RID_LRBRACEX ;
-                RID_LRLINEX ;
-                RID_LRDLINEX ;
-                RID_LMRANGLEXY ;
-                RID_LRGROUPX ;
-                RID_SLRPARENTX ;
-                RID_SLRBRACKETX ;
-                RID_SLRANGLEX ;
-                RID_SLRBRACEX ;
-                RID_SLRLINEX ;
-                RID_SLRDLINEX ;
-                RID_SLMRANGLEXY ;
-                RID_LRDBRACKETX ;
-                RID_SLRDBRACKETX ;
-                RID_XOVERBRACEY ;
-                RID_XUNDERBRACEY ;
-            };
-            IdCount =
-            {
-                19 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -9087,36 +8846,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 3 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "co_lr.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_NEWLINE ;
-                RID_SBLANK ;
-                RID_BLANK ;
-                RID_BINOMXY ;
-                RID_STACK ;
-                RID_MATRIX ;
-                RID_ALIGNLX ;
-                RID_ALIGNCX ;
-                RID_ALIGNRX ;
-                RID_RSUBX ;
-                RID_RSUPX ;
-                RID_LSUBX ;
-                RID_LSUPX ;
-                RID_CSUBX ;
-                RID_CSUPX ;
-            };
-            IdCount =
-            {
-                15 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -9574,40 +9303,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         SVLook = TRUE ;
         Hide = TRUE ;
         LineCount = 4 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "mi_sc.bmp" ;
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_INFINITY ;
-                RID_PARTIAL ;
-                RID_NABLA ;
-                RID_EXISTS ;
-                RID_FORALL ;
-                RID_HBAR;
-                RID_LAMBDABAR ;
-                RID_RE ;
-                RID_IM ;
-                RID_WP ;
-                RID_LEFTARROW ;
-                RID_RIGHTARROW ;
-                RID_UPARROW ;
-                RID_DOWNARROW ;
-                RID_DOTSLOW ;
-                RID_DOTSAXIS ;
-                RID_DOTSVERT ;
-                RID_DOTSUP ;
-                RID_DOTSDOWN ;
-            };
-            IdCount =
-            {
-                19 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -10187,30 +9882,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         Size = MAP_APPFONT ( 65 , 38 ) ;
         SVLook = TRUE ;
         LineCount = 2 ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap
-            {
-                FILE = "im_g.bmp" ;  // image-list bitmap
-            };
-            MaskColor = IMAGE_STDBTN_COLOR ;
-            IdList =
-            {
-                RID_UNBINOPS_CAT ;
-                RID_RELATIONS_CAT ;
-                RID_SETOPERATIONS_CAT ;
-                RID_FUNCTIONS_CAT ;
-                RID_OPERATORS_CAT ;
-                RID_ATTRIBUTES_CAT ;
-                RID_MISC_CAT ;
-                RID_BRACKETS_CAT ;
-                RID_FORMAT_CAT ;
-            };
-            IdCount =
-            {
-                9 ;
-            };
-        };
         ItemList =
         {
             ToolBoxItem
@@ -10506,6 +10177,378 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text[ catalan ] = "Selecci�n";
     Text[ finnish ] = "Valinta";
     Text[ thai ] = "เลือก";
+
+#define UNOP_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_PLUSX ;         \
+        RID_MINUSX ;        \
+        RID_PLUSMINUSX ;    \
+        RID_MINUSPLUSX ;    \
+        RID_XPLUSY ;        \
+        RID_XCDOTY ;        \
+        RID_XTIMESY ;       \
+        RID_XSYMTIMESY ;    \
+        RID_XMINUSY ;       \
+        RID_XOVERY ;        \
+        RID_XDIVY ;         \
+        RID_XSYMDIVIDEY ;   \
+        RID_NEGX ;          \
+        RID_XANDY ;         \
+        RID_XORY ;          \
+        RID_XCIRCY ;        \
+    };                      \
+    IdCount = { 16 ; };
+
+    ImageList IL_UNOP
+    {
+        ImageBitmap = Bitmap { File = "un_op.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        UNOP_IDLIST
+    };
+    ImageList  ILH_UNOP
+    {
+        ImageBitmap = Bitmap { File = "unh_op.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        UNOP_IDLIST
+    };
+
+#define BIOP_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_XEQY ;          \
+        RID_XNEQY ;         \
+        RID_XEQUIVY ;       \
+        RID_XORTHOY ;       \
+        RID_XLTY ;          \
+        RID_XGTY ;          \
+        RID_XAPPROXY ;      \
+        RID_XPARALLELY ;    \
+        RID_XLESLANTY ;     \
+        RID_XGESLANTY ;     \
+        RID_XSIMEQY ;       \
+        RID_XPROPY ;        \
+        RID_XLEY ;          \
+        RID_XGEY ;          \
+        RID_XSIMY ;         \
+        RID_XTOWARDY ;      \
+        RID_XDIVIDESY ;     \
+        RID_XNDIVIDESY;     \
+        RID_DLARROW ;       \
+        RID_DLRARROW ;      \
+        RID_DRARROW ;       \
+    };                      \
+    IdCount ={ 21 ; };
+
+    ImageList IL_BIOP
+    {
+        ImageBitmap = Bitmap { File = "bi_op.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        BIOP_IDLIST
+    };
+    ImageList  ILH_BIOP
+    {
+        ImageBitmap = Bitmap { File = "bih_op.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        BIOP_IDLIST
+    };
+
+#define OPER_IDLIST             \
+    IdList =                    \
+    {                           \
+        RID_XINY ;              \
+        RID_XNOTINY ;           \
+        RID_XOWNSY ;            \
+        RID_XINTERSECTIONY ;    \
+        RID_XUNIONY ;           \
+        RID_XSETMINUSY ;        \
+        RID_XSLASHY ;           \
+        RID_XSUBSETY ;          \
+        RID_XSUBSETEQY ;        \
+        RID_XSUPSETY ;          \
+        RID_XSUPSETEQY ;        \
+        RID_XNSUBSETY ;         \
+        RID_XNSUBSETEQY ;       \
+        RID_XNSUPSETY ;         \
+        RID_XNSUPSETEQY ;       \
+        RID_EMPTYSET ;          \
+        RID_ALEPH ;             \
+        RID_SETN ;              \
+        RID_SETZ ;              \
+        RID_SETQ ;              \
+        RID_SETR ;              \
+        RID_SETC ;              \
+    };                          \
+    IdCount = { 22 ; };
+
+    ImageList IL_OPER
+    {
+        ImageBitmap = Bitmap { File = "op_er.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        OPER_IDLIST
+    };
+    ImageList  ILH_OPER
+    {
+        ImageBitmap = Bitmap { File = "oph_er.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        OPER_IDLIST
+    };
+
+#define FUNC_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_ABSX ;          \
+        RID_FACTX ;         \
+        RID_SQRTX ;         \
+        RID_NROOTXY ;       \
+        RID_EX ;            \
+        RID_LNX ;           \
+        RID_EXPX ;          \
+        RID_LOGX ;          \
+        RID_SINX ;          \
+        RID_COSX ;          \
+        RID_TANX ;          \
+        RID_COTX ;          \
+        RID_SINHX ;         \
+        RID_COSHX ;         \
+        RID_TANHX ;         \
+        RID_COTHX ;         \
+        RID_ARCSINX ;       \
+        RID_ARCCOSX ;       \
+        RID_ARCTANX ;       \
+        RID_ARCCOTX ;       \
+        RID_ARSINHX ;       \
+        RID_ARCOSHX ;       \
+        RID_ARTANHX ;       \
+        RID_ARCOTHX ;       \
+        RID_RSUPX ;         \
+    };                      \
+    IdCount = { 25 ; };
+
+    ImageList IL_FUNC
+    {
+        ImageBitmap = Bitmap { File = "fu_nc.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        FUNC_IDLIST
+    };
+    ImageList  ILH_FUNC
+    {
+        ImageBitmap = Bitmap { File = "fuh_nc.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        FUNC_IDLIST
+    };
+
+#define FORM_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_LIMX ;          \
+        RID_SUMX ;          \
+        RID_PRODX ;         \
+        RID_COPRODX ;       \
+        RID_INTX ;          \
+        RID_IINTX ;         \
+        RID_IIINTX ;        \
+        RID_LINTX ;         \
+        RID_LLINTX ;        \
+        RID_LLLINTX ;       \
+        RID_FROMXTOY ;      \
+        RID_FROMX ;         \
+        RID_TOX ;           \
+    };                      \
+    IdCount = { 13 ; };
+
+    ImageList IL_FORM
+    {
+        ImageBitmap = Bitmap { File = "fo_rm.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        FORM_IDLIST
+    };
+    ImageList  ILH_FORM
+    {
+        ImageBitmap = Bitmap { File = "foh_rm.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        FORM_IDLIST
+    };
+
+#define ATTR_IDLIST             \
+    IdList =                    \
+    {                           \
+        RID_ACUTEX ;            \
+        RID_GRAVEX ;            \
+        RID_CHECKX ;            \
+        RID_BREVEX ;            \
+        RID_BARX ;              \
+        RID_VECX ;              \
+        RID_HATX ;              \
+        RID_TILDEX ;            \
+        RID_CIRCLEX ;           \
+        RID_DOTX ;              \
+        RID_DDOTX ;             \
+        RID_DDDOTX ;            \
+        RID_OVERLINEX ;         \
+        RID_UNDERLINEX ;        \
+        RID_OVERSTRIKEX ;       \
+        RID_PHANTOMX ;          \
+        RID_BOLDX ;             \
+        RID_ITALX ;             \
+        RID_SIZEXY ;            \
+        RID_FONTXY ;            \
+        RID_WIDEHATX ;          \
+        RID_WIDETILDEX ;        \
+        RID_WIDEVECX ;          \
+    };                          \
+    IdCount = { 23 ; };
+
+    ImageList IL_ATTR
+    {
+        ImageBitmap = Bitmap { File = "at_tr.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        ATTR_IDLIST
+    };
+    ImageList  ILH_ATTR
+    {
+        ImageBitmap = Bitmap { File = "ath_tr.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        ATTR_IDLIST
+    };
+
+#define ALGN_IDLIST             \
+    IdList =                    \
+    {                           \
+        RID_LRPARENTX ;         \
+        RID_LRBRACKETX ;        \
+        RID_LRANGLEX ;          \
+        RID_LRBRACEX ;          \
+        RID_LRLINEX ;           \
+        RID_LRDLINEX ;          \
+        RID_LMRANGLEXY ;        \
+        RID_LRGROUPX ;          \
+        RID_SLRPARENTX ;        \
+        RID_SLRBRACKETX ;       \
+        RID_SLRANGLEX ;         \
+        RID_SLRBRACEX ;         \
+        RID_SLRLINEX ;          \
+        RID_SLRDLINEX ;         \
+        RID_SLMRANGLEXY ;       \
+        RID_LRDBRACKETX ;       \
+        RID_SLRDBRACKETX ;      \
+        RID_XOVERBRACEY ;       \
+        RID_XUNDERBRACEY ;      \
+    };                          \
+    IdCount = { 19 ; };
+
+    ImageList IL_ALGN
+    {
+        ImageBitmap = Bitmap { File = "al_gn.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        ALGN_IDLIST
+    };
+    ImageList  ILH_ALGN
+    {
+        ImageBitmap = Bitmap { File = "alh_gn.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        ALGN_IDLIST
+    };
+
+#define COLR_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_NEWLINE ;       \
+        RID_SBLANK ;        \
+        RID_BLANK ;         \
+        RID_BINOMXY ;       \
+        RID_STACK ;         \
+        RID_MATRIX ;        \
+        RID_ALIGNLX ;       \
+        RID_ALIGNCX ;       \
+        RID_ALIGNRX ;       \
+        RID_RSUBX ;         \
+        RID_RSUPX ;         \
+        RID_LSUBX ;         \
+        RID_LSUPX ;         \
+        RID_CSUBX ;         \
+        RID_CSUPX ;         \
+    };                      \
+    IdCount = { 15 ; };
+
+    ImageList IL_COLR
+    {
+        ImageBitmap = Bitmap { File = "co_lr.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        COLR_IDLIST
+    };
+    ImageList  ILH_COLR
+    {
+        ImageBitmap = Bitmap { File = "coh_lr.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        COLR_IDLIST
+    };
+
+#define MISC_IDLIST         \
+    IdList =                \
+    {                       \
+        RID_INFINITY ;      \
+        RID_PARTIAL ;       \
+        RID_NABLA ;         \
+        RID_EXISTS ;        \
+        RID_FORALL ;        \
+        RID_HBAR;           \
+        RID_LAMBDABAR ;     \
+        RID_RE ;            \
+        RID_IM ;            \
+        RID_WP ;            \
+        RID_LEFTARROW ;     \
+        RID_RIGHTARROW ;    \
+        RID_UPARROW ;       \
+        RID_DOWNARROW ;     \
+        RID_DOTSLOW ;       \
+        RID_DOTSAXIS ;      \
+        RID_DOTSVERT ;      \
+        RID_DOTSUP ;        \
+        RID_DOTSDOWN ;      \
+    };                      \
+    IdCount = { 19 ; };
+
+    ImageList IL_MISC
+    {
+        ImageBitmap = Bitmap { File = "mi_sc.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        MISC_IDLIST
+    };
+    ImageList  ILH_MISC
+    {
+        ImageBitmap = Bitmap { File = "mih_sc.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        MISC_IDLIST
+    };
+
+#define IMG_IDLIST                  \
+    IdList =                        \
+    {                               \
+        RID_UNBINOPS_CAT ;          \
+        RID_RELATIONS_CAT ;         \
+        RID_SETOPERATIONS_CAT ;     \
+        RID_FUNCTIONS_CAT ;         \
+        RID_OPERATORS_CAT ;         \
+        RID_ATTRIBUTES_CAT ;        \
+        RID_MISC_CAT ;              \
+        RID_BRACKETS_CAT ;          \
+        RID_FORMAT_CAT ;            \
+    };                              \
+    IdCount = { 9 ; };
+
+    ImageList IL_IMG
+    {
+        ImageBitmap = Bitmap { File = "im_g.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        IMG_IDLIST
+    };
+    ImageList  ILH_IMG
+    {
+        ImageBitmap = Bitmap { File = "imh_g.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        IMG_IDLIST
+    };
 };
 
 

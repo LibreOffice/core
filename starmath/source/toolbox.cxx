@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-24 13:24:37 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SFXIMGMGR_HXX //autogen
 #include <sfx2/imgmgr.hxx>
 #endif
+#ifndef _SV_WRKWIN_HXX //autogen
+#include <vcl/wrkwin.hxx>
+#endif
 
 #ifndef TOOLBOX_HXX
 #include "toolbox.hxx"
@@ -83,10 +86,10 @@
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"
 #endif
-#include "view.hxx"
-#ifndef _SV_WRKWIN_HXX //autogen
-#include <vcl/wrkwin.hxx>
+#ifndef _TOOLBOX_HRC_
+#include "toolbox.hrc"
 #endif
+#include "view.hxx"
 
 
 
@@ -106,7 +109,8 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
     pImgMan->RegisterToolBox( &aToolBoxCat );
 
-    for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
+    int i;
+    for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
     {
         ToolBox *pBox = new ToolBox(this, ResId (i+1));
         pImgMan->RegisterToolBox( pBox );
@@ -115,7 +119,18 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     }
     pToolBoxCmd = vToolBoxCategories [0];
 
+    // get ImageList
+    for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
+    {
+        aImageLists [i] = new ImageList( SmResId(IL_UNOP  + 2*i) );
+        aImageListsH[i] = new ImageList( SmResId(ILH_UNOP + 2*i) );
+    }
+    aImageLists [NUM_TBX_CATEGORIES] = new ImageList( SmResId(IL_IMG) );
+    aImageListsH[NUM_TBX_CATEGORIES] = new ImageList( SmResId(ILH_IMG) );
+
     FreeResource();
+
+    ApplyImageLists();
 }
 
 SmToolBoxWindow::~SmToolBoxWindow()
@@ -123,14 +138,36 @@ SmToolBoxWindow::~SmToolBoxWindow()
     SfxImageManager *pImgMan = GetBindings().GetImageManager();
     pImgMan->ReleaseToolBox( &aToolBoxCat );
 
-    for (int i = 0;  i < NUM_TBX_CATEGORIES;  i++)
+    int i;
+    for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
     {
         ToolBox *pBox = vToolBoxCategories[i];
         pImgMan->ReleaseToolBox( pBox );
         delete pBox;
     }
+    for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
+    {
+        delete aImageLists[i];
+        delete aImageListsH[i];
+    }
 }
 
+void SmToolBoxWindow::ApplyImageLists()
+{
+    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    ImageList ** const &rImgList = bHighContrast ? aImageListsH : aImageLists;
+    for (int i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
+        vToolBoxCategories[i]->SetImageList( *rImgList[i] );
+    aToolBoxCat.SetImageList( *rImgList[NUM_TBX_CATEGORIES] );
+}
+
+void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
+{
+    if ( (rEvt.GetType() == DATACHANGED_SETTINGS) && (rEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageLists();
+
+    SfxFloatingWindow::DataChanged( rEvt );
+}
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {

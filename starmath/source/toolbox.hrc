@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: toolbox.hxx,v $
+ *  $RCSfile: toolbox.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:30:47 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,73 +58,34 @@
  *
  *
  ************************************************************************/
-#ifndef TOOLBOX_HXX
-#define TOOLBOX_HXX
 
-#ifndef _BASEDLGS_HXX //autogen
-#include <sfx2/basedlgs.hxx>
-#endif
-#ifndef _SFX_CHILDWIN_HXX //autogen
-#include <sfx2/childwin.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX //autogen
-#include <vcl/toolbox.hxx>
-#endif
+#ifndef _TOOLBOX_HRC_
+#define _TOOLBOX_HRC_
 
-#ifndef _SMMOD_HXX
-#include "smmod.hxx"
-#endif
-#ifndef CONFIG_HXX
-#include "config.hxx"
-#endif
 
-#include "dialog.hrc"
+// defines for ImageList's
+//! order and numbering is important
+#define IL_UNOP         1
+#define ILH_UNOP        2
+#define IL_BIOP         3
+#define ILH_BIOP        4
+#define IL_OPER         5
+#define ILH_OPER        6
+#define IL_FUNC         7
+#define ILH_FUNC        8
+#define IL_FORM         9
+#define ILH_FORM       10
+#define IL_ATTR        11
+#define ILH_ATTR       12
+#define IL_ALGN        13
+#define ILH_ALGN       14
+#define IL_COLR        15
+#define ILH_COLR       16
+#define IL_MISC        17
+#define ILH_MISC       18
+#define IL_IMG         19
+#define ILH_IMG        20
 
-#define NUM_TBX_CATEGORIES  9
-
-class SmToolBoxWindow : public SfxFloatingWindow
-{
-
-protected:
-    ToolBox     aToolBoxCat;
-    ToolBox    *pToolBoxCmd;
-    ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
-    ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
-    ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
-    USHORT      nActiveCategory;
-
-    virtual BOOL    Close();
-    virtual void    GetFocus();
-
-    void            ApplyImageLists();
-
-    DECL_LINK( CategoryClickHdl, ToolBox* );
-    DECL_LINK( CmdSelectHdl, ToolBox* );
-
-public:
-    SmToolBoxWindow(SfxBindings    *pBindings,
-                    SfxChildWindow *pChildWindow,
-                    Window         *pParent);
-    ~SmToolBoxWindow();
-
-    // Window
-    virtual void    StateChanged( StateChangedType nStateChange );
-    virtual void    DataChanged( const DataChangedEvent &rEvt );
-
-    void        AdjustPosition(const Point &rPoint);
-    void        SetCategory(USHORT nCategory);
-};
-
-/**************************************************************************/
-
-class SmToolBoxWrapper : public SfxChildWindow
-{
-    SFX_DECL_CHILDWINDOW(SmToolBoxWrapper);
-
-protected:
-    SmToolBoxWrapper(Window *pParentWindow,
-                     USHORT, SfxBindings*, SfxChildWinInfo*);
-};
 
 #endif
 
