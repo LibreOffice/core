@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.1.1.1 2000-09-22 15:33:33 hr Exp $
+/* RCS  $Id: runargv.c,v 1.2 2000-11-01 12:27:31 hjs Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -72,7 +72,7 @@ char    *cmd;
 #ifdef arm32
    extern  const char * const sys_errlist[];
 #else
-#ifdef linux
+#if defined(linux) || defined(__FreeBSD__)
    extern  const char * const sys_errlist[];
 #else
    extern  char *sys_errlist[];
