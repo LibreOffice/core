@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-27 10:51:05 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 12:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -326,13 +329,27 @@ ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
     {
+        LanguageType aLanguageType;
+
         String aMgrName = String::CreateFromAscii( "dkt" );
         aMgrName += String::CreateFromInt32(SOLARUPD);
-        return ResMgr::CreateResMgr(U2S(aMgrName));
+        return ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
     }
     return Desktop::pResMgr;
 }
 
+// ----------------------------------------------------------------------------
+// Get a message string securely. There is a fault back string if the resource
+// is not available.
+
+OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
+{
+    ResMgr* pResMgr = GetDesktopResManager();
+    if ( !pResMgr )
+        return aFaultBackMsg;
+    else
+        return OUString( ResId( nId, pResMgr ));
+}
 
 CommandLineArgs* GetCommandLineArgs()
 {
@@ -346,7 +363,6 @@ CommandLineArgs* GetCommandLineArgs()
 
     return pArgs;
 }
-
 
 BOOL InitializeInstallation( const UniString& rAppFilename )
 {
@@ -416,7 +432,6 @@ void PreloadConfigTrees()
     }
 }
 
-
 void ReplaceStringHookProc( UniString& rStr )
 {
     static String aBrandName;
@@ -477,7 +492,9 @@ void Desktop::Init()
 
     Reference < XMultiServiceFactory > rSMgr = createApplicationServiceManager();
     if( ! rSMgr.is() )
-        m_aBootstrapError = BE_UNO_SERVICEMANAGER;
+    {
+        SetBootstrapError( BE_UNO_SERVICEMANAGER );
+    }
 
     ::comphelper::setProcessServiceFactory( rSMgr );
 
@@ -489,7 +506,7 @@ void Desktop::Init()
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
-            m_aBootstrapError = BE_PATHINFO_MISSING;
+            SetBootstrapError( BE_PATHINFO_MISSING );
         }
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
@@ -556,7 +573,10 @@ void Desktop::StartSetup( const OUString& aParameters )
 
     if ( aProcessError != OProcess::E_None )
     {
-        OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "Couldn't start setup executable! Please start it manually." ));
+        OUString aMessage( GetMsgString(
+            STR_SETUP_ERR_CANNOT_START,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Couldn't start setup application! Please start it manually." )) ));
+
         ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
         aBootstrapFailedBox.Execute();
     }
@@ -570,6 +590,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         ::rtl::OUString     aBaseInstallURL;
         ::rtl::OUString     aUserInstallURL;
         ::rtl::OUString     aProductKey;
+        ::rtl::OUString     aTemp;
         ::vos::OStartupInfo aInfo;
 
         aInfo.getExecutableFile( aProductKey );
@@ -577,7 +598,10 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         if ( lastIndex > 0 )
             aProductKey = aProductKey.copy( lastIndex+1 );
 
-        aProductKey = ::utl::Bootstrap::getProductKey( aProductKey );
+        aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
+        if ( aTemp.getLength() > 0 )
+            aProductKey = aTemp;
+
         ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
         ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
 
@@ -599,9 +623,15 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             OUStringBuffer  aBuffer( 100 );
             aBuffer.append( aDiagnosticMessage );
 
+            aBuffer.appendAscii( "\n" );
+
             if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
             {
-                aBuffer.appendAscii( "Start setup application to check installation?" );
+                OUString aAskSetupStr( GetMsgString(
+                    STR_ASK_START_SETUP,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
+
+                aBuffer.append( aAskSetupStr );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
@@ -617,7 +647,11 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
                      ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
             {
-                aBuffer.appendAscii( "Start setup application to repair installation?" );
+                OUString aAskSetupRepairStr( GetMsgString(
+                    STR_ASK_START_SETUP_REPAIR,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
+
+                aBuffer.append( aAskSetupRepairStr );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
@@ -636,49 +670,231 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     }
 }
 
+// Create a error message depending on bootstrap failure code and an optional file url
+::rtl::OUString Desktop::CreateErrorMsgString(
+    utl::Bootstrap::FailureCode nFailureCode,
+    const ::rtl::OUString& aFileURL )
+{
+    OUStringBuffer  aDiagnosticMessage( 100 );
+    OUString        aMsg;
+    OUString        aFilePath;
+    sal_Bool        bFileInfo = sal_True;
+
+    // First sentence. We cannot bootstrap office further!
+    aDiagnosticMessage.append( GetMsgString( STR_BOOTSTRAP_ERR_CANNOT_START,
+                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "The program cannot be started." )) ));
+    aDiagnosticMessage.appendAscii( "\n" );
+
+    switch ( nFailureCode )
+    {
+        /// the shared installation directory could not be located
+        case ::utl::Bootstrap::MISSING_INSTALL_DIRECTORY:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_PATH_INVALID,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The installation path is not available." )) );
+            bFileInfo = sal_False;
+        }
+        break;
+
+        /// the bootstrap INI file could not be found or read
+        case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is missing." )) );
+        }
+        break;
+
+        /// the bootstrap INI is missing a required entry
+        /// the bootstrap INI contains invalid data
+         case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY:
+         case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_CORRUPT,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is corrupt." )) );
+        }
+        break;
+
+        /// the version locator INI file could not be found or read
+        case ::utl::Bootstrap::MISSING_VERSION_FILE:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_FILE_MISSING,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration file \"$1\" is missing." )) );
+        }
+        break;
+
+        /// the version locator INI has no entry for this version
+         case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SUPPORT,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The main configuration file \"$1\" does not support the current version." )) );
+        }
+        break;
+
+        /// the user installation directory does not exist
+           case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_DIR_MISSING,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration directory \"$1\" is missing." )) );
+        }
+        break;
+
+        /// some bootstrap data was invalid in unexpected ways
+        case ::utl::Bootstrap::INVALID_BOOTSTRAP_DATA:
+        {
+            aMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "An internal failure occurred." )) );
+            bFileInfo = sal_False;
+        }
+        break;
+    }
+
+    if ( bFileInfo )
+    {
+        String aMsgString( aMsg );
+
+        osl::File::getSystemPathFromFileURL( aFileURL, aFilePath );
+
+        aMsgString.SearchAndReplaceAscii( "$1", aFilePath );
+        aMsg = aMsgString;
+    }
+
+    aDiagnosticMessage.append( aMsg );
+
+    return aDiagnosticMessage.makeStringAndClear();
+}
+
 void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 {
     if ( aBootstrapError == BE_PATHINFO_MISSING )
     {
-        ::rtl::OUString         aDiagnosticMessage;
-        utl::Bootstrap::Status  aBootstrapStatus;
+        OUString                    aErrorMsg;
+        OUString                    aBuffer;
+        utl::Bootstrap::Status      aBootstrapStatus;
+        utl::Bootstrap::FailureCode nFailureCode;
 
-        aBootstrapStatus = ::utl::Bootstrap::checkBootstrapStatus( aDiagnosticMessage );
+        aBootstrapStatus = ::utl::Bootstrap::checkBootstrapStatus( aBuffer, nFailureCode );
         if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
-            HandleBootstrapPathErrors( aBootstrapStatus, aDiagnosticMessage );
+        {
+            switch ( nFailureCode )
+            {
+                case ::utl::Bootstrap::MISSING_INSTALL_DIRECTORY:
+                case ::utl::Bootstrap::INVALID_BOOTSTRAP_DATA:
+                {
+                    aErrorMsg = CreateErrorMsgString( nFailureCode, OUString() );
+                }
+                break;
+
+                /// the bootstrap INI file could not be found or read
+                /// the bootstrap INI is missing a required entry
+                /// the bootstrap INI contains invalid data
+                 case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY:
+                 case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
+                case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
+                {
+                    OUString aBootstrapFileURL;
+
+                    utl::Bootstrap::locateBootstrapFile( aBootstrapFileURL );
+                    aErrorMsg = CreateErrorMsgString( nFailureCode, aBootstrapFileURL );
+                }
+                break;
+
+                /// the version locator INI file could not be found or read
+                /// the version locator INI has no entry for this version
+                /// the version locator INI entry is not a valid directory URL
+                   case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
+                 case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
+                 case ::utl::Bootstrap::MISSING_VERSION_FILE:
+                {
+                    OUString aVersionFileURL;
+
+                    utl::Bootstrap::locateVersionFile( aVersionFileURL );
+                    aErrorMsg = CreateErrorMsgString( nFailureCode, aVersionFileURL );
+                }
+                break;
+
+                /// the user installation directory does not exist
+                   case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
+                {
+                    OUString aUserInstallationURL;
+
+                    utl::Bootstrap::locateUserInstallation( aUserInstallationURL );
+                    aErrorMsg = CreateErrorMsgString( nFailureCode, aUserInstallationURL );
+                }
+                break;
+            }
+
+            HandleBootstrapPathErrors( aBootstrapStatus, aErrorMsg );
+        }
     }
-    else if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
+    else if ( aBootstrapError == BE_UNO_SERVICEMANAGER || aBootstrapError == BE_UNO_SERVICE_CONFIG_MISSING )
     {
         // Uno service manager is not available. VCL needs a uno service manager to display a message box!!!
         // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
 
         if ( Application::IsRemoteServer() )
         {
-            OString aUnoServiceManagerError( "Couldn't initialize office uno service manager! Please check your installation\n" );
-            fprintf( stderr, aUnoServiceManagerError.getStr() );
-        }
-        else
-        {
-            OUString aUnoServiceManagerError( RTL_CONSTASCII_USTRINGPARAM(
-                "Couldn't initialize office uno service manager! Please start 'setup -repair'." ));
-            Application::Abort( aUnoServiceManagerError );
-        }
-    }
-    else if ( aBootstrapError == BE_UNO_SERVICE_CONFIG_MISSING )
-    {
-        // Uno service manager is initialized correctly. It is not save to call VCL to display a message box because VCL needs
-        // a correctly initialized uno service manager!!!
+            OStringBuffer aErrorMsgBuffer( 50 );
 
-        if ( Application::IsRemoteServer() )
-        {
-            OString aUnoConfigServiceError( "Couldn't create configuration service! Please check your installation\n" );
-            fprintf( stderr, aUnoConfigServiceError.getStr() );
+            aErrorMsgBuffer.append( "The program cannot be started. " );
+
+            if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
+                aErrorMsgBuffer.append( "The service manager is not available.\n" );
+            else
+                aErrorMsgBuffer.append( "The configuration service is not available.\n" );
+
+            OString aErrorMsg = aErrorMsgBuffer.makeStringAndClear();
+            fprintf( stderr, aErrorMsg.getStr() );
         }
         else
         {
-            OUString aUnoConfigServiceError( RTL_CONSTASCII_USTRINGPARAM(
-                "Couldn't create configuration service! Please start 'setup -repair'." ));
-            Application::Abort( aUnoConfigServiceError );
+            // First sentence. We cannot bootstrap office further!
+            OUString            aProductKey;
+            OUString            aMessage;
+            OUString            aTemp;
+            OUStringBuffer      aDiagnosticMessage( 100 );
+            ::vos::OStartupInfo aInfo;
+
+            aDiagnosticMessage.append( GetMsgString( STR_BOOTSTRAP_ERR_CANNOT_START,
+                                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "The program cannot be started." )) ));
+            aDiagnosticMessage.appendAscii( "\n" );
+
+            OUString aErrorMsg;
+
+            if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
+                aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SERVICE,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "The service manager is not available." )) );
+            else
+                aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration service is not available." )) );
+
+            aDiagnosticMessage.append( aErrorMsg );
+            aDiagnosticMessage.appendAscii( "\n" );
+
+            OUString aAskSetupRepairStr( GetMsgString(
+                STR_ASK_START_SETUP_REPAIR,
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
+
+            aDiagnosticMessage.append( aAskSetupRepairStr );
+            aMessage = aDiagnosticMessage.makeStringAndClear();
+
+            aInfo.getExecutableFile( aProductKey );
+            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+            if ( lastIndex > 0 )
+                aProductKey = aProductKey.copy( lastIndex+1 );
+
+            aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
+            if ( aTemp.getLength() > 0 )
+                aProductKey = aTemp;
+
+            ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+            aBootstrapFailedBox.SetText( aProductKey );
+            int nResult = aBootstrapFailedBox.Execute();
+
+            if ( nResult == RET_YES )
+            {
+                 OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
+                StartSetup( aParameters );
+            }
         }
     }
 
@@ -914,19 +1130,40 @@ void Desktop::Main()
         }
         catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
         {
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, e.Message );
+            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::MISSING_BOOTSTRAP_FILE,
+                                                    e.BootstrapFileURL ));
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, aMsg );
         }
         catch( ::com::sun::star::configuration::InvalidBootstrapFileException& e )
         {
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, e.Message );
+            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY,
+                                                    e.BootstrapFileURL ));
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
         }
-        catch( ::com::sun::star::configuration::InstallationIncompleteException& e )
+        catch( ::com::sun::star::configuration::InstallationIncompleteException& )
         {
-            HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, e.Message );
+            OUString aVersionFileURL;
+            OUString aMsg;
+
+            utl::Bootstrap::PathStatus aPathStatus = utl::Bootstrap::locateVersionFile( aVersionFileURL );
+            if ( aPathStatus == utl::Bootstrap::PATH_EXISTS )
+                aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE_ENTRY, aVersionFileURL );
+            else
+                aMsg = CreateErrorMsgString( utl::Bootstrap::MISSING_VERSION_FILE, aVersionFileURL );
+
+            HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
         {
-            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, e.Message );
+            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
+                                                 OUString() ));
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+            OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
+                                                 OUString() ));
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
         }
     }
 
@@ -968,7 +1205,6 @@ void Desktop::Main()
             Reference< XConnectionBroker >  xServiceManagerBroker;
             Reference< XConnectionBroker >  xPalmPilotManagerBroker;
 
-//          RemoteControl aControl;
             InitTestToolLib();
 
             try

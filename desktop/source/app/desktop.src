@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:40:52 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 12:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,80 @@ WarningBox STR_RECOVER_PREPARED
     Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehkä palauttaa, kun käynnistät ohjelman uudelleen.";
 };
 
+String STR_BOOTSTRAP_ERR_CANNOT_START
+{
+    Text = "Die Anwendung kann nicht gestartet werden. " ;
+    Text [ ENGLISH ] = "The program cannot be started. " ;
+};
 
+String STR_BOOTSTRAP_ERR_DIR_MISSING
+{
+    Text = "Der Konfigurationspfad \"$1\" wurde nicht gefunden." ;
+    Text [ ENGLISH ] = "The configuration directory \"$1\" is missing." ;
+};
 
+String STR_BOOTSTRAP_ERR_PATH_INVALID
+{
+    Text = "Der Installationspfad ist ungültig." ;
+    Text [ ENGLISH ] = "The installation path is invalid." ;
+};
 
+String STR_BOOTSTRAP_ERR_NO_PATH
+{
+    Text = "Der Installationspfad konnte nicht bestimmt werden." ;
+    Text [ ENGLISH ] = "The installation path is not available." ;
+};
+
+String STR_BOOTSTRAP_ERR_INTERNAL
+{
+    Text = "Ein interner Fehler ist aufgetreten." ;
+    Text [ ENGLISH ] = "An internal failure occurred." ;
+};
+
+String STR_BOOTSTRAP_ERR_FILE_CORRUPT
+{
+    Text = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
+    Text [ ENGLISH ] = "The configuration file \"$1\" is corrupt." ;
+};
+
+String STR_BOOTSTRAP_ERR_FILE_MISSING
+{
+    Text = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden." ;
+    Text [ ENGLISH ] = "The configuration file \"$1\" is missing." ;
+};
+
+String STR_BOOTSTRAP_ERR_NO_SUPPORT
+{
+    Text = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
+    Text [ ENGLISH ] = "The main configuration file \"$1\" does not support the current version." ;
+};
+
+String STR_BOOTSTRAP_ERR_NO_SERVICE
+{
+    Text = "Der Komponenten-Manager ist nicht verfügbar." ;
+    Text [ ENGLISH ] = "The service manager is not available." ;
+};
+
+String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
+{
+    Text = "Der Konfigurations-Manager kann nicht erzeugt werden." ;
+    Text [ ENGLISH ] = "The configuration service is not available." ;
+};
+
+String STR_ASK_START_SETUP_REPAIR
+{
+    Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?" ;
+    Text [ ENGLISH ] = "Start setup application to repair installation?" ;
+};
+
+String STR_ASK_START_SETUP
+{
+    Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
+    Text [ ENGLISH ] = "Start setup application to check installation?" ;
+};
+
+String STR_SETUP_ERR_CANNOT_START
+{
+    Text = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell." ;
+    Text [ ENGLISH ] = "Couldn't start setup application! Please start it manually." ;
+};

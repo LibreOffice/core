@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-17 08:34:12 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 12:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,28 @@
 #include <svtools/solar.hrc>
 #endif
 
-#define RID_DESKTOP_DIALOG_START        2000
-#define RID_DESKTOP_STRING_START        10000
+#define RID_DESKTOP_DIALOG_START            2000
+#define RID_DESKTOP_STRING_START            10000
 
-#define STR_RECOVER_QUERY               (RID_DESKTOP_STRING_START+0)
-#define STR_RECOVER_TITLE               (RID_DESKTOP_STRING_START+1)
-#define STR_RECOVER_PREPARED            (RID_DESKTOP_STRING_START+2)
+#define STR_RECOVER_QUERY                   (RID_DESKTOP_STRING_START+0)
+#define STR_RECOVER_TITLE                   (RID_DESKTOP_STRING_START+1)
+#define STR_RECOVER_PREPARED                (RID_DESKTOP_STRING_START+2)
+
+#define STR_BOOTSTRAP_ERR_CANNOT_START      (RID_DESKTOP_STRING_START+100)
+#define STR_BOOTSTRAP_ERR_DIR_MISSING       (RID_DESKTOP_STRING_START+101)
+#define STR_BOOTSTRAP_ERR_PATH_INVALID      (RID_DESKTOP_STRING_START+102)
+#define STR_BOOTSTRAP_ERR_NO_PATH           (RID_DESKTOP_STRING_START+103)
+#define STR_BOOTSTRAP_ERR_INTERNAL          (RID_DESKTOP_STRING_START+104)
+#define STR_BOOTSTRAP_ERR_FILE_CORRUPT      (RID_DESKTOP_STRING_START+105)
+#define STR_BOOTSTRAP_ERR_FILE_MISSING      (RID_DESKTOP_STRING_START+106)
+#define STR_BOOTSTRAP_ERR_NO_SUPPORT        (RID_DESKTOP_STRING_START+107)
+
+#define STR_BOOTSTRAP_ERR_NO_SERVICE        (RID_DESKTOP_STRING_START+120)
+#define STR_BOOTSTRAP_ERR_NO_CFG_SERVICE    (RID_DESKTOP_STRING_START+121)
+
+#define STR_ASK_START_SETUP_REPAIR          (RID_DESKTOP_STRING_START+150)
+#define STR_ASK_START_SETUP                 (RID_DESKTOP_STRING_START+151)
+
+#define STR_SETUP_ERR_CANNOT_START          (RID_DESKTOP_STRING_START+160)
 
 #endif // _DESKTOP_HRC_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-09 05:43:13 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 12:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,22 @@ class Desktop : public Application //public SfxApplicationClass
         static ResMgr*      GetDesktopResManager();
 
         void                HandleBootstrapErrors( BootstrapError );
+        void                SetBootstrapError( BootstrapError nError )
+        {
+            if ( m_aBootstrapError == BE_OK )
+                m_aBootstrapError = nError;
+        }
 
     private:
         void                HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                StartSetup( const ::rtl::OUString& aParameters );
+
+        // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
+        ::rtl::OUString     GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
+
+        // Create a error message depending on bootstrap failure code and an optional file url
+        ::rtl::OUString     CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+                                                  const ::rtl::OUString& aFileURL );
 
         void                OpenStartupScreen();
         void                CloseStartupScreen();
