@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 15:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ public:
 /** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
     on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
 */
-class OEnumerationByIndex : public ::cppu::WeakImplHelper1<starcontainer::XIndexAccess>
+class OEnumerationByIndex : public ::cppu::WeakImplHelper1<starcontainer::XEnumeration>
 {
     sal_Int32                                       m_nPos;
     staruno::Reference<starcontainer::XIndexAccess> m_xAccess;
@@ -143,6 +143,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
+ *  initial import
+ *
  *
  *  Revision 1.0 29.09.00 08:49:14  fs
  ************************************************************************/
