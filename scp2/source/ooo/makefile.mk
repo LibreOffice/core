@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ka $ $Date: 2004-08-27 13:31:25 $
+#   last change: $Author: rt $ $Date: 2004-09-09 08:10:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,30 @@ SCPDEFS+=-DENABLE_GTK
 
 .IF "$(ENABLE_DIRECTX)" != ""
 SCPDEFS+=-DENABLE_DIRECTX
+.ENDIF
+
+.IF "$(SYSTEM_FREETYPE)" == "YES"
+SCPDEFS+=-DSYSTEM_FREETYPE
+.ENDIF
+
+.IF "$(SYSTEM_LIBXML)" == "YES"
+SCPDEFS+=-DSYSTEM_LIBXML
+.ENDIF
+
+.IF "$(SYSTEM_DB3)" == "YES"
+SCPDEFS+=-DSYSTEM_DB3
+.ENDIF
+
+.IF "$(USE_SYSTEM_STL)" == "YES"
+SCPDEFS+=-DUSE_SYSTEM_STL
+.ENDIF
+
+.IF "$(WITH_MOZILLA)" == "NO"
+SCPDEFS+=-DWITHOUT_MOZILA
+.ENDIF
+
+.IF "$(SYSTEM_CURL)" == "YES"
+SCPDEFS+=-DSYSTEM_CURL
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
