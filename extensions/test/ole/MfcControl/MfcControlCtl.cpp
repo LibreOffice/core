@@ -40,11 +40,11 @@ BEGIN_DISPATCH_MAP(CMfcControlCtrl, COleControl)
     DISP_FUNCTION(CMfcControlCtrl, "inDouble", inDouble, VT_R8, VTS_R8)
     DISP_FUNCTION(CMfcControlCtrl, "inVariant", inVariant, VT_VARIANT, VTS_VARIANT)
     DISP_FUNCTION(CMfcControlCtrl, "inObject", inObject, VT_DISPATCH, VTS_DISPATCH)
-    DISP_FUNCTION(CMfcControlCtrl, "outShort", outShort, VT_EMPTY, VTS_I2)
-    DISP_FUNCTION(CMfcControlCtrl, "outLong", outLong, VT_EMPTY, VTS_I4)
+    DISP_FUNCTION(CMfcControlCtrl, "outShort", outShort, VT_EMPTY, VTS_PI2)
+    DISP_FUNCTION(CMfcControlCtrl, "outLong", outLong, VT_EMPTY, VTS_PI4)
     DISP_FUNCTION(CMfcControlCtrl, "outString", outString, VT_EMPTY, VTS_PBSTR)
-    DISP_FUNCTION(CMfcControlCtrl, "outFloat", outFloat, VT_EMPTY, VTS_R4)
-    DISP_FUNCTION(CMfcControlCtrl, "outDouble", outDouble, VT_EMPTY, VTS_R8)
+    DISP_FUNCTION(CMfcControlCtrl, "outFloat", outFloat, VT_EMPTY, VTS_PR4)
+    DISP_FUNCTION(CMfcControlCtrl, "outDouble", outDouble, VT_EMPTY, VTS_PR8)
     DISP_FUNCTION(CMfcControlCtrl, "outVariant", outVariant, VT_EMPTY, VTS_PVARIANT)
     DISP_FUNCTION(CMfcControlCtrl, "outObject", outObject, VT_EMPTY, VTS_PDISPATCH)
     //}}AFX_DISPATCH_MAP
@@ -304,15 +304,20 @@ void CMfcControlCtrl::outDouble(double* val)
 
 void CMfcControlCtrl::outVariant(VARIANT FAR* val)
 {
-    val= (VARIANT*)CoTaskMemAlloc( sizeof( VARIANT));
+    VariantInit( val);
+    val->vt= VT_BSTR;
+    val->bstrVal= SysAllocString( L"a string in a VARIANT");
 }
 
 void CMfcControlCtrl::outObject(LPDISPATCH FAR* val)
 {
     //{BFE10EBE-8584-11D4-005004526AB4}
-    CLSID clsTestControl={0xBFE10EBE,0x8584,0x11D4, { 0x00,0x50,0x04,0x52,0x6A,0xB4}};
+    HRESULT hr= S_OK;
+    CLSID clsTestControl;
+    hr= CLSIDFromProgID( L"AxTestComponents.Basic", &clsTestControl);
+
     IDispatch* pDisp= NULL;
-    HRESULT hr= CoCreateInstance( clsTestControl, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&pDisp);
+    hr= CoCreateInstance( clsTestControl, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&pDisp);
 
     if( SUCCEEDED( hr) && val)
     {
@@ -336,3 +341,4 @@ void CMfcControlCtrl::outObject(LPDISPATCH FAR* val)
     }
 
 }
+// VT_I1
