@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 10:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
     return bRet;
 }
 
-sal_Bool ScXMLImportWrapper::Import()
+sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 {
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
@@ -265,12 +265,15 @@ sal_Bool ScXMLImportWrapper::Import()
         rtl::OUString sEmpty;
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
-        uno::Sequence<uno::Any> aMetaArgs(0);
+        if(!bStylesOnly)
+        {
+            uno::Sequence<uno::Any> aMetaArgs(0);
 
-        sal_Bool bMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs);
+            sal_Bool bMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs);
+        }
 
         uno::Sequence<uno::Any> aStylesArgs(0);
 
@@ -279,49 +282,58 @@ sal_Bool ScXMLImportWrapper::Import()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
             sEmpty, aStylesArgs);
 
-        SvXMLGraphicHelper* pGraphicHelper = NULL;
-        uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
-
-        uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-        SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
-
-        if( pStorage )
+        sal_Bool bDocRetval(sal_False);
+        if (!bStylesOnly)
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
-            xGrfContainer = pGraphicHelper;
+            SvXMLGraphicHelper* pGraphicHelper = NULL;
+            uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
 
-            SvPersist *pPersist = pObjSh;
-            if( pPersist )
+            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+            SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
+
+            if( pStorage )
             {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
-                xObjectResolver = pObjectHelper;
+                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+                xGrfContainer = pGraphicHelper;
+
+                SvPersist *pPersist = pObjSh;
+                if( pPersist )
+                {
+                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                    xObjectResolver = pObjectHelper;
+                }
             }
+
+            uno::Sequence<uno::Any> aDocArgs(3);
+            uno::Any* pDocArgs = aDocArgs.getArray();
+            pDocArgs[0] <<= xGrfContainer;
+            pDocArgs[1] <<= GetStatusIndicator(xModel);
+            pDocArgs[2] <<= xObjectResolver;
+
+            bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs);
+
+            if( pGraphicHelper )
+                SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+            if( pObjectHelper )
+                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
 
-        uno::Sequence<uno::Any> aDocArgs(3);
-        uno::Any* pDocArgs = aDocArgs.getArray();
-        pDocArgs[0] <<= xGrfContainer;
-        pDocArgs[1] <<= GetStatusIndicator(xModel);
-        pDocArgs[2] <<= xObjectResolver;
+        if (!bStylesOnly)
+        {
+            uno::Sequence<uno::Any> aSettingsArgs(0);
 
-        sal_Bool bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs);
-
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-        if( pObjectHelper )
-            SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-
-        sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
-            sEmpty, aDocArgs);
+            sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
+                sEmpty, aSettingsArgs);
+        }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
-        return bDocRetval;
+        return !bStylesOnly ? bDocRetval : bStylesRetval;
     }
     return sal_False;
 }
@@ -378,7 +390,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     return bRet;
 }
 
-sal_Bool ScXMLImportWrapper::Export()
+sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
@@ -421,7 +433,7 @@ sal_Bool ScXMLImportWrapper::Export()
         ScMySharedData* pSharedData = NULL;
 
         // meta export
-
+        if (!bStylesOnly)
         {
             uno::Sequence<uno::Any> aMetaArgs(2);
             uno::Any* pMetaArgs = aMetaArgs.getArray();
@@ -448,6 +460,7 @@ sal_Bool ScXMLImportWrapper::Export()
 
         // content export
 
+        if (!bStylesOnly)
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
             SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
@@ -489,6 +502,7 @@ sal_Bool ScXMLImportWrapper::Export()
 
         // settings export
 
+        if (!bStylesOnly)
         {
             uno::Sequence<uno::Any> aSettingsArgs(2);
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
@@ -500,7 +514,7 @@ sal_Bool ScXMLImportWrapper::Export()
                 sal_True, aSettingsArgs, pSharedData);
         }
 
-        return bDocRet && bMetaRet && bStylesRet && bSettingsRet;
+        return bStylesRet && ((!bStylesOnly && bDocRet && bMetaRet && bSettingsRet) || bStylesOnly);
     }
 
     // later: give string descriptor as parameter for doc type

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 10:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ class ScXMLImportWrapper
 
 public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, SvStorage* pS);
-    BOOL Import();
-    BOOL Export();
+    BOOL Import(sal_Bool bStylesOnly);
+    BOOL Export(sal_Bool bStylesOnly);
 };
 
 #endif
