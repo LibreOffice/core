@@ -1,0 +1,12 @@
+    <node oor:name="draw8" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/sdraw*</value></prop>
+        <prop oor:name="Extensions"><value>oxd</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.drawing</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>draw8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Draw 8</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Draw 8</value></prop>
+    </node>
