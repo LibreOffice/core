@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 12:45:56 $
+ *  last change: $Author: mba $ $Date: 2001-02-05 18:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,12 @@ class StgIo;
 class StgDirEntry;
 class StgStrm;
 class SvGlobalName;
-struct ClsId;
+struct ClsId
+{
+    INT32   n1;
+    INT16   n2, n3;
+    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
+};
 
 class StorageBase : public SvRefBase
 {
