@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:29:25 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 08:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,13 +436,13 @@
 #define SC_UNO_SHOWSOLID            "SolidHandles"
 #define SC_UNO_VALUEHIGH            "IsValueHighlightingEnabled"
 #define SC_UNO_VERTSCROLL           "HasVerticalScrollBar"
-#define SC_UNO_SNAPTOGRID           "IsSnapToGrid"
-#define SC_UNO_GRIDVIS              "GridIsVisible"
-#define SC_UNO_GRIDRESX             "GridResolutionX"
-#define SC_UNO_GRIDRESY             "GridResolutionY"
-#define SC_UNO_GRIDSUBX             "GridSubdivisionX"
-#define SC_UNO_GRIDSUBY             "GridSubdivisionY"
-#define SC_UNO_GRIDSYNC             "IsGridAxisSynchronized"
+#define SC_UNO_SNAPTORASTER         "IsSnapToRaster"
+#define SC_UNO_RASTERVIS            "RasterIsVisible"
+#define SC_UNO_RASTERRESX           "RasterResolutionX"
+#define SC_UNO_RASTERRESY           "RasterResolutionY"
+#define SC_UNO_RASTERSUBX           "RasterSubdivisionX"
+#define SC_UNO_RASTERSUBY           "RasterSubdivisionY"
+#define SC_UNO_RASTERSYNC           "IsRasterAxisSynchronized"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettingsSequenceDefines.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 09:44:05 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 08:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,5 +92,25 @@
 #define SC_POSITION_TOP                     9
 #define SC_POSITION_BOTTOM                  10
 
+#define SC_CURSORPOSITIONX                  "CursorPositionX"
+#define SC_CURSORPOSITIONY                  "CursorPositionY"
+#define SC_HORIZONTALSPLITMODE              "HorizontalSplitMode"
+#define SC_VERTICALSPLITMODE                "VerticalSplitMode"
+#define SC_HORIZONTALSPLITPOSITION          "HorizontalSplitPosition"
+#define SC_VERTICALSPLITPOSITION            "VerticalSplitPosition"
+#define SC_ACTIVESPLITRANGE                 "ActiveSplitRange"
+#define SC_POSITIONLEFT                     "PositionLeft"
+#define SC_POSITIONRIGHT                    "PositionRight"
+#define SC_POSITIONTOP                      "PositionTop"
+#define SC_POSITIONBOTTOM                   "PositionBottom"
+
+#define SC_TABLES                           "Tables"
+#define SC_ACTIVETABLE                      "ActiveTable"
+#define SC_HORIZONTALSCROLLBARWIDTH         "HorizontalScrollbarWidth"
+#define SC_ZOOMTYPE                         "ZoomType"
+#define SC_ZOOMVALUE                        "ZoomValue"
+#define SC_PAGEVIEWZOOMVALUE                "PageViewZoomValue"
+#define SC_VIEWID                           "ViewId"
+#define SC_VIEW                             "View"
 
 #endif
