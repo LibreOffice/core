@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:38:46 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _BASIC_TESTTOOL_HXX_
 #include <basic/testtool.hxx>
 #endif
+#ifndef _SMARTID_HXX_
+#include "smartid.hxx"
+#endif
 
 class CommunicationLink;
 class CommunicationManagerClientViaSocketTT;
@@ -103,7 +106,7 @@ public:
 SV_DECL_PTRARR_DEL(CErrors, ErrorEntry*, 1, 1)
 
 struct ControlDefLoad {
-    char* Kurzname;
+    const char* Kurzname;
     ULONG nUId;
 };
 
@@ -166,7 +169,7 @@ private:
     BOOL bReturnOK;             // Bricht WaitForAnswer ab
     CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
     ULONG nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
-    TTUniqueId aNextReturnId;   // Id des Returnwertes i.e. UId
+    SmartId aNextReturnId;  // Id des Returnwertes i.e. UId
     void ReplaceNumbers(String &aText); // Zahlen im String mit speziellem Format in Namen umwandeln
 
     String aLastRecordedKontext;//  Keeps the last kontext recorded by the Macro Recorder
