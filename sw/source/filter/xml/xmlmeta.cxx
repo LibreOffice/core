@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,28 +85,47 @@
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include <xmloff/xmlmetae.hxx>
 #endif
-
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
 
+#ifndef _DOCSTAT_HXX
+#include "docstat.hxx"
+#endif
 #ifndef _SWDOCSH_HXX
 #include "docsh.hxx"
 #endif
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
+#endif
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
 
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 // ---------------------------------------------------------------------
 
@@ -143,19 +162,6 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
         pContext = new SfxXMLMetaContext( *this,
                                     XML_NAMESPACE_OFFICE, rLocalName,
                                     GetModel() );
-#if 0
-        SfxObjectShell* pObjSh = pDoc->GetDocShell();
-        if( pObjSh )
-        {
-            Reference< frame::XModel >  xModel = pObjSh->GetBaseModel();
-            Reference< document::XDocumentInfoSupplier > xSupp( xModel,
-                                                                UNO_QUERY );
-            if( xSupp.is() )
-                pContext = new SwXMLMetaContext_Impl( *this,
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    xSupp->getDocumentInfo() );
-        }
-#endif
     }
 
     if( !pContext )
@@ -167,61 +173,148 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
 
 // ---------------------------------------------------------------------
 
-#if 0
+enum SvXMLTokenMapAttrs
+{
+    XML_TOK_META_STAT_TABLE = 1,
+    XML_TOK_META_STAT_IMAGE = 2,
+    XML_TOK_META_STAT_OLE = 4,
+    XML_TOK_META_STAT_PAGE = 8,
+    XML_TOK_META_STAT_PARA = 16,
+    XML_TOK_META_STAT_WORD = 32,
+    XML_TOK_META_STAT_CHAR = 64,
+    XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
+{
+    { XML_NAMESPACE_META, sXML_table_count, XML_TOK_META_STAT_TABLE },
+    { XML_NAMESPACE_META, sXML_image_count, XML_TOK_META_STAT_IMAGE },
+    { XML_NAMESPACE_META, sXML_object_count,    XML_TOK_META_STAT_OLE   },
+    { XML_NAMESPACE_META, sXML_paragraph_count, XML_TOK_META_STAT_PARA  },
+    { XML_NAMESPACE_META, sXML_page_count,  XML_TOK_META_STAT_PAGE  },
+    { XML_NAMESPACE_META, sXML_word_count,  XML_TOK_META_STAT_WORD  },
+    { XML_NAMESPACE_META, sXML_character_count, XML_TOK_META_STAT_CHAR  },
+    XML_TOKEN_MAP_END
+};
+void SwXMLImport::SetStatisticAttributes(
+        const Reference< xml::sax::XAttributeList > & xAttrList)
+{
+    if( IsStylesOnlyMode() || IsInsertMode() )
+        return;
+
+    Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
+                                       UNO_QUERY);
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                        SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    SwDocStat aDocStat( pDoc->GetDocStat() );
+
+    SvXMLTokenMap aTokenMap( aMetaStatAttrTokenMap );
+
+    sal_uInt32 nTokens = 0;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+        sal_Int32 nValue;
+        if( !GetMM100UnitConverter().convertNumber( nValue, rValue ) )
+            continue;
+
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+
+        sal_uInt32 nToken = aTokenMap.Get( nPrefix, aLocalName );
+        switch( nToken )
+        {
+        case XML_TOK_META_STAT_TABLE:
+            aDocStat.nTbl = (sal_uInt16)nValue;
+            break;
+        case XML_TOK_META_STAT_IMAGE:
+            aDocStat.nGrf = (sal_uInt16)nValue;
+            break;
+        case XML_TOK_META_STAT_OLE:
+            aDocStat.nOLE = (sal_uInt16)nValue;
+            break;
+        case XML_TOK_META_STAT_PAGE:
+            aDocStat.nPage = (sal_uInt32)nValue;
+            break;
+        case XML_TOK_META_STAT_PARA:
+            aDocStat.nPara = (sal_uInt32)nValue;
+            break;
+        case XML_TOK_META_STAT_WORD:
+            aDocStat.nWord = (sal_uInt32)nValue;
+            break;
+        case XML_TOK_META_STAT_CHAR:
+            aDocStat.nChar = (sal_uInt32)nValue;
+            break;
+        default:
+            nToken = 0;
+        }
+        nTokens |= nToken;
+    }
+
+    if( 127 == nTokens )
+        aDocStat.bModified = sal_False;
+    if( nTokens )
+        pDoc->SetDocStat( aDocStat );
+    if( nTokens & XML_TOK_META_STAT_PARA )
+        SetProgressRef( (sal_Int32)aDocStat.nPara );
+    else if ( nTokens & XML_TOK_META_STAT_PAGE )
+        SetProgressRef( (sal_Int32)aDocStat.nPage * 10 );
+}
+
+// ---------------------------------------------------------------------
+
 void SwXMLExport::_ExportMeta()
 {
-    SfxObjectShell* pObjSh = pDoc->GetDocShell();
-    if( pObjSh )
-    {
-        pObjSh->UpdateDocInfoForSave();     // update information
+    SvXMLExport::_ExportMeta();
 
-        LanguageType eDocLang = ((const SvxLanguageItem&)
-                pDoc->GetDefault(RES_CHRATR_LANGUAGE)).GetLanguage();
-
-        Reference< frame::XModel >  xModel = pObjSh->GetBaseModel();
-        Reference< document::XDocumentInfoSupplier >  xSupp( xModel,
-                                                            UNO_QUERY );
-        if( xSupp.is() )
-        {
-            SfxXMLMetaExport aMeta( GetDocHandler(), xSupp->getDocumentInfo(),
-                                    eDocLang );
-            aMeta.Export( GetNamespaceMap() );
-        }
-    }
-}
+    SwDocStat aDocStat( GetDoc().GetDocStat() );
+    if( aDocStat.bModified )
+        GetDoc().UpdateDocStat( aDocStat
+#if SUPD < 614
+                 ,0
 #endif
+                );
 
+    if( bShowProgress )
+    {
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        pProgress->SetReference( 20 + 2*aDocStat.nPara );
+        pProgress->SetValue( 20 );
+    }
+    OUStringBuffer aOut(16);
 
-/*************************************************************************
-
-      Source Code Control chaos::System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlmeta.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
-
-      Source Code Control chaos::System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2000/09/18 16:05:07  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.6  2000/08/02 14:52:39  mib
-      text export continued
-
-      Revision 1.5  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.4  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.3  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.2  2000/02/11 14:42:04  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.1  2000/01/06 15:03:49  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-
-*************************************************************************/
+    aOut.append( (sal_Int32)aDocStat.nTbl );
+    AddAttribute( XML_NAMESPACE_META, sXML_table_count,
+                  aOut.makeStringAndClear() );
+    aOut.append( (sal_Int32)aDocStat.nGrf );
+    AddAttribute( XML_NAMESPACE_META, sXML_image_count,
+                  aOut.makeStringAndClear() );
+    aOut.append( (sal_Int32)aDocStat.nOLE );
+    AddAttribute( XML_NAMESPACE_META, sXML_object_count,
+                  aOut.makeStringAndClear() );
+    if( aDocStat.nPage )
+    {
+        aOut.append( (sal_Int32)aDocStat.nPage );
+        AddAttribute( XML_NAMESPACE_META, sXML_page_count,
+                      aOut.makeStringAndClear() );
+    }
+    aOut.append( (sal_Int32)aDocStat.nPara );
+    AddAttribute( XML_NAMESPACE_META, sXML_paragraph_count,
+                  aOut.makeStringAndClear() );
+    aOut.append( (sal_Int32)aDocStat.nWord );
+    AddAttribute( XML_NAMESPACE_META, sXML_word_count,
+                  aOut.makeStringAndClear() );
+    aOut.append( (sal_Int32)aDocStat.nChar );
+    AddAttribute( XML_NAMESPACE_META, sXML_character_count,
+                  aOut.makeStringAndClear() );
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_META,
+                              sXML_document_statistic,
+                              sal_True, sal_True );
+}
 

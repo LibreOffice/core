@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,16 +101,22 @@ class SwXMLImport: public SvXMLImport
     SvXMLImportContextRef   xAutoStyles;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
+    sal_Int32               nProgress;
+    sal_Int32               nProgressRef;
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
     sal_Bool                bInsert : 1;    // Insert mode. If styles are
                                             // loaded only sal_False means that
                                             // existing styles will be
                                             // overwritten.
     sal_Bool                bAutoStylesValid : 1;
-
+    sal_Bool                bProgressValid : 1;
+    sal_Bool                bShowProgress : 1;
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
+
+    void ShowProgress( sal_Int32 nPercent );
+    void SetProgressRef( sal_Int32 nParagraphs );
 
 protected:
 
@@ -167,6 +173,8 @@ public:
                              const ::rtl::OUString& rName,
                              const SfxItemSet **ppItemSet=0,
                              ::rtl::OUString *pParent=0 ) const;
+
+    virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,8 +447,8 @@ void SwXMLExport::_ExportAutoStyles()
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 
-    GetTextParagraphExport()->collectFrameBoundToPageAutoStyles();
-    GetTextParagraphExport()->collectTextAutoStyles( xText );
+    GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
+    GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
     GetPageExport()->collectAutoStyles( sal_False );
 
     GetTextParagraphExport()->exportTextAutoStyles();

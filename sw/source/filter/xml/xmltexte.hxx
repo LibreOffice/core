@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ protected:
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
-        sal_Bool bAutoStyles );
+        sal_Bool bAutoStyles, sal_Bool bProgress );
 
 public:
     SwXMLTextParagraphExport(

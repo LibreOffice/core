@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,9 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 
     _InitItemExport();
 
-    if( bShowProgress )
-        ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
-                         pDoc->GetDocShell() );
+//  if( bShowProgress )
+//      ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
+//                       pDoc->GetDocShell() );
 
     SfxObjectShell* pObjSh = pDoc->GetDocShell();
     if( pObjSh )
@@ -242,8 +242,8 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
 
 __EXPORT SwXMLExport::~SwXMLExport()
 {
-    if( bShowProgress )
-        ::EndProgress( pDoc->GetDocShell() );
+//  if( bShowProgress )
+//      ::EndProgress( pDoc->GetDocShell() );
 
 #ifdef XML_CORE_API
     if( pCurPaM )
@@ -292,8 +292,8 @@ void SwXMLExport::_ExportContent()
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 
-    GetTextParagraphExport()->exportFramesBoundToPage();
-    GetTextParagraphExport()->exportText( xText );
+    GetTextParagraphExport()->exportFramesBoundToPage( bShowProgress );
+    GetTextParagraphExport()->exportText( xText, bShowProgress );
 #endif
 }
 
@@ -343,8 +343,8 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         pCurPaM->GetPoint()->nNode++;   // next node
 
         sal_uInt32 nPos = pCurPaM->GetPoint()->nNode.GetIndex();
-        if( bShowProgress )
-            ::SetProgressState( nPos, pDoc->GetDocShell() );
+//      if( bShowProgress )
+//          ::SetProgressState( nPos, pDoc->GetDocShell() );
 
         // if not everything should be exported, the WriteAll flag must be
         // set for all but the first and last node anyway.

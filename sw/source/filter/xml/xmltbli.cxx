@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2157,7 +2157,7 @@ protected:
 public:
     SwXMLTextImportHelper(
             const Reference < XModel>& rModel,
-            sal_Bool bInsertM, sal_Bool bStylesOnlyM );
+            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress );
     ~SwXMLTextImportHelper();
 
     virtual sal_Bool IsInHeaderFooter() const;
@@ -2165,8 +2165,8 @@ public:
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM ) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM )
+        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress ) :
+    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress )
 {
 }
 
@@ -2200,5 +2200,5 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
-                                      IsStylesOnlyMode() );
+                                      IsStylesOnlyMode(), bShowProgress );
 }

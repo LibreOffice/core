@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include <xmloff/XMLFontStylesContext.hxx>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -269,7 +272,10 @@ SwXMLImport::SwXMLImport(
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
     pTableItemMapper( 0 ),
-    pSttNdIdx( 0 )
+    pSttNdIdx( 0 ),
+    bProgressValid( sal_False ),
+    bShowProgress( sal_True ),
+    nProgress( 0 )
 {
     _InitItemImport();
 
@@ -480,3 +486,40 @@ XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
 {
     return new XMLTextShapeImportHelper( *this );
 }
+
+void SwXMLImport::SetProgressRef( sal_Int32 nParagraphs )
+{
+    if( bShowProgress && !bProgressValid )
+    {
+        if( !nParagraphs )
+            nParagraphs = 250;  // We assume 250 paragarphs here
+
+        // We assume that
+        // - 5% are taken reading meta information and fonts
+        // - 5% are taken reading styles
+        // - 5% are taken reading automatic styles
+        // - 85% are taken reading the rest of the document
+        // The 85% correspond exactly to the number of paragarphs
+        // contained in the document
+        nProgressRef = (nParagraphs *100) / 85;
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        if( pProgress )
+            pProgress->SetReference( nProgressRef );
+        bProgressValid = sal_True;
+    }
+}
+
+void SwXMLImport::ShowProgress( sal_Int32 nPercent )
+{
+    if( bShowProgress)
+    {
+        if( !bProgressValid )
+            SetProgressRef( 0 );
+
+        nProgress = nPercent * nProgressRef / 100;
+        ProgressBarHelper *pProgress = GetProgressBarHelper();
+        if( pProgress )
+            pProgress->SetValue( nProgress );
+    }
+}
+

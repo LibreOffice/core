@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,12 @@ SvXMLImportContext *SwXMLImport::CreateBodyContext(
     else
         pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
                                            rLocalName );
+
+    if( !bProgressValid )
+    {
+        ShowProgress( 15 );
+        GetTextImport()->SetProgressValue( nProgress );
+    }
 
     return pContext;
 }
