@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:18:28 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,8 @@ class SingleBackendAdapter : public BackendBase {
         osl::Mutex mMutex ;
         /** Remote backend that the offline cache is handling */
         uno::Reference<backenduno::XSchemaSupplier> mBackend ;
+        /* checks if object is in initialized and undisposed state */
+        bool checkOkState();
 } ;
 
 } } // configmgr.backend
