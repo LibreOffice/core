@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 14:27:37 $
+ *  last change: $Author: os $ $Date: 2001-03-16 14:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,9 +387,9 @@ service BaseFrame
     //-------------------------------------------------------------------------
     /** determines the type of the surrounding text.
 
-        @see BaseFrame::WrapTextMode
+        @deprecated
      */
-    [property] short Surround;
+    [property] com::sun::star::text::WrapTextMode Surround;
 
     //-------------------------------------------------------------------------
     /** determines if the text of the paragraph in which the object
