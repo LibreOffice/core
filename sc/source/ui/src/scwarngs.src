@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 16:15:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 12:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ Resource RID_WRNHDLSC
         Text[ chinese_simplified ] = "ÒΡΎ­³¬ΉύΠΠµΔΧξ΄σΚύΔΏ£¬³¬ΉύµΔΠΠΓ»ΣΠ±»ΚδΘλ£΅";
         Text[ russian ] = "Μΰκρθμΰλόνξε χθρλξ ρςπξκ οπεβϋψενξ. Ρςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, θμοξπςθπξβΰνϋ νε ασδσς!";
         Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bκdΉ importowane!";
-        Text[ japanese ] = "s‚ΜΕ‚”‚π’΄‚¦‚ά‚µ‚½B‰ίθ‚Μs‚Ν²έΞί°Δ‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½!";
+        Text[ japanese ] = "s‚ΜΕ‚”‚π’΄‚¦‚Δ‚Ά‚ά‚·B‰ίθ‚Μs‚Ν²έΞί°Δ‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "¤wΈg¶WΉL¦CªΊ³Μ¤jΌΖ¥Ψ΅A¶WΉLªΊ¦C¨S¦³³QΏι¤J΅I";
         Text[ arabic ] = "Κγ ΚΜΗζÒ ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ΅ αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
