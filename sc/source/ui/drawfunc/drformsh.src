@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:27:28 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 20:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@
                     Text[ polish ] = "~Na stronie";\
                     Text[ japanese ] = "Íß°¼Ş‚É(~A)";\
                     Text[ greek ] = "~Óôç óåëßäá";\
-                    Text[ korean ] = "ÆäÀÌÁö¿¡¼­(~A)";\
+                    Text[ korean ] = "ÂÊ¿¡¼­(~A)";\
                     Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
                     Text[ arabic ] = "Úáì ÇáÕİÍÉ";\
                     Text[ turkish ] = "Sayfa";\
@@ -523,7 +523,7 @@ String RID_POPUP_DRAWFORM
                 Text[ dutch ] = "Popup-menu voor formulierobjecten";
                 Text[ french ] = "Menu Pop-up pour les objets de formulaire";
                 Text[ spanish ] = "Menú emergente para objetos de formulario";
-                Text[ italian ] = "Menu popup degli oggetti per formulario";
+                Text[ italian ] = "Menu a comparsa degli oggetti per formulario";
                 Text[ danish ] = "Popup-menu for formularobjekter";
                 Text[ swedish ] = "Popup-meny för formulärobjekt";
                 Text[ polish ] = "Menu podrêczne dla obiektów formularzy";
@@ -535,7 +535,7 @@ String RID_POPUP_DRAWFORM
                 Text[ dutch ] = "Popup-menu voor formulierobjecten";
     Text[ chinese_simplified ] = "±íµ¥¶ÔÏóµÄµ¯³öÊ½²Ëµ¥";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôéêåßìåíá öüñìáò";
-    Text[ korean ] = "¾ç½Ä°³Ã¼ ÆË¾÷ ¸Ş´º";
+    Text[ korean ] = "¾ç½Ä°³Ã¼ÀÇ ÆË¾÷ ¸Ş´º";
     Text[ turkish ] = "Form nesneleri için popup mönü";
 };
  //
