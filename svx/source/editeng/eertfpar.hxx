@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eertfpar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2002-11-06 12:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ protected:
     SvxRTFStyleType*    FindStyleSheet( const String& rName );
     void                AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
     void                ReadField();
+    void                SkipGroup();
 
 public:
                 EditRTFParser( SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, ImpEditEngine* pImpEditEngine );

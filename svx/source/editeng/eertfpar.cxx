@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-11-06 12:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,11 @@ void __EXPORT EditRTFParser::NextToken( int nToken )
         case RTF_FIELD:
         {
             ReadField();
+        }
+        break;
+        case RTF_LISTTEXT:
+        {
+            SkipGroup();
         }
         break;
         default:
@@ -559,6 +564,31 @@ void EditRTFParser::ReadField()
             aCurSel = pImpEditEngine->InsertField( aCurSel, aField );
             pImpEditEngine->UpdateFields();
             nLastAction = ACTION_INSERTTEXT;
+        }
+    }
+
+    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+}
+
+void EditRTFParser::SkipGroup()
+{
+    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt
+
+    while( nOpenBrakets && IsParserWorking() )
+    {
+        switch( GetNextToken() )
+        {
+            case '}':
+            {
+                nOpenBrakets--;
+            }
+            break;
+
+            case '{':
+            {
+                nOpenBrakets++;
+            }
+            break;
         }
     }
 
