@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 11:47:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 #define _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 
-#ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
+#include "XMLShapeStyleContext.hxx"
 #endif
 
-class XMLChartStyleContext : public XMLPropStyleContext
+class XMLChartStyleContext : public XMLShapeStyleContext
 {
 private:
     ::rtl::OUString msDataStyleName;
