@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 16:09:32 $
+ *  last change: $Author: tl $ $Date: 2001-01-24 10:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,14 +283,6 @@ BOOL LinguOptionsData::LoadConfig()
 {
     BOOL bRes = FALSE;
 
-#ifdef DEBUG
-    //! workaround for bug in configuration of 614 a
-    {
-        LinguOptConfig aCfg( rtl::OUString::createFromAscii( "Office.Linguistic" ) );
-        aCfg.GetNodeNames(OUString::createFromAscii( ""));
-    }
-#endif
-
     for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
         LinguOptConfig aCfg( String::CreateFromAscii( aRootNames[ nCfgItem ]));
@@ -360,13 +352,6 @@ BOOL LinguOptionsData::SaveConfig()
     BOOL bRet = FALSE;
     const Type &rBOOL     = ::getBooleanCppuType();
     const Type &rINT16    = ::getCppuType( (INT16 *) NULL );
-
-#ifdef DEBUG
-    //! workaround for bug in configuration of 614 a
-    {
-        LinguOptConfig aCfg( String::CreateFromAscii( "Office.Linguistic" ) );
-    }
-#endif
 
     for( INT16 nCfgItem = 0; nCfgItem < 4; ++nCfgItem )
     {
@@ -725,9 +710,6 @@ void LinguOptions::SetCfgActiveDictionaries(
             if (rDic.is()  &&  rDic->isActive())
             {
                 pActiveDic[ nLen++ ] = rDic->getName();
-#ifdef DEBUG
-                OUString aDicName( rDic->getName() );
-#endif
             }
         }
         pData->aActiveDics.realloc( nLen );
