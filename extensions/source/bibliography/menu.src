@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:08:10 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Sütun düzeni...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Asignación de columnas...";
+                        Text[ finnish ] = "~Sarakejärjestys";
                     };
             MenuItem
             {
@@ -216,6 +217,7 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Veri kaynaðý...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Fuente de datos...";
+                        Text[ finnish ] = "~Tietolähde";
                     };
         };
         };
@@ -314,6 +316,7 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Filter...";
+                        Text[ finnish ] = "~Filtern...";
                     };
              MenuItem
             {
