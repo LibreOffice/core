@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ TabDialog DLG_FRM_GRF
     Text [ portuguese_brazilian ] = "Gráfico" ;
     Text [ portuguese ] = "Imagens" ;
     Text [ finnish ] = "Kuva" ;
-    Text [ danish ] = "Billeder" ;
+    Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
     Text [ dutch ] = "Afbeelding" ;
@@ -1513,7 +1513,7 @@ TabPage TP_FRM_STD
         Text [ dutch ] = "Op even pagina's ~spiegelen" ;
         Text [ portuguese ] = "Inverter em páginas ~pares" ;
         Text[ chinese_simplified ] = "·´Ó³µ½Å¼ÊıÒ³Ãæ(~E)";
-        Text[ russian ] = "Îòîáğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
+        Text[ russian ] = "Îòğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
         Text[ polish ] = "Przerzu~æ na parzystych stronach";
         Text[ japanese ] = "‹ô”Íß°¼Ş‚É”½“](~E)";
         Text[ chinese_traditional ] = "¤Ï¬M¨ì°¸¼Æ­¶­±(~E)";
@@ -1827,7 +1827,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "ïñé~æüíôéá";
         Text[ dutch ] = "~horizontaal";
         Text[ french ] = "~horizontalement";
-        Text[ spanish ] = "~horizontal, sobre";
+        Text[ spanish ] = "~horizontal";
         Text[ italian ] = "~orizzontalmente su ";
         Text[ danish ] = "vandret";
         Text[ swedish ] = "h~orisontalt";
@@ -1853,7 +1853,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "óå üëåò ôéò óåëßäåò";
         Text[ dutch ] = "~op alle pagina's";
         Text[ french ] = "~sur toutes les pages";
-        Text[ spanish ] = "on all pages";
+        Text[ spanish ] = "en todas las páginas";
         Text[ italian ] = "on all pages";
         Text[ danish ] = "på alle sider";
         Text[ swedish ] = "på ~alla sidor";
@@ -1879,7 +1879,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "óå áñéóôåñİò óå~ëßäåò";
         Text[ dutch ] = "op e~ven pagina's";
         Text[ french ] = "sur les pages de ~gauche";
-        Text[ spanish ] = "on even pages";
+        Text[ spanish ] = "en páginas izquierdas";
         Text[ italian ] = "on even pages";
         Text[ danish ] = "på venstre sider";
         Text[ swedish ] = "på vä~nstersidor";
@@ -1905,7 +1905,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "óå äåîéİò óåëßäåò";
         Text[ dutch ] = "op o~neven pagina's";
         Text[ french ] = "sur les pages de ~droite";
-        Text[ spanish ] = "on odd pages";
+        Text[ spanish ] = "en páginas derechas";
         Text[ italian ] = "on odd pages";
         Text[ danish ] = "på højre sider";
         Text[ swedish ] = "på höge~rsidor";
@@ -2090,12 +2090,12 @@ TabPage TP_GRF_EXT
         Text [ finnish ] = "Peilaa" ;
         Text [ danish ] = "Spejlvend" ;
         Text [ french ] = "Refléter" ;
-        Text [ swedish ] = "Spegla" ;
+        Text [ swedish ] = "Spegelvänd" ;
         Text [ dutch ] = "Spiegelen" ;
         Text [ spanish ] = "Reflejar" ;
         Text [ english_us ] = "Flip" ;
         Text[ chinese_simplified ] = "·´Ó³";
-        Text[ russian ] = "Îòîáğàçèòü";
+        Text[ russian ] = "Îòğàçèòü";
         Text[ polish ] = "Przerzuæ";
         Text[ japanese ] = "”½“]";
         Text[ chinese_traditional ] = "¤Ï¬M";
