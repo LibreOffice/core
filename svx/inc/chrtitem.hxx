@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,9 @@ public:
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
+
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     USHORT GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrder GetValue() const
