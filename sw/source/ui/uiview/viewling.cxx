@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:51:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,17 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -170,6 +176,10 @@
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
+#ifndef _HHCWRP_HXX
+#include <hhcwrp.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -193,7 +203,10 @@ void SwView::ExecLingu(SfxRequest &rReq)
         case FN_SPELLING_DLG:
             SpellDocument( NULL, sal_False );
             break;
-        case FN_ADD_UNKNOWN:
+        case SID_HANGUL_HANJA_CONVERSION:
+            ConvertDocument( NULL );
+            break;
+       case FN_ADD_UNKNOWN:
             {
                 SpellDocument( NULL, sal_True );
             }
@@ -214,6 +227,10 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
 void SwView::SpellDocument( const String* pStr, sal_Bool bAllRight )
 {
+    //
+    // see ConvertDocument also
+    //
+
     // do not spell if interactive spelling is active elsewhere
     if (GetWrtShell().HasSpellIter())
     {
@@ -268,6 +285,10 @@ void SwView::SpellDocument( const String* pStr, sal_Bool bAllRight )
 
 void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
 {
+    //
+    // see _ConvertDocument also
+    //
+
     sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
         pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
 
@@ -313,11 +334,114 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
 
 }
 
+/*--------------------------------------------------------------------
+    Description: start text conversion
+ --------------------------------------------------------------------*/
 
-void SwView::SpellStart( SvxSpellArea eWhich, sal_Bool bStartDone, sal_Bool bEndDone )
+
+void SwView::ConvertDocument( const String* pStr )
+{
+    //
+    // see SpellDocument also
+    //
+
+    // do not do text conversion if it is active elsewhere
+    if (GetWrtShell().HasConvIter())
+    {
+//        MessBox( 0, WB_OK, String( SW_RES( STR_SPELL_TITLE ) ),
+//                String( SW_RES( STR_MULT_INTERACT_SPELL_WARN ) ) ).Execute();
+        return;
+    }
+/*
+    SfxErrorContext aContext( ERRCTX_SVX_LINGU_SPELLING, aEmptyStr, pEditWin,
+         RID_SVXERRCTX, DIALOG_MGR() );
+
+    Reference< XSpellChecker1 >  xSpell = ::GetSpellChecker();
+    if(!xSpell.is())
+    {   // keine Arme keine Kekse
+        ErrorHandler::HandleError( ERRCODE_SVX_LINGU_LINGUNOTEXISTS );
+        return;
+    }
+*/
+    SpellKontext(sal_True);
+
+    SwViewOption* pVOpt = (SwViewOption*)pWrtShell->GetViewOptions();
+    sal_Bool bOldIdle = pVOpt->IsIdle();
+    pVOpt->SetIdle( sal_False );
+
+    sal_Bool bOldIns = pWrtShell->IsInsMode();
+    pWrtShell->SetInsMode( sal_True );
+
+    // den eigentlichen Inhalt pruefen
+    _ConvertDocument( pStr );
+
+    pWrtShell->SetInsMode( bOldIns );
+
+    SpellKontext(sal_False);
+
+//    SvxSaveDictionaries( SvxGetDictionaryList() );
+
+    pVOpt->SetIdle( bOldIdle );
+}
+
+/*--------------------------------------------------------------------
+    Description: internal text conversion function
+ --------------------------------------------------------------------*/
+
+void SwView::_ConvertDocument( const String* pStr )
+{
+    //
+    // see _SpellDocument also
+    //
+
+    sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
+        pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
+
+    sal_Bool bIsWrapReverse  = sal_False;
+    sal_Bool bIsSpellSpecial = sal_True;
+
+    sal_Bool    bStart = bSelection || ( bIsWrapReverse ?
+                        pWrtShell->IsEndOfDoc() : pWrtShell->IsStartOfDoc() );
+    sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+
+    if( bOther && !bIsSpellSpecial )
+    // kein Sonderbereich eingeschaltet
+    {
+/*
+        // Ich will auch in Sonderbereichen trennen
+        QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
+        if( aBox.Execute() == RET_YES  &&  xProp.is())
+        {
+            sal_Bool bTrue = sal_True;
+            Any aTmp(&bTrue, ::getBooleanCppuType());
+            xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
+        }
+        else
+            return; // Nein Es wird nicht gespellt
+*/
+    }
+    {
+        const uno::Reference< lang::XMultiServiceFactory > xMgr(
+                    comphelper::getProcessServiceFactory() );
+        INT16 nLang = LANGUAGE_KOREAN;
+        lang::Locale aLocale( SvxCreateLocale( nLang ) );
+        SwHHCWrapper aWrap( this, xMgr, aLocale,
+                            bStart, bOther, bSelection );
+
+        aWrap.Convert();
+    }
+}
+
+/*--------------------------------------------------------------------
+     spellcheck and text conversion related stuff
+ --------------------------------------------------------------------*/
+
+void SwView::SpellStart( SvxSpellArea eWhich,
+        sal_Bool bStartDone, sal_Bool bEndDone,
+        sal_Bool bIsConversion )
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = xProp.is() ?
+    sal_Bool bIsWrapReverse = (bIsConversion && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
@@ -368,7 +492,7 @@ void SwView::SpellStart( SvxSpellArea eWhich, sal_Bool bStartDone, sal_Bool bEnd
         default:
             ASSERT( !this, "SpellStart with unknown Area" );
     }
-    pWrtShell->SpellStart( eStart, eEnde, eCurr );
+    pWrtShell->SpellStart( eStart, eEnde, eCurr, bIsConversion );
 }
 
 /*--------------------------------------------------------------------
@@ -441,9 +565,9 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
  --------------------------------------------------------------------*/
 
 
-void SwView::SpellEnd()
+void SwView::SpellEnd( sal_Bool bIsConversion )
 {
-    pWrtShell->SpellEnd();
+    pWrtShell->SpellEnd( bIsConversion );
     if( pWrtShell->IsExtMode() )
         pWrtShell->SetMark();
 }
