@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-27 08:10:30 $
+ *  last change: $Author: dv $ $Date: 2001-06-28 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,6 @@
 
 #ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
-#include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
-#include <com/sun/star/container/XSet.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
@@ -1358,39 +1351,6 @@ const short FileDialogHelper::getDialogType( sal_uInt32 nFlags ) const
         nDialogType = FILEOPEN_READONLY_VERSION;
 
     return nDialogType;
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper::registerFactories( Reference <XMultiServiceFactory> xFactory )
-{
-    OUString aFileService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
-    OUString aFolderService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-
-    Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
-    Reference< XSet > xSet( xFactory, UNO_QUERY );
-
-    if ( ! xEnumAccess.is() || ! xSet.is() )
-        return;
-
-    try
-    {
-        Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
-        if ( ! xEnum.is() || ! xEnum->hasMoreElements() )
-        {
-            Reference< XInterface > xFac( SfxFilePicker::impl_createFactory(xFactory) );
-            xSet->insert( makeAny( xFac ) );
-        }
-
-        xEnum = xEnumAccess->createContentEnumeration( aFolderService );
-        if ( ! xEnum.is() || ! xEnum->hasMoreElements() )
-        {
-            Reference< XInterface > xFac( SfxFolderPicker::impl_createFactory(xFactory) );
-            xSet->insert( makeAny( xFac ) );
-        }
-    }
-
-    catch( IllegalArgumentException ) {}
-    catch( ElementExistException ) {}
 }
 
 // ------------------------------------------------------------------------
