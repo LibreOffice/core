@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-21 15:42:23 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,10 @@ import com.sun.star.lib.sandbox.ClassContextProxy;
 import com.sun.star.lib.sandbox.ExecutionContext;
 import com.sun.star.lib.sandbox.JarEntry;
 import com.sun.star.lib.sandbox.ResourceProxy;
-
+import com.sun.star.lib.sandbox.SandboxSecurity;
 import com.sun.star.lib.sandbox.CodeSource;
+
+import stardiv.controller.SjSettings;
 
 public final class AppletExecutionContext extends ExecutionContext
         implements AppletStub, LiveConnectable
@@ -194,7 +196,15 @@ public final class AppletExecutionContext extends ExecutionContext
 
           _documentProxy.addExecutionContext(this, _className);
 
-        super.init(nm, ClassContextProxy.create(_baseURL, null, null));
+        super.init(nm, ClassContextProxy.create(_baseURL, null, null, false));
+
+        // Set the property stardiv.security.noExit to true. That value will be used in
+        // SjSettings.changeProperties in the constructor of the SecurityManager SandboxSecurity
+        if (System.getSecurityManager() == null)
+            System.setProperty("stardiv.security.noExit", "true");
+        // SjSettings.changeProperties puts a lot of applet relating properties into the system properties
+        // and it sets the SecurityManager
+        SjSettings.changeProperties( System.getProperties());
 
         if(DEBUG) System.err.println("#####" + getClass().getName() + ".init: _className=" + _className + " _baseURL=" + _baseURL);
     }
