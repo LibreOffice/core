@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:01:02 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,8 @@ private:
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
+    void                    ReplaceFormatName( String& rEntry );
     void                    SetCurrentOptions( ULONG nOptions );
-    ULONG                   GetCurrentOptions() const;
-    void                    SetDocumentOptions( ULONG nOptions );
     ULONG                   GetDocumentOptions() const;
     void                    WriteOptions();
 
