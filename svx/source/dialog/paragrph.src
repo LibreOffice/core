@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-06 14:13:19 $
+ *  last change: $Author: gt $ $Date: 2002-08-09 14:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,6 +1559,97 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
             < "ด้านล่าง" ; > ;
         };
     };
+    FixedLine   FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 154 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Hide = TRUE ;
+        Text = "Eigenschaften" ;
+        Text [ ENGLISH ] = "Properties" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Properties";
+        Text[ russian ] = "Properties";
+        Text[ greek ] = "Properties";
+        Text[ dutch ] = "Properties";
+        Text[ french ] = "Properties";
+        Text[ spanish ] = "Properties";
+        Text[ finnish ] = "Properties";
+        Text[ italian ] = "Properties";
+        Text[ danish ] = "Properties";
+        Text[ swedish ] = "Properties";
+        Text[ polish ] = "Properties";
+        Text[ japanese ] = "属性";
+        Text[ korean ] = "Properties";
+        Text[ chinese_simplified ] = "Properties";
+        Text[ chinese_traditional ] = "Properties";
+        Text[ turkish ] = "Properties";
+        Text[ arabic ] = "Properties";
+        Text[ catalan ] = "Opcions";
+        Text[ thai ] = "คุณสมบัติ";
+    };
+    FixedText   FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "Text ~direction" ;
+        Text[ english_us ] = "Text ~direction";
+        Text[ portuguese ] = "Text ~direction";
+        Text[ russian ] = "Text ~direction";
+        Text[ greek ] = "Text ~direction";
+        Text[ dutch ] = "Text ~direction";
+        Text[ french ] = "Text ~direction";
+        Text[ spanish ] = "Text ~direction";
+        Text[ finnish ] = "Text ~direction";
+        Text[ italian ] = "Text ~direction";
+        Text[ danish ] = "Text ~direction";
+        Text[ swedish ] = "Text ~direction";
+        Text[ polish ] = "Text ~direction";
+        Text[ japanese ] = "文字方向";
+        Text[ korean ] = "Text ~direction";
+        Text[ chinese_simplified ] = "Text ~direction";
+        Text[ chinese_traditional ] = "Text ~direction";
+        Text[ turkish ] = "Text ~direction";
+        Text[ arabic ] = "Text ~direction";
+    };
+    ListBox     LB_TEXTDIRECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 105 , 165 ) ;
+        Size = MAP_APPFONT ( 146 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+            < "Use superordinate settings" ; 4; > ;
+        };
+        StringList [ language_user1 ] =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ japanese ] =
+        {
+            < "左から右へ" ; 0; > ;
+            < "右から左へ" ; 1; > ;
+            < "周りのテキストの文字方向に合わせる" ; 4; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+        };
+    };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
     Text[ polish ] = "Wyr�wnanie";
@@ -2697,7 +2788,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ finnish ] = "S��d� automaattisesti v�lit aasialaisen tekstin ja numeroiden v�liss�";
         Text[ thai ] = "ปรับระยะห่างอัตโนมัติระหว่างของความและตัวเลขภาษาเอเชีย";
     };
-    FixedText FT_TEXT_ALIGN
+/*  FixedText FT_TEXT_ALIGN
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
@@ -2941,7 +3032,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
             < "Left-to-right" ; 0; > ;
             < "Right-to-left" ; 1; > ;
         };
-    };
+    };*/
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Tipografia asi�tica";
     Text[ russian ] = "��������� ������";
