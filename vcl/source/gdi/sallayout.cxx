@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-22 17:24:25 $
+ *  last change: $Author: hdu $ $Date: 2002-12-12 13:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
             maRuns.push_back( mnEndCharPos );
         }
 
+        ResetPos();
         return;
     }
 
@@ -232,7 +233,7 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
         int32_t nMinPos, nLength;
         UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
         int j = 2 * i;
-        maRuns[ j+0 ] = maRuns[ j+1 ] = nMinPos;
+        maRuns[ j+0 ] = maRuns[ j+1 ] = nMinPos + mnMinCharPos;
         j += (nDir==UBIDI_LTR);
         maRuns[ j ] += nLength;
     }
@@ -484,10 +485,8 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         }
     }
 
-
     return bRet;
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -603,7 +602,6 @@ void GenericSalLayout::UpdateGlyphPos( int nStart, int nNewXPos )
 
 void GenericSalLayout::RemoveNotdefs()
 {
-
     GlyphItem* pGDst = mpGlyphItems;
     const GlyphItem* pGSrc = mpGlyphItems;
     const GlyphItem* pGEnd = mpGlyphItems + mnGlyphCount;
@@ -858,7 +856,7 @@ long GenericSalLayout::FillDXArray( long* pDXArray ) const
 long GenericSalLayout::GetTextWidth() const
 {
     if( mnGlyphCount <= 0 )
-    return 0;
+        return 0;
 
     const GlyphItem* pG = mpGlyphItems;
     long nMinPos = pG->maLinearPos.X();
@@ -1265,9 +1263,9 @@ MultiSalLayout::~MultiSalLayout()
 
 bool MultiSalLayout::ApplyFallback( SalLayout& rFallback )
 {
-    if( mnLevel >= MAX_FALLBACK )
-        return false;
     if( !&rFallback )
+        return false;
+    if( mnLevel >= MAX_FALLBACK )
         return false;
 
     mpLayouts[ mnLevel ] = &rFallback;
@@ -1366,11 +1364,29 @@ void MultiSalLayout::GetCaretPositions( long* pCaretXArray ) const
 int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
     int& nStart, long* pGlyphAdvAry, int* pCharPosAry ) const
 {
-    // TODO: merge multiple fallback levels
-    SalLayout& rLayout = *mpLayouts[ 0 ];
-    int nRetVal = rLayout.GetNextGlyphs( nLen, pGlyphIdxAry, rPos,
-        nStart, pGlyphAdvAry, pCharPosAry );
-    return nRetVal;
+    // for multi-level fallback only single glyphs should be used
+    if( mnLevel > 1 && nLen > 1 )
+        nLen = 1;
+
+    // NOTE: nStart is tagged with current font index
+    int nLevel = nStart >> GF_FONTSHIFT;
+    nStart &= ~GF_FONTMASK;
+    for(; nLevel < mnLevel; ++nLevel, nStart=0 )
+    {
+        SalLayout& rLayout = *mpLayouts[ nLevel ];
+        int nRetVal = rLayout.GetNextGlyphs( nLen, pGlyphIdxAry, rPos,
+            nStart, pGlyphAdvAry, pCharPosAry );
+        if( nRetVal )
+        {
+            int nFontTag = nLevel << GF_FONTSHIFT;
+            nStart |= nFontTag;
+            for( int i = 0; i < nRetVal; ++i )
+                pGlyphIdxAry[ i ] |= nFontTag;
+            return nRetVal;
+        }
+    }
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
