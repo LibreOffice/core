@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-09 12:49:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ public:
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
     BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
     SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
+
+    sal_uInt32 Count() { return maObjList.Count(); }
 };
 
 #endif //_SVDITER_HXX
