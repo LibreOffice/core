@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:10:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 #include <algorithm>
 
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 /* Implementation of EventMultiplexer class */
@@ -203,9 +202,12 @@ namespace presentation
 
         void EventMultiplexer::Listener::scheduleTick()
         {
-            EventSharedPtr pEvent( makeDelay( ::boost::bind( &EventMultiplexer::Listener::tick,
-                                                             ::boost::ref( *this ) ),
-                                              mnTimeout ) );
+            // TODO(Q3): make robust (no boost::ref()) when
+            //           get_pointer(uno::Ref...) is available
+            EventSharedPtr pEvent(
+                makeDelay(
+                    boost::bind( &EventMultiplexer::Listener::tick, this ),
+                    mnTimeout ) );
 
             // store weak reference to generated event, to notice when
             // the event queue gets cleansed (we then have to
