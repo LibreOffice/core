@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-20 17:42:03 $
+ *  last change: $Author: sj $ $Date: 2001-03-29 15:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3977,11 +3977,6 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
 
 void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, UINT32 nLevel )
 {
-    if ( nIsBullet )
-    {
-        if ( rNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )  // be sure that there are no extended paragraph settings
-            rNumberFormat.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
-    }
     Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
 
     UINT32  nMappedFontId;
@@ -4547,7 +4542,8 @@ PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager )
         {
             const PPTParaLevel& rParaLevel = mpParaSheet[ i ]->maParaLevel[ nCount ];
             const PPTCharLevel& rCharLevel = mpCharSheet[ i ]->maCharLevel[ nCount ];
-            SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );
+            SvxNumberFormat aNumberFormat( SVX_NUM_CHAR_SPECIAL );
+            aNumberFormat.SetBulletChar( ' ' );
             GetNumberFormat( rManager, aNumberFormat, nCount, rParaLevel, rCharLevel, i );
             aRule.SetLevel( nDepth++, aNumberFormat );
             if ( nCount >= 4 )
@@ -5790,7 +5786,8 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
         {
-            SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );
+            SvxNumberFormat aNumberFormat( SVX_NUM_CHAR_SPECIAL );
+            aNumberFormat.SetBulletChar( ' ' );
             if ( GetNumberFormat( rManager, aNumberFormat, this, nInstanceInSheet ) )
             {
                 SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
