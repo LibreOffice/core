@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.26 2001-01-03 11:32:24 mib Exp $
+	$Id: drawing.mod,v 1.27 2001-01-17 21:29:51 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -419,6 +419,7 @@
 <!ATTLIST style:properties presentation:transition-speed %presentationSpeeds; #IMPLIED >
 <!ATTLIST style:properties presentation:duration %timeDuration; #IMPLIED>
 <!ATTLIST style:properties presentation:visibility (visible|hidden) #IMPLIED>
+<!ATTLIST style:properties draw:background-size (full|border) #IMPLIED>
 
 <!-- text boxes -->
 <!ELEMENT draw:text-box (text:h|text:p|text:ordered-list|
