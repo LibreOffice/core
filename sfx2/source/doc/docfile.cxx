@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: mav $ $Date: 2004-12-02 10:15:21 $
+ *  last change: $Author: as $ $Date: 2004-12-07 10:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2087,6 +2087,13 @@ void SfxMedium::Init_Impl()
     pImp->bDisposeStorage = FALSE;
 
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+    if ( pSalvageItem && !pSalvageItem->GetValue().Len() )
+    {
+        OSL_ENSURE( sal_False, "The empty salvage item is not acceptable!\n" );
+        pSalvageItem = NULL;
+        pSet->ClearItem( SID_DOC_SALVAGE );
+    }
+
     if( aLogicName.Len() )
     {
         INetURLObject aUrl( aLogicName );
