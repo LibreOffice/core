@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,17 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[25] = new SvxLanguageItem( LANGUAGE_GERMAN, EE_CHAR_LANGUAGE );
         ppDefItems[26] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[27] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
+#ifdef DEBUG
+        ppDefItems[28] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CJK );
+        ppDefItems[29] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CTL );
+        ppDefItems[30] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CJK );
+        ppDefItems[31] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CTL );
+#else
         ppDefItems[28] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
         ppDefItems[29] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
         ppDefItems[30] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
         ppDefItems[31] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
+#endif
         ppDefItems[32] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
          ppDefItems[33] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
         ppDefItems[34] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );

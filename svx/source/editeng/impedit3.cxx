@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 15:25:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <kernitem.hxx>
 #include <lrspitem.hxx>
 #include <ulspitem.hxx>
+#include <fontitem.hxx>
+#include <wghtitem.hxx>
+#include <postitem.hxx>
+
 
 #include <textconv.hxx>
 
@@ -1740,8 +1744,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     DBG_ASSERT( pNode->Len(), "CreateTextPortions sollte nicht fuer leere Absaetze verwendet werden!" );
 
     SortedPositions aPositions;
-    sal_uInt32 nZero = 0;
-    aPositions.Insert( nZero );
+    aPositions.Insert( (sal_uInt32) 0 );
 
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -1755,6 +1758,13 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
         pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     }
     aPositions.Insert( pNode->Len() );
+
+    if ( !pParaPortion->aScriptInfos.Count() )
+        ((ImpEditEngine*)this)->InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
+
+    const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+    for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
+        aPositions.Insert( rTypes[nT].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
@@ -1823,24 +1833,20 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
     ContentNode* const pNode = pParaPortion->GetNode();
     if ( nNewChars > 0 )
     {
-        // Wenn an nStartPos ein Attribut beginnt/endet, f„ngt eine neue Portion
+        // Wenn an nStartPos ein Attribut beginnt/endet, faengt eine neue Portion
         // an, ansonsten wird die Portion an nStartPos erweitert.
 
-        if ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) )
+        if ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) || IsScriptChange( EditPaM( pNode, nStartPos ) ) )
         {
             sal_uInt16 nNewPortionPos = 0;
             if ( nStartPos )
                 nNewPortionPos = SplitTextPortion( pParaPortion, nStartPos ) + 1;
-//          else if ( ( pParaPortion->GetTextPortions().Count() == 1 ) &&
-//                      !pParaPortion->GetTextPortions()[0]->GetLen() )
-//              pParaPortion->GetTextPortions().Reset();    // DummyPortion
 
             // Eine leere Portion kann hier stehen, wenn der Absatz leer war,
             // oder eine Zeile durch einen harten Zeilenumbruch entstanden ist.
             if ( ( nNewPortionPos < pParaPortion->GetTextPortions().Count() ) &&
                     !pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
-                // Dann die leere Portion verwenden.
                 DBG_ASSERT( pParaPortion->GetTextPortions()[nNewPortionPos]->GetKind() == PORTIONKIND_TEXT, "Leere Portion war keine TextPortion!" );
                 pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() += nNewChars;
             }
@@ -1969,7 +1975,18 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
 
     short nScriptType = GetScriptType( EditPaM( pNode, nPos ) );
     if ( ( nScriptType == text::ScriptType::ASIAN ) || ( nScriptType == text::ScriptType::COMPLEX ) )
-        CreateFont( rFont, pNode->GetContentAttribs().GetItems(), FALSE, nScriptType );
+    {
+        const SvxFontItem& rFontItem = (const SvxFontItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
+        rFont.SetName( rFontItem.GetFamilyName() );
+        rFont.SetFamily( rFontItem.GetFamily() );
+        rFont.SetPitch( rFontItem.GetPitch() );
+        rFont.SetCharSet( rFontItem.GetCharSet() );
+        Size aSz( rFont.GetSize() );
+        aSz.Height() = ((const SvxFontHeightItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) ).GetHeight();
+        rFont.SetSize( aSz );
+        rFont.SetWeight( ((const SvxWeightItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ))).GetWeight() );
+        rFont.SetItalic( ((const SvxPostureItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ))).GetPosture() );
+    }
 
     const SvxFontWidthItem& rWidthItem =
         (const SvxFontWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH);
