@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 11:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ void SwDoc::CorrRel( const SwNodeIndex& rOldNode,
     }
 
     if( bMoveCrsr )
-        ::PaMCorrAbs( rOldNode, rNewPos, nOffset );
+        ::PaMCorrRel( rOldNode, rNewPos, nOffset );
 }
 
 
