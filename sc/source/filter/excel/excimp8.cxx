@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-16 08:41:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@
 #ifndef SC_DRWLAYER_HXX
 #include <drwlayer.hxx>
 #endif
+
+#include <boost/scoped_array.hpp>
 
 #include "cell.hxx"
 #include "document.hxx"
@@ -902,13 +904,17 @@ void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
     {
         InsertQueryParam();
 
-        BYTE nFlags;
-        for( SCROW nRow = StartRow(); nRow <= EndRow(); nRow++ )
+        SCROW nRow1 = StartRow();
+        SCROW nRow2 = EndRow();
+        size_t nRows = nRow2 - nRow1 + 1;
+        boost::scoped_array<BYTE> pFlags( new BYTE[nRows]);
+        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
+                pFlags.get());
+        for (size_t j=0; j<nRows; ++j)
         {
-            nFlags = pExcRoot->pDoc->GetRowFlags( nRow, Tab() );
-            if( nFlags & CR_HIDDEN )
-                nFlags |= CR_FILTERED;
-            pExcRoot->pDoc->SetRowFlags( nRow, Tab(), nFlags );
+            if ((pFlags[j] & CR_HIDDEN) && !(pFlags[j] & CR_FILTERED))
+                pExcRoot->pDoc->SetRowFlags( nRow1 + j, Tab(),
+                        pFlags[j] | CR_FILTERED );
         }
     }
 }
