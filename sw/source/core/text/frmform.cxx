@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 13:47:02 $
+ *  last change: $Author: fme $ $Date: 2001-11-14 11:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         if ( IsVertical() )
         {
             ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
-            nRstHeight = Frm().Right() -
+            nRstHeight = Frm().Left() + Frm().Width() -
                          ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
         }
         else
@@ -634,7 +634,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
             //klein ist und der Upper noch Platz schaffen kann.
             if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
-                nRstHeight += GetUpper()->Grow( Frm().Height()-nRstHeight PHEIGHT );
+                nRstHeight += GetUpper()->Grow( nFrmHeight - nRstHeight PHEIGHT );
             // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
             // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
             // schrumpfen wir und notieren bUndersized, damit FormatWidthCols die richtige
@@ -1133,7 +1133,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             if( bPrepMustFit )
             {
 #ifdef VERTICAL_LAYOUT
-                const SwTwips nMust = (GetUpper()->*fnRect->fnGetBottomMargin)();
+                const SwTwips nMust = (GetUpper()->*fnRect->fnGetLimit)();
                 const SwTwips nIs   = (Frm().*fnRect->fnGetBottom)();
 #else
                 const SwTwips nMust = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
@@ -2209,6 +2209,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
 sal_Bool SwTxtFrm::FormatQuick()
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::FormatQuick with swapped frame" );
+#endif
+
     DBG_LOOP;
 #ifdef DEBUG
     const XubString aXXX = GetTxtNode()->GetTxt();
@@ -2225,9 +2230,15 @@ sal_Bool SwTxtFrm::FormatQuick()
 
     if( IsEmpty() && FormatEmpty() )
         return sal_True;
+
     // Wir sind sehr waehlerisch:
     if( HasPara() || IsWidow() || IsLocked()
+#ifdef VERTICAL_LAYOUT
+        || !GetValidSizeFlag() ||
+        ( ( IsVertical() ? Prt().Width() : Prt().Height() ) && IsHiddenNow() ) )
+#else
         || !GetValidSizeFlag() || (Prt().Height() && IsHiddenNow()) )
+#endif
         return sal_False;
 
     SwTxtLineAccess aAccess( this );
@@ -2235,16 +2246,34 @@ sal_Bool SwTxtFrm::FormatQuick()
     if( !pPara )
         return sal_False;
 
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( this )
+#endif
+
     SwTxtFrmLocker aLock(this);
     SwTxtFormatInfo aInf( this, sal_False, sal_True );
     if( 0 != aInf.MaxHyph() )   // 27483: MaxHyphen beachten!
+#ifdef VERTICAL_LAYOUT
+    {
+        UNDO_SWAP( this )
         return sal_False;
+    }
+#else
+        return sal_False;
+#endif
 
     SwTxtFormatter  aLine( this, &aInf );
 
     // DropCaps sind zu kompliziert...
     if( aLine.GetDropFmt() )
+#ifdef VERTICAL_LAYOUT
+    {
+        UNDO_SWAP( this )
         return sal_False;
+    }
+#else
+        return sal_False;
+#endif
 
     xub_StrLen nStart = GetOfst();
     const xub_StrLen nEnd = GetFollow()
@@ -2269,11 +2298,21 @@ sal_Bool SwTxtFrm::FormatQuick()
 #endif
         xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
+#ifdef VERTICAL_LAYOUT
+        UNDO_SWAP( this )
+#endif
         return sal_False;
     }
 
     if( pFollow && nStart != ((SwTxtFrm*)pFollow)->GetOfst() )
+#ifdef VERTICAL_LAYOUT
+    {
+        UNDO_SWAP( this )
         return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
+    }
+#else
+        return sal_False; // kann z.B. durch Orphans auftreten (35083,35081)
+#endif
 
     // Geschafft, wir sind durch ...
 
@@ -2285,6 +2324,9 @@ sal_Bool SwTxtFrm::FormatQuick()
     *(pPara->GetReformat()) = SwCharRange();
     *(pPara->GetDelta()) = 0;
 
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( this )
+#endif
     return sal_True;
 }
 
