@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:30:56 $
+ *  last change: $Author: bm $ $Date: 2001-08-21 16:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,13 @@ BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMem
     ::com::sun::star::drawing::LineJoint eUnoJoint;
 
     if(!(rVal >>= eUnoJoint))
-        return sal_False;
+    {
+        // also try an int (for Basic)
+        sal_Int32 nLJ;
+        if(!(rVal >>= nLJ))
+            return sal_False;
+        eUnoJoint = (::com::sun::star::drawing::LineJoint)nLJ;
+    }
 
     switch( eUnoJoint )
     {
