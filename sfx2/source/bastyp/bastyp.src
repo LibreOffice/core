@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:13:45 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ String ERR_FILENAMECHECK83
     Text[ chinese_simplified ] = "Έψ¶¨µΔΞΔΌώΓϋ³ΖΞήΠ§΅£\nΗλΧΆÒβ£ΊΞΔΌώΓϋ²»µΓ³¬Ήύ8ΈφΧΦ·ϋ΅£\nΞΔΌώµΔΐ©ΥΉΓϋ²»µΓ³¬Ήύ 3 ΈφΧΦ·ϋ΅£";
     Text[ russian ] = "Ηΰδΰννξε θμÿ τΰιλΰ νεοπΰβθλόνξ.\nΟξζΰλσιρςΰ, σχςθςε, χςξ θμÿ τΰιλΰ μξζες ρξδεπζΰςό νε αξλεε 8 ηνΰκξβ\n, ΰ πΰρψθπενθε τΰιλΰ νε αξλεε 3 ηνΰκξβ.";
     Text[ polish ] = "Podana nazwa pliku jest nieprawid³owa.\nNaleΏy uwzglκdniζ, Ώe nazwa pliku moΏe zawieraζ maksym. 8 znakσw\n,a rozszerzenie pliku maksym. 3 znaki.";
-    Text[ japanese ] = "w’θ‚µ‚½Μ§²Ω–Ό‚ª–³ψ‚Ε‚·B\nΜ§²Ω–Ό‚ΝΕ‚8•¶‚ά‚Ε\nΜ§²Ωg’£q‚ΝΕ‚3•¶‚ά‚Ε‚Ε‚Θ‚­‚Δ‚Ν‚Ά‚―‚Θ‚Ά‚±‚Ζ‚Ι’Σ‚µ‚Δ‰Ί‚³‚ΆB";
+    Text[ japanese ] = "w’θ‚µ‚½Μ§²Ω–Ό‚ª–³ψ‚Ε‚·B\nΜ§²Ω–Ό‚ΝΕ‚8•¶‚ά‚ΕA\nΜ§²Ωg’£q‚ΝΕ‚3•¶‚ά‚Ε‚Ζ§ΐ‚ª‚ ‚θ‚ά‚·B’Σ‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     Text[ chinese_traditional ] = "Ώι¤JªΊΐΙ®Χ¦WµL®Δ΅C\n½Π±z―d·NΐΙ®Χ¦W¤£±o¶WΉL8­Σ¦r¤Έ΅C\n°ΖΐΙ¦W¤£±o¶WΉL 3 ­Σ¦r¤Έ΅C";
     Text[ arabic ] = "ΗΣγ Ηαγαέ ΗαγυΟΞα ΫνΡ ΥΗαΝ.\n ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗΣγ Ηαγαέ νΜΘ ΓαΗ νÒνΟ Ϊδ\nΛγΗδνΙ ΝΡζέ ζΗγΚΟΗΟε Ϊδ ΛαΗΛΙ.";
     Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n και η επέκταση να περιέχει πάνω από 3 χαρακτήρες.";
