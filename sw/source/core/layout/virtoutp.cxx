@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-03 12:52:33 $
+ *  last change: $Author: ama $ $Date: 2001-04-03 14:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
 BOOL SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
-    Rectangle aTmp( aRect.SVRect() );
         return FALSE;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
         return FALSE;
