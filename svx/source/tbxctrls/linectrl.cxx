@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:41:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,13 @@
 #include "itemwin.hxx"
 #include "dialmgr.hxx"
 
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+
 // Fuer Linienenden-Controller
 #define MAX_LINES 12
 
@@ -123,16 +130,16 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
 |*
 \************************************************************************/
 
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nId,
-                                                        ToolBox& rTbx,
-                                                        SfxBindings& rBind ) :
-    SfxToolBoxControl( nId, rTbx, rBind ),
-    aDashForwarder  ( SID_ATTR_LINE_DASH, *this ),
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nSlotId,
+                                                        USHORT nId,
+                                                        ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     pStyleItem      ( NULL ),
     pDashItem       ( NULL ),
     bUpdate         ( FALSE )
 {
-    StartListening( rBind, TRUE );
+    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
+    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
 }
 
 //========================================================================
@@ -174,29 +181,23 @@ void SvxLineStyleToolBoxControl::StateChanged (
                 delete pDashItem;
                 pDashItem = (XLineDashItem*)pState->Clone();
             }
-            else
-                DBG_ERROR( "Huch wer kommt nach drinnen rein?");
 
             bUpdate = TRUE;
+            Update( pState );
         }
-        else
+        else if ( nSID != SID_DASH_LIST )
+        {
             // kein oder uneindeutiger Status
             pBox->SetNoSelection();
+        }
     }
 }
 
 //========================================================================
 
-void SvxLineStyleToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
-                                         const TypeId& rBCType,
-                                         const SfxHint& rHint,
-                                         const TypeId& rHintType )
+void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 {
-    const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-    if ( pSimpleHint &&
-        ( pSimpleHint->GetId() == SFX_HINT_UPDATEDONE ) &&
-          bUpdate )
+    if ( pState && bUpdate )
     {
         bUpdate = FALSE;
 
@@ -207,18 +208,7 @@ void SvxLineStyleToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
         // die LB noch nicht gefuellt ist. Ein ClearCache() am Control im
         // DelayHdl() blieb ohne Erfolg.
         if( pBox->GetEntryCount() == 0 )
-        {
-            SfxObjectShell* pSh = SfxObjectShell::Current();
-            if ( pSh )
-            {
-                pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-                pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID) );
-                const SvxDashListItem *pItem =
-                    (const SvxDashListItem*)( pSh->GetItem( SID_DASH_LIST ) );
-                if(pItem)
-                    pBox->Fill( pItem->GetDashList() );
-            }
-        }
+            pBox->FillControl();
 
         XLineStyle eXLS;
 
@@ -255,10 +245,7 @@ void SvxLineStyleToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
         }
     }
 
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxDashListItem ) ) )
+    if ( pState && ( pState->ISA( SvxDashListItem ) ) )
     {
         // Die Liste der Linienstile hat sich geaendert
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
@@ -268,7 +255,7 @@ void SvxLineStyleToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
         pBox->Clear();
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID) );
-        pBox->Fill( ( (SvxDashListItem*) pPoolItemHint->GetObject() )->GetDashList() );
+        pBox->Fill( ((SvxDashListItem*)pState )->GetDashList() );
         pBox->SelectEntry( aString );
     }
 }
@@ -277,7 +264,7 @@ void SvxLineStyleToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    return new SvxLineBox( pParent, GetBindings() );
+    return new SvxLineBox( pParent, m_xFrame );
 }
 
 /*************************************************************************
@@ -286,19 +273,11 @@ Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl( USHORT nId,
-                                                        ToolBox& rTbx,
-                                                        SfxBindings& rBind ) :
-    SfxToolBoxControl( nId, rTbx, rBind )
+SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxModule* pModule = pSfxApp->GetActiveModule();
-
-    if( pModule )
-        StartListening( rBind, TRUE );
-    else
-        StartListening( *pSfxApp , TRUE );
-
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" )));
 }
 
 //========================================================================
@@ -310,59 +289,41 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 //========================================================================
 
 void SvxLineWidthToolBoxControl::StateChanged(
-
     USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-
 {
     SvxMetricField* pFld = (SvxMetricField*)
                            GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pFld, "Window not found" );
 
-    if ( eState == SFX_ITEM_DISABLED )
+    if ( nSID == SID_ATTR_METRIC )
     {
-        pFld->Disable();
-        pFld->SetText( String() );
+        pFld->RefreshDlgUnit();
     }
     else
     {
-        pFld->Enable();
-
-        if ( eState == SFX_ITEM_AVAILABLE )
+        if ( eState == SFX_ITEM_DISABLED )
         {
-            DBG_ASSERT( pState->ISA(XLineWidthItem), "falscher ItemType" )
-
-            // Core-Unit an MetricField uebergeben
-            // Darf nicht in CreateItemWin() geschehen!
-            SfxMapUnit eUnit = GetCoreMetric();
-            pFld->SetCoreUnit( eUnit );
-
-            pFld->Update( (const XLineWidthItem*)pState );
+            pFld->Disable();
+            pFld->SetText( String() );
         }
         else
-            pFld->Update( NULL );
-    }
-}
+        {
+            pFld->Enable();
 
-//========================================================================
+            if ( eState == SFX_ITEM_AVAILABLE )
+            {
+                DBG_ASSERT( pState->ISA(XLineWidthItem), "falscher ItemType" )
 
-void SvxLineWidthToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
-                                         const TypeId& rBCType,
-                                         const SfxHint& rHint,
-                                         const TypeId& rHintType )
-{
-    // SfxItemSetHint funktioniert nicht mehr und kann laut MI
-    // auch nie funktioniert haben!
-    //const SfxItemSetHint *pOptionsHint = PTR_CAST(SfxItemSetHint, &rHint);
+                // Core-Unit an MetricField uebergeben
+                // Darf nicht in CreateItemWin() geschehen!
+                SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM; // CD!!! GetCoreMetric();
+                pFld->SetCoreUnit( eUnit );
 
-    const SfxPoolItemHint *pOptionsHint = PTR_CAST(SfxPoolItemHint, &rHint);
-    if( pOptionsHint
-        && ( pOptionsHint->GetObject()->Which() == SID_ATTR_METRIC ) )
-    {
-        SvxMetricField* pFld = (SvxMetricField*)
-                               GetToolBox().GetItemWindow( GetId() );
-        DBG_ASSERT( pFld, "Window not found" );
-
-        pFld->RefreshDlgUnit();
+                pFld->Update( (const XLineWidthItem*)pState );
+            }
+            else
+                pFld->Update( NULL );
+        }
     }
 }
 
@@ -370,7 +331,7 @@ void SvxLineWidthToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    return( new SvxMetricField( pParent, GetBindings() ) );
+    return( new SvxMetricField( pParent, m_xFrame ) );
 }
 
 /*************************************************************************
@@ -379,12 +340,11 @@ Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-SvxLineColorToolBoxControl::SvxLineColorToolBoxControl( USHORT nId,
-                                                        ToolBox& rTbx,
-                                                        SfxBindings& rBind ) :
-    SfxToolBoxControl( nId, rTbx, rBind )
+SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
+    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    StartListening( GetBindings() );
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
 }
 
 //========================================================================
@@ -403,36 +363,35 @@ void SvxLineColorToolBoxControl::StateChanged(
     SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pBox, "Window not found" );
 
-    if ( eState == SFX_ITEM_DISABLED )
+    if ( nSID != SID_COLOR_TABLE )
     {
-        pBox->Disable();
-        pBox->SetNoSelection();
-    }
-    else
-    {
-        pBox->Enable();
-
-        if ( eState == SFX_ITEM_AVAILABLE )
+        if ( eState == SFX_ITEM_DISABLED )
         {
-            DBG_ASSERT( pState->ISA(XLineColorItem), "falscher ItemTyoe" );
-            pBox->Update( (const XLineColorItem*) pState );
+            pBox->Disable();
+            pBox->SetNoSelection();
         }
         else
-            pBox->Update( NULL );
+        {
+            pBox->Enable();
+
+            if ( eState == SFX_ITEM_AVAILABLE )
+            {
+                DBG_ASSERT( pState->ISA(XLineColorItem), "falscher ItemTyoe" );
+                pBox->Update( (const XLineColorItem*) pState );
+            }
+            else
+                pBox->Update( NULL );
+        }
     }
+    else
+        Update( pState );
 }
 
 //========================================================================
 
-void SvxLineColorToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
-                                    const TypeId& rBCType,
-                                    const SfxHint& rHint,
-                                    const TypeId& rHintType )
+void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
 {
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
+    if ( pState && ( pState->ISA( SvxColorTableItem ) ) )
     {
         SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
 
@@ -441,7 +400,7 @@ void SvxLineColorToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
         // Die Liste der Farben (ColorTable) hat sich geaendert:
         Color aTmpColor( pBox->GetSelectEntryColor() );
         pBox->Clear();
-        pBox->Fill( ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable() );
+        pBox->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
         pBox->SelectEntry( aTmpColor );
     }
 }
@@ -450,7 +409,7 @@ void SvxLineColorToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    return new SvxColorBox( pParent, GetId(), GetBindings() );
+    return new SvxColorBox( pParent, m_aCommandURL, m_xFrame );
 }
 
 /*************************************************************************
@@ -459,17 +418,21 @@ Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-SvxLineEndWindow::SvxLineEndWindow( USHORT nId, const String& rWndTitle, SfxBindings& rBindings ) :
-
-    SfxPopupWindow( nId, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ), rBindings ),
-
+SvxLineEndWindow::SvxLineEndWindow(
+    USHORT nSlotId,
+    const Reference< XFrame >& rFrame,
+    const String& rWndTitle ) :
+    SfxPopupWindow( nSlotId,
+                    rFrame,
+                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
     pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
     bPopupMode      ( TRUE ),
-    mbInResize      ( false )
+    mbInResize      ( false ),
+    mxFrame         ( rFrame )
 {
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
     const SfxPoolItem*  pItem   = NULL;
@@ -493,15 +456,16 @@ SvxLineEndWindow::SvxLineEndWindow( USHORT nId, const String& rWndTitle, SfxBind
     // ValueSet mit Eintraegen der LineEndList fuellen
     FillValueSet();
 
+    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndListState" )));
+
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
     SetText( rWndTitle );
     aLineEndSet.Show();
-    StartListening( rBindings );
 }
 
 SfxPopupWindow* SvxLineEndWindow::Clone() const
 {
-    return new SvxLineEndWindow( GetId(), GetText(), (SfxBindings&)GetBindings() );
+    return new SvxLineEndWindow( GetId(), mxFrame, GetText() );
 }
 
 // -----------------------------------------------------------------------
@@ -540,12 +504,25 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-    DBG_ASSERT( pDisp, "invalid Dispatcher" );
+    Sequence< PropertyValue > aArgs( 1 );
+    Any a;
+
     if ( pLineStartItem )
-        pDisp->Execute( SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pLineStartItem, 0L , 0L );
+    {
+        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ));
+        pLineStartItem->QueryValue( a );
+        aArgs[0].Value = a;
+    }
     else
-        pDisp->Execute( SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pLineEndItem, 0L , 0L );
+    {
+        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ));
+        pLineEndItem->QueryValue( a );
+        aArgs[0].Value = a;
+    }
+
+    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndStyle" )),
+                                 aArgs );
 
     delete pLineEndItem;
     delete pLineStartItem;
@@ -693,26 +670,24 @@ BOOL SvxLineEndWindow::Close()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndWindow::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType )
+void SvxLineEndWindow::StateChanged(
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxLineEndListItem ) ) )
+    if ( nSID == SID_LINEEND_LIST )
     {
         // Die Liste der LinienEnden (LineEndList) hat sich geaendert:
+        if ( pState->ISA( SvxLineEndListItem ))
+        {
+            pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
+            DBG_ASSERT( pLineEndList, "LineEndList nicht gefunden" );
 
-        pLineEndList = ( (SvxLineEndListItem*) pPoolItemHint->
-                                        GetObject() )->GetLineEndList();
-        DBG_ASSERT( pLineEndList, "LineEndList nicht gefunden" );
+            aLineEndSet.Clear();
+            FillValueSet();
 
-        aLineEndSet.Clear();
-        FillValueSet();
-
-        Size aSize = GetOutputSizePixel();
-        Resizing( aSize );
-        Resize();
+            Size aSize = GetOutputSizePixel();
+            Resizing( aSize );
+            Resize();
+        }
     }
 }
 
@@ -774,11 +749,11 @@ void SvxLineEndWindow::GetFocus (void)
 |*
 \************************************************************************/
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( USHORT  nId, ToolBox &rTbx, SfxBindings &rBindings ) :
-
-    SfxToolBoxControl( nId, rTbx, rBindings )
-
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -799,9 +774,10 @@ SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
-        new SvxLineEndWindow( GetId(),SVX_RESSTR( RID_SVXSTR_LINEEND ), GetBindings() );
+        new SvxLineEndWindow( GetId(), m_xFrame, SVX_RESSTR( RID_SVXSTR_LINEEND ) );
     pLineEndWin->StartPopupMode( &GetToolBox(), TRUE );
     pLineEndWin->StartSelection();
+    SetPopupWindow( pLineEndWin );
     return pLineEndWin;
 }
 
