@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:36:39 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ namespace connectivity
             // Knoten Operationen
             USHORT  Count() const {return nCount;}
 
-            BOOL    Insert(ONDXNode& rNode, ULONG nRowsLeft = 0);
+            BOOL    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
             BOOL    Insert(USHORT nIndex, ONDXNode& rNode);
             BOOL    Append(ONDXNode& rNode);
             BOOL    Delete(USHORT);
@@ -219,7 +219,7 @@ namespace connectivity
             void   SearchAndReplace(const ONDXKey& rSearch, ONDXKey& rReplace);
 
         protected:
-            ONDXPage(ODbaseIndex& rIndex, ULONG nPos, ONDXPage* = NULL);
+            ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = NULL);
             ~ONDXPage();
 
             virtual void QueryDelete();
