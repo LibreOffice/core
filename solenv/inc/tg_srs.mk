@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:40:47 $
+#   last change: $Author: hr $ $Date: 2004-04-08 15:10:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,7 +153,7 @@ $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICL
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$@ $(SRC$(TNR)FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS$(TNR)NAME).srs -fo$@ $(SRC$(TNR)FILES)
 
 $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
     @echo ------------------------------
