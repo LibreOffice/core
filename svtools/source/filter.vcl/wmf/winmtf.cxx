@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-11 14:35:22 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,14 +1238,11 @@ void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool bReco
 
 //-----------------------------------------------------------------------------------
 
-/* if we are taking care of polyflags in the output device the following code needs
-   to be activated, so beziers will be supported then (100127)
-
 void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
     UpdateClipRegion();
 
-    UINT16 nPoints = rPolygon.GetSize();
+    sal_uInt16 nPoints = rPolygon.GetSize();
     if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
     {
         ImplMap( rPolygon );
@@ -1267,47 +1264,6 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRe
         {
             UpdateLineStyle();
             mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
-        }
-    }
-}
-*/
-
-void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
-{
-    UpdateClipRegion();
-
-    UINT16 nPoints = rPolygon.GetSize();
-    if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
-    {
-        ImplMap( rPolygon );
-        if ( bTo )
-        {
-            rPolygon[ 0 ] = maActPos;
-            maActPos = rPolygon[ nPoints - 1 ];
-        }
-        // create bezier polygon
-        const USHORT    nSegPoints = 25;
-        const USHORT    nSegments = ( ( nPoints - 4 ) / 3 ) + 1;
-        Polygon         aBezPoly( nSegments * nSegPoints );
-
-        USHORT nSeg, nBezPos, nStartPos;
-        for( nSeg = 0, nBezPos = 0, nStartPos = 0; nSeg < nSegments; nSeg++, nStartPos += 3 )
-        {
-            const Polygon aSegPoly( rPolygon[ nStartPos ], rPolygon[ nStartPos + 1 ],
-                                    rPolygon[ nStartPos + 3 ], rPolygon[ nStartPos + 2 ],
-                                    nSegPoints );
-            for( USHORT nSegPos = 0; nSegPos < nSegPoints; )
-                aBezPoly[ nBezPos++ ] = aSegPoly[ nSegPos++ ];
-        }
-        if( nBezPos != aBezPoly.GetSize() )
-            aBezPoly.SetSize( nBezPos );
-
-        if ( bRecordPath )
-            aPathObj.AddPolyLine( aBezPoly );
-        else
-        {
-            UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( aBezPoly, maLineStyle.aLineInfo ) );
         }
     }
 }
