@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-01 08:57:00 $
+ *  last change: $Author: pb $ $Date: 2001-11-08 06:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,23 +1785,24 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 {
     if ( &m_aEmphasisLB == pBox )
     {
-        BOOL bEnable = ( m_aEmphasisLB.GetSelectEntryPos() > 0 );
+        USHORT nEPos = m_aEmphasisLB.GetSelectEntryPos();
+        BOOL bEnable = ( nEPos > 0 && nEPos != LISTBOX_ENTRY_NOTFOUND );
         m_aPositionFT.Enable( bEnable );
         m_aPositionLB.Enable( bEnable );
     }
     else if( &m_aReliefLB == pBox)
     {
         BOOL bEnable = ( pBox->GetSelectEntryPos() == 0 );
-        m_aOutlineBtn.Enable(bEnable);
-        m_aShadowBtn.Enable(bEnable);
+        m_aOutlineBtn.Enable( bEnable );
+        m_aShadowBtn.Enable( bEnable );
     }
     else if ( &m_aPositionLB != pBox )
     {
-        BOOL bEnable = ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) ;
+        USHORT nUPos = m_aUnderlineLB.GetSelectEntryPos(), nSPos = m_aStrikeoutLB.GetSelectEntryPos();
+        BOOL bEnable = ( nUPos > 0 && nUPos != LISTBOX_ENTRY_NOTFOUND );
         m_aColorFT.Enable( bEnable );
         m_aColorLB.Enable( bEnable );
-        m_aIndividualWordsBtn.Enable( bEnable || m_aStrikeoutLB.GetSelectEntryPos() > 0);
-
+        m_aIndividualWordsBtn.Enable( bEnable || ( nSPos > 0 && nSPos != LISTBOX_ENTRY_NOTFOUND ) );
     }
     UpdatePreview_Impl();
     return 0;
@@ -1955,14 +1956,31 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // WordLineMode
     nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
-
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    switch ( eState )
     {
-        const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
-        rFont.SetWordLineMode( rItem.GetValue() );
-        rCJKFont.SetWordLineMode( rItem.GetValue() );
-        m_aIndividualWordsBtn.Check( rItem.GetValue() );
-        m_aIndividualWordsBtn.Enable( bEnable );
+        case SFX_ITEM_UNKNOWN:
+            m_aIndividualWordsBtn.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aIndividualWordsBtn.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aIndividualWordsBtn.SetState( STATE_DONTKNOW );
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
+            rFont.SetWordLineMode( rItem.GetValue() );
+            rCJKFont.SetWordLineMode( rItem.GetValue() );
+            m_aIndividualWordsBtn.Check( rItem.GetValue() );
+            m_aIndividualWordsBtn.Enable( bEnable );
+            break;
+        }
     }
 
     // Emphasis
@@ -1976,15 +1994,14 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         rFont.SetEmphasisMark( eMark );
         rCJKFont.SetEmphasisMark( eMark );
         m_aEmphasisLB.SelectEntryPos( (USHORT)( eMark & EMPHASISMARK_STYLE ) );
-
         eMark &= ~EMPHASISMARK_STYLE;
-        ULONG nEntryData = eMark == EMPHASISMARK_POS_ABOVE ?
-                            CHRDLG_POSITION_OVER :
-                                eMark == EMPHASISMARK_POS_BELOW ?
-                                    CHRDLG_POSITION_UNDER : 0;
-        for(int i = 0; i < m_aPositionLB.GetEntryCount(); i++)
+        ULONG nEntryData = ( eMark == EMPHASISMARK_POS_ABOVE )
+            ? CHRDLG_POSITION_OVER
+            : ( eMark == EMPHASISMARK_POS_BELOW ) ? CHRDLG_POSITION_UNDER : 0;
+
+        for ( int i = 0; i < m_aPositionLB.GetEntryCount(); i++ )
         {
-            if(nEntryData == (ULONG)m_aPositionLB.GetEntryData(i))
+            if ( nEntryData == (ULONG)m_aPositionLB.GetEntryData(i) )
             {
                 m_aPositionLB.SelectEntryPos(i);
                 break;
@@ -1993,10 +2010,15 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     }
     else if ( eState == SFX_ITEM_DONTCARE )
         m_aEmphasisLB.SetNoSelection( );
-    else
+    else if ( eState == SFX_ITEM_UNKNOWN )
     {
-        m_aEmphasisFT.Disable( );
-        m_aEmphasisLB.Disable( );
+        m_aEmphasisFT.Hide();
+        m_aEmphasisLB.Hide();
+    }
+    else // SFX_ITEM_DISABLED or SFX_ITEM_READONLY
+    {
+        m_aEmphasisFT.Disable();
+        m_aEmphasisLB.Disable();
     }
 
     // the select handler for the underline/strikeout list boxes
@@ -2016,39 +2038,69 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         // this is for consistency only. Here it would be allowed to call SelectHdl_Impl directly ...
 
     // Effects
-    nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
     SvxCaseMap eCaseMap = SVX_CASEMAP_END;
+    nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
+    eState = rSet.GetItemState( nWhich );
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aEffectsFT.Hide();
+            m_aEffects2LB.Hide();
+            break;
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
-    {
-        const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
-        eCaseMap = (SvxCaseMap)rItem.GetValue();
-    }
-    else
-    {
-        m_aEffectsFT.Disable( );
-        m_aEffects2LB.Disable( );
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aEffectsFT.Disable();
+            m_aEffects2LB.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aEffects2LB.SetNoSelection();
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
+            eCaseMap = (SvxCaseMap)rItem.GetValue();
+            break;
+        }
     }
     SetCaseMap_Impl( eCaseMap );
 
     //Relief
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    eState = rSet.GetItemState( nWhich );
+    switch ( eState )
     {
-        const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
-        m_aReliefLB.SelectEntryPos(rItem.GetValue());
-        SelectHdl_Impl(&m_aReliefLB);
-    }
-    else
-    {
-        m_aReliefFT.Disable( );
-        m_aReliefLB.Disable( );
+        case SFX_ITEM_UNKNOWN:
+            m_aReliefFT.Hide();
+            m_aReliefLB.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aReliefFT.Disable();
+            m_aReliefLB.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aReliefLB.SetNoSelection();
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+            m_aReliefLB.SelectEntryPos(rItem.GetValue());
+            SelectHdl_Impl(&m_aReliefLB);
+            break;
+        }
     }
 
     // Outline
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
     eState = rSet.GetItemState( nWhich );
-
     switch ( eState )
     {
         case SFX_ITEM_UNKNOWN:
