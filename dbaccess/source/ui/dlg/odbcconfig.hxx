@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:48:44 $
+ *  last change: $Author: obo $ $Date: 2000-10-26 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #if defined(WIN) || defined(WNT) || defined (UNX)
 #define HAVE_ODBC_SUPPORT
+#endif
+#if ( defined(WIN) || defined(WNT) ) && defined(HAVE_ODBC_SUPPORT)
+#define HAVE_ODBC_ADMINISTRATION
 #endif
 
 #ifndef _OSL_MODULE_H_
@@ -171,6 +174,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/24 12:48:44  fs
+ *  initial checkin - wrapping (system) data source related ODBC functionality
+ *
  *
  *  Revision 1.0 24.10.00 10:11:51  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:13:30 $
+ *  last change: $Author: obo $ $Date: 2000-10-26 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,10 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
 IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 {
     OOdbcManagement aOdbcConfig;
+#ifdef HAVE_ODBC_ADMINISTRATION
     if (!aOdbcConfig.isLoaded())
     {
+#endif
         // show an error message
         OLocalResourceAccess aLocRes(DLG_DATASOURCE_SELECTION, RSC_MODALDIALOG);
         String sError(ModuleRes(STR_COULDNOTLOAD_CONFIGLIB));
@@ -187,10 +189,12 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
         m_aDatasource.GrabFocus();
         m_aManageDatasources.Disable();
         return 1L;
+#ifdef HAVE_ODBC_ADMINISTRATION
     }
 
     aOdbcConfig.manageDataSources(GetSystemData()->hWnd);
     return 0L;
+#endif
 }
 
 //.........................................................................
@@ -200,6 +204,9 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/24 12:13:30  fs
+ *  initial checkin - dialog for selecting system datasources
+ *
  *
  *  Revision 1.0 24.10.00 09:25:01  fs
  ************************************************************************/
