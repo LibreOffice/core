@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 18:47:27 $
+ *  last change: $Author: fs $ $Date: 2000-12-11 08:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ namespace connectivity
 
         private:
             struct DBFHeader {                       /* Kopfsatz-Struktur            */
-                                BYTE    db_typ;                         /* Dateityp                     */
+                                DBFType db_typ;                         /* Dateityp                     */
                                 BYTE    db_aedat[3];                    /* Datum der letzen Aenderung   */
                                                                         /* JJ MM TT                     */
                                 ULONG   db_anz;                         /* Anzahl der Saetze            */
@@ -125,7 +125,7 @@ namespace connectivity
                             };
             struct DBFMemoHeader
                             {
-                                BYTE    db_typ;                     /* Dateityp                     */
+                                DBFMemoType db_typ;                     /* Dateityp                     */
                                 UINT32  db_next;                        /* nächster freier Block        */
                                 USHORT  db_size;                        /* Blockgröße: dBase 3 fest     */
                             };
@@ -136,6 +136,7 @@ namespace connectivity
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
+            sal_Bool        m_bWriteable;
             sal_Bool        m_bWriteableMemo;
             sal_Bool        m_bValid;       // set to false when this isn't a correct dbase table
 
