@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 //------------------------------------------------------------------------------
 namespace
 {
-    static ::rtl::OUString getCompatibleControlServiceName( const ::rtl::OUString& _rServiceName )
+    static ::rtl::OUString getCompatibleControlServiceName( const ::rtl::OUString& _rServiceName, bool _bRevertedLookup )
     {
         ::rtl::OUString sReturn( _rServiceName );
 
@@ -1027,13 +1027,24 @@ namespace
             FRM_SUN_CONTROL_FORMATTEDFIELD, STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD
         };
 
-    sal_Int32 i = 0;
+        sal_Int32 i = 0;
         for ( ; i < sizeof( aServiceNamePairs ) / sizeof( aServiceNamePairs[ 0 ] ) / 2; ++i )
         {
-            if ( _rServiceName == aServiceNamePairs[ 2 * i ] )
+            if ( _bRevertedLookup )
             {
-                sReturn = aServiceNamePairs[ 2 * i + 1 ];
-                break;
+                if ( _rServiceName == aServiceNamePairs[ 2 * i + 1 ] )
+                {
+                    sReturn = aServiceNamePairs[ 2 * i ];
+                    break;
+                }
+            }
+            else
+            {
+                if ( _rServiceName == aServiceNamePairs[ 2 * i ] )
+                {
+                    sReturn = aServiceNamePairs[ 2 * i + 1 ];
+                    break;
+                }
             }
         }
 #if OSL_DEBUG_LEVEL > 0
@@ -1082,7 +1093,7 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
         if ( m_xAggregateSet.is() )
         {
             m_xAggregateSet->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sOriginalDefaultControl;
-            ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl ) );
+            ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl, false ) );
             m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sNewDefaultControl ) );
         }
 
@@ -1141,7 +1152,24 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     {
         sal_Int32 nMark = xMark->createMark();
 
-        readAggregate( InStream );
+        try
+        {
+            readAggregate( InStream );
+
+            // translate the service name to a more modern one.
+            // #i29828# - 2004-06-18 - fs@openoffice.org
+            if ( m_xAggregateSet.is() )
+            {
+                ::rtl::OUString sOriginalDefaultControl;
+                m_xAggregateSet->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sOriginalDefaultControl;
+                ::rtl::OUString sNewDefaultControl( getCompatibleControlServiceName( sOriginalDefaultControl, true ) );
+                m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( sNewDefaultControl ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlModel::read: caught an exception!" );
+        }
 
         xMark->jumpToMark(nMark);
         InStream->skipBytes(nLen);
