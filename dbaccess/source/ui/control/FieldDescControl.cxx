@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:20:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 13:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2055,12 +2055,14 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
         sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),nFormatKey);
         if(nNumberFormat == NumberFormat::TEXT)
             pFormatSample->SetText(sDefault);
-        else if(sDefault.Len())
+        else
         {
             Reference<XNumberFormatPreviewer> xPreViewer(GetFormatter(),UNO_QUERY);
             OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
 
-            double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
+            double nValue = 0;
+            if(sDefault.Len())
+                nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
             Reference<XPropertySet> xFormSet = GetFormatter()->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
 
@@ -2073,7 +2075,7 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Format Exception!");
+
     }
 }
 
