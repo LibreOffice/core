@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:19:55 $
+#   last change: $Author: pjunck $ $Date: 2004-10-28 13:35:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ EXCEPTIONSFILES=				\
         $(SLO)$/drviews8.obj \
         $(SLO)$/drviewsa.obj \
         $(SLO)$/outlnvsh.obj \
-        $(SLO)$/slidvish.obj	
+        $(SLO)$/slidvish.obj \
+        $(SLO)$/ObjectBarManager.obj
 
 EXCEPTIONSNOOPTFILES=\
         $(SLO)$/drviews5.obj\
@@ -160,6 +161,7 @@ SLOFILES =	\
         $(SLO)$/ViewShellImplementation.obj		\
         $(SLO)$/ViewShellManager.obj			\
         $(SLO)$/ViewShellCache.obj				\
+        $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj
 
