@@ -18821,3 +18821,4 @@ _real@8@400d8ca0000000000000
 ?skipBytes@SvXMLGraphicInputStream@@EAAXJ@Z
 ?writeBytes@SvXMLGraphicOutputStream@@EAAXABV?$Sequence@C@uno@star@sun@com@@@Z
 _TI3?AVNotConnectedException@io@star@sun@com@@
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@G@2345@@Z
