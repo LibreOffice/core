@@ -77,12 +77,13 @@ echo "Munging po/Makefile.in.in"
 sed s%@PACKAGE@%@GETTEXT_PACKAGE@% < po/Makefile.in.in > po/Makefile.in.in.new
 mv po/Makefile.in.in.new po/Makefile.in.in
 
+chmod 666 aclocal.m4
 aclocal $ACLOCAL_FLAGS
 
 # optionally feature autoheader
 (autoheader --version)  < /dev/null > /dev/null 2>&1 && autoheader
 
-automake -a $am_opt
+automake --foreign $am_opt
 autoconf
 cd $ORIGDIR
 
