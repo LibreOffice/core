@@ -2,8 +2,8 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.4 $
- *  last change: $Author: hr $ $Date: 2003-04-29 16:32:57 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String RID_SVXSTR_FRAMEDIR_LTR
     Text[ czech ] = "Zleva doprava";
     Text[ hebrew ] = "‮משמאל-לימין‬";
     Text[ hindi ] = "बायाँ ओर से दाहिनी ओर";
+    Text[ slovak ] = "Zľava-do-prava";
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
@@ -120,6 +121,7 @@ String RID_SVXSTR_FRAMEDIR_RTL
     Text[ czech ] = "Zprava doleva";
     Text[ hebrew ] = "‮מימין-לשמאל‬";
     Text[ hindi ] = "Right-to-left";
+    Text[ slovak ] = "Sprava-do-ľava";
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
@@ -150,6 +152,7 @@ String RID_SVXSTR_FRAMEDIR_SUPER
     Text[ czech ] = "Použít nastavení nadřazeného objektu";
     Text[ hebrew ] = "Einstellungen des übergeordneten Objektes verwenden";
     Text[ hindi ] = "Use superordinate object settings";
+    Text[ slovak ] = "Použiť nastavenia nadriadeného objektu";
 };
 
 // page direction -------------------------------------------------------------
@@ -182,6 +185,7 @@ String RID_SVXSTR_PAGEDIR_LTR_HORI
     Text[ czech ] = "Zleva doprava (vodorovně)";
     Text[ hebrew ] = "Links-nach-rechts (horizontal)";
     Text[ hindi ] = "Left-to-right (horizontal)";
+    Text[ slovak ] = "Zľava-do-prava (horizontálne)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_HORI
@@ -212,6 +216,7 @@ String RID_SVXSTR_PAGEDIR_RTL_HORI
     Text[ czech ] = "Zprava doleva (vodorovně)";
     Text[ hebrew ] = "Rechts-nach-links (horizontal)";
     Text[ hindi ] = "Right-to-left (horizontal)";
+    Text[ slovak ] = "Sprava-do-ľava (horizontálne)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_VERT
@@ -242,6 +247,7 @@ String RID_SVXSTR_PAGEDIR_RTL_VERT
     Text[ czech ] = "Zprava doleva (svisle)";
     Text[ hebrew ] = "Rechts-nach-links (vertikal)";
     Text[ hindi ] = "Right-to-left (vertical)";
+    Text[ slovak ] = "Sprava-do-ľava (vertikálne)";
 };
 
 String RID_SVXSTR_PAGEDIR_LTR_VERT
@@ -272,9 +278,12 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
     Text[ czech ] = "Zleva doprava (svisle)";
     Text[ hebrew ] = "Links-nach-rechts (vertikal)";
     Text[ hindi ] = "Left-to-right (vertical)";
+    Text[ slovak ] = "Zľava-do-prava (vertikálne)";
 };
 
 // ----------------------------------------------------------------------------
+
+
 
 
 
