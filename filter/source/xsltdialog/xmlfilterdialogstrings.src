@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:18:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,21 @@ String STR_COLUMN_HEADER_NAME
     Text[ korean ] = "이름";
     Text[ chinese_simplified ] = "名称";
     Text[ chinese_traditional ] = "名稱";
+    Text[ portuguese ] = "Nome";
+    Text[ russian ] = "���";
+    Text[ greek ] = "�����";
+    Text[ dutch ] = "Naam";
+    Text[ finnish ] = "Nimi";
+    Text[ czech ] = "Název";
+    Text[ danish ] = "Navn";
+    Text[ polish ] = "Nazwa";
+    Text[ portuguese_brazilian ] = "Nome";
+    Text[ turkish ] = "Ad";
+    Text[ arabic ] = "�����";
+    Text[ hebrew ] = "‮שם מדפסת‬";
+    Text[ catalan ] = "Nom:";
+    Text[ thai ] = "ชื่อ:";
+    Text[ slovak ] = "Názov";
 };
 
 String STR_COLUMN_HEADER_TYPE
@@ -88,6 +103,21 @@ String STR_COLUMN_HEADER_TYPE
     Text[ korean ] = "종류";
     Text[ chinese_simplified ] = "类型";
     Text[ chinese_traditional ] = "類型";
+    Text[ portuguese ] = "Tipo";
+    Text[ russian ] = "���";
+    Text[ greek ] = "�����";
+    Text[ dutch ] = "~Type";
+    Text[ finnish ] = "Tyyppi";
+    Text[ czech ] = "Typ";
+    Text[ danish ] = "V�RDITYPE";
+    Text[ polish ] = "Typ";
+    Text[ portuguese_brazilian ] = "Tipo";
+    Text[ turkish ] = "T�r";
+    Text[ arabic ] = "�����";
+    Text[ hebrew ] = "‮סוג‬";
+    Text[ catalan ] = "Tipus";
+    Text[ thai ] = "ชนิด";
+    Text[ slovak ] = "Typ";
 };
 
 String STR_UNKNOWN_APPLICATION
@@ -102,6 +132,21 @@ String STR_UNKNOWN_APPLICATION
     Text[ korean ] = "알 수 없음";
     Text[ chinese_simplified ] = "不明的";
     Text[ chinese_traditional ] = "不明的";
+    Text[ portuguese ] = "Desconhecido";
+    Text[ russian ] = "����������";
+    Text[ greek ] = "�������";
+    Text[ dutch ] = "Onbekend";
+    Text[ finnish ] = "tuntematon";
+    Text[ czech ] = "neznámý";
+    Text[ danish ] = "Ukendt";
+    Text[ polish ] = "Nieznany";
+    Text[ portuguese_brazilian ] = "desconhecido";
+    Text[ turkish ] = "Bilinmiyor";
+    Text[ arabic ] = "��� �����";
+    Text[ hebrew ] = "‮לא מוכר‬";
+    Text[ catalan ] = "Desconegut";
+    Text[ thai ] = "ไม่รู้จัก";
+    Text[ slovak ] = "Neznáme";
 };
 
 String STR_IMPORT_ONLY
@@ -116,6 +161,7 @@ String STR_IMPORT_ONLY
     Text[ korean ] = "가져오기 필터";
     Text[ chinese_simplified ] = "输入筛选器";
     Text[ chinese_traditional ] = "匯入篩選器";
+    Text[ slovak ] = "importný filter";
 };
 
 String STR_IMPORT_EXPORT
@@ -130,6 +176,7 @@ String STR_IMPORT_EXPORT
     Text[ korean ] = "가져오기/내보내기 필터";
     Text[ chinese_simplified ] = "输入/输出筛选器";
     Text[ chinese_traditional ] = "匯入/匯出篩選器";
+    Text[ slovak ] = "importný/exportný filter";
 };
 
 String STR_EXPORT_ONLY
@@ -139,11 +186,12 @@ String STR_EXPORT_ONLY
     Text[ french ] = "Filtre d'export";
     Text[ spanish ] = "Exportar filtro";
     Text[ italian ] = "Esporta filtro";
-    Text[ swedish ] = "Exportfilter";
+    Text[ swedish ] = "exportfilter";
     Text[ japanese ] = "エクスポートフィルタ";
     Text[ korean ] = "내보내기 필터";
     Text[ chinese_simplified ] = "输出筛选器";
     Text[ chinese_traditional ] = "匯出篩選器";
+    Text[ slovak ] = "exportný filter";
 };
 
 String STR_APPL_NAME_WRITER
@@ -178,20 +226,22 @@ String STR_WARN_DELETE
     Text[ korean ] = "XML Filter '%s'을(를) 삭제하시겠습니까? 이 실행은 취소할 수 없습니다.";
     Text[ chinese_simplified ] = "您真的要删除 XML 筛选器 '%s'? 此操作将无法撤销。";
     Text[ chinese_traditional ] = "您真的要刪除 XML 篩選器 '%s'? 此動作將無法恢復。";
+    Text[ slovak ] = "Určite chcete zmazať XML filter '%s'? Tento krok nemôže byť vrátený.";
 };
 
 String STR_ERROR_FILTER_NAME_EXISTS
 {
     Text                = "Es existiert bereits ein XML-Filter mit dem Namen '%s'. Bitte w�hlen Sie einen anderen Namen.";
     Text [english_us]   = "An XML filter with the name '%s' already exists. Please enter a different name.";
-    Text[ french ] = "Il existe d�j� un filtre XML nomm� '%s'. Choisissez un autre nom.";
-    Text[ spanish ] = "Un filtro XML de nombre '%s' ya existe. Introduzca otro nombre.";
+    Text[ french ] = "Un filtre XML nomm� '%s' existe d�j�. Choisissez un autre nom.";
+    Text[ spanish ] = "Ya existe un filtro XML de nombre '%s'. Introduzca otro nombre.";
     Text[ italian ] = "Un filtro XML dal nome '%s' esiste gi�. Indicate un nome diverso.";
     Text[ swedish ] = "Det finns redan ett XML-filter med namnet '%s'. Ange ett annat namn.";
-    Text[ japanese ] = "'%s' の名前が付いた XML フィルタがすでにあります。別の名前を入力してください。";
-    Text[ korean ] = "이름이 '%s'인 XML 필터가 이미 있습니다. 다른 이름을 입력해주십시오.";
-    Text[ chinese_simplified ] = "已经存在一个 XML 筛选器 '%s' 。请输入一个不同的名称。";
-    Text[ chinese_traditional ] = "已存在一個 '%s' 。 請輸入一個不同的名稱。";
+    Text[ japanese ] = "'%s' の名前が付いた XML フィルタはすでにあります。別の名前を入力してください。";
+    Text[ korean ] = "'%s'의 이름을 가진 XML 필터가 이미 있습니다. 다른 이름을 입력해주십시오.";
+    Text[ chinese_simplified ] = "已经存在一个名称为'%s'的 XML 筛选器 。请输入一个不同的名称。";
+    Text[ chinese_traditional ] = "已經存在一個名稱為 '%s' 的 XML 篩選器。 請輸入一個不同的名稱。";
+    Text[ slovak ] = "XML filter s týmto názvom '%s' už existuje. Prosím zadajte iný názov.";
 };
 
 String STR_ERROR_TYPE_NAME_EXISTS
@@ -206,6 +256,7 @@ String STR_ERROR_TYPE_NAME_EXISTS
     Text[ korean ] = "사용자 인터페이스 '%s1'의 이름은 이미 XML 필터 '%s2'의 이름으로 사용하고 있습니다. 다른 이름을 입력해주십시오.";
     Text[ chinese_simplified ] = "XML 筛选器 '%s2' 已经使用了使用界面 '%s1' 的名称。请输入一个不同的名称。";
     Text[ chinese_traditional ] = "XML 篩選器 '%s2' 已使用使用介面 '%s1' 名稱。請輸入一個不同的名稱。";
+    Text[ slovak ] = "Názov užívateľského interface '%s1' už používa XML filter '%s2'. Prosím zadajte iný názov.";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
@@ -215,11 +266,12 @@ String STR_ERROR_DTD_NOT_FOUND
     Text[ french ] = "Impossible de d�tecter la DTD : sp�cifiez un chemin valide.";
     Text[ spanish ] = "No se puede encontrar la DTD (definici�n del tipo de documento). Introduzca una ruta v�lida.";
     Text[ italian ] = "Impossibile trovare il DTD (definizione del tipo di documento). Indicate un percorso valido.";
-    Text[ swedish ] = "DTD:n kan inte hittas. Ange en giltig s�kv�g.";
-    Text[ japanese ] = "DTD は見つかりません。有効なパスを入力してください。";
+    Text[ swedish ] = "DTD:n kunde inte hittas. Ange en giltig s�kv�g.";
+    Text[ japanese ] = "DTD は見つかりませんでした。有効なパスを入力してください。";
     Text[ korean ] = "DTD를 찾을 수 없습니다. 올바른 경로를 입력해주십시오.";
     Text[ chinese_simplified ] = "无法找到 DTD 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到 DTD 。請輸入一個有效的路徑。";
+    Text[ slovak ] = "DTD nebolo nájdené. Prosím zadajte platnú cestu.";
 };
 
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
@@ -234,6 +286,7 @@ String STR_ERROR_EXPORT_XSLT_NOT_FOUND
     Text[ korean ] = "내보내기용 XSLT를 찾을 수 없습니다. 올바른 경로를 입력해주십시오.";
     Text[ chinese_simplified ] = "无法找到输出 XSLT 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到匯出 XSLT 。請輸入一個有效的路徑。";
+    Text[ slovak ] = "XSLT pre export nebolo nájdené. Prosím zadajte platnú cestu.";
 };
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
@@ -248,6 +301,7 @@ String STR_ERROR_IMPORT_XSLT_NOT_FOUND
     Text[ korean ] = "가져오기용 XSLT를 찾을 수 없습니다. 올바른 경로를 입력해주십시오.";
     Text[ chinese_simplified ] = "无法找到输入文档样式。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到匯入文件樣式。請輸入一個有效的路徑。";
+    Text[ slovak ] = "XSLT pre import nebolo nájdené. Prosím zadajte platnú cestu.";
 };
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
@@ -257,11 +311,12 @@ String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
     Text[ french ] = "Impossible de d�tecter le mod�le d'import d�termin� : sp�cifiez un chemin valide.";
     Text[ spanish ] = "La plantilla de importaci�n especificada no se encuentra. Introduzca una ruta v�lida.";
     Text[ italian ] = "Impossibile trovare il modello d'importazione richiesto. Indicate un percorso valido.";
-    Text[ swedish ] = "Den givna importmallen kan inte hittas. Ange en giltig s�kv�g.";
+    Text[ swedish ] = "Den angivna importmallen kunde inte hittas. Ange en giltig s�kv�g.";
     Text[ japanese ] = "入力したインポートフィルタは見つかりません。有効なパスを入力してください。";
     Text[ korean ] = "지정한 가져오기 서식 파일을 찾을 수 없습니다. 올바른 경로를 입력해주십시오.";
     Text[ chinese_simplified ] = "无法找到 DTD 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到 DTD 。請輸入一個有效的路徑。";
+    Text[ slovak ] = "Zadaná šablóna nebola nájdená. Prosím zadajte platnú cestu.";
 };
 
 String STR_NOT_SPECIFIED
@@ -276,6 +331,7 @@ String STR_NOT_SPECIFIED
     Text[ korean ] = "지정되지 않음";
     Text[ chinese_simplified ] = "尚未指定";
     Text[ chinese_traditional ] = "尚未指定";
+    Text[ slovak ] = "Nešpecifikované";
 };
 
 String STR_NO_ERRORS_FOUND
@@ -295,6 +351,7 @@ String STR_DEFAULT_FILTER_NAME
     Text[ korean ] = "새 필터";
     Text[ chinese_simplified ] = "新的筛选器";
     Text[ chinese_traditional ] = "新的篩選器";
+    Text[ slovak ] = "Nový filter";
 };
 
 String STR_DEFAULT_UI_NAME
@@ -309,6 +366,21 @@ String STR_DEFAULT_UI_NAME
     Text[ korean ] = "제목 없음";
     Text[ chinese_simplified ] = "未命名";
     Text[ chinese_traditional ] = "未命名";
+    Text[ portuguese ] = "Sem nome";
+    Text[ russian ] = "��� �����";
+    Text[ greek ] = "����� �����";
+    Text[ dutch ] = "Naamloos";
+    Text[ finnish ] = "Nimet�n";
+    Text[ czech ] = "Bez_názvu";
+    Text[ danish ] = "Ikke-navngivet";
+    Text[ polish ] = "Bez tytu�u";
+    Text[ portuguese_brazilian ] = "Sem nome";
+    Text[ turkish ] = "Ads�z";
+    Text[ arabic ] = "���� �����";
+    Text[ hebrew ] = "‮ללא כותרת‬";
+    Text[ catalan ] = "Sense t�tol";
+    Text[ thai ] = "ไม่มีชื่อ";
+    Text[ slovak ] = "Bez_názvu";
 };
 
 String STR_DEFAULT_EXTENSION
@@ -328,6 +400,7 @@ String STR_UNDEFINED_FILTER
     Text[ korean ] = "정의되지 않은 필터";
     Text[ chinese_simplified ] = "未定义的筛选器";
     Text[ chinese_traditional ] = "未定義的篩選器";
+    Text[ slovak ] = "nedefinovaný filter";
 };
 
 String STR_FILTER_HAS_BEEN_SAVED
@@ -342,6 +415,7 @@ String STR_FILTER_HAS_BEEN_SAVED
     Text[ korean ] = "XML 필터 '%s'을(를) 패키지 '%s'로 저장했습니다. ";
     Text[ chinese_simplified ] = "XML 筛选器 '%s' 已经存为软件包 '%s' 。";
     Text[ chinese_traditional ] = "XML 篩選器 '%s' 已經另存為套裝 '%s' 。";
+    Text[ slovak ] = "XML filter '%s' bol uložený ako balík '%s'. ";
 };
 
 String STR_FILTERS_HAVE_BEEN_SAVED
@@ -356,6 +430,7 @@ String STR_FILTERS_HAVE_BEEN_SAVED
     Text[ korean ] = "%s XML 필터를 '%s' 패키지에 저장했습니다.";
     Text[ chinese_simplified ] = "%s XML 筛选器已经存入软件包 '%s' 。";
     Text[ chinese_traditional ] = "%s XML 篩選器已經存入套裝 '%s' 。";
+    Text[ slovak ] = "%s XML filtre boli uložené do balíka '%s'.";
 };
 
 String STR_FILTER_PACKAGE
@@ -370,6 +445,7 @@ String STR_FILTER_PACKAGE
     Text[ korean ] = "XSLT 필터 패키지";
     Text[ chinese_simplified ] = "XSLT 筛选器软件包";
     Text[ chinese_traditional ] = "XSLT 篩選器套裝";
+    Text[ slovak ] = "XSLT balík filtrov";
 };
 
 String STR_FILTER_INSTALLED
@@ -384,6 +460,7 @@ String STR_FILTER_INSTALLED
     Text[ korean ] = "XML 필터 '%s'의 설치가 성공적으로 완료되었습니다.";
     Text[ chinese_simplified ] = "已经成功地安装了 XML 筛选器 '%s' 。";
     Text[ chinese_traditional ] = "已經成功地安裝 XML 篩選器 '%s' 。";
+    Text[ slovak ] = "XML filter '%s' bol úspešne inštalovaný.";
 };
 
 String STR_FILTERS_INSTALLED
@@ -398,6 +475,7 @@ String STR_FILTERS_INSTALLED
     Text[ korean ] = "%s XML 필터의 설치가 성공적으로 완료되었습니다.";
     Text[ chinese_simplified ] = "已经成功地安装了 %s XML 筛选器。";
     Text[ chinese_traditional ] = "已經成功安裝 %s XML 篩選器。";
+    Text[ slovak ] = "%s XML filtre boli úspešne inštalované.";
 };
 
 String STR_NO_FILTERS_FOUND
@@ -412,7 +490,10 @@ String STR_NO_FILTERS_FOUND
     Text[ korean ] = "패키지 '%s'에 XML 필터가 없는 이유로 XML 필터를 설치하지 못했습니다.";
     Text[ chinese_simplified ] = "因为软件包 '%s' 没有包含任何的 XML 筛选器， 因此无法安装 XML 筛选器。";
     Text[ chinese_traditional ] = "因爲套裝 '%s' 沒有包含任何的 XML 篩選器，因此無法安裝 XML 篩選器。";
+    Text[ slovak ] = "Nebol nainštalovaný žiaden XML filter, pretože balík '%s' neobsahuje žiadne XML filtre.";
 };
+
+
 
 
 
