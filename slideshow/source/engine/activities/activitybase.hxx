@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitybase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:58:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,6 @@ namespace presentation
         public:
             ActivityBase( const ActivityParameters& rParms );
 
-            /** Hook for derived classes
-
-                This method will be called from the first
-                perform() invocation, to signal the start of the
-                activity.
-            */
-            virtual void start() = 0;
-
             /// From Disposable interface
             virtual void dispose();
 
@@ -100,16 +92,44 @@ namespace presentation
                 and then perform their work.
             */
             virtual bool perform();
+            virtual double calcTimeLag() const;
 
             virtual bool isActive() const;
             virtual bool needsScreenUpdate() const;
-            virtual void end();
+            // virtual void dequeued() = 0; must be overridden by derived classes
 
             // From AnimationActivity interface
             virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
                                      const ShapeAttributeLayerSharedPtr&    rAttrLayer );
 
         protected:
+            /** Hook for derived classes
+
+                This method will be called from the first
+                perform() invocation, to signal the start of the
+                activity.
+            */
+            virtual void startAnimation() = 0;
+
+            /** Hook for derived classes
+
+                This method will be called after the last perform()
+                invocation, and after the potential changes of that
+                perform() call are committed to screen. That is, in
+                endAnimation(), the animation objects (sprites,
+                animation) can safely be destroyed, without causing
+                visible artifacts on screen.
+            */
+            virtual void endAnimation() = 0;
+
+            /** End this activity, in a regular way.
+
+                This method is for derived classes needing to signal a
+                regular activity end (i.e. because the regular
+                duration is over)
+             */
+            void endActivity();
+
             /** Modify fractional time.
 
                 This method modifies the fractional time (total
@@ -119,9 +139,14 @@ namespace presentation
             */
             double calcAcceleratedTime( double nT ) const;
 
-            // TODO(Q2): Wrap direct member access with protected
-            // accessor methods
+            EventQueue&                     getEventQueue() const { return mrEventQueue; }
+            AnimatableShapeSharedPtr        getShape() const { return mpShape; }
+            ShapeAttributeLayerSharedPtr    getShapeAttributeLayer() const { return mpAttributeLayer; }
+            bool                            isRepeatCountValid() const { return maRepeats.isValid(); }
+            double                          getRepeatCount() const { return maRepeats.getValue(); }
+            bool                            isAutoReverse() const { return mbAutoReverse; }
 
+        private:
             EventSharedPtr                              mpEndEvent;
             EventQueue&                                 mrEventQueue;
             AnimatableShapeSharedPtr                    mpShape;            // only to pass on to animation
@@ -133,7 +158,7 @@ namespace presentation
 
             const bool                                  mbAutoReverse;
 
-            bool                                        mbFirstPerformCall; // true, if perform() has not yet been called
+            mutable bool                                mbFirstPerformCall; // true, if perform() has not yet been called
             bool                                        mbIsActive;
         };
     }
