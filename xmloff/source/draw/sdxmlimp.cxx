@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:31:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@ static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
     { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
     { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME       },
     { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_MASTERPAGE_USE_HEADER_NAME  },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_MASTERPAGE_USE_FOOTER_NAME  },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME   },
     XML_TOKEN_MAP_END
 };
 
@@ -221,6 +224,10 @@ static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
     { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
     { XML_NAMESPACE_DRAW,           XML_ID,                             XML_TOK_DRAWPAGE_ID                 },
     { XML_NAMESPACE_XLINK,          XML_HREF,                           XML_TOK_DRAWPAGE_HREF               },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_DRAWPAGE_USE_HEADER_NAME    },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_DRAWPAGE_USE_FOOTER_NAME    },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_DRAWPAGE_USE_DATE_TIME_NAME },
+
     XML_TOKEN_MAP_END
 };
 
@@ -881,13 +888,13 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     {
         try
         {
-            if( xInfo->hasPropertyByName( pValues->Name ) )
-            {
-                xProps->setPropertyValue( pValues->Name, pValues->Value );
-            }
+            const OUString& rProperty = pValues->Name;
+            if( xInfo->hasPropertyByName( rProperty ) )
+                xProps->setPropertyValue( rProperty, pValues->Value );
         }
-        catch( uno::Exception& )
+        catch( uno::Exception& e )
         {
+            (void)e;
             OSL_TRACE( "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }
 
@@ -974,6 +981,67 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
                 return XMLImpressImportOasis_getImplementationName();
         }
     }
+}
+
+    HeaderFooterDeclMap         maHeaderDeclsMap;
+    HeaderFooterDeclMap         maFooterDeclsMap;
+    DateTimeDeclMap             maDateTimeDeclsMap;
+
+void SdXMLImport::AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
+{
+    if( rName.getLength() && rText.getLength() )
+        maHeaderDeclsMap[rName] = rText;
+}
+
+void SdXMLImport::AddFooterDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
+{
+    if( rName.getLength() && rText.getLength() )
+        maFooterDeclsMap[rName] = rText;
+}
+
+void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText, sal_Bool bFixed, const ::rtl::OUString& rDateTimeFormat )
+{
+    if( rName.getLength() && (rText.getLength() || !bFixed) )
+    {
+        DateTimeDeclContextImpl aDecl;
+        aDecl.maStrText = rText;
+        aDecl.mbFixed = bFixed;
+        aDecl.maStrDateTimeFormat = rDateTimeFormat;
+        maDateTimeDeclsMap[rName] = aDecl;
+    }
+}
+
+::rtl::OUString SdXMLImport::GetHeaderDecl( const ::rtl::OUString& rName ) const
+{
+    ::rtl::OUString aRet;
+    HeaderFooterDeclMap::const_iterator aIter( maHeaderDeclsMap.find( rName ) );
+    if( aIter != maHeaderDeclsMap.end() )
+        aRet = (*aIter).second;
+
+    return aRet;
+}
+
+::rtl::OUString SdXMLImport::GetFooterDecl( const ::rtl::OUString& rName ) const
+{
+    ::rtl::OUString aRet;
+    HeaderFooterDeclMap::const_iterator aIter( maFooterDeclsMap.find( rName ) );
+    if( aIter != maFooterDeclsMap.end() )
+        aRet = (*aIter).second;
+
+    return aRet;
+}
+
+::rtl::OUString SdXMLImport::GetDateTimeDecl( const ::rtl::OUString& rName, sal_Bool& rbFixed, ::rtl::OUString& rDateTimeFormat )
+{
+    DateTimeDeclContextImpl aDecl;
+
+    DateTimeDeclMap::const_iterator aIter( maDateTimeDeclsMap.find( rName ) );
+    if( aIter != maDateTimeDeclsMap.end() )
+        aDecl = (*aIter).second;
+
+    rbFixed = aDecl.mbFixed;
+    rDateTimeFormat = aDecl.maStrDateTimeFormat;
+    return aDecl.maStrText;
 }
 
 // eof
