@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,7 +1555,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     }
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // only paint first level bidi portions
     if( rMulti.Width() > 1 && ! pEnvPor )
         GetInfo().DrawViewOpt( rMulti, POR_FLD );
