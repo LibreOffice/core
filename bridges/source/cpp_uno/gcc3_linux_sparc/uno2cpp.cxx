@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:03:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ namespace
 // never happens at runtime), which in turn can throw exceptions, and (b)
 // callVirtualMethod is not inlined at its call site (so that any exceptions are
 // caught which are thrown from the instruction calling callVirtualMethod):
+
 void callVirtualMethod( void * pAdjustedThisPtr,
                         sal_Int32 nVtableIndex,
                         void * pRegisterReturn,
@@ -222,7 +223,7 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "ld [%%i0], %%l0\n\t"       // get vtable ptr
 
 "sll %%i1, 2, %%l6\n\t"
-//         "add %%l6, 8, %%l6\n\t"
+//        "add %%l6, 8, %%l6\n\t"
         "add %%l6, %%l0, %%l0\n\t"
 //      // vtable has 8byte wide entries,
 //      // upper half contains 2 half words, of which the first
@@ -304,8 +305,7 @@ void callVirtualMethod( void * pAdjustedThisPtr,
     }
 }
 
-
-//==================================================================================================
+//=================================================================================================
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -314,7 +314,8 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
       // max space for: complex ret ptr, this, values|ptr ...
-      char * pCppStack  = (char *)alloca( (nParams+3) * sizeof(sal_Int64) );
+      char * pCppStack  =
+          (char *)alloca( (nParams+2) * sizeof(sal_Int64) );
       char * pCppStackStart = pCppStack;
 
     // return
@@ -329,15 +330,14 @@ static void cpp_call(
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
         {
             pCppReturn = pUnoReturn; // direct way for simple types
+            *(void**)pCppStack = NULL;
         }
         else
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack
-            = (bridges::cpp_uno::shared::relatesToInterfaceType(
-             pReturnTypeDescr )
-            ? alloca( pReturnTypeDescr->nSize )
-            : pUnoReturn); // direct way
+            pCppReturn = *(void **)pCppStack = (bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr )
+                                                ? alloca( pReturnTypeDescr->nSize )
+                                                : pUnoReturn); // direct way
         }
         pCppStack += sizeof(void*);
     }
@@ -363,21 +363,16 @@ static void cpp_call(
         const typelib_MethodParameter & rParam = pParams[nPos];
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
-        if (!rParam.bOut
-                 && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-            pCppArgs[ nPos ] = CPPU_CURRENT_NAMESPACE::adjustPointer(
-                pCppStack, pParamTypeDescr );
-            uno_copyAndConvertData( pCppArgs[nPos], pUnoArgs[nPos], pParamTypeDescr,
-                                    pThis->getBridge()->getUno2Cpp() );
+            pCppArgs[ nPos ] = CPPU_CURRENT_NAMESPACE::adjustPointer(pCppStack, pParamTypeDescr );
 
             switch (pParamTypeDescr->eTypeClass)
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
-
-                          OSL_ASSERT( sizeof (double) == sizeof (sal_Int64) );
+                        OSL_ASSERT( sizeof (double) == sizeof (sal_Int64) );
                           *reinterpret_cast< sal_Int32 * >(pCppStack) =
                           *reinterpret_cast< sal_Int32 const * >(pUnoArgs[ nPos ]);
                           pCppStack += sizeof (sal_Int32);
@@ -411,8 +406,8 @@ static void cpp_call(
             {
                 uno_copyAndConvertData(
                     *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                                pUnoArgs[nPos], pParamTypeDescr,
-                         pThis->getBridge()->getUno2Cpp() );
+                                    pUnoArgs[nPos], pParamTypeDescr,
+                    pThis->getBridge()->getUno2Cpp() );
 
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
@@ -430,8 +425,9 @@ static void cpp_call(
 
     try
     {
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic" );
         int nStackLongs = (pCppStack - pCppStackStart)/sizeof(sal_Int32);
+        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic" );
+
         if( nStackLongs & 1 )
             // stack has to be 8 byte aligned
             nStackLongs++;
@@ -441,7 +437,7 @@ static void cpp_call(
             pCppReturn,
             pReturnTypeDescr->eTypeClass,
             (sal_Int32 *)pCppStackStart,
-            nStackLongs);
+             nStackLongs);
         // NO exception occured...
         *ppUnoExc = 0;
 
@@ -480,9 +476,9 @@ static void cpp_call(
     }
      catch( ... )
      {
-                printf("uno2cpp catch got exception!!!\n"); // why is the following __cxa ???
-        // get exception
-           fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+         // get exception
+           fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions,
+                                *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
         for ( ; nTempIndizes--; )
@@ -498,7 +494,6 @@ static void cpp_call(
     }
 }
 
-}
 
 //==================================================================================================
 void bridges::cpp_uno::shared::UnoInterfaceProxy::dispatch(
@@ -626,3 +621,4 @@ void * pReturn, void * pArgs[], uno_Any ** ppException ) SAL_THROW(())
     }
 }
 
+}
