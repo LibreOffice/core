@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2000-10-26 08:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,40 @@ ULONG ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
         rTwoRect.mnDestHeight = -rTwoRect.mnDestHeight;
         rTwoRect.mnDestY -= rTwoRect.mnDestHeight-1;
         nMirrFlags |= BMP_MIRROR_VERT;
+    }
+
+    if( ( rTwoRect.mnSrcX < 0 ) || ( rTwoRect.mnSrcX >= rSizePix.Width() ) ||
+        ( rTwoRect.mnSrcY < 0 ) || ( rTwoRect.mnSrcY >= rSizePix.Height() ) ||
+        ( ( rTwoRect.mnSrcX + rTwoRect.mnSrcWidth ) > rSizePix.Width() ) ||
+        ( ( rTwoRect.mnSrcY + rTwoRect.mnSrcHeight ) > rSizePix.Height() ) )
+    {
+        const Rectangle aSourceRect( Point( rTwoRect.mnSrcX, rTwoRect.mnSrcY ),
+                                     Size( rTwoRect.mnSrcWidth, rTwoRect.mnSrcHeight ) );
+        Rectangle       aCropRect( aSourceRect );
+
+        aCropRect.Intersection( Rectangle( Point(), rSizePix ) );
+
+        if( aCropRect.IsEmpty() )
+            rTwoRect.mnSrcWidth = rTwoRect.mnSrcHeight = rTwoRect.mnDestWidth = rTwoRect.mnDestHeight = 0;
+        else
+        {
+            const double    fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
+            const double    fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
+
+            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+
+            rTwoRect.mnSrcX = aCropRect.Left();
+            rTwoRect.mnSrcY = aCropRect.Top();
+            rTwoRect.mnSrcWidth = aCropRect.GetWidth();
+            rTwoRect.mnSrcHeight = aCropRect.GetHeight();
+            rTwoRect.mnDestX = nDstX1;
+            rTwoRect.mnDestY = nDstY1;
+            rTwoRect.mnDestWidth = nDstX2 - nDstX1 + 1;
+            rTwoRect.mnDestHeight = nDstY2 - nDstY1 + 1;
+        }
     }
 
     return nMirrFlags;
