@@ -7986,3 +7986,11 @@ CreateWindow
 ?ExecuteDrop@SvLBox@@UAECABUExecuteDropEvent@@@Z
 ?StartDrag@SvLBox@@UAEXCABVPoint@@@Z
 ?getPropertyState@SfxItemPropertySet@@QAE?AW4PropertyState@beans@star@sun@com@@ABUSfxItemPropertyMap@@ABVSfxItemSet@@@Z
+?GetExportFormatMediaType@GraphicFilter@@QAE?AVString@@G@Z
+?GetExportFormatNumberForMediaType@GraphicFilter@@QAEGABVString@@@Z
+?GetImportFormatMediaType@GraphicFilter@@QAE?AVString@@G@Z
+?GetImportFormatNumberForMediaType@GraphicFilter@@QAEGABVString@@@Z
+?GetExportFormatMediaType@FilterConfigCache@@QAE?AVString@@G@Z
+?GetExportFormatNumberForMediaType@FilterConfigCache@@QAEGABVString@@@Z
+?GetImportFormatMediaType@FilterConfigCache@@QAE?AVString@@G@Z
+?GetImportFormatNumberForMediaType@FilterConfigCache@@QAEGABVString@@@Z
