@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,11 +336,8 @@ void ColRowSettings::SetDefaultXF( UINT16 nColFirst, UINT16 nColLast, UINT16 nXF
     if( nColLast > MAXCOL )
         nColLast = MAXCOL;
 
-    ScDocument&         rDoc = *pExcRoot->pDoc;
-    XclImpXFBuffer&     rXFBuff = pExcRoot->pIR->GetXFBuffer();
-    const UINT16        nTab = pExcRoot->pIR->GetScTab();
-
-    rDoc.ApplyPatternAreaTab( nColFirst, 0, nColLast, MAXROW, nTab, rXFBuff.GetPattern( nXF ) );
+    const XclImpRoot& rRoot = *pExcRoot->pIR;
+    rRoot.GetXFBuffer().ApplyPattern( nColFirst, 0, nColLast, MAXROW, rRoot.GetScTab(), nXF );
 }
 
 
