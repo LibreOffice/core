@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:50:41 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,8 @@
  *
  *
  ************************************************************************/
-#include <rtl/ustring>
+#include "rtl/ustring.hxx"
+#include "rtl/ref.hxx"
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -83,15 +84,11 @@ class MasterScriptProviderFactory :
 {
 private:
 
-    ActiveMSPList* m_MSPList;
+    mutable rtl::Reference< ActiveMSPList > m_MSPList;
 
-    // need to not only hold a pointer to this object but also
-    // keep it aqcuired
-    css::uno::Reference< css::lang::XEventListener > m_MSPListHolder;
+    const css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
 
-    css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
-
-    ActiveMSPList& getActiveMSPList();
+    const rtl::Reference< ActiveMSPList > & getActiveMSPList() const;
 
 protected:
     virtual ~MasterScriptProviderFactory();
