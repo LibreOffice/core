@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-10 17:26:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ protected:
     virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) const;
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
 
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );

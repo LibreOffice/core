@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nf $ $Date: 2001-11-05 12:23:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 #endif
 #endif
 #endif
+
+Link Star::aDBNotFoundHdl;
 
 //
 //  class SimpleConfig
@@ -350,7 +352,6 @@ Prj::Prj() :
     pPrjInitialDepList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
-    bFixedDependencies( FALSE ),
     bVisited( FALSE )
 /*****************************************************************************/
 {
@@ -363,7 +364,6 @@ Prj::Prj( ByteString aName ) :
     pPrjInitialDepList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
-    bFixedDependencies( FALSE ),
     bVisited( FALSE )
 /*****************************************************************************/
 {
@@ -501,8 +501,7 @@ Star::Star()
 /*****************************************************************************/
 Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
-                : nStarMode( nMode ),
-                sFileName( aFileName )
+                : nStarMode( nMode )
 {
     Read( aFileName );
 }
@@ -522,8 +521,9 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
+    String sSrcRoot;
     if ( pSourceRoot )
-        sSourceRoot = String::CreateFromAscii( pSourceRoot );
+        sSrcRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -556,8 +556,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-                    if ( sSourceRoot.Len()) {
-                        aEntry = DirEntry( sSourceRoot );
+                    if ( sSrcRoot.Len()) {
+                        aEntry = DirEntry( sSrcRoot );
                         bOk = TRUE;
                     }
                     else {
@@ -580,7 +580,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            if ( !sSourceRoot.Len()) {
+                            if ( !sSrcRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
                                 GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
@@ -595,7 +595,6 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
-                            sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
@@ -792,7 +791,6 @@ void Star::InsertToken ( char *yytext )
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
     static BOOL bPrjDep = FALSE;
     static BOOL bHardDep = FALSE;
-    static BOOL bFixedDep = FALSE;
     static int nCommandType, nOSType;
     CommandData* pCmdData;
     static SByteStringList *pStaticDepList;
@@ -812,28 +810,18 @@ void Star::InsertToken ( char *yytext )
                 {
                     bPrjDep = TRUE;
                     bHardDep = FALSE;
-                    bFixedDep = FALSE;
                     i = 9;
                 }
                 else if ( !strcmp( yytext, "::" ))
                 {
                     bPrjDep = TRUE;
                     bHardDep = TRUE;
-                    bFixedDep = FALSE;
-                    i = 9;
-                }
-                else if ( !strcmp( yytext, ":::" ))
-                {
-                    bPrjDep = TRUE;
-                    bHardDep = TRUE;
-                    bFixedDep = TRUE;
                     i = 9;
                 }
                 else
                 {
                     bPrjDep = FALSE;
                     bHardDep = FALSE;
-                    bFixedDep = FALSE;
 
                     aWhat = yytext;
                     if ( aWhat == "nmake" )
@@ -933,7 +921,6 @@ void Star::InsertToken ( char *yytext )
                         }
                         pPrj->AddDependencies( aItem );
                         pPrj->HasHardDependencies( bHardDep );
-                        pPrj->HasFixedDependencies( bFixedDep );
 
                         if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                             String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
@@ -1050,7 +1037,6 @@ ByteString Star::GetPrjName( DirEntry &aPath )
 StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
 {
-    sFileName = aFileName;
     Read ( aFileName, bReadComments, nMode );
 }
 
@@ -1063,12 +1049,13 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 
 /*****************************************************************************/
 StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
+    BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
+    String sSrcRoot;
     if ( pSourceRoot )
-        sSourceRoot = String::CreateFromAscii( pSourceRoot );
+        sSrcRoot = String::CreateFromAscii( pSourceRoot );
 
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
@@ -1085,7 +1072,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         }
         String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
-        Read( sFileName, bReadComments );
+        Read( sFileName );
     }
     else {
         SolarFileList *pFileList = new SolarFileList();
@@ -1101,8 +1088,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-                    if ( sSourceRoot.Len()) {
-                        aEntry = DirEntry( sSourceRoot );
+                    if ( sSrcRoot.Len()) {
+                        aEntry = DirEntry( sSrcRoot );
                         bOk = TRUE;
                     }
                     else {
@@ -1125,7 +1112,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            if ( !sSourceRoot.Len()) {
+                            if ( !sSrcRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
                                 GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
@@ -1140,7 +1127,6 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
-                            sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
@@ -1167,7 +1153,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                 }
             }
         }
-        Read( pFileList, bReadComments );
+        Read( pFileList );
     }
 }
 
@@ -1182,8 +1168,6 @@ void StarWriter::CleanUp()
 USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 /*****************************************************************************/
 {
-    sFileName = aFileName;
-
     nStarMode = nMode;
 
     ByteString aString;
@@ -1265,9 +1249,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
             aDataString += aTab;
             aDataString += pPrj->GetProjectName();
             aDataString += aTab;
-            if ( pPrj->HasFixedDependencies())
-                aDataString+= ByteString(":::");
-            else if ( pPrj->HasHardDependencies())
+            if ( pPrj->HasHardDependencies())
                 aDataString+= ByteString("::");
             else
                 aDataString+= ByteString(":");
@@ -1339,19 +1321,9 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 USHORT StarWriter::Write( String aFileName )
 /*****************************************************************************/
 {
-    sFileName = aFileName;
-
-    FileStat::SetReadOnlyFlag( DirEntry( aFileName ), FALSE );
-
     SvFileStream aFileStream;
 
     aFileStream.Open( aFileName, STREAM_WRITE | STREAM_TRUNC);
-    if ( !aFileStream.IsOpen() && aFileIOErrorHdl.IsSet()) {
-        String sError( String::CreateFromAscii( "Error: Unable to open \"" ));
-        sError += aFileName;
-        sError += String::CreateFromAscii( "for writing!" );
-        aFileIOErrorHdl.Call( &sError );
-    }
 
     if ( Count() > 0 )
     {
@@ -1372,8 +1344,6 @@ USHORT StarWriter::Write( String aFileName )
 USHORT StarWriter::WriteMultiple( String rSourceRoot )
 /*****************************************************************************/
 {
-    sSourceRoot = rSourceRoot;
-
     if ( Count() > 0 )
     {
         String sPrjDir( String::CreateFromAscii( "prj" ));
@@ -1389,17 +1359,8 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
             aEntry += DirEntry( sPrjDir );
             aEntry += DirEntry( sSolarFile );
 
-            FileStat::SetReadOnlyFlag( aEntry, FALSE );
-
             SvFileStream aFileStream;
             aFileStream.Open( aEntry.GetFull(), STREAM_WRITE | STREAM_TRUNC);
-
-            if ( !aFileStream.IsOpen() && aFileIOErrorHdl.IsSet()) {
-                String sError( String::CreateFromAscii( "Error: Unable to open \"" ));
-                sError += aEntry.GetFull();
-                sError += String::CreateFromAscii( "for writing!" );
-                aFileIOErrorHdl.Call( &sError );
-            }
 
               WritePrj( pPrj, aFileStream );
 
@@ -1422,7 +1383,6 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     static  ByteString aDirName;
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
-    BOOL bFixedDep = FALSE;
     int nCommandType, nOSType;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
@@ -1459,28 +1419,18 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                     {
                         bPrjDep = TRUE;
                         bHardDep = FALSE;
-                        bFixedDep = FALSE;
                         i = 9;
                     }
                     else if ( !strcmp( yytext, "::" ))
                     {
                         bPrjDep = TRUE;
                         bHardDep = TRUE;
-                        bFixedDep = FALSE;
-                        i = 9;
-                    }
-                    else if ( !strcmp( yytext, ":::" ))
-                    {
-                        bPrjDep = TRUE;
-                        bHardDep = TRUE;
-                        bFixedDep = TRUE;
                         i = 9;
                     }
                     else
                     {
                         bPrjDep = FALSE;
                         bHardDep = FALSE;
-                        bFixedDep = FALSE;
 
                         aWhat = yytext;
                         if ( aWhat == "nmake" )
@@ -1581,7 +1531,6 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             }
                             pPrj->AddDependencies( aItem );
                             pPrj->HasHardDependencies( bHardDep );
-                            pPrj->HasFixedDependencies( bFixedDep );
 
                             if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                                 String sItem( aItem, RTL_TEXTENCODING_ASCII_US );

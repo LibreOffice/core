@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:03:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,10 +79,8 @@ CXXFILES=	debug.cxx			\
 SLOFILES=	$(SLO)$/debug.obj	 \
             $(SLO)$/stcktree.obj
 
-.IF "$(UPDATER)"!=""
 OBJFILES=	$(OBJ)$/debug.obj	 \
             $(OBJ)$/stcktree.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

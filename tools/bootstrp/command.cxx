@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 10:02:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:15:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,7 @@ const sal_Char * INetMIME::scanQuotedBlock(const sal_Char * pBegin,
                                            const sal_Char * pEnd,
                                            sal_uInt32 nOpening,
                                            sal_uInt32 nClosing,
-                                           sal_uInt32 & rLength,
+                                           sal_Size & rLength,
                                            bool & rModify)
 {
     DBG_ASSERT(pBegin && pBegin <= pEnd,
@@ -1062,7 +1062,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                                               const sal_Unicode * pEnd,
                                               sal_uInt32 nOpening,
                                               sal_uInt32 nClosing,
-                                              sal_uInt32 & rLength,
+                                              sal_Size & rLength,
                                               bool & rModify)
 {
     DBG_ASSERT(pBegin && pBegin <= pEnd,
@@ -2592,7 +2592,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                             // Calculate the length of in- and output:
                             const sal_Unicode * pStart = pBodyPtr;
-                            sal_uInt32 nLength = 0;
+                            sal_Size nLength = 0;
                             bool bModify = false;
                             bool bEnd = false;
                             while (pBodyPtr != pBodyEnd && !bEnd)
@@ -2664,7 +2664,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         {
                             // Calculate the length of in- and output:
                             const sal_Unicode * pStart = pBodyPtr;
-                            sal_uInt32 nLength = 0;
+                            sal_Size nLength = 0;
                             bool bBracketedBlock = false;
                             bool bSymbol = *pStart != '.' && *pStart != '@';
                             bool bModify = false;

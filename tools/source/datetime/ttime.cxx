@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2002-09-03 13:13:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,10 @@
 #elif defined( DOS )
 #include <dos.h>
 #elif defined UNX
-#include <limits.h>
-#if defined( IRIX ) || defined( UNX )
 #include <unistd.h>
-#endif
-#include <sys/times.h>
+#include <limits.h>
+#include <math.h>
+#include <sys/time.h>
 #elif defined( MAC )
 #include "mac_start.h"
 #ifndef __OSUTILS__
@@ -88,10 +87,6 @@
 
 #include <time.h>
 #include <time.hxx>
-
-#ifdef UNX
-#include <math.h>
-#endif
 
 #ifndef WNT
 #ifndef localtime_r
@@ -494,31 +489,15 @@ ULONG Time::GetSystemTicks()
     millisec = ( millisec + 500L ) / 1000L;
     return (ULONG)millisec;
 #else
-    static ULONG    nImplTicksPerSecond = 0;
-    static double   dImplTicksPerSecond;
-    static double   dImplTicksULONGMAX;
-    struct tms      aTms;
-    ULONG           nTicks = (ULONG)times( &aTms );
+    timeval tv;
+    gettimeofday (&tv, 0);
 
-    if ( !nImplTicksPerSecond )
-    {
-#if defined( CLK_TCK )
-        nImplTicksPerSecond = CLK_TCK;
-#elif defined( _SC_CLK_TCK )
-        nImplTicksPerSecond = sysconf(_SC_CLK_TCK);
-#else
-#error "I don't know how to get CLK_TCK."
-#endif
-        dImplTicksPerSecond = nImplTicksPerSecond;
-        dImplTicksULONGMAX  = (double)(ULONG)ULONG_MAX;
-    }
-
-    double fTicks = nTicks;
+    double fTicks = tv.tv_sec;
     fTicks *= 1000;
-    fTicks /= dImplTicksPerSecond;
-    fTicks = fmod (fTicks, dImplTicksULONGMAX);
+    fTicks += ((tv.tv_usec + 500) / 1000);
 
-    return (ULONG)fTicks;
+    fTicks = fmod (fTicks, double(ULONG_MAX));
+    return ULONG(fTicks);
 #endif
 }
 

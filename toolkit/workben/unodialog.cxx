@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-15 14:04:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
 #define NOOLDSV
 
 #ifndef _SVWIN_H
@@ -118,27 +117,65 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
 
+
+
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > createApplicationServiceManager()
+{
+    try
+    {
+        ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
+        ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
+
+        Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
+        Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
+        if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
+        {
+            try
+            {
+                xLocalRegistry->open( localRegistry, sal_False, sal_True);
+            }
+            catch ( InvalidRegistryException& )
+            {
+            }
+
+            if ( !xLocalRegistry->isValid() )
+                xLocalRegistry->open(localRegistry, sal_True, sal_True);
+        }
+
+        if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
+            xSystemRegistry->open( systemRegistry, sal_True, sal_False);
+
+        if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
+             (xSystemRegistry.is() && xSystemRegistry->isValid()) )
+        {
+            Reference < XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
+            Sequence< Any > seqAnys(2);
+            seqAnys[0] <<= xLocalRegistry ;
+            seqAnys[1] <<= xSystemRegistry ;
+            Reference< XInitialization > xInit( xReg, UNO_QUERY );
+            xInit->initialize( seqAnys );
+
+            Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
+            return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    return ::cppu::createServiceFactory();
+}
+
+
 // -----------------------------------------------------------------------
 void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
 SAL_IMPLEMENT_MAIN()
 {
-    try
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-              xMSF = cppu::createRegistryServiceFactory(
-                  OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
-
-        //SVInit( xMSF );
-        ::Main( xMSF );
-        //SVDeinit();
-    }
-    catch ( Exception & e )
-    {
-        fprintf( stderr, "Error during bootstrapping servicemanager: %s\n" ,
-                 OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        return 1;
-    }
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = createApplicationServiceManager();
+    //SVInit( xMSF );
+    ::Main( xMSF );
+    //SVDeinit();
     return NULL;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dv $ $Date: 2002-11-28 11:38:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #include "simplerm.hxx"
 #endif
 
+#include <functional>
+#include <algorithm>
+
 #pragma hdrstop
 
 #ifdef UNX
@@ -142,45 +145,66 @@ struct ImpContent
     ULONG   nOffset;
 };
 
-#if defined( OS2 ) && defined( ICC )
-static int _Optlink Compare( const void * pFirst, const void * pSecond )
-#elif S390
-extern "C" { int Compare( const void * pFirst, const void * pSecond )
-#else
-static int __LOADONCALLAPI Compare( const void * pFirst, const void * pSecond )
-#endif
+struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
 {
-    if( ((ImpContent *)pFirst)->nTypeAndId > ((ImpContent *)pSecond)->nTypeAndId )
-        return( 1 );
-    else if( ((ImpContent *)pFirst)->nTypeAndId < ((ImpContent *)pSecond)->nTypeAndId )
-        return( -1 );
-    else
-        return( 0 );
-}
+    inline bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
+    {
+        return lhs.nTypeAndId < rhs.nTypeAndId;
+    }
+};
 
-#ifdef S390
-}
-#endif
-
-#if defined( OS2 ) && defined( ICC )
-static int _Optlink Search( const void * nTypeAndId, const void * pSecond )
-#elif S390
-extern "C" { int Search( const void * nTypeAndId, const void * pSecond )
-#else
-static int __LOADONCALLAPI Search( const void * nTypeAndId, const void * pSecond )
-#endif
+struct ImpContentMixLessCompare : public ::std::binary_function< ImpContent, ULONG, bool>
 {
-    if( (ULONG)nTypeAndId > (((ImpContent *)pSecond)->nTypeAndId) )
-        return( 1 );
-    else if( (ULONG)nTypeAndId < (((ImpContent *)pSecond)->nTypeAndId) )
-        return( -1 );
-    else
-        return( 0 );
-}
+    inline bool operator() (const ImpContent& lhs, const ULONG& rhs) const
+    {
+        return lhs.nTypeAndId < rhs;
+    }
+    inline bool operator() (const ULONG& lhs, const ImpContent& rhs) const
+    {
+        return lhs < rhs.nTypeAndId;
+    }
+};
 
-#ifdef S390
-}
-#endif
+
+//#if defined( OS2 ) && defined( ICC )
+//static int _Optlink Compare( const void * pFirst, const void * pSecond )
+//#elif S390
+//extern "C" { int Compare( const void * pFirst, const void * pSecond )
+//#else
+//static int __LOADONCALLAPI Compare( const void * pFirst, const void * pSecond )
+//#endif
+//{
+//    if( ((ImpContent *)pFirst)->nTypeAndId > ((ImpContent *)pSecond)->nTypeAndId )
+//        return( 1 );
+//    else if( ((ImpContent *)pFirst)->nTypeAndId < ((ImpContent *)pSecond)->nTypeAndId )
+//        return( -1 );
+//    else
+//        return( 0 );
+//}
+//
+//#ifdef S390
+//}
+//#endif
+
+//#if defined( OS2 ) && defined( ICC )
+//static int _Optlink Search( const void * nTypeAndId, const void * pSecond )
+//#elif S390
+//extern "C" { int Search( const void * nTypeAndId, const void * pSecond )
+//#else
+//static int __LOADONCALLAPI Search( const void * nTypeAndId, const void * pSecond )
+//#endif
+//{
+//    if( (ULONG)nTypeAndId > (((ImpContent *)pSecond)->nTypeAndId) )
+//        return( 1 );
+//    else if( (ULONG)nTypeAndId < (((ImpContent *)pSecond)->nTypeAndId) )
+//        return( -1 );
+//    else
+//        return( 0 );
+//}
+//
+//#ifdef S390
+//}
+//#endif
 
 // =======================================================================
 
@@ -191,15 +215,24 @@ static ResHookProc pImplResHookProc = 0;
 SvStream * InternalResMgr::GetBitmapStream( USHORT nId )
 {
     // Anfang der Strings suchen
-    ImpContent * pFind = (ImpContent *)
-        bsearch( (void *)((ULONG(RT_SYS_BITMAP) << 16) | nId), pContent, nEntries,
-                sizeof( ImpContent ), Search );
-
-    if ( pFind )
+    ImpContent * pFind = ::std::lower_bound(pContent,
+                                            pContent + nEntries,
+                                            ((ULONG(RT_SYS_BITMAP) << 16) | nId),
+                                            ImpContentMixLessCompare());
+    if ( (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == ((ULONG(RT_SYS_BITMAP) << 16) | nId)) )
     {
         pStm->Seek( pFind->nOffset );
         return pStm;
     }
+//    ImpContent * pFind = (ImpContent *)
+//        bsearch( (void *)((ULONG(RT_SYS_BITMAP) << 16) | nId), pContent, nEntries,
+//                sizeof( ImpContent ), Search );
+
+//    if ( pFind )
+//    {
+//        pStm->Seek( pFind->nOffset );
+//        return pStm;
+//    }
     return NULL;
 }
 
@@ -221,7 +254,8 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
             INetURLObject aAppDir( *pAppFileName, INET_PROT_FILE );
             aAppDir.CutName();
             UniString aAppPath = aAppDir.PathToFileName();
-            aAppDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "resource" ) ) );
+            static const String sResource( RTL_CONSTASCII_USTRINGPARAM( "resource" ) );
+            aAppDir.Append( sResource );
             UniString aAppResPath = aAppDir.PathToFileName();
 
             // Default resource path is bin\resource
@@ -334,7 +368,7 @@ InternalResMgr::~InternalResMgr()
             aLine.Append( ByteString( aFileName, RTL_TEXTENCODING_UTF8 ) );
             aStm.WriteLine( aLine );
 
-            for( ULONG i = 0; i < pResUseDump->Count(); i++ )
+            for( ULONG i = 0; i < pResUseDump->Count(); ++i )
             {
                 ULONG nKeyId = pResUseDump->GetObjectKey( i );
                 aLine.Assign( "Type/Id: " );
@@ -403,29 +437,31 @@ BOOL InternalResMgr::Create()
             if ( pLogFile )
             {
                 pResUseDump = new Table();
-                for( ULONG i = 0; i < nEntries; i++ )
+                for( ULONG i = 0; i < nEntries; ++i )
                     pResUseDump->Insert( pContent[i].nTypeAndId, NULL );
             }
 #endif
             // swap the content to the right endian
             pContent[0].nTypeAndId = ResMgr::GetLong( &pContent[0].nTypeAndId );
             pContent[0].nOffset = ResMgr::GetLong( &pContent[0].nOffset );
-            for( ULONG i = 0; i < nEntries -1; i++ )
+            ULONG nCount = nEntries - 1;
+            for( ULONG i = 0,j=1; i < nCount; ++i,++j )
             {
                 // swap the content to the right endian
-                pContent[i+1].nTypeAndId = ResMgr::GetLong( &pContent[i+1].nTypeAndId );
-                pContent[i+1].nOffset = ResMgr::GetLong( &pContent[i+1].nOffset );
-                if( pContent[i].nTypeAndId >= pContent[i +1].nTypeAndId )
+                pContent[j].nTypeAndId = ResMgr::GetLong( &pContent[j].nTypeAndId );
+                pContent[j].nOffset = ResMgr::GetLong( &pContent[j].nOffset );
+                if( pContent[i].nTypeAndId >= pContent[j].nTypeAndId )
                     bSorted = FALSE;
-                if( (pContent[i].nTypeAndId & 0xFFFF0000) == (pContent[i +1].nTypeAndId & 0xFFFF0000)
-                  && pContent[i].nOffset >= pContent[i +1].nOffset )
+                if( (pContent[i].nTypeAndId & 0xFFFF0000) == (pContent[j].nTypeAndId & 0xFFFF0000)
+                    && pContent[i].nOffset >= pContent[j].nOffset )
                     bEqual2Content = FALSE;
             }
         }
         DBG_ASSERT( bSorted, "content not sorted" )
         DBG_ASSERT( bEqual2Content, "resource structure wrong" )
         if( !bSorted )
-            qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
+            ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
+            //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
         bDone = TRUE;
     }
@@ -494,10 +530,15 @@ void InternalResMgr::FreeInternalResMgr( InternalResMgr* pFreeInternalResMgr )
 BOOL InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, USHORT nId ) const
 {
     // Anfang der Strings suchen
-    ImpContent * pFind = (ImpContent *)
-        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
-                sizeof( ImpContent ), Search );
-    return pFind != NULL;
+    ULONG nValue = ((ULONG(nRT) << 16) | nId);
+    ImpContent * pFind = ::std::lower_bound(pContent,
+                                            pContent + nEntries,
+                                            nValue,
+                                            ImpContentMixLessCompare());
+//    ImpContent * pFind = (ImpContent *)
+//        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
+//                sizeof( ImpContent ), Search );
+    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == nValue);
 }
 
 // -----------------------------------------------------------------------
@@ -510,10 +551,16 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, USHORT nId,
         pResUseDump->Remove( (ULONG(nRT) << 16) | nId );
 #endif
     // Anfang der Strings suchen
-    ImpContent * pFind = (ImpContent *)
-        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
-                sizeof( ImpContent ), Search );
-    if( nRT == RSC_STRING && bEqual2Content && pFind )
+    ULONG nValue = ((ULONG(nRT) << 16) | nId);
+    ImpContent* pEnd = (pContent + nEntries);
+    ImpContent* pFind = ::std::lower_bound( pContent,
+                                            pEnd,
+                                            nValue,
+                                            ImpContentMixLessCompare());
+//    ImpContent * pFind = (ImpContent *)
+//        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
+//                sizeof( ImpContent ), Search );
+    if( nRT == RSC_STRING && bEqual2Content && ((pFind != pEnd) && (pFind->nTypeAndId == nValue)) )
     {
         // String Optimierung
         if( !pStringBlock )
@@ -522,9 +569,9 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, USHORT nId,
             ImpContent * pFirst = pFind;
             ImpContent * pLast = pFirst;
             while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 16) == RSC_STRING )
-                pFirst--;
-            while( pLast < (pContent + nEntries) && (pLast->nTypeAndId >> 16) == RSC_STRING )
-                pLast++;
+                --pFirst;
+            while( pLast < pEnd && (pLast->nTypeAndId >> 16) == RSC_STRING )
+                ++pLast;
             nOffCorrection = pFirst->nOffset;
             UINT32 nSize;
             --pLast;
@@ -624,7 +671,7 @@ static void RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
         aStr.Append( ByteString( GetTypeRes_Impl( ResId( (pResStack + nStackTop)->pResource->GetRT(), pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
         aStr.Append( ", Id: " );
         aStr.Append( ByteString::CreateFromInt32( (long)(pResStack + nStackTop)->pResource->GetId() ) );
-        nStackTop--;
+        --nStackTop;
     }
 
     delete pNewResMgr;
@@ -806,7 +853,7 @@ void ResMgr::TestStack( const Resource* pResObj )
 {
     if ( DbgIsResource() )
     {
-        for( short i = 1; i <= nTopRes; i++ )
+        for( short i = 1; i <= nTopRes; ++i )
         {
             if ( aStack[i].pResObj == pResObj )
             {
@@ -885,8 +932,7 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     if ( pLastMgr != this )
         Resource::SetResManager( this );
 
-    nTopRes++;      // Stackzeiger erhoehen
-    ImpRCStack* pTop = &aStack[nTopRes];
+    ImpRCStack* pTop = &aStack[++nTopRes];// Stackzeiger erhoehen
     pTop->Init( pLastMgr, pResObj, nId |
                 (rId.IsAutoRelease() ? 0 : RSC_DONTRELEASE) );
 
@@ -901,7 +947,7 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                            this, nRT, nId, aStack, nTopRes -1 );
 #endif
             RscException_Impl();
-            nTopRes--;
+            --nTopRes;
             return FALSE;
         }
     }
@@ -924,7 +970,7 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                            this, nRT, nId, aStack, nTopRes -1 );
 #endif
             RscException_Impl();
-            nTopRes--;
+            --nTopRes;
             return FALSE;
         }
     }
@@ -990,7 +1036,7 @@ void ResMgr::PopContext( const Resource* )
         if ( pTop->pResMgr != this )
             // wurde durch ResId gesetzt, automatisch zuruecksetzen
             Resource::SetResManager( pTop->pResMgr );
-        nTopRes--;
+        --nTopRes;
     }
 }
 
@@ -1073,17 +1119,19 @@ USHORT ResMgr::GetRemainSize()
 
 void* ResMgr::Increment( USHORT nSize )
 {
-    BYTE* pClassRes = (BYTE*)aStack[nTopRes].pClassRes + nSize;
+    ImpRCStack& rStack = aStack[nTopRes];
+    BYTE* pClassRes = (BYTE*)rStack.pClassRes + nSize;
 
-    aStack[nTopRes].pClassRes = pClassRes;
+    rStack.pClassRes = pClassRes;
 
-    RSHEADER_TYPE* pRes = aStack[nTopRes].pResource;
+    RSHEADER_TYPE* pRes = rStack.pResource;
 
-    if ( (pRes->GetGlobOff() == pRes->GetLocalOff()) &&
-         (((char*)pRes + pRes->GetLocalOff()) == aStack[nTopRes].pClassRes) &&
-         (aStack[nTopRes].Flags & RC_AUTORELEASE))
+    USHORT nLocalOff = pRes->GetLocalOff();
+    if ( (pRes->GetGlobOff() == nLocalOff) &&
+         (((char*)pRes + nLocalOff) == rStack.pClassRes) &&
+         (rStack.Flags & RC_AUTORELEASE))
     {
-        PopContext( aStack[nTopRes].pResObj );
+        PopContext( rStack.pResObj );
     }
 
     return pClassRes;
@@ -1273,7 +1321,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     UniString aName;
     InternalResMgr* pInternalResMgr = NULL;
     int i;
-    for ( i = 0; i < 6; i++ )
+    for ( i = 0; i < 6; ++i )
     {
         pLang[i] = GetLang( nType, i );
 
@@ -1351,7 +1399,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
         LANGUAGE_HINDI
     };
 
-    for( size_t i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); i++ )
+    for( size_t i = 0; i < sizeof( aLanguages )/sizeof( aLanguages[0] ); ++i )
     {
         nType = aLanguages[i];
         aName = aBaseName;
@@ -1417,7 +1465,7 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 
     // Resourcefile suchen
     UniString aName;
-    for ( int i = 0; i < 6; i++ )
+    for ( int i = 0; i < 6; ++i )
     {
         pLang[i] = ResMgr::GetLang( nType, i );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 08:54:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 
 
+#ifndef TOOLKIT_FORMATTED_CONTROL_HXX
+#include <toolkit/controls/formattedcontrol.hxx>
+#endif
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
 #endif
@@ -143,807 +146,8 @@
 #include <tools/time.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
+using namespace ::toolkit;
 
-//  ----------------------------------------------------
-//  class UnoControlHolder
-//  ----------------------------------------------------
-struct UnoControlModelHolder
-{
-public:
-    uno::Reference< awt::XControlModel > xModel;
-    ::rtl::OUString aName;
-
-    UnoControlModelHolder( const ::rtl::OUString& rName, const uno::Reference< awt::XControlModel > & rModel )
-        : aName( rName )
-    {
-        xModel = rModel;
-    }
-};
-
-DECLARE_LIST( UnoControlModelHolderList, UnoControlModelHolder* );
-
-
-//  ----------------------------------------------------
-//  class UnoControlDialogModel
-//  ----------------------------------------------------
-UnoControlDialogModel::UnoControlDialogModel()
-    : maContainerListeners( *this )
-{
-    mpModels = new UnoControlModelHolderList;
-
-    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-//  ImplRegisterProperty( BASEPROPERTY_BORDER );
-    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-    ImplRegisterProperty( BASEPROPERTY_ENABLED );
-    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
-//  ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
-    ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_TITLE );
-    ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
-
-    uno::Any aBool;
-    aBool <<= (sal_Bool) sal_True;
-    ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
-    ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
-}
-
-UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel ) :
-    UnoControlModel( rModel ) , maContainerListeners( *this )
-{
-    mpModels = new UnoControlModelHolderList;
-}
-
-UnoControlDialogModel::~UnoControlDialogModel()
-{
-    for ( sal_uInt32 n = mpModels->Count(); n; )
-        delete mpModels->GetObject( --n );
-    delete mpModels;
-}
-
-uno::Any UnoControlDialogModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( lang::XMultiServiceFactory*, this ),
-                                        SAL_STATIC_CAST( container::XContainer*, this ),
-                                        SAL_STATIC_CAST( container::XElementAccess*, this ),
-                                        SAL_STATIC_CAST( container::XNameAccess*, this ),
-                                        SAL_STATIC_CAST( container::XNameReplace*, this ),
-                                        SAL_STATIC_CAST( container::XNameContainer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
-}
-
-// lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControlDialogModel )
-getCppuType( ( uno::Reference< lang::XMultiServiceFactory>* ) NULL ),
-getCppuType( ( uno::Reference< container::XContainer>* ) NULL ),
-getCppuType( ( uno::Reference< container::XElementAccess>* ) NULL ),
-getCppuType( ( uno::Reference< container::XNameAccess>* ) NULL ),
-getCppuType( ( uno::Reference< container::XNameReplace>* ) NULL ),
-getCppuType( ( uno::Reference< container::XNameContainer>* ) NULL ),
-UnoControlModel::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-
-::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel );
-}
-
-uno::Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
-{
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-    {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
-        return aAny;
-    }
-
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
-}
-
-::cppu::IPropertyArrayHelper& UnoControlDialogModel::getInfoHelper()
-{
-    static UnoPropertyArrayHelper* pHelper = NULL;
-    if ( !pHelper )
-    {
-        uno::Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
-        pHelper = new UnoPropertyArrayHelper( aIDs );
-    }
-    return *pHelper;
-}
-
-void SAL_CALL UnoControlDialogModel::dispose(  ) throw(uno::RuntimeException)
-{
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
-    // tell our listeners
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-        lang::EventObject aDisposeEvent;
-        aDisposeEvent.Source = static_cast< uno::XAggregation* >( static_cast< ::cppu::OWeakAggObject* >( this ) );
-        maContainerListeners.disposeAndClear( aDisposeEvent );
-    }
-
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
-    // call the base class
-    UnoControlModel::dispose();
-
-    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
-    // dispose our child models
-    // for this, collect the models (we collect them from mpModels, and this is modified when disposing children)
-    ::std::vector< uno::Reference< lang::XComponent > > aChildModels;
-    aChildModels.reserve( mpModels->Count() );
-    for ( sal_uInt32 n = mpModels->Count(); n; )
-    {
-        uno::Reference< lang::XComponent > xChildComp( mpModels->GetObject( --n )->xModel, uno::UNO_QUERY );
-        if ( xChildComp.is() )
-            aChildModels.push_back( xChildComp );
-    }
-    // now dispose
-    for (   const uno::Reference< lang::XComponent >* pChildModel = aChildModels.begin();
-            pChildModel != aChildModels.end();
-            ++pChildModel
-        )
-    {
-        try
-        {
-            if ( pChildModel->is() )
-                (*pChildModel)->dispose();
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_ERROR( "UnoControlDialogModel::dispose: caught an exception while disposing a child model!" );
-        }
-    }
-}
-
-// beans::XMultiPropertySet
-uno::Reference< beans::XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
-{
-    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-UnoControlModel* UnoControlDialogModel::Clone() const
-{
-    UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
-
-    for ( sal_uInt32 n = 0; n < mpModels->Count(); n++ )
-    {
-        UnoControlModelHolder* pH = mpModels->GetObject( n );
-
-        uno::Reference< util::XCloneable > xC( pH->xModel, uno::UNO_QUERY );
-        uno::Reference< util::XCloneable > xNew = xC->createClone();
-        uno::Reference< awt::XControlModel > xM( xNew, uno::UNO_QUERY );
-        UnoControlModelHolder* pNew = new UnoControlModelHolder( pH->aName, xM );
-        pClone->mpModels->Insert( pNew, LIST_APPEND );
-    }
-
-    return pClone;
-}
-
-UnoControlModelHolder* UnoControlDialogModel::ImplFindElement( const ::rtl::OUString& rName ) const
-{
-    UnoControlModelHolder* pE = NULL;
-    for ( sal_uInt32 n = mpModels->Count(); n && !pE; )
-    {
-        UnoControlModelHolder* pH = mpModels->GetObject( --n );
-        if ( pH->aName == rName )
-            pE = pH;
-    }
-    return pE;
-}
-
-// ::lang::XMultiServiceFactory
-uno::Reference< uno::XInterface >UnoControlDialogModel::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(uno::Exception, uno::RuntimeException)
-{
-    OGeometryControlModel_Base* pNewModel = NULL;
-
-    if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlEditModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlEditModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFormattedFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFileControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFileControlModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlButtonModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlImageControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlImageControlModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRadioButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCheckBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedTextModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlGroupBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlListBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlListBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlComboBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlDateFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlTimeFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlNumericFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCurrencyFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlPatternFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
-
-    if ( !pNewModel )
-    {
-        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-        if ( xORB.is() )
-        {
-            Reference< XInterface > xObject = xORB->createInstance( aServiceSpecifier );
-            Reference< XServiceInfo > xSI( xObject, UNO_QUERY );
-            Reference< XCloneable > xCloneAccess( xSI, UNO_QUERY );
-            Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
-            if ( xAgg.is() )
-            {
-                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" ) ) )
-                {
-                    // release 3 of the 4 references we have to the object
-                    xAgg.clear();
-                    xSI.clear();
-                    xObject.clear();
-
-                    pNewModel = new OCommonGeometryControlModel( xCloneAccess, aServiceSpecifier );
-                }
-            }
-        }
-    }
-
-    uno::Reference< uno::XInterface > xNewModel = static_cast< ::cppu::OWeakObject* >( pNewModel );
-    return xNewModel;
-}
-
-uno::Reference< uno::XInterface > UnoControlDialogModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& /* Arguments */ ) throw(uno::Exception, uno::RuntimeException)
-{
-    return createInstance( ServiceSpecifier );
-}
-
-uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() throw(uno::RuntimeException)
-{
-    static uno::Sequence< ::rtl::OUString >* pNamesSeq = NULL;
-    if ( !pNamesSeq )
-    {
-        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 19 );
-        ::rtl::OUString* pNames = pNamesSeq->getArray();
-        pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
-        pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
-        pNames[2] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel );
-        pNames[3] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel );
-        pNames[4] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel );
-        pNames[5] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel );
-        pNames[6] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel );
-        pNames[7] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel );
-        pNames[8] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel );
-        pNames[9] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel );
-        pNames[10] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel );
-        pNames[11] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel );
-        pNames[12] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel );
-        pNames[13] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
-        pNames[14] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
-        pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
-        pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
-        pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
-        pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
-    }
-    return *pNamesSeq;
-}
-
-// container::XContainer
-void UnoControlDialogModel::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
-{
-    maContainerListeners.addInterface( l );
-}
-
-void UnoControlDialogModel::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
-{
-    maContainerListeners.removeInterface( l );
-}
-
-// container::XElementAcces
-uno::Type UnoControlDialogModel::getElementType() throw(uno::RuntimeException)
-{
-    uno::Type aType = getCppuType( ( uno::Reference< awt::XControlModel>* ) NULL );
-    return aType;
-}
-
-sal_Bool UnoControlDialogModel::hasElements() throw(uno::RuntimeException)
-{
-    return mpModels->Count() ? sal_True : sal_False;
-}
-
-// container::XNameContainer, XNameReplace, XNameAccess
-void UnoControlDialogModel::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    UnoControlModelHolder* pE = ImplFindElement( aName );
-    if ( pE )
-    {
-        container::ContainerEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.Element <<= aElement;
-        aEvent.ReplacedElement <<= pE->xModel;
-        aEvent.Accessor <<= aName;
-
-        aElement >>= pE->xModel;
-
-        maContainerListeners.elementReplaced( aEvent );
-    }
-}
-
-uno::Any UnoControlDialogModel::getByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    uno::Any aElement;
-    UnoControlModelHolder* pE = ImplFindElement( aName );
-    if ( pE )
-        aElement <<= pE->xModel;
-    return aElement;
-}
-
-uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getElementNames() throw(uno::RuntimeException)
-{
-    uno::Sequence< ::rtl::OUString > aNames( mpModels->Count() );
-    ::rtl::OUString* pNames = aNames.getArray();
-
-    for ( sal_uInt32 n = 0; n < mpModels->Count(); n++ )
-    {
-        UnoControlModelHolder* pH = mpModels->GetObject( n );
-        pNames[n] = pH->aName;
-    }
-    return aNames;
-}
-
-sal_Bool UnoControlDialogModel::hasByName( const ::rtl::OUString& aName ) throw(uno::RuntimeException)
-{
-    return ImplFindElement( aName ) ? sal_True : sal_False;
-}
-
-void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    uno::Reference< awt::XControlModel > xM;
-    aElement >>= xM;
-    if ( !xM.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "The to be inserted element must not be NULL." ), *this, 1 );
-
-    UnoControlModelHolder* pNew = new UnoControlModelHolder( aName, xM );
-    mpModels->Insert( pNew, LIST_APPEND );
-
-    container::ContainerEvent aEvent;
-    aEvent.Source = *this;
-    aEvent.Element <<= aElement;
-    aEvent.Accessor <<= aName;
-    maContainerListeners.elementInserted( aEvent );
-}
-
-void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    UnoControlModelHolder* pE = ImplFindElement( aName );
-    if ( pE )
-    {
-        container::ContainerEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.Element <<= pE->xModel;
-        aEvent.Accessor <<= aName;
-        maContainerListeners.elementRemoved( aEvent );
-
-        mpModels->Remove( pE );
-        delete pE;
-    }
-}
-
-//  ----------------------------------------------------
-//  class UnoDialogControl
-//  ----------------------------------------------------
-UnoDialogControl::UnoDialogControl() : maTopWindowListeners( *this )
-{
-    maComponentInfos.nWidth = 300;
-    maComponentInfos.nHeight = 450;
-}
-
-::rtl::OUString UnoDialogControl::GetComponentServiceName()
-{
-    return ::rtl::OUString::createFromAscii( "Dialog" );
-}
-
-// uno::XInterface
-uno::Any UnoDialogControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XTopWindow*, this ),
-                                        SAL_STATIC_CAST( awt::XDialog*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlContainer::queryAggregation( rType ));
-}
-
-// lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoDialogControl )
-getCppuType( ( uno::Reference< awt::XDialog>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XTopWindow>* ) NULL ),
-UnoControlContainer::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-
-void UnoDialogControl::ImplInsertControl( uno::Reference< awt::XControlModel >& rxModel, const ::rtl::OUString& rName )
-{
-    uno::Reference< beans::XPropertySet > xP( rxModel, uno::UNO_QUERY );
-
-    // be more tolerant against invalid arguments
-    // this is part of the fix for #97087# - 05.03.2002 - fs@openoffice.org
-    DBG_ASSERT( xP.is(), "UnoDialogControl::ImplInsertControl: invalid model!" );
-    if ( !xP.is() )
-        return;
-
-    ::rtl::OUString aDefCtrl;
-    xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference < awt::XControl > xCtrl( xMSF->createInstance( aDefCtrl ), uno::UNO_QUERY );
-
-    DBG_ASSERT( xCtrl.is(), "UnoDialogControl::ImplInsertControl: could not create the control!" );
-    if ( xCtrl.is() )
-    {
-        xCtrl->setModel( rxModel );
-        addControl( rName, xCtrl );
-            // will implicitly call addingControl, where we can add the PropertiesChangeListener to the model
-            // (which we formerly did herein)
-            // 08.01.2001 - 96008 - fs@openoffice.org
-
-        ImplSetPosSize( xCtrl );
-    }
-}
-
-void UnoDialogControl::ImplRemoveControl( uno::Reference< awt::XControlModel >& rxModel )
-{
-    uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
-    uno::Reference< awt::XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
-    if ( xCtrl.is() )
-        removeControl( xCtrl );
-}
-
-void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
-{
-    uno::Reference< beans::XPropertySet > xP( rxCtrl->getModel(), uno::UNO_QUERY );
-
-    sal_Int32 nX, nY, nWidth, nHeight;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
-
-    // Currentley we are simply using MAP_APPFONT
-    OutputDevice*pOutDev = Application::GetDefaultDevice();
-    DBG_ASSERT( pOutDev, "Missing Default Device!" );
-    if ( pOutDev )
-    {
-        Size aTmp( nX, nY );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
-        nX = aTmp.Width();
-        nY = aTmp.Height();
-        aTmp = Size( nWidth, nHeight );
-        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
-        nWidth = aTmp.Width();
-        nHeight = aTmp.Height();
-    }
-    else
-    {
-        uno::Reference< awt::XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
-        uno::Reference< awt::XDevice > xD( xPeer, uno::UNO_QUERY );
-
-        awt::SimpleFontMetric aFM;
-        awt::FontDescriptor aFD;
-        uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
-        aVal >>= aFD;
-        if ( aFD.StyleName.getLength() )
-        {
-            uno::Reference< awt::XFont > xFont = xD->getFont( aFD );
-            aFM = xFont->getFontMetric();
-        }
-        else
-        {
-            uno::Reference< awt::XGraphics > xG = xD->createGraphics();
-            aFM = xG->getFontMetric();
-        }
-
-        sal_Int16 nH = aFM.Ascent + aFM.Descent;
-        sal_Int16 nW = nH/2;    // calculate avarage width?!
-
-        nX *= nW;
-        nX /= 4;
-        nWidth *= nW;
-        nWidth /= 4;
-        nY *= nH;
-        nY /= 8;
-        nHeight *= nH;
-        nHeight /= 8;
-    }
-    uno::Reference < awt::XWindow > xW( rxCtrl, uno::UNO_QUERY );
-    xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
-}
-
-void UnoDialogControl::dispose() throw(uno::RuntimeException)
-{
-    lang::EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
-    maTopWindowListeners.disposeAndClear( aEvt );
-
-    UnoControlContainer::dispose();
-}
-
-sal_Bool UnoDialogControl::setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if ( getModel().is() )
-    {
-        uno::Sequence< uno::Reference< awt::XControl > > aControls = getControls();
-        const uno::Reference< awt::XControl >* pCtrls = aControls.getConstArray();
-        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrls + aControls.getLength();
-
-        for ( ; pCtrls < pCtrlsEnd; ++pCtrls )
-            removeControl( *pCtrls );
-                // will implicitly call removingControl, which will remove the PropertyChangeListener
-                // (which we formerly did herein)
-                // 08.01.2001 - 96008 - fs@openoffice.org
-
-        uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
-        if ( xC.is() )
-            xC->removeContainerListener( this );
-    }
-
-    sal_Bool bRet = UnoControl::setModel( rxModel );
-
-    if ( getModel().is() )
-    {
-        uno::Reference< container::XNameAccess > xNA( getModel(), uno::UNO_QUERY );
-        if ( xNA.is() )
-        {
-            uno::Sequence< ::rtl::OUString > aNames = xNA->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            sal_uInt32 nCtrls = aNames.getLength();
-
-            uno::Reference< awt::XControlModel > xCtrlModel;
-            for( sal_uInt32 n = 0; n < nCtrls; ++n, ++pNames )
-            {
-                xNA->getByName( *pNames ) >>= xCtrlModel;
-                ImplInsertControl( xCtrlModel, *pNames );
-            }
-        }
-
-        uno::Reference< container::XContainer > xC( getModel(), uno::UNO_QUERY );
-        if ( xC.is() )
-            xC->addContainerListener( this );
-    }
-    return bRet;
-}
-
-void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    UnoControl::setDesignMode( bOn );
-
-    uno::Sequence< uno::Reference< awt::XControl > > xCtrls = getControls();
-    sal_Int32 nControls = xCtrls.getLength();
-    uno::Reference< awt::XControl >* pControls = xCtrls.getArray();
-    for ( sal_Int32 n = 0; n < nControls; n++ )
-        pControls[n]->setDesignMode( bOn );
-}
-
-void UnoDialogControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
-{
-    UnoControlContainer::createPeer( rxToolkit, rParentPeer );
-
-    uno::Reference < awt::XTopWindow > xTW( mxPeer, uno::UNO_QUERY );
-    xTW->setMenuBar( mxMenuBar );
-    if ( maTopWindowListeners.getLength() )
-        xTW->addTopWindowListener( &maTopWindowListeners );
-}
-
-void UnoDialogControl::elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-{
-    uno::Reference< awt::XControlModel > xModel;
-    ::rtl::OUString aName;
-
-    Event.Accessor >>= aName;
-    Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
-}
-
-void UnoDialogControl::elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-{
-    uno::Reference< awt::XControlModel > xModel;
-    Event.Element >>= xModel;
-    if ( xModel.is() )
-        ImplRemoveControl( xModel );
-}
-
-void UnoDialogControl::elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-{
-    uno::Reference< awt::XControlModel > xModel;
-    Event.ReplacedElement >>= xModel;
-    if ( xModel.is() )
-        ImplRemoveControl( xModel );
-
-    ::rtl::OUString aName;
-    Event.Accessor >>= aName;
-    Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
-}
-
-void UnoDialogControl::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maTopWindowListeners.addInterface( rxListener );
-    if( mxPeer.is() && maTopWindowListeners.getLength() == 1 )
-    {
-        uno::Reference < awt::XTopWindow >  xTW( mxPeer, uno::UNO_QUERY );
-        xTW->addTopWindowListener( &maTopWindowListeners );
-    }
-}
-
-void UnoDialogControl::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if( mxPeer.is() && maTopWindowListeners.getLength() == 1 )
-    {
-        uno::Reference < awt::XTopWindow >  xTW( mxPeer, uno::UNO_QUERY );
-        xTW->removeTopWindowListener( &maTopWindowListeners );
-    }
-    maTopWindowListeners.removeInterface( rxListener );
-}
-
-void UnoDialogControl::toFront(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if ( getPeer().is() )
-    {
-        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
-        if( xTW.is() )
-            xTW->toFront();
-    }
-}
-
-void UnoDialogControl::toBack(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    if ( getPeer().is() )
-    {
-        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
-        if( xTW.is() )
-            xTW->toBack();
-    }
-}
-
-void UnoDialogControl::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenuBar ) throw (::com::sun::star::uno::RuntimeException)
-{
-    mxMenuBar = rxMenuBar;
-    if ( getPeer().is() )
-    {
-        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
-        if( xTW.is() )
-            xTW->setMenuBar( mxMenuBar );
-    }
-}
-
-// beans::XPropertiesChangeListener
-void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if( !isDesignMode() && !IsUpdatingModel() && !mbCreatingCompatiblePeer )
-    {
-        ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
-        ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
-        ::rtl::OUString s3( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-        ::rtl::OUString s4( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
-
-        sal_Int32 nLen = rEvents.getLength();
-        for( sal_Int32 i = 0; i < nLen; i++ )
-        {
-            const beans::PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
-            uno::Reference< awt::XControlModel > xModel( rEvt.Source, uno::UNO_QUERY );
-            sal_Bool bOwnModel = (awt::XControlModel*)xModel.get() == (awt::XControlModel*)getModel().get();
-            if ( ( rEvt.PropertyName == s1 ) || ( rEvt.PropertyName == s2 ) || ( rEvt.PropertyName == s3 ) || ( rEvt.PropertyName == s4 ) )
-            {
-                if ( bOwnModel )
-                {
-                    uno::Reference< awt::XControl > xThis( (uno::XAggregation*)(::cppu::OWeakAggObject*)this, uno::UNO_QUERY );
-                    ImplSetPosSize( xThis );
-                }
-                else
-                {
-                    uno::Sequence<uno::Reference<awt::XControl> > aControlSequence(getControls());
-                    uno::Reference<awt::XControl> aControlRef( StdTabController::FindControl( aControlSequence, xModel ) );
-                    ImplSetPosSize( aControlRef );
-                }
-                break;
-            }
-
-        }
-    }
-
-    UnoControlContainer::propertiesChange( rEvents );
-}
-
-void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(uno::RuntimeException)
-{
-    uno::Any aAny;
-    aAny <<= Title;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, sal_True );
-}
-
-::rtl::OUString UnoDialogControl::getTitle() throw(uno::RuntimeException)
-{
-    return ImplGetPropertyValue_UString( BASEPROPERTY_TITLE );
-}
-
-sal_Int16 UnoDialogControl::execute() throw(uno::RuntimeException)
-{
-    sal_Int16 nDone = -1;
-    if ( getPeer().is() )
-    {
-        uno::Reference< awt::XDialog > xDlg( getPeer(), uno::UNO_QUERY );
-        if( xDlg.is() )
-        {
-            GetComponentInfos().bVisible = sal_True;
-            nDone = xDlg->execute();
-            GetComponentInfos().bVisible = sal_False;
-        }
-    }
-    return nDone;
-}
-
-void UnoDialogControl::endExecute() throw(uno::RuntimeException)
-{
-    if ( getPeer().is() )
-    {
-        uno::Reference< awt::XDialog > xDlg( getPeer(), uno::UNO_QUERY );
-        if( xDlg.is() )
-        {
-            xDlg->endExecute();
-            GetComponentInfos().bVisible = sal_False;
-        }
-    }
-}
-
-void UnoDialogControl::addingControl( const uno::Reference< awt::XControl >& _rxControl )
-{
-    UnoControlContainer::addingControl( _rxControl );
-
-    if ( _rxControl.is() )
-    {
-        uno::Reference< beans::XMultiPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
-        if ( xProps.is() )
-        {
-            uno::Sequence< ::rtl::OUString > aNames( 4 );
-            ::rtl::OUString* pNames = aNames.getArray();
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionX" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionY" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Width" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Height" );
-
-            xProps->addPropertiesChangeListener( aNames, this );
-        }
-    }
-}
-
-void UnoDialogControl::removingControl( const uno::Reference< awt::XControl >& _rxControl )
-{
-    UnoControlContainer::removingControl( _rxControl );
-
-    if ( _rxControl.is() )
-    {
-        uno::Reference< beans::XMultiPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
-        if ( xProps.is() )
-            xProps->removePropertiesChangeListener( this );
-    }
-
-}
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
@@ -1035,10 +239,10 @@ UnoEditControl::UnoEditControl()
 void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     sal_Bool bDone = sal_False;
-    if ( mxPeer.is() && ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT ) )
+    if ( getPeer().is() && ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT ) )
     {
         // #96986# use setText(), or text listener will not be called.
-        uno::Reference < awt::XTextComponent > xTextComponent( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XTextComponent > xTextComponent( getPeer(), uno::UNO_QUERY );
         if ( xTextComponent.is() )
         {
             ::rtl::OUString aText;
@@ -1086,7 +290,7 @@ void UnoEditControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+    uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
     xText->addTextListener( this );
 
     if ( mbSetMaxTextLenInPeer )
@@ -1097,7 +301,7 @@ void UnoEditControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 void UnoEditControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeException)
 {
-    uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+    uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
 
     if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
     {
@@ -1136,9 +340,9 @@ void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeE
     {
         maText = aText;
         mbSetTextInPeer = TRUE;
-        if ( mxPeer.is() )
+        if ( getPeer().is() )
         {
-            uno::Reference < awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+            uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
             xText->setText( maText );
         }
     }
@@ -1173,9 +377,9 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUStri
 ::rtl::OUString UnoEditControl::getSelectedText( void ) throw(uno::RuntimeException)
 {
     ::rtl::OUString aSelected;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         aSelected = xText->getSelectedText();
     }
     return aSelected;
@@ -1183,9 +387,9 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUStri
 
 void UnoEditControl::setSelection( const awt::Selection& aSelection ) throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         xText->setSelection( aSelection );
     }
 }
@@ -1193,9 +397,9 @@ void UnoEditControl::setSelection( const awt::Selection& aSelection ) throw(uno:
 awt::Selection UnoEditControl::getSelection( void ) throw(uno::RuntimeException)
 {
     awt::Selection aSel;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
         aSel = xText->getSelection();
     }
     return aSel;
@@ -1235,9 +439,9 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException
     {
         mnMaxTextLen = nLen;
         mbSetMaxTextLenInPeer = TRUE;
-        if ( mxPeer.is() )
+        if ( getPeer().is() )
         {
-            uno::Reference < awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+            uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
             xText->setMaxTextLen( mnMaxTextLen );
         }
     }
@@ -1268,137 +472,6 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
     Impl_getColumnsAndLines( nCols, nLines );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlFormattedFieldModel
-//  ----------------------------------------------------
-UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
-{
-    ImplRegisterProperty( BASEPROPERTY_ALIGN );
-    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-    ImplRegisterProperty( BASEPROPERTY_BORDER );
-    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-    ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_DEFAULT );
-    ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_VALUE );
-    ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_MAX );
-    ImplRegisterProperty( BASEPROPERTY_EFFECTIVE_MIN );
-    ImplRegisterProperty( BASEPROPERTY_ENABLED );
-    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
-    ImplRegisterProperty( BASEPROPERTY_FORMATKEY );
-    ImplRegisterProperty( BASEPROPERTY_FORMATSSUPPLIER );
-    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
-    ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
-    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_READONLY );
-    ImplRegisterProperty( BASEPROPERTY_SPIN );
-    ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
-    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXT );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
-
-    uno::Any aTreatAsNumber;
-    aTreatAsNumber <<= (sal_Bool) sal_True;
-    ImplRegisterProperty( BASEPROPERTY_TREATASNUMBER, aTreatAsNumber );
-}
-
-::rtl::OUString UnoControlFormattedFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
-{
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
-}
-
-sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
-            ::com::sun::star::uno::Any& rConvertedValue,
-            ::com::sun::star::uno::Any& rOldValue,
-            sal_Int32 nPropId,
-            const ::com::sun::star::uno::Any& rValue
-        ) throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId )
-    {
-        double dVal = 0;
-        sal_Int32  nVal = 0;
-        ::rtl::OUString sVal;
-        if ( ( rValue >>= dVal ) || ( rValue >>= nVal ) || ( rValue >>= sVal ) )
-        {
-            getFastPropertyValue( rOldValue, nPropId );
-            return !CompareProperties( rConvertedValue, rOldValue );
-        }
-
-        throw ::com::sun::star::lang::IllegalArgumentException(
-                    ( ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                +=  GetPropertyName((sal_uInt16)nPropId) )
-                +=  ::rtl::OUString::createFromAscii(" (double, integer, or string expected)."),
-            static_cast< ::com::sun::star::beans::XPropertySet* >(this),
-            1);
-    }
-
-    return UnoControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nPropId, rValue );
-}
-
-uno::Any UnoControlFormattedFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
-{
-    uno::Any aReturn;
-    switch (nPropId)
-    {
-        case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
-
-        case BASEPROPERTY_TREATASNUMBER: aReturn <<= (sal_Bool)sal_True; break;
-
-        case BASEPROPERTY_EFFECTIVE_DEFAULT:
-        case BASEPROPERTY_EFFECTIVE_VALUE:
-        case BASEPROPERTY_EFFECTIVE_MAX:
-        case BASEPROPERTY_EFFECTIVE_MIN:
-        case BASEPROPERTY_FORMATKEY:
-        case BASEPROPERTY_FORMATSSUPPLIER:
-            // (void)
-            break;
-
-        default : aReturn = UnoControlModel::ImplGetDefaultValue( nPropId ); break;
-    }
-
-    return aReturn;
-}
-
-::cppu::IPropertyArrayHelper& UnoControlFormattedFieldModel::getInfoHelper()
-{
-    static UnoPropertyArrayHelper* pHelper = NULL;
-    if ( !pHelper )
-    {
-        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
-        pHelper = new UnoPropertyArrayHelper( aIDs );
-    }
-    return *pHelper;
-}
-
-// beans::XMultiPropertySet
-uno::Reference< beans::XPropertySetInfo > UnoControlFormattedFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
-{
-    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//  ----------------------------------------------------
-//  class UnoFormattedFieldControl
-//  ----------------------------------------------------
-UnoFormattedFieldControl::UnoFormattedFieldControl()
-{
-}
-
-::rtl::OUString UnoFormattedFieldControl::GetComponentServiceName()
-{
-    return ::rtl::OUString::createFromAscii( "FormattedField" );
-}
-
-void UnoFormattedFieldControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeException)
-{
-    uno::Reference< awt::XVclWindowPeer >  xPeer(mxPeer, uno::UNO_QUERY);
-    DBG_ASSERT(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");
-    ::rtl::OUString sEffectiveValue = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
-    ImplSetPropertyValue( sEffectiveValue, xPeer->getProperty( sEffectiveValue ), sal_False );
-
-    if ( GetTextListeners().getLength() )
-        GetTextListeners().textChanged( e );
-}
 
 //  ----------------------------------------------------
 //  class UnoControlFileControlModel
@@ -1617,7 +690,7 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
@@ -1626,10 +699,10 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
 void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( mxPeer.is() && ( nType == BASEPROPERTY_IMAGEURL ) )
+    if ( getPeer().is() && ( nType == BASEPROPERTY_IMAGEURL ) )
     {
         uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
 
         if ( xImgProd.is() && xImgCons.is() )
         {
@@ -1646,18 +719,18 @@ void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, co
 void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
     maActionListeners.addInterface( l );
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->addActionListener( &maActionListeners );
     }
 }
 
 void UnoButtonControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
@@ -1673,9 +746,9 @@ void UnoButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno::Run
 void UnoButtonControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->setActionCommand( rCommand );
     }
 }
@@ -1844,10 +917,10 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) 
 void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( mxPeer.is() && ( nType == BASEPROPERTY_IMAGEURL ) )
+    if ( getPeer().is() && ( nType == BASEPROPERTY_IMAGEURL ) )
     {
         uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
 
         if ( xImgProd.is() && xImgCons.is() )
         {
@@ -1966,10 +1039,10 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XRadioButton >  xRadioButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XRadioButton >  xRadioButton( getPeer(), uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
 
-    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
@@ -1995,18 +1068,18 @@ void UnoRadioButtonControl::removeItemListener(const uno::Reference < awt::XItem
 void UnoRadioButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
     maActionListeners.addInterface( l );
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->addActionListener( &maActionListeners );
     }
 }
 
 void UnoRadioButtonControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
@@ -2022,9 +1095,9 @@ void UnoRadioButtonControl::setLabel( const ::rtl::OUString&  rLabel ) throw(uno
 void UnoRadioButtonControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->setActionCommand( rCommand );
     }
 }
@@ -2177,10 +1250,10 @@ void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxT
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XCheckBox >  xCheckBox( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XCheckBox >  xCheckBox( getPeer(), uno::UNO_QUERY );
     xCheckBox->addItemListener( this );
 
-    uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
@@ -2199,18 +1272,18 @@ void UnoCheckBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
 void UnoCheckBoxControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
     maActionListeners.addInterface( l );
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->addActionListener( &maActionListeners );
     }
 }
 
 void UnoCheckBoxControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XButton >  xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton >  xButton( getPeer(), uno::UNO_QUERY );
         xButton->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
@@ -2219,9 +1292,9 @@ void UnoCheckBoxControl::removeActionListener(const uno::Reference< awt::XAction
 void UnoCheckBoxControl::setActionCommand( const ::rtl::OUString& rCommand ) throw(uno::RuntimeException)
 {
     maActionCommand = rCommand;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XButton > xButton( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
         xButton->setActionCommand( rCommand );
     }
 }
@@ -2645,9 +1718,9 @@ void UnoListBoxControl::dispose() throw(uno::RuntimeException)
 
 void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox > xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox > xListBox( getPeer(), uno::UNO_QUERY );
         DBG_ASSERT( xListBox.is(), "XListBox?" );
 
         uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
@@ -2669,7 +1742,7 @@ void UnoListBoxControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, c
         uno::Any aVal = ImplGetPropertyValue( aSelPropName );
         if ( !( aVal.getValueType().getTypeClass() == uno::TypeClass_VOID ) )
         {
-            uno::Reference< awt::XVclWindowPeer > xW( mxPeer, uno::UNO_QUERY );
+            uno::Reference< awt::XVclWindowPeer > xW( getPeer(), uno::UNO_QUERY );
             if (xW.is())
                 // same comment as in UnoControl::ImplSetPeerProperty - see there
                 xW->setProperty( aSelPropName, aVal );
@@ -2681,7 +1754,7 @@ void UnoListBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxTo
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
     xListBox->addItemListener( this );
 
     if ( maActionListeners.getLength() )
@@ -2691,18 +1764,18 @@ void UnoListBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxTo
 void UnoListBoxControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
     maActionListeners.addInterface( l );
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->addActionListener( &maActionListeners );
     }
 }
 
 void UnoListBoxControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
@@ -2821,9 +1894,9 @@ uno::Sequence< ::rtl::OUString> UnoListBoxControl::getItems() throw(uno::Runtime
 sal_Int16 UnoListBoxControl::getSelectedItemPos() throw(uno::RuntimeException)
 {
     sal_Int16 n = -1;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         n = xListBox->getSelectedItemPos();
     }
     return n;
@@ -2832,9 +1905,9 @@ sal_Int16 UnoListBoxControl::getSelectedItemPos() throw(uno::RuntimeException)
 uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos() throw(uno::RuntimeException)
 {
     uno::Sequence<sal_Int16> aSeq;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         aSeq = xListBox->getSelectedItemsPos();
     }
     return aSeq;
@@ -2843,9 +1916,9 @@ uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos() throw(uno::Run
 ::rtl::OUString UnoListBoxControl::getSelectedItem() throw(uno::RuntimeException)
 {
     ::rtl::OUString aItem;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         aItem = xListBox->getSelectedItem();
     }
     return aItem;
@@ -2854,9 +1927,9 @@ uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos() throw(uno::Run
 uno::Sequence< ::rtl::OUString> UnoListBoxControl::getSelectedItems() throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString> aSeq;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         aSeq = xListBox->getSelectedItems();
     }
     return aSeq;
@@ -2864,9 +1937,9 @@ uno::Sequence< ::rtl::OUString> UnoListBoxControl::getSelectedItems() throw(uno:
 
 void UnoListBoxControl::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->selectItemPos( nPos, bSelect );
     }
     ImplUpdateSelectedItemsProperty();
@@ -2874,9 +1947,9 @@ void UnoListBoxControl::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(
 
 void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect ) throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->selectItemsPos( aPositions, bSelect );
     }
     ImplUpdateSelectedItemsProperty();
@@ -2884,9 +1957,9 @@ void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositio
 
 void UnoListBoxControl::selectItem( const ::rtl::OUString& aItem, sal_Bool bSelect ) throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->selectItem( aItem, bSelect );
     }
     ImplUpdateSelectedItemsProperty();
@@ -2894,9 +1967,9 @@ void UnoListBoxControl::selectItem( const ::rtl::OUString& aItem, sal_Bool bSele
 
 void UnoListBoxControl::makeVisible( sal_Int16 nEntry ) throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XListBox >  xListBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
         xListBox->makeVisible( nEntry );
     }
 }
@@ -3060,7 +2133,7 @@ void UnoComboBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxT
 {
     UnoEditControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XComboBox >  xComboBox( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
     if ( maActionListeners.getLength() )
         xComboBox->addActionListener( &maActionListeners );
     if ( maItemListeners.getLength() )
@@ -3070,18 +2143,18 @@ void UnoComboBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxT
 void UnoComboBoxControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
     maActionListeners.addInterface( l );
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
         xComboBox->addActionListener( &maActionListeners );
     }
 }
 
 void UnoComboBoxControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maActionListeners.getLength() == 1 )
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
         xComboBox->removeActionListener( &maActionListeners );
     }
     maActionListeners.removeInterface( l );
@@ -3090,18 +2163,18 @@ void UnoComboBoxControl::removeActionListener(const uno::Reference< awt::XAction
 void UnoComboBoxControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
 {
     maItemListeners.addInterface( l );
-    if( mxPeer.is() && maItemListeners.getLength() == 1 )
+    if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
         xComboBox->addItemListener( &maItemListeners );
     }
 }
 
 void UnoComboBoxControl::removeItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
 {
-    if( mxPeer.is() && maItemListeners.getLength() == 1 )
+    if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( mxPeer, uno::UNO_QUERY ); // MT: Mal alles so umstellen, schoener als Ref anlegen und query rufen
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );  // MT: Mal alles so umstellen, schoener als Ref anlegen und query rufen
         xComboBox->removeItemListener( &maItemListeners );
     }
     maItemListeners.removeInterface( l );
@@ -3246,7 +2319,7 @@ void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 {
     UnoEditControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     xField->enableRepeat( mbRepeat );
     if ( maSpinListeners.getLength() )
         xField->addSpinListener( &maSpinListeners );
@@ -3256,18 +2329,18 @@ void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 void UnoSpinFieldControl::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException)
 {
     maSpinListeners.addInterface( l );
-    if( mxPeer.is() && maSpinListeners.getLength() == 1 )
+    if( getPeer().is() && maSpinListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
         xField->addSpinListener( &maSpinListeners );
     }
 }
 
 void UnoSpinFieldControl::removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( mxPeer.is() && maSpinListeners.getLength() == 1 )
+    if( getPeer().is() && maSpinListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
         xField->removeSpinListener( &maSpinListeners );
     }
     maSpinListeners.removeInterface( l );
@@ -3275,28 +2348,28 @@ void UnoSpinFieldControl::removeSpinListener( const ::com::sun::star::uno::Refer
 
 void UnoSpinFieldControl::up() throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->up();
 }
 
 void UnoSpinFieldControl::down() throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->down();
 }
 
 void UnoSpinFieldControl::first() throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->first();
 }
 
 void UnoSpinFieldControl::last() throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->last();
 }
@@ -3305,7 +2378,7 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::sta
 {
     mbRepeat = bRepeat;
 
-    uno::Reference < awt::XSpinField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XSpinField > xField( getPeer(), uno::UNO_QUERY );
     if ( xField.is() )
         xField->enableRepeat( bRepeat );
 }
@@ -3405,7 +2478,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 {
     UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
     if ( mbLongFormat != 2 )    // not set
@@ -3415,7 +2488,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 
 void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getDate();
@@ -3465,9 +2538,9 @@ sal_Int32 UnoDateFieldControl::getMax() throw(uno::RuntimeException)
 void UnoDateFieldControl::setFirst( sal_Int32 Date ) throw(uno::RuntimeException)
 {
     mnFirst = Date;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
         xField->setFirst( Date );
     }
 }
@@ -3480,9 +2553,9 @@ sal_Int32 UnoDateFieldControl::getFirst() throw(uno::RuntimeException)
 void UnoDateFieldControl::setLast( sal_Int32 Date ) throw(uno::RuntimeException)
 {
     mnLast = Date;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
         xField->setLast( Date );
     }
 }
@@ -3495,9 +2568,9 @@ sal_Int32 UnoDateFieldControl::getLast() throw(uno::RuntimeException)
 void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeException)
 {
     mbLongFormat = bLong;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
         xField->setLongFormat( bLong );
     }
 }
@@ -3509,9 +2582,9 @@ sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XDateField >  xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XDateField >  xField( getPeer(), uno::UNO_QUERY );
         xField->setEmpty();
     }
 }
@@ -3519,9 +2592,9 @@ void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
 sal_Bool UnoDateFieldControl::isEmpty() throw(uno::RuntimeException)
 {
     sal_Bool bEmpty = sal_False;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
         bEmpty = xField->isEmpty();
     }
     return bEmpty;
@@ -3631,14 +2704,14 @@ void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 {
     UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XTimeField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
 }
 
 void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    uno::Reference < awt::XTimeField >  xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getTime();
@@ -3687,9 +2760,9 @@ sal_Int32 UnoTimeFieldControl::getMax() throw(uno::RuntimeException)
 void UnoTimeFieldControl::setFirst( sal_Int32 Time ) throw(uno::RuntimeException)
 {
     mnFirst = Time;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XTimeField > xField( getPeer(), uno::UNO_QUERY );
         xField->setFirst( mnFirst );
     }
 }
@@ -3702,9 +2775,9 @@ sal_Int32 UnoTimeFieldControl::getFirst() throw(uno::RuntimeException)
 void UnoTimeFieldControl::setLast( sal_Int32 Time ) throw(uno::RuntimeException)
 {
     mnLast = Time;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XTimeField > xField( getPeer(), uno::UNO_QUERY );
         xField->setFirst( mnLast );
     }
 }
@@ -3716,9 +2789,9 @@ sal_Int32 UnoTimeFieldControl::getLast() throw(uno::RuntimeException)
 
 void UnoTimeFieldControl::setEmpty() throw(uno::RuntimeException)
 {
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XTimeField >  xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
         xField->setEmpty();
     }
 }
@@ -3726,9 +2799,9 @@ void UnoTimeFieldControl::setEmpty() throw(uno::RuntimeException)
 sal_Bool UnoTimeFieldControl::isEmpty() throw(uno::RuntimeException)
 {
     sal_Bool bEmpty = sal_False;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XTimeField >  xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
         bEmpty = xField->isEmpty();
     }
     return bEmpty;
@@ -3840,7 +2913,7 @@ void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > &
 {
     UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XNumericField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
 }
@@ -3848,7 +2921,7 @@ void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > &
 
 void UnoNumericFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    uno::Reference < awt::XNumericField >  xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XNumericField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aAny;
     aAny <<= xField->getValue();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_False );
@@ -3896,9 +2969,9 @@ double UnoNumericFieldControl::getMax() throw(uno::RuntimeException)
 void UnoNumericFieldControl::setFirst( double Value ) throw(uno::RuntimeException)
 {
     mnFirst = Value;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XNumericField > xField( getPeer(), uno::UNO_QUERY );
         xField->setFirst( mnFirst );
     }
 }
@@ -3911,9 +2984,9 @@ double UnoNumericFieldControl::getFirst() throw(uno::RuntimeException)
 void UnoNumericFieldControl::setLast( double Value ) throw(uno::RuntimeException)
 {
     mnLast = Value;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XNumericField > xField( getPeer(), uno::UNO_QUERY );
         xField->setLast( mnLast );
     }
 }
@@ -4059,14 +3132,14 @@ void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > 
 {
     UnoSpinFieldControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XCurrencyField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
 }
 
 void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    uno::Reference < awt::XCurrencyField >  xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XCurrencyField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aAny;
     aAny <<= xField->getValue();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VALUE_DOUBLE ), aAny, sal_False );
@@ -4114,9 +3187,9 @@ double UnoCurrencyFieldControl::getMax() throw(uno::RuntimeException)
 void UnoCurrencyFieldControl::setFirst( double Value ) throw(uno::RuntimeException)
 {
     mnFirst = Value;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XCurrencyField > xField( getPeer(), uno::UNO_QUERY );
         xField->setFirst( mnFirst );
     }
 }
@@ -4129,9 +3202,9 @@ double UnoCurrencyFieldControl::getFirst() throw(uno::RuntimeException)
 void UnoCurrencyFieldControl::setLast( double Value ) throw(uno::RuntimeException)
 {
     mnLast = Value;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XCurrencyField > xField( getPeer(), uno::UNO_QUERY );
         xField->setLast( mnLast );
     }
 }
@@ -4256,7 +3329,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
         ::rtl::OUString EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
         ::rtl::OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
 
-        uno::Reference < awt::XPatternField >  xPF( mxPeer, uno::UNO_QUERY );
+        uno::Reference < awt::XPatternField >  xPF( getPeer(), uno::UNO_QUERY );
         if (xPF.is())
         {   // same comment as in UnoControl::ImplSetPeerProperty - see there
             xPF->setString( Text );
@@ -4546,7 +3619,7 @@ void UnoScrollBarControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    uno::Reference < awt::XScrollBar >  xScrollBar( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XScrollBar >  xScrollBar( getPeer(), uno::UNO_QUERY );
     xScrollBar->addAdjustmentListener( this );
 }
 
@@ -4559,7 +3632,7 @@ void UnoScrollBarControl::adjustmentValueChanged( const ::com::sun::star::awt::A
         case ::com::sun::star::awt::AdjustmentType_ADJUST_PAGE:
         case ::com::sun::star::awt::AdjustmentType_ADJUST_ABS:
         {
-            uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+            uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
 
             if ( xScrollBar.is() )
             {
@@ -4612,9 +3685,9 @@ void UnoScrollBarControl::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_I
 sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getValue();
     }
     return n;
@@ -4630,9 +3703,9 @@ void UnoScrollBarControl::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno:
 sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getMaximum();
     }
     return n;
@@ -4648,9 +3721,9 @@ void UnoScrollBarControl::setLineIncrement( sal_Int32 n ) throw(::com::sun::star
 sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getLineIncrement();
     }
     return n;
@@ -4666,9 +3739,9 @@ void UnoScrollBarControl::setBlockIncrement( sal_Int32 n ) throw(::com::sun::sta
 sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getBlockIncrement();
     }
     return n;
@@ -4684,9 +3757,9 @@ void UnoScrollBarControl::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::
 sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getVisibleSize();
     }
     return n;
@@ -4702,9 +3775,9 @@ void UnoScrollBarControl::setOrientation( sal_Int32 n ) throw(::com::sun::star::
 sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 n;
-    if ( mxPeer.is() )
+    if ( getPeer().is() )
     {
-        uno::Reference< awt::XScrollBar > xScrollBar( mxPeer, uno::UNO_QUERY );
+        uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
         n = xScrollBar->getOrientation();
     }
     return n;

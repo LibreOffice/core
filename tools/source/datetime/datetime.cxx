@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datetime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-10 17:54:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <datetime.hxx>
-#include <solmath.hxx>
+#include <rtl/math.hxx>
 
 /*************************************************************************
 |*
@@ -360,12 +360,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
     double fInt, fFrac;
     if ( fTimeInDays < 0.0 )
     {
-        fInt = SolarMath::ApproxCeil( fTimeInDays );
+        fInt = ::rtl::math::approxCeil( fTimeInDays );
         fFrac = fInt <= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
     else
     {
-        fInt = SolarMath::ApproxFloor( fTimeInDays );
+        fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
     Date::operator+=( long(fInt) );     // full days

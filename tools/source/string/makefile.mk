@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: th $ $Date: 2001-07-06 13:47:33 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,10 @@ SLOFILES=   $(SLO)$/tstring.obj     \
             $(SLO)$/charset.obj     \
             $(SLO)$/tenccvt.obj
 
-
-.IF "$(UPDATER)"!=""
 OBJFILES=   $(OBJ)$/tstring.obj     \
             $(OBJ)$/tustring.obj    \
             $(OBJ)$/charset.obj     \
             $(OBJ)$/tenccvt.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

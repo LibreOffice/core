@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2002-03-13 09:03:53 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,9 @@ TARGET=rc
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
+.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -75,11 +77,9 @@ SLOFILES=	$(SLO)$/rc.obj		\
             $(SLO)$/resmgr.obj	\
             $(SLO)$/resary.obj
 
-.IF "$(UPDATER)"!=""
 OBJFILES=	$(OBJ)$/rc.obj		\
             $(OBJ)$/resmgr.obj	\
             $(OBJ)$/resary.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

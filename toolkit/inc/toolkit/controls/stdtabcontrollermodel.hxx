@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontrollermodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public:
     void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) )
+    DECLIMPL_SERVICEINFO( StdTabControllerModel, szServiceName2_TabControllerModel )
 };
 
 

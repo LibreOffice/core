@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 09:40:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODECHANGEBROADCASTER_HPP_
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#endif
+
 
 struct UnoControlComponentInfos
 {
@@ -155,6 +159,9 @@ class UnoControl :  public UnoControl_Base
 private:
     ::osl::Mutex    maMutex;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      mxPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   mxVclWindowPeer; // just to avoid the query_interface thing
+
 protected:
     EventListenerMultiplexer            maDisposeListeners;
     WindowListenerMultiplexer           maWindowListeners;
@@ -165,7 +172,6 @@ protected:
     PaintListenerMultiplexer            maPaintListeners;
     ::cppu::OInterfaceContainerHelper   maModeChangeListeners;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      mxPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    mxModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >        mxGraphics;
@@ -196,6 +202,13 @@ protected:
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
 
     void                                                                        disposeAccessibleContext();
+
+    inline void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _xPeer)
+    {
+        mxPeer = _xPeer;
+        mxVclWindowPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >(mxPeer,::com::sun::star::uno::UNO_QUERY); // just to avoid the query_interface thing
+    }
+
 
 public:
                 UnoControl();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 09:38:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,15 +214,41 @@ void ClassName::MethodName( const EventType& e ) throw(::com::sun::star::uno::Ru
 
 // -------------------------------------------------------------------------------------
 
+#define DECLIMPL_SUPPORTS_SERVICE( ) \
+    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
+    { \
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() ); \
+        const ::rtl::OUString* pSupported = aServiceNames.getConstArray(); \
+        const ::rtl::OUString* pSupportedEnd = pSupported + aServiceNames.getLength(); \
+        for ( ; pSupported != pSupportedEnd; ++pSupported ) \
+            if ( *pSupported == rServiceName ) \
+                return sal_True; \
+        return sal_False; \
+    }
+
+// -------------------------------------------------------------------------------------
+
+#define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
+    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+                            { \
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                aNames.realloc( aNames.getLength() + 1 ); \
+                                aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                return aNames; \
+                            } \
+
+// -------------------------------------------------------------------------------------
+
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
     ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
-                                ::rtl::OUString aServiceName( ServiceName ); \
-                                return ::com::sun::star::uno::Sequence< ::rtl::OUString >( &aServiceName, 1);\
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 ); \
+                                aNames[ 0 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                return aNames; \
                             } \
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
-                            { return rServiceName == ServiceName; }
+    DECLIMPL_SUPPORTS_SERVICE( )
 
 
 

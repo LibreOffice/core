@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainermodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 15:00:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlContainerModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainerModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainerModel, UnoControlModel, szServiceName2_UnoControlContainerModel )
 };
 
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2002-03-13 09:03:34 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,9 @@ TARGET=fsys
 
 # --- Files --------------------------------------------------------
 
+UNOUCROUT = $(OUT)$/inc
+UNOTYPES = com.sun.star.util.XStringWidth
+
 SLOFILES= \
             $(SLO)$/tempfile.obj   \
             $(SLO)$/wldcrd.obj   \
@@ -81,7 +84,6 @@ SLOFILES= \
             $(SLO)$/tdir.obj	\
             $(SLO)$/urlobj.obj
 
-.IF "$(UPDATER)"!=""
 OBJFILES=   $(OBJ)$/wldcrd.obj   \
             $(OBJ)$/fstat.obj    \
             $(OBJ)$/comdep.obj   \
@@ -89,7 +91,6 @@ OBJFILES=   $(OBJ)$/wldcrd.obj   \
             $(OBJ)$/dirent.obj   \
             $(OBJ)$/tdir.obj	\
             $(OBJ)$/urlobj.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

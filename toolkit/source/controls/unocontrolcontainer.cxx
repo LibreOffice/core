@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 13:41:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ UnoControlContainer::UnoControlContainer() : maCListeners( *this )
 UnoControlContainer::UnoControlContainer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP )
     :   maCListeners( *this )
 {
-    mxPeer = xP;
+    setPeer( xP );
     mbDisposePeer = sal_False;
     mpControls = new UnoControlHolderList;
 }
@@ -374,10 +374,10 @@ void UnoControlContainer::addControl( const ::rtl::OUString& rName, const ::com:
 
         addingControl( rControl );
 
-        if( mxPeer.is() )
+        if( getPeer().is() )
         {
             // Hat der Container ein Peer, dann auch gleich im Child erzeugen
-            rControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), mxPeer );
+            rControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), getPeer() );
             ImplActivateTabControllers();
         }
 
@@ -451,12 +451,9 @@ void UnoControlContainer::addTabController( const ::com::sun::star::uno::Referen
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uInt32 nOldCount = maTabControllers.getLength();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > aNewSeq( nOldCount + 1 );
-    for ( sal_uInt32 n = 0; n < nOldCount; n++ )
-        aNewSeq.getArray()[n] = maTabControllers.getConstArray()[n];
-    aNewSeq.getArray()[nOldCount] = TabController;
-    maTabControllers = aNewSeq;
+    sal_uInt32 nCount = maTabControllers.getLength();
+    maTabControllers.realloc( nCount + 1 );
+    maTabControllers[ nCount ] = TabController;
 }
 
 void UnoControlContainer::removeTabController( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& TabController ) throw(::com::sun::star::uno::RuntimeException)
@@ -464,9 +461,10 @@ void UnoControlContainer::removeTabController( const ::com::sun::star::uno::Refe
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_uInt32 nCount = maTabControllers.getLength();
-    for ( sal_uInt32 n = 0; n < nCount; n++ )
+    const uno::Reference< awt::XTabController >* pLoop = maTabControllers.getConstArray();
+    for ( sal_uInt32 n = 0; n < nCount; ++n, ++pLoop )
     {
-        if( maTabControllers.getConstArray()[n] == TabController )
+        if( pLoop->get() == TabController.get() )
         {
             ::comphelper::removeElementAt( maTabControllers, n );
             break;
@@ -479,7 +477,7 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if( !mxPeer.is() )
+    if( !getPeer().is() )
     {
         sal_Bool bVis = maComponentInfos.bVisible;
         if( bVis )
@@ -515,9 +513,9 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
             sal_uInt32 nCtrls = aCtrls.getLength();
             for( sal_uInt32 n = 0; n < nCtrls; n++ )
-                aCtrls.getArray()[n]->createPeer( rxToolkit, mxPeer );
+                aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer >  xC( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer >  xC( getPeer(), ::com::sun::star::uno::UNO_QUERY );
 
             xC->enableDialogControl( sal_True );
             ImplActivateTabControllers();

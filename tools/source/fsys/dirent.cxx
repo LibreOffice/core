@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.11 $
- *  last change: $Author: hro $ $Date: 2001-07-27 08:03:57 $
+ *  $Revision: 1.12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,15 +219,15 @@ void FSysRedirector::Register( FSysRedirector *pRedirector )
 
 BOOL FSysRedirector::DoRedirect( String &rPath )
 {
-        ByteString aURL(rPath, osl_getThreadTextEncoding());
-      String sURL = String(aURL, osl_getThreadTextEncoding());
+        String aURL(rPath);
+      String sURL = aURL;
 
         // if redirection is disabled or not even registered do nothing
         if ( !_bEnabled || !pRedirectMutex )
                 return FALSE;
 
         // redirect only removable or remote volumes
-        if ( !IsRedirectable_Impl( aURL ) )
+        if ( !IsRedirectable_Impl( ByteString( aURL, osl_getThreadTextEncoding() ) ) )
                 return FALSE;
 
         // Redirection is acessible only by one thread per time
@@ -244,7 +244,7 @@ BOOL FSysRedirector::DoRedirect( String &rPath )
 
         // convert to URL
 #ifndef UNX
-        for ( char *p = (char *) aURL.GetBuffer(); *p; ++p )
+        for ( sal_Unicode *p = (sal_Unicode*)aURL.GetBuffer(); *p; ++p )
 #ifndef MAC
                 if ( '\\' == *p ) *p = '/';
                 else if ( ':' == *p ) *p = '|';
@@ -253,7 +253,7 @@ BOOL FSysRedirector::DoRedirect( String &rPath )
 #endif
 #endif
 
-        aURL.Insert( "file:///", 0 );
+        aURL.Insert( String("file:///", osl_getThreadTextEncoding()), 0 );
 
         // do redirection
         Redirector();
@@ -262,10 +262,10 @@ BOOL FSysRedirector::DoRedirect( String &rPath )
         // if redirected transform URL to file name
         if ( bRedirected )
         {
-                rPath = String(aURL.Copy( 8 ), osl_getThreadTextEncoding());
-                aURL  = ByteString(rPath, osl_getThreadTextEncoding());
+                rPath = aURL.Copy( 8 );
+                aURL  = rPath;
 #ifndef UNX
-                for ( char *p = (char *) aURL.GetBuffer(); *p; ++p )
+                for ( sal_Unicode *p = (sal_Unicode *)aURL.GetBuffer(); *p; ++p )
 #ifndef MAC
                         if ( '/' == *p ) *p = '\\';
                         else if ( '|' == *p ) *p = ':';
@@ -469,7 +469,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     // die einzelnen Namen auf einen Stack packen
-    ByteString       aPfad( rPfad );
+    String       aPfad( rPfad, osl_getThreadTextEncoding() );
     DirEntryStack   aStack;
 
     do
@@ -495,7 +495,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             for ( nPos = 2; aPfad.Len() > nPos; ++nPos )
                 if ( aPfad.GetChar(nPos) == '\\' || aPfad.GetChar(nPos) == '/' )
                     break;
-            aName = aPfad.Copy( 2, nPos-2 );
+            aName = ByteString( aPfad.Copy( 2, nPos-2 ), osl_getThreadTextEncoding() );
             aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT, eStyle ) );
         }
         // ist der Name die Root des aktuellen Drives?
@@ -510,7 +510,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             // ist der Name ein Drive?
             if ( nPos < aPfad.Len() && aPfad.GetChar(nPos) == ':' )
             {
-                aName = aPfad.Copy( 0, nPos + 1 );
+                aName = ByteString( aPfad.Copy( 0, nPos + 1 ), osl_getThreadTextEncoding() );
 
                 // ist der Name die Root des Drives
                 if ( (nPos + 1) < aPfad.Len() &&
@@ -543,7 +543,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
             else
             {
                 // den Namen ohne Trenner abspalten
-                aName = aPfad.Copy( 0, nPos );
+                aName = ByteString( aPfad.Copy( 0, nPos ), osl_getThreadTextEncoding() );
 
                 // stellt der Name die aktuelle Directory dar?
                 if ( aName == "." )
@@ -661,16 +661,17 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 |*
 *************************************************************************/
 
-FSysError DirEntry::ImpParseName( const ByteString& rInitName,
+FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
                                   FSysPathStyle eStyle )
 {
+    String  rInitName( rbInitName, osl_getThreadTextEncoding() );
     if ( eStyle == FSYS_STYLE_HOST )
         eStyle = DEFSTYLE;
 
     // KI-Division of FSys
     if ( eStyle == FSYS_STYLE_DETECT )
     {
-        char cFirst = rInitName.Copy(0,1).ToLowerAscii().GetChar(0);
+        sal_Unicode cFirst = rInitName.Copy(0,1).ToLowerAscii().GetChar(0);
         if ( rInitName.Len() == 2 && rInitName.GetChar(1) == ':' &&
          cFirst >= 'a' &&
              cFirst <= 'z' )
@@ -699,14 +700,14 @@ FSysError DirEntry::ImpParseName( const ByteString& rInitName,
         case FSYS_STYLE_HPFS:
         case FSYS_STYLE_NTFS:
         case FSYS_STYLE_NWFS:
-            return ImpParseOs2Name( rInitName, eStyle );
+            return ImpParseOs2Name( rbInitName, eStyle );
 
         case FSYS_STYLE_BSD:
         case FSYS_STYLE_SYSV:
-            return ImpParseUnixName( rInitName, eStyle );
+            return ImpParseUnixName( rbInitName, eStyle );
 
         case FSYS_STYLE_MAC:
-            return ImpParseMacName( rInitName );
+            return ImpParseMacName( rbInitName );
 
         default:
             return FSYS_ERR_UNKNOWN;
@@ -1942,15 +1943,14 @@ BOOL DirEntry::ImpToRel( String aCurStr )
 
         DirEntry aThis(*this);
     aThis.ToAbs();
-    ByteString aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ), osl_getThreadTextEncoding());
-    ByteString bCurStr( aCurStr, osl_getThreadTextEncoding());
-    aThisStr = CMP_LOWER( aThisStr );
-    bCurStr = CMP_LOWER( bCurStr );
+    String aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ) );
+    aThisStr = String( aThisStr ).ToLowerAscii();
+    aCurStr = String( aCurStr ).ToLowerAscii();
 
     // "Ubereinstimmung pr"ufen
-    USHORT nPos = aThisStr.Match( bCurStr );
-    if ( nPos == STRING_MATCH && aThisStr.Len() != bCurStr.Len() )
-        nPos = Min( aThisStr.Len(), bCurStr.Len() );
+    USHORT nPos = aThisStr.Match( aCurStr );
+    if ( nPos == STRING_MATCH && aThisStr.Len() != aCurStr.Len() )
+        nPos = Min( aThisStr.Len(), aCurStr.Len() );
 
     // Sonderfall, die DirEntries sind identisch
     if ( nPos == STRING_MATCH )
@@ -1972,15 +1972,15 @@ BOOL DirEntry::ImpToRel( String aCurStr )
     while ( nPos > 0 && aThisStr.GetChar(nPos) != '\\' )
         --nPos;
         aThisStr.Erase( 0, nPos + ( ( aThisStr.GetChar(nPos) == '\\' ) ? 1 : 0 ) );
-    bCurStr.Erase( 0, nPos + ( ( bCurStr.GetChar(nPos) == '\\' ) ? 1 : 0 ) );
+    aCurStr.Erase( 0, nPos + ( ( aCurStr.GetChar(nPos) == '\\' ) ? 1 : 0 ) );
 
     // und fuellen mit dem Level der Directories auf
-    for ( nPos = 0; nPos < bCurStr.Len(); ++nPos )
-        if ( bCurStr.GetChar(nPos) == '\\' )
-            aThisStr.Insert( "..\\", 0 );
+    for ( nPos = 0; nPos < aCurStr.Len(); ++nPos )
+        if ( aCurStr.GetChar(nPos) == '\\' )
+            aThisStr.Insert( String( "..\\", osl_getThreadTextEncoding() ), 0 );
 
     // das ist dann unser relativer Pfad
-    *this = DirEntry( String(aThisStr, osl_getThreadTextEncoding()), FSYS_STYLE_HPFS );
+    *this = DirEntry( aThisStr, FSYS_STYLE_HPFS );
     return TRUE;
 }
 
@@ -2435,7 +2435,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                         }
             }
 
-            delete ret_val;
+            delete[] ret_val;
             ret_val = 0;
         }
 
@@ -3360,7 +3360,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
             FileStat::SetReadOnlyFlag(*this, isReadOnly);
         }
 
-        delete pName;
+        delete[] pName;
         return eError;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxprinter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-12-10 15:14:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,11 @@ VCLXPrinter::~VCLXPrinter()
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XPrinter*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXPrinterPropertySet::queryInterface( rType ));
+
+    if ( !aRet.hasValue() )
+        aRet = VCLXPrinterPropertySet::queryInterface( rType );
+
+    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
@@ -412,7 +416,11 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XInfoPrinter*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXPrinterPropertySet::queryInterface( rType ));
+
+    if ( !aRet.hasValue() )
+        aRet = VCLXPrinterPropertySet::queryInterface( rType );
+
+    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider

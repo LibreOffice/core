@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2002-12-10 07:14:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLESTATUSBAR_HXX_
+#include <toolkit/awt/vclxaccessiblestatusbar.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABCONTROL_HXX_
 #include <toolkit/awt/vclxaccessibletabcontrol.hxx>
@@ -205,6 +208,7 @@ VCLXWindow::VCLXWindow()
 
     mbDisposing = sal_False;
     mbDesignMode = sal_False;
+    mbSynthesizingVCLEvent = sal_False;
 }
 
 VCLXWindow::~VCLXWindow()
@@ -350,41 +354,61 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             }
         }
         break;
+        case VCLEVENT_CONTROL_GETFOCUS:
         case VCLEVENT_WINDOW_GETFOCUS:
         {
-            if ( GetFocusListeners().getLength() )
+            if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_GETFOCUS
+                    )
+                ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_GETFOCUS
+                    )
+                )
             {
-                ::com::sun::star::awt::FocusEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
-                aEvent.Temporary = sal_False;
-                GetFocusListeners().focusGained( aEvent );
+                if ( GetFocusListeners().getLength() )
+                {
+                    ::com::sun::star::awt::FocusEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                    aEvent.Temporary = sal_False;
+                    GetFocusListeners().focusGained( aEvent );
+                }
             }
         }
         break;
+        case VCLEVENT_CONTROL_LOSEFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
         {
-            if ( GetFocusListeners().getLength() )
+            if  (   (   rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_CONTROL_LOSEFOCUS
+                    )
+                ||  (   !rVclWindowEvent.GetWindow()->IsCompoundControl()
+                    &&  rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS
+                    )
+                )
             {
-                ::com::sun::star::awt::FocusEvent aEvent;
-                aEvent.Source = (::cppu::OWeakObject*)this;
-                aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
-                aEvent.Temporary = sal_False;
-
-                Window* pNext = Application::GetFocusWindow();
-                if ( pNext )
+                if ( GetFocusListeners().getLength() )
                 {
-                    // Bei zusammengesetzten Controls interessiert sich keiner fuer das Innenleben:
-                    Window* pNextC = pNext;
-                    while ( pNextC && !pNextC->IsCompoundControl() )
-                        pNextC = pNextC->GetParent();
-                    if ( pNextC )
-                        pNext = pNextC;
+                    ::com::sun::star::awt::FocusEvent aEvent;
+                    aEvent.Source = (::cppu::OWeakObject*)this;
+                    aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                    aEvent.Temporary = sal_False;
 
-                    pNext->GetComponentInterface( sal_True );
-                    aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
+                    Window* pNext = Application::GetFocusWindow();
+                    if ( pNext )
+                    {
+                        // Bei zusammengesetzten Controls interessiert sich keiner fuer das Innenleben:
+                        Window* pNextC = pNext;
+                        while ( pNextC && !pNextC->IsCompoundControl() )
+                            pNextC = pNextC->GetParent();
+                        if ( pNextC )
+                            pNext = pNextC;
+
+                        pNext->GetComponentInterface( sal_True );
+                        aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
+                    }
+                    GetFocusListeners().focusLost( aEvent );
                 }
-                GetFocusListeners().focusLost( aEvent );
             }
         }
         break;
@@ -513,10 +537,27 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xContext;
 
-    if ( GetWindow() && GetWindow()->GetType() == WINDOW_TABCONTROL )
-        xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
-    else
-        xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        switch ( pWindow->GetType() )
+        {
+            case WINDOW_STATUSBAR:
+            {
+                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
+            }
+            break;
+            case WINDOW_TABCONTROL:
+            {
+                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+            }
+            break;
+            default:
+            {
+                xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+            }
+        }
+    }
 
     return xContext;
 }

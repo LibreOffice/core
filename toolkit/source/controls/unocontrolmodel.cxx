@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 10:09:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,10 @@ static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rF
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        rValue >>= rFD.Weight;
                                                             break;
-        case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         rValue >>= nExtractShort; rFD.Slant = (::com::sun::star::awt::FontSlant)nExtractShort;
+        case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         if ( rValue >>= nExtractShort )
+                                                                rFD.Slant = (::com::sun::star::awt::FontSlant)nExtractShort;
+                                                            else
+                                                                rValue >>= rFD.Slant;
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE:     rValue >>= rFD.Underline;
                                                             break;
@@ -253,12 +256,7 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     {
         ImplControlProperty* pProp = rModel.mpData->GetObject( --n );
         ImplControlProperty* pNew = new ImplControlProperty( *pProp );
-
-#ifdef DBG_UTIL
-        BOOL bSuccess =
-#endif
         mpData->Insert( pNew->GetId(), pNew );
-        DBG_ASSERT( bSuccess, "UnoControlModel::UnoControlModel: property was already known!" );
     }
 }
 
@@ -485,18 +483,6 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
 
 void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault )
 {
-    if ( mpData->Get( nPropId ) )
-    {
-        // property is already known
-        DBG_ASSERT( ( BASEPROPERTY_TEXTCOLOR == nPropId )
-                ||  ( BASEPROPERTY_TEXTLINECOLOR == nPropId )
-                ||  ( BASEPROPERTY_FONTRELIEF == nPropId )
-                ||  ( BASEPROPERTY_FONTEMPHASISMARK == nPropId ),
-            "UnoControlModel::ImplRegisterProperty: property was already known!"
-        );
-        return;
-    }
-
     ImplControlProperty* pProp = new ImplControlProperty( nPropId, rDefault );
     mpData->Insert( nPropId, pProp );
 }
@@ -1104,10 +1090,8 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    DBG_ERROR( "This method should be overloaded!" );
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >();
+    ::rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlModel" ) );
+    return Sequence< ::rtl::OUString >( &sName, 1 );
 }
 
 // ::cppu::OPropertySetHelper
@@ -1225,15 +1209,11 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 if (!bConverted)
                 {
-                    ::rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "Unable to convert the given value for the property " ) );
-                    sMessage += GetPropertyName((sal_uInt16)nPropId);
-                    sMessage += ::rtl::OUString::createFromAscii( "\n(expected " );
-                    sMessage += pDestType->getTypeName();
-                    sMessage += ::rtl::OUString::createFromAscii( ", found " );
-                    sMessage += rValue.getValueType().getTypeName();
-                    sMessage += ::rtl::OUString::createFromAscii( ")" );
                     throw ::com::sun::star::lang::IllegalArgumentException(
-                                sMessage, static_cast< ::com::sun::star::beans::XPropertySet* >(this), 1);
+                                ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                            +=  GetPropertyName((sal_uInt16)nPropId),
+                        static_cast< ::com::sun::star::beans::XPropertySet* >(this),
+                        1);
                 }
             }
         }

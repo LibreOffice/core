@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ public:
     void SAL_CALL activateLast(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO( StdTabController, ::rtl::OUString::createFromAscii( szServiceName2_TabController ) )
+    DECLIMPL_SERVICEINFO( StdTabController, szServiceName2_TabController )
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-12 10:39:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,9 +801,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.10 $\n"
+        "#   $Revision: 1.11 $\n"
         "#\n"
-        "#   last change: $Author: nf $ $Date: 2001-06-12 10:39:45 $\n"
+        "#   last change: $Author: hr $ $Date: 2003-03-27 17:03:02 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"

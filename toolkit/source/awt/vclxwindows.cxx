@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-28 13:24:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,13 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
         pCheckBox->SetState( (TriState)n );
 
         // #105198# call C++ click listeners (needed for accessibility)
-        pCheckBox->GetClickHdl().Call( pCheckBox );
+        // pCheckBox->GetClickHdl().Call( pCheckBox );
+
+        // #107218# Call same virtual methods and listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pCheckBox->Toggle();
+        pCheckBox->Click();
+        SetSynthesizingVCLEvent( sal_False );
     }
 }
 
@@ -784,7 +790,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.Selected = pCheckBox->GetState();
                     maItemListeners.itemStateChanged( aEvent );
                 }
-                if ( maActionListeners.getLength() )
+                if ( !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
                     ::com::sun::star::awt::ActionEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
@@ -956,7 +962,12 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
         pRadioButton->Check( b );
         // #102717# item listeners are called, but not C++ click listeners in StarOffice code => call click hdl
         // But this is needed in old code because Accessibility API uses it.
-        pRadioButton->GetClickHdl().Call( pRadioButton );
+        // pRadioButton->GetClickHdl().Call( pRadioButton );
+
+        // #107218# Call same virtual methods and listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pRadioButton->Click();
+        SetSynthesizingVCLEvent( sal_False );
     }
 }
 
@@ -1006,7 +1017,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_BUTTON_CLICK:
-            if ( maActionListeners.getLength() )
+            if ( !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
             {
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -1354,8 +1365,18 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
     ::vos::OGuard aGuard( GetMutex() );
 
     ListBox* pBox = (ListBox*) GetWindow();
-    if ( pBox )
+    if ( pBox && ( pBox->IsEntryPosSelected( nPos ) != bSelect ) )
+    {
         pBox->SelectEntryPos( nPos, bSelect );
+
+        // VCL doesn't call select handler after API call.
+        // ImplCallItemListeners();
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pBox->Select();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
@@ -1365,18 +1386,40 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
+        BOOL bChanged = FALSE;
         for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
-            pBox->SelectEntryPos( (sal_uInt16) aPositions.getConstArray()[--n], bSelect );
+        {
+            USHORT nPos = (USHORT) aPositions.getConstArray()[--n];
+            if ( pBox->IsEntryPosSelected( nPos ) != bSelect )
+            {
+                pBox->SelectEntryPos( nPos, bSelect );
+                bChanged = TRUE;
+            }
+        }
+
+        if ( bChanged )
+        {
+            // VCL doesn't call select handler after API call.
+            // ImplCallItemListeners();
+
+            // #107218# Call same listeners like VCL would do after user interaction
+            SetSynthesizingVCLEvent( sal_True );
+            pBox->Select();
+            SetSynthesizingVCLEvent( sal_False );
+        }
     }
 }
 
-void VCLXListBox::selectItem( const ::rtl::OUString& aItem, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXListBox::selectItem( const ::rtl::OUString& rItemText, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
-        pBox->SelectEntry( aItem, bSelect );
+    {
+        String aItemText( rItemText );
+        selectItemPos( pBox->GetEntryPos( aItemText ), bSelect );
+    }
 }
 
 
@@ -1445,7 +1488,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if( pListBox )
             {
                 sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
-                if ( bDropDown && maActionListeners.getLength() )
+                if ( bDropDown && !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
                     // Bei DropDown den ActionListener rufen...
                     ::com::sun::star::awt::ActionEvent aEvent;
@@ -1456,15 +1499,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
                 if ( maItemListeners.getLength() )
                 {
-                    ::com::sun::star::awt::ItemEvent aEvent;
-                    aEvent.Source = (::cppu::OWeakObject*)this;
-                    aEvent.Highlighted = sal_False;
-
-                    // Bei Mehrfachselektion 0xFFFF, sonst die ID
-                    aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 )
-                        ? pListBox->GetSelectEntryPos() : 0xFFFF;
-
-                    maItemListeners.itemStateChanged( aEvent );
+                    ImplCallItemListeners();
                 }
             }
         }
@@ -1673,6 +1708,23 @@ void VCLXListBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thro
         nLines = nL;
     }
 }
+
+void VCLXListBox::ImplCallItemListeners()
+{
+    ListBox* pListBox = (ListBox*) GetWindow();
+    if ( pListBox && maItemListeners.getLength() )
+    {
+        ::com::sun::star::awt::ItemEvent aEvent;
+        aEvent.Source = (::cppu::OWeakObject*)this;
+        aEvent.Highlighted = sal_False;
+
+        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+        aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectEntryPos() : 0xFFFF;
+
+        maItemListeners.itemStateChanged( aEvent );
+    }
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXMessageBox
@@ -2372,19 +2424,16 @@ void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::u
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Window* pWindow = GetWindow();
-    if ( pWindow )
+    Edit* pEdit = (Edit*)GetWindow();
+    if ( pEdit )
     {
-        pWindow->SetText( aText );
+        pEdit->SetText( aText );
 
-        // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-        // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
-        if ( GetTextListeners().getLength() )
-        {
-            ::com::sun::star::awt::TextEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            GetTextListeners().textChanged( aEvent );
-        }
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( sal_False );
     }
 }
 
@@ -2397,6 +2446,12 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const :
     {
         pEdit->SetSelection( Selection( rSel.Min, rSel.Max ) );
         pEdit->ReplaceSelected( aText );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( sal_False );
     }
 }
 
@@ -3238,7 +3293,15 @@ void VCLXDateField::setDate( sal_Int32 nDate ) throw(::com::sun::star::uno::Runt
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
+    {
         pDateField->SetDate( nDate );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pDateField->SetModifyFlag();
+        pDateField->Modify();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 sal_Int32 VCLXDateField::getDate() throw(::com::sun::star::uno::RuntimeException)
@@ -3360,7 +3423,15 @@ void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
+    {
         pDateField->SetEmptyDate();
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pDateField->SetModifyFlag();
+        pDateField->Modify();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 sal_Bool VCLXDateField::isEmpty() throw(::com::sun::star::uno::RuntimeException)
@@ -3413,7 +3484,15 @@ void VCLXTimeField::setTime( sal_Int32 nTime ) throw(::com::sun::star::uno::Runt
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
+    {
         pTimeField->SetTime( nTime );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        SetSynthesizingVCLEvent( sal_True );
+        pTimeField->SetModifyFlag();
+        pTimeField->Modify();
+        SetSynthesizingVCLEvent( sal_False );
+    }
 }
 
 sal_Int32 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException)
@@ -3665,6 +3744,16 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
         // ein float 1,05 muss also eine 105 einstellen...
         pNumericFormatter->SetValue(
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        Edit* pEdit = (Edit*)GetWindow();
+        if ( pEdit )
+        {
+            SetSynthesizingVCLEvent( sal_True );
+            pEdit->SetModifyFlag();
+            pEdit->Modify();
+            SetSynthesizingVCLEvent( sal_False );
+        }
     }
 }
 
@@ -3961,6 +4050,16 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
         // ein float 1,05 muss also eine 105 einstellen...
         pCurrencyFormatter->SetValue(
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
+
+        // #107218# Call same listeners like VCL would do after user interaction
+        Edit* pEdit = (Edit*)GetWindow();
+        if ( pEdit )
+        {
+            SetSynthesizingVCLEvent( sal_True );
+            pEdit->SetModifyFlag();
+            pEdit->Modify();
+            SetSynthesizingVCLEvent( sal_False );
+        }
     }
 }
 

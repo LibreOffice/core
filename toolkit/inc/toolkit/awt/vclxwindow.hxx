@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-07 17:18:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ private:
 
     sal_Bool                        mbDisposing;
     sal_Bool                        mbDesignMode;
-    sal_Bool                        mbDummy1;
+    sal_Bool                        mbSynthesizingVCLEvent;
     sal_Bool                        mbDummy2;
 
 
@@ -160,6 +160,9 @@ protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
+
+    void            SetSynthesizingVCLEvent( sal_Bool b )   { mbSynthesizingVCLEvent = b; }
+    BOOL            IsSynthesizingVCLEvent() const          { return mbSynthesizingVCLEvent; }
 
 public:
     VCLXWindow();

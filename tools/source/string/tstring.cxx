@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:25:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ xub_StrLen ImplStringLen( const sal_Char* pStr )
 {
     const sal_Char* pTempStr = pStr;
     while( *pTempStr )
-        pTempStr++;
+        ++pTempStr;
     return (xub_StrLen)(pTempStr-pStr);
 }
 
@@ -114,7 +114,7 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 {
     const sal_Unicode* pTempStr = pStr;
     while( *pTempStr )
-        pTempStr++;
+        ++pTempStr;
     return (xub_StrLen)(pTempStr-pStr);
 }
 
@@ -205,8 +205,8 @@ BOOL ByteString::IsLowerAscii() const
         if ( (*pStr >= 65) && (*pStr <= 90) )
             return FALSE;
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return TRUE;
@@ -226,8 +226,8 @@ BOOL ByteString::IsUpperAscii() const
         if ( (*pStr >= 97) && (*pStr <= 122) )
             return FALSE;
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return TRUE;
@@ -248,8 +248,8 @@ BOOL ByteString::IsAlphaAscii() const
                ((*pStr >= 65) && (*pStr <=  90))) )
             return FALSE;
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return TRUE;
@@ -269,8 +269,8 @@ BOOL ByteString::IsNumericAscii() const
         if ( !((*pStr >= 48) && (*pStr <= 57)) )
             return FALSE;
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return TRUE;
@@ -292,8 +292,8 @@ BOOL ByteString::IsAlphaNumericAscii() const
                ((*pStr >= 48) && (*pStr <=  57))) )
             return FALSE;
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return TRUE;

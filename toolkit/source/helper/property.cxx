@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-12-10 07:14:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#include <functional>
+#include <algorithm>
 
 #include <toolkit/helper/property.hxx>
 
@@ -264,17 +266,22 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
     return pPropertyInfos;
 }
 
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-     ImplPropertyInfoCompare( const void* pFirst, const void* pSecond)
+
+struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,::rtl::OUString,bool>
 {
-    return ((ImplPropertyInfo*)pFirst)->aName.compareTo( ((ImplPropertyInfo*)pSecond)->aName );
-}
+    inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
+    {
+        return lhs.aName.compareTo(rhs.aName) < 0;
+    }
+    inline bool operator()(const ImplPropertyInfo& lhs,const ::rtl::OUString& rhs)  const
+    {
+        return lhs.aName.compareTo(rhs) < 0;
+    }
+    inline bool operator()(const ::rtl::OUString& lhs,const ImplPropertyInfo& rhs)  const
+    {
+        return lhs.compareTo(rhs.aName) < 0;
+    }
+};
 
 void ImplAssertValidPropertyArray()
 {
@@ -283,7 +290,7 @@ void ImplAssertValidPropertyArray()
     {
         sal_uInt16 nElements;
         ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
-        qsort( pInfos, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );
+        ::std::sort(pInfos, pInfos+nElements,ImplPropertyInfoCompareFunctor());
         bSorted = sal_True;
     }
 }
@@ -292,32 +299,28 @@ sal_uInt16 GetPropertyId( const ::rtl::OUString& rPropertyName )
 {
     ImplAssertValidPropertyArray();
 
-    ImplPropertyInfo aSearch;
-    aSearch.aName = rPropertyName;
-
     sal_uInt16 nElements;
     ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
-    ImplPropertyInfo* pInf = (ImplPropertyInfo*)
+    ImplPropertyInfo* pInf = ::std::lower_bound(pInfos,pInfos+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
+/*
+        (ImplPropertyInfo*)
                                 bsearch( &aSearch, pInfos, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );
+*/
 
-    return pInf ? pInf->nPropId: 0;
+    return ( pInf && pInf != (pInfos+nElements) && pInf->aName == rPropertyName) ? pInf->nPropId: 0;
 }
 
 const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
 {
     ImplAssertValidPropertyArray();
 
-    const ImplPropertyInfo* pImplPropertyInfo = NULL;
-
     sal_uInt16 nElements;
     ImplPropertyInfo* pInfos = ImplGetPropertyInfos( nElements );
-    for ( sal_uInt16 n = nElements; n && !pImplPropertyInfo; )
-    {
-        if ( pInfos[--n].nPropId == nPropertyId )
-            pImplPropertyInfo = &pInfos[n];
-    }
+    sal_uInt16 n;
+    for ( n = 0; n < nElements && pInfos[n].nPropId != nPropertyId; ++n)
+        ;
 
-    return pImplPropertyInfo;
+    return (n < nElements) ? &pInfos[n] : NULL;
 }
 
 sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )

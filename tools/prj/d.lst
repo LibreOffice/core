@@ -33,7 +33,6 @@ mkdir: %_DEST%\inc%_EXT%\testshl
 
 hedabu: ..\%__SRC%\inc\svconf.h %_DEST%\inc%_EXT%\tools\svconf.h
 hedabu: ..\%__SRC%\inc\toolerr.hxx %_DEST%\inc%_EXT%\tools\toolerr.hxx
-hedabu: ..\bootstrp\prodmap.hxx %_DEST%\inc%_EXT%\bootstrp\prodmap.hxx
 hedabu: ..\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
 hedabu: ..\bootstrp\minormk.hxx %_DEST%\inc%_EXT%\bootstrp\minormk.hxx
 hedabu: ..\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
@@ -56,7 +55,6 @@ hedabu: ..\bootstrp\static.mk %_DEST%\inc%_EXT%\static.mk
 hedabu: ..\bootstrp\uierr.hxx %_DEST%\inc%_EXT%\bootstrp\uierr.hxx
 hedabu: ..\bootstrp\updmake.hxx %_DEST%\inc%_EXT%\bootstrp\updmake.hxx
 hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
-hedabu: ..\bootstrp\xmlparse.hxx %_DEST%\inc%_EXT%\bootstrp\xmlparse.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
@@ -152,8 +150,9 @@ hedabu: ..\inc\sasyncfn.hxx %_DEST%\inc%_EXT%\tools\sasyncfn.hxx
 hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx
 hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
 hedabu: ..\inc\resary.hxx %_DEST%\inc%_EXT%\tools\resary.hxx
-hedabu: ..\inc\abthread.hxx %_DEST%\inc%_EXT%\tools\abthread.hxx
-hedabu: ..\inc\SafePureVirtual.hxx %_DEST%\inc%_EXT%\tools\SafePureVirtual.hxx
+hedabu: ..\inc\poly.hxx %_DEST%\inc%_EXT%\tools\poly.hxx
+hedabu: ..\inc\line.hxx %_DEST%\inc%_EXT%\tools\line.hxx
+hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\tools\vector2d.hxx
 
 ..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 

@@ -501,7 +501,17 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleListBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleListBox</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Peter Burow</author>
+        <name>com.sun.star.comp.toolkit.AccessibleList</name>
+        <description>specifies accessibility support for a list.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.awt.AccessibleList</supported-service>
     </component-description>
 
     <component-description>
@@ -511,7 +521,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleListItem</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleListItem</supported-service>
     </component-description>
 
     <component-description>
@@ -521,7 +531,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleDropDownListBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleDropDownListBox</supported-service>
     </component-description>
 
     <component-description>
@@ -531,7 +541,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleComboBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -541,7 +551,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleDropDownComboBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleDropDownComboBox</supported-service>
     </component-description>
 
     <component-description>
@@ -551,7 +561,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleToolBox</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleToolBox</supported-service>
     </component-description>
 
     <component-description>
@@ -561,7 +571,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.accessibility.AccessibleToolBoxItem</supported-service>
+        <supported-service>drafts.com.sun.star.awt.AccessibleToolBoxItem</supported-service>
     </component-description>
 
     <component-description>
@@ -632,5 +642,25 @@
         <language>c++</language>
         <status value="beta"/>
         <supported-service>drafts.com.sun.star.awt.AccessibleTabPage</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleStatusBar</name>
+        <description>specifies accessibility support for a status bar.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.awt.AccessibleStatusBar</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.toolkit.AccessibleStatusBarItem</name>
+        <description>specifies accessibility support for a status bar item.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+        <supported-service>drafts.com.sun.star.awt.AccessibleStatusBarItem</supported-service>
     </component-description>
 </module-description>

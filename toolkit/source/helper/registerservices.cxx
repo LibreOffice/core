@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:03:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,13 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
+#ifndef _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
 #include <toolkit/controls/geometrycontrolmodel.hxx>
+#endif
 
+#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -80,19 +84,47 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
 
+#ifndef _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
 #include <toolkit/awt/vclxtoolkit.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #include <toolkit/awt/vclxmenu.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXPOINTER_HXX_
 #include <toolkit/awt/vclxpointer.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXPRINTER_HXX_
 #include <toolkit/awt/vclxprinter.hxx>
+#endif
 
+#ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
+#endif
+#ifndef _TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX_
 #include <toolkit/controls/unocontrolcontainer.hxx>
+#endif
+#ifndef _TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX_
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
+#endif
+#ifndef _TOOLKIT_CONTROLS_STDTABCONTROLLER_HXX_
 #include <toolkit/controls/stdtabcontroller.hxx>
+#endif
+#ifndef _TOOLKIT_CONTROLS_STDTABCONTROLLERMODEL_HXX_
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
+#endif
+#ifndef TOOLKIT_FORMATTED_CONTROL_HXX
+#include <toolkit/controls/formattedcontrol.hxx>
+#endif
+#ifndef TOOLKIT_DIALOG_CONTROL_HXX
+#include <toolkit/controls/dialogcontrol.hxx>
+#endif
 
 #define REGISTER_SERVICES( ImplName, ServiceName1, ServiceName2 ) \
     xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.Toolkit." #ImplName "/UNO/SERVICES" ) ); \
@@ -128,6 +160,8 @@
         } \
     }
 
+
+using namespace toolkit;
 
 IMPL_CREATEINSTANCE2( VCLXToolkit )
 IMPL_CREATEINSTANCE( StdTabController )

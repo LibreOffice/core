@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,9 @@ SLOFILES=\
     $(SLO)$/inetmsg.obj \
     $(SLO)$/inetstrm.obj
 
-.IF "$(UPDATER)" != ""
 OBJFILES=\
     $(OBJ)$/inetmime.obj \
     $(OBJ)$/inetmsg.obj \
     $(OBJ)$/inetstrm.obj
-.ENDIF
 
 .INCLUDE: target.mk

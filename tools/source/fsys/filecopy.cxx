@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecopy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ok $ $Date: 2001-08-28 09:46:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
                     // adjust the block-size
                     if ( nBlockSize > nAllocSize )
                     {
-                        delete pBuf;
+                        delete[] pBuf;
                         nAllocSize = nBlockSize;
                         pBuf = new char[nAllocSize];
                     }
@@ -465,7 +465,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
                     if ( nBytesCopied > nBytesTotal )
                         nBytesTotal = nBytesCopied;
                 }
-                delete pBuf;
+                delete[] pBuf;
             }
             else
                 eRet = Error( aTargetStream.GetError(), 0, &aTarget );
@@ -583,5 +583,3 @@ FSysError FileCopier::ExecuteExact( FSysAction nActions, FSysExact eExact )
     // recursive copy
     return DoCopy_Impl( aAbsSource, aAbsTarget, TRUE );
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-29 08:10:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,23 +435,19 @@ main()
             printf("BAD http\n");
             bSuccess = false;
         }
-        else
-            printf("GOOD http\n");
         INetURLObject aUrl2("vnd.sun.star.webdav://host:1234/xy/~zw?xxx=yyy");
         if (aUrl2.HasError())
         {
             printf("BAD vnd.sun.star.webdav\n");
             bSuccess = false;
         }
-        else
-            printf("GOOD vnd.sun.star.webdav\n");
     }
 
     if (true)
     {
         static sal_Char const * const aTest[]
-            = { "vnd.sun.star.help://",
-                "vnd.sun.star.help://swriter",
+            = { /*TODO "vnd.sun.star.help://",*/
+                /*TODO "vnd.sun.star.help://swriter",*/
                 "vnd.sun.star.help://swriter/",
                 "vnd.sun.star.help://swriter/12345",
                 "vnd.sun.star.help://swriter/1234X",
@@ -484,16 +480,16 @@ main()
     if (true)
     {
         static sal_Char const * const aTest[]
-            = { "vnd.sun.star.wfs://",
-                "vnd.sun.star.wfs://LocalHost",
-                "vnd.sun.star.wfs:///c|/xyz/",
-                "vnd.sun.star.wfs://xxx/yyy?zzz",
+            = { /*TODO "vnd.sun.star.wfs://",*/
+                /*TODO "vnd.sun.star.wfs://LocalHost",*/
+                /*TODO "vnd.sun.star.wfs:///c|/xyz/",*/
+                /*TODO "vnd.sun.star.wfs://xxx/yyy?zzz",*/
                 "vnd.sun.star.wfs:///x/y/z",
-                "wfs://",
-                "wfs://LocalHost",
-                "wfs:///c|/xyz/",
-                "wfs://xxx/yyy?zzz",
-                "wfs:///x/y/z" };
+                /*TODO "wfs://",*/
+                /*TODO "wfs://LocalHost",*/
+                /*TODO "wfs:///c|/xyz/",*/
+                /*TODO "wfs://xxx/yyy?zzz",*/
+                /*TODO "wfs:///x/y/z"*/ };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i]);
@@ -513,13 +509,13 @@ main()
     if (true)
     {
         static sal_Char const * const aTest[]
-            = { "vnd.sun.star.pkg:",
-                "vnd.sun.star.pkg:/",
-                "vnd.sun.star.pkg://abc",
-                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c",
+            = { /*TODO "vnd.sun.star.pkg:",*/
+                /*TODO "vnd.sun.star.pkg:/",*/
+                /*TODO "vnd.sun.star.pkg://abc",*/
+                /*TODO "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c",*/
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/",
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx",
-                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",
+                /*TODO "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",*/
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx//yy" };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
@@ -540,11 +536,11 @@ main()
     if (true)
     {
         static sal_Char const * const aTest[]
-            = { "vnd.sun.star.cmd:",
-                "vnd.sun.star.cmd:/",
+            = { /*TODO "vnd.sun.star.cmd:",*/
+                /*TODO "vnd.sun.star.cmd:/",*/
                 "vnd.sun.star.cmd:logout",
                 "vnd.sun.star.cmd:log/out",
-                "vnd.sun.star.cmd:[logout]",
+                /*TODO "vnd.sun.star.cmd:[logout]",*/
                 "vnd.sun.star.cmd:log[out]" };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
@@ -576,12 +572,16 @@ main()
             {
                 INetContentTypeParameter const * p = aList.GetObject(i);
                 if (p)
+                {
+/*
                     printf("attribute: '%s'\n charset: '%s'\n language: '%s'\n value: '%s'\n converted: %s\n",
                            p->m_sAttribute.GetBuffer(),
                            p->m_sCharset.GetBuffer(),
                            p->m_sLanguage.GetBuffer(),
                            rtl::OUStringToOString(p->m_sValue,RTL_TEXTENCODING_UTF8).getStr(),
                            p->m_bConverted ? "true" : "false");
+*/
+                }
                 else
                     printf("BAD INetContentTypeParameter\n");
             }
@@ -704,6 +704,7 @@ main()
 
     if (true)
     {
+/*TODO
         {
             INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://xxx/yyy?abc/def~")));
             if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
@@ -713,6 +714,7 @@ main()
                 bSuccess = false;
             }
         }
+*/
         {
             INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https://xxx/yyy?abc/def~")));
             if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
@@ -722,6 +724,7 @@ main()
                 bSuccess = false;
             }
         }
+/*TODO
         {
             INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://xxx/yyy")));
             aObj.SetParam("abc/def~");
@@ -732,6 +735,7 @@ main()
                 bSuccess = false;
             }
         }
+*/
         {
             INetURLObject aObj(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https://xxx/yyy")));
             aObj.SetParam("abc/def~");
@@ -911,7 +915,7 @@ main()
         }
     }
 
-    if (true)
+    if (false)
     {
         abbreviate(INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "file:///"))));
@@ -1036,6 +1040,7 @@ main()
                 bSuccess = false;
             }
         }
+/*TODO
         {
             rtl::OUString
                 aBase(RTL_CONSTASCII_USTRINGPARAM("file:///test.html"));
@@ -1054,6 +1059,7 @@ main()
                 bSuccess = false;
             }
         }
+*/
     }
 
     if (true)
@@ -1160,7 +1166,36 @@ main()
                 { "TELNET://abc.def.ghi/", "telnet://abc.def.ghi/" },
                 { "telnet://abc.def.ghi/jkl", 0 },
                 { "telnet://abc.def.ghi?jkl", 0 },
-                { "telnet://abc.def.ghi/?jkl", 0 } };
+                { "telnet://abc.def.ghi/?jkl", 0 },
+                { "file:", 0 },
+                { "file:/", "file:///" },
+                { "file:/abc", "file:///abc" },
+                { "file:/abc/def", "file:///abc/def" },
+                { "file:/localhost", "file:///localhost" },
+                { "file://", "file:///" },
+                { "file:///", "file:///" },
+                { "http:", 0 },
+                { "http:/abc", 0 },
+                { "news:", 0 },
+                { "news:*", "news:*" },
+                { "news:**", 0 },
+                { "news:%2A", 0 },
+                { "news:a", "news:a" },
+                { "news:A", "news:A" },
+                { "news:+-._", 0 },
+                { "news:A0+-._", "news:A0+-._" },
+                { "news:0", 0 },
+                { "news:AB,", 0 },
+                { "news:abc@def", "news:abc@def" },
+                { "news:abc@def:33", 0 },
+                { "news:abc@123.456.789.0", "news:abc@123.456.789.0" },
+                { "news:abc@def.", "news:abc@def." },
+                { "news:abc@def.ghi", "news:abc@def.ghi" },
+                { "news:abc@def.-ghi", 0 },
+                { "news:abc@def.ghi@", 0 },
+                { "news:%21%22%23@def", "news:%21%22%23@def" },
+                { "news:!%22%23@def", "news:!%22%23@def" },
+                { "news: @def", "news:%20@def" } };
         for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
@@ -1228,6 +1263,123 @@ main()
             printf(
                 "BAD <ftp://user@test> user: \"%s\" != \"user\"",
                 rtl::OUStringToOString(aUser, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    if (true)
+    {
+        INetURLObject aUrl;
+
+        aUrl = INetURLObject("vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?");
+        if (aUrl.GetProtocol() != INET_PROT_VND_SUN_STAR_PKG)
+            printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?>:"
+                   " scheme = %d\n",
+                   static_cast< int >(aUrl.GetProtocol()));
+        else
+        {
+            if (!rtl::OUString(aUrl.GetMainURL(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                 "vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?")))
+                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?>:"
+                       " URL = %s\n",
+                       rtl::OUStringToOString(
+                           aUrl.GetMainURL(INetURLObject::NO_DECODE),
+                           RTL_TEXTENCODING_UTF8).getStr());
+            if (!rtl::OUString(aUrl.GetParam(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc/def?")))
+                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?>:"
+                       " query = %s\n",
+                       rtl::OUStringToOString(
+                           aUrl.GetParam(INetURLObject::NO_DECODE),
+                           RTL_TEXTENCODING_UTF8).getStr());
+        }
+
+        aUrl = INetURLObject("vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F");
+        if (aUrl.GetProtocol() != INET_PROT_VND_SUN_STAR_PKG)
+            printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F>:"
+                   " scheme = %d\n",
+                   static_cast< int >(aUrl.GetProtocol()));
+        else
+        {
+            if (!rtl::OUString(aUrl.GetMainURL(INetURLObject::NO_DECODE)).
+                equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(
+                        "vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F")))
+                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c?abc/def?>:"
+                       " URL = %s\n",
+                       rtl::OUStringToOString(
+                           aUrl.GetMainURL(INetURLObject::NO_DECODE),
+                           RTL_TEXTENCODING_UTF8).getStr());
+            if (!rtl::OUString(aUrl.GetParam(INetURLObject::NO_DECODE)).
+                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")))
+                printf("BAD <vnd.sun.star.pkg://foo.bar/a/b/c%3Fabc/def%3F>:"
+                       " query = %s\n",
+                       rtl::OUStringToOString(
+                           aUrl.GetParam(INetURLObject::NO_DECODE),
+                           RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+
+    if (true)
+    {
+        struct Test
+        {
+            INetProtocol eScheme;
+            char const * pPath;
+            char const * pUri;
+        };
+        static Test const aTest[]
+            = { { INET_PROT_FILE, "", "file:///" },
+                { INET_PROT_FILE, "/", "file:///" },
+                { INET_PROT_FILE, "abc", 0 },
+                { INET_PROT_FILE, "/abc/", "file:///abc/" },
+                { INET_PROT_NEWS, "", 0 },
+                { INET_PROT_NEWS, "*", "news:*" },
+                { INET_PROT_NEWS, "**", 0 },
+                { INET_PROT_NEWS, "%2A", 0 },
+                { INET_PROT_NEWS, "a", "news:a" },
+                { INET_PROT_NEWS, "A", "news:A" },
+                { INET_PROT_NEWS, "+-._", 0 },
+                { INET_PROT_NEWS, "A0+-._", "news:A0+-._" },
+                { INET_PROT_NEWS, "0", 0 },
+                { INET_PROT_NEWS, "AB,", 0 },
+                { INET_PROT_NEWS, "abc@def", "news:abc@def" },
+                { INET_PROT_NEWS, "abc@def:33", 0 },
+                { INET_PROT_NEWS, "abc@123.456.789.0",
+                  "news:abc@123.456.789.0" },
+                { INET_PROT_NEWS, "abc@def.", "news:abc@def." },
+                { INET_PROT_NEWS, "abc@def.ghi", "news:abc@def.ghi" },
+                { INET_PROT_NEWS, "abc@def.-ghi", 0 },
+                { INET_PROT_NEWS, "abc@def.ghi@", 0 },
+                { INET_PROT_NEWS, "!\"#@def", "news:!%22%23@def" },
+                { INET_PROT_NEWS, " @def", "news:%20@def" } };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUri;
+            bool bOk = aUri.ConcatData(aTest[i].eScheme, String(), String(),
+                                       String(), 0,
+                                       String(aTest[i].pPath,
+                                              RTL_TEXTENCODING_ASCII_US),
+                                       INetURLObject::ENCODE_ALL);
+            if (bOk == aUri.HasError())
+                printf(
+                    "BAD ConcatData(%d, ..., %s) = %d, HasError() = %d\n",
+                    static_cast< int >(aTest[i].eScheme), aTest[i].pPath,
+                    static_cast< int >(bOk),
+                    static_cast< int >(aUri.HasError()));
+            else if (aTest[i].pUri == 0
+                     ? !aUri.HasError()
+                     : (aUri.HasError()
+                        || (aUri.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                                CompareToAscii(aTest[i].pUri)
+                            != 0)))
+                printf("BAD ConcatData(%d, ..., %s) -> %s != %s\n",
+                       static_cast< int >(aTest[i].eScheme), aTest[i].pPath,
+                       aUri.HasError() ? "<none>"
+                       : ByteString(aUri.GetMainURL(
+                                        INetURLObject::DECODE_TO_IURI),
+                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       aTest[i].pUri == 0 ? "<none>" : aTest[i].pUri);
+        }
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: nf $ $Date: 2002-01-30 13:09:20 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:03:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,35 +83,21 @@ dummy:
     @echo No bootstrp for Mac OS
 .ELSE	# "$(OS)"=="MACOS"
 
-OBJFILES=                       \
-    $(OBJ)$/sstring.obj     \
-    $(OBJ)$/appdef.obj      \
-    $(OBJ)$/cppdep.obj      \
-    $(OBJ)$/command.obj     \
-    $(OBJ)$/prj.obj         \
-    $(OBJ)$/inimgr.obj      \
-    $(OBJ)$/revision.obj    \
-    $(OBJ)$/shellprp.obj 	\
-    $(OBJ)$/fattr.obj 		\
-    $(OBJ)$/minormk.obj 	\
-    $(OBJ)$/prodmap.obj 	\
-    $(OBJ)$/xmlparse.obj 	\
-    $(OBJ)$/mkcreate.obj
+OBJFILES=                       $(OBJ)$/cppdep.obj\
+                                $(OBJ)$/prj.obj \
+                                $(OBJ)$/command.obj \
+                                $(OBJ)$/mkcreate.obj \
+                                $(OBJ)$/sstring.obj \
+                                $(OBJ)$/inimgr.obj\
+                                $(OBJ)$/appdef.obj
 
-SLOFILES=                   \
-    $(SLO)$/sstring.obj     \
-    $(SLO)$/appdef.obj      \
-    $(SLO)$/cppdep.obj      \
-    $(SLO)$/command.obj     \
-    $(SLO)$/prj.obj         \
-    $(SLO)$/inimgr.obj      \
-    $(SLO)$/revision.obj    \
-    $(SLO)$/shellprp.obj 	\
-    $(SLO)$/fattr.obj 		\
-    $(SLO)$/minormk.obj 	\
-    $(SLO)$/prodmap.obj 	\
-    $(SLO)$/xmlparse.obj 	\
-    $(SLO)$/mkcreate.obj
+SLOFILES=                   $(SLO)$/cppdep.obj\
+                            $(SLO)$/prj.obj\
+                            $(SLO)$/command.obj\
+                            $(SLO)$/mkcreate.obj\
+                            $(SLO)$/sstring.obj\
+                            $(SLO)$/inimgr.obj\
+                            $(SLO)$/appdef.obj
 
 LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
@@ -121,47 +107,12 @@ LIB2TARGET= $(SLB)$/btstrpsh.lib
 LIB2ARCHIV= $(SLB)$/libbtstrpsh.a
 LIB2FILES=  $(SLB)$/bootstrp.lib
 
-LIB3TARGET=$(LB)$/bsvermap.lib
-LIB3ARCHIV= $(LB)$/libbsvermap.a
-LIB3OBJFILES=\
-    $(OBJ)$/vermap.obj
-
 APP1TARGET=     i_server
 APP1STACK=      16000
 APP1OBJS=   $(OBJ)$/iserver.obj
 APP1STDLIBS=$(STATIC_LIBS)
 APP1LIBS=       $(LB)$/bootstrp.lib
 APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-#APP2TARGET=     copyprj
-#APP2OBJS=   $(OBJ)$/cprjexe.obj $(OBJ)$/copyprj.obj
-#APP2STDLIBS=$(STATIC_LIBS)
-#APP2LIBS=       $(LB)$/bootstrp.lib
-#APP2DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-#APP3TARGET=mkcreate
-#APP3OBJS=   $(OBJ)$/mkcrexe.obj 
-#APP3STDLIBS=$(STATIC_LIBS)
-#APP3LIBS=   $(LB)$/bootstrp.lib
-#APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-#APP4TARGET=	setsolar
-#APP4OBJS=   $(OBJ)$/setsolar.obj $(OBJ)$/envset.obj $(OBJ)$/vermap.obj
-#APP4STDLIBS=$(STATIC_LIBS)
-#APP4LIBS=	$(LB)$/bootstrp.lib
-#APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-#APP5TARGET=	zipdep
-#APP5OBJS=	$(OBJ)$/zipdep.obj
-#APP5LIBS=	$(LB)$/bootstrp.lib
-#APP5STDLIBS=$(STATIC_LIBS) 
-#APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/zipdep.obj
-
-#APP5TARGET=	saxophon
-#APP5OBJS=	$(OBJ)$/xmlparse.obj
-#APP5LIBS=	$(LB)$/bootstrp.lib
-#APP5STDLIBS=$(STATIC_LIBS) 
-#APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/zipdep.obj
 
 APP6TARGET= sspretty
 APP6OBJS=	$(OBJ)$/sspretty.obj
@@ -175,13 +126,7 @@ APP7LIBS=	$(LB)$/bootstrp.lib
 APP7STDLIBS=$(STATIC_LIBS) 
 APP7DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib $(OBJ)$/rscdep.obj
 
-#APP8TARGET=	getsolar
-#APP8OBJS=   $(OBJ)$/getsolar.obj 
-#APP8STDLIBS=$(STATIC_LIBS)
-#APP8LIBS=	$(LB)$/bootstrp.lib
-#APP8DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS)
+DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
 
 .ENDIF	# "$(OS)"=="MACOS"
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,13 +79,11 @@ SLOFILES=	$(SLO)$/contnr.obj	\
             $(SLO)$/mempool.obj \
             $(SLO)$/multisel.obj
 
-.IF "$(UPDATER)"!=""
 OBJFILES=	$(OBJ)$/contnr.obj	 \
             $(OBJ)$/table.obj	 \
             $(OBJ)$/unqidx.obj	 \
             $(OBJ)$/mempool.obj  \
             $(OBJ)$/multisel.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 13:24:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException);
 
-    DECLIMPL_SERVICEINFO( UnoControlContainer, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainer ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainer, UnoControlBase, szServiceName2_UnoControlContainer )
 
 
 protected:

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2002-01-10 13:51:08 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,31 +73,33 @@ TARGET=gen
 
 # --- Files --------------------------------------------------------
 
+EXCEPTIONSFILES=	$(SLO)$/poly.obj
+
 SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/link.obj                \
             $(SLO)$/bigint.obj              \
             $(SLO)$/fract.obj               \
-            $(SLO)$/solmath.obj     \
             $(SLO)$/color.obj               \
             $(SLO)$/l2txtenc.obj    \
             $(SLO)$/gen.obj			\
             $(SLO)$/config.obj		\
-            $(SLO)$/supd.obj
+            $(SLO)$/supd.obj		\
+            $(SLO)$/poly.obj		\
+            $(SLO)$/poly2.obj		\
+            $(SLO)$/line.obj
 
-
-.IF "$(UPDATER)"!=""
 OBJFILES=       $(OBJ)$/toolsin.obj     \
             $(OBJ)$/link.obj                \
             $(OBJ)$/bigint.obj              \
             $(OBJ)$/fract.obj               \
-            $(OBJ)$/solmath.obj     \
             $(OBJ)$/color.obj               \
             $(OBJ)$/l2txtenc.obj    \
             $(OBJ)$/gen.obj			\
             $(OBJ)$/config.obj		\
-            $(OBJ)$/supd.obj
-
-.ENDIF
+            $(OBJ)$/supd.obj		\
+            $(OBJ)$/poly.obj		\
+            $(OBJ)$/poly2.obj		\
+            $(OBJ)$/line.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 08:51:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #define _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
-#include <com/sun/star/awt/XDialog.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
 #endif
@@ -134,176 +131,32 @@
 #ifndef _COM_SUN_STAR_AWT_XSCROLLBAR_HPP_
 #include <com/sun/star/awt/XScrollBar.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
-#include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-// #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
-// #include <com/sun/star/container/XIndexContainer.hpp>
-// #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
-#include <com/sun/star/container/XContainer.hpp>
-#endif
 
+#ifndef _TOOLKIT_AWT_UNOCONTROLMODEL_HXX_
 #include <toolkit/controls/unocontrolmodel.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_UNOCONTROLBASE_HXX_
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/controls/unocontrolcontainer.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
+#endif
 
+#ifndef _IMGCONS_HXX
 #include <vcl/imgcons.hxx>
+#endif
+#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
 
 #include <list>
-
-struct UnoControlModelHolder;
-class UnoControlModelHolderList;
-
-//  ----------------------------------------------------
-//  class UnoControlDialogModel
-//  ----------------------------------------------------
-class UnoControlDialogModel : public UnoControlModel,
-                              public ::com::sun::star::lang::XMultiServiceFactory,
-                              public ::com::sun::star::container::XContainer,
-                              public ::com::sun::star::container::XNameContainer
-{
-private:
-    ContainerListenerMultiplexer    maContainerListeners;
-    UnoControlModelHolderList*      mpModels;
-
-protected:
-    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
-    UnoControlModelHolder*          ImplFindElement( const ::rtl::OUString& rName ) const;
-
-
-public:
-                        UnoControlDialogModel();
-                        UnoControlDialogModel( const UnoControlDialogModel& rModel );
-                        ~UnoControlDialogModel();
-
-    UnoControlModel*    Clone() const;
-
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XContainer
-    void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XElementAcces
-    ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XIndexContainer, XIndexReplace, XIndexAcces
-    // void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
-    // sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
-    // ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
-    // void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
-    // void SAL_CALL removeByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) = 0;
-
-    // ::com::sun::star::container::XNameContainer, XNameReplace, XNameAccess
-    void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeByName( const ::rtl::OUString& Name ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XMultiServiceFactory
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
-
-    // XComponent
-    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) )
-};
-
-//  ----------------------------------------------------
-//  class UnoDialogControl
-//  ----------------------------------------------------
-class UnoDialogControl : public UnoControlContainer,
-                         public ::com::sun::star::container::XContainerListener,
-                         public ::com::sun::star::awt::XTopWindow,
-                         public ::com::sun::star::awt::XDialog
-{
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar > mxMenuBar;
-    TopWindowListenerMultiplexer    maTopWindowListeners;
-
-protected:
-
-    void        ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
-    void        ImplRemoveControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel );
-    void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
-
-public:
-
-                                UnoDialogControl();
-    ::rtl::OUString             GetComponentServiceName();
-
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlContainer::disposing( Source ); }
-    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XTopWindow
-    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toFront(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toBack(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::beans::XPropertiesChangeListener
-    void SAL_CALL propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& evt ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XContainerListener
-    void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-
-
-    void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
-    sal_Int16 SAL_CALL execute() throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL endExecute() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XControl
-    sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) )
-
-protected:
-    virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
-    virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
-};
 
 
 //  ----------------------------------------------------
@@ -329,7 +182,7 @@ public:
 
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlEditModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlEditModel, UnoControlModel, szServiceName2_UnoControlEditModel )
 };
 
 //  ----------------------------------------------------
@@ -400,57 +253,7 @@ public:
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoEditControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit ) )
-};
-
-//  ----------------------------------------------------
-//  class UnoControlFormattedFieldModel
-//  ----------------------------------------------------
-class UnoControlFormattedFieldModel : public UnoControlModel
-{
-protected:
-    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-protected:
-    sal_Bool SAL_CALL convertFastPropertyValue(
-                ::com::sun::star::uno::Any& rConvertedValue,
-                ::com::sun::star::uno::Any& rOldValue,
-                sal_Int32 nPropId,
-                const ::com::sun::star::uno::Any& rValue
-            ) throw (::com::sun::star::lang::IllegalArgumentException);
-
-public:
-                        UnoControlFormattedFieldModel();
-                        UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel ) : UnoControlModel( rModel ) {;}
-
-    UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
-
-    // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::beans::XMultiPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-
-    // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlFormattedFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel ) )
-};
-
-//  ----------------------------------------------------
-//  class UnoFormattedFieldControl
-//  ----------------------------------------------------
-class UnoFormattedFieldControl : public UnoEditControl
-{
-public:
-                        UnoFormattedFieldControl();
-    ::rtl::OUString     GetComponentServiceName();
-
-    // ::com::sun::star::awt::XTextListener
-    void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoFormattedFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoEditControl, UnoControlBase, szServiceName2_UnoControlEdit )
 };
 
 //  ----------------------------------------------------
@@ -475,7 +278,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlFileControlModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFileControlModel, UnoControlModel, szServiceName2_UnoControlFileControlModel )
 };
 
 //  ----------------------------------------------------
@@ -488,7 +291,7 @@ public:
     ::rtl::OUString     GetComponentServiceName();
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoFileControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControl ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFileControl, UnoEditControl, szServiceName2_UnoControlFileControl )
 };
 
 //  ----------------------------------------------------
@@ -527,7 +330,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlButtonModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlButtonModel, UnoControlModel, szServiceName2_UnoControlButtonModel )
 };
 
 //  ----------------------------------------------------
@@ -570,7 +373,7 @@ public:
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoButtonControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButton ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoButtonControl, UnoControlBase, szServiceName2_UnoControlButton )
 
 };
 
@@ -610,7 +413,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlImageControlModel, UnoControlModel, szServiceName2_UnoControlImageControlModel )
 };
 
 //  ----------------------------------------------------
@@ -649,7 +452,7 @@ public:
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControl ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoImageControlControl, UnoControlBase, szServiceName2_UnoControlImageControl )
 
 };
 
@@ -676,7 +479,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlRadioButtonModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlRadioButtonModel, UnoControlModel, szServiceName2_UnoControlRadioButtonModel )
 
 };
 
@@ -735,7 +538,7 @@ public:
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoRadioButtonControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButton ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoRadioButtonControl, UnoControlBase, szServiceName2_UnoControlRadioButton )
 
 };
 
@@ -761,7 +564,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlCheckBoxModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlCheckBoxModel, UnoControlModel, szServiceName2_UnoControlCheckBoxModel )
 };
 
 //  ----------------------------------------------------
@@ -821,7 +624,7 @@ public:
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoCheckBoxControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBox ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoCheckBoxControl, UnoControlBase, szServiceName2_UnoControlCheckBox )
 
 };
 
@@ -847,7 +650,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlFixedTextModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedTextModel, UnoControlModel, szServiceName2_UnoControlFixedTextModel )
 
 };
 
@@ -886,7 +689,7 @@ public:
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoFixedTextControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedText ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFixedTextControl, UnoControlBase, szServiceName2_UnoControlFixedText )
 
 };
 
@@ -912,7 +715,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlGroupBoxModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlGroupBoxModel, UnoControlModel, szServiceName2_UnoControlGroupBoxModel )
 
 };
 
@@ -928,7 +731,7 @@ public:
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoGroupBoxControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBox ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoGroupBoxControl, UnoControlBase, szServiceName2_UnoControlGroupBox )
 
 };
 
@@ -962,7 +765,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlListBoxModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
 
 };
 
@@ -1036,7 +839,7 @@ public:
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoListBoxControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBox ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
 
 };
 
@@ -1062,7 +865,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlComboBoxModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, szServiceName2_UnoControlComboBoxModel )
 
 };
 
@@ -1107,7 +910,7 @@ public:
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoComboBoxControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBox ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_UnoControlComboBox )
 
 };
 
@@ -1172,7 +975,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlDateFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlDateFieldModel, UnoControlModel, szServiceName2_UnoControlDateFieldModel )
 
 };
 
@@ -1223,7 +1026,7 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoDateFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoDateFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlDateField )
 };
 
 //  ----------------------------------------------------
@@ -1248,7 +1051,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlTimeFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlTimeFieldModel, UnoControlModel, szServiceName2_UnoControlTimeFieldModel )
 
 };
 
@@ -1297,7 +1100,7 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoTimeFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoTimeFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlTimeField )
 
 };
 
@@ -1323,7 +1126,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlNumericFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlNumericFieldModel, UnoControlModel, szServiceName2_UnoControlNumericFieldModel )
 
 };
 
@@ -1374,7 +1177,7 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoNumericFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoNumericFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlNumericField )
 
 };
 
@@ -1400,7 +1203,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlCurrencyFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlCurrencyFieldModel, UnoControlModel, szServiceName2_UnoControlCurrencyFieldModel )
 
 };
 
@@ -1451,7 +1254,7 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoCurrencyFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoCurrencyFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlCurrencyField )
 };
 
 //  ----------------------------------------------------
@@ -1476,7 +1279,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlPatternFieldModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlPatternFieldModel, UnoControlModel, szServiceName2_UnoControlPatternFieldModel )
 
 };
 
@@ -1511,7 +1314,7 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoPatternFieldControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternField ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoPatternFieldControl, UnoSpinFieldControl, szServiceName2_UnoControlPatternField )
 
 };
 
@@ -1537,7 +1340,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlProgressBarModel, UnoControlModel, szServiceName2_UnoControlProgressBarModel )
 };
 
 //  ----------------------------------------------------
@@ -1567,7 +1370,7 @@ public:
     sal_Int32 SAL_CALL getValue() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoProgressBarControl, UnoControlBase, szServiceName2_UnoControlProgressBar )
 };
 
 
@@ -1593,7 +1396,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlScrollBarModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlScrollBarModel, UnoControlModel, szServiceName2_UnoControlScrollBarModel )
 };
 
 //  ----------------------------------------------------
@@ -1643,7 +1446,7 @@ public:
     sal_Int32 SAL_CALL getOrientation(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoScrollBarControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBar ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoScrollBarControl, UnoControlBase, szServiceName2_UnoControlScrollBar )
 };
 
 
@@ -1669,7 +1472,7 @@ public:
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoControlFixedLineModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedLineModel, UnoControlModel, szServiceName2_UnoControlFixedLineModel )
 
 };
 
@@ -1685,7 +1488,7 @@ public:
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoFixedLineControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLine ) )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFixedLineControl, UnoControlBase, szServiceName2_UnoControlFixedLine )
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2002-05-27 14:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 // class InformationParser
 //
 
-#define cKeyLevelChar '\t'
+const char InformationParser::cKeyLevelChars = '\t';
 
 /*****************************************************************************/
 InformationParser::InformationParser( BOOL bReplace )
@@ -109,25 +109,20 @@ ByteString &InformationParser::ReadLine()
     else {
          if ( !pActStream->IsEof()) {
             pActStream->ReadLine( sLine );
-            ULONG nStart = 0;
-            ULONG nEnd = sLine.Len();
-            BOOL bCopy = FALSE;
-            while ( nStart < nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
-            {
-                nStart++;
-                bCopy = TRUE;
-            }
+            ULONG nLen;
+            do {
+                nLen = sLine.Len();
+                sLine.EraseLeadingChars( 0x09 );
+                sLine.EraseLeadingChars( ' ' );
+            } while ( nLen != sLine.Len());
 
-            while ( nStart < nEnd && ( sLine.GetChar( nEnd-1 ) == ' ' || sLine.GetChar( nEnd-1 ) == 0x09 ) )
-            {
-                nEnd--;
-                bCopy = TRUE;
-            }
+            do {
+                nLen = sLine.Len();
+                sLine.EraseTrailingChars( 0x09 );
+                sLine.EraseTrailingChars( ' ' );
+            } while ( nLen != sLine.Len());
 
-            if ( bCopy )
-                sLine = sLine.Copy( nStart, nEnd - nStart );
-
-            if (( sLine.GetChar( 0 ) == '#' ) || ( !sLine.Len())) {
+            if (( sLine.Search( "#" ) == 0 ) || ( !sLine.Len())) {
                 if ( sCurrentComment.Len())
                     sCurrentComment += "\n";
                 sCurrentComment += sLine;
@@ -135,20 +130,10 @@ ByteString &InformationParser::ReadLine()
             }
             else {
                 if ( bReplaceVariables ) {
-                    sLine.SearchAndReplaceAll( "%UPD", sUPD );
-                    sLine.SearchAndReplaceAll( "%VERSION", sVersion );
+                    while( sLine.SearchAndReplace( "%UPD", sUPD ) != (USHORT)-1 );
+                    while( sLine.SearchAndReplace( "%VERSION", sVersion ) != (USHORT)-1 );
                 }
             }
-        }
-        else {
-            if ( nLevel ) {
-                sLine = "}";
-                fprintf( stdout, "Reached EOF parsing %s. Suplying extra '}'\n",ByteString( sStreamName, gsl_getSystemTextEncoding()).GetBuffer() );
-    //          nErrorCode = IP_UNEXPECTED_EOF;
-    //          nErrorLine = nActLine;
-            }
-            else
-                sLine = "";
         }
 
         sOldLine = sLine;
@@ -230,11 +215,8 @@ GenericInformation *InformationParser::ReadKey(
     }
     else {
         Recover();
-        if ( !sKey.Equals( "}" ) && !sKey.Equals( "{" ) )
-        {
-            pInfo = new GenericInformation( sKey, sValue, pExistingList );
-            pInfo->SetComment( sComment );
-        }
+        pInfo = new GenericInformation( sKey, sValue, pExistingList );
+        pInfo->SetComment( sComment );
     }
 
     return pInfo;
@@ -250,7 +232,7 @@ void InformationParser::Recover()
 /*****************************************************************************/
 BOOL InformationParser::Save( SvStream &rOutStream,
                   const GenericInformationList *pSaveList,
-                  USHORT nLevel, BOOL bStripped )
+                  USHORT nLevel )
 /*****************************************************************************/
 {
     USHORT i;
@@ -259,23 +241,19 @@ BOOL InformationParser::Save( SvStream &rOutStream,
     GenericInformation *pGenericInfo;
     GenericInformationList *pGenericInfoList;
 
-     static ByteString aKeyLevel;
-    aKeyLevel.Expand( nLevel, cKeyLevelChar );
-
     for ( nInfoListCount = 0; nInfoListCount < pSaveList->Count(); nInfoListCount++) {
         // Key-Value Paare schreiben
         pGenericInfo = pSaveList->GetObject( nInfoListCount );
         sTmpStr = "";
-        if ( !bStripped && nLevel )
-            sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
+        for( ULONG j=0; j<nLevel; j++)
+              sTmpStr += cKeyLevelChars;
 
-        if ( !bStripped )
-            for ( i = 0; i < pGenericInfo->GetComment().GetTokenCount( '\n' ); i++ ) {
-                sTmpStr += pGenericInfo->GetComment().GetToken( i, '\n' );
-                sTmpStr += "\n";
-                if ( nLevel )
-                    sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
-            }
+        for ( i = 0; i < pGenericInfo->GetComment().GetTokenCount( '\n' ); i++ ) {
+            sTmpStr += pGenericInfo->GetComment().GetToken( i, '\n' );
+            sTmpStr += "\n";
+            for( ULONG j=0; j<nLevel; j++)
+                  sTmpStr += cKeyLevelChars;
+        }
 
         sTmpStr += pGenericInfo->GetBuffer();
         sTmpStr += ' ';
@@ -284,21 +262,21 @@ BOOL InformationParser::Save( SvStream &rOutStream,
               return FALSE;
 
         // wenn vorhanden, bearbeite recursive die Sublisten
-        if (( pGenericInfoList = pGenericInfo->GetSubList() ) != NULL ) {
+        if (( pGenericInfoList = pGenericInfo->GetSubList() ) != 0) {
               // oeffnende Klammer
               sTmpStr = "";
-            if ( !bStripped && nLevel )
-                sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
+              for( i=0; i<nLevel; i++)
+                sTmpStr += cKeyLevelChars;
               sTmpStr += '{';
               if ( !rOutStream.WriteLine( sTmpStr ) )
                 return FALSE;
               // recursiv die sublist abarbeiten
-              if ( !Save( rOutStream, pGenericInfoList, nLevel+1, bStripped ) )
+              if ( !Save( rOutStream, pGenericInfoList, nLevel+1 ) )
                 return FALSE;
                   // schliessende Klammer
               sTmpStr = "";
-            if ( !bStripped && nLevel )
-                sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
+              for( i=0; i<nLevel; i++)
+                sTmpStr += cKeyLevelChars;
               sTmpStr += '}';
               if ( !rOutStream.WriteLine( sTmpStr ) )
                 return FALSE;
@@ -432,11 +410,8 @@ BOOL InformationParser::Save( SvFileStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, FALSE ))
-    {
-        printf( "ERROR saving file \"%s\"\n",ByteString( rSourceStream.GetFileName(), gsl_getSystemTextEncoding()).GetBuffer() );
+    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0 ))
         return FALSE;
-    }
 
     return TRUE;
 }
@@ -446,11 +421,7 @@ BOOL InformationParser::Save( SvMemoryStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    Time a;
-    BOOL bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, TRUE );
-    Time b;
-    b = b - a;
-    return bRet;
+    return Save( (SvStream &)rSourceStream, pSaveList, 0 );
 }
 
 /*****************************************************************************/

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: replace.cxx,v $
+ *  $RCSfile: poly.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,49 +59,90 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-#include "string.hxx"
+#ifndef _POLY_H
+#define _POLY_H
 
-
-/****************************************************************************/
-#if defined( UNX ) || defined( MAC )
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char *argv[] )
+#ifndef _GEN_HXX
+#include <gen.hxx>
 #endif
-/****************************************************************************/
+
+#define MAX_64KPOINTS       ((((USHORT)0xFFFF)-32)/sizeof(Point))
+
+// -------------------
+// - ImplPolygonData -
+// -------------------
+
+class ImplPolygonData
 {
-    if ( argc < 4 )
-    {
-        fprintf( stderr, "ERROR: too few parameters. \n\n");
-        fprintf( stderr, "usage: txtrep.exe EnvironmentVariable Searchstring replacestring\n");
-        return 1;
-    }
-    ByteString aText( getenv( argv[ 1 ] ));
-    if ( aText.Len() == 0 )
-    {
-        fprintf( stderr, "ERROR: Variable not set. \n\n");
-        fprintf( stderr, "usage: txtrep.exe EnvironmentVariable Searchstring replacestring\n");
-        return 2;
-    }
-    ByteString aSearch( argv[ 2 ] );
-    ByteString aReplace( argv[ 3 ] );
+public:
+#ifdef WIN
+    Point huge*     mpPointAry;
+    BYTE*           mpFlagAry;
+    GLOBALHANDLE    mhPoints;
+#else
+    Point*          mpPointAry;
+    BYTE*           mpFlagAry;
+#endif
 
-    ByteString aUpperText( aText );
-    aUpperText.ToUpperAscii();
+    USHORT          mnPoints;
+    USHORT          mnRefCount;
+};
 
+// ---------------
+// - ImplPolygon -
+// ---------------
 
-    ULONG nIndex;
-    aSearch.ToUpperAscii();
+class ImplPolygon  : public ImplPolygonData
+{
+public:
+                    ImplPolygon( USHORT nInitSize, BOOL bFlags = FALSE );
+                    ImplPolygon( USHORT nPoints, const Point* pPtAry, const BYTE* pInitFlags = NULL );
+                    ImplPolygon( const ImplPolygon& rImplPoly );
+                    ~ImplPolygon();
 
-    nIndex = aUpperText.Search( aSearch.GetBuffer(), 0);
-    while ( nIndex != STRING_NOTFOUND )
-    {
-        aText.Replace( nIndex, aSearch.Len(), aReplace.GetBuffer());
-        aUpperText.Replace( nIndex, aSearch.Len(), aReplace.GetBuffer());
-        nIndex = aUpperText.Search( aSearch.GetBuffer(), nIndex + aReplace.Len());
-    }
+    void            ImplSetSize( USHORT nSize, BOOL bResize = TRUE );
+    void            ImplCreateFlagArray();
+    void            ImplSplit( USHORT nPos, USHORT nSpace, ImplPolygon* pInitPoly = NULL );
+    void            ImplRemove( USHORT nPos, USHORT nCount );
+};
 
-    fprintf( stdout, "%s\n", aText.GetBuffer());
-    return 0;
+// -------------------
+// - ImplPolyPolygon -
+// -------------------
+
+#define MAX_POLYGONS        ((USHORT)0x3FF0)
+
+class Polygon;
+typedef Polygon* SVPPOLYGON;
+
+class ImplPolyPolygon
+{
+public:
+    SVPPOLYGON*     mpPolyAry;
+    USHORT          mnCount;
+    USHORT          mnRefCount;
+    USHORT          mnSize;
+    USHORT          mnResize;
+
+                    ImplPolyPolygon( USHORT nInitSize, USHORT nResize )
+                        { mpPolyAry = NULL; mnCount = 0; mnRefCount = 1;
+                          mnSize = nInitSize; mnResize = nResize; }
+                    ImplPolyPolygon( USHORT nInitSize );
+                    ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly );
+                    ~ImplPolyPolygon();
+};
+
+inline long MinMax( long nVal, long nMin, long nMax )
+{
+    return( nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin );
 }
+
+// ------------------------------------------------------------------
+
+inline long FRound( double fVal )
+{
+    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
+}
+
+
+#endif // _SV_POLY_H

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-20 10:31:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,12 @@ ByteString::ByteString( const rtl::OString& rStr )
 {
     DBG_CTOR( ByteString, DbgCheckByteString );
 
-    mpData = (ByteStringData*)rStr.pData;
+    OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
+               "Overflowing rtl::OString -> ByteString cut to zero length");
+    mpData = rStr.pData->length < STRING_MAXLEN
+        ? reinterpret_cast< ByteStringData * >(
+            const_cast< rtl::OString & >(rStr).pData)
+        : &aImplEmptyStrData;
     ImplIncRefCount( mpData );
 }
 
@@ -625,8 +630,13 @@ ByteString& ByteString::Assign( const rtl::OString& rStr )
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    rtl_string_acquire( rStr.pData );
+    OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
+               "Overflowing rtl::OString -> ByteString cut to zero length");
     ImplDeleteData( mpData );
-    mpData = (ByteStringData*)rStr.pData;
+    mpData = rStr.pData->length < STRING_MAXLEN
+        ? reinterpret_cast< ByteStringData * >(
+            const_cast< rtl::OString & >(rStr).pData)
+        : &aImplEmptyStrData;
+    ImplIncRefCount( mpData );
     return *this;
 }

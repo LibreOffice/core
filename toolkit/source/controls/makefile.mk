@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2002-04-26 14:34:00 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:03:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,9 @@ SLOFILES=   \
             $(SLO)$/unocontrolcontainer.obj 		\
             $(SLO)$/unocontrolcontainermodel.obj 	\
             $(SLO)$/unocontrolmodel.obj 			\
-            $(SLO)$/unocontrols.obj
+            $(SLO)$/unocontrols.obj					\
+            $(SLO)$/formattedcontrol.obj\
+            $(SLO)$/dialogcontrol.obj
 
 # --- Targets ------------------------------------------------------
 

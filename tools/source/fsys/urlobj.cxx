@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-08 12:55:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,11 @@ using namespace com::sun;
    segment = *(pchar / ";")
 
 
-   ; private (see RFC 1738)
-   news-url = "NEWS://" login ["/" (group / message)]
-   group = *uric
-   message = "<" *uric ">"
+   ; RFC 1738, RFC 2396, RFC 2732
+   news-url = "NEWS:" grouppart
+   grouppart = "*" / group / article
+   group = alpha *(alphanum / "+" / "-" / "." / "_")
+   article = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "?" / "_" / "~") "@" host
 
 
    ; private
@@ -271,7 +272,7 @@ using namespace com::sun;
 
 
    ; private
-   vnd-sun-star-pkg-url = "VND.SUN.STAR.PKG://" reg_name *("/" *pchar)
+   vnd-sun-star-pkg-url = "VND.SUN.STAR.PKG://" reg_name *("/" *pchar) ["?" *uric]
    reg_name = 1*(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
@@ -405,8 +406,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false, true },
         { "vnd.sun.star.webdav", "vnd.sun.star.webdav://", 80, true, false,
           false, false, true, true, true, true },
-        { "news", "news:", 119, true, true, false, true, true, true,
-          false, false },
+        { "news", "news:", 0, false, false, false, false, false, false, false,
+          false },
         { "private", "private:", 0, false, false, false, false, false,
           false, false, true },
         { "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
@@ -440,7 +441,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { ".component", ".component:", 0, false, false, false, false,
           false, false, false, true },
         { "vnd.sun.star.pkg", "vnd.sun.star.pkg://", 0, true, false, false,
-          false, false, false, true, false },
+          false, false, false, true, true },
         { "ldap", "ldap://", 389, true, false, false, false, true, true,
           false, true },
         { "db", "db:", 0, false, false, false, false, false, false, false,
@@ -525,107 +526,108 @@ enum
     pX = INetURLObject::PART_UNO_PARAM_VALUE,
     pY = INetURLObject::PART_UNAMBIGUOUS,
     pZ = INetURLObject::PART_URIC_NO_SLASH,
-    p1 = INetURLObject::PART_HTTP_QUERY
+    p1 = INetURLObject::PART_HTTP_QUERY,
+    p2 = INetURLObject::PART_NEWS_ARTICLE_LOCALPART
 };
 
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                                                         pY,
-/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
 /* " */                                                             pU+pV      +pY,
 /* # */                                                             pU,
-/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
 /* % */                                                             pU,
-/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
-/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
-/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ+p1,
-/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* / */ pA+pB+pC            +pH   +pJ   +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
-/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1,
-/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ+p1,
+/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
+/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
+/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ+p1+p2,
+/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* / */ pA+pB+pC            +pH   +pJ   +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX         +p2,
+/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ+p1+p2,
+/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ+p1+p2,
 /* < */       pC                                 +pO+pP            +pU+pV      +pY,
-/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ+p1,
+/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ+p1+p2,
 /* > */       pC                                 +pO+pP            +pU+pV      +pY,
-/* ? */       pC                        +pL                     +pT+pU   +pW+pX   +pZ,
+/* ? */       pC                        +pL                     +pT+pU   +pW+pX   +pZ   +p2,
 /* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
 /* [ */                                  pL                        +pU+pV   +pX,
 /* \ */    pB                                                      +pU+pV      +pY,
 /* ] */                                  pL                        +pU+pV   +pX,
 /* ^ */                                                             pU+pV      +pY,
-/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
 /* ` */                                                             pU+pV      +pY,
-/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
-/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1,
+/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
+/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ+p1+p2,
 /* { */                                                             pU+pV      +pY,
 /* | */    pB+pC                              +pN               +pT+pU+pV      +pY,
 /* } */                                                             pU+pV      +pY,
-/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ  +p2,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -1158,9 +1160,15 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                 }
             default:
             {
+                // For INET_PROT_FILE, allow an empty authority ("//") to be
+                // missing if the following path starts with an explicit "/"
+                // (Java is notorious in generating such file URLs, so be
+                // liberal here):
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     pPos += 2;
-                else if (!bSmart)
+                else if (!bSmart
+                         && !(m_eScheme == INET_PROT_FILE
+                              && pPos != pEnd && *pPos == '/'))
                 {
                     setInvalid();
                     return false;
@@ -1354,7 +1362,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
 
     // Parse <path>
     UniString aSynPath;
-    if (!parsePath(&pPos, pEnd, bOctets, eMechanism, eCharset,
+    if (!parsePath(m_eScheme, &pPos, pEnd, bOctets, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
                    nAltSegmentDelimiter,
                    getSchemeInfo().m_bQuery ? '?' : 0x80000000,
@@ -2367,7 +2375,9 @@ bool INetURLObject::setHost(UniString const & rTheHost, bool bOctets,
 }
 
 //============================================================================
-bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
+// static
+bool INetURLObject::parsePath(INetProtocol eScheme,
+                              sal_Unicode const ** pBegin,
                               sal_Unicode const * pEnd,
                               bool bOctets,
                               EncodeMechanism eMechanism,
@@ -2382,12 +2392,10 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
     DBG_ASSERT(pBegin && pSynPath,
                "INetURLObject::parsePath(): Null output param");
 
-    sal_Char cEscapePrefix = getEscapePrefix();
-
     sal_Unicode const * pPos = *pBegin;
     UniString aTheSynPath;
 
-    switch (m_eScheme)
+    switch (eScheme)
     {
         case INET_PROT_NOT_VALID:
             return false;
@@ -2395,18 +2403,15 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
         case INET_PROT_FTP:
         case INET_PROT_IMAP:
             if (pPos < pEnd && *pPos != '/')
-            {
-                setInvalid();
                 return false;
-            }
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_HTTP_PATH, cEscapePrefix, eCharset, true);
+                           PART_HTTP_PATH, '%', eCharset, true);
             }
             if (aTheSynPath.Len() == 0)
                 aTheSynPath = '/';
@@ -2416,19 +2421,16 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
         case INET_PROT_VND_SUN_STAR_WEBDAV:
         case INET_PROT_HTTPS:
             if (pPos < pEnd && *pPos != '/')
-            {
-                setInvalid();
                 return false;
-            }
             while (pPos < pEnd && *pPos != nQueryDelimiter
                    && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_HTTP_PATH, cEscapePrefix, eCharset, true);
+                           PART_HTTP_PATH, '%', eCharset, true);
             }
             if (aTheSynPath.Len() == 0)
                 aTheSynPath = '/';
@@ -2442,15 +2444,12 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             else if (pPos < pEnd
                      && *pPos != nSegmentDelimiter
                      && *pPos != nAltSegmentDelimiter)
-            {
-                setInvalid();
                 return false;
-            }
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO)
                     if (nUTF32 == nSegmentDelimiter
@@ -2473,7 +2472,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                         continue;
                     }
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_PCHAR, cEscapePrefix, eCharset, true);
+                           PART_PCHAR, '%', eCharset, true);
             }
             if (aTheSynPath.Len() == 0)
                 aTheSynPath = '/';
@@ -2486,23 +2485,84 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_MAILTO, cEscapePrefix, eCharset, true);
+                           PART_MAILTO, '%', eCharset, true);
             }
             break;
 
         case INET_PROT_NEWS:
+            if (pPos == pEnd || *pPos == nQueryDelimiter
+                || *pPos == nFragmentDelimiter)
+                return false;
+
+            // Match <"*">:
+            if (*pPos == '*'
+                && (pEnd - pPos == 1 || pPos[1] == nQueryDelimiter
+                    || pPos[1] == nFragmentDelimiter))
+            {
+                ++pPos;
+                aTheSynPath = '*';
+                break;
+            }
+
+            // Match <group>:
+            if (INetMIME::isAlpha(*pPos))
+                for (sal_Unicode const * p = pPos + 1;; ++p)
+                    if (p == pEnd || *p == nQueryDelimiter
+                        || *p == nFragmentDelimiter)
+                    {
+                        aTheSynPath.Assign(pPos, p - pPos);
+                        pPos = p;
+                        goto done;
+                    }
+                    else if (!INetMIME::isAlphanumeric(*p) && *p != '+'
+                             && *p != '-' && *p != '.' && *p != '_')
+                        break;
+
+            // Match <article>:
+            for (;;)
+            {
+                if (pPos == pEnd || *pPos == nQueryDelimiter
+                    || *pPos == nFragmentDelimiter)
+                    return false;
+                if (*pPos == '@')
+                    break;
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets, '%',
+                                             eMechanism, eCharset, eEscapeType);
+                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                           PART_NEWS_ARTICLE_LOCALPART, '%', eCharset, true);
+            }
+            if (aTheSynPath.Len() == 0)
+                return false;
+            ++pPos;
+            aTheSynPath += '@';
+            {
+                sal_Unicode const * p = pPos;
+                while (p < pEnd && *pPos != nQueryDelimiter
+                       && *pPos != nFragmentDelimiter)
+                    ++p;
+                UniString aCanonic;
+                if (!parseHost(pPos, p, bOctets, eMechanism, eCharset,
+                               aCanonic))
+                    return false;
+                aTheSynPath += aCanonic;
+            }
+
+        done:
+            break;
+
         case INET_PROT_POP3:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_MESSAGE_ID_PATH, cEscapePrefix, eCharset,
+                           PART_MESSAGE_ID_PATH, '%', eCharset,
                            true);
             }
             break;
@@ -2517,10 +2577,10 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_PATH_BEFORE_QUERY, cEscapePrefix, eCharset,
+                           PART_PATH_BEFORE_QUERY, '%', eCharset,
                            true);
             }
             break;
@@ -2533,17 +2593,11 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             else
             {
                 if (*pPos++ != '/')
-                {
-                    setInvalid();
                     return false;
-                }
                 while (pPos < pEnd && *pPos != nQueryDelimiter
                        && *pPos != nFragmentDelimiter)
                     if (!INetMIME::isAlphanumeric(*pPos++))
-                    {
-                        setInvalid();
                         return false;
-                    }
                 aTheSynPath = UniString(*pBegin, pPos - *pBegin);
             }
             break;
@@ -2557,49 +2611,45 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, cEscapePrefix, eCharset, true);
+                           PART_URIC, '%', eCharset, true);
             }
             break;
 
         case INET_PROT_OUT:
             if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '~')
-            {
-                setInvalid();
                 return false;
-            }
             aTheSynPath.AssignAscii(RTL_CONSTASCII_STRINGPARAM("/~"));
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC, cEscapePrefix, eCharset, true);
+                           PART_URIC, '%', eCharset, true);
             }
             break;
 
         case INET_PROT_VND_SUN_STAR_HIER:
         case INET_PROT_VND_SUN_STAR_PKG:
-            if (pPos < pEnd && *pPos != '/')
-            {
-                setInvalid();
+            if (pPos < pEnd && *pPos != '/'
+                && *pPos != nQueryDelimiter && *pPos != nFragmentDelimiter)
                 return false;
-            }
-            while (pPos < pEnd && *pPos != nFragmentDelimiter)
+            while (pPos < pEnd && *pPos != nQueryDelimiter
+                   && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 if (eEscapeType == ESCAPE_NO && nUTF32 == '/')
                     aTheSynPath += '/';
                 else
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_PCHAR, cEscapePrefix, eCharset, false);
+                               PART_PCHAR, '%', eCharset, false);
             }
             if (aTheSynPath.Len() == 0)
                 aTheSynPath = '/';
@@ -2607,11 +2657,11 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
 
         case INET_PROT_VIM:
         {
+/* test had to be taken out to make parsePath static; ok since INET_PROT_VIM is
+   obsolete, anyway
             if (m_aUser.isEmpty())
-            {
-                setInvalid();
                 return false;
-            }
+*/
             sal_Unicode const * pPathEnd = pPos;
             while (pPathEnd < pEnd && *pPathEnd != nFragmentDelimiter)
                 ++pPathEnd;
@@ -2619,22 +2669,19 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             if (pPos == pPathEnd)
                 break;
             else if (*pPos++ != '/')
-            {
-                setInvalid();
                 return false;
-            }
             if (pPos == pPathEnd)
                 break;
             while (pPos < pPathEnd && *pPos != '/')
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '=', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath,
                            eEscapeType == ESCAPE_NO ?
                                INetMIME::toLowerCase(nUTF32) : nUTF32,
-                           eEscapeType, bOctets, PART_VIM, cEscapePrefix,
+                           eEscapeType, bOctets, PART_VIM, '=',
                            eCharset, false);
             }
             bool bInbox;
@@ -2643,18 +2690,12 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             else if (aTheSynPath.EqualsAscii("/newsgroups"))
                 bInbox = false;
             else
-            {
-                setInvalid();
                 return false;
-            }
             aTheSynPath += '/';
             if (pPos == pPathEnd)
                 break;
             else if (*pPos++ != '/')
-            {
-                setInvalid();
                 return false;
-            }
             if (!bInbox)
             {
                 bool bEmpty = true;
@@ -2662,59 +2703,44 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 {
                     EscapeType eEscapeType;
                     sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                                 cEscapePrefix, eMechanism,
+                                                 '=', eMechanism,
                                                  eCharset, eEscapeType);
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_VIM, cEscapePrefix, eCharset, false);
+                               PART_VIM, '=', eCharset, false);
                     bEmpty = false;
                 }
                 if (bEmpty)
-                {
-                    setInvalid();
                     return false;
-                }
                 aTheSynPath += '/';
                 if (pPos == pPathEnd)
                     break;
                 else if (*pPos++ != '/')
-                {
-                    setInvalid();
                     return false;
-                }
             }
             bool bEmpty = true;
             while (pPos < pPathEnd && *pPos != ':')
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '=', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_VIM, cEscapePrefix, eCharset, false);
+                           PART_VIM, '=', eCharset, false);
                 bEmpty = false;
             }
             if (bEmpty)
-            {
-                setInvalid();
                 return false;
-            }
             if (pPos == pPathEnd)
                 break;
             else if (*pPos++ != ':')
-            {
-                setInvalid();
                 return false;
-            }
             aTheSynPath += ':';
             for (int i = 0; i < 3; ++i)
             {
                 if (i != 0)
                 {
                     if (pPos == pPathEnd || *pPos++ != '.')
-                    {
-                        setInvalid();
                         return false;
-                    }
                     aTheSynPath += '.';
                 }
                 bool bEmpty = true;
@@ -2722,46 +2748,34 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 {
                     EscapeType eEscapeType;
                     sal_uInt32 nUTF32 = getUTF32(pPos, pPathEnd, bOctets,
-                                                 cEscapePrefix, eMechanism,
+                                                 '=', eMechanism,
                                                  eCharset, eEscapeType);
                     if (!INetMIME::isDigit(nUTF32))
-                    {
-                        setInvalid();
                         return false;
-                    }
                     aTheSynPath += sal_Unicode(nUTF32);
                     bEmpty = false;
                 }
                 if (bEmpty)
-                {
-                    setInvalid();
                     return false;
-                }
             }
             if (pPos != pPathEnd)
-            {
-                setInvalid();
                 return false;
-            }
             break;
         }
 
         case INET_PROT_VND_SUN_STAR_CMD:
         {
             if (pPos == pEnd || *pPos == nFragmentDelimiter)
-            {
-                setInvalid();
                 return false;
-            }
             Part ePart = PART_URIC_NO_SLASH;
             while (pPos != pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets, ePart,
-                           cEscapePrefix, eCharset, true);
+                           '%', eCharset, true);
                 ePart = PART_URIC;
             }
             break;
@@ -2775,7 +2789,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 switch (eState)
                 {
@@ -2783,14 +2797,11 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 case STATE_COMMA:
                     if (eEscapeType == ESCAPE_NO
                         && (nUTF32 == '=' || nUTF32 == ','))
-                    {
-                        setInvalid();
                         return false;
-                    }
                     eState = STATE_KEY;
                     appendUCS4(aTheSynPath, INetMIME::toLowerCase(nUTF32),
                                eEscapeType, bOctets, PART_UNO_PARAM_VALUE,
-                               cEscapePrefix, eCharset, true);
+                               '%', eCharset, true);
                     break;
 
                 case STATE_KEY:
@@ -2802,13 +2813,10 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                             break;
                         }
                         else if (nUTF32 == ',')
-                        {
-                            setInvalid();
                             return false;
-                        }
                     appendUCS4(aTheSynPath, INetMIME::toLowerCase(nUTF32),
                                eEscapeType, bOctets, PART_UNO_PARAM_VALUE,
-                               cEscapePrefix, eCharset, true);
+                               '%', eCharset, true);
                     break;
 
                 case STATE_VALUE:
@@ -2820,21 +2828,15 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                             break;
                         }
                         else if (nUTF32 == '=')
-                        {
-                            setInvalid();
                             return false;
-                        }
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_UNO_PARAM_VALUE, cEscapePrefix, eCharset,
+                               PART_UNO_PARAM_VALUE, '%', eCharset,
                                true);
                     break;
                 }
             }
             if (eState == STATE_COMMA || eState == STATE_KEY)
-            {
-                setInvalid();
                 return false;
-            }
             break;
         }
 
@@ -2843,19 +2845,16 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 if (*pPos == '/')
                     ++pPos;
                 else
-                {
-                    setInvalid();
                     return false;
-                }
             aTheSynPath = '/';
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
                 sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             cEscapePrefix, eMechanism,
+                                             '%', eMechanism,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                           PART_URIC_NO_SLASH, cEscapePrefix, eCharset, true);
+                           PART_URIC_NO_SLASH, '%', eCharset, true);
             }
             break;
 
@@ -2863,10 +2862,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             if (pPos < pEnd)
             {
                 if (*pPos != '/' || pEnd - pPos > 1)
-                {
-                    setInvalid();
                     return false;
-                }
                 ++pPos;
             }
             aTheSynPath = '/';
@@ -2886,8 +2882,8 @@ bool INetURLObject::setPath(UniString const & rThePath, bool bOctets,
     UniString aSynPath;
     sal_Unicode const * p = rThePath.GetBuffer();
     sal_Unicode const * pEnd = p + rThePath.Len();
-    if (!parsePath(&p, pEnd, bOctets, eMechanism, eCharset, false, '/',
-                   0x80000000, 0x80000000, 0x80000000, &aSynPath)
+    if (!parsePath(m_eScheme, &p, pEnd, bOctets, eMechanism, eCharset, false,
+                   '/', 0x80000000, 0x80000000, 0x80000000, &aSynPath)
         || p != pEnd)
         return false;
     sal_Int32 nDelta = m_aPath.set(m_aAbsURIRef, aSynPath);
@@ -3247,165 +3243,6 @@ UniString INetURLObject::GetURLNoMark(DecodeMechanism eMechanism,
     aTemp.clearFragment();
     return aTemp.GetMainURL(eMechanism, eCharset);
 }
-
-#if SUPD < 642
-//============================================================================
-UniString INetURLObject::getAbbreviated(sal_Int32 nLength,
-                                        DecodeMechanism eMechanism,
-                                        rtl_TextEncoding eCharset)
-    const
-{
-    sal_Char cEscapePrefix = getEscapePrefix();
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.appendAscii(getSchemeInfo().m_pScheme);
-    aBuffer.append(static_cast< sal_Unicode >(':'));
-    OSL_ENSURE(m_aHost.isPresent()
-               || !(m_aUser.isPresent()
-                    || m_aAuth.isPresent()
-                    || m_aPort.isPresent()),
-               "unexpected situation"); // misusing host as authority...
-    if (m_aHost.isPresent())
-    {
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
-        OSL_ENSURE(m_aUser.isPresent() || !m_aAuth.isPresent(),
-                   "unexpected situation");
-        if (m_aUser.isPresent())
-        {
-            aBuffer.
-                append(decode(m_aUser, cEscapePrefix, eMechanism, eCharset));
-            if (m_aAuth.isPresent())
-            {
-                if (getSchemeInfo().m_bAuth)
-                    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(";AUTH="));
-                else
-                    aBuffer.append(static_cast< sal_Unicode >(':'));
-                aBuffer.append(decode(m_aAuth,
-                                      cEscapePrefix,
-                                      eMechanism,
-                                      eCharset));
-            }
-            aBuffer.append(static_cast< sal_Unicode >('@'));
-        }
-        aBuffer.append(decode(m_aHost, cEscapePrefix, eMechanism, eCharset));
-        if (m_aPort.isPresent())
-        {
-            aBuffer.append(static_cast< sal_Unicode >(':'));
-            aBuffer.
-                append(decode(m_aPort, cEscapePrefix, eMechanism, eCharset));
-        }
-    }
-    bool bSegment = false;
-    if (getSchemeInfo().m_bHierarchical)
-    {
-        OSL_ENSURE(!m_aPath.isEmpty()
-                   && m_aAbsURIRef.GetChar(m_aPath.getBegin()) == '/',
-                   "unexpected situation");
-        aBuffer.append(static_cast< sal_Unicode >('/'));
-        sal_Int32 nUsed
-            = aBuffer.getLength()
-                  + (m_aQuery.isPresent() || m_aFragment.isPresent() ? 4 : 0);
-        sal_Int32 nSize = nUsed < nLength ? nLength - nUsed : 0;
-        bool bEllipsis = false;
-        rtl::OUStringBuffer aTrailer;
-        sal_Unicode const * pBegin = m_aAbsURIRef.GetBuffer()
-                                         + m_aPath.getBegin();
-        sal_Unicode const * pEnd = pBegin + m_aPath.getLength();
-        bool bPrefix = true;
-        bool bSuffix = true;
-        sal_Unicode const * pPrefixBegin = pBegin;
-        sal_Unicode const * pSuffixEnd = pEnd;
-        do
-        {
-            if (bSuffix)
-            {
-                sal_Unicode const * p = pSuffixEnd - 1;
-                while (*p != '/')
-                    --p;
-                rtl::OUString aSegment(decode(p == pBegin ? p + 1 : p,
-                                              pSuffixEnd,
-                                              cEscapePrefix,
-                                              eMechanism,
-                                              eCharset));
-                pSuffixEnd = p;
-                if (aSegment.getLength() <= nSize
-                    && (pBegin == pSuffixEnd
-                        || nSize - aSegment.getLength() >= 3))
-                {
-                    nSize -= aSegment.getLength();
-                    aTrailer.insert(0, aSegment);
-                    bSegment = true;
-                    pEnd = pSuffixEnd;
-                }
-                else
-                {
-                    bEllipsis = true;
-                    bSuffix = false;
-                }
-                if (pPrefixBegin == pSuffixEnd)
-                    break;
-            }
-            if (bPrefix)
-            {
-                sal_Unicode const * p = pPrefixBegin + 1;
-                while (p != pSuffixEnd && *p != '/')
-                    ++p;
-                rtl::OUString aSegment(decode(pPrefixBegin + 1,
-                                              p == pEnd ? p : p + 1,
-                                              cEscapePrefix,
-                                              eMechanism,
-                                              eCharset));
-                pPrefixBegin = p;
-                if (aSegment.getLength() <= nSize
-                    && (pPrefixBegin == pEnd
-                        || nSize - aSegment.getLength() >= 3))
-                {
-                    nSize -= aSegment.getLength();
-                    aBuffer.append(aSegment);
-                    bSegment = true;
-                    pBegin = pPrefixBegin;
-                }
-                else
-                {
-                    bEllipsis = true;
-                    bPrefix = false;
-                }
-                if (pPrefixBegin == pSuffixEnd)
-                    break;
-            }
-        }
-        while (bPrefix || bSuffix);
-        if (bSegment)
-        {
-            if (bEllipsis)
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-            aBuffer.append(aTrailer);
-        }
-        else
-            aBuffer.setLength(aBuffer.getLength() - 1);
-                // remove the initial '/' of the path again
-    }
-    if (!bSegment)
-        aBuffer.append(decode(m_aPath, cEscapePrefix, eMechanism, eCharset));
-    if (m_aQuery.isPresent())
-    {
-        aBuffer.append(static_cast< sal_Unicode >('?'));
-        aBuffer.append(decode(m_aQuery, cEscapePrefix, eMechanism, eCharset));
-    }
-    if (m_aFragment.isPresent())
-    {
-        aBuffer.append(static_cast< sal_Unicode >('#'));
-        aBuffer.
-            append(decode(m_aFragment, cEscapePrefix, eMechanism, eCharset));
-    }
-    if (aBuffer.getLength() > nLength)
-    {
-        aBuffer.setLength(nLength < 3 ? 0 : nLength - 3);
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-        aBuffer.setLength(std::max< sal_Int32 >(nLength, 0));
-    }
-    return aBuffer.makeStringAndClear();
-}
-#endif // SUPD, 642
 
 //============================================================================
 UniString
@@ -3817,21 +3654,16 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         }
     }
     UniString aSynPath;
-    if (getSchemeInfo().m_bHierarchical
-        && (rThePath.Len() == 0 || rThePath.GetChar(0) != '/'))
-        aSynPath = '/';
-    aSynPath += rThePath;
-    m_aPath.set(m_aAbsURIRef,
-                encodeText(aSynPath, false,
-                           m_eScheme == INET_PROT_FILE
-                           || m_eScheme == INET_PROT_VND_SUN_STAR_WFS ?
-                               PART_PATH_SEGMENTS_EXTRA :
-                           m_eScheme == INET_PROT_NEWS
-                           || m_eScheme == INET_PROT_POP3 ?
-                               PART_MESSAGE_ID_PATH :
-                               PART_HTTP_PATH,
-                           getEscapePrefix(), WAS_ENCODED, eCharset, true),
-                m_aAbsURIRef.Len());
+    sal_Unicode const * p = rThePath.GetBuffer();
+    sal_Unicode const * pEnd = p + rThePath.Len();
+    if (!parsePath(m_eScheme, &p, pEnd, false, eMechanism, eCharset, false, '/',
+                   0x80000000, 0x80000000, 0x80000000, &aSynPath)
+        || p != pEnd)
+    {
+        setInvalid();
+        return false;
+    }
+    m_aPath.set(m_aAbsURIRef, aSynPath, m_aAbsURIRef.Len());
     return true;
 }
 
@@ -5029,7 +4861,7 @@ UniString INetURLObject::getFSysPath(FSysStyle eStyle,
 //============================================================================
 bool INetURLObject::HasMsgId() const
 {
-    if (m_eScheme != INET_PROT_NEWS && m_eScheme != INET_PROT_POP3)
+    if (m_eScheme != INET_PROT_POP3)
         return false;
     sal_Unicode const * p = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin();
     sal_Unicode const * pEnd = p + m_aPath.getLength();
@@ -5043,7 +4875,7 @@ bool INetURLObject::HasMsgId() const
 UniString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset) const
 {
-    if (m_eScheme != INET_PROT_NEWS && m_eScheme != INET_PROT_POP3)
+    if (m_eScheme != INET_PROT_POP3)
         return UniString();
     sal_Unicode const * p = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin();
     sal_Unicode const * pEnd = p + m_aPath.getLength();

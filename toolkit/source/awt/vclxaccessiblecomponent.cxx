@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-12 18:08:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXFONT_HXX_
 #include <toolkit/awt/vclxfont.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -230,7 +233,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
     return 0;
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) const
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAccessible( const VclWindowEvent& rVclWindowEvent )
 {
     // checks if the data in the window event is our direct child
     // and returns its accessible
@@ -368,7 +371,9 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             {
                 // if multiple listeners were registered it is possible that the
                 // focus was changed during event processing (eg SfxTopWindow )
-                if( pWindow->HasChildPathFocus() )
+                // #106082# allow ChildPathFocus only for CompoundControls, for windows the focus must be in the window itself
+                if( (pWindow->IsCompoundControl() && pWindow->HasChildPathFocus()) ||
+                    (!pWindow->IsCompoundControl() && pWindow->HasFocus()) )
                 {
                     aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
                     NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
@@ -389,8 +394,8 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_FRAMETITLECHANGED:
         {
-            ::rtl::OUString aOldName ( *((::rtl::OUString*) rVclWindowEvent.GetData()) );
-            ::rtl::OUString aNewName ( pWindow->GetText() );
+            ::rtl::OUString aOldName( *((::rtl::OUString*) rVclWindowEvent.GetData()) );
+            ::rtl::OUString aNewName( getAccessibleName() );
             aOldValue <<= aOldName;
             aNewValue <<= aNewName;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT, aOldValue, aNewValue );
@@ -440,6 +445,18 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
                     NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
                 }
             }
+        }
+        break;
+        case VCLEVENT_WINDOW_ICONIFIED:
+        {
+            aNewValue <<= accessibility::AccessibleStateType::ICONIFIED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_RESTORED:
+        {
+            aOldValue <<= accessibility::AccessibleStateType::ICONIFIED;
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
         }
         break;
         default:
@@ -522,6 +539,13 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
+
+        if( pWindow->IsDialog() )
+        {
+            Dialog *pDlg = static_cast< Dialog* >( pWindow );
+            if( pDlg->IsInExecute() )
+                rStateSet.AddState( accessibility::AccessibleStateType::MODAL );
+        }
     }
     else
     {
@@ -541,7 +565,6 @@ FOCUSABLE
 HORIZONTAL
 VERTICAL
 ICONIFIED
-MODAL
 MULTILINE
 MULTISELECTABLE
 PRESSED

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-13 13:43:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,23 +191,25 @@ BOOL CppDep::Search( ByteString aFileName )
 
 ByteString CppDep::Exists( ByteString aFileName )
 {
-#ifdef DEBUG_VERBOSE
-            fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
-#endif
+    char pFullName[1023];
     ByteString aString;
+
+#ifdef DEBUG_VERBOSE
+    fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
+#endif
+
     ULONG nCount = pSearchPath->Count();
     for ( ULONG n=0; n<nCount; n++)
     {
         struct stat aBuf;
         ByteString *pPathName = pSearchPath->GetObject(n);
 
-        char *pFullName = new char[1023];
         strcpy( pFullName, pPathName->GetBuffer());
         strcat( pFullName, DIR_SEP );
         strcat( pFullName, aFileName.GetBuffer());
 
 #ifdef DEBUG_VERBOSE
-            fprintf( stderr, "looking for %s\t ", pFullName );
+        fprintf( stderr, "looking for %s\t ", pFullName );
 #endif
         if ( stat( pFullName, &aBuf ) == 0 )
         {
@@ -220,7 +222,6 @@ ByteString CppDep::Exists( ByteString aFileName )
 
             return ByteString(pFullName);
         }
-        delete pFullName;
     }
     return aString;
 }

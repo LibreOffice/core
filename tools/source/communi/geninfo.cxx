@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geninfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-01-09 17:34:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:45 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -254,24 +254,11 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
         return 0;
     }
 
-    ByteString sKey( pInfo->GetBuffer());
-    sKey.ToUpperAscii();
-
-    // Check to sppeed up reading a (partially) sorted list
-    if ( nStart == 0 && Count()-1 == nEnd )
-    {
-        ByteString sCandidate( *GetObject( nEnd ));
-        if ( sCandidate.ToUpperAscii() < sKey )
-        {
-            Insert( pInfo, LIST_APPEND );
-            return nEnd+1;
-        }
-    }
-
 // ### GH: dieser Block schein überflüssig zu sein
+    ByteString sKey( pInfo->GetBuffer());
     if ( Count() == 1 ) {
         ByteString sCandidate( *GetObject( 0 ));
-        if ( sCandidate.ToUpperAscii() == sKey ) {
+        if ( sCandidate.ToUpperAscii() == sKey.ToUpperAscii()) {
             // key allready exists in list
             if ( bOverwrite )
                 Replace( pInfo, ULONG(0));  // ### Laut NF scheint hier ein Memory Leak zu sein
@@ -291,7 +278,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
     ULONG nActPos = nStart + (( nEnd - nStart ) / 2 );
     ByteString sCandidate = ByteString( *GetObject( nActPos ));
 
-    if ( sCandidate.ToUpperAscii() == sKey ) {
+    if ( sCandidate.ToUpperAscii() == sKey.ToUpperAscii()) {
         // key allready exists in list
         if ( bOverwrite )
             Replace( pInfo, nActPos );  // ### Laut NF scheint hier ein Memory Leak zu sein
@@ -306,7 +293,7 @@ ULONG GenericInformationList::InsertSorted( GenericInformation *pInfo,
         }
         else {
             Insert( pInfo, nStart + 1 );
-            return ( nStart + 1 );
+        return ( nStart + 1 );
         }
     }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:04:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,12 +78,10 @@ SLOFILES=   $(SLO)$/ref.obj      \
             $(SLO)$/globname.obj \
             $(SLO)$/errinf.obj
 
-.IF "$(UPDATER)"!=""
 OBJFILES=   $(OBJ)$/ref.obj      \
             $(OBJ)$/pstm.obj  	\
             $(OBJ)$/globname.obj \
             $(OBJ)$/errinf.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

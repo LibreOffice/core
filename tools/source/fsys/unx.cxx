@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-16 21:06:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
 extern "C" int mntctl( int cmd, size_t size, char* buf );
-#elif defined S390
-#include <sys/mntent.h>
-#define mnttab w_mntent
 #elif defined(NETBSD)
 #include <sys/mount.h>
 #elif defined(FREEBSD) || defined(MACOSX)
@@ -111,9 +108,6 @@ DECLARE_LIST( FileStatList, FileStat* )
 #define MNTTAB       "/etc/mnttab"
 #define MOUNTSPECIAL mt_dev
 #define MOUNTPOINT   mt_filsys
-#elif defined S390
-#define MOUNTSPECIAL mnt_fsname
-#define MOUNTPOINT   mnt_mountpoint
 #else
 #define MOUNTSPECIAL mnt_fsname
 #define MOUNTPOINT   mnt_dir
@@ -190,7 +184,7 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         return FALSE;
     struct mnttab mnt[1];
     while (fread (&mnt, sizeof mnt, 1, fp) > 0)
-#elif defined DECUNIX || defined AIX || defined S390
+#elif defined DECUNIX || defined AIX
     FILE *fp = NULL;
     if (! fp)
         return FALSE;

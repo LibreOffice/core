@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2001-10-16 08:52:30 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:05:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ VERSION=$(UPD)
 # --- Allgemein ----------------------------------------------------
 
 # --- TOOLS.HXX ---
+
 HXX1FILES=  $(INC)$/debug.hxx       \
             $(INC)$/new.hxx         \
             $(INC)$/shl.hxx         \
@@ -117,17 +118,13 @@ HXX17FILES= $(INC)$/stream.hxx $(INC)$/cachestr.hxx
 HXX18FILES= $(HXX1FILES)
 HXX19FILES= $(INC)$/zcodec.hxx
 
-.IF "$(UPDATER)"!=""
 # --- STDSTRM.LIB ---
 LIB3TARGET= $(LB)$/stdstrm.lib
 LIB3ARCHIV= $(LB)$/libstdstrm.a
 LIB3FILES=  $(LB)$/stream.lib
-.ENDIF                  # "$(UPDATER)"!=""
 
 MEMMGRLIB=$(LB)$/memmgr.lib
 MEMMGRSLB=$(SLB)$/memmgr.lib
-
-.IF "$(UPDATER)"!=""
 
 LIB7TARGET= $(LB)$/a$(TARGET).lib
 LIB7ARCHIV= $(LB)$/liba$(TARGET).a
@@ -148,8 +145,6 @@ LIB7FILES=  $(LB)$/gen.lib          \
 
 
 LIB7FILES+= $(LB)$/dll.lib
-
-.ENDIF      # "$(UPDATER)"!=""
 
 # --- TOOLS.LIB ---
 LIB1TARGET:= $(SLB)$/$(TARGET).lib
@@ -188,12 +183,12 @@ SHL1STDLIBS+=   wsock32.lib
 .ENDIF          # "$(BIG_TOOLS)"!=""
 
 # --- TOOLS.DLL ---
+
 SHL1TARGET=     tl$(VERSION)$(DLLPOSTFIX)
-#SHL1TARGET=    $(TOOLSDLLPREFIX)$(VERSION)$(DLLPOSTFIX)
 SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB)
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(GPC3RDLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=   shell32.lib     \
@@ -241,7 +236,6 @@ $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
     @echo Imp>$@
     @echo PointerList>>$@
     @echo DbgCheck>>$@
-    @echo DbgName>>$@
     @echo LabelList>>$@
     @echo ActionList>>$@
     @echo CBlock>>$@

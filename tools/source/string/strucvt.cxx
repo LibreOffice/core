@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-20 10:31:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,12 @@ UniString::UniString( const rtl::OUString& rStr )
 {
     DBG_CTOR( UniString, DbgCheckUniString );
 
-    mpData = (UniStringData*)rStr.pData;
+    OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
+               "Overflowing rtl::OUString -> UniString cut to zero length");
+    mpData = rStr.pData->length < STRING_MAXLEN
+        ? reinterpret_cast< UniStringData * >(
+            const_cast< rtl::OUString & >(rStr).pData)
+        : &aImplEmptyStrData;
     ImplIncRefCount( mpData );
 }
 
@@ -167,8 +172,13 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
 
-    rtl_uString_acquire( rStr.pData );
+    OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
+               "Overflowing rtl::OUString -> UniString cut to zero length");
     ImplDeleteData( mpData );
-    mpData = (UniStringData*)rStr.pData;
+    mpData = rStr.pData->length < STRING_MAXLEN
+        ? reinterpret_cast< UniStringData * >(
+            const_cast< rtl::OUString & >(rStr).pData)
+        : &aImplEmptyStrData;
+    ImplIncRefCount( mpData );
     return *this;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:26:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2 )
             *pStr2 )
 #endif
     {
-        pStr1++;
-        pStr2++;
+        ++pStr1,
+        ++pStr2;
     }
 
     return nRet;
@@ -100,9 +100,9 @@ static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2,
             *pStr2 )
 #endif
     {
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
 
     return nRet;
@@ -122,9 +122,9 @@ static sal_Int32 ImplStringCompareWithoutZero( const STRCODE* pStr1, const STRCO
             ((nRet = ((sal_Int32)((unsigned STRCODE)*pStr1))-((sal_Int32)((unsigned STRCODE)*pStr2))) == 0) )
 #endif
     {
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
 
     return nRet;
@@ -154,8 +154,8 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 
         if ( nRet != 0 )
             break;
 
-        pStr1++;
-        pStr2++;
+        ++pStr1,
+        ++pStr2;
     }
     while ( c2 );
 
@@ -190,9 +190,9 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2,
         if ( nRet != 0 )
             break;
 
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
     while ( c2 );
 
@@ -225,9 +225,9 @@ static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRC
         nRet = ((sal_Int32)((unsigned STRCODE)c1))-((sal_Int32)((unsigned STRCODE)c2));
 #endif
 
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
     while ( nRet == 0 );
 
@@ -1048,8 +1048,8 @@ STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
     do
     {
         *pStr = cFillChar;
-        pStr++;
-        nCount--;
+        ++pStr,
+        --nCount;
     }
     while ( nCount );
 
@@ -1080,8 +1080,8 @@ STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
     do
     {
         *pStr = cExpandChar;
-        pStr++;
-        nCount--;
+        ++pStr,
+        --nCount;
     }
     while ( nCount );
 
@@ -1103,7 +1103,7 @@ STRING& STRING::EraseLeadingChars( STRCODE c )
 
     xub_StrLen nStart = 0;
     while ( mpData->maStr[nStart] == c )
-        nStart++;
+        ++nStart;
 
     return Erase( 0, nStart );
 }
@@ -1132,7 +1132,7 @@ STRING& STRING::EraseLeadingAndTrailingChars( STRCODE c )
 
     xub_StrLen nStart = 0;
     while ( mpData->maStr[nStart] == c )
-        nStart++;
+        ++nStart;
     if ( nStart )
         Erase( 0, nStart );
 
@@ -1156,8 +1156,8 @@ STRING& STRING::EraseAllChars( STRCODE c )
     while ( i < mpData->mnLen )
     {
         if ( mpData->maStr[i] == c )
-            nCount++;
-        i++;
+            ++nCount;
+        ++i;
     }
 
     if ( nCount )
@@ -1175,12 +1175,12 @@ STRING& STRING::EraseAllChars( STRCODE c )
 
             // Alten String kopieren und initialisieren
             nCount = 0;
-            for( xub_StrLen i = 0; i < mpData->mnLen; i++ )
+            for( xub_StrLen i = 0; i < mpData->mnLen; ++i )
             {
                 if ( mpData->maStr[i] != c )
                 {
                     pNewData->maStr[nCount] = mpData->maStr[i];
-                    nCount++;
+                    ++nCount;
                 }
             }
 
@@ -1208,7 +1208,7 @@ STRING& STRING::Reverse()
     // Reverse
     STRCODE     cTemp;
     xub_StrLen  nCount = mpData->mnLen / 2;
-    for ( xub_StrLen i = 0; i < nCount; i++ )
+    for ( xub_StrLen i = 0; i < nCount; ++i )
     {
         cTemp = mpData->maStr[i];
         mpData->maStr[i] = mpData->maStr[mpData->mnLen-i-1];
@@ -1237,8 +1237,8 @@ STRING& STRING::ToLowerAscii()
             *pStr += 32;
         }
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return *this;
@@ -1263,8 +1263,8 @@ STRING& STRING::ToUpperAscii()
             *pStr -= 32;
         }
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return *this;
@@ -1306,11 +1306,11 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
             // \r\n oder \n\r, dann Zeichen ueberspringen
             if ( ((pStr[i+1] == _CR) || (pStr[i+1] == _LF)) &&
                  (pStr[i] != pStr[i+1]) )
-                i++;
+                ++i;
         }
         else
-            nLen++;
-        i++;
+            ++nLen;
+        ++i;
 
         // Wenn String zu lang, dann konvertieren wir nicht
         if ( nLen >= STRING_MAXLEN )
@@ -1341,20 +1341,20 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
                         pNewData->maStr[j] = _CR;
                     else
                         pNewData->maStr[j] = _LF;
-                    j++;
+                    ++j;
                 }
 
                 if ( ((pStr[i+1] == _CR) || (pStr[i+1] == _LF)) &&
                      (pStr[i] != pStr[i+1]) )
-                    i++;
+                    ++i;
             }
             else
             {
                 pNewData->maStr[j] = mpData->maStr[i];
-                j++;
+                ++j;
             }
 
-            i++;
+            ++i;
         }
 
         // Alte Daten loeschen und Neue zuweisen
@@ -1607,9 +1607,9 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
         // Stimmt das Zeichen nicht ueberein, dann abbrechen
         if ( *pStr1 != *pStr2 )
             return i;
-        pStr1++;
-        pStr2++;
-        i++;
+        ++pStr1,
+        ++pStr2,
+        ++i;
     }
 
     return STRING_MATCH;
@@ -1633,9 +1633,9 @@ xub_StrLen STRING::Match( const STRCODE* pCharStr ) const
         // Stimmt das Zeichen nicht ueberein, dann abbrechen
         if ( *pStr != *pCharStr )
             return i;
-        pStr++;
-        pCharStr++;
-        i++;
+        ++pStr,
+        ++pCharStr,
+        ++i;
     }
 
     return STRING_MATCH;
@@ -1654,8 +1654,8 @@ xub_StrLen STRING::Search( STRCODE c, xub_StrLen nIndex ) const
     {
         if ( *pStr == c )
             return nIndex;
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return STRING_NOTFOUND;
@@ -1686,8 +1686,8 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
         {
             if ( *pStr1 == cSearch )
                 return nIndex;
-            pStr1++;
-            nIndex++;
+            ++pStr1,
+            ++nIndex;
         }
     }
     else
@@ -1700,8 +1700,8 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
             // Stimmt der String ueberein
             if ( ImplStringCompareWithoutZero( pStr1, pStr2, nStrLen ) == 0 )
                 return nIndex;
-            pStr1++;
-            nIndex++;
+            ++pStr1,
+            ++nIndex;
         }
     }
 
@@ -1732,8 +1732,8 @@ xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
         {
             if ( *pStr == cSearch )
                 return nIndex;
-            pStr++;
-            nIndex++;
+            ++pStr,
+            ++nIndex;
         }
     }
     else
@@ -1744,8 +1744,8 @@ xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
             // Stimmt der String ueberein
             if ( ImplStringCompareWithoutZero( pStr, pCharStr, nStrLen ) == 0 )
                 return nIndex;
-            pStr++;
-            nIndex++;
+            ++pStr,
+            ++nIndex;
         }
     }
 
@@ -1792,10 +1792,10 @@ xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
         {
             if ( *pCompStr == c )
                 return nIndex;
-            pCompStr++;
+            ++pCompStr;
         }
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return STRING_NOTFOUND;
@@ -1824,7 +1824,7 @@ xub_StrLen STRING::SearchCharBackward( const STRCODE* pChars, xub_StrLen nIndex 
         {
             if ( *pCompStr == c )
                 return nIndex;
-            pCompStr++;
+            ++pCompStr;
         }
     }
 
@@ -1848,8 +1848,8 @@ xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex 
             mpData->maStr[nIndex] = cRep;
             return nIndex;
         }
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return STRING_NOTFOUND;
@@ -1902,8 +1902,8 @@ void STRING::SearchAndReplaceAll( STRCODE c, STRCODE cRep )
             ImplCopyData( this );
             mpData->maStr[nIndex] = cRep;
         }
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 }
 
@@ -1959,9 +1959,9 @@ xub_StrLen STRING::GetTokenCount( STRCODE cTok ) const
     {
         // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
         if ( *pStr == cTok )
-            nTokCount++;
-        pStr++;
-        nIndex++;
+            ++nTokCount;
+        ++pStr,
+        ++nIndex;
     }
 
     return nTokCount;
@@ -1988,7 +1988,7 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
         // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
         if ( *pStr == cTok )
         {
-            nTok++;
+            ++nTok;
 
             if ( nTok == nToken )
                 nFirstChar = i+1;
@@ -1999,8 +1999,8 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
             }
         }
 
-        pStr++;
-        i++;
+        ++pStr,
+        ++i;
     }
 
     if ( nTok >= nToken )
@@ -2026,7 +2026,7 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
         // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
         if ( *pStr == cTok )
         {
-            nTok++;
+            ++nTok;
 
             if ( nTok == nToken )
                 nFirstChar = i+1;
@@ -2037,8 +2037,8 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
             }
         }
 
-        pStr++;
-        i++;
+        ++pStr,
+        ++i;
     }
 
     if ( nTok >= nToken )
@@ -2102,11 +2102,11 @@ xub_StrLen STRING::GetQuotedTokenCount( const STRING& rQuotedPairs, STRCODE cTok
 
             // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
             if ( c == cTok )
-                nTokCount++;
+                ++nTokCount;
         }
 
-        pStr++;
-        nIndex++;
+        ++pStr,
+        ++nIndex;
     }
 
     return nTokCount;
@@ -2160,7 +2160,7 @@ STRING STRING::GetQuotedToken( xub_StrLen nToken, const STRING& rQuotedPairs,
             // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
             if ( c == cTok )
             {
-                nTok++;
+                ++nTok;
 
                 if ( nTok == nToken )
                     nFirstChar = i+1;
@@ -2172,8 +2172,8 @@ STRING STRING::GetQuotedToken( xub_StrLen nToken, const STRING& rQuotedPairs,
             }
         }
 
-        pStr++;
-        i++;
+        ++pStr,
+        ++i;
     }
 
     if ( nTok >= nToken )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 14:58:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
         if ( xL.is() )
             aSz = xL->getMinimumSize();
 
-        if ( !mxPeer.is() || ( mxPeer != xP ) )
+        if ( !getPeer().is() || ( getPeer() != xP ) )
             xP->dispose();
     }
     return aSz;
@@ -213,7 +213,7 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
         if ( xL.is() )
             aSz = xL->getPreferredSize();
 
-        if ( !mxPeer.is() || ( mxPeer != xP ) )
+        if ( !getPeer().is() || ( getPeer() != xP ) )
             xP->dispose();
     }
     return aSz;
@@ -230,7 +230,7 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
         if ( xL.is() )
             aSz = xL->calcAdjustedSize( rNewSize );
 
-        if ( !mxPeer.is() || ( mxPeer != xP ) )
+        if ( !getPeer().is() || ( getPeer() != xP ) )
             xP->dispose();
     }
     return aSz;
@@ -247,7 +247,7 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
         if ( xL.is() )
             aSz = xL->getMinimumSize( nCols, nLines );
 
-        if ( !mxPeer.is() || ( mxPeer != xP ) )
+        if ( !getPeer().is() || ( getPeer() != xP ) )
             xP->dispose();
     }
     return aSz;
@@ -263,7 +263,7 @@ void UnoControlBase::Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLine
         if ( xL.is() )
             xL->getColumnsAndLines( nCols, nLines );
 
-        if ( !mxPeer.is() || ( mxPeer != xP ) )
+        if ( !getPeer().is() || ( getPeer() != xP ) )
             xP->dispose();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-10 13:58:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
         case WINDOW_CURRENCYFIELD:  return new VCLXNumericField;
         case WINDOW_DATEFIELD:      return new VCLXDateField;
         case WINDOW_EDIT:           return new VCLXEdit;
+        case WINDOW_METRICFIELD:    return new VCLXSpinField;
         case WINDOW_MESSBOX:
         case WINDOW_INFOBOX:
         case WINDOW_WARNINGBOX:
@@ -149,7 +150,6 @@
         // case WINDOW_LONGCURRENCYBOX:
         // case WINDOW_METRICBOX:
         // case WINDOW_SPLITTER:
-        // case WINDOW_METRICFIELD:
         // case WINDOW_STATUSBAR:
         // case WINDOW_TABCONTROL:
         // case WINDOW_NUMERICBOX:

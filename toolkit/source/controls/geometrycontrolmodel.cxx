@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-01 12:07:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,6 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#include <algorithm>
-#include <functional>
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
 #endif
 
 
@@ -344,18 +339,12 @@
     }
 
     //--------------------------------------------------------------------
-    void OGeometryControlModel_Base::releaseAggregation()
+    OGeometryControlModel_Base::~OGeometryControlModel_Base()
     {
         // release the aggregate (_before_ clearing m_xAggregate)
         if (m_xAggregate.is())
             m_xAggregate->setDelegator(NULL);
         setAggregation(NULL);
-    }
-
-    //--------------------------------------------------------------------
-    OGeometryControlModel_Base::~OGeometryControlModel_Base()
-    {
-        releaseAggregation();
     }
 
     //--------------------------------------------------------------------
@@ -490,183 +479,6 @@
         Reference<XComponent>  xComp;
         if ( query_aggregation( m_xAggregate, xComp ) )
             xComp->dispose();
-    }
-
-    //====================================================================
-    //= OCommonGeometryControlModel
-    //====================================================================
-    //--------------------------------------------------------------------
-    OCommonGeometryControlModel::HashMapString2Int  OCommonGeometryControlModel::s_aServiceSpecifierMap;
-    OCommonGeometryControlModel::PropSeqArray       OCommonGeometryControlModel::s_aAggregateProperties;
-    OCommonGeometryControlModel::IntArrayArray      OCommonGeometryControlModel::s_aAmbiguousPropertyIds;
-
-    //--------------------------------------------------------------------
-    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const ::rtl::OUString& _rServiceSpecifier )
-        :OGeometryControlModel_Base( _rxAgg )
-        ,m_sServiceSpecifier( _rServiceSpecifier )
-        ,m_nPropertyMapId( 0 )
-    {
-        Reference< XPropertySetInfo > xPI;
-        if ( m_xAggregateSet.is() )
-            xPI = m_xAggregateSet->getPropertySetInfo();
-        if ( !xPI.is() )
-        {
-            releaseAggregation();
-            throw IllegalArgumentException();
-        }
-
-        HashMapString2Int::const_iterator aPropMapIdPos = s_aServiceSpecifierMap.find( m_sServiceSpecifier );
-        if ( s_aServiceSpecifierMap.end() == aPropMapIdPos )
-        {
-            m_nPropertyMapId = s_aAggregateProperties.size();
-            s_aAggregateProperties.push_back( xPI->getProperties() );
-            s_aAmbiguousPropertyIds.push_back( IntArrayArray::value_type() );
-
-            s_aServiceSpecifierMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
-        }
-        else
-            m_nPropertyMapId = aPropMapIdPos->second;
-    }
-
-    //--------------------------------------------------------------------
-    struct PropertyNameLess : public ::std::binary_function< Property, Property, bool >
-    {
-        bool operator()( const Property& _rLHS, const Property& _rRHS )
-        {
-            return _rLHS.Name < _rRHS.Name ? true : false;
-        }
-    };
-
-    //--------------------------------------------------------------------
-    struct PropertyNameEqual : public ::std::unary_function< Property, bool >
-    {
-        const ::rtl::OUString&  m_rCompare;
-        PropertyNameEqual( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
-
-        bool operator()( const Property& _rLHS )
-        {
-            return _rLHS.Name == m_rCompare ? true : false;
-        }
-    };
-
-    //--------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
-    {
-        OSL_ENSURE( _nId == m_nPropertyMapId, "OCommonGeometryControlModel::createArrayHelper: invalid argument!" );
-        OSL_ENSURE( _nId < (sal_Int32)s_aAggregateProperties.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
-        OSL_ENSURE( _nId < (sal_Int32)s_aAmbiguousPropertyIds.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
-
-        // our own properties
-        Sequence< Property > aProps;
-        OPropertyContainer::describeProperties( aProps );
-
-        // the aggregate properties
-        Sequence< Property > aAggregateProps;
-        aAggregateProps = s_aAggregateProperties[ _nId ];
-
-        // look for duplicates, and remember them
-        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ _nId ];
-        // for this, sort the aggregate properties
-        ::std::sort(
-            aAggregateProps.getArray(),
-            aAggregateProps.getArray() + aAggregateProps.getLength(),
-            PropertyNameLess()
-        );
-        const Property* pAggProps = aAggregateProps.getConstArray();
-        const Property* pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength();
-
-        // now loop through our own props
-        const Property* pProp = aProps.getConstArray();
-        const Property* pPropEnd = aProps.getConstArray() + aProps.getLength();
-        while ( pProp < pPropEnd )
-        {
-            // look for the current property in the properties of our aggregate
-            const Property* pAggPropPos = ::std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
-            if ( pAggPropPos != pAggPropsEnd )
-            {   // found a duplicate
-                // -> remove from the aggregate property sequence
-                ::comphelper::removeElementAt( aAggregateProps, pAggPropPos - pAggProps );
-                // which means we have to adjust the pointers
-                pAggProps = aAggregateProps.getConstArray(),
-                pAggPropsEnd = aAggregateProps.getConstArray() + aAggregateProps.getLength(),
-
-                // and additionally, remember the id of this property
-                rDuplicateIds.push_back( pProp->Handle );
-            }
-
-            ++pProp;
-        }
-
-        // now, finally, sort the duplicates
-        ::std::sort( rDuplicateIds.begin(), rDuplicateIds.end(), ::std::less< sal_Int32 >() );
-
-        return new OPropertyArrayAggregationHelper(aProps, aAggregateProps);
-    }
-
-    //--------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper& SAL_CALL OCommonGeometryControlModel::getInfoHelper()
-    {
-        return *getArrayHelper( m_nPropertyMapId );
-    }
-
-    //--------------------------------------------------------------------
-    OGeometryControlModel_Base* OCommonGeometryControlModel::createClone_Impl( Reference< XCloneable >& _rxAggregateInstance )
-    {
-        return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
-    }
-
-    //--------------------------------------------------------------------
-    Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException)
-    {
-        static ::cppu::OImplementationId * pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId s_aId;
-                pId = &s_aId;
-            }
-        }
-        return pId->getImplementationId();
-    }
-
-    //--------------------------------------------------------------------
-    struct Int32Equal : public ::std::unary_function< sal_Int32, bool >
-    {
-        sal_Int32   m_nCompare;
-        Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
-
-        bool operator()( sal_Int32 _nLHS )
-        {
-            return _nLHS == m_nCompare ? true  : false;
-        }
-    };
-
-    //--------------------------------------------------------------------
-    void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
-    {
-        OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
-
-        // look if this id is one we recognized as duplicate
-        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ m_nPropertyMapId ];
-
-        IntArrayArray::value_type::const_iterator aPos = ::std::find_if(
-            rDuplicateIds.begin(),
-            rDuplicateIds.end(),
-            Int32Equal( _nHandle )
-        );
-
-        if ( rDuplicateIds.end() != aPos )
-        {
-            // yes, it is such a property
-            ::rtl::OUString sPropName;
-            sal_Int16 nAttributes(0);
-            static_cast< OPropertyArrayAggregationHelper* >( getArrayHelper( m_nPropertyMapId ) )->fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
-
-            if ( m_xAggregateSet.is() && sPropName.getLength() )
-                m_xAggregateSet->setPropertyValue( sPropName, _rValue );
-        }
     }
 
 //........................................................................

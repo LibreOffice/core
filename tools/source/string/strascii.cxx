@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strascii.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 10:46:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 17:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@ static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, xub_StrLen nLen )
     {
         if ( ((unsigned char)*pAsciiStr) > 127 )
             return FALSE;
-        pAsciiStr++;
-        nLen--;
+        ++pAsciiStr,
+        --nLen;
     }
 
     return TRUE;
@@ -89,9 +89,9 @@ static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
     while ( nLen )
     {
         *pDest = (unsigned char)*pSrc;
-        pDest++;
-        pSrc++;
-        nLen--;
+        ++pDest,
+        ++pSrc,
+        --nLen;
     }
 }
 
@@ -103,8 +103,8 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
     while ( ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)((unsigned char)*pStr2))) == 0) &&
             *pStr2 )
     {
-        pStr1++;
-        pStr2++;
+        ++pStr1,
+        ++pStr2;
     }
 
     return nRet;
@@ -120,9 +120,9 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
             ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)((unsigned char)*pStr2))) == 0) &&
             *pStr2 )
     {
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
 
     return nRet;
@@ -137,9 +137,9 @@ static sal_Int32 ImplStringCompareWithoutZeroAscii( const sal_Unicode* pStr1, co
     while ( nCount &&
             ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)((unsigned char)*pStr2))) == 0) )
     {
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
 
     return nRet;
@@ -165,8 +165,8 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
         if ( nRet != 0 )
             break;
 
-        pStr1++;
-        pStr2++;
+        ++pStr1,
+        ++pStr2;
     }
     while ( c2 );
 
@@ -197,9 +197,9 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
         if ( nRet != 0 )
             break;
 
-        pStr1++;
-        pStr2++;
-        nCount--;
+        ++pStr1,
+        ++pStr2,
+        --nCount;
     }
     while ( c2 );
 
@@ -294,7 +294,7 @@ UniString& UniString::AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 #ifdef DBG_UTIL
     if ( DbgIsAssert() )
     {
-        for ( xub_StrLen i = 0; i < nLen; i++ )
+        for ( xub_StrLen i = 0; i < nLen; ++i )
         {
             if ( !pAsciiStr[i] )
             {
@@ -373,7 +373,7 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
 #ifdef DBG_UTIL
     if ( DbgIsAssert() )
     {
-        for ( xub_StrLen i = 0; i < nLen; i++ )
+        for ( xub_StrLen i = 0; i < nLen; ++i )
         {
             if ( !pAsciiStr[i] )
             {
@@ -622,8 +622,8 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
         {
             if ( *pStr == cSearch )
                 return nIndex;
-            pStr++;
-            nIndex++;
+            ++pStr,
+            ++nIndex;
         }
     }
     else
@@ -634,8 +634,8 @@ xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex 
             // Stimmt der String ueberein
             if ( ImplStringCompareWithoutZeroAscii( pStr, pAsciiStr, nStrLen ) == 0 )
                 return nIndex;
-            pStr++;
-            nIndex++;
+            ++pStr,
+            ++nIndex;
         }
     }
 

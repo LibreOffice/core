@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2001-12-21 15:43:24 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:03:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,7 @@ APP6STDLIBS=\
     $(SALLIB)
 
 #APP7TARGET= replace
+APP7TARGET= txtrepl
 APP7OBJS= $(OBJ)$/replace.obj
 APP7STDLIBS=$(STATIC_LIBS)
 APP7DEPN=   $(LB)$/atools.lib 

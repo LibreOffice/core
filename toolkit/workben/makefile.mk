@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2002-01-15 14:04:13 $
+#   last change: $Author: hr $ $Date: 2003-03-27 17:05:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,10 +98,6 @@ APP2DEF=	$(MISC)$/unodialog.def
 
 # --- Targets ------------------------------------------------------
 
-ALL : \
-    ALLTAR \
-    $(BIN)$/applicat.rdb 
-
 .INCLUDE :  target.mk
 
 
@@ -123,10 +119,3 @@ $(MISC)$/unodialog.def: makefile.mk
     echo  STACKSIZE 	32768							   >>$@
 
 .ENDIF
-
-$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/applicat.rdb
-    rm -f $@
-    $(GNUCOPY) $(SOLARBINDIR)$/applicat.rdb $@
-    +cd $(BIN) && \
-        regcomp -register -r applicat.rdb \
-            -c $(DLLPRE)tk$(UPD)$(DLLPOSTFIX)$(DLLPOST) 

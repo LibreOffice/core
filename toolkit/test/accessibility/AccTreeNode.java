@@ -174,29 +174,6 @@ class AccTreeNode
         return null;
     }
 
-    public AccessibleTreeNode getChildNoCreate (int nIndex)
-        throws IndexOutOfBoundsException
-    {
-        if( nIndex >= 0 )
-        {
-            for(int i = 0; i < maHandlers.size(); i++)
-            {
-                // check if this handler has the child, and if not
-                // search with next handler
-                HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
-                if (nIndex < aDescriptor.mnChildCount)
-                    return aDescriptor.maHandler.getChildNoCreate (this, nIndex);
-                else
-                    nIndex -= aDescriptor.mnChildCount;
-            }
-        }
-        else
-            throw new IndexOutOfBoundsException();
-
-        // nothing found?
-        return null;
-    }
-
     public boolean removeChild (int nIndex)
         throws IndexOutOfBoundsException
     {
@@ -253,7 +230,7 @@ class AccTreeNode
 
     public boolean equals (Object aOther)
     {
-        return (this == aOther) || (aOther!=null && aOther.equals(mxContext));
+        return (this == aOther) || aOther.equals(mxContext);
     }
 
 
@@ -320,12 +297,9 @@ class AccTreeNode
             The returned array containes the indices of the updated children
             and can be used to create a TreeModelEvent.
     */
-    public Vector updateChildren (java.lang.Class class1)
-    {
-        return updateChildren (class1, null);
-    }
-
-    public Vector updateChildren (java.lang.Class class1, java.lang.Class class2)
+    public Vector update (java.lang.Class class1)
+    {return update (class1, null); }
+    public Vector update (java.lang.Class class1, java.lang.Class class2)
     {
         Vector aChildIndices = new Vector();
         int nOffset = 0;
