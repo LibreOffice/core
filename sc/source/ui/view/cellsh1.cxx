@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:17:00 $
+ *  last change: $Author: er $ $Date: 2001-07-11 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #include <svtools/sbxcore.hxx>
 #include <svtools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #include "cellsh.hxx"
@@ -1636,7 +1636,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 String aNoteStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_RANGE_NOTETEXT )).GetValue();
-                String aDateStr = ScGlobal::pSysLocale->GetLocaleData().getDate( Date() );
+                String aDateStr = ScGlobal::pLocaleData->getDate( Date() );
                 String aAuthorStr = aUserOpt.GetID();
                 ScPostIt aNote( aNoteStr, aDateStr, aAuthorStr );
 
