@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
+ *  last change: $Author: dbo $ $Date: 2001-11-26 15:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,11 +222,6 @@ inline static sal_Bool coerce_assign(
 }
 
 //--------------------------------------------------------------------------------------------------
-static inline void copyUnoAny( uno_Any * pDest, uno_Any * pSource )
-{
-    ::uno_type_any_construct( pDest, pSource->pData, pSource->pType, 0 );
-}
-//--------------------------------------------------------------------------------------------------
 static inline void constructRuntimeException( uno_Any * pExc, const OUString & rMsg )
 {
     RuntimeException aExc;
@@ -235,6 +230,34 @@ static inline void constructRuntimeException( uno_Any * pExc, const OUString & r
     const Type & rType = ::getCppuType( (const RuntimeException *)0 );
     // no conversion neeeded due to binary compatibility + no convertable type
     ::uno_type_any_construct( pExc, &aExc, rType.getTypeLibType(), 0 );
+}
+//--------------------------------------------------------------------------------------------------
+static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
+{
+    OUString const & name =
+        * reinterpret_cast< OUString const * >( &pSource->pType->pTypeName );
+
+    if (name.equalsAsciiL(
+        RTL_CONSTASCII_STRINGPARAM("com.sun.star.reflection.InvocationTargetException") ))
+    {
+        // unwrap invocation target exception
+        uno_Any * target_exc =
+            & reinterpret_cast< InvocationTargetException * >( pSource->pData )->TargetException;
+        ::uno_type_any_construct( pDest, target_exc->pData, target_exc->pType, 0 );
+    }
+    else // all other exceptions are wrapped to RuntimeException
+    {
+        if (typelib_TypeClass_EXCEPTION == pSource->pType->eTypeClass)
+        {
+            constructRuntimeException(
+                pDest, ((Exception const *)pSource->pData)->Message );
+        }
+        else
+        {
+            constructRuntimeException(
+                pDest, OUString( RTL_CONSTASCII_USTRINGPARAM("no exception has been thrown via invocation?!") ) );
+        }
+    }
 }
 
 //__________________________________________________________________________________________________
@@ -266,7 +289,7 @@ void AdapterImpl::getValue(
 
     if (pInvokExc) // getValue() call exception
     {
-        copyUnoAny( *ppException, pInvokExc );
+        handleInvokExc( *ppException, pInvokExc );
         uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // invocation call succeeded
@@ -322,7 +345,7 @@ void AdapterImpl::setValue(
 
     if (pInvokExc) // setValue() call exception
     {
-        copyUnoAny( *ppException, pInvokExc );
+        handleInvokExc( *ppException, pInvokExc );
         uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // invocation call succeeded
@@ -398,18 +421,7 @@ void AdapterImpl::invoke(
 
     if (pInvokExc)
     {
-        OUString aInvokExcName( pInvokExc->pType->pTypeName );
-        if (aInvokExcName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.reflection.InvocationTargetException") ))
-        {
-            // unwrap invocation target exception
-            copyUnoAny( *ppException,
-                        &((InvocationTargetException *)pInvokExc->pData)->TargetException );
-        }
-        else
-        {
-            // defer original exception to caller
-            copyUnoAny( *ppException, pInvokExc );
-        }
+        handleInvokExc( *ppException, pInvokExc );
         uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // no invocation exception
