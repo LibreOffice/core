@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:56:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2220,7 +2220,7 @@ void ValueSet::SelectItem( USHORT nItemId )
 
     if ( (mnSelItemId != nItemId) || mbNoSelection )
     {
-        USHORT nOldItem = mnSelItemId;
+        USHORT nOldItem = mnSelItemId ? mnSelItemId : 1;
         mnSelItemId = nItemId;
         mbNoSelection = FALSE;
 
