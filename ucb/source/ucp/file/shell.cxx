@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-20 11:06:32 $
+ *  last change: $Author: hro $ $Date: 2000-12-20 17:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2325,14 +2325,15 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
     }
     else if( TypeToCopy == +1 ) // Folder
     {
+        osl::Directory aDir( srcUnqPath );
+        aDir.open();
+
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;
         if( err == osl::FileBase::E_None )
         {
             sal_Int32 n_Mask = FileStatusMask_FilePath | FileStatusMask_FileName | FileStatusMask_Type;
 
-            osl::Directory aDir( srcUnqPath );
-            aDir.open();
             osl::DirectoryItem aDirItem;
 
             while( ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
@@ -2358,13 +2359,14 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                     newDstUnqPath += rtl::OUString::createFromAscii( "/" );
                 newDstUnqPath += tit;
 
-                copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy );
+                if ( newSrcUnqPath != dstUnqPath )
+                    copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy );
             }
 
-            aDir.close();
             if( next != osl::FileBase::E_NOENT )
                 err = osl::FileBase::E_INVAL;
         }
+        aDir.close();
     }
 
     return err;
