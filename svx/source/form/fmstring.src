@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:31:10 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ String RID_ERR_FIELDREQUIRED
     Text[ chinese_simplified ] = "±ΨΠλΞªΥβΈφΧΦ¶Ξ '#' ΚδΘλÒ»ΈφΚύΦµ£΅";
     Text[ russian ] = "Δλÿ οξλÿ '#' ςπεασεςρÿ ββξδ δΰννϋυ.\nΟξζΰλσιρςΰ, ββεδθςε ηνΰχενθε!";
     Text[ polish ] = "Dla pola '#' wymagany jest wpis.\nProszκ wstawiζ wartoζ!";
-    Text[ japanese ] = "Μ¨°ΩΔή'#'‚Μ‚½‚ί‚Ι“ό—Ν‚ª•K—v‚Ε‚·B\n‚»‚±‚Φ”’l‚π“ό—Ν‚µ‚Δ‰Ί‚³‚Ά!";
+    Text[ japanese ] = "'#' Μ¨°ΩΔή‚Ι‚Ν“ό—Ν‚ª•K—v‚Ε‚·B\n”’l‚π“ό—Ν‚µ‚ά‚·B";
     Text[ chinese_traditional ] = "¥²¶·¬°³o­ΣΔζ¦μ '#' Ώι¤J¤@­ΣΌΖ­Θ΅T";
     Text[ greek ] = "Απαιτείται εισαγωγή στο πεδίο '#'.\nΠαρακαλώ εισάγετε μια τιμή!.";
     Text[ korean ] = "ΗΚµε'#'Ώ΅ ΐΤ·Βΐ» ΗΨΎί ΗΥ΄Ο΄Ω.\nΎξ¶² °ªΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ!";
@@ -2090,7 +2090,7 @@ String RID_ERR_NO_ELEMENT
     Text[ chinese_simplified ] = "ΗλΔϊΡ΅ΤρΑΠµ¥ΔΪÒ»ΈφΜυΔΏ»ςΥίΔϊΚδΘλÒ»Έφ·ϋΊΕΑΠ±νΔΪΜυΔΏµΔΧΦ·ϋ΅£";
     Text[ russian ] = "Βϋαεπθςε ύλεμενς ροθρκΰ θλθ ββεδθςε ςεκρς, κξςξπϋι ρξβοΰδΰες ρ ξδνθμ θη οεπεχθρλεννϋυ ύλεμενςξβ.";
     Text[ polish ] = "Wybierz element z listy lub wstaw tekst, ktσry by³by zgodny z elementami listy.";
-    Text[ japanese ] = "Ψ½Δ‚Μ—v‘f‚π‘I‘π‚·‚ι‚© ‚ά‚½‚ΝΨ½Δ‚Μ’†‚Μ—v‘fκ‚Β‚Ζκ’v‚·‚ιΓ·½Δ‚π“ό—Ν‚µ‚Δ‰Ί‚³‚ΆB";
+    Text[ japanese ] = "Ψ½Δ‚Μ—v‘f‚π‘I‘π‚·‚ι‚© ‚ά‚½‚ΝΨ½Δ‚Μ’†‚Μ—v‘fκ‚Β‚Ζκ’v‚·‚ιΓ·½Δ‚π“ό—Ν‚µ‚ά‚·B";
     Text[ chinese_traditional ] = "½Π±zΏοΎά²M³ζ¤Ί¤@­Σ¶µ¥Ψ©ΞªΜ±zΏι¤J¤@­Σ²ΕΈΉ²M³ζ¤Ί¶µ¥ΨªΊ¦r²Ε΅C";
     Text[ greek ] = "Επιλέξτε ένα στοιχείο της λίστας ή εισάγετε ένα κείμενο το οποίο να ταυτίζεται με ένα από τα στοιχεία της λίστας.";
     Text[ korean ] = "Έρ·ΟΏ΅Ό­ ΗΡ ΗΧΈρΐ» Ό±ΕΓΗΟ°Ε³ª Έρ·ΟΐΗ ΗΧΈρµι °΅Ώξµ¥ ΗΡ °΅ΑφΏΝ ΐΟΔ΅ΗΟ΄Β ΕΨ½ΊΖ®Έ¦ ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
@@ -2104,7 +2104,7 @@ String RID_STR_READONLY
     Text = "Nur lesen" ;
     Text [ ENGLISH ] = "Read only" ;
     Text [ portuguese ] = "Sσ leitura" ;
-    Text [ english_us ] = "Read only" ;
+    Text [ english_us ] = "Read-only" ;
     Text [ portuguese_brazilian ] = "Nur lesen" ;
     Text [ swedish ] = "Endast lδsa" ;
     Text [ danish ] = "Skrivebeskyttet" ;
@@ -4739,7 +4739,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text[ polish ] = "Przy otrzymaniu ogniska";
     Text[ japanese ] = "Μ«°¶½‚π“Ύ‚½Ϋ";
     Text[ chinese_traditional ] = "¦bΊΛ·Η®Ι";
-    Text[ greek ] = "Σε περίπτωση επιλογής";
+    Text[ greek ] = "Σε περίπτωση εστίασης";
     Text[ korean ] = "ΓΚΑ΅ΐ» ΈΒΓθΐ» ¶§";
     Text[ arabic ] = "ΗαΝΥζα Ϊαμ ΗαΚΡίνÒ";
     Text[ turkish ] = "Odaklandύ";
