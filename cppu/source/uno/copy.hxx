@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:23 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,21 +263,17 @@ inline void _copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = *(typelib_TypeDescriptionReference **)pSource;
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_ANY:
-        OSL_ENSURE( sal_False, "### unexpected nested any!" );
+        OSL_ENSURE( 0, "### unexpected nested any!" );
         break;
-#endif
     case typelib_TypeClass_ENUM:
         pDestAny->pData = &pDestAny->pReserved;
         // enum is forced to 32bit long
         *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
@@ -488,11 +484,9 @@ inline void _copyConstructAny(
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
-#ifdef CPPU_ASSERTIONS
             case typelib_TypeClass_TYPEDEF:
-                OSL_ENSURE( sal_False, "### unexpected typedef!" );
+                OSL_ENSURE( 0, "### unexpected typedef!" );
                 break;
-#endif
             case typelib_TypeClass_STRUCT:
             case typelib_TypeClass_EXCEPTION:
                 if (pTypeDescr)
@@ -788,11 +782,9 @@ inline void _copyConstructData(
     case typelib_TypeClass_ENUM:
         *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
