@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:55:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,12 @@
 #include "tablemgr.hxx"
 #include "wrtsh.hxx"
 #include "view.hxx"
-#include "tautofmt.hxx"
+//CHINA001 #include "tautofmt.hxx"
 #include "tblafmt.hxx"
 
 #include "table.hrc"
 #include "convert.hrc"
-
+#include "swabstdlg.hxx" //CHINA001
 //keep the state of the buttons on runtime
 static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used
 static sal_Bool bIsKeepColumn = sal_True;
@@ -254,9 +254,15 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
-    SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    if( RET_OK == aDlg.Execute())
-        aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell,ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt);
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if( RET_OK == pDlg->Execute()) //CHINA001  if( RET_OK == aDlg.Execute())
+        pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001  aDlg.FillAutoFmtOfIndex( pTAutoFmt );
+    delete pDlg; //CHINA001
     return 0;
 }
 
