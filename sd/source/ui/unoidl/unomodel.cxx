@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-04 09:37:20 $
+ *  last change: $Author: cl $ $Date: 2002-03-19 15:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,10 +441,23 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         if( hasEventListeners() )
         {
-            document::EventObject aEvent;
 
-            if( SvxUnoDrawMSFactory::createEvent( pDoc, pSdrHint, aEvent ) )
-                notifyEvent( aEvent );
+            bool bBackgroundShape = false;
+
+            // the background shape itself has no api representation, so filter all notifies for it
+            const SdrObject* pSdrObj = pSdrHint->GetObject();
+            if( pSdrObj && (pSdrObj->GetObjInventor() == SdrInventor) && (pSdrObj->GetObjIdentifier() == OBJ_RECT) )
+            {
+                SdPage* pPage = (SdPage*)pSdrObj->GetPage();
+                bBackgroundShape = pPage && (pPage->GetPresObjKind(const_cast<SdrObject*>(pSdrObj)) == PRESOBJ_BACKGROUND);
+            }
+
+            if( !bBackgroundShape )
+            {
+                document::EventObject aEvent;
+                if( SvxUnoDrawMSFactory::createEvent( pDoc, pSdrHint, aEvent ) )
+                    notifyEvent( aEvent );
+            }
         }
 
         if( pSdrHint->GetKind() == HINT_MODELCLEARED )
