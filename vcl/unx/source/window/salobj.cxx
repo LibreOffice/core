@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,19 @@
 #include <saldata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <salinst.h>
 #endif
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <salframe.h>
 #endif
-#ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#ifndef _SV_SALOBJ_H
+#include <salobj.h>
 #endif
 
-SalObjectList SalObjectData::aAllObjects;
+SalObjectList X11SalObject::aAllObjects;
 
 // =======================================================================
 
@@ -96,11 +96,11 @@ long ImplSalObjCallbackDummy( void*, SalObject*, USHORT, const void* )
 // =======================================================================
 // SalInstance memberfkts to create and destroy a SalObject
 
-SalObject* SalInstance::CreateObject( SalFrame* pParent )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
 {
     int error_base, event_base;
-    SalObject*       pObject  = new SalObject;
-    SystemChildData* pObjData = const_cast<SystemChildData*>(pObject->GetSystemData());
+    X11SalObject*       pObject  = new X11SalObject();
+    SystemChildData*    pObjData = const_cast<SystemChildData*>(pObject->GetSystemData());
 
     if ( ! XShapeQueryExtension( (Display*)pObjData->pDisplay,
                                   &event_base, &error_base ) )
@@ -109,31 +109,32 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
         return NULL;
     }
 
-    SalDisplay* pSalDisp        = pParent->maFrameData.GetDisplay();
-    Display* pDisp              = pParent->maFrameData.GetXDisplay();
-    XLIB_Window aObjectParent   = pParent->maFrameData.GetWindow();
+    SalDisplay* pSalDisp        = GetSalData()->GetDefDisp();
+    const SystemEnvData* pEnv   = pParent->GetSystemData();
+    Display* pDisp              = pSalDisp->GetDisplay();
+    XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
 
-    pObject->maObjectData.maPrimary =
+    pObject->maPrimary =
         XCreateSimpleWindow( pDisp,
                              aObjectParent,
                              0, 0,
                              100, 100, 0,
-                             pParent->maFrameData.GetDisplay()->GetColormap().GetBlackPixel(),
-                             pParent->maFrameData.GetDisplay()->GetColormap().GetWhitePixel()
+                             pSalDisp->GetColormap().GetBlackPixel(),
+                             pSalDisp->GetColormap().GetWhitePixel()
                              );
-    pObject->maObjectData.maSecondary =
+    pObject->maSecondary =
         XCreateSimpleWindow( pDisp,
-                             pObject->maObjectData.maPrimary,
+                             pObject->maPrimary,
                              0, 0,
                              100, 100, 0,
-                             pParent->maFrameData.GetDisplay()->GetColormap().GetBlackPixel(),
-                             pParent->maFrameData.GetDisplay()->GetColormap().GetWhitePixel()
+                             pSalDisp->GetColormap().GetBlackPixel(),
+                             pSalDisp->GetColormap().GetWhitePixel()
                              );
-    XMapWindow( pDisp, pObject->maObjectData.maPrimary );
-    XMapWindow( pDisp, pObject->maObjectData.maSecondary );
+    XMapWindow( pDisp, pObject->maPrimary );
+    XMapWindow( pDisp, pObject->maSecondary );
 
     pObjData->pDisplay      = pDisp;
-    pObjData->aWindow       = pObject->maObjectData.maSecondary;
+    pObjData->aWindow       = pObject->maSecondary;
     pObjData->pWidget       = NULL;
     pObjData->pVisual       = pSalDisp->GetVisual()->GetVisual();
     pObjData->nDepth        = pSalDisp->GetVisual()->GetDepth();
@@ -144,7 +145,7 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
 }
 
 
-void SalInstance::DestroyObject( SalObject* pObject )
+void X11SalInstance::DestroyObject( SalObject* pObject )
 {
     delete pObject;
 }
@@ -204,43 +205,43 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 // SalObject Implementation
 
 
-SalObject::SalObject()
+X11SalObject::X11SalObject()
 {
-    maObjectData.maSystemChildData.nSize        = sizeof( SystemChildData );
-    maObjectData.maSystemChildData.pDisplay     = GetSalData()->GetDefDisp()->GetDisplay();
-    maObjectData.maSystemChildData.aWindow      = None;
-    maObjectData.maSystemChildData.pSalFrame    = 0;
-    maObjectData.maSystemChildData.pWidget      = 0;
-    maObjectData.maSystemChildData.pVisual      = 0;
-    maObjectData.maSystemChildData.nDepth       = 0;
-    maObjectData.maSystemChildData.aColormap    = 0;
-    maObjectData.maSystemChildData.pAppContext  = NULL;
-    maObjectData.maSystemChildData.aShellWindow = 0;
-    maObjectData.maSystemChildData.pShellWidget = NULL;
+    maSystemChildData.nSize     = sizeof( SystemChildData );
+    maSystemChildData.pDisplay  = GetSalData()->GetDefDisp()->GetDisplay();
+    maSystemChildData.aWindow       = None;
+    maSystemChildData.pSalFrame = 0;
+    maSystemChildData.pWidget       = 0;
+    maSystemChildData.pVisual       = 0;
+    maSystemChildData.nDepth        = 0;
+    maSystemChildData.aColormap = 0;
+    maSystemChildData.pAppContext   = NULL;
+    maSystemChildData.aShellWindow  = 0;
+    maSystemChildData.pShellWidget  = NULL;
 
-    maObjectData.mpInst                         = NULL;
-    maObjectData.mpProc                         = ImplSalObjCallbackDummy;
-    maObjectData.maPrimary                      = NULL;
-    maObjectData.maSecondary                    = NULL;
+    mpInst                          = NULL;
+    mpProc                          = ImplSalObjCallbackDummy;
+    maPrimary                       = NULL;
+    maSecondary                 = NULL;
 
-    SalObjectData::aAllObjects.Insert( this, LIST_APPEND );
+    X11SalObject::aAllObjects.Insert( this, LIST_APPEND );
 }
 
 
-SalObject::~SalObject()
+X11SalObject::~X11SalObject()
 {
-    SalObjectData::aAllObjects.Remove( this );
-    if ( maObjectData.maSecondary )
-        XDestroyWindow( (Display*)maObjectData.maSystemChildData.pDisplay, maObjectData.maSecondary );
-    if ( maObjectData.maPrimary )
-        XDestroyWindow( (Display*)maObjectData.maSystemChildData.pDisplay, maObjectData.maPrimary );
+    X11SalObject::aAllObjects.Remove( this );
+    if ( maSecondary )
+        XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
+    if ( maPrimary )
+        XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
 }
 
 
 void
-SalObject::ResetClipRegion()
+X11SalObject::ResetClipRegion()
 {
-    maObjectData.maClipRegion.ResetClipRegion();
+    maClipRegion.ResetClipRegion();
 
     const int   dest_kind   = ShapeBounding;
     const int   op          = ShapeSet;
@@ -249,9 +250,9 @@ SalObject::ResetClipRegion()
     XWindowAttributes win_attrib;
     XRectangle        win_size;
 
-    XLIB_Window aShapeWindow = maObjectData.maPrimary;
+    XLIB_Window aShapeWindow = maPrimary;
 
-    XGetWindowAttributes ( (Display*)maObjectData.maSystemChildData.pDisplay,
+    XGetWindowAttributes ( (Display*)maSystemChildData.pDisplay,
                            aShapeWindow,
                            &win_attrib );
 
@@ -260,7 +261,7 @@ SalObject::ResetClipRegion()
     win_size.width  = win_attrib.width;
     win_size.height = win_attrib.height;
 
-    XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
+    XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
                               0, 0,             // x_off, y_off
@@ -271,25 +272,25 @@ SalObject::ResetClipRegion()
 
 
 void
-SalObject::BeginSetClipRegion( ULONG nRectCount )
+X11SalObject::BeginSetClipRegion( ULONG nRectCount )
 {
-    maObjectData.maClipRegion.BeginSetClipRegion ( nRectCount );
+    maClipRegion.BeginSetClipRegion ( nRectCount );
 }
 
 
 void
-SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+X11SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
-    maObjectData.maClipRegion.UnionClipRegion ( nX, nY, nWidth, nHeight );
+    maClipRegion.UnionClipRegion ( nX, nY, nWidth, nHeight );
 }
 
 
 void
-SalObject::EndSetClipRegion()
+X11SalObject::EndSetClipRegion()
 {
-    XRectangle *pRectangles = maObjectData.maClipRegion.EndSetClipRegion ();
-    const int   nType       = maObjectData.maClipRegion.GetClipRegionType();
-    const int   nRectangles = maObjectData.maClipRegion.GetRectangleCount();
+    XRectangle *pRectangles = maClipRegion.EndSetClipRegion ();
+    const int   nType       = maClipRegion.GetClipRegionType();
+    const int   nRectangles = maClipRegion.GetRectangleCount();
 
     const int   dest_kind   = ShapeBounding;
     const int   ordering    = YSorted;
@@ -310,9 +311,9 @@ SalObject::EndSetClipRegion()
             op = ShapeUnion;
     }
 
-    XLIB_Window aShapeWindow = maObjectData.maPrimary;
+    XLIB_Window aShapeWindow = maPrimary;
 
-    XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
+    XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
                               0, 0, // x_off, y_off
@@ -323,127 +324,104 @@ SalObject::EndSetClipRegion()
 
 
 USHORT
-SalObject::GetClipRegionType()
+X11SalObject::GetClipRegionType()
 {
-    return maObjectData.maClipRegion.GetClipRegionType();
+    return maClipRegion.GetClipRegionType();
 }
 
 // -----------------------------------------------------------------------
 
 void
-SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
-    if ( maObjectData.maPrimary && maObjectData.maSecondary && nWidth && nHeight )
+    if ( maPrimary && maSecondary && nWidth && nHeight )
     {
-        XMoveResizeWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
-                           maObjectData.maPrimary,
+        XMoveResizeWindow( (Display*)maSystemChildData.pDisplay,
+                           maPrimary,
                             nX, nY, nWidth, nHeight );
-        XMoveResizeWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
-                           maObjectData.maSecondary,
+        XMoveResizeWindow( (Display*)maSystemChildData.pDisplay,
+                           maSecondary,
                             0, 0, nWidth, nHeight );
     }
 }
 
 
 void
-SalObject::Show( BOOL bVisible )
+X11SalObject::Show( BOOL bVisible )
 {
-    if  ( ! maObjectData.maSystemChildData.aWindow )
+    if  ( ! maSystemChildData.aWindow )
         return;
 
     if ( bVisible )
-        XMapWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
-                    maObjectData.maPrimary );
+        XMapWindow( (Display*)maSystemChildData.pDisplay,
+                    maPrimary );
     else
-        XUnmapWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
-                    maObjectData.maPrimary );
+        XUnmapWindow( (Display*)maSystemChildData.pDisplay,
+                    maPrimary );
 
-    maObjectData.mbVisible = bVisible;
+    mbVisible = bVisible;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::Enable( BOOL bEnable )
+void X11SalObject::Enable( BOOL bEnable )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::GrabFocus()
+void X11SalObject::GrabFocus()
 {
-    if( maObjectData.mbVisible )
-         XSetInputFocus( (Display*)maObjectData.maSystemChildData.pDisplay,
-                         maObjectData.maSystemChildData.aWindow,
+    if( mbVisible )
+         XSetInputFocus( (Display*)maSystemChildData.pDisplay,
+                         maSystemChildData.aWindow,
                          RevertToNone,
                          CurrentTime );
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground()
+void X11SalObject::SetBackground()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground( SalColor nSalColor )
+void X11SalObject::SetBackground( SalColor nSalColor )
 {
 }
 
 // -----------------------------------------------------------------------
 
-const SystemChildData* SalObject::GetSystemData() const
+const SystemChildData* X11SalObject::GetSystemData() const
 {
-    return &maObjectData.maSystemChildData;
+    return &maSystemChildData;
 }
 
-// -----------------------------------------------------------------------
-
-void SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
-{
-      maObjectData.mpInst = pInst;
-      if ( pProc )
-          maObjectData.mpProc = pProc;
-      else
-          maObjectData.mpProc = ImplSalObjCallbackDummy;
-}
-
-long SalObjectData::Dispatch( XEvent* pEvent )
+long X11SalObject::Dispatch( XEvent* pEvent )
 {
     for( int n= 0; n < aAllObjects.Count(); n++ )
     {
-        SalObject* pObject = aAllObjects.GetObject( n );
-        if( pEvent->xany.window == pObject->maObjectData.maPrimary ||
-            pEvent->xany.window == pObject->maObjectData.maSecondary )
+        X11SalObject* pObject = aAllObjects.GetObject( n );
+        if( pEvent->xany.window == pObject->maPrimary ||
+            pEvent->xany.window == pObject->maSecondary )
         {
             switch( pEvent->type )
             {
                 case UnmapNotify:
-                    pObject->maObjectData.mbVisible = FALSE;
+                    pObject->mbVisible = FALSE;
                     return 1;
                 case MapNotify:
-                    pObject->maObjectData.mbVisible = TRUE;
+                    pObject->mbVisible = TRUE;
                     return 1;
                 case ButtonPress:
-                    pObject->maObjectData.mpProc(
-                        pObject->maObjectData.mpInst,
-                        pObject,
-                        SALOBJ_EVENT_TOTOP,
-                        NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
                     return 1;
                 case FocusIn:
-                    pObject->maObjectData.mpProc(
-                        pObject->maObjectData.mpInst,
-                        pObject,
-                        SALOBJ_EVENT_GETFOCUS,
-                        NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, NULL );
                     return 1;
                 case FocusOut:
-                    pObject->maObjectData.mpProc(
-                        pObject->maObjectData.mpInst,
-                        pObject,
-                        SALOBJ_EVENT_LOSEFOCUS,
-                        NULL );
+                    pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, NULL );
                     return 1;
                 default: break;
             }
