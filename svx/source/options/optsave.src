@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:25:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "Load user-specific settings with the document";
         Text[ portuguese ] = "~Carregar definiηυes personalizadas com o documento";
         Text[ russian ] = "Ηΰγπσζΰςό νΰρςπξικθ οξλόηξβΰςελÿ βμερςε ρ δξκσμενςξμ";
-        Text[ greek ] = "Load user-defined settings with the document";
+        Text[ greek ] = "Φόρτωση των ρυθμίσεων του χρήστη μαζί με το έγγραφο";
         Text[ dutch ] = "Door gebruiker gedefinieerde instellingen samen met het document laden";
         Text[ french ] = "Chargement des paramθtres utilisateur avec le document";
         Text[ spanish ] = "Cargar la configuraciσn de usuario al cargar el documento";
@@ -224,7 +224,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ japanese ] = "δΏε­ζ™‚γ«γƒ—γƒ­γƒ‘γƒ†γ‚£γ®ηΆΊθª(~E)";
         Text[ chinese_traditional ] = "ε…η·¨θΌ―ε±¬ζ€§(~E)";
         Text[ arabic ] = "ΚΝΡνΡ ΞΥΗΖΥ ΗαγΣΚδΟ ήΘα ΗαΝέΩ";
-        Text[ greek ] = "Επεξεργ. ~ιδιοτήτων εγγράφου πριν την αποθήκευση";
+        Text[ greek ] = "Επεξεργασία ~ιδιοτήτων εγγράφου πριν την αποθήκευση";
         Text[ korean ] = "λ¬Έμ„ λ“±λ΅ μ •λ³΄λ¥Ό μ €μ¥ μ „μ— νΈμ§‘(~E)";
         Text[ turkish ] = "Φnce φzellikleri dόzenle";
         Text[ catalan ] = "~Edita les propietats del document abans de desar";
@@ -393,7 +393,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
         Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
         Text[ russian ] = "Ξοςθμθηΰφθÿ πΰημεπΰ δλÿ τξπμΰςΰ XML (νεκΰχερςβεννΰÿ οεχΰςό)";
-        Text[ greek ] = "Size optimization for XML files (no pretty printing)";
+        Text[ greek ] = "Βελτιστοποίηση μεγέθους για μορφή XML (χωρίς pretty printing)";
         Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
         Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
         Text[ spanish ] = "Optimar el tamaρo del formato XML (sin 'pretty printing')";
@@ -473,7 +473,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ arabic ] = "δΩΗγ Ηαγαέ";
         Text[ greek ] = "στο σύστημα αρχείων";
         Text[ korean ] = "νμΌ μ‹μ¤ν…(~F)";
-        Text[ language_user1 ] = "LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
+        Text[ language_user1 ] = "; LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
         Text[ turkish ] = "Dosya sistemi";
         Text[ finnish ] = "~Tiedostojδrjestelmδ";
         Text[ catalan ] = "Sistema de ~fitxers";
@@ -556,7 +556,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "D~ocument type";
         Text[ portuguese ] = "~Tipo de documento";
         Text[ russian ] = "Òθο δξκσμενςΰ";
-        Text[ greek ] = "Τύπος εγγράφου";
+        Text[ greek ] = "~Τύπος εγγράφου";
         Text[ dutch ] = "~Documenttype";
         Text[ french ] = "Type de document";
         Text[ spanish ] = "Tipo de documento";
@@ -588,7 +588,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "Always sa~ve as";
         Text[ portuguese ] = "G~uardar sempre como";
         Text[ russian ] = "Βρεγδΰ ρξυπΰνÿςό κΰκ";
-        Text[ greek ] = "Πάντα αποθήκευση ως";
+        Text[ greek ] = "Πάντα α~ποθήκευση ως";
         Text[ dutch ] = "Altijd op~slaan als";
         Text[ french ] = "Enregistrer systιmatiquement comme";
         Text[ spanish ] = "Guardar siempre como";
@@ -636,12 +636,12 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ language_user1 ] =
     {
-            < "Textdokument" ;     APP_WRITER    ; > ;
-        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
-        < "Tabellendokument" ; APP_CALC      ; > ;
-        < "Prδsentation" ;     APP_IMPRESS   ; > ;
-        < "Zeichnung" ;        APP_DRAW      ; > ;
-        < "Formel" ;           APP_MATH      ; > ;
+            < "; Textdokument" ;     APP_WRITER    ; > ;
+        < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "; Tabellendokument" ; APP_CALC      ; > ;
+        < "; Prδsentation" ;     APP_IMPRESS   ; > ;
+        < "; Zeichnung" ;        APP_DRAW      ; > ;
+        < "; Formel" ;           APP_MATH      ; > ;
         };
     StringList [ english_us ] =
     {
@@ -674,7 +674,7 @@ TabPage RID_SFXPAGE_SAVE
     {
             < "Έγγραφο κειμένου" ;     APP_WRITER    ; > ;
         < "Έγγραφο HTML" ;    APP_WRITER_WEB;  > ;
-        < "Έγγραφο πίνακα" ; APP_CALC      ; > ;
+        < "Υπολογιστικό φύλλο " ; APP_CALC      ; > ;
         < "Παρουσίαση" ;     APP_IMPRESS   ; > ;
         < "Σχέδιο" ;        APP_DRAW      ; > ;
         < "Τύπος" ;           APP_MATH      ; > ;
@@ -906,7 +906,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ english_us ] = "Using \"%1\" as default file format may cause information loss.\n";
         Text[ portuguese ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ russian ] = "Θροξλόηξβΰνθε \"%1\" β κΰχερςβε τξπμΰςΰ τΰιλΰ μξζες οπθβερςθ κ οξςεπε θντξπμΰφθθ.\n";
-        Text[ greek ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ greek ] = "Η χρήση του \"%1\" ως προεπιλεγμένη μορφή αρχείου μπορεί να προκαλέσει απώλεια πληροφορίας.\n";
         Text[ dutch ] = "Het gebruik van \"%1\" als standaardbestandsindeling kan leiden tot verlies van gegevens.\n";
         Text[ french ] = "L'application de \"%1\" comme format de fichier par dιfaut peut entraξner une perte d'information.\n";
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pιrdida de informaciσn.\n";
@@ -949,6 +949,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
