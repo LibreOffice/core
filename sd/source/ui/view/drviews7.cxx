@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,16 @@
 #include "glob.hrc"
 #include "res_bmp.hrc"
 
+#ifndef _SD_PRESVISH_HXX
+#include "presvish.hxx"
+#endif
+
 #include "misc.hxx"
 #include "sdoutl.hxx"
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "sdclient.hxx"
-#include "drviewsh.hxx"
 #include "docshell.hxx"
 #include "zoomlist.hxx"
 #include "preview.hxx"
@@ -541,14 +544,20 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if ( !pClipEvtLstnr )
         {
-            // create listener
-            pClipEvtLstnr = new TransferableClipboardListener( LINK( this, SdDrawViewShell, ClipboardChanged ) );
-            pClipEvtLstnr->acquire();
-            pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
+            // SSA: #108717# avoid clipboard initialization for read-only presentation views (workaround for NT4.0 clipboard prob...)
+            if( !ISA( SdPresViewShell ) || ( pFuSlideShow && pFuSlideShow->IsLivePresentation())  )
+            {
+                // create listener
+                pClipEvtLstnr = new TransferableClipboardListener( LINK( this, SdDrawViewShell, ClipboardChanged ) );
+                pClipEvtLstnr->acquire();
+                pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
 
-            // get initial state
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
-            bPastePossible = ( aDataHelper.GetFormatCount() != 0 );
+                // get initial state
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
+                bPastePossible = ( aDataHelper.GetFormatCount() != 0 );
+            }
+            else
+                bPastePossible = FALSE;
         }
 
         if( !bPastePossible )
