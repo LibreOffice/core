@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:06:48 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -351,8 +351,8 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::dbtools;
 using namespace ::svx;
 
-using ::drafts::com::sun::star::frame::XLayoutManager;      // obsolete of interface is moved outside drafts
-using ::drafts::com::sun::star::ui::XUIElement;             // dito
+using ::com::sun::star::frame::XLayoutManager;      // obsolete of interface is moved outside drafts
+using ::com::sun::star::ui::XUIElement;             // dito
 
 // .........................................................................
 namespace dbaui
@@ -3731,7 +3731,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
     }
     else if ( !m_bPreview )
     {
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
 
         if ( xLayoutManager.is() )
         {
