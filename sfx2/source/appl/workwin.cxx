@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 17:07:26 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 11:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3039,8 +3039,7 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     if ( aStatBar.pStatusBar )
     {
         StatusBar* pBar = aStatBar.pStatusBar->GetStatusBar();
-        if ( pBar )
-            pBar->SetSizePixel( pBar->CalcWindowSizePixel() );
+        pBar->DataChanged( rDCEvt );
     }
 
     USHORT n;
