@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
     if ( aName.Len() && pModel )
     {
-        USHORT nDummyTab;
+        SCTAB nDummyTab;
         if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )
         {
             // existing object found -> name invalid
