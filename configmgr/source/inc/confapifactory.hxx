@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:42:35 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace configmgr
     const ServiceInfo* getDataImportServiceInfo();
 
     // service infos
+    const ServiceInfo* getConfigurationProviderServiceInfo();
     const ServiceInfo* getConfigurationRegistryServiceInfo();
 
 } //  namespace configmgr

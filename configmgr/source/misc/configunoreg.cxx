@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:42:36 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
-        RegisterService(&configmgr::ConfigurationProvider2::staticServiceInfo, xKey);
+        RegisterService(configmgr::getConfigurationProviderServiceInfo(), xKey);
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
