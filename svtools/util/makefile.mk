@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.32 $
+#*  $Revision: 1.33 $
 #*
-#*  last change: $Author: sab $ $Date: 2002-01-18 09:50:32 $
+#*  last change: $Author: hjs $ $Date: 2002-02-05 17:39:59 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -124,8 +124,7 @@ LIB7FILES=	\
         $(SLB)$/svcontnr.lib	\
         $(SLB)$/syslocale.lib   \
         $(SLB)$/svhtml2.lib     \
-        $(SLB)$/filepicker.lib	\
-        $(SLB)$/accessibility.lib
+        $(SLB)$/filepicker.lib
 
 
 .IF "$(GUI)" == "OS2"
