@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:20:00 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
 #include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationListener.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -153,11 +159,12 @@ namespace framework
 class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
-class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
-                       public com::sun::star::frame::XFrameActionListener   ,
-                       public com::sun::star::lang::XComponent              ,
-                       public com::sun::star::awt::XSystemDependentMenuPeer ,
-                       public ThreadHelpBase                                ,
+class MenuBarManager : public com::sun::star::frame::XStatusListener                ,
+                       public com::sun::star::frame::XFrameActionListener           ,
+                       public drafts::com::sun::star::ui::XUIConfigurationListener  ,
+                       public com::sun::star::lang::XComponent                      ,
+                       public com::sun::star::awt::XSystemDependentMenuPeer         ,
+                       public ThreadHelpBase                                        ,
                        public ::cppu::OWeakObject
 {
     protected:
@@ -218,6 +225,11 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
+        // XUIConfigurationListener
+        virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
         // XSystemDependentMenuPeer
         virtual ::com::sun::star::uno::Any SAL_CALL getMenuHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -236,6 +248,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
         DECL_LINK( Deactivate, Menu * );
 
         void RemoveListener();
+        void RequestImages();
+        void RetrieveImageManagers();
 
     private:
         String RetrieveLabelFromCommand( const String& aCmdURL );
@@ -279,6 +293,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
                                                                                                        m_bIsBookmarkMenu : 1,
                                                                                                        m_bWasHiContrast : 1,
                                                                                                        m_bShowMenuImages : 1;
+        sal_Bool                                                                                       m_bModuleIdentified : 1,
+                                                                                                       m_bRetrieveImages : 1;
         ::rtl::OUString                                                                                m_aMenuItemCommand;
         ::rtl::OUString                                                                                m_aModuleIdentifier;
         Menu*                                                                                          m_pVCLMenu;
@@ -287,9 +303,10 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;
         ::std::vector< MenuItemHandler* >                                                              m_aMenuItemHandlerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
-
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xDocImageManager;
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
         // #110897#
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&        mxServiceFactory;
 };
 
 } // namespace
