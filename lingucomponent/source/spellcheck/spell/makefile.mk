@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: khendricks $ $Date: 2001-09-08 15:55:44 $
+#   last change: $Author: khendricks $ $Date: 2001-09-11 11:30:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,14 @@ TARGET	= spell
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
+.IF "$(MYSPELLLIB)"==""
+.IF "$(GUI)"=="UNX"
+MYSPELLLIB=-lmyspell
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+MYSPELLLIB=myspell.lib
+.ENDIF # wnt
+.ENDIF
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -136,7 +144,7 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                -lmyspell 
+                $(MYSPELLLIB) 
 
 
 # build DLL
