@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-15 14:32:37 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,6 @@ throw ( Exception, RuntimeException )
                 {
                     OSL_TRACE("Creating MSP for document, url is %s",
                         ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            invokeArgs[ 0 ] <<= m_XScriptingContext;
                     // If document url is valid (i.e. pointing to a document) we want to get
                     // the StorageManager to create a storage component, this will be done
                     // by the document in the next rev.
@@ -309,6 +308,7 @@ throw ( Exception, RuntimeException )
                                                    propValUrl );
                 m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_STORAGE_ID,
                                                    propValSid );
+                invokeArgs[ 0 ] <<= m_XScriptingContext;
             }
 
             catch ( beans::UnknownPropertyException & e )
