@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Size = MAP_APPFONT ( 128 , 10 ) ;
         Text = "Gleiche ~Breite aller Spalten" ;
         TEXT [ ENGLISH ] = "Equal width for all columns" ;
+        Check = TRUE;
         Hide = TRUE ;
         Text [ english_us ] = "Equal width for all columns" ;
         Text [ portuguese_brazilian ] = "gleiche Breite aller Spalten" ;
