@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,12 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBaseCell*                         pCell;
     sal_uInt32                          nID;
+    sal_Int32                           nMatrixCols;
+    sal_Int32                           nMatrixRows;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
     sal_Bool                            bBigRange;
+    sal_Bool                            bContainsCell;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -309,8 +312,6 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     ScEditEngineTextObj*    pEditTextObj;
     double&                 rDateTimeValue;
     double                  fValue;
-    sal_Int32               nMatrixRows;
-    sal_Int32               nMatrixCols;
     sal_uInt16&             rType;
     sal_Bool                bIsMatrix;
     sal_Bool                bIsCoveredMatrix;
@@ -328,7 +329,7 @@ public:
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScBaseCell*& rOldCell, rtl::OUString& sAddress, rtl::OUString& sFormula,
                                       double& fValue, sal_uInt16& nType,
-                                      sal_uInt8& nMatrixFlag);
+                                      sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
     virtual ~ScXMLChangeCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
@@ -351,6 +352,8 @@ class ScXMLPreviousContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBaseCell*                         pOldCell;
     sal_uInt32                          nID;
+    sal_Int32                           nMatrixCols;
+    sal_Int32                           nMatrixRows;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
 

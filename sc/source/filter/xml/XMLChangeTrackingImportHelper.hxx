@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,15 @@ struct ScMyCellInfo
     rtl::OUString   sFormula;
     String          sResult;
     double          fValue;
+    sal_Int32       nMatrixCols;
+    sal_Int32       nMatrixRows;
     sal_uInt16      nType;
     sal_uInt8       nMatrixFlag;
 
     ScMyCellInfo();
     ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
-                const double& fValue, const sal_uInt16 nType, sal_uInt8 nMatrixFlag);
+                const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
+                const sal_Int32 nMatrixRows);
     ~ScMyCellInfo();
 
     ScBaseCell* CreateCell(ScDocument* pDoc);
@@ -114,7 +117,7 @@ struct ScMyDeleted
     ~ScMyDeleted();
 };
 
-typedef std::list<ScMyDeleted> ScMyDeletedList;
+typedef std::list<ScMyDeleted*> ScMyDeletedList;
 
 struct ScMyGenerated
 {
@@ -126,7 +129,7 @@ struct ScMyGenerated
     ~ScMyGenerated();
 };
 
-typedef std::list<ScMyGenerated> ScMyGeneratedList;
+typedef std::list<ScMyGenerated*> ScMyGeneratedList;
 
 struct ScMyInsertionCutOff
 {
@@ -218,6 +221,8 @@ struct ScMyRejAction : public ScMyBaseAction
 
 typedef std::list<ScMyBaseAction*> ScMyActions;
 
+class ScChangeViewSettings;
+
 class ScXMLChangeTrackingImportHelper
 {
     StrCollection       aUsers;
@@ -225,7 +230,9 @@ class ScXMLChangeTrackingImportHelper
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     ScMyBaseAction*     pCurrentAction;
+    ScChangeViewSettings* pViewSettings;
     rtl::OUString       sIDPrefix;
+    rtl::OUString       sRangeList;
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
@@ -254,6 +261,9 @@ public:
     void SetMoveRanges(const ScBigRange& aSourceRange, const ScBigRange& aTargetRange);
     void GetMultiSpannedRange();
     void AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
+
+    ScChangeViewSettings* GetViewSettings();
+    void SetRangeList(rtl::OUString& sValue) { sRangeList = sValue; }
 
     void EndChangeAction();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 16:21:09 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,18 +98,23 @@ ScMyCellInfo::ScMyCellInfo()
     sResult(),
     fValue(0.0),
     nType(NUMBERFORMAT_ALL),
-    nMatrixFlag(MM_NONE)
+    nMatrixFlag(MM_NONE),
+    nMatrixCols(0),
+    nMatrixRows(0)
 {
 }
 
 ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
-            const double& rValue, const sal_uInt16 nTempType, sal_uInt8 nTempMatrixFlag)
+            const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
+            const sal_Int32 nTempMatrixRows)
     : pCell(pTempCell),
     sFormulaAddress(rFormulaAddress),
     sFormula(rFormula),
     fValue(rValue),
     nType(nTempType),
-    nMatrixFlag(nTempMatrixFlag)
+    nMatrixFlag(nTempMatrixFlag),
+    nMatrixCols(nTempMatrixCols),
+    nMatrixRows(nTempMatrixRows)
 {
 }
 
@@ -127,6 +132,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         sal_Int32 nOffset(0);
         ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
         pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
+        static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
     }
 
     if (nType != NUMBERFORMAT_ALL)
@@ -245,9 +251,12 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
     : sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
     aActions(),
     aUsers(),
+    nMultiSpanned(0),
+    nMultiSpannedSlaveCount(0),
     pCurrentAction(NULL),
     pDoc(NULL),
-    pTrack(NULL)
+    pTrack(NULL),
+    pViewSettings(NULL)
 {
     nPrefixLength = sIDPrefix.getLength();
 }
@@ -365,17 +374,17 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
 {
-    ScMyDeleted aDeleted;
-    aDeleted.nID = nID;
-    pCurrentAction->aDeletedList.push_front(aDeleted);
+    ScMyDeleted* pDeleted = new ScMyDeleted();
+    pDeleted->nID = nID;
+    pCurrentAction->aDeletedList.push_front(pDeleted);
 }
 
 void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo)
 {
-    ScMyDeleted aDeleted;
-    aDeleted.nID = nID;
-    aDeleted.pCellInfo = pCellInfo;
-    pCurrentAction->aDeletedList.push_front(aDeleted);
+    ScMyDeleted* pDeleted = new ScMyDeleted();
+    pDeleted->nID = nID;
+    pDeleted->pCellInfo = pCellInfo;
+    pCurrentAction->aDeletedList.push_front(pDeleted);
 }
 
 void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMultiSpanned)
@@ -443,18 +452,25 @@ void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
 
 void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange)
 {
-    ScMyGenerated aGenerated(pCellInfo, aBigRange);
+    ScMyGenerated* pGenerated = new ScMyGenerated(pCellInfo, aBigRange);
     if (pCurrentAction->nActionType == SC_CAT_MOVE)
     {
-        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(aGenerated);
+        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
     }
     else if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(aGenerated);
+        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
     }
     else
         DBG_ERROR("try to insert a generated action to a wrong action");
+}
+
+ScChangeViewSettings* ScXMLChangeTrackingImportHelper::GetViewSettings()
+{
+    if (!pViewSettings)
+        pViewSettings = new ScChangeViewSettings();
+    return pViewSettings;
 }
 
 void ScXMLChangeTrackingImportHelper::EndChangeAction()
@@ -590,16 +606,16 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
         ScMyGeneratedList::iterator aItr = rList.begin();
         while (aItr != rList.end())
         {
-            if ((aItr->nID == 0))
+            if (((*aItr)->nID == 0))
             {
                 ScBaseCell* pCell = NULL;
-                if (aItr->pCellInfo)
-                    pCell = aItr->pCellInfo->CreateCell(pDoc);
+                if ((*aItr)->pCellInfo)
+                    pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
 
                 if (pCell)
                 {
-                    aItr->nID = pTrack->AddLoadedGenerated(pCell, aItr->aBigRange );
-                    DBG_ASSERT(aItr->nID, "could not insert generated action");
+                    (*aItr)->nID = pTrack->AddLoadedGenerated(pCell, (*aItr)->aBigRange );
+                    DBG_ASSERT((*aItr)->nID, "could not insert generated action");
                 }
             }
             aItr++;
@@ -619,8 +635,10 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependences(ScMyDelAction* pAct
             ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
             while (aItr != pAction->aGeneratedList.end())
             {
-                DBG_ASSERT(aItr->nID, "a not inserted generated action");
-                pDelAct->LoadCellContent(aItr->nID, pTrack);
+                DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
+                pDelAct->LoadCellContent((*aItr)->nID, pTrack);
+                if (*aItr)
+                    delete *aItr;
                 aItr = pAction->aGeneratedList.erase(aItr);
             }
         }
@@ -673,8 +691,10 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependences(ScMyMoveAction* pAc
                 ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
                 while (aItr != pAction->aGeneratedList.end())
                 {
-                    DBG_ASSERT(aItr->nID, "a not inserted generated action");
-                    pMoveAct->LoadCellContent(aItr->nID, pTrack);
+                    DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
+                    pMoveAct->LoadCellContent((*aItr)->nID, pTrack);
+                    if (*aItr)
+                        delete *aItr;
                     aItr = pAction->aGeneratedList.erase(aItr);
                 }
             }
@@ -726,20 +746,19 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
             ScMyDeletedList::iterator aItr = pAction->aDeletedList.begin();
             while(aItr != pAction->aDeletedList.end())
             {
-                pAct->SetDeletedInThis(aItr->nID, pTrack);
-                if ((pAct->GetType() == SC_CAT_CONTENT) && aItr->pCellInfo)
+                pAct->SetDeletedInThis((*aItr)->nID, pTrack);
+                ScChangeAction* pDeletedAct = pTrack->GetAction((*aItr)->nID);
+                if ((pDeletedAct->GetType() == SC_CAT_CONTENT) && (*aItr)->pCellInfo)
                 {
-                    ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pAct);
-                    if (pContentAct)
+                    ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
+                    if (pContentAct && (*aItr)->pCellInfo)
                     {
-                        ScBaseCell* pCell = NULL;
-                        if (aItr->pCellInfo)
-                        {
-                            pCell = aItr->pCellInfo->CreateCell(pDoc);
-                            pContentAct->SetNewCell(pCell, pDoc);
-                        }
+                        ScBaseCell* pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
+                        pContentAct->SetNewCell(pCell, pDoc);
                     }
                 }
+                if (*aItr)
+                    delete *aItr;
                 aItr = pAction->aDeletedList.erase(aItr);
             }
         }
@@ -873,8 +892,18 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         }
 
         pDoc->SetChangeTrack(pTrack);
-        ScChangeViewSettings aChgViewSettings;
-        aChgViewSettings.SetShowChanges(sal_True);
-        pDoc->SetChangeViewSettings(aChgViewSettings);
+        if (!pViewSettings)
+        {
+            DBG_ERROR("there are no change view settings");
+            pViewSettings = new ScChangeViewSettings();
+            pViewSettings->SetShowChanges(sal_True);
+        }
+        if (sRangeList.getLength())
+        {
+            ScRangeList aRangeList;
+            ScXMLConverter::GetRangeListFromString(aRangeList, sRangeList, pDoc);
+            pViewSettings->SetTheRangeList(aRangeList);
+        }
+        pDoc->SetChangeViewSettings(*pViewSettings);
     }
 }

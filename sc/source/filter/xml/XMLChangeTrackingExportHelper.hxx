@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 class ScDocument;
 class ScChangeAction;
@@ -78,6 +81,7 @@ class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
 class ScChangeActionTable;
+class DateTime;
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 
@@ -125,6 +129,7 @@ class ScChangeTrackingExportHelper
     void CollectCellAutoStyles(const ScBaseCell* pBaseCell);
     void CollectActionAutoStyles(ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
+    void WriteChangeViewSettings();
 public:
     ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
