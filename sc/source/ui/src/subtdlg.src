@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-01 11:23:45 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 16:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,10 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ swedish ] = "Grupper";
         Text[ polish ] = "Grupy";
         Text[ portuguese_brazilian ] = "Groups";
-        Text[ japanese ] = "¸ŞÙ°Ìß";
-        Text[ korean ] = "±×·ì";
-        Text[ chinese_simplified ] = "Ğ¡×é";
-        Text[ chinese_traditional ] = "¸s²Õ";
+        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ";
+        Text[ korean ] = "ê·¸ë£¹";
+        Text[ chinese_simplified ] = "å°ç»„";
+        Text[ chinese_traditional ] = "ç¾¤çµ„";
         Text[ turkish ] = "Groups";
         Text[ arabic ] = "Groups";
         Text[ catalan ] = "Groups";
@@ -112,14 +112,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Sidbrytning för varje grupp" ;
         Text [ PORTUGUESE ] = "Nova página para cada grupo" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ğ¡×éÖ®¼ä»»Ò³(~P)";
+        Text[ chinese_simplified ] = "å°ç»„ä¹‹é—´æ¢é¡µ(~P)";
         Text[ russian ] = "Ğàçğûâ ñòğàíèöû ìåæäó ãğóïïàìè";
         Text[ polish ] = "Nowa strona przy podziale grup";
-        Text[ japanese ] = "¸ŞÙ°Ìß‚²‚Æ‚É‰üÍß°¼Ş(~P)";
-        Text[ chinese_traditional ] = "¸s²Õ¤§¶¡´«­¶(~P)";
+        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿã”ã¨ã«æ”¹ï¾ï¾Ÿï½°ï½¼ï¾(~P)";
+        Text[ chinese_traditional ] = "ç¾¤çµ„ä¹‹é–“æ›é (~P)";
         Text[ arabic ] = "ÕİÍÉ ÌÏíÏÉ ÚäÏ ÊÛííÑ ÇáãÌãæÚÉ";
         Text[ greek ] = "Íİá óåëßäá ìå êÜèå áëëáãŞ ïìÜäáò";
-        Text[ korean ] = "±×·ì º¯°æ½Ã¿¡ »õ ÆäÀÌÁö(~P)";
+        Text[ korean ] = "ê·¸ë£¹ ë³€ê²½ì‹œì— ìƒˆ í˜ì´ì§€(~P)";
         Text[ turkish ] = "~Her grup için yeni sayfa başlat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nueva página entre grupos";
@@ -143,14 +143,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Versalkänsli~g" ;
         Text [ PORTUGUESE ] = "~Maiúsculas/Minúsculas" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Çø·Ö×ÖÄ¸´óĞ¡Ğ´(~C)";
+        Text[ chinese_simplified ] = "åŒºåˆ†å­—æ¯å¤§å°å†™(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
         Text[ polish ] = "U~wzglêdnij wielkie i ma³e litery";
-        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
-        Text[ chinese_traditional ] = "°Ï¤À¦r¥À¤j¤p¼g(~C)";
+        Text[ japanese ] = "å¤§æ–‡å­—/å°æ–‡å­—ã‚’åŒºåˆ¥(~C)";
+        Text[ chinese_traditional ] = "å€åˆ†å­—æ¯å¤§å°å¯«(~C)";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
         Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
-        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~C)";
+        Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~C)";
         Text[ turkish ] = "~Büyük/küçük harf duyarlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mayúsculas/minúsculas";
@@ -173,14 +173,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "~Sortera området efter grupper först" ;
         Text [ PORTUGUESE ] = "~Ordenar primeiro área de acordo com os grupos" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÇøÓòÏÈ°´ÕÕĞ¡×éÅÅĞò(~S)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå…ˆæŒ‰ç…§å°ç»„æ’åº(~S)";
         Text[ russian ] = "Ñîğòèğîâàòü îáëàñòü ñíà÷àëà ïî ãğóïïàì";
         Text[ polish ] = "Przesortuj wczeœniej o~bszar wed³ug grup";
-        Text[ japanese ] = "”ÍˆÍ‚ğ‚ ‚ç‚©‚¶‚ß¸ŞÙ°Ìß•Ê‚É•À‚×‚é(~S)";
-        Text[ chinese_traditional ] = "°Ï°ì¥ı«ö·Ó¸s²Õ±Æ§Ç(~S)";
+        Text[ japanese ] = "ç¯„å›²ã‚’ã‚ã‚‰ã‹ã˜ã‚ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿåˆ¥ã«ä¸¦ã¹ã‚‹(~S)";
+        Text[ chinese_traditional ] = "å€åŸŸå…ˆæŒ‰ç…§ç¾¤çµ„æ’åº(~S)";
         Text[ arabic ] = "İÑÒ ÇáäØÇŞ ŞÈá Ğáß ÍÓÈ ÇáãÌãæÚÇÊ";
         Text[ greek ] = "Íá ãßíåé ğñéí ôáîéíüìç~óç ôçò ğåñéï÷Şò êáôÜ ïìÜäåò";
-        Text[ korean ] = "±×·ì¿¡ µû¶ó ¹üÀ§¸¦ »çÀü¿¡ Á¤·Ä(~S)";
+        Text[ korean ] = "ê·¸ë£¹ì— ë”°ë¼ ë²”ìœ„ë¥¼ ì‚¬ì „ì— ì •ë ¬(~S)";
         Text[ turkish ] = "Bölümü önce gruplara göre ~sırala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordenar primero e~l área por grupos";
@@ -204,14 +204,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Inkludera ~format" ;
         Text [ PORTUGUESE ] = "Incluir ~formatos" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "°üº¬¸ñÊ½(~N)";
+        Text[ chinese_simplified ] = "åŒ…å«æ ¼å¼(~N)";
         Text[ russian ] = "Âêëş÷àòü ôîğìàòû";
         Text[ polish ] = "Uwzglêdnij f~ormaty";
-        Text[ japanese ] = "‘®‚ğŠÜ‚Ş(~N)";
-        Text[ chinese_traditional ] = "¥]§t®æ¦¡(~N)";
+        Text[ japanese ] = "æ›¸å¼ã‚’å«ã‚€(~N)";
+        Text[ chinese_traditional ] = "åŒ…å«æ ¼å¼(~N)";
         Text[ arabic ] = "ÊÖãíä ÇáÊäÓíŞÇÊ";
         Text[ greek ] = "Íá óõìğåñéëç~öèïıí ïé ìïñöİò";
-        Text[ korean ] = "¼­½Ä Æ÷ÇÔ(~N)";
+        Text[ korean ] = "ì„œì‹ í¬í•¨(~N)";
         Text[ turkish ] = "~Formatlamayı da dikkate al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Incluir formatos";
@@ -234,14 +234,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "A~nvändardefinierad sorteringsordning" ;
         Text [ PORTUGUESE ] = "Ordem de classificação definida pelo ~utilizador" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~U)";
+        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªå®šçš„æ’åºè§„åˆ™(~U)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
         Text[ polish ] = "Indywidualnie zdefiniowana kolejnoœæ sortowania";
-        Text[ japanese ] = "‡˜‚Ìw’è(~U)";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~U)";
+        Text[ japanese ] = "é †åºã®æŒ‡å®š(~U)";
+        Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚æ’åºè¦å‰‡(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
         Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ°¡ Á¤ÀÇÇÑ  Á¤·Ä ¼ø¼­(~U)";
+        Text[ korean ] = "ì‚¬ìš©ìê°€ ì •ì˜í•œ  ì •ë ¬ ìˆœì„œ(~U)";
         Text[ turkish ] = "~Kullanıcı tanımlı sıralama düzeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Orden de clasificación definido por el usuario";
@@ -272,14 +272,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Stig~ande" ;
         Text [ PORTUGUESE ] = "~Ascendente" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÏòÉÏ(~A)";
+        Text[ chinese_simplified ] = "å‘ä¸Š(~A)";
         Text[ russian ] = "Ïî âîçğàñòàíèş";
         Text[ polish ] = "Rosn¹co";
-        Text[ japanese ] = "¸‡(~A)";
-        Text[ chinese_traditional ] = "¦V¤W(~A)";
+        Text[ japanese ] = "æ˜‡é †(~A)";
+        Text[ chinese_traditional ] = "å‘ä¸Š(~A)";
         Text[ arabic ] = "ÊÕÇÚÏí";
         Text[ greek ] = "Áıîïõóá";
-        Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
+        Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ(~A)";
         Text[ turkish ] = "A~rtan düzende";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ascendente";
@@ -302,14 +302,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ SWEDISH ] = "Fallan~de" ;
         Text [ PORTUGUESE ] = "~Descendente" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÏòÏÂ(~E)";
+        Text[ chinese_simplified ] = "å‘ä¸‹(~E)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
-        Text[ japanese ] = "~‡(~E)";
-        Text[ chinese_traditional ] = "¦V¤U(~E)";
+        Text[ japanese ] = "é™é †(~E)";
+        Text[ chinese_traditional ] = "å‘ä¸‹(~E)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
-        Text[ korean ] = "³»¸²Â÷¼ø(~E)";
+        Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ(~E)";
         Text[ turkish ] = "A~zalan düzende";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Descendente";
@@ -331,14 +331,14 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ PORTUGUESE_BRAZILIAN ] = "Ordenar" ;
         Text [ SWEDISH ] = "Sortera" ;
         Text [ PORTUGUESE ] = "Ordenar" ;
-        Text[ chinese_simplified ] = "ÅÅĞò";
+        Text[ chinese_simplified ] = "æ’åº";
         Text[ russian ] = "Ñîğòèğîâàòü";
         Text[ polish ] = "Sortuj";
-        Text[ japanese ] = "•À‚×‘Ö‚¦";
-        Text[ chinese_traditional ] = "±Æ§Ç";
+        Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆ";
+        Text[ chinese_traditional ] = "æ’åº";
         Text[ arabic ] = "İÑÒ";
         Text[ greek ] = "Ôáîéíüìçóç";
-        Text[ korean ] = "Á¤·Ä";
+        Text[ korean ] = "ì •ë ¬";
         Text[ turkish ] = "Sıralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordenar";
@@ -371,14 +371,14 @@ TabPage RID_SUBTBASE
         Text [ dutch ] = "~Groeperen per" ;
         Text [ spanish ] = "~Agrupar por" ;
         Text [ english_us ] = "~Group by" ;
-        Text[ chinese_simplified ] = "·Ö×é°´ÕÕ(~G)";
+        Text[ chinese_simplified ] = "åˆ†ç»„æŒ‰ç…§(~G)";
         Text[ russian ] = "Ãğóïïèğîâàòü ïî";
         Text[ polish ] = "Grupuj wed³ug";
-        Text[ japanese ] = "¸ŞÙ°Ìß‚ÌŠî€(~G)";
-        Text[ chinese_traditional ] = "¨Ì¸s²Õ(~G)";
+        Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿã®åŸºæº–(~G)";
+        Text[ chinese_traditional ] = "ä¾ç¾¤çµ„(~G)";
         Text[ arabic ] = "ÊÌãíÚ ÍÓÈ";
         Text[ greek ] = "Ïìáäïğïßçóç êáôÜ";
-        Text[ korean ] = "¿¡ÀÇÇÑ ±×·ì(~G)";
+        Text[ korean ] = "ì—ì˜í•œ ê·¸ë£¹(~G)";
         Text[ turkish ] = "~Gruplama esası";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Agrupar por";
@@ -410,14 +410,14 @@ TabPage RID_SUBTBASE
         Text [ dutch ] = "~Subtotalen berekenen van" ;
         Text [ spanish ] = "~Calcular subtotales para" ;
         Text [ english_us ] = "~Calculate subtotals for" ;
-        Text[ chinese_simplified ] = "·ÖÀà»ã×Ü¼ÆËã(~C)";
+        Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»è®¡ç®—(~C)";
         Text[ russian ] = "Âû÷èñëèòü ïğîìåæóòî÷íûå èòîãè äëÿ";
         Text[ polish ] = "Oblicz sumy poœrednie dla";
-        Text[ japanese ] = "¬Œv‚ğo‚·€–Ú(~C)";
-        Text[ chinese_traditional ] = "¤p­p¥Î©ó(~C)";
+        Text[ japanese ] = "å°è¨ˆã‚’å‡ºã™é …ç›®(~C)";
+        Text[ chinese_traditional ] = "å°è¨ˆç”¨æ–¼(~C)";
         Text[ arabic ] = "ÍÓÇÈ ÇáãÌÇãíÚ ÇáİÑÚíÉ áÜ";
         Text[ greek ] = "Õğïëïãéóìüò ìåñéêşí áèñïéóìÜ~ôùí ãéá";
-        Text[ korean ] = "¿¡ ´ëÇÑ ¼Ò°è °è»ê(~C)";
+        Text[ korean ] = "ì— ëŒ€í•œ ì†Œê³„ ê³„ì‚°(~C)";
         Text[ turkish ] = "~Ara toplamları hesaplanacak sütun(lar)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Calcular subtotales para";
@@ -447,14 +447,14 @@ TabPage RID_SUBTBASE
         Text [ dutch ] = "~Functie" ;
         Text [ spanish ] = "~Usar función" ;
         Text [ english_us ] = "Use ~function" ;
-        Text[ chinese_simplified ] = "¼ÆËã¹æÔò(~F)";
+        Text[ chinese_simplified ] = "è®¡ç®—è§„åˆ™(~F)";
         Text[ russian ] = "Èíñòğóêöèÿ ïî âû÷èñëåíèÿì";
         Text[ polish ] = "Instrukcja obliczania";
-        Text[ japanese ] = "ŒvZ•û–@(~F)";
-        Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
+        Text[ japanese ] = "è¨ˆç®—æ–¹æ³•(~F)";
+        Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "°è»ê ±ÔÄ¢(~F)";
+        Text[ korean ] = "ê³„ì‚° ê·œì¹™(~F)";
         Text[ turkish ] = "K~ullanılacak fonksiyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Usar función";
@@ -629,7 +629,7 @@ TabPage RID_SUBTBASE
             < "Máx." ; Default ; > ;
             < "Mín." ; Default ; > ;
             < "Producto" ; Default ; > ;
-            < "Cantidad (solo números)" ; Default ; > ;
+            < "Cantidad (sólo números)" ; Default ; > ;
             < "DesvEst (Muestra)" ; Default ; > ;
             < "DesvEstP (Población)" ; Default ; > ;
             < "Varianza (Muestra)" ; Default ; > ;
@@ -651,17 +651,17 @@ TabPage RID_SUBTBASE
         };
     StringList [ chinese_simplified ] =
     {
-            < "×Ü¼Æ" ; Default ; > ;
-        < "ÊıÄ¿" ; Default ; > ;
-        < "Æ½¾ùÖµ" ; Default ; > ;
-        < "×î´óÖµ" ; Default ; > ;
-        < "×îĞ¡Öµ" ; Default ; > ;
-        < "³Ë»ı" ; Default ; > ;
-        < "ÊıÄ¿(Ö»ÊÇÊı×Ö)" ; Default ; > ;
-        < "±ê×¼Æ«²î(³éÑù)" ; Default ; > ;
-        < "±ê×¼Æ«²î(È«²¿»ùÊı)" ; Default ; > ;
-        < "·½²î(³éÑù)" ; Default ; > ;
-        < "·½²î(È«²¿»ùÊı)" ; Default ; > ;
+            < "æ€»è®¡" ; Default ; > ;
+        < "æ•°ç›®" ; Default ; > ;
+        < "å¹³å‡å€¼" ; Default ; > ;
+        < "æœ€å¤§å€¼" ; Default ; > ;
+        < "æœ€å°å€¼" ; Default ; > ;
+        < "ä¹˜ç§¯" ; Default ; > ;
+        < "æ•°ç›®(åªæ˜¯æ•°å­—)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ ‡å‡†åå·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ ·)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -693,31 +693,31 @@ TabPage RID_SUBTBASE
     };
     StringList [ japanese ] =
     {
-            < "‡Œv" ; Default ; > ;
-        < "‘”" ; Default ; > ;
-        < "•½‹Ï" ; Default ; > ;
-        < "Å‘å" ; Default ; > ;
-        < "Å¬" ; Default ; > ;
-        < "Ï" ; Default ; > ;
-        < "‘”(”’l‚Ì‚İ)" ; Default ; > ;
-        < "•W€•Î·(•W–{’²¸)" ; Default ; > ;
-        < "•W€•Î·(•êW’c)" ; Default ; > ;
-        < "•ªU(•W–{’²¸)" ; Default ; > ;
-        < "•ªU(•êW’c)" ; Default ; > ;
+            < "åˆè¨ˆ" ; Default ; > ;
+        < "ç·æ•°" ; Default ; > ;
+        < "å¹³å‡" ; Default ; > ;
+        < "æœ€å¤§" ; Default ; > ;
+        < "æœ€å°" ; Default ; > ;
+        < "ç©" ; Default ; > ;
+        < "ç·æ•°(æ•°å€¤ã®ã¿)" ; Default ; > ;
+        < "æ¨™æº–åå·®(æ¨™æœ¬èª¿æŸ»)" ; Default ; > ;
+        < "æ¨™æº–åå·®(æ¯é›†å›£)" ; Default ; > ;
+        < "åˆ†æ•£(æ¨™æœ¬èª¿æŸ»)" ; Default ; > ;
+        < "åˆ†æ•£(æ¯é›†å›£)" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¤p­p" ; Default ; > ;
-        < "¼Æ¥Ø" ; Default ; > ;
-        < "¥­§¡­È" ; Default ; > ;
-        < "³Ì¤j­È" ; Default ; > ;
-        < "³Ì¤p­È" ; Default ; > ;
-        < "­¼¿n" ; Default ; > ;
-        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
-        < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
-        < "¤è®t(©â¼Ë)" ; Default ; > ;
-        < "¤è®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
+            < "å°è¨ˆ" ; Default ; > ;
+        < "æ•¸ç›®" ; Default ; > ;
+        < "å¹³å‡å€¼" ; Default ; > ;
+        < "æœ€å¤§å€¼" ; Default ; > ;
+        < "æœ€å°å€¼" ; Default ; > ;
+        < "ä¹˜ç©" ; Default ; > ;
+        < "æ•¸ç›®(åªæ˜¯æ•¸å­—)" ; Default ; > ;
+        < "æ¨™æº–åå·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ¨™æº–åå·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
+        < "æ–¹å·®(æŠ½æ¨£)" ; Default ; > ;
+        < "æ–¹å·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -749,17 +749,17 @@ TabPage RID_SUBTBASE
     };
     StringList [ korean ] =
     {
-            < "ÇÕ°è" ; Default ; > ;
-        < "¼ö" ; Default ; > ;
-        < "Æò±Õ" ; Default ; > ;
-        < "ÃÖ´ë" ; Default ; > ;
-        < "ÃÖ¼Ò" ; Default ; > ;
-        < "°ö" ; Default ; > ;
-        < "°³¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "StAbwN (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
-        < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
+            < "í•©ê³„" ; Default ; > ;
+        < "ìˆ˜" ; Default ; > ;
+        < "í‰ê· " ; Default ; > ;
+        < "ìµœëŒ€" ; Default ; > ;
+        < "ìµœì†Œ" ; Default ; > ;
+        < "ê³±" ; Default ; > ;
+        < "ê°œìˆ˜ (ìˆ«ìë§Œ)" ; Default ; > ;
+        < "StDev (ìƒ˜í”Œ)" ; Default ; > ;
+        < "StAbwN (ëª¨ì§‘ë‹¨)" ; Default ; > ;
+        < "ë¶„ì‚° (ìƒ˜í”Œ)" ; Default ; > ;
+        < "ë¶„ì‚° (ëª¨ì§‘ë‹¨)" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -865,14 +865,14 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ dutch ] = "Groep 1" ;
                 Text [ spanish ] = "Grupo 1" ;
                 Text [ english_us ] = "1st Group" ;
-                Text[ chinese_simplified ] = "µÚÒ»×é";
+                Text[ chinese_simplified ] = "ç¬¬ä¸€ç»„";
                 Text[ russian ] = "1-àÿ ãğóïïà";
                 Text[ polish ] = "1 grupa";
-                Text[ japanese ] = "¸ŞÙ°Ìß 1";
-                Text[ chinese_traditional ] = "²Ä¤@²Õ";
+                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 1";
+                Text[ chinese_traditional ] = "ç¬¬ä¸€çµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáÃæáì";
                 Text[ greek ] = "1ç ÏìÜäá";
-                Text[ korean ] = "1¹øÂ° ±×·ì";
+                Text[ korean ] = "1ë²ˆì§¸ ê·¸ë£¹";
                 Text[ turkish ] = "1. Grup";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Grupo 1";
@@ -893,14 +893,14 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ dutch ] = "Groep 2" ;
                 Text [ spanish ] = "Grupo 2" ;
                 Text [ english_us ] = "2nd Group" ;
-                Text[ chinese_simplified ] = "µÚ¶ş×é";
+                Text[ chinese_simplified ] = "ç¬¬äºŒç»„";
                 Text[ russian ] = "2-àÿ ãğóïïà";
                 Text[ polish ] = "2 grupa";
-                Text[ japanese ] = "¸ŞÙ°Ìß 2";
-                Text[ chinese_traditional ] = "²Ä¤G²Õ";
+                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 2";
+                Text[ chinese_traditional ] = "ç¬¬äºŒçµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇäíÉ";
                 Text[ greek ] = "2ç. ÏìÜäá";
-                Text[ korean ] = "2¹øÂ° ±×·ì";
+                Text[ korean ] = "2ë²ˆì§¸ ê·¸ë£¹";
                 Text[ turkish ] = "2. Grup";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Grupo 2";
@@ -921,14 +921,14 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ dutch ] = "Groep 3" ;
                 Text [ spanish ] = "Grupo 3" ;
                 Text [ english_us ] = "3rd Group" ;
-                Text[ chinese_simplified ] = "µÚÈı×é";
+                Text[ chinese_simplified ] = "ç¬¬ä¸‰ç»„";
                 Text[ russian ] = "3-üÿ ãğóïïà";
                 Text[ polish ] = "3 grupa";
-                Text[ japanese ] = "¸ŞÙ°Ìß 3";
-                Text[ chinese_traditional ] = "²Ä¤T²Õ";
+                Text[ japanese ] = "ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ 3";
+                Text[ chinese_traditional ] = "ç¬¬ä¸‰çµ„";
                 Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇáËÉ";
                 Text[ greek ] = "3ç ÏìÜäá";
-                Text[ korean ] = "3¹øÂ° ±×·ì";
+                Text[ korean ] = "3ë²ˆì§¸ ê·¸ë£¹";
                 Text[ turkish ] = "3. Grup";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Grupo 3";
@@ -949,14 +949,14 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ dutch ] = "Opties" ;
                 Text [ spanish ] = "Opciones" ;
                 Text [ english_us ] = "Options" ;
-                Text[ chinese_simplified ] = "Ñ¡Ïî";
+                Text[ chinese_simplified ] = "é€‰é¡¹";
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Opcje";
-                Text[ japanese ] = "µÌß¼®İ";
-                Text[ chinese_traditional ] = "¿ï¶µ";
+                Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+                Text[ chinese_traditional ] = "é¸é …";
                 Text[ arabic ] = "ÇáÎíÇÑÇÊ";
                 Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "¿É¼Ç";
+                Text[ korean ] = "ì˜µì…˜";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Opciones";
@@ -982,30 +982,31 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
     };
-    Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
+    Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»";
     Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
     Text[ polish ] = "Sumy poœrednie";
-    Text[ japanese ] = "¬Œv";
-    Text[ chinese_traditional ] = "¤p­p";
+    Text[ japanese ] = "å°è¨ˆ";
+    Text[ chinese_traditional ] = "å°è¨ˆ";
     Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
     Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
-    Text[ korean ] = "¼Ò°è";
+    Text[ korean ] = "ì†Œê³„";
     Text[ turkish ] = "Ara toplamlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subtotales";
 };
+
 
 
 
