@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-14 09:58:45 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 07:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,12 +633,20 @@ sal_Int32 SvxGetLanguagePos(const Sequence< Language > &rSeq, Language nLang)
 
 String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
 {
-    // get directory to use
-    String aURL ( rDicName );
-    SvtPathOptions::Pathes ePath = bIsUserDic ?
-        SvtPathOptions::PATH_USERDICTIONARY : SvtPathOptions::PATH_DICTIONARY;
-    BOOL bRes = SvtPathOptions().SearchFile( aURL, ePath );
-    return bRes ? aURL : String();
+    // build URL to use for new (persistent) dictionaries
+
+    SvtPathOptions aPathOpt;
+    String aDirName( bIsUserDic ?
+            aPathOpt.GetUserDictionaryPath() : aPathOpt.GetDictionaryPath() );
+
+    INetURLObject aURLObj;
+    aURLObj.SetSmartProtocol( INET_PROT_FILE );
+    aURLObj.SetSmartURL( aDirName );
+    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
+    aURLObj.Append( rDicName );
+    DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
+
+    return aURLObj.GetMainURL();
 }
 
 //TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
