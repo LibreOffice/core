@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:21:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 10:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.16 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.17 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
@@ -344,8 +344,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
 
-            // start the tests
-            nExitCode = starttest(opt, aHelper);
+            if (aHelper.isOkToStartTests())
+            {
+                // start the tests
+                nExitCode = starttest(opt, aHelper);
+            }
+            else
+            {
+
+                fprintf(stderr, "error: The library '%s' can't initialised, must quit.\n", opt.getFirstParam().getStr());
+                nExitCode = 1;
+            }
         }
     }
 
