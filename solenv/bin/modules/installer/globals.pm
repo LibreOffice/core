@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.13 $
-#   last change: $Author: hr $ $Date: 2004-09-08 14:26:45 $
+#   $Revision: 1.14 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:07:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ BEGIN
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
-    $msifilespath = "";
+    $msichildpath = "";
     $packjobref = "";
     $buildid = "Not set";
     $guidcounter = 1000; # for uniqueness of guids
@@ -145,6 +145,7 @@ BEGIN
     $ismultilingual = 0;
     $isopensourceproduct = 1;
     $manufacturer = "";
+    $sundirname = "Sun";
     $codefilename = "codes.txt";
     $productcode = "";
     $upgradecode = "";
@@ -157,15 +158,13 @@ BEGIN
     $languagepack = 0;
 
     $unomaxservices = 25;
-    # $unomaxservices = 1;
-
-    $javamaxservices = 1;
+    $javamaxservices = 15;
 
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
     $cabfilecompressionlevel = 2;
-    $number_of_cabfiles = 3;    # only for $fix_number_of_cab_files = 1
+    $number_of_cabfiles = 4;    # only for $fix_number_of_cab_files = 1
 
     $updatepack = 0;
 
@@ -175,16 +174,17 @@ BEGIN
     $javafilename = "";
     $javafilename2 = "";
 
-    @environmentvariables = ( "SOLARVERSION", "GUI", "COMMON_OUTDIR", "ENV_ROOT", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
+    $starttime = "";
+
+    @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
 
     @selfreglibraries = ("shlxthdl.dll", "ooofilt.dll");                # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi"); # to be removed after scp changes, see parameter.pm
-
-    @msiassemblyfiles = ("cli_types.dll", "cli_cppuhelper.dll", "cli_ure.dll"); # to be removed after scp changes
-    @msiassemblynamecontent = ("cli_types.dll", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "cli_cppuhelper.dll", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "cli_ure.dll", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
+    @msiassemblyfiles = ("gid_File_Lib_Cli_Types_Assembly", "gid_File_Lib_Cli_Cppuhelper_Assembly", "gid_File_Lib_Cli_Ure_Assembly");   # to be removed after scp changes
+    @msiassemblynamecontent = ("gid_File_Lib_Cli_Types_Assembly", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Cppuhelper_Assembly", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Ure_Assembly", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");  # to be removed after scp changes
 
     @removedirs = ();
 
