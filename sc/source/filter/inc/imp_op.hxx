@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:47:10 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ public:
     void Apply(ScDocument* pD);
 };
 
-class ImportExcel : private XclImpRootData, public ImportTyp, public XclImpRoot
+class ImportExcel : public ImportTyp, protected XclImpRoot
 {
 private:
     ExcelChartData*         pChart;             // aktuelle Chart-Daten
@@ -211,7 +211,6 @@ protected:
     void                    Blank25( void );                // 0x01
     void                    Integer( void );                // 0x02
     void                    Number25( void );               // 0x03
-    void                    Label25( void );                // 0x04
     void                    Boolerr25( void );              // 0x05
     void                    Formula25( void );              // 0x06     -> excform.cxx
     void                    RecString( void );              // 0x07, 0x0207
@@ -254,7 +253,7 @@ protected:
     void                    Olesize( void );                // 0xDE
     void                    Blank34( void );                // 0x0201
     void                    Number34( void );               // 0x0203
-    void                    Label34( void );                // 0x0204
+    void                    Label( void );                  // 0x0204
     void                    Boolerr34( void );              // 0x0205
     void                    Formula3( void );               // 0x0206       -> excform.cxx
                                                             // 0x0207 -> 0x07
@@ -339,17 +338,13 @@ protected:
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
                                 double& rVal );
 
-    EditTextObject*         CreateFormText( BYTE, const String&, const UINT16 );
     virtual void            EndAllChartObjects( void );     // -> excobj.cxx
 
     virtual void            AdjustRowHeight();
     virtual void            PostDocLoad( void );
-    virtual void            SetTextCell( const UINT16 nCol, const UINT16 nRow,
-                                        String& rUnconvertedText, const UINT16 nXF );
-                                            // Achtung: rUnconvertedText wird moeglicherweise veraendert
 
 public:
-                            ImportExcel( SfxMedium&, SvStream&, XclBiff, ScDocument* );
+                            ImportExcel( XclImpRootData& rImpData );
 
     virtual                 ~ImportExcel( void );
 
