@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 13:02:31 $
+ *  last change: $Author: os $ $Date: 2001-05-18 13:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,11 +334,9 @@ service ParagraphProperties
     [optional, property] short NumberingLevel;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingRules
     /** contains the numbering rules applied to this paragraph.
      */
-    [readonly, property] com::sun::star::container::XIndexReplace NumberingRules;
+    [property] com::sun::star::container::XIndexReplace NumberingRules;
 
     //-------------------------------------------------------------------------
 
