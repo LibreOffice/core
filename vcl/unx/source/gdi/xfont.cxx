@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:46:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,16 +98,19 @@
 #define VCLASS_FONT_NUM         2 // Other than rotate and rotate_reverse,
                                   // don't have spacial font
 
-ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, unsigned short nPixelSize,
+ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, const Size& rPixelSize,
                                         sal_Bool bVertical, ExtendedXlfd* pXlfd ) :
         mpDisplay( pDisplay ),
-        mnPixelSize( nPixelSize ),
+        maPixelSize( rPixelSize ),
+        mfXScale(1.0), mfYScale(1.0),
         mbVertical( bVertical ),
         mpXlfd( pXlfd ),
         mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW ),
         mpRangeCodes(NULL),
         mnRangeCount(-1)
 {
+    if( !maPixelSize.Width() )
+        maPixelSize.Width() = maPixelSize.Height();
     mnAsciiEncoding = GetAsciiEncoding (NULL);
     mnDefaultWidth = GetDefaultWidth();
 
@@ -154,11 +157,18 @@ ExtendedFontStruct::LoadEncoding( rtl_TextEncoding nEncoding )
         return nIdx;
 
     ByteString aFontName;
-    mpXlfd->ToString( aFontName, mnPixelSize, nEncoding );
-
+    mpXlfd->ToString( aFontName, maPixelSize.Height(), nEncoding );
     mpXFontStruct[ nIdx ] = LoadXFont( mpDisplay, aFontName.GetBuffer() );
     if (mpXFontStruct[nIdx] == NULL)
         mpXFontStruct[nIdx] = LoadXFont( mpDisplay, "fixed" );
+
+    // calculate correction factors to improve matching
+    // the selected font size to available bitmap font
+    int nRealPixelSize = mpXlfd->GetPixelSize( maPixelSize.Height() );
+    if( nRealPixelSize && (nRealPixelSize != maPixelSize.Width()) )
+        mfXScale = (float)maPixelSize.Width() / nRealPixelSize;
+    if( nRealPixelSize && (nRealPixelSize != maPixelSize.Height()) )
+        mfYScale = (float)maPixelSize.Height() / nRealPixelSize;
 
     return nIdx;
 }
@@ -213,6 +223,21 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
                                          pCharStruct->descent );
         }
 
+    // apply correction factors to better match selected size to available size
+    if( mfYScale != 1.0 )
+    {
+        *pAscent                *= mfYScale;
+        *pDescent               *= mfYScale;
+        pCharStruct->ascent     *= mfYScale;
+        pCharStruct->descent    *= mfYScale;
+    }
+    if( mfXScale != 1.0 )
+    {
+        pCharStruct->lbearing   *= mfXScale;
+        pCharStruct->rbearing   *= mfXScale;
+        pCharStruct->width      *= mfXScale;
+    }
+
     return (pCharStruct->width > 0);
 }
 
@@ -254,12 +279,12 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
 
 Bool
 ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd,
-        int nPixelSize, sal_Bool bVertical ) const
+    const Size& rPixelSize, sal_Bool bVertical ) const
 {
     if( mpXlfd != pXlfd )
         return FALSE;
 
-    return (mnPixelSize == nPixelSize) && (mbVertical == bVertical);
+    return (maPixelSize == rPixelSize) && (mbVertical == bVertical);
 }
 
 // Get an appropriate x-font that contains a glyph for the given unicode
@@ -373,7 +398,7 @@ QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
 sal_Size
 ExtendedFontStruct::GetDefaultWidth()
 {
-    return (mnPixelSize + 1) / 2;
+    return (maPixelSize.Width() + 1) / 2;
 }
 
 // Handle single byte fonts which do not require conversion, this exploits
@@ -381,7 +406,7 @@ ExtendedFontStruct::GetDefaultWidth()
 // is compatible with iso8859-X at least in the range to 0x7f
 sal_Size
 ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
-        long *pWidthArray, rtl_TextEncoding nEncoding )
+        long* pWidthArray, rtl_TextEncoding nEncoding )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -424,7 +449,7 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
 // Handle utf16 encoded fonts, which do not require conversion
 sal_Size
 ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
-        long *pWidthArray )
+        long* pWidthArray )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -470,16 +495,14 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
 // font in fontstruct, 8 and 16 bit fonts are handled the same way
 sal_Size
 ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
-        long *pWidthArray, ExtendedFontStruct *pFallback )
+    long* pWidthArray, ExtendedFontStruct *pFallback )
 {
-    if ( !(nFrom <= nTo) )
+    if ( nFrom > nTo )
         return 0;
 
-    sal_Char pBuffer[16];
-    sal_MultiByte nChar;
+    sal_Char pBuffer[64];
 
     SalConverterCache *pCvt = SalConverterCache::GetInstance();
-
     for ( sal_Int32 nIdx = nFrom ; nIdx <= nTo ; nIdx++, pWidthArray++ )
     {
         FontPitch nSpacing;
@@ -521,7 +544,7 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
         // query font metrics
         if ( pFont && (nSize == 1 || nSize == 2) )
         {
-            nChar = nSize == 1 ? (unsigned char)pBuffer[0] :
+            sal_MultiByte nChar = (nSize == 1) ? (unsigned char)pBuffer[0] :
                 ((sal_MultiByte)pBuffer[0] << 8) + (sal_MultiByte)pBuffer[1];
 
             if (   nSpacing == PITCH_VARIABLE
@@ -557,49 +580,56 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
 }
 
 sal_Size
-ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray,
-         ExtendedFontStruct *pFallback )
+ExtendedFontStruct::GetCharWidth( sal_Unicode cChar, long *pPhysicalWidth,
+    long *pLogicalWidth )
 {
-    int nAsciiRange;
     sal_Size nConverted = 0;
 
-    rtl_TextEncoding nEncoding = mpXlfd->GetAsciiEncoding(&nAsciiRange);
-
     // dispatch querying of metrics to most promising encoding candidate
+    int nAsciiRange;
+    rtl_TextEncoding nEncoding = mpXlfd->GetAsciiEncoding(&nAsciiRange);
     if ( nEncoding == RTL_TEXTENCODING_UNICODE )
     {
         // if we have a unicode encoded system font than we get the charwidth
         // straight forward
-        nConverted = GetCharWidthUTF16( nFrom, nTo, pWidthArray );
+        nConverted = GetCharWidthUTF16( cChar, cChar, pPhysicalWidth );
     }
     else
     {
-        if ( nFrom < nAsciiRange )
+        if ( cChar < nAsciiRange )
         {
             // optimize the most frequent case, requesting only the latin1
             // chars which are mappable to a single encoding
-            sal_Unicode nMinTo = std::min(nAsciiRange, (int)nTo);
-            nConverted = GetCharWidth8( nFrom, nMinTo, pWidthArray, nEncoding );
+            nConverted = GetCharWidth8( cChar, cChar, pPhysicalWidth, nEncoding );
         }
 
         // if further requests are pending, then the according unicode
         // codepoint has to be dispatched to one of the system fonts and
         // converted to this fonts encoding
-        nConverted += GetCharWidth16( nFrom + nConverted, nTo, pWidthArray + nConverted,
-                            pFallback );
+        nConverted += GetCharWidth16( cChar + nConverted, cChar,
+                        pPhysicalWidth + nConverted, NULL );
     }
+
+    // convert physical width to logical width, apply correction factor if needed
+    *pLogicalWidth = *pPhysicalWidth;
+    if( mfXScale != 1.0 )
+        *pLogicalWidth *= mfXScale;
 
     return nConverted;
 }
 
 bool ExtendedFontStruct::HasUnicodeChar( sal_Unicode cChar ) const
 {
+    // #i18818# return false if there are no known encodings
+    if( !mnRangeCount )
+        return false;
+
     // init unicode range cache if needed
     if( mnRangeCount < 0 )
     {
         mnRangeCount = mpXlfd->GetFontCodeRanges( NULL );
         if( !mnRangeCount )
-            return NULL;
+            return false;
         mpRangeCodes = new sal_uInt32[ 2*mnRangeCount ];
         mpXlfd->GetFontCodeRanges( mpRangeCodes );
         // TODO: make sure everything is sorted
@@ -664,15 +694,16 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
                 nGlyphIndex = 0; // drop NotDef fallback glyphs
         }
 
-        long nGlyphWidth;
-        mrFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
-        int nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+        long nPhysGlyphWidth, nLogGlyphWidth;
+        mrFont.GetCharWidth( cChar, &nPhysGlyphWidth, &nLogGlyphWidth );
+        int nGlyphFlags = (nPhysGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-        GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+        GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nPhysGlyphWidth );
+        aGI.mnNewWidth = nLogGlyphWidth;
         AppendGlyph( aGI );
 
-        aNewPos.X() += nGlyphWidth;
+        aNewPos.X() += nLogGlyphWidth;
     }
 
     return (nCharPos >= 0);
