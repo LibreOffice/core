@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:52:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2129,10 +2129,23 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NSWE },    // POINTER_AUTOSCROLL_NSWE
     { 0, 0, SAL_RESID_POINTER_AIRBRUSH },           // POINTER_AIRBRUSH
     { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
-    { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE }        // POINTER_PIVOT_DELETE
+    { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
+
+    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_S },       // POINTER_TAB_SELECT_S
+    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_E },       // POINTER_TAB_SELECT_E
+    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
+    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
+    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
+    // <--
+
+    // --> FME 2004-08-16 #i20119# Paintbrush tool
+    { 0, 0, SAL_RESID_POINTER_PAINTBRUSH }          // POINTER_PAINTBRUSH
+    // <--
+
     };
 
-#if POINTER_COUNT != 88
+#if POINTER_COUNT != 94
 #error New Pointer must be defined!
 #endif
 
