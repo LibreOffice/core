@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:06:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 10:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,10 +1159,10 @@ void UnoControlModel::setPropertyValue( const ::rtl::OUString& rPropertyName, co
 // ::com::sun::star::beans::XFastPropertySet
 void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
+        ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
         ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
         ::com::sun::star::awt::FontDescriptor aFD;
         pProp->GetValue() >>= aFD;
