@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:05:23 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:50:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
 
 # --- Generate -----------------------------------------------------
 
@@ -99,7 +97,8 @@ SLOFILES=			\
                     $(SLO)$/detectorfactory.obj
 
 
-SRCFILES=			logindialog.src \
+SRS1NAME=$(TARGET)
+SRC1FILES=			logindialog.src \
                     documentlist.src
 
 RESLIB1NAME=		lgd
@@ -113,3 +112,4 @@ RESLIB1DEPN=		logindialog.src									\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :			target.mk
+
