@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,7 @@ Accelerator MAIN_ACCEL {
 
 ImageList RID_IMGLST_LAYOUT
 {
-    ImageBitmap = Bitmap { FILE = "images2.bmp" ; };
+    Prefix = "im";
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -1305,7 +1305,6 @@ ImageList RID_IMGLST_LAYOUT
         IMGID_ERRORMARKER ;
     };
 };
-
 
 ModelessDialog IDD_EDIT_VAR {
     Pos = MAP_APPFONT( 0, 0 );
