@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSourceBrowser.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,48 +167,20 @@ module com {  module sun {  module star {  module sdb {
             <br/>
             </li>
         </ul>
-        For all kinds of URL's, the parameters supplied when dispatching it are as follows:
-        <ul>
-            <li><b>DataSourceName</b>
-            <br/>
-            The name of the globally registered
-            <service>
-            DataSource
-            </service>
-            from which the currently displayed data is taken.
-            </li>
-            <li><b>CommandType</b>
-            <br/>
-            A
-            <type>
-            CommandType
-            </type>
-            value, specifying the type of the object displayed currently.
-            </li>
-            <li><b>Command</b>
-            <br/>
-            A string value, specifying the name of the object displayed currently (or the SQL statement used to populate
-            the grid view).
-            </li>
-            <li><b>Selection</b>
-            <br/>
-            A sequence of integers, containing the numbers of the rows currently selected.
-            </li>
-            <li><b>Cursor</b> (optional)
-            <br/>
-            If available, this parameter contains an object implementing the
-            <service scope="com::sun::star::sdb">
-            ResultSet
-            </service>
-            service.
-            It may be used to obtain the data described by the <em>Selection</em> parameter (which otherwise
-            would have to be retrieved from the
-            <service>
-            DatabaseContext
-            </service>
-            , using the information given in the other parameters).
-            </li>
-        </ul>
+    </p>
+    <p>For all kinds of URL's, the parameters supplied during dispatching build up a <type>DataAccessDescriptor</type>,
+    where the following properties are present:
+    <ul>
+        <li><member>DataAccessDescriptor::DataSourceName</member></li>
+        <li><member>DataAccessDescriptor::Command</member></li>
+        <li><member>DataAccessDescriptor::CommandType</member></li>
+        <li><em>optional</em> <member>DataAccessDescriptor::Selection</member></li>
+        <li><em>optional</em> <member>DataAccessDescriptor::BookmarkSelection</member></li>
+        <li><em>optional</em> <member>DataAccessDescriptor::ResultSet</member></li>
+    </ul>
+    </p>
+    <p>The default for <member>DataAccessDescriptor::Selection</member> is to contain bookmarks, if not specifies
+    otherwise by <member>DataAccessDescriptor::BookmarkSelection</member>.</pr>
     </p>
 
     @see com::sun::star::sdb::ContentLoader
