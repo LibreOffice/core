@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:35:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -117,7 +117,7 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 sal_Bool SwAccessibleFrameBase::IsSelected()
@@ -250,7 +250,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
                 static_cast <SwAccessibleContext *>( xParent.get() );
 
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
+            aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
             pAcc->FireAccessibleEvent( aEvent );
         }
     }
@@ -311,7 +311,7 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             if( sOldName != GetName() )
             {
                 AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+                aEvent.EventId = AccessibleEventId::NAME_CHANGED;
                 aEvent.OldValue <<= sOldName;
                 aEvent.NewValue <<= GetName();
                 FireAccessibleEvent( aEvent );
