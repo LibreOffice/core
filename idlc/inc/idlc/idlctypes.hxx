@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlctypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:57:35 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,6 @@ enum ParseState
     PS_OpTypeSeen,          // Seen operation return type
     PS_OpIDSeen,            // Seen operation ID
     PS_OpParsCompleted,     // Completed operation param list
-    PS_OpRaiseCompleted,    // Completed operation except list
     PS_OpCompleted,         // Completed operation statement
     PS_OpSqSeen,            // Seen '(' for operation
     PS_OpQsSeen,            // Seen ')' for operation
@@ -292,10 +291,11 @@ enum ParseState
     PS_OpParDirSeen,        // Seen parameter direction
     PS_OpParTypeSeen,       // Seen parameter type
     PS_OpParDeclSeen,       // Seen parameter declaration
-    PS_OpRaiseSeen,         // Seen RAISES keyword
-    PS_OpRaiseSqSeen,       // Seen '(' for RAISES
-    PS_OpRaiseQsSeen,       // Seen ')' for RAISES
     PS_OpOnewaySeen,        // Seen ONEWAY keyword
+
+    PS_RaiseSeen,           // Seen RAISES keyword
+    PS_RaiseSqSeen,         // Seen '(' for RAISES
+    PS_RaiseQsSeen,         // Seen ')' for RAISES
 
     PS_DeclsCommaSeen,      // Seen ',' in declarators list
     PS_DeclsDeclSeen        // Seen complete decl in decls list
