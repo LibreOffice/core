@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:37:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,8 +948,9 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 
     // medium based on OutputStream: must work with TempFile
     USHORT nState = GetItemSet()->GetItemState( SID_STREAM );
-    if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL )
-        CreateTempFile();
+    if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL
+      || !::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
+        CreateTempFileNoCopy();
     // if Medium already contains a stream - TODO/LATER: store stream/outputstream in ImplData, not in Medium
     else if ( GetItemSet()->GetItemState( SID_STREAM ) < SFX_ITEM_SET )
     {
@@ -1040,6 +1041,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                 }
                 else
                 {
+                    // there is no explicit request to open the document readonly
+
                     // create a storage on the stream
                     if ( pImp->xStream.is() )
                     {
@@ -1049,8 +1052,32 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     }
                     else
                     {
-                        aArgs[0] <<= pImp->xInputStream;
-                        aArgs[1] <<= embed::ElementModes::READ;
+                        sal_Bool bReadOnly = sal_False;
+
+                        if ( aLogicName.CompareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+                          && GetContent().is() )
+                        {
+                            Any aAny = pImp->aContent.getPropertyValue(
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly" )) );
+
+                            if ( ( aAny >>= bReadOnly ) && bReadOnly )
+                            {
+                                GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                                SetOpenMode( SFX_STREAM_READONLY, sal_False, sal_True );
+                            }
+                        }
+
+                        if ( bReadOnly )
+                        {
+                            aArgs[0] <<= pImp->xInputStream;
+                            aArgs[1] <<= embed::ElementModes::READ;
+                        }
+                        else
+                        {
+                            CreateTempFile();
+                            aArgs[0] <<= ::rtl::OUString( aName );
+                            aArgs[1] <<= embed::ElementModes::READWRITE;
+                        }
                     }
                 }
 
@@ -1434,6 +1461,7 @@ void SfxMedium::Transfer_Impl()
         // commit to the stream
         if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL )
         {
+            // TODO/LATER: support storing to SID_STREAM
                SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
              if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
             {
@@ -1845,24 +1873,6 @@ void SfxMedium::GetMedium_Impl()
         }
         else if ( pInStreamItem )
         {
-            // TODO/LATER: if the document still must be opened in readwrite mode additional implementation is required
-            if ( GetContent().is() && !IsReadOnly() )
-            {
-                try
-                {
-                    Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly" )) );
-                    BOOL bReadonly;
-                    if ( ( aAny >>= bReadonly ) && bReadonly )
-                    {
-                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                        SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                    }
-                }
-                catch ( ::com::sun::star::uno::Exception& )
-                {
-                }
-            }
-
             pInStreamItem->GetValue() >>= pImp->xInputStream;
         }
         else
@@ -1899,6 +1909,14 @@ void SfxMedium::GetMedium_Impl()
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
             SetError( ERRCODE_IO_NOTSUPPORTED );
+
+        if ( !GetError() )
+        {
+            if ( pImp->xStream.is() )
+                pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
+            else if ( pImp->xInputStream.is() )
+                pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
+        }
 
         pImp->bDownloadDone = sal_True;
         pImp->aDoneLink.ClearPendingCall();
