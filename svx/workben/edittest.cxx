@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-15 08:38:08 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 11:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #include <comphelper/regpathhelper.hxx>
 #endif
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -224,67 +225,49 @@ using namespace ::com::sun::star::lang;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > createApplicationServiceManager()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xReturn = ::cppu::createServiceFactory();
-
     try
     {
+        ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
+        ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
 
-    if ( xReturn.is() )
-    {
-        Reference< XInitialization > xInit ( xReturn, UNO_QUERY ) ;
-        if ( xInit.is() )
+        Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
+        Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
+        if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
         {
-            ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
-            ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
-
-            Reference< XSimpleRegistry > xLocalRegistry   ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), UNO_QUERY );
-            Reference< XSimpleRegistry > xSystemRegistry ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), UNO_QUERY );
-            if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
+            try
             {
-                try
-                {
-                    xLocalRegistry->open( localRegistry, sal_False, sal_True);
-                }
-                catch ( InvalidRegistryException& )
-                {
-                }
-
-                if ( !xLocalRegistry->isValid() )
-                    xLocalRegistry->open(localRegistry, sal_True, sal_True);
+                xLocalRegistry->open( localRegistry, sal_False, sal_True);
+            }
+            catch ( InvalidRegistryException& )
+            {
             }
 
-            if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
-                xSystemRegistry->open( systemRegistry, sal_True, sal_False);
-
-            if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
-                 (xSystemRegistry.is() && xSystemRegistry->isValid()) )
-            {
-                Sequence< Any > seqAnys(2);
-                seqAnys[0] <<= xLocalRegistry ;
-                seqAnys[1] <<= xSystemRegistry ;
-
-                Reference < XSimpleRegistry > xReg(
-                            xReturn->createInstanceWithArguments(
-                            DEFINE_CONST_UNICODE("com.sun.star.registry.NestedRegistry"), seqAnys ), UNO_QUERY );
-
-                seqAnys = Sequence< Any >( 1 );
-                seqAnys[0] <<= xReg;
-                if ( xReg.is() )
-                    xInit->initialize( seqAnys );
-            }
+            if ( !xLocalRegistry->isValid() )
+                xLocalRegistry->open(localRegistry, sal_True, sal_True);
         }
-        else
+
+        if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
+            xSystemRegistry->open( systemRegistry, sal_True, sal_False);
+
+        if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
+             (xSystemRegistry.is() && xSystemRegistry->isValid()) )
         {
-            xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >();
+            Reference < XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
+            Sequence< Any > seqAnys(2);
+            seqAnys[0] <<= xLocalRegistry ;
+            seqAnys[1] <<= xSystemRegistry ;
+            Reference< XInitialization > xInit( xReg, UNO_QUERY );
+            xInit->initialize( seqAnys );
+
+            Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
+            return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
         }
     }
-    }
-
     catch( ::com::sun::star::uno::Exception& )
     {
     }
 
-    return xReturn ;
+    return ::cppu::createServiceFactory();
 }
 
 
