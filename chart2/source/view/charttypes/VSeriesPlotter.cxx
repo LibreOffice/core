@@ -202,9 +202,7 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShape( VDataSer
                                         , const uno::Reference< drawing::XShapes >& xTarget )
 {
     if(pDataSeries->m_xShape.is())
-    {
         return uno::Reference<drawing::XShapes>( pDataSeries->m_xShape, uno::UNO_QUERY );
-    }
 
     //create a group shape for this series and add to logic target:
     uno::Reference< drawing::XShapes > xShapes(
@@ -212,6 +210,36 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShape( VDataSer
     uno::Reference<drawing::XShape> xShape =
                 uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
     pDataSeries->m_xShape.set(xShape);
+    return xShapes;
+}
+
+uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
+                                        , const uno::Reference< drawing::XShapes >& xTarget )
+{
+    if(pDataSeries->m_xShapeFrontChild.is())
+        return uno::Reference<drawing::XShapes>( pDataSeries->m_xShapeFrontChild, uno::UNO_QUERY );
+
+    //ensure that the series group shape is already created
+    uno::Reference< drawing::XShapes > xSeriesShapes( this->getSeriesGroupShape( pDataSeries, xTarget ) );
+    //ensure that the back child is created first
+    this->getSeriesGroupShapeBackChild( pDataSeries, xTarget );
+    //use series group shape as parent for the new created front group shape
+    uno::Reference< drawing::XShapes > xShapes( createGroupShape( xSeriesShapes ) );
+    pDataSeries->m_xShapeFrontChild.set(xShapes);
+    return xShapes;
+}
+
+uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
+                                        , const uno::Reference< drawing::XShapes >& xTarget )
+{
+    if(pDataSeries->m_xShapeBackChild.is())
+        return uno::Reference<drawing::XShapes>( pDataSeries->m_xShapeBackChild, uno::UNO_QUERY );
+
+    //ensure that the series group shape is already created
+    uno::Reference< drawing::XShapes > xSeriesShapes( this->getSeriesGroupShape( pDataSeries, xTarget ) );
+    //use series group shape as parent for the new created back group shape
+    uno::Reference< drawing::XShapes > xShapes( createGroupShape( xSeriesShapes ) );
+    pDataSeries->m_xShapeBackChild.set(xShapes);
     return xShapes;
 }
 

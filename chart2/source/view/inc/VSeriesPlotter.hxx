@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-15 08:54:11 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 15:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,18 @@ private: //methods
 protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getSeriesGroupShape( VDataSeries* pDataSeries
+            , const::com::sun::star:: uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
+
+    //the following group shapes will be created as children of SeriesGroupShape on demand
+    //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)
+    //parameter xTarget will be used as parent for the series group shape
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+        getSeriesGroupShapeFrontChild( VDataSeries* pDataSeries
+            , const::com::sun::star:: uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+        getSeriesGroupShapeBackChild( VDataSeries* pDataSeries
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
