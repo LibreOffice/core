@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 08:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,16 @@ using namespace dbtools;
 //.........................................................................
 namespace frm
 {
+namespace staruno   = ::com::sun::star::uno;
+namespace starawt   = ::com::sun::star::awt;
+namespace starlang  = ::com::sun::star::lang;
+namespace starform  = ::com::sun::star::form;
+namespace starutil  = ::com::sun::star::util;
+namespace starbeans      = ::com::sun::star::beans;
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OEditControl_CreateInstance(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+InterfaceRef SAL_CALL OEditControl_CreateInstance(const
+com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & _rxFactory)
 {
     return *(new OEditControl(_rxFactory));
 }
