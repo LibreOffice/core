@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text [ ENGLISH ] = "Cell Style" ;
     Text [ norwegian ] = "Celletype" ;
     Text [ italian ] = "Modello di cella" ;
-    Text [ portuguese_brazilian ] = "Cell Style" ;
+    Text [ portuguese_brazilian ] = "Estilo da C�lula" ;
     Text [ portuguese ] = "Estilo da c�lula" ;
     Text [ finnish ] = "Solun tyyli" ;
     Text [ danish ] = "Celletypografi" ;
@@ -95,7 +95,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Number" ;
                 Text [ norwegian ] = "Number" ;
                 Text [ italian ] = "Numeri" ;
-                Text [ portuguese_brazilian ] = "N?ero" ;
+                Text [ portuguese_brazilian ] = "N�meros" ;
                 Text [ portuguese ] = "N�meros" ;
                 Text [ finnish ] = "Luku" ;
                 Text [ danish ] = "Tal" ;
@@ -116,6 +116,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "N�meros";
                 Text[ thai ] = "ตัวเลข";
+                Text[ czech ] = "Čísla";
+                Text[ hebrew ] = "Zahlen";
+                Text[ hindi ] = "संख्या";
             };
             PageItem
             {
@@ -125,7 +128,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Character" ;
                 Text [ norwegian ] = "Character" ;
                 Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
                 Text [ portuguese ] = "Tipo de letra" ;
                 Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
@@ -146,6 +149,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "फ़ॉन्ट्";
             };
             PageItem
             {
@@ -162,17 +168,20 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ italian ] = "Effetto carattere";
                 Text[ danish ] = "Skrifteffekt";
                 Text[ swedish ] = "Teckeneffekt";
-                Text[ polish ] = "Efekt czcionki";
-                Text[ portuguese_brazilian ] = "Character Extension";
+                Text[ polish ] = "Efekty czcionki";
+                Text[ portuguese_brazilian ] = "Efeitos da Fonte";
                 Text[ japanese ] = "フォント効果";
                 Text[ korean ] = "글꼴 효과";
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ chinese_traditional ] = "字型效果";
-                Text[ turkish ] = "Character Extension";
+                Text[ turkish ] = "Yaz� tipi efektleri";
                 Text[ arabic ] = "������� ������";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ finnish ] = "Fonttitehosteet";
                 Text[ thai ] = "ลักษณะตัวอักษร";
+                Text[ czech ] = "Efekty pro písmo";
+                Text[ hebrew ] = "‮אפקטים לגופים‬";
+                Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
             };
             PageItem
             {
@@ -202,6 +211,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineament";
                 Text[ thai ] = "จัดตำแหน่ง";
+                Text[ czech ] = "Zarovnání";
+                Text[ hebrew ] = "‮ישור‬";
+                Text[ hindi ] = "पंक्तिकरण";
             };
             PageItem
             {
@@ -219,16 +231,19 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ portuguese_brazilian ] = "Tipografia asi�tica";
                 Text[ japanese ] = "日本語文の体裁";
                 Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩文字";
                 Text[ chinese_traditional ] = "中日韓文字";
-                Text[ turkish ] = "Asian typography";
+                Text[ turkish ] = "Asya Matbaas�";
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "แบบการพิมพ์ของเอเชีย";
+                Text[ czech ] = "Asijská typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "Asian Typography";
             };
             PageItem
             {
@@ -237,7 +252,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Border" ;
                 Text [ norwegian ] = "Border" ;
                 Text [ italian ] = "Bordo" ;
-                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
@@ -248,7 +263,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ english_us ] = "Borders" ;
                 Text[ chinese_simplified ] = "边框";
                 Text[ russian ] = "����������";
-                Text[ polish ] = "Obramowanie";
+                Text[ polish ] = "Kraw�dzie";
                 Text[ japanese ] = "外枠";
                 Text[ chinese_traditional ] = "邊框";
                 Text[ arabic ] = "������";
@@ -258,6 +273,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vores";
                 Text[ thai ] = "เส้นขอบ";
+                Text[ czech ] = "Okraje";
+                Text[ hebrew ] = "‮מסגרות‬";
+                Text[ hindi ] = "किनारें";
             };
             PageItem
             {
@@ -266,7 +284,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -287,6 +305,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
             PageItem
             {
@@ -295,7 +316,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ ENGLISH ] = "Protection" ;
                 Text [ norwegian ] = "Protection" ;
                 Text [ italian ] = "Protezione celle" ;
-                Text [ portuguese_brazilian ] = "Prote??o" ;
+                Text [ portuguese_brazilian ] = "Prote��o da C�lula" ;
                 Text [ portuguese ] = "Protec��o de c�lula" ;
                 Text [ finnish ] = "Solujen suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
@@ -316,6 +337,9 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Protecci� de cel.les";
                 Text[ thai ] = "การป้องกันเซลล์";
+                Text[ czech ] = "Ochrana buňky";
+                Text[ hebrew ] = "Zellschutz";
+                Text[ hindi ] = "कोष्ठ रक्षा";
             };
         };
     };
@@ -331,6 +355,9 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil de la cel.la";
     Text[ thai ] = "ลักษณะเซลล์";
+    Text[ czech ] = "Styl buňky";
+    Text[ hebrew ] = "Zellvorlage";
+    Text[ hindi ] = "कोष्ठ शैली";
 };
 TabDialog RID_SCDLG_STYLES_PAGE
 {
@@ -341,7 +368,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text [ ENGLISH ] = "Page Style" ;
     Text [ norwegian ] = "Page Style" ;
     Text [ italian ] = "Modello di pagina" ;
-    Text [ portuguese_brazilian ] = "Estilo da P?gina" ;
+    Text [ portuguese_brazilian ] = "Estilo da P�gina" ;
     Text [ portuguese ] = "Estilo de p�gina" ;
     Text [ finnish ] = "Sivun tyyli" ;
     Text [ danish ] = "Sidetypografi" ;
@@ -366,7 +393,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Page" ;
                 Text [ norwegian ] = "Page" ;
                 Text [ italian ] = "Pagina" ;
-                Text [ portuguese_brazilian ] = "P?gina" ;
+                Text [ portuguese_brazilian ] = "P�gina" ;
                 Text [ portuguese ] = "P�gina" ;
                 Text [ finnish ] = "Sivu" ;
                 Text [ danish ] = "Side" ;
@@ -387,6 +414,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "P�gina";
                 Text[ thai ] = "หน้า";
+                Text[ czech ] = "Stránka";
+                Text[ hebrew ] = "‮דף‬";
+                Text[ hindi ] = "पृष्ठ";
             };
             PageItem
             {
@@ -395,7 +425,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Border" ;
                 Text [ norwegian ] = "Border" ;
                 Text [ italian ] = "Bordo" ;
-                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
@@ -406,7 +436,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ english_us ] = "Borders" ;
                 Text[ chinese_simplified ] = "边框";
                 Text[ russian ] = "����������";
-                Text[ polish ] = "Obramowanie";
+                Text[ polish ] = "Kraw�dzie";
                 Text[ japanese ] = "外枠";
                 Text[ chinese_traditional ] = "邊框";
                 Text[ arabic ] = "������";
@@ -416,6 +446,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vores";
                 Text[ thai ] = "เส้นขอบ";
+                Text[ czech ] = "Okraje";
+                Text[ hebrew ] = "‮מסגרות‬";
+                Text[ hindi ] = "किनारें";
             };
             PageItem
             {
@@ -424,7 +457,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -445,6 +478,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
             PageItem
             {
@@ -453,7 +489,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Header" ;
                 Text [ norwegian ] = "Header" ;
                 Text [ italian ] = "Riga d'intestazione" ;
-                Text [ portuguese_brazilian ] = "Cabe?alho" ;
+                Text [ portuguese_brazilian ] = "Cabe�alho" ;
                 Text [ portuguese ] = "Cabe�alho" ;
                 Text [ finnish ] = "Yl�tunniste" ;
                 Text [ danish ] = "Sidehoved" ;
@@ -474,6 +510,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cap�alera";
                 Text[ thai ] = "หัวกระดาษ";
+                Text[ czech ] = "Záhlaví";
+                Text[ hebrew ] = "‮כותרת עליונה‬";
+                Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
             };
             PageItem
             {
@@ -482,7 +521,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Footer" ;
                 Text [ norwegian ] = "Footer" ;
                 Text [ italian ] = "Pi� di pagina" ;
-                Text [ portuguese_brazilian ] = "Rodap?" ;
+                Text [ portuguese_brazilian ] = "Rodap�" ;
                 Text [ portuguese ] = "Rodap�" ;
                 Text [ finnish ] = "Alatunniste" ;
                 Text [ danish ] = "Sidefod" ;
@@ -503,6 +542,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Peu de p�gina";
                 Text[ thai ] = "ท้ายกระดาษ";
+                Text[ czech ] = "Zápatí";
+                Text[ hebrew ] = "‮כותרת תחתונה‬";
+                Text[ hindi ] = "पृष्ठ के नीचे की टीका";
             };
             PageItem
             {
@@ -511,7 +553,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ ENGLISH ] = "Table" ;
                 Text [ norwegian ] = "Table" ;
                 Text [ italian ] = "Tabella" ;
-                Text [ portuguese_brazilian ] = "Tabela" ;
+                Text [ portuguese_brazilian ] = "Planilha" ;
                 Text [ portuguese ] = "Folha" ;
                 Text [ finnish ] = "Taulukko" ;
                 Text [ danish ] = "Ark" ;
@@ -532,6 +574,9 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ turkish ] = "Tablo";
                 Text[ catalan ] = "Full";
                 Text[ thai ] = "แผ่นงาน";
+                Text[ czech ] = "List";
+                Text[ hebrew ] = "Tabelle";
+                Text[ hindi ] = "शीट्";
             };
         };
     };
@@ -547,7 +592,23 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil de la p�gina";
     Text[ thai ] = "ลักษณะหน้า";
+    Text[ czech ] = "Styl stránky";
+    Text[ hebrew ] = "‮סגנון‬";
+    Text[ hindi ] = "पृष्ठ शैली";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
