@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 17:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // not required
     // RES_UNKNOWNATR_CONTAINER
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    M_E( "ParaIsCharacterDistance", STYLE, text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 ),
+    M_E( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
+    M_E( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
     { 0, 0, 0, 0 }
 };
 
@@ -453,6 +456,9 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // TODO
     // RES_UNKNOWNATR_CONTAINER
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    M_E( "ParaIsCharacterDistance", STYLE, text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 ),
+    M_E( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
+    M_E( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
     { 0, 0, 0, 0 }
 };
 

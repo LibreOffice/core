@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:56:13 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 17:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,6 +1149,21 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_COMBINECHAR:
         pHdl = new XMLTextCombineCharPropHdl_Impl;
+        break;
+    case XML_TYPE_TEXT_AUTOSPACE:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ideograph_alpha ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) ) );
+        break;
+    case XML_TYPE_TEXT_PUNCTUATION_WRAP:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_hanging ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_simple ) ) );
+        break;
+    case XML_TYPE_TEXT_LINE_BREAK:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_strict ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_normal ) ) );
         break;
     }
 
