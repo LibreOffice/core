@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 10:52:51 $
+ *  last change: $Author: ab $ $Date: 2001-05-04 08:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ public:
     // For XML import/export:
     StarBASIC*      CreateLib( const String& rLibName, const String& Password,
                                const String& ExternalSourceURL, const String& LinkTargetURL );
+    StarBASIC*      CreateLibForLibContainer( const String& rLibName,
+                        SfxScriptLibraryContainer* pScriptCont );
     StarBASIC*      AddLib( SvStorage& rStorage, const String& rLibName, BOOL bReference );
     void            AddLib( StarBASIC* pLib );
     BOOL            MoveLib( USHORT nLib, USHORT nNewPos );
