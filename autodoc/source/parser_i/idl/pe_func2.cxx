@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_func2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:41:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,7 @@ PE_Function::Process_BuiltInType( const TokBuiltInType & i_rToken )
                 break;
         case expect_parameter_separator:
         {
-                if (i_rToken.Id() != TokBuiltInType::bty_ellipse)
-                    csv_assert(false);
+                csv_assert(i_rToken.Id() == TokBuiltInType::bty_ellipse);
 
                 pCurFunction->Set_Ellipse();
                    SetResult(done,stay);
