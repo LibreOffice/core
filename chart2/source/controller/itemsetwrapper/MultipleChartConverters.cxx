@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:11 $
+ *  last change: $Author: iha $ $Date: 2003-12-18 12:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "DataPointItemConverter.hxx"
 #include "ChartModelHelper.hxx"
+#include "TitleHelper.hxx"
+#include "TitleItemConverter.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
 #include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
@@ -197,6 +199,39 @@ const USHORT * AllDataLabelItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nDataLabelWhichPairs;
+}
+
+//-----------------------------------------------------------------------------
+
+AllTitleItemConverter::AllTitleItemConverter(
+    const uno::Reference< frame::XModel > & xChartModel,
+    SfxItemPool& rItemPool,
+    SdrModel& rDrawModel,
+    ::std::auto_ptr< awt::Size > pRefSize )
+        : MultipleItemConverter( rItemPool )
+{
+    for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::TITLE_END; nTitle++ )
+    {
+        uno::Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( TitleHelper::eTitleType(nTitle), xChartModel ) );
+        if(!xTitle.is())
+            return;
+        uno::Reference< beans::XPropertySet > xObjectProperties( xTitle, uno::UNO_QUERY);
+        ::std::auto_ptr< awt::Size > pSingleRefSize(0);
+        if( pRefSize.get())
+            pSingleRefSize = ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize ));
+        m_aConverters.push_back( new ::chart::wrapper::TitleItemConverter(
+                                        xObjectProperties, rItemPool, rDrawModel, pSingleRefSize ));
+    }
+}
+
+AllTitleItemConverter::~AllTitleItemConverter()
+{
+}
+
+const USHORT * AllTitleItemConverter::GetWhichPairs() const
+{
+    // must span all used items!
+    return nTitleWhichPairs;
 }
 
 //-----------------------------------------------------------------------------
