@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:57:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,9 +1019,9 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
         sAppName = ::rtl::OUString();
 
     const AllSettings& rAllSettings = Application::GetSettings();
-    LanguageType nType = rAllSettings.GetUILanguage();
+    ::com::sun::star::lang::Locale aLocale = rAllSettings.GetUILocale();
     String sTemp( sAppName );
-    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), nType, &sTemp, 0 );
+    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), aLocale, &sTemp, 0 );
 
     return pRet;
 }
