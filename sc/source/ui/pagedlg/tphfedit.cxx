@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-27 08:50:51 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,7 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     //! if font color is used, header/footer background color must be set
 
     ScPatternAttr   aPatAttr( rCoreAttrs.GetPool() );
-    Font            aFnt;
 
-    aPatAttr.GetFont( aFnt );
     aBtnFile.SetPopupMenu(&aPopUpFile);
 
     aBtnFile.SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
@@ -165,9 +163,9 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aBtnFile    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnTable   .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
 
-    aWndLeft.   SetFont( aFnt );
-    aWndCenter. SetFont( aFnt );
-    aWndRight.  SetFont( aFnt );
+    aWndLeft.   SetFont( aPatAttr );
+    aWndCenter. SetFont( aPatAttr );
+    aWndRight.  SetFont( aPatAttr );
 
     FillCmdArr();
 
@@ -479,16 +477,15 @@ EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::SetFont( const Font& rFont )
+void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
 {
     SfxItemSet* pSet = new SfxItemSet( pEdEngine->GetEmptyItemSet() );
-    Font        aTextFont( rFont );
-
-    aTextFont.SetTransparent( TRUE );
-    aTextFont.SetColor( COL_BLACK );
-    aTextFont.SetFillColor( COL_WHITE );
-
-    pEdEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+    rPattern.FillEditItemSet( pSet );
+    //  FillEditItemSet adjusts font height to 1/100th mm,
+    //  but for header/footer twips is needed, as in the PatternAttr:
+    pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
+    pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
+    pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
     pEdEngine->SetDefaults( pSet );
 }
 

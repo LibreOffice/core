@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 //===================================================================
 
 class ScHeaderEditEngine;
+class ScPatternAttr;
 class EditView;
 class EditTextObject;
 class SvxFieldItem;
@@ -108,7 +109,7 @@ public:
             ScEditWindow( Window* pParent, const ResId& rResId );
             ~ScEditWindow();
 
-    void            SetFont( const Font& rTextFont );
+    void            SetFont( const ScPatternAttr& rPattern );
     void            SetText( const EditTextObject& rTextObject );
     EditTextObject* CreateTextObject();
     void            SetCharAttriutes();
