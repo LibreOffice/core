@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:43:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,8 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
         ::comphelper::TStringMixEqualFunctor aEqualFunctor;
         for(;pViewBegin != pViewEnd;++pViewBegin)
             aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)));
-        sTables = Sequence< ::rtl::OUString>(aTables.begin(),aTables.size());
+        ::rtl::OUString* pTables = aTables.empty() ? 0 : &aTables[0];
+        sTables = Sequence< ::rtl::OUString>(pTables, aTables.size());
         sViews = Sequence< ::rtl::OUString>();
     }
 
