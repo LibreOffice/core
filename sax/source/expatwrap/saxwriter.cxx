@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:32:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,6 +1386,9 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
     {
         throw SAXException();
     }
+
+    if( sString.matchAsciiL( "<?xml", 5 ) )
+        return;
 
     sal_Int32 nLength(0);
     if (m_bAllowLineBreak)
