@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:13 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,14 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
 , m_nAdvConn( 0 )
 , m_nSupportedFormat( 0 )
 , m_nSupportedMedium( 0 )
+, m_bOleInitialized( sal_False )
 {
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
+
+    HRESULT hr = OleInitialize( NULL );
+    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfuly initialized\n" );
+    if ( hr == S_OK || hr == S_FALSE )
+        m_bOleInitialized = sal_True;
 
     m_pOleWrapClientSite = new OleWrapperClientSite( (OleComponent*)this );
     m_pOleWrapClientSite->AddRef();
@@ -352,6 +358,9 @@ OleComponent::~OleComponent()
         delete m_pInterfaceContainer;
         m_pInterfaceContainer = NULL;
     }
+
+    if ( m_bOleInitialized )
+        OleUninitialize();
 }
 
 //----------------------------------------------
@@ -654,8 +663,6 @@ uno::Sequence< embed::VerbDescr > OleComponent::GetVerbList()
 
     if( !m_aVerbList.getLength() )
     {
-        // InitOle(); // TODO: makes sence to do in a central place
-
         CComPtr< IEnumOLEVERB > pEnum;
         if( SUCCEEDED( m_pOleObject->EnumVerbs( &pEnum ) ) )
         {

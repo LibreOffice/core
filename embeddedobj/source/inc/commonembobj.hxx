@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-04 14:30:20 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getSupportedVerbs()
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > SAL_CALL getSupportedVerbs()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -326,7 +326,7 @@ public:
 
 // XEmbedPersist
 
-    virtual sal_Bool SAL_CALL setPersistentEntry(
+    virtual void SAL_CALL setPersistentEntry(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,

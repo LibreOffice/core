@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:32 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ class OleComponent : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCl
     sal_uInt16 m_nSupportedFormat;
     sal_uInt32 m_nSupportedMedium;
 
+    sal_Bool m_bOleInitialized;
 
     sal_Bool InitializeObject_Impl( sal_uInt32 nIconHandle );
 

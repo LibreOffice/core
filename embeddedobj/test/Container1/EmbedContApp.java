@@ -5,6 +5,7 @@ import java.net.*;
 import java.io.*;
 
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -30,7 +31,7 @@ import com.sun.star.io.XTruncate;
 
 import com.sun.star.embed.*;
 
-public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient
+public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClient, ActionListener
 {
     private XMultiServiceFactory m_xServiceFactory;
 
@@ -48,6 +49,24 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     private boolean m_bLinkObj = false;
     private String m_aLinkURI;
 
+    private byte[] m_pActionsList;
+    private int m_nActionsNumber;
+    private Timer m_aTimer;
+    private boolean m_bDestroyed = false;
+
+// Constants
+    private final byte DESTROY                  =  1;
+    private final byte MOUSE_CLICKED            =  2;
+    private final byte NEW_DOCUMENT             =  3;
+    private final byte SAVE_AS                  =  4;
+    private final byte OPEN_FILE                =  5;
+    private final byte SAVE                     =  6;
+    private final byte NEW_OBJECT               =  7;
+    private final byte OBJECT_FROM_FILE         =  8;
+    private final byte LINK_FROM_FILE           =  9;
+    private final byte CONVERT_LINK_TO_OBJECT   = 10;
+
+// Methods
     public EmbedContApp( Frame aFrame, XMultiServiceFactory xServiceFactory )
     {
         m_aFrame = aFrame;
@@ -60,6 +79,12 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         setBackground( Color.gray );
 
         m_aToolkit = Toolkit.getDefaultToolkit();
+
+        m_pActionsList = new byte[200];
+        m_nActionsNumber = 0;
+
+        m_aTimer = new Timer( 100, this );
+        m_aTimer.start();
 
         // Get a menu bar.
         MenuBar aMenuBar = m_aFrame.getMenuBar();
@@ -106,6 +131,401 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         // Handle mouse clicks in our window.
 //      addMouseListener( new MouseWatcher() );
         addMouseListener( this );
+    }
+
+    public void actionPerformed( ActionEvent evt )
+    {
+        synchronized( this )
+        {
+            for( int nInd = 0; nInd < m_nActionsNumber; nInd++ )
+            {
+                // TODO: execute m_pActionsList[ nInd ] operation
+                if ( m_pActionsList[ nInd ] == DESTROY )
+                {
+                    // free all resources
+                    clearObjectAndStorage();
+                    m_bDestroyed = true;
+                }
+                else if ( m_pActionsList[ nInd ] == MOUSE_CLICKED )
+                {
+                    // activate object if exists and not active
+                    if ( m_xEmbedObj != null )
+                    {
+                        try {
+                            m_xEmbedObj.changeState( EmbedStates.EMBED_ACTIVE );
+                        }
+                        catch( Exception ex )
+                        {
+                            JOptionPane.showMessageDialog( m_aFrame, ex, "Exception on mouse click", JOptionPane.ERROR_MESSAGE );
+                        }
+                    }
+                }
+                else if ( m_pActionsList[ nInd ] == NEW_DOCUMENT )
+                {
+                    // clear everything
+                    clearObjectAndStorage();
+
+                    repaint();
+                }
+                else if ( m_pActionsList[ nInd ] == SAVE_AS )
+                {
+                    // open SaveAs dialog and store
+
+                    if ( m_xStorage != null && m_xEmbedObj != null )
+                    {
+                        FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
+                        aFileDialog.show();
+                        if ( aFileDialog.getFile() != null )
+                        {
+                            String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                            File aFile = new File( aFileName );
+                            if ( aFile != null )
+                            {
+                                // create object from specified file
+                                String aFileURI = aFile.toURI().toASCIIString();
+                                try {
+                                    saveObject();
+
+                                    if ( m_bLinkObj )
+                                        storeLinkToStorage();
+
+                                    saveStorageAsFileURI( aFileURI );
+                                }
+                                catch( Exception ex )
+                                {
+                                    JOptionPane.showMessageDialog( m_aFrame,
+                                                                    ex,
+                                                                    "Exception in SaveAsMenuItem:",
+                                                                    JOptionPane.ERROR_MESSAGE );
+                                }
+                            }
+                        }
+                    }
+                    else
+                        JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
+                }
+                else if ( m_pActionsList[ nInd ] == OPEN_FILE )
+                {
+                    // clear everything
+                    clearObjectAndStorage();
+
+                    // open OpenFile dialog and load doc
+                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Open" );
+                    aFileDialog.show();
+                    if ( aFileDialog.getFile() != null )
+                    {
+                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                        File aFile = new File( aFileName );
+                        if ( aFile != null )
+                        {
+                            // create object from specified file
+                            String aFileURI = aFile.toURI().toASCIIString();
+
+                            // load from specified file
+                            loadFileURI( aFileURI );
+
+                            if ( m_xEmbedObj != null )
+                            {
+                                try {
+                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                }
+                                catch( Exception ex )
+                                {
+                                    JOptionPane.showMessageDialog( m_aFrame,
+                                                                    ex,
+                                                                    "Exception in OpenFileMenuItem:",
+                                                                    JOptionPane.ERROR_MESSAGE );
+                                }
+                            }
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( m_pActionsList[ nInd ] == SAVE )
+                {
+                    // if has persistance store there
+                    // if not open SaveAs dialog and store
+                    if ( m_xStorage != null && m_xEmbedObj != null )
+                    {
+                        if ( m_bOwnFile )
+                        {
+                            if ( m_xStorage == null )
+                            {
+                                JOptionPane.showMessageDialog( m_aFrame,
+                                                                "No storage for oned file!",
+                                                                "Error:",
+                                                                JOptionPane.ERROR_MESSAGE );
+                                return;
+                            }
+
+                            try {
+                                saveObject();
+
+                                if ( m_bLinkObj )
+                                    storeLinkToStorage();
+
+                                XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
+                                                                                                            m_xStorage );
+                                if ( xTransact != null )
+                                    xTransact.commit();
+                            }
+                            catch( Exception ex )
+                            {
+                                JOptionPane.showMessageDialog( m_aFrame,
+                                                                ex,
+                                                                "Exception during save operation in SaveMenuItem:",
+                                                                JOptionPane.ERROR_MESSAGE );
+                            }
+                        }
+                        else
+                        {
+                            FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
+                            aFileDialog.show();
+                            if ( aFileDialog.getFile() != null )
+                            {
+                                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                                File aFile = new File( aFileName );
+                                if ( aFile != null )
+                                {
+                                    // create object from specified file
+                                    String aFileURI = aFile.toURI().toASCIIString();
+                                    try {
+                                        saveObject();
+
+                                        if ( m_bLinkObj )
+                                            storeLinkToStorage();
+
+                                        saveStorageAsFileURI( aFileURI );
+                                    }
+                                    catch( Exception ex )
+                                    {
+                                        JOptionPane.showMessageDialog( m_aFrame,
+                                                                        ex,
+                                                                        "Exception during 'save as' operation in SaveMenuItem:",
+                                                                        JOptionPane.ERROR_MESSAGE );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                        JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
+                }
+                else if ( m_pActionsList[ nInd ] == NEW_OBJECT )
+                {
+                    // remove current object an init a new one
+                    clearObjectAndStorage();
+
+                    Object[] possibleValues = { "com.sun.star.comp.Writer.TextDocument",
+                                                "com.sun.star.comp.Writer.GlobalDocument",
+                                                "com.sun.star.comp.Writer.WebDocument",
+                                                "com.sun.star.comp.Calc.SpreadsheetDocument",
+                                                "com.sun.star.comp.Draw.PresentationDocument",
+                                                "com.sun.star.comp.Draw.DrawingDocument",
+                                                "com.sun.star.comp.Math.FormulaDocument",
+                                                "BitmapImage" };
+
+                    String selectedValue = (String)JOptionPane.showInputDialog( null, "DocumentType", "Select",
+                                                                                JOptionPane.INFORMATION_MESSAGE, null,
+                                                                                possibleValues, possibleValues[0] );
+
+                    if ( selectedValue != null )
+                    {
+                        m_xStorage = createTempStorage();
+
+                        if ( m_xStorage != null )
+                            m_xEmbedObj = createEmbedObject( selectedValue );
+                        else
+                            JOptionPane.showMessageDialog( m_aFrame,
+                                                            "Can't create temporary storage!",
+                                                            "Error:",
+                                                            JOptionPane.ERROR_MESSAGE );
+
+
+                        if ( m_xEmbedObj != null )
+                        {
+                            try {
+                                m_xEmbedObj.setClientSite( EmbedContApp.this );
+                            }
+                            catch( Exception ex )
+                            {
+                                JOptionPane.showMessageDialog( m_aFrame,
+                                                                ex,
+                                                                "Exception in NewObjectMenuItem:",
+                                                                JOptionPane.ERROR_MESSAGE );
+                            }
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( m_pActionsList[ nInd ] == OBJECT_FROM_FILE )
+                {
+                    // first remove current object
+                    clearObjectAndStorage();
+
+                    // open OpenFile dialog and load doc
+                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
+                    aFileDialog.show();
+                    if ( aFileDialog.getFile() != null )
+                    {
+                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                        File aFile = new File( aFileName );
+                        if ( aFile != null )
+                        {
+                            // create object from specified file
+                            String aFileURI = aFile.toURI().toASCIIString();
+                            m_xStorage = createTempStorage();
+
+                            if ( m_xStorage != null )
+                                m_xEmbedObj = loadEmbedObject( aFileURI );
+
+                            if ( m_xEmbedObj != null )
+                            {
+                                try {
+                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                }
+                                catch( Exception ex )
+                                {
+                                    JOptionPane.showMessageDialog( m_aFrame,
+                                                                    ex,
+                                                                    "Exception in LoadObjectMenuItem:",
+                                                                    JOptionPane.ERROR_MESSAGE );
+                                }
+                            }
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( m_pActionsList[ nInd ] == LINK_FROM_FILE )
+                {
+                    // first remove current object
+                    clearObjectAndStorage();
+
+                    // open OpenFile dialog and load doc
+                    FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
+                    aFileDialog.show();
+                    if ( aFileDialog.getFile() != null )
+                    {
+                        m_xStorage = createTempStorage();
+
+                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
+                        File aFile = new File( aFileName );
+                        if ( aFile != null )
+                        {
+                            // create object from specified file
+                            String aFileURI = aFile.toURI().toASCIIString();
+
+                            m_xEmbedObj = createLinkObject( aFileURI );
+
+                            if ( m_xEmbedObj != null )
+                            {
+                                m_aLinkURI = aFileURI;
+                                m_bLinkObj = true;
+
+                                try {
+                                    m_xEmbedObj.setClientSite( EmbedContApp.this );
+                                }
+                                catch( Exception ex )
+                                {
+                                    JOptionPane.showMessageDialog( m_aFrame,
+                                                                    ex,
+                                                                    "Exception in LinkObjectMenuItem:",
+                                                                    JOptionPane.ERROR_MESSAGE );
+                                }
+                            }
+                        }
+                    }
+
+                    generateNewImage();
+                    repaint();
+                }
+                else if ( m_pActionsList[ nInd ] == CONVERT_LINK_TO_OBJECT )
+                {
+                    if ( !m_bLinkObj )
+                    {
+                        JOptionPane.showMessageDialog( m_aFrame, "The object is not a link!", "Error:", JOptionPane.ERROR_MESSAGE );
+                        return;
+                    }
+
+                    if ( m_xEmbedObj != null )
+                    {
+                        if ( m_xStorage != null )
+                        {
+                            try {
+                                XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+                                                                                                m_xStorage );
+                                if ( xNameAccess != null && xNameAccess.hasByName( "LinkName" ) )
+                                    m_xStorage.removeElement( "LinkName" );
+
+                                XLinkageSupport xLinkage = (XLinkageSupport)UnoRuntime.queryInterface( XLinkageSupport.class,
+                                                                                                        m_xEmbedObj );
+                                if ( xLinkage != null )
+                                {
+                                    xLinkage.breakLink( m_xStorage, "EmbedSub" );
+                                    m_bLinkObj = false;
+                                    m_aLinkURI = null;
+                                }
+                                else
+                                    JOptionPane.showMessageDialog( m_aFrame,
+                                                                    "No XLinkageSupport in ConvertLink... !",
+                                                                    "Error:",
+                                                                    JOptionPane.ERROR_MESSAGE );
+                            }
+                            catch( Exception e1 )
+                            {
+                                JOptionPane.showMessageDialog( m_aFrame,
+                                                                e1,
+                                                                "Exception in ConvertLinkToEmbed:try 1 :",
+                                                                JOptionPane.ERROR_MESSAGE );
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    System.out.println( "Unknoun action is requested: " + m_pActionsList[nInd] + "\n" );
+                }
+            }
+
+            m_nActionsNumber = 0;
+        }
+    }
+
+    public void actionRegister( byte nActionID )
+    {
+        synchronized( this )
+        {
+            if ( m_nActionsNumber < 199
+              && ( m_nActionsNumber == 0 || m_pActionsList[ m_nActionsNumber - 1 ] != DESTROY ) )
+                m_pActionsList[ m_nActionsNumber++ ] = nActionID;
+        }
+    }
+
+    public void destroy()
+    {
+        // redirect the call through the timer and call super.destroy();
+        actionRegister( DESTROY );
+
+        for ( int i = 0; i < 3 && !m_bDestroyed; i++ )
+        {
+            try {
+                Thread.sleep( 200 );
+            } catch ( Exception e )
+            {}
+        }
+
+        if ( !m_bDestroyed )
+            System.out.println( "The object application can not exit correctly!" );
+
+        m_aTimer.stop();
+
+        super.destroy();
     }
 
     public void update( Graphics g )
@@ -186,17 +606,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
     {
         if( e.getModifiers() == InputEvent.BUTTON1_MASK )
         {
-            // activate object if exists and not active
-            if ( m_xEmbedObj != null )
-            {
-                try {
-                    m_xEmbedObj.changeState( EmbedStates.EMBED_ACTIVE );
-                }
-                catch( Exception ex )
-                {
-                    JOptionPane.showMessageDialog( m_aFrame, ex, "Exception on mouse click", JOptionPane.ERROR_MESSAGE );
-                }
-            }
+            actionRegister( MOUSE_CLICKED );
         }
     }
 
@@ -247,10 +657,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // clear everything
-            clearObjectAndStorage();
-
-            repaint();
+            actionRegister( NEW_DOCUMENT );
         }
     }
 
@@ -264,40 +671,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // open SaveAs dialog and store
-
-            if ( m_xStorage != null && m_xEmbedObj != null )
-            {
-                FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
-                aFileDialog.show();
-                if ( aFileDialog.getFile() != null )
-                {
-                    String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                    File aFile = new File( aFileName );
-                    if ( aFile != null )
-                    {
-                        // create object from specified file
-                        String aFileURI = aFile.toURI().toASCIIString();
-                        try {
-                            saveObject();
-
-                            if ( m_bLinkObj )
-                                storeLinkToStorage();
-
-                            saveStorageAsFileURI( aFileURI );
-                        }
-                        catch( Exception ex )
-                        {
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            ex,
-                                                            "Exception in SaveAsMenuItem:",
-                                                            JOptionPane.ERROR_MESSAGE );
-                        }
-                    }
-                }
-            }
-            else
-                JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
+            actionRegister( SAVE_AS );
         }
     }
 
@@ -311,42 +685,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // clear everything
-            clearObjectAndStorage();
-
-            // open OpenFile dialog and load doc
-            FileDialog aFileDialog = new FileDialog( m_aFrame, "Open" );
-            aFileDialog.show();
-            if ( aFileDialog.getFile() != null )
-            {
-                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                File aFile = new File( aFileName );
-                if ( aFile != null )
-                {
-                    // create object from specified file
-                    String aFileURI = aFile.toURI().toASCIIString();
-
-                    // load from specified file
-                    loadFileURI( aFileURI );
-
-                    if ( m_xEmbedObj != null )
-                    {
-                        try {
-                            m_xEmbedObj.setClientSite( EmbedContApp.this );
-                        }
-                        catch( Exception ex )
-                        {
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            ex,
-                                                            "Exception in OpenFileMenuItem:",
-                                                            JOptionPane.ERROR_MESSAGE );
-                        }
-                    }
-                }
-            }
-
-            generateNewImage();
-            repaint();
+            actionRegister( OPEN_FILE );
         }
     }
 
@@ -360,73 +699,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // if has persistance store there
-            // if not open SaveAs dialog and store
-            if ( m_xStorage != null && m_xEmbedObj != null )
-            {
-                if ( m_bOwnFile )
-                {
-                    if ( m_xStorage == null )
-                    {
-                        JOptionPane.showMessageDialog( m_aFrame,
-                                                        "No storage for oned file!",
-                                                        "Error:",
-                                                        JOptionPane.ERROR_MESSAGE );
-                        return;
-                    }
-
-                    try {
-                        saveObject();
-
-                        if ( m_bLinkObj )
-                            storeLinkToStorage();
-
-                        XTransactedObject xTransact = (XTransactedObject)UnoRuntime.queryInterface( XTransactedObject.class,
-                                                                                                    m_xStorage );
-                        if ( xTransact != null )
-                            xTransact.commit();
-                    }
-                    catch( Exception ex )
-                    {
-                        JOptionPane.showMessageDialog( m_aFrame,
-                                                        ex,
-                                                        "Exception during save operation in SaveMenuItem:",
-                                                        JOptionPane.ERROR_MESSAGE );
-                    }
-                }
-                else
-                {
-                    FileDialog aFileDialog = new FileDialog( m_aFrame, "SaveAs", FileDialog.SAVE );
-                    aFileDialog.show();
-                    if ( aFileDialog.getFile() != null )
-                    {
-                        String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                        File aFile = new File( aFileName );
-                        if ( aFile != null )
-                        {
-                            // create object from specified file
-                            String aFileURI = aFile.toURI().toASCIIString();
-                            try {
-                                saveObject();
-
-                                if ( m_bLinkObj )
-                                    storeLinkToStorage();
-
-                                saveStorageAsFileURI( aFileURI );
-                            }
-                            catch( Exception ex )
-                            {
-                                JOptionPane.showMessageDialog( m_aFrame,
-                                                                ex,
-                                                                "Exception during 'save as' operation in SaveMenuItem:",
-                                                                JOptionPane.ERROR_MESSAGE );
-                            }
-                        }
-                    }
-                }
-            }
-            else
-                JOptionPane.showMessageDialog( m_aFrame, "No document is embedded!", "Error:", JOptionPane.ERROR_MESSAGE );
+            actionRegister( SAVE );
         }
     }
 
@@ -440,51 +713,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // remove current object an init a new one
-            clearObjectAndStorage();
-
-            Object[] possibleValues = { "com.sun.star.comp.Writer.TextDocument",
-                                        "com.sun.star.comp.Writer.GlobalDocument",
-                                        "com.sun.star.comp.Writer.WebDocument",
-                                        "com.sun.star.comp.Calc.SpreadsheetDocument",
-                                        "com.sun.star.comp.Draw.PresentationDocument",
-                                        "com.sun.star.comp.Draw.DrawingDocument",
-                                        "com.sun.star.comp.Math.FormulaDocument" };
-
-            String selectedValue = (String)JOptionPane.showInputDialog( null, "DocumentType", "Select",
-                                                                        JOptionPane.INFORMATION_MESSAGE, null,
-                                                                        possibleValues, possibleValues[0] );
-
-            if ( selectedValue != null )
-            {
-                m_xStorage = createTempStorage();
-
-                if ( m_xStorage != null )
-                    m_xEmbedObj = createEmbedObject( selectedValue );
-                else
-                    JOptionPane.showMessageDialog( m_aFrame,
-                                                    "Can't create temporary storage!",
-                                                    "Error:",
-                                                    JOptionPane.ERROR_MESSAGE );
-
-
-                if ( m_xEmbedObj != null )
-                {
-                    try {
-                        m_xEmbedObj.setClientSite( EmbedContApp.this );
-                    }
-                    catch( Exception ex )
-                    {
-                        JOptionPane.showMessageDialog( m_aFrame,
-                                                        ex,
-                                                        "Exception in NewObjectMenuItem:",
-                                                        JOptionPane.ERROR_MESSAGE );
-                    }
-                }
-            }
-
-            generateNewImage();
-            repaint();
+            actionRegister( NEW_OBJECT );
         }
     }
 
@@ -498,43 +727,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // first remove current object
-            clearObjectAndStorage();
-
-            // open OpenFile dialog and load doc
-            FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
-            aFileDialog.show();
-            if ( aFileDialog.getFile() != null )
-            {
-                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                File aFile = new File( aFileName );
-                if ( aFile != null )
-                {
-                    // create object from specified file
-                    String aFileURI = aFile.toURI().toASCIIString();
-                    m_xStorage = createTempStorage();
-
-                    if ( m_xStorage != null )
-                        m_xEmbedObj = loadEmbedObject( aFileURI );
-
-                    if ( m_xEmbedObj != null )
-                    {
-                        try {
-                            m_xEmbedObj.setClientSite( EmbedContApp.this );
-                        }
-                        catch( Exception ex )
-                        {
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            ex,
-                                                            "Exception in LoadObjectMenuItem:",
-                                                            JOptionPane.ERROR_MESSAGE );
-                        }
-                    }
-                }
-            }
-
-            generateNewImage();
-            repaint();
+            actionRegister( OBJECT_FROM_FILE );
         }
     }
 
@@ -548,46 +741,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            // first remove current object
-            clearObjectAndStorage();
-
-            // open OpenFile dialog and load doc
-            FileDialog aFileDialog = new FileDialog( m_aFrame, "Select sources to use for object init" );
-            aFileDialog.show();
-            if ( aFileDialog.getFile() != null )
-            {
-                m_xStorage = createTempStorage();
-
-                String aFileName = aFileDialog.getDirectory() + aFileDialog.getFile();
-                File aFile = new File( aFileName );
-                if ( aFile != null )
-                {
-                    // create object from specified file
-                    String aFileURI = aFile.toURI().toASCIIString();
-
-                    m_xEmbedObj = createLinkObject( aFileURI );
-
-                    if ( m_xEmbedObj != null )
-                    {
-                        m_aLinkURI = aFileURI;
-                        m_bLinkObj = true;
-
-                        try {
-                            m_xEmbedObj.setClientSite( EmbedContApp.this );
-                        }
-                        catch( Exception ex )
-                        {
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            ex,
-                                                            "Exception in LinkObjectMenuItem:",
-                                                            JOptionPane.ERROR_MESSAGE );
-                        }
-                    }
-                }
-            }
-
-            generateNewImage();
-            repaint();
+            actionRegister( LINK_FROM_FILE );
         }
     }
 
@@ -601,45 +755,7 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
 
         public void actionPerformed( ActionEvent e )
         {
-            if ( !m_bLinkObj )
-            {
-                JOptionPane.showMessageDialog( m_aFrame, "The object is not a link!", "Error:", JOptionPane.ERROR_MESSAGE );
-                return;
-            }
-
-            if ( m_xEmbedObj != null )
-            {
-                if ( m_xStorage != null )
-                {
-                    try {
-                        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
-                                                                                        m_xStorage );
-                        if ( xNameAccess != null && xNameAccess.hasByName( "LinkName" ) )
-                            m_xStorage.removeElement( "LinkName" );
-
-                        XLinkageSupport xLinkage = (XLinkageSupport)UnoRuntime.queryInterface( XLinkageSupport.class,
-                                                                                                m_xEmbedObj );
-                        if ( xLinkage != null )
-                        {
-                            xLinkage.breakLink( m_xStorage, "EmbedSub" );
-                            m_bLinkObj = false;
-                            m_aLinkURI = null;
-                        }
-                        else
-                            JOptionPane.showMessageDialog( m_aFrame,
-                                                            "No XLinkageSupport in ConvertLink... !",
-                                                            "Error:",
-                                                            JOptionPane.ERROR_MESSAGE );
-                    }
-                    catch( Exception e1 )
-                    {
-                        JOptionPane.showMessageDialog( m_aFrame,
-                                                        e1,
-                                                        "Exception in ConvertLinkToEmbed:try 1 :",
-                                                        JOptionPane.ERROR_MESSAGE );
-                    }
-                }
-            }
+            actionRegister( CONVERT_LINK_TO_OBJECT );
         }
     }
 
@@ -695,6 +811,13 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         {
             int[] pTempClassID = { 0x07, 0x8B, 0x7A, 0xBA, 0x54, 0xFC, 0x45, 0x7F,
                                     0x85, 0x51, 0x61, 0x47, 0xE7, 0x76, 0xA9, 0x97 };
+            for ( int ind = 0; ind < 16; ind++ )
+                pClassID[ind] = (byte)pTempClassID[ind];
+        }
+        else if ( aServiceName.equals( "BitmapImage" ) )
+        {
+            int[] pTempClassID = { 0xD3, 0xE3, 0x4B, 0x21, 0x9D, 0x75, 0x10, 0x1A,
+                                    0x8C, 0x3D, 0x00, 0xAA, 0x00, 0x1A, 0x16, 0x52 };
             for ( int ind = 0; ind < 16; ind++ )
                 pClassID[ind] = (byte)pTempClassID[ind];
         }

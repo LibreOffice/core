@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-04 14:30:19 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::CreateTempDocFromLink_Imp
 }
 
 //------------------------------------------------------
-sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
+void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -547,6 +547,10 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+    // TODO: the OOo link will have persistence
+    if ( m_bIsLink )
+        return;
+
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( !xNameAccess.is() )
         throw uno::RuntimeException(); //TODO
@@ -564,10 +568,6 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
     m_xObjectStorage = xStorage->openStorageElement( sEntName, nStorageMode );
     m_xParentStorage = xStorage;
     m_aEntryName = sEntName;
-
-    // the object should be based on the storage ??? TODO
-    if ( bElExists && !xStorage->isStorageElement( sEntName ) )
-        throw io::IOException(); // TODO access denied
 
     if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_DEFAULT_INIT )
     {
@@ -593,9 +593,8 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
         {
             // the document just already changed its storage to store to
-            // the links to OOo documents will ignore this call and return false
-            if ( m_bIsLink )
-                return sal_False;
+            // the links to OOo documents for now ignore this call
+            // TODO: OOo links will have persistence so it will be switched here
         }
         else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRUNCATE_INIT )
         {
@@ -621,8 +620,6 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
     }
-
-    return sal_True;
 }
 
 //------------------------------------------------------
@@ -985,10 +982,6 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     m_xObjectStorage = xStorage->openStorageElement( sEntName, nStorageMode );
     m_xParentStorage = xStorage;
     m_aEntryName = sEntName;
-
-    // the object should be based on the storage ??? TODO
-    if ( bElExists && !xStorage->isStorageElement( sEntName ) )
-        throw io::IOException(); // TODO access denied
 
     // for linked object it means that it becomes embedded object
     // the document must switch it's persistence also

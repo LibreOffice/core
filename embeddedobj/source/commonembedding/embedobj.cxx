@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:57:28 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( !xModif.is() )
                 throw uno::RuntimeException();
 
+            if ( !m_xClientSite.is() )
+                throw embed::WrongStateException(); //TODO: client site is not set!
+
             // store document if it is modified
             if ( xModif->isModified() )
             {
@@ -324,7 +327,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 //----------------------------------------------
-uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
+uno::Sequence< embed::VerbDescr > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
@@ -336,7 +339,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    uno::Sequence< sal_Int32 > aResult;
+    uno::Sequence< embed::VerbDescr > aResult;
     sal_Int32 nResLen = 0;
 
     // verbs list will be set on initialization depending from document type
@@ -345,7 +348,8 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
             if ( m_aVerbTable[nVerbInd][1] == m_aAcceptedStates[nStatesInd] )
             {
                 aResult.realloc( ++nResLen );
-                aResult[nResLen-1] = m_aVerbTable[nVerbInd][0];
+                // TODO: fill the whole structure
+                aResult[nResLen-1].VerbID = m_aVerbTable[nVerbInd][0];
             }
 
     return aResult;
