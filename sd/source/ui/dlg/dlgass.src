@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-05 21:56:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ ModalDialog DLG_ASS
         Text[ japanese ] = "Νί°Όή½ΐ²Ω‚π‘I‘π‚µ‚ά‚·(~S)";
         Text[ chinese_traditional ] = "½Π±zΏοΎά¤@­Σ­¶­±ΌΛ¦΅(~S)";
         Text[ arabic ] = "ΗαΡΜΗΑ ΗΞΚνΗΡ ΚΞΨνΨ ΗαΥέΝΙ";
-        Text[ greek ] = "Επιλέξετε ένα πρότυπο σελίδας";
+        Text[ greek ] = "Επιλέξτε ένα πρότυπο ~σελίδας";
         Text[ korean ] = "ΒΚ ΐ―Ηόΐ» Ό±ΕΓΗΟ½Κ½ΓΏΐ(~S)";
         Text[ turkish ] = "Bir sayfa biηimi seηin";
         Text[ language_user1 ] = " ";
@@ -378,7 +378,7 @@ ModalDialog DLG_ASS
         Text[ japanese ] = "ΜίΪΎήέΓ°Ό®έ‚Μ”­•\\•ϋ–@‚π‘I‘π‚µ‚ά‚·";
         Text[ chinese_traditional ] = "½ΠΏοΎά¤@­Σ¦C¦LΒ²³ψªΊ΄CΕι";
         Text[ arabic ] = "ΗΞΚΡ ΓΟΗΙ ΗαΪΡΦ ΗαΚήΟνγν";
-        Text[ greek ] = "Επιλέξτε ένα μέσον έκδοσης";
+        Text[ greek ] = "Επιλέξτε μια συσκευή έκδοσης";
         Text[ korean ] = "ΗΑΈ®Α¨ΕΧΐΜΌΗ Γβ·ΒΈΕΓΌΈ¦ Ό±ΕΓΗΟ½Κ½ΓΏΐ";
         Text[ turkish ] = "Bir ηύktύ ortamύ seηin";
         Text[ language_user1 ] = " ";
@@ -1257,6 +1257,7 @@ ModalDialog DLG_ASS
     Text[ catalan ] = "AutoPiloto Presentaciσn";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
+
 
 
 
