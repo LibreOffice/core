@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 12:19:09 $
+ *  last change: $Author: tl $ $Date: 2002-07-02 11:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,9 +515,14 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 nVal = static_cast < sal_Int16 > ( TWIP_TO_MM100(nVal) );
                 aSize.Height() = nVal;
                 aFormat.SetBaseSize(aSize);
+
+                // apply base size to fonts
+                const Size aTmp( aFormat.GetBaseSize() );
+                for (USHORT  i = FNT_BEGIN;  i <= FNT_END;  i++)
+                    aFormat.SetFontSize(i, aTmp);
             }
             break;
-            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT           :
+            case HANDLE_RELATIVE_FONT_HEIGHT_TEXT          :
             case HANDLE_RELATIVE_FONT_HEIGHT_INDICES       :
             case HANDLE_RELATIVE_FONT_HEIGHT_FUNCTIONS     :
             case HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS     :
