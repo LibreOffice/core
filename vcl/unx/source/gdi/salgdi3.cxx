@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: avy $ $Date: 2001-04-09 17:08:50 $
+ *  last change: $Author: cp $ $Date: 2001-04-09 20:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,8 @@ class FontLookup
 
         FontWeight          mnWeight;
         FontItalic          mnItalic;
+        sal_Bool            mbDisplay;
+
         rtl::OString        maName;
 
     public:
@@ -241,7 +243,8 @@ class FontLookup
                             FontLookup (const FontLookup &rRef) :
                                     mnWeight (rRef.mnWeight),
                                     mnItalic (rRef.mnItalic),
-                                    maName   (rRef.maName)
+                                    maName   (rRef.maName),
+                                    mbDisplay(rRef.mbDisplay)
                             {}
                             ~FontLookup ()
                             {}
@@ -254,13 +257,15 @@ class FontLookup
                             {
                                 return     (abs(mnWeight - rRef.mnWeight) < 2)
                                         && (mnItalic == rRef.mnItalic)
-                                        && (maName   == rRef.maName);
+                                        && (maName   == rRef.maName)
+                                        && (mbDisplay== rRef.mbDisplay);
                             }
         FontLookup&         operator= (const FontLookup &rRef)
                             {
                                 mnWeight = rRef.mnWeight;
                                 mnItalic = rRef.mnItalic;
                                 maName   = rRef.maName;
+                                mbDisplay= rRef.mbDisplay;
 
                                 return *this;
                             }
@@ -293,6 +298,8 @@ FontLookup::FontLookup ( ::std::list< psp::fontID >::iterator& it,
     {
         mnItalic = ToFontItalic (aInfo.m_eItalic);
         mnWeight = ToFontWeight (aInfo.m_eWeight);
+        mbDisplay=    aInfo.m_eType == psp::fonttype::Builtin
+                   || aInfo.m_eType == psp::fonttype::Unknown ? False : True;
         maName   = rtl::OUStringToOString (aInfo.m_aFamilyName,
                                         RTL_TEXTENCODING_ISO_8859_1).toLowerCase();
 
@@ -309,11 +316,13 @@ FontLookup::FontLookup ( ::std::list< psp::fontID >::iterator& it,
         maName = rtl::OString (p_to, j);
         if (mnItalic == ITALIC_OBLIQUE)
             mnItalic = ITALIC_NORMAL;
+
     }
     else
     {
         mnItalic = ITALIC_DONTKNOW;
         mnWeight = WEIGHT_DONTKNOW;
+        mbDisplay= False;
     }
 }
 
@@ -331,6 +340,8 @@ FontLookup::FontLookup (const Xlfd& rFont)
 
     if (mnItalic == ITALIC_OBLIQUE)
         mnItalic = ITALIC_NORMAL;
+
+    mbDisplay = True;
 }
 
 void
@@ -373,9 +384,10 @@ class FontFallback
 {
     private:
 
-        inline bool         equalItalic (psp::italic::type from, psp::italic::type to);
-        inline bool         equalWeight (psp::weight::type from, psp::weight::type to);
-        ServerFont*         ImplFallbackFor (const ImplFontSelectData *pData);
+        static inline bool  equalItalic (psp::italic::type from, psp::italic::type to);
+        static inline bool  equalWeight (psp::weight::type from, psp::weight::type to);
+        ServerFont*         ImplFallbackFor (const ImplFontSelectData *pData) const ;
+        ::psp::fontID       ImplFallbackFor () const ;
 
         ::psp::fontID       mnId;
         void*               mpSysData;
@@ -383,6 +395,7 @@ class FontFallback
     public:
                             FontFallback ();
         static ServerFont*  FallbackFor (const ImplFontSelectData *pData);
+        static ::psp::fontID FallbackFor ();
         static FontFallback* GetInstance ();
 };
 
@@ -437,7 +450,7 @@ FontFallback::FontFallback () :
 }
 
 ServerFont*
-FontFallback::ImplFallbackFor (const ImplFontSelectData *pData)
+FontFallback::ImplFallbackFor (const ImplFontSelectData *pData) const
 {
     if (mpSysData == NULL)
         return NULL;
@@ -446,7 +459,7 @@ FontFallback::ImplFallbackFor (const ImplFontSelectData *pData)
     ImplFontData        aFaksimileData;
 
     aFaksimile.mnHeight              = pData->mnHeight;
-    aFaksimile.mnWidth               = 0;
+    aFaksimile.mnWidth               = pData->mnWidth;
     aFaksimile.mnOrientation         = pData->mnOrientation;
     aFaksimile.mbVertical            = pData->mbVertical;
     aFaksimile.mbNonAntialiased      = pData->mbNonAntialiased;
@@ -456,6 +469,12 @@ FontFallback::ImplFallbackFor (const ImplFontSelectData *pData)
     return GlyphCache::GetInstance().CacheFont (aFaksimile);
 }
 
+::psp::fontID
+FontFallback::ImplFallbackFor () const
+{
+    return mnId;
+}
+
 ServerFont*
 FontFallback::FallbackFor (const ImplFontSelectData *pData)
 {
@@ -463,6 +482,15 @@ FontFallback::FallbackFor (const ImplFontSelectData *pData)
     if (pInstance != NULL)
         return pInstance->ImplFallbackFor (pData);
     return NULL;
+}
+
+::psp::fontID
+FontFallback::FallbackFor ()
+{
+    FontFallback* pInstance = FontFallback::GetInstance();
+    if (pInstance != NULL)
+        return pInstance->ImplFallbackFor ();
+    return 0;
 }
 
 FontFallback*
@@ -1231,6 +1259,16 @@ void SalGraphicsData::DispatchServerFontString( int nX, int nY,
 
 //--------------------------------------------------------------------------
 
+static Point
+RotatedPoint( Point &rOrigin, int nDx, int nAngle )
+{
+    Point   aPos( rOrigin.X() + nDx, rOrigin.Y() );
+    Polygon aPolygon(1);
+    aPolygon.SetPoint( aPos, 0 );
+    aPolygon.Rotate( rOrigin, nAngle );
+    return aPolygon.GetPoint( 0 );
+}
+
 void SalGraphicsData::DrawServerFontString(
     int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
 {
@@ -1240,7 +1278,7 @@ void SalGraphicsData::DrawServerFontString(
         pFGlyph[i] = mpServerSideFont->GetGlyphIndex( pStr[i] );
     }
 
-    if ((mpSrvFallbackFont == NULL) || (pDXAry == 0) || (nFontOrientation_ != 0))
+    if ((mpSrvFallbackFont == NULL) || (pDXAry == 0))
     {
         DispatchServerFontString (nX, nY, mpServerSideFont, pFGlyph, nLength, pDXAry);
         return;
@@ -1264,8 +1302,9 @@ void SalGraphicsData::DrawServerFontString(
             }
             if (nLen)
             {
-                DispatchServerFontString(nX + nAdvance, nY, mpServerSideFont,
-                                        pFGlyph + nFrom, nLen, pDeltaArray);
+                Point aPoint = RotatedPoint( Point(nX, nY), nAdvance, nFontOrientation_);
+                DispatchServerFontString(aPoint.X(), aPoint.Y(), mpServerSideFont,
+                        pFGlyph + nFrom, nLen, pDeltaArray);
             }
         }
         else
@@ -1280,7 +1319,8 @@ void SalGraphicsData::DrawServerFontString(
             }
             if (nLen)
             {
-                DispatchServerFontString(nX + nAdvance, nY, mpSrvFallbackFont,
+                Point aPoint = RotatedPoint( Point(nX, nY), nAdvance, nFontOrientation_);
+                DispatchServerFontString(aPoint.X(), aPoint.Y(), mpSrvFallbackFont,
                                         pFFGlyph + nFrom, nLen, pDeltaArray);
             }
         }
@@ -1471,6 +1511,7 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
         sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
+        maGraphicsData.m_pPrinterGfx->SetFallbackFont( FontFallback::FallbackFor() );
         return maGraphicsData.m_pPrinterGfx->SetFont(
                                                      nID,
                                                      pEntry->mnHeight,
