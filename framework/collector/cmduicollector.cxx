@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:21:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,17 +81,22 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/keycodes.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#include <com/sun/star/awt/KeyEvent.hpp>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 
 #include <hash_map>
 #include <vector>
 
 using namespace rtl;
+namespace css = ::com::sun::star;
 
 // Menubars
 const unsigned short MENUBAR_GLOBAL             = 261;
@@ -109,6 +114,23 @@ const unsigned short MENUBAR_BACKINGCOMP        = 261;
 const unsigned short MENUBAR_DBACCESS_TABLE     = 19210;
 const unsigned short MENUBAR_DBACCESS_QUERY     = 19211;
 const unsigned short MENUBAR_DBACCESS_RELATION  = 19212;
+
+// Accelerators (TODO_AS change numbers)
+const unsigned short ACC_GLOBAL             = 262;
+const unsigned short ACC_WRITER             = 20017;
+const unsigned short ACC_WRITERWEB          = 20017;    // same as writer ?
+const unsigned short ACC_WRITERGLOBAL       = 20017;    // same as writer ?
+const unsigned short ACC_CALC               = 26006;
+const unsigned short ACC_DRAW               = 23008;
+const unsigned short ACC_CHART              = 20080;
+const unsigned short ACC_MATH               = 20815;
+const unsigned short ACC_IMPRESS            = 23008;    // same as draw ?
+const unsigned short ACC_BASIC              = 0;
+const unsigned short ACC_BIBLIOGRAPHY       = 0;
+const unsigned short ACC_BACKINGCOMP        = 0;
+const unsigned short ACC_DBACCESS_TABLE     = 0;
+const unsigned short ACC_DBACCESS_QUERY     = 0;
+const unsigned short ACC_DBACCESS_RELATION  = 0;
 
 // Toolbars
 const unsigned short TOOLBAR_functionbar                = 560;
@@ -237,19 +259,127 @@ const unsigned short SUBTOOLBAR_GLOBAL_TBX_DRAW                 = 1;
 const unsigned short SUBTOOLBAR_GLOBAL_RID_SVXTBX_ALIGNMENT     = (RID_SVX_START + 190);
 const unsigned short SUBTOOLBAR_GLOBAL_TBX_ALIGNMENT            = 10131; // SID_OBJECT_ALIGN_LEFT
 
+struct KeyIdentifierInfo
+{
+    sal_Int16 Code      ;
+    char*     Identifier;
+};
+
+KeyIdentifierInfo AWTKeyIdentifierMap[] =
+{
+    {css::awt::Key::NUM0          , "KEY_0"          },
+    {css::awt::Key::NUM1          , "KEY_1"          },
+    {css::awt::Key::NUM2          , "KEY_2"          },
+    {css::awt::Key::NUM3          , "KEY_3"          },
+    {css::awt::Key::NUM4          , "KEY_4"          },
+    {css::awt::Key::NUM5          , "KEY_5"          },
+    {css::awt::Key::NUM6          , "KEY_6"          },
+    {css::awt::Key::NUM7          , "KEY_7"          },
+    {css::awt::Key::NUM8          , "KEY_8"          },
+    {css::awt::Key::NUM9          , "KEY_9"          },
+    {css::awt::Key::A             , "KEY_A"          },
+    {css::awt::Key::B             , "KEY_B"          },
+    {css::awt::Key::C             , "KEY_C"          },
+    {css::awt::Key::D             , "KEY_D"          },
+    {css::awt::Key::E             , "KEY_E"          },
+    {css::awt::Key::F             , "KEY_F"          },
+    {css::awt::Key::G             , "KEY_G"          },
+    {css::awt::Key::H             , "KEY_H"          },
+    {css::awt::Key::I             , "KEY_I"          },
+    {css::awt::Key::J             , "KEY_J"          },
+    {css::awt::Key::K             , "KEY_K"          },
+    {css::awt::Key::L             , "KEY_L"          },
+    {css::awt::Key::M             , "KEY_M"          },
+    {css::awt::Key::N             , "KEY_N"          },
+    {css::awt::Key::O             , "KEY_O"          },
+    {css::awt::Key::P             , "KEY_P"          },
+    {css::awt::Key::Q             , "KEY_Q"          },
+    {css::awt::Key::R             , "KEY_R"          },
+    {css::awt::Key::S             , "KEY_S"          },
+    {css::awt::Key::T             , "KEY_T"          },
+    {css::awt::Key::U             , "KEY_U"          },
+    {css::awt::Key::V             , "KEY_V"          },
+    {css::awt::Key::W             , "KEY_W"          },
+    {css::awt::Key::X             , "KEY_X"          },
+    {css::awt::Key::Y             , "KEY_Y"          },
+    {css::awt::Key::Z             , "KEY_Z"          },
+    {css::awt::Key::F1            , "KEY_F1"         },
+    {css::awt::Key::F2            , "KEY_F2"         },
+    {css::awt::Key::F3            , "KEY_F3"         },
+    {css::awt::Key::F4            , "KEY_F4"         },
+    {css::awt::Key::F5            , "KEY_F5"         },
+    {css::awt::Key::F6            , "KEY_F6"         },
+    {css::awt::Key::F7            , "KEY_F7"         },
+    {css::awt::Key::F8            , "KEY_F8"         },
+    {css::awt::Key::F9            , "KEY_F9"         },
+    {css::awt::Key::F10           , "KEY_F10"        },
+    {css::awt::Key::F11           , "KEY_F11"        },
+    {css::awt::Key::F12           , "KEY_F12"        },
+    {css::awt::Key::F13           , "KEY_F13"        },
+    {css::awt::Key::F14           , "KEY_F14"        },
+    {css::awt::Key::F15           , "KEY_F15"        },
+    {css::awt::Key::F16           , "KEY_F16"        },
+    {css::awt::Key::F17           , "KEY_F17"        },
+    {css::awt::Key::F18           , "KEY_F18"        },
+    {css::awt::Key::F19           , "KEY_F19"        },
+    {css::awt::Key::F20           , "KEY_F20"        },
+    {css::awt::Key::F21           , "KEY_F21"        },
+    {css::awt::Key::F22           , "KEY_F22"        },
+    {css::awt::Key::F23           , "KEY_F23"        },
+    {css::awt::Key::F24           , "KEY_F24"        },
+    {css::awt::Key::F25           , "KEY_F25"        },
+    {css::awt::Key::F26           , "KEY_F26"        },
+    {css::awt::Key::DOWN          , "KEY_DOWN"       },
+    {css::awt::Key::UP            , "KEY_UP"         },
+    {css::awt::Key::LEFT          , "KEY_LEFT"       },
+    {css::awt::Key::RIGHT         , "KEY_RIGHT"      },
+    {css::awt::Key::HOME          , "KEY_HOME"       },
+    {css::awt::Key::END           , "KEY_END"        },
+    {css::awt::Key::PAGEUP        , "KEY_PAGEUP"     },
+    {css::awt::Key::PAGEDOWN      , "KEY_PAGEDOWN"   },
+    {css::awt::Key::RETURN        , "KEY_RETURN"     },
+    {css::awt::Key::ESCAPE        , "KEY_ESCAPE"     },
+    {css::awt::Key::TAB           , "KEY_TAB"        },
+    {css::awt::Key::BACKSPACE     , "KEY_BACKSPACE"  },
+    {css::awt::Key::SPACE         , "KEY_SPACE"      },
+    {css::awt::Key::INSERT        , "KEY_INSERT"     },
+    {css::awt::Key::DELETE        , "KEY_DELETE"     },
+    {css::awt::Key::ADD           , "KEY_ADD"        },
+    {css::awt::Key::SUBTRACT      , "KEY_SUBTRACT"   },
+    {css::awt::Key::MULTIPLY      , "KEY_MULTIPLY"   },
+    {css::awt::Key::DIVIDE        , "KEY_DIVIDE"     },
+    {css::awt::Key::POINT         , "KEY_POINT"      },
+    {css::awt::Key::COMMA         , "KEY_COMMA"      },
+    {css::awt::Key::LESS          , "KEY_LESS"       },
+    {css::awt::Key::GREATER       , "KEY_GREATER"    },
+    {css::awt::Key::EQUAL         , "KEY_EQUAL"      },
+    {css::awt::Key::OPEN          , "KEY_OPEN"       },
+    {css::awt::Key::CUT           , "KEY_CUT"        },
+    {css::awt::Key::COPY          , "KEY_COPY"       },
+    {css::awt::Key::PASTE         , "KEY_PASTE"      },
+    {css::awt::Key::UNDO          , "KEY_UNDO"       },
+    {css::awt::Key::REPEAT        , "KEY_REPEAT"     },
+    {css::awt::Key::FIND          , "KEY_FIND"       },
+    {css::awt::Key::PROPERTIES    , "KEY_PROPERTIES" },
+    {css::awt::Key::FRONT         , "KEY_FRONT"      },
+    {css::awt::Key::CONTEXTMENU   , "KEY_CONTEXTMENU"},
+    {css::awt::Key::HELP          , "KEY_HELP"       },
+    {0                            , ""               } // mark the end of this array!
+};
+
 struct ISO_code
 {
     const char* pLanguage;
     const char* pCountry;
 };
 
-//const int NUM_LANGUAGES = 27;
-const int NUM_LANGUAGES = 1;
+const int NUM_LANGUAGES = 27;
+//const int NUM_LANGUAGES = 1;
 
 ISO_code Language_codes[] =
 {
     { "de", ""       },
-    { "en", "US "    },
+    { "en", "US"     },
     { "ar", ""       },
     { "no", ""       },
     { "ca", ""       },
@@ -343,7 +473,6 @@ Projects ProjectModule_Mapping[] =
     { 0             , 0,        "",         false,  MODULE_BASIC          }
 };
 
-
 const char XMLFileExtension[] = ".xcu";
 const char* ModuleToXML_Mapping[] =
 {
@@ -396,6 +525,27 @@ ResourceToModule ResourceModule_Mapping[] =
     { MENUBAR_DBACCESS_QUERY,   "dbquery",      MODULE_DBACCESS     },
     { MENUBAR_DBACCESS_RELATION,"dbrelation",   MODULE_DBACCESS     },
     { 0,                        "",             MODULE_DBACCESS     }
+};
+
+
+ResourceToModule AccResourceModule_Mapping[] =
+{
+    { ACC_GLOBAL,           "default",      MODULE_GLOBAL       },
+    { ACC_WRITER,           "writer",       MODULE_WRITER       },
+    { ACC_WRITERWEB,        "web",          MODULE_WRITER       },
+    { ACC_WRITERGLOBAL,     "global",       MODULE_WRITER       },
+    { ACC_CALC,             "calc",         MODULE_CALC         },
+    { ACC_DRAW,             "draw",         MODULE_DRAWIMPRESS  },
+    { ACC_CHART,            "chart",        MODULE_CHART        },
+    { ACC_MATH,             "math",         MODULE_MATH         },
+    { ACC_IMPRESS,          "impress",      MODULE_DRAWIMPRESS  },
+    { ACC_BIBLIOGRAPHY,     "biblio",       MODULE_BIBLIO       }, // 0
+    { ACC_BACKINGCOMP,      "backing",      MODULE_BACKINGCOMP  }, // 0
+    { ACC_DBACCESS_TABLE,   "dbtable",      MODULE_DBACCESS     }, // 0
+    { ACC_DBACCESS_QUERY,   "dbquery",      MODULE_DBACCESS     }, // 0
+    { ACC_DBACCESS_RELATION,"dbrelation",   MODULE_DBACCESS     }, // 0
+    { ACC_BASIC,            "basic",        MODULE_BASIC        }, // 0
+    { 0,                    "",             MODULE_COUNT        }
 };
 
 ResourceToModule TBResourceModule_Mapping[] =
@@ -510,6 +660,27 @@ struct CommandLabels
     {}
 };
 
+struct KeyCommandInfo
+{
+    KeyCode aVCLKey;
+    css::awt::KeyEvent aAWTKey;
+    ::rtl::OUString sCommand;
+    ::rtl::OUString sKey;
+    USHORT nCommandId;
+
+    bool operator==(const KeyCommandInfo& rI) const
+    {
+        return (
+                   (rI.aVCLKey    == aVCLKey) &&
+                   (rI.aAWTKey.KeyCode    == aAWTKey.KeyCode) &&
+                   (rI.aAWTKey.Modifiers    == aAWTKey.Modifiers) &&
+                   (rI.sCommand   == sCommand) &&
+                   (rI.sKey       == sKey) &&
+                   (rI.nCommandId == nCommandId)
+               );
+    }
+};
+
 struct ToolBarInfo
 {
     unsigned short nID;
@@ -534,9 +705,12 @@ struct OUStringHashCode
 typedef std::hash_map< int, CommandLabels > CommandIDToLabelsMap;
 typedef std::hash_map< OUString, CommandLabels, OUStringHashCode, ::std::equal_to< OUString > > CommandToLabelsMap;
 typedef std::hash_map< int, ToolBarInfo > ResIdToToolBarInfoMap;
+typedef std::vector< KeyCommandInfo > KeyCommandInfoList;
+typedef std::hash_map< int, KeyCommandInfoList > Locale2KeyCommandInfoList;
 
 static CommandIDToLabelsMap     moduleMapFiles[MODULE_COUNT];
 static CommandToLabelsMap       modulePopupMenusCmd[MODULE_COUNT];
+static Locale2KeyCommandInfoList moduleAccs[MODULE_COUNT];
 
 bool ExtractVersionNumber( const OUString& rVersion, OUString& rVersionNumber )
 {
@@ -563,8 +737,14 @@ bool ExtractVersionNumber( const OUString& rVersion, OUString& rVersionNumber )
 bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& aProjectName )
 {
     osl::File  aCSVFile( aCVSFileURL );
+    fprintf(stdout, "############ read csv \"%s\" ... ", ::rtl::OUStringToOString(aCVSFileURL, RTL_TEXTENCODING_UTF8).getStr());
+    if ( aCSVFile.open( OpenFlag_Read ) != osl::FileBase::E_None )
+    {
+        fprintf(stdout, "failed!\n");
+        return false;
+    }
+    fprintf(stdout, "OK!\n");
 
-    if ( aCSVFile.open( OpenFlag_Read ) == osl::FileBase::E_None )
     {
         sal_Bool            bEOF;
         ::rtl::ByteSequence aCSVLine;
@@ -666,6 +846,107 @@ void AddCommandLabelsToIDHashMap( MODULES eModule, const CommandLabels& rNewCmdL
 void AddCommandLabelsToCommandHashMap( MODULES eModule, const CommandLabels& rNewCmdLabels )
 {
     modulePopupMenusCmd[int(eModule)].insert( CommandToLabelsMap::value_type( rNewCmdLabels.aCommand, rNewCmdLabels ));
+}
+
+KeyCode impl_KeyCodeAWT2VCL(const css::awt::KeyEvent& aAWTKey)
+{
+    BOOL   bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+    BOOL   bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+    BOOL   bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+    USHORT nKey   = (USHORT)aAWTKey.KeyCode;
+    return KeyCode(nKey, bShift, bMod1, bMod2);
+}
+
+css::awt::KeyEvent impl_KeyCodeVCL2AWT(const KeyCode& aVCLKey)
+{
+    css::awt::KeyEvent aAWTKey;
+    aAWTKey.Modifiers = 0;
+    aAWTKey.KeyCode   = (sal_Int16)aVCLKey.GetCode();
+
+    if (aVCLKey.IsShift())
+        aAWTKey.Modifiers |= css::awt::KeyModifier::SHIFT;
+    if (aVCLKey.IsMod1())
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
+    if (aVCLKey.IsMod2())
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
+
+    return aAWTKey;
+}
+
+bool impl_isDuplicateKey(const KeyCommandInfoList& rList,
+                         const KeyCommandInfo&     aInfo)
+{
+    KeyCommandInfoList::const_iterator pInfo;
+    for (  pInfo  = rList.begin();
+           pInfo != rList.end()  ;
+         ++pInfo                 )
+    {
+        if (
+            (pInfo->aVCLKey    == aInfo.aVCLKey   ) &&
+            (pInfo->nCommandId == aInfo.nCommandId)
+           )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ReadAccelerators( int nLangIndex, ResMgr* pResMgr, MODULES eModule, const ::rtl::OUString& aProjectName, Accelerator* pAcc )
+{
+    Locale2KeyCommandInfoList& rLocale = moduleAccs[eModule];
+    KeyCommandInfoList&        rAccs   = rLocale[nLangIndex];
+
+    USHORT c = pAcc->GetItemCount();
+    USHORT i = 0;
+    for (i=0; i<c; ++i)
+    {
+        USHORT nItem = pAcc->GetItemId(i);
+
+        KeyCommandInfo aInfo;
+        aInfo.nCommandId = nItem;
+        aInfo.aVCLKey    = pAcc->GetItemKeyCode(i); // dont use GetKeyCode(nItem) ... You cant handle logic keys then. Because they have the same ID - but another keycode!
+        aInfo.aAWTKey    = impl_KeyCodeVCL2AWT(aInfo.aVCLKey);
+
+        fprintf(stdout, "     acc key=%d\tid=%d", aInfo.aVCLKey.GetFullCode(), aInfo.nCommandId);
+        CommandLabels* pCmdInfo = RetrieveCommandLabelsFromID(aInfo.nCommandId, eModule);
+        if (!pCmdInfo || !pCmdInfo->aCommand.getLength())
+        {
+            fprintf(stdout, "\t\t\t=>\tERROR\t: no command [mod=%d]\n", eModule);
+            continue;
+        }
+        aInfo.sCommand = pCmdInfo->aCommand;
+        fprintf(stdout, "\tcmd=%s\t=>\t", ::rtl::OUStringToOString(aInfo.sCommand, RTL_TEXTENCODING_UTF8).getStr());
+
+        sal_Int32 i = 0;
+        while(AWTKeyIdentifierMap[i].Code != 0)
+        {
+            const KeyIdentifierInfo& rKeyInfo = AWTKeyIdentifierMap[i];
+            if (aInfo.aAWTKey.KeyCode == rKeyInfo.Code)
+            {
+                aInfo.sKey = ::rtl::OUString::createFromAscii(rKeyInfo.Identifier);
+                break;
+            }
+            ++i;
+        }
+
+        if (!aInfo.sKey.getLength())
+        {
+            fprintf(stdout, "ERROR\t: no key identifier\n");
+            continue;
+        }
+
+        if (impl_isDuplicateKey(rAccs, aInfo))
+        {
+            fprintf(stdout, "WARNING\t: key is duplicate\n");
+            continue;
+        }
+
+        fprintf(stdout, "\n");
+        rAccs.push_back(aInfo);
+    }
+
+    return true;
 }
 
 bool ReadMenuLabels( int nLangIndex, Menu* pMenu, MODULES eModule, bool bHasSlotInfos, OUString aResourceFilePrefix )
@@ -881,6 +1162,31 @@ bool ReadResourceFile( int nLangIndex, const OUString& aResourceDirURL, const OU
                 if ( bHasSlotInfos )
                     ReadSlotInfos( nLangIndex, pResMgr, eModule, aProjectName );
             }
+            ++i;
+        }
+
+        i = 0;
+        while ( AccResourceModule_Mapping[i].nResId > 0 )
+        {
+            if ( AccResourceModule_Mapping[i].eBelongsTo != eModule )
+            {
+                ++i;
+                continue;
+            }
+
+            ResId   aAccResId( AccResourceModule_Mapping[i].nResId, pResMgr );
+            aAccResId.SetRT( RSC_ACCEL );
+
+            if (!pResMgr->IsAvailable( aAccResId ))
+            {
+                fprintf(stdout, ".. acc %d not found\n", AccResourceModule_Mapping[i].nResId);
+                ++i;
+                continue;
+            }
+
+            Accelerator* pAcc = new Accelerator( aAccResId );
+            ReadAccelerators( nLangIndex, pResMgr, eModule, aProjectName, pAcc );
+            delete pAcc;
             ++i;
         }
 
@@ -1189,6 +1495,15 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
 
                             if ( aLabel.getLength() > 0 )
                             {
+                                OString mystr;
+                                mystr += Language_codes[j].pLanguage;
+                                if ( strlen(Language_codes[j].pCountry))
+                                {
+                                    mystr += "-";
+                                    mystr += Language_codes[j].pCountry;
+                                }
+
+                                /*
                                 char mystr[255];
                                 strncat( mystr, Language_codes[j].pLanguage, 2);
                                 if ( strlen(Language_codes[j].pCountry))
@@ -1196,6 +1511,7 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                                     strncat( mystr, "-", 1);
                                     strncat( mystr, Language_codes[j].pCountry, 2);
                                 }
+                                */
                                 aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
                                 aXMLFile.write( mystr, strlen( mystr ), nWritten );
                                 aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
@@ -1428,6 +1744,18 @@ bool WriteMenuEnd( osl::File& rFile, int nLevel )
     return true;
 }
 
+bool WriteAccXML( osl::File& rFile, Accelerator* pAcc, MODULES eModule, int nLevel )
+{
+   ::rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+
+    for ( unsigned short n = 0; n < pAcc->GetItemCount(); n++ )
+    {
+        unsigned short nId = pAcc->GetItemId( n );
+    }
+
+    return true;
+}
+
 bool WriteMenuBarXML( osl::File& rFile, Menu* pMenu, MODULES eModule, int nLevel )
 {
    OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
@@ -1490,6 +1818,147 @@ bool WriteMenuBarXML( osl::File& rFile, Menu* pMenu, MODULES eModule, int nLevel
         }
     }
 
+    return true;
+}
+
+bool impl_isAccListDuplicate(const KeyCommandInfoList& rAccsReference,
+                             const KeyCommandInfoList& rAccs         )
+{
+    KeyCommandInfoList::const_iterator pIt1;
+    for (  pIt1  = rAccsReference.begin();
+           pIt1 != rAccsReference.end()  ;
+         ++pIt1                          )
+    {
+        KeyCommandInfoList::const_iterator pIt2 = ::std::find(rAccs.begin(), rAccs.end(), *pIt1);
+        if (pIt2 == rAccs.end())
+            return false;
+    }
+    return true;
+}
+
+bool ReadResourceWriteAcceleratorXMLLang( const ::rtl::OUString& aOutDirURL,
+                                      const ::rtl::OUString& aResourceDirURL,
+                                      const ::rtl::OUString& aResourceFilePrefix,
+                                            MODULES          eModule,
+                                      const ::rtl::OUString& aProjectName,
+                                      int nLanguage)
+{
+    static const char AccStart[]    = "<accel:acceleratorlist xmlns:accel=\"http://openoffice.org/2001/accel\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n";
+    static const char AccEnd[]      = "</accel:acceleratorlist>\n";
+
+    Locale2KeyCommandInfoList& rLocale        = moduleAccs[eModule];
+    KeyCommandInfoList&        rAccs          = rLocale[nLanguage]; // current language
+    KeyCommandInfoList&        rAccsReference = rLocale[1];         // en-US!
+
+    // dont write empty files :-)
+    if (rAccs.size()<1)
+        return true;
+
+    ::rtl::OUString sLanguage = ::rtl::OUString::createFromAscii(Language_codes[nLanguage].pLanguage);
+    ::rtl::OUString sCountry  = ::rtl::OUString::createFromAscii(Language_codes[nLanguage].pCountry);
+
+    // dont generate duplicate xml files, if current language isnt different from en-US!
+    // Of course we have to write en-US everytimes :-)
+    if (nLanguage != 1 && impl_isAccListDuplicate(rAccsReference, rAccs))
+    {
+        fprintf(stdout, "ignore acc list [mod=%d, lang=%s-%s] ... seems to be duplicate against en-US=1\n", eModule, ::rtl::OUStringToOString(sLanguage, RTL_TEXTENCODING_UTF8).getStr(), ::rtl::OUStringToOString(sCountry, RTL_TEXTENCODING_UTF8).getStr());
+        return true;
+    }
+
+    fprintf(stdout, "write acc list [mod=%d, lang=%s-%s] ... seems to be duplicate against en-US=1\n", eModule, ::rtl::OUStringToOString(sLanguage, RTL_TEXTENCODING_UTF8).getStr(), ::rtl::OUStringToOString(sCountry, RTL_TEXTENCODING_UTF8).getStr());
+
+    ::rtl::OUString aSysDirPath;
+    ::rtl::OString  aResFilePrefix = ::rtl::OUStringToOString( aResourceFilePrefix, RTL_TEXTENCODING_ASCII_US );
+
+    osl::FileBase::getSystemPathFromFileURL( aResourceDirURL, aSysDirPath );
+
+    String aSysDirPathStr( aSysDirPath );
+
+    ::rtl::OUString aOutputDirectoryURL( aOutDirURL );
+    if ( aOutputDirectoryURL.getLength() > 0 && aOutputDirectoryURL[aOutputDirectoryURL.getLength()-1] != '/' )
+        aOutputDirectoryURL += ::rtl::OUString::createFromAscii( "/" );
+
+    int i = 0;
+    while ( AccResourceModule_Mapping[i].nResId > 0 )
+    {
+        if ( AccResourceModule_Mapping[i].eBelongsTo == eModule )
+            break;
+        ++i;
+    }
+
+    ::rtl::OUString aOutputFileURL( aOutputDirectoryURL );
+    aOutputFileURL += ::rtl::OUString::createFromAscii( AccResourceModule_Mapping[i].pXMLPrefix );
+    aOutputFileURL += ::rtl::OUString::createFromAscii( "_(" );
+    aOutputFileURL += sLanguage;
+    aOutputFileURL += ::rtl::OUString::createFromAscii( "-" );
+    aOutputFileURL += sCountry;
+    aOutputFileURL += ::rtl::OUString::createFromAscii( ")_accelerator.xml" );
+
+    osl::File aXMLFile( aOutputFileURL );
+    osl::File::RC nRet = aXMLFile.open( OpenFlag_Write );
+    if ( nRet != osl::File::E_None )
+    {
+        nRet = aXMLFile.open( OpenFlag_Write | OpenFlag_Create );
+        if ( nRet != osl::File::E_None )
+        {
+            fprintf(stdout, "ERROR:\tcould not create acc.xml \"%s\" [ret=%d]\n", ::rtl::OUStringToOString( aOutputFileURL, RTL_TEXTENCODING_ASCII_US ).getStr(), nRet);
+            return false;
+        }
+    }
+
+    sal_uInt64 nWritten;
+
+    aXMLFile.write( XMLStart, strlen( XMLStart ), nWritten );
+    aXMLFile.write( AccStart, strlen( AccStart ), nWritten );
+
+    ::rtl::OUStringBuffer sAccBuf(10000);
+    KeyCommandInfoList::const_iterator pIt;
+    for (  pIt  = rAccs.begin();
+           pIt != rAccs.end()  ;
+         ++pIt                 )
+    {
+        const KeyCommandInfo& aInfo = *pIt;
+
+        sAccBuf.appendAscii("\t<accel:item accel:code=\"");
+        sAccBuf.append(aInfo.sKey);
+        sAccBuf.appendAscii("\"");
+
+        BOOL   bShift = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
+        BOOL   bMod1  = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
+        BOOL   bMod2  = ((aInfo.aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+
+        if (bShift)
+            sAccBuf.appendAscii(" accel:shift=\"true\"");
+        if (bMod1)
+            sAccBuf.appendAscii(" accel:mod1=\"true\"");
+        if (bMod2)
+            sAccBuf.appendAscii(" accel:mod2=\"true\"");
+
+        sAccBuf.appendAscii(" xlink:href=\"");
+        sAccBuf.append(aInfo.sCommand);
+        sAccBuf.appendAscii("\"/>\n");
+    }
+
+    ::rtl::OString sAcc = ::rtl::OUStringToOString(sAccBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+
+    aXMLFile.write( sAcc.getStr(), sAcc.getLength(), nWritten );
+    aXMLFile.write( AccEnd, strlen( AccEnd ), nWritten );
+    aXMLFile.close();
+
+    return true;
+}
+
+bool ReadResourceWriteAcceleratorXML( const ::rtl::OUString& aOutDirURL,
+                                      const ::rtl::OUString& aResourceDirURL,
+                                      const ::rtl::OUString& aResourceFilePrefix,
+                                            MODULES          eModule,
+                                      const ::rtl::OUString& aProjectName)
+{
+    for ( int k = 0; k < NUM_LANGUAGES; k++ )
+    {
+        if (!ReadResourceWriteAcceleratorXMLLang(aOutDirURL, aResourceDirURL, aResourceFilePrefix, eModule, aProjectName, k))
+            return false;
+    }
     return true;
 }
 
@@ -2074,6 +2543,7 @@ bool Convert( sal_Bool        bUseProduct,
                             ReadResourceWriteMenuBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
                             ReadResourceWriteToolBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
                             ReadResourceWriteSubToolBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
+                            ReadResourceWriteAcceleratorXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, ::rtl::OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
                         }
                         j++;
                     }
