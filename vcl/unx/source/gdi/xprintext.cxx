@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-18 10:26:26 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,6 +640,12 @@ else
 // Xprint server is found then a pointer to Display is returned, otherwise NULL. This
 // function can be used by other functions to determine the current Xprint server display.
 
+// [ed] 6/15/02 We've got some linkage errors with this function on OS X,
+// perhaps due to mismatched prototypes.  Let's take a quick route to the finish
+// line and declare it C linkage! +++ FIXME
+#ifdef MACOSX
+extern "C"
+#endif
 Display*
 GetXpDisplay()
 {
@@ -665,6 +671,12 @@ GetXpDisplay()
     }
 }
 
+// [ed] 6/15/02 We've got some linkage errors with this function on OS X,
+// perhaps due to mismatched prototypes.  Let's take a quick route to the finish
+// line and declare it C linkage!  +++ FIXME
+#ifdef MACOSX
+extern "C"
+#endif
 Bool
 XSalIsPrinter( Display * display )
 {
@@ -675,6 +687,12 @@ XSalIsPrinter( Display * display )
     return bPrinter;
 }
 
+// [ed] 6/15/02 We've got some linkage errors with this function on OS X,
+// perhaps due to mismatched prototypes.  Let's take a quick route to the finish
+// line and declare it C linkage! +++ FIXME
+#ifdef MACOSX
+extern "C"
+#endif
 Bool
 XSalIsDisplay( Display * display )
 {
