@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-12 10:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-06-25 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2299,8 +2299,7 @@ SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
                                         SfxBindings&    rBindings )
 
     :   SfxToolBoxControl   ( nId, rTbx, rBindings ),
-    pBtnUpdater(new SvxTbxButtonColorUpdater_Impl(   nId, &GetToolBox() ))
-
+    pBtnUpdater(new SvxTbxButtonColorUpdater_Impl(nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ))
 {
 }
 
