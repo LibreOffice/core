@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,11 +174,11 @@ void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 
 void ScXMLAnnotationContext::EndElement()
 {
-    ScMyAnnotation aMyAnnotation;
-    aMyAnnotation.sAuthor = sAuthor;
-    aMyAnnotation.sCreateDate = sCreateDate;
-    aMyAnnotation.sText = sOUText.makeStringAndClear();
-    aMyAnnotation.bDisplay = bDisplay;
-    pCellContext->AddAnnotation(aMyAnnotation);
+    ScMyAnnotation* pMyAnnotation = new ScMyAnnotation();
+    pMyAnnotation->sAuthor = sAuthor;
+    pMyAnnotation->sCreateDate = sCreateDate;
+    pMyAnnotation->sText = sOUText.makeStringAndClear();
+    pMyAnnotation->bDisplay = bDisplay;
+    pCellContext->AddAnnotation(pMyAnnotation);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,9 @@ ScXMLDetectiveContext::ScXMLDetectiveContext(
         ScXMLImport& rImport,
         USHORT nPrfx,
         const OUString& rLName,
-        ScMyImpDetectiveObjVec& rNewDetectiveObjVec ) :
+        ScMyImpDetectiveObjVec* pNewDetectiveObjVec ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    rDetectiveObjVec( rNewDetectiveObjVec )
+    pDetectiveObjVec( pNewDetectiveObjVec )
 {
 }
 
@@ -157,7 +157,7 @@ SvXMLImportContext *ScXMLDetectiveContext::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
         case XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED:
-            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), nPrefix, rLName, xAttrList, rDetectiveObjVec );
+            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), nPrefix, rLName, xAttrList, pDetectiveObjVec );
         break;
         case XML_TOK_DETECTIVE_ELEM_OPERATION:
             pContext = new ScXMLDetectiveOperationContext( GetScImport(), nPrefix, rLName, xAttrList );
@@ -181,9 +181,9 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         USHORT nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-        ScMyImpDetectiveObjVec& rNewDetectiveObjVec ):
+        ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    rDetectiveObjVec( rNewDetectiveObjVec ),
+    pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
     bValid( sal_False )
 {
@@ -204,7 +204,9 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE:
             {
                 sal_Int32 nOffset(0);
+                GetScImport().LockSolarMutex();
                 bValid = ScXMLConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), nOffset );
+                GetScImport().UnlockSolarMutex();
             }
             break;
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION:
@@ -243,7 +245,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
             bValid = sal_False;
     }
     if( bValid )
-        rDetectiveObjVec.push_back( aDetectiveObj );
+        pDetectiveObjVec->push_back( aDetectiveObj );
 }
 
 
@@ -302,6 +304,6 @@ SvXMLImportContext *ScXMLDetectiveOperationContext::CreateChildContext(
 void ScXMLDetectiveOperationContext::EndElement()
 {
     if( bHasType && (aDetectiveOp.nIndex >= 0) )
-        GetScImport().GetDetectiveOpArray().AddDetectiveOp( aDetectiveOp );
+        GetScImport().GetDetectiveOpArray()->AddDetectiveOp( aDetectiveOp );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ void ScMyShapeResizer::ResizeShapes()
             ScDocument* pDoc = rImport.GetDocument();
             if ( pDoc && xIndex.is() )
             {
+                rImport.LockSolarMutex();
                 while (aItr != aShapes.end())
                 {
                     if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
@@ -260,6 +261,7 @@ void ScMyShapeResizer::ResizeShapes()
                         delete aItr->pRangeList;
                     aItr = aShapes.erase(aItr);
                 }
+                rImport.UnlockSolarMutex();
 //              if (pCollection)
 //                  pDoc->SetChartListenerCollection(pCollection);
             }

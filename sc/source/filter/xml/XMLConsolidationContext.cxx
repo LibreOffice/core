@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     bLinkToSource( sal_False ),
     bTargetAddr(sal_False)
 {
+    rImport.LockSolarMutex();
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
@@ -195,5 +196,6 @@ void ScXMLConsolidationContext::EndElement()
         if( pDoc )
             pDoc->SetConsolidateDlgData( &aConsParam );
     }
+    GetScImport().UnlockSolarMutex();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,12 @@ ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
+    rImport.LockSolarMutex();
 }
 
 ScXMLDDELinksContext::~ScXMLDDELinksContext()
 {
+    GetScImport().UnlockSolarMutex();
 }
 
 SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( USHORT nPrefix,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,12 @@ ScXMLLabelRangesContext::ScXMLLabelRangesContext(
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ):
     SvXMLImportContext( rImport, nPrefix, rLName )
 {
+    rImport.LockSolarMutex();
 }
 
 ScXMLLabelRangesContext::~ScXMLLabelRangesContext()
 {
+    GetScImport().UnlockSolarMutex();
 }
 
 SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(

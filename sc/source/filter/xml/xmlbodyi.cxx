@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,17 +234,21 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLBodyContext::EndElement()
 {
-    ScMyImpDetectiveOpArray&    rDetOpArray = GetScImport().GetDetectiveOpArray();
+    GetScImport().LockSolarMutex();
+    ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
     ScDocument*                 pDoc        = GetScImport().GetDocument();
-    ScMyImpDetectiveOp          rDetOp;
+    ScMyImpDetectiveOp          aDetOp;
 
     if (pDoc && GetScImport().GetModel().is())
     {
-        rDetOpArray.Sort();
-        while( rDetOpArray.GetFirstOp( rDetOp ) )
+        if (pDetOpArray)
         {
-            ScDetOpData aOpData( rDetOp.aPosition, rDetOp.eOpType );
-            pDoc->AddDetectiveOperation( aOpData );
+            pDetOpArray->Sort();
+            while( pDetOpArray->GetFirstOp( aDetOp ) )
+            {
+                ScDetOpData aOpData( aDetOp.aPosition, aDetOp.eOpType );
+                pDoc->AddDetectiveOperation( aOpData );
+            }
         }
 
         if (pChangeTrackingImportHelper)
@@ -285,5 +289,6 @@ void ScXMLBodyContext::EndElement()
             }
         }
     }
+    GetScImport().UnlockSolarMutex();
 }
 

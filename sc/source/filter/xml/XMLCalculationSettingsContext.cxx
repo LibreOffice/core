@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:14 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,11 @@ void ScXMLCalculationSettingsContext::EndElement()
                 xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), aAny);
                 if (GetScImport().GetDocument())
                 {
+                    GetScImport().LockSolarMutex();
                     ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
                     aDocOptions.SetYear2000(nYear2000);
                     GetScImport().GetDocument()->SetDocOptions(aDocOptions);
+                    GetScImport().UnlockSolarMutex();
                 }
             }
         }

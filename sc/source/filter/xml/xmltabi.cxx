@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    GetScImport().LockSolarMutex();
     GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc = GetScImport().GetDocument();
     if (pDoc)
@@ -311,5 +312,6 @@ void ScXMLTableContext::EndElement()
         GetScImport().GetTables().DeleteTable();
         GetScImport().GetProgressBarHelper()->Increment();
     }
+    GetScImport().UnlockSolarMutex();
 }
 

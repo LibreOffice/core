@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,6 +625,7 @@ class SfxItemSet;
 class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
+class ScUnoGuard;
 
 struct tScMyCellRange
 {
@@ -758,9 +759,10 @@ class ScXMLImport: public SvXMLImport
 
     ScMyTables              aTables;
 
-    ScMyNamedExpressions    aMyNamedExpressions;
-    ScMyImportValidations   aValidations;
-    ScMyImpDetectiveOpArray aDetectiveOpArray;
+    ScMyNamedExpressions*   pMyNamedExpressions;
+    ScMyImportValidations*  pValidations;
+    ScMyImpDetectiveOpArray*    pDetectiveOpArray;
+    ScUnoGuard*             pScUnoGuard;
 
     rtl::OUString           sFirstTableStyle;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
@@ -773,6 +775,7 @@ class ScXMLImport: public SvXMLImport
     rtl::OUString           sEmpty;
     rtl::OUString           sPrevStyleName;
     rtl::OUString           sPrevCurrency;
+    sal_uInt32              nSolarMutexLocked;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int16               nPrevCellType;
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
@@ -907,13 +910,22 @@ public:
 //  const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
 //  const SvXMLTokenMap& GetTextListBlockElemTokenMap();
 
-    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) { aMyNamedExpressions.insert(aMyNamedExpressions.end(), pMyNamedExpression); }
-    ScMyNamedExpressions* GetNamedExpressions() { return &aMyNamedExpressions; }
+    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
+        if (!pMyNamedExpressions)
+            pMyNamedExpressions = new ScMyNamedExpressions();
+        pMyNamedExpressions->push_back(pMyNamedExpression); }
+    ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
 
-    void AddValidation(const ScMyImportValidation& aValidation) { aValidations.push_back(aValidation); }
+    void AddValidation(const ScMyImportValidation& rValidation) {
+        if (!pValidations)
+            pValidations = new ScMyImportValidations();
+        pValidations->push_back(rValidation); }
     sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
 
-    inline ScMyImpDetectiveOpArray& GetDetectiveOpArray()   { return aDetectiveOpArray; }
+    inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()   {
+        if (!pDetectiveOpArray)
+            pDetectiveOpArray = new ScMyImpDetectiveOpArray();
+        return pDetectiveOpArray; }
 
     void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
     sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
@@ -946,51 +958,16 @@ public:
 
     void SetStylesToRangesFinished();
 
-    // ::com::sun::star::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL startElement(const ::rtl::OUString& aName,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endElement(const ::rtl::OUString& aName)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL characters(const ::rtl::OUString& aChars)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL processingInstruction(const ::rtl::OUString& aTarget,
-                                       const ::rtl::OUString& aData)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
-    // ::com::sun::star::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endCDATA(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL comment(const ::rtl::OUString& sComment)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL allowLineBreak(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL unknown(const ::rtl::OUString& sString)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void DisposingModel();
+
+    void LockSolarMutex();
+    void UnlockSolarMutex();
 };
 
 #endif

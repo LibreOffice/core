@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:14 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShapes >& rShapes )
 {
     XMLShapeImportHelper::finishShape( rShape, xAttrList, rShapes );
+    static_cast<ScXMLImport&>(mrImporter).LockSolarMutex();
     if (rShapes == static_cast<ScXMLImport&>(mrImporter).GetTables().GetCurrentXShapes())
     {
         sal_Bool bBackground(sal_False);
@@ -195,4 +196,5 @@ void XMLTableShapeImportHelper::finishShape(
             }
         }
     }
+    static_cast<ScXMLImport&>(mrImporter).UnlockSolarMutex();
 }

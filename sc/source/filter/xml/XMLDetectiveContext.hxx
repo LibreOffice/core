@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ public:
 class ScXMLDetectiveContext : public SvXMLImportContext
 {
 private:
-    ScMyImpDetectiveObjVec&     rDetectiveObjVec;
+    ScMyImpDetectiveObjVec*     pDetectiveObjVec;
 
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
@@ -144,7 +144,7 @@ public:
                                     ScXMLImport& rImport,
                                     USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
-                                    ScMyImpDetectiveObjVec& rNewDetectiveObjVec
+                                    ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveContext();
 
@@ -162,7 +162,7 @@ public:
 class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 {
 private:
-    ScMyImpDetectiveObjVec&     rDetectiveObjVec;
+    ScMyImpDetectiveObjVec*     pDetectiveObjVec;
     ScMyImpDetectiveObj         aDetectiveObj;
     sal_Bool                    bValid : 1;
 
@@ -175,7 +175,7 @@ public:
                                     USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                                    ScMyImpDetectiveObjVec& rNewDetectiveObjVec
+                                    ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveHighlightedContext();
 

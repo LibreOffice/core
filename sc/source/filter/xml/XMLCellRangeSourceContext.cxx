@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-25 12:03:09 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,7 @@ using namespace ::com::sun::star;
 ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
     nColumns( 0 ),
     nRows( 0 ),
-    nRefresh( 0 ),
-    bHas( sal_False )
+    nRefresh( 0 )
 {
 }
 
@@ -104,7 +103,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         USHORT nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-        ScMyImpCellRangeSource& rCellRangeSource ) :
+        ScMyImpCellRangeSource* pCellRangeSource ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     if( !xAttrList.is() ) return;
@@ -122,49 +121,44 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME:
-                rCellRangeSource.sSourceStr = sValue;
+                pCellRangeSource->sSourceStr = sValue;
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME:
-                rCellRangeSource.sFilterName = sValue;
+                pCellRangeSource->sFilterName = sValue;
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS:
-                rCellRangeSource.sFilterOptions = sValue;
+                pCellRangeSource->sFilterOptions = sValue;
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF:
-                rCellRangeSource.sURL = GetScImport().GetAbsoluteReference(sValue);
+                pCellRangeSource->sURL = GetScImport().GetAbsoluteReference(sValue);
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN:
             {
                 sal_Int32 nValue;
                 if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
-                    rCellRangeSource.nColumns = nValue;
+                    pCellRangeSource->nColumns = nValue;
                 else
-                    rCellRangeSource.nColumns = 1;
+                    pCellRangeSource->nColumns = 1;
             }
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW:
             {
                 sal_Int32 nValue;
                 if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
-                    rCellRangeSource.nRows = nValue;
+                    pCellRangeSource->nRows = nValue;
                 else
-                    rCellRangeSource.nRows = 1;
+                    pCellRangeSource->nRows = 1;
             }
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY:
             {
                 double fTime;
                 if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
-                    rCellRangeSource.nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
-                else
-                    rCellRangeSource.nRefresh = 0;
+                    pCellRangeSource->nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
             break;
         }
     }
-    rCellRangeSource.bHas = rCellRangeSource.sSourceStr.getLength() &&
-                            rCellRangeSource.sFilterName.getLength() &&
-                            rCellRangeSource.sURL.getLength();
 }
 
 ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext()

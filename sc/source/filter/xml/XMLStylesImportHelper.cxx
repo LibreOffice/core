@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,22 +545,26 @@ void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& r
 
 void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
 {
+    rImport.LockSolarMutex();
     ScMyStylesSet::iterator aItr = aCellStyles.begin();
     while (aItr != aCellStyles.end())
     {
         aItr->xRanges->InsertRow(nRow, nTab, pDoc);
         aItr++;
     }
+    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
 {
+    rImport.LockSolarMutex();
     ScMyStylesSet::iterator aItr = aCellStyles.begin();
     while (aItr != aCellStyles.end())
     {
         aItr->xRanges->InsertCol(nCol, nTab, pDoc);
         aItr++;
     }
+    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::EndTable()

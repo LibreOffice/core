@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ struct ScMyImpCellRangeSource
     sal_Int32                   nColumns;
     sal_Int32                   nRows;
     sal_Int32                   nRefresh;
-    sal_Bool                    bHas : 1;
 
                                 ScMyImpCellRangeSource();
 };
@@ -100,7 +99,7 @@ public:
                                     USHORT nPrfx,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                                    ScMyImpCellRangeSource& rCellRangeSource
+                                    ScMyImpCellRangeSource* pCellRangeSource
                                     );
     virtual                     ~ScXMLCellRangeSourceContext();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,10 +270,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                         if (pDoc)
                         {
+                            rImport.LockSolarMutex();
                             String sTabName = String::CreateFromAscii("Table");
                             pDoc->CreateValidTabName(sTabName);
                             rtl::OUString sOUTabName(sTabName);
                             xSheets->insertNewByName(sOUTabName, nCurrentSheet);
+                            rImport.UnlockSolarMutex();
                         }
                     }
                 }
@@ -297,10 +299,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                                     if (pDoc)
                                     {
+                                        rImport.LockSolarMutex();
                                         String sTabName = String::CreateFromAscii("Table");
                                         pDoc->CreateValidTabName(sTabName);
                                         rtl::OUString sOUTabName(sTabName);
                                         xNamed->setName(sOUTabName);
+                                        rImport.UnlockSolarMutex();
                                     }
                                 }
                         }
@@ -657,15 +661,19 @@ void ScMyTables::UpdateRowHeights()
 {
     if (rImport.GetModel().is())
     {
+        rImport.LockSolarMutex();
         // update automatic row heights
         sal_Int16 nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
         for (sal_Int16 i = 0; i < nTableCount; i++)
             ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
+        rImport.UnlockSolarMutex();
     }
 }
 
 void ScMyTables::DeleteTable()
 {
+    rImport.LockSolarMutex();
+
     nCurrentColStylePos = 0;
     if (nTableCount > 0)
     {
@@ -691,6 +699,8 @@ void ScMyTables::DeleteTable()
             xProtectable->protect(sKey);
         }*/
     }
+
+    rImport.UnlockSolarMutex();
 }
 
 table::CellAddress ScMyTables::GetRealCellPos()

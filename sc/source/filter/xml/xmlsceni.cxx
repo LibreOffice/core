@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     bCopyFormulas( sal_True ),
     bIsActive( sal_False )
 {
+    rImport.LockSolarMutex();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableScenarioAttrTokenMap();
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -163,6 +164,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
 
 ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
 {
+    GetScImport().UnlockSolarMutex();
 }
 
 SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(

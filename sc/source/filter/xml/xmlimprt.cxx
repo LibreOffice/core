@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 12:40:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,9 +1459,9 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     pDataPilotMemberAttrTokenMap( 0 ),
     pConsolidationAttrTokenMap( 0 ),
     aTables(*this),
-    aMyNamedExpressions(),
-    aValidations(),
-    aDetectiveOpArray(),
+    pMyNamedExpressions(NULL),
+    pValidations(NULL),
+    pDetectiveOpArray(NULL),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     bRemoveLastChar(sal_False),
     pChangeTrackingImportHelper(NULL),
@@ -1476,7 +1476,9 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     pStyleNumberFormats(NULL),
     sPrevStyleName(),
     sPrevCurrency(),
-    nPrevCellType(0)
+    nPrevCellType(0),
+    nSolarMutexLocked(0),
+    pScUnoGuard(NULL)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1584,6 +1586,8 @@ ScXMLImport::~ScXMLImport() throw()
         if (xActionLockable.is())
             xActionLockable->removeActionLock();
     }
+    if (pScUnoGuard)
+        delete pScUnoGuard;
 }
 
 // ---------------------------------------------------------------------
@@ -1718,28 +1722,34 @@ XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
 
 sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation)
 {
-    sal_Bool bFound(sal_False);
-    rtl::OUString sEmpty;
-    ScMyImportValidations::iterator aItr = aValidations.begin();
-    while(aItr != aValidations.end() && !bFound)
+    if (pValidations)
     {
-        if (aItr->sName == sName)
+        sal_Bool bFound(sal_False);
+        rtl::OUString sEmpty;
+        ScMyImportValidations::iterator aItr = pValidations->begin();
+        while(aItr != pValidations->end() && !bFound)
         {
-            if (aItr->sBaseCellAddress.getLength())
+            if (aItr->sName == sName)
             {
-                sal_Int32 nOffset(0);
-                if (ScXMLConverter::GetAddressFromString(
-                    aItr->aBaseCellAddress, aItr->sBaseCellAddress, GetDocument(), nOffset ))
-                    aItr->sBaseCellAddress = sEmpty;
+                if (aItr->sBaseCellAddress.getLength())
+                {
+                    sal_Int32 nOffset(0);
+                    LockSolarMutex();
+                    if (ScXMLConverter::GetAddressFromString(
+                        aItr->aBaseCellAddress, aItr->sBaseCellAddress, GetDocument(), nOffset ))
+                        aItr->sBaseCellAddress = sEmpty;
+                    UnlockSolarMutex();
+                }
+                bFound = sal_True;
             }
-            bFound = sal_True;
+            else
+                aItr++;
         }
-        else
-            aItr++;
+        if (bFound)
+            aValidation = *aItr;
+        return bFound;
     }
-    if (bFound)
-        aValidation = *aItr;
-    return bFound;
+    return sal_False;
 }
 
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
@@ -1761,6 +1771,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
         sal_Int32 nCount(rChangeProps.getLength());
         if (nCount)
         {
+            LockSolarMutex();
             sal_Int32 nTemp32(0);
             sal_Int16 nTemp16(0);
             ScChangeViewSettings* pViewSettings = new ScChangeViewSettings();
@@ -1836,6 +1847,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                 }
             }
             pDoc->SetChangeViewSettings(*pViewSettings);
+            UnlockSolarMutex();
         }
     }
 }
@@ -1919,6 +1931,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                     lang::Locale aLocale;
                     if (GetDocument() && (aAny >>= aLocale))
                     {
+                        LockSolarMutex();
                         LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
                         rtl::OUStringBuffer aBuffer(15);
                         aBuffer.appendAscii("#");
@@ -1928,6 +1941,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                         aBuffer.appendAscii("00 [$");
                         aBuffer.append(rCurrency);
                         aBuffer.appendAscii("]");
+                        UnlockSolarMutex();
                         return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
                     }
                 }
@@ -2128,107 +2142,11 @@ void ScXMLImport::SetStylesToRangesFinished()
     sPrevStyleName = sEmpty;
 }
 
-// ::com::sun::star::xml::sax::XDocumentHandler
-void SAL_CALL ScXMLImport::startDocument(void)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::startDocument();
-}
-
-void SAL_CALL ScXMLImport::endDocument(void)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::endDocument();
-}
-
-void SAL_CALL ScXMLImport::startElement(const ::rtl::OUString& aName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::startElement(aName, xAttribs);
-}
-
-void SAL_CALL ScXMLImport::endElement(const ::rtl::OUString& aName)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::endElement(aName);
-}
-
-void SAL_CALL ScXMLImport::characters(const ::rtl::OUString& aChars)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::characters(aChars);
-}
-
-void SAL_CALL ScXMLImport::ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::ignorableWhitespace(aWhitespaces);
-}
-
-void SAL_CALL ScXMLImport::processingInstruction(const ::rtl::OUString& aTarget,
-                                    const ::rtl::OUString& aData)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::processingInstruction(aTarget, aData);
-}
-
-void SAL_CALL ScXMLImport::setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::setDocumentLocator(xLocator);
-}
-
-// ::com::sun::star::xml::sax::XExtendedDocumentHandler
-void SAL_CALL ScXMLImport::startCDATA(void)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::startCDATA();
-}
-
-void SAL_CALL ScXMLImport::endCDATA(void)
-    throw( ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::endCDATA();
-}
-
-void SAL_CALL ScXMLImport::comment(const ::rtl::OUString& sComment)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::comment(sComment);
-}
-
-void SAL_CALL ScXMLImport::allowLineBreak(void)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::allowLineBreak();
-}
-
-void SAL_CALL ScXMLImport::unknown(const ::rtl::OUString& sString)
-    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::unknown(sString);
-}
-
-
 // XImporter
 void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aUnoGuard;
+    LockSolarMutex();
     SvXMLImport::setTargetDocument( xDoc );
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
@@ -2240,29 +2158,13 @@ void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Refer
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
-}
-
-// XInitialization
-void SAL_CALL ScXMLImport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
-{
-    ScUnoGuard aUnoGuard;
-    SvXMLImport::initialize(aArguments);
-}
-
-// XUnoTunnel
-sal_Int64 SAL_CALL ScXMLImport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    ScUnoGuard aUnoGuard;
-    return SvXMLImport::getSomething(aIdentifier);
+    UnlockSolarMutex();
 }
 
 // XServiceInfo
 ::rtl::OUString SAL_CALL ScXMLImport::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ScUnoGuard aUnoGuard;
     switch( getImportFlags() )
     {
         case IMPORT_ALL:
@@ -2288,20 +2190,6 @@ sal_Int64 SAL_CALL ScXMLImport::getSomething( const ::com::sun::star::uno::Seque
     return SvXMLImport::getImplementationName();
 }
 
-sal_Bool SAL_CALL ScXMLImport::supportsService( const ::rtl::OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    ScUnoGuard aUnoGuard;
-    return SvXMLImport::supportsService(ServiceName);
-}
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScXMLImport::getSupportedServiceNames(  )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    ScUnoGuard aUnoGuard;
-    return SvXMLImport::getSupportedServiceNames();
-}
-
 // XEventListener
 void ScXMLImport::DisposingModel()
 {
@@ -2309,3 +2197,26 @@ void ScXMLImport::DisposingModel()
     pDoc = NULL;
 }
 
+void ScXMLImport::LockSolarMutex()
+{
+    if (nSolarMutexLocked == 0)
+    {
+        DBG_ASSERT(!pScUnoGuard, "Solar Mutex is locked");
+        pScUnoGuard = new ScUnoGuard();
+    }
+    nSolarMutexLocked++;
+}
+
+void ScXMLImport::UnlockSolarMutex()
+{
+    if (nSolarMutexLocked > 0)
+    {
+        nSolarMutexLocked--;
+        if (nSolarMutexLocked == 0)
+        {
+            DBG_ASSERT(pScUnoGuard, "Solar Mutex is always unlocked");
+            delete pScUnoGuard;
+            pScUnoGuard = NULL;
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ void ScXMLTableSourceContext::EndElement()
         ScDocument* pDoc = GetScImport().GetDocument();
         if (xLinkable.is() && pDoc)
         {
+            GetScImport().LockSolarMutex();
             if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
                 GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
             {
@@ -197,6 +198,7 @@ void ScXMLTableSourceContext::EndElement()
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
+            GetScImport().UnlockSolarMutex();
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 08:04:16 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,17 +113,13 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
     com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
-    rtl::OUString sEmpty;
-    rtl::OUString sOUText;
-    rtl::OUString sOUTextValue;
-    rtl::OUString sOUTextContent;
-    rtl::OUString sOUFormula;
-    rtl::OUString sCurrencySymbol;
-    rtl::OUString sStyleName;
-    rtl::OUString sContentValidationName;
-    ScMyAnnotation          aMyAnnotation;
-    ScMyImpDetectiveObjVec  aDetectiveObjVec;
-    ScMyImpCellRangeSource  aCellRangeSource;
+    rtl::OUString* pOUTextValue;
+    rtl::OUString* pOUTextContent;
+    rtl::OUString* pOUFormula;
+    rtl::OUString* pContentValidationName;
+    ScMyAnnotation*         pMyAnnotation;
+    ScMyImpDetectiveObjVec* pDetectiveObjVec;
+    ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
     sal_Int32   nMergedRows, nMergedCols;
     sal_Int32   nMatrixRows, nMatrixCols;
@@ -133,10 +129,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int16   nCellType;
     sal_Bool    bIsMerged : 1;
     sal_Bool    bIsMatrix : 1;
-    sal_Bool    bIsFormula : 1;
     sal_Bool    bHasSubTable : 1;
     sal_Bool    bIsCovered : 1;
-    sal_Bool    bHasAnnotation : 1;
     sal_Bool    bIsEmpty : 1;
     sal_Bool    bHasTextImport : 1;
     sal_Bool    bIsFirstTextImport : 1;
@@ -172,7 +166,10 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void SetString(const rtl::OUString& sOUTempText) { sOUTextContent = sOUTempText; }
+    void SetString(const rtl::OUString& sOUTempText) {
+        if (pOUTextContent)
+            delete pOUTextContent;
+        pOUTextContent = new ::rtl::OUString(sOUTempText); }
     void SetCursorOnTextImport();
 
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
@@ -181,7 +178,7 @@ public:
 
     virtual void EndElement();
 
-    void AddAnnotation(const ScMyAnnotation& aValue) { aMyAnnotation = aValue; bHasAnnotation = sal_True; }
+    void AddAnnotation(ScMyAnnotation* pValue) { pMyAnnotation = pValue; }
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,12 +369,17 @@ void ScXMLTableColsContext::EndElement()
         if (nGroupStartCol <= nGroupEndCol)
         {
             ScDocument* pDoc = GetScImport().GetDocument();
-            ScOutlineTable* pOutlineTable = pDoc ? pDoc->GetOutlineTable(nSheet, sal_True) : NULL;
-            ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
-            if (pColArray)
+            if (pDoc)
             {
-                sal_Bool bResized;
-                pColArray->Insert(static_cast<USHORT>(nGroupStartCol), static_cast<USHORT>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
+                rXMLImport.LockSolarMutex();
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
+                if (pColArray)
+                {
+                    sal_Bool bResized;
+                    pColArray->Insert(static_cast<USHORT>(nGroupStartCol), static_cast<USHORT>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
+                }
+                rXMLImport.UnlockSolarMutex();
             }
         }
     }
