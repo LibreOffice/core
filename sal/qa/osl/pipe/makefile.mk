@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:39:35 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:49:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=qa
+TARGET=qa_osl_pipe
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -73,24 +73,24 @@ ENABLE_EXCEPTIONS=TRUE
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Pipe by codegen.pl 
-SHL2OBJS=  \
+SHL1OBJS=  \
     $(SLO)$/osl_Pipe.obj
 
-SHL2TARGET= Pipe
-SHL2STDLIBS=\
+SHL1TARGET= Pipe
+SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
-SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
-SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
-SHL2IMPLIB= i$(SHL2TARGET)
-SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
+SHL1IMPLIB= i$(SHL1TARGET)
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-DEF2NAME    =$(SHL2TARGET)
-DEF2EXPORTFILE= export.exp
+DEF1NAME    =$(SHL1TARGET)
+DEF1EXPORTFILE= export.exp
 # auto generated Target:Pipe
 # END ------------------------------------------------------------------
 
