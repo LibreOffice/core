@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:21 $
+ *  last change: $Author: obo $ $Date: 2001-11-01 22:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,14 @@ TabPage TP_ANIMATION
         Text [ danish ] = "Handling ved klik med musen" ;
         Text [ portuguese ] = "Acção com clique no rato" ;
         Text [ portuguese_brazilian ] = "Aktion bei Mausklick" ;
-        Text[ chinese_simplified ] = "µ¥»÷Êó±êÊ±Ö´ĞĞµÄ²Ù×÷";
+        Text[ chinese_simplified ] = "å•å‡»é¼ æ ‡æ—¶æ‰§è¡Œçš„æ“ä½œ";
         Text[ russian ] = "Äåéñòâèå ïî ùåë÷êó ìûøè";
         Text[ polish ] = "Akcja po klikniêciu mysz¹";
-        Text[ japanese ] = "Ï³½¸Ø¯¸‚Å±¸¼®İ";
-        Text[ chinese_traditional ] = "«ö¹«¼Ğ®É°õ¦æªº°Ê§@";
+        Text[ japanese ] = "ï¾ï½³ï½½ï½¸ï¾˜ï½¯ï½¸ã§ï½±ï½¸ï½¼ï½®ï¾";
+        Text[ chinese_traditional ] = "æŒ‰é¼ æ¨™æ™‚åŸ·è¡Œçš„å‹•ä½œ";
         Text[ arabic ] = "ÅÌÑÇÁ ÚäÏ ÇáäŞÑ ÈÇáãÇæÓ";
         Text[ greek ] = "Åíİñãåéá ìå êëéê ôïõ ğïíôéêéïı";
-        Text[ korean ] = "¸¶¿ì½º Å¬¸¯ÇÒ ¶§ ½ÇÇà";
+        Text[ korean ] = "ë§ˆìš°ìŠ¤ í´ë¦­í•  ë•Œ ì‹¤í–‰";
         Text[ turkish ] = "Tıklama sonrası işlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acción con pulsación de ratón";
@@ -135,14 +135,14 @@ TabPage TP_ANIMATION
         Text [ SWEDISH ] = "Effekt" ;
         Text [ PORTUGUESE ] = "Efeitos" ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "Ğ§¹û";
+        Text[ chinese_simplified ] = "æ•ˆæœ";
         Text[ russian ] = "İôôåêò";
         Text[ polish ] = "Efekt";
-        Text[ japanese ] = "Œø‰Ê";
-        Text[ chinese_traditional ] = "®ÄªG";
+        Text[ japanese ] = "åŠ¹æœ";
+        Text[ chinese_traditional ] = "æ•ˆæœ";
         Text[ arabic ] = "ÇáÊÃËíÑ";
         Text[ greek ] = "Åöİ";
-        Text[ korean ] = "È¿°ú";
+        Text[ korean ] = "íš¨ê³¼";
         Text[ turkish ] = "Efektler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Efecto";
@@ -168,10 +168,10 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Animation";
         Text[ polish ] = "Animacja";
         Text[ portuguese_brazilian ] = "Animation";
-        Text[ japanese ] = "±ÆÒ°¼®İ";
-        Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç";
-        Text[ chinese_simplified ] = "¶¯»­";
-        Text[ chinese_traditional ] = "°Êµe";
+        Text[ japanese ] = "ï½±ï¾†ï¾’ï½°ï½¼ï½®ï¾";
+        Text[ korean ] = "ì• ë‹ˆë©”ì´ì…˜";
+        Text[ chinese_simplified ] = "åŠ¨ç”»";
+        Text[ chinese_traditional ] = "å‹•ç•«";
         Text[ turkish ] = "Canlandırma";
         Text[ arabic ] = "ÍÑßÉ";
         Text[ catalan ] = "Animation";
@@ -206,10 +206,10 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Hastighet";
         Text[ polish ] = "Szybkoœæ";
         Text[ portuguese_brazilian ] = "Speed";
-        Text[ japanese ] = "½Ëß°ÄŞ";
-        Text[ korean ] = "Speed";
-        Text[ chinese_simplified ] = "ËÙ¶È";
-        Text[ chinese_traditional ] = "³t«×";
+        Text[ japanese ] = "ï½½ï¾‹ï¾Ÿï½°ï¾„ï¾";
+        Text[ korean ] = "ì†ë„";
+        Text[ chinese_simplified ] = "é€Ÿåº¦";
+        Text[ chinese_traditional ] = "é€Ÿåº¦";
         Text[ turkish ] = "Speed";
         Text[ arabic ] = "Speed";
         Text[ catalan ] = "Speed";
@@ -233,14 +233,14 @@ TabPage TP_ANIMATION
         Text [ english_us ] = "~Slow" ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "ÂıËÙ(~S)";
+        Text[ chinese_simplified ] = "æ…¢é€Ÿ(~S)";
         Text[ russian ] = "~Ìåäëåííî";
         Text[ polish ] = "Powoli";
-        Text[ japanese ] = "‚ä‚Á‚­‚è(~S)";
-        Text[ chinese_traditional ] = "ºC³t(~S)";
+        Text[ japanese ] = "ã‚†ã£ãã‚Š(~S)";
+        Text[ chinese_traditional ] = "æ…¢é€Ÿ(~S)";
         Text[ arabic ] = "ÈØíÁ";
         Text[ greek ] = "ÁñãÜ";
-        Text[ korean ] = "ÃµÃµÈ÷(~S)";
+        Text[ korean ] = "ì²œì²œíˆ(~S)";
         Text[ turkish ] = "Yavaş";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Lenta";
@@ -264,14 +264,14 @@ TabPage TP_ANIMATION
         Text [ english_us ] = "~Medium" ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "ÖĞËÙ(~M)";
+        Text[ chinese_simplified ] = "ä¸­é€Ÿ(~M)";
         Text[ russian ] = "~Íîğìàëüíî";
         Text[ polish ] = "Œrednio";
-        Text[ japanese ] = "•’Ê(~M)";
-        Text[ chinese_traditional ] = "¤¤³t(~M)";
+        Text[ japanese ] = "æ™®é€š(~M)";
+        Text[ chinese_traditional ] = "ä¸­é€Ÿ(~M)";
         Text[ arabic ] = "ãÊæÓØ";
         Text[ greek ] = "Ìåóáßï";
-        Text[ korean ] = "Áß°£(~M)";
+        Text[ korean ] = "ì¤‘ê°„(~M)";
         Text[ turkish ] = "Normal";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Media";
@@ -295,14 +295,14 @@ TabPage TP_ANIMATION
         Text [ english_us ] = "~Fast" ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "¿ìËÙ(~F)";
+        Text[ chinese_simplified ] = "å¿«é€Ÿ(~F)";
         Text[ russian ] = "Áûñòğî";
         Text[ polish ] = "Szybko";
-        Text[ japanese ] = "‘¬‚­(~F)";
-        Text[ chinese_traditional ] = "§Ö³t(~F)";
+        Text[ japanese ] = "é€Ÿã(~F)";
+        Text[ chinese_traditional ] = "å¿«é€Ÿ(~F)";
         Text[ arabic ] = "ÓÑíÚ";
         Text[ greek ] = "ÃñŞãïñá";
-        Text[ korean ] = "ºü¸£°Ô(~F)";
+        Text[ korean ] = "ë¹ ë¥´ê²Œ(~F)";
         Text[ turkish ] = "Hızlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rápida";
@@ -329,10 +329,10 @@ TabPage TP_ANIMATION
         Text[ swedish ] = "Tona ut med ljud";
         Text[ polish ] = "Ukryj z dŸwiêkiem";
         Text[ portuguese_brazilian ] = "Vanish with sound";
-        Text[ japanese ] = "»³İÄŞ‚ÅÁ‚¦¸‚¹‚é";
-        Text[ korean ] = "Vanish with sound";
-        Text[ chinese_simplified ] = "ÏûÊ§Ê±²¥·ÅÉùÒô";
-        Text[ chinese_traditional ] = "®ø¥¢®É¼½©ñÁn­µ";
+        Text[ japanese ] = "ï½»ï½³ï¾ï¾„ï¾ä»˜ãã§ï¾Œï½ªï½°ï¾„ï¾ï½±ï½³ï¾„";
+        Text[ korean ] = "ê°œì²´ ìˆ¨ê¸¸ ë•Œ ì‚¬ìš´ë“œ ì¬ìƒ";
+        Text[ chinese_simplified ] = "æ¶ˆå¤±æ—¶æ’­æ”¾å£°éŸ³";
+        Text[ chinese_traditional ] = "æ¶ˆå¤±æ™‚æ’­æ”¾è²éŸ³";
         Text[ turkish ] = "Vanish with sound";
         Text[ arabic ] = "Vanish with sound";
         Text[ catalan ] = "Vanish with sound";
@@ -364,14 +364,14 @@ TabPage TP_ANIMATION
         Text [ danish ] = "Gennemse..." ;
         Text [ portuguese_brazilian ] = "~Buscar..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
         Text[ russian ] = "Îáçîğ...";
         Text[ polish ] = "Przegl¹daj...";
-        Text[ japanese ] = "ŒŸõ(~B)...";
-        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ japanese ] = "æ¤œç´¢(~B)...";
+        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "Ã£¾Æ º¸±â(~B)...";
+        Text[ korean ] = "ì°¾ì•„ ë³´ê¸°(~B)...";
         Text[ turkish ] = "Tara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xaminar...";
@@ -387,21 +387,21 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
         Text [ dutch ] = "Geluid ~volledig afspelen" ;
         Text [ english_us ] = "~Play in full" ;
-        Text [ italian ] = "Eseguire del tutto" ;
+        Text [ italian ] = "Esegui del ~tutto" ;
         Text [ spanish ] = "Reproducir el sonido ~completo" ;
         Text [ french ] = "Jouer le son en entier" ;
         Text [ swedish ] = "Spela ~upp ljud fullständigt" ;
         Text [ danish ] = "Afspil lyden helt" ;
         Text [ portuguese_brazilian ] = "Klang ~vollst?ndig abspielen" ;
         Text [ portuguese ] = "Tocar som ~completo" ;
-        Text[ chinese_simplified ] = "ÍêÕûµØ²¥·ÅÉùÒô(~P)";
+        Text[ chinese_simplified ] = "å®Œæ•´åœ°æ’­æ”¾å£°éŸ³(~P)";
         Text[ russian ] = "Ïîëíîå âîñïğîèçâåäåíèå çâóêà";
         Text[ polish ] = "Odtwórz pe³ny dŸwiêk";
-        Text[ japanese ] = "»³İÄŞ‚ğ‰¹—Ê–L‚©‚ÉÄ¶(~P)";
-        Text[ chinese_traditional ] = "§¹¾ã¦a¼½©ñÁn­µ(~P)";
+        Text[ japanese ] = "ï½»ï½³ï¾ï¾„ï¾ã‚’å…¨éƒ¨å†ç”Ÿ(~P)";
+        Text[ chinese_traditional ] = "å®Œæ•´åœ°æ’­æ”¾è²éŸ³(~P)";
         Text[ arabic ] = "ÊÔÛíá ÇáÕæÊ ßÇãáÇğ";
         Text[ greek ] = "ĞëŞñçò åêôİëåóç Ş÷ïõ";
-        Text[ korean ] = "»ç¿îµå ¿Ïº®ÇÏ°Ô Àç»ı(~P)";
+        Text[ korean ] = "ì‚¬ìš´ë“œ ì™„ë²½í•˜ê²Œ ì¬ìƒ(~P)";
         Text[ turkish ] = "Sesi sonuna kadar çal";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reproducir el sonido ~completo";
@@ -497,14 +497,14 @@ TabPage TP_ANIMATION
         Text [ danish ] = "Søg" ;
         Text [ portuguese ] = "~Localizar..." ;
         Text [ portuguese_brazilian ] = "~Buscar..." ;
-        Text[ chinese_simplified ] = "ËÑÑ°(~F)";
+        Text[ chinese_simplified ] = "æœå¯»(~F)";
         Text[ russian ] = "~Ïîèñê";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "ŒŸõ(~F)";
-        Text[ chinese_traditional ] = "·j´M(~F)";
+        Text[ japanese ] = "æ¤œç´¢(~F)";
+        Text[ chinese_traditional ] = "æœå°‹(~F)";
         Text[ arabic ] = "ÈÍË";
         Text[ greek ] = "AíáæŞôçóç";
-        Text[ korean ] = "Ã£±â(~F)";
+        Text[ korean ] = "ì°¾ê¸°(~F)";
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Buscar";
@@ -522,14 +522,14 @@ TabPage TP_ANIMATION
     Text [ dutch ] = "Interactie";
     Text [ spanish ] = "Interacción";
     Text [ english_us ] = "Interaction";
-    Text[ chinese_simplified ] = "½»»¥Ê½";
+    Text[ chinese_simplified ] = "äº¤äº’å¼";
     Text[ russian ] = "Èíòåğàêöèÿ";
     Text[ polish ] = "Interakcja";
-    Text[ japanese ] = "²İÀ×¸¼®İ";
-    Text[ chinese_traditional ] = "¤¬°Ê¦¡";
+    Text[ japanese ] = "ï½²ï¾ï¾€ï¾—ï½¸ï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = "äº’å‹•å¼";
     Text[ arabic ] = "ÊİÇÚá";
     Text[ greek ] = "Áëëçëåğßäñáóç";
-    Text[ korean ] = "»óÈ£ÀÛ¿ë";
+    Text[ korean ] = "ìƒí˜¸ì‘ìš©";
     Text[ turkish ] = "Etkileşim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interacción";
@@ -544,5 +544,6 @@ TabPage TP_ANIMATION
     Text [ portuguese_brazilian ] = "Interaktion" ;
     Text [ portuguese ] = "Interacção" ;
 };
+
 
 
