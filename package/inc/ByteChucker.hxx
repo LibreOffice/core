@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 12:09:51 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,31 @@
 #ifndef _BYTE_CHUCKER_HXX_
 #define _BYTE_CHUCKER_HXX_
 
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
 #endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_IO_BUFFERSIZEEXCEEDEDEXCEPTION_HPP_
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
+#include <com/sun/star/io/IOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_NOTCONNECTEDEXCEPTION_HPP_
+#include <com/sun/star/io/NotConnectedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace io { class XSeekable; class XOutputStream; }
+} } }
 class ByteChucker
 {
 protected:
