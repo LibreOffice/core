@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-08 16:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,60 +974,52 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             {
                 SdrObject* pObj = aMark.GetMark(0)->GetObj();
                 SdrModel* pModel = GetModel();
-//-/                SfxItemSet aSet(pModel->GetItemPool(), XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE, 0, 0);
-//-/                pObj->TakeAttributes(aSet, TRUE, FALSE);
                 const SfxItemSet& rSet = pObj->GetItemSet();
-                const SfxPoolItem* pPoolItem;
-                SfxItemState eState = rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, FALSE, &pPoolItem);
 
-                if(SFX_ITEM_SET == eState)
+                if(SFX_ITEM_SET != rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, FALSE))
                 {
-                    // activate if not yet done
-                    if(!((XFillFloatTransparenceItem*)pPoolItem)->IsEnabled())
-                    {
-                        XFillFloatTransparenceItem aNewItem(*((XFillFloatTransparenceItem*)pPoolItem));
-                        XGradient aGrad = aNewItem.GetValue();
+                    // add this item, it's not yet there
+                    XFillFloatTransparenceItem aNewItem(
+                        (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
+                    XGradient aGrad = aNewItem.GetValue();
 
-                        aNewItem.SetEnabled(TRUE);
-                        aGrad.SetStartIntens(100);
-                        aGrad.SetEndIntens(100);
-                        aNewItem.SetValue(aGrad);
-//-/                        aSet.Put(aNewItem);
+                    aNewItem.SetEnabled(TRUE);
+                    aGrad.SetStartIntens(100);
+                    aGrad.SetEndIntens(100);
+                    aNewItem.SetValue(aGrad);
 
-                        // add undo to allow user to take back this step
-                        pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
-                        pModel->AddUndo(new SdrUndoAttrObj(*pObj));
-                        pModel->EndUndo();
+                    // add undo to allow user to take back this step
+                    pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
+                    pModel->AddUndo(new SdrUndoAttrObj(*pObj));
+                    pModel->EndUndo();
 
-                        pObj->SetItem(aNewItem);
-//-/                        pObj->SetAttributes(aSet, FALSE);
-                    }
-
-                    // set values and transform to vector set
-                    GradTransformer aGradTransformer;
-                    GradTransVector aGradTransVector;
-                    GradTransGradient aGradTransGradient;
-
-                    aGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
-                    aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
-
-                    // build handles
-                    SdrHdlColor* pColHdl1 = new SdrHdlColor(aGradTransVector.aPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
-                    SdrHdlColor* pColHdl2 = new SdrHdlColor(aGradTransVector.aPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
-                    SdrHdlGradient* pGradHdl = new SdrHdlGradient(aGradTransVector.aPos1, aGradTransVector.aPos2, FALSE);
-                    DBG_ASSERT(pColHdl1 && pColHdl2 && pGradHdl, "Got not all necessary handles!!");
-
-                    // link them
-                    pGradHdl->SetColorHandles(pColHdl1, pColHdl2);
-                    pGradHdl->SetObj(pObj);
-                    pColHdl1->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
-                    pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
-
-                    // insert them
-                    aHdl.AddHdl(pColHdl1);
-                    aHdl.AddHdl(pColHdl2);
-                    aHdl.AddHdl(pGradHdl);
+                    pObj->SetItemAndBroadcast(aNewItem);
                 }
+
+                // set values and transform to vector set
+                GradTransformer aGradTransformer;
+                GradTransVector aGradTransVector;
+                GradTransGradient aGradTransGradient;
+
+                aGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetValue();
+                aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
+
+                // build handles
+                SdrHdlColor* pColHdl1 = new SdrHdlColor(aGradTransVector.aPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
+                SdrHdlColor* pColHdl2 = new SdrHdlColor(aGradTransVector.aPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, TRUE);
+                SdrHdlGradient* pGradHdl = new SdrHdlGradient(aGradTransVector.aPos1, aGradTransVector.aPos2, FALSE);
+                DBG_ASSERT(pColHdl1 && pColHdl2 && pGradHdl, "Got not all necessary handles!!");
+
+                // link them
+                pGradHdl->SetColorHandles(pColHdl1, pColHdl2);
+                pGradHdl->SetObj(pObj);
+                pColHdl1->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
+                pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
+
+                // insert them
+                aHdl.AddHdl(pColHdl1);
+                aHdl.AddHdl(pColHdl2);
+                aHdl.AddHdl(pGradHdl);
             }
             break;
         }
