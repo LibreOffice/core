@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:38:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,86 @@
 module com { module sun { module star { module awt {
 
 /** specifies accessibility support for a menu item.
+
+    @since #108645#
  */
 service AccessibleMenuItem
 {
+    /** This interface gives access to the structural information of a
+        menu item:
+
+        <ul>
+        <li>Role: The role of a menu item is <const
+            scope="com::sun::star::accessibility"
+            >AccessibleRole::MENU_ITEM</const>.</li>
+        <li>Name: The name of a menu item is the localized item text.</li>
+        <li>Description: The description of a menu item is its localized
+            help text.</li>
+        <li>Children: There are no children.</li>
+        <li>Parent: The parent of a menu item is a menu bar, a popup menu or
+            a menu, whose accessible context supports the services
+            <type>AccessibleMenuBar</type>, <type>AccessiblePopupMenu</type>
+            or <type>AccessibleMenu</type>.</li>
+        <li>Relations: There are no relations.</li>
+        <li>States: The states supported by this service are
+            <ul>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::ARMED</const> is set
+                if the object is highlighted.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::CHECKED</const> is set
+                if the object is currently checked.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::DEFUNC</const>
+                is set if the object has already been disposed
+                and subsequent calls to this object result in
+                <type scope="com::sun::star::lang">DisposedException</type>
+                exceptions.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::ENABLED</const> is set
+                if the object is enabled.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::OPAQUE</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SELECTABLE</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SELECTED</const> is set
+                if the object is selected.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SHOWING</const> is set
+                if the object is displayed on the screen.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            </ul>
+            </li>
+        </ul>
+     */
     interface ::com::sun::star::accessibility::XAccessibleContext;
+
     interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+
     interface ::com::sun::star::accessibility::XAccessibleComponent;
+
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
+
+    /** This interface gives read-only access to the text representation
+        of a menu item.
+     */
     interface ::com::sun::star::accessibility::XAccessibleText;
+
+    /** This interface gives access to the actions that can be executed for
+        a menu item. The supported actions for a menu item are:
+        <ul>
+        <li>select</li>
+        </ul>
+     */
     interface ::com::sun::star::accessibility::XAccessibleAction;
+
+    /** This interface gives access to the numerical value of a
+        menu item, which is related to the menu item's
+        <const scope="com::sun::star::accessibility"
+        >AccessibleStateType::SELECTED</const> state.
+     */
     interface ::com::sun::star::accessibility::XAccessibleValue;
 };
 
