@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 11:50:52 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 15:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,14 +389,15 @@ private:
 
     BOOL            ImplDraw( OutputDevice* pOut, const Point& rPt,
                               const Size& rSz, GraphicObject& rObj,
-                              const GraphicAttr& rAttr, BOOL& rCached );
+                              const GraphicAttr& rAttr,
+                              const ULONG nFlags, BOOL& rCached );
 
     BOOL            ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                       const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
-                                      BitmapEx* pBmpEx = NULL );
+                                      const ULONG nFlags, BitmapEx* pBmpEx = NULL );
     BOOL            ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                       const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                      GDIMetaFile* pMtf = NULL );
+                                      const ULONG nFlags, GDIMetaFile* pMtf = NULL );
 
     BOOL            ImplCreateScaled( const BitmapEx& rBmpEx,
                                       long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,

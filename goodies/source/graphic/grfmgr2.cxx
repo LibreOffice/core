@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-27 15:36:45 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 15:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         {
             // cached/direct drawing
             if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
-                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, rCached );
+                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, nFlags, rCached );
             else
                 bRet = rCached = TRUE;
         }
@@ -281,7 +281,8 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 
 BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
-                               const GraphicAttr& rAttr, BOOL& rCached )
+                               const GraphicAttr& rAttr,
+                               const ULONG nFlags, BOOL& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
     BOOL            bRet = FALSE;
@@ -296,7 +297,7 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             {
                 BitmapEx aDstBmpEx;
 
-                if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, &aDstBmpEx ) )
+                if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                 {
                     rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
                     bRet = TRUE;
@@ -304,7 +305,7 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             }
 
             if( !bRet )
-                bRet = ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr );
+                bRet = ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags );
         }
         else
         {
@@ -314,7 +315,7 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             {
                 GDIMetaFile aDstMtf;
 
-                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, &aDstMtf ) )
+                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, nFlags, &aDstMtf ) )
                 {
                     rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstMtf );
                     bRet = TRUE;
@@ -339,9 +340,10 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
+                                       const Point& rPt, const Size& rSz,
                                        const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
-                                       BitmapEx* pBmpEx )
+                                       const ULONG nFlags, BitmapEx* pBmpEx )
 {
     USHORT  nRot10 = rAttr.GetRotation() % 3600;
     Point   aOutPtPix;
@@ -395,7 +397,13 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
             if( bHMirr )
                 fTmp = nTmpX - fTmp;
 
-            pMapFX[ nX ] = (long) ( ( fTmp - ( pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
+            if( nFlags & GRFMGR_DRAW_BILINEAR )
+                pMapFX[ nX ] = (long) ( ( fTmp - ( pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
+            else
+            {
+                pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp );
+                pMapFX[ nX ] = 0;
+            }
         }
 
         // create vertical mapping table
@@ -406,7 +414,13 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
             if( bVMirr )
                 fTmp = nTmpY - fTmp;
 
-            pMapFY[ nY ] = (long) ( ( fTmp - ( pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
+            if( nFlags & GRFMGR_DRAW_BILINEAR )
+                pMapFY[ nY ] = (long) ( ( fTmp - ( pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
+            else
+            {
+                pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp );
+                pMapFY[ nY ] = 0;
+            }
         }
 
         // calculate output sizes
@@ -521,9 +535,8 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut, const Point& rPt, con
 
 BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
-                                       const GDIMetaFile& rMtf,
-                                       const GraphicAttr& rAttr,
-                                       GDIMetaFile* pMtf )
+                                       const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
+                                       const ULONG nFlags, GDIMetaFile* pMtf )
 {
     if( !pMtf )
     {
