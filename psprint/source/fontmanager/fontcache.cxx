@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:48:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,73 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
 }
 
 /*
+ *  FontCache::equalsPrintFont
+ */
+bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight ) const
+{
+    if( pLeft->m_eType != pRight->m_eType )
+        return false;
+    switch( pLeft->m_eType )
+    {
+        case fonttype::TrueType:
+        {
+            const PrintFontManager::TrueTypeFontFile* pLT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pLeft);
+            const PrintFontManager::TrueTypeFontFile* pRT = static_cast<const PrintFontManager::TrueTypeFontFile*>(pRight);
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aFontFile        != pLT->m_aFontFile         ||
+                pRT->m_nCollectionEntry != pLT->m_nCollectionEntry  ||
+                pRT->m_nTypeFlags       != pLT->m_nTypeFlags )
+                return false;
+        }
+        break;
+        case fonttype::Type1:
+        {
+            const PrintFontManager::Type1FontFile* pLT = static_cast<const PrintFontManager::Type1FontFile*>(pLeft);
+            const PrintFontManager::Type1FontFile* pRT = static_cast<const PrintFontManager::Type1FontFile*>(pRight);
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aFontFile        != pLT->m_aFontFile         ||
+                pRT->m_aMetricFile      != pLT->m_aMetricFile )
+                return false;
+        }
+        break;
+        case fonttype::Builtin:
+        {
+            const PrintFontManager::BuiltinFont* pLT = static_cast<const PrintFontManager::BuiltinFont*>(pLeft);
+            const PrintFontManager::BuiltinFont* pRT = static_cast<const PrintFontManager::BuiltinFont*>(pRight);
+            if( pRT->m_nDirectory       != pLT->m_nDirectory        ||
+                pRT->m_aMetricFile      != pLT->m_aMetricFile )
+                return false;
+        }
+        break;
+        default: break;
+    }
+    if( pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
+        pRight->m_nPSName           != pLeft->m_nPSName         ||
+        pRight->m_eItalic           != pLeft->m_eItalic         ||
+        pRight->m_eWeight           != pLeft->m_eWeight         ||
+        pRight->m_eWidth            != pLeft->m_eWidth          ||
+        pRight->m_ePitch            != pLeft->m_ePitch          ||
+        pRight->m_aEncoding         != pLeft->m_aEncoding       ||
+        pRight->m_aGlobalMetricX    != pLeft->m_aGlobalMetricX  ||
+        pRight->m_aGlobalMetricY    != pLeft->m_aGlobalMetricY  ||
+        pRight->m_nAscend           != pLeft->m_nAscend         ||
+        pRight->m_nDescend          != pLeft->m_nDescend        ||
+        pRight->m_nLeading          != pLeft->m_nLeading        ||
+        pRight->m_nXMin             != pLeft->m_nXMin           ||
+        pRight->m_nYMin             != pLeft->m_nYMin           ||
+        pRight->m_nXMax             != pLeft->m_nXMax           ||
+        pRight->m_nYMax             != pLeft->m_nYMax           ||
+        pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs )
+        return false;
+    std::list< int >::const_iterator lit, rit;
+    for( lit = pLeft->m_aAliases.begin(), rit = pRight->m_aAliases.begin();
+         lit != pLeft->m_aAliases.end() && rit != pRight->m_aAliases.end() && (*lit) == (*rit);
+         ++lit, ++rit )
+        ;
+    return lit == pLeft->m_aAliases.end() && rit == pRight->m_aAliases.end();
+}
+
+/*
  *  FontCache::clonePrintFont
  */
 PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::PrintFont* pOldFont ) const
@@ -650,7 +717,13 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
         createCacheDir( nDirID );
 
     if( pCacheFont )
-        copyPrintFont( pFont, pCacheFont );
+    {
+        if( ! equalsPrintFont( pFont, pCacheFont ) )
+        {
+            copyPrintFont( pFont, pCacheFont );
+            m_bDoFlush = true;
+        }
+    }
     else
     {
         pCacheFont = clonePrintFont( pFont );
@@ -662,8 +735,8 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
         struct stat aStat;
         if( ! stat( aPath.GetBuffer(), &aStat ) )
             m_aCache[nDirID].m_aEntries[aFile].m_nTimestamp = (sal_Int64)aStat.st_mtime;
+        m_bDoFlush = true;
     }
-    m_bDoFlush = true;
     if( bFlush )
         flush();
 }
