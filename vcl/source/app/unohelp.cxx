@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:31:14 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,8 @@ using namespace ::rtl;
 
 struct VCLRegServiceInfo
 {
-    sal_Char*   pLibName;
-    sal_Bool    bHasSUPD;
+    const sal_Char*     pLibName;
+    sal_Bool            bHasSUPD;
 };
 
 static VCLRegServiceInfo aVCLComponentsArray[] =
