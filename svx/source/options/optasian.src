@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:17:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Solo caratteri occidentali";
         Text[ danish ] = "Western characters only";
         Text[ swedish ] = "Bara västliga tecke~n";
-        Text[ polish ] = "Tylko znaki alfabetu ³aciñskiego";
+        Text[ polish ] = "Tylko znaki zachodnioeuropejskie";
         Text[ portuguese_brazilian ] = "Western characters only";
         Text[ japanese ] = "‰pš‚Ì‚İ(~W)";
-        Text[ korean ] = "~¾ËÆÄºª ¹®ÀÚ¸¸";
+        Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ¸¸";
         Text[ chinese_simplified ] = "½öÊÊÓÃÓÚÎ÷ÎÄ(~W)";
         Text[ chinese_traditional ] = "¶È¥Î©ó¦è¤å(~W)";
         Text[ turkish ] = "Western characters only";
@@ -143,7 +143,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Testo e punteggiatura occidentali";
         Text[ danish ] = "Western text and punctuation";
         Text[ swedish ] = "~Västlig text och interpunktion";
-        Text[ polish ] = "Tekst i interpunkcja zachodnia";
+        Text[ polish ] = "Tekst i interpunkcja zachodnioeuropejska";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
         Text[ japanese ] = "”¼Šp‰pš‚Æ‹æØ‚è•¶š(~T)";
         Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ ÅØ½ºÆ®¿Í ±¸µÎÁ¡";
@@ -170,7 +170,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Spazio tra caratteri";
         Text[ danish ] = "Character distance";
         Text[ swedish ] = "Teckenavstånd";
-        Text[ polish ] = "Odstêp miêdzy znakami";
+        Text[ polish ] = "Odstêpy miêdzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
         Text[ japanese ] = "•¶šŠÔŠu‚Ì’²®";
         Text[ korean ] = "ÀÚ°£";
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ polish ] = "Bez kompresji";
         Text[ portuguese_brazilian ] = "No compression";
         Text[ japanese ] = "ŠÔŠu‚ğ‹l‚ß‚È‚¢(~N)";
-        Text[ korean ] = "~¾ĞÃà ¾øÀ½";
+        Text[ korean ] = "¾ĞÃà ¾øÀ½";
         Text[ chinese_simplified ] = "²»Ñ¹Ëõ(~N)";
         Text[ chinese_traditional ] = "¤£À£ÁY(~N)";
         Text[ turkish ] = "No compression";
@@ -227,7 +227,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ polish ] = "Skompresuj tylko interpunkcjê";
         Text[ portuguese_brazilian ] = "Compress punctuation only";
         Text[ japanese ] = "‹å“Ç“_‚Ì‚İ‚ğ‹l‚ß‚é(~C)";
-        Text[ korean ] = "~±¸µÎÁ¡¸¸ ¾ĞÃà";
+        Text[ korean ] = "±¸µÎÁ¡¸¸ ¾ĞÃà";
         Text[ chinese_simplified ] = "Ö»Ñ¹Ëõ±êµã·ûºÅ(~C)";
         Text[ chinese_traditional ] = "¶ÈÀ£ÁY¼ĞÂI²Å¸¹(~C)";
         Text[ turkish ] = "Compress punctuation only";
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "Standard";
         Text[ japanese ] = "•W€(~D)";
         Text[ korean ] = "±âº»";
