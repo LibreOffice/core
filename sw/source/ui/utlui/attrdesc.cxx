@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:29:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _FMTFTNTX_HXX //autogen
 #include <fmtftntx.hxx>
+#endif
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 
@@ -1379,4 +1382,28 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
     return ePres;
 }
 
+SfxItemPresentation SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
+                                    SfxMapUnit eCoreMetric,
+                                    SfxMapUnit ePresMetric,
+                                    String &rText,
+                                    const IntlWrapper*    pIntl ) const
+{
+    rText.Erase();
+    switch( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        break;
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            {
+                USHORT nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
+                rText = SW_RESSTR( nId );
+            }
+        break;
+
+        default:
+            ePres = SFX_ITEM_PRESENTATION_NONE;
+        break;
+    }
+    return ePres;
+}
 
