@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:19:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,33 +202,40 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
         }
         else
         {
-            Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
-                SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
-                SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
+            try
+            {
+                Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
+                    SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+                    SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+                    SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
 
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                SetControlDefault( xAffectedCol->getPropertyValue(PROPERTY_CONTROLDEFAULT) );
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                    SetControlDefault( xAffectedCol->getPropertyValue(PROPERTY_CONTROLDEFAULT) );
 
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
-                SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
-                SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
-                SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
-                SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
-                SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-                SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-                SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
-            if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
-                SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
+                    SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
+                    SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
+                    SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
+                    SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
+                    SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
+                    SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
+                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
+                    SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(0,"Exception catched while getting the props");
+            }
         }
     }
 }
@@ -617,6 +624,20 @@ sal_Bool                    OFieldDescription::IsNullable()             const
     else
         return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE;
 }
-
-
+// -----------------------------------------------------------------------------
+void OFieldDescription::SetTypeName(const ::rtl::OUString& _sTypeName)
+{
+    try
+    {
+        if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
+            m_xDest->setPropertyValue(PROPERTY_TYPENAME,makeAny(_sTypeName));
+        else
+            m_sTypeName = _sTypeName;
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Exception catched while set a value!");
+    }
+}
+// -----------------------------------------------------------------------------
 
