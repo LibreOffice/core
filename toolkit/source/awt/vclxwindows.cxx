@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2002-02-22 08:38:08 $
+ *  last change: $Author: fs $ $Date: 2002-03-04 17:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,7 +1336,13 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     if ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_SELECT )
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox > xKeepAlive( this );
+            // in the DoubleClickHdl, the object may be destroyed, so we have to ensure
+            // that we stay alive as long as we're herein
+            // 97515 - 04.03.2002 - fs@openoffice.org
+
         ListBox* pListBox = (ListBox*)GetWindow();
+
         sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
         if ( bDropDown && maActionListeners.getLength() )
         {
