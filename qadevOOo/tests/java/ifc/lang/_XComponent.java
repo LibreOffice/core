@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:44:44 $
+ *  last change:$Date: 2003-12-11 11:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.lang;
 
+import com.sun.star.container.XNameContainer;
 import lib.MultiMethodTest;
 
 import com.sun.star.frame.XDesktop;
@@ -83,6 +84,8 @@ import com.sun.star.lang.XEventListener;
 public class _XComponent extends MultiMethodTest {
 
     public static XComponent oObj = null;
+    private XNameContainer xContainer = null;
+    private XComponent altDispose = null;
 
     boolean listenerDisposed[] = new boolean[2];
     String[] Loutput = new String[2];
@@ -111,6 +114,15 @@ public class _XComponent extends MultiMethodTest {
 
     XEventListener listener1 = new MyEventListener();
     XEventListener listener2 = new MyEventListener2();
+
+    /**
+     * For the cfgmgr2.OSetElement tests: dispose the owner element.
+     */
+    protected void before() {
+        // do not dispose this component, but parent instead
+        altDispose = (XComponent)tEnv.getObjRelation("XComponent.DisposeThis");
+
+    }
 
     /**
     * Adds two listeners. <p>
@@ -164,7 +176,16 @@ public class _XComponent extends MultiMethodTest {
 
         log.println( "begin dispose" + Thread.currentThread());
         XDesktop oDesk = (XDesktop) tEnv.getObjRelation("Desktop");
-        if (oDesk !=null) oDesk.terminate(); else oObj.dispose();
+        if (oDesk !=null) {
+            oDesk.terminate();
+        }
+        else {
+            if (altDispose == null)
+                oObj.dispose();
+            else
+                altDispose.dispose();
+        }
+
         try {
             Thread.sleep(500) ;
         } catch (InterruptedException e) {}
