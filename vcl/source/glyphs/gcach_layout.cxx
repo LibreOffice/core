@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.26 $
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:17 $
+ *  $Revision: 1.27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,6 @@
  ************************************************************************/
 
 #define ENABLE_ICU_LAYOUT
-#if OSL_DEBUG_LEVEL > 1
-//#define VERBOSE_DEBUG
-#endif
-
-#if !defined(_SV_SALUNX_HXX) && !defined(WIN32)
-#include <salunx.h>
-#endif
 
 #ifndef _SV_GCACHFTYP_HXX
 #include <gcach_ftyp.hxx>
@@ -78,11 +71,10 @@
 #include <salgdi.hxx>
 #endif
 
-#ifdef WIN32
-#include <malloc.h>
-#define alloca _alloca
-#elif !defined(FREEBSD) && !defined(NETBSD) && !defined(MACOSX)
-#include <alloca.h>
+#if defined(SOLARIS) || defined(IRIX)
+  #include <alloca.h>
+#else
+  #include <malloc.h>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -381,8 +373,8 @@ public:
 
 IcuLayoutEngine::IcuLayoutEngine( FreetypeServerFont& rServerFont )
 :   maIcuFont( rServerFont ),
-    mpIcuLE( NULL ),
-    meScriptCode( USCRIPT_INVALID_CODE )
+    meScriptCode( USCRIPT_INVALID_CODE ),
+    mpIcuLE( NULL )
 {}
 
 // -----------------------------------------------------------------------
