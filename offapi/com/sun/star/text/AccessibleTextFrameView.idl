@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextFrameView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:56:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com {  module sun {  module star {  module text {
 
      @since #107627#
  */
-service AccessibleTextFrameView
+published service AccessibleTextFrameView
 {
     /** This interface gives access to any paragraph fragment and table
         fragment that is contained in a text frame and at least
