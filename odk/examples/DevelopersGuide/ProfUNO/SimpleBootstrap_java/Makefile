@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:50:30 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:13:42 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -82,7 +82,7 @@ SimpleBootstrapJavaExample : $(COMPONENT_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make SimpleBootstrap_java.run
+	@echo $(MAKE) SimpleBootstrap_java.run
 	@echo --------------------------------------------------------------------------------
 
 # Setting the optional system property "com.sun.star.lib.loader.unopath" to the office
