@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svicnvw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include <svimpicn.hxx>
 #include <svlbitm.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define ICNVW_BLOCK_ENTRYINS    0x0001
 
