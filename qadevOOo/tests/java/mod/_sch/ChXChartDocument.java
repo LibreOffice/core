@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXChartDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:23:17 $
+ *  last change:$Date: 2003-12-11 12:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._sch;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 import com.sun.star.chart.XChartData;
 import com.sun.star.chart.XChartDocument;
@@ -76,6 +67,16 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XSelectionSupplier;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.SOfficeFactory;
+
 
 /**
 * Test for object which is represented by service
@@ -109,8 +110,8 @@ public class ChXChartDocument extends TestCase {
     /**
     * Disposes Chart documents.
     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    disposing xChartDoc " );
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("    disposing xChartDoc ");
         xChartDoc.dispose();
         doc2.dispose();
     }
@@ -141,51 +142,58 @@ public class ChXChartDocument extends TestCase {
     * @see com.sun.star.chart.XChartData
     * @see com.sun.star.chart.ChartDocument
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                                 PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a chartdocument" );
+            log.println("creating a chartdocument");
             xChartDoc = SOF.createChartDoc(null);
             log.println("Waiting before opening second document");
             doc2 = SOF.createChartDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
+
         // get the chartdocument
-        log.println( "getting ChartDocument" );
+        log.println("getting ChartDocument");
+
         XInterface oObj = (XChartDocument) xChartDoc;
 
         XController cont1 = xChartDoc.getCurrentController();
         XController cont2 = doc2.getCurrentController();
 
-        XSelectionSupplier sel = (XSelectionSupplier)
-                    UnoRuntime.queryInterface(XSelectionSupplier.class, cont1);
+        cont1.getFrame().setName("cont1");
+        cont2.getFrame().setName("cont2");
 
-        log.println( "creating a new environment for chartdocument object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+                                         XSelectionSupplier.class, cont1);
 
-        log.println( "Adding SelectionSupplier and Shape to select for XModel");
-        tEnv.addObjRelation("SELSUPP",sel);
-        tEnv.addObjRelation("TOSELECT",xChartDoc.getTitle());
+        log.println("creating a new environment for chartdocument object");
 
-        log.println( "adding Controller as ObjRelation for XModel");
-        tEnv.addObjRelation("CONT2",cont2);
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        log.println( "adding another Diagram as mod relation to environment" );
-        tEnv.addObjRelation("DIAGRAM", SOF.createDiagram(xChartDoc, "PieDiagram"));
+        log.println("Adding SelectionSupplier and Shape to select for XModel");
+        tEnv.addObjRelation("SELSUPP", sel);
+        tEnv.addObjRelation("TOSELECT", xChartDoc.getTitle());
 
-        log.println( "adding another ChartData as mod relation to environment" );
+        log.println("adding Controller as ObjRelation for XModel");
+        tEnv.addObjRelation("CONT2", cont2);
+
+        log.println("adding another Diagram as mod relation to environment");
+        tEnv.addObjRelation("DIAGRAM",
+                            SOF.createDiagram(xChartDoc, "PieDiagram"));
+
+        log.println("adding another ChartData as mod relation to environment");
+
         XChartData ChartData = doc2.getData();
         tEnv.addObjRelation("CHARTDATA", ChartData);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-
-}    // finish class ChXChartDocument
-
+} // finish class ChXChartDocument
