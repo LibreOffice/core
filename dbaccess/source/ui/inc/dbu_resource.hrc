@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:01:17 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,8 @@
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
-#define DLG_INDEXDESIGN                 RID_DIALOG_START + 18
+#define DLG_ADABASSTAT                  RID_DIALOG_START + 18
+#define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
 
 //========================================================================
 // tab pages
@@ -119,6 +120,7 @@
 #define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 11
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 12
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 13
+#define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 14
 
 //========================================================================
 // error boxes
@@ -352,14 +354,20 @@
 #define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STRING_START + 127
 #define STR_OPENTABLES_WARNINGS             RID_STRING_START + 128
 #define STR_OPENTABLES_WARNINGS_DETAILS     RID_STRING_START + 129
-#define STR_TAB_INDEX_SORTORDER             RID_STRING_START + 130
-#define STR_TAB_INDEX_FIELD                 RID_STRING_START + 131
-#define STR_ORDER_ASCENDING                 RID_STRING_START + 132
-#define STR_ORDER_DESCENDING                RID_STRING_START + 133
-#define STR_CONFIRM_DROP_INDEX              RID_STRING_START + 134
-#define STR_LOGICAL_INDEX_NAME              RID_STRING_START + 135
-#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 136
-#define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STRING_START + 137
+#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 130
+#define STR_ADABAS_HELP_TRANSACT            RID_STRING_START + 131
+#define STR_ADABAS_HELP_DATADEVSPACES       RID_STRING_START + 132
+#define STR_ADABAS_HELP_SIZE                RID_STRING_START + 133
+#define STR_ADABAS_HELP_FREESIZE            RID_STRING_START + 134
+#define STR_ADABAS_HELP_MEMORYUSING         RID_STRING_START + 135
+#define STR_ADABAS_HELP_SYSDEVSPACE         RID_STRING_START + 136
+#define STR_TAB_INDEX_SORTORDER             RID_STRING_START + 137
+#define STR_TAB_INDEX_FIELD                 RID_STRING_START + 138
+#define STR_ORDER_ASCENDING                 RID_STRING_START + 139
+#define STR_ORDER_DESCENDING                RID_STRING_START + 140
+#define STR_CONFIRM_DROP_INDEX              RID_STRING_START + 141
+#define STR_LOGICAL_INDEX_NAME              RID_STRING_START + 142
+#define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STRING_START + 143
 
 //========================================================================
 // untyped resources
@@ -374,6 +382,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/03/19 06:01:17  fs
+ *  +STR_INDEXDESIGN_DOUBLE_COLUMN_NAME + QUERY_SAVE_TABLE_EDIT_INDEXES
+ *
  *  Revision 1.31  2001/03/16 16:20:09  fs
  *  new ids for the index design dialog and friends
  *
