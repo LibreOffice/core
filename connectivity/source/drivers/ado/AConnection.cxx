@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
                          ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver),
+                         OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
                          m_xCatalog(NULL),
@@ -218,7 +218,6 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 void SAL_CALL OConnection::release() throw(RuntimeException)
 {
     relase_ChildImpl();
-    OConnection_BASE::release();
 }
 // --------------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:32:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ using namespace rtl;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OConnection_BASE(m_aMutex)
-                         ,OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver)
+                         ,OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)
@@ -153,7 +153,6 @@ OConnection::~OConnection()
 void SAL_CALL OConnection::release() throw(RuntimeException)
 {
     relase_ChildImpl();
-    OConnection_BASE::release();
 }
 
 //-----------------------------------------------------------------------------

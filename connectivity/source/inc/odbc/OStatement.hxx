@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ namespace connectivity
             friend class OSubComponent< OStatement_BASE2>;
         public:
             OStatement_BASE2(OConnection* _pConnection ) :  OStatement_Base(_pConnection ),
-                                    OSubComponent< OStatement_BASE2>((::cppu::OWeakObject*)_pConnection){}
+                                    OSubComponent< OStatement_BASE2>((::cppu::OWeakObject*)_pConnection, this){}
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Connection( JNIEnv * pEnv, jobject myObj,java_sql_Driver* _pDriver ) :java_sql_Connection_BASE(m_aMutex),
                     java_lang_Object( pEnv, myObj ),
-                    OSubComponent<java_sql_Connection>((::cppu::OWeakObject*)_pDriver),
+                    OSubComponent<java_sql_Connection>((::cppu::OWeakObject*)_pDriver, this),
                     m_xMetaData(NULL),
                     m_pDriver(_pDriver){}
 
