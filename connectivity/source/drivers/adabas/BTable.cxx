@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 08:13:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 08:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,13 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
+    if (
+#ifdef GCC
+        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
                 throw DisposedException();
 
     if(!isNew())
@@ -412,8 +418,14 @@ void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLEx
 void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+    if (
+#ifdef GCC
+        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
+        throw DisposedException();
 
     if(!isNew())
     {
@@ -476,7 +488,13 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed)
+    if (
+#ifdef GCC
+        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
+#else
+        rBHelper.bDisposed
+#endif
+        )
                 throw DisposedException();
 
         Reference< XPropertySet > xOld;
