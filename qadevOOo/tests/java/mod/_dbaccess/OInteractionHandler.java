@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInteractionHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:37 $
+ *  last change:$Date: 2003-05-27 12:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._dbaccess;
 
 import com.sun.star.sdbc.SQLException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.uno.XInterface;
@@ -120,7 +121,7 @@ public class OInteractionHandler extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = Param.getMSF().createInstance(
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                             "com.sun.star.sdb.InteractionHandler" );
 
         }
