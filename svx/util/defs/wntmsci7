@@ -23368,3 +23368,9 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx3242827148@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx2691825481@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx109227445@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?PutValue@FmFormInfoItem@@UAEEABVAny@uno@star@sun@com@@C@Z
+?clear@OLocalExchange@svxform@@QAEXXZ
+?GrabFirstControlFocus@FmFormView@@QAEXE@Z
+?SetPosAndSize@?%O:\SRC658\src\svx\source\fmcomp\gridctrl.cxx2345421796@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRC658\src\svx\source\fmcomp\gridcell.cxx2078221947@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRC658\src\svx\source\fmcomp\fmgridcl.cxx1819515173@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
