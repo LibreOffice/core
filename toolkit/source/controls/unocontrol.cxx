@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-28 07:41:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,30 +78,64 @@
 #ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
+#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
 
+#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
+#endif
+#ifndef _DATE_HXX
 #include <tools/date.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
+#endif
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
 
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -109,6 +143,12 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 WorkWindow* lcl_GetDefaultWindow()
 {
@@ -118,18 +158,18 @@ WorkWindow* lcl_GetDefaultWindow()
     return pW;
 }
 
-static ::com::sun::star::uno::Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > & rxModel )
+static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aNames;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xPSInf = rxModel->getPropertySetInfo();
+    Sequence< ::rtl::OUString> aNames;
+    Reference< XPropertySetInfo >  xPSInf = rxModel->getPropertySetInfo();
     DBG_ASSERT( xPSInf.is(), "UpdateFromModel: No PropertySetInfo!" );
     if ( xPSInf.is() )
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps = xPSInf->getProperties();
+        Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
-        aNames = ::com::sun::star::uno::Sequence< ::rtl::OUString>( nLen );
+        aNames = Sequence< ::rtl::OUString>( nLen );
         ::rtl::OUString* pNames = aNames.getArray() + nLen - 1;
-        const ::com::sun::star::beans::Property* pProps = aProps.getConstArray() + nLen - 1;
+        const Property* pProps = aProps.getConstArray() + nLen - 1;
         for ( sal_uInt32 n = nLen; n; --n, --pProps, --pNames)
             *pNames = pProps->Name;
     }
@@ -151,9 +191,7 @@ UnoControl::UnoControl()
     mbUpdatingModel = sal_False;
     mbDisposePeer = sal_True;
     mbRefeshingPeer = sal_False;
-#if SUPD >= 629
     mbCreatingPeer = sal_False;
-#endif
     mbCreatingCompatiblePeer = sal_False;
     mbDesignMode = sal_False;
 }
@@ -167,13 +205,13 @@ UnoControl::~UnoControl()
     return ::rtl::OUString();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer )
+Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer )
 {
     DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - rekursive?" );
 
     mbCreatingCompatiblePeer = sal_True;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP;
+    Reference< XWindowPeer >    xP;
 
     if ( bAcceptExistingPeer )
         xP = mxPeer;
@@ -185,12 +223,12 @@ UnoControl::~UnoControl()
         if( bVis )
             maComponentInfos.bVisible = sal_False;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xCurrentPeer = mxPeer;
+        Reference< XWindowPeer >    xCurrentPeer = mxPeer;
         mxPeer = NULL;
 
         // Ueber queryInterface, wegen Aggregation...
-        ::com::sun::star::uno::Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>*)0) );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xMe;
+        Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const Reference< XControl>*)0) );
+        Reference< XControl > xMe;
         aAny >>= xMe;
 
         WorkWindow* pWW;
@@ -198,7 +236,7 @@ UnoControl::~UnoControl()
         osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
         pWW = lcl_GetDefaultWindow();
         }
-        xMe->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >(), pWW->GetComponentInterface( sal_True ) );
+        xMe->createPeer( Reference< XToolkit >(), pWW->GetComponentInterface( sal_True ) );
         xP = mxPeer;
         mxPeer = xCurrentPeer;
 
@@ -211,9 +249,9 @@ UnoControl::~UnoControl()
     return xP;
 }
 
-void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal )
+void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+    Reference< XVclWindowPeer >  xW( mxPeer, UNO_QUERY );
     if (xW.is())
         // since a change made in propertiesChange, we can't be sure that this is called with an valid mxPeer,
         // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
@@ -222,21 +260,21 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::
         xW->setProperty( rPropName, rVal );
 }
 
-void UnoControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
+void UnoControl::PrepareWindowDescriptor( WindowDescriptor& rDesc )
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  UnoControl::getParentPeer() const
+Reference< XWindow >    UnoControl::getParentPeer() const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xPeer;
+    Reference< XWindow > xPeer;
     if( mxContext.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xContComp( mxContext, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XControl > xContComp( mxContext, UNO_QUERY );
         if ( xContComp.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xP = xContComp->getPeer();
+            Reference< XWindowPeer > xP = xContComp->getPeer();
             if ( xP.is() )
-                xP->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >*)0) ) >>= xPeer;
+                xP->queryInterface( ::getCppuType((const Reference< XWindow >*)0) ) >>= xPeer;
         }
     }
     return xPeer;
@@ -247,40 +285,40 @@ void UnoControl::updateFromModel()
     // Alle standard Properties werden ausgelesen und in das Peer uebertragen
     if( mxPeer.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >  xPropSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
+        Reference< XMultiPropertySet >  xPropSet( mxModel, UNO_QUERY );
+        Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
         xPropSet->firePropertiesChangeEvent( aNames, this );
     }
 }
 
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any UnoControl::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+// XInterface
+Any UnoControl::queryAggregation( const Type & rType ) throw(RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XControl*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XWindow*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, SAL_STATIC_CAST( ::com::sun::star::awt::XControl*, this ) ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertiesChangeListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+    Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( XControl*, this ),
+                                        SAL_STATIC_CAST( XWindow*, this ),
+                                        SAL_STATIC_CAST( XComponent*, SAL_STATIC_CAST( XControl*, this ) ),
+                                        SAL_STATIC_CAST( XView*, this ),
+                                        SAL_STATIC_CAST( XPropertiesChangeListener*, this ),
+                                        SAL_STATIC_CAST( XEventListener*, this ),
+                                        SAL_STATIC_CAST( XServiceInfo*, this ),
+                                        SAL_STATIC_CAST( XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+// XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoControl )
-getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>* ) NULL ),
-getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>* ) NULL ),
-getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
-getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener>* ) NULL ),
-getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL )
+getCppuType( ( Reference< XControl>* ) NULL ),
+getCppuType( ( Reference< XWindow>* ) NULL ),
+getCppuType( ( Reference< XView>* ) NULL ),
+getCppuType( ( Reference< XPropertiesChangeListener>* ) NULL ),
+getCppuType( ( Reference< XServiceInfo>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
-void UnoControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::dispose(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && mbDisposePeer )
     {
@@ -288,8 +326,8 @@ void UnoControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         mxPeer = NULL;
     }
 
-    ::com::sun::star::lang::EventObject aEvt;
-    aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
+    EventObject aEvt;
+    aEvt.Source = (XAggregation*)(::cppu::OWeakAggObject*)this;
 
     maDisposeListeners.disposeAndClear(aEvt);
     maWindowListeners.disposeAndClear(aEvt);
@@ -300,33 +338,33 @@ void UnoControl::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     maPaintListeners.disposeAndClear(aEvt);
 
     // Model wieder freigeben
-    setModel( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > () );
-    setContext( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () );
+    setModel( Reference< XControlModel > () );
+    setContext( Reference< XInterface > () );
 }
 
-void UnoControl::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maDisposeListeners.addInterface( rxListener );
 }
 
-void UnoControl::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maDisposeListeners.removeInterface( rxListener );
 }
 
-// ::com::sun::star::beans::XPropertiesChangeListener
-void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
+// XPropertiesChangeListener
+void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 {
     ::osl::ClearableGuard< ::osl::Mutex > aGuard( GetMutex() );
 
     // kommt von xModel
     if( !IsUpdatingModel() && mxPeer.is() )
     {
-        DECLARE_STL_VECTOR( ::com::sun::star::beans::PropertyValue, PropertyValueVector);
+        DECLARE_STL_VECTOR( PropertyValue, PropertyValueVector);
         PropertyValueVector     aPeerPropertiesToSet;
         sal_Int32               nIndependentPos = 0;
             // position where to insert the independent properties, dependent ones are inserted at the end of the vector
@@ -337,17 +375,13 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
-            const ::com::sun::star::beans::PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( rEvt.Source, ::com::sun::star::uno::UNO_QUERY );
-            sal_Bool bOwnModel = (::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)getModel().get();
+            const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
+            Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
+            sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
             if ( bOwnModel )
             {
                 sal_uInt16 nPType = GetPropertyId( rEvt.PropertyName );
-#if SUPD < 629
-                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingCompatiblePeer )
-#else
                 if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
-#endif
                 {
                     // Im Design-Mode koennen sich Props aendern, die eine
                     // Neuerzeugung der Peer erfordern...
@@ -368,19 +402,19 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
                     // Properties die von anderen abhaengen erst hinterher einstellen,
                     // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
                     // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
-                    aPeerPropertiesToSet.push_back(::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
+                    aPeerPropertiesToSet.push_back(PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, PropertyState_DIRECT_VALUE));
                 }
                 else
                 {
                     aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
-                        ::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
+                        PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, PropertyState_DIRECT_VALUE));
                     ++nIndependentPos;
                 }
             }
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xParent = getParentPeer();
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xThis( (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xParent = getParentPeer();
+        Reference< XControl > xThis( (XAggregation*)(::cppu::OWeakAggObject*)this, UNO_QUERY );
         // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
 
         DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );
@@ -400,8 +434,8 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
             mxPeer->dispose();
             mxPeer.clear();
             mbRefeshingPeer = sal_True;
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP( xParent, ::com::sun::star::uno::UNO_QUERY );
-            xThis->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), xP );
+            Reference< XWindowPeer >    xP( xParent, UNO_QUERY );
+            xThis->createPeer( Reference< XToolkit > (), xP );
             mbRefeshingPeer = sal_False;
             aPeerPropertiesToSet.clear();
         }
@@ -420,9 +454,9 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
     }
 }
 
-void UnoControl::disposing( const ::com::sun::star::lang::EventObject& rEvt ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
     // kommt von xModel, bei "Multible Inheritance" nicht unterschiedliche
     // Typen vergleichen.
 
@@ -431,257 +465,256 @@ void UnoControl::disposing( const ::com::sun::star::lang::EventObject& rEvt ) th
         mxModel = NULL;
 
         // #62337# Ohne Model wollen wir nicht weiterleben
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xThis = this;
+        Reference< XControl >  xThis = this;
         xThis->dispose();
     }
 }
 
 
-// ::com::sun::star::awt::XWindow
-void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException)
+// XWindow
+void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    maComponentInfos.nX = X;
-    maComponentInfos.nY = Y;
-    maComponentInfos.nWidth = Width;
-    maComponentInfos.nHeight = Height;
-    maComponentInfos.nFlags = Flags;
-
-    if( mxPeer.is() )
+    Reference< XWindow > xWindow;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xW->setPosSize( X, Y, Width, Height, Flags );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        maComponentInfos.nX = X;
+        maComponentInfos.nY = Y;
+        maComponentInfos.nWidth = Width;
+        maComponentInfos.nHeight = Height;
+        maComponentInfos.nFlags = Flags;
+
+        xWindow = xWindow.query( mxPeer );
     }
+    if( xWindow.is() )
+        xWindow->setPosSize( X, Y, Width, Height, Flags );
 }
 
-::com::sun::star::awt::Rectangle UnoControl::getPosSize(  ) throw(::com::sun::star::uno::RuntimeException)
+awt::Rectangle UnoControl::getPosSize(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
-    return ::com::sun::star::awt::Rectangle( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight);
+    return awt::Rectangle( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight);
 }
 
-void UnoControl::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::setVisible( sal_Bool bVisible ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    // Visible status ist Sache der ::com::sun::star::sdbcx::View
-    maComponentInfos.bVisible = bVisible;
-    if( mxPeer.is() )
+    Reference< XWindow > xWindow;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xW->setVisible( maComponentInfos.bVisible );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        // Visible status ist Sache der View
+        maComponentInfos.bVisible = bVisible;
+        xWindow = xWindow.query( mxPeer );
     }
+    if ( xWindow.is() )
+        xWindow->setVisible( bVisible );
 }
 
-void UnoControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::setEnable( sal_Bool bEnable ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    // Enable status ist Sache der ::com::sun::star::sdbcx::View
-    maComponentInfos.bEnable = bEnable;
-    if( mxPeer.is() )
+    Reference< XWindow > xWindow;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xW->setEnable( maComponentInfos.bEnable );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        // Enable status ist Sache der View
+        maComponentInfos.bEnable = bEnable;
+        xWindow = xWindow.query( mxPeer );
     }
+    if ( xWindow.is() )
+        xWindow->setEnable( bEnable );
 }
 
-void UnoControl::setFocus(  ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::setFocus(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    if( mxPeer.is() )
+    Reference< XWindow > xWindow;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xW->setFocus();
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xWindow = xWindow.query( mxPeer );
     }
+    if ( xWindow.is() )
+        xWindow->setFocus();
 }
 
-void UnoControl::addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addWindowListener( const Reference< XWindowListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maWindowListeners.addInterface( rxListener );
     if( mxPeer.is() && maWindowListeners.getLength() == 1 )
     {
         // erster Focus Listener, also am Peer anmelden
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->addWindowListener( &maWindowListeners );
     }
 }
 
-void UnoControl::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeWindowListener( const Reference< XWindowListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maWindowListeners.getLength() == 1 )
     {
         // letzter Focus Listener, also am Peer abmelden
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removeWindowListener( &maWindowListeners );
     }
     maWindowListeners.removeInterface( rxListener );
 }
 
-void UnoControl::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addFocusListener( const Reference< XFocusListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maFocusListeners.addInterface( rxListener );
     if( mxPeer.is() && maFocusListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->addFocusListener( &maFocusListeners );
     }
 }
 
-void UnoControl::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeFocusListener( const Reference< XFocusListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maFocusListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removeFocusListener( &maFocusListeners );
     }
     maFocusListeners.removeInterface( rxListener );
 }
 
-void UnoControl::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addKeyListener( const Reference< XKeyListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maKeyListeners.addInterface( rxListener );
     if( mxPeer.is() && maKeyListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->addKeyListener( &maKeyListeners);
     }
 }
 
-void UnoControl::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeKeyListener( const Reference< XKeyListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maKeyListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removeKeyListener( &maKeyListeners);
     }
     maKeyListeners.removeInterface( rxListener );
 }
 
-void UnoControl::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addMouseListener( const Reference< XMouseListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maMouseListeners.addInterface( rxListener );
     if( mxPeer.is() && maMouseListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );;
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );;
         xW->addMouseListener( &maMouseListeners);
     }
 }
 
-void UnoControl::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeMouseListener( const Reference< XMouseListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maMouseListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removeMouseListener( &maMouseListeners);
     }
     maMouseListeners.removeInterface( rxListener );
 }
 
-void UnoControl::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addMouseMotionListener( const Reference< XMouseMotionListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maMouseMotionListeners.addInterface( rxListener );
     if( mxPeer.is() && maMouseMotionListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->addMouseMotionListener( &maMouseMotionListeners);
     }
 }
 
-void UnoControl::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maMouseMotionListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removeMouseMotionListener( &maMouseMotionListeners);
     }
     maMouseMotionListeners.removeInterface( rxListener );
 }
 
-void UnoControl::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::addPaintListener( const Reference< XPaintListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     maPaintListeners.addInterface( rxListener );
     if( mxPeer.is() && maPaintListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->addPaintListener( &maPaintListeners );
     }
 }
 
-void UnoControl::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::removePaintListener( const Reference< XPaintListener >& rxListener ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     if( mxPeer.is() && maPaintListeners.getLength() == 1 )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XWindow >    xW( mxPeer, UNO_QUERY );
         xW->removePaintListener( &maPaintListeners );
     }
     maPaintListeners.removeInterface( rxListener );
 }
 
-// ::com::sun::star::awt::XView
-sal_Bool UnoControl::setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& rDevice ) throw(::com::sun::star::uno::RuntimeException)
+// XView
+sal_Bool UnoControl::setGraphics( const Reference< XGraphics >& rDevice ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    mxGraphics = rDevice;
-    if ( mxPeer.is() )
+    Reference< XView > xView;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        if ( xV.is() )
-            xV->setGraphics( mxGraphics );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        mxGraphics = rDevice;
+        xView = xView.query( mxPeer );
     }
-    return sal_True;
+    return xView.is() ? xView->setGraphics( rDevice ) : sal_True;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > UnoControl::getGraphics(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< XGraphics > UnoControl::getGraphics(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return mxGraphics;
 }
 
-::com::sun::star::awt::Size UnoControl::getSize(  ) throw(::com::sun::star::uno::RuntimeException)
+awt::Size UnoControl::getSize(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return ::com::sun::star::awt::Size( maComponentInfos.nWidth, maComponentInfos.nHeight );
+    ::osl::MutexGuard aGuard( GetMutex() );
+    return awt::Size( maComponentInfos.nWidth, maComponentInfos.nHeight );
 }
 
-void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP = ImplGetCompatiblePeer( sal_True );
+    Reference< XWindowPeer >    xP = ImplGetCompatiblePeer( sal_True );
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV( xP, ::com::sun::star::uno::UNO_QUERY );
+        Reference< XView >  xV( xP, UNO_QUERY );
         xV->draw( x, y );
 
         if ( !mxPeer.is() || ( mxPeer != xP ) )
@@ -689,67 +722,67 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::R
     }
 }
 
-void UnoControl::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::setZoom( float fZoomX, float fZoomY ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    maComponentInfos.nZoomX = fZoomX;
-    maComponentInfos.nZoomY = fZoomY;
-    if ( mxPeer.is() )
+    Reference< XView > xView;
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xV->setZoom( fZoomX, fZoomY );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        maComponentInfos.nZoomX = fZoomX;
+        maComponentInfos.nZoomY = fZoomY;
+
+        xView = xView.query( mxPeer );
     }
+    if ( xView.is() )
+        xView->setZoom( fZoomX, fZoomY );
 }
 
-// ::com::sun::star::awt::XControl
-void UnoControl::setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxContext ) throw(::com::sun::star::uno::RuntimeException)
+// XControl
+void UnoControl::setContext( const Reference< XInterface >& rxContext ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     mxContext = rxContext;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > UnoControl::getContext(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< XInterface > UnoControl::getContext(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
     return mxContext;
 }
 
-void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Reference< XWindowPeer >& rParentPeer ) throw(RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
     if ( !mxModel.is() )
     {
-        ::com::sun::star::uno::RuntimeException aException;
+        RuntimeException aException;
         aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
-        aException.Context = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
+        aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
 
     if( !mxPeer.is() )
     {
-#if SUPD >= 629
         mbCreatingPeer = sal_True;
-#endif
 
-        ::com::sun::star::awt::WindowClass eType;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >  xToolkit = rxToolkit;
+        WindowClass eType;
+        Reference< XToolkit >  xToolkit = rxToolkit;
         if( rParentPeer.is() && mxContext.is() )
         {
             // kein TopWindow
             if ( !xToolkit.is() )
                 xToolkit = rParentPeer->getToolkit();
-            ::com::sun::star::uno::Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>*)0) );
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xC;
+            Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const Reference< XControlContainer>*)0) );
+            Reference< XControlContainer > xC;
             aAny >>= xC;
             if( xC.is() )
                 // Es ist ein Container
-                eType = ::com::sun::star::awt::WindowClass_CONTAINER;
+                eType = WindowClass_CONTAINER;
             else
-                eType = ::com::sun::star::awt::WindowClass_SIMPLE;
+                eType = WindowClass_SIMPLE;
         }
         else
         { // Nur richtig, wenn es sich um ein Top Window handelt
@@ -757,27 +790,27 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             {
                 if ( !xToolkit.is() )
                     xToolkit = rParentPeer->getToolkit();
-                eType = ::com::sun::star::awt::WindowClass_CONTAINER;
+                eType = WindowClass_CONTAINER;
             }
             else
             {
                 if ( !xToolkit.is() )
                     xToolkit = VCLUnoHelper::CreateToolkit();
-                eType = ::com::sun::star::awt::WindowClass_TOP;
+                eType = WindowClass_TOP;
             }
         }
-         ::com::sun::star::awt::WindowDescriptor aDescr;
+        WindowDescriptor aDescr;
         aDescr.Type = eType;
         aDescr.WindowServiceName = GetComponentServiceName();
         aDescr.Parent = rParentPeer;
         aDescr.Bounds = getPosSize();
         aDescr.WindowAttributes = 0;
 
-        // ::com::sun::star::sheet::Border
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
+        // Border
+        Reference< XPropertySet > xPSet( mxModel, UNO_QUERY );
+        Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
 
-        ::com::sun::star::uno::Any aVal;
+        Any aVal;
         ::rtl::OUString aPropName = GetPropertyName( BASEPROPERTY_BORDER );
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
@@ -786,9 +819,9 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             if ( aVal >>= n )
             {
                 if ( n )
-                    aDescr.WindowAttributes |= ::com::sun::star::awt::WindowAttribute::BORDER;
+                    aDescr.WindowAttributes |= WindowAttribute::BORDER;
                 else
-                    aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::NOBORDER;
+                    aDescr.WindowAttributes |= VclWindowPeerAttribute::NOBORDER;
             }
         }
 
@@ -799,7 +832,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::WindowAttribute::MOVEABLE;
+                aDescr.WindowAttributes |= WindowAttribute::MOVEABLE;
         }
 
         // Closeable
@@ -809,7 +842,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::WindowAttribute::CLOSEABLE;
+                aDescr.WindowAttributes |= WindowAttribute::CLOSEABLE;
         }
 
         // Dropdown
@@ -819,7 +852,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::DROPDOWN;
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::DROPDOWN;
         }
 
         // Spin
@@ -829,7 +862,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::SPIN;
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::SPIN;
         }
 
         // HScroll
@@ -839,7 +872,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::HSCROLL;
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::HSCROLL;
         }
 
         // VScroll
@@ -849,7 +882,7 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             aVal = xPSet->getPropertyValue( aPropName );
             sal_Bool b;
             if ( ( aVal >>= b ) && b)
-                aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::VSCROLL;
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::VSCROLL;
         }
 
         // Align
@@ -861,11 +894,11 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             if ( aVal >>= n )
             {
                 if ( n == PROPERTY_ALIGN_LEFT )
-                    aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::LEFT;
+                    aDescr.WindowAttributes |= VclWindowPeerAttribute::LEFT;
                 else if ( n == PROPERTY_ALIGN_CENTER )
-                    aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::CENTER;
+                    aDescr.WindowAttributes |= VclWindowPeerAttribute::CENTER;
                 else
-                    aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::RIGHT;
+                    aDescr.WindowAttributes |= VclWindowPeerAttribute::RIGHT;
             }
         }
 
@@ -886,9 +919,9 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
         // 82300 - 12/21/00 - FS
         UnoControlComponentInfos aComponentInfos(maComponentInfos);
         sal_Bool bDesignMode(mbDesignMode);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > xGraphics( mxGraphics );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV(mxPeer, ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XGraphics > xGraphics( mxGraphics );
+        Reference< XView >  xV(mxPeer, UNO_QUERY);
+        Reference< XWindow >    xW(mxPeer, UNO_QUERY);
 
         aGuard.clear();
 
@@ -927,22 +960,20 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
 
         xV->setGraphics( xGraphics );
 
-#if SUPD >= 629
         mbCreatingPeer = sal_False;
-#endif
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > UnoControl::getPeer(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< XWindowPeer > UnoControl::getPeer(  ) throw(RuntimeException)
 {
     return mxPeer;
 }
 
-sal_Bool UnoControl::setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > xPropSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
+    Reference< XMultiPropertySet > xPropSet( mxModel, UNO_QUERY );
 
     if( xPropSet.is() )
         xPropSet->removePropertiesChangeListener( this );
@@ -950,81 +981,73 @@ sal_Bool UnoControl::setModel( const ::com::sun::star::uno::Reference< ::com::su
     mxModel = rxModel;
     if( mxModel.is() )
     {
-        xPropSet = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > ( mxModel, ::com::sun::star::uno::UNO_QUERY );
+        xPropSet = Reference< XMultiPropertySet > ( mxModel, UNO_QUERY );
         if( xPropSet.is() )
         {
-            ::com::sun::star::uno::Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
+            Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, this );
         }
     }
     return mxModel.is();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > UnoControl::getModel(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< XControlModel > UnoControl::getModel(    ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return mxModel;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > UnoControl::getView(  ) throw(::com::sun::star::uno::RuntimeException)
+Reference< XView > UnoControl::getView(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    return  (::com::sun::star::awt::XView*)this;
+    return  static_cast< XView* >( this );
 }
 
-void UnoControl::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException)
+void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    mbDesignMode = bOn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-    if ( xW.is() )
-        xW->setVisible( !bOn );
+    Reference< XWindow > xWindow;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        mbDesignMode = bOn;
+        xWindow = xWindow.query( mxPeer );
+    }
+    if ( xWindow.is() )
+        xWindow->setVisible( !bOn );
 }
 
-sal_Bool UnoControl::isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControl::isDesignMode(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return mbDesignMode;
 }
 
-sal_Bool UnoControl::isTransparent(  ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return sal_False;
 }
 
-// ::com::sun::star::lang::XServiceInfo
-::rtl::OUString UnoControl::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+// XServiceInfo
+::rtl::OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     DBG_ERROR( "This method should be overloaded!" );
     return ::rtl::OUString();
 }
 
-sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == rServiceName )
-            return sal_True;
-    return sal_False;
+    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
+    const ::rtl::OUString* pArray = aSNL.getConstArray();
+    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    for (; pArray != pArrayEnd; ++pArray )
+        if( *pArray == rServiceName )
+            break;
+
+    return pArray != pArrayEnd;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     DBG_ERROR( "This method should be overloaded!" );
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >();
+    return Sequence< ::rtl::OUString >();
 }
 
 
