@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 16:19:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,22 +61,22 @@
 
 #pragma hdrstop
 
-#define ITEMID_FONT 0
+#define ITEMID_FONT     0
+#define ITEMID_COLOR    0
+
 #include <ctype.h>
 
 #ifdef MAC
 #include "mac_start.h"
-
 #ifndef __TYPES__
   #include <Types.h>
 #endif
-
 #ifndef __FONTS__
   #include <Fonts.h>
 #endif
-
 #include "mac_end.h"
 #endif
+
 
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -101,10 +101,9 @@
 #endif
 
 #include "fontitem.hxx"
-
+#include "colritem.hxx"
 #include "svxrtf.hxx"
 #include "svxids.hrc"
-
 
 
 SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
@@ -201,7 +200,12 @@ void SvxRTFParser::Continue( int nToken )
     SvRTFParser::Continue( nToken );
 
     if( SVPAR_PENDING != GetStatus() )
+    {
         SetAllAttrOfStk();
+        if( bNewDoc && ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor )
+            pAttrPool->SetPoolDefaultItem( SvxColorItem( GetColor( 0 ),
+                        ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor ));
+     }
 }
 
 
@@ -248,7 +252,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
     case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
 INSINGLECHAR:
-        aToken = ByteString::ConvertToUnicode( cCh,
+        aToken = ByteString::ConvertToUnicode( (sal_Char)cCh,
                                             RTL_TEXTENCODING_MS_1252 );
 
         // kein Break, aToken wird als Text gesetzt
@@ -468,7 +472,7 @@ void SvxRTFParser::ReadStyleTable()
 void SvxRTFParser::ReadColorTable()
 {
     int nToken;
-    BYTE nRed = 0, nGreen = 0, nBlue = 0;
+    BYTE nRed = -1, nGreen = -1, nBlue = -1;
 
     while( '}' != ( nToken = GetNextToken() ) && IsParserWorking() )
     {
@@ -491,9 +495,10 @@ void SvxRTFParser::ReadColorTable()
             {
                 // eine Farbe ist Fertig, in die Tabelle eintragen
                 // versuche die Werte auf SV interne Namen zu mappen
-                ColorPtr pColor = 0;
-                if( !pColor )
-                    pColor = new Color( nRed, nGreen, nBlue );
+                ColorPtr pColor = new Color( nRed, nGreen, nBlue );
+                if( !aColorTbl.Count() &&
+                    BYTE(-1) == nRed && BYTE(-1) == nGreen && BYTE(-1) == nBlue )
+                    pColor->SetColor( COL_AUTO );
                 aColorTbl.Insert( pColor, aColorTbl.Count() );
                 nRed = 0, nGreen = 0, nBlue = 0;
 
@@ -1309,7 +1314,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
 {
     nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, FALSE );
-    nBgColor = 0;
+    nBgColor = rPool.GetTrueWhich( SID_ATTR_BRUSH_CHAR, FALSE );
     nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, FALSE );
     nContour = rPool.GetTrueWhich( SID_ATTR_CHAR_CONTOUR, FALSE );
     nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, FALSE );
