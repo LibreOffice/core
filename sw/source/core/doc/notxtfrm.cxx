@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:22:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,7 +870,7 @@ BOOL SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 
 
 BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                            const SwCrsrMoveState* ) const
+                             SwCrsrMoveState* ) const
 {
     SwCntntNode* pCNd = (SwCntntNode*)GetNode();
     pPos->nNode = *pCNd;
