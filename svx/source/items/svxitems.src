@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:35:24 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7458,6 +7458,15 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ turkish ] = "Hanging punctuation at line end";
     Text[ arabic ] = "Hanging punctuation at line end";
 };
+String RID_SVXITEMS_FORBIDDEN_RULE_OFF
+{
+    Text = "Verbotene Zeichen an Zeilenanfang und -ende berücksichtigen";
+    Text [ English ] = "Apply list of forbidden characters at line end and line start" ;
+};
 
-
+String RID_SVXITEMS_FORBIDDEN_RULE_ON
+{
+    Text = "Verbotene Zeichen an Zeilenanfang und -ende nicht berücksichtigen";
+    Text [ English ] = "Don't Apply list of forbidden characters at line end and line start" ;
+};
  // ********************************************************************** EOF
