@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-04-11 09:21:12 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,12 @@
         Text [ portuguese ] = "Margem ~esquerda" ;                          \
         Text [ finnish ] = "~Vasen marginaali" ;                            \
         Text [ danish ] = "Venstre margen" ;                                \
-        Text [ french ] = "Marge gauche" ;                                  \
-        Text [ swedish ] = "V‰nstermargina~l" ;                             \
+        Text [ french ] = "Marge ~gauche" ;                                  \
+        Text [ swedish ] = "~V‰nstermarginal" ;                             \
         Text [ dutch ] = "~Linker marge" ;                                  \
         Text [ spanish ] = "Margen ~izquierdo" ;                            \
         Text [ english_us ] = "~Left margin" ;                              \
-        Text[ chinese_simplified ] = "Â∑¶ÊñπÈ°µËæπË∑ù(~L)";                 \
+        Text[ chinese_simplified ] = "Â∑¶ËæπË∑ù(~L)";                 \
         Text[ russian ] = "œÓÎÂ ÒÎÂ‚‡";                                     \
         Text[ polish ] = "Lewy margines";                                   \
         Text[ japanese ] = "Â∑¶‰ΩôÁôΩ(~L)";                                 \
@@ -99,12 +99,12 @@
         Text [ portuguese ] = "Margem ~direita" ;                           \
         Text [ finnish ] = "~Oikea marginaali" ;                            \
         Text [ danish ] = "H¯jre margen" ;                                  \
-        Text [ french ] = "Marge droite" ;                                  \
+        Text [ french ] = "Marge ~droite" ;                                  \
         Text [ swedish ] = "Hˆge~rmarginal" ;                               \
         Text [ dutch ] = "~Rechter marge" ;                                 \
         Text [ spanish ] = "Margen ~derecho" ;                              \
         Text [ english_us ] = "R~ight margin" ;                             \
-        Text[ chinese_simplified ] = "Âè≥ÊñπÈ°µËæπË∑ù(~I)";                 \
+        Text[ chinese_simplified ] = "Âè≥ËæπË∑ù(~I)";                 \
         Text[ russian ] = "œÓÎÂ ÒÔ‡‚‡";                                    \
         Text[ polish ] = "Prawy margines";                                  \
         Text[ japanese ] = "Âè≥‰ΩôÁôΩ(~I)";                                 \
@@ -247,7 +247,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ English ] = "~Distance" ;
         Text [ english_us ] = "~Spacing" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
-        Text [ swedish ] = "A~vstÂnd" ;
+        Text [ swedish ] = "~AvstÂnd" ;
         Text [ danish ] = "Afstand" ;
         Text [ italian ] = "~Distanza" ;
         Text [ spanish ] = "~Espacio" ;
