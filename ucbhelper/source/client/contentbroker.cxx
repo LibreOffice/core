@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 12:53:23 $
+ *  last change: $Author: kso $ $Date: 2002-09-20 12:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,23 +136,22 @@ public:
 
     ~ContentBroker_Impl();
 
-    bool init() const;
-    bool init();
+    bool initialize();
 
     const Reference< XMultiServiceFactory >& getServiceManager() const
     { return m_xSMgr; }
 
     const Reference< XContentIdentifierFactory >& getIdFactory() const
-    { init(); return m_xIdFac; }
+    { return m_xIdFac; }
 
     const Reference< XContentProvider >& getProvider() const
-    { init(); return m_xProvider; }
+    { return m_xProvider; }
 
     const Reference< XContentProviderManager >& getProviderManager() const
-    { init(); return m_xProviderMgr; }
+    { return m_xProviderMgr; }
 
     const Reference< XCommandProcessor >& getCommandProcessor() const
-    { init(); return m_xCommandProc; }
+    { return m_xCommandProc; }
 };
 
 //=========================================================================
@@ -238,7 +237,7 @@ sal_Bool ContentBroker::initialize(
             ContentBroker * pBroker = new ContentBroker( rSMgr, rArguments );
 
             // Force init to be able to detect UCB init trouble immediately.
-            if ( pBroker->m_pImpl->init() )
+            if ( pBroker->m_pImpl->initialize() )
                 m_pTheBroker = pBroker;
             else
                 delete pBroker;
@@ -266,7 +265,7 @@ sal_Bool ContentBroker::initialize(
             ContentBroker * pBroker = new ContentBroker( rSMgr, rData );
 
             // Force init to be able to detect UCB init trouble immediately.
-            if ( pBroker->m_pImpl->init() )
+            if ( pBroker->m_pImpl->initialize() )
                 m_pTheBroker = pBroker;
             else
                 delete pBroker;
@@ -304,7 +303,7 @@ ContentBroker* ContentBroker::get()
 ContentBroker_Impl::~ContentBroker_Impl()
 {
     Reference< XComponent > xComponent( m_xProvider, UNO_QUERY );
-    if ( xComponent.is() ) // must not exist, if init() was never called.
+    if ( xComponent.is() )
     {
         m_xIdFac       = 0;
         m_xProvider    = 0;
@@ -315,13 +314,7 @@ ContentBroker_Impl::~ContentBroker_Impl()
 }
 
 //=========================================================================
-bool ContentBroker_Impl::init() const
-{
-    return const_cast< ContentBroker_Impl * >( this )->init();
-}
-
-//=========================================================================
-bool ContentBroker_Impl::init()
+bool ContentBroker_Impl::initialize()
 {
     if ( !m_bInitDone )
     {
@@ -333,10 +326,15 @@ bool ContentBroker_Impl::init()
 
             if ( m_aProvData.size() > 0 )
             {
-                xIfc
-                    = m_xSMgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.ucb.UniversalContentBroker" ) );
+                try
+                {
+                    xIfc = m_xSMgr->createInstance(
+                            OUString::createFromAscii(
+                                "com.sun.star.ucb.UniversalContentBroker" ) );
+                }
+                catch ( Exception const & )
+                {
+                }
 
                 if ( xIfc.is() )
                 {
@@ -349,18 +347,25 @@ bool ContentBroker_Impl::init()
                                                    m_xSMgr,
                                                    m_aProvData,
                                                    0 ) )
+                        {
                             OSL_ENSURE( false, "Failed to configure UCB!" );
                             return false;
+                        }
                     }
                 }
             }
             else
             {
-                xIfc
-                    = m_xSMgr->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.ucb.UniversalContentBroker" ),
-                        m_aArguments );
+                try
+                {
+                    xIfc = m_xSMgr->createInstanceWithArguments(
+                            OUString::createFromAscii(
+                                "com.sun.star.ucb.UniversalContentBroker" ),
+                            m_aArguments );
+                }
+                catch ( Exception const & )
+                {
+                }
             }
 
             OSL_ENSURE( xIfc.is(), "Error creating UCB service!" );
