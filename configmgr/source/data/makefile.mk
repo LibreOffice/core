@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2002-02-15 14:34:33 $
+#   last change: $Author: hr $ $Date: 2004-02-02 20:21:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,6 @@ SLOFILES=	\
         $(SLO)$/types.obj	\
         $(SLO)$/accessor.obj		\
         $(SLO)$/updateaccessor.obj		\
-
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
-.ENDIF
 
 # --- Targets ----------------------------------
 
