@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,11 +453,11 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ dutch ] = "Fa~x/e-mail" ;
         Text [ spanish ] = "Fa~x/E-mail" ;
         Text [ english_us ] = "Fa~x / E-mail" ;
-        Text[ chinese_simplified ] = "´«Õæ/µç×ÓÓÊ¼ş";
+        Text[ chinese_simplified ] = "´«Õæ/µç×ÓÓÊ¼ş(~X)";
         Text[ russian ] = "Ôàêñ ¹/Àäğåñ ıë. ïî÷òû";
         Text[ polish ] = "Faks/e-mail";
-        Text[ japanese ] = "Fax/E-mail";
-        Text[ chinese_traditional ] = "¶Ç¯u/¹q¤l¶l¥ó";
+        Text[ japanese ] = "Fa~x/E-mail";
+        Text[ chinese_traditional ] = "¶Ç¯u/¹q¤l¶l¥ó(~X)";
         Text[ arabic ] = "İÇßÓ/ÈÑíÏ ÅáßÊÑæäí";
         Text[ greek ] = "Fax/E-mail";
         Text[ korean ] = "ÆÑ½º/E-mail(~X)";
@@ -492,11 +492,11 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ swedish ] = " Adress  " ;
         Text [ dutch ] = "  Adres   " ;
         Text [ spanish ] = "  Dirección " ;
-        Text [ english_us ] = " Address " ;
+        Text [ english_us ] = "Address " ;
         Text[ chinese_simplified ] = " µØÖ· ";
-        Text[ russian ] = " Àäğåñ ";
-        Text[ polish ] = " Adres ";
-        Text[ japanese ] = " ZŠ ";
+        Text[ russian ] = "Àäğåñ ";
+        Text[ polish ] = "Adres ";
+        Text[ japanese ] = "ZŠ ";
         Text[ chinese_traditional ] = " ¦a§} ";
         Text[ arabic ] = "ÇáÚäæÇä ";
         Text[ greek ] = " Äéåıèõíóç ";
