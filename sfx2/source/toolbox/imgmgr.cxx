@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:47:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,11 @@
 #include "objsh.hxx"
 #include "cfgmgr.hxx"
 #include "macrconf.hxx"
+
+// #110897#
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 static const USHORT nVersion = 5;
 DECLARE_LIST( LinkList, Link * );
@@ -485,7 +490,10 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
     {
         SfxMacroConfig* pCfg = SfxMacroConfig::GetOrCreate();
         ::framework::ImageListsDescriptor aDescriptor;
-        if ( !::framework::ImagesConfiguration::LoadImages( *xStream, aDescriptor ) )
+
+        // #110897#
+        // if ( !::framework::ImagesConfiguration::LoadImages( *xStream, aDescriptor ) )
+        if ( !::framework::ImagesConfiguration::LoadImages( ::comphelper::getProcessServiceFactory(), *xStream, aDescriptor ) )
             return ERR_READ;
 
         if ( !aDescriptor.pImageList || !aDescriptor.pImageList->Count() )
@@ -712,7 +720,10 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
         // store configuration
         xBitmapStorage->Commit();
-        return ::framework::ImagesConfiguration::StoreImages( *xStream, aDescriptor );
+
+        // #110897#
+        // return ::framework::ImagesConfiguration::StoreImages( *xStream, aDescriptor );
+        return ::framework::ImagesConfiguration::StoreImages( ::comphelper::getProcessServiceFactory(), *xStream, aDescriptor );
     }
 }
 
