@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 11:08:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIAPLAYER_HXX
+#include <avmedia/mediaplayer.hxx>
 #endif
 
 #include "app.hrc"
@@ -469,6 +472,11 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     {
         USHORT nId = Svx3DChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_3D_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
+    {
+        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 
@@ -863,6 +871,15 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             pDrView->EndTextEdit();
             pFuActual = new FuSummaryPage( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             Cancel();
+        }
+        break;
+
+        case SID_AVMEDIA_PLAYER:
+        {
+            GetViewFrame()->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
+            GetViewFrame()->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
+            Cancel();
+            rReq.Ignore ();
         }
         break;
 
