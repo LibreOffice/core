@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:50:01 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:18:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,8 +116,9 @@ $(BIN)$/$(TARGET).rdb: types.idl
 
 $(SLOFILES) $(JAVACLASSFILES): $(BIN)$/$(TARGET).rdb
 
+# Use "127.0.0.1" instead of "localhost", see #i32281#:
 TEST_JAVAUNO_ACQUIRE_UNO_URL := \
-    \"'uno:socket,host=localhost,port=2002;urp;test'\"
+    \"'uno:socket,host=127.0.0.1,port=2002;urp;test'\"
 
 $(BIN)$/testacquire-java-client$(SCRIPTEXT):
     echo java -classpath \
