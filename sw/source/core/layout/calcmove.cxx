@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 09:33:58 $
+ *  last change: $Author: ama $ $Date: 2002-04-25 08:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,7 +1518,11 @@ void SwCntntFrm::MakeAll()
                     if ( !bMovedBwd &&
                          ((bMoveFwdInvalid && !GetIndNext()) ||
                           bNxtNew) )
+                    {
+                        if( bMovedFwd )
+                            pNotify->SetInvaKeep();
                         bMovedFwd = FALSE;
+                    }
                 }
             }
             continue;
