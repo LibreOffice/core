@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:21:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,7 +973,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 pView = SFX_APP()->CreateViewFrame( *pDocShell, 0 );
                 pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
             }
-            else
+
+            if ( pView )
                 pView->GetFrame()->Appear();
 
             const SfxItemSet* pArgs = rReq.GetArgs();
