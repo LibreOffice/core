@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 11:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
 
     // get the supplier of the database
     ODatabaseSource* pParent = NULL;
-    if (!getImplementation(pParent, m_xParent))
+        if (!comphelper::getImplementation(pParent, m_xParent))
         throw RuntimeException();
 
     //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
