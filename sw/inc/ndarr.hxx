@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:03:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _NDARR_HXX
 #define _NDARR_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -73,10 +77,11 @@
 #include <ndtyp.hxx>
 #endif
 
+#include <svtools/embedhlp.hxx>
+
 class Graphic;
 class GraphicObject;
 class UniString;
-class SvInPlaceObject;
 class SwAttrSet;
 class SwCntntFrm;
 class SwCntntNode;
@@ -273,7 +278,7 @@ public:
                             SwAttrSet* pAutoAttr = 0 ); // in ndgrf.cxx
 
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
-                            SvInPlaceObject *pObj,
+                            const svt::EmbeddedObjectRef&,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
