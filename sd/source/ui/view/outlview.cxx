@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-22 11:27:14 $
+ *  last change: $Author: dl $ $Date: 2001-07-02 12:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,6 +1166,11 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 pTO->SetOutlinerParaObject(pOPO);
                             // TRUE: DontRemoveHardAttr
                 pTO->SetStyleSheet(pTitleSheet, TRUE);
+                AutoLayout eLayout = pPage->GetAutoLayout();
+                if( eLayout == AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       ||
+                    eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE )
+                    pTO->SetVerticalWriting( TRUE );
+
                 AddUndo(new SdrUndoNewObj(*pTO));
             }
             else if (pTO && bText)
@@ -1181,6 +1186,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
 
                 pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+                pOPO->SetVertical( pTO->IsVerticalWriting() );
                 // loescht altes OutlinerParaObject
                 AddUndo(new SdrUndoObjSetText(*pTO));
                 pTO->SetOutlinerParaObject(pOPO);
@@ -1206,16 +1212,22 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                             bBegUndoDone = TRUE;
                         }
 
-                        pTempLiner->Clear();
+                        BOOL bVertical = pTO->IsVerticalWriting();
+                        AddUndo(new SdrUndoObjSetText(*pTO));
+
+                        String aString( pPage->GetPresObjText(PRESOBJ_TITLE) );
+                        pPage->SetObjText( pTO, pTempLiner, PRESOBJ_TITLE, aString );
+                        pTO->SetVerticalWriting(bVertical);
+                        pTO->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE), TRUE );
+
+/*                      pTempLiner->Init( OUTLINERMODE_TITLEOBJECT );
                         pTempLiner->SetMinDepth(0);
                         String aString (SdResId(STR_PRESOBJ_TITLE));
                         pTempLiner->Insert(aString, LIST_APPEND, 0);
                         pOPO = pTempLiner->CreateParaObject( 0, 1 );
                         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-
-                        // loescht auch altes OutlinerParaobject
-                        AddUndo(new SdrUndoObjSetText(*pTO));
                         pTO->SetOutlinerParaObject(pOPO);
+ * */
                         pTO->SetEmptyPresObj(TRUE);
                         pTempLiner->SetMinDepth(0);
                     }
@@ -1291,6 +1303,12 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 pPage->InsertObject(pTO);
                 pTO->SetOutlinerParaObject(pOPO);
 
+                AutoLayout eLayout = pPage->GetAutoLayout();
+                if( eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE       ||
+                    eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE ||
+                    eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART )
+                    pTO->SetVerticalWriting( TRUE );
+
                 // Linien- und Fuellattribute der Standardvorlage hart
                 // ueberschreiben
                 SfxItemSet aTempAttr(pDoc->GetPool());
@@ -1350,6 +1368,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                     pOutl->Clear();
                 }
 
+                pOPO->SetVertical( pTO->IsVerticalWriting() );
                 pTO->SetOutlinerParaObject(pOPO);
                 pTO->SetEmptyPresObj(FALSE);
 
@@ -1402,7 +1421,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                         // loescht auch altes OutlinerParaObject
                         AddUndo(new SdrUndoObjSetText(*pTO));
 
-                        pTempLiner->Clear();
+                        pTempLiner->Init( OUTLINERMODE_OUTLINEOBJECT );
                         pTempLiner->SetMinDepth(0);
 
                         String aEmptyStr;
@@ -1410,9 +1429,12 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                         String aString = pPage->GetPresObjText(ePresObjKind);
                         pPage->SetObjText( pTO, pTempLiner, ePresObjKind, aString );
                         pTO->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
+                        pTO->GetOutlinerParaObject()->SetVertical( pTO->IsVerticalWriting() );
 
                         if (ePresObjKind == PRESOBJ_TEXT)
                         {
+                            pTempLiner->Init( OUTLINERMODE_SUBTITLE );
+
                             // Vorlage setzen
                             pTO->SetStyleSheet(pPage->GetStyleSheetForPresObj(ePresObjKind), TRUE);
 
@@ -1571,8 +1593,10 @@ void SdOutlineView::FillOutliner()
                 OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
                 if (pOPO)
                 {
+                    BOOL bVertical = pOPO->IsVertical();
                     pOPO->SetVertical( FALSE );
                     pOutliner->AddText(*pOPO);
+                    pOPO->SetVertical( bVertical );
                     pPara = pOutliner->GetParagraph( pOutliner->GetParagraphCount() - 1 );
                     // Man sollte meinen, dass folgendes Statement unnoetig sei,
                     // aber ueber das #39788#-Bugdoc ist eine Inkonsistenz im
@@ -1634,8 +1658,10 @@ void SdOutlineView::FillOutliner()
                 if (pOPO)
                 {
                     ULONG nParaCount1 = pOutliner->GetParagraphCount();
+                    BOOL bVertical = pOPO->IsVertical();
                     pOPO->SetVertical( FALSE );
                     pOutliner->AddText(*pOPO);
+                    pOPO->SetVertical( bVertical );
                     if (bSubTitle)
                     {
                         ULONG nParaCount2 = pOutliner->GetParagraphCount();

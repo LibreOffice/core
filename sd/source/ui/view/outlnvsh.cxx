@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:53:01 $
+ *  last change: $Author: dl $ $Date: 2001-07-02 12:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2184,6 +2184,11 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
+        AutoLayout eLayout = pPage->GetAutoLayout();
+        if( eLayout == AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       ||
+            eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE )
+            pTO->SetVerticalWriting( TRUE );
+
         // als Praesentationsobjekt anmelden
         pTO->SetUserCall( pPage );
         List* pPresObjList = pPage->GetPresObjList();
@@ -2203,6 +2208,7 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     {
         pOPO = pOutliner->CreateParaObject( (USHORT) pOutliner->GetAbsPos( pPara ), 1 );
         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+        pOPO->SetVertical( pTO->IsVerticalWriting() );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
@@ -2262,6 +2268,12 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         pPage->InsertObject( pTO );
         pTO->SetOutlinerParaObject( pOPO );
 
+        AutoLayout eLayout = pPage->GetAutoLayout();
+        if( eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE       ||
+            eLayout == AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE ||
+            eLayout == AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART )
+            pTO->SetVerticalWriting( TRUE );
+
         // Linien- und Fuellattribute der Standardvorlage hart
         // ueberschreiben
         SfxItemSet aTempAttr( pDoc->GetPool() );
@@ -2289,6 +2301,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
     // Text uebernehmen
     else if( pTO && pOPO )
     {
+        pOPO->SetVertical( pTO->IsVerticalWriting() );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
