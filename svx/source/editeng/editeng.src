@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:20:06 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ String RID_EDITUNDO_INDENT
     Text [ dutch ] = "Inspringen" ;
     Text[ chinese_simplified ] = "Ëõ½ø";
     Text[ russian ] = "Îòñòóï";
-    Text[ polish ] = "Wysuniêcie";
+    Text[ polish ] = "Wciêcie";
     Text[ japanese ] = "‘}“ü";
     Text[ chinese_traditional ] = "ÁY±Æ";
     Text[ arabic ] = "ÅÒÇÍÉ";
@@ -450,6 +450,7 @@ Menu RID_MENU_SPELL
         };
     };
 };
+
 
 
 
