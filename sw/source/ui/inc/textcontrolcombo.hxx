@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textcontrolcombo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:54:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,15 @@
 #ifndef _TEXTCONTROLCOMBO_HXX
 #define _TEXTCONTROLCOMBO_HXX
 
-
 #ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
-class TextControlCombo : public Window
+class SW_DLLPUBLIC TextControlCombo : public Window
 {
 private:
 protected:
