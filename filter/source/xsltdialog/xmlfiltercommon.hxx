@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltercommon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:12:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ public:
     rtl::OUString   maImportXSLT;
     rtl::OUString   maImportTemplate;
     rtl::OUString   maDocType;
+    rtl::OUString   maImportService;
+    rtl::OUString   maExportService;
 
     sal_Int32       maFlags;
     sal_Int32       maFileFormatVersion;
