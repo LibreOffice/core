@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _CONFIGMGR_TRACER_HXX_
 #define _CONFIGMGR_TRACER_HXX_
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if OSL_DEBUG_LEVEL > 0
 #define CFG_ENABLE_TRACING
 #endif
 
@@ -149,7 +149,7 @@ public:
 
 }   // namespace configmgr
 
-#else   // !(defined(DEBUG) || defined(_DEBUG))
+#else   // !CFG_ENABLE_TRACING
 
 #include <stdio.h>
 
@@ -163,7 +163,7 @@ public:
 #define CFG_TRACE_ERROR_NI      1 ? (0) : printf
 #define CFG_TRACE_TO_DEVICE     1 ? (0) : printf
 
-#endif  // (defined(DEBUG) || defined(_DEBUG))
+#endif  // CFG_ENABLE_TRACING
 
 #endif // _CONFIGMGR_TRACER_HXX_
 
