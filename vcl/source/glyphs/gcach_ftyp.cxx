@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.85 $
- *  last change: $Author: hdu $ $Date: 2002-11-29 11:01:15 $
+ *  $Revision: 1.86 $
+ *  last change: $Author: hdu $ $Date: 2002-12-06 11:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,7 +924,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 {
-    if( GetFontSelData().mbNonAntialiased )
+    if( GetFontSelData().mbNonAntialiased || (nPrioAntiAlias<=0) )
         return false;
     bool bAdviseAA = true;
     // TODO: also use GASP info
@@ -1039,7 +1039,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
-    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAutoHint) )
+    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= nPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
