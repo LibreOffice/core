@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcharg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:56:13 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 17:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #ifndef CHAOS_UCBDEMO_SRCHARG_HXX
 #include <srcharg.hxx>
 #endif
-
-#undef max // declared as a macro in <tools/solar.h>...
-#undef min // declared as a macro in <tools/solar.h>...
 
 namespace unnamed_chaos_ucbdemo_srcharg {}
 using namespace unnamed_chaos_ucbdemo_srcharg;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-10-11 11:26:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 17:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #endif
 
-#include <string>
 #include <algorithm>
 #include "opengrf.hxx"
 

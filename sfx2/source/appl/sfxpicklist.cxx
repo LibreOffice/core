@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-10 10:46:24 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@
 #include "docfile.hxx"
 #include "objshimp.hxx"
 #include "docfilt.hxx"
+
+#include <algorithm>
 
 // ----------------------------------------------------------------------------
 
