@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-07 15:35:52 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "editeng.hxx"
 #include "eeitem.hxx"
 #include "flditem.hxx"
+#include "sdtfchim.hxx"
 
 
 #ifndef _MyEDITVIEW_HXX
@@ -548,7 +549,11 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
                 rOutliner.SetUpdateMode(TRUE);
                 // !!! hier sollte ich wohl auch noch mal die Optimierung mit
                 // bPortionInfoChecked usw einbauen
-                if (pOutlinerParaObject!=NULL) rOutliner.SetText(*pOutlinerParaObject);
+                if ( pOutlinerParaObject != NULL )
+                {
+                    rOutliner.SetText(*pOutlinerParaObject);
+                    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                }
                 if (bWdtGrow) {
                     Size aSiz(rOutliner.CalcTextSize());
                     nWdt=aSiz.Width()+1; // lieber etwas Tolleranz
