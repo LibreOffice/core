@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 14:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
             {
                 if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
                 {
-                    maThumbnailURL = xAttrList->getValueByIndex( i );
+                    maThumbnailURL = GetImport().GetAbsoluteReference(xAttrList->getValueByIndex( i ));
                     break;
                 }
             }
@@ -1951,7 +1951,7 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
     {
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            maURL = rValue;
+            maURL = GetImport().GetAbsoluteReference(rValue);
             return;
         }
     }
@@ -2269,7 +2269,7 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     case XML_NAMESPACE_XLINK:
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            maHref = rValue;
+            maHref = GetImport().GetAbsoluteReference(rValue);
             return;
         }
         break;
@@ -2335,7 +2335,7 @@ void SdXMLAppletShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     case XML_NAMESPACE_XLINK:
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            maHref = rValue;
+            maHref = GetImport().GetAbsoluteReference(rValue);
             return;
         }
         break;
@@ -2477,7 +2477,7 @@ void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     case XML_NAMESPACE_XLINK:
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            maHref = rValue;
+            maHref = GetImport().GetAbsoluteReference(rValue);
             return;
         }
         break;
@@ -2627,7 +2627,7 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
     case XML_NAMESPACE_XLINK:
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
         {
-            maHref = rValue;
+            maHref = GetImport().GetAbsoluteReference(rValue);
             return;
         }
         break;
