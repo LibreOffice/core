@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pb $ $Date: 2002-05-30 13:14:29 $
+#   last change: $Author: tbe $ $Date: 2002-06-03 17:13:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,17 +76,18 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/listboxhelper.obj 			\
-            $(SLO)$/listenermultiplexer.obj 	\
-            $(SLO)$/property.obj 				\
-            $(SLO)$/registerservices.obj 		\
-            $(SLO)$/servicenames.obj 			\
-            $(SLO)$/tkresmgr.obj				\
-            $(SLO)$/unomemorystream.obj 		\
-            $(SLO)$/unopropertyarrayhelper.obj	\
-            $(SLO)$/unowrapper.obj 				\
-            $(SLO)$/vclunohelper.obj			\
-            $(SLO)$/externallock.obj
+            $(SLO)$/listboxhelper.obj 				\
+            $(SLO)$/listenermultiplexer.obj 		\
+            $(SLO)$/property.obj 					\
+            $(SLO)$/registerservices.obj 			\
+            $(SLO)$/servicenames.obj 				\
+            $(SLO)$/tkresmgr.obj					\
+            $(SLO)$/unomemorystream.obj 			\
+            $(SLO)$/unopropertyarrayhelper.obj		\
+            $(SLO)$/unowrapper.obj 					\
+            $(SLO)$/vclunohelper.obj				\
+            $(SLO)$/externallock.obj				\
+            $(SLO)$/characterattributeshelper.obj
 
 # --- Targets ------------------------------------------------------
 
