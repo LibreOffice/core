@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:12:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,11 +156,13 @@ namespace dbaui
         void deleteIterator();
         void executeQuery();
         void doSaveAsDoc(sal_Bool _bSaveAs);
+
+        void saveViewSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+        void loadViewSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
-        void updateTitle( );
+
 
     protected:
-        virtual String          getMenu() const;
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -170,6 +172,7 @@ namespace dbaui
         virtual ToolBox*        CreateToolBox(Window* pParent);
 
         virtual void            reconnect( sal_Bool _bUI );
+        virtual void            updateTitle( );
 
 
         OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
@@ -222,12 +225,6 @@ namespace dbaui
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        // lang::XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-        //
-        virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
     protected:
         virtual OTableWindowData* createTableWindowData();
@@ -235,6 +232,8 @@ namespace dbaui
         // ask the user if the design should be saved when it is modified
         virtual short saveModified();
         virtual void reset();
+        virtual void impl_initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+
         void        resetImpl();
 
         /// sets m_sStatement, and notifies our respective property change listeners
