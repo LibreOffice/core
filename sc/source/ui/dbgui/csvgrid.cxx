@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:20:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,10 @@ void ScCsvGrid::InitFonts()
     aDefSet.Put( aAsianItem );
     aDefSet.Put( aComplexItem );
 
-    // set Asian/Complex font size to width of character in Latin font
-    aDefSet.Put( SvxFontHeightItem( GetCharWidth(), 100, EE_CHAR_FONTHEIGHT_CJK ) );
-    aDefSet.Put( SvxFontHeightItem( GetCharWidth(), 100, EE_CHAR_FONTHEIGHT_CTL ) );
+    // set Asian/Complex font size to height of character in Latin font
+    ULONG nFontHt = static_cast< ULONG >( maMonoFont.GetSize().Height() );
+    aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
     // copy other items from default font
     const SfxPoolItem& rWeightItem = aDefSet.Get( EE_CHAR_WEIGHT );
