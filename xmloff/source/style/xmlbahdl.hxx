@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:36:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,5 +316,20 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_NUMBER_NO_ZERO
+    Reads/writes numeric properties, but fails for the value zero
+    (i.e., a value 0 property will not be written)
+*/
+class XMLNumberWithoutZeroPropHdl : public XMLPropertyHandler
+{
+    sal_Int8        nBytes;
+public:
+    XMLNumberWithoutZeroPropHdl( sal_Int8 nB = 4 );
+    virtual ~XMLNumberWithoutZeroPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
 
 #endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
