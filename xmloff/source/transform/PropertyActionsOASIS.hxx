@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:17:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ enum XMLPropOASISTransformerAction
     XML_OPTACTION_SYMBOL_NAME,
     XML_OPTACTION_OPACITY,
     XML_OPTACTION_IMAGE_OPACITY,
+    XML_OPTACTION_CONTROL_TEXT_ALIGN,
     XML_OPTACTION_END=XML_ATACTION_END
 };
 
