@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:36:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ String SAMPLES
     Text[ czech ] = "Abyste si mohli vyzkoušet plnou funkcionalitu této ukázky, musíte vytvořit dokument založený na této šabloně:";
     Text[ hebrew ] = "‮כדי לנצל את מלא היכולת של דוגמה זו יש ליצור מסמך מבוסס על תבנית זו.‬";
     Text[ hindi ] = "इस नमूने का सम्पूर्ण कार्य का उपयोग करने केलिए, इस नमूने के आधार पर एक लेखपत्र को उत्पन्न कीजिए ।";
+    Text[ slovak ] = "Ak chcete využiť plnú funkčnosť tohoto vzorku, vytvorte dokument založený na tejto šablóne.";
 };
 
 String SAMPLES + 1
@@ -131,6 +132,7 @@ String SAMPLES + 1
     Text[ czech ] = "Rady";
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "विशेष कथन";
+    Text[ slovak ] = "Poznámky";
 };
 
 // --------------------------------------------------------------------
@@ -163,6 +165,7 @@ String STYLES
     Text[ czech ] = "Výběr tématu";
     Text[ hebrew ] = "‮בחירת נושא רקע‬";
     Text[ hindi ] = "प्रकरण चुनाव";
+    Text[ slovak ] = "Výber témy";
 };
 
 String STYLES + 1
@@ -193,6 +196,7 @@ String STYLES + 1
     Text[ czech ] = "Při ukládání dokumentu do schránky došlo k chybě. Následující akce nemůže být vrácena.";
     Text[ hebrew ] = "‮שגיאה בעת שמירת המסמך ללוח הטיוטה! הפעולה הבאה בלתי הפיכה.‬";
     Text[ hindi ] = "लेखपत्र को क्लिपबोर्ड में संचित करने के समय गलती ! निम्नलिखित कार्य का अनावृत्ति नहीं हो सकता है ।";
+    Text[ slovak ] = "Chyba pri ukladaní dokumentu do schránky! Nasledujúca akcia nemôže byť odvolaná.";
 };
 
 String STYLES + 2
@@ -224,6 +228,7 @@ String STYLES + 2
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "~Zrušiť";
 };
 
 String STYLES + 3
@@ -255,6 +260,7 @@ String STYLES + 3
     Text[ czech ] = "OK";
     Text[ hebrew ] = "‮אישור‬";
     Text[ hindi ] = "~ठीक";
+    Text[ slovak ] = "~OK";
 };
 
 // --------------------------------------------------------------------
@@ -286,6 +292,7 @@ String AgendaDlgName
     Text[ czech ] = "Minutová šablona";
     Text[ hebrew ] = "‮תבנית יומן‬";
     Text[ hindi ] = "मिनट का नमूना";
+    Text[ slovak ] = "Šablóna protokolu";
 };
 
 String AgendaDlgNoCancel
@@ -316,6 +323,7 @@ String AgendaDlgNoCancel
     Text[ czech ] = "Volba musí být potvrzena";
     Text[ hebrew ] = "‮יש לאשר אפשרות.‬";
     Text[ hindi ] = "विकल्प को दृढ़ करना ज़रूरी है ।";
+    Text[ slovak ] = "Voľba musí byť potvrdená";
 };
 
 String AgendaDlgFrame
@@ -346,6 +354,7 @@ String AgendaDlgFrame
     Text[ czech ] = "Typ záznamů";
     Text[ hebrew ] = "‮סוג רישום‬";
     Text[ hindi ] = "मिनट का वर्ग";
+    Text[ slovak ] = "Typ protokolu";
 };
 
 String AgendaDlgButton1
@@ -376,6 +385,7 @@ String AgendaDlgButton1
     Text[ czech ] = "Přijatá usnesení";
     Text[ hebrew ] = "‮יומן תוצאות‬";
     Text[ hindi ] = "नतीजा मिनटों में";
+    Text[ slovak ] = "Prijaté uznesenie";
 };
 
 String AgendaDlgButton2
@@ -406,6 +416,7 @@ String AgendaDlgButton2
     Text[ czech ] = "Průběh zasedání";
     Text[ hebrew ] = "‮יומן הערכה‬";
     Text[ hindi ] = "परीक्षा करने का मिनटें ";
+    Text[ slovak ] = "Priebeh zasadania";
 };
 
 // --------------------------------------------------------------------
@@ -437,6 +448,7 @@ String CorrespondenceNoTextmark
     Text[ czech ] = "Chybí záložka 'Příjemci'.";
     Text[ hebrew ] = "‮סמן הנמען חסר‬";
     Text[ hindi ] = "पृष्ठसंकेत 'प्रतिग्राहक' अनुपस्थित लुप्त है ।";
+    Text[ slovak ] = "Chýba záložka 'Príjemca'.";
 };
 
 String CorrespondenceNoTextmark+1
@@ -467,6 +479,7 @@ String CorrespondenceNoTextmark+1
     Text[ czech ] = "Pole formulářového dopisu nemohou být zahrnuta.";
     Text[ hebrew ] = "‮אין אפשרות לכלול שדות ממכתבי תבנית‬";
     Text[ hindi ] = "फॉर्म पत्र का क्षेत्रों को सम्मिलित नहीं कर सकते है ।";
+    Text[ slovak ] = "Formulárové polia nemôžu byť zahrnuté.";
 };
 
 String CorrespondenceMsgError
@@ -497,6 +510,7 @@ String CorrespondenceMsgError
     Text[ czech ] = "Chyba";
     Text[ hebrew ] = "‮ארעה שגיאה!‬";
     Text[ hindi ] = "गलती";
+    Text[ slovak ] = "Chyba";
 };
 
 String CorrespondenceDialog
@@ -527,6 +541,7 @@ String CorrespondenceDialog
     Text[ czech ] = "Adresa";
     Text[ hebrew ] = "‮נמען‬";
     Text[ hindi ] = "लेनेवाला";
+    Text[ slovak ] = "Príjemca";
 };
 
 String CorrespondenceDialog+1
@@ -558,6 +573,7 @@ String CorrespondenceDialog+1
     Text[ czech ] = "Jeden příjemce";
     Text[ hebrew ] = "‮נמען אחד‬";
     Text[ hindi ] = "एक प्रतिग्राहक";
+    Text[ slovak ] = "Jeden príjemca";
 };
 
 String CorrespondenceDialog+2
@@ -588,6 +604,7 @@ String CorrespondenceDialog+2
     Text[ czech ] = "Několik příjemců (databáze adres)";
     Text[ hebrew ] = "‮נמענים אחדים (ממסד הנתונים)‬";
     Text[ hindi ] = "अनेक प्रतिग्राहक (पता लेखासंचय)";
+    Text[ slovak ] = "Niekoľko príjemcov (databáza adries)";
 };
 
 String CorrespondenceDialog+3
@@ -618,6 +635,7 @@ String CorrespondenceDialog+3
     Text[ czech ] = "Použít tuto šablonu";
     Text[ hebrew ] = "‮שימוש בתבנית זו‬";
     Text[ hindi ] = "इस नमूने का उपयोग";
+    Text[ slovak ] = "Použitie tejto šablóny";
 };
 
 
@@ -650,6 +668,7 @@ String CorrespondenceFields
     Text[ czech ] = "Klikněte na naznačené místo a vepište vlastní text";
     Text[ hebrew ] = "‮לחיצה על סמן המקום כותבת על‬";
     Text[ hindi ] = "स्थानधारक क्लिक करो और ओवररइट् करो";
+    Text[ slovak ] = "Klikni na vlastníka a prepíš";
 };
 
 String CorrespondenceFields+1
@@ -681,6 +700,7 @@ String CorrespondenceFields+1
     Text[ czech ] = "Společnost";
     Text[ hebrew ] = "‮חברה‬";
     Text[ hindi ] = "संस्था";
+    Text[ slovak ] = "Spoločnosť";
 };
 
 String CorrespondenceFields+2
@@ -712,6 +732,7 @@ String CorrespondenceFields+2
     Text[ czech ] = "Oddělení";
     Text[ hebrew ] = "‮מחלקה‬";
     Text[ hindi ] = "विभाग";
+    Text[ slovak ] = "Oddelenie";
 };
 
 String CorrespondenceFields+3
@@ -743,6 +764,7 @@ String CorrespondenceFields+3
     Text[ czech ] = "Jméno";
     Text[ hebrew ] = "‮שם פרטי‬";
     Text[ hindi ] = "पहिला नाम";
+    Text[ slovak ] = "Meno";
 };
 
 String CorrespondenceFields+4
@@ -774,6 +796,7 @@ String CorrespondenceFields+4
     Text[ czech ] = "Příjmení";
     Text[ hebrew ] = "‮שם משפחה‬";
     Text[ hindi ] = "अंतिम नाम";
+    Text[ slovak ] = "Priezvisko";
 };
 
 String CorrespondenceFields+5
@@ -805,6 +828,7 @@ String CorrespondenceFields+5
     Text[ czech ] = "Ulice";
     Text[ hebrew ] = "‮רחוב‬";
     Text[ hindi ] = "सड़क";
+    Text[ slovak ] = "Ulica";
 };
 
 String CorrespondenceFields+6
@@ -836,6 +860,7 @@ String CorrespondenceFields+6
     Text[ czech ] = "Země";
     Text[ hebrew ] = "‮מדינה‬";
     Text[ hindi ] = "देश";
+    Text[ slovak ] = "Krajina";
 };
 
 
@@ -868,6 +893,7 @@ String CorrespondenceFields+7
     Text[ czech ] = "PSČ";
     Text[ hebrew ] = "‮מיקוד‬";
     Text[ hindi ] = "ZIP/डाक कोड";
+    Text[ slovak ] = "PSČ";
 };
 
 String CorrespondenceFields+8
@@ -899,6 +925,7 @@ String CorrespondenceFields+8
     Text[ czech ] = "Obec/město";
     Text[ hebrew ] = "‮עיר‬";
     Text[ hindi ] = "नगर";
+    Text[ slovak ] = "Obec";
 };
 
 String CorrespondenceFields+9
@@ -930,6 +957,7 @@ String CorrespondenceFields+9
     Text[ czech ] = "Titul";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Nadpis";
 };
 
 
@@ -962,6 +990,7 @@ String CorrespondenceFields+10
     Text[ czech ] = "Umístění";
     Text[ hebrew ] = "‮מיקום‬";
     Text[ hindi ] = "स्थान";
+    Text[ slovak ] = "Umiestnenie";
 };
 
 
@@ -994,6 +1023,7 @@ String CorrespondenceFields+11
     Text[ czech ] = "Forma adresy";
     Text[ hebrew ] = "‮צורת פניה‬";
     Text[ hindi ] = "पते का फॉर्म";
+    Text[ slovak ] = "Formulár z adries";
 };
 
 
@@ -1026,6 +1056,7 @@ String CorrespondenceFields+12
     Text[ czech ] = "Iniciály";
     Text[ hebrew ] = "‮ראשי תיבות‬";
     Text[ hindi ] = "इनिश्यल";
+    Text[ slovak ] = "Iniciály";
 };
 
 
@@ -1058,6 +1089,7 @@ String CorrespondenceFields+13
     Text[ czech ] = "Oslovení";
     Text[ hebrew ] = "‮פתיח‬";
     Text[ hindi ] = "नमस्कार";
+    Text[ slovak ] = "Oslovenie";
 };
 
 
@@ -1090,6 +1122,7 @@ String CorrespondenceFields+14
     Text[ czech ] = "Telefon domů";
     Text[ hebrew ] = "‮טלפון בבית‬";
     Text[ hindi ] = "घर का दूरभाष";
+    Text[ slovak ] = "Telefón domov";
 };
 
 
@@ -1122,6 +1155,7 @@ String CorrespondenceFields+15
     Text[ czech ] = "Telefon do zaměstnání";
     Text[ hebrew ] = "‮טלפון בעבודה‬";
     Text[ hindi ] = "काम का दूरभाष";
+    Text[ slovak ] = "Telefón do zamestnania";
 };
 
 
@@ -1154,6 +1188,7 @@ String CorrespondenceFields+16
     Text[ czech ] = "Fax";
     Text[ hebrew ] = "‮פקס‬";
     Text[ hindi ] = "फॉक्स";
+    Text[ slovak ] = "Fax";
 };
 
 
@@ -1186,6 +1221,7 @@ String CorrespondenceFields+17
     Text[ czech ] = "E-Mail";
     Text[ hebrew ] = "‮דואר א'‬";
     Text[ hindi ] = "इ-मेइल";
+    Text[ slovak ] = "Email";
 };
 
 
@@ -1218,6 +1254,7 @@ String CorrespondenceFields+18
     Text[ hebrew ] = "URL";
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
+    Text[ slovak ] = "URL";
 };
 
 
@@ -1250,6 +1287,7 @@ String CorrespondenceFields+19
     Text[ czech ] = "Poznámky";
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "टिप्पणी";
+    Text[ slovak ] = "Poznámky";
 };
 
 
@@ -1282,6 +1320,7 @@ String CorrespondenceFields+20
     Text[ czech ] = "Vlastní pole 1";
     Text[ hebrew ] = "‮שדה נוסף 1‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 1";
+    Text[ slovak ] = "Vol. pole 1";
 };
 
 
@@ -1314,6 +1353,7 @@ String CorrespondenceFields+21
     Text[ czech ] = "Vlastní pole 2";
     Text[ hebrew ] = "‮שדה נוסף 2‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 2";
+    Text[ slovak ] = "Vol. pole 2";
 };
 
 
@@ -1346,6 +1386,7 @@ String CorrespondenceFields+22
     Text[ czech ] = "Vlastní pole 3";
     Text[ hebrew ] = "‮שדה נוסף 3‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 3";
+    Text[ slovak ] = "Vol. pole 3";
 };
 
 
@@ -1378,6 +1419,7 @@ String CorrespondenceFields+23
     Text[ czech ] = "Vlastní pole 4";
     Text[ hebrew ] = "‮שדה נוסף 4‬";
     Text[ hindi ] = "वैकल्पिक क्षेत्र 4";
+    Text[ slovak ] = "Vol. pole 4";
 };
 
 
@@ -1410,6 +1452,7 @@ String CorrespondenceFields+24
     Text[ hebrew ] = "ID";
     Text[ thai ] = "ID";
     Text[ hindi ] = "ID";
+    Text[ slovak ] = "ID";
 };
 
 
@@ -1442,6 +1485,7 @@ String CorrespondenceFields+25
     Text[ czech ] = "Stát";
     Text[ hebrew ] = "‮מחוז‬";
     Text[ hindi ] = "राज्य";
+    Text[ slovak ] = "Štát";
 };
 
 
@@ -1474,6 +1518,7 @@ String CorrespondenceFields+26
     Text[ czech ] = "Telefon do kanceláře";
     Text[ hebrew ] = "‮טלפון במשרד‬";
     Text[ hindi ] = "दफ्तर दूरभाष";
+    Text[ slovak ] = "Telefón do kancelárie";
 };
 
 
@@ -1506,6 +1551,7 @@ String CorrespondenceFields+27
     Text[ czech ] = "Pager";
     Text[ hebrew ] = "‮איתורית‬";
     Text[ hindi ] = "पेजर";
+    Text[ slovak ] = "Pager";
 };
 
 
@@ -1538,6 +1584,7 @@ String CorrespondenceFields+28
     Text[ czech ] = "Mobilní telefon";
     Text[ hebrew ] = "‮טלפון נייד‬";
     Text[ hindi ] = "मोबैल दूरभाष";
+    Text[ slovak ] = "Mobil";
 };
 
 
@@ -1570,6 +1617,7 @@ String CorrespondenceFields+29
     Text[ czech ] = "Další telefon";
     Text[ hebrew ] = "‮טלפון אחר‬";
     Text[ hindi ] = "अन्य दूरभाष";
+    Text[ slovak ] = "Ostatné telefóny";
 };
 
 String CorrespondenceFields+30
@@ -1601,6 +1649,7 @@ String CorrespondenceFields+30
     Text[ czech ] = "URL kalendáře";
     Text[ hebrew ] = "‮URL של לוח שנה‬";
     Text[ hindi ] = "केलन्डर URL";
+    Text[ slovak ] = "Kalendár URL";
 };
 
 String CorrespondenceFields+31
@@ -1632,6 +1681,7 @@ String CorrespondenceFields+31
     Text[ czech ] = "Pozvat";
     Text[ hebrew ] = "‮להזמין‬";
     Text[ hindi ] = "आमन्त्रण";
+    Text[ slovak ] = "Pozvať";
 };
 
 
@@ -1665,6 +1715,7 @@ String TextField
     Text[ czech ] = "Pole s daty uživatele není definováno!";
     Text[ hebrew ] = "‮שדה פרטי המשתמש לא מוגדר!‬";
     Text[ hindi ] = "उपभोक्ता का ड़ॉटा क्षेत्र परिभाषित नहीं है!";
+    Text[ slovak ] = "Užívateľské dátové pole nie je definované!";
 };
 
 String Newsletter
@@ -1696,6 +1747,7 @@ String Newsletter
     Text[ czech ] = "Všeobecný vzhled";
     Text[ hebrew ] = "‮עיצוב פריסה כללית‬";
     Text[ hindi ] = "सामान्य अभिन्यास";
+    Text[ slovak ] = "Všeobecné rozloženie";
 };
 
 
@@ -1728,6 +1780,7 @@ String Newsletter + 1
     Text[ czech ] = "Výchozí vzhled";
     Text[ hebrew ] = "‮עיצוב פריסה ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति अभिन्यास";
+    Text[ slovak ] = "Východzie rozloženie";
 };
 
 String Newsletter + 2
@@ -1759,6 +1812,7 @@ String Newsletter + 2
     Text[ czech ] = "Vzhled upomínkové publikace";
     Text[ hebrew ] = "‮עיצוב פריסה לחוברת הנצחה‬";
     Text[ hindi ] = "कमेमरेटिव प्रकाशन अभिन्यास ";
+    Text[ slovak ] = "Vzhľad spomienkovej publikácie";
 };
 
 String Newsletter + 3
@@ -1790,6 +1844,7 @@ String Newsletter + 3
     Text[ czech ] = "Vzhled brožury";
     Text[ hebrew ] = "‮עיצוב פריסה לחוברת מסחרית‬";
     Text[ hindi ] = "ब्रोशर अभिन्यास";
+    Text[ slovak ] = "Vzhľad brožúry";
 };
 
 String Newsletter + 10
@@ -1821,6 +1876,7 @@ String Newsletter + 10
     Text[ czech ] = "Formát";
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचना";
+    Text[ slovak ] = "Formát";
 };
 
 String Newsletter + 11
@@ -1852,6 +1908,7 @@ String Newsletter + 11
     Text[ czech ] = "Jednostranný";
     Text[ hebrew ] = "‮חד צדדי‬";
     Text[ hindi ] = "अकेला-भाग";
+    Text[ slovak ] = "Jednoduché";
 };
 
 String Newsletter + 12
@@ -1883,7 +1940,10 @@ String Newsletter + 12
     Text[ czech ] = "Oboustranný";
     Text[ hebrew ] = "‮דו צדדי‬";
     Text[ hindi ] = "द्विगुणित-भाग";
+    Text[ slovak ] = "Dvojité riadkovanie";
 };
+
+
 
 
 
