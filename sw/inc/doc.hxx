@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:21:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,9 +249,11 @@ struct SwPrintData;
 struct SwTableEntry;
 // OD 26.06.2003 #108784#
 class SdrPageView;
+class SwHHCWrapper;
 class SwRewriter;
 class SwFmtFld;
 class SwMsgPoolItem;
+
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -804,7 +806,7 @@ public:
             Spell( SwPaM&, ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                   sal_Bool bIsConversion = sal_False ) const;
+                   SwHHCWrapper *pConvWrapper = 0 ) const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
