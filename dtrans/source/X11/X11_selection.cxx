@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:33:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ SelectionManager::SelectionManager() :
         m_pDisplay( NULL ),
         m_aWindow( None ),
         m_aDropWindow( None ),
+        m_aCurrentDropWindow( None ),
         m_aDropProxy( None ),
         m_aThread( NULL ),
         m_aDragExecuteThread( NULL ),
