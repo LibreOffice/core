@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,8 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_BODY_OFF:
     case HTML_HEAD_ON:
     case HTML_HEAD_OFF:
-    case HTML_TITLE_ON:
-    case HTML_TITLE_OFF:
+    case HTML_FORM_ON:
+    case HTML_FORM_OFF:
     case HTML_THEAD_ON:
     case HTML_THEAD_OFF:
     case HTML_TBODY_ON:
