@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 15:06:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ jclass java_sql_Date::getMyClass()
 
 void java_sql_Date::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
@@ -157,7 +157,7 @@ jclass java_sql_Time::getMyClass()
 
 void java_sql_Time::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
@@ -215,7 +215,7 @@ jclass java_sql_Timestamp::getMyClass()
 
 void java_sql_Timestamp::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
