@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:49 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,9 @@
 #include <flddropdown.hxx>
 #endif
 
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
 #endif
@@ -250,11 +253,8 @@
 #include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
 #endif
 
-#ifndef C2U
-#define C2U(s) rtl::OUString::createFromAscii(s)
-#endif
-
 using namespace com::sun::star;
+using namespace sw::util;
 //-----------------------------------------
 //            UNO-Controls
 //-----------------------------------------
@@ -290,9 +290,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     //substituting Unicode spacing 0x2002 with double space for layout
     aFormula.sDefault.SearchAndReplaceAll(String(0x2002),
         CREATE_CONST_ASC("  "));
-
-    //replace CR 0x0D with LF 0x0A
-    aFormula.sDefault.SearchAndReplaceAll(0x0D, 0x0A);
 
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
         aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
@@ -1469,8 +1466,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
     rStyle.nLeftParaMgn = rFmt.GetAbsLSpace();
     rStyle.nTxtFirstLineOfst = GetListFirstLineIndent(rFmt);
-    SvxLRSpaceItem aLR(
-            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
     aLR.SetTxtLeft(rStyle.nLeftParaMgn);
     aLR.SetTxtFirstLineOfst(rStyle.nTxtFirstLineOfst);
     rStyle.pFmt->SetAttr(aLR);
@@ -1481,15 +1477,13 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
     if (rStyle.bListReleventIndentSet)
     {
-        SvxLRSpaceItem aLR(
-            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         SyncStyleIndentWithList(aLR, rFmt);
         rStyle.pFmt->SetAttr(aLR);
     }
     else
     {
-        SvxLRSpaceItem aLR(
-            (const SvxLRSpaceItem &)rStyle.pFmt->GetAttr(RES_LR_SPACE));
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         aLR.SetTxtLeft(0);
         aLR.SetTxtFirstLineOfst(0);
         rStyle.pFmt->SetAttr(aLR);
@@ -1697,23 +1691,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         short nData = SVBT16ToShort( pData );
         if( 0 >= nData )
         {
-            // expliziet die Numerierung abschalten
-            // sind wir erst beim Einlesen der StyleDef ?
-            if( pAktColl )
-                pAktColl->SetAttr( *GetDfltAttr( RES_PARATR_NUMRULE ) );
-            else
-            {
-                SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
-                if( pTxtNode )
-                {
-                    pTxtNode->SwCntntNode::SetAttr(
-                                *GetDfltAttr( RES_PARATR_NUMRULE ) );
-                    pTxtNode->UpdateNum( SwNodeNum( NO_NUMBERING ) );
-                }
-            }
-
             /*
-            #94672#
+            #94672# discussion
             If you have a paragraph in word with left and/or hanging indent
             and remove its numbering, then the indentation appears to get
             reset, but not back to the base style, instead its goes to a blank
@@ -1722,8 +1701,24 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             required, some more details about that in
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */
-            NewAttr(SvxLRSpaceItem());
 
+            if (pAktColl)
+            {
+                pAktColl->SetAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
+                pAktColl->SetAttr(SvxLRSpaceItem());    //#94672#
+            }
+            else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
+            {
+                if (pTxtNode->GetNum())
+                {
+                    pTxtNode->SwCntntNode::SetAttr(
+                        *GetDfltAttr(RES_PARATR_NUMRULE));
+                    pTxtNode->UpdateNum(SwNodeNum(NO_NUMBERING));
+                }
+                if (pTxtNode->GetOutlineNum())
+                    pTxtNode->UpdateOutlineNum(SwNodeNum(NO_NUM));
+                pTxtNode->SwCntntNode::SetAttr(SvxLRSpaceItem()); //#94672#
+            }
             nLFOPosition = USHRT_MAX;
         }
         else
