@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-11 15:36:36 $
+ *  last change: $Author: mtg $ $Date: 2002-01-18 13:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1840,17 +1840,6 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
     if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.TextDocument" ) ) ||
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ) ) )
         bRet = sal_True;
-    else
-    {
-        Sequence< OUString > aNames =  SvxFmMSFactory::getAvailableServiceNames();
-        OUString* pArray = aNames.getArray();
-        for(int i = 0; i < aNames.getLength(); i++)
-            if(pArray[i] == rServiceName)
-            {
-                bRet = sal_True;
-                break;
-            }
-    }
     return bRet;
 }
 /* -----------------18.03.99 11:32-------------------
@@ -1858,10 +1847,10 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
  * --------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet =  SvxFmMSFactory::getAvailableServiceNames();
-    aRet.realloc(aRet.getLength() + 1);
+    Sequence< OUString > aRet ( 2 );
     OUString* pArray = aRet.getArray();
-    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextDocument");
+    pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
+    pArray[1] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.document.OfficeDocument" ) ) );
     return aRet;
 }
 /* -----------------05.05.99 12:10-------------------
