@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:01:08 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 09:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ DBG_NAME(SfxViewFrame);
 
 SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_PARTWIN );
+    SFX_CHILDWINDOW_REGISTRATION( SID_BROWSER );
 }
 
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
@@ -3337,7 +3337,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
                     rState.DisableItem(nSID);
             }
         }
-        else if ( nSID == SID_PARTWIN )
+        else if ( nSID == SID_BROWSER )
         {
             Reference < XFrame > xFrame = GetFrame()->GetTopFrame()->GetFrameInterface()->
                             findFrame( DEFINE_CONST_UNICODE("_beamer"), FrameSearchFlag::CHILDREN );
