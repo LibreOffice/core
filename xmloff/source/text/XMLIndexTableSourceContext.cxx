@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: hr $ $Date: 2000-11-21 12:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELD_PART_HPP
-#include <com/sun/star/text/ReferenceFieldpart.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
