@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:24:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _I18N_CCLASS_UNICODE_HXX_
 #define _I18N_CCLASS_UNICODE_HXX_
 
-#include <drafts/com/sun/star/i18n/XNativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -164,7 +164,7 @@ private:
     /// used for parser only
     com::sun::star::lang::Locale    aParserLocale;
     com::sun::star::uno::Reference < XLocaleData > xLocaleData;
-    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XNativeNumberSupplier > xNatNumSup;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XNativeNumberSupplier > xNatNumSup;
     rtl::OUString             aStartChars;
     rtl::OUString             aContChars;
     UPT_FLAG_TYPE*              pTable;
