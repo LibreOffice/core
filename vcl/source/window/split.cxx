@@ -3,9 +3,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:15:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,8 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        Point aNewPos = mpRefWin->ScreenToOutputPixel( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
+        //Point aNewPos = mpRefWin->ScreenToOutputPixel( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
+        Point aNewPos = mpRefWin->NormalizedScreenToOutputPixel( OutputToNormalizedScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
         ImplSplitMousePos( aNewPos );
         Splitting( aNewPos );
         ImplSplitMousePos( aNewPos );
