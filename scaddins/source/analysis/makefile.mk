@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.1 2001-04-06 13:59:16 gt Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.2 2001-04-24 10:01:27 gt Exp $
 #
-#     $Date: 2001-04-06 13:59:16 $
+#     $Date: 2001-04-24 10:01:27 $
 #     $Author: gt $
-#     $Revision: 1.1 $
+#     $Revision: 1.2 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -137,7 +137,7 @@ DEF1EXPORTFILE=exports.dxp
 .INCLUDE : target.mk
 
 $(BIN)$/analysisadd.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
