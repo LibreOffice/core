@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:36:14 $
+ *  last change: $Author: mba $ $Date: 2001-03-08 10:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2609,8 +2609,8 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 xFilters->getByName( aName ) >>= aProps;
 
             sal_Int32 nFilterFlags = 0, nClipId = 0, nDocIconId = 0, nVersion = 0;
-            ::rtl::OUString aMimeType, aUserData, aType, aUIName, aDefaultTemplate;
-            String aEmptyStr, aFilterName;
+            ::rtl::OUString aMimeType, aType, aUIName, aDefaultTemplate;
+            String aEmptyStr, aFilterName, aUserData;
             String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
             BOOL bMatches = FALSE;
 
@@ -2687,7 +2687,19 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 else if ( rFilterProp.Name.compareToAscii("FileFormatVersion") == COMPARE_EQUAL )
                     rFilterProp.Value >>= nVersion;
                 else if ( rFilterProp.Name.compareToAscii("UserData") == COMPARE_EQUAL )
-                    rFilterProp.Value >>= aUserData;
+                {
+                    Sequence < ::rtl::OUString > aUserDataList;
+                    if ( rFilterProp.Value >>= aUserDataList )
+                    {
+                        sal_Int32 nStrings = aUserDataList.getLength();
+                        for ( sal_Int32 nString=0; nString<nStrings; nString++ )
+                        {
+                            aUserData += String( aUserDataList[nString] );
+                            if ( nString+1 < nStrings )
+                                aUserData += ',';
+                        }
+                    }
+                }
                 else if ( rFilterProp.Name.compareToAscii("Flags") == COMPARE_EQUAL )
                     rFilterProp.Value >>= nFilterFlags;
             }
@@ -2696,14 +2708,21 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
             {
                 // register SfxFilter
                 aFilterName = impl_getOldFilterName( aName );
-                if ( aFilterName.Len() && !aUserData.getLength() )
+                if ( aFilterName.Len() )
                 {
-                    aUserData = impl_getUserData( aFilterName );
+#ifdef DBG_UTIL
+                    if ( !aUserData.Len() )
+                    {
+                        aUserData = impl_getUserData( aFilterName );
+                        DBG_ASSERT( !aUserData.Len(), "Wrong UserData in Configuration!" )
+                    }
+#endif
                     USHORT nPos = aFilterName.Search( ':' );
                     aFilterName.Erase( 0, nPos+2 );
                 }
                 else
                     aFilterName = aName;
+
                 SfxFilter *pFilter = new SfxFilter( aFilterName, aExtension, nFilterFlags, nClipId, aEmptyStr,
                         aEmptyStr, (USHORT) nDocIconId, aMimeType, this, aUserData );
 
