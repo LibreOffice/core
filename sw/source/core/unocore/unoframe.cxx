@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-01 09:37:44 $
+ *  last change: $Author: mtg $ $Date: 2001-11-07 14:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,13 +662,21 @@ SwFrameProperties_Impl::SwFrameProperties_Impl():
 /* -----------------22.06.98 11:27-------------------
  *
  * --------------------------------------------------*/
+inline void lcl_FillCol ( SfxItemSet &rToSet, const SfxItemSet &rFromSet, Any *pAny)
+{
+    if ( pAny )
+    {
+        SwFmtCol aCol ( static_cast < const SwFmtCol & > ( rFromSet.Get ( RES_COL ) ) );
+        ((SfxPoolItem&)aCol).PutValue( *pAny, MID_COLUMNS);
+        rToSet.Put(aCol);
+    }
+}
 sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
 {
     //Properties fuer alle Frames
     uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = NULL;
     sal_Bool bRet;
-    const SfxItemSet *pItemSet;
 
     if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
     {
@@ -678,27 +686,27 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, 
                                                     SFX_STYLE_FAMILY_FRAME);
     }
 
+    uno::Any* pColumns = NULL;
+    GetProperty (RES_COL, MID_COLUMNS, pColumns);
     if ( pStyle )
     {
         SwDocStyleSheet aStyle (*pStyle);
-           bRet = FillBaseProperties(rSet, aStyle.GetItemSet(), rSizeFound );
+        const SfxItemSet *pItemSet = &aStyle.GetItemSet();
+           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     else
-           bRet = FillBaseProperties( rSet, pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet(), rSizeFound );
-
+    {
+        const SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        lcl_FillCol ( rSet, *pItemSet, pColumns );
+    }
     uno::Any* pEdit;
     if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
     {
         SfxBoolItem aBool(RES_EDIT_IN_READONLY);
         ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
         rSet.Put(aBool);
-    }
-    uno::Any* pColumns;
-    if(GetProperty(RES_COL, MID_COLUMNS, pColumns))
-    {
-        SwFmtCol aCol ( static_cast < const SwFmtCol & > ( pItemSet->Get ( RES_COL ) ) );
-        ((SfxPoolItem&)aCol).PutValue(*pColumns, MID_COLUMNS);
-        rSet.Put(aCol);
     }
     return bRet;
 }
@@ -724,6 +732,21 @@ SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
 /* -----------------27.06.98 14:40-------------------
  *
  * --------------------------------------------------*/
+inline void lcl_FillMirror ( SfxItemSet &rToSet, const SfxItemSet &rFromSet, Any *pHEvenMirror, Any *pHOddMirror, Any *pVMirror, sal_Bool &rRet )
+{
+    if(pHEvenMirror || pHOddMirror || pVMirror )
+    {
+        SwMirrorGrf aMirror ( static_cast < const SwMirrorGrf& > ( rFromSet.Get ( RES_FRM_SIZE ) ) );
+        if(pHEvenMirror)
+            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
+        if(pHOddMirror)
+            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pHOddMirror, MID_MIRROR_HORZ_ODD_PAGES);
+        if(pVMirror)
+            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
+        rToSet.Put(aMirror);
+    }
+}
+
 sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
             SwDoc* pDoc,
             SfxItemSet& rFrmSet,
@@ -734,7 +757,6 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     sal_Bool bRet;
     uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = NULL;
-    const SfxItemSet *pItemSet;
 
     if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
     {
@@ -743,29 +765,28 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
         pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
                                                     SFX_STYLE_FAMILY_FRAME);
     }
-    if ( pStyle )
-        pItemSet = &pStyle->GetItemSet();
-    else
-        pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
 
-    bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
     uno::Any* pHEvenMirror = 0;
     uno::Any* pHOddMirror = 0;
     uno::Any* pVMirror = 0;
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_EVEN_PAGES, pHEvenMirror);
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES, pHOddMirror);
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT, pVMirror);
-    if(pHEvenMirror || pHOddMirror || pVMirror )
+
+    if ( pStyle )
     {
-        SwMirrorGrf aMirror ( static_cast < const SwMirrorGrf& > ( pItemSet->Get ( RES_FRM_SIZE ) ) );
-        if(pHEvenMirror)
-            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
-        if(pHOddMirror)
-            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pHOddMirror, MID_MIRROR_HORZ_ODD_PAGES);
-        if(pVMirror)
-            bRet &= ((SfxPoolItem&)aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
-        rGrSet.Put(aMirror);
+        SwDocStyleSheet aStyle (*pStyle);
+        const SfxItemSet *pItemSet = &aStyle.GetItemSet();
+        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
+        lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
+    else
+    {
+        const SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
+        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
+        lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
+    }
+
 
     static const USHORT nIDs[] =
     {
