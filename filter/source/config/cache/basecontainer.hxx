@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:57:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,23 @@ class BaseContainer : public BaseLock
                     which is used to work with the underlying configuration. */
         ::salhelper::SingletonRef< FilterCache > m_rCache;
 
+        /** @short  local filter cache, which is used to collect changes on the
+                    filter configuration first and flush it later.
+
+            @descr  Normaly this member isnt used nor initialized. Thats true,
+                    if this container is used for reading only. The first write access
+                    (e.g. by calling insertByName()) creates a copy of the current
+                    global cache m_rCache to initialize the m_pFlushCache member.
+
+                    Afterwards only the flush cache copy is used. Inside flush() this
+                    copy will be removed and m_rCache can be used again.
+
+                    m_pFlushCache and m_rCache must not be synchronized manually here.
+                    m_rCache listen on the global configuration, where m_pFlushCache
+                    write its data. m_rCache update itself automaticly.
+         */
+        FilterCache* m_pFlushCache;
+
         /** @short  specify, which sub container of the used filter cache
                     must be wrapped by this container interface. */
         FilterCache::EItemType m_eType;
@@ -222,9 +239,9 @@ class BaseContainer : public BaseLock
                                 FilterCache::EItemType                                  eType              );
 
     //-------------------------------------------
-    // private helper
+    // helper
 
-    private:
+    protected:
 
         //---------------------------------------
 
@@ -232,6 +249,40 @@ class BaseContainer : public BaseLock
                     and do it if neccessary automaticly.
          */
         void impl_loadOnDemand();
+
+        //---------------------------------------
+
+        /** @short  it creates the global instance m_pFilterCache, which is a copy
+                    of the global instance m_rCache, and will be used to change the
+                    configuration.
+
+            @descr  If no exception occures, its guaranteed, that the member m_rFlushCache
+                    was initialized right and can be used further.
+         */
+        void impl_initFlushMode()
+            throw (css::uno::RuntimeException);
+
+        //---------------------------------------
+
+        /** @short  returns a pointer to the current used cache member.
+
+            @descr  Its a point to the FilterCache instance behind m_pFlushCache
+                    or m_rCache.
+
+            @note   The lifetime of this pointer is restricted to the time, where
+                    the mutex of this BaseContainer instance is locked.
+                    Otherwhise may be the interface method flush() will destroy
+                    m_pFlushCache and the here returned pointer will be invalid!
+
+                    Use:
+
+                        Guard aLock(m_aLock);
+                            FilterCache* p = impl_getWorkingCache();
+                            p->doSomething();
+                        aLock.clear();
+                        // after this point p cant b e guaranteed any longer!
+         */
+        FilterCache* impl_getWorkingCache() const;
 
     //-------------------------------------------
     // uno interface
