@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:14:21 $
+ *  last change: $Author: tbe $ $Date: 2001-04-12 11:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _XMLSCRIPT_XML_HELPER_HXX_
+#include <xmlscript/xml_helper.hxx>
+#endif
+
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
 #endif
@@ -138,16 +142,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::rtl;
 
-
-//----------------------------------------------------------------------------
-
-namespace xmlscript
-{
-    SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-    SAL_CALL createInputStream(
-        ::rtl::ByteSequence const & rInData )
-        SAL_THROW( () );
-}
 
 //----------------------------------------------------------------------------
 
