@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-15 13:33:55 $
+ *  last change: $Author: tl $ $Date: 2002-08-23 10:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,27 +411,27 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
     /** contains the distance from the border to the object.
      */
-    [property] long BorderDistance;
+    [property, optional] long BorderDistance;
 
     //-------------------------------------------------------------------------
     /** contains the distance from the left border to the object.
      */
-    [property] long LeftBorderDistance;
+    [property, optional] long LeftBorderDistance;
 
     //-------------------------------------------------------------------------
     /** contains the distance from the right border to the object.
      */
-    [property] long RightBorderDistance;
+    [property, optional] long RightBorderDistance;
 
     //-------------------------------------------------------------------------
     /** contains the distance from the top border to the object.
      */
-    [property] long TopBorderDistance;
+    [property, optional] long TopBorderDistance;
 
     //-------------------------------------------------------------------------
     /** contains the distance from the bottom border to the object.
      */
-    [property] long BottomBorderDistance;
+    [property, optional] long BottomBorderDistance;
 
     //-------------------------------------------------------------------------
 };
