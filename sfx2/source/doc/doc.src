@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 14:24:05 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2156,7 +2156,7 @@ QueryBox DLG_MACROQUERY
     Buttons = WB_OK_CANCEL;
     Title = "Makro ausführen" ;
     Title [ english ] = "Execute Macro" ;
-    Title [ english_us ] = "Execute Macro" ;
+    Title [ english_us ] = "Run Macro" ;
     Title [ french ] = "Exécuter une macro" ;
     Title[ italian ] = "Esegui macro";
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
@@ -2182,7 +2182,9 @@ QueryBox DLG_MACROQUERY
 
     Message = "Dieses Dokument enthält Makros. $(TEXT)";
     Message [English] = "Dieses Dokument enthält Makros. $(TEXT)";
-    Message [English_us] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message [English_us] = "This document contains macros. $(TEXT)";
+    Message[ french ] = "Ce document contient des macros. $(TEXT)";
+    Message[ spanish ] = "Ejecutar macro";
 };
 
 String BTN_OK
@@ -2190,7 +2192,7 @@ String BTN_OK
     Text = "Ausführen" ;
     Text [ ENGLISH ] = "Execute" ;
     Text [ portuguese ] = "Executar" ;
-    Text [ english_us ] = "Execute" ;
+    Text [ english_us ] = "Run" ;
     Text [ portuguese_brazilian ] = "Ausf?ren" ;
     Text [ swedish ] = "Utför" ;
     Text [ danish ] = "Udfør" ;
@@ -2217,7 +2219,7 @@ String BTN_CANCEL
 {
     Text = "Nicht Ausführen" ;
     Text [ ENGLISH ] = "Don't execute" ;
-    Text [ english_us ] = "Don't execute" ;
+    Text [ english_us ] = "Do Not Run" ;
     Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
     Text [ swedish ] = "Utför inte" ;
     Text [ danish ] = "Udfør ikke" ;
@@ -2245,16 +2247,22 @@ String FT_CANCEL
 {
     Text = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
     Text [english] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
-    Text [english_us] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text [english_us] = "According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
+    Text[ french ] = "Les paramètres de sécurité n'autorisent normalement pas l'exécution des macros de ce document. Exécuter quand même ?";
+    Text[ spanish ] = "Por motivos de seguridad las macros de este documento no se deberían ejecutar. ¿Desea ejecutarlas a pesar de todo?";
+    Text[ japanese ] = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è¨­å®šã«å¾“ã†ã¨ã€ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒã‚¯ãƒ­ã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚ãã‚Œã§ã‚‚å®Ÿè¡Œã—ã¾ã™ã‹ã€‚";
 };
 String FT_OK
 {
     Text = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
     Text [english] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
-    Text [english_us] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text [english_us] = "Do you want to allow these macros to be run?";
+    Text[ french ] = "Voulez-vous autoriser l'exécution de ces macros ?";
+    Text[ spanish ] = "¿Desea autorizar la ejecución de estas macros?";
 };
 
 // ******************************************************************* EOF
+
 
 
 
