@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:50:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ class PersistentWindowState :   // interfaces
     // helper
 
     private:
-
         //____________________________
         /** @short  identify the application module, which  is used behind the component
                     of our frame.
