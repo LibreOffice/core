@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:53:59 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,10 @@
 #include "svdograf.hxx"
 #include "svdopath.hxx"
 #include "svdetc.hxx"
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
