@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:21:42 $
+ *  last change: $Author: rt $ $Date: 2002-01-22 21:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,7 +1642,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ swedish ] = "Visa ~varning innan makro k�rs";
         Text[ polish ] = "Show ~warning before running macro";
         Text[ portuguese_brazilian ] = "Show ~warning before running macro";
-        Text[ japanese ] = "常に実行する前に警告する";
+        Text[ japanese ] = "実行前に常に警告する";
         Text[ korean ] = "매크로 실행 전 경고 표시(W)";
         Text[ chinese_simplified ] = "在执行之前自动警告";
         Text[ chinese_traditional ] = "在執行之前自動警告";
