@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:57:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
 #endif
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
