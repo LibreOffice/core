@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-12-03 09:50:15 $
+ *  last change: $Author: ab $ $Date: 2002-12-06 15:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,18 @@ StarBASIC::~StarBASIC()
         *pp = 0;
     }
 #endif
+    }
+
+    // #100326 Set Parent NULL in registered listeners
+    if( xUnoListeners.Is() )
+    {
+        USHORT uCount = xUnoListeners->Count();
+        for( USHORT i = 0 ; i < uCount ; i++ )
+        {
+            SbxVariable* pListenerObj = xUnoListeners->Get( i );
+            pListenerObj->SetParent( NULL );
+        }
+        xUnoListeners = NULL;
     }
 }
 
@@ -981,6 +993,14 @@ void StarBASIC::SetGlobalBreakHdl( const Link& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
 }
+
+SbxArrayRef StarBASIC::getUnoListeners( void )
+{
+    if( !xUnoListeners.Is() )
+        xUnoListeners = new SbxArray();
+    return xUnoListeners;
+}
+
 
 /**************************************************************************
 *
