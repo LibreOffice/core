@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:12:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2145,6 +2145,12 @@ XubString SalFrame::GetKeyName( USHORT nKeyCode )
 XubString SalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
 {
   return GetKeyName( nKeyCode );
+}
+
+LanguageType SalFrame::GetInputLanguage()
+{
+    // could be improved by checking unicode ranges of the last input
+    return LANGUAGE_DONTKNOW;
 }
 
 // Settings
