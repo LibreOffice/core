@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:21:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,10 @@ class ImportExcel8 : public ImportExcel
 
     public:
                                 ImportExcel8(
-                                    SvStorage*  pStorage,
+                                    SfxMedium&  rMedium,
                                     SvStream&   aStream,
                                     XclBiff     eBiff,
-                                    ScDocument* pDoc,
-                                    const String& rDocUrl,
-                                    SvStorage*  pPivotCache );
+                                    ScDocument* pDoc );
 
         virtual                 ~ImportExcel8( void );
 
