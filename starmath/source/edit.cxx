@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:29:52 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,15 @@ SmEditWindow::~SmEditWindow()
     aCursorMoveTimer.Stop();
     aModifyTimer.Stop();
 
+
+    // #112565# clean up of classes used for accessibility
+    // must be done before EditView (and thus EditEngine) is no longer
+    // available for those classes.
+    if (pAccessible)
+        pAccessible->ClearWin();    // make Accessible defunctional
+    // Note: memory for pAccessible will be freed when the reference
+    // xAccessible is released.
+
     if (pEditView)
     {
         EditEngine *pEditEngine = pEditView->GetEditEngine();
@@ -215,11 +224,6 @@ SmEditWindow::~SmEditWindow()
     delete pHScrollBar;
     delete pVScrollBar;
     delete pScrollBox;
-
-    if (pAccessible)
-        pAccessible->ClearWin();    // make Accessible defunctional
-    // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released.
 }
 
 
@@ -413,6 +417,7 @@ void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void SmEditWindow::Command(const CommandEvent& rCEvt)
 {
+    BOOL bForwardEvt = TRUE;
     if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
     {
         GetParent()->ToTop();
@@ -439,12 +444,39 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
         pPopupMenu->Execute( this, aPoint );
         delete pPopupMenu;
+        bForwardEvt = FALSE;
     }
-    else if (pEditView)
-        pEditView->Command( rCEvt );
-    else
-        Window::Command (rCEvt);
+    else if (rCEvt.GetCommand() == COMMAND_WHEEL)
+        bForwardEvt = !HandleWheelCommands( rCEvt );
+
+    if (bForwardEvt)
+    {
+        if (pEditView)
+            pEditView->Command( rCEvt );
+        else
+            Window::Command (rCEvt);
+    }
 }
+
+
+BOOL SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
+{
+    BOOL bCommandHandled = FALSE;    // true if the CommandEvent needs not
+                                    // to be passed on (because it has fully
+                                    // been taken care of).
+
+    const CommandWheelData* pWData = rCEvt.GetWheelData();
+    if (pWData)
+    {
+        if (COMMAND_WHEEL_ZOOM == pWData->GetMode())
+            bCommandHandled = TRUE;     // no zooming in Command window
+        else
+            bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);
+    }
+
+    return bCommandHandled;
+}
+
 
 IMPL_LINK_INLINE_START( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 {
@@ -546,6 +578,8 @@ void SmEditWindow::CreateEditView()
             pScrollBox  = new ScrollBarBox(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
+        pVScrollBar->EnableDrag( TRUE );
+        pHScrollBar->EnableDrag( TRUE );
 
         pEditView->SetOutputArea(AdjustScrollBars());
 
