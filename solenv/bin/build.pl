@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-26 10:10:16 $
+#   last change: $Author: vg $ $Date: 2004-03-09 15:33:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.97 $ ';
+    $id_str = ' $Revision: 1.98 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -163,13 +163,14 @@
     %build_modes = ();
     $maximal_processes = 0; # the max number of the processes run
     %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
+    %platforms = (); # platforms available or being working with
 ### main ###
 
     &get_options;
     &get_build_modes;
     %deliver_env = ();
     if ($prepare) {
-        %platforms = &get_platforms;
+        &get_platforms(\%platforms);
         @modules_built = ();
 
         $deliver_env{'BUILD_SOSL'}++;
@@ -327,7 +328,7 @@
                 &print_annonce($Prj);
                 $PrjDir = &CorrectPath($StandDir.$Prj);
                 &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP});
-                 &get_deps_hash($PrjDir, \%LocalDepsHash);
+                 &get_deps_hash($Prj, \%LocalDepsHash);
                  &BuildDependent(\%LocalDepsHash);
                 my $deliver_commando = &get_deliver_commando($Prj);
                  if ($cmd_file) {
@@ -341,7 +342,7 @@
             $no_projects = 0;
         };
     } else {
-        &get_deps_hash('.', \%LocalDepsHash);
+        &get_deps_hash($CurrentPrj, \%LocalDepsHash);
         &BuildDependent(\%LocalDepsHash);
     };
 };
@@ -455,11 +456,12 @@ sub get_prj_platform {
 # infos for given project
 #
 sub get_deps_hash {
-    my ($dummy, $PrjToBuild);
+    my ($dummy, $module_to_build, $module_path);
     %DeadDependencies = ();
-    $PrjToBuild = shift;
+    $module_to_build = shift;
+    $module_path = &CorrectPath($StandDir.$module_to_build);
     my $dependencies_hash = shift;
-    chdir $PrjToBuild;
+    chdir $module_path;
     cwd();
     if ($deliver) {
         if ($cmd_file) {
@@ -473,11 +475,8 @@ sub get_deps_hash {
     &get_prj_platform;
     while (<BUILD_LST>) {
         if ($_ =~ /#/o) {
-            if ($`) {
-                $_ = $`;
-            } else {
-                next;
-            };
+            next if (!$`);
+            $_ = $`;
         };
         s/\r\n//;
         if ($_ =~ /nmake/o) {
@@ -500,10 +499,13 @@ sub get_deps_hash {
             };
             $PlatformHash{$DirAlias}++;
             $Dependencies = $';
-            &print_error("$PrjToBuild/prj/build.lst has wrong written dependencies string:\n$_\n") if (!$Dependencies);
+            &print_error("$module_to_build/prj/build.lst has wrong written dependencies string:\n$_\n") if (!$Dependencies);
             @Array = &GetDependenciesArray($Dependencies);
             $$dependencies_hash{$DirAlias} = [@Array];
             $BuildQueue{$DirAlias}++;
+            if ($Dir =~ /(\\|\/)/o) {
+                $Dir = $module_to_build . $1 . $';
+            } else {$Dir = $module_to_build;};
             $PathHash{$DirAlias} = $Dir;
         };
     };
@@ -544,15 +546,18 @@ sub CorrectPath {
     return $_;
 };
 
+
 sub check_dmake {
-    open(DMAKETEMP, "which dmake |");
-    my $dmake_exe;
-    foreach (<DMAKETEMP>) {
-    $dmake_exe = $_ if (/dmake/);
+    print "Checking dmake...";
+    if (open(DMAKEVERSION, "dmake -V |")) {
+        my @dmake_version = <DMAKEVERSION>;
+        close DMAKEVERSION;
+        if ($dmake_version[0] =~ /^dmake\s\-\sCopyright\s\(c\)/) {
+            print " Using version $1\n" if ($dmake_version[0] =~ /Version\s(\d+\.*\d*)/);
+        };
+        return;
     };
-    close DMAKETEMP;
-    chomp $dmake_exe;
-    &print_error("dmake - no such file or directory") unless -x $dmake_exe;
+    &print_error('dmake - no such file or directory');
 };
 
 #
@@ -562,7 +567,7 @@ sub get_commands {
     my $arg = '';
     # Setting alias for dmake
     $dmake = 'dmake';
-#   &check_dmake if ($ENV{GUI} eq 'UNX'); # doesn't working with new aliases
+    &check_dmake;
 
     if ($cmd_file) {
         if ($ENV{GUI} eq 'UNX') {
@@ -1121,7 +1126,7 @@ sub build_multiprocessing {
             &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP});
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
-            &get_deps_hash(&CorrectPath($StandDir.$Prj), $projects_deps_hash{$Prj});
+            &get_deps_hash($Prj, $projects_deps_hash{$Prj});
         };
         sleep(1) if (!$Prj);
         &build_actual_queue(\@build_queue);
@@ -1639,8 +1644,13 @@ sub get_incomp_projects {
 };
 
 sub get_platforms {
+    my $platforms_ref = shift;
+    if ($only_platform) {
+        $$platforms_ref{$only_platform}++;
+        return;
+    };
     my $solver = $ENV{SOLARVERSION};
-    my ($iserverbin, @platforms_conf, %platforms);
+    my ($iserverbin, @platforms_conf);
     $iserverbin = "i_server -d ";
     $iserverbin .= $ENV{SOLAR_ENV_ROOT} . '/b_server/config/stand.lst -i ';
     my $workstamp = $ENV{WORK_STAMP};
@@ -1648,14 +1658,13 @@ sub get_platforms {
     if ( $platforms_conf[0]  =~ /Environments/ ) {
         shift @platforms_conf;
     }
+
     foreach (@platforms_conf) {
         s/\s//g;
-        next if ($only_platform && ($only_platform ne $_));
         my $s_path = $solver . '/' .  $_;
-        $platforms{$_}++ if (-e $s_path);
+        $$platforms_ref{$_}++ if (-e $s_path);
     };
     &print_error("There is no platform found!!") if (!scalar keys %platforms);
-    return %platforms;
 };
 
 #
