@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-05-22 13:03:32 $
+ *  last change: $Author: sab $ $Date: 2001-06-01 10:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,6 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
         aDocument.SetInsertingFromOtherDoc( FALSE );
         if ( bRet )
         {
-            aDocument.CompileXML();
             ScChartListenerCollection* pChartListener = aDocument.GetChartListenerCollection();
             if (pChartListener)
                 pChartListener->UpdateDirtyCharts();
