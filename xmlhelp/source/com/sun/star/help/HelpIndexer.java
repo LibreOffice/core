@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:24:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:07:02 $
  *
  *  The Contents of this file are made available subject to tUhe terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ import com.sun.xmlsearch.util.*;
 import com.sun.xmlsearch.xml.indexer.*;
 
 import com.sleepycat.db.*;
-import com.sun.star.help.HelpURLStreamHandlerFactory;
 
 public class HelpIndexer {
 
@@ -596,6 +595,7 @@ public class HelpIndexer {
                 System.exit(1);
             } catch (java.io.IOException e) {
                 System.err.println("<!-- Style sheet not found: -->");
+                System.err.println(e.getMessage());
                 System.exit(1);
             }
             // System.out.println( "Using stylesheet: " + styleSheet );
@@ -616,8 +616,7 @@ public class HelpIndexer {
                     _processor.parse(_in);
                     _out.flush();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("url: " + url);
                 System.err.println(e.getMessage());
