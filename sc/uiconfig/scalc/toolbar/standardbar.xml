@@ -15,7 +15,7 @@
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:helpid="helpid:5509"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:helpid="helpid:5325"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Spelling" toolbar:helpid="helpid:20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="helpid:20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="helpid:12021"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:helpid="helpid:5710"/>
