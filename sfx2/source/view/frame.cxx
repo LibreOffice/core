@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:30:17 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@
 #include "appuno.hxx"
 #include "topfrm.hxx"
 #include "workwin.hxx"
-#include "fsetvwsh.hxx"
 #include "sfxuno.hxx"
 #include "msgpool.hxx"
 #include "objshimp.hxx"
@@ -144,7 +143,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 
 TYPEINIT1(SfxFrame, SfxListener);
-TYPEINIT1(SfxFrameItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
 
 void SfxFrame::SetLoadCancelable_Impl( SfxCancellable* pCbl )
@@ -1103,6 +1102,18 @@ SfxFrameItem::SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p )
     wFrame = pFrame;
 }
 
+SfxFrameItem::SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p ):
+    SfxPoolItem( nWhich ),
+    pFrame( p ), wFrame( p )
+{
+}
+
+SfxFrameItem::SfxFrameItem( SfxFrame *p ):
+    SfxPoolItem( 0 ),
+    pFrame( p ), wFrame( p )
+{
+}
+
 int SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 {
      return ((SfxFrameItem&)rItem).pFrame == pFrame &&
@@ -1122,6 +1133,40 @@ SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
     pNew->SetFramePtr_Impl( pFrame );
     return pNew;
 }
+
+sal_Bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+{
+    if ( wFrame )
+    {
+        rVal <<= wFrame->GetFrameInterface();
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+sal_Bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+{
+    Reference < XFrame > xFrame;
+    if ( (rVal >>= xFrame) && xFrame.is() )
+    {
+        SfxFrame* pFr = SfxFrame::GetFirst();
+        while ( pFr )
+        {
+            if ( pFr->GetFrameInterface() == xFrame )
+            {
+                wFrame = pFrame = pFr;
+                return TRUE;
+            }
+
+            pFr = SfxFrame::GetNext( *pFr );
+        }
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 
 SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhich, const ::com::sun::star::uno::Any& rAny )
     : SfxPoolItem( nWhich )
@@ -1474,10 +1519,6 @@ void SfxFrame::GrabFocusOnComponent_Impl()
 
 void SfxFrame::ReFill_Impl( const SfxFrameSetDescriptor* pSet )
 {
-    SfxFrameSetViewShell *pView = PTR_CAST( SfxFrameSetViewShell, GetCurrentViewFrame()->GetViewShell() );
-    if ( pView )
-        pView->ReFill( pSet );
-    else
     {
         SfxFrameSetDescriptor *pOld = pImp->pDescr->GetFrameSet();
         SfxFrameSetDescriptor *pNew = pSet->Clone();
