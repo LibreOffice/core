@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-05 09:39:42 $
+ *  last change: $Author: sj $ $Date: 2001-04-09 15:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,12 @@
 #include <bulitem.hxx>
 #include "polysc3d.hxx"
 #include "extrud3d.hxx"
-
 #ifndef _EEITEMID_HXX
 #include "eeitemid.hxx"
 #endif
-
 #ifndef _SVX_TSPTITEM_HXX
 #include "tstpitem.hxx"
 #endif
-
 #if defined(JOEENV) && defined(JOEDEBUG)
 #include "impinccv.h" // etwas Testkram
 #endif
@@ -150,7 +147,6 @@
 #ifndef _SVX_FONTITEM_HXX
 #include <fontitem.hxx>
 #endif
-
 #ifndef _SVDOUTL_HXX
 #include <svdoutl.hxx>
 #endif
@@ -172,47 +168,39 @@
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
-
 #ifndef _SVDITER_HXX
 #include <svditer.hxx>
 #endif
-
 #ifndef _SVDOEDGE_HXX
 #include <svdoedge.hxx>
 #endif
-
 #ifndef _SXEKITM_HXX
 #include <sxekitm.hxx>
 #endif
-
 #ifndef _SVX_FLDITEM_HXX
 #include <flditem.hxx>
 #endif
-
 #ifndef _SYCHCONV_HXX
 #include <svtools/sychconv.hxx>
 #endif
-
 #ifndef _TEXTCONV_HXX
 #include <textconv.hxx>
 #endif
-
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
 #endif
-
 #ifndef _SVXMSBAS_HXX
 #include <svxmsbas.hxx>
 #endif
-
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
-
 #ifndef _SVX_BRSHITEM_HXX
 #include <brshitem.hxx>
 #endif
-
+#ifndef _SVX_LANGITEM_HXX
+#include <langitem.hxx>
+#endif
 #ifndef _SVDOOLE2_HXX
 #include <svdoole2.hxx>
 #endif
@@ -1693,7 +1681,23 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
             {
                 if ( !pFonts )
                     ReadFontCollection();
-                pPPTStyleSheet = new PPTStyleSheet( rStCtrl, *this );
+
+                // reading TxSI styles (default language setting ... )
+                PPTTextSpecInfoAtomInterpreter aTxSIStyle;
+                DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
+                if ( pEnvHd )
+                {
+                    pEnvHd->SeekToContent( rStCtrl );
+                    DffRecordHeader aTxSIStyleRecHd;
+                    if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
+                        aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
+                }
+                PPTTextSpecInfo aTxSI( 0 );
+                if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
+                    aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
+
+                // creating stylesheets
+                pPPTStyleSheet = new PPTStyleSheet( rStCtrl, *this, aTxSI );
             }
         }
     }
@@ -4296,7 +4300,8 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
     }
 }
 
-PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager )
+PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager, const PPTTextSpecInfo& rTextSpecInfo ) :
+    maTxSI  ( rTextSpecInfo )
 {
     UINT32 i;
     UINT32 nOldFilePos = rIn.Tell();
@@ -4606,7 +4611,8 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
 PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
     pCharSet        ( new ImplPPTCharPropSet ),
     mnParagraph     ( nParagraph ),
-    mpFieldItem     ( NULL )
+    mpFieldItem     ( NULL ),
+    mnLanguage      ( 0 )
 {
 }
 
@@ -4619,6 +4625,7 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
+    mnLanguage = rCharPropSet.mnLanguage;
 }
 
 PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
@@ -4630,6 +4637,7 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagr
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
+    mnLanguage = 0;
 }
 
 PPTCharPropSet::~PPTCharPropSet()
@@ -4812,8 +4820,69 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+PPTTextSpecInfoAtomInterpreter::PPTTextSpecInfoAtomInterpreter() :
+    bValid  ( sal_False )
+{
+}
+
+sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
+            const DffRecordHeader& rRecHd, sal_uInt16 nRecordType )
+{
+    bValid = sal_False;
+    sal_uInt32  nCharIdx = 0;
+    rRecHd.SeekToContent( rIn );
+
+    while ( rIn.Tell() < rRecHd.GetRecEndFilePos() )
+    {
+        sal_uInt32  nCharCount,
+                    nFlags, i;
+
+        if ( nRecordType == PPT_PST_TextSpecInfoAtom )
+        {
+            rIn >> nCharCount;
+            nCharIdx += nCharCount;
+        }
+        rIn >> nFlags;
+
+        sal_uInt16 nVal0, nVal2;
+        PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
+        for ( i = 1; nFlags && i ; i <<= 1 )
+        {
+            switch( nFlags & i )
+            {
+                case 0 : break;
+                case 1 : rIn >> nVal0; break;
+                case 2 : rIn >> pEntry->nLanguage; break;
+                case 4 : rIn >> nVal2; break;
+                default :
+                {
+                    rIn.Seek( 2 );
+                    DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+                }
+            }
+            nFlags &= ~i;
+        }
+        aList.Insert( pEntry, LIST_APPEND );
+    }
+    bValid = rIn.Tell() == rRecHd.GetRecEndFilePos();
+#ifdef DBG_UTIL
+    if ( !bValid )
+        DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+#endif
+    return bValid;
+}
+
+PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
+{
+    void *pPtr;
+    for ( pPtr = aList.First(); pPtr; pPtr = aList.Next() )
+        delete (PPTTextSpecInfo*)pPtr;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
-                                                    PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd )
+                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd )
 {
     sal_uInt32 nMerk = rIn.Tell();
 
@@ -4824,7 +4893,6 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
     sal_uInt32 nMaxLen = aTextHd.nRecLen;
     if ( nMaxLen > 0xFFFF )
         nMaxLen = 0xFFFF;
-
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
@@ -5529,6 +5597,13 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         SvxEscapementItem aItem( nEsc, nProp );
         rSet.Put( aItem );
     }
+
+    sal_uInt16 nLanguage = mnLanguage;
+    if ( !nLanguage )
+         nLanguage = mrStyleSheet.maTxSI.nLanguage;
+    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE ) );
+    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE_CJK ) );
+    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE_CTL ) );
 }
 
 SvxFieldItem* PPTPortionObj::GetTextField()
@@ -6303,12 +6378,41 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     if ( rSdrPowerPointImport.SeekToRec2( PPT_PST_TextBytesAtom, PPT_PST_TextCharsAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
                     {
                         PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, rSdrPowerPointImport,
-                                                                            aClientTextBoxHd, rIn );
+                                                                        aClientTextBoxHd, rIn );
                         PPTStyleTextPropReader aStyleTextPropReader( rIn, rSdrPowerPointImport, aClientTextBoxHd,
                                                                         aTextRulerInterpreter, aExtParaHd );
                         UINT32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.Count();
                         if ( nParagraphs )
                         {
+                            // the language settings will be merged into the list of PPTCharPropSet
+                            DffRecordHeader aTextSpecInfoHd;
+                            PPTTextSpecInfoAtomInterpreter aTextSpecInfoAtomInterpreter;
+                            if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
+                                                        aClientTextBoxHd.GetRecEndFilePos(), &aTextSpecInfoHd ) )
+                            {
+                                if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom ) )
+                                {
+                                    sal_uInt32 nI = 0;
+                                    PPTTextSpecInfo* pSpecInfo;
+                                    for ( pSpecInfo = (PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.First();
+                                        pSpecInfo; pSpecInfo =(PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.Next() )
+                                    {
+                                        // todo: this is not 100% correct
+                                        // portions and text have to been splitted in some cases
+                                        for ( ; nI < aStyleTextPropReader.aCharPropList.Count(); )
+                                        {
+                                            PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( nI );
+                                            if ( pSet->mnOriginalTextPos < pSpecInfo->nCharIdx )
+                                            {
+                                                pSet->mnLanguage = pSpecInfo->nLanguage;
+                                                nI++;
+                                            }
+                                            else
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
                             //
                             // now will search for possible textextensions such as date/time fields
                             // or ParaTabStops and append them on this textobj
