@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XActiveDataSource.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:48 $
+ *  last change:$Date: 2003-09-08 10:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.io;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.io.XActiveDataSource;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.io.XActiveDataSource</code>

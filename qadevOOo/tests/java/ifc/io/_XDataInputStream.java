@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataInputStream.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:47 $
+ *  last change:$Date: 2003-09-08 10:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,16 @@
 
 package ifc.io;
 
+import java.util.Vector;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XDataOutputStream;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.util.Vector;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.io.XDataInputStream</code>
