@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:36:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+// must be first
+#include <canvas/debug.hxx>
+
 #ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
 #endif
@@ -69,12 +69,20 @@
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
 #endif
+#ifndef BOOST_MEM_FN_HPP_INCLUDED
+#include <boost/mem_fn.hpp>
+#endif
 
 #include <queue>
+#include <algorithm>
+#include <limits>
 
-#include "event.hxx"
-#include "eventqueue.hxx"
+#include <event.hxx>
+#include <eventqueue.hxx>
+#include <slideshowexceptions.hxx>
 
+
+using namespace ::com::sun::star;
 
 namespace presentation
 {
@@ -94,6 +102,16 @@ namespace presentation
         {
         }
 
+        EventQueue::~EventQueue()
+        {
+            // dispose event queue
+            while( !maEvents.empty() )
+            {
+                maEvents.top().pEvent->dispose();
+                maEvents.pop();
+            }
+        }
+
         bool EventQueue::addEvent( const EventSharedPtr& rEvent )
         {
             OSL_ENSURE( rEvent.get() != NULL, "EventQueue::addEvent: event ptr NULL" );
@@ -104,8 +122,15 @@ namespace presentation
             // prepare entry
             EventEntry entry;
 
+            const double nCurrTime( maElapsedTime.getElapsedTime() );
             entry.pEvent = rEvent;
-            entry.nTime  = rEvent->getActivationTime( maElapsedTime.getElapsedTime() );
+            entry.nTime  = rEvent->getActivationTime( nCurrTime );
+
+            // A seemingly obvious optimization cannot be used here,
+            // because it breaks assumed order of notification: zero
+            // timeout events could be fired() immediately, but that
+            // would not unwind the stack and furthermore changes
+            // order of notification
 
             // add entry
             maEvents.push( entry );
@@ -113,30 +138,80 @@ namespace presentation
             return true;
         }
 
-        void EventQueue::process()
+        void EventQueue::process( double* pTimeoutForNextCall )
         {
             VERBOSE_TRACE( "EventQueue: heartbeat" );
 
             // perform topmost, ready-to-execute event
             // =======================================
 
-            // process ready events
-            if( !maEvents.empty() &&
-                maEvents.top().nTime <= maElapsedTime.getElapsedTime() )
+            const double nCurrTime( maElapsedTime.getElapsedTime() );
+
+            // process ready/elapsed events. Note that the 'perceived'
+            // current time remains constant for this loop, thus we're
+            // processing only those events which where ready when we
+            // entered this method.
+            while( !maEvents.empty() &&
+                   maEvents.top().nTime <= nCurrTime )
             {
                 EventEntry event( maEvents.top() );
                 maEvents.pop();
 
                 try
                 {
+#if OSL_DEBUG_LEVEL > 0
+                    VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
+                                   event.pEvent.get(),
+                                   event.pEvent->getActivationTime(0.0) );
+#endif
+
                     event.pEvent->fire();
                 }
-                catch(...)
+                catch( uno::Exception& )
                 {
                     // catch anything here, we don't want
-                    // to leave this frame under _any_
-                    // circumstance.
-                    OSL_TRACE( "::presentation::internal::EventQueue: Event threw, action might not have been fully performed" );
+                    // to leave this scope under _any_
+                    // circumstance. Although, do _not_
+                    // reinsert an activity that threw
+                    // once.
+
+                    // NOTE: we explicitely don't catch(...) here,
+                    // since this will also capture segmentation
+                    // violations and the like. In such a case, we
+                    // still better let our clients now...
+                    OSL_TRACE( "::presentation::internal::EventQueue: Event threw a uno::Exception, action might not have been fully performed" );
+                }
+                catch( SlideShowException& )
+                {
+                    // catch anything here, we don't want
+                    // to leave this scope under _any_
+                    // circumstance. Although, do _not_
+                    // reinsert an activity that threw
+                    // once.
+
+                    // NOTE: we explicitely don't catch(...) here,
+                    // since this will also capture segmentation
+                    // violations and the like. In such a case, we
+                    // still better let our clients now...
+                    OSL_TRACE( "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
+                }
+            }
+
+            // setup optional timeout value
+            if( pTimeoutForNextCall )
+            {
+                if( maEvents.empty() )
+                {
+                    // no further events available,
+                    *pTimeoutForNextCall = ::std::numeric_limits<double>::max();
+                }
+                else
+                {
+                    // ensure nothing negative is returned. Fetch
+                    // fresh current time, event processing above
+                    // might have taken significant time
+                    *pTimeoutForNextCall = ::std::max(0.0,
+                                                      maEvents.top().nTime - maElapsedTime.getElapsedTime());
                 }
             }
         }
@@ -146,5 +221,11 @@ namespace presentation
             return maEvents.empty();
         }
 
+        void EventQueue::clear()
+        {
+            // TODO(P1): Maybe a plain vector and vector.swap will
+            // be faster here. Profile.
+            maEvents = ImplQueueType();
+        }
     }
 }
