@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:25:18 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,12 +116,6 @@
 
 /** All allowed flags for import. */
 const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS;
-
-
-inline XclImpStream& operator>>( XclImpStream& rStrm, XclFormatRun& rRun )
-{
-    return rStrm >> rRun.mnChar >> rRun.mnFontIx;
-}
 
 
 // ----------------------------------------------------------------------------
@@ -689,7 +683,7 @@ void XclImpUrlHelper::DecodeUrl(
 
 // Cached Values ==============================================================
 
-XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm, ExcelToSc& rFmlConv ) :
+XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
     mfValue( 0.0 )
 {
     rStrm >> mnType;
@@ -715,7 +709,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm, ExcelToSc& rFmlConv )
             rStrm >> nErrBool;
             rStrm.Ignore( 6 );
 
-            const ScTokenArray* pTok = rFmlConv.GetBoolErr(
+            const ScTokenArray* pTok = rStrm.GetRoot().GetFmlaConverter().GetBoolErr(
                 XclTools::ErrorToEnum( fVal, bIsErr, nErrBool ) );
             if( pTok )
                 mpTokArr.reset( new ScTokenArray( *pTok ) );
