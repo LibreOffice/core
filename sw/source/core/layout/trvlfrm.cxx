@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-23 11:42:19 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 14:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2145,11 +2145,20 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             {
                 Point aTmpSt( aStRect.Pos() );
                 Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
-                if( bSameRotatedLine && aTmpSt.Y() > aTmpEnd.Y() )
+                if( bSameRotatedLine )
                 {
-                    long nTmpY = aTmpEnd.Y();
-                    aTmpEnd.Y() = aTmpSt.Y();
-                    aTmpSt.Y() = nTmpY;
+                    if( aTmpSt.Y() > aTmpEnd.Y() )
+                    {
+                        long nTmpY = aTmpEnd.Y();
+                        aTmpEnd.Y() = aTmpSt.Y();
+                        aTmpSt.Y() = nTmpY;
+                    }
+                    if( aTmpSt.X() > aTmpEnd.X() )
+                    {
+                        long nTmpX = aTmpEnd.X();
+                        aTmpEnd.X() = aTmpSt.X();
+                        aTmpSt.X() = nTmpX;
+                    }
                 }
 
                 SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
