@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SjSettings.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-22 13:50:27 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@ public class SjSettings {
      * if a SecurityManager is installed. The default is "false".<BR>
      * if you are running more than one java application in the virtual machine. This occures
      * only in the first call.<BR>
-     * "stardiv.controller.installConsole"="true" | "false": pipe the stdout and stderr
-     * through a console. Show the console with stardiv.controller.Console.showConsole( true ).
-     * This occures only in the first call.<BR>
      * "stardiv.js.debugOnError"="true" | "false": Start the javascript ide, if an error
      * occures. The default is "false".<BR>
      * "stardiv.js.debugImmediate"="true" | "false": Start the javascript ide, if a script
@@ -173,8 +170,6 @@ public class SjSettings {
             props.put("path.separator.applet", "true");
             props.put("line.separator.applet", "true");
 
-            // das appletresourceprotokol
-            props.put("java.protocol.handler.pkgs", "stardiv.net.protocol");
         }
 
         // put new and changed properties to the property table
@@ -200,8 +195,8 @@ public class SjSettings {
             if (System.getSecurityManager() == null)
                 System.setSecurityManager(new SandboxSecurity(bNoExit));
 
-            if( Boolean.getBoolean("stardiv.controller.installConsole") )
-                Console.installConsole();
+//          if( Boolean.getBoolean("stardiv.controller.installConsole") )
+//              Console.installConsole();
         }
     }
 
