@@ -1,6 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\external\curl
-
 ..\%__SRC%\inc\easy.h %_DEST%\inc%_EXT%\external\curl\easy.h
+..\%__SRC%\inc\curlver.h %_DEST%\inc%_EXT%\external\curl\curlver.h
 ..\%__SRC%\inc\curl.h %_DEST%\inc%_EXT%\external\curl\curl.h
 ..\%__SRC%\inc\mprintf.h %_DEST%\inc%_EXT%\external\curl\mprintf.h
 ..\%__SRC%\inc\multi.h %_DEST%\inc%_EXT%\external\curl\multi.h
@@ -10,3 +10,4 @@ mkdir: %_DEST%\inc%_EXT%\external\curl
 ..\%__SRC%\bin\libcurl.dll %_DEST%\bin%_EXT%\libcurl.dll
 ..\%__SRC%\lib\libcurl.* %_DEST%\lib%_EXT%\libcurl.*
 
+linklib: libcurl.*.*
