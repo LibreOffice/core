@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-28 14:41:43 $
+ *  last change: $Author: jb $ $Date: 2002-11-26 15:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,7 +944,7 @@ namespace configmgr
             }
             else if (_rArgs[i] >>= aNV)
             {
-                if ( !extractOneArgument(aPV.Name,aPV.Value,_rNodeAccessor,_nLevels,_xOptions) )
+                if ( !extractOneArgument(aNV.Name,aNV.Value,_rNodeAccessor,_nLevels,_xOptions) )
                     failInvalidArgValue(aNV.Name,aNV.Value,i);
             }
             else
