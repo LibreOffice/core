@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-08 17:24:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 14:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -117,10 +120,10 @@ using namespace ::std;
  * SvxUnoNumberingRules
  ******************************************************************/
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper2< container::XIndexReplace, lang::XUnoTunnel >
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper3< container::XIndexReplace, lang::XUnoTunnel, lang::XServiceInfo >
 {
 private:
     SvxNumRule maRule;
@@ -140,6 +143,11 @@ public:
     //XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName(  ) throw(uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(uno::RuntimeException);
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(uno::RuntimeException);
 
     // intern
     uno::Sequence<beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
@@ -215,6 +223,26 @@ uno::Type SAL_CALL SvxUnoNumberingRules::getElementType()
 sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( uno::RuntimeException )
 {
     return sal_True;
+}
+
+// XServiceInfo
+const char* pSvxUnoNumberingRulesService = "com.sun.star.text.NumberingRules";
+
+OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoNumberingRules" ) );
+}
+
+sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSvxUnoNumberingRulesService ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSvxUnoNumberingRulesService ) );
+    uno::Sequence< OUString > aSeq( &aService, 1 );
+    return aSeq;
 }
 
 uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
