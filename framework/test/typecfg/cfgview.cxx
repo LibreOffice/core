@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-08-31 09:38:40 $
+ *  last change: $Author: as $ $Date: 2001-09-25 13:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,16 @@
 #include <hash_map>
 #endif
 
+#ifndef _SAL_MAIN_H_
+#include <sal/main.h>
+#endif
+
+/*
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
+*/
 #include <stdio.h>
 
 //_________________________________________________________________________________________________________________
@@ -220,21 +226,18 @@ struct AppMember
 };
 
 /*-***************************************************************************************************************/
-class CFGView : public Application
+class CFGView
 {
     //*************************************************************************************************************
     public:
-        void Main();
+        void start();
 
     //*************************************************************************************************************
     private:
         void impl_parseCommandLine                  ( AppMember& rMember );
-        void impl_generateHTMLView                  ();
-
-    //*************************************************************************************************************
-    private:
         void impl_printCopyright                    ();
         void impl_printSyntax                       ();
+        void impl_generateHTMLView                  ();
         void impl_generateTypeListHTML              ();
         void impl_generateFilterListHTML            ();
         void impl_generateFilterModulListHTML       ();
@@ -260,16 +263,23 @@ class CFGView : public Application
 //  global variables
 //_________________________________________________________________________________________________________________
 
-CFGView gApplication;
-
 //*****************************************************************************************************************
-void CFGView::Main()
+SAL_IMPLEMENT_MAIN()
 {
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
     ServiceManager aManager;
     ::comphelper::setProcessServiceFactory( aManager.getGlobalUNOServiceManager() );
 
+    CFGView aGenerator;
+    aGenerator.start();
+
+    return 0;
+}
+
+//*****************************************************************************************************************
+void CFGView::start()
+{
     // Get optional commands from command line.
     impl_parseCommandLine( m_aData );
 
