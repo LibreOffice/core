@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-26 14:26:14 $
+ *  last change: $Author: ab $ $Date: 2002-08-09 10:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ void SbiRuntime::StepRESUME( USHORT nOp1 )
     {
         // Code-Zeiger auf naechstes Statement setzen
         USHORT n1, n2;
-        pCode = pMod->FindNextStmnt( pErrCode, n1, n2 );
+        pCode = pMod->FindNextStmnt( pErrCode, n1, n2, TRUE, pImg );
     }
     else
         pCode = pErrStmnt;
