@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeModule.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:35 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,37 @@
 
 package org.openoffice.netbeans.modules.office.utils;
 
+import org.openide.TopManager;
+import org.openide.WizardDescriptor;
+import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
+
+import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.idesupport.xml.XMLParserFactory;
+import org.openoffice.netbeans.modules.office.wizard.InstallationPathDescriptor;
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 
 public class OfficeModule extends ModuleInstall {
 
     private static final long serialVersionUID = -8499324854301243852L;
 
+    public void installed () {
+        WizardDescriptor wiz = new InstallationPathDescriptor();
+        TopManager.getDefault().createDialog(wiz).show();
+
+        if(wiz.getValue() == NotifyDescriptor.OK_OPTION) {
+            OfficeInstallation oi = (OfficeInstallation)
+                wiz.getProperty(InstallationPathDescriptor.PROP_INSTALLPATH);
+
+            OfficeSettings settings = OfficeSettings.getDefault();
+            settings.setOfficeDirectory(oi);
+        }
+        FrameworkJarChecker.mountDependencies();
+        XMLParserFactory.setParser(ManifestParser.getManifestParser());
+    }
+
     public void restored () {
+        FrameworkJarChecker.mountDependencies();
         XMLParserFactory.setParser(ManifestParser.getManifestParser());
     }
 

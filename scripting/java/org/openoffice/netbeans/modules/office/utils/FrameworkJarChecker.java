@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameworkJarChecker.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:38 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public class FrameworkJarChecker {
 
     public static void mountDependencies() {
         String unoilPath = SVersionRCFile.getPathForUnoil(
-            OfficeSettings.getDefault().getOfficeDirectory());
+            OfficeSettings.getDefault().getOfficeDirectory().getPath());
 
         if (unoilPath == null)
             return;
@@ -124,7 +124,7 @@ public class FrameworkJarChecker {
 
     public static void unmountDependencies() {
         String unoilPath = SVersionRCFile.getPathForUnoil(
-            OfficeSettings.getDefault().getOfficeDirectory());
+            OfficeSettings.getDefault().getOfficeDirectory().getPath());
 
         if (unoilPath == null)
             return;
