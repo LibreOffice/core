@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog TAB_CHAR
     Text [ ENGLISH ] = "Character" ;
     Text [ norwegian ] = "Character" ;
     Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese_brazilian ] = "Caracter" ;
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
@@ -95,7 +95,7 @@ TabDialog TAB_CHAR
                 Text [ ENGLISH ] = "Character" ;
                 Text [ norwegian ] = "Character" ;
                 Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
                 Text [ portuguese ] = "Tipo de letra" ;
                 Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
@@ -113,10 +113,13 @@ TabDialog TAB_CHAR
                 Text[ arabic ] = "����";
                 Text[ greek ] = "�������������";
                 Text[ korean ] = "글꼴";
-                Text[ turkish ] = "Yaz�tipi";
+                Text[ turkish ] = "Yaz� Tipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "फ़ॉन्ट";
             };
             PageItem
             {
@@ -125,7 +128,7 @@ TabDialog TAB_CHAR
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
                 Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extens?o de Caracter" ;
+                Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
@@ -137,16 +140,19 @@ TabDialog TAB_CHAR
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ russian ] = "������� ������";
-                Text[ polish ] = "Efekt czcionki";
+                Text[ polish ] = "Efekty czcionki";
                 Text[ japanese ] = "フォント効果";
                 Text[ chinese_traditional ] = "字型效果";
                 Text[ arabic ] = "������� ������";
                 Text[ greek ] = "��� ����������";
                 Text[ korean ] = "글꼴 효과";
-                Text[ turkish ] = "Yaz�tipi efekti";
+                Text[ turkish ] = "Yaz� Tipi Efektleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ thai ] = "ลักษณะตัวอักษร";
+                Text[ czech ] = "Efekty písma";
+                Text[ hebrew ] = "‮אפקטים לגופנים‬";
+                Text[ hindi ] = "फ़ॉन्ट प्रभाव";
             };
             PageItem
             {
@@ -165,7 +171,7 @@ TabDialog TAB_CHAR
                 Text[ danish ] = "Placering";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
-                Text[ portuguese_brazilian ] = "Position";
+                Text[ portuguese_brazilian ] = "Posi��o";
                 Text[ japanese ] = "位置";
                 Text[ korean ] = "위치";
                 Text[ chinese_simplified ] = "位置";
@@ -175,6 +181,9 @@ TabDialog TAB_CHAR
                 Text[ catalan ] = "Posici�";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "ตำแหน่ง";
+                Text[ czech ] = "Umístění";
+                Text[ hebrew ] = "‮מיקום‬";
+                Text[ hindi ] = "स्थान";
             };
         };
     };
@@ -205,7 +214,7 @@ TabDialog TAB_CHAR
         Text [ ENGLISH ] = "Return" ;
         Text [ norwegian ] = "Return" ;
         Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese_brazilian ] = "Retorna" ;
         Text [ portuguese ] = "Anterior" ;
         Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
@@ -227,6 +236,9 @@ TabDialog TAB_CHAR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Torna";
         Text[ thai ] = "ส่งกลับ";
+        Text[ czech ] = "Návrat";
+        Text[ hebrew ] = "Zurück";
+        Text[ hindi ] = "लौटना";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "�����";
@@ -240,7 +252,23 @@ TabDialog TAB_CHAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Car�cters";
     Text[ thai ] = "ตัวอักขระ";
+    Text[ czech ] = "Znak";
+    Text[ hebrew ] = "Zeichen";
+    Text[ hindi ] = "अक्षर";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
