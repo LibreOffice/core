@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 11:21:16 $
+ *  last change: $Author: as $ $Date: 2001-07-30 12:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,12 @@ namespace fileaccess {
 
 
     private:
+        // methods
+        void SAL_CALL initSubstVars( void );
+        rtl::OUString SAL_CALL subst( const rtl::OUString& sValue );
+        rtl::OUString m_sInstPath;
+        rtl::OUString m_sUserPath;
+
         // Members
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
+ *  last change: $Author: as $ $Date: 2001-07-30 12:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "prov.hxx"
 #endif
 
+#include <unotools/configmgr.hxx>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -298,12 +299,6 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
         rtl::OUString aRootDirectory;
         if( xSubNode.is() )
         {
-            Reference< frame::XConfigManager > xCfgMgr(
-                m_xMultiServiceFactory->createInstance(
-                    rtl::OUString::createFromAscii(
-                               "com.sun.star.config.SpecialConfigManager" ) ),
-                UNO_QUERY );
-
             Any aAny = xSubNode->getByName( rtl::OUString::createFromAscii("MountPoints" ) );
             Reference< container::XNameAccess > xSubSubNode;
             aAny >>= xSubSubNode;
@@ -324,29 +319,20 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
                 rtl::OUString aAliasName;
                 letztesany >>= aAliasName;
 
-                VOS_ENSURE( xCfgMgr.is(),
-                        "FileProvider::FileProvider - No Config Manager!" );
-
                 rtl::OUString aUnqDir;
                 rtl::OUString aUnqAl;
 
-                if ( xCfgMgr.is() )
-                {
-                    // Substitute path variables, like "$(user)".
+                initSubstVars();
 
-                    rtl::OUString aDir
-                        = xCfgMgr->substituteVariables( aDirectory );
-                    // old,assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
-                    // new, assuming system path:
-                    osl::FileBase::getFileURLFromSystemPath( aDir,aUnqDir );
+                rtl::OUString aDir = subst( aDirectory );
+                // old,assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
+                // new, assuming system path:
+                osl::FileBase::getFileURLFromSystemPath( aDir,aUnqDir );
 
-
-                    rtl::OUString aAlias
-                        = xCfgMgr->substituteVariables( aAliasName );
-                    // old, assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
-                    // new, assuming system path:
-                    osl::FileBase::getFileURLFromSystemPath( aAlias,aUnqAl );
-                }
+                rtl::OUString aAlias = subst( aAliasName );
+                // old, assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
+                // new, assuming system path:
+                osl::FileBase::getFileURLFromSystemPath( aAlias,aUnqAl );
 
                 if ( !aUnqDir.getLength() )
                     osl::FileBase::getFileURLFromSystemPath( aDirectory,aUnqDir );
@@ -936,4 +922,36 @@ rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUStri
         return rtl::OUString();
 
     return aSystemPath;
+}
+
+////////////////////////
+// private
+////////////////////////
+void SAL_CALL FileProvider::initSubstVars()
+{
+    m_sUserPath = rtl::OUString();
+    m_sInstPath = rtl::OUString();
+
+    utl::ConfigManager* pCfgMgr = utl::ConfigManager::GetConfigManager();
+    if( pCfgMgr != NULL )
+    {
+        com::sun::star::uno::Any aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::OFFICEINSTALL );
+        aAny >>= m_sInstPath;
+
+        aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::INSTALLPATH );
+        aAny >>= m_sUserPath;
+    }
+}
+
+rtl::OUString SAL_CALL FileProvider::subst( const rtl::OUString& sValue )
+{
+    rtl::OUString sReturn = sValue;
+
+    if( sValue.compareToAscii( "$(userpath)" ) == 0 )
+        sReturn = m_sUserPath;
+    else
+    if( sValue.compareToAscii( "$(instpath)" ) == 0 )
+        sReturn = m_sInstPath;
+
+    return sReturn;
 }
