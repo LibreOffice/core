@@ -7479,3 +7479,8 @@ _TI4?AVout_of_range@_STL@@
 ?Notify@SfxPrintOptionsDialog@@UAEJAAVNotifyEvent@@@Z
 ?__query@?$Reference@VXTask@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXTask@frame@345@PAVXInterface@2345@@Z
 ?IsHelpErrorDocument@SfxContentHelper@@SAEABVString@@@Z
+??0?$Reference@VXFilePicker@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0OGuard@vos@@QAE@AAVIMutex@1@@Z
+??1EventsConfig@framework@@QAE@XZ
+?Export@SfxEventConfiguration@@SAEPAVSvStream@@AAV2@PAVSfxObjectShell@@@Z
+?Import@SfxEventConfiguration@@SAEAAVSvStream@@PAV2@PAVSfxObjectShell@@@Z
