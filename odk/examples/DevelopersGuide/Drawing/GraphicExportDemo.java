@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicExportDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:28:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,23 +40,15 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.beans.PropertyValue;
 
-// name access
-import com.sun.star.container.*;
-
-// application specific classes
-import com.sun.star.drawing.*;
-
-// XExporter
 import com.sun.star.document.XExporter;
 import com.sun.star.document.XFilter;
 
+import com.sun.star.drawing.XDrawPage;
 
 // __________ Implementation __________
 
@@ -70,89 +62,97 @@ public class GraphicExportDemo
     {
         if ( args.length < 3 )
         {
-            System.out.println( "usage: GraphicExportDemo SourceURL DestinationURL PageIndexToExport [ connection ]" );
+            System.out.println( "usage: GraphicExportDemo SourceURL DestinationURL PageIndexToExport" );
+            System.exit(1);
         }
-        else
+
+        XComponent xComponent = null;
+        try
         {
-            XComponent xComponent = null;
-            try
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
+
+            // suppress Presentation Autopilot when opening the document
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
+            PropertyValue[] pPropValues = new PropertyValue[ 1 ];
+            pPropValues[ 0 ] = new PropertyValue();
+            pPropValues[ 0 ].Name = "Silent";
+            pPropValues[ 0 ].Value = new Boolean( true );
+
+            java.io.File sourceFile = new java.io.File(args[0]);
+            StringBuffer sUrl = new StringBuffer("file:///");
+            sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
+
+            xComponent = Helper.createDocument( xOfficeContext,
+                                                sUrl.toString(), "_blank", 0,
+                                                pPropValues );
+
+            Object GraphicExportFilter =
+                xOfficeContext.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.drawing.GraphicExportFilter", xOfficeContext);
+            XExporter xExporter = (XExporter)
+                UnoRuntime.queryInterface( XExporter.class, GraphicExportFilter );
+
+            PropertyValue aProps[] = new PropertyValue[2];
+            aProps[0] = new PropertyValue();
+            aProps[0].Name = "MediaType";
+            aProps[0].Value = "image/gif";
+
+            /* some graphics e.g. the Windows Metafile does not have a Media Type,
+               for this case
+               aProps[0].Name = "FilterName"; // it is possible to set a FilterName
+               aProps[0].Value = "WMF";
+            */
+            java.io.File destFile = new java.io.File(args[1]);
+            java.net.URL destUrl = destFile.toURL();
+
+            aProps[1] = new PropertyValue();
+            aProps[1].Name = "URL";
+            aProps[1].Value = destUrl.toString();//args[ 1 ];
+
+            int nPageIndex = Integer.parseInt( args[ 2 ] );
+            if ( nPageIndex < PageHelper.getDrawPageCount( xComponent ) &&
+                 nPageIndex > 1 )
             {
-                String sConnection;
-                if ( args.length >= 4 )
-                    sConnection = args[ 3 ];
-                else
-                    sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-                XMultiServiceFactory xServiceFactory =
-                    Helper.connect( sConnection );
+                XDrawPage xPage = PageHelper.getDrawPageByIndex( xComponent,
+                                                                 nPageIndex );
+                XComponent xComp = (XComponent)
+                    UnoRuntime.queryInterface( XComponent.class, xPage );
+                xExporter.setSourceDocument( xComp );
+                XFilter xFilter = (XFilter)
+                    UnoRuntime.queryInterface( XFilter.class, xExporter );
+                xFilter.filter( aProps );
+                System.out.println( "*** graphics on page \"" + nPageIndex
+                                    + "\" from file \"" + args[0]
+                                    + "\" exported under the name \""
+                                    + args[1] + "\" in the local directory" );
+            } else
+            {
+                System.out.println( "page index not in range" );
+            }
 
-                // suppress Presentation Autopilot when opening the document
-                // properties are the same as described for com.sun.star.document.MediaDescriptor
-                PropertyValue[] pPropValues = new PropertyValue[ 1 ];
-                pPropValues[ 0 ] = new PropertyValue();
-                pPropValues[ 0 ].Name = "Silent";
-                pPropValues[ 0 ].Value = new Boolean( true );
 
-                java.io.File sourceFile = new java.io.File(args[0]);
-                StringBuffer sUrl = new StringBuffer("file:///");
-                sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
+            // close the document
+            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
+                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
+                                          xComponent);
 
-                xComponent = Helper.createDocument( xServiceFactory,
-                    sUrl.toString(), "_blank", 0, pPropValues );
-
-                Object GraphicExportFilter = xServiceFactory.createInstance
-                    ("com.sun.star.drawing.GraphicExportFilter");
-                XExporter xExporter = (XExporter)
-                    UnoRuntime.queryInterface( XExporter.class, GraphicExportFilter );
-
-                PropertyValue aProps[] = new PropertyValue[2];
-                aProps[0] = new PropertyValue();
-                aProps[0].Name = "MediaType";
-                aProps[0].Value = "image/gif";
-
-/* some graphics e.g. the Windows Metafile does not have a Media Type, for this case
-                aProps[0].Name = "FilterName";  // it is possible to set a FilterName
-                aProps[0].Value = "WMF";
-*/
-                java.io.File destFile = new java.io.File(args[1]);
-                StringBuffer destUrl = new StringBuffer("file:///");
-                destUrl.append(destFile.getCanonicalPath().replace('\\', '/'));
-
-                aProps[1] = new PropertyValue();
-                aProps[1].Name = "URL";
-                aProps[1].Value = destUrl.toString();//args[ 1 ];
-
-                int nPageIndex = Integer.parseInt( args[ 2 ] );
-                if ( nPageIndex < PageHelper.getDrawPageCount( xComponent ) &&
-                   nPageIndex > 1 )
-                {
-                    XDrawPage xPage = PageHelper.getDrawPageByIndex( xComponent, nPageIndex );
-                    XComponent xComp = (XComponent)
-                        UnoRuntime.queryInterface( XComponent.class, xPage );
-                    xExporter.setSourceDocument( xComp );
-                    XFilter xFilter = (XFilter)
-                        UnoRuntime.queryInterface( XFilter.class, xExporter );
-                    xFilter.filter( aProps );
-                    System.out.println( "*** graphics on page \"" + nPageIndex + "\" from file \"" +
-                                        args[0] + "\" exported under the name \""
-                                        + args[1] + "\" in the local directory" );
-                }
-                else
-                {
-                    System.out.println( "page index not in range" );
-                }
-
-                System.out.println( "Press return to close the document \"" + args[0]+"\" and terminate!" );
-                while( System.in.read() != 10 );
-
-                // close the document
+            if (xCloseable != null )
+                xCloseable.close(false);
+            else
                 xComponent.dispose();
 
-            }
-            catch( Exception ex )
-            {
-                System.out.println( ex );
-            }
+            System.out.println("*** document closed!");
+
         }
+        catch( Exception ex )
+        {
+            System.out.println( ex );
+        }
+
         System.exit( 0 );
     }
 }
+
