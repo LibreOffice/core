@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:00:03 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,8 +688,7 @@ void RscTypCont::Init()
     pRoot->Insert( pClassKeyCode );
     {
     pLangClassKeyCode = new RscClassArray( pHS->Insert( "LangKeyCode" ),
-                    RSC_KEYCODE, pClassKeyCode, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+                    RSC_KEYCODE, pClassKeyCode, &aLangType );
     aBaseLst.Insert( pLangClassKeyCode );
     }
 
@@ -820,8 +819,7 @@ void RscTypCont::Init()
     }
     {
     pLangClassI12 = new RscClassArray( pHS->Insert( "LangInternational" ),
-                    RSC_INTERNATIONAL, pClassI12, &aLangType,
-                    &nLangTypeId, &nDfltLangTypeId );
+                                       RSC_INTERNATIONAL, pClassI12, &aLangType );
     aBaseLst.Insert( pLangClassI12 );
     }
 
