@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2002-09-27 17:18:24 $
+ *  last change: $Author: er $ $Date: 2002-11-01 18:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,6 +1471,13 @@ BOOL ScCompiler::NextNewToken()
                 SetError(errCodeOverflow); return FALSE;
             }
         }
+        if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
+                !bAutoCorrect )
+        {   // #101100# special case to speed up broken [$]#REF documents
+            String aBad( aFormula.Copy( nSrcPos-1 ) );
+            eLastOp = pArr->AddBad( aBad )->GetOpCode();
+            return FALSE;
+        }
         if( !IsString() )
         {
             String aTmpStr( cSymbol[0] );
@@ -1499,12 +1506,20 @@ BOOL ScCompiler::NextNewToken()
               && !(bMayBeFuncName && IsOpCode2( aUpper )) )
             {
                 SetError( errNoName );
-                ScGlobal::pCharClass->toLower( aUpper );
-                aToken.SetString( aUpper.GetBuffer() );
-                aToken.NewOpCode( ocBad );
-                pRawToken = aToken.Clone();
                 if ( bAutoCorrect )
+                {   // provide single token information and continue
+                    ScGlobal::pCharClass->toLower( aUpper );
+                    aToken.SetString( aUpper.GetBuffer() );
+                    aToken.NewOpCode( ocBad );
+                    pRawToken = aToken.Clone();
                     AutoCorrectParsedSymbol();
+                }
+                else
+                {   // we don't need single token information, just a bad formula
+                    String aBad( aFormula.Copy( nSrcPos - aOrg.Len() ) );
+                    eLastOp = pArr->AddBad( aBad )->GetOpCode();
+                    return FALSE;
+                }
             }
         }
         return TRUE;
