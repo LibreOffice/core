@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:00:54 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,11 @@ sal_Bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
     return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName,
                                               &aLocalName ) == nPrefix &&
            ::xmloff::token::IsXMLToken( aLocalName, eToken );
+}
+
+sal_Bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
+{
+    return GetTransformer().GetNamespaceMap().GetKeyByAttrName( m_aQName ) == nPrefix;
 }
 
 XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,

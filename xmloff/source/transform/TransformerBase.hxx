@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:00:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,8 @@ public:
                                       const TransformerAction_Impl& rAction,
                                       const ::rtl::OUString& rQName,
                                          sal_Bool bPersistent=sal_False ) = 0;
-    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName ) = 0;
+    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName,
+                                             sal_Bool bForm = sal_False ) = 0;
 
 
     XMLMutableAttributeList *ProcessAttrList( ::com::sun::star::uno::Reference<
@@ -214,6 +215,7 @@ public:
     ::xmloff::token::XMLTokenEnum GetToken( const ::rtl::OUString& rStr ) const;
 
     const XMLTransformerContext *GetCurrentContext() const;
+    const XMLTransformerContext *GetAncestorContext( sal_uInt32 i ) const;
 
     // C++
     inline void SetClass( const ::rtl::OUString& r ) { m_aClass = r; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:01:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ public:
     const ::rtl::OUString& GetQName() const { return m_aQName; }
     sal_Bool HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const;
+    sal_Bool HasNamespace( sal_uInt16 nPrefix ) const;
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
