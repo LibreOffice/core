@@ -199,6 +199,7 @@
                     <menu:menuitem menu:id=".uno:RenameTable" menu:helpid="26346" menu:label="" />
                     <menu:menuitem menu:id=".uno:Hide" menu:helpid="26289" menu:label="" />
                     <menu:menuitem menu:id=".uno:Show" menu:helpid="26290" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SheetRightToLeft" menu:helpid="26352" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ToggleMergeCells" menu:helpid="26581" menu:label="" />
