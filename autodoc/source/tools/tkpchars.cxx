@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpchars.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <cosv/bstream.hxx>
+#include <cosv/x.hxx>
 
 
 
@@ -97,7 +98,8 @@ CharacterSource::LoadText(csv::bstream & io_rSource)
     dpSource = new char[nSourceSize+1];
 
     intt nCount = (intt) io_rSource.read(dpSource,nSourceSize);
-    csv_assert( nCount == nSourceSize );
+    if (nCount != nSourceSize)
+        throw csv::X_Default("IO-Error: Could not load file completely.");
 
     dpSource[nSourceSize] = NULCH;
 
