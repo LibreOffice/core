@@ -8,4 +8,5 @@ dt	desktop\source\app							nmake	-	all	dt_app NULL
 dt	desktop\source\offwrp							nmake	-	all	dt_offwrp NULL
 dt	desktop\win32\source							nmake	-	w	dt_wrapper NULL
 dt	desktop\source\javaldx							nmake	-	u	dt_javaldx NULL
+dt	desktop\source\pkgchk							nmake	-	all	dt_pkgchk NULL
 dt	desktop\util								nmake	-	all	dt_util dt_app dt_offwrp dt_wrapper.w NULL
