@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:53:00 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,6 +1275,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                 pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             }
+            pMisc->SetYear2000(nY2K);
 
 // -------------------------------------------------------------------------
 //          Drucken auswerten
