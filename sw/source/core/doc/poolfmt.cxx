@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 18:43:17 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 10:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,21 +285,53 @@ long lcl_GetRightMargin( SwDoc& rDoc )
     return nWidth - nLeft - nRight;
 }
 
+void lcl_SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
+{
+    rSet.Put( rItem );
+    USHORT nWhCJK = 0, nWhCTL = 0;
+    switch( rItem.Which() )
+    {
+    case RES_CHRATR_FONTSIZE:
+        nWhCJK = RES_CHRATR_CJK_FONTSIZE, nWhCTL = RES_CHRATR_CTL_FONTSIZE;
+        break;
+    case RES_CHRATR_FONT:
+        nWhCJK = RES_CHRATR_CJK_FONT, nWhCTL = RES_CHRATR_CTL_FONT;
+        break;
+    case RES_CHRATR_LANGUAGE:
+        nWhCJK = RES_CHRATR_CJK_LANGUAGE, nWhCTL = RES_CHRATR_CTL_LANGUAGE;
+        break;
+    case RES_CHRATR_POSTURE:
+        nWhCJK = RES_CHRATR_CJK_POSTURE, nWhCTL = RES_CHRATR_CTL_POSTURE;
+        break;
+    case RES_CHRATR_WEIGHT:
+        nWhCJK = RES_CHRATR_CJK_WEIGHT, nWhCTL = RES_CHRATR_CTL_WEIGHT;
+        break;
+    }
+
+    if( nWhCJK )
+        rSet.Put( rItem, nWhCJK );
+    if( nWhCTL )
+        rSet.Put( rItem, nWhCTL );
+}
+
 void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         USHORT nOutLvlBits, BYTE nLevel, BOOL bItalic )
 {
-    rSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
+    ::lcl_SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
+    SvxFontHeightItem aHItem;
     if( pDoc->IsHTMLMode() )
-        rSet.Put( SvxFontHeightItem( aHeadlineSizes[ MAXLEVEL + nLevel ] ));
+        aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
     else
-        rSet.Put( SvxFontHeightItem( PT_14, aHeadlineSizes[ nLevel ] ));
+        aHItem.SetHeight( PT_14, aHeadlineSizes[ nLevel ] );
+    ::lcl_SetAllScriptItem( rSet, aHItem );
 
     if( bItalic && !pDoc->IsHTMLMode() )
-        rSet.Put( SvxPostureItem( ITALIC_NORMAL ) );
+        ::lcl_SetAllScriptItem( rSet, SvxPostureItem( ITALIC_NORMAL ) );
 
     if( pDoc->IsHTMLMode() )
     {
+//JP 1.6.2001: which font for CJK/CTL ???
         rSet.Put( SvxFontItem( FAMILY_ROMAN, String::CreateFromAscii(
 #if defined(OW) || defined (MTF) || defined(UNX)
                             RTL_CONSTASCII_STRINGPARAM("times")
@@ -348,8 +380,8 @@ void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, USHORT nFact,
     rSet.Put( aLR );
     if( bHeader )
     {
-        rSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
-        rSet.Put( SvxFontHeightItem( PT_16 ) );
+        ::lcl_SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD ) );
+        ::lcl_SetAllScriptItem( rSet, SvxFontHeightItem( PT_16 ) );
     }
     if( bTab )
     {
@@ -526,6 +558,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_HEADLINE_BASE:            // Basis Ueberschrift
         {
+//JP 1.6.2001: which font for CJK/CTL ???
             SvxFontItem aFont( FAMILY_SWISS, String::CreateFromAscii(
 #if defined(OW) || defined (MTF) || defined(UNX)
                     RTL_CONSTASCII_STRINGPARAM("helvetica")
@@ -541,7 +574,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
             SvxFontHeightItem aFntSize( PT_14 );
             SvxULSpaceItem aUL( PT_12, PT_6 );
-            if( IsHTMLMode() ) aUL.SetLower( HTML_PARSPACE );
+            if( IsHTMLMode() )
+                aUL.SetLower( HTML_PARSPACE );
             aSet.Put( SvxFmtKeepItem( TRUE ));
 
             if( !pDesc )
@@ -549,7 +583,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
                                                 RES_POOLCOLL_TEXT ));
 
             aSet.Put( aUL );
-            aSet.Put( aFntSize );
+            ::lcl_SetAllScriptItem( aSet, aFntSize );
+//JP 1.6.2001: which font for CJK/CTL ???
             aSet.Put( aFont );
         }
         break;
@@ -624,9 +659,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_TABLE_HDLN:
         {
-            aSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
+            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
             if( !IsHTMLMode() )
-                aSet.Put( SvxPostureItem( ITALIC_NORMAL ) );
+                ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -639,7 +674,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
             SvxLRSpaceItem aLR;
             aLR.SetTxtFirstLineOfst( -(short)GetMetricVal( CM_05 ));
             aLR.SetTxtLeft( GetMetricVal( CM_05 ));
-            aSet.Put( SvxFontHeightItem( PT_10 ) );
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
             aSet.Put( aLR );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
@@ -650,8 +685,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
         {
             SvxULSpaceItem aUL; aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
             aSet.Put( aUL );
-            aSet.Put( SvxPostureItem( ITALIC_NORMAL ) );
-            aSet.Put( SvxFontHeightItem( PT_10 ) );
+            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_10 ) );
             SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
             aSet.Put( aLN );
         }
@@ -676,7 +711,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
     case RES_POOLCOLL_SENDADRESS:           // AbsenderAdresse
         {
             if( IsHTMLMode() )
-                aSet.Put( SvxPostureItem(ITALIC_NORMAL) );
+                ::lcl_SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL) );
             else
             {
                 SvxULSpaceItem aUL; aUL.SetLower( PT_3 );
@@ -999,8 +1034,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_DOC_TITEL:            // Doc. Titel
         {
-            aSet.Put( SvxWeightItem( WEIGHT_BOLD ) );
-            aSet.Put( SvxFontHeightItem( PT_18 ) );
+            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ) );
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_18 ) );
+
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
             if( !pDesc )
@@ -1011,8 +1047,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_DOC_SUBTITEL:         // Doc. UnterTitel
         {
-            aSet.Put( SvxPostureItem( ITALIC_NORMAL ));
-            aSet.Put( SvxFontHeightItem( PT_14 ));
+            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ));
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_14 ));
+
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ));
 
             if( !pDesc )
@@ -1038,13 +1075,14 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_HTML_PRE:
         {
+//JP 1.6.2001: which font for CJK/CTL ???
             aSet.Put( SvxFontItem( FAMILY_ROMAN,
                         System::GetStandardFont( STDFONT_FIXED ).GetName(),
                         aEmptyStr,PITCH_FIXED,
 /*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding() ));   // Font
 
 // WORKAROUND: PRE auf 10pt setzten
-            aSet.Put( SvxFontHeightItem(PT_10) );
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem(PT_10) );
 // WORKAROUND: PRE auf 10pt setzten
 
             // der untere Absatz-Abstand wird explizit gesetzt (macht
@@ -1067,7 +1105,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );
-            aSet.Put( SvxFontHeightItem(120) );
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem(120) );
 
             SvxULSpaceItem aUL;
             if( !pDesc )
@@ -1296,10 +1334,10 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_BUL_LEVEL:             // Aufzaehlungszeichen
         {
             const Font& rBulletFont = SwNumRule::GetDefBulletFont();
-            aSet.Put( SvxFontItem( rBulletFont.GetFamily(),
+            ::lcl_SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                         rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet() ));
-            aSet.Put( SvxFontHeightItem( PT_9 ));
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( PT_9 ));
         }
         break;
 
@@ -1330,7 +1368,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
         {
             long nH = ((SvxFontHeightItem*)GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
-            aSet.Put( SvxFontHeightItem( nH ));
+            ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem( nH ));
         }
         break;
 
@@ -1338,14 +1376,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_HTML_CITIATION:
     case RES_POOLCHR_HTML_VARIABLE:
         {
-            aSet.Put( SvxPostureItem( ITALIC_NORMAL ) );
+            ::lcl_SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL ) );
         }
         break;
 
     case RES_POOLCHR_IDX_MAIN_ENTRY:
     case RES_POOLCHR_HTML_STRONG:
         {
-            aSet.Put( SvxWeightItem( WEIGHT_BOLD ));
+            ::lcl_SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD ));
         }
         break;
 
@@ -1354,6 +1392,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_HTML_KEYBOARD:
     case RES_POOLCHR_HTML_TELETYPE:
         {
+//JP 1.6.2001: which font for CJK/CTL ???
             aSet.Put( SvxFontItem( FAMILY_ROMAN,
                         System::GetStandardFont( STDFONT_FIXED ).GetName(),
                         aEmptyStr,PITCH_FIXED,
