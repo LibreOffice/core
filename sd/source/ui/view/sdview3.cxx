@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-09 10:46:49 $
+ *  last change: $Author: ka $ $Date: 2001-11-13 13:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,38 +1032,56 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = SdrView::Paste( *xStm, EE_FORMAT_HTML, aDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && ( CHECK_FORMAT_TRANS( FORMAT_RTF ) || CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) ) )
+    else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
     {
         SotStorageStreamRef xStm;
 
-        if( aDataHelper.GetSotStorageStream( nFormat ? nFormat : FORMAT_RTF, xStm ) ||
-            aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EDITENGINE, xStm ) )
+        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EDITENGINE, xStm ) )
         {
-            EETextFormat nFmt = EE_FORMAT_RTF;
+            OutlinerView* pOLV = GetTextEditOutlinerView();
 
             xStm->Seek( 0 );
-
-            if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
-                nFmt = EE_FORMAT_BIN;
-
-            OutlinerView* pOLV = GetTextEditOutlinerView();
 
             if( pOLV )
             {
                 Rectangle   aRect( pOLV->GetOutputArea() );
-                   Point        aPos( pOLV->GetWindow()->PixelToLogic( aDropPos ) );
+                   Point       aPos( pOLV->GetWindow()->PixelToLogic( aDropPos ) );
 
-                if( aRect.IsInside( aPos ) ||
-                    // #94382# Also insert into textedit if paste special is used
-                    (!bDrag && IsTextEdit()) )
+                if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
-                    pOLV->Read( *xStm, nFmt, FALSE, pDocSh->GetHeaderAttributes() );
+                    pOLV->Read( *xStm, EE_FORMAT_BIN, FALSE, pDocSh->GetHeaderAttributes() );
                     bReturn = TRUE;
                 }
             }
 
             if( !bReturn )
-                bReturn = SdrView::Paste( *xStm, nFmt, aDropPos, pPage, nPasteOptions );
+                bReturn = SdrView::Paste( *xStm, EE_FORMAT_BIN, aDropPos, pPage, nPasteOptions );
+        }
+    }
+    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_RTF ) )
+    {
+        SotStorageStreamRef xStm;
+
+        if( aDataHelper.GetSotStorageStream( FORMAT_RTF, xStm ) )
+        {
+            OutlinerView* pOLV = GetTextEditOutlinerView();
+
+            xStm->Seek( 0 );
+
+            if( pOLV )
+            {
+                Rectangle   aRect( pOLV->GetOutputArea() );
+                   Point       aPos( pOLV->GetWindow()->PixelToLogic( aDropPos ) );
+
+                if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
+                {
+                    pOLV->Read( *xStm, EE_FORMAT_RTF, FALSE, pDocSh->GetHeaderAttributes() );
+                    bReturn = TRUE;
+                }
+            }
+
+            if( !bReturn )
+                bReturn = SdrView::Paste( *xStm, EE_FORMAT_RTF, aDropPos, pPage, nPasteOptions );
         }
     }
     else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
@@ -1084,7 +1102,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     pOLV->InsertText( aOUString );
                     bReturn = TRUE;
                 }
-                else
+
+                if( !bReturn )
                     bReturn = SdrView::Paste( aOUString, aDropPos, pPage, nPasteOptions );
             }
         }
