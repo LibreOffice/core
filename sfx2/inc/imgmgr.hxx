@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:31:38 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ public:
     Image           GetImage(USHORT nId, BOOL bHiContrast, SfxModule* pMod = 0 ) const;
     void            SetImages( ToolBox& rToolBox, SfxModule* );
     void            SetImages( ToolBox& rToolBox, SfxModule*, BOOL bHiContrast );
+    void            SetImagesForceSize( ToolBox& rToolBox, SfxModule*, BOOL bHiContrast, BOOL bLarge );
     void            LockImage(USHORT nNewId, ToolBox *pBox );
     void            LockImage(USHORT nNewId, ToolBox *pBox, BOOL bHiContrast );
     Image           MakeUserImage(USHORT nNewId, Image& aSourceImage, BOOL bHiContrast = FALSE );
