@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.44 $
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:49 $
+ *  $Revision: 1.45 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     };
     FixedText FT_SYMBOLE
     {
-        Pos = MAP_APPFONT ( 6 , 139 ) ;
+        Pos = MAP_APPFONT ( 6 , 140 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
         Left = TRUE ;
         Text= "Zeichen:";
@@ -216,7 +216,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     {
         HelpId = HID_CHARMAP_CTL_SHOWTEXT ;
         Pos = MAP_APPFONT ( 46 , 137 ) ;
-        Size = MAP_APPFONT ( 244 , 14 ) ;
+        Size = MAP_APPFONT ( 244 , 16 ) ;
         Group = TRUE ;
     };
     Control CT_SHOWCHAR
@@ -427,7 +427,7 @@ String RID_SUBSETSTR_IPA_EXTENSIONS
     };
 String RID_SUBSETSTR_SPACING_MODIFIERS
 {
-    Text = "Spacing Modifier Zeichen" ;
+    Text = "Abstandsanpassung" ;
     Text [ ENGLISH ] = "Spacing Modifier Letters" ;
     Text[ english_us ] = "Spacing Modifier Letters";
         Text[ portuguese ] = "Caracteres de modifica��o do espa�amento";
@@ -555,6 +555,12 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ finnish ] = "kyrillinen";
         Text[ thai ] = "ตัวอักขระของซิริล";
     };
+String RID_SUBSETSTR_CYRILLIC_SUPPL
+{
+    Text = "Erg�nztes Kyrillische";
+    Text [ ENGLISH ] = "Cyrillic Supplementary";
+    Text[ english_us ] = "Cyrillic Supplementary";
+    };
 String RID_SUBSETSTR_ARMENIAN
 {
     Text = "Armenisch" ;
@@ -581,7 +587,7 @@ String RID_SUBSETSTR_ARMENIAN
         Text[ finnish ] = "armenia";
         Text[ thai ] = "ภาษาอามีเนีย";
     };
-String RID_SUBSETSTR_HEBREW_EXTENDED
+String RID_SUBSETSTR_BASIC_HEBREW
 {
     Text = "Basis Hebr�isch" ;
     Text [ ENGLISH ] = "Basic Hebrew" ;
@@ -607,7 +613,7 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ finnish ] = "heprea (perusteet)";
         Text[ thai ] = "ภาษาฮิบรูพื้นฐาน";
     };
-String RID_SUBSETSTR_BASIC_HEBREW
+String RID_SUBSETSTR_HEBREW_EXTENDED
 {
     Text = "Erweitertes Hebr�isch" ;
     Text [ ENGLISH ] = "Hebrew Extended" ;
@@ -2725,7 +2731,6 @@ String RID_SUBSETSTR_CHEROKEE
 {
     Text = "Cherokee" ;
     Text [ ENGLISH ] = "Cherokee" ;
-
     Text[ english_us ] = "Cherokee";
         Text[ portuguese ] = "Cherokee";
         Text[ russian ] = "������";
@@ -2800,19 +2805,111 @@ String RID_SUBSETSTR_MONGOLIAN
         Text[ finnish ] = "mongolia";
         Text[ thai ] = "ภาษามองโกเลีย";
     };
+
+String RID_SUBSETSTR_MISC_MATH_SYMS_A
+{
+    Text = "Verschiedene Mathematische Symbole-A";
+    Text [ ENGLISH ] = "Miscellaneous Mathematical Symbols-A" ;
+    Text[ english_us ] = "Miscellaneous Mathematical Symbols-A";
+};
+
+String RID_SUBSETSTR_SUPPL_ARROWS_A
+{
+    Text = "Erg�nzende Pfeile-A" ;
+    Text [ ENGLISH ] = "Supplemental Arrows-A";
+    Text[ english_us ] = "Supplemental Arrows-A";
+};
+
+String RID_SUBSETSTR_BRAILLE_PATTERNS
+{
+    Text = "Braille";
+    Text [ ENGLISH ] = "Braille Patterns" ;
+    Text[ english_us ] = "Braille Patterns";
+};
+
+String RID_SUBSETSTR_SUPPL_ARROWS_B
+{
+    Text = "Erg�nzende Pfeile-B" ;
+    Text [ ENGLISH ] = "Supplemental Arrows-B" ;
+    Text[ english_us ] = "Supplemental Arrows-B";
+};
+
+String RID_SUBSETSTR_MISC_MATH_SYMS_B
+{
+    Text = "Verschiedene Mathematische Symbole-B";
+    Text [ ENGLISH ] = "Miscellaneous Mathematical Symbols-B" ;
+    Text[ english_us ] = "Miscellaneous Mathematical Symbols-B";
+};
+
+String RID_SUBSETSTR_CJK_RADICAL_SUPPL
+{
+    Text = "Erg�nzte CJK Radikale";
+    Text [ ENGLISH ] = "CJK Radical Supplement" ;
+    Text[ english_us ] = "CJK Radical Supplement";
+};
+
+String RID_SUBSETSTR_KANXI_RADICALS
+{
+    Text = "Kanxi Radikale";
+    Text [ ENGLISH ] = "Kanxi Radicals" ;
+    Text[ english_us ] = "Kanxi Radicals";
+};
+
+String RID_SUBSETSTR_IDEO_DESC_CHARS
+{
+    Text = "Ideographische Beschreibungszeichen";
+    Text [ ENGLISH ] = "Ideographic Description Characters" ;
+    Text[ english_us ] = "Ideographic Description Characters";
+};
+
+String RID_SUBSETSTR_TAGALOG
+{
+    Text = "Tagalog";
+    Text [ ENGLISH ] = "Tagalog" ;
+    Text[ english_us ] = "Tagalog";
+};
+
+String RID_SUBSETSTR_HANUNOO
+{
+    Text = "Hanunoo";
+    Text [ ENGLISH ] = "Hanunoo" ;
+    Text[ english_us ] = "Hanunoo";
+};
+
+String RID_SUBSETSTR_TAGBANWA
+{
+    Text = "Tagbanwa";
+    Text [ ENGLISH ] = "Tagbanwa" ;
+    Text[ english_us ] = "Tagbanwa";
+};
+
+String RID_SUBSETSTR_BUHID
+{
+    Text = "Buhid";
+    Text [ ENGLISH ] = "Buhid" ;
+    Text[ english_us ] = "Buhid";
+};
+
+String RID_SUBSETSTR_KANBUN
+{
+    Text = "Kanbun";
+    Text [ ENGLISH ] = "Kanbun" ;
+    Text[ english_us ] = "Kanbun";
+};
+
+String RID_SUBSETSTR_BOPOMOFO_EXTENDED
+{
+    Text = "Erweitertes Bopomofo";
+    Text [ ENGLISH ] = "Bopomofo Extended" ;
+    Text[ english_us ] = "Bopomofo Extended";
+};
+
+String RID_SUBSETSTR_KATAKANA_PHONETIC
+{
+    Text = "Phonetisches Katakana";
+    Text [ ENGLISH ] = "Katakana Phonetics" ;
+    Text[ english_us ] = "Katakana Phonetics";
+};
 };
 
 // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
