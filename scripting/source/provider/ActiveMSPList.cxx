@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 14:14:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,161 +81,6 @@ using namespace drafts::com::sun::star::script;
 namespace func_provider
 {
 
-class BrowseNodeImpl :  public ::cppu::WeakImplHelper1< browse::XBrowseNode >
-{
-public:
-BrowseNodeImpl( const Reference< provider::XScriptProvider >& msp, const ::rtl::OUString& location ):  m_xSP( msp )
-{
-    m_sNodeName = parseLocationName( location );
-}
-
-virtual ::rtl::OUString
-SAL_CALL getName()
-        throw ( RuntimeException )
-{
-    return m_sNodeName;
-}
-
-virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
-getChildNodes()
-        throw ( RuntimeException )
-{
-    MasterScriptProvider* providerGetter = static_cast< MasterScriptProvider* >( m_xSP.get() );
-    Sequence< Reference< provider::XScriptProvider > > providers = providerGetter->getAllProviders();
-    Sequence<  Reference< browse::XBrowseNode > > children( providers.getLength() );
-    for ( sal_Int32 index = 0; index < providers.getLength(); index++ )
-    {
-        children[ index ] = Reference< browse::XBrowseNode >( providers[ index ], UNO_QUERY );
-    }
-    return children;
-}
-
-virtual sal_Bool SAL_CALL
-hasChildNodes()
-        throw ( RuntimeException )
-{
-    return true; //will always be user and share
-}
-
-virtual sal_Int16 SAL_CALL getType()
-        throw ( RuntimeException )
-{
-    return browse::BrowseNodeTypes::CONTAINER;
-}
-protected:
-::rtl::OUString parseLocationName( const ::rtl::OUString& location )
-{
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
-
-    if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
-    {
-        temp = temp.copy( lastSlashIndex + 1 );
-    }
-    // maybe we should throw here!!!
-    else
-    {
-        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
-    }
-    return temp;
-}
-    BrowseNodeImpl(){}
-    ::rtl::OUString m_sNodeName;
-    Reference < provider::XScriptProvider > m_xSP;
-};
-
-
-class  DocBrowseNodeImpl : public BrowseNodeImpl
-{
-public:
-DocBrowseNodeImpl( const Reference< provider::XScriptProvider >& msp,
-                   const Reference< frame::XModel >& xModel ) :  m_xModel( xModel )
-
-{
-    OSL_TRACE("DocBrowseNodeImpl() ctor");
-    m_sNodeName = parseLocationName( getTitleFromModel( m_xModel ) );
-    m_xSP = msp;
-}
-
-virtual ::rtl::OUString SAL_CALL
-getName() throw ( RuntimeException )
-{
-     if ( m_xModel->getURL().getLength() > 0 )
-    {
-        ::rtl::OUString docName = getTitleFromModel( m_xModel );
-        if ( !m_sNodeName.equals( docName ) )
-        {
-            OSL_TRACE("DocBrowseNodeImpl::getName() have to change name");
-            m_sNodeName =  docName;
-        }
-    }
-    return m_sNodeName;
-}
-
-private:
-    Reference< frame::XModel > m_xModel;
-::rtl::OUString
-getTitleFromModel( const Reference< frame::XModel >& xModel  )
-{
-{
-    // Set a default name, this should never be seen.
-    ::rtl::OUString docNameOrURL;
-
-    docNameOrURL = ::rtl::OUString::createFromAscii("Unknown");
-    if ( xModel.is() )
-    {
-        ::rtl::OUString tempName;
-        try
-        {
-            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
-            if ( propSet.is() )
-            {
-                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
-                {
-                    docNameOrURL = tempName;
-                    if ( xModel->getURL().getLength() == 0 )
-                    {
-                        // process "UntitledX - YYYYYYYY"
-                        // to get UntitledX
-                        sal_Int32 pos = 0;
-                        docNameOrURL = tempName.getToken(0,' ',pos);
-                        OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() Title for document is %s.",
-                            ::rtl::OUStringToOString( docNameOrURL,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-                    else
-                    {
-                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
-                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
-                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                        aTitle >>= docNameOrURL;
-                        if ( docNameOrURL.getLength() == 0 )
-                        {
-                            docNameOrURL =  parseLocationName( xModel->getURL() );
-                        }
-                    }
-                }
-            }
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() exception thrown: !!! %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-
-    }
-    else
-    {
-        OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() doc model is null" );
-    }
-    return docNameOrURL;
-}
-}
-};
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
     OSL_TRACE("ActiveMSPList::ActiveMSPList) - ctor");
@@ -276,7 +121,6 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
     {
         MspInst theMsp;
         theMsp.provider = msp;
-        theMsp.node = new DocBrowseNodeImpl( msp, xModel );
         m_mModels[ xModel ] = theMsp;
 
         // add self as listener for document dispose
@@ -301,6 +145,117 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
     {
         OSL_TRACE("ActiveMSPList::addActiveMSP() model for document exists already in map" );
     }
+}
+Reference< provider::XScriptProvider >
+ActiveMSPList::createMSP( const Any& aContext )
+            throw ( RuntimeException )
+{
+    Reference< provider::XScriptProvider > msp;
+    if (  aContext.getValueType() == ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
+
+    {
+        OSL_TRACE("ActiveMSPList::createMSP() for model");
+        Reference< frame::XModel> xModel( aContext, UNO_QUERY );
+        if ( xModel.is() )
+        {
+            msp = createMSP( xModel );
+        }
+        else
+        {
+            ::rtl::OUString message =
+                OUSTR( "Failed to extract XModel from context, could not create MasterScriptProvider" );
+            throw RuntimeException( message, Reference< XInterface >() );
+        }
+
+    }
+    else
+    {
+        ::rtl::OUString sContext;
+        aContext >>= sContext;
+        OSL_TRACE("ActiveMSPList::createMSP() for user/share %s",
+            ::rtl::OUStringToOString( sContext,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        msp = createMSP( sContext );
+    }
+    return msp;
+}
+
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createMSP( const ::rtl::OUString& context )
+            throw ( RuntimeException )
+{
+    Reference< provider::XScriptProvider > msp;
+    ::osl::MutexGuard guard( m_mutex );
+    Msp_hash::const_iterator itr = m_hMsps.find( context );
+    if ( itr == m_hMsps.end() )
+    {
+        OSL_TRACE("ActiveMSPList::createMSP( user/share ) no msp in cache for %s",
+            ::rtl::OUStringToOString( context,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        Any aCtx;
+        if ( context.equals( OUSTR("user") ) )
+        {
+            aCtx = makeAny( userDirString );
+        }
+        else if ( context.equals( OUSTR("share") ) )
+        {
+            aCtx = makeAny( shareDirString );
+        }
+        else
+        {
+            ::rtl::OUString message = OUSTR("ActiveMSPList::createMSP create for MSP failed, invalid context ");
+            message.concat( context );
+            // We will allow a MSP to be created with a default context
+            // such an msp should be capable of handling getScript() for
+            // non document scripts
+            //throw RuntimeException( message, Reference< XInterface > () );
+        }
+        msp = createNewMSP( aCtx );
+        MspInst mspEntry;
+        mspEntry.provider = msp;
+        m_hMsps[ context ] = mspEntry;
+    }
+    else
+    {
+        msp = itr->second.provider;
+    }
+    return msp;
+}
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createMSP( const Reference< frame::XModel >& xModel )
+            throw ( RuntimeException )
+{
+    Reference< provider::XScriptProvider > msp;
+    ::osl::MutexGuard guard( m_mutex );
+    Model_map::const_iterator itr = m_mModels.find( xModel );
+    if ( itr == m_mModels.end() )
+    {
+
+        Any aCtx = makeAny( xModel );
+        msp = createNewMSP( aCtx );
+        addActiveMSP( xModel, msp ); // will update map
+    }
+    else
+    {
+        msp = itr->second.provider;
+    }
+    return msp;
+}
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createNewMSP( const Any& context )
+            throw ( RuntimeException )
+{
+    OSL_TRACE("ActiveMSPList::createNewMSP( ANY )");
+
+    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
+    Sequence< Any > args(1);
+    args[ 0 ] = context;
+
+    Reference< provider::XScriptProvider > msp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    return msp;
 }
 
 //*************************************************************************
@@ -390,79 +345,18 @@ ActiveMSPList::createNonDocMSPs()
         Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
         // should check if provider reference is valid
         MspInst userInstance;
-        userInstance.node = new BrowseNodeImpl( userMsp, userDirString );
         userInstance.provider = userMsp;
-        m_hMsps[ userDirString ] = userInstance;
+        m_hMsps[ OUSTR("user") ] = userInstance;
 
         args[ 0 ] <<= shareDirString;
         Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
         MspInst shareInstance;
-        shareInstance.node = new BrowseNodeImpl( shareMsp, shareDirString );
         shareInstance.provider = shareMsp;
         // should check if provider reference is valid
-        m_hMsps[ shareDirString ] = shareInstance;
+        m_hMsps[ OUSTR("share") ] = shareInstance;
         created = true;
     }
 
-}
-
-::rtl::OUString SAL_CALL
-ActiveMSPList::getName()
-        throw ( css::uno::RuntimeException )
-{
-    return ::rtl::OUString::createFromAscii("Root");
-}
-
-Sequence< Reference< browse::XBrowseNode > > SAL_CALL
-ActiveMSPList::getChildNodes()
-        throw ( css::uno::RuntimeException )
-{
-    // 1. create a XBrowseNodeImpl (location )node for each MSP in the ActiveMSPList
-    // 2. add each Provider as a childNode for (location ) node
-    // create user & share MSP's if needed
-    ::osl::MutexGuard guard( m_mutex );
-    createNonDocMSPs();
-
-    // number of child nodes is number of providers for application ( user & share )
-    // + providers for active documents
-    sal_Int32 numChildNodes = m_hMsps.size() + m_mModels.size();
-
-    // get providers for application
-    Msp_hash::iterator h_itEnd =  m_hMsps.end();
-    Sequence< Reference< browse::XBrowseNode > > children( numChildNodes );
-    sal_Int32 count = 0;
-
-
-    for ( Msp_hash::iterator h_it = m_hMsps.begin(); h_it != h_itEnd; ++h_it )
-    {
-        OSL_TRACE("Adding application browsenode index [ %d ]", count );
-        children[ count++ ] =  h_it->second.node;
-    }
-
-    // get providers for active documents
-    Model_map::iterator m_itEnd =  m_mModels.end();
-
-    for ( Model_map::iterator m_it = m_mModels.begin(); m_it != m_itEnd; ++m_it )
-    {
-        OSL_TRACE("Adding document browsenode index [ %d ]", count  );
-        children[ count++ ] = m_it->second.node;
-    }
-
-    return children;
-}
-
-sal_Bool SAL_CALL
-ActiveMSPList::hasChildNodes()
-        throw ( css::uno::RuntimeException )
-{
-    return sal_True;
-}
-
-sal_Int16 SAL_CALL
-ActiveMSPList::getType()
-        throw ( css::uno::RuntimeException )
-{
-    return browse::BrowseNodeTypes::ROOT;
 }
 
 } // namespace func_provider
