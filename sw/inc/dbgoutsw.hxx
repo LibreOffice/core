@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:56:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,11 @@ class SfxItemSet;
 struct SwPosition;
 class SwPaM;
 class SwNodeNum;
+class SwUndos;
+class SwRect;
+class SwFrmFmt;
 class SwNodes;
+class SwRewriter;
 
 #define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
 #define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
@@ -81,11 +85,15 @@ class SwNodes;
 #define DBG_OUT_HERE_FN_LN printf("%s(%d) %s\n", __FILE__, __LINE__, __FUNCTION__)
 #define DBG_OUT(x) printf("%s\n", dbg_out(x))
 #define DBG_OUT_LN(x) printf("%s(%d): %s\n", __FILE__, __LINE__, dbg_out(x))
+#define DBG_OUT_FN_LN(x) printf("%s: %s\n", __FUNCTION__, dbg_out(x))
 
 extern bool bDbgOutStdErr;
 extern bool bDbgOutPrintAttrSet;
 
+const char * dbg_out(const void * pVoid);
 const char * dbg_out(const String & aStr);
+const char * dbg_out(const SwRect & rRect);
+const char * dbg_out(const SwFrmFmt & rFrmFmt);
 const char * dbg_out(const SwNode & rNode);
 const char * dbg_out(const SwTxtAttr & rAttr);
 const char * dbg_out(const SwpHints &rHints);
@@ -95,6 +103,8 @@ const char * dbg_out(SwNodes & rNodes);
 const char * dbg_out(const SwPosition & rPos);
 const char * dbg_out(const SwPaM & rPam);
 const char * dbg_out(const SwNodeNum & rNum);
+const char * dbg_out(const SwUndos & rUndos);
+const char * dbg_out(const SwRewriter & rRewriter);
 
 #endif // DEBUG
 #endif // __DBGOUTSW_HXX
