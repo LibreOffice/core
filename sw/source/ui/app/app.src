@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:33:08 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ String STR_PRINT_MERGE_MACRO
     Text [ portuguese ] = "Imprimir cartas em sйrie" ;
     Text[ chinese_simplified ] = "ж‰“еЌ°й‚®д»¶еђ€е№¶";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Печать циркулярного письма";
+    Text[ russian ] = "Печать сформированных писем";
     Text[ polish ] = "Drukuj listy seryjne";
     Text[ japanese ] = "е·®гЃ—иѕјгЃїеЌ°е€·";
     Text[ chinese_traditional ] = "еђ€дЅµе€—еЌ°";
@@ -519,14 +519,14 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ russian ] =
         {
          < "Все стили" ; SFXSTYLEBIT_ALL ; > ;
-            < "Использованные стили" ; SFXSTYLEBIT_USED ; > ;
+            < "Используемые стили" ; SFXSTYLEBIT_USED ; > ;
             < "Стили пользователя" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Автоматически" ; SFXSTYLEBIT_AUTO ; > ;
             < "Стили текста" ; SWSTYLEBIT_TEXT ; > ;
             < "Стили главы" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Стили списка" ; SWSTYLEBIT_LIST ; > ;
             < "Стили указателя" ; SWSTYLEBIT_IDX ; > ;
-            < "Стили специальных областей" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Специальные стили" ; SWSTYLEBIT_EXTRA ; > ;
             < "Стили HTML" ; SWSTYLEBIT_HTML ; > ;
             < "Условные стили" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
@@ -546,12 +546,12 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ dutch ] =
         {
-         < "Alle opmaakprovielen" ; SFXSTYLEBIT_ALL ; > ;
+         < "Alle opmaakprofielen" ; SFXSTYLEBIT_ALL ; > ;
             < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
             < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
             < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
-            < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Opmaakprofielen voor hoofdstukken" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
             < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
             < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
@@ -588,10 +588,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ finnish ] =
         {
-         < "Automaattinen" ; SFXSTYLEBIT_ALL ; > ;
-            < "Kaikki tyylit" ; SFXSTYLEBIT_USED ; > ;
-            < "Kдytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Mukautetut tyylit" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Kaikki tyylit" ; SFXSTYLEBIT_ALL ; > ;
+            < "Kдytetyt tyylit" ; SFXSTYLEBIT_USED ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automaattinen" ; SFXSTYLEBIT_AUTO ; > ;
             < "Tekstityylit" ; SWSTYLEBIT_TEXT ; > ;
             < "Luvun tyylit" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Luettelotyylit" ; SWSTYLEBIT_LIST ; > ;
@@ -900,13 +900,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < " " ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ language_user1 ] = " ";
-            Text[ russian ] = "Стили знаков";
+            Text[ russian ] = "Стили символа";
             Text[ polish ] = "Style znaku";
             Text[ japanese ] = "ж–‡е­—г‚№г‚їг‚¤гѓ«";
             FilterList [ russian ] =
         {
             < "Все" ; SFXSTYLEBIT_ALL ; > ;
-            < "Примененные стили" ; SFXSTYLEBIT_USED ; > ;
+            < "Используемые стили" ; SFXSTYLEBIT_USED ; > ;
             < "Стили пользователя" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ polish ] =
@@ -1093,13 +1093,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < " " ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ language_user1 ] = " ";
-            Text[ russian ] = "Стили рамок";
+            Text[ russian ] = "Стили врезок";
             Text[ polish ] = "Style ramek";
             Text[ japanese ] = "жћ г‚№г‚їг‚¤гѓ«";
             FilterList [ russian ] =
         {
             < "Все" ; SFXSTYLEBIT_ALL ; > ;
-            < "Примененные стили" ; SFXSTYLEBIT_USED ; > ;
+            < "Используемые стили" ; SFXSTYLEBIT_USED ; > ;
             < "Стили пользователя" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ polish ] =
@@ -1477,13 +1477,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < " " ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ language_user1 ] = "ил? стил? тиЃE";
-            Text[ russian ] = "Стили нумерации";
+            Text[ russian ] = "Стили списка";
             Text[ polish ] = "Style numeracji";
             Text[ japanese ] = "з•ЄеЏ·д»гЃ‘г‚№г‚їг‚¤гѓ«";
             FilterList [ russian ] =
         {
             < "Все" ; SFXSTYLEBIT_ALL ; > ;
-            < "Примененные стили" ; SFXSTYLEBIT_USED ; > ;
+            < "Используемые стили" ; SFXSTYLEBIT_USED ; > ;
             < "Стили пользователя" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ polish ] =
@@ -1599,7 +1599,7 @@ String STR_ENV_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori (Envelope)" ;
+    Text [ finnish ] = "Kirjekuori" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
@@ -1630,7 +1630,7 @@ String STR_LAB_TITLE
     Text [ italian ] = "Etichette" ;
     Text [ portuguese_brazilian ] = "Etiquetas" ;
     Text [ portuguese ] = "Etiquetas" ;
-    Text [ finnish ] = "Nimiцt" ;
+    Text [ finnish ] = "Osoitetarrat" ;
     Text [ danish ] = "Etiketter" ;
     Text [ french ] = "Йtiquettes" ;
     Text [ swedish ] = "Etiketter" ;
@@ -1638,7 +1638,7 @@ String STR_LAB_TITLE
     Text [ spanish ] = "Etiquetas" ;
     Text [ english_us ] = "Labels" ;
     Text[ chinese_simplified ] = "ж ‡з­ѕ";
-    Text[ russian ] = "Наклейки";
+    Text[ russian ] = "Этикетка ";
     Text[ polish ] = "Etykiety";
     Text[ japanese ] = "гѓ©гѓ™гѓ«ж›ёгЃЌ";
     Text[ chinese_traditional ] = "иІјжЁ™";
@@ -1646,7 +1646,7 @@ String STR_LAB_TITLE
     Text[ dutch ] = "Etiketten";
     Text[ chinese_simplified ] = "ж ‡з­ѕ";
     Text[ greek ] = "ЕфйкЭфет";
-    Text[ korean ] = "лќјлІЁ";
+    Text[ korean ] = "л €мќґлё”";
     Text[ turkish ] = "Etiket";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Etiquetes";
@@ -1699,7 +1699,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text [ dutch ] = "%PRODUCTNAME 3.0 Tekst" ;
     Text [ portuguese ] = "%PRODUCTNAME 3.0 Text" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ж–‡жњ¬";
-    Text[ russian ] = "Текст в %PRODUCTNAME 3.0";
+    Text[ russian ] = "Текст (%PRODUCTNAME 3.0)";
     Text[ polish ] = "Tekst %PRODUCTNAME 3.0";
     Text[ japanese ] = "%PRODUCTNAME 3.0 гѓ†г‚­г‚№гѓ€";
     Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ж–‡е­—ж–‡д»¶";
@@ -1711,7 +1711,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 Text";
-    Text[ finnish ] = "Teksti (%PRODUCTNAME 3,0)";
+    Text[ finnish ] = "Teksti (%PRODUCTNAME 3.0)";
     Text[ thai ] = "аё‚а№‰аё­аё„аё§аёІаёЎ (%PRODUCTNAME 3.0)";
 };
 
@@ -1730,7 +1730,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text [ portuguese ] = "Texto (%PRODUCTNAME 4.0)" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ж–‡жњ¬";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Текст в %PRODUCTNAME 4.0";
+    Text[ russian ] = "Текст (%PRODUCTNAME 4.0)";
     Text[ polish ] = "Tekst %PRODUCTNAME 4.0";
     Text[ japanese ] = "%PRODUCTNAME 4.0 гѓ†г‚­г‚№гѓ€";
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ж–‡е­—ж–‡д»¶";
@@ -1759,7 +1759,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text [ dutch ] = "%PRODUCTNAME 5.0 Tekst" ;
     Text [ portuguese ] = "%PRODUCTNAME 5.0 Texto" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ж–‡жњ¬";
-    Text[ russian ] = "Текст в %PRODUCTNAME 5.0";
+    Text[ russian ] = "Текст (%PRODUCTNAME 5.0)";
     Text[ polish ] = "%PRODUCTNAME 5.0 - Tekst";
     Text[ japanese ] = "%PRODUCTNAME 5.0 ж–‡ж›ё";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ж–‡е­—";
@@ -1771,7 +1771,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Text";
-    Text[ finnish ] = "Teksti (%PRODUCTNAME 5,0)";
+    Text[ finnish ] = "Teksti (%PRODUCTNAME 5.0)";
     Text[ thai ] = "аё‚а№‰аё­аё„аё§аёІаёЎ (%PRODUCTNAME 5.0)";
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
@@ -1797,7 +1797,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ arabic ] = "гУКдП дХ гд %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Text";
-    Text[ finnish ] = "Ohjelman %PRODUCTNAME 6.0 tekstiasiakirja";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 -tekstiasiakirja";
     Text[ language_user1 ] = " ";
     Text[ thai ] = "аё‚а№‰аё­аё„аё§аёІаёЎа№Ђаё­аёЃаёЄаёІаёЈ%PRODUCTNAME 6.0 ";
 };
@@ -1819,7 +1819,7 @@ String STR_CANTOPEN
     TEXT [ spanish ] = "No es posible abrir el documento." ;
     TEXT [ english_us ] = "Cannot open document." ;
     TEXT[ chinese_simplified ] = "ж— жі•ж‰“ејЂиї™дёЄж–‡жЎЈгЂ‚";
-    TEXT[ russian ] = "Открыть документ невозможно.";
+    TEXT[ russian ] = "Невозможно открыть документ.";
     TEXT[ polish ] = "Nie moїe otworzyж dokumentu.";
     TEXT[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€г‚’й–‹гЃЏгЃ“гЃЁгЃЊгЃ§гЃЌгЃѕгЃ›г‚“";
     TEXT[ chinese_traditional ] = "з„Ўжі•й–‹е•џйЂ™еЂ‹ж–‡д»¶гЂ‚";
@@ -1844,16 +1844,16 @@ String STR_CANTCREATE
     TEXT[ danish ] = "Det var ikke muligt at oprette dokumentet.";
     TEXT[ french ] = "Impossible de crйer le document.";
     TEXT[ swedish ] = "Det gick inte att skapa dokumentet.";
-    TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
+    TEXT[ dutch ] = "Het document kan niet worden gemaakt.";
     TEXT[ spanish ] = "El documento no pudo ser creado.";
     TEXT[ english_us ] = "Can't create document.";
     TEXT[ chinese_simplified ] = "ж— жі•з”џж€ђж–‡жЎЈ";
-    TEXT[ russian ] = "Этот документ создать невозможно.";
+    TEXT[ russian ] = "Невозможно создать документ.";
     TEXT[ polish ] = "Dokument nie mуgі zostaж utworzony.";
     TEXT[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€г‚’дЅњж€ђгЃ§гЃЌгЃѕгЃ›г‚“гЂ‚";
     TEXT[ chinese_traditional ] = "з„Ўжі•е»єз«‹йЂ™еЂ‹ж–‡д»¶";
     TEXT[ arabic ] = "КЪРС ЕдФЗБ ЗбгУКдП.";
-    TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
+    TEXT[ dutch ] = "Het document kan niet worden gemaakt.";
     TEXT[ chinese_simplified ] = "ж— жі•з”џж€ђж–‡жЎЈ";
     TEXT[ greek ] = "Ден еЯнбй дхнбфЮ з дзмйпхсгЯб фпх еггсЬцпх.";
     TEXT[ korean ] = "л¬ём„њлҐј л§Њл“¤ м€ м—†м—€мЉµл‹€л‹¤.";
@@ -1879,7 +1879,7 @@ String STR_DLLNOTFOUND
     TEXT [ spanish ] = "No se encontrу el filtro." ;
     TEXT [ english_us ] = "Filter not found." ;
     TEXT[ chinese_simplified ] = "жІЎжњ‰ж‰ѕе€°з­›йЂ‰гЂ‚";
-    TEXT[ russian ] = "Фильтр ненайден.";
+    TEXT[ russian ] = "Фильтр не найден.";
     TEXT[ polish ] = "Filtru nie znaleziono.";
     TEXT[ japanese ] = "гѓ•г‚Јгѓ«г‚їгЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ›г‚“";
     TEXT[ chinese_traditional ] = "жІ’жњ‰ж‰ѕе€°зЇ©йЃёгЂ‚";
@@ -1911,7 +1911,7 @@ String STR_UNBENANNT
     TEXT [ spanish ] = "Sin nombre" ;
     TEXT [ english_us ] = "Untitled" ;
     TEXT[ chinese_simplified ] = "жњЄе‘ЅеђЌ";
-    TEXT[ russian ] = "Без имени";
+    TEXT[ russian ] = "Документ";
     TEXT[ polish ] = "Bez tytuіu";
     TEXT[ japanese ] = "з„ЎйЎЊ";
     TEXT[ chinese_traditional ] = "жњЄе‘ЅеђЌ";
@@ -1938,22 +1938,22 @@ String STR_LOAD_GLOBAL_DOC
     Text [ italian ] = "Nome e percorso del documento master" ;
     Text [ spanish ] = "Nombre y ruta del documento maestro" ;
     Text [ french ] = "Nom et chemin du document maоtre" ;
-    Text [ dutch ] = "Naam en pad van het master-document" ;
+    Text [ dutch ] = "Naam en pad van het masterdocument" ;
     Text [ portuguese ] = "Nome e atalho do documento-mestre" ;
     Text[ chinese_simplified ] = "дё»жЋ§ж–‡жЎЈзљ„еђЌз§°е’Њи·Їеѕ„";
-    Text[ russian ] = "Имя и путь главного документа";
+    Text[ russian ] = "Имя и путь составного документа";
     Text[ polish ] = "Nazwa i њcieїka dokumentu gіуwnego";
     Text[ japanese ] = "гѓћг‚№г‚їгѓјгѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ®еђЌе‰ЌгЃЁгѓ‘г‚№";
     Text[ chinese_traditional ] = "дё»жЋ§ж–‡д»¶зљ„еђЌзЁ±е’Њи·Їеѕ‘";
     Text[ arabic ] = "ЗУг жгУЗС ЗбгУКдП ЗбФЗгб";
-    Text[ dutch ] = "Naam en pad van het master-document";
+    Text[ dutch ] = "Naam en pad van het masterdocument";
     Text[ chinese_simplified ] = "дё»жЋ§ж–‡жЎЈзљ„еђЌз§°е’Њи·Їеѕ„";
     Text[ greek ] = "јнпмб кбй дйбдспмЮ фпх кхсЯпх еггсЬцпх";
     Text[ korean ] = "л§€мЉ¤н„° л¬ём„њмќ мќґл¦„кіј кІЅлЎњ";
     Text[ turkish ] = "Ana belgenin adэ ve veri yolu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nom i camн del document mestre";
-    Text[ finnish ] = "Pддasiakirjan nimi ja polku";
+    Text[ finnish ] = "Perusasiakirjan nimi ja polku";
     Text[ thai ] = "аёЉаё·а№€аё­а№ЃаёҐаё°а№ЂаёЄа№‰аё™аё—аёІаё‡аё‚аё­аё‡а№Ђаё­аёЃаёЄаёІаёЈаё•а№‰аё™аё‰аёљаё±аёљ";
 };
 
@@ -1968,15 +1968,15 @@ String STR_LOAD_HTML_DOC
     Text [ italian ] = "Nome e percorso del documento HTML " ;
     Text [ spanish ] = "Nombre y ruta del documento HTML " ;
     Text [ french ] = "Nom et chemin du document HTML" ;
-    Text [ dutch ] = "Naam en pad van het HTML document" ;
+    Text [ dutch ] = "Naam en pad van het HTML-document" ;
     Text [ portuguese ] = "Nome e atalho do documento HTML" ;
     Text[ chinese_simplified ] = "HTML ж–‡жЎЈеђЌз§°е’Њи·Їеѕ„";
-    Text[ russian ] = "Имя и путь документа HTML";
+    Text[ russian ] = "Имя и путь HTML-документа.";
     Text[ polish ] = "Nazwa i њcieїka dokumentu HTML";
     Text[ japanese ] = "HTML еЅўејЏгѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ®еђЌе‰ЌгЃЁгѓ‘г‚№";
     Text[ chinese_traditional ] = "HTML ж–‡д»¶еђЌзЁ±е’Њи·Їеѕ‘";
     Text[ arabic ] = "ЗУг жгУЗС гУКдП   HTML";
-    Text[ dutch ] = "Naam en pad van het HTML document";
+    Text[ dutch ] = "Naam en pad van het HTML-document";
     Text[ chinese_simplified ] = "HTML ж–‡жЎЈеђЌз§°е’Њи·Їеѕ„";
     Text[ greek ] = "јнпмб кбй дйбдспмЮ фпх еггсЬцпх HTML";
     Text[ korean ] = "HTML л§€мЉ¤н„° л¬ём„њмќ мќґл¦„кіј кІЅлЎњ";
@@ -1997,7 +1997,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe sдhkцpostia lдhetettдessд." ;
+    MESSAGE [ finnish ] = "Virhe sдhkцpostia lдhetettдessд" ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
     MESSAGE [ swedish ] = "Fel vid sдndning av meddelande." ;
@@ -2006,7 +2006,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ english_us ] = "Error sending mail." ;
     MESSAGE[ chinese_simplified ] = "ењЁеЇ„еЏ‘з”µе­ђй‚®д»¶ж—¶еЏ‘з”џй”™иЇЇгЂ‚";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ russian ] = "Ошибка при отправлении сообщения.";
+    MESSAGE[ russian ] = "Ошибка отправки сообщения.";
     MESSAGE[ polish ] = "Bі№d przy wysyіaniu wiadomoњci.";
     MESSAGE[ japanese ] = "гѓЎгѓјгѓ«йЂЃдїЎгЃ®йљ›гЃ®г‚Ёгѓ©гѓј";
     MESSAGE[ chinese_traditional ] = "ењЁеЇ„з™јй›»е­ђйѓµд»¶ж™‚з™јз”џйЊЇиЄ¤гЂ‚";
@@ -2029,20 +2029,20 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ italian ] = "La password non corrisponde." ;
     MESSAGE [ portuguese_brazilian ] = "A senha n?o combina." ;
     MESSAGE [ portuguese ] = "A senha nгo й vбlida." ;
-    MESSAGE [ finnish ] = "Virheellinen salasana." ;
+    MESSAGE [ finnish ] = "Virheellinen salasana" ;
     MESSAGE [ danish ] = "Fejagtig adgangskode" ;
     MESSAGE [ french ] = "Mot de passe incorrect." ;
     MESSAGE [ swedish ] = "Felaktigt lцsenord." ;
-    MESSAGE [ dutch ] = "Wachtwoord niet correct." ;
+    MESSAGE [ dutch ] = "Wachtwoord niet juist." ;
     MESSAGE [ spanish ] = "Contraseсa errуnea" ;
     MESSAGE [ english_us ] = "Invalid password" ;
     MESSAGE[ chinese_simplified ] = "еЇ†з Ѓж— ж•€гЂ‚";
-    MESSAGE[ russian ] = "Ошибка в пароле.";
+    MESSAGE[ russian ] = "Неправильный пароль.";
     MESSAGE[ polish ] = "Nieprawidіowe hasіo.";
     MESSAGE[ japanese ] = "гѓ‘г‚№гѓЇгѓјгѓ‰гЃЊй–“йЃ•гЃЈгЃ¦гЃ„гЃѕгЃ™гЂ‚";
     MESSAGE[ chinese_traditional ] = "еЇ†зўјз„Ўж•€гЂ‚";
     MESSAGE[ arabic ] = "ЯбгЙ УС ЫнС ХЗбНЙ.";
-    MESSAGE[ dutch ] = "Wachtwoord niet correct.";
+    MESSAGE[ dutch ] = "Wachtwoord niet juist.";
     MESSAGE[ chinese_simplified ] = "еЇ†з Ѓж— ж•€гЂ‚";
     MESSAGE[ greek ] = "ЕуцблмЭнпт кщдйкьт рсьувбузт.";
     MESSAGE[ korean ] = "м•”нёк°Ђ мім§Ђ м•ЉмЉµл‹€л‹¤.";
@@ -2153,7 +2153,7 @@ String STR_FMT_STD
     TEXT [ spanish ] = "(ninguna)" ;
     TEXT [ english_us ] = "(none)" ;
     TEXT[ chinese_simplified ] = "(ж— )";
-    TEXT[ russian ] = "(без)";
+    TEXT[ russian ] = "(нет)";
     TEXT[ polish ] = "(brak)";
     TEXT[ japanese ] = "(гЃЄгЃ—)";
     TEXT[ chinese_traditional ] = "(з„Ў)";
@@ -2282,7 +2282,7 @@ String STR_STATSTR_SWGREAD
     Text [ english_us ] = "Loading document..." ;
     Text[ chinese_simplified ] = "иЈ…е…Ґж–‡жЎЈ...";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Документ загружается...";
+    Text[ russian ] = "Загрузка документа...";
     Text[ polish ] = "Јadowanie dokumentu...";
     Text[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€г‚’иЄ­гЃїиѕјг‚“гЃ§гЃ„гЃѕгЃ™...";
     Text[ chinese_traditional ] = "иј‰е…Ґж–‡д»¶...";
@@ -2313,7 +2313,7 @@ String STR_STATSTR_SWGWRITE
     Text [ english_us ] = "Saving document..." ;
     Text = "Dokument wird gespeichert..." ;
     Text[ chinese_simplified ] = "е­з›ж–‡жЎЈ...";
-    Text[ russian ] = "Документ сохраняется...";
+    Text[ russian ] = "Сохранение документа...";
     Text[ polish ] = "Zapisywanie dokumentu...";
     Text[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€г‚’дїќе­гЃ—гЃ¦гЃ„гЃѕгЃ™...";
     Text[ chinese_traditional ] = "ж­ЈењЁе„Іе­ж–‡д»¶...";
@@ -2345,7 +2345,7 @@ String STR_STATSTR_REFORMAT
     TEXT [ english_us ] = "Repagination..." ;
     TEXT[ chinese_simplified ] = "й‡Ќж–°е€¶дЅњж–‡жЎЈж јејЏ...";
     TEXT[ language_user1 ] = " ";
-    TEXT[ russian ] = "Новое форматирование документа...";
+    TEXT[ russian ] = "Разбивка на страницы...";
     TEXT[ polish ] = "Ponowne formatowanie dokumentu...";
     TEXT[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ®ж–°и¦Џж›ёејЏиЁ­е®љ...";
     TEXT[ chinese_traditional ] = "й‡Ќж–°иЈЅдЅњж–‡д»¶ж јејЏ...";
@@ -2376,7 +2376,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT [ english_us ] = "Formatting document automatically..." ;
     TEXT[ chinese_simplified ] = "ж–‡жЎЈи‡ЄеЉЁж јејЏеЊ–...";
     TEXT[ language_user1 ] = " ";
-    TEXT[ russian ] = "Автоформатирование документа...";
+    TEXT[ russian ] = "Автоматическое форматирование документа...";
     TEXT[ polish ] = "Automatycze formatowanie dokumentu...";
     TEXT[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ®г‚Єгѓјгѓ€гѓ•г‚©гѓјгѓћгѓѓгѓ€...";
     TEXT[ chinese_traditional ] = "з‰©д»¶и‡Єе‹•ж јејЏеЊ–...";
@@ -2406,7 +2406,7 @@ String STR_STATSTR_IMPGRF
     Text [ spanish ] = "Importando imagen..." ;
     Text [ english_us ] = "Importing graphics..." ;
     Text[ chinese_simplified ] = "иѕ“е…Ґе›ѕеЅў...";
-    Text[ russian ] = "Импорт графики...";
+    Text[ russian ] = "Импорт графических объектов...";
     Text[ polish ] = "Importowanie grafiki...";
     Text[ japanese ] = "е›ігЃ®г‚¤гѓігѓќгѓјгѓ€дё­...";
     Text[ chinese_traditional ] = "ж­ЈењЁеЊЇе…Ґењ–еЅў...";
@@ -2469,7 +2469,7 @@ String STR_STATSTR_FORMAT
     Text [ english_us ] = "Formatting..." ;
     Text[ chinese_simplified ] = "ж јејЏеЊ–...";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Формат...";
+    Text[ russian ] = "Форматирование...";
     Text[ polish ] = "Formatuj";
     Text[ japanese ] = "ж›ёејЏиЁ­е®љ...";
     Text[ chinese_traditional ] = "ж јејЏеЊ–...";
@@ -2491,7 +2491,7 @@ String STR_STATSTR_PRINT
     Text [ italian ] = "Stampa..." ;
     Text [ portuguese_brazilian ] = "Imprimindo..." ;
     Text [ portuguese ] = "A imprimir..." ;
-    Text [ finnish ] = "Tulostetaan" ;
+    Text [ finnish ] = "Tulostetaan..." ;
     Text [ danish ] = "Udskriver..." ;
     Text [ french ] = "Impression..." ;
     Text [ swedish ] = "Skriver ut ..." ;
@@ -2601,7 +2601,7 @@ String STR_STATSTR_SPELL
     Text[ turkish ] = "Yazэm denetimi...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'estа revisant la ortografia...";
-    Text[ finnish ] = "Oikeinkirjoituksen tarkistus";
+    Text[ finnish ] = "Oikeinkirjoituksen tarkistus...";
     Text[ thai ] = "аё•аёЈаё§аё€аёЄаё­аёљаёЃаёІаёЈаёЄаё°аёЃаё”...";
 };
 
@@ -2673,7 +2673,7 @@ String STR_STATSTR_TOX_UPDATE
     Text [ italian ] = "L'indice viene aggiornato..." ;
     Text [ spanish ] = "Actualizando directorio..." ;
     Text [ french ] = "Index en cours d'actualisation..." ;
-    Text [ dutch ] = "Index wordt geactualiseerd..." ;
+    Text [ dutch ] = "Index wordt bijgewerkt..." ;
     Text [ swedish ] = "Fцrteckning uppdateras..." ;
     Text [ danish ] = "Opdaterer indeks..." ;
     Text [ portuguese_brazilian ] = "Verzeichnis wird aktualisiert..." ;
@@ -2685,7 +2685,7 @@ String STR_STATSTR_TOX_UPDATE
     Text[ japanese ] = "зґўеј•гЃ®ж›ґж–°...";
     Text[ chinese_traditional ] = "ж›ґж–°з›®йЊ„...";
     Text[ arabic ] = "МЗСн КНПнЛ ЗбЭеСУ...";
-    Text[ dutch ] = "Index wordt geactualiseerd...";
+    Text[ dutch ] = "Index wordt bijgewerkt...";
     Text[ chinese_simplified ] = "ж›ґж–°з›®еЅ•...";
     Text[ greek ] = "ЕнзмЭсщуз кбфбльгпх...";
     Text[ korean ] = "мѓ‰мќё м—…лЌ°мќґнЉё...";
@@ -2710,7 +2710,7 @@ String STR_STATSTR_SUMMARY
     Text [ portuguese ] = "A criar Sumбrio..." ;
     Text[ chinese_simplified ] = "е€¶дЅњж‘и¦Ѓ...";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Идет создание просмотра документа...";
+    Text[ russian ] = "Создание абстрактного представления документа...";
     Text[ polish ] = "Tworzenie Abstraktu...";
     Text[ japanese ] = "и¦Ѓзґ„гЃ®дЅњж€ђ...";
     Text[ chinese_traditional ] = "иЈЅдЅњж‘и¦Ѓ...";
@@ -2731,7 +2731,7 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text [ English ] = "Adjust Objects..." ;
     Text[ english_us ] = "Adapt Objects...";
     Text[ portuguese ] = "Ajustar objectos...";
-    Text[ russian ] = "Выровнять объекты...";
+    Text[ russian ] = "Адаптировать объекты...";
     Text[ dutch ] = "Objecten aanpassen...";
     Text[ french ] = "Adapter les objets...";
     Text[ spanish ] = "Ajustar objetos...";
@@ -2766,20 +2766,20 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ italian ] = "L'annullamento di questa azione occorre molta memoria.\nVolete disattivare la possibilitа di annullare?" ;
     Message [ portuguese_brazilian ] = "Esta a??o requer muita mem?ia para desfazer.\nDeseja desativar a fun??o desfazer?" ;
     Message [ portuguese ] = "Para poder anular esta acзгo й necessбria muita memуria.\nDeseja cancelar esta funзгo?" ;
-    Message [ finnish ] = "Tдmдn toiminnon peruuttamiseen tarvitaan suuri mддrд muistia.\nHaluatko peruuttaa peruutuksen?" ;
+    Message [ finnish ] = "Tдmдn toiminnon kumoamiseen tarvitaan suuri mддrд muistia.\nHaluatko peruuttaa kumoamisen?" ;
     Message [ danish ] = "Denne handling krжver megen hukommelse til fortryd-funktionen\nVil du slе fortryd-funktionen fra?" ;
     Message [ french ] = "Cette action nйcessite beaucoup de mйmoire pour l'annulation (Undo).\nVoulez-vous dйsactiver l'annulation ?" ;
     Message [ swedish ] = "Den hдr еtgдrden krдver mycket minne fцr Еngra-funktionen.\nVill du stдnga av Еngra-funktionen?" ;
-    Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?" ;
+    Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?" ;
     Message [ spanish ] = "Esta acciуn necesita mucha memoria para la operaciуn de Deshacer.\nїDesea desactivar la opciуn de deshacer?" ;
     Message [ english_us ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
     Message[ chinese_simplified ] = "ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅйњЂи¦Ѓеѕ€е¤љзљ„е†…е­гЂ‚\nи¦ЃеЏ–ж¶€ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅпјџ";
-    Message[ russian ] = "Этому действию необходимо для отмены слишком много памяти.\nВы хотите отключить отмену?";
+    Message[ russian ] = "Требуется большой объем памяти для отмены этого действия.\nНе отменять?";
     Message[ polish ] = "Cofniкcie tej akcji wymaga duїej iloњci pamiкci.\nCzy chcesz przerwaж cofniкcie?";
     Message[ japanese ] = "гЃ“гЃ®г‚ўг‚Їг‚·гѓ§гѓіг‚’е…ѓгЃ«ж€»гЃ™гЃ«гЃЇйќћеёёгЃ«гЃџгЃЏгЃ•г‚“гЃ®гѓ‡г‚Јг‚№г‚Їе®№й‡ЏгЃЊеї…и¦ЃгЃ§гЃ™гЂ‚\nе…ѓгЃ«ж€»гЃ™гЃ®г‚’г‚­гѓЈгѓіг‚»гѓ«гЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Message[ chinese_traditional ] = "еѕ©еЋџеЉџиѓЅйњЂи¦Ѓеѕ€е¤љзљ„иЁж†¶й«”гЂ‚\nи¦Ѓй—њй–‰еѕ©еЋџеЉџиѓЅпјџ";
     Message[ arabic ] = "ЗбКСЗМЪ Ъд еРЗ ЗбЕМСЗБ нКШбИ РЗЯСЙ ЯИнСЙ МПЗр.\nеб КСнП ЕбЫЗБ ЗбКСЗМЪї";
-    Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
+    Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?";
     Message[ chinese_simplified ] = "ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅйњЂи¦Ѓеѕ€е¤љзљ„е†…е­гЂ‚\nи¦ЃеЏ–ж¶€ж’¤ж¶€е‘Ѕд»¤еЉџиѓЅпјџ";
     Message[ greek ] = "З екфЭлеуз бхфЮт фзт енЭсгейбт брбйфеЯ мегЬлз рпуьфзфб мнЮмзт.\nИЭлефе нб бкхсюуефе фзн бнбЯсеуз;";
     Message[ korean ] = "мќґ мћ‘лЏ™мќ„ м‹¤н–‰м·Ём†Њн•кё° мњ„н•ґм„њлЉ” лЊЂмљ©лџ‰мќ л©”лЄЁл¦¬к°Ђ мљ”кµ¬лђ©л‹€л‹¤.\nм‹¤н–‰м·Ём†ЊлҐј м·Ём†Њн•кІ мЉµл‹€к№Њ?";
@@ -2846,7 +2846,7 @@ String STR_GRAPHIC_DEFNAME
     TEXT [ spanish ] = "Imagen" ;
     TEXT [ english_us ] = "Graphic" ;
     TEXT[ chinese_simplified ] = "е›ѕеЅў";
-    TEXT[ russian ] = "Рисунок";
+    TEXT[ russian ] = "Графический объект";
     TEXT[ polish ] = "Grafika";
     TEXT[ japanese ] = "е›і";
     TEXT[ chinese_traditional ] = "ењ–еЅў";
@@ -2908,7 +2908,7 @@ String STR_FRAME_DEFNAME
     Text [ spanish ] = "Marco" ;
     Text [ english_us ] = "Frame" ;
     Text[ chinese_simplified ] = "жЎ†";
-    Text[ russian ] = "Рамка";
+    Text[ russian ] = "Врезка";
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "жћ ";
     Text[ chinese_traditional ] = "ж–‡е­—ж–№еЎЉ";
@@ -2930,7 +2930,7 @@ String STR_REGION_DEFNAME
     Text [ italian ] = "Sezione" ;
     Text [ portuguese_brazilian ] = "se??o" ;
     Text [ portuguese ] = "Secзгo" ;
-    Text [ finnish ] = "Osio" ;
+    Text [ finnish ] = "Osa" ;
     Text [ danish ] = "Omrеde" ;
     Text [ french ] = "Section" ;
     Text [ swedish ] = "Omrеde" ;
@@ -2938,7 +2938,7 @@ String STR_REGION_DEFNAME
     Text [ spanish ] = "Бrea" ;
     Text [ english_us ] = "Section" ;
     Text[ chinese_simplified ] = "еЊєеџџ";
-    Text[ russian ] = "Область";
+    Text[ russian ] = "Раздел";
     Text[ polish ] = "Obszar";
     Text[ japanese ] = "зЇ„е›І";
     Text[ chinese_traditional ] = "еЌЂеџџ";
@@ -3031,7 +3031,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE [ spanish ] = "Usted tiene muchos datos en el portapapeles.\nїDesea mantener disponible el contenido del portapapeles para otras aplicaciones?" ;
     MESSAGE[ chinese_simplified ] = "ж‚Ёе°†дёЂдёЄиѕѓе¤§зљ„ж•°жЌ®е¤Ќе€¶е€°е‰ЄиґґжќїгЂ‚\nж‚Ёжѓіи¦Ѓи®©е…¶д»–зљ„еє”з”ЁзЁ‹еєЏд№џиѓЅе¤џдЅїз”Ёиї™дёЄж•°жЌ®еђ—пјџ";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ russian ] = "Вы сохранили большее количество данных в буфере обмена.\nДолжно ли содержимое буфера обмена быть доступным для других приложений?";
+    MESSAGE[ russian ] = "Вы сохранили большой объем данных в буфере обмена.\nСделать доступным содержимое буфера обмена для других приложений?";
     MESSAGE[ polish ] = "W schowku zostaіy umieszczone wiкksze iloњci danych.\nCzy treњж tych danych ma zostaж udostкpniona innym aplikacjom?";
     MESSAGE[ japanese ] = "г‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ«гЃЇгЃџгЃЏгЃ•г‚“гЃ®гѓ‡гѓјг‚їгЃЊдїќе­гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nг‚ЇгѓЄгѓѓгѓ—гѓњгѓјгѓ‰гЃ®е†…е®№г‚’д»–гЃ®г‚ўгѓ—гѓЄг‚±гѓјг‚·гѓ§гѓігЃ«г‚‚дЅїз”ЁгЃ—гЃѕгЃ™гЃ‹гЂ‚";
     MESSAGE[ chinese_traditional ] = "ж‚Ёе·Із¶“е°‡дёЂеЂ‹ијѓе¤§зљ„иі‡ж–™и¤‡иЈЅе€°е‰ЄиІјз°їгЂ‚\nж‚Ёжѓіи¦Ѓи®“е…¶д»–зљ„ж‡‰з”ЁзЁ‹еєЏд№џиѓЅе¤ дЅїз”ЁйЂ™еЂ‹иі‡ж–™пјџ";
@@ -3056,18 +3056,18 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message [ italian ] = "La conversione nel formato HTML \npuт causare perdita di informazioni \nSalvare il documento?" ;
     Message [ spanish ] = "La transformaciуn en el formato HTML \npuede causar la pйrdida de informaciуn. \nїDesea guardar el documento?" ;
     Message [ french ] = "La conversion au format HTML\npeut engendrer une perte d'informations. \nSouhaitez-vous enregistrer le document ?" ;
-    Message [ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?" ;
+    Message [ dutch ] = "De conversie naar de HTML-indeling \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?" ;
     Message [ swedish ] = "Omvandling till HTML-format \nkan fцrorsaka informationsfцrlust.\nSkall dokumentet sparas?" ;
     Message [ danish ] = "Konvertering til HTML-format\nkan medfшre informationstab.\nVil du gemme dokumentet?" ;
     Message [ portuguese_brazilian ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nM?hten Sie das Dokument speichern?" ;
     Message [ portuguese ] = "A conversгo para o formato HTML pode \nprovocar perda de informaзгo. \nGuardar o documento?" ;
     Message[ chinese_simplified ] = "ж–‡д»¶иЅ¬жЌўж€ђ HTML ж јејЏ\nеЏЇиѓЅдјљеј•иµ·иµ„ж–™жЌџе¤±гЂ‚\nж‚Ёи¦Ѓе­з›иї™дёЄж–‡д»¶еђ—?";
-    Message[ russian ] = "Переход в формат HTML \nможет привести к потере информации. \n Вы хотите сохранить этот документ?";
+    Message[ russian ] = "Переход в формат HTML \nможет привести к потере информации. \nСохранить этот документ?";
     Message[ polish ] = "Konwersja na format HTML \nmoїe spowodowaж utratк informacji. \nCzy chcesz zapisaж dokument?";
     Message[ japanese ] = "HTML еЅўејЏгЃ«е¤‰жЏ›гЃ™г‚‹гЃЁ\nжѓ…е ±гЃЊе¤±г‚Џг‚Њг‚‹еЏЇиѓЅжЂ§гЃЊгЃ‚г‚ЉгЃѕгЃ™гЂ‚\nгЃ“гЃ®ж–‡ж›ёг‚’дїќе­гЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Message[ chinese_traditional ] = "жЄ”жЎ€иЅ‰жЏ›ж€ђ HTML ж јејЏ\nеЏЇиѓЅжњѓеј•иµ·иі‡ж–™жђЌе¤±гЂ‚\nж‚Ёи¦Ѓе„Іе­йЂ™еЂ‹жЄ”жЎ€пјџ";
     Message[ arabic ] = "ЗбКНжб Ебм КдУнЮ HTML \nнгЯд Гд нДПн Ебм ЭЮПЗд ИЪЦ ЗбгЪбжгЗК. \nеб КСнП НЭЩ ЗбгУКдПї";
-    Message[ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?";
+    Message[ dutch ] = "De conversie naar de HTML-indeling \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?";
     Message[ chinese_simplified ] = "ж–‡д»¶иЅ¬жЌўж€ђ HTML ж јејЏ\nеЏЇиѓЅдјљеј•иµ·иµ„ж–™жЌџе¤±гЂ‚\nж‚Ёи¦Ѓе­з›иї™дёЄж–‡д»¶еђ—?";
     Message[ greek ] = "З мефбфспрЮ уе мпсцЮ HTML \nмрпсеЯ нб рспкблЭуей брюлейет рлзспцпсйюн. \nИЭлефе нб брпизкеэуефе фп Эггсбцп;";
     Message[ korean ] = "HTML м„њм‹ќмњјлЎњ ліЂн™мќЂ \nм •ліґ м†ђм‹¤мќ м›ђмќёмќґ лђ©л‹€л‹¤. \nл¬ём„њлҐј м ЂмћҐн•кІ мЉµл‹€к№Њ?";
@@ -3085,12 +3085,12 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE [ English ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?" ;
     MESSAGE[ english_us ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
     MESSAGE[ portuguese ] = "Sу й possнvel ver o texto-fonte se o documento for guardado em formato HTML.\nGuardar o documento em formato HTML?";
-    MESSAGE[ russian ] = "Код источника отображается только, если документ сохранен в формате HTML.\nСохранить документ в формате HTML?";
+    MESSAGE[ russian ] = "Исходный код показывается, если документ сохранен в формате HTML.\nСохранить документ в формате HTML?";
     MESSAGE[ greek ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
-    MESSAGE[ dutch ] = "De brontekst kan alleen worden weergegeven als het document in HTML-formaat is opgeslagen.\nWilt u het document nu in HTML-formaat opslaan?";
+    MESSAGE[ dutch ] = "De brontekst kan alleen worden weergegeven als het document in de HTML-indeling is opgeslagen.\nWilt u het document nu in de HTML-indeling opslaan?";
     MESSAGE[ french ] = "Le texte source ne peut кtre affichй que si le document a йtй enregistrй au format HTML.\nVoulez-vous enregistrer le document au format HTML ?";
     MESSAGE[ spanish ] = "Sуlo se puede mostrar el texto fuente si el documento estб guardado en formato HTML.\nїDesea guardar ahora el documento en formato HTML?";
-    MESSAGE[ finnish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ finnish ] = "Lдhdekoodi voidaan nдyttдд vain, jos asiakirja on tallennettu HTML-muodossa.\nTallennetaanko asiakirja HTML-muotoon?";
     MESSAGE[ italian ] = "La sorgente testo и visibile solo se il documento и stato salvato nel formato HTML./nVolete salvare il documento nel formato HTML?";
     MESSAGE[ danish ] = "Kildetekstvisningen kan kun vises, hvis dokumentet er gemt i HTML-format.\nVil du gemme dokumentet i HTML-format nu?";
     MESSAGE[ swedish ] = "Kдlltextvyn gеr inte att visa nдr dokumentet har sparats i HTML-format.\nVill du spara dokumentet i HTML-format nu?";
@@ -3117,15 +3117,15 @@ String STR_ABSTRACT_TITLE
     Text [ italian ] = "Sunto: " ;
     Text [ spanish ] = "Extracto:  " ;
     Text [ french ] = "Synthиse :  " ;
-    Text [ dutch ] = "Extract :   " ;
+    Text [ dutch ] = "Overzicht:" ;
     Text[ chinese_simplified ] = "ж‘и¦Ѓпјљ ";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Просмотр :  ";
+    Text[ russian ] = "Абстрактное представление:  ";
     Text[ polish ] = "Abstrakt :   ";
     Text[ japanese ] = "и¦Ѓзґ„ : ";
     Text[ chinese_traditional ] = "ж‘и¦Ѓпјљ ";
     Text[ arabic ] = "ЗбКбОнХ: ";
-    Text[ dutch ] = "Extract :   ";
+    Text[ dutch ] = "Overzicht:";
     Text[ chinese_simplified ] = "ж‘и¦Ѓпјљ ";
     Text[ greek ] = "Abstract: ";
     Text[ korean ] = "м¶”мѓЃ: ";
@@ -3149,7 +3149,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text [ dutch ] = "Sjabloon" ;
     Text [ portuguese ] = "Estilo" ;
     Text[ chinese_simplified ] = "ж ·ејЏ";
-    Text[ russian ] = "Шаблон";
+    Text[ russian ] = "Стиль";
     Text[ polish ] = "Szablon";
     Text[ japanese ] = "г‚№г‚їг‚¤гѓ«";
     Text[ chinese_traditional ] = "жЁЈејЏ";
@@ -3175,15 +3175,15 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ italian ] = "Modello: " ;
     Text [ spanish ] = "Estilos: " ;
     Text [ french ] = "Styles : " ;
-    Text [ dutch ] = "Actuele sjabloon  " ;
+    Text [ dutch ] = "Huidige sjabloon" ;
     Text [ portuguese ] = "Modelo actual: " ;
     Text[ chinese_simplified ] = "ж јејЏж ·ејЏпјљ";
-    Text[ russian ] = "Текущий шаблон:  ";
+    Text[ russian ] = "Текущий стиль:  ";
     Text[ polish ] = "Aktualny szablon  ";
     Text[ japanese ] = "г‚№г‚їг‚¤гѓ«: ";
     Text[ chinese_traditional ] = "ж јејЏзЇ„жњ¬пјљ ";
     Text[ arabic ] = "ЗбдгШ ЗбНЗбн: ";
-    Text[ dutch ] = "Actuele sjabloon  ";
+    Text[ dutch ] = "Huidige sjabloon";
     Text[ chinese_simplified ] = "ж јејЏж ·ејЏпјљ";
     Text[ greek ] = "ФсЭчщн рсьфхрп:  ";
     Text[ korean ] = "мЉ¤нѓЂмќј: ";
@@ -3205,7 +3205,7 @@ String STR_PAGEOFFSET
     Text [ italian ] = "Numero di pagina: " ;
     Text [ spanish ] = "Nъmero de pбgina:  " ;
     Text [ french ] = "Numйro de page : " ;
-    Text [ dutch ] = "Paginanummer  " ;
+    Text [ dutch ] = "Paginanummer" ;
     Text [ portuguese ] = "Nъmero de pбgina: " ;
     Text[ chinese_simplified ] = "йЎµз Ѓпјљ ";
     Text[ russian ] = "Номер страницы:  ";
@@ -3213,7 +3213,7 @@ String STR_PAGEOFFSET
     Text[ japanese ] = "гѓљгѓјг‚ёз•ЄеЏ·: ";
     Text[ chinese_traditional ] = "й Ѓзўјпјљ ";
     Text[ arabic ] = "СЮг ЗбХЭНЙ: ";
-    Text[ dutch ] = "Paginanummer  ";
+    Text[ dutch ] = "Paginanummer";
     Text[ chinese_simplified ] = "йЎµз Ѓпјљ ";
     Text[ greek ] = "Бсйимьт уелЯдбт: ";
     Text[ korean ] = "нЋмќґм§Ђ лІ€нё: ";
@@ -3231,7 +3231,7 @@ String STR_PAGEBREAK
     Text [ italian ] = "Interrompi prima della pagina nuova" ;
     Text [ portuguese_brazilian ] = "Interromper antes de nova p?gina" ;
     Text [ portuguese ] = "Quebra antes de nova pбgina" ;
-    Text [ finnish ] = "Rivinvaihto ennen uutta sivua" ;
+    Text [ finnish ] = "Vaihto ennen uutta sivua" ;
     Text [ danish ] = "Skift fшr ny side" ;
     Text [ french ] = "Saut avant nouvelle page" ;
     Text [ swedish ] = "Bryt fцre ny sida" ;
@@ -3264,7 +3264,7 @@ String STR_WESTERN_FONT
     Text[ dutch ] = "Westelijke tekst:";
     Text[ french ] = "Texte occidental : ";
     Text[ spanish ] = "Texto occidental: ";
-    Text[ finnish ] = "Western text:";
+    Text[ finnish ] = "Lдnsimainen teksti: ";
     Text[ italian ] = "Testo occidentale: ";
     Text[ danish ] = "Vestlig tekst: ";
     Text[ swedish ] = "Vдstlig text:";
@@ -3287,10 +3287,10 @@ String STR_CJK_FONT
     Text[ portuguese ] = "Texto asiбtico:";
     Text[ russian ] = "Азиатский текст:";
     Text[ greek ] = "Asian text:";
-    Text[ dutch ] = "Asiatische tekst:";
+    Text[ dutch ] = "Aziatische tekst:";
     Text[ french ] = "Texte asiatique : ";
     Text[ spanish ] = "Texto asiбtico: ";
-    Text[ finnish ] = "Asian text:";
+    Text[ finnish ] = "Aasialainen teksti: ";
     Text[ italian ] = "Testo asiatico: ";
     Text[ danish ] = "Asiatisk tekst: ";
     Text[ swedish ] = "Asiatisk text:";
