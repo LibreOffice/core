@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,7 +1301,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     {
                         // Ist der ::com::sun::star::drawing::Layer gelocked, so müssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetPageViewPvNum(0);
-                        bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
+                        if (pPV != NULL)
+                            bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
                     }
                     if (bLayerLocked)
                         rSet.DisableItem( nWhich );
