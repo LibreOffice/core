@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:41:25 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
             jobject aThread = pEnv->CallStaticObjectMethod(aClass, aMethod1);
             jmethodID aMethod2 = pEnv->GetMethodID(
                 aClass, "setContextClassLoader", "(Ljava/lang/ClassLoader;)V");
-            pEnv->CallObjectMethod(aThread, aMethod2,
-                                   m_aInitialContextClassLoader);
+            pEnv->CallVoidMethod(aThread, aMethod2,
+                                 m_aInitialContextClassLoader);
             OSL_ENSURE(!pEnv->ExceptionCheck(), "JNI: exception occured");
             pEnv->ExceptionClear();
         }
