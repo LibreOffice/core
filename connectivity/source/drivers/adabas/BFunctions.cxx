@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BFunctions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-16 08:53:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-16 13:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     {
 
 #if ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
-        _rPath = ::rtl::OUString::createFromAscii(pPath);
+        _rPath = ::rtl::OUString(pPath);
         _rPath += ::rtl::OUString::createFromAscii("/lib/");
 #endif
     }
