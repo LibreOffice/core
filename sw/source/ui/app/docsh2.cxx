@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-19 13:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,19 +1271,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             : pWrtShell->GenerateGlobalDoc( aFileName, pSplitColl )) )
                     {
                         bDone = TRUE;
-                        DoClose();
+
                         SfxStringItem aName( SID_FILE_NAME, aFileName );
                         SfxStringItem aReferer( SID_REFERER, aEmptyStr );
 
-                        SfxViewShell* pViewShell = GetView()
-                                                ? (SfxViewShell*)GetView()
-                                                : SfxViewShell::Current();
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SfxViewFrame::Current()->GetDispatcher()->Execute(
                                 SID_OPENDOC,
-                                SFX_CALLMODE_SYNCHRON,
+                                SFX_CALLMODE_ASYNCHRON,
                                 &aName,
                                 &aReferer,
                                 0L );
+
+                        DoClose();
                     }
                     else if( !rReq.IsAPI() )
                     {
@@ -1673,6 +1672,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/06 13:31:28  jp
+    should changes: don't use IniManager
+
     Revision 1.2  2000/09/26 13:33:18  jp
     SFXDISPATHER removed
 
