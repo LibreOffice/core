@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:36:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ using namespace ::svxform;
 #include <comphelper/property.hxx>
 #endif
 
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::container::XChild;
 
 TYPEINIT1(FmFormPage, SdrPage);
 
@@ -189,73 +192,6 @@ FmFormPage::~FmFormPage()
 }
 
 //------------------------------------------------------------------
-//BFS01void FmFormPage::WriteData(SvStream& rOut) const
-//BFS01{
-//BFS01#ifndef SVX_LIGHT
-//BFS01 {
-//BFS01     {
-//BFS01         SdrDownCompat aVCCompat1( rOut, STREAM_WRITE );
-//BFS01         sal_uInt16 n = 0;
-//BFS01         rOut << n;
-//BFS01     }
-//BFS01     SdrPage::WriteData( rOut );
-//BFS01     SdrDownCompat aVCCompat2( rOut, STREAM_WRITE );
-//BFS01
-//BFS01     rOut << ByteString(aPageName, gsl_getSystemTextEncoding());
-//BFS01     rOut << (sal_uInt32)0x11051967;
-//BFS01     rOut << (sal_uInt32)0x19670511;
-//BFS01     sal_uInt16 nVer = 1;
-//BFS01     rOut << nVer;
-//BFS01     {
-//BFS01         SdrDownCompat aVCCompat3( rOut, STREAM_WRITE);
-//BFS01         sal_uInt32 nFormCount = 0;
-//BFS01         rOut << nFormCount;
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 // dont use the flag in that way: if (rOut.GetVersion() >= SOFFICE_FILEFORMAT_40)
-//BFS01 if (rOut.GetVersion() >= 3830)
-//BFS01 {
-//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01     pImpl->WriteData(rOut);
-//BFS01 }
-//BFS01#else
-//BFS01 DBG_ERROR( "FmFormPage::WriteData: not to be called in SVX_LIGHT version!" );
-//BFS01#endif
-//BFS01}
-
-//------------------------------------------------------------------
-//BFS01void FmFormPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-//BFS01{
-//BFS01 {
-//BFS01     {
-//BFS01         SdrDownCompat aVCCompat1( rIn, STREAM_READ );
-//BFS01     }
-//BFS01     SdrPage::ReadData( rHead, rIn );
-//BFS01     {
-//BFS01         SdrDownCompat aVCCompat2( rIn, STREAM_READ );
-//BFS01         ByteString aByteStringName;
-//BFS01         rIn >> aByteStringName;
-//BFS01         aPageName = String(aByteStringName, gsl_getSystemTextEncoding());
-//BFS01     }
-//BFS01 }
-//BFS01
-//BFS01 // dont use the flag in that way: if (rIn.GetVersion() >= SOFFICE_FILEFORMAT_40)
-//BFS01 if (rIn.GetVersion() >= 3830 && rHead.GetVersion() >=14)
-//BFS01 {
-//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01#ifndef SVX_LIGHT
-//BFS01     DBG_ASSERT( aCompat.GetBytesLeft(), "FmFormPage::ReadData: invalid file format!" );
-//BFS01     if ( aCompat.GetBytesLeft() )
-//BFS01         pImpl->ReadData(rHead, rIn);
-//BFS01     // some old (corrupted) versions between 511 and 554 wrote an empty block here - and some of these documents
-//BFS01     // are still out there
-//BFS01     // So we allow for such an empty block ...
-//BFS01#endif
-//BFS01 }
-//BFS01}
-
-//------------------------------------------------------------------
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
     /* #35055# */
@@ -269,28 +205,22 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 
 
     /* #35055# */
-    if(pOldModel != pNewModel)
+    if ( ( pOldModel != pNewModel ) && pImpl )
     {
         try
         {
-            if(pImpl == NULL  ||  !pImpl->xForms.is())
+            if ( pImpl->m_xForms.is() )
             {
-                pImpl->Init();
-            }
-            else
-            {
-                // we don't want to call "pImpl->Init()" directly, because it creates
-                // a new Forms collection -- we want to keep the current collection,
-                // just reset the model with which it's associated.
-
-                FmFormModel* pDrawModel = (FmFormModel*) GetModel();
-                SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-                if( pObjShell )
-                    pImpl->xModel = pObjShell->GetModel();
-
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xAsChild(pImpl->xForms, ::com::sun::star::uno::UNO_QUERY);
-                if (xAsChild.is())
-                    xAsChild->setParent( pImpl->xModel );
+                // we want to keep the current collection, just reset the model
+                // with which it's associated.
+                Reference< XChild > xAsChild( pImpl->m_xForms, UNO_QUERY );
+                if ( xAsChild.is() )
+                {
+                    FmFormModel* pDrawModel = (FmFormModel*) GetModel();
+                    SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
+                    if ( pObjShell )
+                        xAsChild->setParent( pObjShell->GetModel() );
+                }
             }
         }
         catch( ::com::sun::star::uno::Exception ex )
@@ -345,10 +275,10 @@ sal_Bool FmFormPage::EnsureFormObjectEnv(const SdrObject* _pObj)
 #endif
 
 //------------------------------------------------------------------
-const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms() const
+const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
 #ifndef SVX_LIGHT
-    return pImpl->getForms();
+    return pImpl->getForms( _bForceCreate );
 #else
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
     return aRef;
