@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: fs $ $Date: 2002-10-25 13:21:53 $
+#   last change: $Author: obo $ $Date: 2003-10-21 08:40:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,15 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+# UNO header files
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(UNOUCROUT)
+
+UNOTYPES=\
+    drafts.com.sun.star.form.XBindableValue \
+    drafts.com.sun.star.form.XListEntrySource \
+    drafts.com.sun.star.form.XListEntrySink
+
 SLOFILES =	\
         $(SLO)$/formstyles.obj \
         $(SLO)$/officeforms.obj \
@@ -98,7 +107,8 @@ SLOFILES =	\
         $(SLO)$/formenums.obj \
         $(SLO)$/formsimp.obj \
         $(SLO)$/strings.obj \
-        $(SLO)$/logging.obj
+        $(SLO)$/logging.obj \
+        $(SLO)$/formcellbinding.obj \
 
 # --- Tagets -------------------------------------------------------
 
