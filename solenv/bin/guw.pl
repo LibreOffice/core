@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 15:45:02 $
+#   last change: $Author: hjs $ $Date: 2002-08-22 13:32:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,13 +181,57 @@ sub replace_cyg {
           if ( defined $debug ) { print(STDERR "Converted line:${para}:\n" );};
         } # else
       } # foreach loop
-  }
+}
 
+#----------------------------------------------------------
+# Function name: replace_cyg_env
+# Description:   Process selected environment variables and change
+#                them to Windows Format.
+# Arguments:     -
+# Return value:  -
+#----------------------------------------------------------
+sub replace_cyg_env {
+    @affected_vars = (
+        'SOLAR_VERSION',
+        'SOLARVERSION',
+        'SOLARVER',
+        'SRC_ROOT',
+        'LOCALINI',
+        'GLOBALINI',
+        'SOLARENV',
+        'STAR_INSTPATH',
+        'STAR_SOLARPATH',
+        'STAR_PACKMISC',
+        'STAR_SOLARENVPATH',
+        'STAR_INITROOT',
+        'STAR_STANDLST'
+    );
+    foreach my $one_var ( @affected_vars )
+    {
+        my $this_var = $ENV{ $one_var };
+        if ( defined $this_var )
+        {
+            if ( defined $debug ) { print(STDERR "ENV $one_var before: ".$ENV{ $one_var}."\n" );};
+            $ENV{ $one_var } = WinFormat( $this_var );
+            if ( defined $debug ) { print(STDERR "ENV $one_var after : ".$ENV{ $one_var}."\n" );};
+        }
+    }
+
+}
 #---------------------------------------------------------------------------
 # main
 @params = @ARGV;
 
 $command = shift(@params);
+while ( $command =~ /^-/ )
+{
+    if ( $command eq "-env" )
+    {
+        replace_cyg_env;
+    }
+
+    $command = shift(@params);
+}
 print( STDERR "Command: $command\n" );
 
 replace_cyg(\@params);
