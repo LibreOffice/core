@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:44:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include "globstr.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "scresid.hxx"
+#include "sc.hrc"
 
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
@@ -92,6 +94,7 @@
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 using namespace com::sun::star;
@@ -99,12 +102,14 @@ using namespace com::sun::star;
 // -----------------------------------------------------------------------
 
 //! move to a header file
+//! use names from unonames.hxx?
 #define DP_PROP_ORIENTATION         "Orientation"
 #define DP_PROP_POSITION            "Position"
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
 #define DP_PROP_DATADESCR           "DataDescription"
 #define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
 #define DP_PROP_NUMBERFORMAT        "NumberFormat"
+#define DP_PROP_FILTER              "Filter"
 
 // -----------------------------------------------------------------------
 
@@ -308,6 +313,42 @@ BOOL lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
     return TRUE;    // no member data -> empty
 }
 
+uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Reference<beans::XPropertySet>& xDimProp )
+{
+    uno::Sequence<sheet::MemberResult> aRet;
+    if ( xDimProp.is() )
+    {
+        try
+        {
+            //! merge with ScDPDimension::setPropertyValue?
+
+            uno::Any aValue = xDimProp->getPropertyValue( rtl::OUString::createFromAscii(DP_PROP_FILTER) );
+
+            uno::Sequence<sheet::TableFilterField> aSeq;
+            if (aValue >>= aSeq)
+            {
+                if ( aSeq.getLength() == 1 )
+                {
+                    const sheet::TableFilterField& rField = aSeq[0];
+                    if ( rField.Field == 0 && rField.Operator == sheet::FilterOperator_EQUAL && !rField.IsNumeric )
+                    {
+                        rtl::OUString aSelectedPage( rField.StringValue );
+                        //! different name/caption string?
+                        sheet::MemberResult aResult( aSelectedPage, aSelectedPage, 0 );
+                        aRet = uno::Sequence<sheet::MemberResult>( &aResult, 1 );
+                    }
+                }
+                // else return empty sequence
+            }
+        }
+        catch ( uno::Exception& )
+        {
+            // recent addition - allow source to not handle it (no error)
+        }
+    }
+    return aRet;
+}
+
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
                                 const ScAddress& rPos, BOOL bFilter ) :
     pDoc( pD ),
@@ -415,10 +456,10 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].nHier   = nHierarchy;
                                         pPageFields[nPageFieldCount].nLevel  = nLev;
                                         pPageFields[nPageFieldCount].nDimPos = nDimPos;
-                                        pPageFields[nPageFieldCount].aResult = xLevRes->getResults();
+                                        pPageFields[nPageFieldCount].aResult = lcl_GetSelectedPageAsResult(xDimProp);
                                         pPageFields[nPageFieldCount].aCaption= aCaption;
-                                        if (!lcl_MemberEmpty(pPageFields[nPageFieldCount].aResult))
-                                            ++nPageFieldCount;
+                                        // no check on results for page fields
+                                        ++nPageFieldCount;
                                         break;
                                 }
 
@@ -571,10 +612,11 @@ void ScDPOutput::HeaderCell( USHORT nCol, USHORT nRow, USHORT nTab,
     }
 }
 
-void ScDPOutput::FieldCell( USHORT nCol, USHORT nRow, USHORT nTab, const String& rCaption )
+void ScDPOutput::FieldCell( USHORT nCol, USHORT nRow, USHORT nTab, const String& rCaption, BOOL bFrame )
 {
     pDoc->SetString( nCol, nRow, nTab, rCaption );
-    lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
+    if (bFrame)
+        lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
     //  Button
     pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr(SC_MF_BUTTON) );
@@ -603,8 +645,12 @@ void ScDPOutput::CalcSizes()
         //  calculate output positions and sizes
 
         long nPageSize = 0;     //! use page fields!
-        if ( bDoFilter )
-            nPageSize = 2;      //  filter button in page field row
+        if ( bDoFilter || nPageFieldCount )
+        {
+            nPageSize += nPageFieldCount + 1;   // plus one empty row
+            if ( bDoFilter )
+                ++nPageSize;        //  filter button above the page fields
+        }
 
         if ( aStartPos.Col() + nRowFieldCount + nColCount - 1 > MAXCOL ||
              aStartPos.Row() + nPageSize + nHeaderSize + nColFieldCount + nRowCount > MAXROW )
@@ -622,6 +668,9 @@ void ScDPOutput::CalcSizes()
             nTabEndCol = nDataStartCol + (USHORT)nColCount - 1;
         else
             nTabEndCol = nDataStartCol;     // single column will remain empty
+        // if page fields are involved, include the page selection cells
+        if ( nPageFieldCount > 0 && nTabEndCol < nTabStartCol + 1 )
+            nTabEndCol = nTabStartCol + 1;
         if ( nRowCount > 0 )
             nTabEndRow = nDataStartRow + (USHORT)nRowCount - 1;
         else
@@ -649,6 +698,29 @@ void ScDPOutput::Output()
 
     if ( bDoFilter )
         lcl_DoFilterButton( pDoc, aStartPos.Col(), aStartPos.Row(), nTab );
+
+    //  output page fields:
+
+    for (nField=0; nField<nPageFieldCount; nField++)
+    {
+        USHORT nHdrCol = aStartPos.Col();
+        USHORT nHdrRow = aStartPos.Row() + (USHORT)nField + ( bDoFilter ? 1 : 0 );
+        // draw without frame for consistency with filter button:
+        FieldCell( nHdrCol, nHdrRow, nTab, pPageFields[nField].aCaption, FALSE );
+        USHORT nFldCol = nHdrCol + 1;
+
+        String aPageValue;
+        if ( pPageFields[nField].aResult.getLength() == 1 )
+            aPageValue = pPageFields[nField].aResult[0].Caption;
+        else
+            aPageValue = String( ScResId( SCSTR_ALL ) );        //! separate string?
+
+        pDoc->SetString( nFldCol, nHdrRow, nTab, aPageValue );
+
+        lcl_SetFrame( pDoc,nTab, nFldCol,nHdrRow, nFldCol,nHdrRow, 20 );
+        pDoc->ApplyAttr( nFldCol, nHdrRow, nTab, ScMergeFlagAttr(SC_MF_AUTO) );
+        //! which style?
+    }
 
     //  data description
     //  (may get overwritten by first row field)
@@ -782,6 +854,11 @@ BOOL ScDPOutput::HasError()
     return bSizeOverflow || bResultsError;
 }
 
+long ScDPOutput::GetHeaderRows()
+{
+    return nPageFieldCount + ( bDoFilter ? 1 : 0 );
+}
+
 //
 //      Methods to find specific parts of the table
 //
@@ -861,7 +938,7 @@ BOOL ScDPOutput::IsFilterButton( const ScAddress& rPos )
     return ( nCol == aStartPos.Col() && nRow == aStartPos.Row() );
 }
 
-long ScDPOutput::GetHeaderDim( const ScAddress& rPos )
+long ScDPOutput::GetHeaderDim( const ScAddress& rPos, USHORT& rOrient )
 {
     USHORT nCol = rPos.Col();
     USHORT nRow = rPos.Row();
@@ -877,6 +954,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos )
 
     if ( nRow == nTabStartRow && nCol >= nDataStartCol && nCol < nDataStartCol + nColFieldCount )
     {
+        rOrient = sheet::DataPilotFieldOrientation_COLUMN;
         long nField = nCol - nDataStartCol;
         return pColFields[nField].nDim;
     }
@@ -885,13 +963,24 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos )
 
     if ( nRow+1 == nDataStartRow && nCol >= nTabStartCol == nCol < nTabStartCol + nRowFieldCount )
     {
+        rOrient = sheet::DataPilotFieldOrientation_ROW;
         long nField = nCol - nTabStartCol;
         return pRowFields[nField].nDim;
     }
 
-    //! page fields
+    //  test for page field
+
+    USHORT nPageStartRow = aStartPos.Row() + ( bDoFilter ? 1 : 0 );
+    if ( nCol == aStartPos.Col() && nRow >= nPageStartRow && nRow < nPageStartRow + nPageFieldCount )
+    {
+        rOrient = sheet::DataPilotFieldOrientation_PAGE;
+        long nField = nRow - nPageStartRow;
+        return pPageFields[nField].nDim;
+    }
+
     //! single data field (?)
 
+    rOrient = sheet::DataPilotFieldOrientation_HIDDEN;
     return -1;      // invalid
 }
 
@@ -1016,6 +1105,62 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
         }
 
         rOrient = sheet::DataPilotFieldOrientation_ROW;
+        rDimPos = nField;                       //!...
+        return TRUE;
+    }
+
+    //  test for page fields
+
+    USHORT nPageStartRow = aStartPos.Row() + ( bDoFilter ? 1 : 0 );
+    if ( nCol >= aStartPos.Col() && nCol <= nTabEndCol &&
+            nRow + 1 >= nPageStartRow && nRow < nPageStartRow + nPageFieldCount )
+    {
+        long nField = nRow - nPageStartRow;
+        if (nField < 0)
+        {
+            nField = 0;
+            bMouseTop = TRUE;
+        }
+        //! find start of dimension
+
+        rPosRect = Rectangle( aStartPos.Col(), nPageStartRow + nField,
+                              nTabEndCol, nPageStartRow + nField - 1 );
+
+        BOOL bFound = FALSE;            // is this within the same orientation?
+        BOOL bBeforeDrag = FALSE;
+        BOOL bAfterDrag = FALSE;
+        for (long nPos=0; nPos<nPageFieldCount && !bFound; nPos++)
+        {
+            if (pPageFields[nPos].nDim == nDragDim)
+            {
+                bFound = TRUE;
+                if ( nField < nPos )
+                    bBeforeDrag = TRUE;
+                else if ( nField > nPos )
+                    bAfterDrag = TRUE;
+            }
+        }
+
+        if ( bFound )
+        {
+            if (!bBeforeDrag)
+            {
+                ++rPosRect.Bottom();
+                if (bAfterDrag)
+                    ++rPosRect.Top();
+            }
+        }
+        else
+        {
+            if ( !bMouseTop )
+            {
+                ++rPosRect.Top();
+                ++rPosRect.Bottom();
+                ++nField;
+            }
+        }
+
+        rOrient = sheet::DataPilotFieldOrientation_PAGE;
         rDimPos = nField;                       //!...
         return TRUE;
     }
