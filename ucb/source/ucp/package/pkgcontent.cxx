@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-12 10:03:34 $
+ *  last change: $Author: obo $ $Date: 2001-09-28 08:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::acquire();
 }
@@ -375,7 +375,7 @@ void SAL_CALL Content::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL Content::release()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::release();
 }
