@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:16:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ public:
     double          getDuration() const { return mfDuration; }
     void            setDuration( double fDuration );
 
+    double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
+
     const String&   getName() const { return maName; }
     void            setName( const String& rName ) { maName = rName; }
 
@@ -201,7 +203,8 @@ public:
     sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
     void            setTargetSubItem( sal_Int16 nSubItem );
 
-    void checkForText();
+    bool checkForText();
+    bool calculateIterateDuration();
 
     void setAudio( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& xAudio );
     void setStopAudio();
@@ -217,6 +220,7 @@ public:
 
     // static helpers
     static sal_Int32 get_node_type( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    static sal_Int32 getNumberOfSubitems( const ::com::sun::star::uno::Any& aTarget, sal_Int16 nIterateType );
 
 protected:
     void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
@@ -228,7 +232,8 @@ private:
     rtl::OUString   maProperty;
     sal_Int16       mnPresetClass;
     double          mfBegin;
-    double          mfDuration;
+    double          mfDuration;                 // this is the maximum duration of the subeffects
+    double          mfAbsoluteDuration;         // this is the maximum duration of the subeffects including possible iterations
     sal_Int32       mnGroupId;
     sal_Int16       mnIterateType;
     double          mfIterateInterval;
@@ -334,6 +339,7 @@ public:
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
     virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     /** this must be called if effects from this sequence are changed.
         the method will call the registered listeners */
@@ -420,6 +426,7 @@ public:
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
     virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
     virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     const InteractiveSequenceList& getInteractiveSequenceList() const { return maInteractiveSequenceList; }
 
