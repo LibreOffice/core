@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:45:18 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,6 @@
 
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
-#endif
-
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

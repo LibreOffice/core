@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 
 #ifndef _SFXDOCKWIN_HXX //autogen
 #include <sfx2/dockwin.hxx>
-#endif
-
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
 #endif
 
 #ifndef _SFXCTRLITEM_HXX //autogen

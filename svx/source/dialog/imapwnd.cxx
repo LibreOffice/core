@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 15:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #define ITEMID_MACRO SID_ATTR_MACROITEM
 #ifndef _MACROPG_HXX //autogen
 #include <sfx2/macropg.hxx>
-#endif
-#ifndef _DTRANS_HXX //autogen
-#include <so3/dtrans.hxx>
 #endif
 #ifndef _GOODIES_IMAPRECT_HXX //autogen
 #include <svtools/imaprect.hxx>
