@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:25:52 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2840,12 +2840,11 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
             case FUNIT_PICA:
                 mnUnitIndex = RULER_UNIT_PICA;
                 break;
-
-#ifdef DBG_UTIL
             default:
+#ifdef DBG_UTIL
                 DBG_ERRORFILE( "Ruler::SetUnit() - Wrong Unit" );
-                break;
 #endif
+                break;
         }
 
         maMapMode.SetMapUnit( aImplRulerUnitTab[mnUnitIndex].eMapUnit );
@@ -3176,7 +3175,7 @@ void Ruler::SetStyle( WinBits nStyle )
 
 void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
 {
-    const StyleSettings&    rStyleSettings = pDevice->GetSettings().GetStyleSettings();
+    /*const StyleSettings&    rStyleSettings =*/ pDevice->GetSettings().GetStyleSettings();
     Point                   aPos( rPos );
     USHORT                  nTabStyle = nStyle & (RULER_TAB_STYLE | RULER_TAB_RTL);
 
