@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 07:36:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,22 @@ namespace dbaui
     class OSQLNameEdit : public Edit
     {
         ::rtl::OUString m_sAllowedChars;
+        sal_Bool        m_bOnlyUpperCase;
     public:
         OSQLNameEdit(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
             : Edit(_pParent,nStyle)
             ,m_sAllowedChars(_rAllowedChars)
+            ,m_bOnlyUpperCase(sal_False)
+        {
+        }
+        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
+            : Edit(_pParent,_rRes)
+            ,m_sAllowedChars(_rAllowedChars)
+            ,m_bOnlyUpperCase(sal_False)
         {
         }
 
+        void setUpperCase(sal_Bool _bUpper=sal_True) { m_bOnlyUpperCase = _bUpper; }
         void setAllowedChars(const ::rtl::OUString& _rAllowedChars)
         {
             m_sAllowedChars = _rAllowedChars;
