@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:49:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
         {
             //Ausgehend von der linken oberen Ecke des Fly den
             //dichtesten CntntFrm suchen.
-            const SwFrm* pFrm = rFrm.IsFlyFrm() ? ((SwFlyFrm&)rFrm).GetAnchor()
+            const SwFrm* pFrm = rFrm.IsFlyFrm() ? ((SwFlyFrm&)rFrm).GetAnchorFrm()
                                                 : &rFrm;
             pNewAnch = ::FindAnchor( pFrm, aTmpPnt );
             if( pNewAnch->IsProtected() )
@@ -366,13 +366,13 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
             return;
 
         //Damit der Anker ueberhaupt noch gepaintet wird.
-        if( rFrm.IsFlyInCntFrm() && rFrm.GetAnchor() )
-             rFrm.GetAnchor()->SetCompletePaint();
+        if( rFrm.IsFlyInCntFrm() && rFrm.GetAnchorFrm() )
+             rFrm.GetAnchorFrm()->SetCompletePaint();
 
         //Hier wurde immer kalkuliert. Leider ist der Sonderfall Fly in Fly mit
         //Spalten u.U. sehr kritisch wenn der innenliegende zuerst formatiert
         //wird. Um kein Risiko einzugehen entschaerfen wir nur diesen Sonderfall.
-        if( !rFrm.GetAnchor()->IsInFly() )
+        if( !rFrm.GetAnchorFrm()->IsInFly() )
             rFrm.Calc();
 
         if( pImp->GetDrawView()->HasMarkedObj() )
@@ -449,9 +449,9 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     if( pFmt && FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId() )
     {
-        SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
-            ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor() :
-            ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
+        const SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
+            ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm() :
+            ((SwDrawContact*)GetUserCall(pObj))->GetAnchorFrm( pObj );
         ASSERT( pFly, "IsFlyInFly: Where's my anchor?" );
         ASSERT( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
         return ((SwFlyFrm*)pFly)->GetFmt();
@@ -509,7 +509,7 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
         ((SwFlyAtCntFrm*)pFly)->SetAbsPos( rAbsPos );
     else
     {
-        const SwFrm *pAnch = pFly->GetAnchor();
+        const SwFrm *pAnch = pFly->GetAnchorFrm();
         pAnch->Calc();
         Point aOrient( pAnch->Frm().Pos() );
 
@@ -571,7 +571,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         pFly = pCntnt->FindFlyFrm();
         if ( !pFly )
             return aRet;
-        pOldAnch = pFly->GetAnchor();
+        pOldAnch = pFly->GetAnchorFrm();
         if( !pOldAnch )
             return aRet;
         if( FLY_PAGE != nAnchorId )
@@ -623,7 +623,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         {
             if( pCheck == pFly )
                 break;
-            const SwFrm *pTmp = pCheck->GetAnchor();
+            const SwFrm *pTmp = pCheck->GetAnchorFrm();
             pCheck = pTmp ? pTmp->FindFlyFrm() : NULL;
         }
         // Es darf nicht aus einer Kopf-/Fusszeile in einen anderen Bereich
@@ -999,6 +999,7 @@ void SwFEShell::Insert(  SdrObject& rDrawObj,
         SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
         const Point aRelPos( pPt->X() - pFrm->Frm().Left(),
                              pPt->Y() - pFrm->Frm().Top() );
+        // OD 2004-04-05 #i26791# - direct object positioning for <SwDoc::Insert(..)>
         rDrawObj.SetRelativePos( aRelPos );
         ::lcl_FindAnchorPos( *GetDoc(), *pPt, *pFrm, *(SfxItemSet*)pFlyAttrSet );
         pFmt = GetDoc()->Insert( aPam, rDrawObj, pFlyAttrSet, pFrmFmt );
@@ -1206,6 +1207,48 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
     }
     return bRet;
 }
+/*-- 30.03.2004 15:05:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
+{
+    sal_Bool bRet = sal_False;
+    SET_CURR_SHELL( this );
+    if ( !rSet.Count() ||
+            !Imp()->HasDrawView() )
+        return bRet;
+
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    if ( rMrkList.GetMarkCount() != 1 )
+        return bRet;
+
+    StartUndo();
+    SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
+    SwFrmFmt *pFmt = FindFrmFmt( pObj );
+    StartAllAction();
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+    {
+        RndStdIds nNew = ((SwFmtAnchor&)rSet.Get( RES_ANCHOR )).GetAnchorId();
+        if ( nNew != pFmt->GetAnchor().GetAnchorId() )
+        {
+            ChgAnchor( nNew );
+            // --> OD 2004-06-17 #i26791# - clear anchor attribute in item set,
+            // because method <ChgAnchor(..)> takes care of it.
+            rSet.ClearItem( RES_ANCHOR );
+        }
+    }
+
+    if( GetDoc()->SetFlyFrmAttr( *pFmt, rSet ))
+    {
+        bRet = sal_True;
+        Point aTmp;
+        SelectObj( aTmp, 0, pObj );
+    }
+    EndAllActionAndCall();
+    EndUndo();
+    return bRet;
+}
+
 
 /***********************************************************************
 #*  Class       :  SwFEShell
@@ -1449,7 +1492,7 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPO
         const SwFmtFrmSize& rFrmSz = pFly->GetFmt()->GetFrmSize();
         if( bCheckForOLEInCaption &&
             0 != rFrmSz.GetWidthPercent() &&
-            0 != (pAnchor = pFly->GetAnchor()) &&
+            0 != (pAnchor = pFly->GetAnchorFrm()) &&
             pAnchor->IsTxtFrm() &&
             !pAnchor->GetNext() && !pAnchor->GetPrev() &&
             pAnchor->GetUpper()->IsFlyFrm() &&
