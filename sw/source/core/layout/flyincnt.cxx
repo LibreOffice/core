@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:49:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,12 +365,17 @@ void SwFlyInCntFrm::MakeAll()
         if ( !bValidSize )
         {
             bValidPrtArea = FALSE;
+/*
+            // This is also done in the Format function, so I think
+            // this code is not necessary anymore:
             long nOldWidth = aFrm.Width();
-            aFrm.Width( CalcRel( rFrmSz ).Width() );
+            const Size aRelSize( CalcRel( rFrmSz ) );
+            aFrm.Width( aRelSize.Width() );
 
             if ( aFrm.Width() > nOldWidth )
                 //Damit sich der Inhalt anpasst
-                aFrm.Height( CalcRel( rFrmSz ).Height() );
+                aFrm.Height( aRelSize.Height() );
+*/
         }
 
         if ( !bValidPrtArea )
