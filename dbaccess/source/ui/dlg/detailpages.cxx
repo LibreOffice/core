@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 15:14:33 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 10:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -158,10 +161,15 @@ namespace dbaui
             m_pCharset = new ListBox(this, ResId(LB_CHARSET));
             m_pCharset->SetSelectHdl(getControlModifiedLink());
 
+            sal_Bool bCJKEnabled = SvtCJKOptions().IsAnyEnabled();
+
             OCharsetDisplay::const_iterator aLoop = m_aCharsets.begin();
             while (aLoop != m_aCharsets.end())
             {
-                m_pCharset->InsertEntry((*aLoop).getDisplayName());
+                if  (   ( RTL_TEXTENCODING_BIG5_HKSCS != (*aLoop).getEncoding() )   // not the asian encoding
+                    ||  ( bCJKEnabled )                                             // or asian enabled
+                    )
+                    m_pCharset->InsertEntry((*aLoop).getDisplayName());
                 ++aLoop;
             }
         }
@@ -193,23 +201,22 @@ namespace dbaui
         if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
             eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
 
+        // is UTF8 allowed?
         const sal_Bool bAllowUTF8 = (DST_DBASE != eDSType) && (DST_TEXT != eDSType);
-        const sal_Bool bHaveUTF8 = m_aCharsets.size() == m_pCharset->GetEntryCount();
 
-        if (bAllowUTF8 != bHaveUTF8)
+        // get the display name for UTF8 to check if we currently include it in the list
+        OCharsetDisplay::const_iterator aUTF8Pos = m_aCharsets.find(RTL_TEXTENCODING_UTF8);
+        DBG_ASSERT( m_aCharsets.end() != aUTF8Pos, "OCommonBehaviourTabPage::adjustUTF8: invalid charset map!" );
+        if ( m_aCharsets.end() != aUTF8Pos )
         {
-            OCharsetDisplay::const_iterator aUTF8Pos = m_aCharsets.find(RTL_TEXTENCODING_UTF8);
-            if (m_aCharsets.end() == aUTF8Pos)
-            {
-                DBG_ERROR("OCommonBehaviourTabPage::adjustUTF8: invalid charset map!");
-            }
-            else
-            {
-                ::rtl::OUString sDisplayName = (*aUTF8Pos).getDisplayName();
-                if (!bAllowUTF8)
-                    m_pCharset->RemoveEntry(sDisplayName);
+            String sDisplayName = (*aUTF8Pos).getDisplayName();
+            const sal_Bool bHaveUTF8 = LISTBOX_ENTRY_NOTFOUND != m_pCharset->GetEntryPos( sDisplayName );
+            if ( bAllowUTF8 != bHaveUTF8 )
+            {   // really need to adjust the list
+                if ( !bAllowUTF8 )
+                    m_pCharset->RemoveEntry( sDisplayName );
                 else
-                    m_pCharset->InsertEntry(sDisplayName);
+                    m_pCharset->InsertEntry( sDisplayName );
             }
         }
         return bAllowUTF8;
@@ -1160,6 +1167,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/08/30 15:14:33  fs
+ *  #91731# adjustUTF : InsertEntry instead of RemoveEntry
+ *
  *  Revision 1.8  2001/06/25 08:28:43  oj
  *  #88699# new control for ldap rowcount
  *
