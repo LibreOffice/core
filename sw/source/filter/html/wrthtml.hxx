@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:49:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ public:
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     sal_Bool OutFlyFrm( sal_uInt32 nNdIdx, xub_StrLen nCntntIdx,
-                        sal_uInt8 nPos );
+                        sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
     void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
                     const SdrObject *pSdrObj );
 
