@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-20 20:38:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2131,8 +2131,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "Ì«°Ñ(~O)";
         Text[ korean ] = "Æû(~O)";
-        Text[ chinese_simplified ] = "±íµ¥(~O)";
-        Text[ chinese_traditional ] = "ªí³æ(~O)";
+        Text[ chinese_simplified ] = "·½Ê½(~O)";
+        Text[ chinese_traditional ] = "¤è¦¡(~O)";
         Text[ arabic ] = "ÇáÔßá";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "f~orma";
@@ -2762,6 +2762,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
