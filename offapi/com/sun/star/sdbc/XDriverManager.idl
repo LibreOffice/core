@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDriverManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XConnection;
-interface XDriver;
+ published interface XConnection;
+ published interface XDriver;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XDriverManager
@@ -95,7 +95,7 @@ interface XDriver;
     @see com::sun::star::sdbc::XDriver
      @see com::sun::star::sdbc::XConnection
  */
-interface XDriverManager: com::sun::star::uno::XInterface
+published interface XDriverManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
