@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-10 09:02:22 $
+ *  last change: $Author: kso $ $Date: 2000-11-15 08:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1207,7 +1207,7 @@ void MyApp::Main()
         return;
     }
 
-    utl::setProcessServiceFactory( xFac );
+    comphelper::setProcessServiceFactory( xFac );
 
     Reference< XComponent > xComponent( xFac, UNO_QUERY );
 
