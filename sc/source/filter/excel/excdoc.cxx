@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-28 13:48:23 $
+ *  last change: $Author: gt $ $Date: 2001-04-06 12:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,19 +148,79 @@ ExcRecordListInst::~ExcRecordListInst()
 
 
 
+// structure: 2 byte row number, 2 byte XF -> 4 byte -> 1 pointer
+
+inline void* DefRowXFs::Set( UINT16 nR, UINT16 nXF )
+{
+    return ( void* ) ( nR | ( nXF << 16 ) );
+}
+
+
+inline void DefRowXFs::Get( const void* p, UINT16& rR, UINT16& rXF )
+{
+    rR = ( UINT16 ) p;
+    rXF = ( UINT16 ) ( ((UINT32)p) >> 16 );
+}
+
+
+DefRowXFs::DefRowXFs( void )
+{
+    nLastList = 0;
+    nLastRow = 0;
+}
+
+
+DefRowXFs::~DefRowXFs()
+{
+}
+
+
+void DefRowXFs::Add( UINT16 nR, UINT16 nXF )
+{
+    List::Insert( Set( nR, nXF ), LIST_APPEND );
+}
+
+
+//void DefRowXFs::ChangeXF( ExcRow& rRow )
+void DefRowXFs::ChangeXF( UINT16 nRowNum, UINT16& rXF )
+{
+    UINT32  nCnt;
+    UINT16  nR, nXF;
+
+    nCnt = List::Count();
+    for( UINT32 n = ( nRowNum > nLastRow )? nLastList : 0 ; n < nCnt ; n++ )
+    {
+        Get( List::GetObject( n ), nR, nXF );
+        if( nRowNum == nR )
+        {
+            rXF = nXF;
+
+            nLastList = n;
+            nLastRow = nR;
+
+            return;
+        }
+    }
+}
+
+
+
+
 ExcRowBlock* ExcTable::pRowBlock = NULL;
 
 ExcTable::ExcTable( RootData* pRD ) :
     ExcRoot( pRD ),
     nScTab( 0 ),
-    nExcTab( EXC_TABBUF_INVALID )
+    nExcTab( EXC_TABBUF_INVALID ),
+    pDefRowXFs( NULL )
 {   }
 
 
 ExcTable::ExcTable( RootData* pRD, UINT16 nScTable ) :
     ExcRoot( pRD ),
     nScTab( nScTable ),
-    nExcTab( pRD->pTabBuffer->GetExcTable( nScTable ) )
+    nExcTab( pRD->pTabBuffer->GetExcTable( nScTable ) ),
+    pDefRowXFs( NULL )
 {   }
 
 
@@ -172,6 +232,11 @@ ExcTable::~ExcTable()
 
 void ExcTable::Clear( void )
 {
+    if( pDefRowXFs )
+    {
+        delete pDefRowXFs;
+        pDefRowXFs = NULL;
+    }
 }
 
 
@@ -193,6 +258,15 @@ void ExcTable::AddUsedRow( ExcRow*& rpRow )
         delete rpRow;
     else
         AddRow( rpRow );
+}
+
+
+void ExcTable::SetDefRowXF( UINT16 nXF, UINT16 n )
+{
+    if( !pDefRowXFs )
+        pDefRowXFs = new DefRowXFs;
+
+    pDefRowXFs->Add( n, nXF );
 }
 
 
@@ -703,7 +777,7 @@ void ExcTable::FillAsTable( void )
 
     // at least one ROW rec
     if( !bIter )
-        AddRow( new ExcRow( 0, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow ) );
+        AddRow( new ExcRow( 0, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow, *this ) );
 
     while( bIter )
     {
@@ -717,7 +791,7 @@ void ExcTable::FillAsTable( void )
         // add ROW recs from empty rows
         while( nPrevRow < nRow )
         {
-            ExcRow* pRow = new ExcRow( nPrevRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow );
+            ExcRow* pRow = new ExcRow( nPrevRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow, *this );
             AddUsedRow( pRow );
             nPrevRow++;
         }
@@ -867,17 +941,18 @@ void ExcTable::FillAsTable( void )
         else
         {// leere Zelle mit Attributierung
             pNote = NULL;
+
+            UINT16  nColCnt = aIterator.GetEndCol() - aIterator.GetStartCol() + 1;
+
             if( pLastBlank && pLastBlank->GetLastCol() + 1 == aIterator.GetStartCol() )
             {
-                pLastBlank->Add( aScPos, pPatt, rR,
-                    aIterator.GetEndCol() - aIterator.GetStartCol() + 1 );
+                pLastBlank->Add( aScPos, pPatt, rR, nColCnt, *this );
 
                 pAktScCell = NULL;  // kein NEUER Record!
             }
             else
             {
-                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR,
-                    aIterator.GetEndCol() - aIterator.GetStartCol() + 1 );
+                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR, nColCnt, *this );
                 pAktExcCell = pLastBlank;
             }
         }
@@ -956,10 +1031,12 @@ void ExcTable::FillAsTable( void )
         // new row -> add previous ROW rec
         if( !bIter || (nPrevRow < nRow) )
         {
-            AddRow( new ExcRow( nPrevRow, nScTab, nColMin, nCol, nDefXF, rDoc, aExcOLRow ) );
+            AddRow( new ExcRow( nPrevRow, nScTab, nColMin, nCol, nDefXF, rDoc, aExcOLRow, *this ) );
+
             nPrevRow++;
             nColMin = aIterator.GetStartCol();
             nFirstCol = Min( nFirstCol, nColMin );
+
         }
     }
 
@@ -967,7 +1044,7 @@ void ExcTable::FillAsTable( void )
     while( nRow < nMaxFlagRow )
     {
         nRow++;
-        ExcRow* pRow = new ExcRow( nRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow );
+        ExcRow* pRow = new ExcRow( nRow, nScTab, 0, 0, nDefXF, rDoc, aExcOLRow, *this );
         AddUsedRow( pRow );
     }
 
@@ -1134,6 +1211,13 @@ void ExcTable::NullTab( const String* pCodename )
         Add( new ExcWindow28( nExcTab ) );
     }
     Add( new ExcEof );
+}
+
+
+void ExcTable::ModifyToDefaultRowXF( UINT16 nRowNum, UINT16& rXF )
+{
+    if( pDefRowXFs )
+        pDefRowXFs->ChangeXF( nRowNum, rXF );
 }
 
 

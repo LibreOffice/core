@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
+ *  last change: $Author: gt $ $Date: 2001-04-06 12:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include "editutil.hxx"
 
 #include "excrecds.hxx"
+#include "excdoc.hxx"
 #include "root.hxx"
 #include "fontbuff.hxx"
 #include "excupn.hxx"
@@ -1809,14 +1810,17 @@ ExcBlankMulblank::ExcBlankMulblank(
         const ScAddress rPos,
         const ScPatternAttr* pAttr,
         RootData& rRootData,
-        UINT16 nCount ) :
+        UINT16 nCount,
+        ExcTable& rExcTab ) :
     ExcCell( rPos, NULL, rRootData )
 {
+    bDummy = FALSE;
+
     nRecLen = 2 * nCount - 2;
     nLastCol = aPos.Col() + nCount - 1;
     bMulBlank = (nCount > 1);
 
-    AddEntries( rPos, pAttr, rRootData, nCount );
+    AddEntries( rPos, pAttr, rRootData, nCount, rExcTab );
     nXF = GetXF( UINT32List::Get( 0 ) );        // store first XF in ExcCell::nXF
 }
 
@@ -1825,15 +1829,18 @@ void ExcBlankMulblank::Add(
         const ScAddress rPos,
         const ScPatternAttr* pAttr,
         RootData& rRootData,
-        UINT16 nCount )
+        UINT16 nCount,
+        ExcTable& rExcTab )
 {
+    bDummy = FALSE;
+
     DBG_ASSERT( rPos.Col() == nLastCol + 1, "ExcBlankMulblank::Add - wrong address" );
 
     nRecLen += 2 * nCount;
     nLastCol += nCount;
     bMulBlank = TRUE;
 
-    AddEntries( rPos, pAttr, rRootData, nCount );
+    AddEntries( rPos, pAttr, rRootData, nCount, rExcTab );
 }
 
 
@@ -1841,12 +1848,14 @@ void ExcBlankMulblank::AddEntries(
         const ScAddress rPos,
         const ScPatternAttr* pAttr,
         RootData& rRootData,
-        UINT16 nCount )
+        UINT16 nCount,
+        ExcTable& rExcTab )
 {
     DBG_ASSERT( nCount > 0, "ExcBlankMulblank::AddEntries - count==0!" );
 
     ScAddress   aCurrPos( rPos );
     UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
+    UINT16      nOrgCount = nCount;
 
     while( nCount )
     {
@@ -1873,6 +1882,13 @@ void ExcBlankMulblank::AddEntries(
                 aCurrPos.IncCol( nColCount );
             }
         }
+    }
+
+    if( nCount > MAXCOL && nCount == nOrgCount )
+    {   // set format at row
+        rExcTab.SetDefRowXF( nCellXF, rPos.Row() );
+
+        bDummy = TRUE;
     }
 }
 
@@ -1916,6 +1932,14 @@ ULONG ExcBlankMulblank::GetDiffLen() const
 {
     return bMulBlank ? (nRecLen + 2) : 0;
 }
+
+
+void ExcBlankMulblank::Save( XclExpStream& r )
+{
+    if( !bDummy )
+        ExcCell::Save( r );
+}
+
 
 
 
@@ -2282,10 +2306,11 @@ ULONG ExcEGuts::GetLen() const
 //-------------------------------------------------------------- class ExcRow -
 
 ExcRow::ExcRow( UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
-                UINT16 nNewXF, ScDocument& rDoc, ExcEOutline& rOutline ) :
+                UINT16 nNewXF, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rTab ) :
         nNum( nRow ),
         nXF( nNewXF ),
-        nOptions( 0x0000 )
+        nOptions( 0x0000 ),
+        rExcTab( rTab )
 {
     BYTE    nRowOptions = rDoc.GetRowFlags( nRow, nTab );
     BOOL    bUserHeight = TRUEBOOL( nRowOptions & CR_MANUALSIZE );
@@ -2332,6 +2357,8 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 
 void ExcRow::SaveCont( XclExpStream& rStrm )
 {
+    rExcTab.ModifyToDefaultRowXF( nNum, nXF );
+
     nOptions |= EXC_ROW_FLAGCOMMON;
     rStrm   << nNum << nFirstCol << (UINT16)(nLastCol + 1)
             << nHeight << (UINT32)0 << nOptions << nXF;
@@ -2385,6 +2412,28 @@ ExcRowBlock* ExcRowBlock::Append( ExcRow* pNewRow )
         return pRet;
     }
 }
+
+
+/*BOOL ExcRowBlock::SetDefXF( UINT16 nXF, UINT16 n )
+{
+    for( UINT16 nC = 0 ; nC < nNext ; nC++ )
+    {
+        if( ppRows[ nC ]->nNum == n )
+        {
+            ppRows[ nC ]->nXF = nXF;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}*/
+
+
+/*void ExcRowBlock::SetDefXFs( DefRowXFs& r )
+{
+    for( UINT16 nC = 0 ; nC < nNext ; nC++ )
+        r.ChangeXF( *ppRows[ nC ] );
+}*/
 
 
 void ExcRowBlock::Save( XclExpStream& rStrm )
