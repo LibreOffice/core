@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:53:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace dbaui
     class ORelationController : public OJoinController
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
+        sal_Bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
