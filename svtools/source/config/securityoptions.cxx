@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-12-04 13:23:53 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
 
 #define PROPERTYNAME_SECUREURL          OUString(RTL_CONSTASCII_USTRINGPARAM("SecureURL"        ))
-#define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("StarOfficeBasic"  ))
+#define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"  ))
 
 #define PROPERTYHANDLE_SECUREURL        0
 #define PROPERTYHANDLE_STAROFFICEBASIC  1
@@ -268,7 +268,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                     break;
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\StarOfficeBasic\"?" );
+                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\OfficeBasic\"?" );
                                                         sal_Int32 nMode;
                                                         seqValues[nProperty] >>= nMode;
                                                         m_eBasicMode = (EBasicSecurityMode)nMode;
@@ -316,7 +316,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
         else
         if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\StarOfficeBasic\"?" );
+            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\OfficeBasic\"?" );
             sal_Int32 nMode;
             seqValues[nProperty] >>= nMode;
             m_eBasicMode = (EBasicSecurityMode)nMode;
