@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:37:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,10 @@ struct SfxStatBar_Impl
     BOOL                    bTemp;
 
     SfxStatBar_Impl() :
-        nId(0),
         pResMgr(0),
         pShell(0),
         pBindings(0),
+        nId(0),
         pStatusBar(0),
         bOn(TRUE),
         bTemp(FALSE)
@@ -218,8 +218,8 @@ struct SfxChildWin_Impl
         pCli(0),
         nVisibility( FALSE ),
         bEnable( TRUE ),
-        bDisabled( FALSE ),
-        pControl( 0 )
+        pControl( 0 ),
+        bDisabled( FALSE )
     {}
 };
 
