@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 14:46:58 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ void ScXMLTableColContext::EndElement()
                     uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns, uno::UNO_QUERY);
                     if (xColumnProperties.is())
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
                         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                             XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
                         if (pStyle)

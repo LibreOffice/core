@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
         uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
         if (xProperties.is())
         {
-            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
             XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
             if (pStyle)
@@ -865,7 +865,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
     if (xProperties.is())
     {
-        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
         if (pStyle)

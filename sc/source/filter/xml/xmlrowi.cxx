@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 14:46:58 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void ScXMLTableRowContext::EndElement()
                     uno::Reference <beans::XPropertySet> xRowProperties(xTableRows, uno::UNO_QUERY);
                     if (xRowProperties.is())
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
                         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                             XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
                         if (pStyle)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
+ *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,8 +653,8 @@ class ScXMLImport: public SvXMLImport
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
-    SvXMLImportContextRef       xStyles;
-    SvXMLImportContextRef       xAutoStyles;
+//  SvXMLImportContextRef       xStyles;
+//  SvXMLImportContextRef       xAutoStyles;
 
 //  SvXMLImportItemMapper   *pParaItemMapper;// paragraph item import
 //  SvI18NMap               *pI18NMap;          // name mapping for I18N
@@ -794,8 +794,8 @@ public:
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-    SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
-    SvXMLImportContextRef           GetStyles() const { return xStyles; }
+//  SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
+//  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetStylesElemTokenMap();
