@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-12-11 12:33:50 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:56:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=rtl_uritest
+TARGET=qa_rtl_uritest
 
 ENABLE_EXCEPTIONS=TRUE
 
