@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeToken.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:52:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,6 @@
 #endif
 #include <hash_map>
 
-using namespace ::std;
-
 namespace xmloff { namespace EnhancedCustomShapeToken {
 
 struct TCheck
@@ -78,7 +76,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef hash_map< const char*, EnhancedCustomShapeTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef std::hash_map< const char*, EnhancedCustomShapeTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
