@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:18:20 $
+ *  last change: $Author: aw $ $Date: 2002-08-01 14:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
+
+// #101498# calculate if it's RTL or not
+#include <unicode/ubidi.h>
 
 #define DEFAULT_SCALE   75
 
@@ -1158,7 +1161,10 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     // aTextPos ist Bottom, jetzt die Baseline liefern:
                     FontMetric aMetric( pOutDev->GetFontMetric() );
                     aTextPos.Y() -= aMetric.GetDescent();
-                    DrawingText( aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf, aSvxFont, nPara, 0xFFFF );
+
+                    // #101498#
+                    DrawingText( aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf, aSvxFont, nPara, 0xFFFF, 0xFF);
+
                     delete[] pBuf;
                 }
                 pOutDev->SetFont( aOldFont );
@@ -1987,10 +1993,14 @@ void Outliner::StripPortions()
     bStrippingPortions = FALSE;
 }
 
-void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex )
+// #101498#
+void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft)
 {
     DBG_CHKTHIS(Outliner,0);
-    DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray );
+
+    // #101498#
+    DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray, nRightToLeft);
+
     aDrawPortionHdl.Call( &aInfo );
 }
 
@@ -2277,4 +2287,36 @@ IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
     return 0;
 }
 
+sal_Bool DrawPortionInfo::IsRTL() const
+{
+    if(0xFF == mnBiDiLevel)
+    {
+        // Use Bidi functions from icu 2.0 to calculate if this portion
+        // is RTL or not.
+        UErrorCode nError(U_ZERO_ERROR);
+        UBiDi* pBidi = ubidi_openSized(rText.Len(), 0, &nError);
+        nError = U_ZERO_ERROR;
+
+        // I do not have this info here. Is it necessary? I'll have to ask MT.
+        const BYTE nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
+
+        ubidi_setPara(pBidi, rText.GetBuffer(), rText.Len(), nDefaultDir, NULL, &nError);
+        nError = U_ZERO_ERROR;
+
+        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));
+
+        UTextOffset nStart(0);
+        UTextOffset nEnd;
+        UBiDiLevel nCurrDir;
+
+        ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
+
+        ubidi_close(pBidi);
+
+        // remember on-demand calculated state
+        ((DrawPortionInfo*)this)->mnBiDiLevel = nCurrDir;
+    }
+
+    return (1 == (mnBiDiLevel % 2));
+}
 
