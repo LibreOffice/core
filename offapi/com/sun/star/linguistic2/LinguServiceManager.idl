@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguServiceManager.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,14 @@
 
 module com { module sun { module star { module linguistic2 {
 
-interface XLinguServiceManager;
-interface XAvailableLocales;
+ published interface XLinguServiceManager;
+ published interface XAvailableLocales;
 
 //=============================================================================
 /** offers linguistic functionality. Is to be used to access spell checker,
     hyphenator and thesaurus.
 */
-service LinguServiceManager
+published service LinguServiceManager
 {
     interface com::sun::star::linguistic2::XLinguServiceManager;
     interface com::sun::star::linguistic2::XAvailableLocales;
