@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: abi $ $Date: 2001-06-13 16:26:35 $
+#   last change: $Author: abi $ $Date: 2001-11-23 13:54:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
+.ENDIF
+
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-frtti
 .ENDIF
 
 SLOFILES=\

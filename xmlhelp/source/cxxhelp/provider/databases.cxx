@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-08 15:36:53 $
+ *  last change: $Author: abi $ $Date: 2001-11-23 13:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+
 #include <berkeleydb/db_cxx.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
@@ -88,7 +89,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 #include "inputstream.hxx"
-
+#include <algorithm>
 
 using namespace chelp;
 using namespace com::sun::star::uno;
@@ -223,65 +224,6 @@ void Databases::replaceName( rtl::OUString& oustring ) const
             aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
         oustring = aStrBuf.makeStringAndClear();
     }
-//      sal_Int32 idx = -1,k = 0,add,off;
-//      bool cap = false;
-//      rtl::OUStringBuffer aStrBuf( 0 );
-
-//      while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
-//      {
-//          if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
-//                                idx ) == idx )
-//          {
-//              add = 12;
-//              off = PRODUCTNAME;
-//          }
-//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
-//                                     idx ) == idx )
-//          {
-//              add = 15;
-//              off = PRODUCTVERSION;
-//          }
-//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
-//                                     idx ) == idx )
-//          {
-//              add = 11;
-//              off = VENDORNAME;
-//          }
-//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
-//                                     idx ) == idx )
-//          {
-//              add = 14;
-//              off = VENDORVERSION;
-//          }
-//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
-//                                     idx ) == idx )
-//          {
-//              add = 12;
-//              off = VENDORSHORT;
-//          }
-//          else
-//              add = 0;
-
-//          if( add )
-//          {
-//              if( ! cap )
-//              {
-//                  cap = true;
-//                  aStrBuf.ensureCapacity( 256 );
-//              }
-
-//              aStrBuf.append( &oustring.getStr()[k],idx - k );
-//              aStrBuf.append( m_vReplacement[off] );
-//              k = idx + add;
-//          }
-//      }
-
-//      if( cap )
-//      {
-//          if( k < oustring.getLength() )
-//              aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
-//          oustring = aStrBuf.makeStringAndClear();
-//      }
 }
 
 
@@ -609,12 +551,47 @@ KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
 }
 
 
-bool KeywordInfo::KeywordElement::compare( const KeywordElement& ra ) const
+//  std::vector<KeywordInfo::KeywordElement> *globSet = 0;
+
+//  bool check(const KeywordInfo::KeywordElement& aElement)
+//  {
+//      std::vector<KeywordInfo::KeywordElement> aVec = *globSet;
+
+//      if( aElement.key.getLength() == 0 )
+//          fprintf(stderr,"...found zero element at position %d\n",aVec.size());
+
+//      for(int i = 0; i < aVec.size(); ++i)
+//      {
+//          for(int j = i; j < aVec.size(); ++j)
+//          {
+//              bool b12 = aVec[i]<aVec[j];
+//              bool b13 = aVec[i]<aElement;
+//              bool b21 = aVec[j]<aVec[i];
+//              bool b23 = aVec[j]<aElement;
+//              bool b31 = aElement<aVec[i];
+//              bool b32 = aElement<aVec[j];
+
+//              if( b12 && b23 && ! b13 ||
+//                  b13 && b32 && ! b12 ||
+//                  b21 && b13 && ! b23 ||
+//                  b31 && b12 && ! b32 ||
+//                  b23 && b31 && ! b21 ||
+//                  b32 && b21 && ! b31 )
+//                  fprintf(stderr,"found index tripel not matching weak ordering requirement");
+//          }
+//      }
+
+//      aVec.push_back( aElement );
+//  }
+
+
+bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
 {
     const rtl::OUString& l = key;
     const rtl::OUString& r = ra.key;
 
     bool ret;
+
     if( m_xCollator.is() )
     {
         sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
@@ -622,8 +599,6 @@ bool KeywordInfo::KeywordElement::compare( const KeywordElement& ra ) const
 
         sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
         sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
-
-
 
         sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
 
@@ -642,27 +617,6 @@ bool KeywordInfo::KeywordElement::compare( const KeywordElement& ra ) const
         ret = l < r;
 
     return ret;
-}
-
-
-
-// This is a workaround for a solaris compiler bug
-// it enforces an additional stack frame for operator<
-void inc( int& k )
-{
-    return;
-}
-
-
-
-bool KeywordInfo::KeywordElement::operator<( const KeywordElement& ra ) const
-{
-// This is a workaround for a compiler bug
-    int k = 0;
-    inc(k);
-//
-    bool temp = compare( ra );
-    return temp;
 }
 
 
@@ -732,6 +686,22 @@ KeywordInfo::KeywordInfo( const std::set< KeywordElement >& aSet )
 }
 
 
+KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
+    : listKey( aVec.size() ),
+      listId( aVec.size() ),
+      listAnchor( aVec.size() ),
+      listTitle( aVec.size() )
+{
+    for( int i = 0; i < aVec.size(); ++i )
+    {
+        listKey[i] = aVec[i].key;
+        listId[i] = aVec[i].listId;
+        listAnchor[i] = aVec[i].listAnchor;
+        listTitle[i] = aVec[i].listTitle;
+    }
+}
+
+
 
 KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                     const rtl::OUString& Language )
@@ -752,22 +722,24 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             key +
             rtl::OUString::createFromAscii( ".key" );
 
-        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
+        rtl::OString fileName( fileNameOU.getStr(),
+                               fileNameOU.getLength(),
+                               osl_getThreadTextEncoding() );
+
         Db table( 0,DB_CXX_NO_EXCEPTIONS );
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
-            std::set<KeywordInfo::KeywordElement> aSet;
+            std::vector<KeywordInfo::KeywordElement> aVector;
             Db* idmap = getBerkeley( Database,Language );
             Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
 
             bool first = true;
-            Dbt key,data;
-            key.set_flags( DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
-            data.set_flags( DB_DBT_MALLOC );
 
             Dbc* cursor = 0;
             table.cursor( 0,&cursor,0 );
-
+            Dbt key,data;
+            key.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
+            data.set_flags( DB_DBT_MALLOC );
             while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
             {
                 rtl::OUString keyword( static_cast<sal_Char*>(key.get_data()),
@@ -777,12 +749,11 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                        data.get_size(),
                                        RTL_TEXTENCODING_UTF8 );
 
-                aSet.insert(
-                    KeywordInfo::KeywordElement( this,
-                                                 idmap,
-                                                 xCollator,
-                                                 keyword,
-                                                 doclist ) );
+                aVector.push_back( KeywordInfo::KeywordElement( this,
+                                                                idmap,
+                                                                xCollator,
+                                                                keyword,
+                                                                doclist ) );
                 if( first )
                 {
                     key.set_flags( DB_DBT_REALLOC );
@@ -790,8 +761,9 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                     first = false;
                 }
             }
-            cursor->close();
-            KeywordInfo* info = it->second = new KeywordInfo( aSet );
+            std::sort( aVector.begin(),aVector.end() );
+            if( cursor ) cursor->close();
+            KeywordInfo* info = it->second = new KeywordInfo( aVector );
         }
         table.close( 0 );
     }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+#   last change: $Author: abi $ $Date: 2001-11-23 13:54:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,11 @@ CFLAGS +=  -DHAVE_EXPAT_H
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
 .ENDIF
+
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-frtti
+.ENDIF
+
 
 # --- General -----------------------------------------------------
 
