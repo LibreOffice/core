@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:13:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 13:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,8 +1686,8 @@ Sequence< Reference< XControl > > FmXFormController::getControls(void) throw( Ru
         Reference< XControl >  xCtrl;
 
         // Umsortieren der Controls entsprechend der TabReihenfolge
-    sal_Int32 j = 0;
-        for (sal_Int32 i = 0, j = 0; i < nModels; i++)
+        sal_Int32 j = 0;
+        for (sal_Int32 i = 0; i < nModels; i++)
         {
             xCtrlModel = pModels[i];
 
