@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-19 12:09:21 $
+ *  last change: $Author: ka $ $Date: 2002-11-14 18:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ void SdDrawViewShell::UpdateEffectWindow()
 
                 // find out, if there is any object, which contain text
                 BOOL bHasText = FALSE;
-                if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() )
+                if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() && !((SdrTextObj*)pObject)->IsFontwork() )
                     bHasText = bHasText || TRUE;
 
                 pInfo = pDoc->GetAnimationInfo(pObject);
@@ -395,7 +395,7 @@ void SdDrawViewShell::UpdateEffectWindow()
                     pMark = rMarkList.GetMark( nObject );
                     SdrObject* pObject = pMark->GetObj();
 
-                    if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() )
+                    if( pObject->ISA(SdrTextObj) && ((SdrTextObj*)pObject)->HasText() && !((SdrTextObj*)pObject)->IsFontwork() )
                         bHasText = bHasText || TRUE;
 
                     pInfo = pDoc->GetAnimationInfo(pObject);
