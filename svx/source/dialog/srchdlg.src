@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:14:05 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1359,7 +1359,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ spanish ] = "~Formato..." ;
         Text [ english_us ] = "For~mat..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ê†ºÂºè(~M)...";
+        Text[ chinese_simplified ] = "Ê†ºÂºè..";
         Text[ russian ] = "‘ÓÏ‡Ú...";
         Text[ polish ] = "~Format...";
         Text[ japanese ] = "Êõ∏Âºè(~M)...";
