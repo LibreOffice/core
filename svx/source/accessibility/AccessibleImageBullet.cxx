@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:47:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,20 +87,20 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
@@ -137,7 +137,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
@@ -335,7 +335,7 @@ namespace accessibility
             ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
     }
 
-    sal_Bool SAL_CALL AccessibleImageBullet::contains( const awt::Point& rPoint ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL AccessibleImageBullet::containsPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -351,7 +351,7 @@ namespace accessibility
         return aRect.IsInside( aPoint );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAt( const awt::Point& aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleImageBullet::getAccessibleAtPoint( const awt::Point& aPoint ) throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
@@ -504,7 +504,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+        const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
         return uno::Sequence< ::rtl::OUString > (&sServiceName, 1);
     }
 
@@ -512,7 +512,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleContext"));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext"));
     }
 
     void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
@@ -620,7 +620,7 @@ namespace accessibility
             !pStateSet->contains(nStateId) )
         {
             pStateSet->AddState( nStateId );
-            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            GotPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
         }
     }
 
@@ -633,7 +633,7 @@ namespace accessibility
             pStateSet->contains(nStateId) )
         {
             pStateSet->RemoveState( nStateId );
-            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            LostPropertyEvent( uno::makeAny( nStateId ), AccessibleEventId::STATE_CHANGED );
         }
     }
 
@@ -667,8 +667,8 @@ namespace accessibility
             if( nOldIndex != nIndex )
             {
                 // index and therefore description changed
-                FireEvent( AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT, uno::makeAny( getAccessibleDescription() ), aOldDesc );
-                FireEvent( AccessibleEventId::ACCESSIBLE_NAME_EVENT, uno::makeAny( getAccessibleName() ), aOldName );
+                FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::makeAny( getAccessibleDescription() ), aOldDesc );
+                FireEvent( AccessibleEventId::NAME_CHANGED, uno::makeAny( getAccessibleName() ), aOldName );
             }
         }
         catch( const uno::Exception& ) {} // optional behaviour
