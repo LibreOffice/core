@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:09:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #endif
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXTBXMGR_HXX //autogen
-#include <sfx2/tbxmgr.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
