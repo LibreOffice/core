@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:55:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifndef SC_XLPIVOT_HXX
 #define SC_XLPIVOT_HXX
 
-#include <vector>
-
 #ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #endif
@@ -88,25 +86,37 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #endif
 
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
+
+class XclImpStream;
+class XclExpStream;
 
 // Constants and Enumerations =================================================
 
 // misc -----------------------------------------------------------------------
 
-const sal_uInt16 EXC_PC_MAXFIELDCOUNT       = 0xFFFE;
-const sal_uInt16 EXC_PC_MAXITEMCOUNT        = 32500;
+// strings
+const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;
+const sal_uInt16 EXC_PT_MAXSTRLEN           = 0xFFFE;
 
+// pivot cache fields
+const sal_uInt16 EXC_PC_MAXFIELDCOUNT       = 0xFFFE;
+const sal_uInt16 EXC_PC_NOFIELD             = 0xFFFF;
+
+// pivot cache items
+const sal_uInt16 EXC_PC_MAXITEMCOUNT        = 32500;
+const sal_uInt16 EXC_PC_NOITEM              = 0xFFFF;
+
+// pivot table fields
 const sal_uInt16 EXC_PT_MAXFIELDCOUNT       = 0xFFFE;
 const sal_uInt16 EXC_PT_MAXROWCOLCOUNT      = EXC_PT_MAXFIELDCOUNT;
 const sal_uInt16 EXC_PT_MAXPAGECOUNT        = 256;
 const sal_uInt16 EXC_PT_MAXDATACOUNT        = 256;
-const sal_uInt16 EXC_PT_MAXITEMCOUNT        = 32500;
 
-const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;
-const sal_uInt16 EXC_PT_MAXSTRLEN           = 0xFFFE;
+// pivot table items
+const sal_uInt16 EXC_PT_MAXITEMCOUNT        = 32500;
 
 /** Data type of a pivot cache item. */
 enum XclPCItemType
@@ -115,9 +125,22 @@ enum XclPCItemType
     EXC_PCITEM_EMPTY,           /// Empty cell.
     EXC_PCITEM_TEXT,            /// String data.
     EXC_PCITEM_VALUE,           /// Floating-point value.
+    EXC_PCITEM_INTEGER,         /// 16-bit integer value.
     EXC_PCITEM_DATE,            /// Date/time.
     EXC_PCITEM_BOOL,            /// Boolean value.
     EXC_PCITEM_ERROR            /// Error code.
+};
+
+/** Specifies the type of a pivot cache field. */
+enum XclPCFieldType
+{
+    EXC_PCFIELD_STANDARD,       /// Standard field without grouping.
+    EXC_PCFIELD_STDGROUP,       /// Standard grouping field.
+    EXC_PCFIELD_NUMGROUP,       /// Numeric grouping field.
+    EXC_PCFIELD_DATEGROUP,      /// First date grouping field (opt. with child grouping field).
+    EXC_PCFIELD_DATECHILD,      /// Additional date grouping field.
+    EXC_PCFIELD_CALCED,         /// Calculated field.
+    EXC_PCFIELD_UNKNOWN         /// Unknown field state, handled like standard field.
 };
 
 // (0x0051) DCONREF -----------------------------------------------------------
@@ -144,8 +167,8 @@ const sal_uInt16 EXC_SXVD_AXIS_ROW          = 0x0001;
 const sal_uInt16 EXC_SXVD_AXIS_COL          = 0x0002;
 const sal_uInt16 EXC_SXVD_AXIS_PAGE         = 0x0004;
 const sal_uInt16 EXC_SXVD_AXIS_DATA         = 0x0008;
-const sal_uInt16 EXC_SXVD_AXIS_RC_MASK      = EXC_SXVD_AXIS_ROW | EXC_SXVD_AXIS_COL;
-const sal_uInt16 EXC_SXVD_AXIS_RCP_MASK     = EXC_SXVD_AXIS_RC_MASK | EXC_SXVD_AXIS_PAGE;
+const sal_uInt16 EXC_SXVD_AXIS_ROWCOL       = EXC_SXVD_AXIS_ROW | EXC_SXVD_AXIS_COL;
+const sal_uInt16 EXC_SXVD_AXIS_ROWCOLPAGE   = EXC_SXVD_AXIS_ROWCOL | EXC_SXVD_AXIS_PAGE;
 
 const sal_uInt16 EXC_SXVD_SUBT_NONE         = 0x0000;
 const sal_uInt16 EXC_SXVD_SUBT_DEFAULT      = 0x0001;
@@ -160,6 +183,8 @@ const sal_uInt16 EXC_SXVD_SUBT_STDDEV       = 0x0100;
 const sal_uInt16 EXC_SXVD_SUBT_STDDEVP      = 0x0200;
 const sal_uInt16 EXC_SXVD_SUBT_VAR          = 0x0400;
 const sal_uInt16 EXC_SXVD_SUBT_VARP         = 0x0800;
+
+const sal_uInt16 EXC_SXVD_DEFAULT_CACHE     = EXC_PC_NOFIELD;
 
 // (0x00B2) SXVI --------------------------------------------------------------
 
@@ -188,7 +213,7 @@ const sal_uInt16 EXC_SXVI_HIDEDETAIL        = 0x0002;
 const sal_uInt16 EXC_SXVI_FORMULA           = 0x0004;
 const sal_uInt16 EXC_SXVI_MISSING           = 0x0008;
 
-const sal_uInt16 EXC_SXVI_DEFAULT_CACHE     = 0xFFFF;
+const sal_uInt16 EXC_SXVI_DEFAULT_CACHE     = EXC_PC_NOFIELD;
 
 // (0x00B4) SXIVD -------------------------------------------------------------
 
@@ -257,9 +282,28 @@ const sal_uInt16 EXC_SXDB_SRC_SCENARIO      = 0x0008;
 
 const sal_uInt16 EXC_ID_SXFIELD             = 0x00C7;
 
+const sal_uInt16 EXC_SXFIELD_HASITEMS       = 0x0001;
 const sal_uInt16 EXC_SXFIELD_POSTPONE       = 0x0002;
+const sal_uInt16 EXC_SXFIELD_CALCED         = 0x0004;
+const sal_uInt16 EXC_SXFIELD_HASCHILD       = 0x0008;
+const sal_uInt16 EXC_SXFIELD_NUMGROUP       = 0x0010;
 const sal_uInt16 EXC_SXFIELD_16BIT          = 0x0200;
-const sal_uInt16 EXC_SXFIELD_DEFAULTFLAGS   = 0x0001;
+
+const sal_uInt16 EXC_SXFIELD_DATA_MASK      = 0x0DE0;
+// known data types
+const sal_uInt16 EXC_SXFIELD_DATA_NONE      = 0x0000;   /// Special state for groupings.
+const sal_uInt16 EXC_SXFIELD_DATA_STR       = 0x0480;   /// Only strings, nothing else.
+const sal_uInt16 EXC_SXFIELD_DATA_INT       = 0x0520;   /// Only integers, opt. with doubles.
+const sal_uInt16 EXC_SXFIELD_DATA_DBL       = 0x0560;   /// Only doubles, nothing else.
+const sal_uInt16 EXC_SXFIELD_DATA_STR_INT   = 0x05A0;   /// Only strings and integers, opt. with doubles.
+const sal_uInt16 EXC_SXFIELD_DATA_STR_DBL   = 0x05E0;   /// Only strings and doubles, nothing else.
+const sal_uInt16 EXC_SXFIELD_DATA_DATE      = 0x0900;   /// Only dates, nothing else.
+const sal_uInt16 EXC_SXFIELD_DATA_DATE_NUM  = 0x0D00;   /// Dates with integers or doubles without strings.
+const sal_uInt16 EXC_SXFIELD_DATA_DATE_STR  = 0x0D80;   /// Dates and strings, opt. with integers or doubles.
+
+const sal_uInt16 EXC_SXFIELD_INDEX_MIN      = 0;        /// List index for minimum item in groupings.
+const sal_uInt16 EXC_SXFIELD_INDEX_MAX      = 1;        /// List index for maximum item in groupings.
+const sal_uInt16 EXC_SXFIELD_INDEX_STEP     = 2;        /// List index for step item in groupings.
 
 // (0x00C8) SXIDARRAY ---------------------------------------------------------
 
@@ -277,6 +321,10 @@ const sal_uInt16 EXC_ID_SXBOOLEAN           = 0x00CA;
 
 const sal_uInt16 EXC_ID_SXERROR             = 0x00CB;
 
+// (0x00CC) SXINTEGER ---------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXINTEGER           = 0x00CC;
+
 // (0x00CD) SXSTRING ----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_SXSTRING            = 0x00CD;
@@ -293,6 +341,26 @@ const sal_uInt16 EXC_ID_SXEMPTY             = 0x00CF;
 
 const sal_uInt16 EXC_ID_SXIDSTM             = 0x00D5;
 
+// (0x00D8) SXNUMGROUP --------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXNUMGROUP          = 0x00D8;
+
+const sal_uInt16 EXC_SXNUMGROUP_AUTOMIN     = 0x0001;
+const sal_uInt16 EXC_SXNUMGROUP_AUTOMAX     = 0x0002;
+
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_SEC    = 0x0001;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_MIN    = 0x0002;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_HOUR   = 0x0003;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_DAY    = 0x0004;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_MONTH  = 0x0005;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_QUART  = 0x0006;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_YEAR   = 0x0007;
+const sal_uInt16 EXC_SXNUMGROUP_TYPE_NUM    = 0x0008;
+
+// (0x00D9) SXGROUPINFO -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXGROUPINFO         = 0x00D9;
+
 // (0x00E3) SXVS --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_SXVS                = 0x00E3;
@@ -304,12 +372,36 @@ const sal_uInt16 EXC_SXVS_CONSOLID          = 0x0004;
 const sal_uInt16 EXC_SXVS_PIVOTTAB          = 0x0008;
 const sal_uInt16 EXC_SXVS_SCENARIO          = 0x0010;
 
+// (0x00F0) SXRULE ------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXRULE              = 0x00F0;
+
 // (0x00F1) SXEX --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_SXEX                = 0x00F1;
 
 const sal_uInt32 EXC_SXEX_DRILLDOWN         = 0x00020000;
 const sal_uInt32 EXC_SXEX_DEFAULTFLAGS      = 0x004F0200;
+
+// (0x00F2) SXFILT ------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXFILT              = 0x00F2;
+
+// (0x00F5) -------------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_00F5                = 0x00F5;   /// Unknown record
+
+// (0x00F6) SXNAME ------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXNAME              = 0x00F6;
+
+// (0x00F8) SXPAIR ------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXPAIR              = 0x00F8;
+
+// (0x00F9) SXFMLA ------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXFMLA              = 0x00F9;
 
 // (0x0100) SXVDEX ------------------------------------------------------------
 
@@ -329,7 +421,11 @@ const sal_uInt16 EXC_SXVDEX_SORT_OWN        = 0xFFFF;
 const sal_uInt16 EXC_SXVDEX_SHOW_NONE       = 0xFFFF;
 const sal_uInt16 EXC_SXVDEX_FORMAT_NONE     = 0x0000;
 
-// (0x0122) SXDBEX ---------------------------------------------------------
+// (0x0103) SXFORMULA ---------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SXFORMULA           = 0x0103;
+
+// (0x0122) SXDBEX ------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_SXDBEX              = 0x0122;
 const double EXC_SXDBEX_CREATION_DATE       = 51901.029652778;
@@ -343,57 +439,219 @@ const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
 // Pivot cache
 // ============================================================================
 
+/** Represents a data item of any type in a pivot cache. Supposed as base class for import and export. */
 class XclPCItem
 {
 public:
     explicit            XclPCItem();
 
+    /** Sets the item to 'empty' type. */
     void                SetEmpty();
+    /** Sets the item to 'text' type and adds the passed text. */
     void                SetText( const String& rText );
-    void                SetValue( double fValue );
+    /** Sets the item to 'double' type and adds the passed value. */
+    void                SetDouble( double fValue );
+    /** Sets the item to 'integer' type and adds the passed value. */
+    void                SetInteger( sal_Int16 nValue );
+    /** Sets the item to 'date/time' type and adds the passed date. */
     void                SetDate( double fDate );
+    /** Sets the item to 'error' type and adds the passed Excel error code. */
     void                SetError( sal_uInt16 nError );
+    /** Sets the item to 'boolean' type and adds the passed Boolean value. */
     void                SetBool( bool bValue );
 
+    /** Returns the current item type. */
     inline XclPCItemType GetType() const { return meType; }
 
+    /** Returns true, if the item type is 'empty'. */
     bool                IsEmpty() const;
+    /** Returns pointer to text, if the item type is 'text', otherwise 0. */
     const String*       GetText() const;
-    const double*       GetValue() const;
+    /** Returns pointer to value, if the item type is 'double', otherwise 0. */
+    const double*       GetDouble() const;
+    /** Returns pointer to integer, if the item type is 'integer', otherwise 0. */
+    const sal_Int16*    GetInteger() const;
+    /** Returns pointer to date value, if the item type is 'date/time', otherwise 0. */
     const double*       GetDate() const;
+    /** Returns pointer to error code, if the item type is 'error', otherwise 0. */
     const sal_uInt16*   GetError() const;
+    /** Returns pointer to Boolean value, if the item type is 'boolean', otherwise 0. */
     const bool*         GetBool() const;
 
+    /** Returns the text representation of the item. */
     inline const String& ConvertToText() const { return maText; }
-    inline double       ConvertToValue() const { return mfValue; }
+    /** Returns the value representation of the item. */
+    inline double       ConvertToDouble() const { return mfValue; }
+    /** Returns the value representation of the item. */
+    inline sal_Int16    ConvertToInteger() const { return mnValue; }
+    /** Returns the date/time representation of the item. */
+    inline double       ConvertToDate() const { return mfValue; }
+    /** Returns the error code representation of the item. */
     inline sal_uInt16   ConvertToError() const { return mnError; }
+    /** Returns the boolean representation of the item. */
     inline bool         ConvertToBool() const { return mbValue; }
 
 private:
-    XclPCItemType       meType;             /// Type of the item.
-    String              maText;             /// Text data of a text item.
-    double              mfValue;            /// Value of a floating-point or date item.
-    sal_uInt16          mnError;            /// Error code of an error item.
-    bool                mbValue;            /// Value of a boolean item.
+    XclPCItemType       meType;         /// Type of the item.
+    String              maText;         /// Text data of a text item.
+    double              mfValue;        /// Value of a floating-point or date item.
+    sal_Int16           mnValue;        /// Value of an integer item.
+    sal_uInt16          mnError;        /// Error code of an error item.
+    bool                mbValue;        /// Value of a boolean item.
 };
+
+bool operator==( const XclPCItem& rLeft, const XclPCItem& rRight );
+inline bool operator!=( const XclPCItem& rLeft, const XclPCItem& rRight ) { return !(rLeft == rRight); }
+
+// Field settings =============================================================
+
+/** Contains data for a pivot cache field (SXFIELD record). */
+struct XclPCFieldInfo
+{
+    String              maName;         /// Name of the pivot cache field.
+    sal_uInt16          mnFlags;        /// Various flags.
+    sal_uInt16          mnGroupChild;   /// Field containing grouping info for this field.
+    sal_uInt16          mnGroupBase;    /// Base field if this field contains grouping info.
+    sal_uInt16          mnVisItems;     /// Number of visible items for this field.
+    sal_uInt16          mnGroupItems;   /// Number of special items in a grouping field.
+    sal_uInt16          mnBaseItems;    /// Number of items in the base field.
+    sal_uInt16          mnOrigItems;    /// Number of original source data items.
+
+    explicit            XclPCFieldInfo();
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCFieldInfo& rInfo );
+
+// Numeric grouping field settings ============================================
+
+/** Contains data for a numeric grouping field (SXNUMGROUP record). */
+struct XclPCNumGroupInfo
+{
+    sal_uInt16          mnFlags;        /// Various flags.
+
+    explicit            XclPCNumGroupInfo();
+
+    bool                IsNumType() const;
+    void                SetNumType();
+
+    sal_Int32           GetScDateType() const;
+    void                SetScDateType( sal_Int32 nScType );
+
+    sal_uInt16          GetXclDataType() const;
+    void                SetXclDataType( sal_uInt16 nXclType );
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCNumGroupInfo& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo );
+
+// Base class for pivot cache fields ==========================================
+
+/** Represents a field in a pivot cache. Supposed as base class for import and export. */
+class XclPCField
+{
+public:
+    explicit            XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx );
+
+    /** Returns the index of this field in the containing pivot cache. */
+    inline sal_uInt16   GetFieldIndex() const { return mnFieldIdx; }
+
+    /** Returns true, if the type of the field is supported by Calc. */
+    bool                IsSupportedField() const;
+
+    /** Returns true, if this is a standard field build directly from source data. */
+    bool                IsStandardField() const;
+    /** Returns true, if the items of the field are calculated from a formula. */
+    bool                IsCalculatedField() const;
+
+    /** Returns true, if this field is a grouping field. */
+    bool                IsStdGroupField() const;
+    /** Returns true, if this field is a numeric grouping field. */
+    bool                IsNumGroupField() const;
+    /** Returns true, if this field is a date/time grouping field. */
+    bool                IsDateGroupField() const;
+    /** Returns true, if this field is a grouping field of any type. */
+    bool                IsGroupField() const;
+
+    /** Returns true, if this field has a child field in a grouping. */
+    bool                IsGroupBaseField() const;
+    /** Returns true, if this field is a child field in a grouping (it has a base field). */
+    bool                IsGroupChildField() const;
+    /** Returns the index of the base field, if exists, otherwise the own index. */
+    sal_uInt16          GetBaseFieldIndex() const;
+
+    /** Returns true, if the items are stored separately after the last field. */
+    bool                HasPostponedItems() const;
+
+protected:
+    XclPCFieldInfo      maFieldInfo;        /// Pivot cache field info (SXFIELD record).
+    XclPCFieldType      meFieldType;        /// Type of this pivot cache field.
+    sal_uInt16          mnFieldIdx;         /// Own field index in pivot cache.
+    ScfUInt16Vec        maGroupOrder;       /// Order of items in a grouping field (SXGROUPINFO record).
+    XclPCNumGroupInfo   maNumGroupInfo;     /// Info for numeric grouping (SXNUMGROUP record).
+};
+
+// Pivot cache settings =======================================================
+
+/** Contains data for a pivot cache (SXDB record). */
+struct XclPCInfo
+{
+    sal_uInt32          mnSrcRecs;      /// Records in source database.
+    sal_uInt16          mnStrmId;       /// Stream identifier.
+    sal_uInt16          mnFlags;        /// Flags for the cache.
+    sal_uInt16          mnBlockRecs;    /// Records in a source database block.
+    sal_uInt16          mnStdFields;    /// Number of standard pivot cache fields.
+    sal_uInt16          mnTotalFields;  /// Number of all fields (standard, grouped, calculated).
+    sal_uInt16          mnSrcType;      /// Database type.
+    String              maUserName;     /// Name of user who last modified the cache.
+
+    explicit            XclPCInfo();
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCInfo& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo );
 
 // ============================================================================
 // Pivot table
 // ============================================================================
 
-class XclImpStream;
-class XclExpStream;
+// cached name ================================================================
+
+/** A name for various pivot table info structs. Includes 'use cache' state. */
+struct XclPTCachedName
+{
+    String              maName;         /// The visible name, if used.
+    bool                mbUseCache;     /// true = Use name in cache instead of maName.
+
+    inline explicit     XclPTCachedName() : mbUseCache( true ) {}
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedName );
+
+// ----------------------------------------------------------------------------
+
+/** Base struct for named info structs. Supports explicit naming and using the cache. */
+struct XclPTVisNameInfo
+{
+    XclPTCachedName     maVisName;      /// The displayed name of the item.
+
+    /** Returns true, if the name is set exlicitely (maVisName.mbUseCache is false). */
+    inline bool         HasVisName() const { return !maVisName.mbUseCache; }
+    /** Returns the name, if set explicitely (maVisName.mbUseCache is false). */
+    const String*       GetVisName() const;
+    /** Sets the visible name and enables usage of cache if name is empty. */
+    void                SetVisName( const String& rName );
+};
 
 // Field item settings ========================================================
 
-/** General information about a data item (SXVI record). */
-struct XclPTItemInfo
+/** Contains data for a pivot table data item (SXVI record). */
+struct XclPTItemInfo : public XclPTVisNameInfo
 {
-    String              maName;         /// Name of the item (if cache is not used).
     sal_uInt16          mnType;         /// Type of the item (i.e. data, function, grand total).
     sal_uInt16          mnFlags;        /// Several flags.
     sal_uInt16          mnCacheIdx;     /// Index into cache for item name.
-    bool                mbUseCache;     /// true = Use name in cache.
 
     explicit            XclPTItemInfo();
 };
@@ -405,10 +663,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo );
 
 typedef ::std::vector< USHORT > XclPTSubtotalVec;
 
-/** General information about a field (SXVD record). */
-struct XclPTFieldInfo
+/** Contains data for a pivot table field (SXVD record). */
+struct XclPTFieldInfo : public XclPTVisNameInfo
 {
-    String              maVisName;      /// Visible name of the field.
     sal_uInt16          mnAxes;         /// Flags for axes this field is part of.
     sal_uInt16          mnSubtCount;    /// Number of subtotal functions.
     sal_uInt16          mnSubtotals;    /// Bitfield for subtotal functions.
@@ -417,8 +674,10 @@ struct XclPTFieldInfo
 
     explicit            XclPTFieldInfo();
 
-    /** Returns the API enum representing the orientation (first of row/col/page/data). */
-    ::com::sun::star::sheet::DataPilotFieldOrientation GetApiOrient() const;
+    /** Returns the API enum representing the orientation (first of row/col/page/data).
+        @param nMask  Restricts the axes taken into account.
+        @return  The first found axis orientation, that is allowed in nMask parameter. */
+    ::com::sun::star::sheet::DataPilotFieldOrientation GetApiOrient( sal_uInt16 nMask ) const;
     /** Adds the axis orientation represented by the passed API enum. */
     void                AddApiOrient( ::com::sun::star::sheet::DataPilotFieldOrientation eOrient );
 
@@ -433,7 +692,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo );
 
 // Extended field settings ====================================================
 
-/** Extended information about a field (SXVDEX record). */
+/** Contains extended data for a pivot table field (SXVDEX record). */
 struct XclPTFieldExtInfo
 {
     sal_uInt32          mnFlags;        /// Several flags and number of items for AutoShow.
@@ -468,6 +727,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo );
 
 // Page field settings ========================================================
 
+/** Contains data for a pivot table page field (part of SXPI record). */
 struct XclPTPageFieldInfo
 {
     sal_uInt16          mnField;        /// Base field for this page info.
@@ -482,10 +742,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTPageFieldInfo& rInfo )
 
 // Data field settings ========================================================
 
-/** Additional information about a data field (SXDI record). */
-struct XclPTDataFieldInfo
+/** Contains data for a pivot table data field (SXDI record). */
+struct XclPTDataFieldInfo : public XclPTVisNameInfo
 {
-    String              maVisName;      /// Visible name of the data field (i.e. "Sum of xyz").
     sal_uInt16          mnField;        /// Base field for this data info.
     sal_uInt16          mnAggFunc;      /// Data aggregation function.
     sal_uInt16          mnRefType;      /// Result reference type.
@@ -516,7 +775,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
 
 // Pivot table settings =======================================================
 
-/** general information about a pivot table (SXVIEW record). */
+/** Contains data for a pivot table (SXVIEW record). */
 struct XclPTInfo
 {
     String              maTableName;        /// The name of the pivot table.
