@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
+
 #pragma hdrstop
 
 #include "dialmgr.hxx"
@@ -116,7 +119,8 @@ void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
         {
             nLastAction = nTemp;
             USHORT nImage = nLastAction ? nLastAction : GetId();
-            Image aImage = SFX_IMAGEMANAGER()->GetImage( nImage );
+            SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
+            Image aImage = pFrame->GetImageManager()->GetImage( nImage );
             GetToolBox().SetItemImage( GetId(), aImage );
         }
     }
