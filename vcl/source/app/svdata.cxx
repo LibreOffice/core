@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:08:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,6 @@
  ************************************************************************/
 
 #include <string.h>
-
-#define _SV_SVDATA_CXX
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -170,6 +168,16 @@ ImplSVData* pImplSVData = &private_aImplSVData;
 // static SharedLib SV-Data
 ImplSVShlData aImplSVShlData;
 
+
+SalSystem* ImplGetSalSystem()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mpSalSystem )
+        pSVData->mpSalSystem = pSVData->mpDefInst->CreateSalSystem();
+    return pSVData->mpSalSystem;
+}
+
+
 static String& ReplaceJavaErrorMessages( String& rString )
 {
     rString.SearchAndReplaceAllAscii( "%OK", Button::GetStandardText( BUTTON_OK ) );
@@ -241,7 +249,6 @@ void ImplDeInitSVData()
 void ImplDestroySVData()
 {
     ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
-    ImplSVData*  pSVData = *ppSVData;
 
     // delete global sharedlib data
     // ...
