@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:04:16 $
+ *  last change: $Author: er $ $Date: 2001-02-16 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,8 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     ScDocShellModificator aModificator( *this );
 
     aDocument.SetImportingXML( TRUE );
+    // prevent unnecessary broadcasts and "half way listeners"
+    aDocument.SetInsertingFromOtherDoc( TRUE );
 
     if ( pMedium )
     {
@@ -540,12 +542,10 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     BOOL bRet = aImport.Import();
     UpdateLinks();
+    // don't prevent establishing of listeners anymore
+    aDocument.SetInsertingFromOtherDoc( FALSE );
     if ( bRet )
-    {
-        // don't prevent establishing of listeners anymore
-        aDocument.SetInsertingFromOtherDoc( FALSE );
         aDocument.CompileXML();
-    }
     aDocument.SetImportingXML( FALSE );
 
     //! row heights...
