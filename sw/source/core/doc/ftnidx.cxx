@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnidx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:35:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,34 +347,6 @@ void SwFtnIdxs::UpdateAllFtn()
 
     if( pDoc->GetRootFrm() && FTNNUM_PAGE == rFtnInfo.eNum )
         pDoc->GetRootFrm()->UpdateFtnNums();
-}
-
-void SwFtnIdxs::UpdateFtnInSections()
-{
-    if( !Count() )
-        return;
-
-    // besorge erstmal das Nodes-Array ueber den StartIndex der
-    // ersten Fussnote
-    SwDoc* pDoc = (SwDoc*) (*this)[ 0 ]->GetTxtNode().GetDoc();
-    SwTxtFtn* pTxtFtn;
-    SwUpdFtnEndNtAtEnd aNumArr;
-    for( USHORT nPos = 0; nPos < Count(); ++nPos )
-    {
-        pTxtFtn = (*this)[ nPos ];
-        const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( !rFtn.GetNumStr().Len() )
-        {
-            USHORT nSectNo = aNumArr.ChkNumber( *pTxtFtn );
-            if( nSectNo )
-            {
-                if( rFtn.IsEndNote() )
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-                else
-                    pTxtFtn->SetNumber( nSectNo, &rFtn.GetNumStr() );
-            }
-        }
-    }
 }
 
 SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
