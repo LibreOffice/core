@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.131 $
+#   $Revision: 1.132 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-22 15:52:55 $
+#   last change: $Author: vg $ $Date: 2005-01-13 16:48:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.131 $ ';
+    $id_str = ' $Revision: 1.132 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1326,6 +1326,20 @@ sub build_multiprocessing {
 #            cancel_build();
 #        };
     } while (scalar (keys %global_deps_hash));
+    # Let the last module be built till the end
+    if (scalar @build_queue) {
+        $BuildAllParents = '';
+        my $last_deps_hash = $projects_deps_hash{$build_queue[0]};
+        while (scalar keys %$last_deps_hash) {
+            sleep 1;
+            handle_dead_children();
+            BuildDependent($last_deps_hash);
+        }
+    };
+#    while (scalar @build_queue) {
+#        sleep 1;
+#        build_actual_queue(\@build_queue);
+#    };
     # Let all children finish their work
     while (children_number()) {
         handle_dead_children();
@@ -1358,7 +1372,8 @@ sub build_actual_queue {
             announce_module($Prj) if (!(defined $module_announced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
-            &BuildDependent($projects_deps_hash{$Prj});
+            BuildDependent($projects_deps_hash{$Prj});
+            handle_dead_children();
             if ($no_projects &&
                 !$running_children{$projects_deps_hash{$Prj}} &&
                 !defined $broken_modules_hashes{$projects_deps_hash{$Prj}})
@@ -1370,10 +1385,9 @@ sub build_actual_queue {
                 next;
             };
             $i++;
-            handle_dead_children();
         };
         $i = 0;
-    } while (!&are_all_dependent($build_queue));
+    } while (!are_all_dependent($build_queue));
 };
 
 #
