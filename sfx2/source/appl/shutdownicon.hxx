@@ -8,29 +8,54 @@
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
-
+#ifndef _RTL_STRING_HXX
+#include <rtl/string.hxx>
+#endif
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
+#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+
+class ResMgr;
 
 class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
                         public ::cppu::OWeakObject
 {
         ::osl::Mutex    m_aMutex;
+        bool            m_bVeto;
+        ResMgr          *m_pResMgr;
+
         static ShutdownIcon *pShutdownIcon; // one instance
-        ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop );
+        ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop,
+                      ResMgr *aResMgr );
+
+#ifdef WNT
+        void initSystray();
+        void deInitSystray();
+#endif
 
     public:
         virtual ~ShutdownIcon();
 
-        static void create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop );
+        static void create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop,
+                            ResMgr *aResMgr );
         static ShutdownIcon* getInstance();
+
         static void destroy();
         static void terminateDesktop();
+
+        static void FileOpen();
+        static void OpenURL( ::rtl::OUString& aURL );
+
+        ::rtl::OUString GetResString( int id );
+
+        void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
+        bool GetVeto()              { return m_bVeto; }
 
         // XInterface
         virtual void SAL_CALL acquire()
