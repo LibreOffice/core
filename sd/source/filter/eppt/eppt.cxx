@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-08 18:27:25 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 13:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,7 +1724,8 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
-    Rectangle aRect( Point(), Size( 28000, 21000 ) );
+    Point aEmptyPoint = Point();
+    Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
     EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
