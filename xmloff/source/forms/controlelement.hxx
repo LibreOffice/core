@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,20 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
-#endif _XMLOFF_FORMS_CONTROLELEMENT_HXX_
+#endif // _XMLOFF_FORMS_CONTROLELEMENT_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.152.1  2003/06/06 11:08:47  mh
+ *  join: from cws_srx644_ooo11beta2
+ *
+ *  Revision 1.2.130.1  2003/05/21 13:37:06  waratah
+ *  1858: Simple patch to comment out trailing text after #endif, waring removal
+ *
+ *  Revision 1.2  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.1  2000/12/06 17:30:27  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *
