@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 17:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
 #endif
+
+#include <algorithm>
 
 using namespace dbaui;
 using namespace ::com::sun::star::beans;

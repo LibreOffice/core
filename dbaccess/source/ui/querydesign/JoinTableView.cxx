@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 17:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,9 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
 #endif
-#ifndef INCLUDED_FUNCTIONAL
-#define INCLUDED_FUNCTIONAL
+
+#include <algorithm>
 #include <functional>
-#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
