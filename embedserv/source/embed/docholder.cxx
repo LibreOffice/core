@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:25:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -1100,7 +1103,7 @@ IDispatch* DocumentHolder::GetIDispatch()
     return m_pIDispatch;
 }
 
-
+#if 0
 HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
 {
     if ( pRect && m_xDocument.is() )
@@ -1154,6 +1157,7 @@ HRESULT DocumentHolder::GetVisArea( RECTL *pRect )
 
     return E_FAIL;
 }
+#endif
 
 HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
@@ -1183,27 +1187,21 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 
 HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 {
-    if ( pSize && m_xDocument.is() )
+    if ( pSize )
     {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+        uno::Reference< embed::XVisualObject > xVisObj( m_xDocument, uno::UNO_QUERY );
+        if ( xVisObj.is() )
+        {
+            try
             {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aRect;
-                if( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
-                {
-                    aRect[2] = aRect[0] + pSize->cx; // right = left + cx
-                    aRect[3] = aRect[1] + pSize->cy; // bottom = top + cy
+                awt::Size aNewSize( pSize->cx, pSize->cy );
+                xVisObj->setVisualAreaSize( DVASPECT_CONTENT, aNewSize );
 
-                    aArgs[nInd].Value <<= aRect;
-
-                    m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
-                    return S_OK;
-                }
+                return S_OK;
             }
-
-        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
+            catch( uno::Exception& )
+            {}
+        }
     }
 
     return E_FAIL;
@@ -1211,13 +1209,22 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 
 HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 {
-    RECTL aRect;
-    if ( pSize && SUCCEEDED( GetVisArea( &aRect ) ) )
+    if ( pSize )
     {
-        pSize->cx = aRect.right - aRect.left;
-        pSize->cy = aRect.top - aRect.bottom;
+        uno::Reference< embed::XVisualObject > xVisObj( m_xDocument, uno::UNO_QUERY );
+        if ( xVisObj.is() )
+        {
+            try
+            {
+                awt::Size aDocSize = xVisObj->getVisualAreaSize( DVASPECT_CONTENT );
+                pSize->cx = aDocSize.Width;
+                pSize->cy = aDocSize.Height;
 
-        return S_OK;
+                return S_OK;
+            }
+            catch( uno::Exception& )
+            {}
+        }
     }
 
     return E_FAIL;
