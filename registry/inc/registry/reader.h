@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,11 @@ void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
 /**
    Returns the type class of a type reader.
 
+   <p>This function will always return the type class without the internal
+   <code>RT_TYPE_PUBLISHED</code> flag set.  Use
+   <code>typereg_reader_isPublished</code> to determine whether a type reader is
+   published.</p>
+
    @param handle a handle on a type reader; may be null
 
    @return the type class of the type reader; if <code>handle</code> is null,
@@ -181,6 +186,19 @@ void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
    @since #i21150#
  */
 enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
+    SAL_THROW_EXTERN_C();
+
+/**
+   Returns whether a type reader is published.
+
+   @param handle a handle on a type reader; may be null
+
+   @return whether the type reader is published; if <code>handle</code> is null,
+   <code>sal_False</code> is returned
+
+   @since #i21150#
+ */
+sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
     SAL_THROW_EXTERN_C();
 
 /**

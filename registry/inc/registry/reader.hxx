@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:33:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,11 +214,25 @@ public:
     /**
        Returns the type class of this type reader.
 
+       <p>This function will always return the type class without the internal
+       <code>RT_TYPE_PUBLISHED</code> flag set.  Use <code>isPublished</code> to
+       determine whether this type reader is published.</p>
+
        @return the type class of this type reader; if this type reader is
        invalid, <code>RT_TYPE_INVALID</code> is returned
      */
     RTTypeClass getTypeClass() const {
         return typereg_reader_getTypeClass(m_handle);
+    }
+
+    /**
+       Returns whether this type reader is published.
+
+       @return whether this type reader is published; if this type reader is
+       invalid, <code>false</code> is returned
+     */
+    bool isPublished() const {
+        return typereg_reader_isPublished(m_handle);
     }
 
     /**
