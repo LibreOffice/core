@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:04:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef _FRMMGR_HXX
 #define _FRMMGR_HXX
 
+#ifndef _SWTYPES_HXX
 #include "swtypes.hxx"
+#endif
+#ifndef _FRMATR_HXX
 #include "frmatr.hxx"
+#endif
 
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
@@ -81,6 +85,10 @@
 #endif
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 class   SwWrtShell;
@@ -102,7 +110,7 @@ const SwTwips   DFLT_HEIGHT     = MM50;
 #define FRMMGR_TYPE_LABEL   0x08
 #define FRMMGR_TYPE_ENVELP  0x10
 
-class SwFlyFrmAttrMgr
+class SW_DLLPUBLIC SwFlyFrmAttrMgr
 {
     SfxItemSet  aSet;
     Point       aAbsPos;
@@ -113,12 +121,12 @@ class SwFlyFrmAttrMgr
     BOOL        bIsInVertical;
 
     // interne Verrechnung fuer Umrandung
-    SwTwips             CalcTopSpace();
-    SwTwips             CalcBottomSpace();
-    SwTwips             CalcLeftSpace();
-    SwTwips             CalcRightSpace();
+    SW_DLLPRIVATE SwTwips           CalcTopSpace();
+    SW_DLLPRIVATE SwTwips           CalcBottomSpace();
+    SW_DLLPRIVATE SwTwips           CalcLeftSpace();
+    SW_DLLPRIVATE SwTwips           CalcRightSpace();
 
-    void _UpdateFlyFrm();   //Nacharbeit nach Einfuegen oder Update
+    SW_DLLPRIVATE void _UpdateFlyFrm(); //Nacharbeit nach Einfuegen oder Update
 
 public:
     SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType );
