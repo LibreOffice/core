@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-26 15:55:23 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 21:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,10 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
-
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
+#endif
+#include <hash_set>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -167,6 +170,15 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;
+
+struct OUStringEquals
+{
+    sal_Bool operator()( const rtl::OUString &r1,
+                         const rtl::OUString &r2) const
+    {
+        return r1 == r2;
+    }
+};
 
 //----------------------------------------------------------------------------
 
@@ -869,23 +881,53 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
+    std::hash_set < OUString, OUStringHash, OUStringEquals > aSet;
+
+    // Insert all user level settings to the hash_set
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ForbiddenCharacters" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintAnnotationMode" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintBlackFonts" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintControls" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintDrawings" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintGraphics" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintLeftPages" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintPageBackground" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintProspect" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintReversed" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintRightPages" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintFaxName" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintPaperFromSetup" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintTables" ) ) );
+    aSet.insert ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PrintSingleJobs" ) ) );
+
+    std::hash_set < OUString, OUStringHash, OUStringEquals >::const_iterator aEnd = aSet.end();
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
+    SvtSaveOptions aSaveOpt;
 
     while( nCount-- )
     {
-        try
+        if (aSaveOpt.IsLoadUserSettings() || aSet.find ( pValues->Name ) == aEnd )
         {
-            if( xInfo->hasPropertyByName( pValues->Name ) )
+            try
             {
-                xProps->setPropertyValue( pValues->Name, pValues->Value );
+                if( xInfo->hasPropertyByName( pValues->Name ) )
+                {
+                    xProps->setPropertyValue( pValues->Name, pValues->Value );
+                }
+            }
+            catch( Exception& )
+            {
+                DBG_ERROR( "SwXMLImport::SetConfigurationSettings: Exception!" );
             }
         }
-        catch( Exception& e )
-        {
-            DBG_ERROR( "SwXMLImport::SetConfigurationSettings: Exception!" );
-        }
-
         pValues++;
     }
 }
