@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
     SwFtnBossFrm *pBoss = pCntnt->FindFtnBossFrm( !bEnd );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     SwTwips nRstHeight = GetRstHeight();
 #endif
 
@@ -871,7 +871,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         ValidateFrm();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // pFtnFrm kann sich durch Calc veraendert haben ...
     SwFtnFrm *pFtnFrm = pBoss->FindFtn( this, pFtn );
     if( pFtnFrm && pBoss != pFtnFrm->FindFtnBossFrm( !bEnd ) )
@@ -1463,7 +1463,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     // einen kleineren Font eingestellt als der vom QuoVadis-Text ...
     CalcAdjustLine( pCurr );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( OPTDBG( rInf ) )
     {
 //        aDbstream << "FormatQuoVadis:" << endl;
