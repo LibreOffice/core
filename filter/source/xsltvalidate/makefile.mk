@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.3 $ 
+#   $Revision: 1.4 $ 
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 14:04:45 $ 
+#   last change: $Author: vg $ $Date: 2003-06-12 11:13:48 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -64,6 +64,9 @@ PRJNAME = filter
 #PACKAGE = com$/sun$/star$/documentconversion$/XSLTValidate
 TARGET  =XSLTValidate 
 # --- Settings ----------------------------------------------------- 
+.IF "$(XML_CLASSPATH)" != ""
+XCLASSPATH+=":$(XML_CLASSPATH)"
+.ENDIF
 .INCLUDE: settings.mk  
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
