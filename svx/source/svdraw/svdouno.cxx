@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:27:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ namespace
     };
 }
 
-sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     const SdrPageView* pPV = rInfoRec.pPV;
     OutputDevice* pOut = rXOut.GetOutDev();
@@ -928,43 +928,43 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
     SetUnoControlModel(xModel);
 }
 
-void SdrUnoObj::WriteData(SvStream& rOut) const
-{
-    SdrRectObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01void SdrUnoObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrRectObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrUnoObj");
+//BFS01#endif
+//BFS01
+//BFS01 if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch schreiben
+//BFS01 {
+//BFS01     // UNICODE: rOut << aUnoControlModelTypeName;
+//BFS01     rOut.WriteByteString(aUnoControlModelTypeName);
+//BFS01 }
+//BFS01}
 
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrUnoObj");
-#endif
-
-    if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch schreiben
-    {
-        // UNICODE: rOut << aUnoControlModelTypeName;
-        rOut.WriteByteString(aUnoControlModelTypeName);
-    }
-}
-
-void SdrUnoObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError() != 0)
-        return;
-
-    SdrRectObj::ReadData(rHead,rIn);
-
-    SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrUnoObj");
-#endif
-
-    if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch lesen
-    {
-        // UNICODE: rIn >> aUnoControlModelTypeName;
-        rIn.ReadByteString(aUnoControlModelTypeName);
-
-        CreateUnoControlModel(aUnoControlModelTypeName);
-    }
-}
+//BFS01void SdrUnoObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError() != 0)
+//BFS01     return;
+//BFS01
+//BFS01 SdrRectObj::ReadData(rHead,rIn);
+//BFS01
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrUnoObj");
+//BFS01#endif
+//BFS01
+//BFS01 if (bOwnUnoControlModel)                    // nur als besitzt des Models dieses auch lesen
+//BFS01 {
+//BFS01     // UNICODE: rIn >> aUnoControlModelTypeName;
+//BFS01     rIn.ReadByteString(aUnoControlModelTypeName);
+//BFS01
+//BFS01     CreateUnoControlModel(aUnoControlModelTypeName);
+//BFS01 }
+//BFS01}
 
 void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
 {
