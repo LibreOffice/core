@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-04-04 09:05:57 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,23 @@ css::uno::Sequence< css::beans::PropertyValue > Converter::convert_seqAny2seqPro
 
     if (nRealCount!=nCount)
         lDestination.realloc(nRealCount);
+
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts a sequence of unicode strings into a vector of such items
+ */
+OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >& lSource )
+{
+    OUStringList lDestination;
+    sal_Int32 nCount = lSource.getLength();
+
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem )
+    {
+        lDestination.push_back(lSource[nItem]);
+    }
 
     return lDestination;
 }

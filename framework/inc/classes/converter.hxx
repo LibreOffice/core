@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 06:53:13 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
-#endif
+#include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -107,8 +106,9 @@ namespace framework{
 class Converter
 {
     public:
-        static css::uno::Sequence< css::uno::Any >             convert_seqProp2seqAny( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
-        static css::uno::Sequence< css::beans::PropertyValue > convert_seqAny2seqProp( const css::uno::Sequence< css::uno::Any >&             lSource );
+        static css::uno::Sequence< css::uno::Any >             convert_seqProp2seqAny          ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
+        static css::uno::Sequence< css::beans::PropertyValue > convert_seqAny2seqProp          ( const css::uno::Sequence< css::uno::Any >&             lSource );
+        static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >&           lSource );
 };
 
 }       // namespace framework
