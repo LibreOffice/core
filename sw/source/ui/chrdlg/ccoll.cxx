@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,8 @@ __EXPORT SwCondCollPage::~SwCondCollPage()
 
 int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * pSet)
 {
-    FillItemSet(*pSet);
+    if( pSet )
+        FillItemSet(*pSet);
 
     return LEAVE_PAGE;
 }
@@ -522,6 +523,9 @@ const CommandStruct* SwCondCollItem::GetCmds()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/06/01 10:35:45  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.2  2001/02/09 07:43:05  os
       TabPage size changed
 

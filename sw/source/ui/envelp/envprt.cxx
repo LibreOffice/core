@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,8 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet& rSet)
 
 int SwEnvPrtPage::DeactivatePage(SfxItemSet* pSet)
 {
-    FillItemSet(*pSet);
+    if( pSet )
+        FillItemSet(*pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -293,6 +294,9 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 // ----------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.2  2001/05/30 16:32:13  fme
+Fix #86988#: Redesign of dialogs
+
 Revision 1.1.1.1  2000/09/18 17:14:35  hr
 initial import
 

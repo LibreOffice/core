@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 14:43:53 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,8 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 int SwEnvPage::DeactivatePage(SfxItemSet* pSet)
 {
     FillItem(GetParent()->aEnvItem);
-    FillItemSet(*pSet);
+    if( pSet )
+        FillItemSet(*pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 

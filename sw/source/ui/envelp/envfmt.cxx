@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:22:17 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,8 @@ void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 
 int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* pSet)
 {
-    FillItemSet(*pSet);
+    if( pSet )
+        FillItemSet(*pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -684,6 +685,9 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------
 $Log: not supported by cvs2svn $
+Revision 1.5  2002/05/13 12:22:17  os
+#90353# new[]-delete[] mix fixed
+
 Revision 1.4  2001/05/30 16:32:13  fme
 Fix #86988#: Redesign of dialogs
 

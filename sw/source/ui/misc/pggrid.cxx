@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 14:07:02 $
+ *  last change: $Author: gt $ $Date: 2002-07-23 08:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
   -----------------------------------------------------------------------*/
 int SwTextGridPage::DeactivatePage( SfxItemSet* pSet )
 {
-    return 0;
+    return LEAVE_PAGE;
 }
 /* -----------------------------08.02.2002 11:57------------------------------
 
