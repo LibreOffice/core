@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-17 13:00:20 $
+ *  last change: $Author: pl $ $Date: 2002-09-23 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <osl/profile.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
+#include <cpputools/jenv.hxx>
 
 namespace psp {
 
@@ -188,13 +189,36 @@ const ::rtl::OUString& psp::getFontPath()
             }
             else
                 aJREpath = aTestPath;
-            if( aJREpath.getLength() )
-            {
-                aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-                aPath += OStringToOUString( aJREpath, osl_getThreadTextEncoding() );
-            }
         }
 
+        // if no javarc (e.g. in setup) exists or it failed try the UDK method
+        if( ! aJREpath.getLength() )
+        {
+            char* pJavaLib = getJavaRuntimeLib();
+            if( pJavaLib && *pJavaLib )
+            {
+                rtl::OString aTestPath( pJavaLib );
+                sal_Int32 nIndex;
+                while( ( nIndex = aTestPath.lastIndexOf( '/' ) ) != -1 )
+                {
+                    aTestPath = aTestPath.copy( 0, nIndex );
+                    rtl::OString aTmpPath = aTestPath;
+                    aTmpPath += "/lib/fonts";
+                    if( access( aTmpPath.getStr(), R_OK ) == 0 )
+                    {
+                        aJREpath = aTmpPath;
+                        break;
+                    }
+                }
+            }
+            free( pJavaLib );
+        }
+
+        if( aJREpath.getLength() )
+        {
+            aPath += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
+            aPath += OStringToOUString( aJREpath, osl_getThreadTextEncoding() );
+        }
 #ifdef DEBUG
         fprintf( stderr, "initalizing font path to \"%s\"\n", ::rtl::OUStringToOString( aPath, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif

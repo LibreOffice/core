@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 15:22:50 $
+#   last change: $Author: pl $ $Date: 2002-09-23 13:28:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SHL1VERSIONMAP=libpsp_linux.map
 SHL1STDLIBS=$(UNOTOOLSLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\
+            $(JENVLIB)			\
             $(CPPUHELPERLIB)	\
             $(CPPULIB)			\
             $(SALLIB)			\
