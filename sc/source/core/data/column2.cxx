@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:08:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ void ScColumn::LoadNotes( SvStream& rStream )
         rStream >> nPos;
 #endif
         if (nPos < nCount)
-            pItems[nPos].pCell->LoadNote(rStream);
+            pItems[nPos].pCell->LoadNote(rStream, pDocument);
         else
         {
             DBG_ERROR("falsche Pos in ScColumn::LoadNotes");
