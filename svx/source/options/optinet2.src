@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2002-01-09 10:18:48 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = "代理伺服器(~E)";
         Text[ arabic ] = "����� Proxy";
         Text[ greek ] = "����������� Proxy";
-        Text[ korean ] = "프록시 서버(~E)";
+        Text[ korean ] = "프록시 서버";
         Text[ turkish ] = "Proxy sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor Pro~xy";
@@ -298,7 +298,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ polish ] = "Use browser settings";
         Text[ portuguese_brazilian ] = "Use browser settings";
         Text[ japanese ] = "ブラウザ設定を使用";
-        Text[ korean ] = "Use browser settings";
+        Text[ korean ] = "브라우저 설정 사용";
         Text[ chinese_simplified ] = "使用浏览器的设定";
         Text[ chinese_traditional ] = "使用瀏覽器的設定";
         Text[ turkish ] = "Use browser settings";
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = "H~ttp 代理";
         Text[ arabic ] = "Http Proxy~";
         Text[ greek ] = "~Http Proxy";
-        Text[ korean ] = "H~ttp 프록시";
+        Text[ korean ] = "Http 프록시";
         Text[ turkish ] = "~Http Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Http Proxy";
@@ -395,7 +395,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = "~Ftp 代理";
         Text[ arabic ] = "Ftp Proxy~";
         Text[ greek ] = "~Ftp Proxy";
-        Text[ korean ] = "~Ftp 프록시";
+        Text[ korean ] = "Ftp 프록시";
         Text[ turkish ] = "~Ftp Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ftp Proxy";
@@ -463,7 +463,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = "~Socks 代理";
         Text[ arabic ] = "Socks proxy~";
         Text[ greek ] = "~Socks Proxy";
-        Text[ korean ] = "~Socks 프록시";
+        Text[ korean ] = "Socks 프록시";
         Text[ turkish ] = "Socks Proxy";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Socks Prox~y";
@@ -1444,7 +1444,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "~Run macro";
         Text[ portuguese_brazilian ] = "~Run macro";
         Text[ japanese ] = "マクロの実行";
-        Text[ korean ] = "~Run macro";
+        Text[ korean ] = "매크로 실행(R)";
         Text[ chinese_simplified ] = "执行宏";
         Text[ chinese_traditional ] = "執行巨集";
         Text[ turkish ] = "~Run macro";
@@ -1562,7 +1562,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ korean ] =
     {
          < "절대 없음" ; > ;
-        < "Gem�� Pfadliste" ; > ;
+        < "경로 목록에 의거" ; > ;
         < "항상" ; > ;
     };
     StringList [ chinese_simplified ] =
@@ -1616,7 +1616,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "C~onfirm in case of other document sources";
         Text[ portuguese_brazilian ] = "C~onfirm in case of other document sources";
         Text[ japanese ] = "ほかのドキュメントソースでは確認する";
-        Text[ korean ] = "C~onfirm in case of other document sources";
+        Text[ korean ] = "기타 문서 소스의 경우 확인(O)";
         Text[ chinese_simplified ] = "如果是其它文档来源就需要确认";
         Text[ chinese_traditional ] = "如果是其它文件來源就需要確認";
         Text[ turkish ] = "C~onfirm in case of other document sources";
@@ -1643,7 +1643,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "Show ~warning before running macro";
         Text[ portuguese_brazilian ] = "Show ~warning before running macro";
         Text[ japanese ] = "常に実行する前に警告する";
-        Text[ korean ] = "Show ~warning before running macro";
+        Text[ korean ] = "매크로 실행 전 경고 표시(W)";
         Text[ chinese_simplified ] = "在执行之前自动警告";
         Text[ chinese_traditional ] = "在執行之前自動警告";
         Text[ turkish ] = "Show ~warning before running macro";
@@ -1670,7 +1670,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "~Path list";
         Text[ portuguese_brazilian ] = "~Path list";
         Text[ japanese ] = "パスのリスト";
-        Text[ korean ] = "~Path list";
+        Text[ korean ] = "경로 목록(P)";
         Text[ chinese_simplified ] = "路经列单";
         Text[ chinese_traditional ] = "路經清單";
         Text[ turkish ] = "~Path list";
@@ -1760,7 +1760,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ polish ] = "New pa~th";
         Text[ portuguese_brazilian ] = "New pa~th";
         Text[ japanese ] = "新しいパス";
-        Text[ korean ] = "New pa~th";
+        Text[ korean ] = "새 경로(T)";
         Text[ chinese_simplified ] = "新的路经";
         Text[ chinese_traditional ] = "新的路經";
         Text[ turkish ] = "New pa~th";
@@ -1878,7 +1878,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "安全檢查(~S)";
         Text[ arabic ] = "���� �����";
         Text[ greek ] = "������~� ���������";
-        Text[ korean ] = "보안 점검(~S)";
+        Text[ korean ] = "보안 점검";
         Text[ turkish ] = "G�venlik kontrolleri";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ota suojaustar~kistukset k�ytt��n";
@@ -2125,7 +2125,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "啟用(~N)";
         Text[ arabic ] = "Plug-Ins";
         Text[ greek ] = "����������� ����������";
-        Text[ korean ] = "사용 가능(~N)";
+        Text[ korean ] = "사용 가능";
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plug-ins";
@@ -2301,6 +2301,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
