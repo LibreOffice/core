@@ -1,0 +1,159 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sbagrid.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-09-27 07:25:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef DBACCESS_SBA_GRID_HRC
+#define DBACCESS_SBA_GRID_HRC
+
+//----------------Menueitems-------------------------------------------------
+//#define SID_SBA_BRW_DELETEROWS                    (SID_SBA_START + 34) // Zeilen loeschen
+//#define SID_SBA_BRW_HIDECOL                       (SID_SBA_START + 35) // Spalten verstecken
+//#define SID_SBA_BRW_SHOWCOL                       (SID_SBA_START + 36) // Spalten wieder zeigen
+//#define SID_SBA_BRW_SHOWALLCOLS                   (SID_SBA_START + 37) // Alle Spalten wieder zeigen
+//#define SID_SBA_BRW_INSERTROWS                    (SID_SBA_START + 38) // Zeilen einfuegen
+//#define SID_SBA_BRW_DELETEROW                 (SID_SBA_START + 39) // Zeilen loeschen
+//#define SID_SBA_TABED_PRIMARYKEY              (SID_SBA_START + 40) // Primary key vergeben
+//#define SID_QRY_FUNCTION                      (SID_SBA_START + 41) // Funktionen anzeigen
+//#define SID_QRY_TABLENAME                     (SID_SBA_START + 42) // Tabellennamen anzeigen
+//#define SID_QRY_ALIASNAME                     (SID_SBA_START + 43) // Aliasnamen anzeigen
+//#define SID_QRY_DISTINCT                      (SID_SBA_START + 44) // Distinct anzeigen
+//#define SID_TBL_SORT_ASC                      (SID_SBA_START + 45) // Aufsteigen Sortieren
+//#define SID_TBL_SORT_DESC                     (SID_SBA_START + 46) // Absteigen Sortieren
+
+//#define SID_DBSTATE_ACTUALIZE                 (SID_SBA_START + 48) // actualize dbstate
+//#define SID_DBSTATE_SHUTDOWN                  (SID_SBA_START + 49) // shutdown db
+//#define SID_DBSTATE_RESTART                   (SID_SBA_START + 50) // restart db
+
+// Tabelle
+#define SBA_WHICHID_START       100
+// Zeilenhoehe
+#define SBA_DEF_ROWHEIGHT       (SBA_WHICHID_START+131) // SbaColRowSizeItem
+
+#define SBA_DEF_RANGEFONT       (SBA_WHICHID_START+132) // RangeItem
+#define SBA_DEF_FONT            (SBA_WHICHID_START+133) // SvxFontItem
+#define SBA_DEF_FONTHEIGHT      (SBA_WHICHID_START+134) // SvxFontHeightItem
+#define SBA_DEF_FONTCOLOR       (SBA_WHICHID_START+135) // SvxColorItem
+#define SBA_DEF_FONTWEIGHT      (SBA_WHICHID_START+136) // SvxWeightItem
+#define SBA_DEF_POSTURE         (SBA_WHICHID_START+137) // SvxPostureItem
+#define SBA_DEF_SHADOWED        (SBA_WHICHID_START+138) // SvxShadowedItem
+#define SBA_DEF_CONTOUR         (SBA_WHICHID_START+139) // SvxContourItem
+#define SBA_DEF_CROSSEDOUT      (SBA_WHICHID_START+140) // SvxCrossedOutItem
+#define SBA_DEF_UNDERLINE       (SBA_WHICHID_START+141) // SvxUnderlineItem
+#define SBA_DEF_LANGUAGE        (SBA_WHICHID_START+142) // SvxLanguageItem
+
+// Spalten
+// Formatierung
+#define SBA_DEF_RANGEFORMAT     (SBA_WHICHID_START+143) // RangeItem
+#define SBA_DEF_FMTVALUE        (SBA_WHICHID_START+144) // SfxULONG, Format
+
+// Ausrichtung
+#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
+
+// Spaltenbreite
+#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
+// Feldtyp
+#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
+// Feldlänge
+#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
+// Eingabe erforderlich
+#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
+// Position in der Tabelle, Abfrage
+#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
+// Name der zugehoerigen Tabelle
+#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
+// Spalte ausblenden
+#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
+
+// Ausrichtung
+#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
+
+// Spaltenbreite
+#define SBA_DEF_FLTCOLWIDTH         (SBA_WHICHID_START + 146) // SbaColRowSizeItem
+// Feldtyp
+#define SBA_DEF_FLTTYPE             (SBA_WHICHID_START + 147) // DataFieldTypeItem
+// Feldlänge
+#define SBA_DEF_FLTLENGTH           (SBA_WHICHID_START + 148) // SfxUInt32Item
+// Eingabe erforderlich
+#define SBA_DEF_FLTREQUIRED         (SBA_WHICHID_START + 149) // SfxBoolItem
+// Position in der Tabelle, Abfrage
+#define SBA_DEF_FLTPOS              (SBA_WHICHID_START + 150) // SfxUInt16Item
+// Name der zugehoerigen Tabelle
+#define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
+// Spalte ausblenden
+#define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
+// Kommentar zum Feld
+#define SBA_DEF_FLTCOMMENT          (SBA_WHICHID_START + 153) // SfxStringItem
+// default wert
+#define SBA_DEF_FLTDEFAULT          (SBA_WHICHID_START + 154) // SfxStringItem
+// Primärschluessel
+#define SBA_DEF_FLTPRIMARY          (SBA_WHICHID_START + 155) // SfxBoolItem
+// table properties
+#define SBA_DEF_TABLEPROP           (SBA_WHICHID_START + 156) // SfxString
+#define SBA_DEF_SORT                (SBA_WHICHID_START + 157) // SfxString
+#define SBA_DEF_FILTER              (SBA_WHICHID_START + 158) // SfxString
+#define SBA_DEF_FILTERAPPLIED       (SBA_WHICHID_START + 159) // SfxBool
+#define SBA_DEF_ROWHEIGHT_DEFAULT   (SBA_WHICHID_START + 160) // SfxBool
+// the col has a default width ?
+#define SBA_DEF_FLTCOLWIDTH_DEFAULT (SBA_WHICHID_START + 161) // SfxBool
+#define SBA_DEF_WORDLINEMODE        (SBA_WHICHID_START + 162) // SfxBool
+
+
+
+#endif // DBACCESS_SBA_GRID_HRC
