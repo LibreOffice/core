@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:34:08 $
+ *  last change: $Author: os $ $Date: 2002-09-09 12:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
@@ -725,7 +727,11 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
                 //Chart auf Readonly gesetzt wenn es eine Verbindung
                 //zu einer Tabelle hat.
                 if ( GetChartName( xRef ).Len() )
+                {
                     pMemChart->SetReadOnly( TRUE );
+                    pMemChart->SetNumberFormatter(GetDoc()->GetNumberFormatter( sal_True ));
+                    SchDLL::Update(xRef, pMemChart);
+                }
             }
         }
 
