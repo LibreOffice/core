@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:31:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 14:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#two ranges available:
-#34200 - 34767
-#40768 - 42767
+//two ranges available:
+//34200 - 34767
+//40768 - 42767
 
 /*
  * web wizard :         34200 - 34319
@@ -69,6 +69,7 @@
  * others to be listed...
  *
  * web wizard (cont.) :     41000 - 41050
+ * agenda wizard :              41051 - 41099
  */
 
 
@@ -98,8 +99,6 @@ hidspecial HID { HelpID = HID0_STATUS_DIALOG; } ;
 //step1
 #define HID1_LST_SESSIONS   34207
 hidspecial HID { HelpID = HID1_LST_SESSIONS; } ;
-#define HID1_BTN_LOAD_SES   34208
-hidspecial HID { HelpID = HID1_BTN_LOAD_SES; } ;
 #define HID1_BTN_DEL_SES    34209
 hidspecial HID { HelpID = HID1_BTN_DEL_SES; } ;
 
@@ -157,7 +156,7 @@ hidspecial HID { HelpID = HID3_IL_LAYOUTS_IMG14; } ;
 #define HID3_IL_LAYOUTS_IMG15   34234
 hidspecial HID { HelpID = HID3_IL_LAYOUTS_IMG15; } ;
 
-#define//step4
+//step4
 #define HID4_CHK_DISPLAY_FILENAME   34235
 hidspecial HID { HelpID = HID4_CHK_DISPLAY_FILENAME; } ;
 #define HID4_CHK_DISPLAY_DESCRIPTION    34236
@@ -196,20 +195,12 @@ hidspecial HID { HelpID = HID5_BTN_ICONS; } ;
 //step6
 #define HID6_TXT_SITE_TITLE 34250
 hidspecial HID { HelpID = HID6_TXT_SITE_TITLE; } ;
-#define HID6_TXT_SITE_ICON  34251
-hidspecial HID { HelpID = HID6_TXT_SITE_ICON; } ;
-#define HID6_BTN_SITE_ICON  34252
-hidspecial HID { HelpID = HID6_BTN_SITE_ICON; } ;
 #define HID6_TXT_SITE_DESC  34253
 hidspecial HID { HelpID = HID6_TXT_SITE_DESC; } ;
-#define HID6_TXT_SITE_KEYWRDS   34254
-hidspecial HID { HelpID = HID6_TXT_SITE_KEYWRDS; } ;
 #define HID6_DATE_SITE_CREATED  34255
 hidspecial HID { HelpID = HID6_DATE_SITE_CREATED; } ;
 #define HID6_DATE_SITE_UPDATED  34256
 hidspecial HID { HelpID = HID6_DATE_SITE_UPDATED; } ;
-#define HID6_NUM_SITE_REVISTS   34257
-hidspecial HID { HelpID = HID6_NUM_SITE_REVISTS; } ;
 #define HID6_TXT_SITE_EMAIL 34258
 hidspecial HID { HelpID = HID6_TXT_SITE_EMAIL; } ;
 #define HID6_TXT_SITE_COPYRIGHT 34259
@@ -744,11 +735,11 @@ hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDOWNDATA; };
 hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDCANCEL; };
 #define HID_DLGHOLIDAYCAL_0_CMDOK   34722
 hidspecial HID { HelpID = HID_DLGHOLIDAYCAL_0_CMDOK; };
-#End at 34767
+//End at 34767
 
-#Start at 40768
+//Start at 40768
 
-#LetterWizard---------------------------
+//LetterWizard---------------------------
 
 #define HID_LTRWIZ_OPTBUSINESSLETTER   40769
 hidspecial HID { HelpID = HID_LTRWIZ_OPTBUSINESSLETTER; };
@@ -1124,4 +1115,228 @@ hidspecial HID { HelpID = HID_FTP_BTN_PATH; } ;
 hidspecial HID { HelpID = HID_FTP_OK; } ;
 #define HID_FTP_CANCEL  41048
 hidspecial HID { HelpID = HID_FTP_CANCEL; } ;
-#End at 42767
+
+
+/* ====================================
+ *                 AGENDA WIZARD
+ *                 41051 - 41099
+ * ====================================
+ */
+
+// step 0 - navibar
+
+#define HID_AGWIZ                       41051
+hidspecial HID { HelpID = HID_AGWIZ; } ;
+#define HID_AGWIZ_HELP                      41052
+hidspecial HID { HelpID = HID_AGWIZ_HELP; } ;
+#define HID_AGWIZ_NEXT                      41053
+hidspecial HID { HelpID = HID_AGWIZ_NEXT; } ;
+#define HID_AGWIZ_PREV                      41054
+hidspecial HID { HelpID = HID_AGWIZ_PREV; } ;
+#define HID_AGWIZ_CREATE                    41055
+hidspecial HID { HelpID = HID_AGWIZ_CREATE; } ;
+#define HID_AGWIZ_CANCEL                    41056
+hidspecial HID { HelpID = HID_AGWIZ_CANCEL; } ;
+
+//step 1 - design
+
+#define HID_AGWIZ_1_LIST_PAGEDESIGN             41057
+hidspecial HID { HelpID = HID_AGWIZ_1_LIST_PAGEDESIGN; } ;
+#define HID_AGWIZ_1_CHK_MINUTES                 41058
+hidspecial HID { HelpID = HID_AGWIZ_1_CHK_MINUTES; } ;
+
+// step 2 - general attributes
+
+#define HID_AGWIZ_2_TXT_TIME                    41059
+hidspecial HID { HelpID = HID_AGWIZ_2_TXT_TIME; } ;
+#define HID_AGWIZ_2_TXT_DATE                    41060
+hidspecial HID { HelpID = HID_AGWIZ_2_TXT_DATE; } ;
+#define HID_AGWIZ_2_TXT_TITLE                   41061
+hidspecial HID { HelpID = HID_AGWIZ_2_TXT_TITLE; } ;
+#define HID_AGWIZ_2_TXT_LOCATION                41062
+hidspecial HID { HelpID = HID_AGWIZ_2_TXT_LOCATION; } ;
+
+// step 3 - headings
+
+#define HID_AGWIZ_3_CHK_MEETING_TYPE                41063
+hidspecial HID { HelpID = HID_AGWIZ_3_CHK_MEETING_TYPE; } ;
+#define HID_AGWIZ_3_CHK_READ                    41064
+hidspecial HID { HelpID = HID_AGWIZ_3_CHK_READ; } ;
+#define HID_AGWIZ_3_CHK_BRING                   41065
+hidspecial HID { HelpID = HID_AGWIZ_3_CHK_BRING; } ;
+#define HID_AGWIZ_3_CHK_NOTES                   41066
+hidspecial HID { HelpID = HID_AGWIZ_3_CHK_NOTES; } ;
+
+// step 4 - names
+
+#define HID_AGWIZ_4_CHK_CALLED_BY               41067
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_CALLED_BY; } ;
+#define HID_AGWIZ_4_CHK_FACILITATOR                 41068
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_FACILITATOR; } ;
+#define HID_AGWIZ_4_CHK_NOTETAKER               41069
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_NOTETAKER; } ;
+#define HID_AGWIZ_4_CHK_TIMEKEEPER              41070
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_TIMEKEEPER; } ;
+#define HID_AGWIZ_4_CHK_ATTENDEES               41071
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_ATTENDEES; } ;
+#define HID_AGWIZ_4_CHK_OBSERVERS               41072
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_OBSERVERS; } ;
+#define HID_AGWIZ_4_CHK_RESOURCEPERSONS             41073
+hidspecial HID { HelpID = HID_AGWIZ_4_CHK_RESOURCEPERSONS; } ;
+
+// step 5 - topics
+
+#define HID_AGWIZ_6_TXT_TEMPLATENAME                41074
+hidspecial HID { HelpID = HID_AGWIZ_6_TXT_TEMPLATENAME; } ;
+#define HID_AGWIZ_6_TXT_TEMPLATEPATH                41075
+hidspecial HID { HelpID = HID_AGWIZ_6_TXT_TEMPLATEPATH; } ;
+#define HID_AGWIZ_6_BTN_TEMPLATEPATH                41076
+hidspecial HID { HelpID = HID_AGWIZ_6_BTN_TEMPLATEPATH; } ;
+
+// step 6 - file info
+
+#define HID_AGWIZ_6_OPT_CREATEAGENDA                41077
+hidspecial HID { HelpID = HID_AGWIZ_6_OPT_CREATEAGENDA; } ;
+#define HID_AGWIZ_6_OPT_MAKECHANGES                 41078
+hidspecial HID { HelpID = HID_AGWIZ_6_OPT_MAKECHANGES; } ;
+
+// - again step 5 - buttons
+
+#define HID_AGWIZ_5_BTN_INSERT                  41079
+hidspecial HID { HelpID = HID_AGWIZ_5_BTN_INSERT; } ;
+#define HID_AGWIZ_5_BTN_REMOVE                  41080
+hidspecial HID { HelpID = HID_AGWIZ_5_BTN_REMOVE; } ;
+#define HID_AGWIZ_5_BTN_UP                  41081
+hidspecial HID { HelpID = HID_AGWIZ_5_BTN_UP; } ;
+#define HID_AGWIZ_5_BTN_DOWN                    41082
+hidspecial HID { HelpID = HID_AGWIZ_5_BTN_DOWN; } ;
+
+// again step 5 - scroll control
+
+#define HID_AGWIZ_5_SCROLL_BAR                  41083
+hidspecial HID { HelpID = HID_AGWIZ_5_SCROLL_BAR; } ;
+
+#define HID_AGWIZ_5_TXT_TOPIC_1                 41084
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_TOPIC_1; } ;
+#define HID_AGWIZ_5_TXT_RESPONSIBLE_1               41085
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_RESPONSIBLE_1; } ;
+#define HID_AGWIZ_5_TXT_MINUTES_1               41086
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_MINUTES_1; } ;
+
+#define HID_AGWIZ_5_TXT_TOPIC_2                 41087
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_TOPIC_2; } ;
+#define HID_AGWIZ_5_TXT_RESPONSIBLE_2               41088
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_RESPONSIBLE_2; } ;
+#define HID_AGWIZ_5_TXT_MINUTES_2               41089
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_MINUTES_2; } ;
+
+#define HID_AGWIZ_5_TXT_TOPIC_3                 41090
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_TOPIC_3; } ;
+#define HID_AGWIZ_5_TXT_RESPONSIBLE_3               41091
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_RESPONSIBLE_3; } ;
+#define HID_AGWIZ_5_TXT_MINUTES_3               41092
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_MINUTES_3; } ;
+
+#define HID_AGWIZ_5_TXT_TOPIC_4                 41093
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_TOPIC_4; } ;
+#define HID_AGWIZ_5_TXT_RESPONSIBLE_4               41094
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_RESPONSIBLE_4; } ;
+#define HID_AGWIZ_5_TXT_MINUTES_4               41095
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_MINUTES_4; } ;
+
+#define HID_AGWIZ_5_TXT_TOPIC_5                 41096
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_TOPIC_5; } ;
+#define HID_AGWIZ_5_TXT_RESPONSIBLE_5               41097
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_RESPONSIBLE_5; } ;
+#define HID_AGWIZ_5_TXT_MINUTES_5               41098
+hidspecial HID { HelpID = HID_AGWIZ_5_TXT_MINUTES_5; } ;
+
+
+//FaxWizard---------------------------
+
+#define HID_FAXWIZ_OPTBUSINESSFAX               41120
+hidspecial HID { HelpID = HID_FAXWIZ_OPTBUSINESSFAX; };
+#define HID_FAXWIZ_LSTBUSINESSSTYLE             41121
+hidspecial HID { HelpID = HID_FAXWIZ_LSTBUSINESSSTYLE; };
+#define HID_FAXWIZ_OPTPRIVATEFAX                41122
+hidspecial HID { HelpID = HID_FAXWIZ_OPTPRIVATEFAX; };
+#define HID_LSTPRIVATESTYLE                 41123
+hidspecial HID { HelpID = HID_LSTPRIVATESTYLE; };
+#define HID_IMAGECONTROL3                   41124
+hidspecial HID { HelpID = HID_IMAGECONTROL3; };
+#define HID_CHKUSELOGO                      41125
+hidspecial HID { HelpID = HID_CHKUSELOGO; };
+#define HID_CHKUSEDATE                      41126
+hidspecial HID { HelpID = HID_CHKUSEDATE; };
+#define HID_CHKUSECOMMUNICATIONTYPE             41127
+hidspecial HID { HelpID = HID_CHKUSECOMMUNICATIONTYPE; };
+#define HID_LSTCOMMUNICATIONTYPE                41128
+hidspecial HID { HelpID = HID_LSTCOMMUNICATIONTYPE; };
+#define HID_CHKUSESUBJECT                   41129
+hidspecial HID { HelpID = HID_CHKUSESUBJECT; };
+#define HID_CHKUSESALUTATION                    41130
+hidspecial HID { HelpID = HID_CHKUSESALUTATION; };
+#define HID_LSTSALUTATION                   41131
+hidspecial HID { HelpID = HID_LSTSALUTATION; };
+#define HID_CHKUSEGREETING                  41132
+hidspecial HID { HelpID = HID_CHKUSEGREETING; };
+#define HID_LSTGREETING                     41133
+hidspecial HID { HelpID = HID_LSTGREETING; };
+#define HID_CHKUSEFOOTER                    41134
+hidspecial HID { HelpID = HID_CHKUSEFOOTER; };
+#define HID_OPTSENDERPLACEHOLDER                41135
+hidspecial HID { HelpID = HID_OPTSENDERPLACEHOLDER; };
+#define HID_OPTSENDERDEFINE                 41136
+hidspecial HID { HelpID = HID_OPTSENDERDEFINE; };
+#define HID_TXTSENDERNAME                   41137
+hidspecial HID { HelpID = HID_TXTSENDERNAME; };
+#define HID_TXTSENDERSTREET                 41138
+hidspecial HID { HelpID = HID_TXTSENDERSTREET; };
+#define HID_TXTSENDERPOSTCODE                   41139
+hidspecial HID { HelpID = HID_TXTSENDERPOSTCODE; };
+#define HID_TXTSENDERSTATE                  41140
+hidspecial HID { HelpID = HID_TXTSENDERSTATE; };
+#define HID_TXTSENDERCITY                   41141
+hidspecial HID { HelpID = HID_TXTSENDERCITY; };
+#define HID_TXTSENDERFAX                    41142
+hidspecial HID { HelpID = HID_TXTSENDERFAX; };
+#define HID_OPTRECEIVERPLACEHOLDER              41143
+hidspecial HID { HelpID = HID_OPTRECEIVERPLACEHOLDER; };
+#define HID_OPTRECEIVERDATABASE                 41144
+hidspecial HID { HelpID = HID_OPTRECEIVERDATABASE; };
+#define HID_TXTFOOTER                       41145
+hidspecial HID { HelpID = HID_TXTFOOTER; };
+#define HID_CHKFOOTERNEXTPAGES                  41146
+hidspecial HID { HelpID = HID_CHKFOOTERNEXTPAGES; };
+#define HID_CHKFOOTERPAGENUMBERS                41147
+hidspecial HID { HelpID = HID_CHKFOOTERPAGENUMBERS; };
+#define HID_TXTTEMPLATENAME                 41148
+hidspecial HID { HelpID = HID_TXTTEMPLATENAME; };
+#define HID_FILETEMPLATEPATH                    41149
+hidspecial HID { HelpID = HID_FILETEMPLATEPATH; };
+#define HID_OPTCREATEFAX                    41150
+hidspecial HID { HelpID = HID_OPTCREATEFAX; };
+#define HID_OPTMAKECHANGES                  41151
+hidspecial HID { HelpID = HID_OPTMAKECHANGES; };
+#define HID_IMAGECONTROL2                   41152
+hidspecial HID { HelpID = HID_IMAGECONTROL2; };
+#define HID_FAXWIZ_TXTPATH                  41153
+hidspecial HID { HelpID = HID_FAXWIZ_TXTPATH; };
+#define HID_FAXWIZ_CMDPATH                  41154
+hidspecial HID { HelpID = HID_FAXWIZ_CMDPATH; };
+
+#define HID_FAXWIZARD                       41180
+hidspecial HID { HelpID = HID_FAXWIZARD; };
+#define HID_FAXWIZARD_HELP                  41181
+hidspecial HID { HelpID = HID_FAXWIZARD_HELP; };
+#define HID_FAXWIZARD_BACK                  41182
+hidspecial HID { HelpID = HID_FAXWIZARD_BACK; };
+#define HID_FAXWIZARD_NEXT                  41183
+hidspecial HID { HelpID = HID_FAXWIZARD_NEXT; };
+#define HID_FAXWIZARD_CREATE                    41184
+hidspecial HID { HelpID = HID_FAXWIZARD_CREATE; };
+#define HID_FAXWIZARD_CANCEL                    41185
+hidspecial HID { HelpID = HID_FAXWIZARD_CANCEL; };
+
+
+//End at 42767
