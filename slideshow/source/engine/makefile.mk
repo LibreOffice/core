@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 13:42:55 $
+#   last change: $Author: rt $ $Date: 2005-03-30 07:55:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,23 +70,16 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Common ----------------------------------------------------------
 
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
-.ENDIF
-
-.IF "$(debug)"!="" || "$(DEBUG)"!=""
-CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
-.ENDIF
-
-# Disable optimization for SunCC SPARC (funny loops
-# when parsing e.g. "x+width/2")
-.IF "$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC"
-NOOPTFILES= $(SLO)$/smilfunctionparser.obj \
-            $(SLO)$/eventmultiplexer.obj
-.ENDIF
+# # Disable optimization for SunCC SPARC (funny loops
+# # when parsing e.g. "x+width/2")
+# .IF "$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC"
+# NOOPTFILES= $(SLO)$/smilfunctionparser.obj \
+# 			$(SLO)$/eventmultiplexer.obj
+# .ENDIF
 # same issue for MACOSX
 .IF "$(OS)"=="MACOSX"
 NOOPTFILES= $(SLO)$/smilfunctionparser.obj
@@ -98,8 +91,8 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/backgroundshape.obj \
             $(SLO)$/color.obj \
-            $(SLO)$/doctreenode.obj \
             $(SLO)$/drawshape.obj \
+            $(SLO)$/drawshapesubsetting.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \
