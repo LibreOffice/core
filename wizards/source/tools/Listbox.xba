@@ -5,6 +5,43 @@ Dim OriginalList()
 Dim oDialogModel as Object
 
 
+Sub MergeList(SourceListBox() as Object, SecondList() as String)
+Dim i as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(SecondList())
+	OriginalList() = AddListToList(OriginalList(), SecondList())
+	For i = 0 To MaxIndex
+		SourceListbox = AddSingleItemToListbox(SourceListbox, SecondList(i))
+	Next i
+	Call FormSetMoveRights()	
+End Sub
+
+
+Sub RemoveListItems(SourceListbox as Object, TargetListbox as Object, RemoveList() as String)
+Dim i as Integer
+Dim s as Integer
+Dim MaxIndex as Integer
+Dim CopyList()
+	MaxIndex = Ubound(RemoveList())
+	For i = 0 To MaxIndex
+		RemoveListboxItemByName(SourceListbox, RemoveList(i))
+		RemoveListboxItemByName(TargetListbox, RemoveList(i))
+	Next i
+	CopyList() = OriginalList()
+	s = 0 
+	MaxIndex = Ubound(CopyList())
+	For i = 0 To MaxIndex
+		If IndexInArray(CopyList(i),RemoveList())= -1 Then
+			OriginalList(s) = CopyList(i)
+			s = s + 1
+		End If
+	Next i
+	ReDim Preserve OriginalList(s-1)
+	Call FormSetMoveRights()	
+End Sub
+
+
+&apos; Note Boolean Parameter
 Sub InitializeListboxProcedures(oModel as Object, SourceListbox as Object, TargetListbox as Object)
 Dim EmptyList()
 	Set oDialogModel = oModel
@@ -280,18 +317,20 @@ Dim a as Integer
 Dim MaxIndex as Integer
 	OldList = oListbox.StringItemList()
 	MaxIndex = Ubound(OldList())
-	If MaxIndex &gt; 0 Then
-		a = 0
-		Dim NewList(MaxIndex -1)
-		For i = 0 To MaxIndex
-			If RemoveItem &lt;&gt; OldList(i) Then
-				NewList(a) = OldList(i)
-				a = a + 1
-			End If
-		Next i
-		oListbox.StringItemList() = NewList()
-	Else
-		oListBox.StringItemList() = NullList()
+	If IndexInArray(RemoveItem, OldList()) &lt;&gt; -1 Then
+		If MaxIndex &gt; 0 Then
+			a = 0
+			Dim NewList(MaxIndex -1)
+			For i = 0 To MaxIndex
+				If RemoveItem &lt;&gt; OldList(i) Then
+					NewList(a) = OldList(i)
+					a = a + 1
+				End If
+			Next i
+			oListbox.StringItemList() = NewList()
+		Else
+			oListBox.StringItemList() = NullList()
+		End If
 	End If
 End Sub
 

@@ -315,9 +315,13 @@ End Function
 
 
 &apos;Retrieves the mere filename out of a whole path
-Function FileNameoutofPath(ByVal Path as String, Separator as String) as String
+Function FileNameoutofPath(ByVal Path as String, Optional Separator as String) as String
 Dim i as Integer
 Dim SepList() as String
+	If IsMissing(Separator) Then
+		Path = ConvertFromUrl(Path)
+		Separator = GetPathSeparator()		
+	End If
 	SepList() = ArrayoutofString(Path, Separator,i)
 	FileNameoutofPath = SepList(i)
 End Function
