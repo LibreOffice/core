@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-26 13:13:07 $
+ *  last change: $Author: dvo $ $Date: 2003-04-04 13:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,8 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         }
 
         const SfxPoolItem* pItem;
-        if( aNew.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) &&
+        if( ( SFX_ITEM_SET ==
+                aNew.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) ) &&
             ((SvxTabStopItem*)pItem)->Count() )
         {
             // TabStop-Aenderungen behandeln wir erstmal anders:
