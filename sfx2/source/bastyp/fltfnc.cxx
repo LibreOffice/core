@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-08 10:38:16 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 14:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2609,7 +2609,7 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                 xFilters->getByName( aName ) >>= aProps;
 
             sal_Int32 nFilterFlags = 0, nClipId = 0, nDocIconId = 0, nVersion = 0;
-            ::rtl::OUString aMimeType, aType, aUIName, aDefaultTemplate;
+            ::rtl::OUString aMimeType, aType, aUIName, aDefaultTemplate, aHumanName;
             String aEmptyStr, aFilterName, aUserData;
             String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
             BOOL bMatches = FALSE;
@@ -2665,15 +2665,7 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                                     }
                                 }
                                 else if ( rProp.Name.compareToAscii("ClipboardFormat") == COMPARE_EQUAL )
-                                {
-                                    ::rtl::OUString aFormat;
-                                    if ( rProp.Value >>= aFormat )
-                                    {
-                                        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
-                                        aDataFlavor.MimeType = aFormat;
-                                        nClipId = SotExchange::GetFormat( aDataFlavor );
-                                    }
-                                }
+                                    rProp.Value >>= aHumanName;
                                 else if ( rProp.Name.compareToAscii("DocumentIconId") == COMPARE_EQUAL )
                                     rProp.Value >>= nClipId;
                             }
@@ -2706,6 +2698,15 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 
             if ( bMatches && aType.getLength() )
             {
+                ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                aDataFlavor.MimeType = aMimeType;
+                nClipId = SotExchange::GetFormat( aDataFlavor );
+                if ( !nClipId && aHumanName.getLength() )
+                {
+                    // old formats are found using HumanPresentableName
+                    nClipId = SotExchange::RegisterFormatName( aHumanName );
+                }
+
                 // register SfxFilter
                 aFilterName = impl_getOldFilterName( aName );
                 if ( aFilterName.Len() )
