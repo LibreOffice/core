@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog DLG_PARA
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Par�grafo" ;
     Text [ portuguese ] = "Par�grafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -95,7 +95,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Paragrafo" ;
-                Text [ portuguese_brazilian ] = "Par?grafo" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -117,6 +117,9 @@ TabDialog DLG_PARA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats & Espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení & vzdálenost";
+                Text[ hebrew ] = "‮שוליים ורווחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
             PageItem
             {
@@ -125,7 +128,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Alignment" ;
                 PageResID = TP_PARA_ALIGN ;
                 Text [ english_us ] = "Alignment" ;
-                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
                 Text [ swedish ] = "Justering" ;
                 Text [ danish ] = "Justering" ;
                 Text [ italian ] = "Allineamento" ;
@@ -146,6 +149,9 @@ TabDialog DLG_PARA
                 Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
                 Text[ thai ] = "จัดตำแหน่ง";
+                Text[ czech ] = "Zarovnání";
+                Text[ hebrew ] = "‮ישור‬";
+                Text[ hindi ] = "पंक्तिकरण";
             };
             PageItem
             {
@@ -155,7 +161,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Paragraph Extensions" ;
                 Text [ norwegian ] = "Utvidelse av avsnitt" ;
                 Text [ italian ] = "Flusso di testo" ;
-                Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ;
+                Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
                 Text [ finnish ] = "Tekstin rivitys" ;
                 Text [ danish ] = "Tekstretning" ;
@@ -167,7 +173,7 @@ TabDialog DLG_PARA
                 PageResID = TP_PARA_EXT ;
                 Text[ chinese_simplified ] = "换行和分页";
                 Text[ russian ] = "�� ��������";
-                Text[ polish ] = "Tekst";
+                Text[ polish ] = "Przep�yw tekstu";
                 Text[ japanese ] = "体裁";
                 Text[ chinese_traditional ] = "換行和分頁";
                 Text[ arabic ] = "������ ����";
@@ -177,6 +183,9 @@ TabDialog DLG_PARA
                 Text[ turkish ] = "Metin ak���";
                 Text[ catalan ] = "Flux del text";
                 Text[ thai ] = "การไหลของข้อความ";
+                Text[ czech ] = "Tok textu";
+                Text[ hebrew ] = "‮זרימת טקסט‬";
+                Text[ hindi ] = "टेक्स्ट् धारा";
             };
             PageItem
             {
@@ -194,16 +203,19 @@ TabDialog DLG_PARA
                 Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ portuguese_brazilian ] = "Tipografia asi�tica";
                 Text[ japanese ] = "日本語文の体裁";
                 Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩文字";
                 Text[ chinese_traditional ] = "中日韓文字";
-                Text[ turkish ] = "Asian typography";
+                Text[ turkish ] = "Asya Matbaas�";
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "การพิมพ์แบบเอเชีย";
+                Text[ czech ] = "Asijská typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "ऐशियन टइपोग्रफी";
             };
             PageItem
             {
@@ -211,7 +223,7 @@ TabDialog DLG_PARA
                 Text = "Nummerierung" ;
                 Text [ ENGLISH ] = "Numbering" ;
                 Text [ english_us ] = "Numbering" ;
-                Text [ portuguese_brazilian ] = "Numerierung" ;
+                Text [ portuguese_brazilian ] = "Numera��o" ;
                 Text [ swedish ] = "Numrering" ;
                 Text [ danish ] = "Nummerering" ;
                 Text [ italian ] = "Numerazione" ;
@@ -232,6 +244,9 @@ TabDialog DLG_PARA
                 Text[ catalan ] = "Numeraci�";
                 Text[ finnish ] = "Numerointi";
                 Text[ thai ] = "ลำดับตัวเลข";
+                Text[ czech ] = "Číslování";
+                Text[ hebrew ] = "‮מיספור‬";
+                Text[ hindi ] = "संख्या देना";
             };
             PageItem
             {
@@ -240,7 +255,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Tab" ;
                 Text [ norwegian ] = "Tab" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Tabula??o" ;
+                Text [ portuguese_brazilian ] = "Tabula��es" ;
                 Text [ portuguese ] = "Tabula��o" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
@@ -252,7 +267,7 @@ TabDialog DLG_PARA
                 PageResID = TP_TABULATOR ;
                 Text[ chinese_simplified ] = "制表符";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Tabulator";
+                Text[ polish ] = "Tabulatory";
                 Text[ japanese ] = "タブ";
                 Text[ chinese_traditional ] = "定位鍵";
                 Text[ arabic ] = "����� �����";
@@ -262,6 +277,9 @@ TabDialog DLG_PARA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pestanyes";
                 Text[ thai ] = "ระยะกั้น";
+                Text[ czech ] = "Tabulátory";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "टॉब्स";
             };
             PageItem
             {
@@ -270,7 +288,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Drop caps" ;
                 Text [ norwegian ] = "Drop caps" ;
                 Text [ italian ] = "Capolettera" ;
-                Text [ portuguese_brazilian ] = "Capitulares descidas" ;
+                Text [ portuguese_brazilian ] = "Capitular" ;
                 Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
@@ -292,6 +310,9 @@ TabDialog DLG_PARA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Caplletres";
                 Text[ thai ] = "ตัวอักษรขึ้นต้นที่มีขนาดใหญ่";
+                Text[ czech ] = "Iniciály";
+                Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
+                Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
             };
             PageItem
             {
@@ -300,7 +321,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Border" ;
                 Text [ norwegian ] = "Border" ;
                 Text [ italian ] = "Bordo" ;
-                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
@@ -312,16 +333,19 @@ TabDialog DLG_PARA
                 PageResID = TP_BORDER ;
                 Text[ chinese_simplified ] = "边框";
                 Text[ russian ] = "����������";
-                Text[ polish ] = "Obramowanie";
+                Text[ polish ] = "Kraw�dzie";
                 Text[ japanese ] = "外枠";
                 Text[ chinese_traditional ] = "邊框";
                 Text[ arabic ] = "������";
                 Text[ greek ] = "����������";
                 Text[ korean ] = "테두리";
-                Text[ turkish ] = "Kenarl�k";
+                Text[ turkish ] = "Kenarl�klar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vores";
                 Text[ thai ] = "เส้นขอบ";
+                Text[ czech ] = "Okraje";
+                Text[ hebrew ] = "‮מסגרות‬";
+                Text[ hindi ] = "किनारें";
             };
             PageItem
             {
@@ -330,7 +354,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -352,6 +376,9 @@ TabDialog DLG_PARA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
         };
     };
@@ -367,6 +394,9 @@ TabDialog DLG_PARA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Par�graf";
     Text[ thai ] = "ย่อหน้า";
+    Text[ czech ] = "Odstavec";
+    Text[ hebrew ] = "‮פסקאות‬";
+    Text[ hindi ] = "परिच्छेद";
 };
 TabDialog DLG_DRAWPARA
 {
@@ -376,7 +406,7 @@ TabDialog DLG_DRAWPARA
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Par�grafo" ;
     Text [ portuguese ] = "Par�grafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -399,7 +429,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Rientri e spaziature" ;
-                Text [ portuguese_brazilian ] = "Par?grafo" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -421,6 +451,9 @@ TabDialog DLG_DRAWPARA
                 Text[ turkish ] = "Girinti ve aral�klar";
                 Text[ catalan ] = "Sagnats & Espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení & vzdálenost";
+                Text[ hebrew ] = "‮שוליים ורווחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
 #if SUPD>352
             PageItem
@@ -430,7 +463,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Alignment" ;
                 PageResID = TP_PARA_ALIGN ;
                 Text [ english_us ] = "Alignment" ;
-                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
                 Text [ swedish ] = "Justering" ;
                 Text [ danish ] = "Justering" ;
                 Text [ italian ] = "Allineamento" ;
@@ -451,6 +484,9 @@ TabDialog DLG_DRAWPARA
                 Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
                 Text[ thai ] = "จัดตำแหน่ง";
+                Text[ czech ] = "Zarovnání";
+                Text[ hebrew ] = "‮ישור‬";
+                Text[ hindi ] = "पंक्तिकरण";
             };
 #endif
             PageItem
@@ -469,16 +505,19 @@ TabDialog DLG_DRAWPARA
                 Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ portuguese_brazilian ] = "Tipografia asi�tica";
                 Text[ japanese ] = "日本語文の体裁";
                 Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩文字";
                 Text[ chinese_traditional ] = "中日韓文字";
-                Text[ turkish ] = "Asian typography";
+                Text[ turkish ] = "Asya Matbaas�";
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "การพิมพ์แบบเอเชีย";
+                Text[ czech ] = "Asijská typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "ऐशियन टइपोग्रफी";
             };
             PageItem
             {
@@ -487,7 +526,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Tab" ;
                 Text [ norwegian ] = "Tab" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Tabula??o" ;
+                Text [ portuguese_brazilian ] = "Tabula��es" ;
                 Text [ portuguese ] = "Tabula��o" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
@@ -499,7 +538,7 @@ TabDialog DLG_DRAWPARA
                 PageResID = TP_TABULATOR ;
                 Text[ chinese_simplified ] = "制表符";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Tabulator";
+                Text[ polish ] = "Tabulatory";
                 Text[ japanese ] = "タブ";
                 Text[ chinese_traditional ] = "定位鍵";
                 Text[ arabic ] = "����� �����";
@@ -509,6 +548,9 @@ TabDialog DLG_DRAWPARA
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pestanyes";
                 Text[ thai ] = "ระยะกั้น";
+                Text[ czech ] = "Tabulátory";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "टॉब्स";
             };
         };
     };
@@ -524,7 +566,19 @@ TabDialog DLG_DRAWPARA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Par�graf";
     Text[ thai ] = "ย่อหน้า";
+    Text[ czech ] = "Odstavec";
+    Text[ hebrew ] = "‮פסקאות‬";
+    Text[ hindi ] = "परिच्छेद";
 };
+
+
+
+
+
+
+
+
+
 
 
 
