@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-22 13:50:54 $
+#   last change: $Author: pl $ $Date: 2001-10-24 16:45:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,7 @@ DEF1EXPORTFILE=	tk.dxp
 SHL1STDLIBS +=          
 .ELIF "$(GUI)"=="UNX"
 SHL1STDLIBS +=\
-    -lX11 -lXt -lXmu
+    -lX11
 .ENDIF
 
 .INCLUDE :	target.mk

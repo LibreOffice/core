@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-19 13:19:21 $
+#   last change: $Author: pl $ $Date: 2001-10-24 16:41:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -267,9 +267,9 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 .IF "$(OS)"=="SOLARIS"
 
 .IF "$(USE_XPRINT)" == "TRUE"
-SHL1STDLIBS += -lXp -lXm -lXt -Xext -lSM -lICE -lX11
+SHL1STDLIBS += -lXp Xext -lSM -lICE -lX11
 .ELSE
-SHL1STDLIBS += -lXm -lXt -lXext -lSM -lICE -lX11
+SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 
 # MacOSX
@@ -281,9 +281,9 @@ SHL1STDLIBS += -framework Cocoa
 .ELSE           # "$(OS)"=="MACOSX"
 
 .IF "$(USE_XPRINT)" == "TRUE"
-SHL1STDLIBS += -lXp -lXaw -lXt lXext -lSM -lICE -lX11
+SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
 .ELSE
-SHL1STDLIBS += -lXaw -lXt -lXext -lSM -lICE -lX11
+SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 .ENDIF          # "$(OS)"=="MACOSX"
 .ENDIF          # "$(OS)"=="SOLARIS"
