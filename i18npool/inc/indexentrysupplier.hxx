@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:18:46 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -136,10 +135,8 @@ private:
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
 
 protected:
-    const sal_Char *implementationName;
     com::sun::star::lang::Locale aLocale;
     rtl::OUString aSortAlgorithm;
-    friend sal_Bool SAL_CALL operator == (const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
 };
 
 } } } }
