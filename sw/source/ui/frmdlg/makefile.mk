@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-30 15:10:20 $
+#   last change: $Author: kz $ $Date: 2004-08-02 14:23:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,9 +103,9 @@ LIB1OBJFILES =	\
         $(SLO)$/colmgr.obj \
         $(SLO)$/colex.obj \
         $(SLO)$/frmmgr.obj
-        
-        
-        
+
+
+
 
 # --- Tagets -------------------------------------------------------
 
