@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:23:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ czech ] = "Nový rejstřík";
                 Text[ hebrew ] = "neuer Index";
                 Text[ hindi ] = "नया अनुक्रमणी";
+                Text[ slovak ] = "Nový index";
             };
             ToolBoxItem
             {
@@ -231,6 +232,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ czech ] = "Smazat aktuální rejstřík";
                 Text[ hebrew ] = "aktuellen Index löschen";
                 Text[ hindi ] = "वर्तमाण अनुक्रमणी को मिटाओ";
+                Text[ slovak ] = "Zmazať aktuálny index";
             };
             ToolBoxItem
             {
@@ -263,6 +265,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ czech ] = "Přejmenovat aktuální rejstřík";
                 Text[ hebrew ] = "aktuellen Index umbenennen";
                 Text[ hindi ] = "वर्तमान अनुक्रमणी को पुनः नाम दो";
+                Text[ slovak ] = "Premenovať aktuálny index";
             };
             ToolBoxItem
             {
@@ -295,6 +298,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ czech ] = "Uložit aktuální rejstřík";
                 Text[ hebrew ] = "aktuellen Index speichern";
                 Text[ hindi ] = "वर्तमान अनुक्रमणी संचित करो";
+                Text[ slovak ] = "Uložiť aktuálny index";
             };
             ToolBoxItem
             {
@@ -327,6 +331,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ czech ] = "Obnovit aktuální rejstřík";
                 Text[ hebrew ] = "aktuellen Index zurücksetzen";
                 Text[ hindi ] = "वर्तमान अनुक्रमणी को रिसेट्ट करो";
+                Text[ slovak ] = "Obnoviť aktuálny index";
             };
         };
     };
@@ -370,6 +375,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ czech ] = "Podrobnosti o rejstříku";
         Text[ hebrew ] = "Index-Details";
         Text[ hindi ] = "अनुक्रमणिका विवरण";
+        Text[ slovak ] = "Obsah indexu";
     };
     FixedText FT_DESC_LABEL
     {
@@ -403,6 +409,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ czech ] = "Identifikátor rejstříku:";
         Text[ hebrew ] = "Indexbezeichner:";
         Text[ hindi ] = "अनुक्रमणी अइडेन्टिफयर:";
+        Text[ slovak ] = "Identifikátor indexu:";
     };
     FixedText FT_DESCRIPTION
     {
@@ -440,6 +447,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ czech ] = "Jednoznačný";
         Text[ hebrew ] = "~Eindeutig";
         Text[ hindi ] = "~अपूर्व";
+        Text[ slovak ] = "~Unikátny";
     };
     FixedText FT_FIELDS
     {
@@ -472,6 +480,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ czech ] = "Pole";
         Text[ hebrew ] = "‮שדות‬";
         Text[ hindi ] = "क्षेत्र";
+        Text[ slovak ] = "Polia";
     };
     Control CTR_FIELDS
     {
@@ -513,6 +522,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     HelpButton HB_HELP
     {
@@ -542,6 +552,7 @@ ModalDialog DLG_INDEXDESIGN
     Text[ czech ] = "Rejstříky";
     Text[ hebrew ] = "Indizes";
     Text[ hindi ] = "अनुक्रमणी";
+    Text[ slovak ] = "Indexy";
 };
 
 String STR_TAB_INDEX_SORTORDER
@@ -574,6 +585,7 @@ String STR_TAB_INDEX_SORTORDER
     Text[ czech ] = "Pořadí řazení";
     Text[ hebrew ] = "Sortierreihenfolge";
     Text[ hindi ] = "सोर्ट क्रम";
+    Text[ slovak ] = "Poradie radenia";
 };
 String STR_TAB_INDEX_FIELD
 {
@@ -603,6 +615,7 @@ String STR_TAB_INDEX_FIELD
     Text[ czech ] = "Pole rejstříku";
     Text[ hebrew ] = "Indexfeld";
     Text[ hindi ] = "अनुक्रमणी क्षेत्र";
+    Text[ slovak ] = "Indexové pole";
 };
 String STR_ORDER_ASCENDING
 {
@@ -634,6 +647,7 @@ String STR_ORDER_ASCENDING
     Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "Aufsteigend";
     Text[ hindi ] = "आरोहण क्रम";
+    Text[ slovak ] = "Vzostupne";
 };
 String STR_ORDER_DESCENDING
 {
@@ -665,6 +679,7 @@ String STR_ORDER_DESCENDING
     Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "Absteigend";
     Text[ hindi ] = "अवरोहण क्रम";
+    Text[ slovak ] = "Zostupne";
 };
 
 String STR_CONFIRM_DROP_INDEX
@@ -695,6 +710,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ czech ] = "Opravdu chcete smazat rejstřík '$name$'?";
     Text[ hebrew ] = "Wollen Sie den Index '$name$' wirklich löschen?";
     Text[ hindi ] = "आप सचमुच में '$name$' अनुक्रमणी को मिटाना चाहते है ?";
+    Text[ slovak ] = "Určite chcete zmazať index '$name$'?";
 };
 
 String STR_LOGICAL_INDEX_NAME
@@ -725,6 +741,7 @@ String STR_LOGICAL_INDEX_NAME
     Text[ czech ] = "rejstřík";
     Text[ hebrew ] = "index";
     Text[ hindi ] = "अनुक्रमणी";
+    Text[ slovak ] = "index";
 };
 
 Image IMG_PKEYICON
@@ -795,6 +812,8 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Title[ hebrew ] = "Index speichern";
     Message[ hindi ] = "अनुक्रमणी में कम से कम एक क्षेत्र का रहना ज़रूरी है ।";
     Title[ hindi ] = "Save Index";
+    Message[ slovak ] = "Index musí obsahovať aspoň jedno pole.";
+    Title[ slovak ] = "Uložiť index";
 };
 
 QueryBox QUERY_SAVE_CURRENT_INDEX
@@ -855,6 +874,8 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ hebrew ] = "Index-Entwurf verlassen";
     Message[ hindi ] = "आप वर्तमान अनुक्रमणी में की हुयी परिवर्तनों को संचित करना चाहते है ?";
     Title[ hindi ] = "Exit Index Design";
+    Message[ slovak ] = "Chcete uložiť zmeny urobené v aktuálnom indexe?";
+    Title[ slovak ] = "Ukončiť návrh indexu";
 };
 
 String STR_INDEX_NAME_ALREADY_USED
@@ -885,6 +906,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ czech ] = "Jiný rejstřík s názvem \"$name$\" již existuje.";
     Text[ hebrew ] = "Es gibt schon einen anderen Index namens \"$name$\".";
     Text[ hindi ] = "$name$ नाम का अनुक्रमणी पहिले से ही अस्तित्व में है ।";
+    Text[ slovak ] = "Iný index s názvom \"$name$\" už existuje.";
 };
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
@@ -916,11 +938,21 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ czech ] = "V definici rejstříku se smí vyskytnout každý sloupec pouze jednou. Avšak sloupec \"$name$\" byl zadán dvakrát.";
     Text[ hebrew ] = "In einer Index-Definition darf jede Tabellen-Spalte höchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\"zweimal benutzt.";
     Text[ hindi ] = "अनुक्रमणी परिभाषा में, कोई भी सारणी का स्तंभ एक से अधिक बार नहीं आना चाहिए । आपने \"$name$\" स्तंभ को दो बार प्रविष्ट किया है ।";
+    Text[ slovak ] = "V definícii indexu sa nemôže objaviť názov stĺpca tabuľky viac ako raz. Napriek tomu, ste zadali stĺpec \"$name$\" dva krát.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34.24.1  2003/06/12 10:57:54  gh
+ *  final Merge RC
+ *
+ *  Revision 1.34  2003/04/29 17:23:33  hr
+ *  INTEGRATION: CWS mergem8 (1.32.8); FILE MERGED
+ *  2003/04/29 08:34:00 gh 1.32.8.3: final merge for Beta2
+ *  2003/04/16 11:10:57 gh 1.32.8.2: RESYNC: (1.32-1.33); FILE MERGED
+ *  2003/04/14 15:04:02 gh 1.32.8.1: merging all languages
+ *
  *  Revision 1.32.8.3  2003/04/29 08:34:00  gh
  *  final merge for Beta2
  *
@@ -1057,6 +1089,8 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
+
 
 
 

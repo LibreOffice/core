@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:23:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ czech ] = "Vyberte zdroj dat:";
         Text[ hebrew ] = "Wählen Sie eine Datenquelle:";
         Text[ hindi ] = "एक ड़ॉटा मूल चुनो:";
+        Text[ slovak ] = "Vybrať zdroj dát:";
     };
     ListBox LB_DATASOURCE
     {
@@ -191,6 +192,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ czech ] = "Uspořádat...";
         Text[ hebrew ] = "‮ניהול...‬";
         Text[ hindi ] = "व्यवस्था करना...";
+        Text[ slovak ] = "Usporiadať...";
     };
     String STR_LOCAL_DATASOURCES
     {
@@ -221,6 +223,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ czech ] = "Lokální zdroje dat";
         Text[ hebrew ] = "lokale Datenquellen";
         Text[ hindi ] = "स्थानिक ड़ॉटा मूल";
+        Text[ slovak ] = "Lokálne zdroje dát";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
@@ -250,17 +253,27 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ czech ] = "Nebylo možno načíst knihovnu programu #lib# nebo je poškozena. Nastavení zdroje dat ODBC není možné.";
         Text[ hebrew ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
         Text[ hindi ] = "प्रोग्राम लैब्ररी #lib# को लोड़ नहीं कर सकते है अथवा दोषयुक्त है । ODBC ड़ॉटा मूल रूपरेखा अनुपलब्ध है ।";
+        Text[ slovak ] = "Programová knižnica #lib# nemohla byť načítaná, alebo je poškodená. Nastavenie ODBC zdroja dát nieje možné.";
     };
     Text[ catalan ] = "Font de dades";
     Text[ thai ] = "แหล่งข้อมูล";
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "ड़ॉटा मूल";
+    Text[ slovak ] = "Zdroj dát";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34.24.1  2003/06/12 10:57:54  gh
+ *  final Merge RC
+ *
+ *  Revision 1.34  2003/04/29 17:23:22  hr
+ *  INTEGRATION: CWS mergem8 (1.33.8); FILE MERGED
+ *  2003/04/29 08:33:59 gh 1.33.8.2: final merge for Beta2
+ *  2003/04/14 15:04:01 gh 1.33.8.1: merging all languages
+ *
  *  Revision 1.33.8.2  2003/04/29 08:33:59  gh
  *  final merge for Beta2
  *
@@ -386,6 +399,8 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
+
 
 
 
