@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String RID_SVXSTR_DESC_GRADIENT
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔ²ΚΙ«ΝΌ°ΈΚδΘλÒ»ΈφΓϋ³Ζ£Ί";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξι γπΰδθενςνξι:";
     Text[ polish ] = "Podaj nazwκ gradientu:";
-    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "ΈήΧΓή°Ό®έ‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ±m¦βΉΟ®ΧΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ αΚΟΡΜ Ηααζδ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για την διαβάθμιση του χρώματος:";
@@ -193,7 +193,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφ²ΚΙ«ΝΌ°ΈΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςσ γπΰδθενςνσώ?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ gradient?";
-    Text[ japanese ] = "‚±‚ΜΈήΧΓή°Ό®έ‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "‚±‚ΜΈήΧΓή°Ό®έ‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ±m¦βΉΟ®Χ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΚΟΡΜ ΗααζδΏ";
     Text[ greek ] = "Θέλετε πραγματικά να γίνει διαγραφή της διαβάθμισης χρώματος;";
@@ -253,7 +253,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΞ»ΝΌΚδΘλÒ»ΈφΓϋ³Ζ£Ί";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ νξβξγξ bitmap:";
     Text[ polish ] = "Podaj nazwκ mapy bitowej:";
-    Text[ japanese ] = "Λή―ΔΟ―Μί‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "Λή―ΔΟ―Μί‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ¦μΉΟΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαΥζΡΙ ΗαδήΨνΙ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το Βitmap:";
@@ -281,7 +281,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΝβΐ΄Ξ»ΝΌΚδΘλÒ»ΈφΓϋ³Ζ:";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ νξβξγξ bitmap :";
     Text[ polish ] = "Podaj nazwκ zewnκtrznej mapy bitowej:";
-    Text[ japanese ] = "O•”Λή―ΔΟ―Μί‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "O•”Λή―ΔΟ―Μί‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ¥~¨ΣΒI°}ΉΟΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαΥζΡΙ ΗαδήΨνΙ ΗαΞΗΡΜνΙ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το εξωτερικό Βitmap:";
@@ -337,7 +337,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΞ»ΝΌΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς bitmap?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ mapκ bitowΉ?";
-    Text[ japanese ] = "‚±‚ΜΛή―ΔΟ―Μί‚π–{“–‚Ιν‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "‚±‚ΜΛή―ΔΟ―Μί‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΒI°}ΉΟ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαΥζΡΙ ΗαδήΨνΙΏ";
     Text[ greek ] = "Θέλετε πραγματικά να διαγράψετε το Bitmap;";
@@ -419,7 +419,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΟίΜυΚ½ΡωΚδΘλÒ»ΈφΓϋ³Ζ£Ί";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξγξ ρςθλÿ λθνθθ:";
     Text[ polish ] = "Wpisz tutaj nazwκ dla nowego stylu linii:";
-    Text[ japanese ] = "ό½ΐ²Ω‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "ό½ΐ²Ω‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ½u±ψΌΛ¦΅Ώι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ δγΨ ΗαΞΨ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το στυλ γραμμής:";
@@ -475,7 +475,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΟίΜυΚ½Ρω£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξ ρςθλό λθνθθ?";
     Text[ polish ] = "Czy styl linii ma na pewno zostaζ usuniκty?";
-    Text[ japanese ] = "‚±‚Μό‚Μ½ΐ²Ω‚π–{“–‚Ιν‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "‚±‚Μό½ΐ²Ω‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψΌΛ¦΅΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δγΨ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
@@ -609,7 +609,7 @@ String RID_SVXSTR_DESC_HATCH
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔÒυΣ°ΚδΘλÒ»ΈφΓϋ³Ζ:";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξι ψςπθυξβκθ:";
     Text[ polish ] = "Wpisz nazwκ dla kreskowania:";
-    Text[ japanese ] = "Κ―ΑέΈή‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "Κ―ΑέΈή‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ³±Όv½uΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ααδήΤ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για τη γραμμοσκιά:";
@@ -665,7 +665,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφÒυΣ°Βπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςσ ψςπθυξβκσ?";
     Text[ polish ] = "Czy na pewno usunΉζ kreskowanie?";
-    Text[ japanese ] = "‚±‚ΜΚ―ΑέΈή‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "‚±‚ΜΚ―ΑέΈή‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ³±Όv½u΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαδήΤΏ";
     Text[ greek ] = "Θέλετε να διαγραφεί η γραμμοσκιά;";
@@ -833,7 +833,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΡΥΙ«Βπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς φβες?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ kolor?";
-    Text[ japanese ] = "‚±‚ΜF‚π–{“–‚Ιν‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "‚±‚ΜF‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­ΣΓC¦β΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗααζδΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το χρώμα;";
@@ -913,7 +913,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text[ chinese_simplified ] = "Ξή·¨±£΄ζΥβΈφΞΔΌώ£΅";
     Text[ russian ] = "Ρξυπΰνθςό τΰιλ νε σδΰεςρÿ!";
     Text[ polish ] = "Plik nie mσg³ zostaζ zapisany!";
-    Text[ japanese ] = "Μ§²Ω‚ª•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ!";
+    Text[ japanese ] = "Μ§²Ω‚Ν•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ chinese_traditional ] = "µLªkΐx¦s³o­ΣΐΙ®Χ΅I";
     Text[ arabic ] = "ΚΪΠΡ ΝέΩ Ηαγαέ!";
     Text[ greek ] = "Δεν ήταν δυνατή η αποθήκευση του αρχείου!";
@@ -939,7 +939,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text[ chinese_simplified ] = "Ξή·¨Χ°ΘλΥβΈφΞΔΌώ£΅";
     Text[ russian ] = "Ηΰγπσηθςό ύςξς τΰιλ νε σδΰεςρÿ!";
     Text[ polish ] = "Plik nie mσg³ zostaζ za³adowany!";
-    Text[ japanese ] = "Μ§²Ω‚ª“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρ!";
+    Text[ japanese ] = "Μ§²Ω‚Ν“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ chinese_traditional ] = "µLªkΈό¤J³o­ΣΐΙ®Χ΅I";
     Text[ arabic ] = "ΚΪΠΡ ΚΝγνα Ηαγαέ!";
     Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί το αρχείο!";
@@ -1047,7 +1047,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΟί¶ΛΚδΘλÒ»ΈφΓϋ³Ζ:";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξγξ κξνφΰ λθνθθ:";
     Text[ polish ] = "Podaj nazwκ dla nowych koρcσwek linii:";
-    Text[ japanese ] = "V‚µ‚Άό’[‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‰Ί‚³‚ΆF";
+    Text[ japanese ] = "V‚µ‚Άό’[‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ½uΊέΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαδεΗνΙ ΗαΜΟνΟΙ ααΞΨ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το νέο τέλος της γραμμής:";
@@ -1103,7 +1103,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΟί¶Λ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ςθο κξνφΰ λθνθθ?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ koρcσwki linii?";
-    Text[ japanese ] = "‚±‚Μό’[‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "‚±‚Μό’[‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½uΊέ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δεΗνΙ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί το τέλος της γραμμής;";
@@ -4434,13 +4434,13 @@ String RID_SVXSTR_DASH11
     Text = "Gestrichelt";
     Text [ ENGLISH ] = "Dashed";
     Text [ english_us ] = "Dashed";
-    Text[ portuguese ] = "Dashed";
+    Text[ portuguese ] = "Tracejado";
     Text[ russian ] = "Οσνκςθπνϋι";
     Text[ greek ] = "Διακεκομμένο";
     Text[ dutch ] = "Fijne streepjes";
     Text[ french ] = "Tirets";
     Text[ spanish ] = "Trazos";
-    Text[ italian ] = "Dashed";
+    Text[ italian ] = "A tratti";
     Text[ danish ] = "Dashed";
     Text[ swedish ] = "Streckat";
     Text[ polish ] = "Kreski";
