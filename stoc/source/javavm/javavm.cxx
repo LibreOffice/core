@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-24 12:39:53 $
+ *  last change: $Author: jl $ $Date: 2002-07-25 08:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,28 +959,31 @@ static void getJavaPropsFromConfig(JVM * pjvm,
     Reference<XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
         OUSTR("com.sun.star.configuration.ConfigurationRegistry"),
         xCtx);
-    if(!xConfRegistry.is()) throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"), Reference<XInterface>());
-
+    if(!xConfRegistry.is())
+        throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"),
+                               Reference<XInterface>());
     Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
-    if(!xConfRegistry_simple.is()) throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"), Reference<XInterface>());
-
+    if(!xConfRegistry_simple.is())
+        throw RuntimeException(OUSTR("javavm.cxx: couldn't get ConfigurationRegistry"),
+                               Reference<XInterface>());
     xConfRegistry_simple->open(OUSTR("org.openoffice.Setup"), sal_True, sal_False);
     Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
-
-    Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(OUSTR("Office/ooSetupInstallPath"));
-    if(!key_InstallPath.is()) throw RuntimeException(OUSTR("javavm.cxx: can not find key: Office/InstallPath in org.openoffice.UserProfile"),
+    Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(
+        OUSTR("Office/ooSetupInstallPath"));
+    if(!key_InstallPath.is())
+        throw RuntimeException(OUSTR("javavm.cxx: can not find key: " \
+                                     "Office/InstallPath in org.openoffice.UserProfile"),
                                                      Reference<XInterface>());
-
     OUString rcPath = key_InstallPath->getStringValue();
-
     Reference<XInterface> xIniManager(xSMgr->createInstanceWithContext(
-        OUSTR("com.sun.star.config.INIManager"),
-        xCtx));
-    if(!xIniManager.is()) throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"), Reference<XInterface>());
-
+        OUSTR("com.sun.star.config.INIManager"),xCtx));
+    if(!xIniManager.is())
+        throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"),
+                               Reference<XInterface>());
     Reference<XSimpleRegistry> xIniManager_simple(xIniManager, UNO_QUERY);
-    if(!xIniManager_simple.is()) throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"), Reference<XInterface>());
-
+    if(!xIniManager_simple.is())
+        throw RuntimeException(OUSTR("javavm.cxx: couldn't get: com.sun.star.config.INIManager"),
+                               Reference<XInterface>());
     // normalize the path
     OUString urlrcPath;
     if( osl_File_E_None != File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
@@ -989,23 +992,64 @@ static void getJavaPropsFromConfig(JVM * pjvm,
     }
     urlrcPath += OUSTR("/config/" INI_FILE);
 
-    // There is the special case where there is no java.ini. Then the client is
-    // being asked if he wishes to install Java. If not, a JavaNotConfiguredException
-    // is thrown.
-    Reference<XRegistryKey> xJavaSection;
-    try
-    {
-        xIniManager_simple->open(urlrcPath, sal_True, sal_False);
-        xJavaSection = xIniManager_simple->getRootKey()->openKey(OUSTR("Java"));
 
-        if(!xJavaSection.is() || !xJavaSection->isValid())
-            throw JavaNotConfiguredException();
+    Reference<XRegistryKey> xJavaSection;
+    sal_Bool bNoUserJavarc= sal_False;
+    try
+    {   // open user/config/javarc
+        xIniManager_simple->open(urlrcPath, sal_True, sal_False);
     }
     catch( Exception & e)
     {
-        throw JavaNotConfiguredException (OUSTR(
-                  "javavm.cxx: can not find " INI_FILE " or it is corrupt"), Reference<XInterface>());
+        //now we try share/config/javarc
+        bNoUserJavarc= sal_True;
     }
+
+    // Network installation. A workstation installation does not need to have its own javarc.
+    // Then we use the one from the network insallation ( <install-di>/share/config/javarc)
+    if( bNoUserJavarc)
+    {
+        xConfRegistry_simple->open(OUSTR("org.openoffice.Office.Common"), sal_True, sal_False);
+        Reference<XRegistryKey> xRegistryCommonRootKey = xConfRegistry_simple->getRootKey();
+
+        Reference<XRegistryKey> key_NetInstallPath = xRegistryCommonRootKey->openKey(
+            OUSTR("Path/Current/OfficeInstall"));
+        if(!key_NetInstallPath.is()) throw RuntimeException(
+            OUSTR("javavm.cxx: can not find key: Office/InstallPath in org.openoffice.UserProfile"),
+            Reference<XInterface>());
+        rcPath = key_NetInstallPath->getStringValue();
+        // convert to file url
+        if( osl_File_E_None != File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
+        {
+            urlrcPath = rcPath;
+        }
+        urlrcPath += OUSTR("/share/config/" INI_FILE);
+
+        try
+        {
+            // open share/config/javarc
+            xIniManager_simple->open(urlrcPath, sal_True, sal_False);
+        }
+        catch( Exception & e)
+        {
+            throw JavaNotConfiguredException (
+                OUSTR("javavm.cxx: can not find " INI_FILE ),
+                Reference<XInterface>());
+        }
+    }
+    try
+    {
+        xJavaSection = xIniManager_simple->getRootKey()->openKey(OUSTR("Java"));
+    }
+    catch( Exception & e)
+    {
+        throw JavaNotConfiguredException(OUSTR("javavm.cxx: cannot open Java section" \
+                                               "in " INI_FILE), Reference<XInterface>());
+    }
+    if(!xJavaSection.is() || !xJavaSection->isValid())
+        throw JavaNotConfiguredException(OUSTR("javavm.cxx: "  INI_FILE " has invalid" \
+                                             "Java section"), Reference<XInterface>());
+
     Sequence<OUString> javaProperties = xJavaSection->getKeyNames();
     OUString * pSectionEntry = javaProperties.getArray();
     sal_Int32 nCount         = javaProperties.getLength();
