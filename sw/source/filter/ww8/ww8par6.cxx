@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:26 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1904,9 +1904,6 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     USHORT nOOIndex, USHORT nWWIndex, short *pSize=0 )
 {
-    // Declaration in accordance with svx/boxitem.hxx
-    WW8_DECL_LINETAB_ARRAY
-
     BYTE nCol;
     short nIdx,nSpace;
     short nLineThickness = rBor.DetermineBorderProperties(bVer67,&nSpace,&nCol,
@@ -2067,7 +2064,7 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
             break;
     }
 
-    const WW8_BordersSO& rBorders = nLineTabVer8[ nIdx ];
+    const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(nIdx);
     SvxBorderLine aLine;
     aLine.SetOutWidth( rBorders.Out  );
     aLine.SetInWidth ( rBorders.In   );
@@ -2085,7 +2082,6 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     rBox.SetLine( &aLine, nOOIndex );
     rBox.SetDistance( nSpace, nOOIndex );
 }
-
 
 BOOL lcl_IsBorder( BOOL bVer67, const WW8_BRC* pbrc, BOOL bChkBtwn=FALSE )
 {

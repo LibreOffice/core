@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:25 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,9 +854,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     */
     if (!rTypo.reserved2)
     {
-        i18n::ForbiddenCharacters aForbidden(
-            WW8DopTypography::aJapanNotBeginLevel1,
-            WW8DopTypography::aJapanNotEndLevel1);
+        i18n::ForbiddenCharacters aForbidden(rTypo.GetJapanNotBeginLevel1(),
+            rTypo.GetJapanNotEndLevel1());
         rDoc.SetForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 
@@ -864,7 +863,6 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     rDoc.SetCharCompressType(
         static_cast<SwCharCompressType>(rTypo.iJustification));
 }
-
 
 //-----------------------------------------
 //      Fuss- und Endnoten
@@ -2520,7 +2518,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
-            static SvxExtNumType __READONLY_DATA eNumTA[16] =
+            static const SvxExtNumType eNumTA[16] =
             {
                 SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
                 SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
@@ -2532,7 +2530,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
             if (pSBase->AreThereFootnotes())
             {
-                static SwFtnNum __READONLY_DATA eNumA[4] =
+                static const SwFtnNum eNumA[4] =
                 {
                     FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC
                 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-25 11:31:09 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,99 +215,17 @@ typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
 #define WW8_RIGHT 3
 #define WW8_BETW 4
 
-
-
-
-
-struct WW8_BordersSO            // fuer StarOffice-Border Code
+class WW8_BordersSO         // fuer StarOffice-Border Code
 {
+public:
     USHORT Out;
     USHORT In;
     USHORT Dist;
+    static const WW8_BordersSO &Get0x01LineMatch(USHORT nIdx);
 };
 
-
-/*
-// Linien-Defaults in Twips: fruehere Writer-Defaults,
-//                           siehe auch <svx/boxitem.hxx>
-#define DEF_LINE_WIDTH_0        1
-#define DEF_LINE_WIDTH_1        20
-#define DEF_LINE_WIDTH_2        50
-#define DEF_LINE_WIDTH_3        80
-#define DEF_LINE_WIDTH_4        100
-
-#define DEF_MAX_LINE_WIDHT      DEF_LINE_WIDTH_4
-#define DEF_MAX_LINE_DIST       DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE0_OUT    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE0_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE0_DIST   DEF_LINE_WIDTH_1
-
-#define DEF_DOUBLE_LINE1_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE1_IN     DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE1_DIST   DEF_LINE_WIDTH_1
-
-#define DEF_DOUBLE_LINE2_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE2_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE2_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE3_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE3_IN     DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE3_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE4_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE4_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE4_DIST   DEF_LINE_WIDTH_1
-
-#define DEF_DOUBLE_LINE5_OUT    DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE5_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE5_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE6_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE6_IN     DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE6_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE7_OUT    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE7_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE7_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE8_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE8_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE8_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE9_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
-
-#define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
-*/
-// Deklarationen gemaess BOXITEM.HXX
-#define WW8_DECL_LINETAB_ARRAY                                               \
-    static WW8_BordersSO __READONLY_DATA nLineTabVer8[] =                    \
-    {                                                                        \
-/* 0*/  { DEF_LINE_WIDTH_0, 0, 0 },                                          \
-/* 1*/  { DEF_LINE_WIDTH_1, 0, 0 },                                          \
-/* 2*/  { DEF_LINE_WIDTH_2, 0, 0 },                                          \
-/* 3*/  { DEF_LINE_WIDTH_3, 0, 0 },                                          \
-/* 4*/  { DEF_LINE_WIDTH_4, 0, 0 },                                          \
-/* 5*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST },\
-/* 6*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST },\
-/* 7*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST },\
-/* 8*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST },\
-/* 9*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST },\
-/*10*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST },\
-/*11*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST },\
-/*12*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST },\
-/*13*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST },\
-/*14*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },\
-/*15*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST} \
-    };
-
-#define WW8_DECL_LINETAB_OFS_DOUBLE 5   // Beginn des DOUBLE_LINE Abschnitts in meiner Liste
-
-
+// Beginn des DOUBLE_LINE Abschnitts in meiner Liste
+#define WW8_DECL_LINETAB_OFS_DOUBLE 5
 
 /*
 Document Typography Info (DOPTYPOGRAPHY) These options are Far East only,
@@ -344,19 +262,17 @@ public:
     //themselves into a small corner with one DopTypography for the
     //full document, might not matter all that much though ?
 
+    enum RuleLengths {nMaxFollowing = 101, nMaxLeading = 51};
+    static const sal_Unicode * GetJapanNotBeginLevel1();
+    static const sal_Unicode * GetJapanNotEndLevel1();
 
     INT16 cchFollowingPunct;    // length of rgxchFPunct
     INT16 cchLeadingPunct;      // length of rgxchLPunct
 
-    sal_Unicode rgxchFPunct[101];   // array of characters that should
-                                    // never appear at the start of a line
-    sal_Unicode rgxchLPunct[51];    // array of characters that should
-                                    // never appear at the end of a line
-public:
-    static const INT16 MaxFollowing;
-    static const INT16 MaxLeading;
-    static sal_Unicode aJapanNotBeginLevel1[101];
-    static sal_Unicode aJapanNotEndLevel1[51];
+    // array of characters that should never appear at the start of a line
+    sal_Unicode rgxchFPunct[nMaxFollowing];
+    // array of characters that should never appear at the end of a line
+    sal_Unicode rgxchLPunct[nMaxLeading];
 };
 
 struct WW8_DOGRID

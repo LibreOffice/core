@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:06 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,16 +480,17 @@ void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt,
         pISet = &rSet;                  // fuer Doppel-Attribute
 
         //If frame dir is set, but not adjust, then force adjust as well
-        if (bPapFmt && SFX_ITEM_SET == rSet.GetItemState(RES_FRAMEDIR,
-            FALSE, &pItem ))
+        if (bPapFmt && SFX_ITEM_SET == rSet.GetItemState(RES_FRAMEDIR, FALSE))
         {
             //No explicit adjust set ?
             if (SFX_ITEM_SET != rSet.GetItemState(RES_PARATR_ADJUST, FALSE))
             {
-                pItem = rSet.GetItem(RES_PARATR_ADJUST);
-                // then set the adjust used by the parent format
-                pOut = aWW8AttrFnTab[ RES_PARATR_ADJUST - RES_CHRATR_BEGIN ];
-                (*pOut)( *this, *pItem );
+                if (pItem = rSet.GetItem(RES_PARATR_ADJUST))
+                {
+                    // then set the adjust used by the parent format
+                    pOut = aWW8AttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN];
+                    (*pOut)( *this, *pItem );
+                }
             }
         }
 
@@ -1424,9 +1425,9 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
 void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
                             const String& rFldCmd, BYTE nMode )
 {
-    static BYTE                 aFld13[2] = { 0x13, 0x00 };  // will change
-    static BYTE __READONLY_DATA aFld14[2] = { 0x14, 0xff };
-    static BYTE __READONLY_DATA aFld15[2] = { 0x15, 0x80 };
+    BYTE aFld13[2] = { 0x13, 0x00 };  // will change
+    static const BYTE aFld14[2] = { 0x14, 0xff };
+    static const BYTE aFld15[2] = { 0x15, 0x80 };
 
     BOOL bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP;
@@ -1576,9 +1577,9 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
     const SwTOXBase* pTOX = rSect.GetTOXBase();
     if( pTOX )
     {
-        static sal_Char __READONLY_DATA sContent[] = " VERZEICHNIS \\w \\x ";
-        static sal_Char __READONLY_DATA sIndex[] = " INDEX ";
-        static sal_Char __READONLY_DATA sEntryEnd[] = "\" ";
+        static const sal_Char sContent[] = " VERZEICHNIS \\w \\x ";
+        static const sal_Char sIndex[] = " INDEX ";
+        static const sal_Char sEntryEnd[] = "\" ";
 
         BYTE nCode = 13;
         String sStr;
@@ -2074,20 +2075,21 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             bWriteExpand = TRUE;
         else
         {
-            static sal_Char __READONLY_DATA sFld15[] = "TITLE";
-            static sal_Char __READONLY_DATA sFld16[] = "THEMA";
-            static sal_Char __READONLY_DATA sFld17[] = "AUTOR ";
-            static sal_Char __READONLY_DATA sFld18[] = "STICHW\xd6RTER";
-            static sal_Char __READONLY_DATA sFld19[] = "KOMMENTAR";
-            static sal_Char __READONLY_DATA sFld20[] = "GESPEICHERTVON";
-            static sal_Char __READONLY_DATA sFld21[] = "ERSTELLDAT ";
-            static sal_Char __READONLY_DATA sFld22[] = "SPEICHERDAT ";
-            static sal_Char __READONLY_DATA sFld23[] = "DRUCKDAT ";
-            static sal_Char __READONLY_DATA sFld24[] = "\xdc" "BERARBEITUNGSNUMMER";
+            static const sal_Char sFld15[] = "TITLE";
+            static const sal_Char sFld16[] = "THEMA";
+            static const sal_Char sFld17[] = "AUTOR ";
+            static const sal_Char sFld18[] = "STICHW\xd6RTER";
+            static const sal_Char sFld19[] = "KOMMENTAR";
+            static const sal_Char sFld20[] = "GESPEICHERTVON";
+            static const sal_Char sFld21[] = "ERSTELLDAT ";
+            static const sal_Char sFld22[] = "SPEICHERDAT ";
+            static const sal_Char sFld23[] = "DRUCKDAT ";
+            static const sal_Char sFld24[] = "\xdc" "BERARBEITUNGSNUMMER";
 
-            static const sal_Char* __READONLY_DATA aFldArr[] = {
-                    sFld15, sFld16, sFld17, sFld18, sFld19,
-                    sFld20, sFld21, sFld22, sFld23, sFld24
+            static const sal_Char* aFldArr[] =
+            {
+                sFld15, sFld16, sFld17, sFld18, sFld19, sFld20, sFld21,
+                sFld22, sFld23, sFld24
             };
 
             switch( 0xff & nSubType )
@@ -2490,24 +2492,27 @@ void SwWW8Writer::WriteFtnBegin( const SwFmtFtn& rFtn, WW8Bytes* pOutArr )
     {
         if( bWrtWW8 )
         {
-            static BYTE __READONLY_DATA aSpec[] = {
-                0x03, 0x6a, 0, 0, 0, 0,         // sprmCObjLocation (wahrscheinlich unnoetig)
-                0x55, 0x08, 1                   // sprmCFSpec
+            static const BYTE aSpec[] =
+            {
+                0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
+                0x55, 0x08, 1           // sprmCFSpec
             };
 
-            aAttrArr.Insert( aSpec, sizeof( aSpec ), aAttrArr.Count() );
+            aAttrArr.Insert(aSpec, sizeof(aSpec), aAttrArr.Count());
         }
         else
         {
-            static BYTE __READONLY_DATA aSpec[] = {
+            static BYTE const aSpec[] =
+            {
                 117, 1,                         // sprmCFSpec
-                68, 4, 0, 0, 0, 0               // sprmCObjLocation (wahrscheinlich unnoetig)
+                68, 4, 0, 0, 0, 0               // sprmCObjLocation
             };
-            aAttrArr.Insert( aSpec, sizeof( aSpec ), aAttrArr.Count() );
+
+            aAttrArr.Insert(aSpec, sizeof(aSpec), aAttrArr.Count());
         }
     }
 
-        // sprmCIstd
+    // sprmCIstd
     const SwEndNoteInfo* pInfo;
     if( rFtn.IsEndNote() )
         pInfo = &pDoc->GetEndNoteInfo();
@@ -3586,8 +3591,10 @@ void SwWW8Writer::Out_SwFmtBox( const SvxBoxItem& rBox, BOOL bShadow )
         nOffset = (0x702b - 0x6424);
     }
 
-    static USHORT __READONLY_DATA aBorders[] = {
-            BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
+    static const USHORT aBorders[] =
+    {
+        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+    };
     const USHORT* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
@@ -3606,8 +3613,10 @@ void SwWW8Writer::Out_SwFmtBox( const SvxBoxItem& rBox, BOOL bShadow )
 void SwWW8Writer::Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox )
 {
     // moeglich und vielleicht besser waere 0xffff
-    static USHORT __READONLY_DATA aBorders[] = {
-            BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
+    static const USHORT aBorders[] =
+    {
+        BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
+    };
     const USHORT* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {

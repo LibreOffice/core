@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-12 09:50:27 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 // see file: s62f39.htm
                 //
                 // Since isprm is 7 bits, rgsprmPrm can hold 0x80 entries.
-                static USHORT __READONLY_DATA aSprmId[0x80] =
+                static const USHORT aSprmId[0x80] =
                 {
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop
                     0x0000,0x0000,0x0000,0x0000,
@@ -1234,7 +1234,7 @@ short WW8_BRC::DetermineBorderProperties( BOOL bVer67, short *pSpace,
     */
 
     // Match-Table: Transforms word 6/7 types in version 8+
-    static USHORT __READONLY_DATA nTabBorderCode67ToCode8[] =
+    static const USHORT nTabBorderCode67ToCode8[] =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 2, 2, 3, 0, 0, 0, 1, 2, 3,
@@ -2674,12 +2674,16 @@ BOOL WW8PLCFx_Fc_FKP::NewFkp()
     long nPLCFStart, nPLCFEnd;
     void* pPage;
 
-    static int __READONLY_DATA WW8FkpSizeTabVer6[ PLCF_END ] = {
-                                                    1,  7, 0 /*, 0, 0, 0*/ };
-    static int __READONLY_DATA WW8FkpSizeTabVer8[ PLCF_END ] = {
-                                                    1, 13, 0 /*, 0, 0, 0*/ };
+    static const int WW8FkpSizeTabVer6[ PLCF_END ] =
+    {
+        1,  7, 0 /*, 0, 0, 0*/
+    };
+    static const int WW8FkpSizeTabVer8[ PLCF_END ] =
+    {
+        1, 13, 0 /*, 0, 0, 0*/
+    };
     const int* pFkpSizeTab;
-    switch( GetVersion() )
+    switch (GetVersion())
     {
         case 6:
         case 7:
@@ -6447,9 +6451,6 @@ BOOL WW8Dop::Write( SvStream& rStrm, WW8Fib& rFib ) const
     return 0 == rStrm.GetError();
 }
 
-const INT16 WW8DopTypography::MaxFollowing = 100;
-const INT16 WW8DopTypography::MaxLeading = 50;
-
 void WW8DopTypography::ReadFromMem(BYTE *&pData)
 {
     USHORT a16Bit = Get_UShort(pData);
@@ -6464,9 +6465,9 @@ void WW8DopTypography::ReadFromMem(BYTE *&pData)
     cchLeadingPunct = Get_Short(pData);
 
     INT16 i;
-    for (i=0;i<MaxFollowing+1;i++)
+    for (i=0; i < nMaxFollowing; ++i)
         rgxchFPunct[i] = Get_Short(pData);
-    for (i=0;i<MaxLeading+1;i++)
+    for (i=0; i < nMaxLeading; ++i)
         rgxchLPunct[i] = Get_Short(pData);
 
     rgxchFPunct[cchFollowingPunct]=0;
@@ -6487,9 +6488,9 @@ void WW8DopTypography::WriteToMem(BYTE *&pData) const
     Set_UInt16(pData,cchLeadingPunct);
 
     INT16 i;
-    for (i=0;i<MaxFollowing+1;i++)
+    for (i=0; i < nMaxFollowing; ++i)
         Set_UInt16(pData,rgxchFPunct[i]);
-    for (i=0;i<MaxLeading+1;i++)
+    for (i=0; i < nMaxLeading; ++i)
         Set_UInt16(pData,rgxchLPunct[i]);
 }
 

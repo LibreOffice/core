@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-10 16:36:40 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,114 +694,113 @@ void SwWW8ImplReader::UpdateFields()
     rDoc.SetInitDBFields( TRUE );               // Datenbank-Felder auch
 }
 
-typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, String& );
-static FNReadField aWW8FieldTab[93] = {
-0,
-0,
-0,
-&SwWW8ImplReader::Read_F_Ref,               // 3
-0,
-0,
-&SwWW8ImplReader::Read_F_Set,               // 6
-0,
-&SwWW8ImplReader::Read_F_Tox,               // 8
-0,
-0,
-0,
-&SwWW8ImplReader::Read_F_Seq,               // 12
-&SwWW8ImplReader::Read_F_Tox,               // 13
-&SwWW8ImplReader::Read_F_DocInfo,           // 14
-&SwWW8ImplReader::Read_F_DocInfo,           // 15
-&SwWW8ImplReader::Read_F_DocInfo,           // 16
-&SwWW8ImplReader::Read_F_Author,            // 17
-&SwWW8ImplReader::Read_F_DocInfo,           // 18
-&SwWW8ImplReader::Read_F_DocInfo,           // 19
-&SwWW8ImplReader::Read_F_DocInfo,           // 20
-&SwWW8ImplReader::Read_F_DocInfo,           // 21
-&SwWW8ImplReader::Read_F_DocInfo,           // 22
-&SwWW8ImplReader::Read_F_DocInfo,           // 23
-&SwWW8ImplReader::Read_F_DocInfo,           // 24
-&SwWW8ImplReader::Read_F_DocInfo,           // 25
-&SwWW8ImplReader::Read_F_Anz,               // 26
-&SwWW8ImplReader::Read_F_Anz,               // 27
-&SwWW8ImplReader::Read_F_Anz,               // 28
-&SwWW8ImplReader::Read_F_FileName,          // 29
-&SwWW8ImplReader::Read_F_TemplName,         // 30
-&SwWW8ImplReader::Read_F_DateTime,          // 31
-&SwWW8ImplReader::Read_F_DateTime,          // 32
-&SwWW8ImplReader::Read_F_CurPage,           // 33
-0,
-0,
-&SwWW8ImplReader::Read_F_IncludeText,       // 36
-&SwWW8ImplReader::Read_F_PgRef,             // 37
-&SwWW8ImplReader::Read_F_InputVar,          // 38
-&SwWW8ImplReader::Read_F_Input,             // 39
-0,
-&SwWW8ImplReader::Read_F_DBNext,            // 41
-0,
-0,
-&SwWW8ImplReader::Read_F_DBNum,             // 44
-0,
-0,
-0,
-0,
-&SwWW8ImplReader::Read_F_Equation,          // 49
-0,
-&SwWW8ImplReader::Read_F_Macro,             // 51
-&SwWW8ImplReader::Read_F_ANumber,           // 52
-&SwWW8ImplReader::Read_F_ANumber,           // 53
-&SwWW8ImplReader::Read_F_ANumber,           // 54
-0,
-
-
-0,      // 56: VERKNUePFUNG     // fehlt noch !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-&SwWW8ImplReader::Read_F_Symbol,            // 57
-&SwWW8ImplReader::Read_F_Embedd,            // 58
-&SwWW8ImplReader::Read_F_DBField,           // 59
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-&SwWW8ImplReader::Read_F_IncludePicture,    // 67
-&SwWW8ImplReader::Read_F_IncludeText,       // 68
-0,
-&SwWW8ImplReader::Read_F_FormTextBox,       // 70
-&SwWW8ImplReader::Read_F_FormCheckBox,      // 71
-&SwWW8ImplReader::Read_F_NoteReference,     // 72
-0, /*&SwWW8ImplReader::Read_F_Tox*/
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-0,
-&SwWW8ImplReader::Read_F_FormListBox,       // 83
-0,                                          // 84
-&SwWW8ImplReader::Read_F_DocInfo,           // 85
-0,                                          // 86
-&SwWW8ImplReader::Read_F_OCX,               // 87
-&SwWW8ImplReader::Read_F_Hyperlink,         // 88
-0,                                          // 89
-0,                                          // 90
-0,                                          // 91
-0                                           // 92 - Dummy leer Methode
- };                                         // 92   == alle ueber 91
-
-
-
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
 // Returnwert: Gesamtlaenge des Feldes ( zum UEberlesen )
 long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
+    typedef eF_ResT (SwWW8ImplReader:: *FNReadField)( WW8FieldDesc*, String& );
+    static FNReadField aWW8FieldTab[93] =
+    {
+        0,
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_Ref,               // 3
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_Set,               // 6
+        0,
+        &SwWW8ImplReader::Read_F_Tox,               // 8
+        0,
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_Seq,               // 12
+        &SwWW8ImplReader::Read_F_Tox,               // 13
+        &SwWW8ImplReader::Read_F_DocInfo,           // 14
+        &SwWW8ImplReader::Read_F_DocInfo,           // 15
+        &SwWW8ImplReader::Read_F_DocInfo,           // 16
+        &SwWW8ImplReader::Read_F_Author,            // 17
+        &SwWW8ImplReader::Read_F_DocInfo,           // 18
+        &SwWW8ImplReader::Read_F_DocInfo,           // 19
+        &SwWW8ImplReader::Read_F_DocInfo,           // 20
+        &SwWW8ImplReader::Read_F_DocInfo,           // 21
+        &SwWW8ImplReader::Read_F_DocInfo,           // 22
+        &SwWW8ImplReader::Read_F_DocInfo,           // 23
+        &SwWW8ImplReader::Read_F_DocInfo,           // 24
+        &SwWW8ImplReader::Read_F_DocInfo,           // 25
+        &SwWW8ImplReader::Read_F_Anz,               // 26
+        &SwWW8ImplReader::Read_F_Anz,               // 27
+        &SwWW8ImplReader::Read_F_Anz,               // 28
+        &SwWW8ImplReader::Read_F_FileName,          // 29
+        &SwWW8ImplReader::Read_F_TemplName,         // 30
+        &SwWW8ImplReader::Read_F_DateTime,          // 31
+        &SwWW8ImplReader::Read_F_DateTime,          // 32
+        &SwWW8ImplReader::Read_F_CurPage,           // 33
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_IncludeText,       // 36
+        &SwWW8ImplReader::Read_F_PgRef,             // 37
+        &SwWW8ImplReader::Read_F_InputVar,          // 38
+        &SwWW8ImplReader::Read_F_Input,             // 39
+        0,
+        &SwWW8ImplReader::Read_F_DBNext,            // 41
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_DBNum,             // 44
+        0,
+        0,
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_Equation,          // 49
+        0,
+        &SwWW8ImplReader::Read_F_Macro,             // 51
+        &SwWW8ImplReader::Read_F_ANumber,           // 52
+        &SwWW8ImplReader::Read_F_ANumber,           // 53
+        &SwWW8ImplReader::Read_F_ANumber,           // 54
+        0,
+
+
+        0,      // 56: VERKNUePFUNG     // fehlt noch !!!!!!!!!!!!!!!!!!!!!!!
+
+
+        &SwWW8ImplReader::Read_F_Symbol,            // 57
+        &SwWW8ImplReader::Read_F_Embedd,            // 58
+        &SwWW8ImplReader::Read_F_DBField,           // 59
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_IncludePicture,    // 67
+        &SwWW8ImplReader::Read_F_IncludeText,       // 68
+        0,
+        &SwWW8ImplReader::Read_F_FormTextBox,       // 70
+        &SwWW8ImplReader::Read_F_FormCheckBox,      // 71
+        &SwWW8ImplReader::Read_F_NoteReference,     // 72
+        0, /*&SwWW8ImplReader::Read_F_Tox*/
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        &SwWW8ImplReader::Read_F_FormListBox,       // 83
+        0,                                          // 84
+        &SwWW8ImplReader::Read_F_DocInfo,           // 85
+        0,                                          // 86
+        &SwWW8ImplReader::Read_F_OCX,               // 87
+        &SwWW8ImplReader::Read_F_Hyperlink,         // 88
+        0,                                          // 89
+        0,                                          // 90
+        0,                                          // 91
+        0                                           // 92 - Dummy leer Methode
+    };                                          // 92   == alle ueber 91
+
     ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == 93 ),
             "FeldFunc-Tabelle stimmt nicht" );
     if( nIniFlags & WW8FL_NO_FLD )
@@ -1365,60 +1364,60 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         if( (STRING_NOTFOUND != nPos1) && (nPos1+1 < aStr.Len()) )
         {
             xub_StrLen nPos2 = aStr.SearchAndReplace( '"', '\0', nPos1+1 );
-            if( STRING_NOTFOUND != nPos2 )
+            if (STRING_NOTFOUND != nPos2)
             {
                 aStr.Erase(0, nPos1+1);
-                static sal_Char __READONLY_DATA* aName10 = "\x0F"; // SW field code
-                static sal_Char  __READONLY_DATA* aName11 // German
+                static const sal_Char* aName10 = "\x0F"; // SW field code
+                static const sal_Char* aName11 // German
                     = "TITEL";
-                static sal_Char  __READONLY_DATA* aName12 // French
+                static const sal_Char* aName12 // French
                     = "TITRE";
-                static sal_Char  __READONLY_DATA* aName13 // English
+                static const sal_Char* aName13 // English
                     = "TITLE";
-                static sal_Char  __READONLY_DATA* aName14 // Spanish
+                static const sal_Char* aName14 // Spanish
                     = "TITRO";
-                static sal_Char  __READONLY_DATA* aName20 = "\x15"; // SW filed code
-                static sal_Char  __READONLY_DATA* aName21 // German
+                static const sal_Char* aName20 = "\x15"; // SW filed code
+                static const sal_Char* aName21 // German
                     = "ERSTELLDATUM";
-                static sal_Char  __READONLY_DATA* aName22 // French
+                static const sal_Char* aName22 // French
                     = "CRÉÉ";
-                static sal_Char  __READONLY_DATA* aName23 // English
+                static const sal_Char* aName23 // English
                     = "CREATED";
-                static sal_Char  __READONLY_DATA* aName24 // Spanish
+                static const sal_Char* aName24 // Spanish
                     = "CREADO";
-                static sal_Char  __READONLY_DATA* aName30 = "\x16"; // SW filed code
-                static sal_Char  __READONLY_DATA* aName31 // German
+                static const sal_Char* aName30 = "\x16"; // SW filed code
+                static const sal_Char* aName31 // German
                     = "ZULETZTGESPEICHERTZEIT";
-                static sal_Char  __READONLY_DATA* aName32 // French
+                static const sal_Char* aName32 // French
                     = "DERNIERENREGISTREMENT";
-                static sal_Char  __READONLY_DATA* aName33 // English
+                static const sal_Char* aName33 // English
                     = "SAVED";
-                static sal_Char  __READONLY_DATA* aName34 // Spanish
+                static const sal_Char* aName34 // Spanish
                     = "MODIFICADO";
-                static sal_Char  __READONLY_DATA* aName40 = "\x17"; // SW filed code
-                static sal_Char  __READONLY_DATA* aName41 // German
+                static const sal_Char* aName40 = "\x17"; // SW filed code
+                static const sal_Char* aName41 // German
                     = "ZULETZTGEDRUCKT";
-                static sal_Char  __READONLY_DATA* aName42 // French
+                static const sal_Char* aName42 // French
                     = "DERNIÈREIMPRESSION";
-                static sal_Char  __READONLY_DATA* aName43 // English
+                static const sal_Char* aName43 // English
                     = "LASTPRINTED";
-                static sal_Char  __READONLY_DATA* aName44 // Spanish
+                static const sal_Char* aName44 // Spanish
                     = "HUPS PUPS";
-                static sal_Char  __READONLY_DATA* aName50 = "\x18"; // SW filed code
-                static sal_Char  __READONLY_DATA* aName51 // German
+                static const sal_Char* aName50 = "\x18"; // SW filed code
+                static const sal_Char* aName51 // German
                     = "ÜBERARBEITUNGSNUMMER";
-                static sal_Char  __READONLY_DATA* aName52 // French
+                static const sal_Char* aName52 // French
                     = "NUMÉRODEREVISION";
-                static sal_Char  __READONLY_DATA* aName53 // English
+                static const sal_Char* aName53 // English
                     = "REVISIONNUMBER";
-                static sal_Char  __READONLY_DATA* aName54 // Spanish
+                static const sal_Char* aName54 // Spanish
                     = "SNUBBEL BUBBEL";
                 static const USHORT nFldCnt  = 5;
 
                 // additional fields are to be coded soon!   :-)
 
                 static const USHORT nLangCnt = 4;
-                static const sal_Char * aNameSet_26[nFldCnt][nLangCnt+1] =
+                static const sal_Char *aNameSet_26[nFldCnt][nLangCnt+1] =
                 {
                     {aName10, aName11, aName12, aName13, aName14},
                     {aName20, aName21, aName22, aName23, aName24},
@@ -1613,7 +1612,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         aFld.SetLevel( nPgChpLevel );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
 
-        static sal_Char __READONLY_DATA aDelim[] = "-.:\x97\x96";
+        static const sal_Char aDelim[] = "-.:\x97\x96";
         BYTE nDelim = nPgChpDelim;
         if( nDelim > 4 )
             nDelim = 0;

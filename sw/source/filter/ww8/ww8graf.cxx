@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-08 09:59:43 $
+ *  last change: $Author: cmc $ $Date: 2002-08-12 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,6 +1495,90 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     }
 }
 
+const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(USHORT nIdx)
+{
+    /*
+    // Linien-Defaults in Twips: fruehere Writer-Defaults,
+    //                           siehe auch <svx/boxitem.hxx>
+    #define DEF_LINE_WIDTH_0        1
+    #define DEF_LINE_WIDTH_1        20
+    #define DEF_LINE_WIDTH_2        50
+    #define DEF_LINE_WIDTH_3        80
+    #define DEF_LINE_WIDTH_4        100
+
+    #define DEF_MAX_LINE_WIDHT      DEF_LINE_WIDTH_4
+    #define DEF_MAX_LINE_DIST       DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE0_OUT    DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE0_IN     DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE0_DIST   DEF_LINE_WIDTH_1
+
+    #define DEF_DOUBLE_LINE1_OUT    DEF_LINE_WIDTH_1
+    #define DEF_DOUBLE_LINE1_IN     DEF_LINE_WIDTH_1
+    #define DEF_DOUBLE_LINE1_DIST   DEF_LINE_WIDTH_1
+
+    #define DEF_DOUBLE_LINE2_OUT    DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE2_IN     DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE2_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE3_OUT    DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE3_IN     DEF_LINE_WIDTH_1
+    #define DEF_DOUBLE_LINE3_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE4_OUT    DEF_LINE_WIDTH_1
+    #define DEF_DOUBLE_LINE4_IN     DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE4_DIST   DEF_LINE_WIDTH_1
+
+    #define DEF_DOUBLE_LINE5_OUT    DEF_LINE_WIDTH_3
+    #define DEF_DOUBLE_LINE5_IN     DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE5_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE6_OUT    DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE6_IN     DEF_LINE_WIDTH_3
+    #define DEF_DOUBLE_LINE6_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE7_OUT    DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE7_IN     DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE7_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE8_OUT    DEF_LINE_WIDTH_1
+    #define DEF_DOUBLE_LINE8_IN     DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE8_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE9_OUT    DEF_LINE_WIDTH_2
+    #define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
+
+    #define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
+    #define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
+    #define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
+    */
+    // Deklarationen gemaess BOXITEM.HXX
+    static const WW8_BordersSO aLineTabVer8[] =
+    {
+/* 0*/  { DEF_LINE_WIDTH_0, 0, 0 },
+/* 1*/  { DEF_LINE_WIDTH_1, 0, 0 },
+/* 2*/  { DEF_LINE_WIDTH_2, 0, 0 },
+/* 3*/  { DEF_LINE_WIDTH_3, 0, 0 },
+/* 4*/  { DEF_LINE_WIDTH_4, 0, 0 },
+/* 5*/  { DEF_DOUBLE_LINE0_OUT, DEF_DOUBLE_LINE0_IN, DEF_DOUBLE_LINE0_DIST },
+/* 6*/  { DEF_DOUBLE_LINE1_OUT, DEF_DOUBLE_LINE1_IN, DEF_DOUBLE_LINE1_DIST },
+/* 7*/  { DEF_DOUBLE_LINE2_OUT, DEF_DOUBLE_LINE2_IN, DEF_DOUBLE_LINE2_DIST },
+/* 8*/  { DEF_DOUBLE_LINE3_OUT, DEF_DOUBLE_LINE3_IN, DEF_DOUBLE_LINE3_DIST },
+/* 9*/  { DEF_DOUBLE_LINE4_OUT, DEF_DOUBLE_LINE4_IN, DEF_DOUBLE_LINE4_DIST },
+/*10*/  { DEF_DOUBLE_LINE5_OUT, DEF_DOUBLE_LINE5_IN, DEF_DOUBLE_LINE5_DIST },
+/*11*/  { DEF_DOUBLE_LINE6_OUT, DEF_DOUBLE_LINE6_IN, DEF_DOUBLE_LINE6_DIST },
+/*12*/  { DEF_DOUBLE_LINE7_OUT, DEF_DOUBLE_LINE7_IN, DEF_DOUBLE_LINE7_DIST },
+/*13*/  { DEF_DOUBLE_LINE8_OUT, DEF_DOUBLE_LINE8_IN, DEF_DOUBLE_LINE8_DIST },
+/*14*/  { DEF_DOUBLE_LINE9_OUT, DEF_DOUBLE_LINE9_IN, DEF_DOUBLE_LINE9_DIST },
+/*15*/  { DEF_DOUBLE_LINE10_OUT,DEF_DOUBLE_LINE10_IN,DEF_DOUBLE_LINE10_DIST}
+    };
+    ASSERT(nIdx < sizeof(aLineTabVer8), "Impossible");
+    if (nIdx >= sizeof(aLineTabVer8))
+        nIdx = sizeof(aLineTabVer8)-1;
+    return aLineTabVer8[nIdx];
+}
+
 INT32 SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
     MSO_SPT eShapeType, INT32 &rThick)
 {
@@ -1561,9 +1645,6 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     INT32 nOutsideThick = 0;
     if( !rLineThick )
         return nOutsideThick;
-
-    // Deklarationen gemaess BOXITEM.HXX
-    WW8_DECL_LINETAB_ARRAY
 
     USHORT nIdx = USHRT_MAX;
 
@@ -1656,7 +1737,10 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
 
-        const WW8_BordersSO& rBorders = nLineTabVer8[ nIdx ];
+        const WW8_BordersSO& rBorders = WW8_BordersSO::Get0x01LineMatch(nIdx);
+
+        //rBorders = Get0x01LineMatch(nIdx);
+
         aLine.SetOutWidth( rBorders.Out  );
         aLine.SetInWidth ( rBorders.In   );
         aLine.SetDistance( rBorders.Dist );
