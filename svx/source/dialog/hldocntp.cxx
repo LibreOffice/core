@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 08:40:37 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
         INetURLObject   aURL( aStrURL, INET_PROT_FILE );
         String          aStrName;
         if( bHandleFileName )
-            aStrName = bZeroPath? aTempStrURL : aURL.getName();
+            aStrName = bZeroPath? aTempStrURL : String(aURL.getName());
 
         maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
         String          aStrTmp( xFolderPicker->getDirectory() );
@@ -569,7 +569,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 
         INetURLObject   aNewURL( aStrTmp );
 
-        if( aStrName.Len() > 0 && aNewURL.getExtension().Len() > 0 &&
+        if( aStrName.Len() > 0 && aNewURL.getExtension().getLength() > 0 &&
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
