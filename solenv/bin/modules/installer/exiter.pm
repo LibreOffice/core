@@ -2,9 +2,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:28:43 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:54:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,9 @@ package installer::exiter;
 
 use installer::files;
 use installer::globals;
+use installer::logger;
 use installer::systemactions;
+use installer::worker;
 
 ############################################
 # Exiting the program with an error
@@ -79,6 +81,8 @@ sub exit_program
     # If this directory name matches with "_inprogress", it has to be renamed into "_witherror"
 
     if ( $installer::globals::saveinstalldir =~ /_inprogress/ ) { installer::systemactions::rename_string_in_directory($installer::globals::saveinstalldir, "_inprogress", "_witherror");   }
+
+    installer::worker::clean_output_tree(); # removing directories created in the output tree
 
     # If @installer::globals::logfileinfo is not empty, it can be used.
     # Otherwise the content of @installer::globals::globallogfileinfo has to be used.
@@ -132,6 +136,8 @@ sub exit_program
     # Saving the debug info
 
     if ( $installer::globals::debug ) { installer::logger::savedebug($installer::globals::exitlog); }
+
+    installer::logger::stoptime();
 
     exit(-1);
 }
