@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 18:37:31 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,7 +1119,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescri
 void SbaTableQueryBrowser::connectExternalDispatches()
 {
     Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::attachFrame: no DispatchPprovider !");
+    DBG_ASSERT(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchPprovider !");
     if (xProvider.is())
     {
         sal_Int32 nExternalIds[] = { ID_BROWSER_DOCUMENT_DATASOURCE, ID_BROWSER_FORMLETTER, ID_BROWSER_INSERTCOLUMNS, ID_BROWSER_INSERTCONTENT };
@@ -1147,7 +1147,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("SbaTableQueryBrowser::attachFrame: could not attach a status listener!");
+                    DBG_ERROR("SbaTableQueryBrowser::connectExternalDispatches: could not attach a status listener!");
                 }
             }
 
@@ -1245,7 +1245,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
             }
             catch (Exception&)
             {
-                DBG_ERROR("SbaTableQueryBrowser::attachFrame: could not remove a status listener!");
+                DBG_ERROR("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 #ifndef _SBA_FORMADAPTER_HXX
 #include "formadapter.hxx"
 #endif
@@ -98,6 +101,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
 //==============================================================================
@@ -358,7 +362,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
 
         Reference< ::com::sun::star::frame::XDispatchProvider >  xFrameDispatcher(m_xCurrentFrame, UNO_QUERY);
         if (xFrameDispatcher.is())
-            xReturn = xFrameDispatcher->queryDispatch(aNewUrl, aTargetFrameName, nSearchFlags);
+            xReturn = xFrameDispatcher->queryDispatch(aNewUrl, aTargetFrameName, FrameSearchFlag::PARENT);
 
 #if SUPD<=548 && !PRIV_DEBUG
         xReturn = NULL;
