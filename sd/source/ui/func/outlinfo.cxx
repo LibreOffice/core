@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-02 15:34:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void OutlinerInfo::SetTextObj( SdDrawDocument* pDoc, SdrRectObj* pObj, OutputDev
     pOut = _pOut;
     rOutliner.SetText( *pObj->GetOutlinerParaObject() );
 
-    aObjBound = pObj->GetBoundRect();
+    aObjBound = pObj->GetCurrentBoundRect();
     nParaCount = rOutliner.GetParagraphCount();
     nExtraData = 0L;
 
