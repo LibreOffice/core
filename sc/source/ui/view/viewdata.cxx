@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 11:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,12 +200,12 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eVSplitMode);
         pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSPLITPOSITION));
         if (eHSplitMode == SC_SPLIT_FIX)
-            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
+            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
         else
             pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= nHSplitPos;
         pSettings[SC_VERTICAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VERTICALSPLITPOSITION));
         if (eVSplitMode == SC_SPLIT_FIX)
-            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
+            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
         else
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= nVSplitPos;
         pSettings[SC_ACTIVE_SPLIT_RANGE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVESPLITRANGE));
@@ -227,8 +227,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     DBG_ASSERT(nCount == SC_TABLE_VIEWSETTINGS_COUNT, " wrong Table View Settings count");
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
-    sal_Int32 nTempPosX(0);
-    sal_Int32 nTempPosY(0);
+    sal_Int32 nTempPosV(0);
+    sal_Int32 nTempPosH(0);
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         rtl::OUString sName(aSettings[i].Name);
@@ -254,11 +254,11 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
         else if (sName.compareToAscii(SC_HORIZONTALSPLITPOSITION) == 0)
         {
-            aSettings[i].Value >>= nTempPosY;
+            aSettings[i].Value >>= nTempPosH;
         }
         else if (sName.compareToAscii(SC_VERTICALSPLITPOSITION) == 0)
         {
-            aSettings[i].Value >>= nTempPosX;
+            aSettings[i].Value >>= nTempPosV;
         }
         else if (sName.compareToAscii(SC_ACTIVESPLITRANGE) == 0)
         {
@@ -287,13 +287,13 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
     }
     if (eHSplitMode == SC_SPLIT_FIX)
-        nFixPosY = static_cast<sal_uInt16>(nTempPosY);
+        nFixPosX = static_cast<sal_uInt16>(nTempPosH);
     else
-        nHSplitPos = nTempPosY;
+        nHSplitPos = nTempPosH;
     if (eVSplitMode == SC_SPLIT_FIX)
-        nFixPosX = static_cast<sal_uInt16>(nTempPosX);
+        nFixPosY = static_cast<sal_uInt16>(nTempPosV);
     else
-        nVSplitPos = nTempPosX;
+        nVSplitPos = nTempPosV;
 }
 
 //==================================================================
