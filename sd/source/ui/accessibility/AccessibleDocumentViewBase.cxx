@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:03:41 $
+ *  last change: $Author: af $ $Date: 2002-06-07 14:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,14 @@ AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
                 OUString (RTL_CONSTASCII_USTRINGPARAM("")),
                 static_cast<beans::XPropertyChangeListener*>(this));
     }
+
+    // Unregister from VCL Window.
+    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    if (pWindow != NULL)
+    {
+        pWindow->RemoveChildEventListener (LINK(
+            this, AccessibleDocumentViewBase, WindowChildEventListener));
+    }
 }
 
 
@@ -241,6 +249,74 @@ void AccessibleDocumentViewBase::Init (void)
     if (xTopWindow.is())
         xTopWindow->addTopWindowListener (
             static_cast<awt::XTopWindowListener*>(this));
+
+    // Register at VCL Window to be informed of activated and deactivated
+    // OLE objects.
+    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    if (pWindow != NULL)
+    {
+        pWindow->AddChildEventListener (LINK(
+            this, AccessibleDocumentViewBase, WindowChildEventListener));
+        USHORT nCount = pWindow->GetChildCount();
+        for (sal_uInt16 i=0; i<nCount; i++)
+        {
+            Window* pChildWindow = pWindow->GetChild (i);
+            if (pChildWindow &&
+                (AccessibleRole::EMBEDDED_OBJECT
+                    ==pChildWindow->GetAccessibleRole()))
+            {
+                SetAccessibleOLEObject (pChildWindow->GetAccessible());
+            }
+        }
+    }
+
+}
+
+
+
+
+IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
+    VclSimpleEvent*, pEvent)
+{
+    OSL_ASSERT(pEvent!=NULL && pEvent->ISA(VclWindowEvent));
+    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
+    {
+        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
+        //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        switch (pWindowEvent->GetId())
+        {
+            case VCLEVENT_WINDOW_SHOW:
+            {
+                // A new window has been created.  Is it an OLE object?
+                Window* pChildWindow = static_cast<Window*>(
+                    pWindowEvent->GetWindow());
+                if (pChildWindow!=NULL
+                    && (pChildWindow->GetAccessibleRole()
+                        == AccessibleRole::EMBEDDED_OBJECT))
+                {
+                    SetAccessibleOLEObject (pChildWindow->GetAccessible());
+                }
+            }
+            break;
+
+            case VCLEVENT_WINDOW_HIDE:
+            {
+                // A window has been destroyed.  Has that been an OLE
+                // object?
+                Window* pChildWindow = static_cast<Window*>(
+                    pWindowEvent->GetWindow());
+                if (pChildWindow!=NULL
+                    && (pChildWindow->GetAccessibleRole()
+                        == AccessibleRole::EMBEDDED_OBJECT))
+                {
+                    SetAccessibleOLEObject (NULL);
+                }
+            }
+            break;
+        }
+    }
+
+    return 0;
 }
 
 
@@ -259,11 +335,40 @@ void AccessibleDocumentViewBase::ViewForwarderChanged (ChangeType aChangeType,
 
 //=====  XAccessibleContext  ==================================================
 
-uno::Reference<XAccessible> SAL_CALL
+Reference<XAccessible> SAL_CALL
        AccessibleDocumentViewBase::getAccessibleParent (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return AccessibleContextBase::getAccessibleParent();
+}
+
+
+
+sal_Int32 SAL_CALL
+    AccessibleDocumentViewBase::getAccessibleChildCount (void)
+    throw (uno::RuntimeException)
+{
+    if (mxAccessibleOLEObject.is())
+        return 1;
+    else
+        return 0;
+}
+
+
+
+
+Reference<XAccessible> SAL_CALL
+    AccessibleDocumentViewBase::getAccessibleChild (long nIndex)
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    if (mxAccessibleOLEObject.is())
+        if (nIndex == 0)
+            return mxAccessibleOLEObject;
+
+    throw lang::IndexOutOfBoundsException (
+        ::rtl::OUString::createFromAscii ("no child with index ") + nIndex,
+        NULL);
 }
 
 
@@ -658,14 +763,12 @@ void SAL_CALL AccessibleDocumentViewBase::windowNormalized( const ::com::sun::st
 void SAL_CALL AccessibleDocumentViewBase::windowActivated( const ::com::sun::star::lang::EventObject& e )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    OSL_TRACE ("AccessibleDocumentViewBase::windowActivated");
     Activated ();
 }
 
 void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    OSL_TRACE ("AccessibleDocumentViewBase::windowDeactivated");
     Deactivated ();
 }
 
@@ -677,6 +780,14 @@ void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::s
 // This method is called from the component helper base class while disposing.
 void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 {
+    // Unregister from VCL Window.
+    Window* pWindow = const_cast<Window*>(maShapeTreeInfo.GetWindow());
+    if (pWindow != NULL)
+    {
+        pWindow->RemoveChildEventListener (LINK(
+            this, AccessibleDocumentViewBase, WindowChildEventListener));
+    }
+
     AccessibleContextBase::disposing ();
 }
 
@@ -736,6 +847,35 @@ void AccessibleDocumentViewBase::Activated (void)
 void AccessibleDocumentViewBase::Deactivated (void)
 {
     // Empty.  Overwrite to do something usefull.
+}
+
+
+
+
+void AccessibleDocumentViewBase::SetAccessibleOLEObject (
+    const Reference <XAccessible>& xOLEObject)
+{
+    // Send child event about removed accessible OLE object if necessary.
+    if (mxAccessibleOLEObject != xOLEObject)
+        if (mxAccessibleOLEObject.is())
+            CommitChange (
+                AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+                uno::Any(),
+                uno::makeAny (mxAccessibleOLEObject));
+
+    // Assume that the accessible OLE Object disposes itself correctly.
+
+    {
+        ::osl::MutexGuard aGuard (maMutex);
+        mxAccessibleOLEObject = xOLEObject;
+    }
+
+    // Send child event about new accessible OLE object if necessary.
+    if (mxAccessibleOLEObject.is())
+        CommitChange (
+            AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            uno::makeAny (mxAccessibleOLEObject),
+            uno::Any());
 }
 
 

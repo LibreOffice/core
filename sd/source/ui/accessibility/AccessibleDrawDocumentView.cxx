@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:05:09 $
+ *  last change: $Author: af $ $Date: 2002-06-07 14:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ sal_Int32 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
-    long mpChildCount = 0;
+    long mpChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
     // Forward request to children manager.
     if (mpChildrenManager != NULL)
@@ -285,9 +285,19 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
+
+    // Take care of children of the base class.
+    sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
+    if (nCount > 0)
+        if (nIndex < nCount)
+            return AccessibleDocumentViewBase::getAccessibleChild(nIndex);
+        else
+            nIndex -= nCount;
+
+    // Forward request to children manager.
     if (mpChildrenManager != NULL)
     {
-        // Forward request to children manager.
         return mpChildrenManager->GetChild (nIndex);
     }
     else
