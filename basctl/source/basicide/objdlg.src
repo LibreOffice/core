@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 21:21:02 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ greek ] = "Εμφάνιση";
                 Text[ korean ] = "λ‚νƒ€λ‚΄κΈ°";
                 Text[ turkish ] = "Gφrόntόle";
-                Text[ catalan ] = "Mostrar";
+                Text[ catalan ] = "Mostra";
             };
             /*
             ToolBoxItem
@@ -261,7 +261,8 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ greek ] = "Αντικείμενα";
     Text[ korean ] = "κ°μ²΄";
     Text[ turkish ] = "Nesneler";
-    Text[ catalan ] = "Objetos";
+    Text[ catalan ] = "Objectes";
 };
+
 
 
