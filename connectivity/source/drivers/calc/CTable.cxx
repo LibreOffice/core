@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:44:58 $
+ *  last change: $Author: nn $ $Date: 2002-10-31 18:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XUSEDAREACURSOR_HPP_
+#include <com/sun/star/sheet/XUsedAreaCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CELLFLAGS_HPP_
+#include <com/sun/star/sheet/CellFlags.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
@@ -173,34 +179,78 @@ using namespace ::com::sun::star::util;
 
 // -------------------------------------------------------------------------
 
-sal_Int32 lcl_ColumnCount( const Reference<XSpreadsheet>& xSheet )
+void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {
-    Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
-    Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
-    if ( !xRange.is() )
-        return 0;
+    //  update rEndCol, rEndRow if any non-empty cell in xUsedRange is right/below
 
-    xCursor->collapseToSize( 1, 1 );        // single (first) cell
-    xCursor->collapseToCurrentRegion();     // contiguous data area
+    Reference<XCellRangesQuery> xUsedQuery( xUsedRange, UNO_QUERY );
+    if ( xUsedQuery.is() )
+    {
+        const sal_Int16 nContentFlags =
+            CellFlags::STRING | CellFlags::VALUE | CellFlags::DATETIME | CellFlags::FORMULA | CellFlags::ANNOTATION;
 
-    CellRangeAddress aRangeAddr = xRange->getRangeAddress();
-    return aRangeAddr.EndColumn + 1;
+        Reference<XSheetCellRanges> xUsedRanges = xUsedQuery->queryContentCells( nContentFlags );
+        Sequence<CellRangeAddress> aAddresses = xUsedRanges->getRangeAddresses();
+
+        sal_Int32 nCount = aAddresses.getLength();
+        const CellRangeAddress* pData = aAddresses.getConstArray();
+        for ( sal_Int32 i=0; i<nCount; i++ )
+        {
+            if ( pData[i].EndColumn > rEndCol )
+                rEndCol = pData[i].EndColumn;
+            if ( pData[i].EndRow > rEndRow )
+                rEndRow = pData[i].EndRow;
+        }
+    }
 }
 
-sal_Int32 lcl_RowCount( const Reference<XSpreadsheet>& xSheet )
+void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnCount, sal_Int32& rRowCount )
 {
-    //! detect missing header row
-
     Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
     Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
     if ( !xRange.is() )
-        return 0;
+    {
+        rColumnCount = rRowCount = 0;
+        return;
+    }
+
+    // first find the contiguous cell area starting at A1
 
     xCursor->collapseToSize( 1, 1 );        // single (first) cell
     xCursor->collapseToCurrentRegion();     // contiguous data area
 
-    CellRangeAddress aRangeAddr = xRange->getRangeAddress();
-    return aRangeAddr.EndRow;       // first row (headers) is not counted
+    CellRangeAddress aRegionAddr = xRange->getRangeAddress();
+    sal_Int32 nEndCol = aRegionAddr.EndColumn;
+    sal_Int32 nEndRow = aRegionAddr.EndRow;
+
+    Reference<XUsedAreaCursor> xUsed( xCursor, UNO_QUERY );
+    if ( xUsed.is() )
+    {
+        //  The used area from XUsedAreaCursor includes visible attributes.
+        //  If the used area is larger than the contiguous cell area, find non-empty
+        //  cells in that area.
+
+        xUsed->gotoEndOfUsedArea( sal_False );
+        CellRangeAddress aUsedAddr = xRange->getRangeAddress();
+
+        if ( aUsedAddr.EndColumn > aRegionAddr.EndColumn )
+        {
+            Reference<XCellRange> xUsedRange = xSheet->getCellRangeByPosition(
+                aRegionAddr.EndColumn + 1, 0, aUsedAddr.EndColumn, aUsedAddr.EndRow );
+            lcl_UpdateArea( xUsedRange, nEndCol, nEndRow );
+        }
+
+        if ( aUsedAddr.EndRow > aRegionAddr.EndRow )
+        {
+            //  only up to the last column of aRegionAddr, the other columns are handled above
+            Reference<XCellRange> xUsedRange = xSheet->getCellRangeByPosition(
+                0, aRegionAddr.EndRow + 1, aRegionAddr.EndColumn, aUsedAddr.EndRow );
+            lcl_UpdateArea( xUsedRange, nEndCol, nEndRow );
+        }
+    }
+
+    rColumnCount = nEndCol + 1;     // number of columns
+    rRowCount = nEndRow;            // first row (headers) is not counted
 }
 
 CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
@@ -588,8 +638,7 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
             Any aAny = xSheets->getByName( _Name );
             if ( aAny >>= m_xSheet )
             {
-                m_nDataCols = lcl_ColumnCount( m_xSheet );
-                m_nDataRows = lcl_RowCount( m_xSheet );
+                lcl_GetDataArea( m_xSheet, m_nDataCols, m_nDataRows );
                 m_bHasHeaders = sal_True;
                 // whole sheet is always assumed to include a header row
             }
