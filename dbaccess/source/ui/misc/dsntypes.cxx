@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 15:05:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #include <osl/file.hxx>
 #endif
 // ---
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
 //.........................................................................
 namespace dbaui
 {
@@ -99,6 +105,7 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::sdbc;
 
     namespace
     {
@@ -330,7 +337,7 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatab
             }
             if ( _rsHostname.Len() )
                 _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
-            _rsHostname = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+            _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
             break;
         case DST_LDAP:
             lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
@@ -616,7 +623,14 @@ DATASOURCE_TYPE ODsnTypeCollection::getEmbeddedDatabaseType(const Reference< XMu
     DATASOURCE_TYPE eRet = DST_DBASE;
     ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
     if ( aEmbeddedDatabase.isValid() )
-        eRet = DST_EMBEDDED;
+    {
+        ::rtl::OUString sURLPrefix = getEmbeddedDatabaseURL(_rxORB);
+        Reference< XDriverAccess > xDriverManager(_rxORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+        if ( xDriverManager.is() && xDriverManager->getDriverByURL(sURLPrefix).is() )
+        {
+            eRet = DST_EMBEDDED;
+        }
+    }
     return eRet;
 }
 // -----------------------------------------------------------------------------
