@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:25:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,7 +989,7 @@ Menu RID_SVXMN_IMAP
                         Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";
                         Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";
                         Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";
-                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡¾ÕÀ¸·Î(~F)";
+                        Text[ korean ] = "°è¼ÓÇØ¼­ ¾ÕÀ¸·Î(~F)";
                         Text[ turkish ] = "Bir öne getir";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Traer ~más adelante";
@@ -1017,7 +1017,7 @@ Menu RID_SVXMN_IMAP
                         Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";
                         Text[ arabic ] = "ÅÑÓÇá ÎáİÇó";
                         Text[ greek ] = "~ÌåôáöïñÜ ğßóù";
-                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡µÚ·Î(~W)";
+                        Text[ korean ] = "°è¼ÓÇØ¼­ µÚ·Î(~W)";
                         Text[ turkish ] = "Bir alta gönder";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Enviar hacia a~trás";
@@ -1157,21 +1157,21 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ english_us ] = "Alternative ~text" ;
         Text [ italian ] = "Testo alternativo" ;
         Text [ spanish ] = "Texto alternativo" ;
-        Text [ french ] = "Texte (facultatif) :" ;
+        Text [ french ] = "Texte (facultatif)" ;
         Text [ dutch ] = "Alternatieve tekst:" ;
         Text [ swedish ] = "~Alternativtext" ;
         Text [ danish ] = "Alternativtekst:" ;
         Text [ portuguese_brazilian ] = "Alternativtext:" ;
         Text [ portuguese ] = "Te~xto facultativo" ;
-        Text[ chinese_simplified ] = "Ô¤±¸ÎÄ";
-        Text[ russian ] = "Àëüòåğíàòèâíûé òåêñò:";
+        Text[ chinese_simplified ] = "Ô¤±¸ÎÄ(~T)";
+        Text[ russian ] = "Àëüòåğíàòèâíûé òåêñò";
         Text[ polish ] = "Tekst opcjonalny:";
-        Text[ japanese ] = "‘ã—pÃ·½Ä";
-        Text[ chinese_traditional ] = "´À¥N¤å¦r";
+        Text[ japanese ] = "‘ã—pÃ·½Ä(~T)";
+        Text[ chinese_traditional ] = "´À¥N¤å¦r(~T)";
         Text[ arabic ] = ":äÕ ÈÏíá";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Åíáëëáêôéêü êåßìåíï:";
-        Text[ korean ] = "´ëÃ¼ ÅØ½ºÆ®:";
+        Text[ korean ] = "´ëÃ¼ ÅØ½ºÆ®(~T):";
         Text[ turkish ] = "Alternatif metin:";
         Text[ catalan ] = "Texto alternativo:";
         Text[ finnish ] = "Vaihtoehtoinen teksti:";
@@ -1194,19 +1194,19 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ english_us ] = "~URL" ;
         Text [ italian ] = "URL" ;
         Text [ spanish ] = "URL" ;
-        Text [ french ] = "URL :" ;
+        Text [ french ] = "URL" ;
         Text [ swedish ] = "~URL" ;
         Text [ danish ] = "URL:" ;
         Text [ portuguese_brazilian ] = "URL:" ;
         Text [ portuguese ] = "~URL" ;
-        Text[ chinese_simplified ] = "URL";
-        Text[ russian ] = "URL:";
+        Text[ chinese_simplified ] = "~URL";
+        Text[ russian ] = "URL";
         Text[ polish ] = "URL";
-        Text[ japanese ] = "URL";
-        Text[ chinese_traditional ] = "URL";
+        Text[ japanese ] = "~URL";
+        Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = ":URL äÕ";
         Text[ greek ] = "URL:";
-        Text[ korean ] = "URL ÅØ½ºÆ®:";
+        Text[ korean ] = "~URL ÅØ½ºÆ®:";
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL:";
@@ -1273,17 +1273,17 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ danish ] = "Frame:" ;
         Text [ italian ] = "Frame" ;
         Text [ spanish ] = "Frame" ;
-        Text [ french ] = "Frame :" ;
+        Text [ french ] = "Frame" ;
         Text [ dutch ] = "Frame:" ;
         Text [ portuguese ] = "~Frame" ;
-        Text[ chinese_simplified ] = "¿ò";
-        Text[ russian ] = "Êàäğ:";
+        Text[ chinese_simplified ] = "¿ò(~R)";
+        Text[ russian ] = "Êàäğ";
         Text[ polish ] = "Ramka";
-        Text[ japanese ] = "ÌÚ°Ñ";
-        Text[ chinese_traditional ] = "°T®Ø";
+        Text[ japanese ] = "ÌÚ°Ñ(~R)";
+        Text[ chinese_traditional ] = "°T®Ø(~R)";
         Text[ arabic ] = "ÅØÇÑ:";
         Text[ greek ] = "Ğëáßóéï:";
-        Text[ korean ] = "ÇÁ·¹ÀÓ:";
+        Text[ korean ] = "ÇÁ·¹ÀÓ(~R):";
         Text[ turkish ] = "Frame:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Frame:";
@@ -1312,16 +1312,16 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ danish ] = "Navn:" ;
         Text [ italian ] = "Nome" ;
         Text [ spanish ] = "Nombre" ;
-        Text [ french ] = "Nom :" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "Naam:" ;
-        Text[ chinese_simplified ] = "Ãû³Æ";
-        Text[ russian ] = "Èìÿ:";
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O";
-        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = ":ÇáÇÓã";
         Text[ greek ] = "¼íïìá:";
-        Text[ korean ] = "ÀÌ¸§:";
+        Text[ korean ] = "ÀÌ¸§(~N):";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre:";
@@ -1402,13 +1402,14 @@ String STR_IMAPDLG_MODIFY
     Text[ chinese_traditional ] = "¼v¹³¬M®g¤w¸g³QÅÜ§ó¡C\n±z­n±µ¨üÅÜ§ó¡S";
     Text[ arabic ] = "Êã ÊÛííÑ ãÎØØ ÇáÕæÑÉ .\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Text[ greek ] = "Ôï ImageMap ôñïğïğïéŞèçêå.\nÈİëåôå íá åöáñìïóôïıí ïé áëëáãİò;";
-    Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ¼ö¶ôÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Resim eşlem değiştirildi.\nDeğişiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?";
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
+
 
 
 
