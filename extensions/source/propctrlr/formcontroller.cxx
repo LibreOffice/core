@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:38:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 13:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
 #include "formbrowsertools.hxx"
 #endif
@@ -87,7 +84,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
 #include "propresid.hrc"
 #endif
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
@@ -183,9 +180,6 @@
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
-#include <com/sun/star/table/CellAddress.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
 #endif
@@ -273,6 +267,9 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 #include "taborder.hxx"
 #endif
+#ifndef EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
+#include "cellbindinghelper.hxx"
+#endif
 
 // event handling
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
@@ -287,6 +284,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#endif
 
 #ifndef _MACROPG_HXX
 #include <sfx2/macropg.hxx>
@@ -294,13 +294,9 @@
 #ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
 #endif
-#define LINETYPE_EVENT  reinterpret_cast<void*>(0xFFFFFFFF)
 
 #ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 #include "formhelpid.hrc"
-#endif
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
-#include "extensio.hrc"
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -319,8 +315,29 @@
 #include <unotools/confignode.hxx>
 #endif
 
-#ifndef EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
-#include "cellbindinghelper.hxx"
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
+#include "propertycomposer.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_CELLBINDINGHANDLER_HXX
+#include "cellbindinghandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_BUTTONNAVIGATIONHANDLER_HXX
+#include "buttonnavigationhandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_EDITPROPERTYHANDLER_HXX
+#include "editpropertyhandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_EFORMSPROPERTYHANDLER_HXX
+#include "eformspropertyhandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_XSDVALIDATIONPROPERTYHANDLER_HXX
+#include "xsdvalidationpropertyhandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_SUBMISSIONHANDLER_HXX
+#include "submissionhandler.hxx"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
+#include "stringrepresentation.hxx"
 #endif
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX
 #include "controltype.hxx"
@@ -334,14 +351,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 #include "listselectiondlg.hxx"
 #endif
-
-#ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
-#include "pushbuttonnavigation.hxx"
-#endif
-
-#define TEXTTYPE_SINGLELINE     0
-#define TEXTTYPE_MULTILINE      1
-#define TEXTTYPE_RICHTEXT       2
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
@@ -378,7 +387,7 @@ namespace pcr
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
-    using namespace ::com::sun::star::table;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
     using namespace ::dbtools;
 
@@ -452,19 +461,6 @@ class EventsNameReplace_Impl:
     //= OPropertyBrowserController
     //========================================================================
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::initFormStuff()
-    {
-        m_pPropertyInfo = new OFormPropertyInfoService();
-    }
-
-    //------------------------------------------------------------------------
-    void OPropertyBrowserController::deinitFormStuff()
-    {
-        delete static_cast<const OFormPropertyInfoService*>(m_pPropertyInfo);
-        m_pPropertyInfo = NULL;
-    }
-
-    //------------------------------------------------------------------------
     void OPropertyBrowserController::fakePropertyValue( Any& _rValue, sal_Int32 _nPropId )
     {
         switch ( _nPropId )
@@ -499,7 +495,7 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::getStringRepFromPropertyValue( const Any& rValue, sal_Int32 _nPropId)
+    ::rtl::OUString OPropertyBrowserController::getStringRepFromPropertyValue( sal_Int32 _nPropId, const Any& rValue )
     {
         ::rtl::OUString sReturn;
         if ( !rValue.hasValue() )
@@ -507,7 +503,8 @@ class EventsNameReplace_Impl:
 
         try
         {
-            sReturn = convertSimpleToString(rValue);
+            StringRepresentation aConversionHelper( m_xTypeConverter );
+            sReturn = aConversionHelper.convertSimpleToString(rValue);
 
             // translations for some known types
             switch(rValue.getValueTypeClass())
@@ -635,30 +632,7 @@ class EventsNameReplace_Impl:
             }
 
             // enum properties
-            if ( m_pPropertyInfo )
-            {
-                sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( _nPropId );
-                if ( ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0 )
-                {
-                    sal_Int32 nIntValue = -1;
-                    if ( ::cppu::enum2int( nIntValue, rValue ) )
-                    {
-                        if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-                            // we do not have a UI corresponding to the value "0"
-                            --nIntValue;
-
-                        ::std::vector< String > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations( _nPropId );
-                        if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
-                        {
-                            sReturn = aEnumStrings[ nIntValue ];
-                        }
-                        else
-                            DBG_ERROR("OPropertyBrowserController::getStringRepFromPropertyValue: could not translate an enum value");
-                    }
-                }
-            }
-
-            switch (_nPropId)
+            switch ( _nPropId )
             {
                 case PROPERTY_ID_CONTROLLABEL:
                 {
@@ -674,34 +648,13 @@ class EventsNameReplace_Impl:
                     sReturn = aReturn;
                 }
                 break;
-
-                case PROPERTY_ID_BOUND_CELL:
+                case PROPERTY_ID_SHOW_POSITION:
+                case PROPERTY_ID_SHOW_NAVIGATION:
+                case PROPERTY_ID_SHOW_RECORDACTIONS:
+                case PROPERTY_ID_SHOW_FILTERSORT:
                 {
-                    Reference< XValueBinding > xBinding;
-#if OSL_DEBUG_LEVEL > 0
-                    sal_Bool bSuccess =
-#endif
-                    rValue >>= xBinding;
-                    DBG_ASSERT( bSuccess, "OPropertyBrowserController::getStringRepFromPropertyValue: invalid value (1)!" );
-
-                    // the only value binding we support so far is linking to spreadsheet cells
-                    CellBindingHelper aHelper( m_xPropValueAccess );
-                    sReturn = aHelper.getStringAddressFromCellBinding( xBinding );
-                }
-                break;
-
-                case PROPERTY_ID_LIST_CELL_RANGE:
-                {
-                    Reference< XListEntrySource > xSource;
-#if OSL_DEBUG_LEVEL > 0
-                    sal_Bool bSuccess =
-#endif
-                    rValue >>= xSource;
-                    DBG_ASSERT( bSuccess, "OPropertyBrowserController::getStringRepFromPropertyValue: invalid value (2)!" );
-
-                    // the only value binding we support so far is linking to spreadsheet cells
-                    CellBindingHelper aHelper( m_xPropValueAccess );
-                    sReturn = aHelper.getStringAddressFromCellListSource( xSource );
+                    String aShowHide = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                    sReturn = aShowHide.GetToken( ::comphelper::getBOOL( rValue ) ? 1 : 0 );
                 }
                 break;
                 case PROPERTY_ID_DATASOURCE:
@@ -714,6 +667,11 @@ class EventsNameReplace_Impl:
                     }
                 }
                 break;
+                default:
+                {
+                    StringRepresentation aConversionHelper( m_xTypeConverter );
+                    sReturn = aConversionHelper.getStringRepFromPropertyValue( rValue, _nPropId, m_pPropertyInfo );
+                }
             }
         }
         catch (Exception&)
@@ -731,209 +689,34 @@ class EventsNameReplace_Impl:
         try
         {
             // void values
-            if ((_rProp.Attributes & PropertyAttribute::MAYBEVOID) && !_rString.getLength() )
+            if ( ( _rProp.Attributes & PropertyAttribute::MAYBEVOID ) && !_rString.getLength() )
                 return aReturn;
 
-            //////////////////////////////////////////////////////////////////////
-            // TypeClass
-            Type  aPropertyType = _rProp.Type;
-            TypeClass ePropertyType = aPropertyType.getTypeClass();
-
-            // (one more) special handling : we have a prop which has a TypeClass "ANY" and needs a double
-            // (originally it needed a double _or_ a string, but our UI only supports a double for it)
-            if ((TypeClass_ANY == ePropertyType) && ((PROPERTY_ID_EFFECTIVE_DEFAULT == _nPropId) || (PROPERTY_ID_EFFECTIVE_VALUE == _nPropId)))
-                ePropertyType = TypeClass_DOUBLE;
-
-            switch (ePropertyType)
+            if (  ( _nPropId == PROPERTY_ID_SHOW_POSITION )
+               || (_nPropId == PROPERTY_ID_SHOW_NAVIGATION )
+               || (_nPropId == PROPERTY_ID_SHOW_RECORDACTIONS )
+               || (_nPropId == PROPERTY_ID_SHOW_FILTERSORT )
+               )
             {
-                case TypeClass_STRING:
-                case TypeClass_FLOAT:
-                case TypeClass_DOUBLE:
-                case TypeClass_BYTE:
-                case TypeClass_SHORT:
-                case TypeClass_LONG:
-                case TypeClass_HYPER:
-                case TypeClass_UNSIGNED_SHORT:
-                case TypeClass_UNSIGNED_LONG:
-                case TypeClass_UNSIGNED_HYPER:
-                    // TODO: same as above ... the type converter is expensive
-                    try
-                    {
-                        aReturn = m_xTypeConverter->convertToSimpleType(makeAny(_rString), ePropertyType);
-                    }
-                    catch(CannotConvertException&) { }
-                    catch(IllegalArgumentException&) { }
-                    break;
+                // TODO: do this with property handlers
+                String sShowHide = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                aReturn <<= (sal_Bool)( sShowHide.GetToken(1) == String( _rString ) );
             }
-
-            switch( ePropertyType )
+            else
             {
+                Type  aPropertyType = _rProp.Type;
 
-                case TypeClass_BOOLEAN:
-                {
-                    String sBooleanValues;
-                    if (  _nPropId == PROPERTY_ID_SHOW_POSITION
-                       || _nPropId == PROPERTY_ID_SHOW_NAVIGATION
-                       || _nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
-                       || _nPropId == PROPERTY_ID_SHOW_FILTERSORT
+                // special handling : we have a prop which has a TypeClass "ANY" and needs a double
+                // (originally it needed a double _or_ a string, but our UI only supports a double for it)
+                if  (  aPropertyType.equals( ::getCppuType( static_cast< const Any* >( NULL ) ) )
+                    && (  ( PROPERTY_ID_EFFECTIVE_DEFAULT == _nPropId )
+                       || ( PROPERTY_ID_EFFECTIVE_VALUE == _nPropId )
                        )
-                       sBooleanValues = String( ModuleRes( RID_STR_SHOW_HIDE ) );
-                    else
-                       sBooleanValues = String( ModuleRes( RID_STR_BOOL ) );
+                    )
+                    aPropertyType = ::getCppuType( static_cast< const double* >( NULL ) );
 
-                    if (sBooleanValues.GetToken(0) == String(_rString))
-                        aReturn <<= (sal_Bool)sal_False;
-                    else
-                        aReturn <<= (sal_Bool)sal_True;
-                }
-                break;
-
-                case TypeClass_SEQUENCE:
-                {
-                    Type aElementType = ::comphelper::getSequenceElementType(aPropertyType);
-
-                    String aStr(_rString);
-                    switch (aElementType.getTypeClass())
-                    {
-                        case TypeClass_STRING:
-                        {
-                            sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                            Sequence< ::rtl::OUString> aStringSeq( nEntryCount );
-                            ::rtl::OUString* pStringArray = aStringSeq.getArray();
-
-                            for (sal_Int32 i=0; i<aStringSeq.getLength(); ++i, ++pStringArray)
-                                *pStringArray = aStr.GetToken((sal_uInt16)i, '\n');
-                            aReturn <<= aStringSeq;
-                        }
-                        break;
-                        case TypeClass_UNSIGNED_SHORT:
-                        {
-                            sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                            Sequence<sal_uInt16> aSeq( nEntryCount );
-
-                            sal_uInt16* pArray = aSeq.getArray();
-
-                            for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                                *pArray = (sal_uInt16)aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                            aReturn <<= aSeq;
-
-                        }
-                        break;
-                        case TypeClass_SHORT:
-                        {
-                            sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                            Sequence<sal_Int16> aSeq( nEntryCount );
-
-                            sal_Int16* pArray = aSeq.getArray();
-
-                            for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                                *pArray = (sal_Int16)aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                            aReturn <<= aSeq;
-
-                        }
-                        break;
-                        case TypeClass_LONG:
-                        {
-                            sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                            Sequence<sal_Int32> aSeq( nEntryCount );
-
-                            sal_Int32* pArray = aSeq.getArray();
-
-                            for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                                *pArray = aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                            aReturn <<= aSeq;
-
-                        }
-                        break;
-                        case TypeClass_UNSIGNED_LONG:
-                        {
-                            sal_uInt32 nEntryCount = aStr.GetTokenCount('\n');
-                            Sequence<sal_uInt32> aSeq( nEntryCount );
-
-                            sal_uInt32* pArray = aSeq.getArray();
-
-                            for (sal_Int32 i=0; i<aSeq.getLength(); ++i, ++pArray)
-                                *pArray = aStr.GetToken((sal_uInt16)i, '\n').ToInt32();
-
-                            aReturn <<= aSeq;
-
-                        }
-                    }
-                }
-                break;
-            }
-
-            // enum properties
-            if ( m_pPropertyInfo )
-            {
-                sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( _nPropId );
-                if ( ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0 )
-                {
-                    ::std::vector< String > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations( _nPropId );
-                    sal_Int32 nPos = GetStringPos( _rString, aEnumStrings );
-                    if ( -1 != nPos )
-                    {
-                        if ( ( nPropertyUIFlags & PROP_FLAG_ENUM_ONE ) == PROP_FLAG_ENUM_ONE )
-                            // for the LineEndFormat, we do not have a UI corresponding to the value "0"
-                            ++nPos;
-
-                        switch ( aPropertyType.getTypeClass() )
-                        {
-                            case TypeClass_ENUM:
-                                aReturn = ::cppu::int2enum( nPos, aPropertyType );
-                                break;
-
-                            case TypeClass_SHORT:
-                                aReturn <<= (sal_Int16)nPos;
-                                break;
-
-                            case TypeClass_UNSIGNED_SHORT:
-                                aReturn <<= (sal_uInt16)nPos;
-                                break;
-
-                            case TypeClass_UNSIGNED_LONG:
-                                aReturn <<= (sal_uInt32)nPos;
-                                break;
-
-                            default:
-                                aReturn <<= (sal_Int32)nPos;
-                                break;
-                        }
-                    }
-                    else
-                        DBG_ERROR("OPropertyBrowserController::getPropertyValueFromStringRep: could not translate the enum string!");
-                }
-            }
-
-            switch( _nPropId )
-            {
-                case PROPERTY_ID_LIST_CELL_RANGE:
-                {
-                    CellBindingHelper aHelper( m_xPropValueAccess );
-                    aReturn = makeAny( aHelper.createCellListSourceFromStringAddress( _rString ) );
-                }
-                break;
-
-                case PROPERTY_ID_BOUND_CELL:
-                {
-                    CellBindingHelper aHelper( m_xPropValueAccess );
-
-                    // if we have the possibility of an integer binding, then we must preserve
-                    // this property's value (e.g. if the current binding is an integer binding, then
-                    // the newly created one must be, too)
-                    bool bIntegerBinding = false;
-                    if ( aHelper.isCellIntegerBindingAllowed() )
-                    {
-                        sal_Int16 nCurrentBindingType = 0;
-                        getVirtualPropertyValue( PROPERTY_ID_CELL_EXCHANGE_TYPE ) >>= nCurrentBindingType;
-                        bIntegerBinding = ( nCurrentBindingType != 0 );
-                    }
-                    aReturn = makeAny( aHelper.createCellBindingFromStringAddress( _rString, bIntegerBinding ) );
-                }
-                break;
+                StringRepresentation aConversionHelper( m_xTypeConverter );
+                aReturn = aConversionHelper.getPropertyValueFromStringRep( _rString, aPropertyType, _nPropId, m_pPropertyInfo );
             }
         }
         catch(Exception&)
@@ -954,7 +737,7 @@ class EventsNameReplace_Impl:
             0);     // ripped this somewhere ... don't understand it :(
 
         // get the number formats supplier
-        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
+        Reference< XNumberFormatsSupplier >  xSupplier;
         m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
 
         DBG_ASSERT(xSupplier.is(), "OPropertyBrowserController::ChangeFormatProperty : invalid call !");
@@ -1002,7 +785,7 @@ class EventsNameReplace_Impl:
 
             pItem = NULL;
             if (SFX_ITEM_SET == pResult->GetItemState(SID_ATTR_NUMBERFORMAT_VALUE, sal_False, &pItem))
-                Commit(_rName, ::rtl::OUString::valueOf((sal_Int32)((SfxUInt32Item*)pItem)->GetValue()), pSupplier);
+                Commit( _rName, ::rtl::OUString::valueOf((sal_Int32)((SfxUInt32Item*)pItem)->GetValue()) );
         }
         delete pDlg;
     }
@@ -1018,20 +801,20 @@ class EventsNameReplace_Impl:
             Reference< XPreparedStatement >  xStatement;
 
             // get the form of the control we're inspecting
-            Reference< XChild > xChild(m_xPropValueAccess, UNO_QUERY);
             Reference< XPropertySet > xFormSet;
-            if (xChild.is())
-                xFormSet = Reference< XPropertySet >(xChild->getParent(), UNO_QUERY);
 
-            if (Reference< XGridColumnFactory >(xFormSet, UNO_QUERY).is())
-            {   // we're inspecting a grid column -> the form is one step above
-                xChild = Reference< XChild >(xFormSet, UNO_QUERY);
-                if (xChild.is())
-                    xFormSet = Reference< XPropertySet >(xChild->getParent(), UNO_QUERY);
-                else
-                    xFormSet.clear();
+            if ( Reference< XForm >( m_xObjectParent, UNO_QUERY ).is() )
+            {
+                xFormSet = xFormSet.query( m_xObjectParent );
             }
-            if (!xFormSet.is())
+            else if ( Reference< XGridColumnFactory >( m_xObjectParent, UNO_QUERY ).is() )
+            {   // we're inspecting a grid column -> the form is one step above
+                Reference< XChild > xChild( m_xObjectParent, UNO_QUERY );
+                if ( xChild.is() )
+                    xFormSet = xFormSet.query( xChild->getParent() );
+            }
+
+            if ( !xFormSet.is() )
                 return;
 
             ::rtl::OUString aObjectName = ::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_COMMAND));
@@ -1279,12 +1062,10 @@ class EventsNameReplace_Impl:
 
             aProperty.sName = (const ::rtl::OUString&)PROPERTY_COMMAND;
             aProperty.sTitle = m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_COMMAND);
-            aProperty.pControl = NULL;
-            aProperty.bIsLocked = sal_False;
             aProperty.nHelpId = m_pPropertyInfo->getPropertyHelpId( PROPERTY_ID_COMMAND );
-            aProperty.nUniqueButtonId = UID_PROP_DLG_SQLCOMMAND;
+            aProperty.nButtonHelpId = UID_PROP_DLG_SQLCOMMAND;
             if ( _bInit )
-                aProperty.sValue = GetPropertyValue(PROPERTY_COMMAND);
+                aProperty.sValue = GetPropertyValueStringRep( PROPERTY_COMMAND );
 
             if ( _bConnect)
                 connectRowset();
@@ -1314,8 +1095,8 @@ class EventsNameReplace_Impl:
                 }
             }
 
-            getPropertyBox()->ChangeEntry(aProperty, getPropertyBox()->GetPropertyPos(aProperty.sName));
-            Commit(aProperty.sName, aProperty.sValue, NULL);
+            getPropertyBox()->ChangeEntry( aProperty );
+            Commit( aProperty.sName, aProperty.sValue );
         }
         catch (Exception&)
         {
@@ -1357,7 +1138,7 @@ class EventsNameReplace_Impl:
             sal_Int32 nListSourceType;
             ::cppu::enum2int(nListSourceType,aListSourceTypeAny);
 
-            ::rtl::OUString aListSource = GetPropertyValue( PROPERTY_LISTSOURCE );
+            ::rtl::OUString aListSource = GetPropertyValueStringRep( PROPERTY_LISTSOURCE );
 
             ////////////////////////////////////////////////////////////
             // Setzen der UI-Daten
@@ -1365,8 +1146,6 @@ class EventsNameReplace_Impl:
             aProperty.eControlType = BCT_MEDIT;
             aProperty.sName = (const ::rtl::OUString&)PROPERTY_LISTSOURCE;
             aProperty.sTitle = m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_LISTSOURCE);
-            aProperty.pControl = NULL;
-            aProperty.bIsLocked = sal_False;
             aProperty.nHelpId=m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_LISTSOURCE);
 
 
@@ -1397,8 +1176,8 @@ class EventsNameReplace_Impl:
             // Eintrag umsetzen
             sal_uInt16 nCurPage = getPropertyBox()->GetCurPage();
             getPropertyBox()->SetPage( m_nDataPageId );
-            getPropertyBox()->ChangeEntry( aProperty, getPropertyBox()->GetPropertyPos(aProperty.sName) );
-            Commit( aProperty.sName, aProperty.sValue, NULL );
+            getPropertyBox()->ChangeEntry( aProperty );
+            Commit( aProperty.sName, aProperty.sValue );
             getPropertyBox()->SetPage( nCurPage );
         }
         catch (Exception&)
@@ -1485,7 +1264,7 @@ class EventsNameReplace_Impl:
             else
             {
                 // Dialog editor mode, no EventManager
-                ::cppu::extractInterface( xEventsSupplier, m_aIntrospectee );
+                xEventsSupplier = xEventsSupplier.query( m_xIntrospecteeAsProperty );
                 if( xEventsSupplier.is() )
                 {
                     Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
@@ -1657,7 +1436,6 @@ class EventsNameReplace_Impl:
             // OK & Cancel seem to be both returning 0
             if ( pDlg->Execute() == 0 )
             {
-                OSL_TRACE("here?");
                 setDocumentModified( ); // OJ: #96105#
 
                 //const SvxMacroTableDtor& aTab = pMacroTabPage->GetMacroTbl();
@@ -1667,8 +1445,8 @@ class EventsNameReplace_Impl:
 
 
                 //sal_uInt16 nEventCount = (sal_uInt16)aTab.Count();
-                sal_uInt16 nEventCount = xNameReplace->getElementNames().getLength();
-                sal_uInt16 nEventIndex = 0;
+                sal_Int32 nEventCount = xNameReplace->getElementNames().getLength();
+                sal_Int32 nEventIndex = 0;
 
                 Sequence< ScriptEventDescriptor > aSeqScriptEvts(nEventCount);
 
@@ -1864,8 +1642,7 @@ class EventsNameReplace_Impl:
             else
             {
                 // Dialog editor mode, no EventManager
-                Reference< XScriptEventsSupplier > xEventsSupplier;
-                ::cppu::extractInterface( xEventsSupplier, m_aIntrospectee );
+                Reference< XScriptEventsSupplier > xEventsSupplier( m_xIntrospecteeAsProperty, UNO_QUERY );
                 if( xEventsSupplier.is() )
                 {
                     Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
@@ -1900,8 +1677,7 @@ class EventsNameReplace_Impl:
             const Type * pListeners = m_aObjectListenerTypes.getConstArray();
 
             OLineDescriptor aProperty;
-            aProperty.pDataPtr = LINETYPE_EVENT;
-            aProperty.bIsLocked = sal_True;
+            aProperty.nFlags = LINE_FLAG_EVENT;
 
             DECLARE_STL_SET( OLineDescriptor, OLineDescriptorLess, LineDescriptorSet );
             LineDescriptorSet aEventLines;
@@ -1959,7 +1735,7 @@ class EventsNameReplace_Impl:
                         {
                             aProperty.sTitle = pEventDescription->sDisplayName;
                             aProperty.nHelpId = pEventDescription->nHelpId;
-                            aProperty.nUniqueButtonId = pEventDescription->nUniqueBrowseId;
+                            aProperty.nButtonHelpId = pEventDescription->nUniqueBrowseId;
                             aProperty.nMinValue = pEventDescription->nIndex;    // misuse for sorting
                             aEventLines.insert(aProperty);
                         }
@@ -1991,6 +1767,623 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
+    bool OPropertyBrowserController::describePropertyLine( sal_Int16 _nControlType, const Property& _rProperty, OLineDescriptor& _rDescriptor ) SAL_THROW((Exception))
+    {
+        _rDescriptor.clear();
+
+        sal_Int32   nPropId = m_pPropertyInfo->getPropertyId( _rProperty.Name );
+        if ( nPropId == -1 )
+            return false;
+
+        //////////////////////////////////////////////////////////////////////
+        // for the MultiLine property, we have different UI translations depending on the control
+        // type
+        if ( nPropId == PROPERTY_ID_MULTILINE )
+        {
+            if (  ( m_nClassId == FormComponentType::FIXEDTEXT )
+               || ( m_nClassId == FormComponentType::COMMANDBUTTON )
+               || ( m_nClassId == FormComponentType::RADIOBUTTON )
+               || ( m_nClassId == FormComponentType::CHECKBOX )
+               )
+                nPropId = PROPERTY_ID_WORDBREAK;
+        }
+
+        String sDisplayName = m_pPropertyInfo->getPropertyTranslation( nPropId );
+        if ( !sDisplayName.Len() )
+        {
+            DBG_ERROR( "OPropertyBrowserController::describePropertyLine: no display name! corrupt meta data?" );
+            return false;
+        }
+
+        sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropId );
+        bool bIsEnumProperty      = ( nPropertyUIFlags & PROP_FLAG_ENUM           ) != 0;
+        bool bIsVisibleForForms   = ( nPropertyUIFlags & PROP_FLAG_FORM_VISIBLE   ) != 0;
+        bool bIsVisibleForDialogs = ( nPropertyUIFlags & PROP_FLAG_DIALOG_VISIBLE ) != 0;
+
+        // depending on whether we're working for a form or a UNO dialog, some
+        // properties are not displayed
+        if (  ( _nControlType == CONTROL_TYPE_FORM   && !bIsVisibleForForms )
+           || ( _nControlType == CONTROL_TYPE_DIALOG && !bIsVisibleForDialogs )
+           )
+           return false;
+
+        if ( nPropId == PROPERTY_ID_DATASOURCE )
+        {
+            Reference< XConnection > xConn;
+            if ( m_xPropValueAccess.is() && ::dbtools::isEmbeddedInDatabase( m_xPropValueAccess, xConn ) )
+                return false;
+        }
+
+        _rDescriptor.sName = _rProperty.Name;
+
+        //////////////////////////////////////////////////////////////////////
+        // do we have a dedicated handler for this property, which we can delegate some tasks to?
+        PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropId );
+        bool bDedicatedHandler = aHandlerPos != m_aPropertyHandlers.end();
+
+        bool bNeedGenericUIDescriptor = true;
+        if ( bDedicatedHandler && aHandlerPos->second->supportsUIDescriptor( nPropId ) )
+        {
+            aHandlerPos->second->describePropertyUI( nPropId, _rDescriptor );
+            bNeedGenericUIDescriptor = false;
+        }
+        else
+        {
+            _rDescriptor.eControlType = BCT_EDIT;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+
+        PropertyState   ePropertyState = PropertyState_DIRECT_VALUE;
+        Any             aPropertyValue;
+        if ( bDedicatedHandler )
+        {
+            ePropertyState = aHandlerPos->second->getPropertyState( nPropId );
+            aPropertyValue = aHandlerPos->second->getPropertyValue( nPropId );
+            _rDescriptor.sValue = aHandlerPos->second->getStringRepFromPropertyValue( nPropId, aPropertyValue );
+        }
+        else
+        {
+            if ( m_xPropStateAccess.is() )
+                ePropertyState = m_xPropStateAccess->getPropertyState( _rProperty.Name );
+            aPropertyValue = GetUnoPropertyValue( _rProperty.Name );
+            _rDescriptor.sValue = getStringRepFromPropertyValue( nPropId, aPropertyValue );
+        }
+
+        //////////////////////////////////////////////////////////////////////
+
+        if  (  ( _rProperty.Attributes & PropertyAttribute::MAYBEVOID )
+            && ( nPropId != PROPERTY_ID_BORDER )
+            && ( nPropId != PROPERTY_ID_TABSTOP )
+            )
+        {
+            _rDescriptor.bHasDefaultValue = sal_True;
+            if ( !aPropertyValue.hasValue() )
+                _rDescriptor.sValue = m_sStandard;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+
+        TypeClass eType = _rProperty.Type.getTypeClass();
+
+        sal_Bool bFilter = sal_True;
+        switch ( nPropId )
+        {
+        case PROPERTY_ID_DEFAULT_SELECT_SEQ:
+        case PROPERTY_ID_SELECTEDITEMS:
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_SELECTION;
+            break;
+
+        case PROPERTY_ID_FILTER:
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_FILTER;
+            break;
+
+        case PROPERTY_ID_SORT:
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_ORDER;
+            break;
+
+        case PROPERTY_ID_MASTERFIELDS:
+        case PROPERTY_ID_DETAILFIELDS:
+            if ( !m_bInspectingSubForm )
+                // no master and detail fields for forms which are no sub forms
+                return false;
+
+            _rDescriptor.eControlType = BCT_LEDIT;
+            bFilter = sal_False;
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_FORMLINKFIELDS;
+            break;
+
+        case PROPERTY_ID_COMMAND:
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_SQLCOMMAND;
+            break;
+
+        case PROPERTY_ID_TABINDEX:
+        {
+            if ( m_xControlsView.is() )
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_TABINDEX;
+            _rDescriptor.eControlType = BCT_NUMFIELD;
+        };
+        break;
+
+        case PROPERTY_ID_FONT_NAME:
+        {
+            bFilter = sal_False;
+
+            _rDescriptor.sName = String::CreateFromAscii("Font");
+            _rDescriptor.sTitle = _rDescriptor.sName;
+            _rDescriptor.bIsLocked = sal_True;
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_FONT_TYPE;
+            ::rtl::OUString sValue;
+            aPropertyValue >>= sValue;
+            _rDescriptor.sValue = sValue;
+        }
+        break;
+
+        case PROPERTY_ID_TARGET_URL:
+        case PROPERTY_ID_IMAGE_URL:
+        {
+            _rDescriptor.eControlType = BCT_USERDEFINED;
+            _rDescriptor.pControl = new OFileUrlControl( getPropertyBox(), WB_TABSTOP | WB_BORDER );
+
+            _rDescriptor.nButtonHelpId = ( PROPERTY_ID_TARGET_URL == nPropId )
+                ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL;
+        }
+        break;
+
+        case PROPERTY_ID_ECHO_CHAR:
+        {
+            _rDescriptor.eControlType = BCT_CHAREDIT;
+        }
+        break;
+
+        case PROPERTY_ID_BACKGROUNDCOLOR:
+        case PROPERTY_ID_FILLCOLOR:
+        case PROPERTY_ID_SYMBOLCOLOR:
+        case PROPERTY_ID_BORDERCOLOR:
+        {
+            bFilter = sal_False;
+            _rDescriptor.eControlType = BCT_COLORBOX;
+
+            switch( nPropId )
+            {
+            case PROPERTY_ID_BACKGROUNDCOLOR:
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
+            case PROPERTY_ID_FILLCOLOR:
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_FILLCOLOR; break;
+            case PROPERTY_ID_SYMBOLCOLOR:
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_SYMBOLCOLOR; break;
+            case PROPERTY_ID_BORDERCOLOR:
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_BORDERCOLOR; break;
+            }
+        }
+        break;
+
+        case PROPERTY_ID_LABEL:
+        {
+            _rDescriptor.eControlType = BCT_MEDIT;
+        }
+        break;
+
+        case PROPERTY_ID_DEFAULT_TEXT:
+        {
+            if (FormComponentType::FILECONTROL == m_nClassId)
+                _rDescriptor.eControlType = BCT_EDIT;
+            else
+                _rDescriptor.eControlType = BCT_MEDIT;
+        }
+        break;
+
+        case PROPERTY_ID_TEXT:
+        {
+            if ( ControlType::FORMATTEDFIELD == m_nClassId )
+                return false;
+
+            if ( haveIntrospecteeProperty( PROPERTY_MULTILINE ) )
+                _rDescriptor.eControlType = BCT_MEDIT;
+        }
+        break;
+
+        case PROPERTY_ID_CONTROLLABEL:
+        {
+            bFilter = sal_False;
+            _rDescriptor.bIsLocked = sal_True;
+            _rDescriptor.sValue = getStringRepFromPropertyValue( PROPERTY_ID_CONTROLLABEL, aPropertyValue );
+            _rDescriptor.nButtonHelpId = UID_PROP_DLG_CONTROLLABEL;
+        }
+        break;
+
+        case PROPERTY_ID_FORMATKEY:
+        case PROPERTY_ID_EFFECTIVE_MIN:
+        case PROPERTY_ID_EFFECTIVE_MAX:
+        case PROPERTY_ID_EFFECTIVE_DEFAULT:
+        case PROPERTY_ID_EFFECTIVE_VALUE:
+        {
+            // only if the set has a formatssupplier, too
+            if  (   !haveIntrospecteeProperty( PROPERTY_FORMATSSUPPLIER )
+                ||  (FormComponentType::DATEFIELD == m_nClassId)
+                ||  (FormComponentType::TIMEFIELD == m_nClassId)
+                )
+                return false;
+
+            // and the supplier is really available
+            Reference< XNumberFormatsSupplier >  xSupplier;
+            m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
+            if (xSupplier.is())
+            {
+                Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+                DBG_ASSERT(xTunnel.is(), "OPropertyBrowserController::ChangeFormatProperty : xTunnel is invalid!");
+                SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+
+                if (pSupplier != NULL)
+                {
+                    bFilter = sal_False;    // don't do further checks
+                    sal_Bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
+
+                    _rDescriptor.eControlType = BCT_USERDEFINED;
+
+                    _rDescriptor.bIsLocked = bIsFormatKey;
+
+                    if (bIsFormatKey)
+                    {
+                        _rDescriptor.pControl = new OFormatDescriptionControl(getPropertyBox(), WB_READONLY | WB_TABSTOP | WB_BORDER);
+                            // HACK : the Control need's a non-null parent, but we don't have one ... so use the property box
+                        ((OFormatDescriptionControl*)_rDescriptor.pControl)->SetFormatSupplier(pSupplier);
+
+                        _rDescriptor.nButtonHelpId = UID_PROP_DLG_NUMBER_FORMAT;
+                    }
+                    else
+                    {
+                        _rDescriptor.pControl = new OFormattedNumericControl(getPropertyBox(), WB_TABSTOP | WB_BORDER);
+                            // HACK : same as above
+
+                        FormatDescription aDesc;
+                        aDesc.pSupplier = pSupplier;
+                        Any aFormatKeyValue = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATKEY);
+                        if ( !( aFormatKeyValue >>= aDesc.nKey ) )
+                            aDesc.nKey = 0;
+                        static_cast< OFormattedNumericControl* >( _rDescriptor.pControl )->SetFormatDescription( aDesc );
+                    }
+
+                    // the initial value
+                    if ( aPropertyValue.hasValue() )
+                    {
+                        if (bIsFormatKey)
+                        {
+                            _rDescriptor.sValue = String::CreateFromInt32( ::comphelper::getINT32( aPropertyValue ) );
+                        }
+                        else
+                        {
+                            if ( aPropertyValue.getValueTypeClass() == TypeClass_DOUBLE )
+                            {
+                                StringRepresentation aConversionHelper( m_xTypeConverter );
+                                _rDescriptor.sValue = aConversionHelper.convertSimpleToString( aPropertyValue );
+                            }
+                            else
+                                DBG_WARNING("OPropertyBrowserController::describePropertyLine : non-double values not supported for Effective*-properties !");
+                                // our UI supports only setting double values for the min/max/default, but by definition
+                                // the default may be a string if the field is not in numeric mode ....
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case PROPERTY_ID_DATEMIN:
+        case PROPERTY_ID_DATEMAX:
+        case PROPERTY_ID_DEFAULT_DATE:
+        case PROPERTY_ID_DATE:
+            _rDescriptor.eControlType = BCT_DATEFIELD;
+            break;
+
+        case PROPERTY_ID_TIMEMIN:
+        case PROPERTY_ID_TIMEMAX:
+        case PROPERTY_ID_DEFAULT_TIME:
+        case PROPERTY_ID_TIME:
+            _rDescriptor.eControlType = BCT_TIMEFIELD;
+            break;
+
+        case PROPERTY_ID_VALUEMIN:
+        case PROPERTY_ID_VALUEMAX:
+        case PROPERTY_ID_DEFAULT_VALUE:
+        case PROPERTY_ID_VALUE:
+            {
+                _rDescriptor.eControlType = BCT_USERDEFINED;
+                _rDescriptor.pControl = new OFormattedNumericControl( getPropertyBox(), WB_TABSTOP | WB_BORDER | WB_SPIN | WB_REPEAT );
+                    // HACK : same as above
+
+                // we don't set a formatter so the control uses a default (which uses the application
+                // language and a default numeric format)
+                // but we set the decimal digits
+                static_cast< OFormattedNumericControl* >( _rDescriptor.pControl )->SetDecimalDigits(
+                    ::comphelper::getINT16( m_xPropValueAccess->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) )
+                );
+
+                // and the thousands separator
+                static_cast< OFormattedNumericControl* >( _rDescriptor.pControl )->SetThousandsSep(
+                    ::comphelper::getBOOL( m_xPropValueAccess->getPropertyValue(PROPERTY_SHOWTHOUSANDSEP) )
+                );
+
+                // and the default value for the property
+                try
+                {
+                    if (m_xPropStateAccess.is() && ((PROPERTY_ID_VALUEMIN == nPropId) || (PROPERTY_ID_VALUEMAX == nPropId)))
+                    {
+                        double nDefault = 0;
+                        if ( m_xPropStateAccess->getPropertyDefault( _rProperty.Name ) >>= nDefault )
+                            static_cast< OFormattedNumericControl* >( _rDescriptor.pControl )->SetDefaultValue( nDefault );
+                    }
+                }
+                catch (Exception&)
+                {
+                    // just ignore it
+                }
+
+                // and allow empty values only for the default value and the value
+                static_cast< OFormattedNumericControl* >( _rDescriptor.pControl )
+                    ->EnableEmptyField( ( PROPERTY_ID_DEFAULT_VALUE == nPropId )
+                                    ||  ( PROPERTY_ID_VALUE == nPropId ) );
+            }
+            break;
+
+        default:
+            if ( bNeedGenericUIDescriptor && ( TypeClass_BYTE <= eType && eType <= TypeClass_DOUBLE ) )
+            {
+                if ( _nControlType == CONTROL_TYPE_FORM )
+                {
+                    if  ( nPropId == PROPERTY_ID_HEIGHT )
+                        _rDescriptor.nDigits = 1;
+
+                    if  (  ( nPropId == PROPERTY_ID_WIDTH )
+                        || ( nPropId == PROPERTY_ID_ROWHEIGHT )
+                        )
+                    {
+                        _rDescriptor.eValueUnit = FUNIT_CM;
+                        _rDescriptor.eDisplayUnit = getDocumentMeasurementUnit();
+                        _rDescriptor.nDigits = 2;
+                    }
+                }
+
+                _rDescriptor.eControlType = BCT_NUMFIELD;
+            }
+            break;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        if ( eType == TypeClass_SEQUENCE )
+        {
+            _rDescriptor.eControlType = BCT_LEDIT;
+            bFilter = sal_False;
+        }
+
+        // don't filter dialog controls
+        if ( _nControlType == CONTROL_TYPE_DIALOG )
+            bFilter = sal_False;
+
+        //////////////////////////////////////////////////////////////////////
+        // Filter
+        if ( bFilter )
+        {
+            bool bRemoveProperty = false;
+
+            if ( !bRemoveProperty )
+            {
+                if  (  (  ( aPropertyValue.getValueTypeClass() == TypeClass_INTERFACE )
+                       || ( aPropertyValue.getValueTypeClass() == TypeClass_ARRAY )
+                       || ( aPropertyValue.getValueTypeClass() == TypeClass_UNKNOWN )
+                       )
+                    && !bDedicatedHandler
+                    )
+                    // we can only care for those "complex" property types, if we have a handler
+                    // which we can delegate this too
+                    bRemoveProperty = true;
+            }
+
+            if ( !bRemoveProperty )
+            {
+                if  (  ( aPropertyValue.getValueTypeClass() == TypeClass_VOID )
+                    && ( _rProperty.Attributes & PropertyAttribute::MAYBEVOID ) == 0
+                    )
+                {
+#if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OString sMessage( "OPropertyBrowserController::describePropertyLine:" );
+                    sMessage += "\n";
+                    sMessage += "\nthe following property has a suspicious value:";
+                    sMessage += "\nprogrammatic name: ";
+                    sMessage += ::rtl::OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += "\nUI name: ";
+                    sMessage += ::rtl::OString( sDisplayName.GetBuffer(), sDisplayName.Len(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += "\n";
+                    sMessage += "\nThe property currently has no value, but it is not declared as MAYBEVOID.";
+                    sMessage += "\n";
+                    DBG_ERROR( sMessage.getStr() );
+#endif
+                    bRemoveProperty = true;
+                }
+            }
+
+            if ( !bRemoveProperty )
+            {
+                if ( _rProperty.Attributes & PropertyAttribute::TRANSIENT )
+                    bRemoveProperty = true;
+            }
+
+            if ( !bRemoveProperty )
+            {
+                if ( _rProperty.Attributes & PropertyAttribute::READONLY )
+                    bRemoveProperty = true;
+            }
+
+            if ( bRemoveProperty )
+            {
+                delete _rDescriptor.pControl;
+                return false;
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        // boolean values
+        if ( bNeedGenericUIDescriptor )
+        {
+            if ( eType == TypeClass_BOOLEAN )
+            {
+                String aEntries;
+                if (  nPropId == PROPERTY_ID_SHOW_POSITION
+                   || nPropId == PROPERTY_ID_SHOW_NAVIGATION
+                   || nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
+                   || nPropId == PROPERTY_ID_SHOW_FILTERSORT
+                   )
+                   aEntries = String( ModuleRes( RID_STR_SHOW_HIDE ) );
+                else
+                   aEntries = String( ModuleRes( RID_STR_BOOL ) );
+
+                for ( xub_StrLen i=0; i<2; ++i )
+                    _rDescriptor.aListValues.push_back( aEntries.GetToken(i) );
+
+                _rDescriptor.eControlType = BCT_LISTBOX;
+            }
+        }
+        // void properties
+        else if ( eType == TypeClass_VOID )
+        {
+            DBG_ERROR( "OPropertyBrowserController::describePropertyLine: Huh? A property of type void?" );
+                // me thinks this should not happen - but is was in there before the code was refactored ... fs@openoffice.org
+            _rDescriptor.sValue = String();
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        // enum properties
+        if ( bNeedGenericUIDescriptor && ( bIsEnumProperty || ( PROPERTY_ID_TARGET_FRAME == nPropId ) ) )
+        {
+            ::std::vector< String > aEnumValues = m_pPropertyInfo->getPropertyEnumRepresentations( nPropId );
+            ::std::vector< String >::const_iterator pStart = aEnumValues.begin();
+            ::std::vector< String >::const_iterator pEnd = aEnumValues.end();
+
+            // for a checkbox: if "ambiguous" is not allowed, remove this from the sequence
+            if ( PROPERTY_ID_DEFAULTCHECKED == nPropId || PROPERTY_ID_STATE == nPropId )
+                if ( haveIntrospecteeProperty( PROPERTY_TRISTATE ) )
+                {
+                    if ( !::comphelper::getBOOL( m_xPropValueAccess->getPropertyValue( PROPERTY_TRISTATE ) ) )
+                    {   // remove the last sequence element
+                        if ( pEnd > pStart )
+                            --pEnd;
+                    }
+                }
+                else
+                    --pEnd;
+
+            if ( PROPERTY_ID_LISTSOURCETYPE == nPropId )
+                if ( FormComponentType::COMBOBOX == m_nClassId )
+                    // remove the first sequence element -> value list not possible for combo boxes
+                    ++pStart;
+
+            // copy the sequence
+            for ( ::std::vector< String >::const_iterator pLoop = pStart; pLoop != pEnd; ++pLoop )
+                _rDescriptor.aListValues.push_back( *pLoop );
+
+            _rDescriptor.eControlType =
+                    PROPERTY_ID_TARGET_FRAME == nPropId
+                ?   BCT_COMBOBOX
+                :   BCT_LISTBOX;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        switch( nPropId )
+        {
+            case PROPERTY_ID_REPEAT_DELAY:
+                _rDescriptor.nMaxValue = 0x7FFFFFFF;
+                _rDescriptor.bHaveMinMax = sal_True;
+                _rDescriptor.nMaxValue = 0;
+
+                _rDescriptor.eControlType = BCT_USERDEFINED;
+                _rDescriptor.pControl = new TimeDurationInput( getPropertyBox(), WB_BORDER | WB_TABSTOP );
+                break;
+
+            case PROPERTY_ID_TABINDEX:
+            case PROPERTY_ID_BOUNDCOLUMN:
+            case PROPERTY_ID_VISIBLESIZE:
+            case PROPERTY_ID_MAXTEXTLEN:
+            case PROPERTY_ID_LINEINCREMENT:
+            case PROPERTY_ID_BLOCKINCREMENT:
+            case PROPERTY_ID_SPININCREMENT:
+                _rDescriptor.nMaxValue = 0x7FFFFFFF;
+                _rDescriptor.bHaveMinMax = sal_True;
+
+                if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
+                    _rDescriptor.nMinValue = -1;
+                else if ( ( nPropId == PROPERTY_ID_BOUNDCOLUMN ) || ( nPropId == PROPERTY_ID_VISIBLESIZE ) )
+                    _rDescriptor.nMinValue = 1;
+                else
+                    _rDescriptor.nMinValue = 0;
+                break;
+
+            case PROPERTY_ID_DECIMAL_ACCURACY:
+                _rDescriptor.nMaxValue = 20;
+                _rDescriptor.nMinValue = 0;
+                _rDescriptor.bHaveMinMax = sal_True;
+                break;
+
+            //////////////////////////////////////////////////////////////////////
+            // DataSource
+            case PROPERTY_ID_DATASOURCE:
+            {
+                _rDescriptor.eControlType = BCT_COMBOBOX;
+                _rDescriptor.nButtonHelpId = UID_PROP_DLG_ATTR_DATASOURCE;
+
+                Reference< XConnection > xConnection;
+                if ( m_xPropValueAccess.is() && ::dbtools::isEmbeddedInDatabase( m_xPropValueAccess, xConnection ) )
+                {
+                    getPropertyBox()->EnablePropertyLine( PROPERTY_DATASOURCE, sal_False );
+                }
+
+                Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_DATABASE_CONTEXT), UNO_QUERY);
+                if (xDatabaseContext.is())
+                {
+                    Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
+                    const ::rtl::OUString* pBegin = aDatasources.getConstArray();
+                    const ::rtl::OUString* pEnd = pBegin + aDatasources.getLength();
+
+                    ::std::vector< ::rtl::OUString > aPrevious( _rDescriptor.aListValues.size() );
+                    ::std::copy( _rDescriptor.aListValues.begin(), _rDescriptor.aListValues.end(), aPrevious.begin() );
+
+
+                    _rDescriptor.aListValues.resize( aPrevious.size() + aDatasources.getLength() );
+                    ::std::copy(
+                        aPrevious.begin(),
+                        aPrevious.end(),
+                        ::std::copy( pBegin, pEnd, _rDescriptor.aListValues.begin() )
+                    );
+                }
+            }
+            break;
+
+            case PROPERTY_ID_CONTROLSOURCE:
+                SetFields( _rDescriptor );
+                break;
+
+            case PROPERTY_ID_COMMAND:
+                m_bHasCursorSource = sal_True;
+                break;
+
+            case PROPERTY_ID_LISTSOURCE:
+                m_bHasListSource = sal_True;
+                break;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        _rDescriptor.nHelpId = m_pPropertyInfo->getPropertyHelpId( nPropId );
+        _rDescriptor.sTitle = sDisplayName;
+
+        if ( PropertyState_AMBIGUOUS_VALUE == ePropertyState )
+        {
+            _rDescriptor.bUnknownValue = sal_True;
+            _rDescriptor.sValue = String();
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------
     void OPropertyBrowserController::UpdateUI()
     {
         // Introspection auswerten
@@ -2003,13 +2396,7 @@ class EventsNameReplace_Impl:
             InsertEvents();
             sal_uInt32 nPropCount = m_aObjectProperties.getLength();
             const Property* pProps = m_aObjectProperties.getConstArray();
-            OLineDescriptor* pProperty = NULL;
             sal_Bool bRemoveDataPage=sal_True;
-
-            TypeClass eType;
-            Any aVal,aSupplier,aKey,aDigits,aSeparator,aDefault;
-            ::rtl::OUString aStrVal;
-            PropertyState eState;
 
             // get control type
             sal_Int16 nControlType = getControlType();
@@ -2018,641 +2405,29 @@ class EventsNameReplace_Impl:
             ::std::vector< Any > aActuatingPropertyValues;
             for (sal_uInt32 i=0; i<nPropCount; ++i, ++pProps)
             {
-                sal_Int32   nPropId         = m_pPropertyInfo->getPropertyId( pProps->Name );
-                if ( nPropId == -1 )
-                    continue;
-
                 // for the MultiLine property, we have different UI translations depending on the control
                 // type
-                if ( nPropId == PROPERTY_ID_MULTILINE )
+                ::rtl::OUString sPropertyName( pProps->Name );
+                if ( sPropertyName == PROPERTY_MULTILINE )
                 {
-                    if (  ( m_nClassId == FormComponentType::FIXEDTEXT )
-                       || ( m_nClassId == FormComponentType::COMMANDBUTTON )
-                       || ( m_nClassId == FormComponentType::RADIOBUTTON )
-                       || ( m_nClassId == FormComponentType::CHECKBOX )
-                       )
-                        nPropId = PROPERTY_ID_WORDBREAK;
+                    if  (  ( m_nClassId == FormComponentType::FIXEDTEXT )
+                        || ( m_nClassId == FormComponentType::COMMANDBUTTON )
+                        || ( m_nClassId == FormComponentType::RADIOBUTTON )
+                        || ( m_nClassId == FormComponentType::CHECKBOX )
+                        )
+                        sPropertyName = PROPERTY_WORDBREAK;
                 }
 
-                String sDisplayName = m_pPropertyInfo->getPropertyTranslation( nPropId );
-                if ( !sDisplayName.Len() )
-                {
-                    DBG_ERROR( "OPropertyBrowserController::UpdateUI: no display name! corrupt meta data?" );
+                OLineDescriptor aDescriptor;
+                if ( !describePropertyLine( nControlType, *pProps, aDescriptor ) )
                     continue;
-                }
 
-                sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropId );
-                bool bIsVirtualProperty   = ( nPropertyUIFlags & PROP_FLAG_VIRTUAL_PROP   ) != 0;
+                sal_Int32   nPropertyId = m_pPropertyInfo->getPropertyId( sPropertyName );
+                sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropertyId );
                 bool bIsDataProperty      = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY  ) != 0;
                 bool bIsActuatingProperty = ( nPropertyUIFlags & PROP_FLAG_ACTUATING      ) != 0;
-                bool bIsEnumProperty      = ( nPropertyUIFlags & PROP_FLAG_ENUM           ) != 0;
-                bool bIsVisibleForForms   = ( nPropertyUIFlags & PROP_FLAG_FORM_VISIBLE   ) != 0;
-                bool bIsVisibleForDialogs = ( nPropertyUIFlags & PROP_FLAG_DIALOG_VISIBLE ) != 0;
-
-                // depending on whether we're working for a form or a UNO dialog, some
-                // properties are not displayed
-                if (  ( nControlType == CONTROL_TYPE_FORM   && !bIsVisibleForForms )
-                   || ( nControlType == CONTROL_TYPE_DIALOG && !bIsVisibleForDialogs )
-                   )
-                   continue;
-                if ( nPropId == PROPERTY_ID_DATASOURCE )
-                {
-                    Reference< XConnection > xConn;
-                    if ( m_xPropValueAccess.is() && ::dbtools::isEmbeddedInDatabase( m_xPropValueAccess, xConn ) )
-                        continue;
-                }
-
-                pProperty = new OLineDescriptor();
-
-                eType = pProps->Type.getTypeClass();
 
                 //////////////////////////////////////////////////////////////////////
-                // retrieve the value, and convert it to it's string representation
-                eState = PropertyState_DIRECT_VALUE;
-                if ( bIsVirtualProperty )
-                {
-                    eState = getVirtualPropertyState( nPropId );
-                    aVal = getVirtualPropertyValue( nPropId );
-                }
-                else
-                {
-                    if ( m_xPropStateAccess.is() )
-                        eState = m_xPropStateAccess->getPropertyState( pProps->Name );
-                    aVal = m_xPropValueAccess->getPropertyValue( pProps->Name );
-                    fakePropertyValue( aVal, nPropId );
-                }
-
-                aStrVal = getStringRepFromPropertyValue( aVal, nPropId );
-
-                //////////////////////////////////////////////////////////////////////
-                // default characteristics for the property control
-                pProperty->eControlType = BCT_EDIT;
-                pProperty->sName = pProps->Name;
-                pProperty->sTitle = pProps->Name;
-                pProperty->sValue = aStrVal;
-
-                if (  ( pProps->Attributes & PropertyAttribute::MAYBEVOID )
-                   && ( nPropId != PROPERTY_ID_BORDER )
-                   && ( nPropId != PROPERTY_ID_TABSTOP )
-                   )
-                {
-                    pProperty->bHasDefaultValue = sal_True;
-                    if (!aVal.hasValue())
-                        pProperty->sValue = m_sStandard;
-                }
-
-
-                //////////////////////////////////////////////////////////////////////
-
-                sal_Bool bFilter = sal_True;
-                switch ( nPropId )
-                {
-                case PROPERTY_ID_DEFAULT_SELECT_SEQ:
-                case PROPERTY_ID_SELECTEDITEMS:
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_SELECTION;
-                    break;
-
-                case PROPERTY_ID_FILTER:
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_FILTER;
-                    break;
-
-                case PROPERTY_ID_SORT:
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_ORDER;
-                    break;
-
-                case PROPERTY_ID_MASTERFIELDS:
-                case PROPERTY_ID_DETAILFIELDS:
-                    if ( !m_bInspectingSubForm )
-                    {   // no master and detail fields for forms which are no sub forms
-                        delete pProperty;
-                        continue;
-                    }
-
-                    pProperty->eControlType = BCT_LEDIT;
-                    bFilter = sal_False;
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_FORMLINKFIELDS;
-                    break;
-
-                case PROPERTY_ID_COMMAND:
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_SQLCOMMAND;
-                    break;
-
-                case PROPERTY_ID_TABINDEX:
-                {
-                    if ( m_xControlsView.is() )
-                    {
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_TABINDEX;
-                    }
-                    pProperty->eControlType = BCT_NUMFIELD;
-                };
-                break;
-
-                case PROPERTY_ID_HSCROLL:
-                case PROPERTY_ID_VSCROLL:
-                {
-                    Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
-                    if ( xPropInfo.is() )
-                    {
-                        // if the other property is also present, then don't show the prop
-                        // (since it's then simulated with the virtual property ShowScrollbars)
-                        ::rtl::OUString sOtherProp( PROPERTY_ID_HSCROLL == nPropId ? PROPERTY_VSCROLL : PROPERTY_HSCROLL );
-                        if ( xPropInfo->hasPropertyByName( sOtherProp ) )
-                        {
-                            delete pProperty;
-                            continue;
-                        }
-                    }
-                }
-                break;
-
-                case PROPERTY_ID_FONT_NAME:
-                {
-                    bFilter = sal_False;
-
-                    pProperty->sName = String::CreateFromAscii("Font");
-                    pProperty->sTitle = pProperty->sName;
-                    pProperty->bIsLocked = sal_True;
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_FONT_TYPE;
-                    ::rtl::OUString sValue;
-                    aVal >>= sValue;
-                    pProperty->sValue = sValue;
-                }
-                break;
-
-                case PROPERTY_ID_TARGET_URL:
-                case PROPERTY_ID_IMAGE_URL:
-                {
-                    pProperty->eControlType = BCT_USERDEFINED;
-                    pProperty->pControl = new OFileUrlControl( getPropertyBox(), WB_TABSTOP | WB_BORDER );
-
-/*
-                    INetURLObject aParser( getDocumentURL() );
-                    aParser.removeSegment();
-                    String sBaseURL = aParser.GetMainURL( INetURLObject::NO_DECODE );
-                    if ( !sBaseURL.Len() )
-                        sBaseURL = SvtPathOptions().GetWorkPath();
-                    static_cast< OFileUrlControl* >( pProperty->pControl )->SetBaseURL( sBaseURL );
-*/
-
-                    pProperty->nUniqueButtonId = ( PROPERTY_ID_TARGET_URL == nPropId )
-                        ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL;
-                }
-                break;
-
-                case PROPERTY_ID_ECHO_CHAR:
-                {
-                    pProperty->eControlType = BCT_CHAREDIT;
-                }
-                break;
-
-                case PROPERTY_ID_BACKGROUNDCOLOR:
-                case PROPERTY_ID_FILLCOLOR:
-                case PROPERTY_ID_SYMBOLCOLOR:
-                case PROPERTY_ID_BORDERCOLOR:
-                {
-                    bFilter = sal_False;
-                    pProperty->eControlType = BCT_COLORBOX;
-                    pProperty->bIsLocked = sal_True;
-
-                    switch( nPropId )
-                    {
-                    case PROPERTY_ID_BACKGROUNDCOLOR:
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_BACKGROUNDCOLOR; break;
-                    case PROPERTY_ID_FILLCOLOR:
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_FILLCOLOR; break;
-                    case PROPERTY_ID_SYMBOLCOLOR:
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_SYMBOLCOLOR; break;
-                    case PROPERTY_ID_BORDERCOLOR:
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_BORDERCOLOR; break;
-                    }
-                }
-                break;
-
-                case PROPERTY_ID_LABEL:
-                {
-                    pProperty->eControlType = BCT_MEDIT;
-                }
-                break;
-
-                case PROPERTY_ID_DEFAULT_TEXT:
-                {
-                    if (FormComponentType::FILECONTROL == m_nClassId)
-                        pProperty->eControlType = BCT_EDIT;
-                    else
-                        pProperty->eControlType = BCT_MEDIT;
-                }
-                break;
-
-                case PROPERTY_ID_TEXT:
-                {
-                    if ( m_xIntrospecteeAsProperty.is() )
-                    {
-                        if ( ControlType::FORMATTEDFIELD == m_nClassId )
-                        {
-                            delete pProperty;
-                            continue;
-                        }
-
-                        Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
-                        if ( xPropInfo.is() )
-                        {
-                            if ( xPropInfo->hasPropertyByName( PROPERTY_MULTILINE ) )
-                                pProperty->eControlType = BCT_MEDIT;
-                        }
-                    }
-                }
-                case PROPERTY_ID_MULTILINE:
-                {
-                    Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
-                    if ( xPropInfo.is() )
-                    {
-                        // if the "RichText" property is also present, then don't show the prop
-                        // (since the combination of the two is then simulated with the virtual property TextType)
-                        if ( xPropInfo->hasPropertyByName( PROPERTY_RICHTEXT ) )
-                        {
-                            delete pProperty;
-                            continue;
-                        }
-                    }
-                }
-                break;
-                case PROPERTY_ID_CONTROLLABEL:
-                {
-                    bFilter = sal_False;
-                    pProperty->bIsLocked = sal_True;
-                    pProperty->sValue = getStringRepFromPropertyValue(aVal, PROPERTY_ID_CONTROLLABEL);
-                    pProperty->nUniqueButtonId = UID_PROP_DLG_CONTROLLABEL;
-                }
-                break;
-
-                case PROPERTY_ID_FORMATKEY:
-                case PROPERTY_ID_EFFECTIVE_MIN:
-                case PROPERTY_ID_EFFECTIVE_MAX:
-                case PROPERTY_ID_EFFECTIVE_DEFAULT:
-                case PROPERTY_ID_EFFECTIVE_VALUE:
-                {
-                    // only if the set has a formatssupplier, too
-                    if  (   !::comphelper::hasProperty(PROPERTY_FORMATSSUPPLIER, m_xPropValueAccess)
-                        ||  (FormComponentType::DATEFIELD == m_nClassId)
-                        ||  (FormComponentType::TIMEFIELD == m_nClassId)
-                        )
-                    {
-                        delete pProperty;
-                        continue;
-                    }
-
-                    // and the supplier is really available
-                    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
-                    m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
-                    if (xSupplier.is())
-                    {
-                        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-                        DBG_ASSERT(xTunnel.is(), "OPropertyBrowserController::ChangeFormatProperty : xTunnel is invalid!");
-                        SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-
-                        if (pSupplier != NULL)
-                        {
-                            bFilter = sal_False;    // don't do further checks
-                            sal_Bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
-
-                            pProperty->eControlType = BCT_USERDEFINED;
-
-                            pProperty->bIsLocked = bIsFormatKey;
-
-                            if (bIsFormatKey)
-                            {
-                                pProperty->pControl = new OFormatDescriptionControl(getPropertyBox(), WB_READONLY | WB_TABSTOP | WB_BORDER);
-                                    // HACK : the Control need's a non-null parent, but we don't have one ... so use the property box
-                                ((OFormatDescriptionControl*)pProperty->pControl)->SetFormatSupplier(pSupplier);
-
-                                pProperty->nUniqueButtonId = UID_PROP_DLG_NUMBER_FORMAT;
-                            }
-                            else
-                            {
-                                pProperty->pControl = new OFormattedNumericControl(getPropertyBox(), WB_TABSTOP | WB_BORDER);
-                                    // HACK : same as above
-
-                                FormatDescription aDesc;
-                                aDesc.pSupplier = pSupplier;
-                                aKey = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATKEY);
-                                aDesc.nKey = aKey.hasValue() ? ::comphelper::getINT32(aKey) : 0;
-                                ((OFormattedNumericControl*)pProperty->pControl)->SetFormatDescription(aDesc);
-                            }
-
-                            // the initial value
-                            if (aVal.hasValue())
-                            {
-                                if (bIsFormatKey)
-                                {
-                                    pProperty->sValue = String::CreateFromInt32(::comphelper::getINT32(aVal));
-                                }
-                                else
-                                {
-                                    if (aVal.getValueTypeClass() == TypeClass_DOUBLE)
-                                        pProperty->sValue = convertSimpleToString(aVal);
-                                    else
-                                        DBG_WARNING("OPropertyBrowserController::UpdateUI : non-double values not supported for Effective*-properties !");
-                                        // our UI supports only setting double values for the min/max/default, but by definition
-                                        // the default may be a string if the field is not in numeric mode ....
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-
-                case PROPERTY_ID_DATEMIN:
-                case PROPERTY_ID_DATEMAX:
-                case PROPERTY_ID_DEFAULT_DATE:
-                case PROPERTY_ID_DATE:
-                    pProperty->eControlType = BCT_DATEFIELD;
-                    break;
-
-                case PROPERTY_ID_TIMEMIN:
-                case PROPERTY_ID_TIMEMAX:
-                case PROPERTY_ID_DEFAULT_TIME:
-                case PROPERTY_ID_TIME:
-                    pProperty->eControlType = BCT_TIMEFIELD;
-                    break;
-
-                case PROPERTY_ID_VALUEMIN:
-                case PROPERTY_ID_VALUEMAX:
-                case PROPERTY_ID_DEFAULT_VALUE:
-                case PROPERTY_ID_VALUE:
-                    {
-                        pProperty->eControlType = BCT_USERDEFINED;
-                        pProperty->pControl = new OFormattedNumericControl( getPropertyBox(), WB_TABSTOP | WB_BORDER | WB_SPIN | WB_REPEAT );
-                            // HACK : same as above
-
-                        // we don't set a formatter so the control uses a default (which uses the application
-                        // language and a default numeric format)
-                        // but we set the decimal digits
-                        aDigits = m_xPropValueAccess->getPropertyValue(PROPERTY_DECIMAL_ACCURACY);
-                        ((OFormattedNumericControl*)pProperty->pControl)->SetDecimalDigits(::comphelper::getINT16(aDigits));
-
-                        // and the thousands separator
-                        aSeparator = m_xPropValueAccess->getPropertyValue(PROPERTY_SHOWTHOUSANDSEP);
-                        ((OFormattedNumericControl*)pProperty->pControl)->SetThousandsSep(::comphelper::getBOOL(aSeparator));
-
-                        // and the default value for the property
-                        try
-                        {
-                            if (m_xPropStateAccess.is() && ((PROPERTY_ID_VALUEMIN == nPropId) || (PROPERTY_ID_VALUEMAX == nPropId)))
-                            {
-                                aDefault = m_xPropStateAccess->getPropertyDefault(pProps->Name);
-                                if (aDefault.getValueTypeClass() == TypeClass_DOUBLE)
-
-                                    ((OFormattedNumericControl*)pProperty->pControl)->SetDefaultValue(::comphelper::getDouble(aDefault));
-                            }
-                        }
-                        catch (Exception&)
-                        {
-                            // just ignore it
-                        }
-
-                        // and allow empty values only for the default value and the value
-                        static_cast< OFormattedNumericControl* >( pProperty->pControl )
-                            ->EnableEmptyField( ( PROPERTY_ID_DEFAULT_VALUE == nPropId )
-                                            ||  ( PROPERTY_ID_VALUE == nPropId ) );
-                    }
-                    break;
-
-                default:
-                    if ( TypeClass_BYTE <= eType && eType <= TypeClass_DOUBLE )
-                    {
-                        if ( nControlType == CONTROL_TYPE_FORM )
-                        {
-                            if  ( nPropId == PROPERTY_ID_HEIGHT )
-                                pProperty->nDigits = 1;
-
-                            if (  ( nPropId == PROPERTY_ID_WIDTH )
-                               || ( nPropId == PROPERTY_ID_ROWHEIGHT )
-                               )
-                            {
-                                pProperty->eValueUnit = FUNIT_CM;
-                                pProperty->eDisplayUnit = getDocumentMeasurementUnit();
-                                pProperty->nDigits = 2;
-                            }
-                        }
-
-                        pProperty->eControlType = BCT_NUMFIELD;
-                    }
-                    break;
-                }
-
-                if ( eType == TypeClass_SEQUENCE )
-                {
-                    pProperty->eControlType = BCT_LEDIT;
-                    bFilter = sal_False;
-                }
-
-                // don't filter dialog controls
-                if ( nControlType == CONTROL_TYPE_DIALOG )
-                    bFilter = sal_False;
-                // and don't filter virtual properties
-                if ( bIsVirtualProperty )
-                    bFilter = sal_False;
-
-                //////////////////////////////////////////////////////////////////////
-                // Filter
-                if ( bFilter )
-                {
-                    bool bRemoveProperty = false;
-                    if ( ( TypeClass_INTERFACE == eType ) || ( TypeClass_ARRAY == eType ) )
-                        bRemoveProperty = true;
-
-                    if ( !bRemoveProperty )
-                    {
-                        if (  ( aVal.getValueTypeClass() == TypeClass_INTERFACE )
-                           || ( aVal.getValueTypeClass() == TypeClass_ARRAY )
-                           || ( aVal.getValueTypeClass() == TypeClass_UNKNOWN )
-                           )
-                            bRemoveProperty = true;
-                    }
-
-                    if ( !bRemoveProperty )
-                    {
-                        if (  ( aVal.getValueTypeClass() == TypeClass_VOID )
-                           && ( pProps->Attributes & PropertyAttribute::MAYBEVOID ) == 0
-                           )
-                            bRemoveProperty = true;
-                    }
-
-                    if ( !bRemoveProperty )
-                    {
-                        if ( pProps->Name.equalsAscii( "type unknown" ) )
-                            bRemoveProperty = true;
-                    }
-
-                    if ( !bRemoveProperty )
-                    {
-                        if ( pProps->Attributes & PropertyAttribute::TRANSIENT )
-                            bRemoveProperty = true;
-                    }
-
-                    if ( !bRemoveProperty )
-                    {
-                        if ( pProps->Attributes & PropertyAttribute::READONLY )
-                            bRemoveProperty = true;
-                    }
-
-                    if ( bRemoveProperty )
-                    {
-                        delete pProperty->pControl;
-                        delete pProperty;
-                        continue;
-                    }
-                }
-
-                //////////////////////////////////////////////////////////////////////
-                // sal_Bool-Werte
-                if (eType == TypeClass_BOOLEAN )
-                {
-                    String aEntries;
-                    if (  nPropId == PROPERTY_ID_SHOW_POSITION
-                       || nPropId == PROPERTY_ID_SHOW_NAVIGATION
-                       || nPropId == PROPERTY_ID_SHOW_RECORDACTIONS
-                       || nPropId == PROPERTY_ID_SHOW_FILTERSORT
-                       )
-                       aEntries = String( ModuleRes( RID_STR_SHOW_HIDE ) );
-                    else
-                       aEntries = String( ModuleRes( RID_STR_BOOL ) );
-
-                    for ( xub_StrLen i=0; i<2; ++i )
-                        pProperty->aListValues.push_back( aEntries.GetToken(i) );
-
-                    pProperty->eControlType = BCT_LISTBOX;
-                }
-
-                //////////////////////////////////////////////////////////////////////
-                // TYPECLASS_VOID
-                else if (eType == TypeClass_VOID )
-                    pProperty->sValue = String();
-
-                //////////////////////////////////////////////////////////////////////
-                // enum properties
-                if ( bIsEnumProperty || ( PROPERTY_ID_TARGET_FRAME == nPropId ) )
-                {
-                    ::std::vector< String > aEnumValues = m_pPropertyInfo->getPropertyEnumRepresentations( nPropId );
-                    ::std::vector< String >::const_iterator pStart = aEnumValues.begin();
-                    ::std::vector< String >::const_iterator pEnd = aEnumValues.end();
-
-                    // for a checkbox: if "ambiguous" is not allowed, remove this from the sequence
-                    if ( PROPERTY_ID_DEFAULTCHECKED == nPropId || PROPERTY_ID_STATE == nPropId )
-                        if ( ::comphelper::hasProperty( PROPERTY_TRISTATE, m_xPropValueAccess ) )
-                        {
-                            if ( !::comphelper::getBOOL( m_xPropValueAccess->getPropertyValue( PROPERTY_TRISTATE ) ) )
-                            {   // remove the last sequence element
-                                if ( pEnd > pStart )
-                                    --pEnd;
-                            }
-                        }
-                        else
-                            --pEnd;
-
-                    if ( PROPERTY_ID_LISTSOURCETYPE == nPropId )
-                        if ( FormComponentType::COMBOBOX == m_nClassId )
-                            // remove the first sequence element -> value list not possible for combo boxes
-                            ++pStart;
-
-                    // copy the sequence
-                    for ( ::std::vector< String >::const_iterator pLoop = pStart; pLoop != pEnd; ++pLoop )
-                        pProperty->aListValues.push_back( *pLoop );
-
-                    pProperty->eControlType =
-                            PROPERTY_ID_TARGET_FRAME == nPropId
-                        ?   BCT_COMBOBOX
-                        :   BCT_LISTBOX;
-                }
-
-                //////////////////////////////////////////////////////////////////////
-                switch( nPropId )
-                {
-                    case PROPERTY_ID_REPEAT_DELAY:
-                        pProperty->nMaxValue = 0x7FFFFFFF;
-                        pProperty->bHaveMinMax = sal_True;
-                        pProperty->nMaxValue = 0;
-
-                        pProperty->eControlType = BCT_USERDEFINED;
-                        pProperty->pControl = new TimeDurationInput( getPropertyBox(), WB_BORDER | WB_TABSTOP );
-                        break;
-
-                    case PROPERTY_ID_TABINDEX:
-                    case PROPERTY_ID_BOUNDCOLUMN:
-                    case PROPERTY_ID_VISIBLESIZE:
-                    case PROPERTY_ID_MAXTEXTLEN:
-                    case PROPERTY_ID_LINEINCREMENT:
-                    case PROPERTY_ID_BLOCKINCREMENT:
-                    case PROPERTY_ID_SPININCREMENT:
-                        pProperty->nMaxValue = 0x7FFFFFFF;
-                        pProperty->bHaveMinMax = sal_True;
-
-                        if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
-                            pProperty->nMinValue = -1;
-                        else if ( ( nPropId == PROPERTY_ID_BOUNDCOLUMN ) || ( nPropId == PROPERTY_ID_VISIBLESIZE ) )
-                            pProperty->nMinValue = 1;
-                        else
-                            pProperty->nMinValue = 0;
-                        break;
-
-                    case PROPERTY_ID_DECIMAL_ACCURACY:
-                        pProperty->nMaxValue = 20;
-                        pProperty->nMinValue = 0;
-                        pProperty->bHaveMinMax = sal_True;
-                        break;
-
-                    //////////////////////////////////////////////////////////////////////
-                    // DataSource
-                    case PROPERTY_ID_DATASOURCE:
-                    {
-                        pProperty->nUniqueButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
-                        // if the form already belong to a Database, don't set this property
-                        Reference< XInterface > xInter;
-                        m_aIntrospectee >>= xInter;
-
-                        pProperty->eControlType = BCT_COMBOBOX;
-
-                        Reference< XConnection > xConnection;
-                        if ( xInter.is() && ::dbtools::isEmbeddedInDatabase( xInter, xConnection ) )
-                        {
-                            nPropertyUIFlags = nPropertyUIFlags & ~(PROP_FLAG_FORM_VISIBLE | PROP_FLAG_DIALOG_VISIBLE);
-                            getPropertyBox()->EnablePropertyLine( PROPERTY_DATASOURCE, sal_False );
-                        }
-
-                        Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_DATABASE_CONTEXT), UNO_QUERY);
-                        if (xDatabaseContext.is())
-                        {
-                            Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
-                            const ::rtl::OUString* pBegin = aDatasources.getConstArray();
-                            const ::rtl::OUString* pEnd = pBegin + aDatasources.getLength();
-
-                            ::std::vector< ::rtl::OUString > aPrevious( pProperty->aListValues.size() );
-                            ::std::copy( pProperty->aListValues.begin(), pProperty->aListValues.end(), aPrevious.begin() );
-
-
-                            pProperty->aListValues.resize( aPrevious.size() + aDatasources.getLength() );
-                            ::std::copy(
-                                aPrevious.begin(),
-                                aPrevious.end(),
-                                ::std::copy( pBegin, pEnd, pProperty->aListValues.begin() )
-                            );
-                        }
-                    }
-                    break;
-
-                    case PROPERTY_ID_CONTROLSOURCE:
-                        SetFields( *pProperty );
-                        break;
-                    case PROPERTY_ID_COMMAND:
-                        m_bHasCursorSource = sal_True;
-                        break;
-                    case PROPERTY_ID_LISTSOURCE:
-                        m_bHasListSource = sal_True;
-                        break;
-                }
-
-                //////////////////////////////////////////////////////////////////////
-                // UI-Eintrag
                 if ( bIsDataProperty )
                 {
                     bRemoveDataPage = sal_False;
@@ -2663,24 +2438,14 @@ class EventsNameReplace_Impl:
                     getPropertyBox()->SetPage( m_nGenericPageId );
                 }
 
-                pProperty->nHelpId = m_pPropertyInfo->getPropertyHelpId(nPropId);
-                pProperty->sTitle = sDisplayName;
-
-                if ( PropertyState_AMBIGUOUS_VALUE == eState )
-                {
-                    pProperty->bUnknownValue = sal_True;
-                    pProperty->sValue = String();
-                }
-
                 // finally insert this property control
-                getPropertyBox()->InsertEntry(*pProperty);
-                delete pProperty;
+                getPropertyBox()->InsertEntry( aDescriptor );
 
                 // if it's an actuating property, remember it
                 if ( bIsActuatingProperty )
                 {
-                    aActuatingProperties.push_back( nPropId );
-                    aActuatingPropertyValues.push_back( GetUnoPropertyValue( pProps->Name ) );
+                    aActuatingProperties.push_back( nPropertyId );
+                    aActuatingPropertyValues.push_back( GetAnyPropertyValue( sPropertyName ) );
                 }
             }
 
@@ -2689,7 +2454,7 @@ class EventsNameReplace_Impl:
                 ::std::vector< sal_Int32 >::const_iterator aProperty = aActuatingProperties.begin();
                 ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
                 for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
-                    updateDependentProperties( *aProperty, *aPropertyValue );
+                    updateDependentProperties( *aProperty, *aPropertyValue, *aPropertyValue );
             }
 
             SetCursorSource( sal_True, sal_True );
@@ -2715,7 +2480,7 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Modified( const String& aName, const String& aVal, void* pData )
+    void OPropertyBrowserController::Modified( const String& aName, const String& aVal )
     {
         try
         {
@@ -2724,7 +2489,7 @@ class EventsNameReplace_Impl:
             // Wenn CursorSourceType veraendert wurde, CursorSource anpassen
             if (PROPERTY_ID_COMMANDTYPE == nPropId)
             {
-                Commit( aName, aVal, pData );
+                Commit( aName, aVal );
                 SetCursorSource( sal_False, sal_False );
             }
 
@@ -2732,7 +2497,7 @@ class EventsNameReplace_Impl:
             // Wenn ListSourceType veraendert wurde, ListSource anpassen
             if (PROPERTY_ID_LISTSOURCETYPE == nPropId)
             {
-                Commit( aName, aVal, pData );
+                Commit( aName, aVal );
                 SetListSource();
             }
         }
@@ -2743,7 +2508,7 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::OnImageURLClicked( const String& _rName, const String& _rVal, void* _pData )
+    void OPropertyBrowserController::OnImageURLClicked( const String& _rName, const String& _rVal )
     {
             ::rtl::OUString aStrTrans = m_pPropertyInfo->getPropertyTranslation( PROPERTY_ID_IMAGE_URL );
 
@@ -2770,11 +2535,11 @@ class EventsNameReplace_Impl:
             }
 
             if (!aFileDlg.Execute())
-                Commit( _rName, aFileDlg.GetPath(), _pData );
+                Commit( _rName, aFileDlg.GetPath() );
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Clicked( const String& aName, const String& aVal, void* pData )
+    void OPropertyBrowserController::Clicked( const String& aName, sal_uInt16 _nFlags, bool _bPrimary )
     {
         try
         {
@@ -2782,7 +2547,27 @@ class EventsNameReplace_Impl:
             // we need to commit the changes in the current property field
             getPropertyBox()->CommitModified();
 
-            sal_Int32 nPropId = m_pPropertyInfo->getPropertyId(aName);
+            sal_Int32 nPropId = m_pPropertyInfo->getPropertyId( aName );
+
+            // do we have a dedicated handler do delegate this to?
+            PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropId );
+            if ( aHandlerPos != m_aPropertyHandlers.end() )
+            {
+                Any aData;
+                if ( aHandlerPos->second->requestUserInputOnButtonClick( nPropId, _bPrimary, aData ) )
+                    aHandlerPos->second->executeButtonClick( nPropId, _bPrimary, aData, this );
+                return;
+            }
+
+            DBG_ASSERT( _bPrimary, "OPropertyBrowserController::Clicked: no properties here which support two buttons!" );
+
+            if ( _nFlags & LINE_FLAG_EVENT )
+            {
+                ChangeEventProperty( aName );
+                return;
+            }
+
+            ::rtl::OUString sStringValue = GetPropertyValueStringRep( aName );
 
             switch ( nPropId )
             {
@@ -2823,39 +2608,37 @@ class EventsNameReplace_Impl:
             {
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
 
-                INetURLObject aParser( aVal );
+                INetURLObject aParser( sStringValue );
                 if ( INET_PROT_FILE == aParser.GetProtocol() )
                     // set the initial directory only for file-URLs. Everything else
                     // is considered to be potentially expensive
                     // 106126 - 2002/12/10 - fs@openoffice.org
-                    aFileDlg.SetDisplayDirectory( aVal );
+                    aFileDlg.SetDisplayDirectory( sStringValue );
 
                 if (0 == aFileDlg.Execute())
                 {
                     String aDataSource = aFileDlg.GetPath();
-                    Commit( aName, aDataSource, pData );
+                    Commit( aName, aDataSource );
                 }
             }
             break;
 
             case PROPERTY_ID_IMAGE_URL:
-                OnImageURLClicked( aName, aVal, pData );
+                OnImageURLClicked( aName, sStringValue );
                 break;
 
             //////////////////////////////////////////////////////////////////////
             // Bei Datenquelle auch Cursor-/ListSource fuellen
             case PROPERTY_ID_DATASOURCE:
             {
-                String aUserVal=aVal;
-
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
 
-                INetURLObject aParser( aVal );
+                INetURLObject aParser( sStringValue );
                 if ( INET_PROT_FILE == aParser.GetProtocol() )
                     // set the initial directory only for file-URLs. Everything else
                     // is considered to be potentially expensive
                     // 106126 - 2002/12/10 - fs@openoffice.org
-                    aFileDlg.SetDisplayDirectory( aVal );
+                    aFileDlg.SetDisplayDirectory( sStringValue );
 
                 static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
                 const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
@@ -2868,7 +2651,7 @@ class EventsNameReplace_Impl:
                 if (0 == aFileDlg.Execute())
                 {
                     String aDataSource = aFileDlg.GetPath();
-                    Commit( aName, aDataSource, pData );
+                    Commit( aName, aDataSource );
                 }
             }
             break;
@@ -2880,8 +2663,8 @@ class EventsNameReplace_Impl:
             case PROPERTY_ID_SYMBOLCOLOR:
             case PROPERTY_ID_BORDERCOLOR:
             {
-                sal_uInt32 nColor = aVal.ToInt32();
-                Color aColor( nColor );
+                sal_uInt32 nColor = sStringValue.toInt32();
+                ::Color aColor( nColor );
                 SvColorDialog aColorDlg( getDialogParent() );
                 aColorDlg.SetColor( aColor );
 
@@ -2891,14 +2674,14 @@ class EventsNameReplace_Impl:
                     nColor = aColor.GetColor();
 
                     String aColorString = String::CreateFromInt32( (sal_Int32)nColor );
-                    Commit( aName, aColorString, pData );
+                    Commit( aName, aColorString );
                 }
             }
             break;
 
             case PROPERTY_ID_FORMATKEY:
             {
-                ChangeFormatProperty(aName, aVal);
+                ChangeFormatProperty( aName, sStringValue );
             }
             break;
 
@@ -2921,11 +2704,7 @@ class EventsNameReplace_Impl:
             default:
             if ( aName.EqualsAscii( "Font" ) )
             {
-                ChangeFontProperty( );
-            }
-            else if ( pData == LINETYPE_EVENT )
-            {
-                ChangeEventProperty(aName);
+                ChangeFontProperty();
             }
             break;
             }
@@ -2937,43 +2716,65 @@ class EventsNameReplace_Impl:
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Commit( const String& rName, const String& aVal, void* pData )
+    void OPropertyBrowserController::Commit( const String& rName, const String& _rStringValue )
     {
-        if (m_pChangeMultiplexer)
-            m_pChangeMultiplexer->lock();
+        m_sCommittingProperty = rName;
 
         try
         {
             //////////////////////////////////////////////////////////////////////
             // Property-Info holen
-            Property    aProp               = getIntrospecteeProperty( rName );
+            const Property* pProp = findObjectPropertyByName( rName );
+            DBG_ASSERT( pProp, "OPropertyBrowserController::Commit: where does this come from?" );
+            if ( !pProp )
+                return;
+
             sal_Int32   nPropId             = m_pPropertyInfo->getPropertyId( rName );
             sal_uInt32  nPropertyUIFlags    = m_pPropertyInfo->getPropertyUIFlags( nPropId );
-            bool bIsVirtualProperty         = ( nPropertyUIFlags & PROP_FLAG_VIRTUAL_PROP ) != 0;
             bool bIsActuatingProperty       = ( nPropertyUIFlags & PROP_FLAG_ACTUATING ) != 0;
 
-            String aUserVal=aVal;
+            Any aOldValue;
+            if ( bIsActuatingProperty )
+                aOldValue = GetAnyPropertyValue( rName );
+
+            String sNormalizedStringValue = _rStringValue;
+
+            // do we have a dedicated handler for this property, which we can delegate some tasks to?
+            PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropId );
+            bool bDedicatedHandler = aHandlerPos != m_aPropertyHandlers.end();
 
             //////////////////////////////////////////////////////////////////////
-            // URL- Adresse koennte relativ sein
-            if ((nPropId == PROPERTY_ID_TARGET_URL || nPropId == PROPERTY_ID_IMAGE_URL) && aVal.Len())
+            // URL properties must be made absolute
+            if  (   ( ( nPropId == PROPERTY_ID_TARGET_URL )
+                   || ( nPropId == PROPERTY_ID_IMAGE_URL )
+                    )
+                && _rStringValue.Len()
+                )
             {
                 INetURLObject aDocURL( getDocumentURL() );
-                aUserVal = URIHelper::SmartRel2Abs( aDocURL, aVal, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
+                sNormalizedStringValue = URIHelper::SmartRel2Abs( aDocURL, _rStringValue, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
             }
 
             Any aValue;
-            if (!(m_sStandard.equals(aVal) &&(aProp.Attributes & PropertyAttribute::MAYBEVOID)))
+            if (  !m_sStandard.equals( _rStringValue )
+               || ( 0 == ( pProp->Attributes & PropertyAttribute::MAYBEVOID ) )
+               )
             {
-                aValue = getPropertyValueFromStringRep( aUserVal, aProp, nPropId);
+                if ( bDedicatedHandler )
+                    aValue = aHandlerPos->second->getPropertyValueFromStringRep( nPropId, sNormalizedStringValue );
+                else
+                    aValue = getPropertyValueFromStringRep( sNormalizedStringValue, *pProp, nPropId);
             }
 
-            if  (   (   (nPropId == PROPERTY_ID_DEFAULT_VALUE) || (nPropId == PROPERTY_ID_VALUE)
-                    ||  (nPropId == PROPERTY_ID_DEFAULT_DATE)  || (nPropId == PROPERTY_ID_DATE)
-                    ||  (nPropId == PROPERTY_ID_DEFAULT_TIME)  || (nPropId == PROPERTY_ID_TIME)
-                    ||  (nPropId==PROPERTY_ID_BOUNDCOLUMN)
+            if  (   (   ( nPropId == PROPERTY_ID_DEFAULT_VALUE )
+                    ||  ( nPropId == PROPERTY_ID_VALUE )
+                    ||  ( nPropId == PROPERTY_ID_DEFAULT_DATE )
+                    ||  ( nPropId == PROPERTY_ID_DATE )
+                    ||  ( nPropId == PROPERTY_ID_DEFAULT_TIME )
+                    ||  ( nPropId == PROPERTY_ID_TIME )
+                    ||  ( nPropId == PROPERTY_ID_BOUNDCOLUMN )
                     )
-                &&  (0 == aVal.Len())
+                &&  ( 0 == _rStringValue.Len() )
                 )
             {
                 aValue = Any();
@@ -2981,15 +2782,15 @@ class EventsNameReplace_Impl:
 
             //////////////////////////////////////////////////////////////////////
             // set the value
-            if ( bIsVirtualProperty )
+            if ( bDedicatedHandler )
             {
-                setVirtualPropertyValue( nPropId, aValue );
+                aHandlerPos->second->setPropertyValue( nPropId, aValue );
                 setDocumentModified();
             }
             else
             {
                 sal_Bool bDontForwardToPropSet =
-                        ( ( aProp.Attributes & PropertyAttribute::MAYBEVOID ) == 0 )    // VOID is not allowed
+                        ( ( pProp->Attributes & PropertyAttribute::MAYBEVOID ) == 0 )    // VOID is not allowed
                     &&  !aValue.hasValue();                                             // but it *is* void
 
                 if ( PROPERTY_ID_CONTROLLABEL == nPropId )
@@ -3001,20 +2802,21 @@ class EventsNameReplace_Impl:
             }
 
             // re-retrieve the value
-            if ( bIsVirtualProperty )
+            ::rtl::OUString sNewStrVal;
+            if ( bDedicatedHandler )
             {
-                aValue = getVirtualPropertyValue( nPropId );
+                aValue = aHandlerPos->second->getPropertyValue( nPropId );
+                sNewStrVal = aHandlerPos->second->getStringRepFromPropertyValue( nPropId, aValue );
             }
             else
             {
                 aValue = m_xPropValueAccess->getPropertyValue( rName );
+                sNewStrVal = getStringRepFromPropertyValue( nPropId, aValue );
             }
 
             // care for any inter-property dependencies
             if ( bIsActuatingProperty )
-                updateDependentProperties( nPropId, aValue );
-
-            ::rtl::OUString sNewStrVal = getStringRepFromPropertyValue( aValue, nPropId );
+                updateDependentProperties( nPropId, aValue, aOldValue );
 
             // and display it again. This ensures proper formatting
             getPropertyBox()->SetPropertyValue( rName, sNewStrVal );
@@ -3046,7 +2848,6 @@ class EventsNameReplace_Impl:
                 aProperty.nHelpId           =   m_pPropertyInfo->getPropertyHelpId(nStateId);
                 aProperty.eControlType      =   BCT_LISTBOX;
                 aProperty.sValue            =   getPropertyBox()->GetPropertyValue(aStateName);
-                sal_uInt16 nPos             =   getPropertyBox()->GetPropertyPos(aStateName);
 
                 ::std::vector< String > aEntries =
                     m_pPropertyInfo->getPropertyEnumRepresentations(nStateId);
@@ -3070,10 +2871,9 @@ class EventsNameReplace_Impl:
                 if (!bValidDefaultCheckedValue)
                     aProperty.sValue = *pStart;
 
-                if (nPos != EDITOR_LIST_APPEND)
-                    getPropertyBox()->ChangeEntry(aProperty,nPos);
+                getPropertyBox()->ChangeEntry( aProperty );
 
-                Commit(aProperty.sName, aProperty.sValue, NULL);
+                Commit( aProperty.sName, aProperty.sValue );
             }
             break;
 
@@ -3109,11 +2909,11 @@ class EventsNameReplace_Impl:
 
                 Any aSupplier = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
                 DBG_ASSERT(aSupplier.getValueType().equals(::getCppuType(
-                    (const Reference< ::com::sun::star::util::XNumberFormatsSupplier>*)0)),
+                    (const Reference< XNumberFormatsSupplier>*)0)),
 
                     "OPropertyBrowserController::Commit : invalid property change !");
                     // we only allowed the FormatKey property to be displayed if the set had a valid FormatsSupplier
-                Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
+                Reference< XNumberFormatsSupplier >  xSupplier;
                 aSupplier >>= xSupplier;
                 DBG_ASSERT(xSupplier.is(), "OPropertyBrowserController::Commit : invalid property change !");
                     // same argument
@@ -3123,8 +2923,8 @@ class EventsNameReplace_Impl:
                     // the same again
 
                 aNewDesc.pSupplier = pSupplier;
-                aNewDesc.nKey = aVal.ToInt32();
-                    // nKey will be zero if aVal is empty or standard
+                aNewDesc.nKey = _rStringValue.ToInt32();
+                    // nKey will be zero if _rStringValue is empty or standard
 
                 // give each control which has to know this an own copy of the description
                 IBrowserControl* pControl = getPropertyBox()->GetPropertyControl(PROPERTY_EFFECTIVE_MIN);
@@ -3148,10 +2948,9 @@ class EventsNameReplace_Impl:
             {
                 //////////////////////////////////////////////////////////////////////
                 // Bei Datenquelle auch Cursor-/ListSource fuellen
-                Property aProp = getIntrospecteeProperty( rName );
-                Any aValue = getPropertyValueFromStringRep( aUserVal, aProp, nPropId);
+                Any aValue = getPropertyValueFromStringRep( sNormalizedStringValue, *pProp, nPropId);
 
-                sal_Bool bFlag= !(aProp.Attributes & PropertyAttribute::MAYBEVOID) && !aValue.hasValue();
+                sal_Bool bFlag= !(pProp->Attributes & PropertyAttribute::MAYBEVOID) && !aValue.hasValue();
 
                 if (!bFlag)
                 {
@@ -3191,307 +2990,63 @@ class EventsNameReplace_Impl:
             DBG_ERROR("OPropertyBrowserController::Commit : caught an exception !")
         }
 
-        if (m_pChangeMultiplexer)
-            m_pChangeMultiplexer->unlock();
+        m_sCommittingProperty = ::rtl::OUString();
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Select( const String& aName, void* pData )
+    void OPropertyBrowserController::getPropertyHandlers( PropertyHandlerArray& _rHandlers )
     {
-    }
+        DBG_CHKTHIS( OPropertyBrowserController, CheckPropertyBrowserInvariants );
 
-    //------------------------------------------------------------------------
-    PropertyState OPropertyBrowserController::getVirtualPropertyState( sal_Int32 _nPropId )
-    {
-        PropertyState eState = PropertyState_DIRECT_VALUE;
+        _rHandlers.resize( 0 );
 
-        switch ( _nPropId )
+        // factories for all known handlers
+        HandlerFactory aFactories[] = {
+
+            // a handler which introduces virtual properties for binding controls to spreadsheet cells
+            &CellBindingPropertyHandler::Create,
+
+            // properties related to binding to an XForms DOM node
+            &EFormsPropertyHandler::Create,
+
+            // properties related to the XSD data against which a control content is validated
+            &XSDValidationPropertyHandler::Create,
+
+            // a handler which cares for XForms submissions
+            &SubmissionPropertyHandler::Create,
+
+            // generic virtual edit properties
+            &EditPropertyHandler::Create,
+
+            // a handler which virtualizes the ButtonType property, to provide additional types like
+            // "move to next record"
+            ButtonNavigationHandler::Create
+        };
+
+        for ( sal_Int32 i = 0; i < sizeof( aFactories ) / sizeof( aFactories[ 0 ] ); ++i )
         {
-        case PROPERTY_ID_BUTTONTYPE:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            eState = aHelper.getCurrentButtonTypeState();
-        }
-        break;
-        case PROPERTY_ID_TARGET_URL:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            eState = aHelper.getCurrentTargetURLState();
-        }
-        break;
-        }
-
-        return eState;
-    }
-
-    //------------------------------------------------------------------------
-    Any OPropertyBrowserController::getVirtualPropertyValue( sal_Int32 _nPropId )
-    {
-        Any aReturn;
-
-        switch ( _nPropId )
-        {
-        case PROPERTY_ID_BUTTONTYPE:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            aReturn = aHelper.getCurrentButtonType();
-        }
-        break;
-
-        case PROPERTY_ID_TARGET_URL:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            aReturn = aHelper.getCurrentTargetURL();
-        }
-        break;
-
-        case PROPERTY_ID_BOUND_CELL:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
-            if ( !aHelper.isCellBinding( xBinding ) )
-                xBinding.clear();
-
-            aReturn <<= xBinding;
-        }
-        break;
-
-        case PROPERTY_ID_LIST_CELL_RANGE:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XListEntrySource > xSource( aHelper.getCurrentListSource() );
-            if ( !aHelper.isCellRangeListSource( xSource ) )
-                xSource.clear();
-
-            aReturn <<= xSource;
-        }
-        break;
-
-        case PROPERTY_ID_CELL_EXCHANGE_TYPE:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
-            aReturn <<= (sal_Int16)( aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0 );
-        }
-        break;
-
-        case PROPERTY_ID_SHOW_SCROLLBARS:
-        {
-            sal_Bool bHasVScroll = sal_False;
-            GetUnoPropertyValue( PROPERTY_VSCROLL ) >>= bHasVScroll;
-            sal_Bool bHasHScroll = sal_False;
-            GetUnoPropertyValue( PROPERTY_HSCROLL ) >>= bHasHScroll;
-
-            aReturn <<= (sal_Int32)( ( bHasVScroll ? 2 : 0 ) + ( bHasHScroll ? 1 : 0 ) );
-        }
-        break;
-
-        case PROPERTY_ID_TEXTTYPE:
-        {
-            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-            try
-            {
-                sal_Bool bRichText = sal_False;
-                OSL_VERIFY( m_xPropValueAccess->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
-                if ( bRichText )
-                    nTextType = TEXTTYPE_RICHTEXT;
-                else
-                {
-                    sal_Bool bMultiLine = sal_False;
-                    OSL_VERIFY( m_xPropValueAccess->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
-                    if ( bMultiLine )
-                        nTextType = TEXTTYPE_MULTILINE;
-                    else
-                        nTextType = TEXTTYPE_SINGLELINE;
-                }
-                aReturn <<= nTextType;
+            if ( m_aIntrospectedCollection.getLength() == 1 )
+            {   // we're inspecting only one object -> one handler
+                _rHandlers.push_back( (*aFactories[i])( m_xORB, m_xIntrospecteeAsProperty, m_xContextDocument, m_xTypeConverter ) );
             }
-            catch( const Exception& )
+            else
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::getVirtualPropertyValue: caught an exception!" );
-            }
-        }
-        break;
+                // create a single handler for every single object
+                ::std::vector< ::rtl::Reference< IPropertyHandler > > aSingleHandlers( m_aIntrospectedCollection.getLength() );
+                ::std::vector< ::rtl::Reference< IPropertyHandler > >::iterator pHandler = aSingleHandlers.begin();
 
-        default:
-            DBG_ERROR( "OPropertyBrowserController::getVirtualPropertyValue: given id does not refer to a virtual property!" );
-        }
+                const Reference< XPropertySet >* pObject = m_aIntrospectedCollection.getConstArray();
 
-        return aReturn;
-    }
+                for ( ; pHandler != aSingleHandlers.end(); ++pHandler, ++pObject )
+                    *pHandler = (*aFactories[i])( m_xORB, *pObject, m_xContextDocument, m_xTypeConverter );
 
-    //------------------------------------------------------------------------
-    void OPropertyBrowserController::setVirtualPropertyValue( sal_Int32 _nPropId, const Any& _rValue )
-    {
-        switch ( _nPropId )
-        {
-        case PROPERTY_ID_BUTTONTYPE:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            aHelper.setCurrentButtonType( _rValue );
-        }
-        break;
-
-        case PROPERTY_ID_TARGET_URL:
-        {
-            PushButtonNavigation aHelper( m_xPropValueAccess );
-            aHelper.setCurrentTargetURL( _rValue );
-        }
-        break;
-
-        case PROPERTY_ID_BOUND_CELL:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XValueBinding > xBinding;
-            _rValue >>= xBinding;
-            aHelper.setBinding( xBinding );
-        }
-        break;
-
-        case PROPERTY_ID_LIST_CELL_RANGE:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XListEntrySource > xSource;
-            _rValue >>= xSource;
-            aHelper.setListSource( xSource );
-        }
-        break;
-
-        case PROPERTY_ID_CELL_EXCHANGE_TYPE:
-        {
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            Reference< XValueBinding > xBinding = aHelper.getCurrentBinding( );
-            OSL_ENSURE( xBinding.is(), "OPropertyBrowserController::setVirtualPropertyValue: how this?" );
-                // this property here should be disabled (see updateDependentProperties) if there's no binding
-                // at our current document
-            if ( !xBinding.is() )
-                break;
-
-            sal_Int16 nExchangeType = 0;
-            _rValue >>= nExchangeType;
-
-            sal_Bool bNeedIntegerBinding = ( nExchangeType == 1 );
-            if ( (bool)bNeedIntegerBinding != aHelper.isCellIntegerBinding( xBinding ) )
-            {
-                CellAddress aAddress;
-                if ( aHelper.getAddressFromCellBinding( xBinding, aAddress ) )
-                {
-                    xBinding = aHelper.createCellBindingFromAddress( aAddress, bNeedIntegerBinding );
-                    aHelper.setBinding( xBinding );
-                }
-            }
-        }
-        break;
-
-        case PROPERTY_ID_SHOW_SCROLLBARS:
-        {
-            sal_Int32 nScrollbars = 0;
-            _rValue >>= nScrollbars;
-
-            sal_Bool bHasVScroll = 0 != ( nScrollbars & 2 );
-            sal_Bool bHasHScroll = 0 != ( nScrollbars & 1 );
-
-            m_xPropValueAccess->setPropertyValue( PROPERTY_VSCROLL, makeAny( (sal_Bool)bHasVScroll ) );
-            m_xPropValueAccess->setPropertyValue( PROPERTY_HSCROLL, makeAny( (sal_Bool)bHasHScroll ) );
-        }
-        break;
-
-        case PROPERTY_ID_TEXTTYPE:
-        {
-            sal_Bool bMultiLine = sal_False;
-            sal_Bool bRichText = sal_False;
-            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-            OSL_VERIFY( _rValue >>= nTextType );
-            switch ( nTextType )
-            {
-            case TEXTTYPE_SINGLELINE: bMultiLine = bRichText = sal_False; break;
-            case TEXTTYPE_MULTILINE:  bMultiLine = sal_True; bRichText = sal_False; break;
-            case TEXTTYPE_RICHTEXT:   bMultiLine = sal_True; bRichText = sal_True; break;
-            default:
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: invalid text type!" );
-            }
-
-            try
-            {
-                m_xPropValueAccess->setPropertyValue( PROPERTY_MULTILINE, makeAny( bMultiLine ) );
-                m_xPropValueAccess->setPropertyValue( PROPERTY_RICHTEXT, makeAny( bRichText ) );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: caught an exception!" );
-            }
-        }
-        break;
-
-        default:
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: given id does not refer to a virtual property!" );
-        }
-    }
-
-    //------------------------------------------------------------------------
-    bool OPropertyBrowserController::describeVirtualProperties( Sequence< Property >& /* [out] */ _rProps )
-    {
-        _rProps.realloc( 0 );
-
-        if ( CellBindingHelper::livesInSpreadsheetDocument( m_xPropValueAccess ) )
-        {
-            // check for properties which are related to binding controls to Calc cells
-            CellBindingHelper aHelper( m_xPropValueAccess );
-            bool bAllowCellLinking      = aHelper.isCellBindingAllowed();
-            bool bAllowCellIntLinking   = aHelper.isCellIntegerBindingAllowed();
-            bool bAllowListCellRange    = aHelper.isListCellRangeAllowed();
-            if ( !bAllowCellLinking && !bAllowListCellRange && !bAllowCellIntLinking )
-                // no more virtual properties at the moment
-                return false;
-
-            sal_Int32 nPos =  ( bAllowCellLinking    ? 1 : 0 )
-                            + ( bAllowListCellRange  ? 1 : 0 )
-                            + ( bAllowCellIntLinking ? 1 : 0 );
-            _rProps.realloc( nPos );
-
-            if ( bAllowCellLinking )
-            {
-                _rProps[ --nPos ] = Property( PROPERTY_BOUND_CELL, PROPERTY_ID_BOUND_CELL,
-                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ), 0 );
-            }
-            if ( bAllowCellIntLinking )
-            {
-                _rProps[ --nPos ] = Property( PROPERTY_CELL_EXCHANGE_TYPE, PROPERTY_ID_CELL_EXCHANGE_TYPE,
-                    ::getCppuType( static_cast< sal_Int16* >( NULL ) ), 0 );
-            }
-            if ( bAllowListCellRange )
-            {
-                _rProps[ --nPos ] = Property( PROPERTY_LIST_CELL_RANGE, PROPERTY_ID_LIST_CELL_RANGE,
-                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ), 0 );
+                // then create a handler which composes information out of those single handlers
+                _rHandlers.push_back( new PropertyComposer( aSingleHandlers ) );
             }
         }
 
-        // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
-        Reference< XPropertySetInfo > xPSI;
-        if ( m_xPropValueAccess.is() )
-            xPSI = m_xPropValueAccess->getPropertySetInfo();
-        if ( xPSI.is() )
-        {
-            if ( xPSI->hasPropertyByName( PROPERTY_HSCROLL ) && xPSI->hasPropertyByName( PROPERTY_VSCROLL ) )
-            {
-                sal_Int32 nLength = _rProps.getLength();
-                _rProps.realloc( nLength + 1 );
-                _rProps[ nLength ] = Property( PROPERTY_SHOW_SCROLLBARS, PROPERTY_ID_SHOW_SCROLLBARS,
-                        ::getCppuType( static_cast< sal_Int32* >( NULL ) ), 0 );
-            }
-
-            // if the control supports both the "RichText" and "MultiLine" properties, then we
-            // have a virtual property "TextType", which combines these two
-            if ( xPSI->hasPropertyByName( PROPERTY_MULTILINE ) && xPSI->hasPropertyByName( PROPERTY_RICHTEXT ) )
-            {
-                sal_Int32 nLength = _rProps.getLength();
-                _rProps.realloc( nLength + 1 );
-                _rProps[ nLength ] = Property( PROPERTY_TEXTTYPE, PROPERTY_ID_TEXTTYPE,
-                        ::getCppuType( static_cast< sal_Int32* >( NULL ) ), 0 );
-            }
-        }
-
-        return _rProps.getLength() != 0;
+        // note that the handlers will not be used by our caller, if they indicate that there are no
+        // properties they feel responsible for
     }
 
     //------------------------------------------------------------------------
@@ -3519,43 +3074,183 @@ class EventsNameReplace_Impl:
         enablePropertyLines( _pPropertyStart, _pPropertyEnd, sValue.getLength() != 0 );
     }
 
+    //------------------------------------------------------------------------
+    sal_uInt16 OPropertyBrowserController::getTargetPageId( const ::rtl::OUString& _rPropertyName )
+    {
+        sal_uInt32 nFlags = m_pPropertyInfo->getPropertyUIFlags( m_pPropertyInfo->getPropertyId( _rPropertyName ) );
+        return ( nFlags & PROP_FLAG_DATA_PROPERTY ) ? m_nDataPageId : m_nGenericPageId;
+            // events currently not covered by this mechanism
+    }
+
+    //------------------------------------------------------------------------
+    const Property* OPropertyBrowserController::findObjectPropertyByName( const ::rtl::OUString& _rName )
+    {
+        return findObjectPropertyByHandle( m_pPropertyInfo->getPropertyId( _rName ) );
+    }
+
+    //------------------------------------------------------------------------
+    const Property* OPropertyBrowserController::findObjectPropertyByHandle( sal_Int32 _nHandle )
+    {
+        const Property* pObjectPropsStart = m_aObjectProperties.getConstArray();
+        const Property* pObjectPropsEnd   = m_aObjectProperties.getConstArray() + m_aObjectProperties.getLength();
+        const Property* pObjectPropsPos   = ::std::find_if( pObjectPropsStart, pObjectPropsEnd, FindPropertyByHandle( _nHandle ) );
+
+        if ( pObjectPropsPos != pObjectPropsEnd )
+            return pObjectPropsPos;
+        return NULL;
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::rebuildPropertyUI( const ::rtl::OUString& _rPropertyName )
+    {
+        // obtain the Property structure for the property name
+        sal_Int32 nPropertyId = m_pPropertyInfo->getPropertyId( _rPropertyName );
+
+        const Property* pProperty = findObjectPropertyByHandle( nPropertyId );
+        DBG_ASSERT( pProperty, "OPropertyBrowserController::rebuildPropertyUI: our current introspectee does not support this property!" );
+        if ( !pProperty )
+            return;
+
+        OLineDescriptor aDescriptor;
+        bool bSuccess = false;
+        try
+        {
+            bSuccess = describePropertyLine( getControlType(), *pProperty, aDescriptor );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+        }
+        if ( !bSuccess )
+            return;
+
+        getPropertyBox()->ChangeEntry( aDescriptor );
+
+        // since the UI for this entry changed, give the handler (if there is one) a chance
+        // to re-initialize
+        PropertyHandlerRepository::const_iterator aHandlerPos = m_aPropertyHandlers.find( nPropertyId );
+        if ( aHandlerPos != m_aPropertyHandlers.end() )
+            aHandlerPos->second->initializePropertyUI( nPropertyId, this );
+   }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::enablePropertyUI( const ::rtl::OUString& _rPropertyName, bool _bEnable )
+    {
+        DBG_ASSERT( getPropertyBox(), "OPropertyBrowserController::enablePropertyUI: how did you reach this?!" );
+        if ( !getPropertyBox() )
+            return;
+
+        getPropertyBox()->EnablePropertyLine( _rPropertyName, _bEnable );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::enablePropertyButtons( const ::rtl::OUString& _rPropertyName, bool _bEnablePrimary, bool _bEnableSecondary )
+    {
+        getPropertyBox()->EnablePropertyControls( _rPropertyName, getPropertyBox()->IsPropertyInputEnabled( _rPropertyName ), _bEnablePrimary, _bEnableSecondary );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::showPropertyUI( const ::rtl::OUString& _rPropertyName, bool _bRefreshIfExistent )
+    {
+        if ( getPropertyBox()->GetPropertyPos( _rPropertyName ) != LISTBOX_ENTRY_NOTFOUND )
+        {
+            if ( _bRefreshIfExistent )
+                rebuildPropertyUI( _rPropertyName );
+            return;
+        }
+
+        // look up the property in our object properties
+        const Property* pProperty = findObjectPropertyByName( _rPropertyName  );
+        DBG_ASSERT( pProperty, "OPropertyBrowserController::showPropertyUI: There is no such property!" );
+        if ( !pProperty )
+            return;
+
+        OLineDescriptor aDescriptor;
+        if ( !describePropertyLine( getControlType(), *pProperty, aDescriptor ) )
+            return;
+
+        // look for the position to insert the property
+
+        // side note: The methods GetPropertyPos and InsertEntry of the OPropertyEditor work
+        // only on the current page. This implies that it's impossible to use this method here
+        // to show property lines which are *not* on the current page.
+        // This is sufficient for now, but should be changed in the future.
+
+        // by definition, the properties in m_aObjectProperties are in the order in which they appear in the UI
+        // So all we need is a predecessor of pProperty in m_aObjectProperties
+        size_t nPosition = pProperty - m_aObjectProperties.getConstArray();
+        sal_uInt16 nUIPos = LISTBOX_ENTRY_NOTFOUND;
+        while ( ( nUIPos == LISTBOX_ENTRY_NOTFOUND ) && nPosition-- )
+        {
+            nUIPos = getPropertyBox()->GetPropertyPos( m_aObjectProperties[ nPosition ].Name );
+        }
+        if ( nUIPos == LISTBOX_ENTRY_NOTFOUND )
+            // insert at the very top
+            nUIPos = 0;
+        else
+            // insert right after the predecessor we found
+            ++nUIPos;
+
+        getPropertyBox()->InsertEntry( aDescriptor, nUIPos, getTargetPageId( _rPropertyName ) );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::hidePropertyUI( const ::rtl::OUString& _rPropertyName )
+    {
+        getPropertyBox()->RemoveEntry( _rPropertyName );
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::showCategory( EPropertyCategory _eCategory, bool _bShow )
+    {
+        sal_uInt16 nPageId = 0;
+        switch( _eCategory )
+        {
+        case eGeneral:  nPageId = m_nGenericPageId;  break;
+        case eData:     nPageId = m_nDataPageId;     break;
+        case eEvents:   nPageId = m_nEventPageId;    break;
+        default:
+            OSL_ENSURE( sal_False, "OPropertyBrowserController::showCategory: invalid category!" );
+        }
+        if ( nPageId )
+            getPropertyBox()->ShowPropertyPage( nPageId, _bShow );
+    }
+
 #define STRING_ARRAY_LIMITS( array ) \
     array, \
     array + sizeof( array ) / sizeof( array[0] )
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::updateDependentProperties( sal_Int32 _nPropId, const Any& _rNewValue )
+    void OPropertyBrowserController::updateDependentProperties( sal_Int32 _nPropId, const Any& _rNewValue, const Any& _rOldValue )
     {
         DBG_ASSERT( getPropertyBox(), "OPropertyBrowserController::updateDependentProperties: no view!" );
         if ( !getPropertyBox() )
             return;
 
+        // are there one or more handlers which are interested in the actuation?
+        ::std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator > aInterestedHandlers =
+            m_aDependencyHandlers.equal_range( _nPropId );
+        if ( aInterestedHandlers.first != aInterestedHandlers.second )
+        {
+            PropertyHandlerMultiRepository::iterator aLoop = aInterestedHandlers.first;
+            while ( aLoop != aInterestedHandlers.second )
+            {
+                aLoop->second->updateDependentProperties( _nPropId, _rNewValue, _rOldValue, this );
+                ++aLoop;
+            }
+
+            // leave - as soon as any handler expresses interest in a certain actuating property,
+            // our "generic" code below will not be triggered anymore
+            return;
+        }
+
         // some properties depend on more than a single property changed, they will be updated
         // below
         ::std::vector< ::rtl::OUString > aComplexDependentProperties;
-        aComplexDependentProperties.reserve( 5 );
+        aComplexDependentProperties.reserve( 5 );   // guessed
 
         switch ( _nPropId )
         {
-        case PROPERTY_ID_TEXTTYPE:
-        {
-            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
-            getVirtualPropertyValue( PROPERTY_ID_TEXTTYPE ) >>= nTextType;
-
-            getPropertyBox()->EnablePropertyLine( PROPERTY_WORDBREAK,       nTextType == TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( ::rtl::OUString::createFromAscii( "Font" ), nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
-
-            getPropertyBox()->ShowPropertyPage( m_nDataPageId, nTextType != TEXTTYPE_RICHTEXT );
-        }
-        break;
-
         case PROPERTY_ID_BOUND_CELL:
         {
             // the SQL-data-binding related properties need to be enabled if and only if
@@ -3575,13 +3270,15 @@ class EventsNameReplace_Impl:
                 // ensure that the "transfer selection as" property is reset. Since we can't remember
                 // it at the object itself, but derive it from the binding only, we have to normalize
                 // it now that there *is* no binding anymore.
-                getPropertyBox()->SetPropertyValue(
-                    PROPERTY_CELL_EXCHANGE_TYPE,
-                    getStringRepFromPropertyValue(
-                        makeAny( (sal_Int16) 0 ),
-                        PROPERTY_ID_CELL_EXCHANGE_TYPE
-                    )
-                );
+                PropertyHandlerRepository::const_iterator aCellExchangeHandler = m_aPropertyHandlers.find( PROPERTY_ID_CELL_EXCHANGE_TYPE );
+                if ( aCellExchangeHandler != m_aPropertyHandlers.end() )
+                    getPropertyBox()->SetPropertyValue(
+                        PROPERTY_CELL_EXCHANGE_TYPE,
+                        aCellExchangeHandler->second->getStringRepFromPropertyValue(
+                            PROPERTY_ID_CELL_EXCHANGE_TYPE,
+                            makeAny( (sal_Int16) 0 )
+                        )
+                    );
             }
         }
         break;
@@ -3694,17 +3391,6 @@ class EventsNameReplace_Impl:
             aComplexDependentProperties.push_back( PROPERTY_STRINGITEMLIST );
             break;
 
-        case PROPERTY_ID_MULTILINE:
-        {
-            sal_Bool bIsMultiline = sal_False;
-            _rNewValue >>= bIsMultiline;
-
-            getPropertyBox()->EnablePropertyLine( PROPERTY_SHOW_SCROLLBARS, bIsMultiline );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR, !bIsMultiline );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_LINEEND_FORMAT, bIsMultiline );
-        }
-        break;
-
         case PROPERTY_ID_COMMAND:
         case PROPERTY_ID_DATASOURCE:
             aComplexDependentProperties.push_back( PROPERTY_FILTER );
@@ -3755,17 +3441,12 @@ class EventsNameReplace_Impl:
             break;
         }
 
-        Reference< XPropertySetInfo > xPropInfo;
-        if ( m_xIntrospecteeAsProperty.is() )
-            xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
-        DBG_ASSERT( xPropInfo.is(), "OPropertyBrowserController::updateDependentProperties: no property set info!" );
-
         for ( ::std::vector< ::rtl::OUString >::const_iterator aLoop = aComplexDependentProperties.begin();
               aLoop != aComplexDependentProperties.end();
               ++aLoop
             )
         {
-            if ( xPropInfo.is() && xPropInfo->hasPropertyByName( *aLoop ) )
+            if ( haveIntrospecteeProperty( *aLoop ) )
                 updateComplexPropertyDependency( *aLoop );
         }
     }
@@ -3782,7 +3463,7 @@ class EventsNameReplace_Impl:
         ::rtl::OUString sStringValue;
         ListSourceType eLSType = ListSourceType_VALUELIST;
 
-        bool bIsSpreadsheetDocument = CellBindingHelper::livesInSpreadsheetDocument( m_xPropValueAccess );
+        bool bIsSpreadsheetDocument = CellBindingHelper::isSpreadsheetDocument( m_xContextDocument );
         bool bIsEnabled = true;                 // should the whole property line be en/disabled?
         bool bEnableBrowseButtonOnly = false;   // does |bIsEnabled| hold for the browse button only?
 
@@ -3791,26 +3472,26 @@ class EventsNameReplace_Impl:
         case PROPERTY_ID_SCALEIMAGE:
             GetUnoPropertyValue( PROPERTY_CONTROLSOURCE, true ) >>= sStringValue;
             bIsEnabled = sStringValue.getLength() != 0;
-            GetUnoPropertyValue( PROPERTY_IMAGE_URL ) >>= sStringValue;
+            GetAnyPropertyValue( PROPERTY_IMAGE_URL ) >>= sStringValue;
             bIsEnabled |= ( sStringValue.getLength() != 0 );
             break;
 
         case PROPERTY_ID_FILTERPROPOSAL:
         case PROPERTY_ID_EMPTY_IS_NULL:
-            GetUnoPropertyValue( PROPERTY_CONTROLSOURCE ) >>= sStringValue;
+            GetAnyPropertyValue( PROPERTY_CONTROLSOURCE ) >>= sStringValue;
             if ( bIsSpreadsheetDocument )
-                GetUnoPropertyValue( PROPERTY_BOUND_CELL ) >>= xBinding;
+                GetAnyPropertyValue( PROPERTY_BOUND_CELL ) >>= xBinding;
             bIsEnabled = !xBinding.is() && sStringValue.getLength();
             break;
 
         case PROPERTY_ID_BOUNDCOLUMN:
-            GetUnoPropertyValue( PROPERTY_CONTROLSOURCE ) >>= sStringValue;
+            GetAnyPropertyValue( PROPERTY_CONTROLSOURCE ) >>= sStringValue;
             if ( bIsSpreadsheetDocument )
             {
-                GetUnoPropertyValue( PROPERTY_BOUND_CELL ) >>= xBinding;
-                GetUnoPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= xSource;
+                GetAnyPropertyValue( PROPERTY_BOUND_CELL ) >>= xBinding;
+                GetAnyPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= xSource;
             }
-            GetUnoPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
+            GetAnyPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
 
             bIsEnabled = ( sStringValue.getLength() > 0 )
                       && ( !xBinding.is() )
@@ -3821,12 +3502,12 @@ class EventsNameReplace_Impl:
 
         case PROPERTY_ID_STRINGITEMLIST:
             if ( bIsSpreadsheetDocument )
-                GetUnoPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= xSource;
-            GetUnoPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
+                GetAnyPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= xSource;
+            GetAnyPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
 
             {
                 Sequence< ::rtl::OUString > aListSource;
-                Any aListSourceValue( GetUnoPropertyValue( PROPERTY_LISTSOURCE ) );
+                Any aListSourceValue( GetAnyPropertyValue( PROPERTY_LISTSOURCE ) );
                 if ( aListSourceValue >>= aListSource )
                 {
                     if ( aListSource.getLength() )
@@ -3844,12 +3525,12 @@ class EventsNameReplace_Impl:
 
         case PROPERTY_ID_TARGET_FRAME:
         {
-            GetUnoPropertyValue( PROPERTY_TARGET_URL ) >>= sStringValue;
+            GetAnyPropertyValue( PROPERTY_TARGET_URL ) >>= sStringValue;
             FormButtonType eButtonType( FormButtonType_PUSH );
             if ( 0 != m_nClassId )
             {   // if we're inspecting a control which has a TargetFrame, then it also has
                 // the FormButtonType property, since it's a push/image button then
-                GetUnoPropertyValue( PROPERTY_BUTTONTYPE ) >>= eButtonType;
+                GetAnyPropertyValue( PROPERTY_BUTTONTYPE ) >>= eButtonType;
             }
             bIsEnabled = ( eButtonType == FormButtonType_URL )
                       && ( sStringValue.getLength() > 0 );
@@ -3860,13 +3541,13 @@ class EventsNameReplace_Impl:
         {
             sal_Int32 nIntValue( 0 );
             sal_Bool  bBoolValue( sal_False );
-            GetUnoPropertyValue( PROPERTY_COMMANDTYPE ) >>= nIntValue;
-            GetUnoPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bBoolValue;
+            GetAnyPropertyValue( PROPERTY_COMMANDTYPE ) >>= nIntValue;
+            GetAnyPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bBoolValue;
 
             bIsEnabled = ( nIntValue == CommandType::COMMAND )
                       && ( bBoolValue )
                       && (  haveRowsetConnection()
-                         || isValidDataSourceName( GetPropertyValue( PROPERTY_DATASOURCE ) )
+                         || isValidDataSourceName( GetPropertyValueStringRep( PROPERTY_DATASOURCE ) )
                          );
 
             bEnableBrowseButtonOnly = true;
@@ -3882,8 +3563,8 @@ class EventsNameReplace_Impl:
 
             // in opposite to the other properties, here in real *two* properties are
             // affected
-            getPropertyBox()->EnablePropertyInput( PROPERTY_DETAILFIELDS, true, bIsEnabled );
-            getPropertyBox()->EnablePropertyInput( PROPERTY_MASTERFIELDS, true, bIsEnabled );
+            getPropertyBox()->EnablePropertyControls( PROPERTY_DETAILFIELDS, true, bIsEnabled, false );
+            getPropertyBox()->EnablePropertyControls( PROPERTY_MASTERFIELDS, true, bIsEnabled, false );
             return;
         }
         break;
@@ -3892,16 +3573,14 @@ class EventsNameReplace_Impl:
         case PROPERTY_ID_FILTER:
         {
             sal_Bool  bBoolValue( sal_False );
-            GetUnoPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bBoolValue;
+            GetAnyPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bBoolValue;
             bIsEnabled = hasValidDataSourceSignature( Reference< XForm >( m_xIntrospecteeAsProperty, UNO_QUERY ) )
                       && bBoolValue;
 
+            getPropertyBox()->EnablePropertyLine( _rPropertyName, bBoolValue );
             // if escape processing is on, then we need to disable/enable the browse button only,
             // else the whole line
-            if ( bBoolValue )
-                getPropertyBox()->EnablePropertyInput( _rPropertyName, true, bIsEnabled );
-            else
-                getPropertyBox()->EnablePropertyInput( _rPropertyName, false, false );
+            getPropertyBox()->EnablePropertyControls( _rPropertyName, true, bIsEnabled, false );
             return;
         }
         break;
@@ -3910,12 +3589,12 @@ class EventsNameReplace_Impl:
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
         {
             Sequence< ::rtl::OUString > aEntries;
-            GetUnoPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aEntries;
+            GetAnyPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aEntries;
             bIsEnabled = aEntries.getLength() != 0;
 
             if ( ( m_nClassId == FormComponentType::LISTBOX ) && ( getControlType() == CONTROL_TYPE_FORM ) )
             {
-                GetUnoPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
+                GetAnyPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eLSType;
                 bIsEnabled &= ( eLSType == ListSourceType_VALUELIST );
             }
             bEnableBrowseButtonOnly = true;
@@ -3928,7 +3607,7 @@ class EventsNameReplace_Impl:
         }
 
         if ( bEnableBrowseButtonOnly )
-            getPropertyBox()->EnablePropertyInput( _rPropertyName, true, bIsEnabled );
+            getPropertyBox()->EnablePropertyControls( _rPropertyName, true, bIsEnabled, false );
         else
             getPropertyBox()->EnablePropertyLine( _rPropertyName, bIsEnabled );
     }
@@ -3988,7 +3667,7 @@ class EventsNameReplace_Impl:
     {
         m_nClassId = 0;
 
-        if ( ::comphelper::hasProperty( PROPERTY_CLASSID, m_xPropValueAccess ) )
+        if ( haveIntrospecteeProperty( PROPERTY_CLASSID ) )
         {
             m_nClassId = ::comphelper::getINT16(m_xPropValueAccess->getPropertyValue(PROPERTY_CLASSID));
         }
@@ -4074,7 +3753,8 @@ class EventsNameReplace_Impl:
     {
         FieldUnit eUnit = FUNIT_NONE;
 
-        Reference< XServiceInfo > xDocumentSI( getDocumentModel(), UNO_QUERY );
+        Reference< XServiceInfo > xDocumentSI( m_xContextDocument, UNO_QUERY );
+        OSL_ENSURE( xDocumentSI.is(), "OPropertyBrowserController::getDocumentMeasurementUnit: No context document - where do I live?" );
         if ( xDocumentSI.is() )
         {
             // determine the application type we live in
@@ -4202,10 +3882,15 @@ class EventsNameReplace_Impl:
         OSL_ENSURE( getPropertyBox(), "OPropertyBrowserController::dependentComponentClosed: no view!" );
         if ( getPropertyBox() )
         {
-            getPropertyBox()->EnablePropertyInput( PROPERTY_DATASOURCE, true, true );
-            getPropertyBox()->EnablePropertyInput( PROPERTY_COMMANDTYPE, true, true );
-            getPropertyBox()->EnablePropertyInput( PROPERTY_COMMAND, true, true );
-            getPropertyBox()->EnablePropertyInput( PROPERTY_ESCAPE_PROCESSING, true, true );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_DATASOURCE, true );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_COMMANDTYPE, true );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_COMMAND, true );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_ESCAPE_PROCESSING, true );
+
+            getPropertyBox()->EnablePropertyControls( PROPERTY_DATASOURCE, true, true, false );
+            getPropertyBox()->EnablePropertyControls( PROPERTY_COMMANDTYPE, true, true, false );
+            getPropertyBox()->EnablePropertyControls( PROPERTY_COMMAND, true, true, false );
+            getPropertyBox()->EnablePropertyControls( PROPERTY_ESCAPE_PROCESSING, true, true, false );
         }
     }
 
@@ -4286,9 +3971,9 @@ class EventsNameReplace_Impl:
 
             if ( RET_OK == xDialog->execute() )
                 if ( _bFilter )
-                    m_xIntrospecteeAsProperty->setPropertyValue( PROPERTY_FILTER, makeAny( xComposer->getFilter() ) );
+                    m_xPropValueAccess->setPropertyValue( PROPERTY_FILTER, makeAny( xComposer->getFilter() ) );
                 else
-                    m_xIntrospecteeAsProperty->setPropertyValue( PROPERTY_SORT,   makeAny( xComposer->getOrder()  ) );
+                    m_xPropValueAccess->setPropertyValue( PROPERTY_SORT,   makeAny( xComposer->getOrder()  ) );
         }
         catch (SQLContext& e) { aErrorInfo = e; }
         catch (SQLWarning& e) { aErrorInfo = e; }
@@ -4399,10 +4084,10 @@ class EventsNameReplace_Impl:
                     xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sTitle ) );
                 }
 
-                getPropertyBox()->EnablePropertyInput( PROPERTY_DATASOURCE, false, true );
-                getPropertyBox()->EnablePropertyInput( PROPERTY_COMMANDTYPE, false, true );
-                getPropertyBox()->EnablePropertyInput( PROPERTY_COMMAND, false, true );
-                getPropertyBox()->EnablePropertyInput( PROPERTY_ESCAPE_PROCESSING, false, true );
+                getPropertyBox()->EnablePropertyControls( PROPERTY_DATASOURCE, false, true, false );
+                getPropertyBox()->EnablePropertyControls( PROPERTY_COMMANDTYPE, false, true, false );
+                getPropertyBox()->EnablePropertyControls( PROPERTY_COMMAND, false, true, false );
+                getPropertyBox()->EnablePropertyControls( PROPERTY_ESCAPE_PROCESSING, false, true, false );
             }
         }
         catch( const Exception& )
