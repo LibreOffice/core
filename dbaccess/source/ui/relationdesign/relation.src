@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 08:36:02 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
             Text[ polish ] = "~NarzÍdzia";
             Text[ japanese ] = "„ÉÑ„Éº„É´(~T)";
-            Text[ korean ] = "ÏòµÏÖò(~T)";
+            Text[ korean ] = "ÎèÑÍµ¨(~T)";
             Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
             Text[ chinese_traditional ] = "Â∑•ÂÖ∑(~T)";
             Text[ arabic ] = "√~œÊ« ";
