@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:59:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #include <docfac.hxx>   // SwDocFac
 #endif
 
+#include <sot/storage.hxx>
+
 // einige Forward - Deklarationen
 class SfxFilterContainer;
 class SfxFilter;
@@ -103,8 +105,6 @@ class SfxItemPool;
 class SfxItemSet;
 class SfxMedium;
 class SvPtrarr;
-class SotStorage;
-class SotStorageStreamRef;
 class SvStream;
 class SvStrings;
 class SvStringsSortDtor;
@@ -214,7 +214,7 @@ public:
 class SwReader: public SwDocFac
 {
     SvStream* pStrm;
-    SotStorage* pStg;
+    SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
@@ -271,7 +271,7 @@ class Reader
 
 protected:
     SvStream* pStrm;
-    SotStorage* pStg;
+    SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
@@ -599,7 +599,7 @@ class StgWriter : public Writer
 {
 protected:
     String aFltName;
-    SotStorage* pStg;
+    SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
     // Fehler beim Aufruf erzeugen
@@ -607,7 +607,7 @@ protected:
     virtual ULONG WriteStorage() = 0;
 
 public:
-    StgWriter() : Writer(), pStg( 0 ) {}
+    StgWriter() : Writer() {}
 
     virtual BOOL IsStgWriter() const;
     virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0 );
@@ -644,7 +644,7 @@ public:
 class SwWriter
 {
     SvStream* pStrm;
-    SotStorage* pStg;
+    SotStorageRef pStg;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
     SfxMedium* pMedium;
 
