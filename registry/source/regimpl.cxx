@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:35:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 #include    <registry/reflwrit.hxx>
 #endif
 
+#include "registry/reader.hxx"
+#include "registry/refltype.hxx"
+#include "registry/types.h"
+#include "registry/version.h"
+
 #ifndef __REFLCNST_HXX__
 #include    "reflcnst.hxx"
 #endif
@@ -127,334 +132,374 @@ sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Ap
 
 extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api();
 extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api();
+namespace {
 
-
-//*********************************************************************
-//  dumpType()
-//
-static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
-{
-    sal_uInt16 i, j;
-    sal_Bool ret = sal_True;
-    const sal_Char* indent = sIndent;
-
-    if (reader.isValid())
-    {
-        fprintf(stdout, "minor version: %d\n", reader.getMinorVersion());
-        fprintf(stdout, "%smajor version: %d\n", indent, reader.getMajorVersion());
-        fprintf(stdout, "%s" ,indent);
-        switch (reader.getTypeClass())
-        {
-            case RT_TYPE_INVALID:
-                fprintf(stdout, "type: 'invalid'\n");
-                break;
-            case RT_TYPE_INTERFACE:
-                {
-                    fprintf(stdout, "type: 'interface'\n");
-                    RTUik uik;
-
-                    reader.getUik(uik);
-
-                    fprintf(stdout, "%suik: { 0x%.8x-0x%.4x-0x%.4x-0x%.8x-0x%.8x }\n",
-                            indent, uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
-                }
-                break;
-            case RT_TYPE_MODULE:
-                fprintf(stdout, "type: 'module'\n");
-                break;
-            case RT_TYPE_STRUCT:
-                fprintf(stdout, "type: 'struct'\n");
-                break;
-            case RT_TYPE_ENUM:
-                fprintf(stdout, "type: 'enum'\n");
-                break;
-            case RT_TYPE_EXCEPTION:
-                fprintf(stdout, "type: 'exception'\n");
-                break;
-            case RT_TYPE_TYPEDEF:
-                fprintf(stdout, "type: 'typedef'\n");
-                break;
-            case RT_TYPE_SERVICE:
-                fprintf(stdout, "type: 'service'\n");
-                break;
-            case RT_TYPE_SINGLETON:
-                fprintf(stdout, "type: 'singleton'\n");
-                break;
-            case RT_TYPE_CONSTANTS:
-                fprintf(stdout, "type: 'constants'\n");
-                break;
-            case RT_TYPE_UNION:
-                fprintf(stdout, "type: 'union'\n");
-                break;
-            default:
-                fprintf(stdout, "type: <unknown>\n");
-                break;
-        }
-
-        fprintf(stdout, "%sname: '%s'\n", indent, OUStringToOString(reader.getTypeName(), RTL_TEXTENCODING_UTF8).getStr());
-        if (reader.getTypeClass() == RT_TYPE_UNION )
-        {
-            fprintf(stdout, "%sdiscriminant type: '%s'\n", indent, OUStringToOString(reader.getSuperTypeName(), RTL_TEXTENCODING_UTF8).getStr());
-        } else
-        {
-            fprintf(stdout, "%ssuper name: '%s'\n", indent, OUStringToOString(reader.getSuperTypeName(), RTL_TEXTENCODING_UTF8).getStr());
-        }
-        fprintf(stdout, "%sDoku: \"%s\"\n", indent, OUStringToOString(reader.getDoku(), RTL_TEXTENCODING_UTF8).getStr());
-        fprintf(stdout, "%sIDL source file: \"%s\"\n", indent, OUStringToOString(reader.getFileName(), RTL_TEXTENCODING_UTF8).getStr());
-        fprintf(stdout, "%snumber of fields: %d\n", indent, reader.getFieldCount());
-        sal_uInt16 fieldAccess = RT_ACCESS_INVALID;
-        for (i = 0; i < reader.getFieldCount(); i++)
-        {
-            fprintf(stdout, "%sfield #%d:\n%s  name='%s'\n%s  type='%s'\n", indent,
-                    i, indent, OUStringToOString(reader.getFieldName(i), RTL_TEXTENCODING_UTF8).getStr(),
-                    indent, OUStringToOString(reader.getFieldType(i), RTL_TEXTENCODING_UTF8).getStr());
-
-            fieldAccess = reader.getFieldAccess(i);
-            if ( fieldAccess == RT_ACCESS_INVALID )
-            {
-                fprintf(stdout, "%s  access=INVALID\n", indent);
-            }
-            if ( (fieldAccess  & RT_ACCESS_READONLY) == RT_ACCESS_READONLY )
-            {
-                fprintf(stdout, "%s  access=READONLY\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_READWRITE) == RT_ACCESS_READWRITE )
-            {
-                fprintf(stdout, "%s  access=READWRITE\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_OPTIONAL) == RT_ACCESS_OPTIONAL )
-            {
-                fprintf(stdout, "%s  access=OPTIONAL\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_MAYBEVOID) == RT_ACCESS_MAYBEVOID )
-            {
-                fprintf(stdout, "%s  access=MAYBEVOID\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_BOUND) == RT_ACCESS_BOUND )
-            {
-                fprintf(stdout, "%s  access=BOUND\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_CONSTRAINED) == RT_ACCESS_CONSTRAINED )
-            {
-                fprintf(stdout, "%s  access=CONSTRAINED\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_TRANSIENT) == RT_ACCESS_TRANSIENT )
-            {
-                fprintf(stdout, "%s  access=TRANSIENT\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_MAYBEAMBIGUOUS) == RT_ACCESS_MAYBEAMBIGUOUS )
-            {
-                fprintf(stdout, "%s  access=MAYBEAMBIGUOUS\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_MAYBEDEFAULT) == RT_ACCESS_MAYBEDEFAULT )
-            {
-                fprintf(stdout, "%s  access=MAYBEDEFAULT\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_REMOVEABLE) == RT_ACCESS_REMOVEABLE )
-            {
-                fprintf(stdout, "%s  access=REMOVEABLE\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_DEFAULT) == RT_ACCESS_DEFAULT )
-            {
-                fprintf(stdout, "%s  access=DEFAULT\n", indent);
-            }
-            if ( (fieldAccess & RT_ACCESS_CONST) == RT_ACCESS_CONST )
-            {
-                   fprintf(stdout, "%s  access=CONST\n", indent);
-            }
-
-            RTConstValue constVal = reader.getFieldConstValue(i);
-
-            if ( constVal.m_type != RT_TYPE_NONE )
-            {
-                fprintf(stdout, "%s  value = ", indent);
-
-                switch (constVal.m_type)
-                {
-                    case RT_TYPE_BOOL:
-                        if (constVal.m_value.aBool)
-                            fprintf(stdout, "TRUE");
-                        else
-                            fprintf(stdout, "FALSE");
-                        break;
-                    case RT_TYPE_BYTE:
-                        fprintf(stdout, "%d", (int)constVal.m_value.aByte);
-                        break;
-                    case RT_TYPE_INT16:
-                        fprintf(stdout, "%d", constVal.m_value.aShort);
-                        break;
-                    case RT_TYPE_UINT16:
-                        fprintf(stdout, "%u", constVal.m_value.aUShort);
-                        break;
-                    case RT_TYPE_INT32:
-                        fprintf(stdout, "%d", constVal.m_value.aLong);
-                        break;
-                    case RT_TYPE_UINT32:
-                        fprintf(stdout, "%u", constVal.m_value.aULong);
-                        break;
-                    case RT_TYPE_INT64:
-                        {
-                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aHyper) );
-                            fprintf(stdout, "%s", tmp.getStr());
-                        }
-                        break;
-                    case RT_TYPE_UINT64:
-                        {
-                            OString tmp( OString::valueOf((sal_Int64)constVal.m_value.aUHyper) );
-                            fprintf(stdout, "%s", tmp.getStr());
-                        }
-                        break;
-                    case RT_TYPE_FLOAT:
-                        {
-                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aFloat) );
-                            fprintf(stdout, "%s", tmp.getStr());
-                        }
-                        break;
-                    case RT_TYPE_DOUBLE:
-                        {
-                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aDouble) );
-                            fprintf(stdout, "%s", tmp.getStr());
-                        }
-                        break;
-                    case RT_TYPE_STRING:
-                        fprintf(stdout, "%s", OUStringToOString(constVal.m_value.aString, RTL_TEXTENCODING_UTF8).getStr());
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            fprintf(stdout, "\n%s  Doku: \"%s\"", indent, OUStringToOString(reader.getFieldDoku(i), RTL_TEXTENCODING_UTF8).getStr());
-            fprintf(stdout, "\n%s  IDL source file: \"%s\"\n", indent, OUStringToOString(reader.getFieldFileName(i), RTL_TEXTENCODING_UTF8).getStr());
-        }
-
-        fprintf(stdout, "%snumber of methods: %d\n", indent, reader.getMethodCount());
-        for (i = 0; i < reader.getMethodCount(); i++)
-        {
-            fprintf(stdout, "%smethod #%d: ", indent, i);
-
-            RTMethodMode mode = reader.getMethodMode(i);
-            switch (mode)
-            {
-                case RT_MODE_INVALID:
-                    fprintf(stdout, "<invalid mode> ");
-                    break;
-                case RT_MODE_ONEWAY:
-                    fprintf(stdout, "[oneway] ");
-                    break;
-                case RT_MODE_ONEWAY_CONST:
-                    fprintf(stdout, "[oneway, const] ");
-                    break;
-                case RT_MODE_TWOWAY:
-                    break;
-                case RT_MODE_TWOWAY_CONST:
-                    fprintf(stdout, "[const] ");
-                    break;
-                default:
-                    fprintf(
-                        stdout, "<unknown mode %d> ", static_cast< int >(mode));
-                    break;
-            }
-
-            fprintf(stdout, "%s %s(",
-                    OUStringToOString(reader.getMethodReturnType(i), RTL_TEXTENCODING_UTF8).getStr(),
-                    OUStringToOString(reader.getMethodName(i), RTL_TEXTENCODING_UTF8).getStr());
-
-            for (j = 0; j < reader.getMethodParamCount(i); j++)
-            {
-                RTParamMode mode = reader.getMethodParamMode(i, j);
-                bool rest = (mode & RT_PARAM_REST) != 0;
-                switch (mode & ~RT_PARAM_REST)
-                {
-                    case RT_PARAM_INVALID:
-                        fprintf(stdout, "<invalid mode> ");
-                        break;
-                    case RT_PARAM_IN:
-                        fprintf(stdout, "[in] ");
-                        break;
-                    case RT_PARAM_OUT:
-                        fprintf(stdout, "[out] ");
-                        break;
-                    case RT_PARAM_INOUT:
-                        fprintf(stdout, "[inout] ");
-                        break;
-                    default:
-                        fprintf(
-                            stdout, "<unknown mode %d> ",
-                            static_cast< int >(mode));
-                        break;
-                }
-
-                fprintf(stdout, "%s%s %s",
-                        OUStringToOString(reader.getMethodParamType(i, j), RTL_TEXTENCODING_UTF8).getStr(),
-                        rest ? "..." : "",
-                        OUStringToOString(reader.getMethodParamName(i, j), RTL_TEXTENCODING_UTF8).getStr());
-
-                if (j != reader.getMethodParamCount(i) - 1)
-                    fprintf(stdout, ", ");
-            }
-
-            fprintf(stdout, ") ");
-
-            if (reader.getMethodExcCount(i))
-            {
-                fprintf(stdout, "raises ");
-                for (j = 0; j < reader.getMethodExcCount(i); j++)
-                {
-                    fprintf(stdout, "%s",
-                            OUStringToOString(reader.getMethodExcType(i, j), RTL_TEXTENCODING_UTF8).getStr());
-                    if (j != reader.getMethodExcCount(i) - 1)
-                        fprintf(stdout, ", ");
-                }
-            }
-
-            fprintf(stdout, "\n%s  Doku: \"%s\"\n", indent,
-                    OUStringToOString(reader.getMethodDoku(i), RTL_TEXTENCODING_UTF8).getStr());
-        }
-
-        fprintf(stdout, "%snumber of references: %d\n", indent, reader.getReferenceCount());
-        for (i = 0; i < reader.getReferenceCount(); i++)
-        {
-            fprintf(stdout, "%sreference #%d:\n%s  name='%s'\n", indent, i, indent,
-                    OUStringToOString(reader.getReferenceName(i), RTL_TEXTENCODING_UTF8).getStr());
-            switch (reader.getReferenceType(i))
-            {
-                case RT_REF_INVALID:
-                     fprintf(stdout, "%s  type=INVALID\n", indent);
-                    break;
-                case RT_REF_SUPPORTS:
-                     fprintf(stdout, "%s  type=supported interface\n", indent);
-                    break;
-                case RT_REF_OBSERVES:
-                     fprintf(stdout, "%s  type=observed interface\n", indent);
-                    break;
-                case RT_REF_EXPORTS:
-                     fprintf(stdout, "%s  type=exported service\n", indent);
-                    break;
-                case RT_REF_NEEDS:
-                     fprintf(stdout, "%s  type=needed service\n", indent);
-                    break;
-                default:
-                    fprintf(stdout, "%s  type=<unknown>\n", indent);
-                    break;
-            }
-            if (reader.getReferenceAccess(i) == RT_ACCESS_OPTIONAL)
-            {
-                fprintf(stdout, "%s  access=optional\n", indent);
-            }
-
-            fprintf(stdout, "%s  Doku: \"%s\"\n", indent,
-                    OUStringToOString(reader.getReferenceDoku(i), RTL_TEXTENCODING_UTF8).getStr());
+void printString(rtl::OUString const & s) {
+    printf("\"");
+    for (sal_Int32 i = 0; i < s.getLength(); ++i) {
+        sal_Unicode c = s[i];
+        if (c == '"' || c == '\\') {
+            printf("\\%c", static_cast< char >(c));
+        } else if (s[i] >= ' ' && s[i] <= '~') {
+            printf("%c", static_cast< char >(c));
+        } else {
+            printf("\\u%04X", static_cast< unsigned int >(c));
         }
     }
-    else
-    {
-        ret = sal_False;
-    }
-
-    return ret;
+    printf("\"");
 }
 
+void printFieldOrReferenceFlag(
+    RTFieldAccess * flags, RTFieldAccess flag, char const * name, bool * first)
+{
+    if ((*flags & flag) != 0) {
+        if (!*first) {
+            printf("|");
+        }
+        *first = false;
+        printf("%s", name);
+        *flags &= ~flag;
+    }
+}
+
+void printFieldOrReferenceFlags(RTFieldAccess flags) {
+    if (flags == 0) {
+        printf("none");
+    } else {
+        bool first = true;
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_READONLY, "readonly", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_OPTIONAL, "optional", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_MAYBEVOID, "maybevoid", &first);
+        printFieldOrReferenceFlag(&flags, RT_ACCESS_BOUND, "bound", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_CONSTRAINED, "constrained", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_TRANSIENT, "transient", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_MAYBEAMBIGUOUS, "maybeambiguous", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_MAYBEDEFAULT, "maybedefault", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_REMOVEABLE, "removeable", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_ATTRIBUTE, "attribute", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_PROPERTY, "property", &first);
+        printFieldOrReferenceFlag(&flags, RT_ACCESS_CONST, "const", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_READWRITE, "readwrite", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_PARAMETERIZED_TYPE, "parameterized type", &first);
+        printFieldOrReferenceFlag(
+            &flags, RT_ACCESS_PUBLISHED, "published", &first);
+        if (flags != 0) {
+            if (!first) {
+                printf("|");
+            }
+            printf("<invalid (0x%04X)>", static_cast< unsigned int >(flags));
+        }
+    }
+}
+
+void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
+    if (reader.isValid()) {
+        printf("version: %ld\n", static_cast< long >(reader.getVersion()));
+        printf("%sdocumentation: ", indent.getStr());
+        printString(reader.getDocumentation());
+        printf("\n");
+        printf("%sfile name: ", indent.getStr());
+        printString(reader.getFileName());
+        printf("\n");
+        printf("%stype class: ", indent.getStr());
+        if (reader.isPublished()) {
+            printf("published ");
+        }
+        switch (reader.getTypeClass()) {
+        case RT_TYPE_INTERFACE:
+            printf("interface");
+            break;
+
+        case RT_TYPE_MODULE:
+            printf("module");
+            break;
+
+        case RT_TYPE_STRUCT:
+            printf("struct");
+            break;
+
+        case RT_TYPE_ENUM:
+            printf("enum");
+            break;
+
+        case RT_TYPE_EXCEPTION:
+            printf("exception");
+            break;
+
+        case RT_TYPE_TYPEDEF:
+            printf("typedef");
+            break;
+
+        case RT_TYPE_SERVICE:
+            printf("service");
+            break;
+
+        case RT_TYPE_SINGLETON:
+            printf("singleton");
+            break;
+
+        case RT_TYPE_CONSTANTS:
+            printf("constants");
+            break;
+
+        default:
+            printf(
+                "<invalid (%ld)>", static_cast< long >(reader.getTypeClass()));
+            break;
+        }
+        printf("\n");
+        printf("%stype name: ", indent.getStr());
+        printString(reader.getTypeName());
+        printf("\n");
+        printf(
+            "%ssuper type count: %u\n", indent.getStr(),
+            static_cast< unsigned int >(reader.getSuperTypeCount()));
+        {for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+            printf(
+                "%ssuper type name %u: ", indent.getStr(),
+                static_cast< unsigned int >(i));
+            printString(reader.getSuperTypeName(i));
+            printf("\n");
+        }}
+        printf(
+            "%sfield count: %u\n", indent.getStr(),
+            static_cast< unsigned int >(reader.getFieldCount()));
+        {for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+            printf(
+                "%sfield %u:\n", indent.getStr(),
+                static_cast< unsigned int >(i));
+            printf("%s    documentation: ", indent.getStr());
+            printString(reader.getFieldDocumentation(i));
+            printf("\n");
+            printf("%s    file name: ", indent.getStr());
+            printString(reader.getFieldFileName(i));
+            printf("\n");
+            printf("%s    flags: ", indent.getStr());
+            printFieldOrReferenceFlags(reader.getFieldFlags(i));
+            printf("\n");
+            printf("%s    name: ", indent.getStr());
+            printString(reader.getFieldName(i));
+            printf("\n");
+            printf("%s    type name: ", indent.getStr());
+            printString(reader.getFieldTypeName(i));
+            printf("\n");
+            printf("%s    value: ", indent.getStr());
+            RTConstValue value(reader.getFieldValue(i));
+            switch (value.m_type) {
+            case RT_TYPE_NONE:
+                printf("none");
+                break;
+
+            case RT_TYPE_BOOL:
+                printf("boolean %s", value.m_value.aBool ? "true" : "false");
+                break;
+
+            case RT_TYPE_BYTE:
+                printf(
+                    "byte 0x%02X",
+                    static_cast< unsigned int >(value.m_value.aByte));
+                break;
+
+            case RT_TYPE_INT16:
+                printf("short %d", static_cast< int >(value.m_value.aShort));
+                break;
+
+            case RT_TYPE_UINT16:
+                printf(
+                    "unsigned short %u",
+                    static_cast< unsigned int >(value.m_value.aUShort));
+                break;
+
+            case RT_TYPE_INT32:
+                printf("long %ld", static_cast< long >(value.m_value.aLong));
+                break;
+
+            case RT_TYPE_UINT32:
+                printf(
+                    "unsigned long %lu",
+                    static_cast< unsigned long >(value.m_value.aULong));
+                break;
+
+            case RT_TYPE_INT64:
+                // TODO: no portable way to print hyper values
+                printf("hyper");
+                break;
+
+            case RT_TYPE_UINT64:
+                // TODO: no portable way to print unsigned hyper values
+                printf("unsigned hyper");
+                break;
+
+            case RT_TYPE_FLOAT:
+                // TODO: no portable way to print float values
+                printf("float");
+                break;
+
+            case RT_TYPE_DOUBLE:
+                // TODO: no portable way to print double values
+                printf("double");
+                break;
+
+            case RT_TYPE_STRING:
+                printf("string ");
+                printString(value.m_value.aString);
+                break;
+
+            default:
+                printf("<invalid (%ld)>", static_cast< long >(value.m_type));
+                break;
+            }
+            printf("\n");
+        }}
+        printf(
+            "%smethod count: %u\n", indent.getStr(),
+            static_cast< unsigned int >(reader.getMethodCount()));
+        {for (sal_uInt16 i = 0; i < reader.getMethodCount(); ++i) {
+            printf(
+                "%smethod %u:\n", indent.getStr(),
+                static_cast< unsigned int >(i));
+            printf("%s    documentation: ", indent.getStr());
+            printString(reader.getMethodDocumentation(i));
+            printf("\n");
+            printf("%s    flags: ", indent.getStr());
+            switch (reader.getMethodFlags(i)) {
+            case RT_MODE_ONEWAY:
+                printf("oneway");
+                break;
+
+            case RT_MODE_TWOWAY:
+                printf("synchronous");
+                break;
+
+            case RT_MODE_ATTRIBUTE_GET:
+                printf("attribute get");
+                break;
+
+            case RT_MODE_ATTRIBUTE_SET:
+                printf("attribute set");
+                break;
+
+            default:
+                printf(
+                    "<invalid (%ld)>",
+                    static_cast< long >(reader.getMethodFlags(i)));
+                break;
+            }
+            printf("\n");
+            printf("%s    name: ", indent.getStr());
+            printString(reader.getMethodName(i));
+            printf("\n");
+            printf("%s    return type name: ", indent.getStr());
+            printString(reader.getMethodReturnTypeName(i));
+            printf("\n");
+            printf(
+                "%s    parameter count: %u\n", indent.getStr(),
+                static_cast< unsigned int >(reader.getMethodParameterCount(i)));
+            {for (sal_uInt32 j = 0; j < reader.getMethodParameterCount(i); ++j)
+            {
+                printf(
+                    "%s    parameter %u:\n", indent.getStr(),
+                    static_cast< unsigned int >(j));
+                printf("%s        flags: ", indent.getStr());
+                RTParamMode flags = reader.getMethodParameterFlags(i, j);
+                bool rest = (flags & RT_PARAM_REST) != 0;
+                switch (flags & ~RT_PARAM_REST) {
+                case RT_PARAM_IN:
+                    printf("in");
+                    break;
+
+                case RT_PARAM_OUT:
+                    printf("out");
+                    break;
+
+                case RT_PARAM_INOUT:
+                    printf("inout");
+                    break;
+
+                default:
+                    printf("<invalid (%ld)>", static_cast< long >(flags));
+                    rest = false;
+                    break;
+                }
+                if (rest) {
+                    printf("|rest");
+                }
+                printf("\n");
+                printf("%s        name: ", indent.getStr());
+                printString(reader.getMethodParameterName(i, j));
+                printf("\n");
+                printf("%s        type name: ", indent.getStr());
+                printString(reader.getMethodParameterTypeName(i, j));
+                printf("\n");
+            }}
+            printf(
+                "%s    exception count: %u\n", indent.getStr(),
+                static_cast< unsigned int >(reader.getMethodExceptionCount(i)));
+            {for (sal_uInt32 j = 0; j < reader.getMethodExceptionCount(i); ++j)
+            {
+                printf(
+                    "%s    exception type name %u: ", indent.getStr(),
+                    static_cast< unsigned int >(j));
+                printString(reader.getMethodExceptionTypeName(i, j));
+                printf("\n");
+            }}
+        }}
+        printf(
+            "%sreference count: %u\n", indent.getStr(),
+            static_cast< unsigned int >(reader.getReferenceCount()));
+        {for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
+            printf(
+                "%sreference %u:\n", indent.getStr(),
+                static_cast< unsigned int >(i));
+            printf("%s    documentation: ", indent.getStr());
+            printString(reader.getReferenceDocumentation(i));
+            printf("\n");
+            printf("%s    flags: ", indent.getStr());
+            printFieldOrReferenceFlags(reader.getReferenceFlags(i));
+            printf("\n");
+            printf("%s    sort: ", indent.getStr());
+            switch (reader.getReferenceSort(i)) {
+            case RT_REF_SUPPORTS:
+                printf("supports");
+                break;
+
+            case RT_REF_EXPORTS:
+                printf("exports");
+                break;
+
+            case RT_REF_TYPE_PARAMETER:
+                printf("type parameter");
+                break;
+
+            default:
+                printf(
+                    "<invalid (%ld)>",
+                    static_cast< long >(reader.getReferenceSort(i)));
+                break;
+            }
+            printf("\n");
+            printf("%s    type name: ", indent.getStr());
+            printString(reader.getReferenceTypeName(i));
+            printf("\n");
+        }}
+    } else {
+        printf("<invalid>\n");
+    }
+}
+
+}
 
 //*********************************************************************
 //  ORegistry()
@@ -1855,19 +1900,10 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 fprintf(stdout, "%sValue: Type = RG_VALUETYPE_BINARY\n", indent);
                 fprintf(stdout, "%s       Size = %d\n", indent, valueSize);
                 fprintf(stdout, "%s       Data = ", indent);
-
-                RegistryTypeReader_Api* pReaderApi;
-
-                pReaderApi = initRegistryTypeReader_Api();
-
-                RegistryTypeReader reader(pReaderApi, pBuffer, valueSize, sal_False);
-
-                sIndent += "              ";
-                if (!dumpType(reader, sIndent))
-                {
-                    fprintf(stdout, "<unknown>\n");
-                }
-
+                dumpType(
+                    typereg::Reader(
+                        pBuffer, valueSize, false, TYPEREG_VERSION_1),
+                    sIndent + "              ");
             }
             break;
         case 5:
