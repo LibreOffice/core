@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:51:25 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,8 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
             rType = pFilter->GetMimeType();
             rType += DEFINE_CONST_UNICODE("; name =\"");
             INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
-            rType += aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            rType += String(aFileObj.getName( INetURLObject::LAST_SEGMENT,
+                true, INetURLObject::DECODE_WITH_CHARSET ));
             rType += '\"';
         }
         // restore old settings
@@ -420,7 +421,8 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
             rType = pFilter->GetMimeType();
             rType += DEFINE_CONST_UNICODE("; name =\"");
             INetURLObject aFileObj = xDocShell->GetMedium()->GetURLObject();
-            rType += aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            rType += String(aFileObj.getName( INetURLObject::LAST_SEGMENT,
+                true, INetURLObject::DECODE_WITH_CHARSET ));
             rType += '\"';
         }
 
