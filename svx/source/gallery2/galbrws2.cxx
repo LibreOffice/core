@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-26 11:42:03 $
+ *  last change: $Author: ka $ $Date: 2000-10-17 13:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,10 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     PopupMenu*          pAddMenu = GetPopupMenu( MN_ADDMENU );
     SfxBindings&        rBindings = SfxViewFrame::Current()->GetBindings();
 
-    pAddMenu->EnableItem( MN_ADD_LINK, SGA_OBJ_SVDRAW != eObjKind );
+    pAddMenu->EnableItem( MN_ADD, SGA_OBJ_SOUND != eObjKind );
+    pAddMenu->EnableItem( MN_ADD_LINK, SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+    EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
+
     CheckItem( MN_PREVIEW, mbPreview );
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
