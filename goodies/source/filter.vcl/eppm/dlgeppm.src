@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
         Text[ russian ] = "Ôîğìàò ôàéëà";
         Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "Ì§²ÙŒ`®";
+        Text[ japanese ] = "Ì§²Ù‚Ì‘®";
         Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
         Text[ dutch ] = "Bestandsformaat";
