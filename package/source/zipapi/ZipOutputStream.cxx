@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:24:46 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 18:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
-#endif
-#ifndef _VOS_REF_H_
-#include <vos/ref.hxx>
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
@@ -129,7 +126,7 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 }
 
 void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
-                        const vos::ORef < EncryptionData > &xEncryptData,
+                        vos::ORef < EncryptionData > &xEncryptData,
                         sal_Bool bEncrypt)
     throw(IOException, RuntimeException)
 {
@@ -169,7 +166,9 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
                             xEncryptData->aInitVector.getConstArray(),
                             xEncryptData->aInitVector.getLength());
         OSL_ASSERT( aResult == rtl_Cipher_E_None );
+        aDigest = rtl_digest_createMD5();
         rEntry.nFlag |= 1 << 4;
+        xCurrentEncryptData = xEncryptData;
     }
     sal_Int32 nLOCLength = writeLOC(rEntry);
     // After writeLOC we know which disk we're stored on and also the offset
@@ -237,9 +236,14 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 
         if (bEncryptCurrentEntry)
         {
+            rtlDigestError aDigestResult;
             aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
             rtl_cipher_destroy ( aCipher );
+            xCurrentEncryptData->aDigest.realloc ( RTL_DIGEST_LENGTH_MD5 ); // 16 bytes
+            aDigestResult = rtl_digest_getMD5 ( aDigest, xCurrentEncryptData->aDigest.getArray(), RTL_DIGEST_LENGTH_MD5 );
+            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+            rtl_digest_destroyMD5 ( aDigest );
         }
         pCurrentEntry = NULL;
     }
@@ -261,11 +265,10 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
             }
             break;
         case STORED:
-            sal_Int32 nOldLength = rBuffer.getLength();
-            Sequence < sal_Int8 > *pBuffer = const_cast < Sequence < sal_Int8 > *> (&rBuffer);
-            pBuffer->realloc(nNewLength);
-            aChucker.writeBytes( *pBuffer );
-            pBuffer->realloc(nOldLength);
+            {
+                Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
+                aChucker.writeBytes( aTmpBuffer );
+            }
             break;
     }
 }
@@ -273,10 +276,8 @@ void SAL_CALL ZipOutputStream::write( const Sequence< sal_Int8 >& rBuffer, sal_I
 void SAL_CALL ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
     throw(IOException, RuntimeException)
 {
-    sal_Int32 nOldLength = rBuffer.getLength();
-    rBuffer.realloc(nNewLength);
-    aChucker.writeBytes(rBuffer);
-    rBuffer.realloc(nOldLength);
+    Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
+    aChucker.writeBytes( aTmpBuffer );
 }
 
 void SAL_CALL ZipOutputStream::rawCloseEntry(  )
@@ -313,20 +314,28 @@ void ZipOutputStream::doDeflate()
 
     if ( nLength > 0 )
     {
-        aBuffer.realloc(nLength);
+        Sequence < sal_Int8 > aTmpBuffer ( aBuffer.getConstArray(), nLength );
+        const void *pTmpBuffer = static_cast < const void * > ( aTmpBuffer.getConstArray() );
         if (bEncryptCurrentEntry)
         {
-            rtlCipherError aResult;
+            // Need to update our digest before encryption...
+            rtlDigestError aDigestResult;
+            aDigestResult = rtl_digest_updateMD5 ( aDigest, pTmpBuffer, nLength );
+            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+
             aEncryptionBuffer.realloc ( nLength );
-            aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (aBuffer.getConstArray()),
+
+            rtlCipherError aCipherResult;
+            aCipherResult = rtl_cipher_encode ( aCipher, pTmpBuffer,
                                             nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
+            OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
+
             aChucker.writeBytes ( aEncryptionBuffer );
             aCRC.update ( aEncryptionBuffer );
             aEncryptionBuffer.realloc ( nOldLength );
         }
         else
-            aChucker.writeBytes ( aBuffer );
-        aBuffer.realloc( nOldLength );
+            aChucker.writeBytes ( aTmpBuffer );
     }
 }
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
