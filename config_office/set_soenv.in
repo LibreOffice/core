@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.42 $
-# Date:        $Date: 2005-02-11 17:59:05 $
+# Version:     $Revision: 1.43 $
+# Date:        $Date: 2005-02-11 18:25:50 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -988,7 +988,7 @@ if ($platform eq "$Winnt")
    if ( $COM eq "MSC" )
    {  $ILIB       .= $ps.'$COMPATH'.$LIB;
       if ( '@ENABLE_DIRECTX@' ) {
-          $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_HOME@').$LIB;
+          $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_LIB@');
       }
       if ( "$EXTRA_DOTNET_FILES" ) {
           $ILIB   .= $ps.$EXTRA_DOTNET_FILES;
