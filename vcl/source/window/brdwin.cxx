@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:32:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_BRDWIN_CXX
 
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
@@ -3056,7 +3054,7 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
             Rectangle aRect = pData->maHelpRect;
             if( pOffset )
                 aRect.Move( pOffset->X(), pOffset->Y() );
-            Rectangle aInHelpRect = DrawMacTitleButton( pDev, aRect, pData->mnHelpState );
+            /* Rectangle aInHelpRect = */ DrawMacTitleButton( pDev, aRect, pData->mnHelpState );
             // ...
         }
     }
@@ -3129,11 +3127,6 @@ void ImplMacBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
                          TEXT_DRAW_ENDELLIPSIS );
     }
 }
-
-//fuer WIN16 Borland
-#ifdef WIN
-#pragma codeseg BRWDIN_SEG1
-#endif
 
 // -----------------------------------------------------------------------
 
