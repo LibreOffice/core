@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:54:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,11 +145,13 @@ public:
 
     BOOL            IsEmpty() const;
     Rectangle   DefaultRectangle(const ScAddress& rPos) const ;
+    Rectangle   MimicOldRectangle(const ScAddress& rPos) const ;
     SfxItemSet  DefaultItemSet() const ;
     inline const Rectangle& GetRectangle() const {return maRectangle;}
     inline void     SetRectangle(const Rectangle& aRect) {maRectangle = aRect;}
     inline const SfxItemSet&    GetItemSet() const {return maItemSet;}
     void         SetItemSet(const SfxItemSet& aItemSet);
+    void         SetAndApplyItemSet(const SfxItemSet& aItemSet);
 
     void         InsertObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
     void         RemoveObject( SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const;
