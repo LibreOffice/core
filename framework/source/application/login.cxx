@@ -2,9 +2,9 @@
  *
  *  $RCSfile: login.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-10 10:32:40 $
+ *  last change: $Author: as $ $Date: 2001-05-10 10:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
-#include <logindialog.hxx>
+#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
+#include <services/logindialog.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_SERVICEMANAGER_HXX_
@@ -79,8 +79,8 @@
 #include <macros/debug.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -225,7 +225,7 @@ void LoginApplication::Main()
 {
     // Init global uno servicemanager.
     ServiceManager aManager;
-    Reference< XMultiServiceFactory > xServiceManager = aManager.getManager( LOGIN_RDB );
+    Reference< XMultiServiceFactory > xServiceManager = aManager.getSharedUNOServiceManager( DECLARE_ASCII("login.rdb") );
     LOG_ASSERT( !(xServiceManager.is()==sal_False), "LoginApplication::Main()\nCould not create uno service manager!\n" )
 
     // Parse command line and set found arguments on application member.
