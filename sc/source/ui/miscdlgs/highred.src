@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:13:41 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ french ] = "~Afficher les modifications dans la feuille de calcul" ;
         Text [ dutch ] = "W~ijzigingen op het werkblad weergeven." ;
         Text [ portuguese ] = "Mostrar modificações na folha de cálculo" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾¹¤×÷±íÄÚµÄ¸ü¸ÄÄÚÈİ(~S)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºå·¥ä½œè¡¨å†…çš„æ›´æ”¹å†…å®¹(~S)";
         Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ â ëèñòå";
         Text[ polish ] = "Poka¿ zmiany w tabeli";
-        Text[ japanese ] = "•\\“à‚Ì•ÏX‰ÓŠ‚ğ•\\¦(~S)";
-        Text[ chinese_traditional ] = "Åã¥Ü¤u§@ªí¤ºªºÅÜ§ó(~S)";
+        Text[ japanese ] = "è¡¨å†…ã®å¤‰æ›´ç®‡æ‰€ã‚’è¡¨ç¤º(~S)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºå·¥ä½œè¡¨å…§çš„è®Šæ›´(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ İí ÇáÌÏæá";
         Text[ greek ] = "ÅìöÜíéóç áëëáãşí ğßíáêá";
-        Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ®¿¡ º¯°æ»çÇ× º¸ÀÌ±â(~S)";
+        Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ì— ë³€ê²½ì‚¬í•­ ë³´ì´ê¸°(~S)";
         Text[ turkish ] = "~Tablodaki değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones en la hoja";
@@ -120,10 +120,10 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ swedish ] = "Filterinställningar";
         Text[ polish ] = "Ustawienia filtra";
         Text[ portuguese_brazilian ] = "Filter options";
-        Text[ japanese ] = "Ì¨ÙÀ‚Ìİ’è";
-        Text[ korean ] = "ÇÊÅÍ ¿É¼Ç";
-        Text[ chinese_simplified ] = "Ñ¡ÏîÉè¶¨";
-        Text[ chinese_traditional ] = "³]©w¿z¿ï";
+        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€ã®è¨­å®š";
+        Text[ korean ] = "í•„í„° ì˜µì…˜";
+        Text[ chinese_simplified ] = "é€‰é¡¹è®¾å®š";
+        Text[ chinese_traditional ] = "è¨­å®šç¯©é¸";
         Text[ turkish ] = "Filter options";
         Text[ arabic ] = "Filter options";
         Text[ catalan ] = "Filter options";
@@ -144,14 +144,14 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ french ] = "Afficher les modifications acceptées" ;
         Text [ dutch ] = "Geac~cepteerde wijzigingen weergeven" ;
         Text [ portuguese ] = "Mostrar mo~dificações aceites" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾½ÓÊÜµÄ¸ü¸ÄÄÚÈİ(~A)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¥å—çš„æ›´æ”¹å†…å®¹(~A)";
         Text[ russian ] = "Ïîêàçàòü ïğèíÿòûå èçìåíåíèÿ";
         Text[ polish ] = "Poka¿ zmiany zaakceptowane";
-        Text[ japanese ] = "³”F‚µ‚½•ÏX‰ÓŠ‚ğ•\\¦(~A)";
-        Text[ chinese_traditional ] = "Åã¥Ü±µ¨üªºÅÜ§ó(~A)";
+        Text[ japanese ] = "æ‰¿èªã—ãŸå¤‰æ›´ç®‡æ‰€ã‚’è¡¨ç¤º(~A)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºæ¥å—çš„è®Šæ›´(~A)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãŞÈæáÉ";
         Text[ greek ] = "ÅìöÜíéóç áğïäå÷ïìİíùí áëëáãşí";
-        Text[ korean ] = "Àû¿ëµÈ º¯°æ º¸ÀÌ±â(~A)";
+        Text[ korean ] = "ì ìš©ëœ ë³€ê²½ ë³´ì´ê¸°(~A)";
         Text[ turkish ] = "~Kabul edilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones aceptadas";
@@ -173,14 +173,14 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text [ french ] = "Afficher les modifications ~refusées" ;
         Text [ dutch ] = "Niet-ge~accepteerde wijzigingen weergeven" ;
         Text [ portuguese ] = "Mostrar modificações ~rejeitadas" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾¾Ü¾øµÄ¸ü¸ÄÄÚÈİ(~R)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ‹’ç»çš„æ›´æ”¹å†…å®¹(~R)";
         Text[ russian ] = "Ïîêàçàòü îòêëîíåííûå èçìåíåíèÿ";
         Text[ polish ] = "Poka¿ odrzucone zmiany";
-        Text[ japanese ] = "”jŠü‚µ‚½•ÏX‰ÓŠ‚ğ•\\¦(~R)";
-        Text[ chinese_traditional ] = "Åã¥Ü¤w©Úµ´ªºÅÜ§ó?®e(~R)";
+        Text[ japanese ] = "ç ´æ£„ã—ãŸå¤‰æ›´ç®‡æ‰€ã‚’è¡¨ç¤º(~R)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºå·²æ‹’çµ•çš„è®Šæ›´å†…å®¹(~R)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãÑİæÖÉ";
         Text[ greek ] = "ĞñïâïëŞ áğïññéğôİùí áëëáãşí";
-        Text[ korean ] = "°ÅºÎµÈ º¯°æ»çÇ× Ç¥½Ã(~R)";
+        Text[ korean ] = "ê±°ë¶€ëœ ë³€ê²½ì‚¬í•­ í‘œì‹œ(~R)";
         Text[ turkish ] = "~Reddedilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones rechazadas";
@@ -232,12 +232,12 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
         QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
-        QuickHelpText[ japanese ] = "k¬/Šg‘å";
-        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
-        QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
+        QuickHelpText[ japanese ] = "ç¸®å°/æ‹¡å¤§";
+        QuickHelpText[ chinese_simplified ] = "ç¼©å°/æ”¾å¤§";
+        QuickHelpText[ chinese_traditional ] = "ç¸®å°/æ”¾å¤§";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ/ÊßÈíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò£¯È®´ë";
+        QuickHelpText[ korean ] = "ì¶•ì†Œï¼í™•ëŒ€";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern/Vergrößern";
@@ -253,19 +253,20 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text [ french ] = "Afficher les modifications" ;
     Text [ dutch ] = "Wijzigingen weergeven" ;
     Text [ portuguese ] = "Mostrar modificações" ;
-    Text[ chinese_simplified ] = "ÏÔÊ¾¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ›´æ”¹";
     Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ";
     Text[ polish ] = "Poka¿ zmiany";
-    Text[ japanese ] = "•ÏX‰ÓŠ‚Ì•\\¦";
-    Text[ chinese_traditional ] = "Åã¥ÜÅÜ§ó";
+    Text[ japanese ] = "å¤‰æ›´ç®‡æ‰€ã®è¡¨ç¤º";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºè®Šæ›´";
     Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ";
     Text[ greek ] = "ÅìöÜíéóç áëëáãşí";
-    Text[ korean ] = "º¯°æ º¸ÀÌ±â";
+    Text[ korean ] = "ë³€ê²½ ë³´ì´ê¸°";
     Text[ turkish ] = "Değişiklikleri görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar modificaciones";
     Text[ finnish ] = "Näytä muutokset";
 };
+
 
 
 
