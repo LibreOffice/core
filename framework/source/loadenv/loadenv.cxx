@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:54:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
@@ -1338,15 +1342,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             }
 
             // bring it to front ...
-            css::uno::Reference< css::awt::XWindow >    xTaskWindow = xTask->getContainerWindow();
-            css::uno::Reference< css::awt::XTopWindow > xTopWindow  (xTaskWindow, css::uno::UNO_QUERY);
-            // Check it! May we are plugged into a browser/java canvas etcpp ...
-            // Then such "bring to front" operation isnt supported yet nor neccessary .-)
-            if (xTopWindow.is())
-            {
-                xTaskWindow->setVisible(sal_True);
-                xTopWindow->toFront();
-            }
+            impl_makeFrameWindowVisible(xTask->getContainerWindow(), sal_True);
 
             // It doesn't matter if we was able to bring it to front.
             // But we have found such task and can return it as our result.
@@ -1509,10 +1505,9 @@ void LoadEnv::impl_reactForLoadingState()
         else
         if (!bHidden && !bRecovered)
         {
-            xWindow->setVisible(sal_True);
-            css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
-            if(xTopWindow.is())
-                xTopWindow->toFront();
+            // show frame ... if it's not still visible ...
+            // But do nothing if it's already visible!
+            impl_makeFrameWindowVisible(xWindow, sal_False);
         }
 
         // Note: Only if an existing property "FrameName" is given by this media descriptor,
@@ -1583,6 +1578,48 @@ void LoadEnv::impl_reactForLoadingState()
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
+}
+
+/*-----------------------------------------------
+    16.01.2005 13:04
+-----------------------------------------------*/
+void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
+                                                sal_Bool                                  bForceToFront)
+{
+    css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
+
+    if (xWindow.is())
+        xWindow->setVisible(sal_True);
+
+    if (xTopWindow.is())
+        xTopWindow->toFront();
+
+/* #i19976#
+    We tried to prevent a toFront() call in case the user putted the
+    loading document into the background ..
+    But we had several errors trying that. So we decided to
+    rollback these changes and bring the new loaded document to front hardly !
+
+    css::uno::Reference< css::awt::XWindow2 > xWindow2(xWindow, css::uno::UNO_QUERY);
+
+    sal_Bool bIsVisible = sal_False;
+    if (xWindow2.is())
+        bIsVisible = xWindow2->isVisible(); // TODO is parent visible too ? .-)
+
+    if (!bIsVisible)
+    {
+        xWindow->setVisible(sal_True);
+        bForceToFront = sal_True;
+    }
+
+    if (
+        (bForceToFront  ) &&
+        (xTopWindow.is())
+       )
+    {
+        xTopWindow->toFront();
+    }
+*/
 }
 
 } // namespace framework
