@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-29 10:17:21 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 09:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
         {
             if( !pFormImpl )
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-            /*
+            /* #80205#
             Here we have a small complication. This formula control contains
             the default text that is displayed if you edit the form field in
             the "default text" area. But MSOffice does not display that
@@ -397,7 +397,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
             */
             aFormula.sDefault = GetFieldResult(pF);
 
-            /*
+            /* #80205#
             And also a blank TextBox is indicated by 5 of these
             placeholder chars, convert a field result of this stuff
             into an empty string.
@@ -2109,12 +2109,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.3 2001-01-29 10:17:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.4 2001-01-30 09:27:25 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/01/29 10:17:21  cmc
+      #80205# Default FormTextField Text import
+
       Revision 1.2  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 
