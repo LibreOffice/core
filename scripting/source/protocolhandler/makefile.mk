@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-20 14:33:11 $
+#   last change: $Author: dfoster $ $Date: 2003-10-29 15:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,10 @@ COMP1TYPELIST=$(TARGET)
 SLOFILES=\
         $(SLO)$/scripthandler.obj\
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET=	$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+        $(SFXLIB)    \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)

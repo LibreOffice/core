@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:26:02 $
+*  last change: $Author: dfoster $ $Date: 2003-10-29 15:44:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -66,7 +66,11 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include <sfx2/objsh.hxx>
+#include <sfx2/frame.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <util/util.hxx>
@@ -166,6 +170,33 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
+            // obtain the SfxObject shell for our security check
+            SfxObjectShell* pDocShell = NULL;
+            Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+            if ( xFrame.is() )
+            {
+                SfxFrame* pFrame=0;
+                for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+                {
+                    if ( pFrame->GetFrameInterface() == xFrame )
+                        break;
+                }
+
+                if ( pFrame )
+                    pDocShell = pFrame->GetCurrentDocument();
+            }
+
+            // Security check
+            pDocShell->AdjustMacroMode( String() );
+            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: MacroMode = %d", pDocShell->GetMacroMode() );
+            if ( pDocShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+            {
+                    // check forbids execution
+                    ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::dispatchWithNotification: execution permission denied. " );
+                    throw RuntimeException( temp, Reference< XInterface >() );
+            }
+
+
             // Creates a ScriptProvider ( if one is not created allready )
             createScriptProvider( aURL.Complete );
 
