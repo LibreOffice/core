@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-07 15:45:13 $
+ *  last change: $Author: sj $ $Date: 2002-06-18 15:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
         rxMgr;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
         aMediaDescriptor;
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        aFilterDataSequence;
     rtl::OUString   aDialogTitle;
     FieldUnit       eFieldUnit;
 

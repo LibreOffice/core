@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-13 15:06:34 $
+ *  last change: $Author: sj $ $Date: 2002-06-18 15:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,18 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
 uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
         throw ( uno::RuntimeException )
 {
+    sal_Int32 i, nCount;
+    for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
+    {
+        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+            break;
+    }
+    if ( i == nCount )
+        aMediaDescriptor.realloc( ++nCount );
+
+    // the "FilterData" Property is an Any that will contain our PropertySequence of Values
+    aMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+    aMediaDescriptor[ i ].Value <<= aFilterDataSequence;
     return aMediaDescriptor;
 }
 
@@ -209,6 +221,16 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
                 uno::RuntimeException )
 {
     aMediaDescriptor = aProps;
+
+    sal_Int32 i, nCount;
+    for ( i = 0, nCount = aMediaDescriptor.getLength(); i < nCount; i++ )
+    {
+        if ( aMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        {
+            aMediaDescriptor[ i ].Value >>= aFilterDataSequence;
+            break;
+        }
+    }
 }
 
 // XExecutableDialog
