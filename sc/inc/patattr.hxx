@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:18:08 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,15 @@ public:
                                         BYTE nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL ) const;
 
-    void                    FillEditItemSet( SfxItemSet* pSet,
-                                        const SfxItemSet* pCondSet = NULL ) const;
-    void                    GetFromEditItemSet( const SfxItemSet* pSet );
+    /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
+    static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = NULL );
+    /** Converts all Calc items contained in the own item set to edit engine items and puts them into pEditSet. */
+    void                    FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet = NULL ) const;
+
+    /** Converts all edit engine items contained in rEditSet to Calc items and puts them into rDestSet. */
+    static void             GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet );
+    /** Converts all edit engine items contained in pEditSet to Calc items and puts them into the own item set. */
+    void                    GetFromEditItemSet( const SfxItemSet* pEditSet );
 
     void                    FillEditParaItems( SfxItemSet* pSet ) const;
 
