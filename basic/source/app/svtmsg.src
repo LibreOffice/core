@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-23 13:48:50 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ String S_GPF_ABORT
     Text[ polish ] = "Przerwanie programu przez GPF";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Program aborted with GPF";
-    Text[ korean ] = "ÇÁ·Î±×·¥ÀÌ GPF¿Í ÇÔ²² Ãë¼ÒµÇ¾ú½À´Ï´Ù.";
+    Text[ korean ] = "ÇÁ·Î±×·¥ÀÌ GPF¿Í ÇÔ²² Áß´ÜµÇ¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Program aborted with GPF";
     Text[ chinese_traditional ] = "Program aborted with GPF";
     Text[ arabic ] = "Program aborted with GPF";
@@ -111,7 +111,7 @@ String S_APP_SHUTDOWN
     Text[ polish ] = "Aplikacja zakoñczona";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Application has been shut down";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ÀÌ Á¾·á µÇ¾ú½À´Ï´Ù.";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Application has been shut down";
     Text[ chinese_traditional ] = "Application has been shut down";
     Text[ arabic ] = "Application has been shut down";
@@ -133,7 +133,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
     Text[ polish ] = "Nie móg³ wykonaæ Slot ID: Brak ActiveDispatcher";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ korean ] = "½½·Ô ID°¡ ÀÛµ¿µÉ ¼ö ¾ø½À´Ï´Ù. ActiveDispatcher°¡ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "½½·Ô ID¸¦ ½ÇÇàÇÏÁö¡¡¸øÇß½À´Ï´Ù. ActiveDispatcher°¡ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
@@ -155,7 +155,7 @@ String S_SID_EXECUTE_FAILED
     Text[ polish ] = "Nie móg³ wykonaæ Slot ID";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Slot ID could not be run";
-    Text[ korean ] = "½½·Ô ID°¡ ÀÛµ¿µÉ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "½½·Ô ID¸¦¡¡½ÇÇàÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Slot ID could not be run";
     Text[ chinese_traditional ] = "Slot ID could not be run";
     Text[ arabic ] = "Slot ID could not be run";
@@ -177,7 +177,7 @@ String S_UNO_PROPERTY_NITIALIZE_FAILED
     Text[ polish ] = "UnoSlot: Nie móg³ rozpocz¹æ Properties.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UnoSlot: Properties could not be initialized";
-    Text[ korean ] = "UnoSlot: ¼Ó¼ºÀÌ ÃÊ±âÈ­ µÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "UnoSlot: ¼Ó¼ºÀ» ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "UnoSlot: Properties could not be initialized";
     Text[ chinese_traditional ] = "UnoSlot: Properties could not be initialized";
     Text[ arabic ] = "UnoSlot: Properties could not be initialized";
@@ -243,7 +243,7 @@ String S_NO_ACTIVE_WINDOW
     Text[ polish ] = "Nie znaleziono aktywnego okna (GetNextCloseWindow) ";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Active window not found (GetNextCloseWindow)";
-    Text[ korean ] = "È°¼º Ã¢ÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.(GetNextCloseWindow)";
+    Text[ korean ] = "È°¼º Ã¢À»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.(GetNextCloseWindow)";
     Text[ chinese_simplified ] = "Active window not found (GetNextCloseWindow)";
     Text[ chinese_traditional ] = "ResetApplication failed: unknown window type";
     Text[ arabic ] = "Active window not found (GetNextCloseWindow)";
@@ -265,7 +265,7 @@ String S_NO_DIALOG_IN_GETACTIVE
     Text[ polish ] = "GetActive nie wysy³a z powrotem ¿adnego dialogu! Proszê powiadomiæ o tym oddzia³ programowania.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "GetActive does not deliver a dialog! Inform development.";
-    Text[ korean ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ korean ] = "GetActive´Â¡¡´ëÈ­»óÀÚ¸¦¡¡Á¦°øÇÏÁö¡¡¾Ê½À´Ï´Ù! °³¹ßºÎ¿¡¡¡¿¬¶ôÇÏ½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ chinese_traditional ] = "GetActive does not deliver a dialog! Inform development.";
     Text[ arabic ] = "GetActive does not deliver a dialog! Inform development.";
@@ -353,7 +353,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
     Text[ polish ] = "Selekcja wed³ug atrybutów mo¿liwa jest tylko w wypadku katalogów.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Selection by attributes only possible for directories";
-    Text[ korean ] = "¼Ó¼º¿¡ÀÇÇÑ ¼±ÅÃÀº µğ·¢Åä¸®¿¡¼­¸¸ °¡´ÉÇÕ´Ï´Ù.";
+    Text[ korean ] = "¼Ó¼º¿¡ÀÇÇÑ ¼±ÅÃÀº µğ·ºÅä¸®¿¡¼­¸¸ °¡´ÉÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "Selection by attributes only possible for directories";
     Text[ chinese_traditional ] = "Selection by attributes only possible for directories";
     Text[ arabic ] = "Selection by attributes only possible for directories";
@@ -397,7 +397,7 @@ String S_UNKNOWN_METHOD
     Text[ polish ] = "Nieznana metoda '($Arg1)' do ($Arg2)";
     Text[ portuguese_brazilian ] = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
     Text[ japanese ] = "Unknown method '($Arg1)' to ($Arg2)";
-    Text[ korean ] = "($Arg2)¿¡ º¸³»´Â ¾Ë ¼ö ¾ø´Â ¸Ş¼­µå '($Arg1)'";
+    Text[ korean ] = "¾Ë ¼ö ¾ø´Â ¸Ş¼Òµå ($Arg2)¿¡ '($Arg1)'";
     Text[ chinese_simplified ] = "($Arg2)ÉÏ²»Ã÷µÄ·½·¨'($Arg1)'";
     Text[ chinese_traditional ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
@@ -441,7 +441,7 @@ String S_POINTER_OUTSIDE_APPWIN
     Text[ polish ] = "Pointer poza obszarem okna aplikacji przy '($Arg1)' ";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Pointer not located in application window at '($Arg1)'";
-    Text[ korean ] = "ÀÀ¿ë ÇÁ·Î±×·¥ Ã¢ '($Arg1)'¿¡ Æ÷ÀÎÅÍ°¡ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "'($Arg1)'ÀÇ ÀÀ¿ëÇÁ·Î±×·¥ Ã¢¿¡ Æ÷ÀÎÅÍ°¡ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Pointer not located in application window at '($Arg1)'";
     Text[ chinese_traditional ] = "Pointer not located in application window at '($Arg1)'";
     Text[ arabic ] = "Pointer not located in application window at '($Arg1)'";
@@ -485,7 +485,7 @@ String S_WIN_NOT_FOUND
     Text[ polish ] = "($Arg1) could not be found";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "($Arg1) could not be found";
-    Text[ korean ] = "($Arg1) ÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1) À»£¨¸¦£©Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "($Arg1) could not be found.";
     Text[ chinese_traditional ] = "($Arg1) could not be found";
     Text[ arabic ] = "($Arg1) could not be found";
@@ -617,7 +617,7 @@ String S_ERROR_SAVING_IMAGE
     Text[ polish ] = "Error #($Arg1) when saving the image";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Error #($Arg1) when saving the image";
-    Text[ korean ] = "ÀÌ¹ÌÁö ÀúÀå ½Ã ¿À·ù #($Arg1)";
+    Text[ korean ] = "ÀÌ¹ÌÁö ÀúÀå½Ã ¿À·ù #($Arg1)";
     Text[ chinese_simplified ] = "Error #($Arg1) when saving the image";
     Text[ chinese_traditional ] = "Error #($Arg1) when saving the image";
     Text[ arabic ] = "Error #($Arg1) when saving the image";
@@ -727,7 +727,7 @@ String S_ITEMS_INVISIBLE
     Text[ polish ] = "The items are hidden at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "The items are hidden at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ Ç×¸ñÀÌ ¼û°ÜÁ® ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ Ç×¸ñÀÌ ¼û°ÜÁı´Ï´Ù.";
     Text[ chinese_simplified ] = "The items are hidden at ($Arg1)";
     Text[ chinese_traditional ] = "The items are hidden at ($Arg1)";
     Text[ arabic ] = "The items are hidden at ($Arg1)";
@@ -749,7 +749,7 @@ String S_TABPAGE_NOT_FOUND
     Text[ polish ] = "Tab page not found at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Tab page not found at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ÅÇ ÆäÀÌÁö°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ ÅÇ ÂÊÀ»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Tab page not found at ($Arg1)";
     Text[ chinese_traditional ] = "Tab page not found at ($Arg1)";
     Text[ arabic ] = "Tab page not found at ($Arg1)";
@@ -771,7 +771,7 @@ String S_TRISTATE_NOT_ALLOWED
     Text[ polish ] = "Three state cannot be set at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Three state cannot be set at ($Arg1)";
-    Text[ korean ] = "¼¼°¡Áö »óÅÂ°¡ ($Arg1)¿¡  ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "¼¼°¡Áö »óÅÂ´Â ($Arg1)¿¡  ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Three state cannot be set at ($Arg1)";
     Text[ chinese_traditional ] = "Three state cannot be set at ($Arg1)";
     Text[ arabic ] = "Three state cannot be set at ($Arg1)";
@@ -838,7 +838,7 @@ String S_NO_SELECT_FALSE
     Text[ polish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
-    Text[ korean ] = "FALSE ¼±ÅÃÀÌ Çã¿ëµÇÁö ¾Ê½À´Ï´Ù.  ($Arg1)¿¡ ´ÙÁß ¼±ÅÃ »ç¿ë.";
+    Text[ korean ] = "FALSE ¼±ÅÃÀº Çã¿ëµÇÁö ¾Ê½À´Ï´Ù.  ($Arg1)¿¡¼­ ´ÙÁß ¼±ÅÃ »ç¿ëÇÏ½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ chinese_traditional ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ arabic ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
@@ -860,7 +860,7 @@ String S_ENTRY_NOT_FOUND
     Text[ polish ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "\"($Arg2)\" entry at ($Arg1) not found";
-    Text[ korean ] = "\"($Arg2)\" °¡ Ç×¸ñ ($Arg1)¿¡¼­ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "\"($Arg2)\" À»£¨¸¦£© Ç×¸ñ ($Arg1)¿¡¼­ Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ chinese_traditional ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ arabic ] = "\"($Arg2)\" entry at ($Arg1) not found";
@@ -882,7 +882,7 @@ String S_METHOD_FAILED
     Text[ polish ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "($Arg1) of entry \"($Arg2)\" failed";
-    Text[ korean ] = "Ç×¸ñ\"($Arg2)\"ÀÇ ($Arg1)°¡ Àß¸øµÆ½À´Ï´Ù.";
+    Text[ korean ] = "Ç×¸ñ\"($Arg2)\"ÀÇ ($Arg1)½ÇÆĞ.";
     Text[ chinese_simplified ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ chinese_traditional ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ arabic ] = "($Arg1) of entry \"($Arg2)\" failed";
@@ -904,7 +904,7 @@ String S_HELPID_ON_TOOLBOX_NOT_FOUND
     Text[ polish ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "HelpID in ToolBox not found at ($Arg1)";
-    Text[ korean ] = "µµ±¸»óÀÚÀÇ µµ¿ò¸» ID °¡  ($Arg1)¿¡¼­ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "µµ±¸»óÀÚÀÇ µµ¿ò¸» ID ¸¦  ($Arg1)¿¡¼­ Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     Text[ chinese_simplified ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ chinese_traditional ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ arabic ] = "HelpID in ToolBox not found at ($Arg1)";
@@ -926,7 +926,7 @@ String S_BUTTON_DISABLED_ON_TOOLBOX
     Text[ polish ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "The button is disabled in ToolBox at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°ÀÌ »ç¿ëÀÌ ¾ÈµË´Ï´Ù.";
+    Text[ korean ] = "($Arg1)ÀÇ µµ±¸»óÀÚ ¹öÆ°À» »ç¿ëÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ chinese_traditional ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ arabic ] = "The button is disabled in ToolBox at ($Arg1)";
@@ -948,7 +948,7 @@ String S_BUTTON_HIDDEN_ON_TOOLBOX
     Text[ polish ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "The button is hidden in ToolBox at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°ÀÌ ¼û°ÜÁ® ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)ÀÇ µµ±¸»óÀÚ ¹öÆ°Àº ¼û°ÜÁ® ÀÖ½À´Ï´Ù.";
     Text[ chinese_simplified ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ chinese_traditional ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ arabic ] = "The button is hidden in ToolBox at ($Arg1)";
@@ -970,7 +970,7 @@ String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
     Text[ polish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Button cannot be made visible in ToolBox at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°À» º¸ÀÌ°Ô ÇÒ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)ÀÇ µµ±¸»óÀÚ ¹öÆ°À» º¸ÀÌ°Ô ÇÒ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ chinese_traditional ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ arabic ] = "Button cannot be made visible in ToolBox at ($Arg1)";
@@ -992,7 +992,7 @@ String S_TEAROFF_FAILED
     Text[ polish ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "TearOff failed in ToolBox at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚ¿¡¼­ ÀıÃë°¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1ÀÇ µµ±¸»óÀÚ¿¡¼­ ÀıÃë¿¡ ½ÇÆĞ.";
     Text[ chinese_simplified ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ chinese_traditional ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ arabic ] = "TearOff failed in ToolBox at ($Arg1)";
@@ -1014,7 +1014,7 @@ String S_NO_SELECTED_ENTRY
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ Æ®¸® ¸®½ºÆ® ¹Ú½º¿¡¼­ ¼±ÅÃµÈ Ç×¸ñÀÌ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)ÀÇ Æ®¸® ¸®½ºÆ® ¹Ú½º¿¡ ¼±ÅÃµÈ Ç×¸ñÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ chinese_traditional ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ arabic ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1036,7 +1036,7 @@ String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
     Text[ polish ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Select/Deselect with string not implemented at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ¹®ÀÚ¿­°ú ÇÔ²² ¼±ÅÃ/¼±ÅÃÇØÁ¦°¡ ±¸ÇöµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¹®ÀÚ¿­ ¼±ÅÃ/¼±ÅÃÃë¼Ò°¡ ±¸ÇöµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ chinese_traditional ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ arabic ] = "Select/Deselect with string not implemented at ($Arg1)";
@@ -1058,7 +1058,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ polish ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Method only allowed in floating mode at ($Arg1)";
-    Text[ korean ] = "¸Ş¼Òµå´Â ºÎµ¿-¸ğµå ($Arg1)¿¡¼­¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­¡¡¸Ş¼Òµå´Â ºÎµ¿-¸ğµå¸¸ Çã¿ëµË´Ï´Ù.";
     Text[ chinese_simplified ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
@@ -1080,7 +1080,7 @@ String S_ALLOWED_ONLY_IN_DOCKING_MODE
     Text[ polish ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Method only allowed in docking mode at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ¿¬°á ¸ğµå ¸Ş¼Òµå¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¸Ş¼Òµå´Â¡¡¿¬°á ¸ğµå¿¡¼­¸¸ Çã¿ëµË´Ï´Ù.";
     Text[ chinese_simplified ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ chinese_traditional ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in docking mode at ($Arg1)";
@@ -1102,7 +1102,7 @@ String S_SIZE_NOT_CHANGEABLE
     Text[ polish ] = "Size cannot be altered at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Size cannot be altered at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ Å©±â°¡ ¹Ù²ãÁöÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ Å©±â´Â¡¡º¯°æÇÒ¼ö¡¡¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Size cannot be altered at ($Arg1)";
     Text[ chinese_traditional ] = "Size cannot be altered at ($Arg1)";
     Text[ arabic ] = "Size cannot be altered at ($Arg1)";
@@ -1124,7 +1124,7 @@ String S_NO_OK_BUTTON
     Text[ polish ] = "There is no OK button at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "There is no OK button at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡ È®ÀÎ ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡ £Ï£Ë ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "There is no OK button at ($Arg1)";
     Text[ chinese_traditional ] = "There is no OK button at ($Arg1)";
     Text[ arabic ] = "There is no OK button at ($Arg1)";
@@ -1278,7 +1278,7 @@ String S_BUTTON_ID_NOT_THERE
     Text[ polish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "There is no button with a ($Arg1) ID at ($Arg2)";
-    Text[ korean ] = "($Arg2)¿¡ ID ($Arg1)¸¦ °¡Áø ¹öÆ°ÀÌ ¾øÀ½";
+    Text[ korean ] = "($Arg2)¿¡ ID ($Arg1)À»£¨¸¦£© °¡Áø ¹öÆ°ÀÌ ¾øÀ½";
     Text[ chinese_simplified ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ chinese_traditional ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ arabic ] = "There is no button with a ($Arg1) ID at ($Arg2)";
@@ -1300,7 +1300,7 @@ String S_BUTTONID_REQUIRED
     Text[ polish ] = "A button ID needs to be entered at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "A button ID needs to be entered at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ÀÔ·ÂµÉ ¹öÆ° ID";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¹öÆ° ID°¡¡¡¹İµå½Ã¡¡Á¤ÀÇµÇ¾î¾ßÇÔ";
     Text[ chinese_simplified ] = "A button ID needs to be entered at ($Arg1)";
     Text[ chinese_traditional ] = "A button ID needs to be entered at ($Arg1)";
     Text[ arabic ] = "A button ID needs to be entered at ($Arg1)";
@@ -1322,7 +1322,7 @@ String S_UNKNOWN_TYPE
     Text[ polish ] = "Unknown object type ($Arg1) from UId";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Unknown object type ($Arg1) from UId";
-    Text[ korean ] = "UId·ÎºÎÅÍ  ¾Ë¼ö¾ø´Â°³Ã¼ Å¸ÀÔ ($Arg1) ";
+    Text[ korean ] = "UId·ÎºÎÅÍÀÇ  ¾Ë·ÁÁ®¡¡ÀÖÁö¾ÊÀº¡¡°³Ã¼ Å¸ÀÔ ($Arg1)";
     Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId";
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId";
     Text[ arabic ] = "Unknown object type ($Arg1) from UId";
@@ -1344,9 +1344,9 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ polish ] = "Rozpakowanie pamiêci (storage) \"($Arg1)\" w \"($Arg2)\" nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ japanese ] = "‹L‰¯‘•’u \"($Arg1)\" ‚ğ \"($Arg2)\" ‚É’Šo‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ korean ] = "½ºÅä¸®Áö \"($Arg1)\"À»£¨¸¦£© \"($Arg2)\"¿¡¡¡Çª´Âµ¥¡¡½ÇÆĞ";
     Text[ chinese_simplified ] = "½âÑ¹ËõÎÄ¼ş \"($Arg1)\" ÖÁ \"($Arg2)\" Ê§°Ü¡£";
-    Text[ chinese_traditional ] = "¸ÑÀ£ÁYÀÉ®× \"($Arg1)\" ¨ì \"($Arg2)\" ¨S¦³¦¨¥\\¡C";
+    Text[ chinese_traditional ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed.";
     Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ arabic ] = "İÔáÊ ÚãáíÉ İß ÖÛØ ÊÎÒíä\"($Arg1)\"  Åáì \"($Arg2)\"";
 };
