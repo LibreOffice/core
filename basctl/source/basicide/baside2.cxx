@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:35 $
+ *  last change: $Author: tbe $ $Date: 2000-11-21 17:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,11 @@
 
 #include <vcl/sound.hxx>
 
-#ifndef _TXTCMP_HXX //autogen
-#include <svtools/txtcmp.hxx>
-#endif
+//#ifndef _TXTCMP_HXX //autogen
+//#include <svtools/txtcmp.hxx>
+//#endif
 
+#include <unotools/textsearch.hxx>
 
 //#ifdef OS2
 //#define INCL_DOSPROCESS
@@ -126,6 +127,7 @@
 #define FILTERMASK_ALL "*.*"
 #endif
 
+using namespace utl;
 
 DBG_NAME( ModulWindow );
 
