@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-10 11:54:02 $
+ *  last change: $Author: gh $ $Date: 2001-07-11 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 #ifndef NOOLDSV //autogen
 #include <vcl/system.hxx>
 #endif
@@ -163,9 +166,10 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 {
                     if ( LogMsg->aDebugData.aMsg.Len() == 0 )
                     {
+                        SvtSysLocale aLocale;
                         LogMsg->aDebugData.aMsg = GEN_RES_STR2( S_PROG_START,
-                                GetpApp()->GetAppInternational().GetDate(Date()),
-                                GetpApp()->GetAppInternational().GetTime(Time(),FALSE) );
+                                aLocale.GetLocaleData().getDate(Date()),
+                                aLocale.GetLocaleData().getTime(Time()) );
                         aUILogMsg = pBasicFrame->GenRealString( LogMsg->aDebugData.aMsg );
                     }
                     AddRun( aUILogMsg, LogMsg->aDebugData ); break;
