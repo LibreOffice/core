@@ -2,7 +2,6 @@ sd	sd	:	offmgr sc NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									get		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
-sd	sd\jobs									get		-	all	sd_jobs NULL
 sd	sd\source\ui\inc						get		-	all	sd_sinc NULL
 sd	sd\res									get		-	all	sd_res NULL
 sd	sd\res\imagelst							get		-	all	sd_resil NULL
