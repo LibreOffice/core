@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 15:05:22 $
+ *  last change: $Author: os $ $Date: 2002-06-20 09:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
             const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
             if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
+                !pVOpt->IsReadonly() &&
                 SwViewOption::IsIndexShadings() )
                 return sal_True;
         }
