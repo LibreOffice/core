@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: mh $ $Date: 2002-05-31 08:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,5 @@ BOOL SotObject::Close()
 {
     return TRUE;
 }
-
 
 
