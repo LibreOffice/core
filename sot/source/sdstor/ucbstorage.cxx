@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-23 12:13:29 $
+ *  last change: $Author: mba $ $Date: 2002-01-28 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,6 +1893,8 @@ void UCBStorage_Impl::ReadContent()
                         OpenStream( pElement, STREAM_STD_READ, m_bDirect );
                         if ( Storage::IsStorageFile( pElement->m_xStream ) )
                             pElement->m_bIsStorage = TRUE;
+                        else
+                            pElement->m_xStream->Free();
                     }
                 }
             }
@@ -2748,7 +2750,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
 
                     pElement->m_xStream->m_nMode = nMode;
                     pElement->m_xStream->Free();
-                    pElement->m_xStream->Init();
+                    //pElement->m_xStream->Init();
 
     //              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
                     return new UCBStorageStream( pElement->m_xStream );
