@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:55:57 $
+ *  last change: $Author: dv $ $Date: 2001-07-24 14:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,7 @@ void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, 
     {
         pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
         pDocEventConfig->ConfigureEvent( nId, pMacro );
+        PropagateEvent_Impl( pDoc, nId, pMacro );
     }
     else
     {
@@ -861,8 +862,43 @@ void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
     }
 }
 
+//--------------------------------------------------------------------------
+void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
+                                                 USHORT nId,
+                                                 const SvxMacro* pMacro )
+{
+    REFERENCE< XEVENTSSUPPLIER > xSupplier( pDoc->GetModel(), UNO_QUERY );
+
+    if ( xSupplier.is() )
+    {
+        REFERENCE< XNAMEREPLACE > xEvents = xSupplier->getEvents();
+
+        bIgnoreConfigure = sal_True;
+
+        OUSTRING aEventName = GetEventName_Impl( nId );
+
+        if ( aEventName.getLength() )
+        {
+            ANY aEventData = CreateEventData_Impl( pMacro );
+
+            try
+            {
+                xEvents->replaceByName( aEventName, aEventData );
+            }
+            catch( ::com::sun::star::lang::IllegalArgumentException )
+            { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ) }
+            catch( ::com::sun::star::container::NoSuchElementException )
+            { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ) }
+        }
+        else
+            DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );
+
+        bIgnoreConfigure = sal_False;
+    }
+}
+
 // -------------------------------------------------------------------------------------------------------
-ANY SfxEventConfiguration::CreateEventData_Impl( SvxMacro *pMacro )
+ANY SfxEventConfiguration::CreateEventData_Impl( const SvxMacro *pMacro )
 {
 /*
     This function converts a SvxMacro into an Any containing three
