@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 13:53:33 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ RESLIB1SRSFILES=\
 # --- StarDraw DLL
 
 SHL1TARGET= sd$(UPD)$(DLLPOSTFIX)
-SHL1VERSIONMAP= sd.map
+#SHL1VERSIONMAP= sd.map
 SHL1IMPLIB= sdi
 
 
@@ -132,6 +132,10 @@ SHL1DEPN+=	makefile.mk
 
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
+DEF1NAME	=$(SHL1TARGET)
+DEFLIB1NAME = $(TARGET)
+
 .IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
 .ENDIF
@@ -184,29 +188,53 @@ SHL2OBJS=   $(SLO)$/sddetect.obj \
         $(SLO)$/detreg.obj
 SHL2DEPN+=	makefile.mk
 
+# add for sdui
+SHL4TARGET= sdui$(UPD)$(DLLPOSTFIX)
+SHL4IMPLIB= sduiimp
+SHL4VERSIONMAP= sdui.map
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=       $(SHL4TARGET)
+SHL4LIBS=   $(SLB)$/sdui_all.lib
+
+LIB4TARGET = $(SLB)$/sdui_all.lib
+LIB4OBJFILES= $(SLO)$/pubdlg.obj
+LIB4FILES = $(SLB)$/sdui.lib
+
+SHL4STDLIBS= \
+        $(ISDLIB) \
+    $(SVXLIB) \
+    $(SFXLIB) \
+    $(BASICLIB) \
+    $(BASEGFXLIB) \
+    $(GOODIESLIB) \
+    $(SO2LIB) \
+    $(SVTOOLLIB) \
+    $(TKLIB) \
+    $(VCLLIB) \
+    $(SVLLIB) \
+    $(SOTLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(VOSLIB) \
+    $(CANVASLIB) \
+    $(SALLIB)
+            
+
+
+
+
 
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-.IF "$(GUI)" == "WNT"
-
-$(MISC)$/$(SHL1TARGET).def:
+    
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'SDRAW3 DLL'                                 >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo component_getImplementationEnvironment 				   >>$@
-    @echo component_writeInfo									   >>$@
-    @echo component_getFactory									   >>$@
-.ENDIF
+    @+$(TYPE) sd.flt > $@
 
-$(MISCX)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
 
