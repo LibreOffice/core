@@ -76,6 +76,7 @@ sub create_directory
     my ($directory) = @_;
 
     my $returnvalue = 1;
+    my $infoline = "";
 
     if (!(-d $directory))
     {
@@ -94,8 +95,25 @@ sub create_directory
         }
         else
         {
-            installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+            # New solution in parallel packing: It is possible, that the directory now exists, although it
+            # was not created in this process. There is only an important error, if the directory does not
+            # exist now.
+
+            if (!(-d $directory))
+            {
+                installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+            }
+            else
+            {
+                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
         }
+    }
+    else
+    {
+        $infoline = "\nAlready existing directory, did not create: $directory\n";
+        push(@installer::globals::logfileinfo, $infoline);
     }
 }
 
