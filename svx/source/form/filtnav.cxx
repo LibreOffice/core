@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 10:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1585,9 +1585,12 @@ namespace
 {
     FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
     {
-        FmFilterData*   pData = (FmFilterData*)_pTarget->GetUserData();
-        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems) ? (FmFilterItems*)pData
-                                                          : (FmFilterItems*)((FmFilterItem*)pData)->GetParent();
+        FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
+        FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems)
+                                        ?
+                                        PTR_CAST(FmFilterItems,pData)
+                                        :
+                                    PTR_CAST(FmFilterItems,pData->GetParent());
         return pTargetItems;
     }
 }
@@ -1763,7 +1766,7 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 // -----------------------------------------------------------------------------
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
-    // be sure that the data is only used within a only one form!
+    // be sure that the data is only used within only one form!
     FmFormItem* pFirstItem = NULL;
 
     sal_Bool bHandled = sal_True;
@@ -1806,7 +1809,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
         {
             FmFilterItem* pFilterItem = _pTargetItems->Find((*i)->GetTextComponent());
             String aText = (*i)->GetText();
-            if (!pFilterItem)
+            if ( !pFilterItem )
             {
                 pFilterItem = new FmFilterItem(m_pModel->getORB(),_pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
                 m_pModel->Append(_pTargetItems, pFilterItem);
@@ -1987,20 +1990,16 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
             if ( pTarget )
             {
                 FmFilterItems* pTargetItems = getTargetItems(pTarget);
-                ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
-                sal_Bool bNextTargetItem = sal_True;
-                while ( bNextTargetItem )
+                if ( pTargetItems )
                 {
-                    ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
-                    for (; i != aEnd; ++i)
+                    ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
+                    sal_Bool bNextTargetItem = sal_True;
+                    while ( bNextTargetItem )
                     {
-                        if ((*i)->GetParent() == pTargetItems)
-                            continue;
-                        else
+                        ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
+                        for (; i != aEnd; ++i)
                         {
-                            FmFilterItem* pFilterItem = pTargetItems->Find((*i)->GetTextComponent());
-                            // we found the text component so jump above
-                            if ( pFilterItem )
+                            if ( (*i)->GetParent() == pTargetItems )
                             {
                                 pTarget = aGetEntry(this,pTarget);
                                 if ( !pTarget )
@@ -2008,12 +2007,28 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
                                 pTargetItems = getTargetItems(pTarget);
                                 break;
                             }
+                            else
+                            {
+                                FmFilterItem* pFilterItem = pTargetItems->Find((*i)->GetTextComponent());
+                                // we found the text component so jump above
+                                if ( pFilterItem )
+                                {
+                                    pTarget = aGetEntry(this,pTarget);
+                                    if ( !pTarget )
+                                        return;
+                                    pTargetItems = getTargetItems(pTarget);
+                                    break;
+                                }
+                            }
                         }
+                        bNextTargetItem = i != aEnd && pTargetItems;
                     }
-                    bNextTargetItem = i != aEnd;
+                    if ( pTargetItems )
+                    {
+                        insertFilterItem(aItemList,pTargetItems);
+                        return;
+                    }
                 }
-                insertFilterItem(aItemList,pTargetItems);
-                return;
             }
         }
     }
@@ -2057,6 +2072,13 @@ void FmFilterNavigator::DeleteSelection()
 
     // now check if we need to insert new items
     m_pModel->CheckIntegrity(m_pModel);
+}
+// -----------------------------------------------------------------------------
+void FmFilterNavigator::LoseFocus()
+{
+    if ( IsEditingActive() )
+        EndEditing();
+    SvTreeListBox::LoseFocus();
 }
 
 //========================================================================
