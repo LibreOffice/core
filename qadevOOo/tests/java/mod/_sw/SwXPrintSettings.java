@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPrintSettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:33 $
+ *  last change:$Date: 2003-05-27 13:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public class SwXPrintSettings extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -123,7 +123,7 @@ public class SwXPrintSettings extends TestCase {
 
         log.println( "creating a test environment" );
         try {
-            XMultiServiceFactory myMSF = tParam.getMSF();
+            XMultiServiceFactory myMSF = (XMultiServiceFactory)tParam.getMSF();
             oInst = myMSF.createInstance("com.sun.star.text.GlobalSettings");
         } catch ( com.sun.star.uno.Exception e ){
             log.println("Couldn't create instance!" + e);
