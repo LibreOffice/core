@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-19 12:34:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 
-        sal_Int32 nId = ID_NOTFOUND;
+        sal_Int32 nId = ID_UNKNOWN;
 
         if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
         {
@@ -337,7 +337,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField(
             nId = ID_MEASUREFIELD;
         }
 
-        if( nId != ID_NOTFOUND )
+        if( nId != ID_UNKNOWN )
             xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
     }
 
