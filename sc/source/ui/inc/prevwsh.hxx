@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:38:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class ScPreviewShell: public SfxViewShell
     ScrollBar*      pVerScroll;
     Window*         pCorner;
 
-    String          aSourceData;            // ViewData
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
     BYTE            nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
 
@@ -154,7 +154,8 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-    const String&   GetSourceData() const   { return aSourceData; }
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >
+                    GetSourceData() const       { return aSourceData; }
     BYTE            GetSourceDesignMode() const { return nSourceDesignMode; }
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
