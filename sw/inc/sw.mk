@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-22 10:57:57 $
+#   last change: $Author: rt $ $Date: 2004-10-27 15:24:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,9 @@ CDEFS += -DSW_DLLIMPLEMENTATION
 
 # set default symbol visibility / scope to hidden
 .IF "$(COMNAME)" == "gcc3"
-.IF "$(CCNUMVER)" >= "000300040000"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGS += -fvisibility=hidden
-.ENDIF # 3.4.0
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 .ENDIF # gcc3
 
 .IF "$(COMNAME)" == "sunpro5"
