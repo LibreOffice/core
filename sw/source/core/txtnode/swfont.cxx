@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:34:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,21 +208,6 @@ void SwFont::SetBackColor( Color* pNewColor )
     bFntChg = TRUE;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
-
-/************************************************************************
- * Hintergrundbrush setzen,
- * die alte Brush wird _nicht_ destruiert, sondern ist der Rueckgabewert.
- ***********************************************************************/
-
-Color* SwFont::XChgBackColor( Color* pNewColor )
-{
-    Color* pRet = pBackColor;
-    pBackColor = pNewColor;
-    bFntChg = TRUE;
-    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
-    return pRet;
-}
-
 
 // maps directions for vertical layout
 USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
@@ -801,22 +786,6 @@ short SwSubFont::_CheckKerning( )
 }
 
 /*************************************************************************
- *                    SwFont::GetGuessedLeading()
- *************************************************************************/
-
-USHORT SwFont::GetGuessedLeading( ViewShell *pSh, const OutputDevice& rOut )
-{
-    if( pSh && pSh->GetWin() )
-        return 0;
-    else
-    {
-        SwFntAccess aFntAccess( aSub[nActual].pMagic, aSub[nActual].nFntIndex,
-                                &aSub[nActual], pSh );
-        return aFntAccess.Get()->GetGuessedLeading();
-    }
-}
-
-/*************************************************************************
  *                    SwSubFont::GetAscent()
  *************************************************************************/
 
@@ -920,64 +889,6 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     }
 
     return aTxtSize;
-}
-
-/*************************************************************************
- *                    SwFont::GetTxtBreak()
- *************************************************************************/
-
-xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
-    const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
-    const xub_StrLen nIdx, const xub_StrLen nLen )
-{
-    ChgFnt( pSh, (OutputDevice&)*pOut );
-
-    USHORT nTxtBreak = 0;
-
-    USHORT nLn = ( nLen == STRING_LEN ? rTxt.Len() : nLen );
-    if( aSub[nActual].IsCapital() && nLn )
-        nTxtBreak = GetCapitalBreak( pSh, pOut, pScript, rTxt, nTextWidth,
-                                     0, nIdx, nLn );
-    else
-    {
-        if ( !aSub[nActual].IsCaseMap() )
-            nTxtBreak = pOut->GetTextBreak( rTxt, nTextWidth,
-                                               nIdx, nLn, CheckKerning() );
-        else
-            nTxtBreak = pOut->GetTextBreak( aSub[nActual].CalcCaseMap( rTxt ),
-                        nTextWidth, nIdx, nLn, CheckKerning() );
-    }
-    return nTxtBreak;
-}
-
-/*************************************************************************
- *                    SwFont::GetTxtBreak()
- *************************************************************************/
-
-xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
-   const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
-   xub_StrLen& rExtraCharPos, const xub_StrLen nIdx, const xub_StrLen nLen )
-{
-    // Robust ...
-    if ( !pLastFont || pLastFont->GetOwner()!= aSub[nActual].pMagic )
-        ChgFnt( pSh, (OutputDevice&)*pOut );
-
-    xub_StrLen nTxtBreak = 0;
-
-    xub_StrLen nLn = ( nLen == STRING_LEN ? rTxt.Len() : nLen );
-    if( aSub[nActual].IsCapital() && nLn )
-            nTxtBreak = GetCapitalBreak( pSh, pOut, pScript, rTxt, nTextWidth,
-                                &rExtraCharPos, nIdx, nLn );
-    else
-    {
-        if ( !aSub[nActual].IsCaseMap() )
-            nTxtBreak = pOut->GetTextBreak( rTxt, nTextWidth,
-                            '-', rExtraCharPos, nIdx, nLn, CheckKerning() );
-        else
-            nTxtBreak = pOut->GetTextBreak( aSub[nActual].CalcCaseMap( rTxt ),
-                nTextWidth, '-', rExtraCharPos, nIdx, nLn, CheckKerning() );
-    }
-    return nTxtBreak;
 }
 
 /*************************************************************************
