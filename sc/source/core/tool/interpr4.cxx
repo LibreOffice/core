@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:15:02 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,7 +1639,8 @@ void ScInterpreter::ScExternal()
                             else
                             {
                                 pStr[i-1] = new sal_Char[MAXSTRLEN];
-                                strcpy( pStr[i-1], aStr.GetBuffer() );
+                                strncpy( pStr[i-1], aStr.GetBuffer(), MAXSTRLEN );
+                                pStr[i-1][MAXSTRLEN-1] = 0;
                                 ppParam[i] = pStr[i-1];
                             }
                         }

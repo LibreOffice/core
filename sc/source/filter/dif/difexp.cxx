@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-10-31 18:20:27 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------------
+
+#include <tools/solmath.hxx>
 
 #include <stdio.h>
 
@@ -135,7 +137,6 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
     UINT16              nTab = rRange.aStart.Tab();
 
     double              fVal;
-    sal_Char*           pBuffer = new sal_Char[ 256 ];
 
     const BOOL          bPlain = ( nDifOption == SC_DIFOPT_PLAIN );
 
@@ -196,8 +197,9 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                         if( bPlain )
                         {
                             fVal = ( ( ScValueCell * ) pAkt )->GetValue();
-                            sprintf( pBuffer, "%.14G", fVal );
-                            aOS += pBuffer;
+                            aUniString.Erase();
+                            SolarMath::DoubleToString( aUniString, fVal, 'G', 14, '.', TRUE );
+                            aOS += ByteString( aUniString, eNach );
                         }
                         else
                         {
@@ -234,8 +236,9 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                             if( bPlain )
                             {
                                 fVal = ( ( ScFormulaCell * ) pAkt )->GetValue();
-                                sprintf( pBuffer, "%.14G", fVal );
-                                aOS += pBuffer;
+                                aUniString.Erase();
+                                SolarMath::DoubleToString( aUniString, fVal, 'G', 14, '.', TRUE );
+                                aOS += ByteString( aUniString, eNach );
                             }
                             else
                             {
@@ -270,8 +273,6 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
     }
 
     rOut << pSpecDataType_LF << pKeyEOD << '\n';
-
-    delete[] pBuffer;
 
     return eRet;
 }
