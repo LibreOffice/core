@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:18:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ russian ] = "Θρκλώχενθε (-)";
         Text[ polish ] = "WyjΉtek (-)";
         Text[ japanese ] = "—αO(-) (~E)";
-        Text[ chinese_traditional ] = "¨Ò¥~(-)";
+        Text[ chinese_traditional ] = "¨Ò¥~(-)(~E)";
         Text[ arabic ] = "ΗΣΚΛδΗΑ (-)";
         Text[ greek ] = "Εξ~αίρεση (-)";
         Text[ korean ] = "ΏΉΏά (-)(~E)";
@@ -414,7 +414,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ arabic ] = "ΗαΗήΚΡΗΝ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Προτεινόμενα:";
-        Text[ korean ] = "Α¦ΎΘ:";
+        Text[ korean ] = "Α¦ΎΘ(~B):";
         Text[ turkish ] = "Φneri";
         Text[ catalan ] = "~Sugerencia";
         Text[ finnish ] = "~Korvaus:";
@@ -451,7 +451,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "·s¦rµό(~N)";
         Text[ arabic ] = "ΜΟνΟ";
         Text[ greek ] = "Δημιουργία";
-        Text[ korean ] = "»υ·Ξ";
+        Text[ korean ] = "»υ·Ξ(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
@@ -480,7 +480,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "»θΑ¦";
+        Text[ korean ] = "»θΑ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -516,7 +516,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "΄ΐ¥N(~R)";
         Text[ arabic ] = "ΗΣΚΘΟΗα";
         Text[ greek ] = "Αντικατάσταση";
-        Text[ korean ] = "ΉΩ²Ω±β";
+        Text[ korean ] = "ΉΩ²Ω±β(~R)";
         Text[ turkish ] = "Deπiώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reemplazar";
@@ -635,6 +635,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ finnish ] = "Haluatko vaihtaa sanaston '%1' kieltδ?";
 };
  // ********************************************************************** EOF
+
 
 
 
