@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 17:02:36 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,25 @@
  *
  ************************************************************************/
 
-#ifndef ECOMP_LDAPBE_SINGLEBACKENDADAPTER_HXX_
+#ifndef CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
 #include "singlebackendadapter.hxx"
-#endif // ECOMP_LDAPBE_SINGLEBACKENDADAPTER_HXX_
+#endif // CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
+
+#ifndef CONFIGMGR_API_FACTORY_HXX_
+#include "confapifactory.hxx"
+#endif // CONFIGMGR_API_FACTORY_HXX_
+
+#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
+#include "serviceinfohelper.hxx"
+#endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
 
 namespace configmgr { namespace backend {
 
 //==============================================================================
 
 SingleBackendAdapter::SingleBackendAdapter(
-        const uno::Reference<uno::XComponentContext>& aContext)
-: BackendBase(mMutex), mContext(aContext) {
+        const uno::Reference<lang::XMultiServiceFactory>& aFactory)
+: BackendBase(mMutex), mFactory(aFactory) {
 }
 //------------------------------------------------------------------------------
 
@@ -83,8 +91,7 @@ void SAL_CALL SingleBackendAdapter::initialize(
                 "com.sun.star.configuration.backend.SingleBackend")) ;
 
     mBackend = uno::Reference<backenduno::XSingleBackend>::query(
-        mContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                kSingleBackend, aParameters, mContext)) ;
+        mFactory->createInstanceWithArguments(kSingleBackend, aParameters)) ;
 }
 //------------------------------------------------------------------------------
 
@@ -147,14 +154,29 @@ SAL_CALL SingleBackendAdapter::getUpdateHandler(const rtl::OUString& aComponent,
                                         mBackend->getUpdateLayerId(aComponent,
                                                                    aEntity)) ;
     return uno::Reference<backenduno::XUpdateHandler>::query(
-        mContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            kUpdateMerger, arguments, mContext)) ;
+        mFactory->createInstanceWithArguments(kUpdateMerger, arguments)) ;
+}
+//------------------------------------------------------------------------------
+
+static const sal_Char *kService = "com.sun.star.configuration.backend.Backend" ;
+static const sal_Char *kImplementation =
+                "com.sun.star.comp.configuration.backend.SingleBackendAdapter" ;
+
+static AsciiServiceName kServiceNames [] = { kService, 0 } ;
+static const ServiceInfo kServiceInfo = { kImplementation, kServiceNames } ;
+
+const ServiceInfo *getSingleBackendAdapterServiceInfo(void) {
+    return &kServiceInfo ;
+}
+
+uno::Reference<uno::XInterface> SAL_CALL
+instantiateSingleBackendAdapter(const CreationContext& aContext) {
+    return *new SingleBackendAdapter(aContext) ;
 }
 //------------------------------------------------------------------------------
 
 static const rtl::OUString kImplementationName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.backend.SingleBackendAdapter")) ;
+                                RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
 
 rtl::OUString SAL_CALL SingleBackendAdapter::getName(void) {
     return kImplementationName ;
@@ -169,8 +191,7 @@ rtl::OUString SAL_CALL SingleBackendAdapter::getImplementationName(void)
 //------------------------------------------------------------------------------
 
 static const rtl::OUString kBackendServiceName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.Backend")) ;
+                                        RTL_CONSTASCII_USTRINGPARAM(kService)) ;
 
 sal_Bool SAL_CALL SingleBackendAdapter::supportsService(
                                         const rtl::OUString& aServiceName)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 17:02:36 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif // _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
@@ -104,12 +104,12 @@ typedef cppu::WeakComponentImplHelper3<backenduno::XBackend,
 class SingleBackendAdapter : public BackendBase {
     public :
         /**
-          Service constructor from a component context.
+          Service constructor from a service factory.
 
-          @param aContext   component context
+          @param aFactory   service factory
           */
         SingleBackendAdapter(
-                const uno::Reference<uno::XComponentContext>& aContext) ;
+                const uno::Reference<lang::XMultiServiceFactory>& aFactory) ;
         /** Destructor  */
         ~SingleBackendAdapter(void) ;
 
@@ -168,8 +168,8 @@ class SingleBackendAdapter : public BackendBase {
         static uno::Sequence<rtl::OUString> SAL_CALL getServices(void) ;
     protected :
     private :
-        /** Component context */
-        const uno::Reference<uno::XComponentContext>& mContext ;
+        /** Service factory */
+        const uno::Reference<lang::XMultiServiceFactory>& mFactory ;
         /** Mutex for resource protection */
         osl::Mutex mMutex ;
         /** Remote backend that the offline cache is handling */
