@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:49:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 11:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ hidspecial HID_BROWSER_DROP_LINK                        { HelpId = HID_BROWSER_D
 hidspecial HID_BROWSER_OPEN_DOCUMENT                    { HelpId = HID_BROWSER_OPEN_DOCUMENT ; };
 hidspecial HID_BROWSER_EDIT_DOCUMENT                    { HelpId = HID_BROWSER_EDIT_DOCUMENT ; };
 hidspecial HID_BROWSER_BEW_DOCUMENT                     { HelpId = HID_BROWSER_BEW_DOCUMENT ; };
+
 hidspecial HID_DLGIDX_NEWINDEX                          { HelpId = HID_DLGIDX_NEWINDEX; }
 hidspecial HID_DLGIDX_DROPINDEX                         { HelpId = HID_DLGIDX_DROPINDEX; }
 hidspecial HID_DLGIDX_RENAMEINDEX                       { HelpId = HID_DLGIDX_RENAMEINDEX; }
@@ -284,9 +285,14 @@ hidspecial HID_DLGINDEX_INDEXDETAILS_FIELD              { HelpId = HID_DLGINDEX_
 hidspecial HID_DLGINDEX_INDEXDETAILS_SORTORDER          { HelpId = HID_DLGINDEX_INDEXDETAILS_SORTORDER; }
 hidspecial HID_DOCLINKEDIT_URL                          { HelpId = HID_DOCLINKEDIT_URL; }
 
+hidspecial HID_QUERY_SQLMODE                            { HelpId = HID_QUERY_SQLMODE ; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/08/06 07:49:58  fs
+ *  #90558# #90529# new help ids
+ *
  *  Revision 1.33  2001/07/17 07:28:03  oj
  *  #89575# new pwd change dialog
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:42:40 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 11:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@
 #define HID_DLGINDEX_INDEXDETAILS_SORTORDER         (HID_DBACCESS_START + 206)
 
 #define HID_DOCLINKEDIT_URL                         (HID_DBACCESS_START + 207)
+#define HID_QUERY_SQLMODE                           (HID_DBACCESS_START + 208)
 
 // don't forget to update the file util/hidother.src
 
@@ -309,6 +310,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2001/08/06 07:42:40  fs
+ *  #90558# #90529# new help ids
+ *
  *  Revision 1.40  2001/07/17 07:25:54  oj
  *  #89575# new pwd change dialog
  *
