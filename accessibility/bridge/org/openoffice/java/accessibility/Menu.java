@@ -119,14 +119,14 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
