@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: os $ $Date: 2001-09-28 08:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,63 +295,4 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
     }
 }
 
-/*************************************************************************
-
-      Source Code Control ::com::sun::star::chaos::System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.6 2001-07-09 20:10:42 dvo Exp $
-
-      Source Code Control ::com::sun::star::chaos::System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2001/06/25 11:02:24  mib
-      #87313#: embedded images as BASE64
-
-      Revision 1.4  2001/06/18 17:27:51  dvo
-      #86004#
-      - changed SvXMLItemMaps to use XMLTokenEnum
-      - removed remaining xmlkywd.hxx inclusions and usages
-      -> sw is now xmlkywd.hxx-free!
-
-      Revision 1.3  2001/06/15 17:16:59  dvo
-      #86004# changed SvXMLTokenMap to use XML tokens
-
-      Revision 1.2  2000/12/02 10:57:15  mib
-      #80795#: use packages
-
-      Revision 1.1.1.1  2000/09/18 17:14:59  hr
-      initial import
-
-      Revision 1.2  2000/09/18 16:05:05  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.1  2000/08/02 14:52:38  mib
-      text export continued
-
-      Revision 1.2  2000/06/26 08:29:55  mib
-      no SVX dependency any longer
-
-      Revision 1.1  2000/06/08 09:14:25  aw
-      new export classes from svx
-
-      Revision 1.5  2000/05/02 10:04:19  mib
-      unicode
-
-      Revision 1.4  2000/03/13 14:38:56  cl
-      uno3
-
-      Revision 1.3  2000/02/10 20:09:32  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.2  2000/01/06 14:59:19  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-      Revision 1.1  1999/12/13 08:11:18  mib
-      #70271#: XML brush item import/export
-
-      Revision 1.1  1999/12/04 16:47:25  cl
-      #70271# added support for exporting tab-stop elements in xml
-
-
-*************************************************************************/
 
