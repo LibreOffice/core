@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:27:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,7 +1671,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
         Text[ italian ] = "Compatibilità CJK";
         Text[ danish ] = "CJK Compatibility";
         Text[ swedish ] = "CJK kompatibilitet";
-        Text[ polish ] = "Kompatybilno?æ z CJK";
+        Text[ polish ] = "Kompatybilnoœæ z CJK";
         Text[ portuguese_brazilian ] = "CJK Compatibility";
         Text[ japanese ] = "CJKŒÝŠ·Œ`";
         Text[ korean ] = "CJK È£È¯";
@@ -1896,7 +1896,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ italian ] = "Forme compatibili CJK";
         Text[ danish ] = "CJK Compatibility Forms";
         Text[ swedish ] = "CJK - kompatibilitetsformat";
-        Text[ polish ] = "Formy zgodno?ci CJK";
+        Text[ polish ] = "Formy zgodnoœci CJK";
         Text[ portuguese_brazilian ] = "CJK Compatibility Forms";
         Text[ japanese ] = "CJKŒÝŠ·•¶Žš";
         Text[ korean ] = "CJK È£È¯ Çü½Ä";
