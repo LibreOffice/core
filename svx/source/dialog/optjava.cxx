@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:57:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,33 @@ void SvxJavaTable::KeyInput( const KeyEvent& rKEvt )
     }
 
     SvxSimpleTable::KeyInput( rKEvt );
+}
+
+// -----------------------------------------------------------------------
+
+bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< ::rtl::OUString >& rListB )
+{
+    bool bRet = true;
+    const sal_Int32 nLen = rListA.getLength();
+
+    if (  rListB.getLength() != nLen )
+        bRet = false;
+    else
+    {
+        const ::rtl::OUString* pStringA = rListA.getConstArray();
+        const ::rtl::OUString* pStringB = rListB.getConstArray();
+
+        for ( sal_Int32 i = 0; i < nLen; ++i )
+        {
+            if ( *pStringA++ != *pStringB++ )
+            {
+                bRet = false;
+                break;
+            }
+        }
+    }
+
+    return bRet;
 }
 
 // class SvxJavaOptionsPage ----------------------------------------------
@@ -409,7 +436,21 @@ IMPL_LINK( SvxJavaOptionsPage, ParameterHdl_Impl, PushButton *, EMPTYARG )
         aParameterList = m_pParamDlg->GetParameters();
 
     if ( m_pParamDlg->Execute() == RET_OK )
-        aParameterList = m_pParamDlg->GetParameters();
+    {
+        if ( !areListsEqual( aParameterList, m_pParamDlg->GetParameters() ) )
+        {
+            aParameterList = m_pParamDlg->GetParameters();
+            sal_Bool bRunning = sal_False;
+            javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
+            DBG_ASSERT( JFW_E_NONE == eErr,
+                        "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
+            if ( bRunning )
+            {
+                WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                aWarnBox.Execute();
+            }
+        }
+    }
     else
         m_pParamDlg->SetParameters( aParameterList );
 
@@ -437,7 +478,22 @@ IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
 
     m_pPathDlg->SetFocus();
     if ( m_pPathDlg->Execute() == RET_OK )
-        sClassPath = m_pPathDlg->GetClassPath();
+    {
+
+        if ( m_pPathDlg->GetClassPath() != sClassPath )
+        {
+            sClassPath = m_pPathDlg->GetClassPath();
+            sal_Bool bRunning = sal_False;
+            javaFrameworkError eErr = jfw_isVMRunning( &bRunning );
+            DBG_ASSERT( JFW_E_NONE == eErr,
+                        "SvxJavaOptionsPage::ParameterHdl_Impl(): error in jfw_isVMRunning" );
+            if ( bRunning )
+            {
+                WarningBox aWarnBox( this, SVX_RES( RID_SVX_MSGBOX_JAVA_RESTART2 ) );
+                aWarnBox.Execute();
+            }
+        }
+    }
     else
         m_pPathDlg->SetClassPath( sClassPath );
 
@@ -699,6 +755,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
     m_aAssignBtn        ( this, ResId( PB_ASSIGN ) ),
     m_aAssignedLabel    ( this, ResId( FT_ASSIGNED ) ),
     m_aAssignedList     ( this, ResId( LB_ASSIGNED ) ),
+    m_aExampleText      ( this, ResId( FT_EXAMPLE ) ),
     m_aRemoveBtn        ( this, ResId( PB_REMOVE ) ),
     m_aButtonsLine      ( this, ResId( FL_BUTTONS ) ),
     m_aOKBtn            ( this, ResId( PB_PARAMETER_OK ) ),
@@ -712,6 +769,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
     m_aAssignBtn.SetClickHdl( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
     m_aRemoveBtn.SetClickHdl( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
     m_aAssignedList.SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
+    m_aAssignedList.SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
     ModifyHdl_Impl( &m_aParameterEdit );
     EnableRemoveButton();
@@ -757,6 +815,16 @@ IMPL_LINK( SvxJavaParameterDlg, AssignHdl_Impl, PushButton *, EMPTYARG )
 IMPL_LINK( SvxJavaParameterDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
 {
     EnableRemoveButton();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxJavaParameterDlg, DblClickHdl_Impl, ListBox *, EMPTYARG )
+{
+    USHORT nPos = m_aAssignedList.GetSelectEntryPos();
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        m_aParameterEdit.SetText( m_aAssignedList.GetEntry( nPos ) );
     return 0;
 }
 
