@@ -1,0 +1,214 @@
+[%WELCOME_CAPTION%]
+en-US = "%PRODUCTNAME% %PRODUCTVERSION% Error Report"
+de = "%PRODUCTNAME% %PRODUCTVERSION% Fehlerbericht"
+
+[%WELCOME_HEADER%]
+en-US = "Welcome to the %PRODUCTNAME% %PRODUCTVERSION% Error Report"
+de = "Willkommen zum %PRODUCTNAME% %PRODUCTVERSION% Fehlerbericht"
+
+[%WELCOME_BODY1%]
+en-US = "This error report tool gathers information about how %PRODUCTNAME% is working and sends it to Sun Microsystems to help improve future versions.\n\n"
+de = "Dieses Fehlerbericht-Programm sammelt Informationen über den Zustand von %PRODUCTNAME% und übermittelt sie an Sun Microsystems, um zukünftige Versionen zu verbessern.\n\n"
+
+[%WELCOME_BODY2%]
+en-US = "It's easy - just send the report without any further effort on your part by clicking 'Send' in the next dialog, or you can briefly describe how the error occurred and then click 'Send'. If you want to see the report, click the 'Show Report' button. No data will be sent if you click 'Do Not Send'.\n\n"
+de = "Das Senden der Daten geht ganz einfach. Zum Versenden, klicken Sie im nächsten Dialog 'Senden'. Wenn Sie sich den Fehlerbericht ansehen wollen,klicken Sie auf 'Bericht anzeigen'. Es werden keine Daten versendet, wenn Sie 'Nicht Senden' klicken.\n\n"
+
+[%WELCOME_BODY3%]
+en-US = "Customer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME% %PRODUCTVERSION% when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME% and will not be shared with third parties.\nFor more information on Sun Microsystems' privacy policy, visit\n"
+de = "Datenschutz\nDie gesammelten Informationen über den Zustand von %PRODUCTNAME% %PRODUCTVERSION% beziehen sich nur auf den Fehler der entstanden ist. Andere Informationen wie z.B. Kennwörter oder der Dokumenteninhalt werden nicht gesammelt.\n\nAlle Informationen werden ausschließlich für die Verbesserung von %PRODUCTNAME% genutzt und werden nicht an dritte weitergegeben.\nMehr Information zu Datenschutz-Richtlinien von Sun Microsystems finden Sie unter\n"
+
+[%PRIVACY_URL%]
+en-US = "http://www.sun.com/privacy/"
+de = "http://www.sun.de/Datenschutz/"
+
+[%NEXT_BUTTON%]
+en-US = "~Next >>"
+de = "~Weiter >>"
+
+[%CANCEL_BUTTON%]
+en-US = "Cancel"
+de = "Abbrechen"
+
+[%OK_BUTTON%]
+en-US = "OK"
+de = "OK"
+
+[%REPORT_CAPTION%]
+en-US = "%PRODUCTNAME% %PRODUCTVERSION% Error Report"
+de = "%PRODUCTNAME% %PRODUCTVERSION% Fehlerbericht"
+
+[%REPORT_HEADER%]
+en-US = "An error occurred while running %PRODUCTNAME% %PRODUCTVERSION%"
+de = "Bei der Ausführung von %PRODUCTNAME% %PRODUCTVERSION% ist ein Fehler aufgetreten"
+
+[%REPORT_BODY%]
+en-US = "The %PRODUCTNAME% %PRODUCTVERSION% Error Report has gathered information that could help Sun Microsystems improve %PRODUCTNAME%.\nIn the spaces below, you can enter a title for your crash report and describe the action you were trying to carry out when the error occurred. Then click 'Send'.\n"
+de = "Der %PRODUCTNAME% %PRODUCTVERSION% Fehlerbericht hat Daten gesammelt die Sun Microsystems helfen können %PRODUCTNAME% zu verbessern.\nIn den folgenden Feldern, können Sie einen Titel für Ihren Bericht angeben sowie beschreiben, welche Aktion Sie ausgeführt haben, als der Fehler auftrat. Dann klicken Sie auf 'Senden'.\n"
+
+[%ENTER_TITLE%]
+en-US = "Which type of document (e.g. presentation) were you using when the error occurred?"
+de = "Welchen Dokumententyp (z.B. Präsentation) haben Sie verwendet als der Fehler auftrat?"
+
+[%ALLOW_CONTACT%]
+en-US = "~I allow Sun Microsystems to contact me regarding this report."
+de = "Sun ~Microsystems darf mich bzgl. dieses Berichts kontaktieren."
+
+[%ENTER_EMAIL%]
+en-US = "Please enter your e-mail address."
+de = "Bitte geben Sie Ihre E-Mail-Adresse ein."
+
+[%ENTER_DESCRIPTION%]
+en-US = "~How were you using %PRODUCTNAME% when the error occurred ?"
+de = "Welche Aktion(en) haben Sie ausgeführt als der ~Fehler auftrat ?"
+
+[%BACK_BUTTON%]
+en-US = " << ~Back"
+de = "<< ~Zurück"
+
+[%SEND_BUTTON%]
+en-US = "S~end"
+de = "S~enden"
+
+[%DONOT_SEND_BUTTON%]
+en-US = "Do ~Not Send"
+de = "~Nicht Senden"
+
+[%SHOW_REPORT_BUTTON%]
+en-US = "Show ~Report..."
+de = "Bericht ~anzeigen..."
+
+[%SAVE_REPORT_BUTTON%]
+en-US = "~Save Report..."
+de = "Bericht ~speichern..."
+
+[%SAVE_REPORT_TITLE%]
+en-US = "Save Report to"
+de = "Bericht speichern unter"
+
+[%ERROR_MSG_SIMPLE_MAPI%]
+en-US = "The error report could not be sent because the default e-mail program does not support MAPI.\n Please use a MAPI-compatible e-mail program."
+de = "Der Fehlerbericht konnte nicht versendet werden, da das als Standard angemeldete E-Mail- Programm kein MAPI unterstützt.\nBitte verwenden Sie ein MAPI kompatibles E-Mail Programm."
+
+[%ERROR_MSG_DISK_FULL%]
+en-US = "The error report could not be temporarily saved and could therefore not be sent."
+de = "Der Fehlerbericht konnte nicht zwischengespeichert werden.\nEin Versand ist nicht möglich."
+
+
+[%ERROR_MSG_SENDMAIL%]
+en-US = "The error report could not be sent because 'sendmail' could not be started.\nPlease check the 'sendmail' settings."
+de = "Der Fehlerbericht konnte nicht versendet werden, da 'sendmail' nicht gestartet werden konnte.\nBitte überprüfen Sie die Einstellung von 'sendmail'."
+
+[%ERROR_MSG_PROXY%]
+en-US = "The error report could not be sent. Please check the proxy settings under 'Options' in the Error Report Tool."
+de = "Der Fehlerbericht konnte nicht versendet werden. Bitte überprüfen Sie die Proxy-Einstellungen in den Optionen des Fehlerbericht-Programms."
+
+[%ERROR_MSG_NOCONNECT%]
+en-US = "The error report could not be sent because there is no Internet connection. Please check your Internet settings."
+de = "Der Fehlerbericht konnte nicht versendet werden, da keine Verbindung zum Internet besteht. Bitte überprüfen Sie Ihre Internet-Einstellungen."
+
+[%OPTIONS_BUTTON%]
+en-US = "~Options..."
+de = "~Optionen..."
+
+[%OPTIONS_TITLE%]
+en-US = "Options"
+de = "Optionen"
+
+[%PROXY_SETTINGS_HEADER%]
+en-US = "Proxy settings"
+de = "Proxy-Einstellungen"
+
+[%PROXY_SETTINGS_SYSTEM%]
+en-US = "Use ~system settings"
+de = "~Systemeinstellungen verwenden"
+
+[%PROXY_SETTINGS_DIRECT%]
+en-US = "Use ~direct connection to the Internet"
+de = "~Direkte Verbindung zum Internet verwenden"
+
+[%PROXY_SETTINGS_MANUAL%]
+en-US = "Use ~manual settings"
+de = "~Manuelle Einstellungen verwenden"
+
+[%PROXY_SETTINGS_ADDRESS%]
+en-US = "HT~TP Proxy"
+de = "HT~TP Proxy"
+
+[%PROXY_SETTINGS_PORT%]
+en-US = "~Port"
+de = "~Port"
+
+[%PROXY_SETTINGS_DESCRIPTION%]
+en-US = "The %PRODUCTNAME% Error Report tool needs to be connected to the Internet to be able to send error reports.\n\nCompanies often use proxy servers in conjunction with a firewall to protect the network.\n\nIf this applies to your situation, you have to specify the address and port for the server."
+de = "Das %PRODUCTNAME% Fehlerbericht-Programm benötigt eine Verbindung zum Internet, um Fehlerberichte zu versenden.\n\nIn Firmen werden oft Proxy-Server in Verbindung mit einer Firewall zum Schutz des Netzwerkes eingesetzt.\n\nWenn dies auf Sie zutrifft, müssen Sie die Adresse und den Port des Servers angeben."
+
+[%SENDING_REPORT_HEADER%]
+en-US = "Sending Error Report"
+de = "Sende Fehlerbericht"
+
+[%SENDING_REPORT_STATUS%]
+en-US = "Status: Sending error report"
+de = "Status: Sende Fehlerbericht"
+
+[%SENDING_REPORT_STATUS_FINISHED%]
+en-US = "Status: The error report has been sent successfully."
+de = "Status: Der Fehlerbericht wurde erfolgreich gesendet."
+
+[%ERROR_MSG_NOEMAILADDRESS%]
+en-US = "You have marked the option 'I allow Sun Microsystems to contact me regarding this report.'\nPlease enter your e-mail address."
+de = "Sie haben die Option 'Sun Microsystems darf mich bzgl. dieses Berichts kontaktieren.' markiert.\nBitte geben Sie Ihre E-Mail-Addresse an."
+
+[%MSG_CMDLINE_USAGE%]
+en-US = "Usage:"
+de = "Benutzung:"
+
+[%MSG_PARAM_PROCESSID%]
+en-US = "-p <process ID>"
+de = "-p <Prozess ID>"
+
+[%MSG_PARAM_PROCESSID_DESCRIPTION%]
+en-US = "Assigns the %PRODUCTNAME% process ID (PID) to the Error Report Tool"
+de = "Weist die %PRODUCTNAME%-Prozess-ID (PID) dem Fehlerbericht-Programm zu"
+
+[%MSG_PARAM_HELP_DESCRIPTION%]
+en-US = "Shows this help text.\nDetailed information can be found in the Setup Guide."
+de = "Zeigt diese Hilfe an.\nDetaillierte Informationen entnehmen Sie bitte dem Installationshandbuch."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
