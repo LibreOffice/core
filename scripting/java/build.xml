@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-05 12:50:09 $
+#   last change: $Author: svesik $ $Date: 2004-04-19 23:01:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,6 +194,9 @@
                        value="com.sun.star.script.framework.provider.beanshell.ScriptProviderForBeanShell"/>
         </manifest>
         <include name="**/provider/beanshell/*.class"/>
+        <fileset dir=".">
+          <include name="**/provider/beanshell/*.bsh"/>
+        </fileset>
     </jar>
 
     <jar jarfile="${jardir}/ScriptProviderForJavaScript.jar"
@@ -204,6 +207,9 @@
                        value="com.sun.star.script.framework.provider.javascript.ScriptProviderForJavaScript"/>
         </manifest>
         <include name="**/provider/javascript/*.class"/>
+        <fileset dir=".">
+          <include name="**/provider/javascript/*.js"/>
+        </fileset>
     </jar>
 
     <jar jarfile="${jardir}/ScriptFramework.jar"
@@ -217,6 +223,8 @@
         <include name="**/log/*.class"/>
         <include name="**/provider/*.class"/>
         <include name="**/browse/*.class"/>
+        <include name="**/container/*.class"/>
+        <include name="**/io/*.class"/>
     </jar>
 
   </target>
