@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.22 $
+ #  $Revision: 1.23 $
  #
- #  last change: $Author: vg $ $Date: 2003-04-01 14:02:29 $
+ #  last change: $Author: kz $ $Date: 2003-08-25 15:03:05 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -74,7 +74,8 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 
 BMP_IN=$(PRJ)$/res
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         UserAdmin.src	\
         directsql.src	\
         missingdocdlg.src	\
