@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 09:20:50 $
+#   last change: $Author: hr $ $Date: 2003-08-13 17:21:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ PRJ := ..$/..$/..
 PRJNAME := bridges
 
 TARGET := test_javauno_acquire
-PACKAGE := test$/java_uno$/acquire
+PACKAGE := test$/javauno$/acquire
 
 ENABLE_EXCEPTIONS := TRUE
 
@@ -76,18 +76,20 @@ SLOFILES = $(SLO)$/testacquire.obj
 
 SHL1TARGET = testacquire.uno
 SHL1OBJS = $(SLOFILES)
-SHL1STDLIBS =
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL1VERSIONMAP = testacquire.map
 SHL1IMPLIB = itestacquire
 
 JAVAFILES = TestAcquire.java
-JARFILES = juh.jar jurt.jar ridl.jar
+JARFILES = OOoRunner.jar juh.jar jurt.jar ridl.jar
 
 .INCLUDE: target.mk
 
 ALLTAR: \
-    $(BIN)$/testacquire-client$(SCRIPTEXT) \
-    $(BIN)$/testacquire-server$(SCRIPTEXT)
+    $(BIN)$/testacquire-java-client$(SCRIPTEXT) \
+    $(BIN)$/testacquire-java-server$(SCRIPTEXT) \
+    $(BIN)$/testacquire-native-client$(SCRIPTEXT) \
+    $(BIN)$/testacquire-native-server$(SCRIPTEXT)
 
 .IF "$(GUI)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
@@ -99,30 +101,48 @@ EXEC_CLASSPATH_TMP = $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)
 EXEC_CLASSPATH = \
     $(strip $(subst,!,$(PATH_SEPERATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
-$(MISC)$/$(TARGET).rdb: types.idl
+$(BIN)$/$(TARGET).rdb: types.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
     - $(MKDIR) $(MISC)$/$(TARGET)$/inc
     idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
-    regmerge $(MISC)$/$(TARGET).rdb /UCR $(MISC)$/$(TARGET)$/types.urd
+    regmerge $@ /UCR $(MISC)$/$(TARGET)$/types.urd
     cppumaker -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
     javamaker -BUCR -nD -O$(CLASSDIR) $@ -X$(SOLARBINDIR)$/types.rdb
+    regmerge $@ / $(SOLARBINDIR)$/types.rdb
+    regcomp -register -r $@ -c acceptor.uno$(DLLPOST) \
+        -c bridgefac.uno$(DLLPOST) -c connector.uno$(DLLPOST) \
+        -c remotebridge.uno$(DLLPOST) -c uuresolver.uno$(DLLPOST)
 
-$(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
+$(SLOFILES) $(JAVACLASSFILES): $(BIN)$/$(TARGET).rdb
 
 TEST_JAVAUNO_ACQUIRE_UNO_URL := \
     \"'uno:socket,host=localhost,port=2002;urp;test'\"
 
-$(BIN)$/testacquire-client$(SCRIPTEXT):
+$(BIN)$/testacquire-java-client$(SCRIPTEXT):
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
 ..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
 $(SOLARBINDIR)$/sandbox.jar \
-        test.java_uno.acquire.TestAcquire $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
+        test.javauno.acquire.TestAcquire client \
+        $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(BIN)$/testacquire-server$(SCRIPTEXT):
+$(BIN)$/testacquire-java-server$(SCRIPTEXT):
+    echo java -classpath \
+        ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
+..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
+$(SOLARBINDIR)$/sandbox.jar \
+        test.javauno.acquire.TestAcquire server \
+        $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+$(BIN)$/testacquire-native-client$(SCRIPTEXT):
     echo uno -c com.sun.star.test.bridges.testacquire.impl -l $(SHL1TARGETN:f) \
-        -ro $(SOLARBINDIR)$/types.rdb -ro ..$/misc$/$(TARGET).rdb \
-        -u $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
+        -ro $(TARGET).rdb -- $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+$(BIN)$/testacquire-native-server$(SCRIPTEXT):
+    echo uno -c com.sun.star.test.bridges.testacquire.impl -l $(SHL1TARGETN:f) \
+        -ro $(TARGET).rdb -u $(TEST_JAVAUNO_ACQUIRE_UNO_URL) --singleaccept > $@
     $(GIVE_EXEC_RIGHTS) $@
