@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:37:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 #ifndef _STREAM_HXX
@@ -238,7 +242,7 @@ ULONG SwASCWriter::WriteStream()
                             case RTL_TEXTENCODING_UCS2:
                                 //Strm().StartWritingUnicodeText();
                                 Strm().SetEndianSwap(FALSE);
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
                                 Strm() << BYTE(0xFF) << BYTE(0xFE);
 #else
                                 Strm() << BYTE(0xFE) << BYTE(0xFF);
