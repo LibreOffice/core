@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-24 07:54:36 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 08:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
 
 
     // Java URL erzeugen
-    OUString url = rDocBase.GetMainURL();
+    OUString url = rDocBase.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
     if(!url.getLength())
         url = OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
