@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:43:49 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
+
 #ifndef _WRTWW8_HXX
 #include "wrtww8.hxx"
 #endif
@@ -116,6 +120,7 @@
 #endif
 
 using namespace ::com::sun::star::i18n;
+using namespace sw::util;
 
 USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
     USHORT nVal)
@@ -283,12 +288,6 @@ void SwWW8Writer::OutListTab()
 
                 if (wwFont::IsStarSymbol(sFontName))
                     SubstituteBullet(sNumStr,eChrSet,sFontName);
-                else if (eChrSet == RTL_TEXTENCODING_SYMBOL)
-                {
-                    sal_Unicode cChar = sNumStr.GetChar(0);
-                    if (cChar >= 0xF000 && cChar <= 0xF0FF)
-                        sNumStr.SetChar(0, cChar - 0xF000);
-                }
             }
             else
             {
@@ -598,7 +597,7 @@ void SwWW8Writer::SubstituteBullet(String& rNumStr,
 
     if (sFont.Len())
     {
-        rNumStr = cChar;
+        rNumStr = cChar | 0xF000;
         rFontName = sFont;
         rChrSet = RTL_TEXTENCODING_SYMBOL;
     }
@@ -748,9 +747,8 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 
 #ifdef NUM_RELSPACE
     SwNumFmt aFmt( *pFmt );
-    const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pNd->SwCntntNode::GetAttr(
-        RES_LR_SPACE );
-    aFmt.SetAbsLSpace( aFmt.GetAbsLSpace() + rLR.GetLeft() );
+    const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
+    aFmt.SetAbsLSpace(aFmt.GetAbsLSpace() + rLR.GetLeft());
     pFmt = &aFmt;
 #endif
 
