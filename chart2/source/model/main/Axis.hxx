@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 09:26:02 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,14 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <drafts/com/sun/star/chart2/XAxis.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 namespace chart
@@ -100,9 +100,9 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper4<
-    ::drafts::com::sun::star::chart2::XAxis,
-    ::drafts::com::sun::star::chart2::XIdentifiable,
-    ::drafts::com::sun::star::chart2::XTitled,
+    ::com::sun::star::chart2::XAxis,
+    ::com::sun::star::chart2::XIdentifiable,
+    ::com::sun::star::chart2::XTitled,
     ::com::sun::star::lang::XServiceInfo >
     Axis_Base;
 }
@@ -156,21 +156,21 @@ protected:
 // ____ XMeter ____
     virtual void SAL_CALL attachCoordinateSystem(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCoordSys,
+            ::com::sun::star::chart2::XBoundedCoordinateSystem >& xCoordSys,
         sal_Int32 nRepresentedDimension )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > SAL_CALL getCoordinateSystem()
+        ::com::sun::star::chart2::XBoundedCoordinateSystem > SAL_CALL getCoordinateSystem()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getRepresentedDimension()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setIncrement(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XIncrement >& aIncrement )
+            ::com::sun::star::chart2::XIncrement >& aIncrement )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XIncrement > SAL_CALL getIncrement()
+            ::com::sun::star::chart2::XIncrement > SAL_CALL getIncrement()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XIdentifiable ____
@@ -179,26 +179,26 @@ protected:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+                ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XTitle >& Title )
+            ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ::rtl::OUString m_aIdentifier;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
+        ::com::sun::star::chart2::XBoundedCoordinateSystem >
                        m_xCoordinateSystem;
     sal_Int32          m_nRepresentedDimension;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XIncrement >
+        ::com::sun::star::chart2::XIncrement >
                        m_xIncrement;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle >
+        ::com::sun::star::chart2::XTitle >
                        m_xTitle;
 };
 

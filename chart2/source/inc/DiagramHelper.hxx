@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 15:35:06 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef CHART2_DIAGRAMHELPER_HXX
 #define CHART2_DIAGRAMHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 
 namespace chart
@@ -75,9 +75,9 @@ class DiagramHelper
 public:
     static void changeDiagram(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xSource,
+            ::com::sun::star::chart2::XDiagram > & xSource,
         ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xDestination
+            ::com::sun::star::chart2::XDiagram > & xDestination
         );
 
 private:

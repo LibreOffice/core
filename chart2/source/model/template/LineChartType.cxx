@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,11 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
-#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <com/sun/star/chart2/CurveStyle.hpp>
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -79,9 +78,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
-
-using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AreaChartType.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include "AreaChartType.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace chart
 {

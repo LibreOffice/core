@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:11 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,17 @@
 #include "macros.hxx"
 #include "algohelper.hxx"
 #include "DataSeriesTreeHelper.hxx"
+#include "DataSeriesHelper.hxx"
+#include "BarChartType.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
+#include <com/sun/star/chart2/SymbolStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/XDataSource.hpp>
 #endif
 
 #ifndef CHART_PROPERTYHELPER_HXX
@@ -78,7 +86,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -88,6 +95,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
+// ----------------------------------------
 namespace
 {
 
@@ -171,6 +179,7 @@ const Sequence< Property > & lcl_GetPropertySequence()
 }
 
 } // anonymous namespace
+// ----------------------------------------
 
 namespace chart
 {
@@ -250,16 +259,104 @@ uno::Reference< chart2::XChartType > StockChartTypeTemplate::getDefaultChartType
     return new LineChartType( 2, chart2::CurveStyle_LINES );
 }
 
-// ____ XChartTypeTemplate ____
-uno::Reference< chart2::XDiagram > SAL_CALL
-    StockChartTypeTemplate::createDiagram(
-        const uno::Sequence< uno::Reference< chart2::XDataSeries > >& aSeriesSeq )
-    throw (uno::RuntimeException)
+Reference< chart2::XDataSeriesTreeParent > StockChartTypeTemplate::createDataSeriesTree(
+    const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
+    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys )
 {
-    // todo: create a stock chart!
-    return ChartTypeTemplate::createDiagram( aSeriesSeq );
+    // create series tree nodes
+    // root
+    Reference< chart2::XDataSeriesTreeParent > aRoot( createRootNode());
+
+    bool bHasVolume, bHasOpenValue, bHasLowHighValues;
+
+    getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
+    getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_OPEN ) >>= bHasOpenValue;
+    getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH ) >>= bHasLowHighValues;
+
+    // Bars (Volume)
+    // -------------
+    // chart type group
+    if( bHasVolume )
+    {
+        Reference< chart2::XDataSeries > xVolumeSeries;
+        for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
+        {
+            Reference< chart2::XDataSequence > xMatch(
+                DataSeriesHelper::getDataSequenceByRole(
+                    uno::Reference< chart2::XDataSource >( aSeriesSeq[i], uno::UNO_QUERY ),
+                    C2U( "volume" )));
+            if( xMatch.is() )
+            {
+                xVolumeSeries = aSeriesSeq[i];
+                break;
+            }
+        }
+        Reference< chart2::XDataSeriesTreeNode > aBarNode(
+            createChartTypeGroup( new BarChartType() ));
+
+        // 'x-axis' group
+        Reference< chart2::XDataSeriesTreeNode > aBarCategoryNode(
+            createScaleGroup( true /* bIsDiscrete */,
+                              true /* bIsStackable */,
+                              rCoordSys, 0, chart2::StackMode_STACKED ));
+
+        // 'y-axis' group
+        Reference< chart2::XDataSeriesTreeNode > aBarValueNode(
+            createScaleGroup( false /* bIsDiscrete */,
+                              true  /* bIsStackable */,
+                              rCoordSys, 1, chart2::StackMode_NONE ));
+
+        Sequence< Reference< chart2::XDataSeries > > aBarSeq( 1 );
+        aBarSeq[0] = xVolumeSeries;
+        addDataSeriesToGroup( aBarValueNode, aBarSeq );
+
+        // add value nodes to category nodes
+        attachNodeToNode( aBarCategoryNode, aBarValueNode );
+
+        // add category node to chart type node
+        attachNodeToNode( aBarNode, aBarCategoryNode );
+
+        // add chart type nodes to root of tree
+        aRoot->addChild( aBarNode );
+    }
+
+    // Lines
+    // -----
+    // chart type group
+    Reference< chart2::XDataSeriesTreeNode > aLineNode(
+        createChartTypeGroup( new LineChartType() ));
+
+    // 'x-axis' group
+    Reference< chart2::XDataSeriesTreeNode > aLineCategoryNode(
+        createScaleGroup( true, false, rCoordSys, 0, chart2::StackMode_STACKED ));
+
+    // 'y-axis' group
+    Reference< chart2::XDataSeriesTreeNode > aLineValueNode(
+        createScaleGroup( false, false, rCoordSys, 1, chart2::StackMode_NONE ));
+
+    // Build Tree
+    // ----------
+
+    // add series node to value nodes
+//     Sequence< Reference< chart2::XDataSeries > > aLineSeq( nNumberOfLines );
+//     ::std::copy( aSeriesSeq.getConstArray() + nNumberOfBars,
+//                  aSeriesSeq.getConstArray() + aSeriesSeq.getLength(),
+//                  aLineSeq.getArray());
+//     addDataSeriesToGroup( aLineValueNode, aLineSeq );
+
+    // add value nodes to category nodes
+//     attachNodeToNode( aLineCategoryNode, aLineValueNode );
+
+    // add category node to chart type node
+//     attachNodeToNode( aLineNode, aLineCategoryNode );
+
+    // add chart type nodes to root of tree
+//     aRoot->addChild( aLineNode );
+
+    return aRoot;
 }
 
+// ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram )
     throw (uno::RuntimeException)
@@ -276,7 +373,7 @@ Sequence< OUString > StockChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
     return aServices;
 }
 

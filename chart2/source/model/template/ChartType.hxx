@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartType.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
-#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 
 namespace chart
@@ -89,7 +89,7 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper1<
-    ::drafts::com::sun::star::chart2::XChartType >
+    ::com::sun::star::chart2::XChartType >
     ChartType_Base;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:11 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _CHART2_TOOLS_TITLEHELPER_HXX
 #define _CHART2_TOOLS_TITLEHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
@@ -96,13 +96,13 @@ public:
     static rtl::OUString getIdentifierForTitle( eTitleType nTitleIndex );
 
     static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XTitle >
+            ::com::sun::star::chart2::XTitle >
         getTitle( eTitleType nTitleIndex
                     , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xModel );
 
     static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XTitle >
+            ::com::sun::star::chart2::XTitle >
         createTitle(  eTitleType nTitleIndex
                     , const rtl::OUString& rTitleText
                     , const ::com::sun::star::uno::Reference<
@@ -115,10 +115,10 @@ public:
                             ::com::sun::star::frame::XModel >& xModel );
 
     static rtl::OUString getCompleteString( const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle >& xTitle );
+        ::com::sun::star::chart2::XTitle >& xTitle );
     static void setCompleteString( const rtl::OUString& rNewText
         , const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XTitle >& xTitle
+            ::com::sun::star::chart2::XTitle >& xTitle
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
 };

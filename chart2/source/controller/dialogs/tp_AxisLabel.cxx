@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
 
            aFlSeparator( this, SchResId( FL_SEPARATOR ) ),
 
-        bShowStaggeringControls( true ),
+        m_bShowStaggeringControls( true ),
 ////        bAllowTextOverlap( TRUE ),
 
         m_nInitialDegrees( 0 ),
@@ -197,7 +197,7 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 //  rOutAttrs.Put( SvxChartTextOrientItem( eOrient ) );
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bIsStacked ) );
 
-    if( bShowStaggeringControls )
+    if( m_bShowStaggeringControls )
     {
         SvxChartTextOrder eOrder;
         bool bRadioButtonChecked = true;
@@ -345,7 +345,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     }
 
     // text order ----------
-    if( bShowStaggeringControls )
+    if( m_bShowStaggeringControls )
     {
         aState = rInAttrs.GetItemState( SCHATTR_TEXT_ORDER, FALSE, &pPoolItem );
         if( aState == SFX_ITEM_SET )
@@ -373,11 +373,11 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     ToggleShowLabel( (void*)0 );
 }
 
-void SchAxisLabelTabPage::ShowStaggeringControls( BOOL ShowStaggeringControls )
+void SchAxisLabelTabPage::ShowStaggeringControls( BOOL bShowStaggeringControls )
 {
-    bShowStaggeringControls = ShowStaggeringControls;
+    m_bShowStaggeringControls = bShowStaggeringControls;
 
-    if( !bShowStaggeringControls )
+    if( !m_bShowStaggeringControls )
     {
         aRbSideBySide.Hide();
         aRbUpDown.Hide();

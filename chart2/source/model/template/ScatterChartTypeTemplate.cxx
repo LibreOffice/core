@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:00:36 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #include "algohelper.hxx"
 #include "DataSeriesTreeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
+#include <com/sun/star/chart2/SymbolStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -84,7 +84,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -383,7 +382,7 @@ Sequence< OUString > ScatterChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
     return aServices;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-18 12:39:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,20 +81,20 @@
 #include "LegendHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
+#include <com/sun/star/chart2/XAxisContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
+#include <com/sun/star/chart2/XGridContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 //for auto_ptr
@@ -114,7 +114,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 namespace
 {

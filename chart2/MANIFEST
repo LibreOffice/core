@@ -55,7 +55,7 @@
 Directory Structure
 -------------------
 
-+--drafts
++--com
 +--genjava
 +--inc
 +--prj
@@ -146,10 +146,12 @@ source
 
 	Axes, charttypes and diagram implement the respective view-objects.
 
-drafts
-------
+com
+---
 
-Contains idl files for chart specific idl interface and type definitions.
+Contains idl files for chart specific idl interface and type definitions.  This
+is the so-called "private" API.  The public part of the API (used from outside,
+esp. other applications) is in the offapi project.
 
 util
 ----
@@ -188,8 +190,8 @@ Contains a makefile for creating java-files out of the idl-files.  The
 java-files are generated out of the chart.rdb, which therefore must be ready
 before this makefile is called.
 
-Its subdirectories reflect the directory-structure of the drafts/com directories
-and contain a makefile in each leave of the tree.  These makefiles compile
+Its subdirectories reflect the directory-structure of the com directories and
+contain a makefile in each leave of the tree.  These makefiles compile
 class-files out of the java-files.
 
 qa

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:43 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,12 @@
 #include <rtl/math.hxx>
 #endif
 
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
 
 #include <functional>
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:51 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,20 @@
 #include "MultipleChartConverters.hxx"
 #include "LegendItemConverter.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
+#include <com/sun/star/chart2/XAxisContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
+#include <com/sun/star/chart2/XGridContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 //--------------------------------------
@@ -113,7 +113,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 namespace
 {
@@ -204,7 +204,7 @@ void createGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGr
         C2U( "Identifier" ), uno::makeAny( aId.makeStringAndClear()) ));
 
     xGrid.set( xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "drafts.com.sun.star.chart2.Grid" ),
+            C2U( "com.sun.star.chart2.Grid" ),
             ContextHelper::createContext( aContextValues, xContext ) )
             , uno::UNO_QUERY );
     OSL_ASSERT( xGrid.is());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnChartType.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:33 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include "ColumnChartType.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace chart
 {

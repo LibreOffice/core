@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:21:37 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,17 @@
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-#include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
+#include <com/sun/star/chart2/SceneDescriptor.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <drafts/com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <com/sun/star/layout/RelativeSize.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
@@ -140,7 +140,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------
 // awt::XWindow

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PotentialRegressionCurveCalculator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:29:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
+#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #endif
 
 namespace chart
@@ -74,7 +74,7 @@ namespace chart
 
 
 class PotentialRegressionCurveCalculator : public
-    ::cppu::WeakImplHelper1< ::drafts::com::sun::star::chart2::XRegressionCurveCalculator >
+    ::cppu::WeakImplHelper1< ::com::sun::star::chart2::XRegressionCurveCalculator >
 {
 public:
     PotentialRegressionCurveCalculator();

@@ -21,8 +21,8 @@
 // #define TRANSP_GRADIENT_HACK 1
 
 #ifdef TRANSP_GRADIENT_HACK
-# ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-# include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
+# ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
+# include <com/sun/star/chart2/TransparencyStyle.hpp>
 # endif
 # ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 # include <com/sun/star/container/XNameContainer.hpp>
@@ -35,7 +35,7 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 class BarPositionHelper : public CategoryPositionHelper, public PlottingPositionHelper
 {
@@ -43,7 +43,7 @@ public:
     BarPositionHelper( double fSeriesCount=0 ); //@todo
     virtual ~BarPositionHelper();
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                         getTransformationLogicToScene() const;
 
     void                updateSeriesCount( double fSeriesCount ); /*only enter the size of x stacked series*/
@@ -232,9 +232,9 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint2D_Bar(
     // FillTransparenceGradientName to an empty string
     // Note: TransparencyStyle should become a new property in FillProperties
     //       (FillTransparenceStyle)
-    ::drafts::com::sun::star::chart2::TransparencyStyle aTransStyle;
+    ::com::sun::star::chart2::TransparencyStyle aTransStyle;
     xObjectProperties->getPropertyValue( C2U( "TransparencyStyle" )) >>= aTransStyle;
-    if( aTransStyle != ::drafts::com::sun::star::chart2::TransparencyStyle_GRADIENT )
+    if( aTransStyle != ::com::sun::star::chart2::TransparencyStyle_GRADIENT )
     {
         xProp->setPropertyValue( C2U( "FillTransparenceGradientName" ),
                                 uno::makeAny( ::rtl::OUString()));

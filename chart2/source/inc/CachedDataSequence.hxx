@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDataSequence.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@
 #endif
 
 //
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XTextualDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XTextualDataSequence.hpp>
 #endif
 
 #include <vector>
@@ -107,8 +107,8 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakComponentImplHelper3<
-    ::drafts::com::sun::star::chart2::XNumericalDataSequence,
-    ::drafts::com::sun::star::chart2::XTextualDataSequence,
+    ::com::sun::star::chart2::XNumericalDataSequence,
+    ::com::sun::star::chart2::XTextualDataSequence,
     ::com::sun::star::lang::XServiceInfo >
     CachedDataSequence_Base;
 }
@@ -173,21 +173,21 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
     // ____ XNumericalDataSequence ____
-    /// @see ::drafts::com::sun::star::chart::XNumericalDataSequence
+    /// @see ::com::sun::star::chart::XNumericalDataSequence
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getNumericalData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart::XNumericalDataSequence
+    /// @see ::com::sun::star::chart::XNumericalDataSequence
 //     virtual void SAL_CALL setNumericalData( const ::com::sun::star::uno::Sequence< double >& aData ) throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTextualDataSequence ____
-    /// @see ::drafts::com::sun::star::chart::XTextualDataSequence
+    /// @see ::com::sun::star::chart::XTextualDataSequence
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart::XNumericalDataSequence
+    /// @see ::com::sun::star::chart::XNumericalDataSequence
 //     virtual void SAL_CALL setTextualData( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData ) throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSequence ____
-    /// @see ::drafts::com::sun::star::chart::XDataSequence
+    /// @see ::com::sun::star::chart::XDataSequence
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart::XDataSequence
+    /// @see ::com::sun::star::chart::XDataSequence
     virtual ::rtl::OUString SAL_CALL getSourceIdentifier() throw (::com::sun::star::uno::RuntimeException);
 
     mutable ::osl::Mutex                  m_aMutex;

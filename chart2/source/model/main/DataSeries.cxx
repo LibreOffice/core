@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSeries.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:31:03 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,13 @@
 #include "macros.hxx"
 #include "algohelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
@@ -130,8 +129,8 @@ DataSeries::~DataSeries()
 Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.DataSeries" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.DataPointProperties" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.DataSeries" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataPointProperties" );
     aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

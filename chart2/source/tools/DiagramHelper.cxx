@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-19 14:41:36 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
 #include "LegendHelper.hxx"
 #include "PropertyHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace chart
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 09:01:34 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XStackableScaleGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
+#include <com/sun/star/chart2/XStackableScaleGroup.hpp>
 #endif
 
 #include <algorithm>
@@ -94,7 +94,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -108,8 +107,8 @@ namespace
 {
 #if OSL_DEBUG_LEVEL > 1
 
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
-#include <drafts/com/sun/star/chart2/XScaleGroup.hpp>
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
+#include <com/sun/star/chart2/XScaleGroup.hpp>
 
 // forward declatation
 void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, sal_Int32 nLevel = 0 );
@@ -143,16 +142,10 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
     try
     {
         // create diagram
-        ContextHelper::tContextEntryMapType aContextValues(
-            ContextHelper::MakeContextEntryMap
-            ( C2U( "TemplateServiceName" ),
-              uno::makeAny( getServiceName() ))
-            );
-
         xDia.set(
             m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "drafts.com.sun.star.chart2.Diagram" ),
-                ContextHelper::createContext( aContextValues, m_xContext ) ),
+                C2U( "com.sun.star.chart2.Diagram" ),
+                m_xContext ),
             uno::UNO_QUERY_THROW );
 
         // modify diagram
@@ -161,7 +154,7 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
         // create and attach legend
         Reference< chart2::XLegend > xLegend(
             m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "drafts.com.sun.star.chart2.Legend" ),
+                C2U( "com.sun.star.chart2.Legend" ),
                 m_xContext ),
             uno::UNO_QUERY_THROW );
 
@@ -333,7 +326,7 @@ void ChartTypeTemplate::createAndAddGrids(
 
         Reference< chart2::XGrid > xGrid(
             m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "drafts.com.sun.star.chart2.Grid" ),
+                C2U( "com.sun.star.chart2.Grid" ),
                 ContextHelper::createContext( aContextValues, m_xContext ) ),
             uno::UNO_QUERY );
 
@@ -420,7 +413,7 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createRootNode()
 {
     Reference< chart2::XDataSeriesTreeParent > aRoot(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "drafts.com.sun.star.chart2.DataSeriesTree" ), m_xContext ),
+            C2U( "com.sun.star.chart2.DataSeriesTree" ), m_xContext ),
         uno::UNO_QUERY );
     OSL_ASSERT( aRoot.is());
 
@@ -432,7 +425,7 @@ Reference< chart2::XDataSeriesTreeNode > ChartTypeTemplate::createChartTypeGroup
 {
     Reference< chart2::XDataSeriesTreeNode > aChartTypeNode(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "drafts.com.sun.star.chart2.ChartTypeGroup" ), m_xContext ),
+            C2U( "com.sun.star.chart2.ChartTypeGroup" ), m_xContext ),
         uno::UNO_QUERY );
     OSL_ASSERT( aChartTypeNode.is());
     Reference< chart2::XChartTypeGroup > aChartTypeGroup( aChartTypeNode, uno::UNO_QUERY );
@@ -480,16 +473,16 @@ Reference< chart2::XDataSeriesTreeNode > ChartTypeTemplate::createScaleGroup(
     if( bIsDiscrete )
     {
         if( bIsStackable )
-            aServiceName = C2U( "drafts.com.sun.star.chart2.DiscreteStackableScaleGroup" );
+            aServiceName = C2U( "com.sun.star.chart2.DiscreteStackableScaleGroup" );
         else
-            aServiceName = C2U( "drafts.com.sun.star.chart2.DiscreteScaleGroup" );
+            aServiceName = C2U( "com.sun.star.chart2.DiscreteScaleGroup" );
     }
     else
     {
         if( bIsStackable )
-            aServiceName = C2U( "drafts.com.sun.star.chart2.ContinuousStackableScaleGroup" );
+            aServiceName = C2U( "com.sun.star.chart2.ContinuousStackableScaleGroup" );
         else
-            aServiceName = C2U( "drafts.com.sun.star.chart2.ContinuousScaleGroup" );
+            aServiceName = C2U( "com.sun.star.chart2.ContinuousScaleGroup" );
     }
 
     aNode.set(
@@ -578,8 +571,8 @@ void ChartTypeTemplate::setStackModeAtTree(
 Sequence< OUString > ChartTypeTemplate::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.layout.LayoutElement" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = C2U( "com.sun.star.layout.LayoutElement" );
     aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }
@@ -629,9 +622,9 @@ void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, s
                 Reference< chart2::XStackableScaleGroup > xStackableGroup( xInfo, uno::UNO_QUERY );
                 Reference< chart2::XScaleGroup > xScaleGroup( xInfo, uno::UNO_QUERY );
                 bool bIsDiscrete = ( xInfo->supportsService(
-                                         C2U( "drafts.com.sun.star.chart2.DiscreteScaleGroup" )) ||
+                                         C2U( "com.sun.star.chart2.DiscreteScaleGroup" )) ||
                                      xInfo->supportsService(
-                                         C2U( "drafts.com.sun.star.chart2.DiscreteStackableScaleGroup" )));
+                                         C2U( "com.sun.star.chart2.DiscreteStackableScaleGroup" )));
 
                 if( xStackableGroup.is())
                 {
@@ -666,7 +659,7 @@ void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, s
                         OSL_TRACE( "%s<scale group>", aIndent );
                     }
                 }
-                else if( xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.ChartTypeGroup" )))
+                else if( xInfo->supportsService( C2U( "com.sun.star.chart2.ChartTypeGroup" )))
                 {
                     Reference< chart2::XChartTypeGroup > xGroup( xInfo, uno::UNO_QUERY );
                     if( xGroup.is() )
@@ -678,7 +671,7 @@ void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, s
                         OSL_TRACE( "%s<chart type group>", aIndent );
                     }
                 }
-                else if( xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.DataSeries" )))
+                else if( xInfo->supportsService( C2U( "com.sun.star.chart2.DataSeries" )))
                 {
                     Reference< beans::XPropertySet > xProp( xInfo, uno::UNO_QUERY );
                     ::rtl::OUString aId;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarAxis.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ public:
     virtual void SAL_CALL createShapes();
 
     void setIncrements( const ::com::sun::star::uno::Sequence<
-                    ::drafts::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
+                        ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
 private: //methods
     void create2DAngleAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
@@ -99,7 +99,7 @@ private: //member
     NumberFormatterWrapper*      m_pNumberFormatterWrapper;
     PolarPlottingPositionHelper* m_pPosHelper;
     ::com::sun::star::uno::Sequence<
-        ::drafts::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
+        ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
 };
 
 //.............................................................................

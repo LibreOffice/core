@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RectangularDataSource.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #include "CachedDataSequence.hxx"
 #include "StandardNaNHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XTextualDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTEXTUALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XTextualDataSequence.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -76,7 +76,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::osl::MutexGuard;
@@ -139,10 +138,10 @@ RectangularDataSource::~RectangularDataSource()
 Sequence< OUString > RectangularDataSource::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.RectangularDataSource" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.DataFilter" );
-    aServices[ 2 ] = C2U( "drafts.com.sun.star.chart2.DataSource" );
-    aServices[ 3 ] = C2U( "drafts.com.sun.star.chart2.DataSink" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.RectangularDataSource" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.DataFilter" );
+    aServices[ 2 ] = C2U( "com.sun.star.chart2.DataSource" );
+    aServices[ 3 ] = C2U( "com.sun.star.chart2.DataSink" );
     return aServices;
 }
 

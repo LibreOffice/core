@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 VPolarCoordinateSystem::VPolarCoordinateSystem( const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)

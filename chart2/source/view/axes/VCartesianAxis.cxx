@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianAxis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 10:06:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include "LabelPositionHelper.hxx"
 #include "DoubleRectangle.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -102,7 +102,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 
 void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
@@ -403,7 +403,7 @@ class LabelIterator : private TickIter
 
 public:
     LabelIterator( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
@@ -420,7 +420,7 @@ private: //member
 };
 
 LabelIterator::LabelIterator( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine
             , sal_Int32 nMinDepth, sal_Int32 nMaxDepth )
@@ -795,7 +795,6 @@ void SAL_CALL VCartesianAxis::createShapes()
         double fExtraLineCrossesOtherAxis;
         if( getLogicValueWhereExtraLineCrossesOtherAxis(fExtraLineCrossesOtherAxis) )
         {
-            Vector2D aStart, aEnd;
             this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );
             drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
             uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(

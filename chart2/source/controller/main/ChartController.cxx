@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 18:32:17 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,17 @@
 #include <svx/svxids.hrc>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XStackableScaleGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
+#include <com/sun/star/chart2/XStackableScaleGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
+#include <com/sun/star/frame/XLoadable.hpp>
 #endif
 
 //-------
@@ -126,7 +129,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------
 // ChartController Constructor and Destructor
@@ -813,31 +816,34 @@ void SAL_CALL ChartController
 
 bool isFormatObjectSID( sal_Int32 nSlotID )
 {
-    if((sal_Int32)SID_DIAGRAM_TITLE_MAIN == nSlotID
-    || (sal_Int32)SID_DIAGRAM_TITLE_SUB == nSlotID
-    || (sal_Int32)SID_DIAGRAM_TITLE_X == nSlotID
-    || (sal_Int32)SID_DIAGRAM_TITLE_Y == nSlotID
-    || (sal_Int32)SID_DIAGRAM_TITLE_Z == nSlotID
-    || (sal_Int32)SID_DIAGRAM_TITLE_ALL == nSlotID
-    || (sal_Int32)SID_LEGEND == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AXIS_X == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AXIS_Y == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AXIS_Z == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AXIS_A == nSlotID //secondary x axis
-    || (sal_Int32)SID_DIAGRAM_AXIS_B == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AXIS_ALL == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_X_MAIN == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_Y_MAIN == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_Z_MAIN == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_X_HELP == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_Y_HELP == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_Z_HELP == nSlotID
-    || (sal_Int32)SID_DIAGRAM_GRID_ALL == nSlotID
-    || (sal_Int32)SID_DIAGRAM_WALL == nSlotID
-    || (sal_Int32)SID_DIAGRAM_FLOOR == nSlotID
-    || (sal_Int32)SID_DIAGRAM_AREA == nSlotID
-    )
-        return true;
+    switch( nSlotID )
+    {
+        case SID_DIAGRAM_TITLE_MAIN:
+        case SID_DIAGRAM_TITLE_SUB:
+        case SID_DIAGRAM_TITLE_X:
+        case SID_DIAGRAM_TITLE_Y:
+        case SID_DIAGRAM_TITLE_Z:
+        case SID_DIAGRAM_TITLE_ALL:
+        case SID_LEGEND:
+        case SID_DIAGRAM_AXIS_X:
+        case SID_DIAGRAM_AXIS_Y:
+        case SID_DIAGRAM_AXIS_Z:
+        case SID_DIAGRAM_AXIS_A: // secondary x-axis
+        case SID_DIAGRAM_AXIS_B: // secondary y-axis
+        case SID_DIAGRAM_AXIS_ALL:
+        case SID_DIAGRAM_GRID_X_MAIN:
+        case SID_DIAGRAM_GRID_Y_MAIN:
+        case SID_DIAGRAM_GRID_Z_MAIN:
+        case SID_DIAGRAM_GRID_X_HELP:
+        case SID_DIAGRAM_GRID_Y_HELP:
+        case SID_DIAGRAM_GRID_Z_HELP:
+        case SID_DIAGRAM_GRID_ALL:
+        case SID_DIAGRAM_WALL:
+        case SID_DIAGRAM_FLOOR:
+        case SID_DIAGRAM_AREA:
+            return true;
+    }
+
     return false;
 }
 
@@ -877,19 +883,20 @@ bool isFormatObjectSID( sal_Int32 nSlotID )
         else if(rURL.Protocol.equalsIgnoreAsciiCase( C2U("slot:") ) )
         {
             sal_Int32 nSlotID = rURL.Path.toInt32();
-            if( (sal_Int32)SID_DIAGRAM_OBJECTS == nSlotID
-                || (sal_Int32)SID_DIAGRAM_TYPE == nSlotID
-                || (sal_Int32)SID_INSERT_TITLE == nSlotID
-                || (sal_Int32)SID_INSERT_CHART_LEGEND == nSlotID
-                || (sal_Int32)SID_INSERT_DESCRIPTION == nSlotID
-                || (sal_Int32)SID_INSERT_AXIS == nSlotID
-                || (sal_Int32)SID_INSERT_GRIDS == nSlotID
-                || (sal_Int32)SID_INSERT_STATISTICS == nSlotID
-                || (sal_Int32)SID_CHARMAP == nSlotID
-                || (sal_Int32)SID_TEXTEDIT == nSlotID
+            if( SID_DIAGRAM_OBJECTS == nSlotID
+                || SID_DIAGRAM_TYPE == nSlotID
+                || SID_INSERT_TITLE == nSlotID
+                || SID_INSERT_CHART_LEGEND == nSlotID
+                || SID_INSERT_DESCRIPTION == nSlotID
+                || SID_INSERT_AXIS == nSlotID
+                || SID_INSERT_GRIDS == nSlotID
+                || SID_INSERT_STATISTICS == nSlotID
+                || SID_CHARMAP == nSlotID
+                || SID_TEXTEDIT == nSlotID
                 || isFormatObjectSID(nSlotID)
-                || (sal_Int32)SID_3D_VIEW == nSlotID
-                || (sal_Int32)SID_ATTR_TRANSFORM == nSlotID
+                || SID_3D_VIEW == nSlotID
+                || SID_ATTR_TRANSFORM == nSlotID
+                || SID_DIAGRAM_DATA == nSlotID
                 )
             {
                 return static_cast< frame::XDispatch* >( this );
@@ -973,83 +980,71 @@ tMakeSlotIdCommandMap m_aSlotIdCommandMap =
     else if(rURL.Protocol.equalsIgnoreAsciiCase( C2U("slot:") ) )
     {
         sal_Int32 nSlotID = rURL.Path.toInt32();
-        if((sal_Int32)SID_DIAGRAM_OBJECTS == nSlotID)
+        switch( nSlotID )
         {
-            this->executeDispatch_ObjectProperties();
-        }
-        else if((sal_Int32)SID_DIAGRAM_TYPE == nSlotID)
-        {
-            this->executeDispatch_ChartType();
-        }
-        else if((sal_Int32)SID_INSERT_TITLE == nSlotID)
-        {
-            this->executeDispatch_InsertTitle();
-        }
-        else if((sal_Int32)SID_INSERT_CHART_LEGEND == nSlotID)
-        {
-            this->executeDispatch_InsertLegend();
-        }
-        else if((sal_Int32)SID_INSERT_DESCRIPTION == nSlotID)
-        {
-            this->executeDispatch_InsertDataLabel();
-        }
-        else if((sal_Int32)SID_INSERT_AXIS == nSlotID)
-        {
-            this->executeDispatch_InsertAxis();
-        }
-        else if((sal_Int32)SID_INSERT_GRIDS == nSlotID)
-        {
-            this->executeDispatch_InsertGrid();
-        }
-        else if((sal_Int32)SID_INSERT_STATISTICS == nSlotID)
-        {
-            this->executeDispatch_InsertStatistic();
-        }
-        else if((sal_Int32)SID_CHARMAP == nSlotID)
-        {
-            this->executeDispatch_InsertSpecialCharacter();
-        }
-        else if((sal_Int32)SID_TEXTEDIT == nSlotID)
-        {
-            this->executeDispatch_EditText();
-        }
-        else if( isFormatObjectSID(nSlotID) )
-        {
-            this->executeDispatch_FormatObject(nSlotID);
-        }
-        else if((sal_Int32)SID_3D_VIEW == nSlotID)
-        {
-            this->executeDispatch_RotateDiagram();
-        }
-        else if((sal_Int32)SID_ATTR_TRANSFORM == nSlotID)
-        {
-            this->executeDispatch_PositionAndSize( m_aSelectedObjectCID );
+            case SID_DIAGRAM_OBJECTS:
+                this->executeDispatch_ObjectProperties();
+                break;
+            case SID_DIAGRAM_TYPE:
+                this->executeDispatch_ChartType();
+                break;
+            case SID_INSERT_TITLE:
+                this->executeDispatch_InsertTitle();
+                break;
+            case SID_INSERT_CHART_LEGEND:
+                this->executeDispatch_InsertLegend();
+                break;
+            case SID_INSERT_DESCRIPTION:
+                this->executeDispatch_InsertDataLabel();
+                break;
+            case SID_INSERT_AXIS:
+                this->executeDispatch_InsertAxis();
+                break;
+            case SID_INSERT_GRIDS:
+                this->executeDispatch_InsertGrid();
+                break;
+            case SID_INSERT_STATISTICS:
+                this->executeDispatch_InsertStatistic();
+                break;
+            case SID_CHARMAP:
+                this->executeDispatch_InsertSpecialCharacter();
+                break;
+            case SID_TEXTEDIT:
+                this->executeDispatch_EditText();
+                break;
+            case SID_3D_VIEW:
+                this->executeDispatch_RotateDiagram();
+                break;
+            case SID_ATTR_TRANSFORM:
+                this->executeDispatch_PositionAndSize( m_aSelectedObjectCID );
+                break;
+            case SID_DIAGRAM_DATA:
+                this->executeDispatch_EditData();
+                break;
+
+            default:
+                if( isFormatObjectSID(nSlotID) )
+                {
+                    this->executeDispatch_FormatObject(nSlotID);
+                }
+                break;
         }
     }
     else if(aCommand.equals("SaveAll"))
     {
         if( m_aModel.is())
         {
-            uno::Reference< ::drafts::com::sun::star::chart2::XChartDocument > xDoc(
+            // initialize doc with default data (file-data provider)
+            uno::Reference< frame::XLoadable > xLoadable(
                 m_aModel->getModel(), uno::UNO_QUERY );
-            OSL_ASSERT( xDoc.is());
+            OSL_ASSERT( xLoadable.is());
+            xLoadable->initNew();
 
-            uno::Reference< ::drafts::com::sun::star::chart2::XDataProvider > xDataProvider(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                    C2U( "com.sun.star.comp.chart.FileDataProvider" ),
-                    m_xCC ), uno::UNO_QUERY );
-            OSL_ASSERT( xDataProvider.is());
+            // switch to internal calc-data
+            uno::Reference< XChartDocument > xChartDoc( xLoadable, uno::UNO_QUERY );
+            if( xChartDoc.is())
+                xChartDoc->createInternalDataProvider( sal_True );
 
-            ::rtl::OUString aFileName(
-#if defined WNT
-                RTL_CONSTASCII_USTRINGPARAM( "file:///D:/files/data.chd" )
-#else
-                RTL_CONSTASCII_USTRINGPARAM( "file:///work/data/data.chd" )
-#endif
-                );
-
-            xDoc->attachDataProvider( xDataProvider );
-            xDoc->setRangeRepresentation( aFileName );
             impl_rebuildView();
         }
     }
@@ -1087,6 +1082,9 @@ tMakeSlotIdCommandMap m_aSlotIdCommandMap =
 {
     //@todo
 }
+
+// ____ XEmbeddedClient ____
+// implementation see: ChartController_EditData.cxx
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:08 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 #include "macros.hxx"
 #include "CommonConverters.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 //#include "CommonConverters.hxx"
@@ -80,8 +80,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -104,7 +104,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 VDataSeries::VDataSeries()
 {
@@ -157,7 +157,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                     m_xData_XValues = xDataSequence;
                     m_XValues_Double = DataSequenceToDoubleSequence( m_xData_XValues );
                 }
-                else if( aRole.equals(C2U("values")) )
+                else if( aRole.equals(C2U("y-values")) )
                 {
                     m_xData_YValues = xDataSequence;
                     m_YValues_Double = DataSequenceToDoubleSequence( m_xData_YValues );

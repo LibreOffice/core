@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:10 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@
 #define ITEMID_CHARTDATADESCR SCHATTR_DATADESCR_DESCR
 #include <svx/chrtitem.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
 
 #ifndef _SFXINTITEM_HXX
@@ -95,7 +95,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

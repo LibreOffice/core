@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:06 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,39 +74,39 @@
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitSubIncrement.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
+#include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
+#include <com/sun/star/chart2/XAxisContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
+#include <com/sun/star/chart2/XGridContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XStackableScaleGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
+#include <com/sun/star/chart2/XStackableScaleGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <drafts/com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <com/sun/star/layout/RelativeSize.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
@@ -119,8 +119,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 ChartView::~ChartView()
 {
@@ -538,7 +537,7 @@ bool getPosAndSizeForDiagram(
     uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
 
     //size:
-    ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
+    ::com::sun::star::layout::RelativeSize aRelativeSize;
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativeSize" ) )>>=aRelativeSize) )
     {
         rOutSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
@@ -548,7 +547,7 @@ bool getPosAndSizeForDiagram(
         rOutSize = awt::Size(nWidth,nHeight);
 
     //position:
-    ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+    ::com::sun::star::layout::RelativePosition aRelativePosition;
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
     {
         //@todo decide wether x is primary or secondary
@@ -629,7 +628,7 @@ std::auto_ptr<VTitle> createTitle( const uno::Reference< XTitle >& xTitle
         awt::Point aNewPosition(0,0);
         sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
         sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
-        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        ::com::sun::star::layout::RelativePosition aRelativePosition;
         uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
         if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartType.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 10:46:59 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;

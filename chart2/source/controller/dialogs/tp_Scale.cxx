@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,6 @@ SchScaleYAxisTabPage::SchScaleYAxisTabPage(Window* pWindow,const SfxItemSet& rIn
     nStepHelp(0),
     fOrigin(0.0),
     nAxisType(0),
-    rOutAttrs(rInAttrs),
     pNumFormatter(NULL) //,
 //  bLastStepMain(FALSE)
 {
@@ -823,7 +822,7 @@ void SchScaleYAxisTabPage::SetNumFormat()
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if( rOutAttrs.GetItemState( SCHATTR_AXIS_NUMFMT, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    if( GetItemSet().GetItemState( SCHATTR_AXIS_NUMFMT, TRUE, &pPoolItem ) == SFX_ITEM_SET )
     {
         ULONG nFmt = (ULONG)((const SfxInt32Item*)pPoolItem)->GetValue();
         short eType = pNumFormatter->GetType( nFmt );

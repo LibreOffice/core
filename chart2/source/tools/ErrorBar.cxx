@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:52:18 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
+#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -81,7 +81,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -278,7 +277,7 @@ uno::Sequence< ::rtl::OUString > ErrorBar::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ErrorBar" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ErrorBar" );
     return aServices;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,32 +61,32 @@
 #ifndef CHART_IMPLCHARTMODEL_HXX
 #define CHART_IMPLCHARTMODEL_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
-#include <drafts/com/sun/star/chart2/XDataSource.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/XDataSource.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATAPROVIDER_HPP_
-#include <drafts/com/sun/star/chart2/XDataProvider.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATAPROVIDER_HPP_
+#include <com/sun/star/chart2/XDataProvider.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEMANAGER_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeManager.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEMANAGER_HPP_
+#include <com/sun/star/chart2/XChartTypeManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLE_HPP_
-#include <drafts/com/sun/star/chart2/XTitle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
+#include <com/sun/star/chart2/XTitle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-// #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XSPLITLAYOUTCONTAINER_HPP_
-// #include <drafts/com/sun/star/layout/XSplitLayoutContainer.hpp>
+// #ifndef _COM_SUN_STAR_LAYOUT_XSPLITLAYOUTCONTAINER_HPP_
+// #include <com/sun/star/layout/XSplitLayoutContainer.hpp>
 // #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
@@ -106,6 +106,9 @@ namespace com { namespace sun { namespace star {
     namespace uno {
         class XComponentContext;
     }
+    namespace sheet {
+        class XSpreadsheetDocument;
+    }
 }}}
 
 namespace chart
@@ -121,7 +124,7 @@ public:
 
 //     ::com::sun::star::uno::Sequence<
 //         ::com::sun::star::uno::Reference<
-//         ::drafts::com::sun::star::chart2::XDataSeries > >
+//         ::com::sun::star::chart2::XDataSeries > >
 //         GetDataSeries() const;
 
     ::com::sun::star::uno::Reference<
@@ -133,48 +136,48 @@ public:
     /** @return true, if the chart was found and removed, false otherwise.
      */
     bool RemoveDiagram( const ::com::sun::star::uno::Reference<
-                        ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
+                        ::com::sun::star::chart2::XDiagram > & xDiagram );
     void AppendDiagram( const ::com::sun::star::uno::Reference<
-                        ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
+                        ::com::sun::star::chart2::XDiagram > & xDiagram );
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >
+            ::com::sun::star::chart2::XDiagram >
         GetDiagram( size_t nIndex ) const
             throw( ::com::sun::star::container::NoSuchElementException );
 
     void SetDataProvider( const ::com::sun::star::uno::Reference<
-                          ::drafts::com::sun::star::chart2::XDataProvider > & xProvider );
+                          ::com::sun::star::chart2::XDataProvider > & xProvider );
 
     void SAL_CALL SetRangeRepresentation( const ::rtl::OUString& aRangeRepresentation )
             throw (::com::sun::star::lang::IllegalArgumentException);
 
     void SetChartTypeManager(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartTypeManager > & xManager );
+            ::com::sun::star::chart2::XChartTypeManager > & xManager );
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartTypeManager >
+        ::com::sun::star::chart2::XChartTypeManager >
         GetChartTypeManager();
 
     void SetChartTypeTemplate(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
+            ::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartTypeTemplate >
+        ::com::sun::star::chart2::XChartTypeTemplate >
         GetChartTypeTemplate();
 
 //     void SetSplitLayoutContainer(
 //         const ::com::sun::star::uno::Reference<
-//             ::drafts::com::sun::star::layout::XSplitLayoutContainer > & xLayoutCnt );
+//             ::com::sun::star::layout::XSplitLayoutContainer > & xLayoutCnt );
 
 //     ::com::sun::star::uno::Reference<
-//         ::drafts::com::sun::star::layout::XSplitLayoutContainer > GetSplitLayoutContainer();
+//         ::com::sun::star::layout::XSplitLayoutContainer > GetSplitLayoutContainer();
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTitle >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
         GetTitle();
 
     void SetTitle( const ::com::sun::star::uno::Reference<
-                   ::drafts::com::sun::star::chart2::XTitle >& rTitle );
+                   ::com::sun::star::chart2::XTitle >& rTitle );
 
     /** Is called by the ChartModel's XComponent::dispose() to notify the
         impl-class to release resources
@@ -184,37 +187,41 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         GetPageBackground();
 
+    void CloneData( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sheet::XSpreadsheetDocument > & xCalcDoc );
+
 private:
     void ReadData( const ::rtl::OUString & rRangeRepresentation );
     void CreateDefaultChart();
+    void InterpretData();
 //     void CreateDefaultLayout();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xFamilies;
 
     // Data Access (deprecated, temporary solution)
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSource >   m_xChartData;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataProvider > m_xDataProvider;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSource >   m_xChartData;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataProvider > m_xDataProvider;
 
     ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries > >                               m_aInterpretedData;
+        ::com::sun::star::chart2::XDataSeries > >                               m_aInterpretedData;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartTypeManager >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartTypeTemplate >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate >
         m_xChartTypeTemplate;
 
     // Diagram Access
     typedef ::std::vector< ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::chart2::XDiagram > >
+                                ::com::sun::star::chart2::XDiagram > >
         tDiagramContainer;
 
     tDiagramContainer                     m_aDiagrams;
 
-//     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::layout::XSplitLayoutContainer >
+//     ::com::sun::star::uno::Reference< ::com::sun::star::layout::XSplitLayoutContainer >
 //                                           m_xLayoutContainer;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTitle >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >
                                           m_xTitle;
 
     bool                                  m_bIsDisposed;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSeriesTree.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeriesTreeParent.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
+#include <com/sun/star/chart2/XDataSeriesTreeParent.hpp>
 #endif
 
 #include <vector>
@@ -85,7 +85,7 @@ namespace chart
 class DataSeriesTree : public
     ::cppu::WeakImplHelper2<
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >
+    ::com::sun::star::chart2::XDataSeriesTreeParent >
 {
 public:
     DataSeriesTree( const ::com::sun::star::uno::Reference<
@@ -100,15 +100,15 @@ public:
 protected:
 
     // ____ XDataSeriesTreeParent ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeNode > >
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeriesTreeNode > >
         SAL_CALL getChildren()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addChild(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeNode >& aNode )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeriesTreeNode >& aNode )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeChild(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeNode >& aNode )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeriesTreeNode >& aNode )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
 
@@ -116,7 +116,7 @@ protected:
 
 private:
     typedef ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeNode > >
+        ::com::sun::star::chart2::XDataSeriesTreeNode > >
         m_tChildType;
 
     m_tChildType   m_aChildren;

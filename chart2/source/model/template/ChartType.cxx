@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartType.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -147,7 +146,7 @@ Sequence< OUString > ChartType::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
 
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.ChartType" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.ChartType" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ SchDataDescrDlg::SchDataDescrDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     aBtnOK(this, ResId(BTN_OK)),
     aBtnCancel(this, ResId(BTN_CANCEL)),
     aBtnHelp(this, ResId(BTN_HELP)),
-    rOutAttrs(rInAttrs)
+    m_rInAttrs(rInAttrs)
 {
     FreeResource();
 
@@ -149,7 +149,7 @@ void SchDataDescrDlg::Reset()
     aRbPercent.Enable( FALSE );
     aCbSymbol.Enable( FALSE );
 
-    SfxItemState aState = rOutAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM, TRUE, &pPoolItem);
+    SfxItemState aState = m_rInAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM, TRUE, &pPoolItem);
     if( aState == SFX_ITEM_SET )
         aCbSymbol.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
     else
@@ -158,7 +158,7 @@ void SchDataDescrDlg::Reset()
         aCbSymbol.SetState( STATE_DONTKNOW );
     }
 
-    aState = rOutAttrs.GetItemState(SCHATTR_DATADESCR_DESCR, TRUE, &pPoolItem);
+    aState = m_rInAttrs.GetItemState(SCHATTR_DATADESCR_DESCR, TRUE, &pPoolItem);
     if( aState == SFX_ITEM_SET )
     {
         switch( ((const SvxChartDataDescrItem*)pPoolItem)->GetValue() )
@@ -235,7 +235,7 @@ void SchDataDescrDlg::GetAttr(SfxItemSet& rOutAttrs)
 
     rOutAttrs.Put(SvxChartDataDescrItem(eDescr));
     rOutAttrs.Put(SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM,
-                               aCbSymbol.IsChecked()) );
+                                aCbSymbol.IsChecked()) );
 }
 
 //.............................................................................

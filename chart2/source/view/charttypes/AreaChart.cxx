@@ -12,8 +12,8 @@
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -46,7 +46,7 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::rtl::math;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveModel.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:38:18 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -240,7 +239,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 uno::Sequence< ::rtl::OUString > RegressionCurveModel::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 1 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
     return aServices;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:52 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -311,6 +310,13 @@ void PieChartTypeTemplate::createAndAddAxes(
     // do nothing -- there are no axes in a pie chart
 }
 
+void PieChartTypeTemplate::createAndAddGrids(
+    const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys,
+    const Reference< chart2::XGridContainer > & rOutGridCnt )
+{
+    // do nothing -- there are no grids in a pie chart
+}
+
 Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSeriesTree(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys )
@@ -418,7 +424,7 @@ uno::Sequence< ::rtl::OUString > PieChartTypeTemplate::getSupportedServiceNames_
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
     return aServices;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:27:52 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,26 +78,23 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTELEMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartElement.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
+#include <com/sun/star/chart2/XAxisContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
+#include <com/sun/star/chart2/XGridContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -115,13 +112,13 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper7<
-    ::drafts::com::sun::star::chart2::XDiagram,
+    ::com::sun::star::chart2::XDiagram,
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XAxisContainer,
-    ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer,
-    ::drafts::com::sun::star::chart2::XGridContainer,
-    ::drafts::com::sun::star::chart2::XTitled,
-    ::drafts::com::sun::star::chart2::XIdentifiable >
+    ::com::sun::star::chart2::XAxisContainer,
+    ::com::sun::star::chart2::XBoundedCoordinateSystemContainer,
+    ::com::sun::star::chart2::XGridContainer,
+    ::com::sun::star::chart2::XTitled,
+    ::com::sun::star::chart2::XIdentifiable >
     Diagram_Base;
 }
 
@@ -167,11 +164,11 @@ protected:
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XDiagram ____
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeriesTreeParent >
         SAL_CALL getTree()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTree(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >& xTree )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeriesTreeParent >& xTree )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 //     virtual ::rtl::OUString SAL_CALL getChartTypeTemplateServiceName()
@@ -183,74 +180,74 @@ protected:
         ::com::sun::star::beans::XPropertySet > SAL_CALL getFloor()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XLegend > SAL_CALL getLegend()
+        ::com::sun::star::chart2::XLegend > SAL_CALL getLegend()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setLegend( const ::com::sun::star::uno::Reference<
-                                     ::drafts::com::sun::star::chart2::XLegend >& xLegend )
+                                     ::com::sun::star::chart2::XLegend >& xLegend )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XAxisContainer ____
     virtual void SAL_CALL addAxis(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis >& aAxis )
+        ::com::sun::star::chart2::XAxis >& aAxis )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeAxis(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis >& aAxis )
+        ::com::sun::star::chart2::XAxis >& aAxis )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis > > SAL_CALL getAxes()
+        ::com::sun::star::chart2::XAxis > > SAL_CALL getAxes()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis > SAL_CALL getAxisByIdentifier(
+        ::com::sun::star::chart2::XAxis > SAL_CALL getAxisByIdentifier(
             const ::rtl::OUString& aIdentifier )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XBoundedCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& aCoordSys )
+            ::com::sun::star::chart2::XBoundedCoordinateSystem >& aCoordSys )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeCoordinateSystem(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& aCoordSys )
+            ::com::sun::star::chart2::XBoundedCoordinateSystem >& aCoordSys )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > > SAL_CALL getCoordinateSystems()
+        ::com::sun::star::chart2::XBoundedCoordinateSystem > > SAL_CALL getCoordinateSystems()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XGridContainer ____
     virtual void SAL_CALL addGrid(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XGrid >& aGrid )
+        ::com::sun::star::chart2::XGrid >& aGrid )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeGrid(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XGrid >& aGrid )
+        ::com::sun::star::chart2::XGrid >& aGrid )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XGrid > > SAL_CALL getGrids()
+        ::com::sun::star::chart2::XGrid > > SAL_CALL getGrids()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XGrid > SAL_CALL getGridByIdentifier(
+        ::com::sun::star::chart2::XGrid > SAL_CALL getGridByIdentifier(
             const ::rtl::OUString& aIdentifier )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+        ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle( const ::com::sun::star::uno::Reference<
-                                    ::drafts::com::sun::star::chart2::XTitle >& Title )
+                                    ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XIdentifiable ____
@@ -262,27 +259,27 @@ private:
          ::com::sun::star::uno::XComponentContext >                m_xContext;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >  m_xSeriesTree;
+        ::com::sun::star::chart2::XDataSeriesTreeParent >  m_xSeriesTree;
 
     typedef
         ::std::map<
             ::rtl::OUString,
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis > >
+            ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > >
         tAxisContainerType;
     typedef
         ::std::map<
             ::rtl::OUString,
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XGrid > >
+            ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XGrid > >
         tGridContainerType;
 
     tAxisContainerType  m_aAxes;
     tGridContainerType  m_aGrids;
 
 //     ::std::set< ::com::sun::star::uno::Reference<
-//         ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > >
+//         ::com::sun::star::chart2::XBoundedCoordinateSystem > >
 //                         m_aCoordSystems;
     ::std::vector< ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > >
+        ::com::sun::star::chart2::XBoundedCoordinateSystem > >
                         m_aCoordSystems;
 
     ::com::sun::star::uno::Reference<
@@ -294,16 +291,14 @@ private:
                         m_xFloor;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle >
+        ::com::sun::star::chart2::XTitle >
                         m_xTitle;
 
     ::rtl::OUString     m_aIdentifier;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XLegend >
+        ::com::sun::star::chart2::XLegend >
                         m_xLegend;
-
-    ::rtl::OUString m_aTemplateServiceName;
 };
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Linear3DTransformation.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTRANSFORMATION_HPP_
-#include <drafts/com/sun/star/chart2/XTransformation.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTRANSFORMATION_HPP_
+#include <com/sun/star/chart2/XTransformation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
@@ -77,7 +77,7 @@ namespace chart
 {
 
 class Linear3DTransformation : public ::cppu::WeakImplHelper1<
-    ::drafts::com::sun::star::chart2::XTransformation
+    ::com::sun::star::chart2::XTransformation
     >
 {
 public:
@@ -85,15 +85,15 @@ public:
     virtual ~Linear3DTransformation();
 
     // ____ XTransformation ____
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
         const ::com::sun::star::uno::Sequence< double >& rSourceValues )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getSourceDimension()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getTargetDimension()
         throw (::com::sun::star::uno::RuntimeException);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:07:24 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _CHART2_VTITLE_HXX
 #define _CHART2_VTITLE_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLE_HPP_
-#include <drafts/com/sun/star/chart2/XTitle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
+#include <com/sun/star/chart2/XTitle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
@@ -85,7 +85,7 @@ class VTitle
 {
 public:
     VTitle( const ::com::sun::star::uno::Reference<
-                  ::drafts::com::sun::star::chart2::XTitle > & xTitle
+                  ::com::sun::star::chart2::XTitle > & xTitle
                   , double fAdditionalRotationAngleDegree=0.0 ); //the shape will be rotated by the sum of this value and the rotation given by the title model
     virtual ~VTitle();
 
@@ -105,7 +105,7 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle >                  m_xTitle;
+        ::com::sun::star::chart2::XTitle >                  m_xTitle;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #include "TickmarkProperties.hxx"
 #include "VAxisProperties.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitIncrementData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
 
 
@@ -112,7 +112,7 @@ struct TickInfo
 //methods:
     TickInfo();
     void        updateUnscaledValue( const ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XScaling >& xInverseScaling );
+                    ::com::sun::star::chart2::XScaling >& xInverseScaling );
 };
 
 class TickIter
@@ -120,10 +120,10 @@ class TickIter
 public:
     TickIter( const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Sequence< double > >& rTicks
-                , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+                , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     TickIter( ::std::vector< ::std::vector< TickInfo > >& rTickInfos
-            , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+            , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     virtual ~TickIter();
 
@@ -172,7 +172,7 @@ private: //member
     const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< double > >*  m_pSimpleTicks;
     ::std::vector< ::std::vector< TickInfo > >*       m_pInfoTicks;
-    const ::drafts::com::sun::star::chart2::ExplicitIncrementData& m_rIncrement;
+    const ::com::sun::star::chart2::ExplicitIncrementData& m_rIncrement;
     //iteration from m_nMinDepth to m_nMaxDepth
     sal_Int32   m_nMinDepth;
     sal_Int32   m_nMaxDepth;
@@ -190,16 +190,16 @@ class TickmarkHelper
 {
 public:
     TickmarkHelper(
-         const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
-        , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
+         const ::com::sun::star::chart2::ExplicitScaleData& rScale
+        , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     virtual ~TickmarkHelper();
 
     void          getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     bool          isPostEquidistant( sal_Int32 nDepth ) const;
 
     //
-    static double getMinimumAtIncrement( double fMin, const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
-    static double getMaximumAtIncrement( double fMax, const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
+    static double getMinimumAtIncrement( double fMin, const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
+    static double getMaximumAtIncrement( double fMax, const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
 
     double        getScaledWidth() const;
 
@@ -219,10 +219,10 @@ protected: //methods
     virtual void hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const {}
 
 protected: //member
-    const ::drafts::com::sun::star::chart2::ExplicitScaleData&     m_rScale;
-    const ::drafts::com::sun::star::chart2::ExplicitIncrementData& m_rIncrement;
+    const ::com::sun::star::chart2::ExplicitScaleData&     m_rScale;
+    const ::com::sun::star::chart2::ExplicitIncrementData& m_rIncrement;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XScaling >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >
                                                 m_xInverseScaling;
     double*   m_pfCurrentValues;
     //major-tick positions that may lay outside the visible range but complete partly visible intervals at the borders
@@ -240,8 +240,8 @@ class TickmarkHelper_2D : public TickmarkHelper
 {
 public:
     TickmarkHelper_2D(
-         const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
-        , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+        const ::com::sun::star::chart2::ExplicitScaleData& rScale
+        , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
         , const Vector2D& rStartScreenPos, const Vector2D& rEndScreenPos );
         //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
     virtual ~TickmarkHelper_2D();
@@ -273,8 +273,8 @@ class TickmarkHelper_3D : public TickmarkHelper
 {
 public:
     TickmarkHelper_3D(
-         const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
-        , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
+         const ::com::sun::star::chart2::ExplicitScaleData& rScale
+        , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     virtual ~TickmarkHelper_3D();
 
 };

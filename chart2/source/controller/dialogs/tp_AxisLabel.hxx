@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_AxisLabel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ private:
 
     FixedLine           aFlSeparator;
 
-    BOOL                bShowStaggeringControls;
+    BOOL                m_bShowStaggeringControls;
 ////    BOOL                bAllowTextOverlap;
 
     short               m_nInitialDegrees;
@@ -121,7 +121,7 @@ public:
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
 
-    void ShowStaggeringControls( BOOL ShowStaggeringControls );
+    void ShowStaggeringControls( BOOL bShowStaggeringControls );
 ////    void AllowTextOverlap( BOOL bOverLap )      { bAllowTextOverlap = bOverLap; }
 };
 //.............................................................................

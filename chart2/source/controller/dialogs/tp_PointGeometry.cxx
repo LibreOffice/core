@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_PointGeometry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,27 +98,15 @@ SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aPyramid(this, ResId(RBT_LY_PYRAMID)),
     aHanoi(this,ResId(RBT_LY_HANOI)),
     */
-    aListShapes(this,ResId(LB_LY_SHAPE)),
     aFtLayout(this, ResId(FT_LY_SHAPE)),
-    rOutAttrs(rInAttrs)
+    aListShapes(this,ResId(LB_LY_SHAPE))
 {
     FreeResource();
 }
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
 }
-
-/*************************************************************************
-|*
-|* Erzeugung
-|*
-\*************************************************************************/
 
 SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
                                         const SfxItemSet& rOutAttrs)
@@ -126,11 +114,6 @@ SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
     return new SchLayoutTabPage(pWindow, rOutAttrs);
 }
 
-/*************************************************************************
-|*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
 BOOL SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
 
@@ -144,16 +127,10 @@ BOOL SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
             nSegs=4;
 
         rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
-//-/        rOutAttrs.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS,nSegs));
         rOutAttrs.Put(Svx3DHorizontalSegmentsItem(nSegs));
     }
     return TRUE;
 }
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\*************************************************************************/
 
 void SchLayoutTabPage::Reset(const SfxItemSet& rInAttrs)
 {

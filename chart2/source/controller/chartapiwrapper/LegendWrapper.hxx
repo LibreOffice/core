@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:38 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,24 +84,22 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star {
 namespace chart2
 {
     class XTitle;
 }
 }}}
-}
 
 namespace chart
 {
@@ -123,7 +121,7 @@ class LegendWrapper :
 {
 public:
     LegendWrapper( const ::com::sun::star::uno::Reference<
-                       ::drafts::com::sun::star::chart2::XChartDocument > & xModel,
+                       ::com::sun::star::chart2::XChartDocument > & xModel,
                    const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext > & xContext,
                    ::osl::Mutex & _rMutex );
@@ -204,11 +202,11 @@ private:
                         m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartDocument >
+        ::com::sun::star::chart2::XChartDocument >
                         m_xChartDoc;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XLegend >
+        ::com::sun::star::chart2::XLegend >
                         m_xLegend;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >

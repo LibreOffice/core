@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
 //  aRbtAutoOrder(this, ResId(RBT_AUTOORDER)),
 //  aFlOrder(this, ResId(FL_ORDER)),
 //  eOrderMode(CHORDMODE_X_AXIS),
-    rOutAttrs(rInAttrs),
 
     //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
     aWinOrient      ( this,ResId(CTR_DIAL),ResId(BTN_TXTSTACKED),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-04 14:07:10 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -97,7 +97,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
@@ -385,10 +384,10 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 uno::Sequence< ::rtl::OUString > Title::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 4 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.Title" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.Title" );
     aServices[ 1 ] = C2U( "com.sun.star.style.ParagraphProperties" );
     aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ 3 ] = C2U( "drafts.com.sun.star.layout.LayoutElement" );
+    aServices[ 3 ] = C2U( "com.sun.star.layout.LayoutElement" );
     return aServices;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:38 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ namespace wrapper
 
 TitleWrapper::TitleWrapper(
     const uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle > & xTitle,
+        ::com::sun::star::chart2::XTitle > & xTitle,
     const uno::Reference< uno::XComponentContext > & xContext,
     ::osl::Mutex & _rMutex ) :
         OPropertySet( _rMutex ),
@@ -347,12 +347,12 @@ void SAL_CALL TitleWrapper::setFastPropertyValue_NoBroadcast
                     {
                         uno::Sequence<
                             uno::Reference<
-                            ::drafts::com::sun::star::chart2::XFormattedString > >
+                            ::com::sun::star::chart2::XFormattedString > >
                             aStrings( 1 );
 
                         aStrings[ 0 ].set(
                             m_xContext->getServiceManager()->createInstanceWithContext(
-                                C2U( "drafts.com.sun.star.chart2.FormattedString" ),
+                                C2U( "com.sun.star.chart2.FormattedString" ),
                                 m_xContext ),
                             uno::UNO_QUERY );
 
@@ -410,7 +410,7 @@ void SAL_CALL TitleWrapper::getFastPropertyValue
                 {
                     uno::Sequence<
                         uno::Reference<
-                        ::drafts::com::sun::star::chart2::XFormattedString > >
+                        ::com::sun::star::chart2::XFormattedString > >
                         aStrings( m_xTitle->getText());
 
                     ::rtl::OUStringBuffer aBuf;
@@ -450,7 +450,7 @@ void TitleWrapper::getFastCharacterPropertyValue(
     {
         uno::Sequence<
             uno::Reference<
-            ::drafts::com::sun::star::chart2::XFormattedString > >
+            ::com::sun::star::chart2::XFormattedString > >
             aStrings( m_xTitle->getText());
 
         if( aStrings.getLength() > 0 )
@@ -477,7 +477,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
     {
         uno::Sequence<
             uno::Reference<
-            ::drafts::com::sun::star::chart2::XFormattedString > >
+            ::com::sun::star::chart2::XFormattedString > >
             aStrings( m_xTitle->getText());
 
         for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )

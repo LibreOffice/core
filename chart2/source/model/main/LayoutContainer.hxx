@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutContainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XLAYOUTCONTAINER_HPP_
-#include <drafts/com/sun/star/layout/XLayoutContainer.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_XLAYOUTCONTAINER_HPP_
+#include <com/sun/star/layout/XLayoutContainer.hpp>
 #endif
 
 #include "ServiceMacros.hxx"
@@ -83,7 +83,7 @@ namespace chart
 class LayoutContainer : public
     ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XServiceInfo,
-        ::drafts::com::sun::star::layout::XLayoutContainer >
+        ::com::sun::star::layout::XLayoutContainer >
 {
 public:
     LayoutContainer();
@@ -94,8 +94,8 @@ public:
 
 protected:
     // ____ XLayoutContainer ____
-    virtual void SAL_CALL addConstrainedElementByIdentifier( const ::rtl::OUString& aIdentifier, const ::drafts::com::sun::star::layout::Constraint& Constraint )
-        throw (::drafts::com::sun::star::layout::IllegalConstraintException,
+    virtual void SAL_CALL addConstrainedElementByIdentifier( const ::rtl::OUString& aIdentifier, const ::com::sun::star::layout::Constraint& Constraint )
+        throw (::com::sun::star::layout::IllegalConstraintException,
                ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addElementByIdentifier( const ::rtl::OUString& aIdentifier )
@@ -104,10 +104,10 @@ protected:
     virtual void SAL_CALL removeElementByIdentifier( const ::rtl::OUString& aIdentifier )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setConstraintByIdentifier( const ::rtl::OUString& aIdentifier, const ::drafts::com::sun::star::layout::Constraint& Constraint )
+    virtual void SAL_CALL setConstraintByIdentifier( const ::rtl::OUString& aIdentifier, const ::com::sun::star::layout::Constraint& Constraint )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::drafts::com::sun::star::layout::Constraint SAL_CALL getConstraintByIdentifier( const ::rtl::OUString& aIdentifier )
+    virtual ::com::sun::star::layout::Constraint SAL_CALL getConstraintByIdentifier( const ::rtl::OUString& aIdentifier )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
@@ -119,7 +119,7 @@ private:
 
     typedef ::std::map<
         ::rtl::OUString,
-        ::drafts::com::sun::star::layout::Constraint > tConstraintsMap;
+        ::com::sun::star::layout::Constraint > tConstraintsMap;
 
     tLayoutElements           m_aLayoutElements;
     tConstraintsMap           m_aConstraints;

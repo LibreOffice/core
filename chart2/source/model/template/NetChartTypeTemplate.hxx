@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-12 14:28:12 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 #include "ChartTypeTemplate.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
+#include <com/sun/star/chart2/StackMode.hpp>
 #endif
 
 namespace chart
@@ -77,7 +77,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::StackMode eStackMode,
+        ::com::sun::star::chart2::StackMode eStackMode,
         bool bSymbols );
     virtual ~NetChartTypeTemplate();
 
@@ -85,29 +85,29 @@ public:
 
 protected:
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
         createDiagram( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::uno::Reference<
-                               ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+                               ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
+            ::com::sun::star::chart2::XBoundedCoordinateSystem >
         createCoordinateSystem(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
+                ::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
 
 private:
-    ::drafts::com::sun::star::chart2::StackMode  m_eStackMode;
+    ::com::sun::star::chart2::StackMode  m_eStackMode;
     bool                                         m_bHasSymbols;
 };
 

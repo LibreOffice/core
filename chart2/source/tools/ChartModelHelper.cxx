@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:53 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
 #endif
 
 // header for define DBG_ASSERT
@@ -78,7 +78,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //static
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )

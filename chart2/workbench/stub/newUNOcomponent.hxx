@@ -19,7 +19,7 @@
 
 //---- chart2
 #ifndef _COM_SUN_STAR_CHART2_YYYY_HPP_
-#include <drafts/com/sun/star/chart2/YYYY.hpp>
+#include <com/sun/star/chart2/YYYY.hpp>
 #endif
 
 //----
@@ -33,7 +33,7 @@ namespace chart
 //.............................................................................
 
 class XXXX : public ::cppu::WeakImplHelper2<
-        ::drafts::com::sun::star::chart2::YYYY
+    ::com::sun::star::chart2::YYYY
         , ::com::sun::star::lang::XServiceInfo
         //::com::sun::star::lang::XComponent ???
         //::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)

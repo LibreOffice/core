@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:45 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
-#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
 
 
@@ -120,7 +120,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 namespace
 {

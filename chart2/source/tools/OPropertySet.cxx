@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPropertySet.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 
 using namespace ::com::sun::star;
 
-using ::drafts::com::sun::star::style::XStyleSupplier;
-// using ::drafts::com::sun::star::beans::XFastPropertyState;
+using ::com::sun::star::style::XStyleSupplier;
+// using ::com::sun::star::beans::XFastPropertyState;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

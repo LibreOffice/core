@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 17:18:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #include "LegendHelper.hxx"
 #include "macros.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -73,7 +73,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 //.............................................................................
 namespace chart
@@ -129,7 +128,7 @@ void LegendHelper::defaultFillEmptyLegend(
             {
                 uno::Reference< lang::XServiceInfo > xInfo( aChildren[ i ], uno::UNO_QUERY );
                 if( xInfo.is() &&
-                    xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.ChartTypeGroup" )))
+                    xInfo->supportsService( C2U( "com.sun.star.chart2.ChartTypeGroup" )))
                 {
                     uno::Reference< chart2::XLegendEntry > xEntry( xInfo, uno::UNO_QUERY );
                     if( xEntry.is())

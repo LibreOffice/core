@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-06 19:39:20 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,20 +67,20 @@
 //for auto_ptr
 #include <memory>
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XDataSequence.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
-#include <drafts/com/sun/star/chart2/XDataSource.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -109,10 +109,10 @@ class VDataSeries
 {
 public:
     VDataSeries( const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeries >& xDataSeries );
+        ::com::sun::star::chart2::XDataSeries >& xDataSeries );
     virtual ~VDataSeries();
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeries >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
         getModel() const;
 
     void setCategoryXAxis();
@@ -132,7 +132,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfSeries() const;
 
-    ::drafts::com::sun::star::chart2::Symbol*
+    ::com::sun::star::chart2::Symbol*
                         getSymbolProperties( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
@@ -160,33 +160,33 @@ public:
     rtl::OUString       getLabelCID_Stub() const;
     rtl::OUString       getDataCurveCID( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xDataCurveModelProp ) const;
 
-    ::drafts::com::sun::star::chart2::DataPointLabel*
+    ::com::sun::star::chart2::DataPointLabel*
                         getDataPointLabelIfLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
 private: //methods
     VDataSeries();
     bool    isAttributedDataPoint( sal_Int32 index ) const;
-    ::drafts::com::sun::star::chart2::DataPointLabel*
+    ::com::sun::star::chart2::DataPointLabel*
                         getDataPointLabel( sal_Int32 index ) const;
 
 private: //member
 
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeries >       m_xDataSeries;
+            ::com::sun::star::chart2::XDataSeries >       m_xDataSeries;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSequence > >   m_aDataSequences;
+            ::com::sun::star::chart2::XDataSequence > >   m_aDataSequences;
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32                                                     m_nPointCount;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_XValues;
+        ::com::sun::star::chart2::XDataSequence >         m_xData_XValues;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_YValues;
+        ::com::sun::star::chart2::XDataSequence >         m_xData_YValues;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_ZValues;
+        ::com::sun::star::chart2::XDataSequence >         m_xData_ZValues;
 
     mutable ::com::sun::star::uno::Sequence< double >             m_XValues_Double;
     ::com::sun::star::uno::Sequence< double >                     m_YValues_Double;
@@ -199,20 +199,20 @@ private: //member
     rtl::OUString           m_aLabelCID_Stub;
 
     //some cached values for data labels as they are very expensive
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
+    mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
                                                     m_apLabel_Series;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_Series;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_Series;
 
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
+    mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
                                                     m_apLabel_AttributedPoint;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_AttributedPoint;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_AttributedPoint;
     mutable sal_Int32   m_nCurrentAttributedPoint;
 
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::Symbol >
+    mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
                                                     m_apSymbolProperties_Series;
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::Symbol >
+    mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
                                                     m_apSymbolProperties_AttributedPoint;
     //
 };

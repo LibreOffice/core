@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:17 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -95,9 +95,9 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper3<
-    ::drafts::com::sun::star::chart2::XLegend,
+    ::com::sun::star::chart2::XLegend,
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XIdentifiable >
+    ::com::sun::star::chart2::XIdentifiable >
     Legend_Base;
 }
 
@@ -144,16 +144,16 @@ protected:
 
     // ____ XLegend ____
     virtual void SAL_CALL registerEntry( const ::com::sun::star::uno::Reference<
-                                         ::drafts::com::sun::star::chart2::XLegendEntry >& xEntry )
+                                         ::com::sun::star::chart2::XLegendEntry >& xEntry )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL revokeEntry( const ::com::sun::star::uno::Reference<
-                                       ::drafts::com::sun::star::chart2::XLegendEntry >& xEntry )
+                                       ::com::sun::star::chart2::XLegendEntry >& xEntry )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XLegendEntry > > SAL_CALL getEntries()
+        ::com::sun::star::chart2::XLegendEntry > > SAL_CALL getEntries()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XIdentifiable ____
@@ -163,7 +163,7 @@ protected:
 private:
     typedef ::std::vector<
         ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegendEntry > > tLegendEntries;
+            ::com::sun::star::chart2::XLegendEntry > > tLegendEntries;
 
     tLegendEntries                                    m_aLegendEntries;
     ::rtl::OUString                                   m_aIdentifier;

@@ -16,11 +16,11 @@
 #include "AreaChart.hxx"
 //
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
+#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
 
 #ifndef _SVX_UNOPRNMS_HXX
@@ -48,7 +48,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:35 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XNumericalDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XNUMERICALDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XNumericalDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/XDataSource.hpp>
 #endif
 
 #include "CharacterProperties.hxx"
@@ -83,7 +86,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using ::osl::MutexGuard;
 
 namespace
@@ -112,7 +114,7 @@ void lcl_addValueSequence( uno::Reference< chart2::XDataSeriesTreeParent > xPare
                     {
                         ::rtl::OUString aRole;
                         if( ( xProp->getPropertyValue( C2U( "Role" )) >>= aRole ) &&
-                            aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "values" )) )
+                            aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "y-values" )) )
                         {
                             rOutSeqVector.push_back( aSequences[ j ] );
                         }
@@ -167,7 +169,7 @@ namespace wrapper
 {
 
 ChartDataWrapper::ChartDataWrapper( const uno::Reference<
-                                ::drafts::com::sun::star::chart2::XChartDocument > & xModel,
+                                ::com::sun::star::chart2::XChartDocument > & xModel,
                             const uno::Reference< uno::XComponentContext > & xContext,
                             ::osl::Mutex & rMutex ) :
         m_rMutex( rMutex ),

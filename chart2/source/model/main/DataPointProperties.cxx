@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 13:54:06 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,24 +86,23 @@
 #include <com/sun/star/style/XStyle.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
-#include <drafts/com/sun/star/chart2/FillBitmap.hpp>
+#ifndef _COM_SUN_STAR_CHART2_FILLBITMAP_HPP_
+#include <com/sun/star/chart2/FillBitmap.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
+#include <com/sun/star/chart2/TransparencyStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <drafts/com/sun/star/chart2/NumberFormat.hpp>
+#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
+#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
-#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <com/sun/star/chart2/Symbol.hpp>
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 

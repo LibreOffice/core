@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:34 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 VCartesianCoordinateSystem::VCartesianCoordinateSystem( const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:51 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 {}
 
 // ____ XCoordinateSystem ____
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation > SAL_CALL
+::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL
     PolarCoordinateSystem::getTransformationToCartesian()
     throw (RuntimeException)
 {
     return m_aTransformationToCartesian;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation > SAL_CALL
+::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL
     PolarCoordinateSystem::getTransformationFromCartesian()
     throw (RuntimeException)
 {
@@ -118,7 +118,7 @@ Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices;
 //     Sequence< OUString > aServices( 1 );
-//     aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.CoordinateSystem" );
+//     aServices[ 0 ] = C2U( "com.sun.star.chart2.CoordinateSystem" );
     return aServices;
 }
 

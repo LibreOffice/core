@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianGrid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include "VMeterBase.hxx"
 #include "VLineProperties.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRID_HPP_
-#include <drafts/com/sun/star/chart2/XGrid.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRID_HPP_
+#include <com/sun/star/chart2/XGrid.hpp>
 #endif
 
 //.............................................................................
@@ -84,7 +84,7 @@ class VCartesianGrid : public VMeterBase
 //-------------------------------------------------------------------------
 public:
     VCartesianGrid( const ::com::sun::star::uno::Reference<
-         ::drafts::com::sun::star::chart2::XGrid >& xGrid
+         ::com::sun::star::chart2::XGrid >& xGrid
          , sal_Int32 nDimensionCount );
     virtual ~VCartesianGrid();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:39 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,21 +84,19 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLE_HPP_
-#include <drafts/com/sun/star/chart2/XTitle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
+#include <com/sun/star/chart2/XTitle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star {
 namespace chart2
 {
     class XTitle;
 }
 }}}
-}
 
 namespace chart
 {
@@ -120,7 +118,7 @@ class TitleWrapper :
 {
 public:
     TitleWrapper( const ::com::sun::star::uno::Reference<
-                      ::drafts::com::sun::star::chart2::XTitle > & xTitle,
+                      ::com::sun::star::chart2::XTitle > & xTitle,
                   const ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > & xContext,
                   ::osl::Mutex & _rMutex );
@@ -209,7 +207,7 @@ private:
                         m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle >
+        ::com::sun::star::chart2::XTitle >
                         m_xTitle;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >

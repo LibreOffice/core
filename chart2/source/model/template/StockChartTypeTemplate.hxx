@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:18:05 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,20 +113,23 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
-        createDiagram( const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::uno::Reference<
-                               ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
-        throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+            );
 
 private:
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:35 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,21 +84,19 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star {
 namespace chart2
 {
     class XAxis;
 }
 }}}
-}
 
 namespace chart
 {
@@ -129,7 +127,7 @@ public:
 
     AxisWrapper( eAxisType eType,
                   const ::com::sun::star::uno::Reference<
-                      ::drafts::com::sun::star::chart2::XDiagram > & xDia,
+                      ::com::sun::star::chart2::XDiagram > & xDia,
                   const ::com::sun::star::uno::Reference<
                       ::com::sun::star::uno::XComponentContext > & xContext,
                   ::osl::Mutex & _rMutex );
@@ -197,11 +195,11 @@ private:
                         m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDiagram >
+        ::com::sun::star::chart2::XDiagram >
                         m_xDiagram;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis >
+        ::com::sun::star::chart2::XAxis >
                         m_xAxis;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >

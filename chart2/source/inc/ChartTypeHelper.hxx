@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:47 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _CHART2_CHARTTYPEHELPER_HXX
 #define _CHART2_CHARTTYPEHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
-#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISTYPE_HPP_
-#include <drafts/com/sun/star/chart2/AxisType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
+#include <com/sun/star/chart2/AxisType.hpp>
 #endif
 
 //.............................................................................
@@ -82,19 +82,19 @@ namespace chart
 class ChartTypeHelper
 {
 public:
-    static sal_Bool isSupportingGeometryProperties(  const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
-    static sal_Bool isSupportingStatisticProperties( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
-    static sal_Bool isSupportingRegressionProperties(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
-    static sal_Bool isSupportingMainAxis(            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
-    static sal_Bool isSupportingSecondaryAxis(       const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
-    static sal_Bool isSupportingAreaProperties(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
-    static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingGeometryProperties(  const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingStatisticProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingRegressionProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingMainAxis(            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
+    static sal_Bool isSupportingSecondaryAxis(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
+    static sal_Bool isSupportingAreaProperties(      const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
-    static ::drafts::com::sun::star::chart2::AxisType
-                    getAxisType( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType
+    static ::com::sun::star::chart2::AxisType
+                    getAxisType( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
 
-    static sal_Int32 getDimensionCount( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Int32 getDimensionCount( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 };
 
 //.............................................................................

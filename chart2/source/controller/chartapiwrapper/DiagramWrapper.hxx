@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:37 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,27 +102,25 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAMPROVIDER_HPP_
-#include <drafts/com/sun/star/chart2/XDiagramProvider.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAMPROVIDER_HPP_
+#include <com/sun/star/chart2/XDiagramProvider.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star {
 namespace chart2
 {
     class XTitle;
 }
 }}}
-}
 
 namespace chart
 {
@@ -141,7 +139,7 @@ typedef ::cppu::WeakImplHelper10<
     ::com::sun::star::lang::XServiceInfo,
        ::com::sun::star::lang::XComponent,
     ::com::sun::star::lang::XEventListener,
-    ::drafts::com::sun::star::chart2::XDiagramProvider >
+    ::com::sun::star::chart2::XDiagramProvider >
     DiagramWrapper_Base;
 }
 
@@ -152,7 +150,7 @@ class DiagramWrapper :
 public:
 
     DiagramWrapper( const ::com::sun::star::uno::Reference<
-                        ::drafts::com::sun::star::chart2::XDiagram > & xDia,
+                        ::com::sun::star::chart2::XDiagram > & xDia,
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::uno::XComponentContext > & xContext,
                     ::osl::Mutex & _rMutex );
@@ -311,10 +309,10 @@ protected:
 
     // ____ XDiagramProvider ____
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL getDiagram()
+            ::com::sun::star::chart2::XDiagram > SAL_CALL getDiagram()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDiagram( const ::com::sun::star::uno::Reference<
-                                      ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+                                      ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
@@ -328,7 +326,7 @@ private:
                         m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDiagram >
+        ::com::sun::star::chart2::XDiagram >
                         m_xDiagram;
 
     ::com::sun::star::uno::Reference<

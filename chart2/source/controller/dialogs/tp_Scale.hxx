@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_Scale.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ private:
     sal_Int32           nStepHelp;
     double              fOrigin;
     int                 nAxisType;
-    const SfxItemSet&   rOutAttrs;
     SvNumberFormatter*  pNumFormatter;
 
 //  BOOL                bLastStepMain;

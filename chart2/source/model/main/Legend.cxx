@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-04 14:07:33 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,27 +78,26 @@
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <drafts/com/sun/star/layout/Alignment.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
+#include <com/sun/star/layout/Alignment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
-#include <drafts/com/sun/star/layout/StretchMode.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
+#include <com/sun/star/layout/StretchMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
-#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
 
 #include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 
@@ -271,11 +270,11 @@ uno::Sequence< uno::Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntr
 uno::Sequence< ::rtl::OUString > Legend::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 5 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.Legend" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.Legend" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     aServices[ 2 ] = C2U( "com.sun.star.drawing.FillProperties" );
     aServices[ 3 ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ 4 ] = C2U( "drafts.com.sun.star.layout.LayoutElement" );
+    aServices[ 4 ] = C2U( "com.sun.star.layout.LayoutElement" );
     return aServices;
 }
 

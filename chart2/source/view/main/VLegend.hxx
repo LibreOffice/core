@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:21 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _VLEGEND_HXX
 #define _VLEGEND_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -73,11 +73,11 @@
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeriesTreeParent.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
+#include <com/sun/star/chart2/XDataSeriesTreeParent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <drafts/com/sun/star/layout/Alignment.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
+#include <com/sun/star/layout/Alignment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -96,7 +96,7 @@ class VLegend
 {
 public:
     VLegend( const ::com::sun::star::uno::Reference<
-                 ::drafts::com::sun::star::chart2::XLegend > & xLegend );
+                 ::com::sun::star::chart2::XLegend > & xLegend );
 
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
@@ -123,7 +123,7 @@ public:
 
     static bool isVisible(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend > & xLegend );
+            ::com::sun::star::chart2::XLegend > & xLegend );
 
 private:
     ::com::sun::star::uno::Reference<
@@ -131,7 +131,7 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
     ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XLegend >     m_xLegend;
+                    ::com::sun::star::chart2::XLegend >     m_xLegend;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
     ::com::sun::star::uno::Reference<

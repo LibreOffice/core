@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 23:04:12 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,6 @@ private:
 //  RadioButton aRbtAutoOrder;
 //  FixedLine   aFlOrder;
 //  OrderMode   eOrderMode;
-
-    const SfxItemSet&   rOutAttrs;
 
 //  DECL_LINK(CheckButtonHdl, Button*);
 //  BOOL bTextCanOverlap;

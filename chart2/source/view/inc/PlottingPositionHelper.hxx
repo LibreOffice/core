@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 14:48:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 
 #include "DoubleRectangle.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTRANSFORMATION_HPP_
-#include <drafts/com/sun/star/chart2/XTransformation.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTRANSFORMATION_HPP_
+#include <com/sun/star/chart2/XTransformation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
@@ -107,15 +107,15 @@ public:
     void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
 
     void setScales( const ::com::sun::star::uno::Sequence<
-            ::drafts::com::sun::star::chart2::ExplicitScaleData >& rScales );
+            ::com::sun::star::chart2::ExplicitScaleData >& rScales );
     const ::com::sun::star::uno::Sequence<
-            ::drafts::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
+            ::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
 
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
     inline void   doLogicScaling( double* pX, double* pY, double* pZ ) const;
     inline void   clipLogicValues( double* pX, double* pY, double* pZ ) const;
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationLogicToScene() const;
 
     virtual ::com::sun::star::drawing::Position3D
@@ -138,25 +138,25 @@ public:
 
 protected: //member
     ::com::sun::star::uno::Sequence<
-            ::drafts::com::sun::star::chart2::ExplicitScaleData > m_aScales;
+            ::com::sun::star::chart2::ExplicitScaleData > m_aScales;
     Matrix4D                                                      m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene
     mutable ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTransformation >     m_xTransformationLogicToScene;
+        ::com::sun::star::chart2::XTransformation >     m_xTransformationLogicToScene;
 };
 
 class PolarPlottingPositionHelper : public PlottingPositionHelper
     /*
                                   , public ::cppu::WeakImplHelper1<
-                                ::drafts::com::sun::star::chart2::XTransformation >
+                                ::com::sun::star::chart2::XTransformation >
                                 */
 {
 public:
     PolarPlottingPositionHelper( bool bRadiusAxisMapsToFirstDimension );
     virtual ~PolarPlottingPositionHelper();
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationLogicToScene() const;
 
     //the resulting values should be used for input to the transformation
@@ -176,15 +176,15 @@ public:
 
     /*
     // ____ XTransformation ____
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual ::com::sun::star::uno::Sequence< double > SAL_CALL transform(
         const ::com::sun::star::uno::Sequence< double >& rSourceValues )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getSourceDimension()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XTransformation
+    /// @see ::com::sun::star::chart2::XTransformation
     virtual sal_Int32 SAL_CALL getTargetDimension()
         throw (::com::sun::star::uno::RuntimeException);
         */
@@ -269,15 +269,15 @@ inline double PlottingPositionHelper::getLogicMaxZ() const
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationX() const
 {
-    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[0].Orientation;
+    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[0].Orientation;
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationY() const
 {
-    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[1].Orientation;
+    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[1].Orientation;
 }
 inline bool PlottingPositionHelper::isMathematicalOrientationZ() const
 {
-    return ::drafts::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[2].Orientation;
+    return ::com::sun::star::chart2::AxisOrientation_MATHEMATICAL == m_aScales[2].Orientation;
 }
 
 //.............................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_LegendPosition.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,6 @@ private:
     RadioButton aRbtTop;
     RadioButton aRbtBottom;
     RadioButton aRbtRight;
-
-    const SfxItemSet&   rOutAttrs;
 
 public:
     SchLegendPosTabPage(Window* pParent, const SfxItemSet& rInAttrs);

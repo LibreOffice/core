@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorBar.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 13:52:55 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurve.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
+#include <com/sun/star/chart2/XRegressionCurve.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_

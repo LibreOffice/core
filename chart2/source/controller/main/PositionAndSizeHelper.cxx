@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PositionAndSizeHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 18:13:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,15 @@
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <drafts/com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <com/sun/star/layout/RelativeSize.hpp>
 #endif
 
 // header for class Rectangle
@@ -89,7 +89,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel
@@ -106,7 +106,7 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
     if(rObjectCID.indexOf(C2U("Title"))!=-1)
     {
         //@todo decide wether x is primary or secondary
-        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        ::com::sun::star::layout::RelativePosition aRelativePosition;
         //the anchor point at the title object is top/middle
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
@@ -119,7 +119,7 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
         xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
         Point aLegendAnchor(0,0);//point at legend
         Point aPageAnchor(0,0);//point at page
-        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        ::com::sun::star::layout::RelativePosition aRelativePosition;
         switch( ePos )
         {
             case LegendPosition_LINE_START:
@@ -173,7 +173,7 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
 
         //set position:
         Point aPos = aObjectRect.TopLeft();
-        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        ::com::sun::star::layout::RelativePosition aRelativePosition;
         //the anchor points for the diagram are in the middle of the diagram
         //and in the middle of the page
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0-double(aPageRect.getWidth())/2.0)/double(aPageRect.getWidth());
@@ -181,7 +181,7 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
         xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
 
         //set size:
-        ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
+        ::com::sun::star::layout::RelativeSize aRelativeSize;
         //the anchor points for the diagram are in the middle of the diagram
         //and in the middle of the page
         aRelativeSize.Primary = double(aObjectRect.getWidth())/double(aPageRect.getWidth());

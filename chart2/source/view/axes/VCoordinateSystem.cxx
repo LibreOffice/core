@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 //static
 VCoordinateSystem* VCoordinateSystem::createCoordinateSystem( const uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:56 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ class VCartesianCoordinateSystem : public VCoordinateSystem
 {
 public:
     VCartesianCoordinateSystem( const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSys );
+        ::com::sun::star::chart2::XBoundedCoordinateSystem >& xCooSys );
     virtual ~VCartesianCoordinateSystem();
 
     virtual void createGridShapes();

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: NOTES,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2004-01-19 11:05:20 $
+#   last change: $Author: bm $ $Date: 2004-01-26 09:11:43 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -142,12 +142,3 @@ Testing
 * You can also create a chart from spreadsheet data.
 
 * To run a test for the old API run "dmake" in the qa subdirectory.
-
-ToDo
-----
-
-* Remove "drafts" from *every* UNO-IDL object.
-
-* Split API into public part (used by other applications) and a private part
-  that remains in the chart2 project.  The public part has to go to the offapi
-  project.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-19 15:07:03 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTDATACAPTION_HPP_
 #include <com/sun/star/chart/ChartDataCaption.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
+#include <com/sun/star/chart2/TransparencyStyle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_CHARTERRORCATEGORY_HPP_
@@ -102,7 +102,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 using ::property::OPropertySet;

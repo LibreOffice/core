@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegendSymbolFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:22 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 // #define DISABLE_DASHES_AT_BORDER
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

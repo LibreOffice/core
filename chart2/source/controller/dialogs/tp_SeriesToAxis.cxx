@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,15 +94,15 @@ namespace chart
 SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_OPTIONS), rInAttrs),
     aGrpAxis(this, ResId(GRP_OPT_AXIS)),
-    aGrpBar(this, ResId(GB_BAR)),
     aRbtAxis1(this,ResId(RBT_OPT_AXIS_1)),
     aRbtAxis2(this,ResId(RBT_OPT_AXIS_2)),
-    aMTOverlap(this,ResId(MT_OVERLAP)),
+
+    aGrpBar(this, ResId(GB_BAR)),
+    aFTGap(this,ResId(FT_GAP)),
     aMTGap(this,ResId(MT_GAP)),
     aFTOverlap(this,ResId(FT_OVERLAP)),
-    aFTGap(this,ResId(FT_GAP)),
-    aCBConnect(this,ResId(CB_CONNECTOR)),
-    rOutAttrs(rInAttrs)
+    aMTOverlap(this,ResId(MT_OVERLAP)),
+    aCBConnect(this,ResId(CB_CONNECTOR))
 {
     FreeResource();
 

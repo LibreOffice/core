@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatterWrapper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 #define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <drafts/com/sun/star/chart2/NumberFormat.hpp>
+#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
+#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
 
 //only needed for temp numberformatter
@@ -86,8 +86,8 @@ public:
     NumberFormatterWrapper();
     virtual ~NumberFormatterWrapper();
 
-    ::drafts::com::sun::star::chart2::NumberFormat    getNumberFormatForKey( sal_Int32 nIndex ) const;
-    sal_Int32  getKeyForNumberFormat( const ::drafts::com::sun::star::chart2::NumberFormat& rNumberFormat ) const;
+    ::com::sun::star::chart2::NumberFormat    getNumberFormatForKey( sal_Int32 nIndex ) const;
+    sal_Int32  getKeyForNumberFormat( const ::com::sun::star::chart2::NumberFormat& rNumberFormat ) const;
 
     //this method should only be used by the ViewElementListProvider
     SvNumberFormatter* getSvNumberFormatter() const;
@@ -103,7 +103,7 @@ class FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( NumberFormatterWrapper* pNumberFormatterWrapper
-        , const ::drafts::com::sun::star::chart2::NumberFormat& rNumberFormat );
+        , const ::com::sun::star::chart2::NumberFormat& rNumberFormat );
     virtual ~FixedNumberFormatter();
 
     rtl::OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 10:06:57 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #include "PlottingPositionHelper.hxx"
 #include "LabelAlignment.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <drafts/com/sun/star/chart2/NumberFormat.hpp>
+#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
+#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <drafts/com/sun/star/chart2/XAxis.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
@@ -112,7 +112,7 @@ struct AxisLabelProperties
 {
     AxisLabelProperties();
 
-    drafts::com::sun::star::chart2::NumberFormat        aNumberFormat;
+    ::com::sun::star::chart2::NumberFormat        aNumberFormat;
 
     AxisLabelStaggering  eStaggering;
 
@@ -127,14 +127,14 @@ struct AxisLabelProperties
 
     //methods:
     void init( const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XAxis >&  xAxisModel );
+                ::com::sun::star::chart2::XAxis >&  xAxisModel );
 
     sal_Bool            getIsStaggered() const;
 };
 
 struct AxisProperties
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis > m_xAxisModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > m_xAxisModel;
     ::com::sun::star::awt::Size m_aReferenceSize;
 
     bool        m_bIsMainAxis;//not secondary axis
@@ -164,7 +164,7 @@ struct AxisProperties
 
     //methods:
 
-    AxisProperties( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis >& xAxisModel
+    AxisProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxisModel
                   , const ::com::sun::star::awt::Size& rReferenceSize );
     AxisProperties( const AxisProperties& rAxisProperties );
     virtual ~AxisProperties();

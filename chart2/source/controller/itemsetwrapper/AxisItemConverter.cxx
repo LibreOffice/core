@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:33 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <drafts/com/sun/star/chart2/XAxis.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEM_HPP_
-#include <drafts/com/sun/star/chart2/XBoundedCoordinateSystem.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEM_HPP_
+#include <com/sun/star/chart2/XBoundedCoordinateSystem.hpp>
 #endif
 
 // #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -100,7 +100,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

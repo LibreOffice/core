@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutContainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {
@@ -158,7 +157,7 @@ uno::Sequence< ::rtl::OUString > LayoutContainer::getSupportedServiceNames_Stati
 {
     uno::Sequence< ::rtl::OUString > aServices( 1 );
 
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.layout.LayoutContainer" );
+    aServices[ 0 ] = C2U( "com.sun.star.layout.LayoutContainer" );
     return aServices;
 }
 

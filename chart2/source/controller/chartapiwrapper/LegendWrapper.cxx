@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:37 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,17 +66,17 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
-#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #endif
 
 #include "CharacterProperties.hxx"
@@ -91,7 +91,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
@@ -189,7 +188,7 @@ namespace wrapper
 
 LegendWrapper::LegendWrapper(
     const uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartDocument > & xModel,
+        ::com::sun::star::chart2::XChartDocument > & xModel,
     const uno::Reference< uno::XComponentContext > & xContext,
     ::osl::Mutex & _rMutex ) :
         OPropertySet( _rMutex ),

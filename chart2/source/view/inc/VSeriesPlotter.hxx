@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:05 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "PropertyMapper.hxx"
 #include "LabelAlignment.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
-#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 
 //.............................................................................
@@ -182,7 +182,7 @@ public:
     static sal_Int32    getPointCount( const ::std::vector< VDataSeriesGroup >& rSlots );
 
     static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
+                                ::com::sun::star::chart2::XChartType >& xChartTypeModel );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -194,7 +194,7 @@ private: //methods
 protected: //methods
 
     VSeriesPlotter( const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+                ::com::sun::star::chart2::XChartType >& xChartTypeModel
                 , bool bCategoryXAxis=true );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
@@ -279,7 +279,7 @@ protected: //methods
 
 protected: //member
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartType >    m_xChartTypeModel;
+            ::com::sun::star::chart2::XChartType >    m_xChartTypeModel;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >           m_xChartTypeModelProps;
 

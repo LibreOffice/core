@@ -21,7 +21,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 class PiePositionHelper : public PolarPlottingPositionHelper
 {

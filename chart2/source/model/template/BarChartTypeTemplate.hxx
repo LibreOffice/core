@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:11 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 
 #include "ChartTypeTemplate.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
+#include <com/sun/star/chart2/StackMode.hpp>
 #endif
 
 namespace chart
@@ -99,7 +99,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::StackMode eStackMode,
+        ::com::sun::star::chart2::StackMode eStackMode,
         BarDirection eDirection,
         sal_Int32 nDim = 2,
         ThreeDMode eThreeDMode = THREE_D_FLAT );
@@ -126,14 +126,14 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
-    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
-    virtual ::drafts::com::sun::star::chart2::StackMode getXStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getXStackMode() const;
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ::drafts::com::sun::star::chart2::StackMode
+    ::com::sun::star::chart2::StackMode
                        m_eStackMode;
     BarDirection       m_eBarDirection;
     sal_Int32          m_nDim;

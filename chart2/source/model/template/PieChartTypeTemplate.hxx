@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:36 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 
 #include "ChartTypeTemplate.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_PIECHARTOFFSETMODE_HPP_
-#include <drafts/com/sun/star/chart2/PieChartOffsetMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_PIECHARTOFFSETMODE_HPP_
+#include <com/sun/star/chart2/PieChartOffsetMode.hpp>
 #endif
 
 namespace chart
@@ -87,7 +87,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::PieChartOffsetMode eMode,
+        ::com::sun::star::chart2::PieChartOffsetMode eMode,
         bool bRings = false,
         sal_Int32 nDim = 2 );
     virtual ~PieChartTypeTemplate();
@@ -116,31 +116,37 @@ protected:
 
     virtual void createAndAddAxes(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
+            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
+            ::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
+
+    virtual void createAndAddGrids(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XGridContainer > & rOutGridCnt );
 
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
+            ::com::sun::star::chart2::XBoundedCoordinateSystem >
         createCoordinateSystem(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
+                ::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
+                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ::drafts::com::sun::star::chart2::PieChartOffsetMode
+    ::com::sun::star::chart2::PieChartOffsetMode
                     m_ePieOffsetMode;
     bool            m_bIsRingChart;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 09:52:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #include "ContextHelper.hxx"
 #include "MeterHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
 
 //.............................................................................
@@ -74,7 +74,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 rtl::OUString TitleHelper::getIdentifierForTitle( TitleHelper::eTitleType nTitleIndex )
 {
@@ -179,7 +179,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     if(xNewContext.is() && xTitled.is())
     {
         xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "drafts.com.sun.star.chart2.Title" ),
+                C2U( "com.sun.star.chart2.Title" ),
                     xNewContext ), uno::UNO_QUERY );
 
         if(xTitle.is())
@@ -222,7 +222,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     {
         uno::Reference< uno::XInterface > xI(
             xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "drafts.com.sun.star.chart2.FormattedString" ), xContext ) );
+            C2U( "com.sun.star.chart2.FormattedString" ), xContext ) );
         uno::Reference< XFormattedString > xFormattedString( xI, uno::UNO_QUERY );
 
         if(xFormattedString.is())

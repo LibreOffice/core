@@ -8,12 +8,12 @@
     <office:body>
         <!-- body ***************************************************************************************************************** -->
         <chart2:chart2>
-            <chart2:legend id="legend_0" service="drafts.com.sun.star.chart2.Legend"/>
-            <chart2:legend id="legend_1" service="drafts.com.sun.star.chart2.Legend"/>
+            <chart2:legend id="legend_0" service="com.sun.star.chart2.Legend"/>
+            <chart2:legend id="legend_1" service="com.sun.star.chart2.Legend"/>
             <chart2:scale id="scale1_x" minimum="0" maximum="10">
                 <chart2:break start="2" end="3"/>
             </chart2:scale>
-            <chart2:scale id="scale1_y" scaling-service="drafts.com.sun.star.LogarithmicScaling"/>
+            <chart2:scale id="scale1_y" scaling-service="com.sun.star.LogarithmicScaling"/>
             <chart2:increment id="increment1_x" scale="scale1_x">
                 <chart2:subincrement count="2"/>
                 <chart2:subincrement count="5"/>
@@ -25,28 +25,28 @@
             <chart2:final-target id="final_1">
                 <chart2:title id="title_1"/>
                 <chart2:logic-target id="logic_1">
-                    <chart2:coordinate-system id="coosys_1" service="drafts.com.sun.star.chart2.ThreeDimCartesian" legend="legend_1">
+                    <chart2:coordinate-system id="coosys_1" service="com.sun.star.chart2.ThreeDimCartesian" legend="legend_1">
                         <chart2:scaleRef scale="scale1_x" direction="reverse"/>
                         <chart2:scaleRef scale="scale1_y"/>
                     </chart2:coordinate-system>
                 </chart2:logic-target>
             </chart2:final-target>
             <!-- *************************************** axes ********************************************************************-->
-            <chart2:resident id="axis1_x" service="drafts.com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
+            <chart2:resident id="axis1_x" service="com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
                 <chart2:axis dimension="1" increment="increment1_x"/>
             </chart2:resident>
-            <chart2:resident id="axis1_y" service="drafts.com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
+            <chart2:resident id="axis1_y" service="com.sun.star.chart2.CartesianAxis" coordinate-system="coosys_1">
                 <chart2:axis dimension="2" increment="increment1_y"/>
             </chart2:resident>
             <!-- *************************************** grids *******************************************************************-->
-            <chart2:resident id="grid1_x" service="drafts.com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
+            <chart2:resident id="grid1_x" service="com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
                 <chart2:grid dimension="1" increment="increment1_x"/>
             </chart2:resident>
-            <chart2:resident id="grid1_y" service="drafts.com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
+            <chart2:resident id="grid1_y" service="com.sun.star.chart2.CartesianGrid" coordinate-system="coosys_1">
                 <chart2:grid dimension="2" increment="increment1_y"/>
             </chart2:resident>
             <!-- *************************************** renderer ***************************************************************-->
-            <chart2:resident id="barchart_1" service="drafts.com.sun.star.chart2.BarChart" coordinate-system="coosys_1">
+            <chart2:resident id="barchart_1" service="com.sun.star.chart2.BarChart" coordinate-system="coosys_1">
                 <chart2:renderer/>
             </chart2:resident>
         </chart2:chart2>

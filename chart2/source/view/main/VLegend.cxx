@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-19 14:15:49 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,38 +75,38 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
-#include <drafts/com/sun/star/chart2/XDataSeriesTreeParent.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
+#include <com/sun/star/chart2/XDataSeriesTreeParent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
-#include <drafts/com/sun/star/chart2/XDataSource.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <com/sun/star/chart2/XDataSource.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
 #include <com/sun/star/drawing/LineJoint.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
-#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ANCHORPOINT_HPP_
-#include <drafts/com/sun/star/layout/AnchorPoint.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_ANCHORPOINT_HPP_
+#include <com/sun/star/layout/AnchorPoint.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
 
 // header for class Matrix3D
@@ -123,7 +123,6 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 //.............................................................................
 namespace chart
@@ -931,7 +930,7 @@ void VLegend::changePosition(
         bool bAutoPosition = true;
         double fPrimaryOffset=0.02;// shift legend about 2% into the primary direction by default
         double fSecondaryOffset=0.0;
-        ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+        ::com::sun::star::layout::RelativePosition aRelativePosition;
         if( (xLegendProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
         {
             fPrimaryOffset = aRelativePosition.Primary;

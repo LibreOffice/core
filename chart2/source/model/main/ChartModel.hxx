@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
-/*
 #ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
-*/
 #ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
 #endif
@@ -103,14 +101,22 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
 
-// #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XMODELDATAPROVIDER_HPP_
-// #include <drafts/com/sun/star/chart2/XModelDataProvider.hpp>
-// #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
-#include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+// public API
+#ifndef _COM_SUN_STAR_CHART2_XDATAPROVIDER_HPP_
+#include <com/sun/star/chart2/XDataProvider.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATARECEIVER_HPP_
+#include <com/sun/star/chart2/XDataReceiver.hpp>
+#endif
+
+// #ifndef _COM_SUN_STAR_CHART2_XMODELDATAPROVIDER_HPP_
+// #include <com/sun/star/chart2/XModelDataProvider.hpp>
+// #endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 /*
@@ -141,12 +147,19 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
-#include <com/sun/star/form/XLoadable.hpp>
-#endif
 */
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
+#include <com/sun/star/frame/XLoadable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDCLIENT_HPP_
+#include <com/sun/star/embed/XEmbeddedClient.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 
 // for auto_ptr
@@ -164,7 +177,7 @@ namespace impl
     class ImplChartModel;
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::cppu::WeakImplHelper7 <
+typedef ::cppu::WeakImplHelper10 <
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable     //(required interface)
@@ -179,10 +192,13 @@ typedef ::cppu::WeakImplHelper7 <
     //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
     //  ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
         ,::com::sun::star::lang::XServiceInfo
-//         ,::drafts::com::sun::star::chart2::XModelDataProvider
-        ,::drafts::com::sun::star::chart2::XChartDocument  // derived from XModel
+//         ,::com::sun::star::chart2::XModelDataProvider
+        ,::com::sun::star::chart2::XChartDocument  // derived from XModel
+        ,::com::sun::star::chart2::XDataReceiver   // public API
         ,::com::sun::star::style::XStyleFamiliesSupplier
-        ,::drafts::com::sun::star::chart2::XTitled
+        ,::com::sun::star::chart2::XTitled
+        ,::com::sun::star::frame::XLoadable
+        ,::com::sun::star::embed::XEmbeddedClient
         >
     ChartModel_Base;
 }
@@ -209,7 +225,9 @@ private:
     ::std::auto_ptr< impl::ImplChartModel >                                     m_pImplChartModel;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     m_xOldModelAgg;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >      m_xOldModelAgg;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > m_xInternalData;
 
 private:
     //private methods
@@ -231,6 +249,8 @@ private:
     void SAL_CALL
         impl_notifyModifiedListeners()
                             throw( com::sun::star::uno::RuntimeException);
+
+    void impl_killInternalData() throw( com::sun::star::util::CloseVetoException );
 
 public:
     //no default constructor
@@ -317,7 +337,8 @@ public:
     //-----------------------------------------------------------------
     virtual void SAL_CALL
         close( sal_Bool bDeliverOwnership )
-                            throw( ::com::sun::star::util::CloseVetoException );
+                            throw(::com::sun::star::util::CloseVetoException,
+                                  ::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::util::XCloseBroadcaster (base of XCloseable)
@@ -453,61 +474,92 @@ public:
         getStyleFamilies() throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
-    // ::drafts::com::sun::star::chart2::XModelDataProvider
+    // ::com::sun::star::chart2::XModelDataProvider
     //-----------------------------------------------------------------
 //     virtual ::com::sun::star::uno::Sequence<
 //                 ::com::sun::star::uno::Reference<
-//                     ::drafts::com::sun::star::chart2::XDataSeries > > SAL_CALL
+//                     ::com::sun::star::chart2::XDataSeries > > SAL_CALL
 //         getDataSeries()    throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
-    // ::drafts::com::sun::star::chart2::XChartDocument
+    // ::com::sun::star::chart2::XChartDocument
     //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
+                ::com::sun::star::chart2::XDiagram > SAL_CALL
         getDiagram()       throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
         setDiagram( const ::com::sun::star::uno::Reference<
-                        ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+                        ::com::sun::star::chart2::XDiagram >& xDiagram )
             throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        attachDataProvider( const ::com::sun::star::uno::Reference<
-                            ::drafts::com::sun::star::chart2::XDataProvider >& xProvider )
-            throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        setRangeRepresentation( const ::rtl::OUString& aRangeRepresentation )
-            throw (::com::sun::star::lang::IllegalArgumentException,
+        createInternalDataProvider( sal_Bool bCloneExistingData )
+            throw (::com::sun::star::util::CloseVetoException,
                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > SAL_CALL
+        getDataEditorForInternalData()
+            throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         setChartTypeManager( const ::com::sun::star::uno::Reference<
-                             ::drafts::com::sun::star::chart2::XChartTypeManager >& xNewManager )
+                             ::com::sun::star::chart2::XChartTypeManager >& xNewManager )
             throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartTypeManager > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager()
             throw (::com::sun::star::uno::RuntimeException);
 //     virtual void SAL_CALL setSplitLayoutContainer(
 //         const ::com::sun::star::uno::Reference<
-//             ::drafts::com::sun::star::layout::XSplitLayoutContainer >& xLayoutCnt )
+//             ::com::sun::star::layout::XSplitLayoutContainer >& xLayoutCnt )
 //         throw (::com::sun::star::uno::RuntimeException);
 //     virtual ::com::sun::star::uno::Reference<
-//             ::drafts::com::sun::star::layout::XSplitLayoutContainer > SAL_CALL getSplitLayoutContainer()
+//             ::com::sun::star::layout::XSplitLayoutContainer > SAL_CALL getSplitLayoutContainer()
 //         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
         getPageBackground()
             throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XDataReceiver (public API) ____
+    virtual void SAL_CALL
+        attachDataProvider( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::chart2::XDataProvider >& xProvider )
+            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL
+        setRangeRepresentation( const ::rtl::OUString& aRangeRepresentation )
+            throw (::com::sun::star::lang::IllegalArgumentException,
+                   ::com::sun::star::uno::RuntimeException);
+
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+        ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle( const ::com::sun::star::uno::Reference<
-                                    ::drafts::com::sun::star::chart2::XTitle >& Title )
+                                    ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XInterface (for old API wrapper) ____
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XLoadable ____
+    virtual void SAL_CALL initNew()
+        throw (::com::sun::star::frame::DoubleInitializationException,
+               ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::Exception,
+               ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::beans::PropertyValue >& lArguments )
+        throw (::com::sun::star::frame::DoubleInitializationException,
+               ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::Exception,
+               ::com::sun::star::uno::RuntimeException);
+
+    // ____ XEmbeddedClient ____
+    virtual void SAL_CALL saveObject()
+        throw (::com::sun::star::embed::ObjectSaveVetoException,
+               ::com::sun::star::uno::Exception,
+               ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL onShowWindow( sal_Bool bVisible )
+        throw (::com::sun::star::embed::WrongStateException,
+               ::com::sun::star::uno::RuntimeException);
 };
 
 }  // namespace chart

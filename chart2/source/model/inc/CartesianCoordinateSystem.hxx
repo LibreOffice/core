@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CartesianCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:50 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
-#include <drafts/com/sun/star/chart2/XCoordinateSystem.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #endif
 
 namespace chart
@@ -79,7 +79,7 @@ namespace chart
 
 class CartesianCoordinateSystem : public ::cppu::WeakImplHelper2<
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XCoordinateSystem
+    ::com::sun::star::chart2::XCoordinateSystem
     >
 {
 public:
@@ -88,13 +88,13 @@ public:
 
     // ____ XCoordinateSystem ____
     // ___________________________
-    /// @see ::drafts::com::sun::star::chart2::XCoordinateSystem
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationToCartesian()
+    /// @see ::com::sun::star::chart2::XCoordinateSystem
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationToCartesian()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XCoordinateSystem
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationFromCartesian()
+    /// @see ::com::sun::star::chart2::XCoordinateSystem
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation > SAL_CALL getTransformationFromCartesian()
         throw (::com::sun::star::uno::RuntimeException);
-    /// @see ::drafts::com::sun::star::chart2::XCoordinateSystem
+    /// @see ::com::sun::star::chart2::XCoordinateSystem
     virtual sal_Int32 SAL_CALL getDimension() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getCoordinateSystemType() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getViewServiceName() throw (::com::sun::star::uno::RuntimeException);
@@ -102,9 +102,9 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
 private:
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
         m_aTransformationToCartesian;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
         m_aTransformationFromCartesian;
     sal_Int32   m_nDim;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:48 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
-#include <drafts/com/sun/star/chart2/XDataSequence.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
+#include <com/sun/star/chart2/XDataSequence.hpp>
 #endif
 
 //.............................................................................
@@ -289,7 +289,7 @@ com::sun::star::text::WritingMode WritingMode2ToWritingMode1( sal_Int16 nWriting
 
 ::com::sun::star::uno::Sequence< double > DataSequenceToDoubleSequence(
     const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSequence > & xDataSequence );
+        ::com::sun::star::chart2::XDataSequence > & xDataSequence );
 
 //.............................................................................
 } //namespace chart

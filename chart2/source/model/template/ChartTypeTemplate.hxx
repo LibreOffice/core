@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,36 +69,36 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
+#include <com/sun/star/chart2/XAxisContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
+#include <com/sun/star/chart2/StackMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XGridContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRIDCONTAINER_HPP_
+#include <com/sun/star/chart2/XGridContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XBOUNDEDCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/XBoundedCoordinateSystemContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
-#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 
 namespace chart
 {
 
 class ChartTypeTemplate : public ::cppu::WeakImplHelper2<
-        ::drafts::com::sun::star::chart2::XChartTypeTemplate,
+        ::com::sun::star::chart2::XChartTypeTemplate,
         ::com::sun::star::lang::XServiceName >
 {
 public:
@@ -114,14 +114,14 @@ public:
 
 protected:
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
         createDiagram( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::uno::Reference<
-                               ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+                               ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
@@ -137,20 +137,20 @@ protected:
     /** returns StackMode_NONE by default.  For a column/bar chart you would
         want to return StackMode_STACKED here.
      */
-    virtual ::drafts::com::sun::star::chart2::StackMode getXStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getXStackMode() const;
 
     /** returns StackMode_NONE by default.  This is a global flag used for all series
         if createDataSeriesTree() is not overloaded
      */
-    virtual ::drafts::com::sun::star::chart2::StackMode getYStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getYStackMode() const;
 
     /** returns StackMode_NONE by default.  For a column/bar chart you would
         want to return StackMode_STACKED here.
      */
-    virtual ::drafts::com::sun::star::chart2::StackMode getZStackMode() const;
+    virtual ::com::sun::star::chart2::StackMode getZStackMode() const;
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
     // Methods for creating the diagram piecewise
@@ -165,10 +165,10 @@ protected:
             If this container is valid, the coordinate system is added to it.
      */
    virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
+        ::com::sun::star::chart2::XBoundedCoordinateSystem >
        createCoordinateSystem(
            const ::com::sun::star::uno::Reference<
-               ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
+               ::com::sun::star::chart2::XBoundedCoordinateSystemContainer > & xCoordSysCnt );
 
     /** create axes and add them to the given container.
 
@@ -178,9 +178,9 @@ protected:
      */
     virtual void createAndAddAxes(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
+            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
+            ::com::sun::star::chart2::XAxisContainer > & rOutAxisCnt );
 
     /** create grids and add them to the given container.
 
@@ -189,9 +189,9 @@ protected:
      */
     virtual void createAndAddGrids(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
+            ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XGridContainer > & rOutGridCnt );
+            ::com::sun::star::chart2::XGridContainer > & rOutGridCnt );
 
     /** create a data series tree, that fits the requirements of the chart type.
 
@@ -219,55 +219,55 @@ protected:
         empty.</p>
      */
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
+        ::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
+                    ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
+                ::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
 
     // helper methods
     // --------------
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > createRootNode();
+        ::com::sun::star::chart2::XDataSeriesTreeParent > createRootNode();
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeNode >
+        ::com::sun::star::chart2::XDataSeriesTreeNode >
         createChartTypeGroup(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XChartType > & xChartType );
+                ::com::sun::star::chart2::XChartType > & xChartType );
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeNode >
+        ::com::sun::star::chart2::XDataSeriesTreeNode >
         createScaleGroup( bool bIsDiscrete,
                           bool bIsStackable,
                           ::com::sun::star::uno::Reference<
-                              ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > xCoordSys,
+                              ::com::sun::star::chart2::XBoundedCoordinateSystem > xCoordSys,
                           sal_Int32 nRepresentedDimension,
-                          ::drafts::com::sun::star::chart2::StackMode eStackMode =
-                              ::drafts::com::sun::star::chart2::StackMode_NONE );
+                          ::com::sun::star::chart2::StackMode eStackMode =
+                              ::com::sun::star::chart2::StackMode_NONE );
 
     void addDataSeriesToGroup(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
+            ::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XDataSeries > > & rDataSeries );
+                ::com::sun::star::chart2::XDataSeries > > & rDataSeries );
 
     /** Finds the first ContinuousScaleGroup in the tree and sets the stacking
         mode there if it is a stackable group
      */
     void setStackModeAtTree(
         const  ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & rTree,
-        ::drafts::com::sun::star::chart2::StackMode eMode );
+            ::com::sun::star::chart2::XDataSeriesTreeParent > & rTree,
+        ::com::sun::star::chart2::StackMode eMode );
 
     void attachNodeToNode(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
+            ::com::sun::star::chart2::XDataSeriesTreeNode > & rParent,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeNode > & rChild );
+            ::com::sun::star::chart2::XDataSeriesTreeNode > & rChild );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         GetComponentContext() const;
@@ -280,10 +280,10 @@ private:
     /** modifies the given diagram
      */
     void FillDiagram( const ::com::sun::star::uno::Reference<
-                          ::drafts::com::sun::star::chart2::XDiagram > & xDiagram,
+                          ::com::sun::star::chart2::XDiagram > & xDiagram,
                       const ::com::sun::star::uno::Sequence<
                           ::com::sun::star::uno::Reference<
-                              ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq );
+                              ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq );
 };
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 16:35:28 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "macros.hxx"
 #include "CommonConverters.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -82,7 +82,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 VPolarGrid::VPolarGrid( const uno::Reference< XGrid >& xGrid, sal_Int32 nDimensionCount )
             : VMeterBase( uno::Reference<XMeter>::query(xGrid), nDimensionCount )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:19 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 #ifndef CHART_AXISITEMCONVERTER_HXX
 #define CHART_AXISITEMCONVERTER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXIS_HPP_
-#include <drafts/com/sun/star/chart2/XAxis.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
+#include <com/sun/star/chart2/XAxis.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitIncrementData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
@@ -96,8 +96,8 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         NumberFormatterWrapper * pNumFormatter,
-        ::drafts::com::sun::star::chart2::ExplicitScaleData * pScale = NULL,
-        ::drafts::com::sun::star::chart2::ExplicitIncrementData * pIncrement = NULL,
+        ::com::sun::star::chart2::ExplicitScaleData * pScale = NULL,
+        ::com::sun::star::chart2::ExplicitIncrementData * pIncrement = NULL,
         double * pExplicitOrigin = NULL,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
@@ -118,15 +118,15 @@ protected:
 private:
     ::std::vector< ItemConverter * >               m_aConverters;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XAxis >  m_xAxis;
+        ::com::sun::star::chart2::XAxis >  m_xAxis;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >
+        ::com::sun::star::chart2::XBoundedCoordinateSystem >
                                                    m_xCoordinateSystem;
     sal_Int32                                      m_nDimension;
     NumberFormatterWrapper *                       m_pNumberFormatterWrapper;
 
-    ::drafts::com::sun::star::chart2::ExplicitScaleData *       m_pExplicitScale;
-    ::drafts::com::sun::star::chart2::ExplicitIncrementData *   m_pExplicitIncrement;
+    ::com::sun::star::chart2::ExplicitScaleData *       m_pExplicitScale;
+    ::com::sun::star::chart2::ExplicitIncrementData *   m_pExplicitIncrement;
     double *                                                m_pExplicitOrigin;
 };
 

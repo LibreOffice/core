@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarGrid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:00 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include "TickmarkHelper.hxx"
 #include "VLineProperties.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XGRID_HPP_
-#include <drafts/com/sun/star/chart2/XGrid.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XGRID_HPP_
+#include <com/sun/star/chart2/XGrid.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
@@ -90,27 +90,27 @@ class VPolarGrid : public VMeterBase
 //-------------------------------------------------------------------------
 public:
     VPolarGrid( const ::com::sun::star::uno::Reference<
-         ::drafts::com::sun::star::chart2::XGrid >& xGrid
+         ::com::sun::star::chart2::XGrid >& xGrid
          , sal_Int32 nDimensionCount );
     virtual ~VPolarGrid();
 
     virtual void SAL_CALL createShapes();
 
     void setIncrements( const ::com::sun::star::uno::Sequence<
-                    ::drafts::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
+                    ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
     static void createLinePointSequence_ForAngleAxis(
                     ::com::sun::star::drawing::PointSequenceSequence& rPoints
                     , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
-                    , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-                    , const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
+                    , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
+                    , const ::com::sun::star::chart2::ExplicitScaleData& rScale
                     , PolarPlottingPositionHelper* pPosHelper
                     , double fLogicRadius, double fLogicZ );
 
 private: //member
     PolarPlottingPositionHelper* m_pPosHelper;
     ::com::sun::star::uno::Sequence<
-            ::drafts::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
+            ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
 
     void    getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 

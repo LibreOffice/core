@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-19 13:02:19 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,16 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <com/sun/star/chart2/XChartTypeGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
-#include <drafts/com/sun/star/chart2/XStackableScaleGroup.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
+#include <com/sun/star/chart2/XStackableScaleGroup.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
+#include <com/sun/star/chart2/StackMode.hpp>
 #endif
-#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#include <com/sun/star/chart2/CurveStyle.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -110,7 +110,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -697,7 +696,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
     if( xEnumAcc.is())
     {
         uno::Reference< container::XEnumeration > xEnum(
-            xEnumAcc->createContentEnumeration( C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" ) ));
+            xEnumAcc->createContentEnumeration( C2U( "com.sun.star.chart2.ChartTypeTemplate" ) ));
         if( xEnum.is())
         {
             uno::Reference< uno::XInterface > xFactIntf;
@@ -721,8 +720,8 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeManager" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.lang.MultiServiceFactory" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.ChartTypeManager" );
+    aServices[ 1 ] = C2U( "com.sun.star.lang.MultiServiceFactory" );
     aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

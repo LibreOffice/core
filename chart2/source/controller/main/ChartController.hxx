@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-10 18:30:43 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx>
 #endif
 
@@ -265,6 +266,8 @@ private:
 
     void SAL_CALL       executeDispatch_RotateDiagram();
     void SAL_CALL       executeDispatch_PositionAndSize( const ::rtl::OUString& rObjectCID );
+
+    void                executeDispatch_EditData();
 
     //
     void execute_DoubleClick();

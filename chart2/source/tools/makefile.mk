@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: iha $ $Date: 2004-01-23 10:29:25 $
+#   last change: $Author: bm $ $Date: 2004-01-26 09:13:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=	\
     $(SLO)$/MediaDescriptorHelper.obj \
     $(SLO)$/CommonConverters.obj \
     $(SLO)$/ContextHelper.obj \
+    $(SLO)$/DataSeriesHelper.obj \
     $(SLO)$/DataSeriesTreeHelper.obj \
     $(SLO)$/DiagramHelper.obj \
     $(SLO)$/ExponentialRegressionCurveCalculator.obj \

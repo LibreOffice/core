@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-19 15:04:43 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@
 #include <rtl/math.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
-#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
+#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
+#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -100,7 +100,6 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace
 {

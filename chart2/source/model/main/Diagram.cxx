@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:27:00 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,17 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
-#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <com/sun/star/layout/RelativePosition.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
-#include <drafts/com/sun/star/layout/RelativeSize.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <com/sun/star/layout/RelativeSize.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
-#include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
+#ifndef _COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
+#include <com/sun/star/chart2/SceneDescriptor.hpp>
 #endif
 
 #include <algorithm>
@@ -88,7 +88,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
@@ -195,11 +194,6 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
     m_xTitle( NULL ),
     m_aIdentifier( C2U( "@diagram" ))
 {
-    if( ! m_xContext.is() ||
-        ! ( xContext->getValueByName( C2U( "TemplateServiceName" )) >>= m_aTemplateServiceName ))
-    {
-        OSL_ENSURE( false, "Missing argument TemplateServiceName" );
-    }
 }
 
 Diagram::~Diagram()
@@ -222,7 +216,7 @@ void SAL_CALL Diagram::setTree(
 {
     uno::Reference< lang::XServiceInfo > xInfo( xTree, uno::UNO_QUERY );
     if( xInfo.is() &&
-        xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.DataSeriesTree" )) )
+        xInfo->supportsService( C2U( "com.sun.star.chart2.DataSeriesTree" )) )
     {
         // /--
         MutexGuard aGuard( GetMutex() );
@@ -234,12 +228,6 @@ void SAL_CALL Diagram::setTree(
         throw lang::IllegalArgumentException();
     }
 }
-
-// ::rtl::OUString SAL_CALL Diagram::getChartTypeTemplateServiceName()
-//     throw (uno::RuntimeException)
-// {
-//     return m_aTemplateServiceName;
-// }
 
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     throw (uno::RuntimeException)
@@ -466,8 +454,8 @@ Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 3 );
 
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.Diagram" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.layout.LayoutElement" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.Diagram" );
+    aServices[ 1 ] = C2U( "com.sun.star.layout.LayoutElement" );
     aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

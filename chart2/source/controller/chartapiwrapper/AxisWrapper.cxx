@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:18 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 using ::property::OPropertySet;
@@ -348,7 +347,7 @@ namespace wrapper
 AxisWrapper::AxisWrapper(
     eAxisType eType,
     const uno::Reference<
-        ::drafts::com::sun::star::chart2::XDiagram > & xDia,
+        ::com::sun::star::chart2::XDiagram > & xDia,
     const uno::Reference< uno::XComponentContext > & xContext,
     ::osl::Mutex & _rMutex ) :
         OPropertySet( _rMutex ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 09:25:10 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
-#include <drafts/com/sun/star/layout/Alignment.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
+#include <com/sun/star/layout/Alignment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
-#include <drafts/com/sun/star/layout/StretchMode.hpp>
+#ifndef _COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
+#include <com/sun/star/layout/StretchMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
-#include <drafts/com/sun/star/chart2/NumberFormat.hpp>
+#ifndef _COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
+#include <com/sun/star/chart2/NumberFormat.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
@@ -112,7 +112,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
@@ -476,10 +475,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
 uno::Sequence< ::rtl::OUString > Axis::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.Axis" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartElement" );
-    aServices[ 2 ] = C2U( "com.sun.star.beans.PropertySet" );
+    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.Axis" );
+    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }
 

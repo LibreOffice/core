@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 // #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 // #endif
 
-#include <drafts/com/sun/star/chart2/XChartTypeManager.hpp>
+#include <com/sun/star/chart2/XChartTypeManager.hpp>
 
 // #include <map>
 
@@ -98,7 +98,7 @@ namespace impl
 typedef ::cppu::WeakImplHelper2<
     ::com::sun::star::lang::XMultiServiceFactory,
 //     ::com::sun::star::lang::XMultiComponentFactory,
-    ::drafts::com::sun::star::chart2::XChartTypeManager >
+    ::com::sun::star::chart2::XChartTypeManager >
     ChartTypeManager_Base;
 }
 

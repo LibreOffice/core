@@ -3,8 +3,8 @@
 
 #include "VSeriesPlotter.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
-#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <com/sun/star/chart2/CurveStyle.hpp>
 #endif
 
 //.............................................................................
@@ -20,7 +20,7 @@ class AreaChart : public VSeriesPlotter
     //-------------------------------------------------------------------------
 public:
     AreaChart( const ::com::sun::star::uno::Reference<
-             ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+             ::com::sun::star::chart2::XChartType >& xChartTypeModel
              , bool bCategoryXAxis, bool bNoArea=false
              , PlottingPositionHelper* pPlottingPositionHelper=NULL //takes owner ship
              );
@@ -33,8 +33,8 @@ public:
     virtual void SAL_CALL createShapes();
     /*
     virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setScales( const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::chart2::ExplicitScaleData >& rScales ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setScales( const ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData >& rScales ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
     */
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
@@ -67,7 +67,7 @@ private: //member
     bool                                m_bSymbol;
 
     //Properties for splines:
-    ::drafts::com::sun::star::chart2::CurveStyle    m_eCurveStyle;
+    ::com::sun::star::chart2::CurveStyle    m_eCurveStyle;
     sal_Int32                                       m_nCurveResolution;
     sal_Int32                                       m_nSplineOrder;
 

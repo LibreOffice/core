@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:22 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 
 #include "chmod3d.hxx"
 #include "schattr.hxx"
-// TVM: CHTYPE wurde ins Model verschoben
 */
 
 #include "dlg_ChartType.hxx"
@@ -141,7 +140,6 @@
 //#define CHTYPE_ADDIN         11
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 //.............................................................................
 namespace

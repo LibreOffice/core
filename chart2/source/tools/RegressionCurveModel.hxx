@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveModel.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:37:58 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurve.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
+#include <com/sun/star/chart2/XRegressionCurve.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
@@ -97,8 +97,8 @@ namespace impl
 typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XServiceName,
-        ::drafts::com::sun::star::chart2::XRegressionCurve,
-        ::drafts::com::sun::star::chart2::XIdentifiable >
+        ::com::sun::star::chart2::XRegressionCurve,
+        ::com::sun::star::chart2::XIdentifiable >
     RegressionCurveModel_Base;
 }
 
@@ -145,7 +145,7 @@ protected:
 
     // ____ XRegressionCurve ____
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator()
+            ::com::sun::star::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____

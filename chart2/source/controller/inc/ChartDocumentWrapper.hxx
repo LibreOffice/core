@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:50:56 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,12 @@
 #include <unotools/eventlisteneradapter.hxx>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star {
 namespace chart2
 {
     class XChartDocument;
 }
 }}}
-}
 
 namespace com { namespace sun { namespace star {
 namespace drawing
@@ -276,7 +274,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         m_xDelegator;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartDocument >
+        ::com::sun::star::chart2::XChartDocument >
                         m_xChartDoc;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >

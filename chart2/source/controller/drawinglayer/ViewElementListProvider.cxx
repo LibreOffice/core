@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewElementListProvider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:31:17 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-//using namespace ::drafts::com::sun::star::chart2;
+//using namespace ::com::sun::star::chart2;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper
                                                  , NumberFormatterWrapper* pNumberFormatterWrapper )

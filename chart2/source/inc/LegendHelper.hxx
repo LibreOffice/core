@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 17:18:21 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <com/sun/star/chart2/XLegend.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 
 //.............................................................................
@@ -91,7 +91,7 @@ public:
     static rtl::OUString getIdentifierForLegend();
 
     static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend >
+            ::com::sun::star::chart2::XLegend >
         getLegend( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >& xModel );
 
@@ -104,15 +104,15 @@ public:
      */
     static void defaultFillEmptyLegend(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend > & xLegend,
+            ::com::sun::star::chart2::XLegend > & xLegend,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
+            ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     /** removes all legend entries
      */
     static void flushLegend(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend > & xLegend );
+            ::com::sun::star::chart2::XLegend > & xLegend );
 };
 
 //.............................................................................

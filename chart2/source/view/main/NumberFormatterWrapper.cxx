@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberFormatterWrapper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 FixedNumberFormatter::FixedNumberFormatter(
                 NumberFormatterWrapper* pNumberFormatterWrapper
-                , const ::drafts::com::sun::star::chart2::NumberFormat& rNumberFormat )
+                , const ::com::sun::star::chart2::NumberFormat& rNumberFormat )
             : m_pNumberFormatterWrapper(pNumberFormatterWrapper)
             , m_nFormatIndex(0)
 {

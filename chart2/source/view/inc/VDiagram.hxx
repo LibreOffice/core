@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:59:18 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
 
 #ifndef _CHART2_VIEW_SHAPEFACTORY_HXX
@@ -94,7 +94,7 @@ class VDiagram
 {
 public: //methods
     VDiagram( const ::com::sun::star::uno::Reference<
-                  ::drafts::com::sun::star::chart2::XDiagram > & xDiagram,
+                  ::com::sun::star::chart2::XDiagram > & xDiagram,
               sal_Int32 nDimension=3, sal_Bool bPolar=sal_False);
     virtual ~VDiagram();
 
@@ -138,7 +138,7 @@ private: //members
     sal_Int32                                                               m_nDimension;
     sal_Bool                                                                m_bPolar;
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDiagram >                        m_xDiagram;
+        ::com::sun::star::chart2::XDiagram >                        m_xDiagram;
 };
 
 //.............................................................................

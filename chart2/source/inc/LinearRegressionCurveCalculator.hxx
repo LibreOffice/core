@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinearRegressionCurveCalculator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:33:19 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,15 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
+#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #endif
 
 namespace chart
 {
 
 class LinearRegressionCurveCalculator : public
-    ::cppu::WeakImplHelper1< ::drafts::com::sun::star::chart2::XRegressionCurveCalculator >
+    ::cppu::WeakImplHelper1< ::com::sun::star::chart2::XRegressionCurveCalculator >
 {
 public:
     LinearRegressionCurveCalculator();

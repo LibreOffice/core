@@ -70,7 +70,7 @@
 <!ATTLIST chart2:scale
 	minimum %float; #IMPLIED
 >
-<!-- choose a name of a registered uno component implementing the service ...scaling' ... e.g. drafts.com.sun.star.LogarithmicScaling;
+<!-- choose a name of a registered uno component implementing the service ...scaling' ... e.g. com.sun.star.LogarithmicScaling;
 	if no scaling-service is set a linear scaling will be used-->
 <!ATTLIST chart2:scale
 	scaling-service %service-name; #IMPLIED

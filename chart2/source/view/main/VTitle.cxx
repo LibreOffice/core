@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:07:51 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,11 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "RelativeSizeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XFORMATTEDSTRING_HPP_
-#include <drafts/com/sun/star/chart2/XFormattedString.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XFORMATTEDSTRING_HPP_
+#include <com/sun/star/chart2/XFormattedString.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 
 // header for class Matrix3D
@@ -106,7 +106,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 
 VTitle::VTitle( const uno::Reference< XTitle > & xTitle
                , double fAdditionalRotationAngleDegree )

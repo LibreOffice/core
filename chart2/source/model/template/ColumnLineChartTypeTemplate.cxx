@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:12 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -354,7 +353,7 @@ uno::Sequence< ::rtl::OUString > ColumnLineChartTypeTemplate::getSupportedServic
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartTypeTemplate" );
     return aServices;
 }
 

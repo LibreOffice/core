@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_DataLabel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ SchDataDescrTabPage::SchDataDescrTabPage(Window* pWindow,
         aRbNumber(this, ResId(RB_NUMBER)),
         aRbPercent(this, ResId(RB_PERCENT)),
         aCbText(this, ResId(CB_TEXT)),
-        aCbSymbol(this, ResId(CB_SYMBOL)),
-        rOutAttrs(rInAttrs)
+        aCbSymbol(this, ResId(CB_SYMBOL))
 {
     FreeResource();
 
@@ -176,12 +175,12 @@ void SchDataDescrTabPage::Reset(const SfxItemSet& rInAttrs)
     aRbPercent.Enable( FALSE );
     aCbSymbol.Enable( FALSE );
 
-    if( rOutAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM,
-                               TRUE, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM,
+                              TRUE, &pPoolItem) == SFX_ITEM_SET )
         aCbSymbol.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
 
-    if( rOutAttrs.GetItemState(SCHATTR_DATADESCR_DESCR,
-                               TRUE, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_DESCR,
+                              TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
         switch( ((const SvxChartDataDescrItem*)pPoolItem)->GetValue() )
         {

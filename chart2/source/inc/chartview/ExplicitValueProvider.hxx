@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExplicitValueProvider.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 #ifndef _CHART2_EXPLICITVALUEPROVIDER_HXX
 #define _CHART2_EXPLICITVALUEPROVIDER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitIncrementData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
+#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
-#include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
+#ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
+#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XMETER_HPP_
-#include <drafts/com/sun/star/chart2/XMeter.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XMETER_HPP_
+#include <com/sun/star/chart2/XMeter.hpp>
 #endif
 
 //.............................................................................
@@ -84,9 +84,9 @@ class ExplicitValueProvider
 {
 public:
     virtual void getExplicitValuesForMeter(
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XMeter > xMeter
-        , ::drafts::com::sun::star::chart2::ExplicitScaleData&  rExplicitScale
-        , ::drafts::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement
+        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XMeter > xMeter
+        , ::com::sun::star::chart2::ExplicitScaleData&  rExplicitScale
+        , ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement
         , double& rfExplicitOrigin )=0;
 };
 

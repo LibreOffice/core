@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:00:36 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
+#ifndef _COM_SUN_STAR_CHART2_STACKMODE_HPP_
+#include <com/sun/star/chart2/StackMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
-#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <com/sun/star/chart2/CurveStyle.hpp>
 #endif
 
 namespace chart
@@ -89,7 +89,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
         const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle,
+        ::com::sun::star::chart2::CurveStyle eCurveStyle,
         bool bSymbols,
         bool bHasLines = true,
         sal_Int32 nDim = 2 );
@@ -115,24 +115,24 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL
         createDiagram( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::uno::Reference<
-                               ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+                               ::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL matchesTemplate(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+            ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        ::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ::drafts::com::sun::star::chart2::CurveStyle
+    ::com::sun::star::chart2::CurveStyle
                        m_eCurveStyle;
     bool               m_bHasSymbols;
     bool               m_bHasLines;

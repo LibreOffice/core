@@ -1,7 +1,7 @@
 ch	chart2	:	apphelper comphelper cppu cppuhelper sal sv svl svtool svx tk tools vcl NULL
 ch	chart2										usr1	-	all	ch_mkout NULL
-ch	chart2\drafts\com\sun\star\chart2			nmake	-	all	ch_uno_chart2 NULL
-ch	chart2\drafts\com\sun\star\layout			nmake	-	all	ch_uno_layout NULL
+ch	chart2\com\sun\star\chart2					nmake	-	all	ch_uno_chart2 NULL
+ch	chart2\com\sun\star\layout					nmake	-	all	ch_uno_layout NULL
 ch	chart2\util									nmake	-	all	ch_uno ch_uno_chart2 ch_uno_layout NULL
 ch	chart2\source\inc							get		-	all	ch_source_inc NULL
 ch	chart2\source\inc\chartview					get		-	all	ch_source_inc_chartview NULL
@@ -27,5 +27,5 @@ ch  chart2\source\controller\chartapiwrapper	nmake   -   all ch_source_controlle
 ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_uno NULL
 ch	chart2\prj									get		-	all	ch_prj NULL
 ch	chart2\genjava								nmake	-	all	ch_java ch_uno NULL
-ch	chart2\genjava\drafts\com\sun\star\layout	nmake	-	all	ch_class_layout ch_java NULL
-ch	chart2\genjava\drafts\com\sun\star\chart2	nmake	-	all	ch_class_chart2 ch_class_layout ch_java NULL
+ch	chart2\genjava\com\sun\star\layout			nmake	-	all	ch_class_layout ch_java NULL
+ch	chart2\genjava\com\sun\star\chart2			nmake	-	all	ch_class_chart2 ch_class_layout ch_java NULL

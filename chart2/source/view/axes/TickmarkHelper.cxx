@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:32 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace chart
 {
 //.............................................................................
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 
 TickInfo::TickInfo()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:19 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLE_HPP_
-#include <drafts/com/sun/star/chart2/XTitle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
+#include <com/sun/star/chart2/XTitle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
-#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <com/sun/star/chart2/XIdentifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -95,9 +95,9 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper3<
-    ::drafts::com::sun::star::chart2::XTitle,
+    ::com::sun::star::chart2::XTitle,
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XIdentifiable >
+    ::com::sun::star::chart2::XIdentifiable >
     Title_Base;
 }
 
@@ -145,11 +145,11 @@ protected:
     // ____ XTitle ____
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XFormattedString > > SAL_CALL getText()
+        ::com::sun::star::chart2::XFormattedString > > SAL_CALL getText()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setText( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Reference<
-                                   ::drafts::com::sun::star::chart2::XFormattedString > >& Strings )
+                                   ::com::sun::star::chart2::XFormattedString > >& Strings )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XIdentifiable ____
@@ -161,7 +161,7 @@ private:
 
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XFormattedString > > m_aStrings;
+            ::com::sun::star::chart2::XFormattedString > > m_aStrings;
 };
 
 } //  namespace chart

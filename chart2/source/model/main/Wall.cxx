@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Wall.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-15 15:50:38 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
+#ifndef _COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
+#include <com/sun/star/chart2/TransparencyStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -106,7 +106,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
@@ -258,7 +257,7 @@ void SAL_CALL Wall::release() throw ()
 uno::Sequence< ::rtl::OUString > Wall::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.Wall" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.Wall" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

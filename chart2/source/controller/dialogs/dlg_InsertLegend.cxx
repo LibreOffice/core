@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,6 @@ namespace chart
 {
 //.............................................................................
 
-/*************************************************************************
-|*
-|* Dialog zur Ausrichtung der Legende
-|*
-\************************************************************************/
-
 SchLegendDlg::SchLegendDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     ModalDialog(pWindow, SchResId(DLG_LEGEND)),
     aCbxShow(this, ResId(CBX_SHOW)),
@@ -96,7 +90,7 @@ SchLegendDlg::SchLegendDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     aBtnOK(this, ResId(BTN_OK)),
     aBtnCancel(this, ResId(BTN_CANCEL)),
     aBtnHelp(this, ResId(BTN_HELP)),
-    rOutAttrs(rInAttrs)
+    m_rInAttrs(rInAttrs)
 {
     FreeResource();
 
@@ -105,30 +99,18 @@ SchLegendDlg::SchLegendDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     Reset();
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-/************************************************************************/
-
 SchLegendDlg::~SchLegendDlg()
 {
 }
-
-/*************************************************************************
-|*
-|*  Initialisierung
-|*
-\*************************************************************************/
 
 void SchLegendDlg::Reset()
 {
     SvxChartLegendPos ePos = CHLEGEND_NONE;
 
     const SfxPoolItem* pPoolItem = NULL;
-    if( rOutAttrs.GetItemState( SCHATTR_LEGEND_POS,
+    if( m_rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
                                TRUE, &pPoolItem ) != SFX_ITEM_SET )
-        pPoolItem = &(rOutAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
+        pPoolItem = &(m_rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
 
     if( pPoolItem )
         ePos = ((const SvxChartLegendPosItem*)pPoolItem)->GetValue();
@@ -148,6 +130,8 @@ void SchLegendDlg::Reset()
         case CHLEGEND_BOTTOM:
             aRbtBottom.Check(TRUE);
             break;
+        default:
+            break;
     }
 
     aCbxShow.Check (ePos != CHLEGEND_NONE);
@@ -157,13 +141,7 @@ void SchLegendDlg::Reset()
     aRbtBottom.Enable (ePos != CHLEGEND_NONE);
 }
 
-/*************************************************************************
-|*
-|*    Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
-
-void SchLegendDlg::GetAttr(SfxItemSet& rOutAttrs)
+void SchLegendDlg::GetAttr(SfxItemSet& _rOutAttrs)
 {
     SvxChartLegendPos ePos;
 
@@ -180,7 +158,7 @@ void SchLegendDlg::GetAttr(SfxItemSet& rOutAttrs)
     else
         ePos = CHLEGEND_NONE;
 
-    rOutAttrs.Put(SvxChartLegendPosItem(ePos));
+    _rOutAttrs.Put(SvxChartLegendPosItem(ePos));
 }
 
 

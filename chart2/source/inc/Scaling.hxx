@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Scaling.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _CHART2_SCALING_HXX
 #define _CHART2_SCALING_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSCALING_HPP_
-#include <drafts/com/sun/star/chart2/XScaling.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XSCALING_HPP_
+#include <com/sun/star/chart2/XScaling.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -82,7 +82,7 @@ namespace chart
 */
 
 class LogarithmicScaling : public ::cppu::WeakImplHelper2 <
-        ::drafts::com::sun::star::chart2::XScaling,
+        ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName
         >
 {
@@ -97,7 +97,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XScaling > SAL_CALL
+        ::com::sun::star::chart2::XScaling > SAL_CALL
     getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
@@ -112,7 +112,7 @@ private:
 // ----------------------------------------
 
 class ExponentialScaling : public ::cppu::WeakImplHelper2 <
-        ::drafts::com::sun::star::chart2::XScaling,
+        ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName
         >
 {
@@ -127,7 +127,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XScaling > SAL_CALL
+        ::com::sun::star::chart2::XScaling > SAL_CALL
     getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
@@ -141,7 +141,7 @@ private:
 // ----------------------------------------
 
 class LinearScaling : public ::cppu::WeakImplHelper2 <
-        ::drafts::com::sun::star::chart2::XScaling,
+        ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName
         >
 {
@@ -156,7 +156,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XScaling > SAL_CALL
+        ::com::sun::star::chart2::XScaling > SAL_CALL
     getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
@@ -171,7 +171,7 @@ private:
 // ----------------------------------------
 
 class PowerScaling : public ::cppu::WeakImplHelper2 <
-        ::drafts::com::sun::star::chart2::XScaling,
+        ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName
         >
 {
@@ -185,7 +185,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XScaling > SAL_CALL
+        ::com::sun::star::chart2::XScaling > SAL_CALL
     getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:36 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
-#include <drafts/com/sun/star/chart2/XTitled.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
+#include <com/sun/star/chart2/XTitled.hpp>
 #endif
 
 #include <vector>
@@ -81,7 +81,6 @@
 #include <functional>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star::chart;
 
 using ::com::sun::star::uno::Reference;
@@ -755,7 +754,7 @@ uno::Sequence< ::rtl::OUString > ChartDocumentWrapper::getSupportedServiceNames_
 {
     uno::Sequence< ::rtl::OUString > aServices( 4 );
     aServices[ 0 ] = C2U( "com.sun.star.chart.ChartDocument" );
-    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartDocumentWrapper" );
+    aServices[ 1 ] = C2U( "com.sun.star.chart2.ChartDocumentWrapper" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;

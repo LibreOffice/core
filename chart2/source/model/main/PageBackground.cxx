@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 19:04:46 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
@@ -233,7 +232,7 @@ void SAL_CALL PageBackground::release() throw ()
 uno::Sequence< ::rtl::OUString > PageBackground::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "drafts.com.sun.star.chart2.PageBackground" );
+    aServices[ 0 ] = C2U( "com.sun.star.chart2.PageBackground" );
     aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
     return aServices;
 }

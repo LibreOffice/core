@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,11 @@
 #include <svx/chrtitem.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
-#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -165,10 +165,8 @@ private:
     HelpButton      aBtnHelp;
     ChartDimension  eDimension;
 
-//  const SfxItemSet&       rOutAttrs;
-
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > m_xDiagram;
+            ::com::sun::star::chart2::XDiagram > m_xDiagram;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > m_xTemplateManager;
 
@@ -195,12 +193,10 @@ public:
     SchDiagramTypeDlg(
         Window* pWindow,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xDiagram,
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & xTemplateManager );
     virtual ~SchDiagramTypeDlg();
-
-//BM    void    GetAttr(SfxItemSet& rOutAttrs);
 
      sal_Int32 GetDepth() const;
     void      SetDepth( sal_Int32 nDeep );
@@ -225,7 +221,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartTypeTemplate >
+            ::com::sun::star::chart2::XChartTypeTemplate >
         getTemplate() const;
 
     bool HasChanged() const;

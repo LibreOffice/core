@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_LegendPosition.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+ *  last change: $Author: bm $ $Date: 2004-01-26 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,52 +80,27 @@ namespace chart
 {
 //.............................................................................
 
-/*************************************************************************
-|*
-|* Dialog zur Ausrichtung der Legende
-|*
-\************************************************************************/
-
 SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_LEGEND_POS), rInAttrs),
+    aGrpLegend(this, ResId(GRP_LEGEND)),
     aRbtLeft(this, ResId(RBT_LEFT)),
     aRbtTop(this, ResId(RBT_TOP)),
-    aRbtRight(this, ResId(RBT_RIGHT)),
     aRbtBottom(this, ResId(RBT_BOTTOM)),
-    aGrpLegend(this, ResId(GRP_LEGEND)),
-    rOutAttrs(rInAttrs)
+    aRbtRight(this, ResId(RBT_RIGHT))
 {
     FreeResource();
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-/************************************************************************/
-
 SchLegendPosTabPage::~SchLegendPosTabPage()
 {
 }
-
-/*************************************************************************
-|*
-|* Erzeugung
-|*
-\*************************************************************************/
 
 SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow,
                                         const SfxItemSet& rOutAttrs)
 {
     return new SchLegendPosTabPage(pWindow, rOutAttrs);
 }
-
-/*************************************************************************
-|*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
 
 BOOL SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
@@ -146,12 +121,6 @@ BOOL SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     return TRUE;
 }
-
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\*************************************************************************/
 
 void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
 {
@@ -178,6 +147,8 @@ void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
             break;
         case CHLEGEND_BOTTOM:
             aRbtBottom.Check(TRUE);
+            break;
+        default:
             break;
     }
 }
