@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:35:57 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,18 @@ sal_Bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 // class XMLNumberNonePropHdl
 //
 
+XMLNumberNonePropHdl::XMLNumberNonePropHdl( sal_Int8 nB ) :
+    sZeroStr( RTL_CONSTASCII_USTRINGPARAM( sXML_no_limit ) ),
+    nBytes( nB )
+{
+}
+
+XMLNumberNonePropHdl::XMLNumberNonePropHdl( const sal_Char* sZeroString, sal_Int8 nB ) :
+    sZeroStr( OUString::createFromAscii( sZeroString ) ),
+    nBytes( nB )
+{
+}
+
 XMLNumberNonePropHdl::~XMLNumberNonePropHdl()
 {
     // nothing to do
@@ -189,7 +201,7 @@ sal_Bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     sal_Bool bRet = sal_False;
 
     sal_Int32 nValue;
-    if( rStrImpValue.compareToAscii( sXML_no_limit ) == 0 )
+    if( rStrImpValue == sZeroStr )
     {
         nValue = 0;
         bRet = sal_True;
@@ -198,7 +210,7 @@ sal_Bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     {
         bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
     }
-    rValue <<= nValue;
+    lcl_xmloff_setAny( rValue, nValue, nBytes );
 
     return bRet;
 }
@@ -208,13 +220,13 @@ sal_Bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
     sal_Bool bRet = sal_False;
     sal_Int32 nValue;
 
-    if( rValue >>= nValue )
+    if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
           OUStringBuffer aOut;
 
         if( nValue == 0 )
         {
-            aOut.appendAscii( sXML_no_limit );
+            aOut.append( sZeroStr );
         }
         else
         {
@@ -585,46 +597,4 @@ sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString& rStrExpValue, const Any& rV
     DBG_ASSERT( !this, "exportXML called for compare-only-property" );
     return sal_False;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// class XMLBoolValuesPropHdl
-//
-
-XMLBoolValuesPropHdl::XMLBoolValuesPropHdl(
-        const sal_Char* sTrueValue,
-        const sal_Char* sFalseValue ) :
-    sTrueVal( OUString::createFromAscii( sTrueValue ) ),
-    sFalseVal( OUString::createFromAscii( sFalseValue ) )
-{
-}
-
-XMLBoolValuesPropHdl::~XMLBoolValuesPropHdl()
-{
-}
-
-sal_Bool XMLBoolValuesPropHdl::importXML(
-        const OUString& rStrImpValue,
-        Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bTrue  = (rStrImpValue == sTrueVal);
-    sal_Bool bFalse = !bTrue && (rStrImpValue == sFalseVal);
-
-    if( bTrue || bFalse )
-        setBOOL( rValue, bTrue );
-
-    return (bTrue || bFalse);
-}
-
-sal_Bool XMLBoolValuesPropHdl::exportXML(
-        OUString& rStrExpValue,
-        const Any& rValue,
-        const SvXMLUnitConverter& rUnitConverter ) const
-{
-    rStrExpValue = getBOOL( rValue ) ? sTrueVal : sFalseVal;
-    return sal_True;
-}
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,12 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_NUMBER_NONE :
                 pPropHdl = new XMLNumberNonePropHdl;
+                break;
+            case XML_TYPE_NUMBER8_NONE :
+                pPropHdl = new XMLNumberNonePropHdl( 1 );
+                break;
+            case XML_TYPE_NUMBER16_NONE :
+                pPropHdl = new XMLNumberNonePropHdl( 2 );
                 break;
             case XML_TYPE_DOUBLE :
                 pPropHdl = new XMLDoublePropHdl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:35:57 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,11 @@ public:
 */
 class XMLNumberNonePropHdl : public XMLPropertyHandler
 {
+    ::rtl::OUString sZeroStr;
+    sal_Int8        nBytes;
 public:
+    XMLNumberNonePropHdl( sal_Int8 nB = 4 );
+    XMLNumberNonePropHdl( const sal_Char* sZeroString, sal_Int8 nB = 4 );
     virtual ~XMLNumberNonePropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
@@ -217,24 +221,6 @@ class XMLCompareOnlyPropHdl : public XMLPropertyHandler
 {
 public:
     virtual ~XMLCompareOnlyPropHdl();
-
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};
-
-/**
-    A property handler for a boolean property that is represented by two
-    different strings
-*/
-class XMLBoolValuesPropHdl : public XMLPropertyHandler
-{
-protected:
-    ::rtl::OUString sTrueVal;
-    ::rtl::OUString sFalseVal;
-
-public:
-            XMLBoolValuesPropHdl( const sal_Char* sTrueValue, const sal_Char* sFalseValue );
-    virtual ~XMLBoolValuesPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
