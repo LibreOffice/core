@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:25:06 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,9 @@ SwDrawDocument::~SwDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    Clear();
+    // #116168#
+    ClearModel(sal_True);
+    //Clear();
 }
 
 /*************************************************************************
