@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-13 12:29:52 $
+ *  last change: $Author: hr $ $Date: 2002-08-16 16:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 // NOT FULLY DECLARED SERVICES
 #include <string.h>
 #include <stdio.h>
-#if defined(WNT) || defined(LINUX) || defined(MACOSX)
-#include <stdarg.h>
-#else
-#include <sys/varargs.h>
-#endif
+#include <stdarg.h> // both are needed to satisfy all compilers
+#include <cstdarg>  // std::va_list and friends
+
 #include <cosv/comfunc.hxx>
 #include <cosv/template/swelist.hxx>
 
