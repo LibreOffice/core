@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:41:08 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-08 12:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,14 +102,41 @@ LocalSingleBackend::LocalSingleBackend(
 LocalSingleBackend::~LocalSingleBackend(void) {}
 //------------------------------------------------------------------------------
 
+static void fillFromBlankSeparated(const rtl::OUString& aList,
+                                   uno::Sequence<rtl::OUString>& aTarget) {
+    std::vector<rtl::OUString> tokens ;
+    sal_Int32 nextToken = 0 ;
+
+    do {
+        tokens.push_back(aList.getToken(0, ' ', nextToken)) ;
+    } while (nextToken >= 0) ;
+    if (tokens.size() > 0) {
+        aTarget.realloc(tokens.size()) ;
+        std::vector<rtl::OUString>::const_iterator token ;
+        sal_Int32 i = 0 ;
+
+        for (token = tokens.begin() ; token != tokens.end() ; ++ token) {
+            aTarget [i ++] = *token ;
+        }
+    }
+}
+//------------------------------------------------------------------------------
+
 static const rtl::OUString kMetaConfPrefix(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.bootstrap.")) ;
-static const rtl::OUString kSharedDataUrl(kMetaConfPrefix +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SharedDataUrl"))) ;
+static const rtl::OUString kSchemaDataUrl(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SchemaDataUrl"))) ;
+static const rtl::OUString kDefaultDataUrl(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultDataUrl"))) ;
 static const rtl::OUString kUserDataUrl(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserDataUrl"))) ;
 static const rtl::OUString kUserName(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserName"))) ;
+static const rtl::OUString kAdminMode(kMetaConfPrefix +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service"))) ;
+
+static const rtl::OUString kAdminModeValue(
+        RTL_CONSTASCII_USTRINGPARAM("adminconfiguration")) ;
 
 void SAL_CALL LocalSingleBackend::initialize(
         const uno::Sequence<uno::Any>& aParameters)
@@ -126,8 +153,24 @@ void SAL_CALL LocalSingleBackend::initialize(
     for (sal_Int32 i = 0 ; i < aParameters.getLength() ; ++ i) {
         if (aParameters [i] >>= context) { break ; }
     }
-    context->getValueByName(kSharedDataUrl) >>= mSharedDataUrl ;
-    context->getValueByName(kUserDataUrl) >>= mUserDataUrl ;
+    rtl::OUString adminMode ;
+
+    context->getValueByName(kAdminMode) >>= adminMode ;
+    if (adminMode.equals(kAdminModeValue)) {
+        context->getValueByName(kDefaultDataUrl) >>= mUserDataUrl ;
+    }
+    else {
+        rtl::OUString defaults ;
+
+        if (context->getValueByName(kDefaultDataUrl) >>= defaults) {
+            fillFromBlankSeparated(defaults, mDefaultDataUrl) ;
+        }
+        else {
+            context->getValueByName(kDefaultDataUrl) >>= mDefaultDataUrl ;
+        }
+        context->getValueByName(kUserDataUrl) >>= mUserDataUrl ;
+    }
+    context->getValueByName(kSchemaDataUrl) >>= mSchemaDataUrl ;
     context->getValueByName(kUserName) >>= mOwnId ;
 }
 //------------------------------------------------------------------------------
@@ -144,31 +187,40 @@ static rtl::OUString componentToPath(const rtl::OUString& aComponent) {
 }
 //------------------------------------------------------------------------------
 
-static sal_Unicode kDefaultLayerMark = 'd' ;
-static sal_Unicode kUserLayerMark = 'u' ;
+/**
+  Transforms a file url into a layer id. The layer id will
+  contain the URL passed plus an integer indicating which
+  layer the URL points to. If the integer is -1, the URL
+  is a user layer, otherwise it is one of the default layers.
 
+  @param aFileUrl   URL to encode
+  @param aIndex     index of the layer concerned (-1 = user, other = default)
+  @return   layer id
+  */
 static rtl::OUString urlToLayerId(const rtl::OUString& aFileUrl,
-                                  sal_Bool bIsDefault) {
+                                  sal_Int32 aIndex) {
     rtl::OUStringBuffer retCode ;
 
-    retCode.append(bIsDefault ? kDefaultLayerMark : kUserLayerMark) ;
-    retCode.append(aFileUrl) ;
+    retCode.append(aIndex).appendAscii(" ").append(aFileUrl) ;
     return retCode.makeStringAndClear() ;
 }
 
 static void layerIdToUrl(const rtl::OUString& aLayerId,
                          rtl::OUString& aFileUrl,
-                         sal_Bool& bIsDefault) {
-    bIsDefault = ((static_cast<const sal_Unicode *>(aLayerId)) [0] ==
-                                                            kDefaultLayerMark) ;
-    aFileUrl = aLayerId.copy(1) ;
+                         sal_Int32& aIndex) {
+    sal_Int32 space = aLayerId.indexOf(' ') ;
+
+    if (space == -1) {
+        aFileUrl = aLayerId ;
+        aIndex = -1 ;
+    }
+    else {
+        aFileUrl = aLayerId.copy(space + 1) ;
+        aIndex = aLayerId.copy(0, space).toInt32() ;
+    }
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kDefaultsSubPath(
-                                        RTL_CONSTASCII_USTRINGPARAM("/data")) ;
-static const rtl::OUString kLocalisedDefaultsSubPath(
-                                        RTL_CONSTASCII_USTRINGPARAM("/res")) ;
 static const rtl::OUString kDataSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcu")) ;
 
 uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::listLayerIds(
@@ -176,18 +228,22 @@ uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::listLayerIds(
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    if (!aEntity.equals(mOwnId)) {
+    if (aEntity.getLength() > 0 && !aEntity.equals(mOwnId)) {
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Can only access user data")),
                 *this, 1) ;
     }
-    uno::Sequence<rtl::OUString> retCode(2) ;
+    sal_Int32 nbLayers = mDefaultDataUrl.getLength() + 1 ;
+    uno::Sequence<rtl::OUString> retCode(nbLayers) ;
     rtl::OUString componentSubPath = componentToPath(aComponent) + kDataSuffix ;
+
     // First, the defaults...
-    retCode [0] = urlToLayerId(componentSubPath, sal_True) ;
+    for (sal_Int32 i = 0 ; i < nbLayers - 1 ; ++ i) {
+        retCode [i] = urlToLayerId(componentSubPath, i) ;
+    }
     // Then the user delta.
-    retCode [1] = urlToLayerId(componentSubPath, sal_False) ;
+    retCode [nbLayers - 1] = urlToLayerId(componentSubPath, -1) ;
     return retCode ;
 }
 //------------------------------------------------------------------------------
@@ -197,13 +253,13 @@ rtl::OUString SAL_CALL LocalSingleBackend::getUpdateLayerId(
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    if (!aEntity.equals(mOwnId)) {
+    if (aEntity.getLength() > 0 && !aEntity.equals(mOwnId)) {
         throw lang::IllegalArgumentException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Can only access user data")),
                 *this, 1) ;
     }
-    return urlToLayerId(componentToPath(aComponent) + kDataSuffix, sal_False) ;
+    return urlToLayerId(componentToPath(aComponent) + kDataSuffix, -1) ;
 }
 //------------------------------------------------------------------------------
 
@@ -214,20 +270,22 @@ rtl::OUString SAL_CALL LocalSingleBackend::getOwnId(void)
 }
 //------------------------------------------------------------------------------
 
-/**
-  Tests whether a file defined by its URL is more recent than a
-  date provided as a timestamp.
-  The timestamp is formatted YYYYMMDDhhmmssZ.
+sal_Bool LocalSingleBackend::isMoreRecent(const rtl::OUString& aFileUrl,
+                                          sal_Int32 aLayerIndex,
+                                          const rtl::OUString& aTimestamp) {
+    rtl::OUString layerUrl ;
+    rtl::OUString subLayerUrl ;
 
-  @param aFileUrl   URL of the file to test
-  @param aTimestamp timestamp to test against
-  @return   sal_True if the file is more recent, sal_False otherwise
-  */
-static sal_Bool isMoreRecent(const rtl::OUString& aFileUrl,
-                             const rtl::OUString& aTimestamp) {
-    return (LocalFileLayer::getTimestamp(aFileUrl).compareTo(aTimestamp) > 0) ;
+    getLayerDirectories(aLayerIndex, layerUrl, subLayerUrl) ;
+    return (LocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo(
+                                                            aTimestamp) > 0) ;
 }
 //------------------------------------------------------------------------------
+
+static const rtl::OUString kDefaultsSubPath(
+                                        RTL_CONSTASCII_USTRINGPARAM("/data")) ;
+static const rtl::OUString kLocalisedDefaultsSubPath(
+                                        RTL_CONSTASCII_USTRINGPARAM("/res")) ;
 
 uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
         const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp)
@@ -235,22 +293,13 @@ uno::Reference<backend::XLayer> SAL_CALL LocalSingleBackend::getLayer(
             uno::RuntimeException)
 {
     rtl::OUString fileUrl ;
-    sal_Bool bIsDefault = sal_False ;
+    sal_Int32 defaultIndex = -1 ;
 
-    layerIdToUrl(aLayerId, fileUrl, bIsDefault) ;
-    if (!isMoreRecent(fileUrl, aTimestamp)) { return NULL ; }
-    uno::Reference<backend::XCompositeLayer> layer ;
+    layerIdToUrl(aLayerId, fileUrl, defaultIndex) ;
+    if (!isMoreRecent(fileUrl, defaultIndex, aTimestamp)) { return NULL ; }
+    uno::Reference<backend::XCompositeLayer> layer = getFileLayer(fileUrl,
+                                                                defaultIndex) ;
 
-    if (bIsDefault) {
-        layer = new LocalFileLayer(mFactory,
-                mSharedDataUrl + kDefaultsSubPath,
-                fileUrl,
-                mSharedDataUrl + kLocalisedDefaultsSubPath) ;
-    }
-    else {
-        layer = new LocalFileLayer(mFactory,
-                mUserDataUrl, fileUrl, rtl::OUString()) ;
-    }
     return uno::Reference<backend::XLayer>::query(layer) ;
 }
 //------------------------------------------------------------------------------
@@ -299,18 +348,7 @@ LocalSingleBackend::getUpdatableLayer(const rtl::OUString& aLayerId)
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    rtl::OUString fileUrl ;
-    sal_Bool bIsDefault = sal_False ;
-
-    layerIdToUrl(aLayerId, fileUrl, bIsDefault) ;
-    if (bIsDefault) {
-        throw backend::BackendAccessException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Cannot update default layer")),
-                *this) ;
-    }
-    return new LocalFileLayer(mFactory, mUserDataUrl,
-                              fileUrl, rtl::OUString()) ;
+    return getFileLayer(aLayerId) ;
 }
 //------------------------------------------------------------------------------
 
@@ -319,24 +357,14 @@ LocalSingleBackend::getWriteHandler(const rtl::OUString& aLayerId)
     throw (backend::BackendAccessException, lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    rtl::OUString fileUrl ;
-    sal_Bool bIsDefault = sal_False ;
+    LocalFileLayer *layer = getFileLayer(aLayerId) ;
+    uno::Reference<backend::XLayerHandler> retCode = layer->getLayerWriter() ;
 
-    layerIdToUrl(aLayerId, fileUrl, bIsDefault) ;
-    if (bIsDefault) {
-        throw backend::BackendAccessException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Cannot update default layer")),
-                *this) ;
-    }
-    LocalFileLayer layer(mFactory, mUserDataUrl, fileUrl, rtl::OUString()) ;
-
-    return layer.getLayerWriter() ;
+    delete layer ;
+    return retCode ;
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kSchemaSubPath(
-                                    RTL_CONSTASCII_USTRINGPARAM("/schema")) ;
 static const rtl::OUString kSchemaSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcs")) ;
 static const rtl::OUString kXMLSchemaParser(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.configuration.backend.xml.SchemaParser")) ;
@@ -347,9 +375,9 @@ uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
             uno::RuntimeException)
 {
     rtl::OUString subPath = componentToPath(aComponent) ;
-    rtl::OUStringBuffer schemaUrl(mSharedDataUrl) ;
+    rtl::OUStringBuffer schemaUrl(mSchemaDataUrl) ;
 
-    schemaUrl.append(kSchemaSubPath).append(subPath).append(kSchemaSuffix) ;
+    schemaUrl.append(subPath).append(kSchemaSuffix) ;
     osl::File *schemaFile = new osl::File(schemaUrl.makeStringAndClear()) ;
     osl::FileBase::RC errorCode = schemaFile->open(OpenFlag_Read) ;
 
@@ -373,6 +401,39 @@ uno::Reference<backend::XSchema> SAL_CALL LocalSingleBackend::getSchema(
                 *this) ;
     }
     return schema ;
+}
+//------------------------------------------------------------------------------
+
+LocalFileLayer *LocalSingleBackend::getFileLayer(const rtl::OUString& aLayerId)
+    throw (lang::IllegalArgumentException)
+{
+    rtl::OUString fileUrl ;
+    sal_Int32 defaultIndex = -1 ;
+
+    layerIdToUrl(aLayerId, fileUrl, defaultIndex) ;
+    return getFileLayer(fileUrl, defaultIndex) ;
+}
+//------------------------------------------------------------------------------
+
+LocalFileLayer *LocalSingleBackend::getFileLayer(
+                    const rtl::OUString& aComponent, sal_Int32 aLayerIndex) {
+    rtl::OUString layerPath ;
+    rtl::OUString subLayerPath ;
+
+    getLayerDirectories(aLayerIndex, layerPath, subLayerPath) ;
+    return new LocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
+}
+//------------------------------------------------------------------------------
+
+void LocalSingleBackend::getLayerDirectories(sal_Int32 aLayerIndex,
+                                             rtl::OUString& aLayerUrl,
+                                             rtl::OUString& aSubLayerUrl) {
+    aLayerUrl = (aLayerIndex == -1 ? mUserDataUrl :
+                                     mDefaultDataUrl [aLayerIndex]) ;
+    if (mDefaultDataUrl.getLength() == 0 || aLayerIndex != -1) {
+        aSubLayerUrl = aLayerUrl + kLocalisedDefaultsSubPath ;
+        aLayerUrl += kDefaultsSubPath ;
+    }
 }
 //------------------------------------------------------------------------------
 

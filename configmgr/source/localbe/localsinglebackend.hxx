@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:33:46 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-08 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ namespace backend = drafts::com::sun::star::configuration::backend ;
 typedef cppu::WeakComponentImplHelper3<backend::XSingleBackend,
                                        lang::XInitialization,
                                        lang::XServiceInfo> SingleBackendBase ;
+
+class LocalFileLayer ;
 
 /**
   Implements the SingleBackend service for local file access.
@@ -193,10 +195,63 @@ class LocalSingleBackend : public SingleBackendBase {
         osl::Mutex mMutex ;
         /** Identifier of the user of the backend */
         rtl::OUString mOwnId ;
-        /** Base of the shared data */
-        rtl::OUString mSharedDataUrl ;
+        /** Base of the schema data */
+        rtl::OUString mSchemaDataUrl ;
+        /**
+          Base of the default data. Is a list to allow
+          for multiple layers of default data.
+          */
+        uno::Sequence<rtl::OUString> mDefaultDataUrl ;
         /** Base of the user data */
         rtl::OUString mUserDataUrl ;
+
+        /**
+          Builds a LocalFileLayer object given a layer id.
+          Since the LocalFileLayer implements the various
+          interfaces a layer can be accessed as, a few methods
+          need one. This method handles the layer id mapping
+          and the existence or not of sublayers.
+
+          @param aLayerId   layer id
+          @return   local file layer
+          @throws com::sun::star::lang::IllegalArgumentException
+                  if the layer id is invalid.
+          */
+        LocalFileLayer *getFileLayer(const rtl::OUString& aLayerId)
+            throw (lang::IllegalArgumentException) ;
+        /**
+          Same as above, but using a component URL and layer index
+          combination instead of a layer id (which encodes both).
+
+          @param aComponent     component URL
+          @param aLayerIndex    layer index
+          @return   local file layer
+          */
+        LocalFileLayer *getFileLayer(const rtl::OUString& aComponent,
+                                     sal_Int32 aLayerIndex) ;
+        /**
+          Maps a layer index (-1 for user layer, 0-x for defaults)
+          to the appropriate layer and sublayers base directories.
+
+          @param aLayerIndex    layer index
+          @param aLayerUrl      layer base URL, filled on return
+          @param aSubLayerUrl   sublayer base URL, filled on return
+          */
+        void getLayerDirectories(sal_Int32 aLayerIndex,
+                                 rtl::OUString& aLayerUrl,
+                                 rtl::OUString& aSubLayerUrl) ;
+        /**
+          Tells if a file is more recent than a given date.
+          The date is formatted YYYYMMDDhhmmssZ.
+
+          @param aComponent     URL of the component to check
+          @param aLayerIndex    index of the layer involved (-1 = user)
+          @param aTimestamp     timestamp to check against
+          @return   sal_True if the file is more recent, sal_False otherwise
+          */
+        sal_Bool isMoreRecent(const rtl::OUString& aComponent,
+                              sal_Int32 aLayerId,
+                              const rtl::OUString& aTimestamp) ;
 } ;
 
 } } // configmgr.localbe
