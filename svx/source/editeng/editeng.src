@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:32:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,14 @@ String RID_EDITUNDO_REPLACE
     TEXT [ dutch ] = "Vervangen" ;
     TEXT [ spanish ] = "Reemplazar" ;
     TEXT [ english_us ] = "Replace" ;
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "Ìæ»»";
     TEXT[ russian ] = "Çàìåíèòü";
     TEXT[ polish ] = "Zamieñ";
     TEXT[ japanese ] = "’uŠ·";
     TEXT[ chinese_traditional ] = "¥N´À";
     TEXT[ arabic ] = "ÇÓÊÈÏÇá";
     TEXT[ dutch ] = "Vervangen";
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "Ìæ»»";
     TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
     TEXT[ korean ] = "¹Ù²Ù±â";
     TEXT[ turkish ] = "Değiştir";
@@ -225,7 +225,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
     TEXT[ russian ] = "Âîññòàíîâèòü àòğèáóòû";
     TEXT[ polish ] = "Zresetuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚ğØ¾¯Ä";
+    TEXT[ japanese ] = "‘®«‚ğŒ³‚É–ß‚·";
     TEXT[ chinese_traditional ] = "­«³]Äİ©Ê";
     TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
     TEXT[ dutch ] = "Attributen terugzetten";
@@ -450,6 +450,7 @@ Menu RID_MENU_SPELL
         };
     };
 };
+
 
 
 
