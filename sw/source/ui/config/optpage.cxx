@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:00:27 $
+ *  last change: $Author: jp $ $Date: 2001-06-28 13:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,11 +900,20 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
 {
-    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD));
-    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_OUTLINE));
-    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(FONT_LIST));
-    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(FONT_CAPTION));
-    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(FONT_INDEX));
+    static USHORT aIdArr[5][2] = {
+        { FONT_STANDARD,    FONT_STANDARD_CJK },
+        { FONT_OUTLINE,     FONT_OUTLINE_CJK },
+        { FONT_LIST,        FONT_LIST_CJK },
+        { FONT_CAPTION,     FONT_CAPTION_CJK },
+        { FONT_INDEX,       FONT_INDEX_CJK }
+    };
+    USHORT nOff = bCJKMode ? 1 : 0;
+    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(aIdArr[0][nOff]));
+    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[1][nOff]));
+    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[2][nOff]));
+    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[3][nOff]));
+    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[4][nOff]));
+
     aStandardBox.SaveValue();
     aTitleBox   .SaveValue();
     aListBox    .SaveValue();
