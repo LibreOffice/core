@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 07:43:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,7 @@ void OKeys::appendObject( const Reference< XPropertySet >& descriptor )
                 while(xResult->next())
                 {
                     ::rtl::OUString sName = xRow->getString(12);
-                    ObjectMap::iterator aIter = m_aNameMap.find(sName);
-                    if( aIter == m_aNameMap.end()) // this name wasn't inserted yet so it must be te new one
+                    if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
                     {
                         descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sName));
                         break;
@@ -269,24 +268,27 @@ void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-        ObjectIter aIter = m_aElements[_nPos];
-        if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-            aIter->second = createObject(_sElementName);
-        Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
-        sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-
-        aSql += aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
-        if(nKeyType == KeyType::PRIMARY)
-            aSql += ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
-        else
+        Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
+        if ( xKey.is() )
         {
-            aSql += ::rtl::OUString::createFromAscii(" DROP FOREIGN KEY ");
-            aSql += aQuote + _sElementName + aQuote;
-        }
+            sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
+            aSql += aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
+            if ( nKeyType == KeyType::PRIMARY )
+                aSql += ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
+            else
+            {
+                aSql += ::rtl::OUString::createFromAscii(" DROP FOREIGN KEY ");
+                aSql += aQuote + _sElementName + aQuote;
+            }
+
+            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+            if ( xStmt.is() )
+            {
+                xStmt->execute(aSql);
+                ::comphelper::disposeComponent(xStmt);
+            }
+        }
     }
 }
 // -----------------------------------------------------------------------------
