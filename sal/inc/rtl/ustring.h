@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:28:19 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,41 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode * fi
     string is greater than the second string.
  */
 sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
+/** Compare two strings, ignoring the case of ASCII characters.
+
+    The comparison is based on the numeric value of each character in the
+    strings and returns a value indicating their relationship.  Character
+    values between 65 and 90 (ASCII A--Z) are interpreted as values between 97
+    and 122 (ASCII a--z).  This function cannot be used for language-specific
+    sorting.
+
+    Since this function is optimized for performance, the ASCII character
+    values are not converted in any way.  The caller has to make sure that
+    all ASCII characters are in the allowed range of 0 and 127, inclusive.
+
+    @param first
+    the first string to be compared.  Need not be null-terminated, but must be
+    at least as long as the specified firstLen.
+
+    @param firstLen
+    the length of the first string.
+
+    @param second
+    the second string which is compared with the first one.  Need not be
+    null-terminated, but must be at least as long as the specified secondLen.
+
+    @param secondLen
+    the length of the second string.
+
+    @return
+    0 if both strings are equal, a value less than 0 if the first string is
+    less than the second string, and a value greater than 0 if the first
+    string is greater than the second string.
+ */
+sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+    sal_Unicode const * first, sal_Int32 firstLen,
+    char const * second, sal_Int32 secondLen) SAL_THROW_EXTERN_C();
 
 /** Compare two strings with a maximum count of characters, ignoring the case
     of ASCII characters.
