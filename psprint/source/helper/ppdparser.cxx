@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:14:50 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,13 @@
 // define a hash for PPDKey
 namespace psp { class PPDKey; }
 
-struct std::hash< const psp::PPDKey* >
+namespace  _STL {
+struct hash< const psp::PPDKey* >
 {
     size_t operator()( const psp::PPDKey * pKey) const
     { return (size_t)pKey; }
 };
+}
 
 #include <psprint/ppdparser.hxx>
 #include <tools/debug.hxx>
