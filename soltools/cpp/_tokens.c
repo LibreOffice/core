@@ -50,7 +50,6 @@ unsigned char toLatin1[256] =
 int
     memcpy_EBCDIC( char * pwbuf, uchar *p, int len )
 {
-    int newlen = 0;
     int currpos = 0;
     int processedchars = 0;
 
