@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-08 13:15:28 $
+ *  last change: $Author: hr $ $Date: 2000-11-13 18:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
 #endif
+#ifndef _VOS_DIAGNOSE_HXX_
+#include <vos/diagnose.hxx>
+#endif
+
 
 namespace unnamed_svt_inetoptions {} using namespace unnamed_svt_inetoptions;
     // unnamed namespaces don't work well yet...
