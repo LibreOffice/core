@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:37:44 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,24 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
 #endif
@@ -87,7 +105,8 @@
 
 #define DLGWIN this->GetParent()->GetParent()
 
-
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 /*************************************************************************
 |*
@@ -542,7 +561,6 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 
         bModified = TRUE;
     }
-    return( bModified );
 
     return( bModified );
 }
@@ -571,6 +589,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxCrookNoContortion.SaveValue();
     aCbxQuickEdit.SaveValue();
     aCbxPickThrough.SaveValue();
+
     aCbxMasterPageCache.SaveValue();
     aCbxCopy.SaveValue();
     aCbxStartWithActualPage.SaveValue();
@@ -629,6 +648,8 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aFtPageHeight.Hide();
     aFiInfo1.Hide();
     aFiInfo2.Hide();
+
+    UpdateCompatibilityControls ();
 }
 
 // -----------------------------------------------------------------------
@@ -844,4 +865,62 @@ BOOL SdTpOptionsMisc::SetScale( const String& aScale, INT32& rX, INT32& rY )
     return( TRUE );
 }
 
+
+
+
+void SdTpOptionsMisc::UpdateCompatibilityControls (void)
+{
+    // Disable the compatibility controls by default.  Enable them only when
+    // there is at least one open document.
+    sal_Bool bIsEnabled = sal_False;
+
+    try
+    {
+        // Get a component enumeration from the desktop and search it for documents.
+        Reference<lang::XMultiServiceFactory> xFactory (
+            ::comphelper::getProcessServiceFactory ());
+        do
+        {
+            if ( ! xFactory.is())
+                break;
+
+            Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
+                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+            if ( ! xDesktop.is())
+                break;
+
+            Reference<container::XEnumerationAccess> xComponents (
+                xDesktop->getComponents(), UNO_QUERY);
+            if ( ! xComponents.is())
+                break;
+
+            Reference<container::XEnumeration> xEnumeration (
+                xComponents->createEnumeration());
+            if ( ! xEnumeration.is())
+                break;
+
+            while (xEnumeration->hasMoreElements())
+            {
+                Reference<frame::XModel> xModel (xEnumeration->nextElement(), UNO_QUERY);
+                if (xModel.is())
+                {
+                    // There is at leas one model/document: Enable the compatibility controls.
+                    bIsEnabled = sal_True;
+                    break;
+                }
+            }
+
+        }
+        while (false); // One 'loop'.
+    }
+    catch (uno::Exception e)
+    {
+        // When there is an exception then simply use the default value of
+        // bIsEnabled and disable the controls.
+    }
+
+    aTxtCompatibility.Enable (bIsEnabled);
+    aCbxCompatibility.Enable(bIsEnabled);
+    aCbxUsePrinterMetrics.Enable (bIsEnabled);
+}
 
