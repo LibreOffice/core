@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+#   last change: $Author: jp $ $Date: 2001-02-02 17:47:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ PROJECTPCHSOURCE=..\ui_1st\ui_pch
 CXXFILES = \
         dataex.cxx \
         gloshdl.cxx \
-        selglos.cxx
+        selglos.cxx \
+        swdtflvr.cxx
 
 SRCFILES =  \
         dochdl.src \
@@ -91,7 +92,8 @@ SRCFILES =  \
 SLOFILES =  \
         $(SLO)$/dataex.obj \
         $(SLO)$/gloshdl.obj \
-        $(SLO)$/selglos.obj
+        $(SLO)$/selglos.obj \
+        $(SLO)$/swdtflvr.obj
 
 # --- Tagets -------------------------------------------------------
 
