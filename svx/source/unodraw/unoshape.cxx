@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:31:58 $
+ *  last change: $Author: cl $ $Date: 2001-08-08 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,38 +1619,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
                 if( pSet->GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                 {
-                    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
-                    if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-                    {
-                        // Umrechnen auf Metrik des ItemPools in 100stel mm
-                        // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
-                        uno::Any aVal( rVal );
-
-                        switch(eMapUnit)
-                        {
-                            case SFX_MAPUNIT_TWIP :
-                            {
-                                if( rVal.getValueType() == ::getCppuType(( const sal_Int32 *)0))
-                                    aVal <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rVal.getValue()));
-                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt32*)0))
-                                    aVal <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rVal.getValue()));
-                                else if( rVal.getValueType() == ::getCppuType(( const sal_uInt16*)0))
-                                    aVal <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rVal.getValue()));
-                                else
-                                    DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                                break;
-                            }
-                            default:
-                            {
-                                DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                            }
-                        }
-                        aPropSet.setPropertyValue( pMap, aVal, *pSet );
-                    }
-                    else
-                    {
-                        aPropSet.setPropertyValue( pMap, rVal, *pSet );
-                    }
+                    aPropSet.setPropertyValue( pMap, rVal, *pSet );
 
                     if(bIsNotPersist)
                     {
@@ -2273,45 +2242,6 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
     {
         // Hole Wert aus ItemSet
         aAny = aPropSet.getPropertyValue( pMap, aSet );
-
-        // eventuell umrechnen der Metrik auf 100stel mm noetig
-        SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(pMap->nWID);
-        if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
-        {
-            // Umrechnen auf Metrik des ItemPools
-            // vorkommende Typen: sal_Int32, sal_uInt32, sal_uInt16
-            switch(eMapUnit)
-            {
-            case SFX_MAPUNIT_TWIP :
-            {
-                switch( aAny.getValueTypeClass() )
-                {
-                case uno::TypeClass_BYTE:
-                    aAny <<= (sal_Int8)(TWIPS_TO_MM(*(sal_Int8*)aAny.getValue()));
-                    break;
-                case uno::TypeClass_SHORT:
-                    aAny <<= (sal_Int16)(TWIPS_TO_MM(*(sal_Int16*)aAny.getValue()));
-                    break;
-                case uno::TypeClass_UNSIGNED_SHORT:
-                    aAny <<= (sal_uInt16)(TWIPS_TO_MM(*(sal_uInt16*)aAny.getValue()));
-                    break;
-                case uno::TypeClass_LONG:
-                    aAny <<= (sal_Int32)(TWIPS_TO_MM(*(sal_Int32*)aAny.getValue()));
-                    break;
-                case uno::TypeClass_UNSIGNED_LONG:
-                    aAny <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)aAny.getValue()));
-                    break;
-                default:
-                    DBG_ERROR("AW: Missing unit translation to 100th mm!");
-                }
-                break;
-            }
-            default:
-            {
-                DBG_ERROR("AW: Missing unit translation to 100th mm!");
-            }
-            }
-        }
     }
     }
 
