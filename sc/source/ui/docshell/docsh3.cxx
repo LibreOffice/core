@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:57:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,14 +143,14 @@ void ScDocShell::PostDataChanged()
     //! Navigator direkt benachrichtigen!
 }
 
-void ScDocShell::PostPaint( USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
-                            USHORT nEndCol, USHORT nEndRow, USHORT nEndTab, USHORT nPart,
+void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, USHORT nPart,
                             USHORT nExtFlags )
 {
-    if (nStartCol > MAXCOL) nStartCol = MAXCOL;
-    if (nStartRow > MAXROW) nStartRow = MAXROW;
-    if (nEndCol > MAXCOL) nEndCol = MAXCOL;
-    if (nEndRow > MAXROW) nEndRow = MAXROW;
+    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
+    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
+    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
+    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
 
     if ( pPaintLockData )
     {
@@ -209,7 +209,7 @@ void ScDocShell::PostPaintGridAll()
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
 }
 
-void ScDocShell::PostPaintCell( USHORT nCol, USHORT nRow, USHORT nTab )
+void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, SC_PF_TESTMERGE );
 }
@@ -243,8 +243,8 @@ void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange )
     }
 }
 
-void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
-                                                   USHORT nEndCol, USHORT nEndRow, USHORT nEndTab )
+void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+                                                   SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab )
 {
     UpdatePaintExt( rExtFlags, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
 }
@@ -588,7 +588,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
     if (!pTrack)
         return NULL;
 
-    USHORT nTab = rPos.Tab();
+    SCTAB nTab = rPos.Tab();
 
     const ScChangeAction* pFound = NULL;
     const ScChangeAction* pFoundContent = NULL;
@@ -948,7 +948,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                                 break;
                                 case MM_FORMULA :
                                 {
-                                    USHORT nCols, nRows;
+                                    SCCOL nCols;
+                                    SCROW nRows;
                                     ((const ScFormulaCell*)pCell)->GetMatColsRows( nCols, nRows );
                                     aSourceRange.aEnd.SetCol( aPos.Col() + nCols - 1 );
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
