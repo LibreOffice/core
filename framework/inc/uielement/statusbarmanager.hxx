@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:57:15 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,14 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
-#include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -130,7 +130,7 @@ class FrameworkStatusBar;
 class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener         ,
                          public ::com::sun::star::lang::XComponent                    ,
                          public ::com::sun::star::lang::XTypeProvider                 ,
-                         public ::drafts::com::sun::star::ui::XUIConfigurationListener,
+                         public ::com::sun::star::ui::XUIConfigurationListener,
                          public ThreadHelpBase                                        ,
                          public ::cppu::OWeakObject
 {
@@ -156,9 +156,9 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
         void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
@@ -196,7 +196,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         StatusBarControllerVector                                                                       m_aControllerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >  m_xStatusbarControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >  m_xStatusbarControllerRegistration;
 };
 
 }
