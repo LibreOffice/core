@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:10:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,12 +690,15 @@ public:
                             const String& rTabName, ULONG nRefreshDelay );
     BOOL            HasLink( const String& rDoc,
                             const String& rFilter, const String& rOptions ) const;
-    BOOL            LinkEmptyTab( USHORT& nTab, const String& aDocTab,
-                                    const String& aFileName,
-                                    const String& aTabName );   // insert empty tab & link
     BOOL            LinkExternalTab( USHORT& nTab, const String& aDocTab,
                                     const String& aFileName,
                                     const String& aTabName );
+
+    /** Creates a new sheet, and makes it linked to the specified sheet in an external document.
+        @param rnTab  (out-param) Returns the sheet index, if sheet could be inserted).
+        @return  TRUE = Sheet created, rnTab contains valid sheet index. */
+    BOOL            InsertLinkedEmptyTab( USHORT& rnTab, const String& rFileName,
+                        const String& rFilterName, const String& rFilterOpt, const String& rTabName );
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;
