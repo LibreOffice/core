@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 14:55:01 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,54 +119,11 @@ SdFilter::~SdFilter()
 
 ::rtl::OUString SdFilter::ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const
 {
-    USHORT  i,nq,npq;
-    String  aLibrary( rLibraryName );
-    String  aUPD( String::CreateFromInt32( SOLARUPD ) );
-    String  aDllExt( RTL_CONSTASCII_USTRINGPARAM(__DLLEXTENSION));
-
-    aDllExt.Erase( 2 );
-
-    // Fragezeichen suchen
-    for( i = 0, nq = 0; aLibrary.GetChar(i)!=0; i++ )
-    {
-        if( aLibrary.GetChar(i) == '?' )
-        {
-            if( nq == 0 )
-                npq=i;
-
-            nq++;
-        }
-        else if( nq==aUPD.Len() )
-            break;
-        else
-            nq=0;
-    }
-
-    // Fragezeichen durch UPD-Nummer ersetzen
-    if( nq == aUPD.Len() )
-        aLibrary.Replace( npq, nq, aUPD );
-
-    // Sternchen suchen
-    for( i = 0, nq = 0; aLibrary.GetChar(i) != 0; i++ )
-    {
-        if( aLibrary.GetChar(i) == '*' )
-        {
-            if( nq == 0 )
-                npq=i;
-
-            nq++;
-        }
-        else if( nq == 2 )
-            break;
-        else
-            nq=0;
-    }
-
-    // Sternchen durch Plattform-Kuerzel ersetzen
-    if( nq == 2 )
-        aLibrary.Replace( npq, nq, aDllExt );
-
-    return aLibrary;
+    String aTemp( ::rtl::OUString::createFromAscii( SVLIBRARY( "?" ) ) );
+    xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
+    aTemp.Replace( nIndex, 1, rLibraryName );
+    ::rtl::OUString aLibraryName( aTemp );
+    return aLibraryName;
 }
 
 // -----------------------------------------------------------------------------
