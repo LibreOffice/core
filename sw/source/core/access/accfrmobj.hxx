@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:28:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ inline sal_Bool SwFrmOrObj::IsAccessible( sal_Bool bPagePreview ) const
 
 inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
 {
-    return !pFrm ||
+    return !pFrm || pFrm->IsRootFrm() ||
            !( pFrm->IsTabFrm() || pFrm->IsInTab() ||
              (IsBoundAsChar() &&
               static_cast< const SwFlyFrm *>(pFrm)->GetAnchor()->IsInTab()) );
