@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 07:55:17 $
+ *  last change: $Author: os $ $Date: 2001-10-17 08:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,7 +1298,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 aValue >>= nParam1;
             }
         }
-        else if(RES_SETEXPFLD == nResTypeId)
+        else if(RES_DDEFLD == nResTypeId)
         {
             USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
                 rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
@@ -1457,7 +1457,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 aRet <<= nParam1;
             }
         }
-        else if(RES_SETEXPFLD == nResTypeId)
+        else if(RES_DDEFLD == nResTypeId)
         {
             USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
                 rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE)) ? 1 :
@@ -1654,6 +1654,8 @@ struct SwFieldProperties_Impl
     String      sPar4;
     sal_Int32       nSubType;
     sal_Int32       nFormat;
+    sal_Bool        bFormatIsDefault;
+
     sal_uInt16      nUSHORT1;
     sal_uInt16      nUSHORT2;
     sal_Int16       nSHORT1;
@@ -1677,6 +1679,7 @@ struct SwFieldProperties_Impl
         bBool1(sal_False),
         bBool2(sal_False),
         bBool3(sal_False),
+        bFormatIsDefault(sal_True),
         pDateTime(0)
         {}
     ~SwFieldProperties_Impl()
@@ -2200,9 +2203,13 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName);
                 if(!pFldType)
                     throw uno::RuntimeException();
+                //#93192# detect the field type's sub type and set an appropriate number format
+                if(m_pProps->bFormatIsDefault &&
+                    GSE_STRING == ((SwSetExpFieldType*)pFldType)->GetType())
+                        m_pProps->nFormat = -1;
                 pFld = new SwSetExpField((SwSetExpFieldType*)pFldType,
                     m_pProps->sPar2,
-                    m_pProps->nUSHORT2);
+                    m_pProps->nFormat);
 
                 sal_uInt16  nSubType = pFld->GetSubType();
                 if(m_pProps->bBool2)
@@ -2513,6 +2520,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             case FIELD_PROP_FORMAT:
             {
                 aValue >>= m_pProps->nFormat;
+                m_pProps->bFormatIsDefault = sal_False;
             }
             break;
             case FIELD_PROP_SUBTYPE:
