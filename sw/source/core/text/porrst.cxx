@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-12 07:17:14 $
+ *  last change: $Author: fme $ $Date: 2001-10-22 13:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,12 @@ SwTwips SwTxtFrm::EmptyHeight() const
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        pFnt->SetVertical( 2700 );
+#endif
+
     OutputDevice *pOut = pSh ? pSh->GetOut() : 0;
     if ( !pOut || !rTxtNode.GetDoc()->IsBrowseMode() ||
          ( pSh->GetViewOptions()->IsPrtFormat() ) )
