@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
+ *  last change: $Author: kr $ $Date: 2001-11-14 10:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/module.h>
+#include <osl/module.hxx>
 #include <osl/security.hxx>
 
 #include <rtl/process.h>
@@ -520,7 +521,14 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
-    return defaultBootstrap_InitialComponentContext( OUString() );
+    OSL_TRACE("vcl/source/app/unohelp.cxx: trying rc file...");
+    OUString libraryFileUrl;
+    Module::getUrlFromAddress((void *)(Reference<XComponentContext> (*)())defaultBootstrap_InitialComponentContext, libraryFileUrl);
+
+    OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)SAL_PATHDELIMITER) + 1); // cut the library extension
+    iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
+
+    return defaultBootstrap_InitialComponentContext(iniName);
 }
 
 } // namespace cppu
