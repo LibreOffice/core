@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:35:09 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <tools/stream.hxx>
 #endif
 #include <toolkit/unohlp.hxx>
+#include <math.h>
 
 #pragma hdrstop
 
@@ -671,7 +672,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
     rStrm << (BYTE) GetFamily()
           << (BYTE) GetPitch()
-          << (BYTE) GetStoreCharSet( GetCharSet(), rStrm.GetVersion() );
+          << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() );
 
     // UNICODE: rStrm << GetFamilyName();
     rStrm.WriteByteString(GetFamilyName());
@@ -851,7 +852,7 @@ sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 eSlant = (awt::FontSlant)nValue;
             }
-            SetValue((sal_Int32)eSlant);
+            SetValue((USHORT)eSlant);
         }
     }
     return sal_True;
@@ -1103,7 +1104,7 @@ sal_Bool SvxWeightItem::importXML( const OUString& rValue, sal_uInt16 nMemberId,
         sal_Int32 nTemp;
         if( !rUnitConverter.convertNumber( nTemp, rValue, 100, 900 ) )
             return sal_False;
-        nWeight = nTemp;
+        nWeight = (USHORT)nTemp;
     }
 
     for( int i = 0; aFontWeightMap[i].eWeight != USHRT_MAX; i++ )
@@ -1248,8 +1249,17 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         {
             //  Point (also Twips) sind gefragt,
             //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
-            long nTwips = bConvert ? nHeight : MM100_TO_TWIP(nHeight);
-            rVal <<= (float)( nTwips / 20.0 );
+            if( bConvert )
+            {
+                long nTwips = bConvert ? nHeight : MM100_TO_TWIP(nHeight);
+                rVal <<= (float)( nTwips / 20.0 );
+            }
+            else
+            {
+                float fTwips = MM100_TO_TWIP((long)nHeight) / 20.0f;
+                fTwips = ceil( fTwips * 10.0 ) * 0.1;
+                rVal <<= fTwips;
+            }
         }
         break;
         case MID_FONTHEIGHT_PROP:
@@ -2674,7 +2684,7 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
-    rStrm << (BYTE) GetStoreCharSet( GetCharSet(), rStrm.GetVersion() )
+    rStrm << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() )
           << GetValue();
     return rStrm;
 }
@@ -2804,7 +2814,7 @@ sal_Bool SvxKerningItem::importXML( const OUString& rValue, sal_uInt16 nMemberId
         sal_Int32 eKerning;
         if( rUnitConverter.convertMeasure( eKerning, rValue ) )
         {
-            SetValue(eKerning);
+            SetValue((short)eKerning);
             return sal_True;
         }
     }
@@ -2836,7 +2846,7 @@ sal_Bool SvxKerningItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Int16 nVal = GetValue();
     if(nMemberId & CONVERT_TWIPS)
-        nVal = TWIP_TO_MM100(nVal);
+        nVal = (sal_Int16)TWIP_TO_MM100(nVal);
     rVal <<= nVal;
     return sal_True;
 }
@@ -2847,7 +2857,7 @@ sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     if(!(rVal >>= nVal))
         return sal_False;
     if(nMemberId & CONVERT_TWIPS)
-        nVal = MM100_TO_TWIP(nVal);
+        nVal = (sal_Int16)MM100_TO_TWIP(nVal);
     SetValue(nVal);
     return sal_True;
 }
@@ -3275,7 +3285,7 @@ sal_Bool SvxEscapementItem::importXML( const OUString& rValue, sal_uInt16 nMembe
         sal_Int32 nNewProp;
         if( !rUnitConverter.convertPercent( nNewProp, aToken ) )
             return sal_False;
-        nProp = (sal_uInt16)nNewProp;
+        nProp = (BYTE)nNewProp;
     }
     else
     {
