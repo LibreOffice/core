@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
+ *  last change: $Author: mtg $ $Date: 2001-10-11 15:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,7 +1785,8 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if(bShape)
                 {
                     nIndex = COM_SUN_STAR__DRAWING_LENGTH;
-                    if(!rServiceName.getToken( 1, '.', nIndex ).compareToAscii("GroupShape"))
+                    if( 0 == rServiceName.reverseCompareToAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.drawing.GroupShape" ) ) ||
+                        0 == rServiceName.reverseCompareToAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.drawing.Shape3DSceneObject" ) ) )
                         xRet = *new SwXGroupShape( xTmp );
                     else
                         xRet = *new SwXShape( xTmp );
