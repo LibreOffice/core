@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-05-22 08:19:30 $
+ *  last change: $Author: af $ $Date: 2002-06-07 14:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ void AccessibleShapeTreeInfo::SetWindow (Window* pWindow)
 
 
 
-const Window* AccessibleShapeTreeInfo::GetWindow (void) const
+Window* AccessibleShapeTreeInfo::GetWindow (void) const
 {
     return mpWindow;
 }
