@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:17:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include "helpmerge.hxx"
 #include "utf8conv.hxx"
 #include <algorithm>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 /*****************************************************************************/
 void HelpParser::FillInFallbacks( LangHashMap& rElem_out, //int nLangIdx_in ){
                                                             ByteString sLangIdx_in ){
@@ -372,6 +375,17 @@ bool HelpParser::Merge(
         ByteString sCur;
         for( long int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
+
+            ByteString testpath;
+            if( bISO ){
+                testpath = GetOutpath( rPathX , sCur , rPathY );
+            //    MakeDir( testpath );
+            }
+            else       testpath = rPathX;
+            // Test
+            MakeDir( testpath );
+            // Test
+
             XMLFile* pFile = new XMLFile( *xmlfile );// copy new(ß)
             std::auto_ptr <XMLFile> file ( pFile );
             file->Extract();
@@ -390,12 +404,6 @@ bool HelpParser::Merge(
                 pResData->sGId    =  pos->first;
                 ProcessHelp( aLangHM , sCur , pResData , aMergeDataFile );
             }
-            ByteString testpath;
-            if( bISO ){
-                testpath = GetOutpath( rPathX , sCur , rPathY );
-                MakeDir( testpath );
-            }
-            else       testpath = rPathX;
 
             String test( testpath , RTL_TEXTENCODING_ASCII_US ); // check and remove '\\'
             file->Write(test); // Always write!
@@ -426,7 +434,13 @@ void HelpParser::MakeDir( const ByteString& sPath ){
     String sPathtmp( sPath , RTL_TEXTENCODING_ASCII_US );
     String sDir( sPathtmp.Copy( 0 , sPathtmp.SearchCharBackward( DirEntry::GetAccessDelimiter().GetBuffer() ) ) );
     DirEntry aDirEntry( sDir );
-    aDirEntry.MakeDir();
+
+    ByteString sTDir( sDir , sDir.Len() , RTL_TEXTENCODING_ASCII_US );
+    if( aDirEntry.MakeDir() ){
+    //    printf("ERROR: Could NOT create Directory %s\n",sTDir.GetBuffer() );
+    //    exit( -1 );
+    }
+
 }
 
 /*****************************************************************************/
