@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,7 +794,7 @@ IMPL_LINK( SwNumPositionTabPage, StandardHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void SwNumPositionTabPage::SetModified(BOOL bRepaint)
 {
     bModified = TRUE;
