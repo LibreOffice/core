@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ namespace basegfx
         {
         }
 
+        explicit B3DRange(const B3IRange& rRange);
+
         bool isEmpty() const
         {
             return (
@@ -250,6 +252,21 @@ namespace basegfx
                 );
         }
 
+        double getCenterX() const
+        {
+            return maRangeX.getCenter();
+        }
+
+        double getCenterY() const
+        {
+            return maRangeY.getCenter();
+        }
+
+        double getCenterZ() const
+        {
+            return maRangeZ.getCenter();
+        }
+
         bool isInside(const B3DTuple& rTuple) const
         {
             return (
@@ -289,6 +306,13 @@ namespace basegfx
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
             maRangeZ.expand(rRange.maRangeZ);
+        }
+
+        void intersect(const B3DRange& rRange)
+        {
+            maRangeX.intersect(rRange.maRangeX);
+            maRangeY.intersect(rRange.maRangeY);
+            maRangeZ.intersect(rRange.maRangeZ);
         }
 
         void grow(double fValue)
