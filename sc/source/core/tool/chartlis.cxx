@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-20 10:03:57 $
+ *  last change: $Author: nn $ $Date: 2002-01-22 08:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,16 @@ ScChartListenerCollection::ScChartListenerCollection(
     pDoc( rColl.pDoc )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
+}
+
+ScChartListenerCollection::~ScChartListenerCollection()
+{
+    //  #96783# remove ChartListener objects before aTimer dtor is called, because
+    //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
+    //  to be called if an empty ScNoteCell is deleted
+
+    if (GetCount())
+        FreeAll();
 }
 
 DataObject* ScChartListenerCollection::Clone() const

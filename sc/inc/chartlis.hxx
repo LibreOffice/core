@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-13 12:37:08 $
+ *  last change: $Author: nn $ $Date: 2002-01-22 08:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ public:
                     ScChartListenerCollection( ScDocument* pDoc );
                     ScChartListenerCollection( const ScChartListenerCollection& );
     virtual DataObject* Clone() const;
+
+    virtual         ~ScChartListenerCollection();
 
                     // nur nach copy-ctor noetig, wenn neu ins Dok gehaengt
     void            StartAllListeners();
