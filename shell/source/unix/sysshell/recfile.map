@@ -1,0 +1,6 @@
+RECFILE_1_0_0 {
+    global:
+        add_to_recently_used_file_list;
+    local:
+        *;
+};
