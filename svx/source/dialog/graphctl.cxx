@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
+ *  last change: $Author: cl $ $Date: 2002-06-18 07:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,8 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             {
                 pView->DeleteMarked();
                 bProc = TRUE;
+                if( !pView->HasMarkedObj() )
+                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
             }
         }
         break;
@@ -448,6 +450,10 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     }
 
                     bProc = true;
+                }
+                else
+                {
+                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
                 }
             }
         }
