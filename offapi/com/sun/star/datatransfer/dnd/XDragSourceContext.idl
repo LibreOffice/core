@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceContext.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-interface XDragSourceListener;
+ published interface XDragSourceListener;
 
 //=============================================================================
 /** The drag source context class is responsible for managing the initiator side
@@ -89,7 +89,7 @@ interface XDragSourceListener;
     @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
-interface XDragSourceContext: com::sun::star::uno::XInterface
+published interface XDragSourceContext: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Get the identifier of the currently used cursor.
