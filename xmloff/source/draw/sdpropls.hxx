@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 17:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,20 +142,8 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define CTF_CHARHEIGHT               1
-#define CTF_CHARHEIGHT_REL           2
-#define CTF_PARALEFTMARGIN           3
-#define CTF_PARALEFTMARGIN_REL       4
-#define CTF_PARARIGHTMARGIN          5
-#define CTF_PARARIGHTMARGIN_REL      6
-#define CTF_PARAFIRSTLINE            7
-#define CTF_PARAFIRSTLINE_REL        8
-#define CTF_PARATOPMARGIN            9
-#define CTF_PARATOPMARGIN_REL       10
-#define CTF_PARABOTTOMMARGIN        11
-#define CTF_PARABOTTOMMARGIN_REL    12
-#define CTF_NUMBERINGRULES          13
-#define CTF_NUMBERINGRULES_NAME     14
+#define CTF_NUMBERINGRULES          1000
+#define CTF_NUMBERINGRULES_NAME     1001
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
