@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 16:07:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-08 08:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,8 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
     { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
-    { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },      // RES_PARATR_VERTALIGN
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY3
+    { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },          // RES_PARATR_VERTALIGN
+    { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY6
