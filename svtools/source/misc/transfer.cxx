@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-28 11:02:10 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 08:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1514,7 +1514,16 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OU
             if( aAny >>= aOUString )
                 rStr = aOUString;
             else if( aAny >>= aSeq )
-                rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(), gsl_getSystemTextEncoding() );
+            {
+                sal_Int32 nLen = aSeq.getLength();
+                const sal_Char* pChars = (sal_Char*)aSeq.getConstArray();
+                //JP 10.10.2001: 92930 - don't copy the last zero character
+                //               into the string.
+                if( nLen && 0 == *(pChars+nLen-1) )
+                    --nLen;
+
+                rStr = ::rtl::OUString( pChars, nLen, gsl_getSystemTextEncoding() );
+            }
             else
                 bRet = sal_False;
         }
@@ -1694,9 +1703,10 @@ sal_Bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INe
 
 sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
 {
+    sal_Bool bRet = sal_False;
+    if( HasFormat( rFlavor ))
+    {
     const SotFormatStringId nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool                bRet = sal_False;
-
     switch( nFormat )
     {
         case( SOT_FORMATSTR_ID_SOLK ):
@@ -1821,10 +1831,8 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
         break;
 #endif
 
-        default:
-        break;
     }
-
+    }
     return bRet;
 }
 
