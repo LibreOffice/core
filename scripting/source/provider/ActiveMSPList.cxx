@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:09:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #include "MasterScriptProvider.hxx"
@@ -77,8 +77,9 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace drafts::com::sun::star::script;
-using namespace sf_misc;
+using namespace com::sun::star::script;
+using namespace ::scripting_util;
+using namespace ::sf_misc;
 
 namespace func_provider
 {
@@ -100,7 +101,7 @@ ActiveMSPList::createNewMSP( const ::rtl::OUString& context ) throw( RuntimeExce
 {
     OSL_TRACE("ActiveMSPList::createNewMSP() context [%s]",
         ::rtl::OUStringToOString( context , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
+    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
     Sequence< Any > args(1);
     args[ 0 ] <<= context;
 
@@ -143,8 +144,7 @@ ActiveMSPList::createMSP( const Any& aContext )
             throw ( RuntimeException )
 {
     Reference< provider::XScriptProvider > msp;
-    if (  aContext.getValueType() == ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
-
+    if (  ! ( aContext.getValueType() == ::getCppuType((const ::rtl::OUString* ) NULL ) ) )
     {
         OSL_TRACE("ActiveMSPList::createMSP() for model");
         Reference< frame::XModel> xModel( aContext, UNO_QUERY );
@@ -344,7 +344,7 @@ ActiveMSPList::createNonDocMSPs()
             return;
         }
         // do creation of user and share MSPs here
-        ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
+        ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;
