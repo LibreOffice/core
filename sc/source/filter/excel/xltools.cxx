@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:17:52 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,65 +622,6 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
     }
     return false;
 }
-
-
-// form control tag for linked range address ----------------------------------
-
-const String XclTools::maCtrlCellLinkPrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_Cell_Link=" ) );
-const String XclTools::maCtrlSrcRangePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_Source_Data=" ) );
-
-String XclTools::GetCtrlLinkTag( ScDocument& rDoc, const ScAddress* pCellLink, const ScRange* pSrcRange )
-{
-    String aTag;
-    if( pCellLink )
-    {
-        String aCellTag;
-        pCellLink->Format( aCellTag, SCA_VALID | SCA_TAB_3D, &rDoc );
-        aCellTag.Insert( maCtrlCellLinkPrefix, 0 );
-        ScGlobal::AddToken( aTag, aCellTag, ';' );
-    }
-    if( pSrcRange )
-    {
-        String aRangeTag;
-        pSrcRange->Format( aRangeTag, SCA_VALID | SCA_TAB_3D, &rDoc );
-        aRangeTag.Insert( maCtrlSrcRangePrefix, 0 );
-        ScGlobal::AddToken( aTag, aRangeTag, ';' );
-    }
-    return aTag;
-}
-
-bool XclTools::GetCtrlCellLinkFromTag( ScAddress& rCellLink, ScDocument& rDoc, const String& rTag )
-{
-    xub_StrLen nPrefixLen = maCtrlCellLinkPrefix.Len();
-    xub_StrLen nTokenCnt = rTag.GetTokenCount( ';' );
-    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
-    {
-        String aToken( rTag.GetToken( 0, ';', nStringIx ) );
-        if( aToken.EqualsIgnoreCaseAscii( maCtrlCellLinkPrefix, 0, nPrefixLen ) )
-        {
-            USHORT nRefFlags = rCellLink.Parse( aToken.Copy( nPrefixLen ), &rDoc );
-            return (nRefFlags & SCA_VALID) != 0;
-        }
-    }
-    return false;
-}
-
-bool XclTools::GetCtrlSrcRangeFromTag( ScRange& rSrcRange, ScDocument& rDoc, const String& rTag )
-{
-    xub_StrLen nPrefixLen = maCtrlSrcRangePrefix.Len();
-    xub_StrLen nTokenCnt = rTag.GetTokenCount( ';' );
-    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
-    {
-        String aToken( rTag.GetToken( 0, ';', nStringIx ) );
-        if( aToken.EqualsIgnoreCaseAscii( maCtrlSrcRangePrefix, 0, nPrefixLen ) )
-        {
-            USHORT nRefFlags = rSrcRange.ParseAny( aToken.Copy( nPrefixLen ), &rDoc );
-            return (nRefFlags & SCA_VALID) != 0;
-        }
-    }
-    return false;
-}
-
 
 // read/write range lists -----------------------------------------------------
 
