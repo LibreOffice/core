@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 14:50:36 $
+ *  last change: $Author: pl $ $Date: 2001-02-21 17:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static long sal_CallbackDummy( void*, SalFrame*, USHORT, const void* )
 { return 0; }
+
+XLIB_Window SalFrameData::s_aFullScreenWindow = None;
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -378,10 +380,14 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
         if( mpParent )
             XtSetArg( aArgs[nArgs], XtNtransientFor, mpParent->maFrameData.GetShellWidget() ), nArgs++;
-        if( ! ( nStyle_ & ~SAL_FRAME_STYLE_DEFAULT ) )
-        {
-            XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True );    nArgs++;
-        }
+#ifdef DEBUG
+        fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
+#endif
+           if( ! (nStyle_ & ~SAL_FRAME_STYLE_DEFAULT )
+            || s_aFullScreenWindow != None )
+           {
+               XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True ); nArgs++;
+           }
 
         // Motif sometimes gets stuck on transientShell if the parent was constructed
         // with SystemParentData ( and is therefore not a real top level
@@ -397,6 +403,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
          *  to have full decoration for these dialogues, so create a
          *  frame with iconified parent as a normal application shell
          */
+
         if( mpParent                                    &&
             ! mpParent->maFrameData.hForeignParent_     &&
             mpParent->maFrameData.nShowState_ != SHOWSTATE_MINIMIZED
@@ -479,6 +486,30 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                 y = 20; // leave some space for dcoration
             }
             SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
+        }
+        if( s_aFullScreenWindow != None )
+        {
+            Atom nAtom = XInternAtom( GetXDisplay(), "_MOTIF_WM_HINTS", True );
+            if( nAtom )
+            {
+                struct _mwmhints {
+                    unsigned int flags, func, deco;
+                    int input_mode;
+                    unsigned int status;
+                } mwm_del_hints;
+
+                memset( &mwm_del_hints, 0, sizeof( mwm_del_hints ) );
+                mwm_del_hints.flags         = (1L << 1);
+                mwm_del_hints.deco          = 112;
+                XChangeProperty( GetXDisplay(), GetShellWindow(),
+                                 nAtom, XA_ATOM, 32,
+                                 PropModeReplace,
+                                 (unsigned char*)&mwm_del_hints, 5 );
+            }
+#ifdef DEBUG
+            else
+                fprintf( stderr, "SalFrameData::Init: _MOTIF_WM_HINTS not supported\n" );
+#endif
         }
     }
 
@@ -729,11 +760,11 @@ void SalFrame::Show( BOOL bVisible )
             maFrameData.Call( SALEVENT_RESIZE, NULL );
         }
 
-        if( !_GetStyle() || maFrameData.hNoFullscreenShell_ )
-        {
-            XSync( _GetXDisplay(), False );
-            XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToNone, CurrentTime );
-        }
+         if( !_GetStyle() || maFrameData.hNoFullscreenShell_ )
+         {
+             XSync( _GetXDisplay(), False );
+             XSetInputFocus( _GetXDisplay(), maFrameData.GetShellWindow(), RevertToNone, CurrentTime );
+         }
 
         XSync( _GetXDisplay(), False );
         maFrameData.Call( SALEVENT_RESIZE, NULL );
@@ -1268,6 +1299,7 @@ void SalFrameData::Restore()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void SalFrameData::ShowFullScreen( BOOL bFullScreen )
 {
     if( aRestoreFullScreen_.IsEmpty() == !bFullScreen )
@@ -1275,51 +1307,9 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
 
     const Size &aScreenSize( pDisplay_->GetScreenSize() );
 
-    long        supplied;
-    XSizeHints  hints;
-    if( !XGetWMNormalHints( GetXDisplay(), XtWindow( hShell_ ), &hints, &supplied ) )
-        hints.flags = supplied = 0;
-
     if( bFullScreen )
     {
         GetPosSize( aRestoreFullScreen_ );
-
-        SalVisual *pVisual = pDisplay_->GetVisual();
-
-        hNoFullscreenShell_     = hShell_;
-        hNoFullscreenComposite_ = hComposite_;
-
-        XWithdrawWindow( GetXDisplay(), XtWindow( hNoFullscreenShell_ ),
-                         GetDisplay()->GetScreenNumber() );
-
-        Arg aArgs[10];
-        int nArgs=0;
-        SalVisual* pVis = GetDisplay()->GetVisual();
-        XtSetArg( aArgs[nArgs], XtNvisual, pVis->GetVisual() );     nArgs++;
-        XtSetArg( aArgs[nArgs], XtNdepth, pVis->GetDepth() );       nArgs++;
-        XtSetArg( aArgs[nArgs], XtNcolormap,
-                  GetDisplay()->GetColormap().GetXColormap() );     nArgs++;
-        XtSetArg( aArgs[nArgs], XtNx, 0 );                          nArgs++;
-        XtSetArg( aArgs[nArgs], XtNy, 0 );                          nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwidth, aScreenSize.Width() );    nArgs++;
-        XtSetArg( aArgs[nArgs], XtNheight, aScreenSize.Height() );  nArgs++;
-        XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True );        nArgs++;
-        hShell_ = XtAppCreateShell(
-            "VCLFullScreenShell", "VCLFullScreenFrame",
-            applicationShellWidgetClass,
-            GetXDisplay(),
-            aArgs, nArgs );
-        XtRealizeWidget( hShell_ );
-
-        hComposite_     = XtVaCreateManagedWidget(
-            "ShellComposite",
-            SAL_COMPOSITE_WIDGET,
-            hShell_,
-            NULL );
-        XtRealizeWidget( hComposite_ );
-
-        if( pGraphics_ )
-            pGraphics_->maGraphicsData.SetDrawable( XtWindow( hComposite_ ) );
 
         delete pFreeGraphics_;
         pFreeGraphics_ = NULL;
@@ -1331,6 +1321,9 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
                             RevertToNone, CurrentTime );
         }
 
+        XMoveResizeWindow( GetXDisplay(), GetShellWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
+        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
+
         if ( WMSupportsFWS(GetXDisplay(), pDisplay_->GetRootWindow()) )
         {
             AddFwsProtocols( GetXDisplay(), XtWindow(hShell_) );
@@ -1341,43 +1334,20 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
         nWidth_   = aPosSize_.GetWidth();
         nHeight_  = aPosSize_.GetHeight();
 
-        if ( mpInputContext != NULL )
-        {
-            delete mpInputContext;
-            mpInputContext = new SalI18N_InputContext( pFrame_, True);
-        }
+        DBG_ASSERT( ! s_aFullScreenWindow, "two fullscreen shells" );
+        s_aFullScreenWindow = XtWindow( hComposite_ );
+
+        XRaiseWindow( GetXDisplay(), GetShellWindow() );
+        if( GetStackingWindow() )
+            XRaiseWindow( GetXDisplay(), GetStackingWindow() );
+
         Call( SALEVENT_RESIZE, NULL );
     }
     else
     {
-        if( pGraphics_ )
-            pGraphics_->maGraphicsData.SetDrawable( XtWindow( hNoFullscreenComposite_ ) );
-
+        s_aFullScreenWindow = None;
         delete pFreeGraphics_;
         pFreeGraphics_ = NULL;
-
-        if ( mpInputContext != NULL )
-            delete mpInputContext;
-
-        XtDestroyWidget( hComposite_ );
-        XtDestroyWidget( hShell_ );
-
-        hComposite_     = hNoFullscreenComposite_;
-        hShell_         = hNoFullscreenShell_;
-
-        hNoFullscreenShell_     = None;
-        hNoFullscreenComposite_ = None;
-
-        if( bMapped_ )
-            pFrame_->Show( TRUE );
-        if ( mpInputContext != NULL )
-        {
-            mpInputContext = new SalI18N_InputContext( pFrame_, True);
-            if ( bMapped_ )
-                mpInputContext->SetICFocus();
-            else
-                mpInputContext->Unmap();
-        }
 
         SetPosSize( aRestoreFullScreen_ );
         // SetPosSize macht Call( SALEVENT_RESIZE );
@@ -2270,7 +2240,7 @@ void SalFrameData::RepositionChildren()
     for( nChild = 0; nChild < maChildren.Count(); nChild++ )
     {
         SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
-        XRaiseWindow( GetXDisplay(), pData->GetShellWindow() );
+        XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
     }
     for( nChild = 0; nChild < maChildren.Count(); nChild++ )
     {
@@ -2742,7 +2712,9 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     if( focusWindow == GetShellWindow()
                         || ( focusWindow == GetStackingWindow() && GetStackingWindow() )
                         || focusWindow == GetWindow() )
-                        XRaiseWindow( pDisplay_->GetDisplay(), GetShellWindow() );
+                    {
+                        XRaiseWindow( pDisplay_->GetDisplay(), GetStackingWindow() != None ? GetStackingWindow() : GetShellWindow() );
+                    }
                 }
                 nVisibility_ = pEvent->xvisibility.state;
                 nRet = TRUE;
@@ -2803,6 +2775,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xconfigure.window == hForeignParent_ ||
                     pEvent->xconfigure.window == hForeignTopLevelWindow_ )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
+
                 if( pEvent->xconfigure.window == hStackingWindow_ )
                 {
                     // update position here as well as in HandleSizeEvent
@@ -2817,8 +2790,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                                            &nX, &nY,
                                            &hDummy );
                     aPosSize_.SetPos( Point( nX, nY ) );
-                    RepositionChildren();
                 }
+                RepositionChildren();
                 break;
         }
     }
