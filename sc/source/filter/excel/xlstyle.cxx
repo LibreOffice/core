@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:55:18 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
 #endif
@@ -89,6 +92,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
+#ifndef _SVX_SVXFONT_HXX
+#include <svx/svxfont.hxx>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -97,12 +103,20 @@
 
 // Color data =================================================================
 
+/** Built-in color table (color indexes 0-7). */
+#define EXC_PALETTE_BUILTIN_COLORS \
+            0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF
+
 /** Default color table for BIFF2. */
-static const ColorData pDefColorTable2[] = { 0x000000, 0xFFFFFF };
+static const ColorData pDefColorTable2[] =
+{
+/*  0 */    EXC_PALETTE_BUILTIN_COLORS
+};
 
 /** Default color table for BIFF3/BIFF4. */
 static const ColorData pDefColorTable3[] =
 {
+/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
 /*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
 /* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
 };
@@ -110,6 +124,7 @@ static const ColorData pDefColorTable3[] =
 /** Default color table for BIFF5/BIFF7. */
 static const ColorData pDefColorTable5[] =
 {
+/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
 /*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
 /* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080,
 /* 24 */    0x8080FF, 0x802060, 0xFFFFC0, 0xA0E0E0, 0x600080, 0xFF8080, 0x0080C0, 0xC0C0FF,
@@ -122,6 +137,7 @@ static const ColorData pDefColorTable5[] =
 /** Default color table for BIFF8. */
 static const ColorData pDefColorTable8[] =
 {
+/*  0 */    EXC_PALETTE_BUILTIN_COLORS,
 /*  8 */    0x000000, 0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF,
 /* 16 */    0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080,
 /* 24 */    0x9999FF, 0x993366, 0xFFFFCC, 0xCCFFFF, 0x660066, 0xFF8080, 0x0066CC, 0xCCCCFF,
@@ -131,14 +147,19 @@ static const ColorData pDefColorTable8[] =
 /* 56 */    0x003366, 0x339966, 0x003300, 0x333300, 0x993300, 0x993366, 0x333399, 0x333333
 };
 
+#undef EXC_PALETTE_BUILTIN_COLORS
+
 
 // ----------------------------------------------------------------------------
 
 XclDefaultPalette::XclDefaultPalette( XclBiff eBiff ) :
     mpColorTable( NULL ),
-    mnTableSize( 0 ),
-    mnIndexOffset( 0 )
+    mnTableSize( 0 )
 {
+    const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
+    mnWindowText = rSett.GetWindowTextColor().GetColor();
+    mnWindowBack = rSett.GetWindowColor().GetColor();
+
     if( eBiff != xlBiffUnknown )
         SetDefaultColors( eBiff );
 }
@@ -150,34 +171,39 @@ void XclDefaultPalette::SetDefaultColors( XclBiff eBiff )
         case xlBiff2:
             mpColorTable = pDefColorTable2;
             mnTableSize = STATIC_TABLE_SIZE( pDefColorTable2 );
-            mnIndexOffset = EXC_COLOR_OFFSET2;
         break;
         case xlBiff3:
         case xlBiff4:
             mpColorTable = pDefColorTable3;
             mnTableSize = STATIC_TABLE_SIZE( pDefColorTable3 );
-            mnIndexOffset = EXC_COLOR_OFFSET3;
         break;
         case xlBiff5:
         case xlBiff7:
             mpColorTable = pDefColorTable5;
             mnTableSize = STATIC_TABLE_SIZE( pDefColorTable5 );
-            mnIndexOffset = EXC_COLOR_OFFSET5;
         break;
         case xlBiff8:
             mpColorTable = pDefColorTable8;
             mnTableSize = STATIC_TABLE_SIZE( pDefColorTable8 );
-            mnIndexOffset = EXC_COLOR_OFFSET8;
         break;
         default:
             DBG_ERROR_BIFF();
     }
 }
 
-ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex, ColorData nDefault ) const
+ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
 {
-    return ((mnIndexOffset <= nXclIndex) && (nXclIndex < mnIndexOffset + mnTableSize)) ?
-        mpColorTable[ nXclIndex - mnIndexOffset ] : nDefault;
+    ColorData nColor;
+    if( nXclIndex < mnTableSize )
+        nColor = mpColorTable[ nXclIndex ];
+    else switch( nXclIndex )
+    {
+        case EXC_COLOR_WINDOWTEXT:  nColor = mnWindowText;  break;
+        case EXC_COLOR_WINDOWBACK:  nColor = mnWindowBack;  break;
+        case EXC_COLOR_FONTAUTO:    nColor = COL_AUTO;      break;
+        default:                    nColor = COL_AUTO;
+    }
+    return nColor;
 }
 
 
@@ -193,17 +219,22 @@ XclFontData::XclFontData( const Font& rFont )
     FillFromFont( rFont );
 }
 
+XclFontData::XclFontData( const SvxFont& rFont )
+{
+    FillFromSvxFont( rFont );
+}
+
 void XclFontData::Clear()
 {
     maName.Erase();
     maStyle.Erase();
-    meUnderline = xlUnderlNone;
-    meEscapem = xlEscNone;
     mnHeight = 0;
-    mnColor = EXC_FONT_AUTOCOLOR;
+    mnColor = EXC_COLOR_FONTAUTO;
     mnWeight = EXC_FONTWGHT_DONTKNOW;
+    mnEscapem = EXC_FONTESC_NONE;
     mnFamily = EXC_FONTFAM_SYSTEM;
-    mnCharSet = EXC_FONTCSET_DONTKNOW;
+    mnCharSet = EXC_FONTCSET_ANSI_LATIN;
+    mnUnderline = EXC_FONTUNDERL_NONE;
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
 }
 
@@ -212,9 +243,9 @@ void XclFontData::FillFromFont( const Font& rFont )
     maName = XclTools::GetXclFontName( rFont.GetName() );   // #106246# substitute with MS fonts
     maStyle.Erase();
     SetScUnderline( rFont.GetUnderline() );
-    meEscapem = xlEscNone;
+    mnEscapem = EXC_FONTESC_NONE;
     SetScHeight( rFont.GetSize().Height() );
-    mnColor = EXC_FONT_AUTOCOLOR;
+    mnColor = EXC_COLOR_FONTAUTO;
     SetScWeight( rFont.GetWeight() );
     SetScFamily( rFont.GetFamily() );
     SetScCharSet( rFont.GetCharSet() );
@@ -222,6 +253,12 @@ void XclFontData::FillFromFont( const Font& rFont )
     SetScStrikeout( rFont.GetStrikeout() );
     mbOutline = rFont.IsOutline();
     mbShadow = rFont.IsShadow();
+}
+
+void XclFontData::FillFromSvxFont( const SvxFont& rFont )
+{
+    FillFromFont( rFont );
+    SetScEscapement( rFont.GetEscapement() );
 }
 
 
@@ -279,12 +316,12 @@ FontWeight XclFontData::GetScWeight() const
 FontUnderline XclFontData::GetScUnderline() const
 {
     FontUnderline eScUnderl = UNDERLINE_NONE;
-    switch( meUnderline )
+    switch( mnUnderline )
     {
-        case xlUnderlSingle:
-        case xlUnderlSingleAcc: eScUnderl = UNDERLINE_SINGLE;  break;
-        case xlUnderlDouble:
-        case xlUnderlDoubleAcc: eScUnderl = UNDERLINE_DOUBLE;  break;
+        case EXC_FONTUNDERL_SINGLE:
+        case EXC_FONTUNDERL_SINGLE_ACC: eScUnderl = UNDERLINE_SINGLE;  break;
+        case EXC_FONTUNDERL_DOUBLE:
+        case EXC_FONTUNDERL_DOUBLE_ACC: eScUnderl = UNDERLINE_DOUBLE;  break;
     }
     return eScUnderl;
 }
@@ -292,10 +329,10 @@ FontUnderline XclFontData::GetScUnderline() const
 SvxEscapement XclFontData::GetScEscapement() const
 {
     SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
-    switch( meEscapem )
+    switch( mnEscapem )
     {
-        case xlEscSuper:    eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;    break;
-        case xlEscSub:      eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;      break;
+        case EXC_FONTESC_SUPER: eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;    break;
+        case EXC_FONTESC_SUB:   eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;      break;
     }
     return eScEscapem;
 }
@@ -314,16 +351,16 @@ void XclFontData::SetScFamily( FontFamily eScFamily )
 {
     switch( eScFamily )
     {
-        case FAMILY_DONTKNOW:   mnCharSet = EXC_FONTFAM_DONTKNOW;   break;
-        case FAMILY_DECORATIVE: mnCharSet = EXC_FONTFAM_DECORATIVE; break;
-        case FAMILY_MODERN:     mnCharSet = EXC_FONTFAM_MODERN;     break;
-        case FAMILY_ROMAN:      mnCharSet = EXC_FONTFAM_ROMAN;      break;
-        case FAMILY_SCRIPT:     mnCharSet = EXC_FONTFAM_SCRIPT;     break;
-        case FAMILY_SWISS:      mnCharSet = EXC_FONTFAM_SWISS;      break;
-        case FAMILY_SYSTEM:     mnCharSet = EXC_FONTFAM_SYSTEM;     break;
+        case FAMILY_DONTKNOW:   mnFamily = EXC_FONTFAM_DONTKNOW;    break;
+        case FAMILY_DECORATIVE: mnFamily = EXC_FONTFAM_DECORATIVE;  break;
+        case FAMILY_MODERN:     mnFamily = EXC_FONTFAM_MODERN;      break;
+        case FAMILY_ROMAN:      mnFamily = EXC_FONTFAM_ROMAN;       break;
+        case FAMILY_SCRIPT:     mnFamily = EXC_FONTFAM_SCRIPT;      break;
+        case FAMILY_SWISS:      mnFamily = EXC_FONTFAM_SWISS;       break;
+        case FAMILY_SYSTEM:     mnFamily = EXC_FONTFAM_SYSTEM;      break;
         default:
             DBG_ERRORFILE( "XclFontData::SetScFamily - unknown font family" );
-            mnCharSet = EXC_FONTFAM_DONTKNOW;
+            mnFamily = EXC_FONTFAM_DONTKNOW;
     }
 }
 
@@ -361,28 +398,29 @@ void XclFontData::SetScUnderline( FontUnderline eScUnderl )
 {
     switch( eScUnderl )
     {
-        case UNDERLINE_SINGLE:  meUnderline = xlUnderlSingle;       break;
-        case UNDERLINE_DOUBLE:  meUnderline = xlUnderlDouble;       break;
-        case UNDERLINE_DOTTED:  meUnderline = xlUnderlSingleAcc;    break;
-        default:                meUnderline = xlUnderlNone;
+        case UNDERLINE_NONE:
+        case UNDERLINE_DONTKNOW:    mnUnderline = EXC_FONTUNDERL_NONE;      break;
+        case UNDERLINE_DOUBLE:
+        case UNDERLINE_DOUBLEWAVE:  mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
+        default:                    mnUnderline = EXC_FONTUNDERL_SINGLE;
     }
 }
 
-void XclFontData::SetScEscapement( SvxEscapement eScEscapem )
+void XclFontData::SetScEscapement( short nScEscapem )
 {
-    switch( eScEscapem )
-    {
-        case SVX_ESCAPEMENT_SUPERSCRIPT:    meEscapem = xlEscSuper; break;
-        case SVX_ESCAPEMENT_SUBSCRIPT:      meEscapem = xlEscSub;   break;
-        default:                            meEscapem = xlEscNone;
-    }
+    if( nScEscapem > 0 )
+        mnEscapem = EXC_FONTESC_SUPER;
+    else if( nScEscapem < 0 )
+        mnEscapem = EXC_FONTESC_SUB;
+    else
+        mnEscapem = EXC_FONTESC_NONE;
 }
 
 void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
 {
     mbStrikeout =
         (eScStrikeout == STRIKEOUT_SINGLE) || (eScStrikeout == STRIKEOUT_DOUBLE) ||
-        (eScStrikeout == STRIKEOUT_BOLD) || (eScStrikeout == STRIKEOUT_SLASH) ||
+        (eScStrikeout == STRIKEOUT_BOLD)   || (eScStrikeout == STRIKEOUT_SLASH)  ||
         (eScStrikeout == STRIKEOUT_X);
 }
 
@@ -429,12 +467,12 @@ float XclFontData::GetApiWeight() const
 sal_Int16 XclFontData::GetApiUnderline() const
 {
     sal_Int16 nApiUnderl = ApiAwt::FontUnderline::NONE;
-    switch( meUnderline )
+    switch( mnUnderline )
     {
-        case xlUnderlSingle:
-        case xlUnderlSingleAcc:     nApiUnderl = ApiAwt::FontUnderline::SINGLE; break;
-        case xlUnderlDouble:
-        case xlUnderlDoubleAcc:     nApiUnderl = ApiAwt::FontUnderline::DOUBLE; break;
+        case EXC_FONTUNDERL_SINGLE:
+        case EXC_FONTUNDERL_SINGLE_ACC: nApiUnderl = ApiAwt::FontUnderline::SINGLE; break;
+        case EXC_FONTUNDERL_DOUBLE:
+        case EXC_FONTUNDERL_DOUBLE_ACC: nApiUnderl = ApiAwt::FontUnderline::DOUBLE; break;
     }
     return nApiUnderl;
 }
@@ -487,10 +525,10 @@ void XclFontData::SetApiUnderline( sal_Int16 nApiUnderl )
     switch( nApiUnderl )
     {
         case ApiAwt::FontUnderline::NONE:
-        case ApiAwt::FontUnderline::DONTKNOW:   meUnderline = xlUnderlNone;     break;
+        case ApiAwt::FontUnderline::DONTKNOW:   mnUnderline = EXC_FONTUNDERL_NONE;      break;
         case ApiAwt::FontUnderline::DOUBLE:
-        case ApiAwt::FontUnderline::DOUBLEWAVE: meUnderline = xlUnderlDouble;   break;
-        default:                                meUnderline = xlUnderlSingle;
+        case ApiAwt::FontUnderline::DOUBLEWAVE: mnUnderline = EXC_FONTUNDERL_DOUBLE;    break;
+        default:                                mnUnderline = EXC_FONTUNDERL_SINGLE;
     }
 }
 
@@ -510,8 +548,8 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.mnHeight    == rRight.mnHeight)    &&
         (rLeft.mnWeight    == rRight.mnWeight)    &&
         (rLeft.mnColor     == rRight.mnColor)     &&
-        (rLeft.meUnderline == rRight.meUnderline) &&
-        (rLeft.meEscapem   == rRight.meEscapem)   &&
+        (rLeft.mnUnderline == rRight.mnUnderline) &&
+        (rLeft.mnEscapem   == rRight.mnEscapem)   &&
         (rLeft.mnFamily    == rRight.mnFamily)    &&
         (rLeft.mnCharSet   == rRight.mnCharSet)   &&
         (rLeft.mbItalic    == rRight.mbItalic)    &&
@@ -562,10 +600,10 @@ bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
 // ----------------------------------------------------------------------------
 
 XclCellBorder::XclCellBorder() :
-    mnLeftColor( EXC_XF_NOCOLOR ),
-    mnRightColor( EXC_XF_NOCOLOR ),
-    mnTopColor( EXC_XF_NOCOLOR ),
-    mnBottomColor( EXC_XF_NOCOLOR ),
+    mnLeftColor( 0 ),
+    mnRightColor( 0 ),
+    mnTopColor( 0 ),
+    mnBottomColor( 0 ),
     mnLeftLine( EXC_LINE_NONE ),
     mnRightLine( EXC_LINE_NONE ),
     mnTopLine( EXC_LINE_NONE ),
@@ -586,17 +624,15 @@ bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight )
 // ----------------------------------------------------------------------------
 
 XclCellArea::XclCellArea() :
-    mnForeColor( EXC_XF_AUTOCOLOR ),
-    mnBackColor( EXC_XF_TRANSPCOLOR ),
+    mnForeColor( EXC_COLOR_WINDOWTEXT ),
+    mnBackColor( EXC_COLOR_WINDOWBACK ),
     mnPattern( EXC_PATT_NONE )
 {
 }
 
 bool XclCellArea::IsTransparent() const
 {
-    return (mnPattern == EXC_PATT_NONE) &&
-        (((mnForeColor == EXC_XF_AUTOCOLOR) && (mnBackColor == EXC_XF_TRANSPCOLOR)) ||
-        (mnForeColor == EXC_XF_NOCOLOR));
+    return (mnPattern == EXC_PATT_NONE) && (mnBackColor == EXC_COLOR_WINDOWBACK);
 }
 
 bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight )
