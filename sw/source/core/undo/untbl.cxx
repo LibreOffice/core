@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:01:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,13 +1579,11 @@ SwUndoTblNdsChg::~SwUndoTblNdsChg()
 {
     delete pSaveTbl;
 
-    if( UNDO_TABLE_DELBOX == GetId() )
+    if( IsDelBox() )
         delete Ptrs.pDelSects;
     else
         delete Ptrs.pNewSttNds;
 }
-
-
 
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                                     const SwTableSortBoxes& rOld )
@@ -1595,7 +1593,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     USHORT n;
     USHORT i;
 
-    ASSERT( UNDO_TABLE_DELBOX != GetId(), "falsche Action" );
+    ASSERT( ! IsDelBox(), "falsche Action" );
     Ptrs.pNewSttNds = new SvULongs( (BYTE)(rTblBoxes.Count() - rOld.Count()), 5 );
 
     for( n = 0, i = 0; n < rOld.Count(); ++i )
@@ -1653,7 +1651,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     const SwTable& rTbl = rTblNd.GetTable();
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
 
-    ASSERT( UNDO_TABLE_DELBOX != GetId(), "falsche Action" );
+    ASSERT( ! IsDelBox(), "falsche Action" );
     Ptrs.pNewSttNds = new SvULongs( (BYTE)(rTblBoxes.Count() - rOld.Count()), 5 );
 
     ASSERT( rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
@@ -1728,7 +1726,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 
 void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 {
-    ASSERT( UNDO_TABLE_DELBOX == GetId(), "falsche Action" );
+    ASSERT( IsDelBox(), "falsche Action" );
     if( !Ptrs.pDelSects )
         Ptrs.pDelSects = new SwUndoSaveSections( 10, 5 );
 
@@ -1756,7 +1754,7 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
     _FndBox aTmpBox( 0, 0 );
     aTmpBox.SaveChartData( pTblNd->GetTable() );
 
-    if( UNDO_TABLE_DELBOX == GetId() )
+    if( IsDelBox() )
     {
         // Trick: die fehlenden Boxen in irgendeine Line einfuegen, beim
         // CreateNew werden sie korrekt verbunden.
@@ -1841,7 +1839,7 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
 
     aTmpBox.RestoreChartData( pTblNd->GetTable() );
 
-    if( UNDO_TABLE_DELBOX == GetId() )
+    if( IsDelBox() )
         nSttNode = pTblNd->GetIndex();
     ClearFEShellTabCols();
 }
@@ -1893,6 +1891,8 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
         rDoc.SplitTbl( aSelBoxes, bFlag, nCount, bSameHeight );
         break;
     case UNDO_TABLE_DELBOX:
+    case UNDO_ROW_DELETE:
+    case UNDO_COL_DELETE:
         if( USHRT_MAX == nSetColType )
         {
             SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
