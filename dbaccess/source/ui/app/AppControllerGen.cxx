@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 15:01:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-25 14:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,15 +608,18 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
 void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
 
-    static ::rtl::OUString s_sStatusbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"));
-    _xLayoutManager->createElement( s_sStatusbar );
-    _xLayoutManager->requestElement( s_sStatusbar );
+    if ( _xLayoutManager.is() )
+    {
+        static ::rtl::OUString s_sStatusbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"));
+        _xLayoutManager->createElement( s_sStatusbar );
+        _xLayoutManager->requestElement( s_sStatusbar );
 
-    if ( getContainer() )
-        getContainer()->createIconAutoMnemonics();
+        if ( getContainer() )
+            getContainer()->createIconAutoMnemonics();
 
-    Execute( SID_DB_APP_VIEW_FORMS, Sequence< PropertyValue >() );
-    InvalidateAll();
+        Execute( SID_DB_APP_VIEW_FORMS, Sequence< PropertyValue >() );
+        InvalidateAll();
+    }
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::doAction(sal_uInt16 _nId ,sal_Bool _bEdit)
