@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ka $ $Date: 2002-12-11 14:54:57 $
+#   last change: $Author: rt $ $Date: 2003-05-13 12:19:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/filedlg.obj   	    \
         $(SLO)$/dlgass.obj		    \
         $(SLO)$/TemplateScanner.obj \
-        $(SLO)$/sdtreelb.obj        
+        $(SLO)$/sdtreelb.obj        \
+        $(SLO)$/tpoption.obj
 
 # --- Tagets -------------------------------------------------------
 
