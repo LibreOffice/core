@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:22:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,10 @@ namespace configmgr
         /** removes a file specified by _aURL. Ignores the case of a non-existing file.
         */
         void removeFile(const rtl::OUString& _aURL) CFG_THROW1(io::IOException);
+
+        /** removes a file specified by _aURL. Ignores the case of a non-existing file.
+        */
+        bool tryToRemoveFile(const rtl::OUString& _aURL, bool tryBackupFirst);
 
         /** creates an error msg string for a given file error return code.
         */
