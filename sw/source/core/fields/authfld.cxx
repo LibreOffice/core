@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:34:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,9 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
                 //if it still exists - insert at the correct position
                 if(pNew)
                 {
-                    for(short j = 0; j < aSortArr.Count(); ++j)
+                    short j;
+
+                    for( j = 0; j < aSortArr.Count(); ++j)
                     {
                         SwTOXSortTabBase* pOld = aSortArr[j];
                         if(*pNew < *pOld)
