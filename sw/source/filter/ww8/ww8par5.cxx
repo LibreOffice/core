@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:11:18 $
+ *  last change: $Author: khz $ $Date: 2000-10-25 14:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,186 +762,6 @@ static short GetTimeDatePara( SwDoc& rDoc, String& rStr, ULONG& rFormat )
 }
 
 
-/*
-    Class ''WW8FldParaGuess'' removed as obsolete.    (khz, 05/15/2000)
-
-    We are using class ''_ReadFieldParams'' instead.
-
-//-----------------------------------------------------------------------
-//       class WW8FldParaGuess
-// Erraten von Parametern, auch bei weggelassenen oder typographischen
-// Anfuehrungszeichen. Es wird versucht, dem WW-Interpreter in allen
-// zweifelhafen Faellen moeglichst nahe zu kommen....
-//-----------------------------------------------------------------------
-
-// class WW8FldParaGuess uebernimmt die Feld-Parametererkennung,
-// z.Zt. nur fuer INHALT- und XE-PseudoFelder und fuer TOX-Felder.
-// Der Default-Parameter ( ohne "\" ) wird mit, ohne und mit typographischen
-// Anfuehrungszeichen erkannt. Andere Parameter genauso.
-// Dabei ist die Toleranz der Erkennung ( Falsche oder teilweise
-// Anfuehrungszeichen, Switches vorne oder hinten, ... ) dem WW-Interpreter
-// so weit wie moeglich angepasst.
-
-class WW8FldParaGuess{
-    unsigned char* pFld;                // FeldCode
-    unsigned char* pEnd;                // Ende FeldCode
-    unsigned char* pStdPara;            // Pointer in pFld auf Standard-Parameter
-    unsigned char **ppSwitch;       // Array von Zeigern in pFld auf Switch-Inhalte
-    BYTE nSwitches;         // Anzahl der zu erkennenden Switches
-    BOOL bOk;
-    BOOL bVanish;
-
-    void InitSwitches( const char* pSwitchPara );
-
-public:
-    //WW8FldParaGuess( SvStream& rStrm, const char* pSwitchPara, WW8_FC fcMin );
-    WW8FldParaGuess( unsigned char* pCode, const char* pSwitchPara );
-    ~WW8FldParaGuess();
-    BOOL Ok() const { return bOk; };
-    const unsigned char* GetStdPara() const { return ( bOk ) ? pStdPara : 0; };
-    const unsigned char* GetSwitch( BYTE nIdx ) const
-                { return ( nIdx < nSwitches ) ? ppSwitch[nIdx] : 0; };
-    const BOOL GetSwitchRange( BYTE nIdx, USHORT* pnStart, USHORT* pnEnd )
-        const;
-};
-
-// WWIsQuote( c ) : ist c ein normales oder typographisches Anfuehrungszeichen ?
-inline static BOOL WWIsQuote( char c )
-{
-    return c == '"' || (BYTE)c == 132 || (BYTE)c == 147;
-}
-
-// WWIsQuoteEnd( c ) : ist c ein normales oder typographisches Anfuehrungszeichen
-// oder eine \0 ?
-inline static BOOL WWIsQuoteEnd( char c )
-{
-    return c == '"' || (BYTE)c == 132 || (BYTE)c == 147 || c == 0;
-}
-
-// WWIsNoQuoteEnd( c ) : ist c ein Space oder ein normales oder typographisches
-// Anfuehrungszeichen oder eine \0 ?
-inline static BOOL WWIsNoQuoteEnd( char c )
-{
-    return c == ' ' || c == '"' || (BYTE)c == 132 || (BYTE)c == 147 || c == 0;
-}
-
-void WW8FldParaGuess::InitSwitches( const char* pSwitchPara )
-{
-    pStdPara = 0;
-    ppSwitch = 0;
-
-    nSwitches = ( pSwitchPara ) ? strlen( pSwitchPara ) : 0;
-    if( nSwitches ){
-        ppSwitch = new unsigned char*[nSwitches];
-        memset( ppSwitch, 0, sizeof( unsigned char* ) * nSwitches );
-    }
-#ifdef DEBUG
-    unsigned char* (*ppSwitchD)[10]
-        = (unsigned char*(*)[10])ppSwitch;  // zum Ansehen im Debugger
-    typedef unsigned char* WWCharPtr;
-    typedef WWCharPtr WW10CharPtr[10];
-    typedef WW10CharPtr* WWp10CharPtr;
-    WWp10CharPtr ppSD = (WWp10CharPtr)ppSwitch;
-#endif
-
-    unsigned char* p;
-    for( p = pFld; p < pEnd; p++ ){
-        while( *p == ' ' )                  // Spaces ueberlesen
-            p++;
-        BOOL bTok = p[0] == '\\' && p[1] != '\\';
-        BYTE nSw = 0;
-        if( bTok ){
-            for( nSw = 0; nSw < nSwitches; nSw++ ){
-                unsigned char c = pSwitchPara[nSw];
-                if ( p[1] == c || p[1] == toupper(c) )  // keine Umlaute noetig
-                    break;                              // OK, gueltiges Token
-            }
-            bTok = nSw < nSwitches;         // doch kein gueltiges Token ?
-        }
-        if( bTok ){                         // Token isolieren
-            unsigned char* p2 = p + 2;
-            while( *p2 == ' ' )             // Spaces vor Parameter ueberlesen
-                p2++;
-            if( WWIsQuote( *p2 ) ){         // in " eingeschlossen
-                unsigned char *p3 = p2 + 1; // Anfang gefunden
-                if( nSwitches )
-                    ppSwitch[nSw] = p3;     // bei mehreren gleichen gilt der letzte
-                while( !WWIsQuoteEnd( *p3 ) )// Ende suchen
-                    p3++;
-                *p3 = 0;                    // Ende markieren
-                p = p3;                     // ab hier weitersuchen
-            }
-            else
-            {                           // nicht gequotet
-                unsigned char *p3 = p2;
-                if( nSwitches )
-                    ppSwitch[nSw] = p2;     // Anfang gefunden ( letzter gilt )
-                while( (p3 < pEnd) && !WWIsNoQuoteEnd( *p3 ) )  // Ende suchen
-                    p3++;
-                *p3 = 0;                    // Ende markieren
-                p = p3;                     // ab hier weitersuchen
-            }
-        }else if( !pStdPara ){              // nur der erste kommt durch
-            unsigned char* p2;
-            if( WWIsQuote( *p ) ){          // in " eingeschlossen
-                p2 = pStdPara = p + 1;      // Anfang gefunden
-                while( !WWIsQuoteEnd( *p2 ) )// Ende suchen
-                    p2++;
-            }
-            else
-            {                           // nicht gequotet
-                p2 = pStdPara = p;
-                while( (p2 < pEnd) && !WWIsNoQuoteEnd( *p2 ) )  // Ende suchen
-                    p2++;
-            }
-            *p2 = 0;                        // Ende markieren
-            p = p2;                         // ab hier weitersuchen
-        }
-    }
-}
-
-
-// ctor WW8FldParaGuess, Erklaerung siehe anderer ctor.
-WW8FldParaGuess::WW8FldParaGuess( unsigned char* pCode,
-                                    const char* pSwitchPara )
-:pStdPara( 0 ), ppSwitch( 0 ), nSwitches( 0 ), bOk( TRUE ), bVanish( FALSE )
-{
-    pFld = pEnd = pCode;
-    // search field code end
-    while( *pEnd && (0x014 != *pEnd) && (0x015 != *pEnd) )
-        ++pEnd;
-    InitSwitches( pSwitchPara );
-}
-
-WW8FldParaGuess::~WW8FldParaGuess()
-{
-    if( bVanish )               // ja -> ctor hat alloziert
-        delete[] ( pFld );
-    delete[] ( ppSwitch );
-}
-
-// GetSwitchRange() interpretiert Parameter, die zwingend ein '-' zwischen
-// 2 USHORTs haben, z.B. VERZEICHNIS \o "1-3"
-const BOOL WW8FldParaGuess::GetSwitchRange( BYTE nIdx, USHORT* pnStart,
-USHORT* pnEnd ) const
-{
-    if( nIdx >= nSwitches )
-        return FALSE;
-    unsigned char* p = ppSwitch[nIdx];
-    if( !p )
-        return FALSE;
-    unsigned char* p1 = (unsigned char*)strchr( (char*)p, '-' );
-    if( !p1 )
-        return FALSE;
-    *p1++ = 0;
-    int nVal;
-    sscanf( (char*)p, "%d", &nVal );
-    *pnStart = (USHORT)nVal;
-    sscanf( (char*)p1, "%d", &nVal );
-    *pnEnd = (USHORT)nVal;
-    return TRUE;
-}
-*/
 
 //-----------------------------------------
 //              Felder
@@ -3040,12 +2860,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.2 2000-10-06 13:11:18 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.3 2000-10-25 14:19:04 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/06 13:11:18  jp
+      should changes: don't use IniManager
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 
