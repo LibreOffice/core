@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponentType.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:49 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,14 @@ constants FormComponentType
     /** specifies a control to display and edit a string according to a pattern.
     */
     const short PATTERNFIELD = 19;
+
+    /** specifies a control to display and edit, in the form of a scrollbar, a value from a continuous value range
+    */
+    const short SCROLLBAR = 20;
+
+    /** specifies a control to edit, in the form of a spin field, a value from a continuous range of values
+    */
+    const short SPINBUTTON = 21;
 
 };
 
