@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-06 12:53:02 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef COMPHELPER_INDEXACCESSWRAPPER_HXX
+#include <comphelper/IndexAccessWrapper.hxx>
 #endif
 
 
@@ -246,6 +249,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  ,m_xServiceFactory(_xServiceFactory)
  ,m_pColumns(NULL)
  ,m_pTables(NULL)
+ ,m_pParameters(NULL)
 {
     DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSHURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -284,6 +288,12 @@ void SAL_CALL OQueryComposer::disposing(void)
         m_pColumns->disposing();
         delete m_pColumns;
         m_pColumns = NULL;
+    }
+    if(m_pParameters)
+    {
+        m_pParameters->disposing();
+        delete m_pParameters;
+        m_pParameters = NULL;
     }
     if(m_pTables)
     {
@@ -414,13 +424,21 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         delete m_pColumns;
         m_pColumns = NULL;
     }
+    if(m_pParameters)
+    {
+        m_pParameters->disposing();
+        delete m_pParameters;
+        m_pParameters = NULL;
+    }
     // now set the columns
     const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getSelectColumns();
     ::std::vector< ::rtl::OUString> aNames;
     for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
         aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     m_pColumns = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+
     getTables();
+    getParameters();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException)
@@ -743,7 +761,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
 }
 // -------------------------------------------------------------------------
 // XTablesSupplier
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeException)
 {
     if (OSubComponent::rBHelper.bDisposed)
         throw DisposedException();
@@ -763,7 +781,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::g
 }
 // -------------------------------------------------------------------------
 // XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeException)
 {
     if (OSubComponent::rBHelper.bDisposed)
         throw DisposedException();
@@ -932,11 +950,11 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
     {
         PropertyValue aItem;
         ::rtl::OUString aValue;
-        sal_uInt16 nPos;
+        sal_uInt32 nPos;
         if (SQL_ISRULE(pCondition->getChild(0), column_ref))
         {
             nPos = 0;
-            sal_Int16 i=1;
+            sal_uInt32 i=1;
 
             aItem.Handle = getPredicateType(pCondition->getChild(i));
             // don't display the equal
@@ -951,7 +969,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         {
             nPos = pCondition->count()-1;
 
-            sal_Int16 i = pCondition->count() - 2;
+            sal_uInt32 i = pCondition->count() - 2;
             switch (pCondition->getChild(i)->getNodeType())
             {
                 case SQL_NODE_EQUAL:
@@ -1170,3 +1188,19 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
     }
     return sReturn;
 }
+// -----------------------------------------------------------------------------
+Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(RuntimeException)
+{
+    // now set the Parameters
+    if(!m_pParameters)
+    {
+        const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getParameters();
+        ::std::vector< ::rtl::OUString> aNames;
+        for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
+            aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+        m_pParameters = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+    }
+
+    return m_pParameters;
+}
+// -----------------------------------------------------------------------------

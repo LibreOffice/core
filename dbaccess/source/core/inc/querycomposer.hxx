@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:25:41 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
@@ -76,8 +79,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
@@ -104,7 +107,8 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper4< ::com::sun::star::sdb::XSQLQueryComposer,
+    typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSQLQueryComposer,
+                                    ::com::sun::star::sdb::XParametersSupplier,
                                     ::com::sun::star::sdbcx::XTablesSupplier,
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
                                     ::com::sun::star::lang::XServiceInfo    > OQueryComposer_BASE;
@@ -128,6 +132,7 @@ namespace dbaccess
         ::connectivity::OSQLParseNode*          m_pSqlParseNode;
 
         OPrivateColumns*                        m_pColumns;
+        OPrivateColumns*                        m_pParameters;
         OPrivateTables*                         m_pTables;
 
         ::rtl::OUString                         m_aQuery;
@@ -192,6 +197,8 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
         // XColumnsSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
+        // XParametersSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getParameters(  ) throw(::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // DBACCESS_CORE_API_QUERYCOMPOSER_HXX
