@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:07:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
                                                  XML_AUTO_GROW_WIDTH    ), 0 },
+    { XML_NAMESPACE_PRESENTATION, XML_DURATION, XML_ATACTION_RNG2ISO_DATETIME, NO_PARAMS },
+    { XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY, XML_ATACTION_RNG2ISO_DATETIME, NO_PARAMS },
 
     { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_DECODE_PROTECT, 0 },
     { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, 0 },
