@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MET - OS/2 Metafile</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">MET - OS/2 Metafile</value>
+            <value>MET - OS/2 Metafile</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
