@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-13 10:28:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,7 +606,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Δξκσμενς ρξδεπζθς αξλόψε ρςπξκ, χεμ οξδδεπζθβΰεςρÿ τξπμΰςξμ βϋβξδΰ.\nΡςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, ρξυπΰνενϋ νε ασδσς.";
         Text[ polish ] = "Dokument zawiera wiκcej wierszy niΏ jest obs³ugiwane przez format wyjciowy. \nDodatkowe wiersze nie bκdΉ obs³ugiwane.";
         Text[ japanese ] = "Δή·­ÒέΔ‚ΝA±³ΔΜί―Δ‚·‚ισό‘®‚Εx‰‡‚Ε‚«‚ιs”‚π‰z‚¦‚Δ‚Ά‚ά‚·B\n‰ίθ‚Μs‚Ν•Ϋ‘¶‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
-        Text[ chinese_traditional ] = "Ύγ­Σ¤ε¥σ§t¦³ªΊ¦CΌΖ¶WΉL¦C¦L®ζ¦΅¤δ«ωªΊ½d³ς΅C\n¶WΉLªΊ¦C¤£·|³Qΐx¦s΅C";
+        Text[ chinese_traditional ] = "³o­Σ¤ε¥σ§t¦³ªΊ¦CΌΖ¶WΉL¦C¦L®ζ¦΅¤δ«ωªΊ½d³ς΅C\n¶WΉLªΊ¦C¤£·|³Qΐx¦s΅C";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ ΪΟΟ γδ ΗαΥέζέ νέζή ΗαΪΟΟ ΗαΠν νγίδ ααΚδΣνή ΗαγΝΟΟ ΟΪγε.\nαγ νΚγ ΝέΩ ΗαΥέζέ ΗαÒΗΖΟΙ.";
         Text[ greek ] = "Το έγγραφο περιέχει περισσότερες γραμμές από ότι υποστηρίζει η μορφή \nεξαγωγής. Οι πλεονάζουσες γραμμές δεν αποθηκεύτηκαν.";
         Text[ korean ] = "Γβ·ΒΖχΈΛΐΜ΅΅ΑφΏψΗÒΌφΐΦ΄Β°ΝΊΈ΄Ω ΄υ ΈΉΐΊ ΗΰΐΜ΅΅Ή®Ό­Ώ΅΅΅ΖχΗΤµΗΎξ΅΅ΐΦ½ΐ΄Ο΄Ω.\nΓΚ°ϊµΗ΄Β ΗΰΐΊ ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
