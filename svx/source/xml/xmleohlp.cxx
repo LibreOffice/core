@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,9 +352,9 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 {
     // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
     //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
-    // external URL: #./<path>/<object-name>
-    //           or: #<path>/<object-name>
-    //           or: #<object-name>
+    // external URL: ./<path>/<object-name>
+    //           or: <path>/<object-name>
+    //           or: <object-name>
     // currently, path may only consist of a single directory name
     sal_Bool    bRet = sal_False;
 
@@ -386,20 +386,19 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     }
     else
     {
-        if( '#' != rURLStr[0 ] )
-            return sal_False;
+        DBG_ASSERT( '#' != rURLStr[0], "invalid object URL" );
 
         sal_Int32 nPos = rURLStr.lastIndexOf( '/' );
         if( -1 == nPos )
         {
             rContainerStorageName = OUString();
-            rObjectStorageName = rURLStr.copy( 1 );
+            rObjectStorageName = rURLStr;
         }
         else
         {
-            sal_Int32 nPathStart = 1;
-            if( 0 == rURLStr.compareToAscii( "#./", 3 ) )
-                nPathStart = 3;
+            sal_Int32 nPathStart = 0;
+            if( 0 == rURLStr.compareToAscii( "./", 2 ) )
+                nPathStart = 2;
             if( nPos >= nPathStart )
                 rContainerStorageName = rURLStr.copy( nPathStart, nPos-nPathStart);
             rObjectStorageName = rURLStr.copy( nPos+1 );
@@ -632,7 +631,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     else
     {
         // Objects are written using SfxObjectShell::SaveAs
-        sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM("#./") );
+        sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM("./") );
         if( aContainerStorageName.getLength() )
         {
             sRetURL += aContainerStorageName;
