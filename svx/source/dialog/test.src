@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:24:01 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2068,6 +2068,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ slovak ] = "Umiestnenie a ve��kos��";
 };
  // ********************************************************************** EOF
+
 
 
 
