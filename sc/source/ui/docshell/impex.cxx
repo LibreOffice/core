@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,7 +1498,6 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_VALUE:
                 hasvalue:
                     pDoc->GetValue( nCol, nRow, aRange.aStart.Tab(), nVal );
-                    //sprintf( cBuf, "C;X%d;Y%d;K%lg", c, r, nVal );
 
                     aValStr.Erase();
                     SolarMath::DoubleToString( aValStr, nVal, 'A', INT_MAX, '.', TRUE );
@@ -1516,7 +1515,6 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCellStr );
-                    //sprintf( cBuf, "C;X%d;Y%d;K", c, r );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += String::CreateFromInt32( c );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:21:48 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,12 +1094,12 @@ ULONG Sc10Import::Import()
     if (!nError) { ImportNameCollection();  pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
+#ifdef DBG_UTIL
     if (nError)
     {
-        sal_Char s[8];
-        sprintf(s,"%d",(short)nError);
-        DBG_ERROR(s);
+        DBG_ERROR( ByteString::CreateFromInt32( nError ).GetBuffer() );
     }
+#endif
 
     delete pPrgrsBar;
 #ifdef DBG_UTIL
@@ -1120,7 +1120,7 @@ void Sc10Import::LoadFileHeader()
     if ( nError == 0 )
     {
         sal_Char Sc10CopyRight[32];
-        strcpy(Sc10CopyRight, "Blaise-Tabelle");
+        strcpy(Sc10CopyRight, "Blaise-Tabelle");    // #100211# - checked
         Sc10CopyRight[14] = 10;
         Sc10CopyRight[15] = 13;
         Sc10CopyRight[16] = 0;
@@ -1240,7 +1240,7 @@ void Sc10Import::LoadPatternCollection()
         else
         {
             pPattern->Name[ 27 ] = 0;
-            strcat( pPattern->Name, "_Old" );
+            strcat( pPattern->Name, "_Old" );       // #100211# - checked
             aName = SC10TOSTRING( pPattern->Name );
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
         }

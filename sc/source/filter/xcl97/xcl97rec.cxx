@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:42:29 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
     String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
     UINT32          nPictureId = UINT32(this);
-    sprintf( aBuf, "%08X", nPictureId );
+    sprintf( aBuf, "%08X", nPictureId );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
     SvStorageRef    xOleStg = pRootStorage->OpenStorage( aStorageName,
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );

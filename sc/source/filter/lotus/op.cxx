@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:21:24 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 //------------------------------------------------------------------------
 
 #include <tools/solar.h>
+#include <tools/solmath.hxx>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -149,9 +150,8 @@ void OP_Number( SvStream& r, UINT16 n )
 
     r >> nFormat >> nCol >> nRow >> fValue;
 
-    // pErgebnis kurzzeitig als Dummy-Puffer missbrauchen
-    sprintf( pErgebnis, "%.15lg", fValue ); // auf 15 Stellen runden
-    ScValueCell*    pZelle = new ScValueCell( atof( pErgebnis ) );
+    fValue = SolarMath::Round( fValue, 15 );
+    ScValueCell*    pZelle = new ScValueCell( fValue );
     pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
 
     SetFormat( nCol, nRow, nTab, nFormat, nDezFloat );
@@ -266,10 +266,10 @@ void OP_NamedRange( SvStream& r, UINT16 n )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );
+        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
     }
     else
-        strcpy( pAnsi, cPuffer );
+        strcpy( pAnsi, cPuffer );           // #100211# - checked
 
     DosToSystem( pAnsi );
 
@@ -305,10 +305,10 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
         *pAnsi = 'A';
-        strcpy( pAnsi + 1, cPuffer );
+        strcpy( pAnsi + 1, cPuffer );       // #100211# - checked
     }
     else
-        strcpy( pAnsi, cPuffer );
+        strcpy( pAnsi, cPuffer );           // #100211# - checked
 
     DosToSystem( pAnsi );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2002-11-12 18:22:14 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,9 +249,9 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
     sal_Char*   p = buf;
 
     rStr += "\"#";
-    p += sprintf( p, "%02X", rColor.GetRed() );
-    p += sprintf( p, "%02X", rColor.GetGreen() );
-    p += sprintf( p, "%02X", rColor.GetBlue() );
+    p += sprintf( p, "%02X", rColor.GetRed() );     // #100211# - checked
+    p += sprintf( p, "%02X", rColor.GetGreen() );   // #100211# - checked
+    p += sprintf( p, "%02X", rColor.GetBlue() );    // #100211# - checked
     rStr += buf;
     rStr += '\"';
 }
@@ -315,7 +315,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
     bTableDataHeight( TRUE ),
     bTableDataWidth( TRUE )
 {
-    strcpy( sIndent, sIndentSource );
+    strcpy( sIndent, sIndentSource );       // #100211# - checked
     sIndent[0] = 0;
 
     // set HTML configuration

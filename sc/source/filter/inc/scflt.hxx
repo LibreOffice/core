@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: er $ $Date: 2002-12-06 17:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,11 @@ public:
                         Sc10FontData( const Sc10FontData& rData ) :
                             Height( rData.Height ),
                             CharSet( rData.CharSet ),
-                            PitchAndFamily( rData.PitchAndFamily ) { strcpy( FaceName, rData.FaceName ); }
+                            PitchAndFamily( rData.PitchAndFamily )
+                                {
+                                    strncpy( FaceName, rData.FaceName, sizeof(FaceName) );
+                                    FaceName[sizeof(FaceName)-1] = 0;
+                                }
                         Sc10FontData( SvStream& rStream );
     virtual DataObject* Clone() const { return new Sc10FontData(*this); }
 };
@@ -606,8 +610,10 @@ public :
 
                         Sc10NameData(const Sc10NameData& rData)
                         {
-                            strcpy(Name, rData.Name);
-                            strcpy(Reference, rData.Reference);
+                            strncpy(Name, rData.Name, sizeof(Name));
+                            Name[sizeof(Name)-1] = 0;
+                            strncpy(Reference, rData.Reference, sizeof(Reference));
+                            Reference[sizeof(Reference)-1] = 0;
                             memcpy(Reserved, rData.Reserved, sizeof(Reserved));
                         }
                         Sc10NameData(SvStream& rStream);
@@ -646,7 +652,8 @@ public:
 
                         Sc10PatternData(const Sc10PatternData& rData)
                         {
-                            strcpy(Name, rData.Name);
+                            strncpy(Name, rData.Name, sizeof(Name));
+                            Name[sizeof(Name)-1] = 0;
                             memcpy(&ValueFormat, &rData.ValueFormat, sizeof(ValueFormat));
                             memcpy(&LogFont, &rData.LogFont, sizeof(LogFont));
                             Attr = rData.Attr;
