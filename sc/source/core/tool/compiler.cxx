@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2002-09-16 12:30:52 $
+ *  last change: $Author: er $ $Date: 2002-09-18 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2244,6 +2244,13 @@ void ScCompiler::Factor()
         else if( eOp == ocNot || eOp == ocNeg
               || ( eOp > ocEndNoPar && eOp < ocEnd1Par) )
         {
+            // Functions that have to be always recalculated
+            switch( eOp )
+            {
+                case ocFormula:
+                    pArr->SetRecalcModeAlways();
+                break;
+            }
             pFacToken = pToken;
             eOp = NextToken();
             if( nNumFmt == NUMBERFORMAT_UNDEFINED && eOp == ocNot )
