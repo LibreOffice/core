@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loaddispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:29:18 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,25 +157,28 @@ void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&    
     // OK ... now the internal loader seems to be useable for new requests
     // and our owner frame seems to be valid for such operations.
     // Initialize it with all new but needed properties and start the loading.
+    css::uno::Reference< css::lang::XComponent > xComponent;
     try
     {
         m_aLoader.initializeLoading(aURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, (LoadEnv::EFeature)(LoadEnv::E_ALLOW_CONTENTHANDLER | LoadEnv::E_WORK_WITH_UI));
         m_aLoader.startLoading();
+        m_aLoader.waitWhileLoading(); // wait for ever!
+        xComponent = m_aLoader.getTargetComponent();
+
+        // TODO thinking about asynchronous operations and listener support
     }
     catch(const LoadEnvException&)
+        { xComponent.clear(); }
+
+    if (xListener.is())
     {
-        if (xListener.is())
+        if (xComponent.is())
+            xListener->dispatchFinished(
+                css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::SUCCESS, css::uno::Any()));
+        else
             xListener->dispatchFinished(
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
     }
-
-    /*TODO implement listener support inside LoadEnv member ... */
-
-    // But dont wait for the results here.
-    // In case loading will be synchronous, the listener will be notified immediatly.
-    // In case it will be asynchronous such event will occure next time.
-    // But we block further requests on THIS dispatch object, till our internal
-    // used loader isnt still in progress any longer.
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
