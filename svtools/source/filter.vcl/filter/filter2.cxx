@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:26:58 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,6 +626,12 @@ BOOL GraphicDescriptor::ImpDetectPCD( SvStream& rStm, BOOL bExtendedInfo )
 
 BOOL GraphicDescriptor::ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo )
 {
+    // ! Because 0x0a can be interpreted as LF too ...
+    // we cant be shure that this special sign represent a PCX file only.
+    // Every Ascii file is possible here :-(
+    // We must detect the whole header.
+    bExtendedInfo = TRUE;
+
     BOOL    bRet = FALSE;
     BYTE    cByte;
 
@@ -654,6 +660,8 @@ BOOL GraphicDescriptor::ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo )
             // Kompression lesen
             rStm >> cByte;
             bCompressed = ( cByte > 0 );
+
+            bRet = (cByte==0 || cByte ==1);
 
             // Bits/Pixel lesen
             rStm >> cByte;
@@ -689,6 +697,8 @@ BOOL GraphicDescriptor::ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo )
             rStm.SeekRel( 49 );
             rStm >> cByte;
             nPlanes = cByte;
+
+            bRet = (nPlanes>=0 && nPlanes<=4);
         }
     }
 
