@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:29:42 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,6 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
 
-#ifndef _FLYPOS_HXX
-#include <flypos.hxx>
-#endif
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
@@ -593,7 +590,8 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
         for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
         {
             // write the fspa-struct
-            const SwFrmFmt& rFmt = aIter->mrCntnt;
+            const sw::Frame &rFrmFmt = aIter->maCntnt;
+            const SwFrmFmt &rFmt = rFrmFmt.GetFrmFmt();
             const SdrObject* pObj = rFmt.FindRealSdrObject();
 
             Rectangle aRect;
@@ -629,24 +627,18 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                 }
             }
 
+            //If we are being exported as an inline hack, set
+            //corner to 0
+            if (rFrmFmt.IsInline())
+                aRect.SetPos(Point(0,0));
+
             // spid
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
 
             //Nasty bidi swap
-            bool bBiDi = false;
-            if (const SwPosition *pPos = rFmt.GetAnchor().GetCntntAnchor())
-            {
-                bBiDi =
-                  (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(*pPos));
-            }
-            else
-            {
-                const SwFrmFmt &rPageFmt =
-                  rWrt.pDoc->GetPageDesc(
-                  rFmt.GetAnchor().GetPageNum()).GetMaster();
-                bBiDi =
-                  (FRMDIR_HORI_RIGHT_TOP == rPageFmt.GetFrmDir().GetValue());
-            }
+            const SwPosition &rPos = rFrmFmt.GetPosition();
+            bool bBiDi =
+                (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(rPos));
 
             sal_Int32 nLeft = aRect.Left() + aIter->mnThick;
             sal_Int32 nRight = aRect.Right() - aIter->mnThick;
@@ -681,7 +673,18 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
 
             const SwFmtSurround& rSurr = rFmt.GetSurround();
             USHORT nContour = rSurr.IsContour() ? 0x0080 : 0x0040;
-            switch (rSurr.GetSurround())
+            SwSurround eSurround = rSurr.GetSurround();
+
+            /*
+             #i3958#
+             The inline elements being export as anchored to character inside
+             the shape field hack are required to be wrap through so as to flow
+             over the following dummy 0x01 graphic
+            */
+            if (rFrmFmt.IsInline())
+                eSurround = SURROUND_THROUGHT;
+
+            switch (eSurround)
             {
                 case SURROUND_NONE:
                     nFlags |= 0x0020;
@@ -705,6 +708,13 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             if( pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
                     pObj->GetLayer() == rWrt.pDoc->GetInvisibleHellId()) )
                 nFlags |= 0x4000;
+
+            /*
+             #i3958# Required to make this inline stuff work in WordXP, not
+             needed for 2003 interestingly
+             */
+            if (rFrmFmt.IsInline())
+                nFlags |= 0x8000;
 
             SwWW8Writer::WriteShort(*rWrt.pTableStrm, nFlags);
 
@@ -740,16 +750,17 @@ WW8_CP HdFtPlcDrawObj::GetCpOffset(const WW8Fib &rFib) const
     return rFib.ccpText + rFib.ccpFtn;
 }
 
-bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const SwFrmFmt& rFmt,
+bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
     const Point& rNdTopLeft)
 {
     bool bRet = false;
+    const SwFrmFmt &rFormat = rFmt.GetFrmFmt();
     if (TXT_HDFT == rWrt.nTxtTyp || TXT_MAINTEXT == rWrt.nTxtTyp)
     {
-        if (RES_FLYFRMFMT == rFmt.Which())
+        if (RES_FLYFRMFMT == rFormat.Which())
         {
             // check for textflyframe and if it is the first in a Chain
-            if (rFmt.GetCntnt().GetCntntIdx())
+            if (rFormat.GetCntnt().GetCntntIdx())
                 bRet = true;
         }
         else
@@ -757,8 +768,10 @@ bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const SwFrmFmt& rFmt,
     }
 
     if (bRet)
-        maDrawObjs.push_back(
-            DrawObj(rFmt,nCp,rNdTopLeft,rWrt.TrueFrameDirection(rFmt)));
+    {
+        DrawObj aObj(rFmt, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFormat));
+        maDrawObjs.push_back(aObj);
+    }
     return bRet;
 }
 
@@ -839,9 +852,10 @@ static bool lcl_IsFlyInFlyHere(const SwFrmFmt* pFmt, ULONG nStart, ULONG nEnd)
     return bRet;
 }
 
-void SwWW8Writer::AppendFlyInFlys(WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
+void SwWW8Writer::AppendFlyInFlys(const sw::Frame& rFrmFmt,
     const Point& rNdTopLeft)
 {
+    ASSERT(bWrtWW8, "this has gone horribly wrong");
     ASSERT(!pEscher, "der EscherStream wurde schon geschrieben!");
     if (pEscher)
         return ;
@@ -851,7 +865,17 @@ void SwWW8Writer::AppendFlyInFlys(WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
     else
         pDrwO = pSdrObjs;
 
-    if (pDrwO->Append( *this, rCP, rFrmFmt, rNdTopLeft))
+    if (rFrmFmt.IsInline())
+    {
+        OutField(0, ww::eSHAPE, FieldString(ww::eSHAPE),
+            WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
+    }
+
+    WW8_CP nCP = Fc2Cp(Strm().Tell());
+    bool bSuccess = pDrwO->Append(*this, nCP, rFrmFmt, rNdTopLeft);
+    ASSERT(bSuccess, "Couldn't export a graphical element!");
+
+    if (bSuccess)
     {
         static BYTE __READONLY_DATA aSpec8[] = {
             0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
@@ -862,26 +886,17 @@ void SwWW8Writer::AppendFlyInFlys(WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
                             // in den Text und darum ein fSpec-Attribut
         pChpPlc->AppendFkpEntry( Strm().Tell() );
         WriteChar( 0x8 );
-        rCP += 1;       // to next charakter position
         pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
 
-        if (RES_FLYFRMFMT == rFrmFmt.Which())
-        {
-            const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
-            ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
-            ULONG nStart = pNdIdx->GetIndex();
-            ULONG nEnd = pNdIdx->GetNode().EndOfSectionIndex();
-            // search all Flys/DrawObj in Flys and put it after this text
-            // position.
-            USHORT nArrLen = pDoc->GetSpzFrmFmts()->Count();
-            for (USHORT nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt)
-            {
-                const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[nLastFmt];
-                if (lcl_IsFlyInFlyHere(pFmt, nStart, nEnd))
-                    AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
-            }
-        }
+        const SwFrmFmt &rFmt = rFrmFmt.GetFrmFmt();
+
+        //Need dummy picture frame
+        if (rFrmFmt.IsInline())
+            OutGrf(rFrmFmt);
     }
+
+    if (rFrmFmt.IsInline())
+        OutField(0, ww::eSHAPE, aEmptyStr, WRITEFIELD_CLOSE);
 }
 
 class WW8_SdrAttrIter : public WW8_AttrIter
@@ -1223,12 +1238,15 @@ void WW8_SdrAttrIter::OutParaAttr(bool bCharAttr)
 
 void SwWW8Writer::WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp)
 {
-    const SdrTextObj* pTxtObj = PTR_CAST( SdrTextObj, &rObj );
-    ASSERT( pTxtObj, "das ist gar kein SdrTextObj!" );
+    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, &rObj);
+    ASSERT(pTxtObj, "That is no SdrTextObj!");
+    if (!pTxtObj)
+        return;
 
     bool bAnyWrite = false;
-    const OutlinerParaObject* pParaObj = pTxtObj->GetOutlinerParaObject();
-    if( pParaObj )
+    const OutlinerParaObject* pParaObj =
+        sw::hack::GetOutlinerParaObject(*pTxtObj);
+    if (pParaObj)
     {
         const EditTextObject& rEditObj = pParaObj->GetTextObject();
         WW8_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
@@ -1303,14 +1321,27 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 {
     //Toplevel groups get their winword extra data attached, and sub elements
     //use the defaults
-    if( rEx.GetGroupLevel() <= 1 )
+    if (rEx.GetGroupLevel() <= 1)
     {
-        rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
         SvStream& rSt = rEx.GetStream();
-        rSt << (UINT16)0x038F << nXAlign;
-        rSt << (UINT16)0x0390 << nXRelTo;
-        rSt << (UINT16)0x0391 << nYAlign;
-        rSt << (UINT16)0x0392 << nYRelTo;
+        //The last argument denotes the number of sub properties in this atom
+        if (mbInline)
+        {
+            rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
+            rSt << (UINT16)0x0390 << sal_uInt32(3);
+            rSt << (UINT16)0x0392 << sal_uInt32(3);
+            //This sub property is required to be in the dummy inline frame as
+            //well
+            rSt << (UINT16)0x053F << nInlineHack;
+        }
+        else
+        {
+            rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
+            rSt << (UINT16)0x038F << mnXAlign;
+            rSt << (UINT16)0x0390 << mnXRelTo;
+            rSt << (UINT16)0x0391 << mnYAlign;
+            rSt << (UINT16)0x0392 << mnYRelTo;
+        }
     }
 }
 
@@ -1380,6 +1411,19 @@ void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt&)
 {
     AddAtom(4, ESCHER_ClientAnchor);
     GetStream() << 0x80000000;
+}
+
+void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
+{
+    OpenContainer(ESCHER_SpContainer);
+    AddShape(ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId);
+    // store anchor attribute
+    WriteFrmExtraData(rFmt);
+
+    AddAtom(6, DFF_msofbtUDefProp, 3, 1); //Prop id is 0xF122
+    GetStream() << (UINT16)0x053F << nInlineHack;
+
+    CloseContainer();   // ESCHER_SpContainer
 }
 
 INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
@@ -2052,15 +2096,16 @@ extern "C"
 void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
 {
     const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
+    mbInline = (eAnchor == FLY_IN_CNTNT);
 
     const SwFmtHoriOrient&  rHoriOri = rFmt.GetHoriOrient();
     const SwFmtVertOrient&  rVertOri = rFmt.GetVertOrient();
 
-    const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
-    const SwVertOrient eVOri = rVertOri.GetVertOrient();
+    SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
+    SwVertOrient eVOri = rVertOri.GetVertOrient();
 
-    SwRelationOrient   eHRel = rHoriOri.GetRelationOrient();
-    SwRelationOrient   eVRel = rVertOri.GetRelationOrient();
+    SwRelationOrient eHRel = rHoriOri.GetRelationOrient();
+    SwRelationOrient eVRel = rVertOri.GetRelationOrient();
 
     //There must be a problem with page anchoring and draw objects in writer
     //must be a problem somewhere.
@@ -2515,8 +2560,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
         sizeof(aHVMatcher[0]), CompUINT32 );
     if( !pFound )
         pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    nXAlign = (*pFound & 0x000000F0) >> 4;
-    nXRelTo = (*pFound & 0x0000000F);
+    mnXAlign = (*pFound & 0x000000F0) >> 4;
+    mnXRelTo = (*pFound & 0x0000000F);
 
     // find vertical values
     pFound= (UINT32*)bsearch( (const void*) &nVIndex, (void*) aHVMatcher,
@@ -2524,8 +2569,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
         CompUINT32 );
     if( !pFound )
         pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    nYAlign = (*pFound & 0x000000F0) >> 4;
-    nYRelTo = (*pFound & 0x0000000F);
+    mnYAlign = (*pFound & 0x000000F0) >> 4;
+    mnYRelTo = (*pFound & 0x0000000F);
 }
 
 void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
@@ -2755,11 +2800,12 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     rDstArr.reserve(nCnt);
     for( n = 0; n < nCnt; ++n )
     {
-        ULONG nOrdNum = rWrt.GetSdrOrdNum(rSrcArr[n].mrCntnt);
+        const SwFrmFmt &rFmt = rSrcArr[n].maCntnt.GetFrmFmt();
+        ULONG nOrdNum = rWrt.GetSdrOrdNum(rFmt);
         USHORT nPos;
         //returns what will be the index in aSortFmts of p as nPos
         aSort.Insert( nOrdNum, nPos );
-        void* p = (void *)(&(rSrcArr[n].mrCntnt));
+        void* p = (void *)(&(rFmt));
         aSortFmts.Insert( p, nPos );
         maDirections.insert(maDirections.begin() + nPos,
                 rSrcArr[n].mnDirection);
