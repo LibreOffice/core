@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 11:58:11 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,6 @@ extern FASTBOOL bDontCreateObjects;
 
 //Fuer FlyCnts, siehe SwFlyAtCntFrm::MakeAll()
 extern FASTBOOL bSetCompletePaintOnInvalidate;
-
-//Rechteck fuer BorderPaint ausdehen/wieder schrumpfen.
-void MA_FASTCALL SizeBorderRect( SwRect &rRect );
-void MA_FASTCALL InvertSizeBorderRect( SwRect &rRect, ViewShell *pSh );
 
 //Fuer Tabelleneinstellung per Tastatur.
 long MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow );
