@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:52:43 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,14 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL bCopy)
         }
     }
     return bRet;
+}
+
+void SdrDragObjOwn::Brk()
+{
+    SdrObject* pObj = GetDragObj();
+    if ( pObj )
+        pObj->BrkDrag( DragStat() );
+    SdrDragMethod::Brk();
 }
 
 void SdrDragObjOwn::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
