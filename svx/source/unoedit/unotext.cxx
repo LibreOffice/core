@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:47:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1835,7 +1835,7 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
         }
 
         SvxFieldData* pFieldData = pField->CreateFieldData();
-        if( pField == NULL )
+        if( pFieldData == NULL )
             throw lang::IllegalArgumentException();
 
         SvxFieldItem aField( *pFieldData );
