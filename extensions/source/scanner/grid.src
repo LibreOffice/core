@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:44:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ModalDialog GRID_DIALOG
         Text[ italian ] = "Imposta";
         Text[ danish ] = "Definer";
         Text[ swedish ] = "Definiera";
-        Text[ polish ] = "Osad?";
+        Text[ polish ] = "Osadü";
         Text[ portuguese_brazilian ] = "Set";
         Text[ japanese ] = "ê›íË";
         Text[ korean ] = "¡ˆ¡§";
@@ -182,7 +182,7 @@ ModalDialog GRID_DIALOG
         Text[ italian ] = "Valori originali";
         Text[ danish ] = "OriginalvÊrdier";
         Text[ swedish ] = "Originalv‰rden";
-        Text[ polish ] = "Warto?ci oryginalne";
+        Text[ polish ] = "Wartoúci oryginalne";
         Text[ portuguese_brazilian ] = "Original values";
         Text[ japanese ] = "µÿºﬁ≈Ÿíl";
         Text[ korean ] = "ø¯∑°∞™";
@@ -219,3 +219,4 @@ ModalDialog GRID_DIALOG
         Text[ finnish ] = "Eksponentiaalinen lis‰ys";
     };
 };
+
