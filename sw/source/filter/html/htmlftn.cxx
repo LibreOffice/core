@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: os $ $Date: 2001-02-26 07:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,10 +169,10 @@ xub_StrLen lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
         switch( nPart )
         {
         case 0:
-            rInfo.aFmt.eType = bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC;
+            rInfo.aFmt.SetNumberingType(bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC);
             if( aPart.Len() )
-                rInfo.aFmt.eType = (SvxExtNumType)SwHTMLParser::GetNumType( aPart,
-                                                             rInfo.aFmt.eType );
+                rInfo.aFmt.SetNumberingType(SwHTMLParser::GetNumType( aPart,
+                                                             rInfo.aFmt.GetNumberingType() ));
             break;
 
         case 1:
@@ -547,7 +547,7 @@ USHORT lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  BOOL bEndNote  )
 {
     USHORT nParts = 0;
-    SvxExtNumType eFmt = rInfo.aFmt.eType;
+    sal_Int16 eFmt = rInfo.aFmt.GetNumberingType();
     if( (bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC) != eFmt )
     {
         const sal_Char *pStr = SwHTMLWriter::GetNumFormat( eFmt );
@@ -659,31 +659,4 @@ void SwHTMLWriter::OutFootEndNoteInfo()
                                          sHTML_META_sdendnote );
     }
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2000/09/18 16:04:45  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.5  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.4  1999/09/21 09:49:49  mib
-      multiple text encodings
-
-      Revision 1.3  1999/09/17 12:13:24  mib
-      support of multiple and non system text encodings
-
-      Revision 1.2  1998/11/17 09:44:36  OS
-      #58263# NumType durch SvxExtNumType ersetzt
-
-
-      Rev 1.1   17 Nov 1998 10:44:36   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.0   02 Nov 1998 17:21:20   MIB
-   #58480#: Fuss-/Endnoten
-
-*************************************************************************/
 
