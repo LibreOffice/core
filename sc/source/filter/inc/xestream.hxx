@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:10 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,17 +279,6 @@ inline XclExpStream& XclExpStream::operator<<( double fValue )
     mrStrm << fValue;
     return *this;
 }
-
-
-// ============================================================================
-
-/** Function object to stream out an object, useful i.e. for ::std::for_each(). */
-template< typename Type > struct XclWriteFunc
-{
-    XclExpStream&               mrStrm;
-    inline explicit             XclWriteFunc( XclExpStream& rStrm ) : mrStrm( rStrm ) {}
-    inline void                 operator()( const Type& rObj ) { mrStrm << rObj; }
-};
 
 
 // ============================================================================
