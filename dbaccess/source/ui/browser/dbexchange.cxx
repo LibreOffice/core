@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:13:25 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,77 @@
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _DBACCESS_DBATOOLS_HXX_
+#include "dbatools.hxx"
+#endif
 
 namespace dbaui
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::datatransfer;
+
+    // -----------------------------------------------------------------------------
+    ODataClipboard::ODataClipboard( const Sequence< PropertyValue >& _aSeq,
+                    OHTMLImportExport*  _pHtml, ORTFImportExport*   _pRtf)
+        :m_aSeq(_aSeq)
+        ,m_xHtml(_pHtml)
+        ,m_xRtf(_pRtf)
+        ,m_pHtml(_pHtml)
+        ,m_pRtf(_pRtf)
+        ,m_nObjectType(CommandType::TABLE)
+    {
+        if (m_aSeq.getLength())
+        {
+            // extract the single values from the sequence
+            ::rtl::OUString sDatasourceName;
+            ::rtl::OUString sObjectName;
+            sal_Bool bEscapeProcessing = sal_True;
+            extractObjectDescription(m_aSeq, &sDatasourceName, &m_nObjectType, &sObjectName, &bEscapeProcessing);
+
+            // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+
+            sal_Bool bTreatAsStatement = (CommandType::COMMAND == m_nObjectType);
+                // statements are - in this old and ugly format - described as queries
+
+            const sal_Unicode       cSeparator = sal_Unicode(11);
+            const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+            const sal_Unicode       cTableMark = '1';
+            const sal_Unicode       cQueryMark = '0';
+
+            // build the descriptor string
+            m_sCompatibleObjectDescription += sDatasourceName;
+            m_sCompatibleObjectDescription += sSeparator;
+            m_sCompatibleObjectDescription += bTreatAsStatement ? String() : sObjectName;
+            m_sCompatibleObjectDescription += sSeparator;
+            switch (m_nObjectType)
+            {
+                case CommandType::TABLE:
+                    m_sCompatibleObjectDescription += ::rtl::OUString(&cTableMark, 1);
+                    break;
+                case CommandType::QUERY:
+                    m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                    break;
+                case CommandType::COMMAND:
+                    m_sCompatibleObjectDescription += ::rtl::OUString(&cQueryMark, 1);
+                    // think of it as a query
+                    break;
+            }
+            m_sCompatibleObjectDescription += sSeparator;
+            m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : String();
+            m_sCompatibleObjectDescription += sSeparator;
+        }
+    }
+
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
@@ -87,32 +153,55 @@ namespace dbaui
         }
         return sal_False;
     }
+
     // -----------------------------------------------------------------------------
     void ODataClipboard::AddSupportedFormats()
     {
         AddFormat(SOT_FORMAT_RTF);
         AddFormat(SOT_FORMATSTR_ID_HTML);
-        if(m_aSeq.getLength())
-            AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+        if (m_aSeq.getLength())
+        {
+            switch (m_nObjectType)
+            {
+                case CommandType::TABLE:
+                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE);
+                    break;
+                case CommandType::QUERY:
+                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                    break;
+                case CommandType::COMMAND:
+                    AddFormat(SOT_FORMATSTR_ID_DBACCESS_COMMAND);
+                    break;
+            }
+
+            if (m_sCompatibleObjectDescription.getLength())
+                AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+        }
     }
+
     // -----------------------------------------------------------------------------
-    sal_Bool ODataClipboard::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
         ULONG nFormat = SotExchange::GetFormat(rFlavor);
-        if(nFormat == SOT_FORMAT_RTF)
+        switch (nFormat)
         {
-            return SetObject(m_pRtf,SOT_FORMAT_RTF,rFlavor);
-        }
-        else if(nFormat == SOT_FORMATSTR_ID_HTML)
-        {
-            return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
-        }
-        else if(nFormat == SOT_FORMATSTR_ID_SBA_DATAEXCHANGE)
-        {
-            return SetAny(makeAny(m_aSeq),rFlavor);
+            case SOT_FORMAT_RTF:
+                return SetObject(m_pRtf,SOT_FORMAT_RTF,rFlavor);
+
+            case SOT_FORMATSTR_ID_HTML:
+                return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
+
+            case SOT_FORMATSTR_ID_DBACCESS_TABLE:
+            case SOT_FORMATSTR_ID_DBACCESS_QUERY:
+            case SOT_FORMATSTR_ID_DBACCESS_COMMAND:
+                return SetAny(makeAny(m_aSeq), rFlavor);
+
+            case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
+                return SetString(m_sCompatibleObjectDescription, rFlavor);
         }
         return sal_False;
     }
+
     // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
@@ -120,6 +209,7 @@ namespace dbaui
         m_xRtf  = NULL;
         m_aSeq  = Sequence< PropertyValue >();
     }
+
     // -----------------------------------------------------------------------------
 }
 
