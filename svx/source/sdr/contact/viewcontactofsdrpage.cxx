@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:46:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,15 +165,28 @@ namespace sdr
         // PaintObject() is called.
         sal_Bool ViewContactOfSdrPage::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
-            // Not necessary since this is the page itself.
-            return sal_False;
+            // #115593#
+            // As preparation for AF, the ViewContactOfSdrPage says it's painting so that the
+            // invalidates for the hierarchy will work
+            return sal_True;
+        }
+
+        // Paint this object. This is before evtl. SubObjects get painted. It needs to return
+        // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
+        sal_Bool ViewContactOfSdrPage::PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC)
+        {
+            // #115593#
+            // set paint flags and rectangle
+            rPaintRectangle = GetPaintRectangle();
+
+            return sal_True;
         }
 
         // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
         void ViewContactOfSdrPage::PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             // test for page painting
-            if(rDisplayInfo.GetTemporaryPaintPage() && rDisplayInfo.GetPagePainting())
+            if(!rDisplayInfo.GetControlLayerPainting() && rDisplayInfo.GetPagePainting())
             {
                 // Test for printer output
                 if(!rDisplayInfo.OutputToPrinter())
@@ -220,7 +233,7 @@ namespace sdr
         void ViewContactOfSdrPage::PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             // test for page painting
-            if(rDisplayInfo.GetTemporaryPaintPage() && rDisplayInfo.GetPagePainting())
+            if(!rDisplayInfo.GetControlLayerPainting() && rDisplayInfo.GetPagePainting())
             {
                 // Test for printer output
                 if(!rDisplayInfo.OutputToPrinter())
@@ -460,6 +473,12 @@ namespace sdr
         {
             // No.
             return sal_False;
+        }
+
+        // overload for acessing the SdrPage
+        SdrPage* ViewContactOfSdrPage::TryToGetSdrPage() const
+        {
+            return &GetSdrPage();
         }
     } // end of namespace contact
 } // end of namespace sdr
