@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:05:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ String SV_HELPTEXT_CLOSE
     TEXT[ czech ] = "Zavřít";
     TEXT[ hebrew ] = "‮סגירה‬";
     TEXT[ hindi ] = "बन्द करो";
+    TEXT[ slovak ] = "Zavrieť";
 };
 String SV_HELPTEXT_CLOSEDOCUMENT
 {
@@ -125,6 +126,7 @@ String SV_HELPTEXT_CLOSEDOCUMENT
     TEXT[ czech ] = "Uzavřít dokument";
     TEXT[ hebrew ] = "‮סגירת המסמך‬";
     TEXT[ hindi ] = "लेखपत्र को बन्द करो";
+    TEXT[ slovak ] = "Zatvoriť dokument";
 };
 String SV_HELPTEXT_MINIMIZE
 {
@@ -155,6 +157,7 @@ String SV_HELPTEXT_MINIMIZE
     TEXT[ czech ] = "Minimalizovat";
     TEXT[ hebrew ] = "‮מיזעור‬";
     TEXT[ hindi ] = "छोटा करो";
+    TEXT[ slovak ] = "Minimalizovať";
 };
 
 String SV_HELPTEXT_MAXIMIZE
@@ -186,6 +189,7 @@ String SV_HELPTEXT_MAXIMIZE
     TEXT[ czech ] = "Maximalizovat";
     TEXT[ hebrew ] = "‮מירוב‬";
     TEXT[ hindi ] = "बड़ा करो";
+    TEXT[ slovak ] = "Maximalizovať";
 };
 
 String SV_HELPTEXT_RESTORE
@@ -217,6 +221,7 @@ String SV_HELPTEXT_RESTORE
     TEXT[ czech ] = "Obnovit";
     TEXT[ hebrew ] = "‮שיחזור‬";
     TEXT[ hindi ] = "पूर्व अवस्था में पहुँचाना";
+    TEXT[ slovak ] = "Obnoviť";
 };
 
 String SV_HELPTEXT_ROLLDOWN
@@ -227,7 +232,7 @@ String SV_HELPTEXT_ROLLDOWN
     TEXT[ portuguese_brazilian ] = "Abrir";
     TEXT[ portuguese ] = "Abrir";
     TEXT[ danish ] = "Klap ud";
-    TEXT[ french ] = "Agrandir";
+    TEXT[ french ] = "D�rouler";
     TEXT[ swedish ] = "Visa";
     TEXT[ dutch ] = "Openslaan";
     TEXT[ spanish ] = "Mostrar";
@@ -248,6 +253,7 @@ String SV_HELPTEXT_ROLLDOWN
     TEXT[ czech ] = "Rozbalit";
     TEXT[ hebrew ] = "‮נגלל מטה‬";
     TEXT[ hindi ] = "नीचे गिराओ";
+    TEXT[ slovak ] = "Stránkovanie dole";
 };
 
 String SV_HELPTEXT_ROLLUP
@@ -279,6 +285,7 @@ String SV_HELPTEXT_ROLLUP
     TEXT[ czech ] = "Srolovat";
     TEXT[ hebrew ] = "‮נגלל מעלה‬";
     TEXT[ hindi ] = "ऊपर लपेटो";
+    TEXT[ slovak ] = "Zrolovať";
 };
 
 String SV_HELPTEXT_HELP
@@ -310,6 +317,7 @@ String SV_HELPTEXT_HELP
     TEXT[ czech ] = "Nápověda";
     TEXT[ hebrew ] = "‮עזרה‬";
     TEXT[ hindi ] = "सहायता";
+    TEXT[ slovak ] = "Pomocník";
 };
 
 String SV_HELPTEXT_ALWAYSVISIBLE
@@ -341,6 +349,7 @@ String SV_HELPTEXT_ALWAYSVISIBLE
     TEXT[ czech ] = "Vždy viditelné";
     TEXT[ hebrew ] = "‮תמיד מוצג‬";
     TEXT[ hindi ] = "हमेशा दृष्टिगोचर ";
+    TEXT[ slovak ] = "Vždy viditeľné";
 };
 
 String SV_HELPTEXT_FADEIN
@@ -372,6 +381,7 @@ String SV_HELPTEXT_FADEIN
     TEXT[ czech ] = "Zobrazit";
     TEXT[ hebrew ] = "‮הצגה‬";
     TEXT[ hindi ] = "दिखाओ";
+    TEXT[ slovak ] = "Zobraziť";
 };
 
 String SV_HELPTEXT_FADEOUT
@@ -403,6 +413,7 @@ String SV_HELPTEXT_FADEOUT
     TEXT[ czech ] = "Skrýt";
     TEXT[ hebrew ] = "‮הסתרה‬";
     TEXT[ hindi ] = "छिपाओ";
+    TEXT[ slovak ] = "Skryť";
 };
 
 String SV_HELPTEXT_SPLITFLOATING
@@ -434,6 +445,7 @@ String SV_HELPTEXT_SPLITFLOATING
     TEXT[ czech ] = "Plovoucí";
     TEXT[ hebrew ] = "‮צף‬";
     TEXT[ hindi ] = "फ्लोटिंग";
+    TEXT[ slovak ] = "Plávajúci";
 };
 
 String SV_HELPTEXT_SPLITFIXED
@@ -465,6 +477,7 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ czech ] = "Přilepit";
     TEXT[ hebrew ] = "‮קיבוע‬";
     TEXT[ hindi ] = "छिपकना";
+    TEXT[ slovak ] = "Prilepiť";
 };
 
 String SV_SHORTCUT_HELP
@@ -484,7 +497,7 @@ String SV_SHORTCUT_HELP
     TEXT[ turkish ] = "Yard�m";
     TEXT[ thai ] = "ช่วยเหลือ";
     TEXT[ greek ] = "�������";
-    TEXT[ dutch ] = "Help";
+    TEXT[ dutch ] = "Help-bestanden";
     TEXT[ french ] = "Aide";
     TEXT[ finnish ] = "Ohje";
     TEXT[ danish ] = "Hj�lp";
@@ -495,6 +508,7 @@ String SV_SHORTCUT_HELP
     TEXT[ czech ] = "Nápověda";
     TEXT[ hebrew ] = "‮עזרה‬";
     TEXT[ hindi ] = "सहायता";
+    TEXT[ slovak ] = "Pomocník";
 };
 
 String SV_SHORTCUT_CONTEXTHELP
@@ -506,7 +520,7 @@ String SV_SHORTCUT_CONTEXTHELP
     TEXT[ russian ] = "Context Help";
     TEXT[ spanish ] = "Ayuda contextual";
     TEXT[ italian ] = "Guida contestuale";
-    TEXT[ swedish ] = "Sammanhangsrelaterad hj�lp";
+    TEXT[ swedish ] = "Sammanhangshj�lp";
     TEXT[ polish ] = "Context Help";
     TEXT[ portuguese_brazilian ] = "Context Help";
     TEXT[ japanese ] = "状況依存ヘルプ";
@@ -525,6 +539,7 @@ String SV_SHORTCUT_CONTEXTHELP
     TEXT[ czech ] = "Kontextová nápověda";
     TEXT[ hebrew ] = "Kontexthilfe";
     TEXT[ hindi ] = "Context Help";
+    TEXT[ slovak ] = "Pomocník pre kontext";
 };
 
 String SV_SHORTCUT_ACTIVEHELP
@@ -555,6 +570,7 @@ String SV_SHORTCUT_ACTIVEHELP
     TEXT[ czech ] = "Rozšířené tipy";
     TEXT[ hebrew ] = "‮טיפים מורחבים‬";
     TEXT[ hindi ] = "विस्तृत सुझावें";
+    TEXT[ slovak ] = "Rozšírené tipy";
 };
 
 String SV_SHORTCUT_DOCKUNDOCK
@@ -585,6 +601,7 @@ String SV_SHORTCUT_DOCKUNDOCK
     TEXT[ czech ] = "Uchytit/Uvolnit okna";
     TEXT[ hebrew ] = "Fenster an-/abdocken";
     TEXT[ hindi ] = "Dock/Undock Windows";
+    TEXT[ slovak ] = "Ukotviť/uvoľniť okná";
 };
 
 String SV_SHORTCUT_NEXTSUBWINDOW
@@ -615,6 +632,7 @@ String SV_SHORTCUT_NEXTSUBWINDOW
     TEXT[ czech ] = "K následujícímu panelu nástrojů/oknu";
     TEXT[ hebrew ] = "Zur nächsten Symbolleiste/Fenster";
     TEXT[ hindi ] = "To Next Toolbar/Window";
+    TEXT[ slovak ] = "Na ďalší panel nástrojov/okno";
 };
 
 String SV_SHORTCUT_PREVSUBWINDOW
@@ -645,6 +663,7 @@ String SV_SHORTCUT_PREVSUBWINDOW
     TEXT[ czech ] = "K předchozímu panelu nástrojů/oknu";
     TEXT[ hebrew ] = "Zur vorigen Symbolleiste/Fenster";
     TEXT[ hindi ] = "To Previous Toolbar/Window";
+    TEXT[ slovak ] = "Na predchádzajúci panel nástrojov/okno";
 };
 
 String SV_SHORTCUT_TODOCUMENT
@@ -675,6 +694,7 @@ String SV_SHORTCUT_TODOCUMENT
     TEXT[ czech ] = "Do dokumentu";
     TEXT[ hebrew ] = "Zum Dokument";
     TEXT[ hindi ] = "To Document";
+    TEXT[ slovak ] = "Na dokument";
 };
 
 String SV_SHORTCUT_MENUBAR
@@ -705,7 +725,10 @@ String SV_SHORTCUT_MENUBAR
     TEXT[ czech ] = "Do lišty menu";
     TEXT[ hebrew ] = "Zur Menüleiste";
     TEXT[ hindi ] = "To Menu Bar";
+    TEXT[ slovak ] = "Na menu";
 };
+
+
 
 
 
