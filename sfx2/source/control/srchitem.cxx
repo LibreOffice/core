@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:03:05 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@
 #include <svtools/memberid.hrc>
 #include <tools/isolang.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define _SVX_SRCHITEM_CXX
 
@@ -164,15 +166,15 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           Locale(),
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
+    eFamily         ( SFX_STYLE_FAMILY_PARA ),
     nCommand        ( 0 ),
+    nCellType       ( SVX_SEARCHIN_FORMULA ),
+    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
+    bRowDirection   ( sal_True ),
+    bAllTables      ( sal_False ),
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
     bContent        ( sal_False ),
-    eFamily         ( SFX_STYLE_FAMILY_PARA ),
-    bRowDirection   ( sal_True ),
-    bAllTables      ( sal_False ),
-    nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bAsianOptions   ( FALSE )
 {
     EnableNotification( lcl_GetNotifyNames() );
@@ -239,15 +241,15 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     ConfigItem( OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
+    eFamily         ( rItem.eFamily ),
     nCommand        ( rItem.nCommand ),
+    nCellType       ( rItem.nCellType ),
+    nAppFlag        ( rItem.nAppFlag ),
+    bRowDirection   ( rItem.bRowDirection ),
+    bAllTables      ( rItem.bAllTables ),
     bBackward       ( rItem.bBackward ),
     bPattern        ( rItem.bPattern ),
     bContent        ( rItem.bContent ),
-    eFamily         ( rItem.eFamily ),
-    bRowDirection   ( rItem.bRowDirection ),
-    bAllTables      ( rItem.bAllTables ),
-    nCellType       ( rItem.nCellType ),
-    nAppFlag        ( rItem.nAppFlag ),
     bAsianOptions   ( rItem.bAsianOptions )
 {
     EnableNotification( lcl_GetNotifyNames() );
