@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:34:49 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text[ japanese ] = "ΈήΧΓή°Ό®έ‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ΈήΧΓή°Ό®έ‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚ΆΈήΧΓή°Ό®έ‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ±m¦βΉΟ®Χ¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C\n±z―ΰ°χΕά§σΏο¨ϊªΊ±m¦βΉΟ®Χ\n©ΞªΜΌW¥[¤@­Σ·sªΊ±m¦βΉΟ®Χ΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ ΚΟΡΜ Ηααζδ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ ΚΟΡΜ Ηααζδ ΗαγΝΟΟ \nΓζ ΕΦΗέΙ ΚΟΡΜ αζδ ΜΟνΟ.";
-    Text[ greek ] = "Η διαβάθμιση του χρώματος τροποποιήθηκε και δεν αποθηκεύτηκε. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση χρώματος \nή να προσθέσετε ";
+    Text[ greek ] = "Η διαβάθμιση του χρώματος τροποποιήθηκε και δεν αποθηκεύτηκε. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση χρώματος \nή να προσθέσετε μ ";
     Text[ korean ] = "±Χ¶σµ¥ΐΜΌΗΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ ±Χ¶σµ¥ΐΜΌΗΐ» Ί―°ζΗΟ°Ε³ª \n»υ ±Χ¶σµ¥ΐΜΌΗΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Gradyan deπiώtirildi ancak kaydedilmedi.\nSeηili gradyanύ deπiώtirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -240,6 +240,25 @@ String RID_SVXSTR_BITMAP
     Text = "Bitmap" ;
     Text [ ENGLISH ] = "Bitmap" ;
     Text [ english_us ] = "Bitmap" ;
+    Text[ portuguese ] = "Bitmap";
+    Text[ russian ] = "Bitmap";
+    Text[ greek ] = "Bitmap";
+    Text[ dutch ] = "Bitmap";
+    Text[ french ] = "Bitmap";
+    Text[ spanish ] = "Bitmap";
+    Text[ finnish ] = "Bittikartta";
+    Text[ italian ] = "Bitmap";
+    Text[ danish ] = "Bitmap";
+    Text[ swedish ] = "Bitmap";
+    Text[ polish ] = "Mapa bitowa";
+    Text[ portuguese_brazilian ] = "Bitmap";
+    Text[ japanese ] = "Λή―ΔΟ―Μί";
+    Text[ korean ] = "ΊρΖ®ΈΚ";
+    Text[ chinese_simplified ] = "Ξ»ΝΌ";
+    Text[ chinese_traditional ] = "ΒI°}ΉΟ";
+    Text[ turkish ] = "Bit eώlem";
+    Text[ arabic ] = "ΥζΡΙ δήΨνΙ";
+    Text[ catalan ] = "Bitmap";
 };
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
@@ -405,7 +424,7 @@ String RID_SVXSTR_LINESTYLE
     Text[ russian ] = "Ρςθλό λθνθθ";
     Text[ polish ] = "Styl linii";
     Text[ japanese ] = "ό½ΐ²Ω";
-    Text[ chinese_traditional ] = "½u±ψΌΛ¦΅";
+    Text[ chinese_traditional ] = "½u±ψ¦΅ΌΛ";
     Text[ arabic ] = "δγΨ ΗαΞΨ";
     Text[ greek ] = "Στυλ γραμμής";
     Text[ korean ] = "Ό± ΐ―Ηό";
@@ -434,7 +453,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξγξ ρςθλÿ λθνθθ:";
     Text[ polish ] = "Wpisz tutaj nazwκ dla nowego stylu linii:";
     Text[ japanese ] = "ό½ΐ²Ω‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
-    Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ½u±ψΌΛ¦΅Ώι¤J¤@­Σ¦WΊΩ΅G";
+    Text[ chinese_traditional ] = "½Π¦b¦Ή¬°·sªΊ½u±ψ¦΅ΌΛΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ δγΨ ΗαΞΨ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το στυλ γραμμής:";
     Text[ korean ] = "Ώ©±βΏ΅ »υ Ό± ΐ―ΗόΐΗ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
@@ -463,7 +482,7 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text[ russian ] = "Σδΰλθςό ρςθλό λθνθθ";
     Text[ polish ] = "Usuρ styl linii";
     Text[ japanese ] = "ό½ΐ²Ω‚Μν";
-    Text[ chinese_traditional ] = "§R°£½u±ψΌΛ¦΅";
+    Text[ chinese_traditional ] = "§R°£½u±ψ¦΅ΌΛ";
     Text[ arabic ] = "ΝΠέ δγΨ ΗαΞΨ";
     Text[ greek ] = "Διαγραφή στυλ γραμμής";
     Text[ korean ] = "Ό± ΐ―Ηό »θΑ¦";
@@ -492,7 +511,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξ ρςθλό λθνθθ?";
     Text[ polish ] = "Czy styl linii ma na pewno zostaζ usuniκty?";
     Text[ japanese ] = "‚±‚Μό½ΐ²Ω‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
-    Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψΌΛ¦΅΅H";
+    Text[ chinese_traditional ] = "―u­n§R°£³o­Σ½u±ψ¦΅ΌΛ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δγΨ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
     Text[ korean ] = "Ό± ΐ―Ηόΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -521,9 +540,9 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text[ russian ] = "Ρςθλό λθνθθ αϋλ θημενεν, νξ νε ρξυπΰνεν. \nΒϋ μξζεςε θημενθςό βϋαπΰννϋι\nθλθ δξαΰβθςό νξβϋι ρςθλό λθνθθ.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMoΏesz zmieniζ zaznaczony styl linii \nlub dodaζ nowy styl linii.";
     Text[ japanese ] = "ό‚Μ½ΐ²Ω‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ό‚Μ½ΐ²Ω‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚Άό‚Μ½ΐ²Ω‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
-    Text[ chinese_traditional ] = "³o­Σ½u±ψΌΛ¦΅¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψΌΛ¦΅\n©ΞªΜΌW¥[¤@­Σ·sªΊ½u±ψΌΛ¦΅΅C";
+    Text[ chinese_traditional ] = "³o­Σ½u±ψ¦΅ΌΛ¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψ¦΅ΌΛ\n©ΞªΜΌW¥[¤@­Σ·sªΊ½u±ψ¦΅ΌΛ΅C";
     Text[ arabic ] = "Κγ ΚΫννΡ δγΨ ΗαΞΨ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ δγΨ ΗαΞΨ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δγΨ ΞΨ ΜΟνΟ.";
-    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \nή να προσθέσετε ένα καινούριο στυλ γρα";
+    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \nή να προσθέσετε ένα καινούριο στυλ γραμ ";
     Text[ korean ] = "Ό± ΐ―ΗόΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ Ό± ΐ―Ηόΐ» Ί―°ζΗΟ°Ε³ª \n»υ Ό± ΐ―Ηόΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Ηizgi biηimi deπiώtirildi ancak kaydedilmedi. \nSeηili ηizgi biηimini deπiώtirebilir ya da \nyeni bir ηizgi biηimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -720,7 +739,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ japanese ] = "Κ―ΑέΈή‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½Κ―ΑέΈή‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚ΆΚ―ΑέΈή‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ³±Όv¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ³±Όv\n©ΞªΜΌW¥[¤@­Σ·sªΊ³±Όv΅C";
     Text[ arabic ] = "Κγ ΚΫννΡ ΗαδήΤ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ ΗαδήΤ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δήΤ ΜΟνΟ.";
-    Text[ greek ] = "Η γραμμοσκιά τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε την επιλεγμένη γραμμοσκιά \nή να προσθέσετε μια καινούρια γρα";
+    Text[ greek ] = "Η γραμμοσκιά τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε την επιλεγμένη γραμμοσκιά \nή να προσθέσετε μια καινούρια γραμ ";
     Text[ korean ] = "ΗΨΔªΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. \nΌ±ΕΓµΘ ΗΨΔªΐ» Ί―°ζΗΟ°Ε³ª \n»υ ΗΨΔªΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Tarama deπiώtirildi ancak kaydedilmedi.\nSeηili deseni deπiώtirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -776,7 +795,7 @@ String RID_SVXSTR_ADD
     Text[ russian ] = "Δξαΰβθςό";
     Text[ polish ] = "Dodaj";
     Text[ japanese ] = "’Η‰Α";
-    Text[ chinese_traditional ] = "ΌW¥[";
+    Text[ chinese_traditional ] = "·sΌW";
     Text[ arabic ] = "ΕΦΗέΙ";
     Text[ greek ] = "Προσθήκη";
     Text[ korean ] = "Γί°΅";
@@ -1052,11 +1071,11 @@ String RID_SVXSTR_LINEEND
     Text [ dutch ] = "Lijnuiteinde" ;
     Text [ spanish ] = "Fin de lνnea" ;
     Text [ english_us ] = "Arrowheads" ;
-    Text[ chinese_simplified ] = "Οί¶Λ";
+    Text[ chinese_simplified ] = "ΟίΜυΌύΝ·";
     Text[ russian ] = "Κξνεφ λθνθθ";
     Text[ polish ] = "Koρcσwki linii";
     Text[ japanese ] = "ό‚ΜI“_";
-    Text[ chinese_traditional ] = "½uΊέ";
+    Text[ chinese_traditional ] = "½u±ψ½bΐY";
     Text[ arabic ] = "δεΗνΙ ΗαΞΨ";
     Text[ greek ] = "Τέλος γραμμής";
     Text[ korean ] = "Ό± ³΅";
@@ -1081,11 +1100,11 @@ String RID_SVXSTR_DESC_LINEEND
     Text [ dutch ] = "Typ hier een naam voor het nieuwe lijnuiteinde:" ;
     Text [ spanish ] = "Inserte aquν el nombre para el nuevo fin de lνnea:" ;
     Text [ english_us ] = "Please enter a name for the new arrowhead:" ;
-    Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΟί¶ΛΚδΘλÒ»ΈφΓϋ³Ζ:";
+    Text[ chinese_simplified ] = "ΗλΔϊΤΪ΄ΛΞªΠΒµΔΟίΜυΌύΝ·ΚδΘλÒ»ΈφΓϋ³Ζ:";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, ρώδΰ νΰηβΰνθε νξβξγξ κξνφΰ λθνθθ:";
     Text[ polish ] = "Podaj nazwκ dla nowych koρcσwek linii:";
     Text[ japanese ] = "V‚µ‚Άό’[‚Μ–Ό‘O‚π‚±‚±‚Ι“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆF";
-    Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊ½uΊέΏι¤J¤@­Σ¦WΊΩ΅G";
+    Text[ chinese_traditional ] = "½Π¦b¦Ή¬°·s½u±ψ½bΐYΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαδεΗνΙ ΗαΜΟνΟΙ ααΞΨ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το νέο τέλος της γραμμής:";
     Text[ korean ] = "Ώ©±βΏ΅ »υ Ό± ³΅ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
@@ -1110,11 +1129,11 @@ String RID_SVXSTR_DEL_LINEEND
     Text [ dutch ] = "Lijnuiteinde verwijderen" ;
     Text [ spanish ] = "Eliminar fin de lνnea" ;
     Text [ english_us ] = "Delete line ends" ;
-    Text[ chinese_simplified ] = "ΙΎ³ύΟί¶Λ";
+    Text[ chinese_simplified ] = "ΙΎ³ύΟίΜυΌύΝ·";
     Text[ russian ] = "Σδΰλθςό κξνεφ λθνθθ";
     Text[ polish ] = "Usuρ koρcσwki linii";
     Text[ japanese ] = "ό’[‚Μν";
-    Text[ chinese_traditional ] = "§R°£½uΊέ";
+    Text[ chinese_traditional ] = "§R°£½u±ψ½bΐY";
     Text[ arabic ] = "ΝΠέ δεΗνΗΚ ΗαΞΨζΨ";
     Text[ greek ] = "Διαγραφή τέλους γραμμής";
     Text[ korean ] = "Ό± ³΅ »θΑ¦";
@@ -1139,11 +1158,11 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ dutch ] = "Wilt u het lijnuiteinde werkelijk wissen?" ;
     Text [ spanish ] = "ΏDesea realmente eliminar el final de lνnea?" ;
     Text [ english_us ] = "Do you want to delete the arrowhead?" ;
-    Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΟί¶Λ£Ώ";
+    Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΟίΜυΌύΝ·£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ςθο κξνφΰ λθνθθ?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ koρcσwki linii?";
     Text[ japanese ] = "‚±‚Μό’[‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
-    Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½uΊέ΅H";
+    Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψ½bΐY΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δεΗνΙ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί το τέλος της γραμμής;";
     Text[ korean ] = "Ό± ³΅ΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -1166,14 +1185,14 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text [ danish ] = "Piltypen er blevet ζndret, men ikke gemt. \nDu kan ζndre den markerede pil\n eller tilfψje en ny." ;
     Text [ portuguese ] = "O fim de linha foi modificado e nγo guardado.\nGuardar agora?" ;
     Text [ portuguese_brazilian ] = "Das Linienende wurde ge?ndert und nicht gesichert. \nM?hten Sie das Linienende jetzt sichern?" ;
-    Text[ chinese_simplified ] = "ΥβΈφΟί¶ΛÒΡΎ­ΈόΈΔ£¬µ«ΚΗΓ»ΣΠ±£΄ζ΅£\nΔϊÒªΟΦΤΪ±£΄ζΥβΈφΟί¶ΛΒπ£Ώ";
+    Text[ chinese_simplified ] = "ΥβΈφΟίΜυΌύΝ·ÒΡΎ­ΈόΈΔ£¬µ«ΚΗΓ»ΣΠ±£΄ζ΅£\nΔϊÒªΟΦΤΪ±£΄ζΥβΈφΟίΜυΌύΝ·£Ώ";
     Text[ russian ] = "Κξνεφ λθνθθ αϋλ θημενεν, νξ νε ρξυπΰνεν. \nΒϋ υξςθςε ρειχΰρ ρξυπΰνθςό κξνεφ λθνθθ?";
     Text[ polish ] = "Koρcσwki linii zosta³y zmienione i nie zapisane. \nCzy chcesz zmieniζ teraz koρcσwki linii?";
     Text[ japanese ] = "ό’[‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‚±‚Μό’[‚π΅‚·‚®•Ϋ‘¶‚µ‚ά‚·‚©B";
-    Text[ chinese_traditional ] = "³o­Σ½uΊέ¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C\n±z­n²{¦bΐx¦s³o­Σ½uΊέ΅H";
+    Text[ chinese_traditional ] = "³o­Σ½u±ψ½bΐY¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C\n±z­n²{¦bΐx¦s³o­Σ½u±ψ½bΐY΅H";
     Text[ arabic ] = "Κγ ΚΫννΡ δεΗνΙ ΗαΞΨ ζαγ νΚγ ΝέΩεΗ ΘΪΟ.\nεα ΚΡνΟ ΝέΩ δεΗνΙ ΗαΞΨ ΗαΒδΏ";
     Text[ greek ] = "Το τέλος γραμμής τροποποιήθηκε και δεν αποθηκεύτηκε.\nΘέλετε να το αποθηκεύσετε τώρα;";
-    Text[ korean ] = "Ό±ΐΗ Ύη³΅ΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω .\nΑφ±έ Ό± ³΅ΐ» ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Ό±ΐΗ ³΅ΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω .\nΑφ±έ Ό± ³΅ΐ» ΐϊΐεΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Ηizgi ucu deπiώtirildi ancak kaydedilmedi.\nΗizgi ucunu ώimdi kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El final de lνnea ha sido modificado pero no guardado. \nΏDesea guardar ahora el final de lνnea?";
@@ -1984,7 +2003,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "ΕυΈν΅΅Ή«΄Μ";
+    Text[ korean ] = "ΕυΈν Ή«΄Μ";
     Text[ chinese_simplified ] = "Λ®Σ΅";
     Text[ chinese_traditional ] = "¥­·Ζ";
     Text[ arabic ] = "ΪαΗγΙ γΗΖνΙ";
@@ -2035,7 +2054,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ polish ] = "Video dla Windows (*.avi)";
     Text[ portuguese_brazilian ] = "Video for Windows (*.avi)";
     Text[ japanese ] = "Video for Windows (*.avi)";
-    Text[ korean ] = "ΐ©µµΏμΏλ ΊρµπΏΐ (*.avi)";
+    Text[ korean ] = "ΐ©µµΏμΏλ µΏΏµ»σ(*.avi)";
     Text[ chinese_simplified ] = "Video for Windows (*.avi)";
     Text[ chinese_traditional ] = "Video for Windows (*.avi)";
     Text[ arabic ] = "ένΟνζ αά (*.avi) Windows";
@@ -2061,7 +2080,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ polish ] = "QuickTime Movie (*.mov)";
     Text[ portuguese_brazilian ] = "QuickTime Movie (*.mov)";
     Text[ japanese ] = "QuickTime Movie (*.mov)";
-    Text[ korean ] = "ΔόΕΈΐΣ΅΅Ή«Ίρ (*.mov)";
+    Text[ korean ] = "ΔόΕΈΐΣ µΏΏµ»σ(*.mov)";
     Text[ chinese_simplified ] = "QuickTime Movie (*.mov)";
     Text[ chinese_traditional ] = "QuickTime Movie (*.mov)";
     Text[ arabic ] = "QuickTime Movie (*.mov)";
@@ -2087,7 +2106,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ polish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ portuguese_brazilian ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ japanese ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
-    Text[ korean ] = "MPEG - µΏΏµ»σ΅΅Η¥ΑΨΘ­΅΅±Χ·μ (*.mpe;*.mpeg;*.mpg)";
+    Text[ korean ] = "MPEG - µΏΏµ»σ Η¥ΑΨΘ­ ±Χ·μ(*.mpe;*.mpeg;*.mpg)";
     Text[ chinese_simplified ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ chinese_traditional ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ arabic ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
@@ -2114,7 +2133,7 @@ String STR_EXTFILTER_ALL
     Text[ portuguese_brazilian ] = "<All>";
     Text[ japanese ] = "<‚·‚Χ‚Δ>";
     Text[ korean ] = "<ΈπµΞ>";
-    Text[ chinese_simplified ] = "<Θ«²Ώl>";
+    Text[ chinese_simplified ] = "<Θ«²Ώ>";
     Text[ chinese_traditional ] = "<¥ώ³΅>";
     Text[ arabic ] = "<Ηαία>";
     Text[ turkish ] = "<Tόmό>";
@@ -2904,15 +2923,15 @@ String RID_SVXSTR_GRFILTER_OPENERROR
     TEXT [ portuguese ] = "Impossνvel abrir ficheiro grαfico" ;
     TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
     TEXT [ danish ] = "Det er ikke muligt at εbne grafikfilen" ;
-    TEXT [ french ] = "Ouverture du fichier graphique impossible" ;
-    TEXT [ swedish ] = "Grafikfil kan inte φppnas" ;
+    TEXT [ french ] = "Impossible d'ouvrir le fichier graphique" ;
+    TEXT [ swedish ] = "Det gεr inte att φppna grafikfilen" ;
     TEXT [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
     TEXT [ spanish ] = "No es posible abrir el archivo grαfico" ;
     TEXT [ english_us ] = "Graphics file cannot be opened" ;
     TEXT[ chinese_simplified ] = "Ξή·¨΄ςΏªΝΌΠΞΞΔΌώ";
     TEXT[ russian ] = "Ξςκπϋςό γπΰτθχερκθι τΰιλ νε σδΰεςρÿ";
     TEXT[ polish ] = "Pliku graficznego nie moΏna otworzyζ";
-    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚πJ‚―‚ά‚Ή‚ρB";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚ΝJ‚―‚ά‚Ή‚ρB";
     TEXT[ chinese_traditional ] = "µLªk¶}±ÒΉΟ§ΞΐΙ®Χ";
     TEXT[ arabic ] = "αΗ νγίδ έΚΝ γαέ ΗαΡΣζγΗΚ";
     TEXT[ greek ] = "Το αρχείο γραφικού δεν είναι δυνατόν να ανοιχτεί";
@@ -2928,18 +2947,18 @@ String RID_SVXSTR_GRFILTER_IOERROR
     TEXT [ norwegian ] = "Can't read graphic file" ;
     TEXT [ italian ] = "Impossibile leggere il file grafico" ;
     TEXT [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
-    TEXT [ portuguese ] = "Impossνvel ler ficheiro grαfico" ;
+    TEXT [ portuguese ] = "Impossνvel ler o ficheiro grαfico" ;
     TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
     TEXT [ danish ] = "Det er ikke muligt at lζse grafikfilen" ;
-    TEXT [ french ] = "Lecture du fichier graphique impossible" ;
-    TEXT [ swedish ] = "Grafikfil kan inte lδsas" ;
+    TEXT [ french ] = "Impossible de lire le fichier graphique" ;
+    TEXT [ swedish ] = "Det gεr inte att lδsa grafikfil" ;
     TEXT [ dutch ] = "Grafisch bestand is onleesbaar" ;
     TEXT [ spanish ] = "No es posible leer el archivo grαfico" ;
     TEXT [ english_us ] = "Graphics file cannot be read" ;
     TEXT[ chinese_simplified ] = "Ξή·¨¶Α³φΝΌΠΞΞΔΌώ";
     TEXT[ russian ] = "Οπξχθςΰςό γπΰτθχερκθι τΰιλ νε σδΰεςρÿ";
     TEXT[ polish ] = "Pliku graficznego nie moΏna otworzyζ";
-    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚Ν“Η‚ί‚ά‚Ή‚ρB";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚Ν“Η‚έζ‚κ‚ά‚Ή‚ρB";
     TEXT[ chinese_traditional ] = "µLªkΕª¥XΉΟ§ΞΐΙ®Χ";
     TEXT[ arabic ] = "αΗ νγίδ ήΡΗΑΙ γαέ ΗαΡΣζγΗΚ";
     TEXT[ greek ] = "Η ανάγνωση του αρχείου γραφικού δεν είναι δυνατή";
@@ -2989,11 +3008,11 @@ String RID_SVXSTR_GRFILTER_VERSIONERROR
     TEXT [ swedish ] = "Grafikfilens version stφds inte" ;
     TEXT [ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund" ;
     TEXT [ spanish ] = "No se apoya la versiσn del archivo grαfico" ;
-    TEXT [ english_us ] = "Cannot support version of graphic file" ;
+    TEXT [ english_us ] = "This version of the graphics file is not supported" ;
     TEXT[ chinese_simplified ] = "²»Φ§³ΦΥβΈφΝΌΠΞΞΔΌώ°ζ±Ύ";
     TEXT[ russian ] = "Βεπρθÿ γπΰτθχερκξγξ τΰιλΰ νε οξδδεπζθβΰεςρÿ";
-    TEXT[ polish ] = "Wersja pliku graficznego nie bκdzie obs³ugiwana";
-    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚ΜΚή°Όή®έ‚ª»Ξί°Δ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
+    TEXT[ polish ] = "Wersja pliku graficznego nie jest obs³ugiwana";
+    TEXT[ japanese ] = "‰ζ‘Μ§²Ω‚ΜΚή°Όή®έ‚Ν»Ξί°Δ‚³‚κ‚ά‚Ή‚ρB";
     TEXT[ chinese_traditional ] = "¤£¤δ«ω³o­ΣΉΟ§ΞΐΙ®Χª©¥»";
     TEXT[ arabic ] = "αδ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
     TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
@@ -3012,7 +3031,7 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
     TEXT [ portuguese ] = "Filtro grαfico nγo encontrado" ;
     TEXT [ finnish ] = "Grafiikkasuodatinta ei lφytynyt" ;
     TEXT [ danish ] = "Grafikfilter blev ikke fundet" ;
-    TEXT [ french ] = "Filtre graphique introuvable" ;
+    TEXT [ french ] = "Filtre d'image non dιtectι" ;
     TEXT [ swedish ] = "Grafikfilter hittades inte" ;
     TEXT [ dutch ] = "Grafische filter niet gevonden" ;
     TEXT [ spanish ] = "No se encontrσ el filtro de imαgenes" ;
@@ -3040,13 +3059,13 @@ String RID_SVXSTR_GRFILTER_TOOBIG
     TEXT [ finnish ] = "Muisti ei riitδ kuvan lisδδmiseen" ;
     TEXT [ danish ] = "Ikke tilstrζkkelig hukommelse til at indsζtte grafik" ;
     TEXT [ french ] = "Mιmoire insuffisante pour l'insertion de l'image" ;
-    TEXT [ swedish ] = "Inte tillrδckligt med minne fφr att infoga grafiken" ;
+    TEXT [ swedish ] = "Inte tillrδckligt med minne fφr att infoga grafik" ;
     TEXT [ dutch ] = "Niet genoeg geheugen voor invoegen van grafische afbeelding." ;
     TEXT [ spanish ] = "No hay suficiente memoria para insertar la imagen" ;
     TEXT [ english_us ] = "Not enough memory to insert graphic" ;
     TEXT[ chinese_simplified ] = "ΔΪ΄ζ²»Χγ£¬Ξή·¨²εΘλΝΌΠΞ";
     TEXT[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ δλÿ βρςΰβκθ πθρσνκΰ";
-    TEXT[ polish ] = "Brakuje pamiκci do wstawienia grafiki";
+    TEXT[ polish ] = "Brakuje pamiκci potrzebnej do wstawienia grafiki";
     TEXT[ japanese ] = "}‚π‘}“ό‚·‚ι‚Ι‚ΝAÒΣΨ—e—Κ‚ª•s\\•ª‚Ε‚·B";
     TEXT[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅MµLªk΄΅¤JΉΟ§Ξ";
     TEXT[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ αΕΟΡΗΜ ΗαΡΣγ";
@@ -3495,7 +3514,7 @@ String RID_SVXSTR_GRDT9
     Text[ japanese ] = "²σ –Ύ‚ι‚ΆΤ/”’";
     Text[ korean ] = "Γΰ ΉΰΐΊ ΐϋ»φ/Θς»φ";
     Text[ chinese_simplified ] = "ΦαΟς Η³Ίμ/°Χ";
-    Text[ chinese_traditional ] = "¶b§Ξ²L¬υ¦β/¥Υ¦β";
+    Text[ chinese_traditional ] = "¶b¦V²L¬υ¦β/¥Υ¦β";
     Text[ arabic ] = "γΝζΡν ΓΝγΡ έΗΚΝ/ΓΘνΦ";
     Text[ turkish ] = "Eksen aηύk kύrmύzύ/beyaz";
     Text[ catalan ] = "Axial rojo claro/blanco";
@@ -3580,7 +3599,7 @@ String RID_SVXSTR_HATCH0
     Text[ polish ] = "Czarny 45 stopni, rozciΉgniκty";
     Text[ portuguese_brazilian ] = "Black 45 Degrees Wide";
     Text[ japanese ] = "• 45“x •L";
-    Text[ korean ] = "°ΛΐΊ»φ 45µµ΅΅³ΠΐΊ";
+    Text[ korean ] = "°ΛΐΊ»φ 45µµ ³ΠΐΜ";
     Text[ chinese_simplified ] = "ΊΪΙ« 45 ¶Θ(ΏνΎΰ)";
     Text[ chinese_traditional ] = "¶Β¦β 45 «ΧΌe";
     Text[ arabic ] = "ΓΣζΟ 45 ΟΡΜΙ ζΗΣΪ";
@@ -4143,7 +4162,7 @@ String RID_SVXSTR_BMP7
     Text[ greek ] = "Σταγόνες";
     Text[ dutch ] = "Druppels";
     Text[ french ] = "Gouttelettes";
-    Text[ spanish ] = "Gota";
+    Text[ spanish ] = "Gotear";
     Text[ italian ] = "Gocce";
     Text[ danish ] = "Drεber";
     Text[ swedish ] = "Droppar";
@@ -4325,7 +4344,7 @@ String RID_SVXSTR_BMP14
     Text[ polish ] = "Plecionka";
     Text[ portuguese_brazilian ] = "Pattern";
     Text[ japanese ] = "–ƒD•¨";
-    Text[ korean ] = "Ώ«ΎξΒ§";
+    Text[ korean ] = "Ώ«ΎξΑό";
     Text[ chinese_simplified ] = "±ΰΦ―Ξο";
     Text[ chinese_traditional ] = "½sΒ΄ª«";
     Text[ arabic ] = "ΤΘίΙ";
@@ -4794,7 +4813,7 @@ String RID_SVXSTR_DASH8
     Text[ japanese ] = "ό‚Μ½ΐ²Ω 9";
     Text[ korean ] = "Ό± ΐ―Ηό 9";
     Text[ chinese_simplified ] = "ΟίΜυΚ½Ρω 9";
-    Text[ chinese_traditional ] = "½u±ψ­·®ζ 9";
+    Text[ chinese_traditional ] = "½u±ψ¦΅ΌΛ 9";
     Text[ arabic ] = "δγΨ ΗαΞΨ 9";
     Text[ turkish ] = "Ηizgi biηimi 9";
     Text[ catalan ] = "Estilo de lνnea 9";
@@ -5035,8 +5054,8 @@ String RID_SVXSTR_LEND3
     Text[ portuguese_brazilian ] = "Dimension Lines";
     Text[ japanese ] = "΅–@ό‚ΜI“_";
     Text[ korean ] = "Δ΅ΌφΌ±";
-    Text[ chinese_simplified ] = "³ί΄ηΟίΜυ";
-    Text[ chinese_traditional ] = "¤Ψ«Χ½u±ψ";
+    Text[ chinese_simplified ] = "¶¨³ί΄ηΟίΜυ";
+    Text[ chinese_traditional ] = "©w¤Ψ¤o½u±ψ";
     Text[ arabic ] = "ΞΨζΨ ήνΗΣ";
     Text[ turkish ] = "Boyutlandύrma ηizgileri";
     Text[ catalan ] = "Fines de dimensiones";
@@ -5283,5 +5302,6 @@ String RID_SVXSTR_TRASNGR0
 };
 
  // ********************************************************************** EOF
+
 
 
