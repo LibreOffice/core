@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 17:21:24 $
+ *  last change: $Author: mba $ $Date: 2001-03-21 11:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,10 @@ SfxApplication::SfxApplication()
     International aOldInter( Application::GetAppInternational() );
     String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
     LanguageType eLanguage = (LanguageType) sLanguage.ToInt32();
-    Application::SetAppInternational( International( eLanguage, aOldInter.GetFormatLanguage() ) );
+    if ( Application::IsRemoteServer() )
+        Application::SetAppInternational( International( eLanguage, eLanguage ) );
+    else
+        Application::SetAppInternational( International( eLanguage, aOldInter.GetFormatLanguage() ) );
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
