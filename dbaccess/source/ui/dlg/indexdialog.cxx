@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 10:04:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,17 @@ namespace dbaui
     {
     }
 
+    extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars);
     //------------------------------------------------------------------
     sal_Bool DbaIndexList::EditedEntry( SvLBoxEntry* _pEntry, const String& _rNewText )
     {
+        // first check if this is valid SQL92 name
+        for(xub_StrLen i=0;i < _rNewText.Len();++i)
+        {
+            if(!isCharOk(_rNewText.GetBuffer()[i],i == 0,sal_False,::rtl::OUString()))
+                return sal_False;
+        }
+
         sal_Bool bReturn = SvTreeListBox::EditedEntry(_pEntry, _rNewText);
         SvTreeListBox::SetEntryText(_pEntry, _rNewText);
 
@@ -201,7 +209,7 @@ namespace dbaui
     //==================================================================
     //------------------------------------------------------------------
     DbaIndexDialog::DbaIndexDialog(Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
-        const Reference< XNameAccess >& _rxIndexes, const Reference< XMultiServiceFactory >& _rxORB)
+        const Reference< XNameAccess >& _rxIndexes, const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
         ,m_aActions                         (this, ResId(TLB_ACTIONS))
@@ -211,7 +219,7 @@ namespace dbaui
         ,m_aDescription                     (this, ResId(FT_DESCRIPTION))
         ,m_aUnique                          (this, ResId(CB_UNIQUE))
         ,m_aFieldsLabel                     (this, ResId(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ResId(CTR_FIELDS)))
+        ,m_pFields(new IndexFieldsControl   (this, ResId(CTR_FIELDS),_nMaxColumnsInIndex))
         ,m_aClose                           (this, ResId(PB_CLOSE))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
@@ -229,7 +237,19 @@ namespace dbaui
         m_aIndexes.SetHighlightRange();
         m_pFields->Init(_rFieldNames);
 
-        m_pIndexes = new OIndexCollection(_rxIndexes);
+        m_pIndexes = new OIndexCollection();
+        try
+        {
+            m_pIndexes->attach(_rxIndexes);
+        }
+        catch(SQLException& e)
+        {
+            ::dbaui::showError(SQLExceptionInfo(e),_pParent,_rxORB);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
+        }
         fillIndexList();
 
         m_aUnique.SetClickHdl(LINK(this, DbaIndexDialog, OnModified));
@@ -809,6 +829,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/29 10:04:47  fs
+ *  corrected some minor issues
+ *
  *  Revision 1.3  2001/03/22 07:44:54  avy
  *  Some error checked for linux
  *

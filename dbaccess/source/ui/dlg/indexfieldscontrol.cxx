@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:00:13 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,12 @@ namespace dbaui
     //= IndexFieldsControl
     //==================================================================
     //------------------------------------------------------------------
-    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId )
+    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex)
         :DbBrowseBox(_pParent, _rId, DBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
         ,m_pFieldNameCell(NULL)
+        ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
     {
     }
 
@@ -226,7 +227,8 @@ namespace dbaui
         // insert rows for the the fields
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
-        RowInserted(GetRowCount(), 1, sal_False);
+        if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
+            RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 
         GoToRowColumnId(0, COLUMN_ID_FIELDNAME);
@@ -459,9 +461,9 @@ namespace dbaui
 
                 OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == nRowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
-                if (sSelectedEntry.Len() && (nCurrentRow == nRowCount - 1))
+                if (sSelectedEntry.Len() && (nCurrentRow == nRowCount - 1) && (!m_nMaxColumnsInIndex || nRowCount < m_nMaxColumnsInIndex ) )
                 {   // in the last row, an non-empty string has been selected
-                    // -> insert a bew row
+                    // -> insert a new row
                     m_aFields.push_back(OIndexField());
                     RowInserted(GetRowCount(), 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
@@ -508,6 +510,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/19 06:00:13  fs
+ *  no controller if not enabled
+ *
  *  Revision 1.1  2001/03/16 16:23:31  fs
  *  initial checkin - index design dialog and friends
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:02:09 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,13 +156,13 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
-
     public:
         DbaIndexDialog(
             Window* _pParent,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rFieldNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            sal_Int32 _nMaxColumnsInIndex
             );
         ~DbaIndexDialog();
 
@@ -203,6 +203,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/19 06:02:09  fs
+ *  +implCheckPlausibility
+ *
  *  Revision 1.1  2001/03/16 16:21:52  fs
  *  initial checkin - index design related classes
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:01:51 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ namespace dbaui
         // construction
         OIndexCollection();
         OIndexCollection(const OIndexCollection& _rSource);
-        OIndexCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
+        //  OIndexCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
 
         const OIndexCollection& operator=(const OIndexCollection& _rSource);
 
@@ -181,6 +181,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/19 06:01:51  fs
+ *  move OIndexField and OIndex into indexes.hxx
+ *
  *  Revision 1.1  2001/03/16 16:21:44  fs
  *  initial checkin - index design related classes
  *

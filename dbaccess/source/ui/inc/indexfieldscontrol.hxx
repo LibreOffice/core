@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:22:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,18 @@ namespace dbaui
         IndexFields                 m_aFields;          // !! order matters !!
         ConstIndexFieldsIterator    m_aSeekRow;         // !!
 
+        Link                        m_aModifyHdl;
+
         DbListBoxCtrl*              m_pSortingCell;
         DbListBoxCtrl*              m_pFieldNameCell;
 
         String                      m_sAscendingText;
         String                      m_sDescendingText;
 
-        Link                        m_aModifyHdl;
+        sal_Int32                   m_nMaxColumnsInIndex;
 
     public:
-        IndexFieldsControl( Window* _pParent, const ResId& _rId );
+        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex);
         ~IndexFieldsControl();
 
         void Init(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rAvailableFields);
@@ -140,6 +142,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:22:00  fs
+ *  initial checkin - index design related classes
+ *
  *
  *  Revision 1.0 07.03.01 14:21:34  fs
  ************************************************************************/

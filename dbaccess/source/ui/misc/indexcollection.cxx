@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-30 13:56:42 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,10 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
-    {
-        implConstructFrom(_rxIndexes);
-    }
+//  OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
+//  {
+//      implConstructFrom(_rxIndexes);
+//  }
 
     //------------------------------------------------------------------
     const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
@@ -423,32 +423,25 @@ namespace dbaui
         m_xIndexes = _rxIndexes;
         if (m_xIndexes.is())
         {
-            try
+            // loop through all the indexes
+            Sequence< ::rtl::OUString > aNames = m_xIndexes->getElementNames();
+            const ::rtl::OUString* pNames = aNames.getConstArray();
+            const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+            for (; pNames < pEnd; ++pNames)
             {
-                // loop through all the indexes
-                Sequence< ::rtl::OUString > aNames = m_xIndexes->getElementNames();
-                const ::rtl::OUString* pNames = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-                for (; pNames < pEnd; ++pNames)
+                // extract the index object
+                Reference< XPropertySet > xIndex;
+                m_xIndexes->getByName(*pNames) >>= xIndex;
+                if (!xIndex.is())
                 {
-                    // extract the index object
-                    Reference< XPropertySet > xIndex;
-                    m_xIndexes->getByName(*pNames) >>= xIndex;
-                    if (!xIndex.is())
-                    {
-                        OSL_ENSURE(sal_False, "OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
-                        continue;
-                    }
-
-                    // fill the OIndex structure
-                    OIndex aCurrentIndex(*pNames);
-                    implFillIndexInfo(aCurrentIndex);
-                    m_aIndexes.push_back(aCurrentIndex);
+                    OSL_ENSURE(sal_False, "OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
+                    continue;
                 }
-            }
-            catch(Exception&)
-            {
-                OSL_ENSURE(sal_False, "OIndexCollection::implConstructFrom: could not retrieve basic information from the UNO collection!");
+
+                // fill the OIndex structure
+                OIndex aCurrentIndex(*pNames);
+                implFillIndexInfo(aCurrentIndex);
+                m_aIndexes.push_back(aCurrentIndex);
             }
         }
     }
@@ -461,6 +454,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/03/30 13:56:42  avy
+ *  Temporary variable added because of error during compiling under the Lunux
+ *
  *  Revision 1.2  2001/03/19 06:03:23  fs
  *  ensure that no fields occure twice when committing
  *
