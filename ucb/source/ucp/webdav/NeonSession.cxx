@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-26 15:48:06 $
+ *  last change: $Author: kso $ $Date: 2001-06-26 15:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,11 +791,11 @@ void NeonSession::GETWriter( void *         inUserData,
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        com::sun::star::uno::Reference<
-            XOutputStream > * theOutputStreamPtr =
-                static_cast< Reference< XOutputStream > * >( inUserData );
-        com::sun::star::uno::Reference<
-            XOutputStream > theOutputStream = *theOutputStreamPtr;
+        com::sun::star::uno::Reference< XOutputStream > * theOutputStreamPtr
+            = static_cast< com::sun::star::uno::Reference< XOutputStream > * >(
+                inUserData );
+        com::sun::star::uno::Reference< XOutputStream > theOutputStream =
+            *theOutputStreamPtr;
 
         const Sequence< sal_Int8 > theSequence( ( sal_Int8 *) inBuf, inLen );
         theOutputStream->writeBytes( theSequence );
