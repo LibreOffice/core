@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.11 $
+  *  $Revision: 1.12 $
   *
-  *  last change: $Author: cp $ $Date: 2001-10-08 15:04:06 $
+  *  last change: $Author: pl $ $Date: 2001-11-16 12:52:11 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -358,6 +358,10 @@ void PrinterGfx::drawVerticalizedText(
     double fSin = sin( -2.0*M_PI*nNormalAngle/3600 );
     double fCos = cos( -2.0*M_PI*nNormalAngle/3600 );
 
+    PrintFontManager &rMgr = PrintFontManager::get();
+    PrintFontInfo aInfo;
+    rMgr.getFontInfo( mnFontID, aInfo );
+
     Point aPoint( rPoint );
     for( int i = 0; i < nLen; )
     {
@@ -377,13 +381,17 @@ void PrinterGfx::drawVerticalizedText(
         }
         if( i < nLen )
         {
-            SetFont( mnFontID, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, nNormalAngle + nDeltaAngle,
+            int nOldWidth   = maVirtualStatus.mnTextWidth;
+            int nOldHeight  = maVirtualStatus.mnTextHeight;
+            SetFont( mnFontID, nTextScale,
+                     maVirtualStatus.mnTextHeight,
+                     nNormalAngle + nDeltaAngle,
                      mbTextVertical );
 
-            CharacterMetric aMetric;
-            PrintFontManager &rMgr = PrintFontManager::get();
-            rMgr.getMetrics( mnFontID, pStr + i, 1, &aMetric /* mbVertical */);
-            double nH = nTextScale * aMetric.height / 1000.0;
+//             CharacterMetric aMetric;
+//             rMgr.getMetrics( mnFontID, pStr + i, 1, &aMetric /* mbVertical */);
+//             double nH = nTextScale * aMetric.height / 1000.0;
+            double nH = nTextScale * aInfo.m_nAscend / 1000.0;
 
             Point aPos( aPoint );
             switch( nDeltaAngle )
@@ -403,6 +411,13 @@ void PrinterGfx::drawVerticalizedText(
                 aPoint.X() = rPoint.X() + ((double)pDeltaArray[i] * fCos);
                 aPoint.Y() = rPoint.Y() + ((double)pDeltaArray[i] * fSin);
             }
+
+            // swap text width/height again
+            SetFont( mnFontID,
+                     nOldHeight,
+                     nOldWidth,
+                     nNormalAngle,
+                     mbTextVertical );
         }
         i++;
         nLastPos = i;
