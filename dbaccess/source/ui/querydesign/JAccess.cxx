@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
@@ -85,7 +85,7 @@
 
 namespace dbaui
 {
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
@@ -149,7 +149,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return AccessibleRole::VIEWPORT;
+        return AccessibleRole::VIEW_PORT;
     }
     // -----------------------------------------------------------------------------
 }
