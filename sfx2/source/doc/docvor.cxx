@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 14:59:23 $
+ *  last change: $Author: dv $ $Date: 2001-04-05 14:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1435,12 +1435,13 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
 {
     String aPath;
+    String aExtension = DEFINE_CONST_UNICODE( "vor" );
+
     ULONG nBits = bOpen ? WB_OPEN | WB_3DLOOK : WB_SAVEAS | WB_3DLOOK;
     SfxFileDialog* pFileDlg = new SfxFileDialog( pDialog, nBits );
-    pFileDlg->SetDefaultExt( DEFINE_CONST_UNICODE( "vor" ) );
     pFileDlg->AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ), DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     const String aFilter( SfxResId( STR_TEMPLATE_FILTER ) );
-    pFileDlg->AddFilter( aFilter, DEFINE_CONST_UNICODE( "*.vor" ) );
+    pFileDlg->AddFilter( aFilter, DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
     pFileDlg->SetCurFilter( aFilter );
     if ( aLastDir.Len() || rFileName.Len() )
     {
@@ -1454,13 +1455,35 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
         else
             aObj.SetURL( rFileName );
 
+        if ( aObj.hasExtension() )
+        {
+            aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
+                                            INetURLObject::DECODE_WITH_CHARSET );
+            aObj.removeExtension();
+        }
+
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
         pFileDlg->SetPath( aObj.GetMainURL() );
     }
+
+    pFileDlg->SetDefaultExt( aExtension );
+
     if ( RET_OK == pFileDlg->Execute() )
     {
         aPath = pFileDlg->GetPath();
         INetURLObject aObj( aPath );
+
+        // we want to keep the original extension when exporting, the file open dialog
+        // always sets the extension to *.vor
+        if ( ! bOpen )
+        {
+            if ( aObj.hasExtension() )
+                aObj.removeExtension();
+
+            aObj.setExtension( aExtension );
+            aPath = aObj.GetMainURL();
+        }
+
         aObj.removeSegment();
         aLastDir = aObj.GetMainURL();
     }
