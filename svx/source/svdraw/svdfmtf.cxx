@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
             SetAttributes( pPath );
             aHatchAttr.Put( XFillStyleItem( XFILL_HATCH ) );
-            aHatchAttr.Put( XFillHatchItem( String(), XHatch( rHatch.GetColor(), eStyle,
+            aHatchAttr.Put( XFillHatchItem( &pModel->GetItemPool(), XHatch( rHatch.GetColor(), eStyle,
                                                               rHatch.GetDistance(), rHatch.GetAngle() ) ) );
             pPath->NbcSetAttributes(aHatchAttr,FALSE);
             InsertObj(pPath);
@@ -893,7 +893,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
 
                     SetAttributes( pPath );
                     aGradAttr.Put( XFillStyleItem( XFILL_GRADIENT ) );
-                    aGradAttr.Put( XFillGradientItem( String(), aXGradient ) );
+                    aGradAttr.Put( XFillGradientItem( &pModel->GetItemPool(), aXGradient ) );
                     pPath->NbcSetAttributes(aGradAttr,FALSE);
                     InsertObj(pPath);
                 }

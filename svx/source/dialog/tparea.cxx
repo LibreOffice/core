@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
                 100, 100);
 
     String aString;
-    XFillFloatTransparenceItem aItem(aString, aTmpGradient);
+    XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aTmpGradient);
     rXFSet.Put ( aItem );
 
     InvalidatePreview();
@@ -436,7 +436,7 @@ BOOL SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
                         100, 100);
 
             String aString;
-            XFillFloatTransparenceItem aItem(aString, aTmpGradient);
+            XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aTmpGradient);
             const SfxPoolItem* pOld = GetOldItem(rAttrs, XATTR_FILLFLOATTRANSPARENCE);
 
             if(!pOld || !(*(const XFillFloatTransparenceItem*)pOld == aItem) || !bGradActive)
@@ -462,7 +462,7 @@ BOOL SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
         aGrad.SetStartIntens(100);
         aGrad.SetEndIntens(100);
         String aString;
-        XFillFloatTransparenceItem aItem(aString, aGrad);
+        XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aGrad);
         aItem.SetEnabled(FALSE);
         rAttrs.Put(aItem);
         bModified = TRUE;

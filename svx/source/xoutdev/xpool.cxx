@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: pw $ $Date: 2000-10-12 11:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,11 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
 
     // LineItems
     ppPoolDefaults[XATTR_LINESTYLE          -XATTR_START] = new XLineStyleItem;
-    ppPoolDefaults[XATTR_LINEDASH           -XATTR_START] = new XLineDashItem(aNullStr,aNullDash);
+    ppPoolDefaults[XATTR_LINEDASH           -XATTR_START] = new XLineDashItem(this,aNullDash);
     ppPoolDefaults[XATTR_LINEWIDTH          -XATTR_START] = new XLineWidthItem;
     ppPoolDefaults[XATTR_LINECOLOR          -XATTR_START] = new XLineColorItem(aNullStr,aNullLineCol);
-    ppPoolDefaults[XATTR_LINESTART          -XATTR_START] = new XLineStartItem(aNullStr,aNullPol);
-    ppPoolDefaults[XATTR_LINEEND            -XATTR_START] = new XLineEndItem  (aNullStr,aNullPol);
+    ppPoolDefaults[XATTR_LINESTART          -XATTR_START] = new XLineStartItem(this,aNullPol);
+    ppPoolDefaults[XATTR_LINEEND            -XATTR_START] = new XLineEndItem  (this,aNullPol);
     ppPoolDefaults[XATTR_LINESTARTWIDTH     -XATTR_START] = new XLineStartWidthItem;
     ppPoolDefaults[XATTR_LINEENDWIDTH       -XATTR_START] = new XLineEndWidthItem;
     ppPoolDefaults[XATTR_LINESTARTCENTER    -XATTR_START] = new XLineStartCenterItem;
@@ -224,9 +224,9 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
     // FillItems
     ppPoolDefaults[XATTR_FILLSTYLE              -XATTR_START] = new XFillStyleItem;
     ppPoolDefaults[XATTR_FILLCOLOR              -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
-    ppPoolDefaults[XATTR_FILLGRADIENT           -XATTR_START] = new XFillGradientItem(aNullStr,aNullGrad);
-    ppPoolDefaults[XATTR_FILLHATCH              -XATTR_START] = new XFillHatchItem   (aNullStr,aNullHatch);
-    ppPoolDefaults[XATTR_FILLBITMAP             -XATTR_START] = new XFillBitmapItem  (aNullStr,aNullBmp);
+    ppPoolDefaults[XATTR_FILLGRADIENT           -XATTR_START] = new XFillGradientItem(this,aNullGrad);
+    ppPoolDefaults[XATTR_FILLHATCH              -XATTR_START] = new XFillHatchItem   (this,aNullHatch);
+    ppPoolDefaults[XATTR_FILLBITMAP             -XATTR_START] = new XFillBitmapItem  (this,aNullBmp);
     ppPoolDefaults[XATTR_FILLTRANSPARENCE       -XATTR_START] = new XFillTransparenceItem;
     ppPoolDefaults[XATTR_GRADIENTSTEPCOUNT      -XATTR_START] = new XGradientStepCountItem;
     ppPoolDefaults[XATTR_FILLBMP_TILE           -XATTR_START] = new XFillBmpTileItem;
@@ -239,7 +239,7 @@ void XOutdevItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttr
     ppPoolDefaults[XATTR_FILLBMP_STRETCH        -XATTR_START] = new XFillBmpStretchItem;
     ppPoolDefaults[XATTR_FILLBMP_POSOFFSETX     -XATTR_START] = new XFillBmpPosOffsetXItem;
     ppPoolDefaults[XATTR_FILLBMP_POSOFFSETY     -XATTR_START] = new XFillBmpPosOffsetYItem;
-    ppPoolDefaults[XATTR_FILLFLOATTRANSPARENCE  -XATTR_START] = new XFillFloatTransparenceItem( aNullStr, aNullGrad, FALSE );
+    ppPoolDefaults[XATTR_FILLFLOATTRANSPARENCE  -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, FALSE );
 
     // Reserven fuer FillItems
     ppPoolDefaults[XATTR_FILLRESERVED2          -XATTR_START] = new SfxVoidItem(XATTR_FILLRESERVED2);
