@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:49:39 $
+ *  last change: $Author: nn $ $Date: 2002-05-24 14:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
 #endif
 
 #include <sfx2/viewfrm.hxx>
@@ -170,7 +173,17 @@ SfxPopupWindow* SvxTbxCtlDraw::CreatePopupWindow()
 void SvxTbxCtlDraw::Select( BOOL bMod1 )
 {
     if ( nLastAction )
+    {
         GetBindings().GetDispatcher()->Execute( nLastAction,
             SFX_CALLMODE_SLOT, NULL, ( bMod1 ? KEY_MOD1 : 0 ) );
+
+        if ( bMod1 )
+        {
+            //  #99013# if selected with control key, return focus to current view
+            Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+            if ( pShellWnd )
+                pShellWnd->GrabFocus();
+        }
+    }
 }
 
