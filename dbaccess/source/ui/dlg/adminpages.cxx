@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,7 @@
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
-
+#include <algorithm>
 #include <stdlib.h>
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -112,7 +109,18 @@
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
 #endif
-
+#ifndef _SV_FIELD_HXX
+#include <vcl/field.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -120,11 +128,9 @@ namespace dbaui
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::container;
     using namespace ::dbtools;
     using namespace ::svt;
 
@@ -143,8 +149,8 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
-        ,m_pToolBox( NULL )
-        ,m_pKeyAccel( NULL )
+        ,m_pAdminDialog(NULL)
+        ,m_pItemSetHelper(NULL)
     {
         SetExchangeSupport(sal_True);
     }
@@ -152,8 +158,6 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
-        if ( m_pKeyAccel )
-            delete m_pKeyAccel;
     }
 
     //-------------------------------------------------------------------------
@@ -174,7 +178,14 @@ namespace dbaui
     {
         implInitControls(_rCoreAttrs, sal_False);
     }
-
+    //-------------------------------------------------------------------------
+    void OGenericAdministrationPage::ActivatePage()
+    {
+        TabPage::ActivatePage();
+        OSL_ENSURE(m_pItemSetHelper,"NO ItemSetHelper set!");
+        if ( m_pItemSetHelper )
+            ActivatePage(*m_pItemSetHelper->getOutputSet());
+    }
     //-------------------------------------------------------------------------
     void OGenericAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
     {
@@ -209,101 +220,6 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::prepareConnectionAction( ODbAdminDialog* _pDialog, const String& _rActionDescription, OPageSettings** _pViewSettings )
-    {
-        sal_Bool bDeleteSettings = sal_True;
-        sal_Bool bContinueAction = sal_True;
-        if (_pDialog->isCurrentModified())
-        {
-            // the current data source is modified, so we need to save it in case we're
-            // about to do something which requires a connection
-            if (!_pDialog->isApplyable())
-            {
-                ErrorBox aError(this, ModuleRes(ERR_CANTDOTABLEACTION));
-                aError.Execute();
-            }
-            else
-            {
-                QueryBox aAskForSave(this, ModuleRes(QUERY_NEED_TO_SAVE_FILTER));
-                aAskForSave.SetText(_rActionDescription);
-                if (RET_YES == aAskForSave.Execute())
-                {
-                    _pDialog->applyChangesAsync(_pViewSettings ? *_pViewSettings : NULL);
-                    bDeleteSettings = sal_False;
-                }
-            }
-            bContinueAction = sal_False;
-        }
-
-        if (bDeleteSettings && _pViewSettings)
-        {
-            delete *_pViewSettings;
-            *_pViewSettings = NULL;
-        }
-        return bContinueAction;
-    }
-
-    // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::enableToolBoxAcceleration( ToolBox* _pDerivedClassToolBox )
-    {
-        DBG_ASSERT( !m_pKeyAccel && !m_pToolBox, "OGenericAdministrationPage::enableToolBoxAcceleration: already enabled!" );
-        if ( !m_pKeyAccel )
-        {
-            m_pKeyAccel = new Accelerator;
-            m_pKeyAccel->SetSelectHdl( LINK( this, OGenericAdministrationPage, OnAccelSelected ) );
-        }
-
-        m_pToolBox = _pDerivedClassToolBox;
-    }
-
-    // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::addToolboxAccelerator( sal_uInt16 _nToolboxItemId, const KeyCode& _rKey )
-    {
-        DBG_ASSERT( m_pKeyAccel && m_pToolBox, "OGenericAdministrationPage::addToolboxAccelerator: toolbox acceleration not enabled!" );
-        if ( !(m_pKeyAccel && m_pToolBox) )
-            return;
-
-        // assert that the toolbox knows this item
-        DBG_ASSERT( TOOLBOX_ITEM_NOTFOUND != m_pToolBox->GetItemPos( _nToolboxItemId ),
-            "OGenericAdministrationPage::addToolboxAccelerator: invalid id!" );
-        // assert that the accelerator does not know this item, yet
-        OSL_ENSURE( !m_pKeyAccel->IsIdValid( _nToolboxItemId ), "OGenericAdministrationPage::addToolboxAccelerator: already have this id!" );
-
-        // add the item to the accelerator
-        m_pKeyAccel->InsertItem( _nToolboxItemId, _rKey );
-    }
-
-    //------------------------------------------------------------------------
-    long OGenericAdministrationPage::PreNotify( NotifyEvent& _rNEvt )
-    {
-        if ( m_pKeyAccel )
-        {
-            if ( EVENT_KEYINPUT == _rNEvt.GetType() )
-            {
-                const KeyEvent* pEvent = _rNEvt.GetKeyEvent();
-                if ( m_pKeyAccel->Call( pEvent->GetKeyCode() ) )
-                    return 1;
-            }
-        }
-        return SfxTabPage::PreNotify( _rNEvt );
-    }
-
-    //------------------------------------------------------------------------
-    void OGenericAdministrationPage::onToolBoxAction( sal_uInt16 _nClickedItemId )
-    {
-    }
-
-    //------------------------------------------------------------------------
-    IMPL_LINK( OGenericAdministrationPage, OnAccelSelected, void*, NOTINTERESTEDIN )
-    {
-        sal_uInt16 nId = m_pKeyAccel->GetCurItemId();
-        if ( m_pToolBox && m_pToolBox->IsItemEnabled( nId ) )
-            onToolBoxAction( nId );
-
-        return 0L;
-    }
-
-    // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
     {
         callModifiedHdl();
@@ -335,7 +251,72 @@ namespace dbaui
         }
         return sal_True;
     }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
 
+        ::std::vector< ISaveValueWrapper* > aControlList;
+        if ( _bSaveValue )
+        {
+            fillControls(aControlList);
+            ::std::for_each(aControlList.begin(),aControlList.end(),TSaveValueWrapperFunctor());
+        }
+
+        if ( bReadonly )
+        {
+            fillWindows(aControlList);
+            ::std::for_each(aControlList.begin(),aControlList.end(),TDisableWrapperFunctor());
+        }
+
+        ::std::for_each(aControlList.begin(),aControlList.end(),TDeleteWrapperFunctor());
+        aControlList.clear();
+    }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess )
+    {
+    }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::initializePage()
+    {
+        OSL_ENSURE(m_pItemSetHelper,"NO ItemSetHelper set!");
+        if ( m_pItemSetHelper )
+            Reset(*m_pItemSetHelper->getOutputSet());
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OGenericAdministrationPage::commitPage(COMMIT_REASON _eReason)
+    {
+        return sal_True;
+    }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::fillBool(SfxItemSet& _rSet,CheckBox* _pCheckBox,USHORT _nID,sal_Bool& _bChangedSomething)
+    {
+        if( (_pCheckBox != NULL) && (_pCheckBox->GetState() != _pCheckBox->GetSavedValue()) )
+        {
+            _rSet.Put(SfxBoolItem(_nID, _pCheckBox->IsChecked()));
+            _bChangedSomething = sal_True;
+        }
+    }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething)
+    {
+        if( (_pEdit != NULL) && (_pEdit->GetValue() != _pEdit->GetSavedValue().ToInt32()) )
+        {
+            _rSet.Put(SfxInt32Item(_nID, _pEdit->GetValue()));
+            _bChangedSomething = sal_True;
+        }
+    }
+    // -----------------------------------------------------------------------
+    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething)
+    {
+        if( (_pEdit != NULL) && (_pEdit->GetText() != _pEdit->GetSavedValue()) )
+        {
+            _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
+            _bChangedSomething = sal_True;
+        }
+    }
 
 //.........................................................................
 }   // namespace dbaui
