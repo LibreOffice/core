@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
+ *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,7 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
     HRESULT hr = S_OK;
 
     if ( dwSaveOption && m_pClientSite )
-        hr = m_pClientSite->SaveObject();
-
-    if ( m_pDAdviseHolder )
-        m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, ADVF_DATAONSTOP );
+        hr = SaveObject(); // ADVF_DATAONSTOP);
 
     m_pDocHolder->CloseFrame();
 
@@ -142,7 +139,9 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject
 
 STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect )
 {
-    if ( iVerb == OLEIVERB_PRIMARY || iVerb == OLEIVERB_SHOW || iVerb == OLEIVERB_OPEN )
+    if ( iVerb == OLEIVERB_PRIMARY ||
+         iVerb == OLEIVERB_SHOW ||
+         iVerb == OLEIVERB_OPEN )
     {
         if( m_pDocHolder )
             m_pDocHolder->show();
@@ -297,10 +296,12 @@ STDMETHODIMP EmbedDocument_Impl::SetColorScheme( LOGPALETTE *pLogpal )
 
 // C++ - methods
 
-void EmbedDocument_Impl::SaveObject()
+HRESULT EmbedDocument_Impl::SaveObject()
 {
+    HRESULT hr = S_OK;
+
     if(m_pClientSite) {
-        m_pClientSite->SaveObject();
+        hr = m_pClientSite->SaveObject();
 
         for ( AdviseSinkHashMapIterator iAdvise =
                   m_aAdviseHashMap.begin();
@@ -311,6 +312,8 @@ void EmbedDocument_Impl::SaveObject()
     }
 
     notify();
+
+    return hr;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:09:42 $
+ *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ public:
     // c++ - methods
 
     void notify();
-    void SaveObject();
+    HRESULT SaveObject();
 
 protected:
     oslInterlockedCount                 m_refCount;

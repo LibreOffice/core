@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:18:27 $
+ *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 
 
 
-#define IUL 3
+#define IUL 5
 
 
 
@@ -88,6 +88,10 @@ Interceptor::Interceptor(EmbedDocument_Impl* pOLEInterface)
         RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAll"));
     m_aInterceptedURL[2] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
+    m_aInterceptedURL[3] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
+    m_aInterceptedURL[4] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
 }
 
 
@@ -104,7 +108,9 @@ Interceptor::dispatch(
     if(m_pOLEInterface)
         if(URL.Complete == m_aInterceptedURL[0])
             m_pOLEInterface->SaveObject();
-        else if(URL.Complete == m_aInterceptedURL[2])
+        else if(URL.Complete == m_aInterceptedURL[2] ||
+                URL.Complete == m_aInterceptedURL[3] ||
+                URL.Complete == m_aInterceptedURL[4])
             m_pOLEInterface->Close(1);
 }
 
@@ -167,6 +173,10 @@ Interceptor::queryDispatch(
         return (frame::XDispatch*)0   ;
     else if(URL.Complete == m_aInterceptedURL[2])
         return (frame::XDispatch*)this;
+    else if(URL.Complete == m_aInterceptedURL[3])
+        return (frame::XDispatch*)this;
+    else if(URL.Complete == m_aInterceptedURL[4])
+        return (frame::XDispatch*)this;
     else {
         if(m_xSlaveDispatchProvider.is())
             return m_xSlaveDispatchProvider->queryDispatch(
@@ -196,6 +206,10 @@ Interceptor::queryDispatches(
         else if(m_aInterceptedURL[1] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) 0;
         else if(m_aInterceptedURL[2] == Requests[i].FeatureURL.Complete)
+            aRet[i] = (frame::XDispatch*) this;
+        else if(m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete)
+            aRet[i] = (frame::XDispatch*) this;
+        else if(m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) this;
 
     return aRet;
