@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-22 10:45:15 $
+ *  last change: $Author: tl $ $Date: 2002-10-24 15:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,13 +1723,18 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_TAB_STOP_DISTANCE), RES_PARATR_TABSTOP,     CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
                     COMMON_HYPERLINK_PROPERTIES
-                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},    \
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_RULES), FN_UNO_NUM_RULES,     CPPU_E2T(CPPUTYPE_REFIDXREPL),  PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
                 for( SfxItemPropertyMap * pMap = aTextDefaultMap_Impl;
                         pMap->pName; ++pMap )
-                    pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+                {
+                    // UNO_NAME_PAGE_DESC_NAME should keep its MAYBEVOID flag
+                    if (!(RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId))
+                        pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+                }
             }
             break;
             case PROPERTY_MAP_REDLINE_PORTION :
