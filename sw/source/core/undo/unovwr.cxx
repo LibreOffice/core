@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:39:46 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include <docary.hxx>
 #endif
 
+#include <tools/resid.hxx>
+#include <comcore.hrc> // #111827#
+#include <undo.hrc>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
@@ -317,7 +320,6 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
         SetSaveData( *pDoc, *pRedlSaveData );
 }
 
-
 void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 {
     rUndoIter.pLastUndoObj = this;
@@ -381,6 +383,22 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
         pAktPam->SetMark();
         pAktPam->GetMark()->nContent = nSttCntnt;
     }
+}
+
+SwRewriter SwUndoOverwrite::GetRewriter() const
+{
+    SwRewriter aResult;
+
+    String aString;
+
+    aString += String(SW_RES(STR_START_QUOTE));
+    aString += ShortenString(aInsStr, nUndoStringLength,
+                             String(SW_RES(STR_LDOTS)));
+    aString += String(SW_RES(STR_END_QUOTE));
+
+    aResult.AddRule(UNDO_ARG1, aString);
+
+    return aResult;
 }
 
 //------------------------------------------------------------
