@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:23 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ public:
     */
     virtual void    UpdateTableList(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > _rxTables,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > _rxView);
+                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables,
+                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rViews);
 
 protected:
     virtual void Command( const CommandEvent& rEvt );
@@ -143,6 +143,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:09:23  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:15:45  fs
  ************************************************************************/
