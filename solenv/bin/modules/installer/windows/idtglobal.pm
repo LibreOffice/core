@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-07-02 13:46:50 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -447,7 +447,7 @@ sub get_language_string_from_language_block
 
     if ( $newstring eq "" )
     {
-        $language = "01";   # defaulting to english
+        $language = "en-US";    # defaulting to english
 
         for ( my $i = 0; $i <= $#{$language_block}; $i++ )
         {
@@ -898,6 +898,7 @@ sub set_custom_action
     my $included_customaction = 0;
     my $infoline = "";
     my $customaction_exefilename = $exefilename;
+    my $uniquename = "";
 
     # is the $exefilename a library that is included into the binary table
 
@@ -914,6 +915,7 @@ sub set_custom_action
         if ( $filename eq $exefilename )
         {
             $contains_file = 1;
+            $uniquename = ${$filesref}[$i]->{'uniquename'};
             last;
         }
     }
@@ -921,6 +923,8 @@ sub set_custom_action
     if ( $contains_file )
     {
         # Now the CustomAction can be included into the CustomAc.idt
+
+        if ( ! $inbinarytable ) { $customaction_exefilename = $uniquename; }    # the unique file name has to be added to the custom action table
 
         my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
         push(@{$customactionidttable}, $line);
