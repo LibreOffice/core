@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:33:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // include ------------------------------------------------------------------
 
 #include <limits.h>             // USHRT_MAX
@@ -159,7 +158,6 @@ int LoadGraphic( const String &rPath, const String &rFilterName,
     {
         // z.Z. nur auf die aktuelle DocShell
         pMed = new SfxMedium( rPath, STREAM_READ, TRUE );
-        pMed->SetTransferPriority( SFX_TFPRIO_SYNCHRON );
         pMed->DownLoad();
         pStream = pMed->GetInStream();
     }
