@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:59:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,8 @@ void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
         long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+        if( !nDPIY )
+            nDPIY = 600;
         nFontHeight *= 72;
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
@@ -492,6 +494,8 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
         long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+        if( !nDPIY )
+            nDPIY = 600;
         nFontHeight *= 72;
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
