@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:28:11 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class RangeNameBufferWK3;
 class ShrfmlaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;
+class ExcelToSc;
 class ExcExternDup;
 class ScExtDocOptions;
 
@@ -129,6 +130,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     RangeNameBuffer*    pRNameBuff;
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
+    ExcelToSc*          pFmlaConverter;
     const CharSet*      pCharset;               // actual charset (im- / export!)
     ScExtDocOptions*    pExtDocOpt;
 
