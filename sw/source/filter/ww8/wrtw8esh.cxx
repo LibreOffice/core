@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 13:54:59 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 10:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,66 +1412,63 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
-#if 0
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BACKGROUND, true, &pItem))
-#else
     if (pItem = rWrt.TrueFrameBgBrush(rFmt))
-#endif
     {
-        if( ((SvxBrushItem*)pItem)->GetGraphic() )
+        const SvxBrushItem *pBrush= (const SvxBrushItem*)pItem;
+        bool bSetOpacity = false;
+        sal_uInt32 nOpaque = 0;
+
+        if (const GraphicObject *pGraphicObject = pBrush->GetGraphicObject())
         {
+            ByteString aUniqueId = pGraphicObject->GetUniqueID();
+            if (aUniqueId.Len())
             {
-                Graphic aGraphic( *((SvxBrushItem*)pItem)->GetGraphic() );
-                GraphicObject aGraphicObject( aGraphic );
-                ByteString aUniqueId = aGraphicObject.GetUniqueID();
-
-                if ( aUniqueId.Len() )
+                const Graphic &rGraphic = pGraphicObject->GetGraphic();
+                Size aSize(rGraphic.GetPrefSize());
+                const MapMode aMap100mm(MAP_100TH_MM);
+                if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
                 {
-                     const MapMode aMap100mm( MAP_100TH_MM );
-                    Size aSize( aGraphic.GetPrefSize() );
-
-                    if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
-                    {
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(
-                            aSize, aMap100mm );
-                    }
-                    else
-                    {
-                        aSize = OutputDevice::LogicToLogic( aSize,
-                            aGraphic.GetPrefMapMode(), aMap100mm );
-                    }
-
-                    Point aEmptyPoint = Point();
-                    Rectangle aRect( aEmptyPoint, aSize );
-
-                    sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(),
-                        aUniqueId, aRect, 0 );
-                    if ( nBlibId )
-                        rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
+                    aSize = Application::GetDefaultDevice()->PixelToLogic(
+                        aSize, aMap100mm);
+                }
+                else
+                {
+                    aSize = OutputDevice::LogicToLogic(aSize,
+                        rGraphic.GetPrefMapMode(), aMap100mm);
                 }
 
+                Point aEmptyPoint = Point();
+                Rectangle aRect(aEmptyPoint, aSize);
+
+                sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
+                    aRect, 0);
+                if (nBlibId)
+                    rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
             }
+
+            if (nOpaque = pGraphicObject->GetAttr().GetTransparency())
+                bSetOpacity = true;
+
             rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
             rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
         }
         else
         {
-            UINT32 nFillColor = GetColor( ((SvxBrushItem*)pItem)->
-                                                    GetColor(), false);
+            UINT32 nFillColor = GetColor(pBrush->GetColor(), false);
             rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
             rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
 
-            if (((SvxBrushItem*)pItem)->GetColor().GetTransparency())
-            {
-                sal_uInt32 nOpaque =
-                    ((SvxBrushItem*)pItem)->GetColor().GetTransparency();
-                nOpaque = (nOpaque * 100) / 0xFE;
-                nOpaque = ((100 - nOpaque) << 16) / 100;
-                rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
-            }
+            if (nOpaque = pBrush->GetColor().GetTransparency())
+                bSetOpacity = true;
+        }
 
+        if (bSetOpacity)
+        {
+            nOpaque = (nOpaque * 100) / 0xFE;
+            nOpaque = ((100 - nOpaque) << 16) / 100;
+            rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
         }
     }
 

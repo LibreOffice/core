@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:44 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 10:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1928,6 +1928,18 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     Color Temp(COL_WHITE);
     SvxBrushItem aBrushItem(Temp);
     bool bBrushItemOk = false;
+    sal_uInt8 nTrans = 0;
+
+    //Seperate transparency
+    eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
+    if (eState == SFX_ITEM_SET)
+    {
+        sal_uInt16 nRes = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
+            XFillTransparenceItem);
+        nTrans = sal_uInt8((nRes * 0xFE) / 100);
+        aBrushItem.GetColor().SetTransparency(nTrans);
+        bBrushItemOk = true;
+    }
 
     // Hintergrund: SvxBrushItem
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
@@ -1938,7 +1950,6 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         switch (eFill)
         {
             case XFILL_NONE:
-//                aBrushItem.SetColor(Color(COL_TRANSPARENT));
                 aBrushItem.GetColor().SetTransparency(0xFE);
                 bBrushItemOk = true;
             break;
@@ -1947,6 +1958,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                     const Color aColor = WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR,
                         XFillColorItem);
                     aBrushItem.SetColor(aColor);
+
+                    if (bBrushItemOk) //has trans
+                        aBrushItem.GetColor().SetTransparency(nTrans);
+
                     bBrushItemOk = true;
                 }
             break;
@@ -1960,22 +1975,26 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
                         XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
                     bool bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
                         SfxBoolItem) ? true: false;
-                    aBrushItem.SetGraphic(aGraphic);
+                    GraphicObject aGrfObj(aGraphic);
+
+                    aBrushItem.SetGraphicObject(aGrfObj);
+
+                    if (bBrushItemOk) //has trans
+                    {
+                        GraphicObject *pGraphicObject =
+                            const_cast<GraphicObject *>
+                            (aBrushItem.GetGraphicObject());
+                        GraphicAttr aAttr(pGraphicObject->GetAttr());
+                        aAttr.SetTransparency(nTrans);
+                        pGraphicObject->SetAttr(aAttr);
+                    }
+
                     aBrushItem.SetGraphicPos(bTile ? GPOS_TILED : GPOS_AREA);
+
                     bBrushItemOk = true;
                 }
             break;
         }
-    }
-
-    //Seperate transparency
-    eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
-    if (eState == SFX_ITEM_SET)
-    {
-        sal_uInt16 nTrans = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
-            XFillTransparenceItem);
-        aBrushItem.GetColor().SetTransparency(sal_uInt8((nTrans * 0xFE) / 100));
-        bBrushItemOk = true;
     }
 
     if (bBrushItemOk)
