@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:00:37 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:45:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,7 +138,7 @@ $(DLLDEST)$/%.py: %.py
 # The python loader component is linked against libpyuno.dylib,
 # which hasn't been delivered yet but dyld needs to know where it is
 # so regcomp can load the component.
-$(DLLDEST)$/pyuno_services.rdb : makefile.mk
+$(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLLPOST)
     -rm -f $@ $(DLLDEST)$/pyuno_services.tmp $(DLLDEST)$/pyuno_services.rdb
 .IF "$(OS)"=="MACOSX"
     +cd $(DLLDEST) && sh -c "DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(OUT)$/lib;export DYLD_LIBRARY_PATH;regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
