@@ -39,17 +39,16 @@
   xml:lang CDATA #IMPLIED
 >
 
-<!ELEMENT group (info?, prop*, (node-ref | group | set)*)>
+<!ELEMENT group (info?, (prop | node-ref | group | set)*)>
 <!ATTLIST group
     oor:name CDATA #REQUIRED
     oor:extensible (true | false) #IMPLIED
 >
 
-<!ELEMENT set (info?, prop*, item*)>
+<!ELEMENT set (info?, item*)>
 <!ATTLIST set
     oor:name CDATA #REQUIRED
     oor:node-type NMTOKEN #REQUIRED
-    oor:extensible (true | false) #IMPLIED
     oor:component CDATA #IMPLIED
 >
 
