@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 16:27:58 $
+ *  last change: $Author: ka $ $Date: 2002-04-25 13:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,18 +230,6 @@ void SdViewShell::UpdateSlideChangeWindow()
                     break;
                 }
             }
-            /*
-            if (!(pPage->IsSelected()))
-            {
-                pPage = pDoc->GetSdPage(0, PK_STANDARD);
-                pDoc->SetSelected(pPage, TRUE);
-
-                // ist Selektion sichtbar?
-                if( this->ISA(SdSlideViewShell) )
-                {
-                    ((SdSlideView*)pView)->DrawSelectionRect((USHORT)0);
-                }
-            } */
 
             // ItemSet fuer Dialog (jetzt Window) fuellen
             SfxItemSet aSet(pDoc->GetPool(), ATTR_DIA_START, ATTR_DIA_END);
