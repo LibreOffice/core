@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:47:47 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svtools/urlbmk.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctloptions.hxx>
+#include <acorrcfg.hxx>
 
 #include <fhgtitem.hxx>
 #include <lrspitem.hxx>
@@ -2340,7 +2341,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
 {
     EditSelection aSel( rCurSel );
 #ifndef SVX_LIGHT
-    SvxAutoCorrect* pAutoCorrect = EE_DLL()->GetGlobalData()->GetAutoCorrect();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     if ( pAutoCorrect )
     {
         if ( aSel.HasRange() )
