@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:18:38 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,13 @@ void PropertyUpdate::removeValueFor(OUString const & _aLocale)
                 "PropertyUpdate: Locale being removed is not in this node.");
 
     m_aValues.erase(_aLocale);
+}
+// -----------------------------------------------------------------------------
+
+void PropertyUpdate::finishValue()
+{
+    if (m_aType.getTypeClass() == uno::TypeClass_ANY)
+        m_aType = uno::Type();
 }
 // -----------------------------------------------------------------------------
 
