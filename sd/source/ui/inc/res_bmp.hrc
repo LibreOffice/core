@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-02 13:03:49 $
+ *  last change: $Author: cl $ $Date: 2002-05-13 14:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // - Defines -
 // -----------
 
-#define IMAGE_MASK_STDCOLOR Color{ Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+#define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
 #define RID_TIME_BUTTON           RID_APP_START
 #define RID_ALIGNMENT             RID_APP_START+1
@@ -289,7 +289,25 @@
 #define IMG_ORDER                           RID_APP_START+7
 #define IMG_EFFECT_ACTIVE                   RID_APP_START+8
 #define IMG_TEXT_ACTIVE                     RID_APP_START+9
-
+#define IMG_APPLY_H                         RID_APP_START+10
+#define IMG_EFFECT_H                        RID_APP_START+11
+#define IMG_TEXT_H                          RID_APP_START+12
+#define IMG_EXTRAS_H                        RID_APP_START+13
+#define IMG_EFFECT_ORDER_H                  RID_APP_START+14
+#define IMG_PREVIEW_H                       RID_APP_START+15
+#define IMG_INVISIBLE_H                     RID_APP_START+16
+#define IMG_FADEOUT_H                       RID_APP_START+17
+#define IMG_SOUND_H                         RID_APP_START+18
+#define IMG_PLAYFULL_H                      RID_APP_START+19
+#define IMG_BROWSE_H                        RID_APP_START+20
+#define IMG_PIPETTE_H                       RID_APP_START+21
+#define IMG_GET1OBJECT_H                    RID_APP_START+22
+#define IMG_GETALLOBJECT_H                  RID_APP_START+23
+#define IMG_REMOVEBMP_H                     RID_APP_START+24
+#define IMG_REMOVEALLBMP_H                  RID_APP_START+25
+#define IMG_SLIDE_SEMI_H                    RID_APP_START+26
+#define IMG_SLIDE_AUTO_H                    RID_APP_START+27
+#define IMG_SLIDE_MANU_H                    RID_APP_START+28
 
 /*
  *  ResourceIDs fuer Popup-Menues brauchen keinen Dummy-String !!!
