@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 10:19:53 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 17:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,6 +1295,9 @@ void FmFilterNavigator::Update(const Reference< ::com::sun::star::container::XIn
     if (xCurrent == m_pModel->GetCurrentController())
         return;
 
+    if (m_aSelectTimer.IsActive())
+        m_aSelectTimer.Stop();
+
     m_pModel->Update(xControllers, xCurrent);
 
     // expand the filters for the current controller
@@ -1398,7 +1401,7 @@ IMPL_LINK( FmFilterNavigator, OnSelect, void*, EMPTYTAG )
 {
     // now activate the controller to be consistent
     sal_Bool bHadFocus = HasFocus();
-    Reference< ::com::sun::star::awt::XWindow >  xWindow(m_pModel->GetCurrentController(),  UNO_QUERY);
+    Reference< ::com::sun::star::awt::XWindow >  xWindow(m_pModel->GetCurrentController(), UNO_QUERY);
     if (xWindow.is())
         xWindow->setFocus();
     else
