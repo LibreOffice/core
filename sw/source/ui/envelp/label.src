@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-28 11:56:42 $
+ *  last change: $Author: nf $ $Date: 2001-08-28 12:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
     Text[ turkish ] = "Etiket"; \
     Text[ catalan ] = "Etiquetas";
 
- #define BUSINESS_CARD_STRING \
+#define BUSINESS_CARD_STRING \
     Text = "Visitenkarten" ;                            \
     Text [ ENGLISH ] = "Business cards" ;               \
     Text[ english_us ] = "Business cards";              \
