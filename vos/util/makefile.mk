@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2001-10-30 17:23:59 $
+#   last change: $Author: mh $ $Date: 2001-12-06 14:50:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COMID)
 SHL1IMPLIB=i$(TARGET)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS=wsock32.lib $(SALLIB) $(LIBCIMT)
+SHL1STDLIBS=wsock32.lib $(SALLIB)
 .ELSE
 SHL1STDLIBS=$(SALLIB)
 .ENDIF

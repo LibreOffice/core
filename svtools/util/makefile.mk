@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.28 $
+#*  $Revision: 1.29 $
 #*
-#*  last change: $Author: ka $ $Date: 2001-09-26 09:34:32 $
+#*  last change: $Author: mh $ $Date: 2001-12-06 14:47:37 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -77,11 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 USE_LDUMP2=TRUE
 
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
-
-# --- Allgemein ----------------------------------------------------
+# --- general section ----------------------------------------------------
 
 LIB1TARGET= $(LB)$/svmem.lib
 LIB1ARCHIV=  $(LB)$/libsvarray.a
@@ -105,7 +101,6 @@ LIB4OBJFILES=\
 .ENDIF
 
 LIB7TARGET= $(SLB)$/svt.lib
-#LIB7ARCHIV= $(LB)$/libsvt$(UPD)$(DLLPOSTFIX).a
 LIB7FILES=	\
         $(SLB)$/misc2.lib		\
         $(SLB)$/items2.lib		\
@@ -147,7 +142,6 @@ LIB7FILES+=$(SOLARLIBDIR)$/user9x.lib $(SOLARLIBDIR)$/tools32.lib
 .ENDIF
 
 LIB8TARGET= $(SLB)$/svl.lib
-#LIB8ARCHIV= $(LB)$/libsvl$(UPD)$(DLLPOSTFIX).a
 LIB8OBJFILES= \
             $(SLO)$/svtdata.obj \
             $(SLO)$/registerlight.obj
@@ -165,7 +159,7 @@ LIB8FILES=	\
         $(SLB)$/svsql.lib	\
         $(SLB)$/cmdparse.lib
 
-# Bilden der dyn. Resourcen-DLL --------------------------------------------------
+# generation of resourcen-lib ----------------------------------------
 
 RESLIB1NAME=	$(RESTARGET)
 RESLIB1SRSFILES=$(SRS)$/filter.srs  \
@@ -184,7 +178,7 @@ RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
     $(SRS)$/mediatyp.srs
 
-# Bilden der DLL --------------------------------------------------
+# build the shared library  --------------------------------------------------
 
 SHL1TARGET= svt$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
@@ -201,17 +195,8 @@ SHL1STDLIBS=$(TOOLSLIB)			\
             $(COMPHELPERLIB)		\
             $(UCBHELPERLIB)
 
-
-.IF "$(GUI)"=="WIN"
-SHL1STDLIBS+= \
-        $(LIBPRE) ddeml.lib \
-            $(LIBPRE) shell.lib 	\
-            $(LIBPRE) ver.lib
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        $(LIBCIMT) \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
 .ENDIF
@@ -220,8 +205,6 @@ SHL1STDLIBS+= \
             $(SOTLIB) \
             $(JPEG3RDLIB)
 
-#SHL1DEPNU=$(LB)$/isvl.lib
-#SHL1DEPNU=$(SHL2TARGETN)
 SHL1LIBS= \
         $(SLB)$/svt.lib 	\
         $(LB)$/svmem.lib
@@ -253,7 +236,6 @@ SHL2STDLIBS=$(TOOLSLIB) 	\
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
-        $(LIBCIMT) \
             $(LIBPRE) advapi32.lib	\
             $(LIBPRE) gdi32.lib
 .ENDIF
