@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:05:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ String SV_HELPTEXT_RESTORE
     TEXT[ english_us ] = "Restore";
     TEXT[ russian ] = "Âîññòàíîâèòü";
     TEXT[ polish ] = "Przywróæ";
-    TEXT[ japanese ] = "Œ³‚Ìó‘Ô‚É–ß‚·";
+    TEXT[ japanese ] = "‚â‚è’¼‚µ";
     TEXT[ chinese_simplified ] = "»Ö¸´";
     TEXT[ chinese_traditional ] = "«ì´_";
     TEXT[ greek ] = "ÅğáíáöïñÜ";
