@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:50:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,8 +761,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
 SvxCharNamePage::~SvxCharNamePage()
 {
-    if ( m_pImpl->m_bMustDelete )
-        delete m_pImpl->m_pFontList;
     delete m_pImpl;
 
     delete m_pWestLine;
@@ -876,9 +874,10 @@ const FontList* SvxCharNamePage::GetFontList() const
         /* #110771# SvxFontListItem::GetFontList can return NULL */
         if ( pDocSh && ( pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
         {
-            m_pImpl->m_pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
-            DBG_ASSERT(NULL != m_pImpl->m_pFontList,
+            DBG_ASSERT(NULL != ( (SvxFontListItem*)pItem )->GetFontList(),
                        "Where is the font list?")
+            m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
+            m_pImpl->m_bMustDelete = TRUE;
         }
         if(!m_pImpl->m_pFontList)
         {
@@ -1757,9 +1756,9 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
     if ( m_pImpl->m_bMustDelete )
     {
         delete m_pImpl->m_pFontList;
-        m_pImpl->m_bMustDelete = FALSE;
     }
-    m_pImpl->m_pFontList = rItem.GetFontList();
+    m_pImpl->m_pFontList = rItem.GetFontList()->Clone();
+    m_pImpl->m_bMustDelete = TRUE;
 }
 
 // -----------------------------------------------------------------------
