@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:32:14 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ static PyObject *createUnoStructHelper(PyObject *self, PyObject* args )
                     {
                         idl_class->createObject (IdlStruct);
                         PyUNO *me = (PyUNO*)PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation );
-                        ret = PyRef( (PyObject *) me , SAL_NO_ACQUIRE);
+                        PyRef returnCandidate( (PyObject*)me, SAL_NO_ACQUIRE );
                         if( PyTuple_Size( initializer ) > 0 )
                         {
                             TypeDescription desc( typeName );
@@ -180,6 +180,7 @@ static PyObject *createUnoStructHelper(PyObject *self, PyObject* args )
                                     buf.makeStringAndClear(), Reference< XInterface > ());
                             }
                         }
+                        ret = returnCandidate;
                     }
                     else
                     {
@@ -432,6 +433,7 @@ static PyObject *checkType( PyObject *self, PyObject *args )
         raisePyExceptionWithAny( makeAny( e ) );
         return NULL;
     }
+    Py_INCREF( Py_None );
     return Py_None;
 }
 
@@ -456,6 +458,7 @@ static PyObject *checkEnum( PyObject *self, PyObject *args )
         raisePyExceptionWithAny( makeAny( e) );
         return NULL;
     }
+    Py_INCREF( Py_None );
     return Py_None;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2003-05-24 23:31:19 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     }
     //We shouldn't be here...
+    Py_INCREF( Py_None );
     return Py_None;
 }
 
