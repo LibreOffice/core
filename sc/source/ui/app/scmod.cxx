@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-09 13:03:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-09 14:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,8 @@ void ScModule::Execute( SfxRequest& rReq )
                             ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
                             if ( pViewSh )
                                 pViewSh->UpdateDrawTextOutliner();      // EditEngine-Flags
+
+                            pDocSh->SetDocumentModified();
                         }
                     }
                 }
