@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text [ FRENCH ] = "Cr�ation d'un sc�nario" ;
     Text [ ITALIAN ] = "Crea scenario" ;
     Text [ DUTCH ] = "Scenario maken" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cen?rio" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cen�rio" ;
     Text [ SWEDISH ] = "Skapa scenario" ;
     Text [ PORTUGUESE ] = "Criar cen�rio" ;
     Moveable = TRUE ;
@@ -133,17 +133,20 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ italian ] = "Mostra cornice in";
         Text[ danish ] = "Vis ~ramme";
         Text[ swedish ] = "Visa ~ram";
-        Text[ polish ] = "Poka� ramk�";
-        Text[ portuguese_brazilian ] = "Rahmen anzeigen in";
+        Text[ polish ] = "Wy�wietl kraw�d� w";
+        Text[ portuguese_brazilian ] = "Exibir borda em";
         Text[ japanese ] = "枠を表示";
         Text[ korean ] = "테두리 표시";
         Text[ chinese_simplified ] = "显示边框";
         Text[ chinese_traditional ] = "顯示邊框";
-        Text[ turkish ] = "�er�eve rengi";
+        Text[ turkish ] = "�er�eve i�inde g�ster";
         Text[ arabic ] = "����� ������ ������";
         Text[ catalan ] = "Visualitza la vora en";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "แสดงผลเส้นขอบใน";
+        Text[ czech ] = "Zobrazovat okraje v";
+        Text[ hebrew ] = "~Rahmen anzeigen";
+        Text[ hindi ] = "किनारे को इसमें दिखाओ";
     };
     ListBox LB_COLOR
     {
@@ -161,7 +164,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "Rahmen drucken" ;
         Text [ ENGLISH ] = "Print frame" ;
         Text [ english_us ] = "Print border" ;
-        Text [ portuguese_brazilian ] = "Rahmen drucken" ;
+        Text [ portuguese_brazilian ] = "Imprimir borda" ;
         Text [ swedish ] = "Skriv ut ram" ;
         Text [ danish ] = "Udskriv ramme" ;
         Text [ italian ] = "Stampa cornice" ;
@@ -171,7 +174,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ portuguese ] = "Imprimir moldura" ;
         Text[ chinese_simplified ] = "打印边框";
         Text[ russian ] = "������ �����";
-        Text[ polish ] = "Drukuj ramk�";
+        Text[ polish ] = "Drukuj obramowanie";
         Text[ japanese ] = "枠の印刷";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "列印邊框";
@@ -182,6 +185,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Imprimeix la vora";
         Text[ finnish ] = "Tulosta reunus";
         Text[ thai ] = "พิมพ์เส้นขอบ";
+        Text[ czech ] = "Tisknout okraje";
+        Text[ hebrew ] = "Rahmen drucken";
+        Text[ hindi ] = "किनारे का छपाई";
     };
     CheckBox CB_TWOWAY
     {
@@ -191,7 +197,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "~Zur�ckkopieren" ;
         Text [ ENGLISH ] = "C~opy back" ;
         Text [ english_us ] = "Copy back" ;
-        Text [ portuguese_brazilian ] = "Zur?ckkopieren" ;
+        Text [ portuguese_brazilian ] = "Copiar de volta" ;
         Text [ swedish ] = "Kopiera t~illbaka" ;
         Text [ danish ] = "Kopier til~bage" ;
         Text [ italian ] = "Ricopia all'indietro" ;
@@ -212,6 +218,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Copia enrere";
         Text[ finnish ] = "Kopioi tausta";
         Text[ thai ] = "คัดลอกกลับ";
+        Text[ czech ] = "Kopírovat zpět";
+        Text[ hebrew ] = "~Zurückkopieren";
+        Text[ hindi ] = "फिर से प्रतिलिपि";
     };
     CheckBox CB_ATTRIB
     {
@@ -221,7 +230,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "Attribute" ;
         Text [ ENGLISH ] = "Atributes" ;
         Text [ english_us ] = "Attributes" ;
-        Text [ portuguese_brazilian ] = "Attribute" ;
+        Text [ portuguese_brazilian ] = "Atributos" ;
         Text [ swedish ] = "Attribut" ;
         Text [ danish ] = "Attributter" ;
         Text [ italian ] = "Attributi" ;
@@ -237,11 +246,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ arabic ] = "������";
         Text[ greek ] = "���������";
         Text[ korean ] = "속성";
-        Text[ turkish ] = "�znitelik";
+        Text[ turkish ] = "�znitelikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Atributs";
         Text[ finnish ] = "M��ritteet";
         Text[ thai ] = "คุณลักษณะ";
+        Text[ czech ] = "Atributy";
+        Text[ hebrew ] = "‮תכונות‬";
+        Text[ hindi ] = "ऐट्रिब्यूट्स";
     };
     CheckBox CB_VALUE
     {
@@ -251,7 +263,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "Nur Werte kopieren" ;
         Text [ ENGLISH ] = "Copy values only" ;
         Text [ english_us ] = "Copy values only" ;
-        Text [ portuguese_brazilian ] = "Nur Werte kopieren" ;
+        Text [ portuguese_brazilian ] = "Copiar somente os valores" ;
         Text [ swedish ] = "Kopiera endast v�rden" ;
         Text [ danish ] = "Kopier kun v�rdier" ;
         Text [ italian ] = "Copia solo i valori" ;
@@ -272,6 +284,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Copia nom�s els valors";
         Text[ finnish ] = "Kopioi vain arvot";
         Text[ thai ] = "คัดลอกค่าอย่างเดียว";
+        Text[ czech ] = "Kopírovat pouze hodnoty";
+        Text[ hebrew ] = "Nur Werte kopieren";
+        Text[ hindi ] = "केवल मूल्य का प्रतिलिपि बनाओ";
     };
     CheckBox CB_COPYALL
     {
@@ -280,7 +295,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text = "Ganze ~Tabelle kopieren" ;
         Text [ ENGLISH ] = "Copy entire ~sheet" ;
         Text [ english_us ] = "Copy entire sheet" ;
-        Text [ portuguese_brazilian ] = "Ganze Tabelle kopieren" ;
+        Text [ portuguese_brazilian ] = "Copiar a planilha inteira" ;
         Text [ swedish ] = "Kopiera hel ~tabell" ;
         Text [ danish ] = "Kopier hele ~tabellen" ;
         Text [ italian ] = "Copia intera tabella" ;
@@ -296,11 +311,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ arabic ] = "��� �� ������";
         Text[ greek ] = "��~������� ��������� ������";
         Text[ korean ] = "모든 표 복사";
-        Text[ turkish ] = "Tablonun t�m�n� kopyala";
+        Text[ turkish ] = "B�t�n yapra�� kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copia tot el full";
         Text[ finnish ] = "Kopioi koko taulukko";
         Text[ thai ] = "คัดลอกทั้งแผ่นงาน";
+        Text[ czech ] = "Kopírovat celý list";
+        Text[ hebrew ] = "Ganze ~Tabelle kopieren";
+        Text[ hindi ] = "सम्पूर्ण शीट् का प्रतिलिपि बनाओ";
     };
     String STR_EDIT
     {
@@ -308,7 +326,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "Edit Scenario" ;
         Text [ portuguese ] = "Editar Cen�rio" ;
         Text [ english_us ] = "Edit Scenario" ;
-        Text [ portuguese_brazilian ] = "Szenario bearbeiten" ;
+        Text [ portuguese_brazilian ] = "Editar Cen�rio" ;
         Text [ swedish ] = "Bearbeta scenario" ;
         Text [ danish ] = "Rediger scenario" ;
         Text [ italian ] = "Modifica scenario" ;
@@ -328,6 +346,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Edita l'escenari";
         Text[ finnish ] = "Muuta skenaariota";
         Text[ thai ] = "แก้ไขสถานการณ์สมมติ";
+        Text[ czech ] = "Upravit scénář";
+        Text[ hebrew ] = "Szenario bearbeiten";
+        Text[ hindi ] = "विवरण का संपादन ";
     };
     String STR_CREATEDBY
     {
@@ -356,6 +377,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Creat per";
         Text[ thai ] = "สร้างโดย";
+        Text[ czech ] = "Autor";
+        Text[ hebrew ] = "Angelegt von";
+        Text[ hindi ] = "से उत्पन्न किया हुआ";
     };
     String STR_ON
     {
@@ -384,6 +408,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "el";
         Text[ thai ] = "บน";
+        Text[ czech ] = "vytvořeno";
+        Text[ hebrew ] = "am";
+        Text[ hindi ] = "में";
     };
     FixedLine FL_NAME
     {
@@ -393,7 +420,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "~Name of scenario" ;
         Text [ ENGLISH_US ] = "Name of scenario";
         Text[ italian ] = "Nome dello scenario";
-        Text[ portuguese_brazilian ] = "Name des Szenarios";
+        Text[ portuguese_brazilian ] = "Nome do cen�rio";
         Text[ portuguese ] = "~Nome do cen�rio";
         Text[ danish ] = "~Navn p� scenario";
         Text[ french ] = "~Nom du sc�nario";
@@ -408,11 +435,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ arabic ] = "��� ���������";
         Text[ greek ] = "�~���� ��������";
         Text[ korean ] = "시나리오 이름";
-        Text[ turkish ] = "Senaryonun ad�";
+        Text[ turkish ] = "Senaryo ismi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom de l'escenari";
         Text[ finnish ] = "Skenaarion nimi";
         Text[ thai ] = "ชื่อสถานการณ์สมมติ";
+        Text[ czech ] = "Název scénáře";
+        Text[ hebrew ] = "~Name des Szenarios";
+        Text[ hindi ] = "विवरण का नाम";
     };
     FixedLine FL_COMMENT
     {
@@ -422,7 +452,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "~Comment" ;
         Text [ ENGLISH_US ] = "Comment";
         Text[ italian ] = "~Commento";
-        Text[ portuguese_brazilian ] = "Kommentar";
+        Text[ portuguese_brazilian ] = "Coment�rio";
         Text[ portuguese ] = "~Coment�rio";
         Text[ danish ] = "~Kommentar";
         Text[ french ] = "Commentaire";
@@ -442,6 +472,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "ข้อคิดเห็น";
+        Text[ czech ] = "Poznámka";
+        Text[ hebrew ] = "‮הערות‬";
+        Text[ hindi ] = "अपवाद";
     };
     FixedLine FL_OPTIONS
     {
@@ -451,7 +484,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ ENGLISH ] = "Additional settings" ;
         Text [ ENGLISH_US ] = "Settings";
         Text[ italian ] = "Impostazioni";
-        Text[ portuguese_brazilian ] = "Einstellungen";
+        Text[ portuguese_brazilian ] = "Defini��es";
         Text[ portuguese ] = "Defini��es";
         Text[ danish ] = "Indstillinger";
         Text[ french ] = "Param�tres";
@@ -471,6 +504,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ catalan ] = "Configuraci�";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "กำหนดค่า";
+        Text[ czech ] = "Nastavení";
+        Text[ hebrew ] = "‮הגדרות‬";
+        Text[ hindi ] = "निर्धारण";
     };
     Text[ chinese_simplified ] = "建立方案";
     Text[ russian ] = "������� ��������";
@@ -484,7 +520,23 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crea un escenari";
     Text[ thai ] = "สร้างสถานการณ์สมมติ";
+    Text[ czech ] = "Vytvořit scénář";
+    Text[ hebrew ] = "Szenario anlegen";
+    Text[ hindi ] = "Create Scenario";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
