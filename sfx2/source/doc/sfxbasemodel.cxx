@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:49:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2278,7 +2278,9 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XDOCEVENTLISTE
 void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, const ::rtl::OUString& rTitle )
 {
     sal_Int32 nCount = rSeq.getLength();
-    for ( sal_Int32 nArg=0; nArg<nCount; nArg++ )
+    sal_Int32 nArg;
+
+    for ( nArg = 0; nArg < nCount; nArg++ )
     {
         ::com::sun::star::beans::PropertyValue& rProp = rSeq[nArg];
         if ( rProp.Name.equalsAscii("Title") )
