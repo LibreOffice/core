@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtdmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:05:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,10 @@
  ************************************************************************/
 
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 #include "com/sun/star/reflection/XPublished.hpp"
@@ -69,6 +71,7 @@
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -79,6 +82,8 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/file.h"
+#include "osl/thread.h"
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -165,6 +170,51 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
                     "/singletons/"
                     "com.sun.star.reflection.theTypeDescriptionManager"))),
         css::uno::UNO_QUERY_THROW);
+
+    ////////////////////////////////////////
+    // test: add cmd line rdbs to manager
+    ////////////////////////////////////////
+
+    OSL_ASSERT( arguments.getLength() > 0 );
+    css::uno::Reference<css::container::XSet> xSet(
+        manager, css::uno::UNO_QUERY_THROW );
+    for ( sal_Int32 argPos = 0; argPos < arguments.getLength(); ++argPos ) {
+        rtl::OUString url;
+        OSL_VERIFY( osl_File_E_None == osl_getFileURLFromSystemPath(
+                        arguments[argPos].pData, &url.pData ) );
+        bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCaseAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("_incomp.rdb") );
+
+        css::uno::Reference<css::registry::XSimpleRegistry> xReg(
+            m_context->getServiceManager()->createInstanceWithContext(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.registry.SimpleRegistry") ),
+                m_context ), css::uno::UNO_QUERY_THROW );
+        xReg->open( url, true /* read-only */, false /* ! create */ );
+        css::uno::Any arg( makeAny(xReg) );
+        css::uno::Reference<css::container::XHierarchicalNameAccess> xTDprov(
+            m_context->getServiceManager()->
+            createInstanceWithArgumentsAndContext(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.comp.stoc."
+                                   "RegistryTypeDescriptionProvider") ),
+                css::uno::Sequence<css::uno::Any>( &arg, 1 ), m_context ),
+            css::uno::UNO_QUERY_THROW );
+        try {
+            xSet->insert( makeAny(xTDprov) );
+            if (! supposedToBeCompatible)
+                std::cerr << "current rdb file: " <<
+                    rtl::OUStringToOString(
+                        url, osl_getThreadTextEncoding()).getStr() << std::endl;
+            assertTrue(supposedToBeCompatible);
+        } catch (css::lang::IllegalArgumentException &) {
+            if (supposedToBeCompatible)
+                throw;
+            assertFalse(supposedToBeCompatible);
+        }
+    }
+
+    ///////
 
     css::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(
