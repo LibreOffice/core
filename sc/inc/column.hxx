@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:10:36 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ public:
     void        DeleteArea(USHORT nStartRow, USHORT nEndRow, USHORT nDelFlag );
     void        CopyToClip(USHORT nRow1, USHORT nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags);
     void        CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
-                                USHORT nInsFlag, BOOL bAsLink, ScColumn& rColumn);
+                                USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScColumn& rColumn);
     void        StartListeningInArea( USHORT nRow1, USHORT nRow2 );
     void        BroadcastInArea( USHORT nRow1, USHORT nRow2 );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:18:22 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,8 @@ void ScTable::CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
 
 
 void ScTable::CopyFromClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
-                            short nDx, short nDy, USHORT nInsFlag, BOOL bAsLink, ScTable* pTable)
+                            short nDx, short nDy, USHORT nInsFlag,
+                            BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable)
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
@@ -406,7 +407,7 @@ void ScTable::CopyFromClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow
     {
         nRecalcLvl++;
         for (USHORT i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, pTable->aCol[i - nDx]);
+            aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
         if ((nInsFlag & IDF_ATTRIB) != 0)
         {

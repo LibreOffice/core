@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-23 18:24:35 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,9 +646,45 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 //  nRow1, nRow2 = Zielposition
 
 void ScColumn::CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
-                                USHORT nInsFlag, BOOL bAsLink, ScColumn& rColumn)
+                                USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty,
+                                ScColumn& rColumn)
 {
-    if ((nInsFlag & IDF_ATTRIB) != 0) rColumn.pAttrArray->CopyAreaSafe( nRow1, nRow2, nDy, *pAttrArray );
+    if ((nInsFlag & IDF_ATTRIB) != 0)
+    {
+        if ( bSkipAttrForEmpty )
+        {
+            //  copy only attributes for non-empty cells
+            //  (notes are not counted as non-empty here, to match the content behavior)
+
+            USHORT nStartIndex;
+            rColumn.Search( nRow1-nDy, nStartIndex );
+            while ( nStartIndex < rColumn.nCount && rColumn.pItems[nStartIndex].nRow <= nRow2-nDy )
+            {
+                USHORT nEndIndex = nStartIndex;
+                if ( rColumn.pItems[nStartIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+                {
+                    USHORT nStartRow = rColumn.pItems[nStartIndex].nRow;
+                    USHORT nEndRow = nStartRow;
+
+                    //  find consecutive non-empty cells
+
+                    while ( nEndRow < nRow2-nDy &&
+                            nEndIndex+1 < rColumn.nCount &&
+                            rColumn.pItems[nEndIndex+1].nRow == nEndRow+1 &&
+                            rColumn.pItems[nEndIndex+1].pCell->GetCellType() != CELLTYPE_NOTE )
+                    {
+                        ++nEndIndex;
+                        ++nEndRow;
+                    }
+
+                    rColumn.pAttrArray->CopyAreaSafe( nStartRow+nDy, nEndRow+nDy, nDy, *pAttrArray );
+                }
+                nStartIndex = nEndIndex + 1;
+            }
+        }
+        else
+            rColumn.pAttrArray->CopyAreaSafe( nRow1, nRow2, nDy, *pAttrArray );
+    }
     if ((nInsFlag & IDF_CONTENTS) == 0)
         return;
 

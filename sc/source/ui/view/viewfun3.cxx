@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:59 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         //  copy normally (original range)
         pDoc->CopyFromClip( aUserRange, rMark, nNoObjFlags, pRefUndoDoc, pClipDoc,
-                                TRUE, FALSE, bIncludeFiltered );
+                                TRUE, FALSE, bIncludeFiltered, bSkipEmpty );
 
         // bei Transpose Referenzen per Hand anpassen
         if ( bTranspose && bCutMode && (nFlags & IDF_CONTENTS) )
@@ -913,8 +913,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     }
     else if (!bTranspose)
     {
-        //  kopieren mit bAsLink=TRUE
-        pDoc->CopyFromClip( aUserRange, rMark, nNoObjFlags, pRefUndoDoc, pClipDoc, TRUE, TRUE, bIncludeFiltered );
+        //  copy with bAsLink=TRUE
+        pDoc->CopyFromClip( aUserRange, rMark, nNoObjFlags, pRefUndoDoc, pClipDoc,
+                                TRUE, TRUE, bIncludeFiltered, bSkipEmpty );
     }
     else
     {

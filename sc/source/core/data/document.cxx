@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:18:23 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,7 +1421,7 @@ void ScDocument::CopyBlockFromClip( USHORT nCol1, USHORT nRow1,
             while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
 
             pTab[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
-                pCBFCP->nInsFlag, pCBFCP->bAsLink, ppClipTab[nClipTab] );
+                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, ppClipTab[nClipTab] );
 
             if ( pCBFCP->pClipDoc->pDrawLayer && ( pCBFCP->nInsFlag & IDF_OBJECTS ) )
             {
@@ -1530,7 +1530,7 @@ void ScDocument::CopyNonFilteredFromClip( USHORT nCol1, USHORT nRow1,
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                 USHORT nInsFlag,
                                 ScDocument* pRefUndoDoc, ScDocument* pClipDoc, BOOL bResetCut,
-                                BOOL bAsLink, BOOL bIncludeFiltered )
+                                BOOL bAsLink, BOOL bIncludeFiltered, BOOL bSkipAttrForEmpty )
 {
     if (!bIsClip)
     {
@@ -1626,7 +1626,9 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             USHORT nDelFlag = IDF_NONE;
             if ( nInsFlag & IDF_CONTENTS )
                 nDelFlag |= IDF_CONTENTS;
-            if ( nInsFlag & IDF_ATTRIB )
+            //  With bSkipAttrForEmpty, don't remove attributes, copy
+            //  on top of existing attributes instead.
+            if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
                 nDelFlag |= IDF_ATTRIB;
             DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
 
@@ -1643,6 +1645,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             aCBFCP.pClipDoc = pClipDoc;
             aCBFCP.nInsFlag = nInsFlag;
             aCBFCP.bAsLink  = bAsLink;
+            aCBFCP.bSkipAttrForEmpty = bSkipAttrForEmpty;
             aCBFCP.nTabStart = MAXTAB;      // wird in der Schleife angepasst
             aCBFCP.nTabEnd = 0;             // wird in der Schleife angepasst
 

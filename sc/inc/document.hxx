@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:09:31 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ struct ScCopyBlockFromClipParams
     USHORT      nTabStart;
     USHORT      nTabEnd;
     BOOL        bAsLink;
+    BOOL        bSkipAttrForEmpty;
 };
 
 #define ROWINFO_MAX 1024
@@ -957,7 +958,8 @@ public:
                                     ScDocument* pClipDoc = NULL,
                                     BOOL bResetCut = TRUE,
                                     BOOL bAsLink = FALSE,
-                                    BOOL bIncludeFiltered = TRUE );
+                                    BOOL bIncludeFiltered = TRUE,
+                                    BOOL bSkipAttrForEmpty = FALSE );
 
     void            GetClipArea(USHORT& nClipX, USHORT& nClipY, BOOL bIncludeFiltered);
     void            GetClipStart(USHORT& nClipX, USHORT& nClipY);

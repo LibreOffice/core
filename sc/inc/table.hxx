@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:10:34 $
+ *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ public:
     void        CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, ScTable* pTable,
                             BOOL bKeepScenarioFlags);
     void        CopyFromClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, short nDx, short nDy,
-                                USHORT nInsFlag, BOOL bAsLink, ScTable* pTable);
+                                USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( USHORT nCol1, USHORT nRow1,
                                         USHORT nCol2, USHORT nRow2 );
     void        BroadcastInArea( USHORT nCol1, USHORT nRow1,
