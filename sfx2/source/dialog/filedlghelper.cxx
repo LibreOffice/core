@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-22 08:13:49 $
+ *  last change: $Author: dv $ $Date: 2001-08-23 07:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,9 +826,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
-
         break;
-
     case FILEOPEN_PLAY:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_PLAY;
         break;
@@ -840,11 +838,14 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW;
         mbHasPreview = sal_True;
         mbHasLink = sal_True;
-
         // aPreviewTimer
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
-
+        break;
+    case FILESAVE_AUTOEXTENSION:
+        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
+        mbHasAutoExt = sal_True;
+        mbIsSaveDlg = sal_True;
         break;
 
     default:
