@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,83 +220,6 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
     return pData;
 }
 
-//BFS01void ImpSdrObjTextLinkUserData::WriteData(SvStream& rOut)
-//BFS01{
-//BFS01 SdrObjUserData::WriteData(rOut);
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("ImpSdrObjTextLinkUserData");
-//BFS01#endif
-//BFS01
-//BFS01 String aRelFileName;
-//BFS01
-//BFS01 if( aFileName.Len() )
-//BFS01 {
-//BFS01     aRelFileName = INetURLObject::AbsToRel( aFileName,
-//BFS01                                             INetURLObject::WAS_ENCODED,
-//BFS01                                             INetURLObject::DECODE_UNAMBIGUOUS );
-//BFS01 }
-//BFS01
-//BFS01 rOut.WriteByteString( aRelFileName );
-//BFS01
-//BFS01 // UNICODE: rOut << aFilterName;
-//BFS01 rOut.WriteByteString(aFilterName);
-//BFS01
-//BFS01 // #90477# rOut << UINT16(GetStoreCharSet(eCharSet));
-//BFS01 rOut << UINT16(GetSOStoreTextEncoding(eCharSet, (sal_uInt16)rOut.GetVersion()));
-//BFS01
-//BFS01 rOut << UINT32(aFileDate0.GetDate());
-//BFS01 rOut << UINT32(aFileDate0.GetTime());
-//BFS01}
-
-//BFS01void ImpSdrObjTextLinkUserData::ReadData(SvStream& rIn)
-//BFS01{
-//BFS01 SdrObjUserData::ReadData(rIn);
-//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
-//BFS01
-//BFS01#ifdef DBG_UTIL
-//BFS01 aCompat.SetID("ImpSdrObjTextLinkUserData");
-//BFS01#endif
-//BFS01
-//BFS01 UINT32 nTmp32;
-//BFS01 UINT16 nTmp16;
-//BFS01 String aFileNameRel;
-//BFS01
-//BFS01 rIn.ReadByteString(aFileNameRel);
-//BFS01
-//BFS01 if( aFileNameRel.Len() )
-//BFS01 {
-//BFS01
-//BFS01     aFileName = ::URIHelper::SmartRelToAbs( aFileNameRel, FALSE,
-//BFS01                                             INetURLObject::WAS_ENCODED,
-//BFS01                                             INetURLObject::DECODE_UNAMBIGUOUS );
-//BFS01 }
-//BFS01 else
-//BFS01     aFileName.Erase();
-//BFS01
-//BFS01 // UNICODE: rIn >> aFilterName;
-//BFS01 rIn.ReadByteString(aFilterName);
-//BFS01
-//BFS01 // #90477# rIn >> nTmp16; eCharSet = rtl_TextEncoding(nTmp16);
-//BFS01 rIn >> nTmp16;
-//BFS01 eCharSet = (rtl_TextEncoding)GetSOLoadTextEncoding((rtl_TextEncoding)nTmp16, (sal_uInt16)rIn.GetVersion());
-//BFS01
-//BFS01 rIn >> nTmp32; aFileDate0.SetDate(nTmp32);
-//BFS01 rIn >> nTmp32; aFileDate0.SetTime(nTmp32);
-//BFS01}
-
-//BFS01void ImpSdrObjTextLinkUserData::AfterRead()
-//BFS01{
-//BFS01 if (pObj!=NULL) {
-//BFS01     pObj->ImpLinkAnmeldung();
-//BFS01     // lt. Anweisung von MB kein automatisches Reload mehr
-//BFS01     //pObj->ReloadLinkedText();
-//BFS01 }
-//BFS01}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
@@ -339,7 +262,7 @@ void SdrTextObj::ReleaseTextLink()
     }
 }
 
-FASTBOOL SdrTextObj::ReloadLinkedText(FASTBOOL bForceLoad)
+FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
 {
     ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
     FASTBOOL                    bRet = TRUE;
@@ -425,7 +348,7 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& rFilterName
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT );
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT );
             bRet = TRUE;
         }
 
