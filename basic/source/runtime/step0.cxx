@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:58:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,12 +317,21 @@ void SbiRuntime::StepLSET()
         String aRefVarString = refVar->GetString();
         String aRefValString = refVal->GetString();
 
-        if (aRefVarString.Len() > aRefValString.Len())
-            aRefVarString.Fill(aRefVarString.Len(),' ');
-        aRefVarString  = aRefValString.Copy( 0, aRefVarString.Len() );
-        aRefVarString += aRefVarString.Copy( aRefValString.Len() );
-        refVar->PutString(aRefVarString);
+        USHORT nVarStrLen = aRefVarString.Len();
+        USHORT nValStrLen = aRefValString.Len();
+        String aNewStr;
+        if( nVarStrLen > nValStrLen )
+        {
+            aRefVarString.Fill(nVarStrLen,' ');
+            aNewStr  = aRefValString.Copy( 0, nValStrLen );
+            aNewStr += aRefVarString.Copy( nValStrLen, nVarStrLen - nValStrLen );
+        }
+        else
+        {
+            aNewStr = aRefValString.Copy( 0, nVarStrLen );
+        }
 
+        refVar->PutString( aNewStr );
         refVar->SetFlags( n );
     }
 }
@@ -345,13 +354,14 @@ void SbiRuntime::StepRSET()
         String aRefValString = refVal->GetString();
 
         USHORT nPos = 0;
-        if (aRefVarString.Len() > aRefValString.Len())
+        USHORT nVarStrLen = aRefVarString.Len();
+        if( nVarStrLen > aRefValString.Len() )
         {
-            aRefVarString.Fill(aRefVarString.Len(),' ');
-            nPos = aRefVarString.Len() - aRefValString.Len();
+            aRefVarString.Fill(nVarStrLen,' ');
+            nPos = nVarStrLen - aRefValString.Len();
         }
         aRefVarString  = aRefVarString.Copy( 0, nPos );
-        aRefVarString += aRefValString.Copy( 0, aRefVarString.Len() - nPos );
+        aRefVarString += aRefValString.Copy( 0, nVarStrLen - nPos );
         refVar->PutString(aRefVarString);
 
         refVar->SetFlags( n );
