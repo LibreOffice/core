@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:24:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,15 @@
  ************************************************************************/
 
 #include <cstdio>
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 
-#if defined(WIN32)
-#define M_PI 3.1415926536
-#include <malloc.h>
-#define alloca _alloca
-#elif defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
+#if defined(SOLARIS) || defined(IRIX)
+  #include <alloca.h>
+#else
+  #include <malloc.h>
 #endif
-
-//#define _SV_OUTDEV_CXX
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -84,9 +82,9 @@
 #include <sallayout.hxx>
 #endif // _SV_SALLAYOUT_HXX
 
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
-#endif // _SV_POLY_HXX
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
+#endif
 
 #include <tools/lang.hxx>
 
@@ -131,7 +129,8 @@ sal_Unicode GetVerticalChar( sal_Unicode nChar )
         // #104627# special treatment for some unicodes
         case 0x002C: nVert = 0x3001; break;
         case 0x002E: nVert = 0x3002; break;
-#if 0   // to few fonts have the compatibility forms, using
+        /*
+        // to few fonts have the compatibility forms, using
         // them will then cause more trouble than good
         // TODO: decide on a font specific basis
         case 0x2018: nVert = 0xFE41; break;
@@ -159,7 +158,7 @@ sal_Unicode GetVerticalChar( sal_Unicode nChar )
         case 0x300D: nVert = 0xFE42; break;
         case 0x300E: nVert = 0xFE43; break;
         case 0x300F: nVert = 0xFE44; break;
-#endif
+        */
     }
 
     return nVert;
@@ -427,13 +426,14 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 
 ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
     int nMinCharPos, int nEndCharPos, int nFlags )
-:   mpStr( pStr ),
+:
+    mnFlags( nFlags ),
     mnLength( nLength ),
     mnMinCharPos( nMinCharPos ),
     mnEndCharPos( nEndCharPos ),
-    mnFlags( nFlags ),
-    mnLayoutWidth( 0 ),
+    mpStr( pStr ),
     mpDXArray( NULL ),
+    mnLayoutWidth( 0 ),
     mnOrientation( 0 )
 {
     if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
@@ -474,14 +474,13 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
     for( int i = 0; i < nRunCount; ++i )
     {
         int32_t nMinPos, nLength;
-        UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
+        ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
         int nPos0 = nMinPos + mnMinCharPos;
         int nPos1 = nPos0 + nLength;
-#if 0
-        bool bRTL = (nDir == UBIDI_RTL);
-#else // workaround for #110273# (probably ICU problem TODO: analyze there)
+
+        // bool bRTL = (nDir == UBIDI_RTL);
+        // workaround for #110273# (probably ICU problem TODO: analyze there)
         bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
-#endif
 
         // remove control characters from runs by splitting it up
         if( !bRTL )
@@ -543,10 +542,10 @@ SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
     mnEndCharPos( -1 ),
     mnLayoutFlags( 0 ),
-    mnOrientation( 0 ),
-    maDrawOffset( 0, 0 ),
     mnUnitsPerPixel( 1 ),
-    mnRefCount( 1 )
+    mnOrientation( 0 ),
+    mnRefCount( 1 ),
+    maDrawOffset( 0, 0 )
 {}
 
 // -----------------------------------------------------------------------
@@ -730,9 +729,10 @@ bool SalLayout::IsSpacingGlyph( long nGlyph ) const
 // =======================================================================
 
 GenericSalLayout::GenericSalLayout()
-:   mnGlyphCount(0),
-    mnGlyphCapacity(0),
-    mpGlyphItems(0)
+:   mpGlyphItems(0),
+    mnGlyphCount(0),
+    mnGlyphCapacity(0)
+
 {}
 
 // -----------------------------------------------------------------------
@@ -774,7 +774,6 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 
     // determine cluster extents
     const GlyphItem* pG = mpGlyphItems;
-    int nClusterIndex = 0;
     for( int i = mnGlyphCount; --i >= 0; ++pG )
     {
         // use cluster start to get char index
@@ -926,7 +925,6 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     long nDelta = 0;
     long nNewPos = 0;
     pG = mpGlyphItems;
-    const GlyphItem* const pGEnd = mpGlyphItems + mnGlyphCount;
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
         if( pG->IsClusterStart() )
