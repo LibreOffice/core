@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreIterationMark_ja_JP.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:51:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    sal_Int32 *p, position;
+    sal_Int32 * p = 0;
+    sal_Int32 position = 0;
     if (useOffset) {
         // Allocate nCount length to offset argument.
         offset.realloc( nCount );
