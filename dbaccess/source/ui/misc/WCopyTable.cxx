@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:08:44 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,16 +807,18 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
         if(m_xSourceObject.is()) // can be null when importing data from html or rtf format
         {
-            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT) )
                 m_xDestObject->setPropertyValue(PROPERTY_FONT,m_xSourceObject->getPropertyValue(PROPERTY_FONT));
-            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ROW_HEIGHT))
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ROW_HEIGHT) )
                 m_xDestObject->setPropertyValue(PROPERTY_ROW_HEIGHT,m_xSourceObject->getPropertyValue(PROPERTY_ROW_HEIGHT));
-            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR))
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_TEXTCOLOR) )
                 m_xDestObject->setPropertyValue(PROPERTY_TEXTCOLOR,m_xSourceObject->getPropertyValue(PROPERTY_TEXTCOLOR));
-            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER))
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_ORDER) )
                 m_xDestObject->setPropertyValue(PROPERTY_ORDER,m_xSourceObject->getPropertyValue(PROPERTY_ORDER));
-            if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER))
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILTER) )
                 m_xDestObject->setPropertyValue(PROPERTY_FILTER,m_xSourceObject->getPropertyValue(PROPERTY_FILTER));
+            if ( m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_APPLYFILTER) )
+                m_xDestObject->setPropertyValue(PROPERTY_APPLYFILTER,m_xSourceObject->getPropertyValue(PROPERTY_APPLYFILTER));
         }
         // now append the columns
         const ODatabaseExport::TColumnVector* pVec = getDestVector();
