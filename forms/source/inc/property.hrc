@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:09:43 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ namespace frm
 #define PROPERTY_ID_TEXT                (PROPERTY_ID_START + 48)    // string
 #define PROPERTY_ID_STRINGITEMLIST      (PROPERTY_ID_START + 49)    // wsstringsequence
 #define PROPERTY_ID_LABEL               (PROPERTY_ID_START + 50)    // string
-    // free
+#define PROPERTY_ID_HIDEINACTIVESELECTION (PROPERTY_ID_START + 51)  // sal_Bool
 #define PROPERTY_ID_STATE               (PROPERTY_ID_START + 52)    // UINT16
 #define PROPERTY_ID_DELAY               (PROPERTY_ID_START + 53)    // sal_Int32
 #define PROPERTY_ID_FONT                (PROPERTY_ID_START + 54)    // font
 #define PROPERTY_ID_HASNAVIGATION       (PROPERTY_ID_START + 55)
-    // free
+#define PROPERTY_ID_BORDERCOLOR         (PROPERTY_ID_START + 56)    // sal_Int32
 #define PROPERTY_ID_ROWHEIGHT           (PROPERTY_ID_START + 57)    // UINT16
-#define PROPERTY_ID_BACKGROUNDCOLOR     (PROPERTY_ID_START + 58)    // UINT32
+#define PROPERTY_ID_BACKGROUNDCOLOR     (PROPERTY_ID_START + 58)    // sal_Int32
 #define PROPERTY_ID_FILLCOLOR           (PROPERTY_ID_START + 59)    // UINT32
 #define PROPERTY_ID_TEXTCOLOR           (PROPERTY_ID_START + 60)    // UINT32
 #define PROPERTY_ID_LINECOLOR           (PROPERTY_ID_START + 61)    // UINT32
@@ -300,6 +300,10 @@ namespace frm
 #define PROPERTY_ID_FONT_WIDTH             ( PROPERTY_ID_START + 223 )      // sal_Int16
 
 #define PROPERTY_ID_RICH_TEXT              ( PROPERTY_ID_START + 224 )      // sal_Bool
+
+#define PROPERTY_ID_DYNAMIC_CONTROL_BORDER      ( PROPERTY_ID_START + 218 ) // sal_Bool
+#define PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS  ( PROPERTY_ID_START + 219 ) // sal_Int32
+#define PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE  ( PROPERTY_ID_START + 220 ) // sal_Int32
 
 // start ID fuer aggregierte Properties
 #define PROPERTY_ID_AGGREGATE_ID        (PROPERTY_ID_START + 10000)
