@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-23 15:56:03 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,7 +697,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         aTwipSpc.Width() =
             ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
                 ((SvxLRSpaceItem*)pItem)->GetRight() ) / 2;
-        nDfltLeftMargin = nDfltRightMargin = (USHORT)aTwipSpc.Width();
+        nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
         SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, TRUE, &pItem ))

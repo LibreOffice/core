@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,7 +1206,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
                 rHTMLWrt.GetNextNumInfo(),
                 "NumInfo fuer naechsten Absatz fehlt!" );
         const SvxLRSpaceItem& aLRItem = pFmt->GetLRSpace();
-        if( aLRItem.GetLeft() &&
+        if( aLRItem.GetLeft() > 0 && rHTMLWrt.nDefListMargin > 0 &&
             ( !rHTMLWrt.GetNumInfo().GetNumRule() ||
               ( rHTMLWrt.GetNextNumInfo() &&
                 (rHTMLWrt.GetNextNumInfo()->IsRestart() ||

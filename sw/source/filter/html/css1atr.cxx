@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-13 14:20:19 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,34 +890,6 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
     nDfltTopMargin = 0;
     nDfltBottomMargin = 0;
 }
-
-#ifdef OLD_MS_IE
-
-BOOL SwHTMLWriter::IsDfltLRSpace( const SvxLRSpaceItem& rLRItem ) const
-{
-    // Einen linken Rand kann es durch eine Liste bereits in der
-    // Umgebung geben
-    USHORT nLeft = rLRItem.GetTxtLeft() - nLeftMargin;
-
-    // Der Erstzeilen-Einzug kann den Platz fuer eine Numerierung
-    // enthalten
-    short nIndent = rLRItem.GetTxtFirstLineOfst() - nFirstLineIndent;
-
-    // Wenn Spacer exportiert werden, wird ein psositiver Erstzeilen-Einzug
-    // als Spacer exportiert.
-    return nDfltLeftMargin == nLeft &&
-           nDfltRightMargin == rLRItem.GetRight() &&
-           ( (bCfgSpacer && nIndent > 0) ||
-              nDfltFirstLineIndent == nIndent );
-}
-
-BOOL SwHTMLWriter::IsDfltULSpace( const SvxULSpaceItem& rULItem ) const
-{
-    return nDfltTopMargin == rULItem.GetUpper() &&
-           nDfltBottomMargin == rULItem.GetLower();
-}
-
-#endif
 
 //-----------------------------------------------------------------------
 
@@ -3945,6 +3917,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2002/03/13 14:20:19  mib
+      #97558#: Don't store LANGUAGE_DEFAULT
+
       Revision 1.13  2001/12/03 09:52:53  mib
       #95462#: Export COL_AUTO as black instead of white
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,9 +309,9 @@ public:
     sal_uInt16 nFormCntrlCnt;
     sal_uInt16 nEndNote;
     sal_uInt16 nFootNote;
-    sal_uInt16 nLeftMargin;             // linker Einzug (z.B. aus Listen)
-    sal_uInt16 nDfltLeftMargin;         // die dafaults, der nicht geschrieben
-    sal_uInt16 nDfltRightMargin;        // werden muessen (aus der Vorlage)
+    sal_Int32 nLeftMargin;              // linker Einzug (z.B. aus Listen)
+    sal_Int32 nDfltLeftMargin;          // die dafaults, der nicht geschrieben
+    sal_Int32 nDfltRightMargin;     // werden muessen (aus der Vorlage)
     short  nFirstLineIndent;        // Erstzeilen-Einzug (aus Listen)
     short  nDfltFirstLineIndent;    // nicht zu schreibender default
     sal_uInt16 nDfltTopMargin;          // die defaults, der nicht geschrieben
@@ -319,7 +319,7 @@ public:
     sal_uInt16 nIndentLvl;              // wie weit ist eingerueckt?
     xub_StrLen nWhishLineLen;           // wie lang darf eine Zeile werden?
     sal_uInt16 nDefListLvl;             // welcher DL-Level existiert gerade
-    sal_uInt16 nDefListMargin;          // Wie weit wird in DL eingerueckt
+    sal_Int32  nDefListMargin;          // Wie weit wird in DL eingerueckt
     sal_uInt16 nHeaderFooterSpace;
     sal_uInt16 nTxtAttrsToIgnore;
     sal_uInt16 nExportMode;

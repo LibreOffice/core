@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-13 14:20:19 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 13:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,8 +960,20 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                 ? rLRSpace.GetTxtLeft() - pFmtInfo->nLeftMargin
                 : 0;
 
-        nNewDefListLvl = (nLeftMargin + (rHWrt.nDefListMargin/2)) /
-                         rHWrt.nDefListMargin;
+        if( nLeftMargin > 0 && rHWrt.nDefListMargin > 0 )
+        {
+            nNewDefListLvl = (nLeftMargin + (rHWrt.nDefListMargin/2)) /
+                             rHWrt.nDefListMargin;
+            if( nNewDefListLvl == 0 && bForceDL && !bDT )
+                nNewDefListLvl = 1;
+        }
+        else
+        {
+            // If the left margin is 0 or negative, emulating indent
+            // with <dd> does not work. We then set a def list only if
+            // the dd style is used.
+            nNewDefListLvl = (bForceDL&& !bDT) ? 1 : 0;
+        }
 
         BOOL bIsNextTxtNode =
             rWrt.pDoc->GetNodes()[rWrt.pCurPam->GetPoint()->nNode.GetIndex()+1]
