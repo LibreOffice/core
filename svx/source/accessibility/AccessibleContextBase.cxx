@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 11:48:10 $
+ *  last change: $Author: af $ $Date: 2002-04-29 12:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,18 +382,25 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleContextBase::getAccessibleStateSet (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    CheckDisposedState ();
+    ::utl::AccessibleStateSetHelper* pStateSet = NULL;
 
-    // Create a copy of the state set and return it.
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != NULL)
+    if (rBHelper.bDisposed)
     {
-        return uno::Reference<XAccessibleStateSet> (
-            new ::utl::AccessibleStateSetHelper (*pStateSet));
+        // We are already disposed!
+        // Create a new state set that has only set the DEFUNC state.
+        pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
+        if (pStateSet != NULL)
+            pStateSet->AddState (AccessibleStateType::DEFUNC);
     }
     else
-        return uno::Reference<XAccessibleStateSet>(NULL);
+    {
+        // Create a copy of the state set and return it.
+        pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if (pStateSet != NULL)
+            pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
+    }
+
+    return uno::Reference<XAccessibleStateSet>(pStateSet);
 }
 
 
@@ -657,9 +664,9 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 
 
 void AccessibleContextBase::CheckDisposedState (void)
-    throw (::com::sun::star::lang::DisposedException)
+    throw (::com::sun::star::uno::RuntimeException)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (rBHelper.bDisposed)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
