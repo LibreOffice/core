@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:43:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese_brazilian ] = "E~xcluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -136,6 +136,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     FixedLine FL_POSITION
     {
@@ -170,6 +172,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     FixedText FT_X
     {
@@ -228,7 +232,7 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "Kohdistusobjektin tyyppi" ;
-        Text [ danish ] = "F" ;
+        Text [ danish ] = "Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
         Text [ dutch ] = "Type" ;
@@ -250,6 +254,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     ImageRadioButton RB_POINT
     {
@@ -262,7 +268,7 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese_brazilian ] = "~Ponto" ;
         Text [ portuguese ] = "~Ponto" ;
         Text [ finnish ] = "~Piste" ;
-        Text [ danish ] = "Punkt" ;
+        Text [ danish ] = "~Punkt" ;
         Text [ french ] = "~Point" ;
         Text [ swedish ] = "~Punkt" ;
         Text [ dutch ] = "~Punt" ;
@@ -290,6 +296,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "~Punkt";
         Text[ hindi ] = "~बिन्दु";
         Text[ slovak ] = "~Bod";
+        Text[ hungarian ] = "~Pont";
+        Text[ slovenian ] = "~Točka";
     };
     ImageRadioButton RB_VERTICAL
     {
@@ -302,7 +310,7 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "Pystyviiva" ;
-        Text [ danish ] = "Lodret" ;
+        Text [ danish ] = "~Lodret" ;
         Text [ french ] = "Vertical" ;
         Text [ swedish ] = "~Vertikal" ;
         Text [ dutch ] = "~Verticaal" ;
@@ -330,6 +338,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "~Vertikal";
         Text[ hindi ] = "~लंबरूप";
         Text[ slovak ] = "Z~vislý";
+        Text[ hungarian ] = "~Függőleges";
+        Text[ slovenian ] = "~Navpično";
     };
     ImageRadioButton RB_HORIZONTAL
     {
@@ -342,7 +352,7 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese_brazilian ] = "~Horizontal" ;
         Text [ portuguese ] = "~Horizontal" ;
         Text [ finnish ] = "Vaa~kaviiva" ;
-        Text [ danish ] = "Vandret" ;
+        Text [ danish ] = "~Vandret" ;
         Text [ french ] = "~Horizontal" ;
         Text [ swedish ] = "H~orisontell" ;
         Text [ dutch ] = "~Horizontaal" ;
@@ -370,6 +380,8 @@ ModalDialog DLG_SNAPLINE
         Text[ hebrew ] = "~Horizontal";
         Text[ hindi ] = "~समतल";
         Text[ slovak ] = "~Vodorovný";
+        Text[ hungarian ] = "Ví~zszintes";
+        Text[ slovenian ] = "Vodo~ravno";
     };
     Text[ chinese_simplified ] = "新建坐标";
     Text[ russian ] = "����� ������ ��������";
@@ -405,7 +417,10 @@ ModalDialog DLG_SNAPLINE
     Text[ hebrew ] = "Neues Fangobjekt";
     Text[ hindi ] = "नया स्नॉप वस्तु";
     Text[ slovak ] = "Nový snímok";
+    Text[ hungarian ] = "Új illesztőobjektum";
+    Text[ slovenian ] = "Nov predmet za pripenjanje";
 };
+
 
 
 
