@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:38:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,27 +164,27 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
         }
     }
 
-    String aSource( pModule->GetSource() );
-    aSource.ConvertLineEnd( LINEEND_LF );
+    ::rtl::OUString aOUSource( pModule->GetSource32() );
 
     // Nicht zu viele Leerzeilen erzeugen...
-    if ( aSource.Len() > 2 )
+    sal_Int32 nSourceLen = aOUSource.getLength();
+    if ( nSourceLen > 2 )
     {
-        if ( aSource.GetChar( aSource.Len() - 1 )  != LINE_SEP )
-            aSource += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
-        else if ( aSource.GetChar( aSource.Len() - 2 ) != LINE_SEP )
-            aSource += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
-        else if ( aSource.GetChar( aSource.Len() - 3 ) == LINE_SEP )
-            aSource.Erase( (USHORT)(aSource.Len()-1), 1 );
+        const sal_Unicode* pStr = aOUSource.getStr();
+        if ( pStr[ nSourceLen - 1 ]  != LINE_SEP )
+            aOUSource += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+        else if ( pStr[ nSourceLen - 2 ] != LINE_SEP )
+            aOUSource += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
+        else if ( pStr[ nSourceLen - 3 ] == LINE_SEP )
+            aOUSource = aOUSource.copy( 0, nSourceLen-1 );
     }
 
-    String aSubStr;
-    aSubStr = String( RTL_CONSTASCII_USTRINGPARAM( "Sub " ) );
+    ::rtl::OUString aSubStr;
+    aSubStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sub " ) );
     aSubStr += aMacroName;
-    aSubStr += String( RTL_CONSTASCII_USTRINGPARAM( "\n\nEnd Sub" ) );
+    aSubStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\nEnd Sub" ) );
 
-    aSource += aSubStr;
-    pModule->SetSource( aSource );
+    aOUSource += aSubStr;
 
     // update module in library
     SbxObject* pParent = pModule->GetParent();
@@ -199,9 +199,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             String aLibName = pBasic->GetName();
             String aModName = pModule->GetName();
-            ::rtl::OUString aModule = pModule->GetSource();
-
-            BasicIDE::UpdateModule( pShell, aLibName, aModName, aModule );
+            BasicIDE::UpdateModule( pShell, aLibName, aModName, aOUSource );
         }
     }
 
