@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-15 10:28:53 $
+#   last change: $Author: hjs $ $Date: 2001-02-02 12:03:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,6 +139,9 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)\$(DEFLIB$(TNR)NAME).lib
 .IF "$(USE_LDUMP2)"=!""

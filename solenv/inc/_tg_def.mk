@@ -36,6 +36,9 @@ $(DEF1TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL1DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)\$(DEFLIB1NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -184,6 +187,9 @@ $(DEF2TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL2DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)\$(DEFLIB2NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -332,6 +338,9 @@ $(DEF3TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL3DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)\$(DEFLIB3NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -480,6 +489,9 @@ $(DEF4TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL4DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)\$(DEFLIB4NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -628,6 +640,9 @@ $(DEF5TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL5DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)\$(DEFLIB5NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -776,6 +791,9 @@ $(DEF6TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL6DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)\$(DEFLIB6NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -924,6 +942,9 @@ $(DEF7TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL7DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)\$(DEFLIB7NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -1072,6 +1093,9 @@ $(DEF8TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL8DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)\$(DEFLIB8NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -1220,6 +1244,9 @@ $(DEF9TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL9DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)\$(DEFLIB9NAME).lib
 .IF "$(USE_LDUMP2)"=!""
@@ -1368,6 +1395,9 @@ $(DEF10TARGETN) .PHONY : \
     @echo EXPORTS													>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+.IF "$(NO_SHL10DESCRIPTION)"==""
+    @echo component_getDescriptionFunc	>>$@
+.ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
     lib -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)\$(DEFLIB10NAME).lib
 .IF "$(USE_LDUMP2)"=!""
