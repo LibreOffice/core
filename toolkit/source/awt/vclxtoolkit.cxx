@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 13:30:00 $
+ *  last change: $Author: vg $ $Date: 2002-07-25 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,7 +1357,7 @@ IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclSimpleEvent const *, pEvent)
 void VCLXToolkit::callTopWindowListeners(
     ::VclSimpleEvent const * pEvent,
     void (SAL_CALL ::css::awt::XTopWindowListener::* pFn)(
-        ::css::lang::EventObject const &) throw (::css::uno::RuntimeException))
+        ::css::lang::EventObject const &))
 {
     ::Window * pWindow
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
