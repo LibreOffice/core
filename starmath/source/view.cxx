@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:30:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,9 @@
 #ifndef _SVX_ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
-#ifndef _SVX_ZOOM_HXX //autogen
-#include <svx/zoom.hxx>
-#endif
+//CHINA001 #ifndef _SVX_ZOOM_HXX //autogen
+//CHINA001 #include <svx/zoom.hxx>
+//CHINA001 #endif
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
@@ -172,6 +172,10 @@
 
 #define SmViewShell
 #include "smslots.hxx"
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
@@ -1533,13 +1537,20 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             if ( !GetDoc()->GetProtocol().IsInPlaceActive() )
             {
-                SvxZoomDialog *pDlg = 0;
+                //CHINA001 SvxZoomDialog *pDlg = 0;
+                AbstractSvxZoomDialog *pDlg = 0;
                 const SfxItemSet *pSet = rReq.GetArgs();
                 if ( !pSet )
                 {
                     SfxItemSet aSet( GetDoc()->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
                     aSet.Put( SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
-                    pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aSet);
+                    //CHINA001 pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aSet);
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
+                    {
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, ResId(RID_SVXDLG_ZOOM));
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
                     if( pDlg->Execute() != RET_CANCEL )
                         pSet = pDlg->GetOutputItemSet();
