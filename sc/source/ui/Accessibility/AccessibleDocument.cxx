@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-07 12:13:31 $
+ *  last change: $Author: sab $ $Date: 2002-08-07 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,6 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
 uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) const
 {
     uno::Reference<XAccessible> xAccessible;
-    DBG_ERRORFILE("not implemented");
     if(mpViewShell)
     {
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
@@ -497,9 +496,12 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
         {
             Point aPnt( rPoint.X, rPoint.Y );
             aPnt = pWindow->PixelToLogic( aPnt );
-            SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
-//            if (pObj->GetLayer() != SC_LAYER_INTERN)
-//            {
+            SdrPage* pDrawPage = GetDrawPage();
+            if (pDrawPage)
+            {
+                SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
+    //            if (pObj->GetLayer() != SC_LAYER_INTERN)
+    //            {
                 uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                 SortedShapesList::iterator aItr;;
                 if (FindShape(xShape, aItr))
@@ -511,7 +513,8 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                 }
                 else
                     DBG_ERRORFILE("a shape is not in the list");
-//            }
+    //            }
+            }
         }
     }
     return xAccessible;
