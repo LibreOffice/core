@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:46:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,3 +508,8 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
         pMyTxtNd->Modify(0, &rFmtFld);
 }
 
+// #111840#
+SwPosition * SwTxtFld::GetPosition() const
+{
+    return GetTxtNode().GetPosition(this);
+}
