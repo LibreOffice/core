@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:34:48 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11771,7 +11771,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ russian ] = "Êóğñîğ ôîğìóëû";
             Text[ polish ] = "Kursor formu³y";
             Text[ japanese ] = "æ•°å¼ã‚«ãƒ¼ã‚½ãƒ«";
-            Text[ chinese_traditional ] = "å…¬å¼å…‰æ¨™";
+            Text[ chinese_traditional ] = "å…¬å¼æ¸¸æ¨™";
             Text[ arabic ] = "ãÄÔÑ ÇáÕíÛÉ";
             Text[ greek ] = "Äåßêôçò ôığïõ";
             Text[ korean ] = "ìˆ˜ì‹ ì»¤ì„œ";
