@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvCell.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:16:49 $
+ *  last change: $Date: 2003-02-13 14:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -198,7 +199,16 @@ public class ScAccessibleCsvCell extends TestCase {
 
         log.println("opening dialog");
 
-        lThread = new loadThread(SOF);
+        PropertyValue[] args = new PropertyValue[1];
+        try {
+            args[0] = new PropertyValue();
+            args[0].Name = "InteractionHandler";
+            args[0].Value = Param.getMSF().createInstance(
+                "com.sun.star.comp.uui.UUIInteractionHandler");
+        } catch(com.sun.star.uno.Exception e) {
+        }
+
+        lThread = new loadThread(SOF, args);
         lThread.start();
 
     }
@@ -218,19 +228,21 @@ public class ScAccessibleCsvCell extends TestCase {
     public class loadThread extends Thread {
 
         private SOfficeFactory SOF = null ;
+        private PropertyValue[] args = null;
         public XComponent xSpreadSheedDoc = null;
 
-        public loadThread(SOfficeFactory SOF) {
-            this.SOF = SOF ;
+        public loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
+            this.SOF = SOF;
+            this.args = Args;
         }
 
         public void run() {
             try {
                 String url= utils.getFullTestURL("10test.csv");
                 log.println("loading "+url);
-                XComponent xSpreadsheetDoc = SOF.loadDocument(url);
+                XComponent xSpreadsheetDoc = SOF.loadDocument(url,args);
             } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace( log );
+                e.printStackTrace();
                 throw new StatusException( "Couldn't create document ", e );
             }
         }
