@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 09:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,13 +579,13 @@ public:
     /*
      * XSignatureCreationResultListener
      */
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureCreationResult nResult )
+    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException);
 
     /*
      * XSignatureVerifyResultListener
      */
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureVerifyResult nResult )
+    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException);
 };
 
