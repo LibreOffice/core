@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-17 09:56:51 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 14:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef MACOSX
+#include <rtl/ustring.hxx>
+#include <osl/module.h>
+using namespace rtl;
+#endif
 #include <X11/Xlib.h>
 #include <gcach_xpeer.hxx>
 #include <stdio.h>
@@ -134,6 +139,78 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
+#ifdef MACOSX
+    // [ed] 7/22/02 Use osl loading on OS X.
+
+    OUString xrenderLibraryName( RTL_CONSTASCII_USTRINGPARAM( "libXrender.dylib" ));
+    oslModule pRenderLib=osl_loadModule(xrenderLibraryName.pData, SAL_LOADMODULE_DEFAULT);
+    if( !pRenderLib ) {
+        fprintf( stderr, "Display can do XRender, but no %s installed.\n"
+            "Please install for improved display performance\n", xrenderLibraryName.pData );
+        return;
+    }
+
+    OUString queryExtensionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryExtension"));
+    void *pFunc;
+    pFunc=osl_getSymbol(pRenderLib, queryExtensionFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderQueryExtension          = (Bool(*)(Display*,int*,int*))pFunc;
+
+    OUString queryVersionFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderQueryVersion"));
+    pFunc=osl_getSymbol(pRenderLib, queryVersionFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderQueryVersion            = (void(*)(Display*,int*,int*))pFunc;
+
+    OUString visFormatFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindVisualFormat"));
+    pFunc=osl_getSymbol(pRenderLib, visFormatFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFindVisualFormat        = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
+
+    OUString fmtFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFindFormat"));
+    pFunc=osl_getSymbol(pRenderLib, fmtFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFindFormat              = (XRenderPictFormat*(*)(Display*,unsigned long,XRenderPictFormat*,int))pFunc;
+
+    OUString creatGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreateGlyphSet"));
+    pFunc=osl_getSymbol(pRenderLib, creatGlyphFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderCreateGlyphSet          = (GlyphSet(*)(Display*,XRenderPictFormat*))pFunc;
+
+    OUString freeGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphSet"));
+    pFunc=osl_getSymbol(pRenderLib, freeGlyphFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFreeGlyphSet            = (void(*)(Display*,GlyphSet))pFunc;
+
+    OUString addGlyphFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderAddGlyphs"));
+    pFunc=osl_getSymbol(pRenderLib, addGlyphFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
+
+    OUString freeGlyphsFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreeGlyphs"));
+    pFunc=osl_getSymbol(pRenderLib, freeGlyphsFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
+
+    OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString16"));
+    pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
+
+    OUString creatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
+    pFunc=osl_getSymbol(pRenderLib, creatPicFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderCreatePicture           = (Picture(*)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*))pFunc;
+
+    OUString setClipFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderSetPictureClipRegion"));
+    pFunc=osl_getSymbol(pRenderLib, setClipFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderSetPictureClipRegion    = (void(*)(Display*,Picture,XLIB_Region))pFunc;
+
+    OUString freePicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderFreePicture"));
+    pFunc=osl_getSymbol(pRenderLib, freePicFuncName.pData);
+    if( !pFunc ) return;
+    pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
+#else
     void* pRenderLib = dlopen( "libXrender.so.1", RTLD_GLOBAL | RTLD_LAZY );
     if( !pRenderLib ) {
         fprintf( stderr, "Display can do XRender, but no libXrender.so.1 installed.\n"
@@ -179,6 +256,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pFunc = dlsym( pRenderLib, "XRenderFreePicture" );
     if( !pFunc ) return;
     pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
+#endif
 
     // needed to initialize libXrender internals, we already know its there
     (*pXRenderQueryExtension)( mpDisplay, &nDummy, &nDummy );
