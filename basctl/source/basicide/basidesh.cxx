@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: mt $ $Date: 2000-10-10 09:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,36 +783,40 @@ USHORT BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
 void BasicIDEShell::InvalidateBasicIDESlots()
 {
     // Nur die, die eine optische Auswirkung haben...
-    SfxBindings& rBindings = BasicIDE::GetBindings();
-    rBindings.Invalidate( SID_UNDO );
-    rBindings.Invalidate( SID_REDO );
-    rBindings.Invalidate( SID_SAVEDOC );
-    rBindings.Invalidate( SID_BASICIDE_CHOOSEMACRO );
-    rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
-    rBindings.Invalidate( SID_BASICIDE_OBJCAT );
-    rBindings.Invalidate( SID_BASICSTOP );
-    rBindings.Invalidate( SID_BASICRUN );
-    rBindings.Invalidate( SID_BASICCOMPILE );
-    rBindings.Invalidate( SID_BASICLOAD );
-    rBindings.Invalidate( SID_BASICSAVEAS );
-    rBindings.Invalidate( SID_BASICIDE_MATCHGROUP );
-    rBindings.Invalidate( SID_BASICSTEPINTO );
-    rBindings.Invalidate( SID_BASICSTEPOVER );
-    rBindings.Invalidate( SID_BASICSTEPOUT );
-    rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-    rBindings.Invalidate( SID_BASICIDE_ADDWATCH );
-    rBindings.Invalidate( SID_BASICIDE_REMOVEWATCH );
-    rBindings.Invalidate( SID_CHOOSE_CONTROLS );
-    rBindings.Invalidate( SID_PRINTDOC );
-    rBindings.Invalidate( SID_PRINTDOCDIRECT );
-    rBindings.Invalidate( SID_SETUPPRINTER );
-    rBindings.Invalidate( SID_DIALOG_TESTMODE );
 
-    rBindings.Invalidate( SID_DOC_MODIFIED );
-    rBindings.Invalidate( SID_BASICIDE_STAT_TITLE );
-    rBindings.Invalidate( SID_BASICIDE_STAT_POS );
-    rBindings.Invalidate( SID_ATTR_INSERT );
-    rBindings.Invalidate( SID_ATTR_SIZE );
+    if ( IDE_DLL()->GetShell() )
+    {
+        SfxBindings& rBindings = BasicIDE::GetBindings();
+        rBindings.Invalidate( SID_UNDO );
+        rBindings.Invalidate( SID_REDO );
+        rBindings.Invalidate( SID_SAVEDOC );
+        rBindings.Invalidate( SID_BASICIDE_CHOOSEMACRO );
+        rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
+        rBindings.Invalidate( SID_BASICIDE_OBJCAT );
+        rBindings.Invalidate( SID_BASICSTOP );
+        rBindings.Invalidate( SID_BASICRUN );
+        rBindings.Invalidate( SID_BASICCOMPILE );
+        rBindings.Invalidate( SID_BASICLOAD );
+        rBindings.Invalidate( SID_BASICSAVEAS );
+        rBindings.Invalidate( SID_BASICIDE_MATCHGROUP );
+        rBindings.Invalidate( SID_BASICSTEPINTO );
+        rBindings.Invalidate( SID_BASICSTEPOVER );
+        rBindings.Invalidate( SID_BASICSTEPOUT );
+        rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+        rBindings.Invalidate( SID_BASICIDE_ADDWATCH );
+        rBindings.Invalidate( SID_BASICIDE_REMOVEWATCH );
+        rBindings.Invalidate( SID_CHOOSE_CONTROLS );
+        rBindings.Invalidate( SID_PRINTDOC );
+        rBindings.Invalidate( SID_PRINTDOCDIRECT );
+        rBindings.Invalidate( SID_SETUPPRINTER );
+        rBindings.Invalidate( SID_DIALOG_TESTMODE );
+
+        rBindings.Invalidate( SID_DOC_MODIFIED );
+        rBindings.Invalidate( SID_BASICIDE_STAT_TITLE );
+        rBindings.Invalidate( SID_BASICIDE_STAT_POS );
+        rBindings.Invalidate( SID_ATTR_INSERT );
+        rBindings.Invalidate( SID_ATTR_SIZE );
+    }
 }
 
 void BasicIDEShell::EnableScrollbars( BOOL bEnable )

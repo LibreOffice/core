@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: mt $ $Date: 2000-10-10 09:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,6 @@ void DialogWindow::RenameDialog( const String& rNewName )
 void DialogWindow::DisableBrowser()
 {
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
     SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
         ((VCBrowser*)(pChildWin->GetWindow()))->Update( 0 );
@@ -513,7 +512,6 @@ void DialogWindow::DisableBrowser()
 void DialogWindow::UpdateBrowser()
 {
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
     SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
         ((VCBrowser*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
