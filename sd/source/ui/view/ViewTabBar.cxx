@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:11:38 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,13 +205,19 @@ void ViewTabBar::ActivatePage (void)
     }
 
     ViewShell* pViewShell = mrViewShellBase.GetMainViewShell();
-    FrameView* pFrameView = pViewShell->GetFrameView();
-    pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
-    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pViewShell);
-    if (pDrawViewShell != NULL)
+    if (pViewShell != NULL)
     {
-        pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
-        pFrameView->SetViewShEditMode(EM_PAGE, ePageKind);
+        FrameView* pFrameView = pViewShell->GetFrameView();
+        if (pFrameView != NULL)
+        {
+            pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
+            DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pViewShell);
+            if (pDrawViewShell != NULL)
+            {
+                pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
+                pFrameView->SetViewShEditMode(EM_PAGE, ePageKind);
+            }
+        }
     }
     mrViewShellBase.GetPaneManager().RequestMainViewShellChange (eType);
 }
