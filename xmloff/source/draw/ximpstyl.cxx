@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:41:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,11 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void Finish( sal_Bool bOverwrite );
+
+    // #i35918#
+    virtual void FillPropertySet(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > & rPropSet );
 };
 
 TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );
@@ -356,6 +361,70 @@ void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
         }
     }
 
+}
+
+// #i35918#
+void SdXMLDrawingPageStyleContext::FillPropertySet(
+    const Reference< beans::XPropertySet > & rPropSet )
+{
+    const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
+    struct _ContextID_Index_Pair aContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
+    {
+        { CTF_DASHNAME , -1 },
+        { CTF_LINESTARTNAME , -1 },
+        { CTF_LINEENDNAME , -1 },
+        { CTF_FILLGRADIENTNAME, -1 },
+        { CTF_FILLTRANSNAME , -1 },
+        { CTF_FILLHATCHNAME , -1 },
+        { CTF_FILLBITMAPNAME , -1 },
+        { -1, -1 }
+    };
+    static sal_uInt16 aFamilies[MAX_SPECIAL_DRAW_STYLES] =
+    {
+        XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
+        XML_STYLE_FAMILY_SD_MARKER_ID,
+        XML_STYLE_FAMILY_SD_MARKER_ID,
+        XML_STYLE_FAMILY_SD_GRADIENT_ID,
+        XML_STYLE_FAMILY_SD_GRADIENT_ID,
+        XML_STYLE_FAMILY_SD_HATCH_ID,
+        XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+    };
+
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        GetStyles()->GetImportPropertyMapper( GetFamily() );
+    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    if( xImpPrMap.is() )
+        xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+
+    Reference< beans::XPropertySetInfo > xInfo;
+    for( sal_uInt16 i=0; i<MAX_SPECIAL_DRAW_STYLES; i++ )
+    {
+        sal_Int32 nIndex = aContextIDs[i].nIndex;
+        if( nIndex != -1 )
+        {
+            struct XMLPropertyState& rState = GetProperties()[nIndex];
+            OUString sStyleName;
+            rState.maValue >>= sStyleName;
+            sStyleName = GetImport().GetStyleDisplayName( aFamilies[i],
+                                                          sStyleName );
+            // get property set mapper
+            UniReference<XMLPropertySetMapper> rPropMapper =
+                                        xImpPrMap->getPropertySetMapper();
+
+            // set property
+            const OUString& rPropertyName =
+                    rPropMapper->GetEntryAPIName(rState.mnIndex);
+            if( !xInfo.is() )
+                xInfo = rPropSet->getPropertySetInfo();
+            if ( xInfo->hasPropertyByName( rPropertyName ) )
+            {
+                Any aAny;
+                aAny <<= sStyleName;
+
+                rPropSet->setPropertyValue( rPropertyName, aAny );
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
