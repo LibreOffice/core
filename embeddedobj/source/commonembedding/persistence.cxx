@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 12:49:36 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 09:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,6 +953,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                 uno::RuntimeException )
 {
     // TODO: use lObjArgs
+    // for now this method is used only to switch readonly state
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -965,15 +966,51 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
+    if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+    {
+        // the object is still not loaded
+        throw embed::WrongStateException(
+                                ::rtl::OUString::createFromAscii( "The object must be in loaded state to be reloaded!\n" ),
+                                uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
+
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
                     ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO:
-    // throw away current document
-    // load new document from current storage
-    // use meaningfull part of lArguments
+    // when document allows reloading through API the object can be reloaded not only in loaded state
+
+    // probably readonly mode will disappear
+    /*
+    sal_Bool bOldReadOnlyValue = m_bReadOnly;
+
+    m_bReadOnly = sal_False;
+    for ( sal_Int32 nInd = 0; nInd < lArguments.getLength(); nInd++ )
+        if ( lArguments[nInd].Name.equalsAscii( "ReadOnly" ) )
+            lArguments[nInd].Value >>= m_bReadOnly;
+
+    if ( bOldReadOnlyValue != m_bReadOnly )
+    {
+        // close own storage
+        try {
+            uno::Reference< lang::XComponent > xComponent( m_xObjectStorage, uno::UNO_QUERY );
+            OSL_ENSURE( !m_xObjectStorage.is() || xComponent.is(), "Wrong storage implementation!" );
+            if ( xComponent.is() )
+                xComponent->dispose();
+        }
+        catch ( uno::Exception& )
+        {
+        }
+
+        sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::ELEMENT_READ : embed::ElementModes::ELEMENT_READWRITE;
+        uno::Reference< embed::XStorage > xNewOwnStorage =
+                                                    m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
+
+        m_xObjectStorage = xNewObjectStorage;
+    }
+    */
 }
 
 //------------------------------------------------------

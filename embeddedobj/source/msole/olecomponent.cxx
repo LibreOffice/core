@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-12 12:50:51 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,6 +1462,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         }
     }
     // TODO: Investigate if there is already the format name
+    //       and whether this format is really required
     else if ( aFlavor.DataType == getCppuType( ( const uno::Reference< io::XInputStream >* ) 0 )
             && aFlavor.MimeType.equalsAscii( "application/x-openoffice-contentstream" ) )
     {
@@ -1523,7 +1524,6 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
 
     if ( !m_aDataFlavors.getLength() )
     {
-        // TODO: detect format, the object writes representation in, and return reachable from it formats
         RetrieveObjectDataFlavors_Impl();
     }
 
