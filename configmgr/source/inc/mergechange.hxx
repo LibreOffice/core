@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
+ *  last change: $Author: jb $ $Date: 2001-07-16 17:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ namespace configmgr
         void mergeChanges(const SubtreeChange &_rChange);
 
     private:
-        void initRoot(const RelativePath& _aPathToChange);
+        void initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange);
     private:
         virtual void handle(ValueChange const& _rValueNode);
         virtual void handle(AddNode const& _rAddNode);

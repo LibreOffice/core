@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-06 15:28:50 $
+ *  last change: $Author: jb $ $Date: 2001-07-16 17:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
+#endif
+#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
+#include "treechangefactory.hxx"
 #endif
 #ifndef CONFIGMGR_TREECHANGELIST_HXX
 #include "treechangelist.hxx"
@@ -338,12 +341,21 @@ namespace configmgr
 
     void adjustElementTemplate(SubtreeChange& _rChange, const rtl::OUString& _rName, const rtl::OUString& _rModule)
     {
-        if (!_rChange.isSetNodeChange())
+        if (!_rChange.isSetNodeChange() || isGenericSetElementType(_rChange.getElementTemplateName()))
         {
             _rChange.setElementTemplate(_rName,_rModule);
         }
-        OSL_POSTCOND(_rChange.getElementTemplateName()   == _rName,   "Adjusting: Template modules do not match");
-        OSL_POSTCOND(_rChange.getElementTemplateModule() == _rModule, "Adjusting: Template modules do not match");
+        else if ( isDummySetElementModule(_rChange.getElementTemplateModule()) &&
+                 !isGenericSetElementType(_rName) && !isDummySetElementModule(_rModule))
+        {
+            OSL_ENSURE(_rChange.getElementTemplateName() == _rName,   "Adjusting: Template modules do not match");
+
+            _rChange.setElementTemplate(_rName,_rModule);
+        }
+        OSL_POSTCOND(_rChange.getElementTemplateName()   == _rName   || isGenericSetElementType(_rName),
+                     "Adjusting: Template modules do not match");
+        OSL_POSTCOND(_rChange.getElementTemplateModule() == _rModule || isDummySetElementModule(_rModule),
+                     "Adjusting: Template modules do not match");
     }
     // -----------------------------------------------------------------------------
 
@@ -370,31 +382,78 @@ namespace configmgr
 
         RelativePath aEnsurePath = Path::stripPrefix(aStartPath,aThisRootPath);
 
+        OSL_PRECOND(aStartPath.getLocalName().getName().toString() == _aChanges.root.getNodeName(),
+                        "Treechangelist has incorrect root path" );
+
         SubtreeChange* pCurrentParent = &m_aTreeChangeList.root;
 
-        for(RelativePath::Iterator it = aEnsurePath.begin(), stop = aEnsurePath.end();
-                                        it != stop;
-                                        ++it)
+        if (!aEnsurePath.isEmpty())
         {
-            Change *pChange = findExistingChange(pCurrentParent,*it);
+            RelativePath::Iterator const firstEnsure = aEnsurePath.begin();
+            RelativePath::Iterator lastEnsure = aEnsurePath.end();
 
-            if (!pChange)
+            OSL_ASSERT( firstEnsure != lastEnsure );
+            --lastEnsure; // last to ensure is the actual root
+
+            for(RelativePath::Iterator it = firstEnsure; it != lastEnsure; ++it)
+            {
+                OSL_ASSERT( it != aEnsurePath.end() );
+
+                Change *pChange = findExistingChange(pCurrentParent,*it);
+
+                if (!pChange)
+                {
+                    OSL_ASSERT( it+1 != aEnsurePath.end());
+                    Name const aElementTypeName = (it+1)->getTypeName();
+
+                    // create a correspondens for the name, we did not find.
+                    auto_ptr<SubtreeChange> pNewChange =
+                        OTreeChangeFactory::createDummyChange(it->getName(), aElementTypeName);
+
+                    pChange = pNewChange.get();
+
+                    pCurrentParent->addChange(base_ptr(pNewChange));
+
+                    OSL_ENSURE(pChange == findExistingChange(pCurrentParent,*it),
+                                "ERROR: Newly added change cannot be found in parent change");
+                }
+
+                if (!pChange->ISA(SubtreeChange))
+                {
+                    OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
+                    throw InvalidName(aEnsurePath.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
+                }
+                pCurrentParent = static_cast<SubtreeChange*>( pChange);
+            }
+
+            Change *pRootChange = findExistingChange(pCurrentParent,*lastEnsure);
+
+            if (!pRootChange)
             {
                 // create a correspondens for the name, we did not find.
-                auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(it->getName().toString(), configuration::Attributes()));
-                pChange = pNewChange.get();
+                auto_ptr<SubtreeChange> pNewChange(
+                        new SubtreeChange(_aChanges.root, SubtreeChange::NoChildCopy()) );
 
-                pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
+                pRootChange = pNewChange.get();
 
-                OSL_ENSURE(pChange == findExistingChange(pCurrentParent,*it),
+                pCurrentParent->addChange(base_ptr(pNewChange));
+
+                OSL_ENSURE(pRootChange == findExistingChange(pCurrentParent,*it),
                             "ERROR: Newly added change cannot be found in parent change");
             }
 
-            if (!pChange->ISA(SubtreeChange))
+            if (!pRootChange->ISA(SubtreeChange))
+            {
+                OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
                 throw InvalidName(aEnsurePath.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
-
-            pCurrentParent = static_cast<SubtreeChange*>( pChange);
+            }
+            pCurrentParent = static_cast<SubtreeChange*>( pRootChange);
         }
+
+        OSL_ENSURE(pCurrentParent->getNodeName() == _aChanges.root.getNodeName(),
+                        "Change being merged has a different name" );
+
+        adjustElementTemplate(*pCurrentParent,_aChanges.root);
 
         this->init(aStartPath);
 
@@ -600,33 +659,80 @@ namespace configmgr
     {
     }
 
-    void OMergeChanges::initRoot(const RelativePath& _aPathToChange)
+    void OMergeChanges::initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange)
     {
         SubtreeChange* pCurrentParent = &m_rSubtreeChange;
 
-        for(RelativePath::Iterator it = _aPathToChange.begin(), stop = _aPathToChange.end();
-                                        it != stop;
-                                        ++it)
+        if (!_aPathToChange.isEmpty())
         {
-            Change *pChange = findExistingChange(pCurrentParent,*it);
+            OSL_PRECOND(_aPathToChange.getLocalName().getName().toString() == _rRootChange.getNodeName(),
+                            "Path to change root does not match change being merged" );
 
-            if (!pChange)
+            RelativePath::Iterator const firstEnsure = _aPathToChange.begin();
+            RelativePath::Iterator lastEnsure = _aPathToChange.end();
+
+            OSL_ASSERT( firstEnsure != lastEnsure );
+            --lastEnsure; // last to ensure is the actual root
+
+            for(RelativePath::Iterator it = firstEnsure; it != lastEnsure; ++it)
+            {
+                OSL_ASSERT( it != _aPathToChange.end() );
+
+                Change *pChange = findExistingChange(pCurrentParent,*it);
+
+                if (!pChange)
+                {
+                    OSL_ASSERT( it+1 != _aPathToChange.end());
+                    Name const aElementTypeName = (it+1)->getTypeName();
+
+                    // create a correspondens for the name, we did not find.
+                    auto_ptr<SubtreeChange> pNewChange =
+                        OTreeChangeFactory::createDummyChange(it->getName(), aElementTypeName);
+
+                    pChange = pNewChange.get();
+
+                    pCurrentParent->addChange(base_ptr(pNewChange));
+
+                    OSL_ENSURE(pChange == findExistingChange(pCurrentParent,*it),
+                                "ERROR: Newly added change cannot be found in parent change");
+                }
+
+                if (!pChange->ISA(SubtreeChange))
+                {
+                    OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
+                    throw InvalidName(_aPathToChange.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
+                }
+                pCurrentParent = static_cast<SubtreeChange*>( pChange);
+            }
+
+            Change *pRootChange = findExistingChange(pCurrentParent,*lastEnsure);
+
+            if (!pRootChange)
             {
                 // create a correspondens for the name, we did not find.
-                auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(it->getName().toString(), configuration::Attributes()));
-                pChange = pNewChange.get();
+                auto_ptr<SubtreeChange> pNewChange(
+                        new SubtreeChange(_rRootChange, SubtreeChange::NoChildCopy()) );
 
-                pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
+                pRootChange = pNewChange.get();
 
-                OSL_ENSURE(pChange == findExistingChange(pCurrentParent,*it),
+                pCurrentParent->addChange(base_ptr(pNewChange));
+
+                OSL_ENSURE(pRootChange == findExistingChange(pCurrentParent,*it),
                             "ERROR: Newly added change cannot be found in parent change");
             }
 
-            if (!pChange->ISA(SubtreeChange))
-                throw InvalidName(_aPathToChange.toString(), "points to a non- subtree change in this changes list, but a subtree change is required as root.");
-
-            pCurrentParent = static_cast<SubtreeChange*>( pChange);
+            if (!pRootChange->ISA(SubtreeChange))
+            {
+                OSL_ENSURE(false, "Change to merge does not point to a Subtree Change");
+                throw InvalidName(_aPathToChange.toString(), "points to a non-subtree change in this changes list, but a subtree change is required as root.");
+            }
+            pCurrentParent = static_cast<SubtreeChange*>( pRootChange);
         }
+
+        OSL_ENSURE(pCurrentParent->getNodeName() == _rRootChange.getNodeName(),
+                        "Change being merged has a different name");
+
+        adjustElementTemplate(*pCurrentParent,_rRootChange);
 
         this->init(_aPathToChange);
 
@@ -655,10 +761,7 @@ namespace configmgr
     // WARNING this could be a big tree, because a change can contain subtreechanges!
     void OMergeChanges::mergeChanges(const SubtreeChange &_rChange)
     {
-        initRoot( RelativePath() );
-
-        this->applyToChildren(_rChange); //- semantics ?
-        //this->applyToChange(_rChange);
+        mergeChanges(_rChange, RelativePath());
     }
     // -----------------------------------------------------------------------------
 
@@ -666,10 +769,9 @@ namespace configmgr
     // WARNING this could be a big tree, because a change can contain subtreechanges!
     void OMergeChanges::mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange)
     {
-        initRoot( _aPathToChange); // path location being merged must exist
+        initRoot(_rChange, _aPathToChange); // path location being merged must exist
 
         this->applyToChildren(_rChange); //- semantics ?
-        //this->applyToChange(_rChange);
     }
     // -----------------------------------------------------------------------------
 
