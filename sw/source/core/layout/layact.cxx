@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:09:16 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,14 @@
 #ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
+// --> OD 2004-06-28 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 //#pragma optimize("ity",on)
 
@@ -262,13 +270,13 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
                                     const SwPageFrm *pPage )
 {
     SwRegionRects aTmp( rRect );
-    const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+    const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
     const SwFlyFrm *pSelfFly = pCnt->FindFlyFrm();
     USHORT i;
 
     for ( i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
     {
-        SdrObject *pO = rObjs[i];
+        SdrObject *pO = rObjs[i]->DrawObj();
         if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
 
@@ -420,25 +428,25 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
                        const SwRect &rRect1, const SwRect &rRect2,
                        const SwLayoutFrm *pLay )
 {
-    const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+    const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
     const SwFlyFrm *pSelfFly = pFrm->FindFlyFrm();
     const BOOL bInCnt = pSelfFly && pSelfFly->IsFlyInCntFrm() ? TRUE : FALSE;
 
-    for ( USHORT j = 0; j < rObjs.Count(); ++j )
+    for ( sal_uInt32 j = 0; j < rObjs.Count(); ++j )
     {
-        const SdrObject         *pObj = rObjs[j];
-        const SwRect aRect( pObj->GetCurrentBoundRect() );
+        // --> OD 2004-07-07 #i28701# - consider changed type of <SwSortedObjs> entries
+        const SwAnchoredObject* pAnchoredObj = rObjs[j];
+        const SwRect aRect( pAnchoredObj->GetObjRect() );
         if ( !rRect1.IsOver( aRect ) && !rRect2.IsOver( aRect ) )
             continue;       //Keine Ueberlappung, der naechste.
 
-        const SwVirtFlyDrawObj *pFlyObj = pObj->ISA(SwVirtFlyDrawObj) ?
-                                                (SwVirtFlyDrawObj*)pObj : 0;
-        const SwFlyFrm *pFly = pFlyObj ? pFlyObj->GetFlyFrm() : 0;
+        const SwFlyFrm *pFly = pAnchoredObj->ISA(SwFlyFrm)
+                               ? static_cast<const SwFlyFrm*>(pAnchoredObj) : 0;
 
         //Wenn der Rahmen innerhalb des LayFrm verankert ist, so darf er
         //mitgescrollt werden, wenn er nicht seitlich aus dem Rechteck
         //herausschaut.
-        if ( pLay && pFlyObj && pFlyObj->GetFlyFrm()->IsLowerOf( pLay ) )
+        if ( pLay && pFly && pFly->IsLowerOf( pLay ) )
         {
              if ( pFly->Frm().Left() < rRect1.Left() ||
                   pFly->Frm().Right()> rRect1.Right() )
@@ -449,7 +457,7 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
         if ( !pSelfFly )    //Nur wenn der Frm in einem Fly steht kann
             return TRUE;    //es Einschraenkungen geben.
 
-        if ( !pFlyObj )     //Keine Einschraenkung fuer Zeichenobjekte.
+        if ( !pFly )      //Keine Einschraenkung fuer Zeichenobjekte.
             return TRUE;
 
         if ( pFly != pSelfFly )
@@ -468,7 +476,8 @@ BOOL MA_FASTCALL lcl_IsOverObj( const SwFrm *pFrm, const SwPageFrm *pPage,
                     else
                         pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
                 }
-            } else if ( pObj->GetOrdNum() < pSelfFly->GetVirtDrawObj()->GetOrdNum() )
+            } else if ( pAnchoredObj->GetDrawObj()->GetOrdNum() <
+                                    pSelfFly->GetVirtDrawObj()->GetOrdNum() )
             {
                 const SwFlyFrm *pTmp = pFly;
                 do
@@ -489,33 +498,31 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
                                   const SwTwips nOfst,
                                   const SwTwips nOldBottom )
 {
-    FASTBOOL bScroll = TRUE;
+    // --> OD 2004-07-01 #i28701# - determine, if scrolling is allowed.
+    bool bScroll = mbScrollingAllowed;
     SwRect aPaintRect( pCntnt->PaintArea() );
     SWRECTFN( pCntnt )
 
     //Wenn altes oder neues Rechteck mit einem Fly ueberlappen, in dem der
     //Cntnt nicht selbst steht, so ist nichts mit Scrollen.
-    if ( pPage->GetSortedObjs() )
+    if ( bScroll && pPage->GetSortedObjs() )
     {
         SwRect aRect( aPaintRect );
         if( bVert )
             aPaintRect.Pos().X() += nOfst;
         else
             aPaintRect.Pos().Y() -= nOfst;
+
         if ( ::lcl_IsOverObj( pCntnt, pPage, aPaintRect, aRect, 0 ) )
-            bScroll = FALSE;
+            bScroll = false;
+
         if( bVert )
             aPaintRect.Pos().X() -= nOfst;
         else
             aPaintRect.Pos().Y() += nOfst;
     }
     if ( bScroll && pPage->GetFmt()->GetBackground().GetGraphicPos() != GPOS_NONE )
-        bScroll = FALSE;
-
-    // OD 04.11.2002 #94454# - Don't intersect potential paint rectangle with
-    // union of frame and printing area, because at scroll destination position
-    // could be a frame that has filled up the potential paint area.
-    //aPaintRect.Intersection( pCntnt->UnionFrm( TRUE ) );
+        bScroll = false;
 
     if ( bScroll )
     {
@@ -566,6 +573,8 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     bUpdateExpFlds = bBrowseActionStop = bActionInProgress = FALSE;
     // OD 14.04.2003 #106346# - init new flag <mbFormatCntntOnInterrupt>.
     mbFormatCntntOnInterrupt = sal_False;
+    // --> OD 2004-06-14 #i28701#
+    mbScrollingAllowed = true;
 
     pImp->pLayAct = this;   //Anmelden
 }
@@ -723,8 +732,75 @@ SwPageFrm *SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
     return pPage;
 }
 
+// OD 2004-05-12 #i28701#
+class NotifyLayoutOfPageInProgress
+{
+    private:
+        SwPageFrm& mrPageFrm;
+
+        void _PositionOfObjs( const bool _bLockPos )
+        {
+            SwSortedObjs* pObjs = mrPageFrm.GetSortedObjs();
+            if ( pObjs )
+            {
+                sal_uInt32 i = 0;
+                for ( ; i < pObjs->Count(); ++i )
+                {
+                    SwAnchoredObject* pObj = (*pObjs)[i];
+                    if ( _bLockPos )
+                        pObj->LockPosition();
+                    else
+                        pObj->UnlockPosition();
+                }
+            }
+        }
+    public:
+        NotifyLayoutOfPageInProgress( SwPageFrm& _rPageFrm )
+            : mrPageFrm( _rPageFrm )
+        {
+            _PositionOfObjs( false );
+            _rPageFrm.SetLayoutInProgress( true );
+        }
+        ~NotifyLayoutOfPageInProgress()
+        {
+            mrPageFrm.SetLayoutInProgress( false );
+            _PositionOfObjs( true );
+        }
+};
+
+// --> OD 2004-06-14 #i28701# - local method to determine, if scrolling during
+// the format of the given page is allowed.
+// Scrolling isn't allowed, if the wrapping style of floating screen objects
+// is considered on object positioning and to-paragraph/to-character anchored
+// floating screen objects are registered at the page.
+bool lcl_ScrollingAllowed( const SwPageFrm& _rPageFrm )
+{
+    bool bRetScrollAllowed = true;
+
+    if ( _rPageFrm.GetSortedObjs() &&
+         _rPageFrm.GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+    {
+        const SwSortedObjs* pObjs = _rPageFrm.GetSortedObjs();
+        sal_uInt32 i = 0;
+        for ( ; i < pObjs->Count(); ++i )
+        {
+            SwAnchoredObject* pObj = (*pObjs)[i];
+            if ( pObj->ConsiderObjWrapInfluenceOnObjPos() )
+            {
+                bRetScrollAllowed = false;
+                break;
+            }
+        }
+    }
+
+    return bRetScrollAllowed;
+}
+
 void SwLayAction::InternalAction()
 {
+    // OD 2004-05-21 #i28701#
+    SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
+
     ASSERT( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
 
     pRoot->Calc();
@@ -777,25 +853,6 @@ void SwLayAction::InternalAction()
             continue;
         }
 
-#ifdef MA_DEBUG
-        static USHORT nStop = USHRT_MAX;
-        if ( pPage->GetPhyPageNum() == nStop )
-        {
-            int bla = 5;
-        }
-        Window *pWin = pImp->GetShell()->GetWin();
-        if ( pWin )
-        {
-            // OD 2004-04-23 #116347#
-            pWin->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
-            pWin->SetFillColor( COL_WHITE );
-            pWin->SetLineColor();
-            Point aOfst( pImp->GetShell()->VisArea().Pos() );
-            pWin->DrawRect( Rectangle( aOfst, Size( 2000, 1000 )));
-            pWin->DrawText( Point( 500, 500 ) + aOfst, pPage->GetPhyPageNum() );
-            pWin->Pop();
-        }
-#endif
         if ( nEndPage != USHRT_MAX && pPage->GetPhyPageNum() > nPercentPageNum )
         {
             nPercentPageNum = pPage->GetPhyPageNum();
@@ -838,80 +895,70 @@ void SwLayAction::InternalAction()
         {
             pRoot->DeleteEmptySct();
             XCHECKPAGE;
-            //Erst das Layout der Seite formatieren. Erst wenn das Layout
-            //stabil ist lohnt sich die Inhaltsformatiertung.
-            //Wenn durch die Inhaltsformatierung das Layout wieder ungueltig
-            //wird, so wird die Inhaltsformatierung abgebrochen und das
-            //Layout wird wieder stabilisiert.
-            //Keine Angst: im Normafall kommt es nicht zu Oszillationen.
-            //Das Spielchen spielen wir zweimal. erst fuer die Flys, dann
-            //fuer den Rest.
-            //Die Flys haben Vorrang, d.h. wenn sich an den Flys waehrend der
-            //Formatierung des Bodys etwas aendert wird die Body-Formatierung
-            //unterbrochen und wieder bei den Flys angefangen.
 
-            while ( !IsInterrupt() && !IsNextCycle() &&
-                    ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
+            // OD 2004-05-12 #i28701# - scope for instance of class
+            // <NotifyLayoutOfPageInProgress>
             {
-                USHORT nLoop = 0; // Loop control
-                while ( !IsInterrupt() && IS_INVAFLY && IS_FLYS )
-                {
-                    XCHECKPAGE;
-                    if ( pPage->IsInvalidFlyLayout() )
-                    {
-                        pPage->ValidateFlyLayout();
-                        FormatFlyLayout( pPage );
-                        XCHECKPAGE;
-                    }
-                    if ( pPage->IsInvalidFlyCntnt() && IS_FLYS )
-                    {
-                        pPage->ValidateFlyCntnt();
-                        // More than 20 calls of this function are enough,
-                        // then we disallow the shrinking of fly frames.
-                        if ( !FormatFlyCntnt( pPage, nLoop > 20 ) )
-                        {   XCHECKPAGE;
-                            pPage->InvalidateFlyCntnt();
-                        }
-                    }
-                    ++nLoop; // Loop count
-                }
-                if ( !IS_FLYS )
-                {
-                    //Wenn keine Flys (mehr) da sind, sind die Flags
-                    //mehr als fluessig.
-                    pPage->ValidateFlyLayout();
-                    pPage->ValidateFlyCntnt();
-                }
-                while ( !IsInterrupt() && !IsNextCycle() && pPage->IsInvalid() &&
-                        (!IS_FLYS || (IS_FLYS && !IS_INVAFLY)) )
-                {
-                    PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
-                    XCHECKPAGE;
-                    while ( !IsNextCycle() && pPage->IsInvalidLayout() )
-                    {
-                        pPage->ValidateLayout();
-                        FormatLayout( pPage );
-                        XCHECKPAGE;
-                    }
-                    if ( !IsNextCycle() && pPage->IsInvalidCntnt() &&
-                         (!IS_FLYS || (IS_FLYS && !IS_INVAFLY)) )
-                    {
-                        pPage->ValidateFlyInCnt();
-                        pPage->ValidateCntnt();
-                        if ( !FormatCntnt( pPage ) )
-                        {
-                            XCHECKPAGE;
-                            pPage->InvalidateCntnt();
-                            pPage->InvalidateFlyInCnt();
-                            if ( IsBrowseActionStop() )
-                                bInput = TRUE;
-                        }
-                    }
-                    if( bNoLoop )
-                        pDoc->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPage );
+                // --> OD 2004-07-01 #i28701# - determine, if scrolling is allowed.
+                mbScrollingAllowed = lcl_ScrollingAllowed( *pPage );
 
+                while ( !IsInterrupt() && !IsNextCycle() &&
+                        ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
+                {
+                    // OD 2004-05-10 #i28701#
+                    SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
+                    if ( !IS_FLYS )
+                    {
+                        //Wenn keine Flys (mehr) da sind, sind die Flags
+                        //mehr als fluessig.
+                        pPage->ValidateFlyLayout();
+                        pPage->ValidateFlyCntnt();
+                    }
+                    // OD 2004-05-10 #i28701# - change condition
+                    while ( !IsInterrupt() && !IsNextCycle() &&
+                            ( pPage->IsInvalid() ||
+                              (IS_FLYS && IS_INVAFLY) ) )
+                    {
+                        PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
+                        XCHECKPAGE;
+                        while ( !IsNextCycle() && pPage->IsInvalidLayout() )
+                        {
+                            pPage->ValidateLayout();
+                            FormatLayout( pPage );
+                            XCHECKPAGE;
+                        }
+                        // OD 2004-05-10 #i28701# - change condition
+                        if ( !IsNextCycle() &&
+                             ( pPage->IsInvalidCntnt() ||
+                               (IS_FLYS && IS_INVAFLY) ) )
+                        {
+                            pPage->ValidateFlyInCnt();
+                            pPage->ValidateCntnt();
+                            // --> OD 2004-05-10 #i28701#
+                            pPage->ValidateFlyLayout();
+                            pPage->ValidateFlyCntnt();
+                            // <--
+                            if ( !FormatCntnt( pPage ) )
+                            {
+                                XCHECKPAGE;
+                                pPage->InvalidateCntnt();
+                                pPage->InvalidateFlyInCnt();
+                                // --> OD 2004-05-10 #i28701#
+                                pPage->InvalidateFlyLayout();
+                                pPage->InvalidateFlyCntnt();
+                                // <--
+                                if ( IsBrowseActionStop() )
+                                    bInput = TRUE;
+                            }
+                        }
+                        if( bNoLoop )
+                            pDoc->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                    }
                 }
-            }
+            } // end of scope for instance of class <NotifyLayoutOfPageInProgress>
+
+
             //Eine vorige Seite kann wieder invalid sein.
             XCHECKPAGE;
             if ( !IS_FLYS )
@@ -1022,12 +1069,11 @@ void SwLayAction::InternalAction()
         {
             XCHECKPAGE;
             // OD 14.04.2003 #106346# - special case: interrupt content formatting
-            while ( ( mbFormatCntntOnInterrupt &&
-                      pPg->IsInvalid() &&
-                      (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
-                    ) ||
-                    ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() )
-                  )
+            // --> OD 2004-07-08 #i28701# - conditions, introduced by #106346#,
+            // are incorrect (marcos IS_FLYS and IS_INVAFLY only works for <pPage>)
+            // and are too strict.
+            while ( ( mbFormatCntntOnInterrupt && pPg->IsInvalid() ) ||
+                    ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() ) )
             {
                 XCHECKPAGE;
                 while ( pPg->IsInvalidLayout() )
@@ -1036,10 +1082,7 @@ void SwLayAction::InternalAction()
                     FormatLayout( pPg );
                     XCHECKPAGE;
                 }
-                if ( mbFormatCntntOnInterrupt &&
-                     pPg->IsInvalidCntnt() &&
-                     (!IS_FLYS || (IS_FLYS && !IS_INVAFLY))
-                   )
+                if ( mbFormatCntntOnInterrupt && pPg->IsInvalidCntnt() )
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
@@ -1051,6 +1094,7 @@ void SwLayAction::InternalAction()
                     }
                 }
             }
+            // <--
             pPg = (SwPageFrm*)pPg->GetNext();
         }
         // OD 14.04.2003 #106346# - reset flag for special interrupt content formatting.
@@ -1059,6 +1103,9 @@ void SwLayAction::InternalAction()
     pOptTab = 0;
     if( bNoLoop )
         pDoc->GetLayouter()->EndLoopControl();
+
+    // OD 2004-05-21 #i28701#
+    SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
 }
 /*************************************************************************
 |*
@@ -1111,24 +1158,15 @@ BOOL SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
     }
     if ( !pPage )
         pPage = pCnt->FindPageFrm();
-    //Die im Absatz verankerten Flys wollen auch beachtet werden.
-    if ( pPage->IsInvalidFlyInCnt() && pCnt->GetDrawObjs() )
+
+    // OD 2004-05-10 #i28701# - format floating screen objects at content frame.
+    if ( pCnt->IsTxtFrm() &&
+         !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCnt)),
+                                              *pPage, this ) )
     {
-        const SwDrawObjs *pObjs = pCnt->GetDrawObjs();
-        for ( USHORT i = 0; i < pObjs->Count(); ++i )
-        {
-            SdrObject *pO = (*pObjs)[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
-            {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
-                {
-                    FormatFlyInCnt( (SwFlyInCntFrm*)pFly );
-                    pObjs = pCnt->GetDrawObjs();
-                }
-            }
-        }
+        return FALSE;
     }
+
     if ( pPage->IsInvalidCntnt() )
         return FALSE;
     return TRUE;
@@ -1207,13 +1245,13 @@ const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
 
         if ( pCnt->GetDrawObjs() )
         {
-            const SwDrawObjs &rObjs = *pCnt->GetDrawObjs();
+            const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                const SdrObject *pO = rObjs[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pObj = rObjs[i];
+                if ( pObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
                     if ( pFly->IsFlyInCntFrm() )
                     {
                         if ( ((SwFlyInCntFrm*)pFly)->IsInvalid() ||
@@ -1244,10 +1282,10 @@ const SwFrm *lcl_FindFirstInvaFly( const SwPageFrm *pPage, long nBottom )
 
     for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
     {
-        SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+        if ( pObj->ISA(SwFlyFrm) )
         {
-            const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+            const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pObj);
             if ( pFly->Frm().Top() <= nBottom )
             {
                 if ( pFly->IsInvalid() || pFly->IsCompletePaint() )
@@ -1461,91 +1499,6 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
 /*************************************************************************
 |*
-|*  SwLayAction::ChkFlyAnchor()
-|*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 02. Sep. 96
-|*
-|*************************************************************************/
-void SwLayAction::ChkFlyAnchor( SwFlyFrm *pFly, const SwPageFrm *pPage )
-{
-    //Wenn der Fly innerhalb eines anderen Rahmens gebunden ist, so sollte
-    //dieser zuerst Formatiert werden.
-
-    if ( pFly->GetAnchorFrm()->IsInTab() )
-        pFly->GetAnchorFrm()->FindTabFrm()->Calc();
-
-    SwFlyFrm *pAnch = pFly->AnchorFrm()->FindFlyFrm();
-    if ( pAnch )
-    {
-        ChkFlyAnchor( pAnch, pPage );
-        CHECKPAGE;
-        while ( pPage == pAnch->FindPageFrm() && FormatLayoutFly( pAnch ) )
-            /* do nothing */;
-    }
-}
-
-
-/*************************************************************************
-|*
-|*  SwLayAction::FormatFlyLayout()
-|*
-|*  Ersterstellung      MA 30. Oct. 92
-|*  Letzte Aenderung    MA 03. Jun. 96
-|*
-|*************************************************************************/
-// OD 2004-03-30 #i26791# - Consider also drawing objects - the position
-// of the drawing objects will be calculated.
-void SwLayAction::FormatFlyLayout( const SwPageFrm *pPage )
-{
-    for ( USHORT i = 0; pPage->GetSortedObjs() &&
-                        i < pPage->GetSortedObjs()->Count(); ++i )
-    {
-        SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
-        {
-            const USHORT nOld = i;
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-            ChkFlyAnchor( pFly, pPage );
-            if ( IsAgain() )
-                return;
-            while ( pPage == pFly->FindPageFrm() )
-            {
-                SwFrmFmt *pFmt = pFly->GetFmt();
-                if( FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId() &&
-                    pFly->GetAnchorFrm() &&
-                    ( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() ||
-                      REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() ) )
-                    _FormatCntnt( (SwCntntFrm*)pFly->GetAnchorFrm(), pPage );
-                 if( !FormatLayoutFly( pFly ) )
-                    break;
-            }
-            CHECKPAGE;
-            if ( !IS_FLYS )
-                break;
-            if ( nOld > pPage->GetSortedObjs()->Count() )
-                i -= nOld - pPage->GetSortedObjs()->Count();
-            else
-            {   //Positionswechsel!
-                USHORT nAct;
-                pPage->GetSortedObjs()->Seek_Entry(pFly->GetVirtDrawObj(),&nAct);
-                if ( nAct < i )
-                    i = nAct;
-                else if ( nAct > i )
-                    --i;
-            }
-        }
-        else
-        {
-            // calculate position of drawing objects
-            SwDrawContact* pDrawContact =
-                                static_cast<SwDrawContact*>(GetUserCall( pO ));
-            pDrawContact->GetAnchoredObj( pO )->MakeObjPos();
-        }
-    }
-}
-/*************************************************************************
-|*
 |*  SwLayAction::FormatLayout(), FormatLayoutFly, FormatLayoutTab()
 |*
 |*  Ersterstellung      MA 30. Oct. 92
@@ -1728,13 +1681,14 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
     return bChanged || bTabChanged;
 }
 
-BOOL SwLayAction::FormatLayoutFly( SwFlyFrm *pFly, BOOL bAddRect )
+BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 {
     ASSERT( !IsAgain(), "Ungueltige Seite beachten." );
     if ( IsAgain() )
         return FALSE;
 
-    BOOL bChanged = FALSE;
+    BOOL bChanged = false;
+    BOOL bAddRect = true;
 
     if ( !pFly->IsValid() || pFly->IsCompletePaint() || pFly->IsInvalid() )
     {
@@ -1743,7 +1697,7 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm *pFly, BOOL bAddRect )
         pFly->Calc();
         bChanged = aOldRect != pFly->Frm();
 
-        if ( IsPaint() && bAddRect && (pFly->IsCompletePaint() || bChanged) &&
+        if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
              pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
             pImp->GetShell()->AddPaintRect( pFly->Frm() );
 
@@ -1751,7 +1705,7 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm *pFly, BOOL bAddRect )
             pFly->Invalidate();
         else
             pFly->Validate();
-        bAddRect = FALSE;
+        bAddRect = false;
         pFly->ResetCompletePaint();
     }
 
@@ -1759,7 +1713,7 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm *pFly, BOOL bAddRect )
         return FALSE;
 
     //Jetzt noch diejenigen Lowers versorgen die LayoutFrm's sind
-    BOOL bTabChanged = FALSE;
+    BOOL bTabChanged = false;
     SwFrm *pLow = pFly->Lower();
     while ( pLow )
     {
@@ -1810,11 +1764,27 @@ SwLayoutFrm * MA_FASTCALL lcl_IsTabScrollable( SwTabFrm *pTab )
     return 0;
 }
 
+// OD 2004-05-11 #i28701#
+void lcl_ValidateLowerObjs( SwFrm* pFrm,
+                            const SwTwips nOfst,
+                            SwPageFrm *pPage,
+                            bool bResetOnly );
+
+// OD 2004-05-11 #i28701# - correction: floating screen objects, which are
+// anchored at-fly, have also been to be considered.
 void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                         SwLayoutFrm *pRow, SwPageFrm *pPage,
                         BOOL bResetOnly )
 {
     pLay->ResetCompletePaint();
+
+    // OD 2004-05-11 #i28701# - consider floating screen objects, which are
+    // anchored at-fly.
+    if ( pLay->IsFlyFrm() )
+    {
+        ::lcl_ValidateLowerObjs( pLay, nOfst, pPage, bResetOnly );
+    }
+
     SwFrm *pLow = pLay->Lower();
     if ( pRow )
         while ( pLow != pRow )
@@ -1846,45 +1816,42 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
         else
         {
             pLow->ResetCompletePaint();
-            if ( pLow->GetDrawObjs() )
-            {
-                for ( USHORT i = 0; i < pLow->GetDrawObjs()->Count(); ++i )
-                {
-                    SdrObject *pO = (*pLow->GetDrawObjs())[i];
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
-                    {
-                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                        if ( !bResetOnly )
-                        {
-                            pFly->Frm().Pos().Y() += nOfst;
-                            pFly->GetVirtDrawObj()->_SetRectsDirty();
-                            if ( pFly->IsFlyInCntFrm() )
-                                ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
-                        }
-                        ::lcl_ValidateLowers( pFly, nOfst, 0, pPage, bResetOnly);
-                    }
-                    else
-                    {
-                        // OD 2004-04-06 #i26791# - Direct object positioning
-                        // no longer needed. Instead invalidate and determine
-                        // its position
-                        SwContact* pContact = ::GetUserCall( pO );
-                        ASSERT( pContact,
-                                "<lcl_ValidateLowers((..)> - missing contact object - please inform OD." );
-                        if ( pContact )
-                        {
-                            SwAnchoredObject* pAnchoredObj =
-                                                pContact->GetAnchoredObj( pO );
-                            pAnchoredObj->InvalidateObjPos();
-                            pAnchoredObj->MakeObjPos();
-                        }
-                    }
-                }
-            }
+            // OD 2004-05-11 #i28701# - use new local helper method
+            // <lcl_ValidateLowerObjs(..)>
+            ::lcl_ValidateLowerObjs( pLow, nOfst, pPage, bResetOnly);
         }
         if ( !bResetOnly )
             pLow->Calc();           //#55435# Stabil halten.
         pLow = pLow->GetNext();
+    }
+}
+
+// OD 2004-05-11 #i28701# - helper method for <lcl_ValidateLowers(..)> to
+// 'ValidateLowers' for floating screen objects
+void lcl_ValidateLowerObjs( SwFrm* pFrm,
+                            const SwTwips nOfst,
+                            SwPageFrm *pPage,
+                            bool bResetOnly )
+{
+    if ( pFrm->GetDrawObjs() )
+    {
+        for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+        {
+            SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
+            {
+                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+                if ( !bResetOnly )
+                {
+                    pFly->Frm().Pos().Y() += nOfst;
+                    pFly->GetVirtDrawObj()->_SetRectsDirty();
+                    if ( pFly->IsFlyInCntFrm() )
+                        ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
+                }
+                ::lcl_ValidateLowers( pFly, nOfst, 0, pPage, bResetOnly);
+            }
+            pAnchoredObj->InvalidateObjPos();
+        }
     }
 }
 
@@ -1965,9 +1932,11 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
         //Wachstum innerhalb der Tabelle - und damit der Tabelle selbst -
         //stattgefunden haben kann, muss die untere Kante durch die
         //Unterkante der letzten Zeile bestimmt werden.
-        SwLayoutFrm *pRow;
+        SwLayoutFrm* pRow = 0L;
         SwRect aScrollRect( pTab->PaintArea() );
-        if ( IsPaint() || bAddRect )
+        // --> OD 2004-07-01 #i28701# - check, if scrolling is allowed.
+        if ( mbScrollingAllowed &&
+             ( IsPaint() || bAddRect ) )
         {
             pRow = (SwLayoutFrm*)pTab->Lower();
             while ( pRow->GetNext() )
@@ -1992,7 +1961,9 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 
         if ( IsPaint() && bAddRect )
         {
-            if ( pRow && pOldUp == pTab->GetUpper() &&
+            // --> OD 2004-07-01 #i28701# - check, if scrolling is allowed
+            if ( mbScrollingAllowed &&
+                 pRow && pOldUp == pTab->GetUpper() &&
                  pTab->Frm().SSize() == aOldRect.SSize() &&
                  // OD 31.10.2002 #104100# - vertical layout support
                  (pTab->Frm().*fnRect->fnGetLeft)() == (aOldRect.*fnRect->fnGetLeft)() &&
@@ -2165,6 +2136,17 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             const BOOL bOldPaint = IsPaint();
             bPaint = bOldPaint && !(pTab && pTab == pOptTab);
             _FormatCntnt( pCntnt, pPage );
+
+            // OD 2004-05-10 #i28701# - format floating screen object at content frame.
+            // No format, if action flag <bAgain> is set or action is interrupted.
+            if ( !IsAgain() && !IsInterrupt() &&
+                 pCntnt->IsTxtFrm() &&
+                 !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCntnt)),
+                                                      *pPage, this ) )
+            {
+                return FALSE;
+            }
+
             bPaint = bOldPaint;
 
             if ( !pCntnt->GetValidLineNumFlag() && pCntnt->IsTxtFrm() )
@@ -2364,121 +2346,8 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                         (pCntnt->Frm().*fnRect->fnGetBottom)() );
         pCntnt->OptCalc();
     }
-
-    //Die im Absatz verankerten Flys wollen auch mitspielen.
-    const SwDrawObjs *pObjs = pCntnt->GetDrawObjs();
-    for ( USHORT i = 0; pObjs && i < pObjs->Count(); ++i )
-    {
-        SdrObject *pO = (*pObjs)[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
-        {
-            SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-            if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
-            {
-                FormatFlyInCnt( (SwFlyInCntFrm*)pFly );
-                pObjs = pCntnt->GetDrawObjs();
-                CHECKPAGE;
-            }
-        }
-    }
 }
-/*************************************************************************
-|*
-|*  SwLayAction::FormatFlyCntnt()
-|*
-|*      - Returnt TRUE wenn der Inhalt aller Flys vollstaendig verarbeitet
-|*        wurde, FALSE bei einem vorzeitigen Abbruch.
-|*  Ersterstellung      MA 02. Dec. 92
-|*  Letzte Aenderung    MA 16. Sep. 93
-|*
-|*************************************************************************/
-BOOL SwLayAction::FormatFlyCntnt( const SwPageFrm *pPage, sal_Bool bDontShrink )
-{
-    for ( USHORT i = 0; pPage->GetSortedObjs() &&
-                        i < pPage->GetSortedObjs()->Count(); ++i )
-    {
-        if ( IsAgain() )
-            return FALSE;
-        SdrObject *pO = (*pPage->GetSortedObjs())[i];
-        if ( pO->ISA(SwVirtFlyDrawObj) )
-        {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
 
-            // #110582#-2
-            // During formatting the content of the fly, the fly may be calculated,
-            // which in turn causes the anchor frame to be calculated. If this
-            // anchor frame is invisible, the fly is moved to the invisible layer
-            // and all of its content is deletet. This has to be avoided, because
-            // there are still some references to the content. We lock the deletion
-            // of the fly frame content:
-            const sal_Bool bOldLockDeleteContent = pFly->IsLockDeleteContent();
-            pFly->SetLockDeleteContent( TRUE );
-
-            const sal_Bool bOldShrink = pFly->IsNoShrink();
-            if( bDontShrink )
-                pFly->SetNoShrink( sal_True );
-            if ( !_FormatFlyCntnt( pFly ) )
-            {
-                if( bDontShrink )
-                    pFly->SetNoShrink( bOldShrink );
-                return FALSE;
-            }
-            if( bDontShrink )
-                pFly->SetNoShrink( bOldShrink );
-
-            // #110582#-2 Now the time has come to remove the content of the
-            // fly frame
-            pFly->SetLockDeleteContent( bOldLockDeleteContent );
-            if ( !pFly->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
-                pFly->DeleteCnt();
-        }
-    }
-    return TRUE;
-}
-/*************************************************************************
-|*
-|*  SwLayAction::FormatFlyInCnt()
-|*
-|*  Beschreibung        Da die Flys im Cntnt nix mit der Seite am Hut
-|*      (bzw. in den Bits ;-)) haben werden sie vom Cntnt (FormatCntnt)
-|*      gerufen und hier verarbeitet. Die Verarebeitungsmimik ist
-|*      prinzipiell die gleich wie bei Seiten nur nicht ganz so
-|*      kompliziert (SwLayAction::Action()).
-|*      - Returnt TRUE wenn der Fly vollstaendig verbeitet wurde, FALSE bei
-|*        einem vorzeitigen Abbruch.
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 24. Jun. 96
-|*
-|*************************************************************************/
-void SwLayAction::FormatFlyInCnt( SwFlyInCntFrm *pFly )
-{
-    if ( IsAgain() )
-        return;
-    //Wg. Aenderung eine kleine Vorsichtsmassnahme. Es wird jetzt vor der
-    //Cntntformatierung das Flag validiert und wenn die Formatierung mit
-    //FALSE returnt wird halt wieder invalidiert.
-    while ( pFly->IsInvalid() )
-    {
-        if ( pFly->IsInvalidLayout() )
-        {
-            while ( FormatLayoutFly( pFly ) )
-            {
-                if ( IsAgain() )
-                    return;
-            }
-            if ( IsAgain() )
-                return;
-            pFly->ValidateLayout();
-        }
-        if ( pFly->IsInvalidCntnt() )
-        {
-            pFly->ValidateCntnt();
-            if ( !_FormatFlyCntnt( pFly ) )
-                pFly->InvalidateCntnt();
-        }
-    }
-    CheckWaitCrsr();
-}
 /*************************************************************************
 |*
 |*  SwLayAction::_FormatFlyCntnt()
@@ -2492,13 +2361,26 @@ void SwLayAction::FormatFlyInCnt( SwFlyInCntFrm *pFly )
 |*************************************************************************/
 BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
 {
-    BOOL bOneProcessed = FALSE;
     const SwCntntFrm *pCntnt = pFly->ContainsCntnt();
 
     while ( pCntnt )
     {
-        if ( __FormatFlyCntnt( pCntnt ) )
-            bOneProcessed = TRUE;
+        // OD 2004-05-10 #i28701#
+        const SwPageFrm* pPageFrm = pCntnt->FindPageFrm();
+        _FormatCntnt( pCntnt, pPageFrm );
+
+        // --> OD 2004-07-23 #i28701# - format floating screen objects
+        // at content text frame
+        if ( pCntnt->IsTxtFrm() &&
+             !SwObjectFormatter::FormatObjsAtFrm(
+                                            *(const_cast<SwCntntFrm*>(pCntnt)),
+                                            *pPageFrm, this ) )
+        {
+            // restart format with first content
+            pCntnt = pFly->ContainsCntnt();
+            continue;
+        }
+        // <--
 
         if ( !pCntnt->GetValidLineNumFlag() && pCntnt->IsTxtFrm() )
         {
@@ -2513,7 +2395,7 @@ BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
             return FALSE;
 
         //wenn eine Eingabe anliegt breche ich die Verarbeitung ab.
-        if ( bOneProcessed && !pFly->IsFlyInCntFrm() )
+        if ( !pFly->IsFlyInCntFrm() )
         {
             CheckIdleEnd();
             // OD 14.04.2003 #106346# - consider interrupt formatting.
@@ -2525,69 +2407,6 @@ BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
     CheckWaitCrsr();
     // OD 14.04.2003 #106346# - consider interrupt formatting.
     return !(IsInterrupt() && !mbFormatCntntOnInterrupt);
-}
-
-/*************************************************************************
-|*
-|*  SwLayAction::__FormatFlyCntnt()
-|*
-|*  Beschreibung:
-|*      - Returnt TRUE, wenn der Cntnt verarbeitet,
-|*        d.h. Kalkuliert und/oder gepaintet wurde.
-|*
-|*  Ersterstellung      MA 05. Jan. 93
-|*  Letzte Aenderung    MA 18. May. 95
-|*
-|*************************************************************************/
-BOOL SwLayAction::__FormatFlyCntnt( const SwCntntFrm *pCntnt )
-{
-    BOOL bRet = FALSE;
-    if ( !pCntnt->IsValid() || pCntnt->IsCompletePaint() ||
-         pCntnt->IsRetouche() )
-    {
-        if ( IsPaint() )
-        {
-            const SwRect aOldRect( pCntnt->UnionFrm( TRUE ) );
-            const long   nOldBottom = pCntnt->Frm().Top() + pCntnt->Prt().Bottom();
-            pCntnt->OptCalc();
-            if ( pCntnt->Frm().Bottom() <  aOldRect.Bottom() )
-                pCntnt->SetRetouche();
-            PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom );
-        }
-        else
-            pCntnt->OptCalc();
-        if( IsAgain() )
-            return FALSE;
-        bRet = TRUE;
-    }
-    else
-    {
-        //Falls der Frm schon vor der Abarbeitung hier formatiert wurde.
-        if ( pCntnt->IsTxtFrm() && ((SwTxtFrm*)pCntnt)->HasRepaint() &&
-             IsPaint() )
-            PaintCntnt( pCntnt, pCntnt->FindPageFrm(), pCntnt->Frm(), pCntnt->Frm().Bottom());
-    }
-    //Die im Absatz verankerten Flys wollen auch mitspielen.
-    if ( pCntnt->GetDrawObjs() )
-    {
-        const SwDrawObjs *pObjs = pCntnt->GetDrawObjs();
-        for ( USHORT i = 0; i < pObjs->Count(); ++i )
-        {
-            SdrObject *pO = (*pObjs)[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
-            {
-                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if ( pFly->IsFlyInCntFrm() && ((SwFlyInCntFrm*)pFly)->IsInvalid() )
-                {
-                    FormatFlyInCnt( (SwFlyInCntFrm*)pFly );
-                    if ( IsAgain() )
-                        return FALSE;
-                    pObjs = pCntnt->GetDrawObjs();
-                }
-            }
-        }
-    }
-    return bRet;
 }
 
 BOOL SwLayAction::IsStopPrt() const
@@ -2639,13 +2458,13 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
     //Die im Absatz verankerten Flys wollen auch mitspielen.
     if ( pCnt->GetDrawObjs() )
     {
-        const SwDrawObjs &rObjs = *pCnt->GetDrawObjs();
+        const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
-            SdrObject *pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
+            SwAnchoredObject* pObj = rObjs[i];
+            if ( pObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyInCntFrm() )
                 {
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
@@ -2693,10 +2512,10 @@ BOOL SwLayIdle::FormatSpelling( BOOL bVisAreaOnly )
             for ( USHORT i = 0; pPage->GetSortedObjs() &&
                                 i < pPage->GetSortedObjs()->Count(); ++i )
             {
-                SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+                if ( pObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
                     while( pC )
                     {
@@ -2740,11 +2559,6 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
 
         ((SwTxtFrm*)pCnt)->CollectAutoCmplWrds( pCntntNode, nTxtPos,
                                                 bVisAreaOnly );
-/*      bPageValid = bPageValid && !pCnt->GetNode()->IsAutoCompleteWordDirty();
-
-        if( !bPageValid )
-            bAllValid = FALSE;
-*/
         if ( Application::AnyInput( INPUT_ANY ) )
             return TRUE;
     }
@@ -2752,13 +2566,13 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
     //Die im Absatz verankerten Flys wollen auch mitspielen.
     if ( pCnt->GetDrawObjs() )
     {
-        const SwDrawObjs &rObjs = *pCnt->GetDrawObjs();
+        const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
-            SdrObject *pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
+            SwAnchoredObject* pObj = rObjs[i];
+            if ( pObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
                 if ( pFly->IsFlyInCntFrm() )
                 {
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
@@ -2810,10 +2624,10 @@ BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
             for ( USHORT i = 0; pPage->GetSortedObjs() &&
                                 i < pPage->GetSortedObjs()->Count(); ++i )
             {
-                SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
+                const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+                if ( pObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     const SwCntntFrm *pC = pFly->ContainsCntnt();
                     while( pC )
                     {
