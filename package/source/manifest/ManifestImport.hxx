@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,15 +82,45 @@ enum ElementNames
     e_Manifest,
     e_FileEntry,
     e_EncryptionData,
-    e_InitialisationVector
+    e_Algorithm,
+    e_KeyDerivation
 };
 class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
-private:
+protected:
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aSequence;
     sal_Int16       nNumProperty;
     ::std::stack < ElementNames > aStack;
-    std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
+    sal_Bool bIgnoreEncryptData;
+    ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
+
+    const ::rtl::OUString sFileEntryElement;
+    const ::rtl::OUString sManifestElement;
+    const ::rtl::OUString sEncryptionDataElement;
+    const ::rtl::OUString sAlgorithmElement;
+    const ::rtl::OUString sKeyDerivationElement;
+
+    const ::rtl::OUString sCdataAttribute;
+    const ::rtl::OUString sMediaTypeAttribute;
+    const ::rtl::OUString sFullPathAttribute;
+    const ::rtl::OUString sSizeAttribute;
+    const ::rtl::OUString sSaltAttribute;
+    const ::rtl::OUString sInitialisationVectorAttribute;
+    const ::rtl::OUString sIterationCountAttribute;
+    const ::rtl::OUString sAlgorithmNameAttribute;
+    const ::rtl::OUString sKeyDerivationNameAttribute;
+
+    const ::rtl::OUString sFullPathProperty;
+    const ::rtl::OUString sMediaTypeProperty;
+    const ::rtl::OUString sIterationCountProperty;
+    const ::rtl::OUString sSaltProperty;
+    const ::rtl::OUString sInitialisationVectorProperty;
+    const ::rtl::OUString sSizeProperty;
+
+    const ::rtl::OUString sWhiteSpace;
+    const ::rtl::OUString sBlowfish;
+    const ::rtl::OUString sPBKDF2;
+
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
     ~ManifestImport( void );
