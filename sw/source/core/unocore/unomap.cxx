@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:27:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2031,7 +2031,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDBNextSetFieldPropMap    [] =
                 {
-                    // Note: DATA_BASE_NAME, DATA_BASE_URL and DATA_BASE_RESOURCE
+                    // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
                     // them as DataSource and it does not matter which one it is.
 
@@ -2039,7 +2039,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_URL ) ,  FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_RESOURCE ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
@@ -2050,7 +2049,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDBNumSetFieldPropMap [] =
                 {
-                    // Note: DATA_BASE_NAME, DATA_BASE_URL and DATA_BASE_RESOURCE
+                    // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
                     // them as DataSource and it does not matter which one it is.
 
@@ -2058,7 +2057,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CONDITION),         FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_URL ) ,   FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_RESOURCE ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
                     {0,0,0,0}
@@ -2070,14 +2068,13 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
                 {
-                    // Note: DATA_BASE_NAME, DATA_BASE_URL and DATA_BASE_RESOURCE
+                    // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
                     // them as DataSource and it does not matter which one it is.
 
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_URL ) ,  FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_RESOURCE ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,  0},
                     {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
@@ -2105,14 +2102,13 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDBNameFieldPropMap       [] =
                 {
-                    // Note: DATA_BASE_NAME, DATA_BASE_URL and DATA_BASE_RESOURCE
+                    // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
                     // them as DataSource and it does not matter which one it is.
 
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_URL ) ,  FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_RESOURCE ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN),    PROPERTY_NONE, 0},
                     {0,0,0,0}
@@ -2278,7 +2274,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDBFieldTypePropMap           [] =
                 {
-                    // Note: DATA_BASE_NAME, DATA_BASE_URL and DATA_BASE_RESOURCE
+                    // Note: DATA_BASE_NAME and DATA_BASE_URL
                     // are mapped to the same nMId, because internally  we only use
                     // them as DataSource and it does not matter which one it is.
 
@@ -2287,7 +2283,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_DATA_COLUMN_NAME ), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),     FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_URL ) ,   FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_RESOURCE ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
