@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:43:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case SID_BASICIDE_APPEAR:
         {
             SfxViewFrame* pView = SfxViewFrame::GetFirst();
-            ::rtl::OUString aBasicName = ::rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
+            ::rtl::OUString aBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
             while ( pView )
             {
                 if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == aBasicName )
