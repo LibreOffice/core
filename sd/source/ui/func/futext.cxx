@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-07 09:08:30 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 15:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,34 +629,24 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 // Damit das Objekt beim anschliessenden Erzeugen gleich die richtige
                 // Hoehe bekommt (sonst wird zuviel gepainted)
                 SfxItemSet aSet(pViewShell->GetPool());
-                SdrTextMinFrameHeightItem aMinHeight(0);
-                aSet.Put(aMinHeight);
-                SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
-                aSet.Put(aAutoGrowHeight);
-
-    //-/            pTextObj->NbcSetAttributes(aSet, FALSE);
+                aSet.Put(SdrTextMinFrameHeightItem(0));
+                aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
+                aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
                 pTextObj->SetItemSet(aSet);
-
                 pTextObj->AdjustTextFrameWidthAndHeight();
-                SdrTextMaxFrameHeightItem aMaxHeight(pTextObj->GetLogicRect().GetSize().Height());
-                aSet.Put(aMaxHeight);
-
-    //-/            pTextObj->NbcSetAttributes(aSet, FALSE);
+                aSet.Put(SdrTextMaxFrameHeightItem(pTextObj->GetLogicRect().GetSize().Height()));
                 pTextObj->SetItemSet(aSet);
             }
             else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
             {
                 SfxItemSet aSet(pViewShell->GetPool());
-                SdrTextMinFrameWidthItem aMinWidth( 0 );
-                aSet.Put( aMinWidth );
-                SdrTextAutoGrowWidthItem aAutoGrowWidth( TRUE );
-                aSet.Put( aAutoGrowWidth );
-                pTextObj->SetItemSet( aSet );
-
+                aSet.Put(SdrTextMinFrameWidthItem(0));
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                pTextObj->SetItemSet(aSet);
                 pTextObj->AdjustTextFrameWidthAndHeight();
-                SdrTextMaxFrameWidthItem aMaxWidth( pTextObj->GetLogicRect().GetSize().Width() );
-                aSet.Put( aMaxWidth );
-                pTextObj->SetItemSet( aSet );
+                aSet.Put(SdrTextMaxFrameWidthItem(pTextObj->GetLogicRect().GetSize().Width()));
+                pTextObj->SetItemSet(aSet);
             }
         }
 
@@ -668,27 +658,24 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         else if (nSlotId == SID_TEXT_FITTOSIZE)
         {
             // FitToSize (An Rahmen anpassen)
-            SfxItemSet aSet(pViewShell->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT,
-                                                   SDRATTR_TEXT_AUTOGROWWIDTH, 0L);
+            SfxItemSet aSet(pViewShell->GetPool(),
+                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
             SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
             aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
             aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
             aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-
-//-/            pTextObj->NbcSetAttributes(aSet, FALSE);
             pTextObj->SetItemSet(aSet);
-
             pTextObj->AdjustTextFrameWidthAndHeight();
             SetInEditMode(rMEvt, FALSE);
         }
         else if ( nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
         {
-            SfxItemSet aSet(pViewShell->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT,
-                                                   SDRATTR_TEXT_AUTOGROWWIDTH, 0L);
+            SfxItemSet aSet(pViewShell->GetPool(),
+                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWWIDTH);
             SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
-            aSet.Put( SdrTextFitToSizeTypeItem(eFTS) );
-            aSet.Put( SdrTextAutoGrowHeightItem(FALSE) );
-            aSet.Put( SdrTextAutoGrowWidthItem(FALSE) );
+            aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
+            aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+            aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
             pTextObj->SetItemSet(aSet);
             pTextObj->AdjustTextFrameWidthAndHeight();
             SetInEditMode(rMEvt, FALSE);
@@ -702,25 +689,19 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     // Impress-Textobjekt (faellt auf Zeilenhoehe zusammen)
                     SfxItemSet aSet(pViewShell->GetPool());
-                    SdrTextMinFrameHeightItem aMinHeight(0);
-                    aSet.Put(aMinHeight);
-                    SdrTextMaxFrameHeightItem aMaxHeight(0);
-                    aSet.Put(aMaxHeight);
-                    SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
-                    aSet.Put(aAutoGrowHeight);
-
-    //-/                pTextObj->NbcSetAttributes(aSet, FALSE);
+                    aSet.Put(SdrTextMinFrameHeightItem(0));
+                    aSet.Put(SdrTextMaxFrameHeightItem(0));
+                    aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
+                    aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
                     pTextObj->SetItemSet(aSet);
                 }
                 else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
                 {
-                    SfxItemSet aSet( pViewShell->GetPool() );
-                    SdrTextMinFrameHeightItem aMinWidth( 0 );
-                    aSet.Put( aMinWidth );
-                    SdrTextMaxFrameWidthItem aMaxWidth( 0 );
-                    aSet.Put( aMaxWidth );
-                    SdrTextAutoGrowHeightItem aAutoGrowWidth( TRUE );
-                    aSet.Put(aAutoGrowWidth);
+                    SfxItemSet aSet(pViewShell->GetPool());
+                    aSet.Put(SdrTextMinFrameWidthItem(0));
+                    aSet.Put(SdrTextMaxFrameWidthItem(0));
+                    aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                    aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
                     pTextObj->SetItemSet(aSet);
                 }
 
@@ -795,18 +776,11 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             if (pTextObj)
             {
                 SfxItemSet aSet(pViewShell->GetPool());
-                SdrTextMinFrameHeightItem aMinHeight(0);
-                aSet.Put(aMinHeight);
-                SdrTextMinFrameWidthItem aMinWidth(0);
-                aSet.Put(aMinWidth);
-                SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
-                aSet.Put(aAutoGrowHeight);
-                SdrTextAutoGrowWidthItem aAutoGrowWidth(TRUE);
-                aSet.Put(aAutoGrowWidth);
-                SdrTextHorzAdjustItem aTextHorzAdjust(SDRTEXTHORZADJUST_LEFT);
-                aSet.Put(aTextHorzAdjust);
-
-//-/                pTextObj->NbcSetAttributes(aSet, FALSE);
+                aSet.Put(SdrTextMinFrameHeightItem(0));
+                aSet.Put(SdrTextMinFrameWidthItem(0));
+                aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
                 pTextObj->SetItemSet(aSet);
 
                 pTextObj->SetDisableAutoWidthOnDragging(TRUE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 13:13:01 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
             {
                 // Bei Praesentationsobjekten auf der MasterPage soll die
                 // Groesse vom Benutzwer frei waehlbar sein
-                SdrTextAutoGrowHeightItem aAutoGrowHeight(FALSE);
-                aTempAttr.Put(aAutoGrowHeight);
+                aTempAttr.Put(SdrTextAutoGrowHeightItem(FALSE));
             }
 
             pSdrObj->SetItemSet(aTempAttr);
@@ -2215,22 +2214,14 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
              && !bMaster )
         {
             // AutoGrowHeight ausschalten, MinHeight neu setzen
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-            SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
-            aTempAttr.Put( aMinHeight );
-            SdrTextAutoGrowHeightItem aAutoGrowHeight(FALSE);
-            aTempAttr.Put(aAutoGrowHeight);
-
+            SfxItemSet aTempAttr(((SdDrawDocument*)pModel)->GetPool());
+            aTempAttr.Put(SdrTextMinFrameHeightItem(aRect.GetSize().Height()));
+            aTempAttr.Put(SdrTextAutoGrowHeightItem(FALSE));
             pObj->SetItemSet(aTempAttr);
-
             pObj->SetLogicRect(aRect);
 
             // AutoGrowHeight einschalten
-            SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-            SdrTextAutoGrowHeightItem aAutoGrowHeightOn(TRUE);
-            aAttr.Put(aAutoGrowHeightOn);
-
-            pObj->SetItemSet(aAttr);
+            pObj->SetItem(SdrTextAutoGrowHeightItem(TRUE));
         }
     }
 
