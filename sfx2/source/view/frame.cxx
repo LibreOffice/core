@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-25 13:26:57 $
+ *  last change: $Author: mba $ $Date: 2001-01-25 15:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1940,8 +1940,17 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
     {
         Point aPos ( rBorder.Left(), rBorder.Top() );
         Size aSize( GetWindow().GetOutputSizePixel() );
-        aSize.Width() -= ( rBorder.Left() + rBorder.Right() );
-        aSize.Height() -= ( rBorder.Top() + rBorder.Bottom() );
+        USHORT nDeltaX = rBorder.Left() + rBorder.Right();
+        if ( aSize.Width() > nDeltaX )
+            aSize.Width() -= nDeltaX;
+        else
+            aSize.Width() = 0;
+
+        USHORT nDeltaY = rBorder.Top() + rBorder.Bottom();
+        if ( aSize.Height() > nDeltaY )
+            aSize.Height() -= nDeltaY;
+        else
+            aSize.Height() = 0;
 
         if ( GetParentFrame() )
         {
