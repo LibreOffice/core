@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 09:56:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,95 +373,95 @@ void FrameView::Disconnect()
 |*
 \************************************************************************/
 
-SvStream& operator << (SvStream& rOut, const FrameView& rView)
-{
-    ULONG nULTemp;
-
-    // #95895# translate view-layer name to standard-ASCII
-    // like in MakeUniqueLayerNames()
-    String aLayerName(rView.GetActiveLayer());
-
-    String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
-    String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
-    String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
-    String aLayerControls(SdResId(STR_LAYER_CONTROLS));
-    String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
-
-    sal_Bool bActiveLayerWasChanged(sal_False);
-    String aOldLayerName(rView.GetActiveLayer());
-
-    if (aLayerName == aLayerLayout)
-    {
-        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
-        bActiveLayerWasChanged = sal_True;
-    }
-    else if (aLayerName == aLayerBckgrnd)
-    {
-        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
-        bActiveLayerWasChanged = sal_True;
-    }
-    else if (aLayerName == aLayerBckgrndObj)
-    {
-        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
-        bActiveLayerWasChanged = sal_True;
-    }
-    else if (aLayerName == aLayerControls)
-    {
-        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
-        bActiveLayerWasChanged = sal_True;
-    }
-    else if (aLayerName == aLayerMeasurelines)
-    {
-        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
-        bActiveLayerWasChanged = sal_True;
-    }
-
-    // stream out the view
-    rOut << (SdrView&) rView;
-
-    // #95895# when active layer name was changed for export, change it back to original here
-    if(bActiveLayerWasChanged)
-    {
-        ((FrameView&)rView).SetActiveLayer(aOldLayerName);
-    }
-
-    // Letzter Parameter ist die aktuelle Versionsnummer des Codes
-    SdIOCompat aIO(rOut, STREAM_WRITE, 11);
-
-    rOut << rView.bRuler;
-    rOut << rView.aVisibleLayers;
-    rOut << rView.aLockedLayers;
-    rOut << rView.aPrintableLayers;
-    rOut << rView.aStandardHelpLines;
-    rOut << rView.aNotesHelpLines;
-    rOut << rView.aHandoutHelpLines;
-    rOut << rView.bNoColors;
-    rOut << rView.bNoAttribs;
-    rOut << rView.aVisArea;
-    nULTemp = (ULONG) rView.ePageKind;            rOut << nULTemp;
-    rOut << rView.nSelectedPage;
-    nULTemp = (ULONG) rView.eStandardEditMode;    rOut << nULTemp;
-    rOut << rView.bLayerMode;
-    rOut << rView.bQuickEdit;
-    rOut << rView.bDragWithCopy;
-    rOut << (UINT16)rView.nSlidesPerRow;
-
-    rOut << rView.bBigHandles;
-    rOut << rView.bDoubleClickTextEdit;
-    rOut << rView.bClickChangeRotation;
-
-    nULTemp = (ULONG) rView.eNotesEditMode;       rOut << nULTemp;
-    nULTemp = (ULONG) rView.eHandoutEditMode;     rOut << nULTemp;
-
-    rOut << rView.nDrawMode;
-    rOut << rView.nPreviewDrawMode;
-
-    rOut << rView.bShowPreviewInPageMode;
-    rOut << rView.bShowPreviewInMasterPageMode;
-    rOut << rView.bShowPreviewInOutlineMode;
-
-    return rOut;
-}
+//BFS02SvStream& operator << (SvStream& rOut, const FrameView& rView)
+//BFS02{
+//BFS02 ULONG nULTemp;
+//BFS02
+//BFS02 // #95895# translate view-layer name to standard-ASCII
+//BFS02 // like in MakeUniqueLayerNames()
+//BFS02 String aLayerName(rView.GetActiveLayer());
+//BFS02
+//BFS02 String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
+//BFS02 String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
+//BFS02 String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
+//BFS02 String aLayerControls(SdResId(STR_LAYER_CONTROLS));
+//BFS02 String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
+//BFS02
+//BFS02 sal_Bool bActiveLayerWasChanged(sal_False);
+//BFS02 String aOldLayerName(rView.GetActiveLayer());
+//BFS02
+//BFS02 if (aLayerName == aLayerLayout)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
+//BFS02     bActiveLayerWasChanged = sal_True;
+//BFS02 }
+//BFS02 else if (aLayerName == aLayerBckgrnd)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
+//BFS02     bActiveLayerWasChanged = sal_True;
+//BFS02 }
+//BFS02 else if (aLayerName == aLayerBckgrndObj)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
+//BFS02     bActiveLayerWasChanged = sal_True;
+//BFS02 }
+//BFS02 else if (aLayerName == aLayerControls)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
+//BFS02     bActiveLayerWasChanged = sal_True;
+//BFS02 }
+//BFS02 else if (aLayerName == aLayerMeasurelines)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
+//BFS02     bActiveLayerWasChanged = sal_True;
+//BFS02 }
+//BFS02
+//BFS02 // stream out the view
+//BFS02 rOut << (SdrView&) rView;
+//BFS02
+//BFS02 // #95895# when active layer name was changed for export, change it back to original here
+//BFS02 if(bActiveLayerWasChanged)
+//BFS02 {
+//BFS02     ((FrameView&)rView).SetActiveLayer(aOldLayerName);
+//BFS02 }
+//BFS02
+//BFS02 // Letzter Parameter ist die aktuelle Versionsnummer des Codes
+//BFS02 SdIOCompat aIO(rOut, STREAM_WRITE, 11);
+//BFS02
+//BFS02 rOut << rView.bRuler;
+//BFS02 rOut << rView.aVisibleLayers;
+//BFS02 rOut << rView.aLockedLayers;
+//BFS02 rOut << rView.aPrintableLayers;
+//BFS02 rOut << rView.aStandardHelpLines;
+//BFS02 rOut << rView.aNotesHelpLines;
+//BFS02 rOut << rView.aHandoutHelpLines;
+//BFS02 rOut << rView.bNoColors;
+//BFS02 rOut << rView.bNoAttribs;
+//BFS02 rOut << rView.aVisArea;
+//BFS02 nULTemp = (ULONG) rView.ePageKind;            rOut << nULTemp;
+//BFS02 rOut << rView.nSelectedPage;
+//BFS02 nULTemp = (ULONG) rView.eStandardEditMode;    rOut << nULTemp;
+//BFS02 rOut << rView.bLayerMode;
+//BFS02 rOut << rView.bQuickEdit;
+//BFS02 rOut << rView.bDragWithCopy;
+//BFS02 rOut << (UINT16)rView.nSlidesPerRow;
+//BFS02
+//BFS02 rOut << rView.bBigHandles;
+//BFS02 rOut << rView.bDoubleClickTextEdit;
+//BFS02 rOut << rView.bClickChangeRotation;
+//BFS02
+//BFS02 nULTemp = (ULONG) rView.eNotesEditMode;       rOut << nULTemp;
+//BFS02 nULTemp = (ULONG) rView.eHandoutEditMode;     rOut << nULTemp;
+//BFS02
+//BFS02 rOut << rView.nDrawMode;
+//BFS02 rOut << rView.nPreviewDrawMode;
+//BFS02
+//BFS02 rOut << rView.bShowPreviewInPageMode;
+//BFS02 rOut << rView.bShowPreviewInMasterPageMode;
+//BFS02 rOut << rView.bShowPreviewInOutlineMode;
+//BFS02
+//BFS02 return rOut;
+//BFS02}
 
 /*************************************************************************
 |*
@@ -469,138 +469,138 @@ SvStream& operator << (SvStream& rOut, const FrameView& rView)
 |*
 \************************************************************************/
 
-SvStream& operator >> (SvStream& rIn, FrameView& rView)
-{
-    rIn >> (SdrView&) rView;
-
-    SdIOCompat aIO(rIn, STREAM_READ);
-
-    rIn >> rView.bRuler;
-    rIn >> rView.aVisibleLayers;
-    rIn >> rView.aLockedLayers;
-    rIn >> rView.aPrintableLayers;
-    rIn >> rView.aStandardHelpLines;
-
-    if (aIO.GetVersion() >= 1)
-    {
-        // Daten der Versionen >= 1 einlesen
-        rIn >> rView.aNotesHelpLines;
-        rIn >> rView.aHandoutHelpLines;
-    }
-
-    if (aIO.GetVersion() >= 2)
-    {
-        // Daten der Versionen >= 2 einlesen
-        rIn >> rView.bNoColors;
-        rIn >> rView.bNoAttribs;
-    }
-
-    if (aIO.GetVersion() >= 3)
-    {
-        ULONG nULTemp;
-        rIn >> rView.aVisArea;
-        rIn >> nULTemp;          rView.ePageKind = (PageKind) nULTemp;
-        rIn >> rView.nSelectedPage;
-        rIn >> nULTemp;          rView.eStandardEditMode = (EditMode) nULTemp;
-        rView.eNotesEditMode   = rView.eStandardEditMode;
-        rView.eHandoutEditMode = rView.eStandardEditMode;
-        rIn >> rView.bLayerMode;
-    }
-
-    if (aIO.GetVersion() >= 4)
-    {
-        rIn >> rView.bQuickEdit;
-    }
-
-    if (aIO.GetVersion() >= 5)
-    {
-        rIn >> rView.bDragWithCopy;
-    }
-
-    if (aIO.GetVersion() >= 6)
-    {
-        UINT16 nTemp;
-        rIn >> nTemp; rView.nSlidesPerRow = (USHORT)nTemp;
-    }
-
-    if (aIO.GetVersion() >= 7)
-    {
-        rIn >> rView.bBigHandles;
-        rIn >> rView.bDoubleClickTextEdit;
-        rIn >> rView.bClickChangeRotation;
-    }
-
-    if (aIO.GetVersion() >= 8)
-    {
-        ULONG nULTemp;
-        rIn >> nULTemp; rView.eNotesEditMode   = (EditMode) nULTemp;
-        rIn >> nULTemp; rView.eHandoutEditMode = (EditMode) nULTemp;
-    }
-
-    if (aIO.GetVersion() >= 9)
-    {
-        rIn >> rView.nDrawMode;
-        rIn >> rView.nPreviewDrawMode;
-    }
-
-    if (aIO.GetVersion() >= 10)
-    {
-        rIn >> rView.bShowPreviewInPageMode;
-        rIn >> rView.bShowPreviewInMasterPageMode;
-    }
-
-    if (aIO.GetVersion() >= 11)
-    {
-        rIn >> rView.bShowPreviewInOutlineMode;
-    }
-
-    // Falls die UniqueLayerNames vorhanden sind, werden die Default-Namen
-    // verwendet
-    String aLayerName(rView.GetActiveLayer());
-
-    if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )))
-    {
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
-    }
-    else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )))
-    {
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRND)));
-    }
-    else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )))
-    {
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
-    }
-    else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )))
-    {
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_CONTROLS)));
-    }
-    else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )))
-    {
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_MEASURELINES)));
-    }
-    else
-    {
-        // #i12131#
-        // If layer name was not translated this may be an old layer name in
-        // translated speech version. To avoid errors (see bugid) this needs to be
-        // set to a useful default. Best default-layout is 'Layout'.
-        rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
-    }
-
-    if (rView.GetModel())
-    {
-        USHORT nMaxPages = ((SdDrawDocument* )rView.GetModel())->
-                                      GetSdPageCount(rView.ePageKind);
-
-        if (rView.nSelectedPage >= nMaxPages)
-        {
-            // Ggf. auf die letzte Seite selektieren
-            rView.nSelectedPage = nMaxPages - 1;
-        }
-    }
-
-    return rIn;
-}
+//BFS02SvStream& operator >> (SvStream& rIn, FrameView& rView)
+//BFS02{
+//BFS02 rIn >> (SdrView&) rView;
+//BFS02
+//BFS02 SdIOCompat aIO(rIn, STREAM_READ);
+//BFS02
+//BFS02 rIn >> rView.bRuler;
+//BFS02 rIn >> rView.aVisibleLayers;
+//BFS02 rIn >> rView.aLockedLayers;
+//BFS02 rIn >> rView.aPrintableLayers;
+//BFS02 rIn >> rView.aStandardHelpLines;
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 1)
+//BFS02 {
+//BFS02     // Daten der Versionen >= 1 einlesen
+//BFS02     rIn >> rView.aNotesHelpLines;
+//BFS02     rIn >> rView.aHandoutHelpLines;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 2)
+//BFS02 {
+//BFS02     // Daten der Versionen >= 2 einlesen
+//BFS02     rIn >> rView.bNoColors;
+//BFS02     rIn >> rView.bNoAttribs;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 3)
+//BFS02 {
+//BFS02     ULONG nULTemp;
+//BFS02     rIn >> rView.aVisArea;
+//BFS02     rIn >> nULTemp;          rView.ePageKind = (PageKind) nULTemp;
+//BFS02     rIn >> rView.nSelectedPage;
+//BFS02     rIn >> nULTemp;          rView.eStandardEditMode = (EditMode) nULTemp;
+//BFS02     rView.eNotesEditMode   = rView.eStandardEditMode;
+//BFS02     rView.eHandoutEditMode = rView.eStandardEditMode;
+//BFS02     rIn >> rView.bLayerMode;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 4)
+//BFS02 {
+//BFS02     rIn >> rView.bQuickEdit;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 5)
+//BFS02 {
+//BFS02     rIn >> rView.bDragWithCopy;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 6)
+//BFS02 {
+//BFS02     UINT16 nTemp;
+//BFS02     rIn >> nTemp; rView.nSlidesPerRow = (USHORT)nTemp;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 7)
+//BFS02 {
+//BFS02     rIn >> rView.bBigHandles;
+//BFS02     rIn >> rView.bDoubleClickTextEdit;
+//BFS02     rIn >> rView.bClickChangeRotation;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 8)
+//BFS02 {
+//BFS02     ULONG nULTemp;
+//BFS02     rIn >> nULTemp; rView.eNotesEditMode   = (EditMode) nULTemp;
+//BFS02     rIn >> nULTemp; rView.eHandoutEditMode = (EditMode) nULTemp;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 9)
+//BFS02 {
+//BFS02     rIn >> rView.nDrawMode;
+//BFS02     rIn >> rView.nPreviewDrawMode;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 10)
+//BFS02 {
+//BFS02     rIn >> rView.bShowPreviewInPageMode;
+//BFS02     rIn >> rView.bShowPreviewInMasterPageMode;
+//BFS02 }
+//BFS02
+//BFS02 if (aIO.GetVersion() >= 11)
+//BFS02 {
+//BFS02     rIn >> rView.bShowPreviewInOutlineMode;
+//BFS02 }
+//BFS02
+//BFS02 // Falls die UniqueLayerNames vorhanden sind, werden die Default-Namen
+//BFS02 // verwendet
+//BFS02 String aLayerName(rView.GetActiveLayer());
+//BFS02
+//BFS02 if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )))
+//BFS02 {
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
+//BFS02 }
+//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )))
+//BFS02 {
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRND)));
+//BFS02 }
+//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )))
+//BFS02 {
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
+//BFS02 }
+//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )))
+//BFS02 {
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_CONTROLS)));
+//BFS02 }
+//BFS02 else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )))
+//BFS02 {
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_MEASURELINES)));
+//BFS02 }
+//BFS02 else
+//BFS02 {
+//BFS02     // #i12131#
+//BFS02     // If layer name was not translated this may be an old layer name in
+//BFS02     // translated speech version. To avoid errors (see bugid) this needs to be
+//BFS02     // set to a useful default. Best default-layout is 'Layout'.
+//BFS02     rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
+//BFS02 }
+//BFS02
+//BFS02 if (rView.GetModel())
+//BFS02 {
+//BFS02     USHORT nMaxPages = ((SdDrawDocument* )rView.GetModel())->
+//BFS02                                   GetSdPageCount(rView.ePageKind);
+//BFS02
+//BFS02     if (rView.nSelectedPage >= nMaxPages)
+//BFS02     {
+//BFS02         // Ggf. auf die letzte Seite selektieren
+//BFS02         rView.nSelectedPage = nMaxPages - 1;
+//BFS02     }
+//BFS02 }
+//BFS02
+//BFS02 return rIn;
+//BFS02}
 
 /*************************************************************************
 |*
