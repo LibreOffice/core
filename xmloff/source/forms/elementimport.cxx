@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 13:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,12 +592,90 @@ namespace xmloff
     void OControlImport::EndElement()
     {
         OSL_ENSURE(m_xElement.is(), "OControlImport::EndElement: invalid control!");
+        if ( !m_xElement.is() )
+            return;
+
         // register our control with it's id
-        if (m_xElement.is() && m_sControlId.getLength())
+        if (m_sControlId.getLength())
             m_rFormImport.getControlIdMap().registerControlId(m_xElement, m_sControlId);
         // it's allowed to have no control id. In this case we're importing a column
 
+        // one more pre-work to do:
+        // when we set default values, then by definition the respective value is set
+        // to this default value, too. This means if the sequence contains for example
+        // a DefaultText value, then the Text will be affected by this, too.
+        // In case the Text is not part of the property sequence (or occurs _before_
+        // the DefaultText, which can happen for other value/default-value property names),
+        // this means that the Text (the value property) is incorrectly imported.
+        // #102475# - 04.09.2002 - fs@openoffice.org
+
+        sal_Bool bRestoreValuePropertyValue = sal_False;
+        Any aValuePropertyValue;
+
+        sal_Int16 nClassId = FormComponentType::CONTROL;
+        try
+        {
+            // get the class id of our element
+            m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while retrieving the class id!" );
+        }
+
+        const sal_Char* pValueProperty = NULL;
+        const sal_Char* pDefaultValueProperty = NULL;
+        getRuntimeValuePropertyNames(m_eElementType, nClassId, pValueProperty, pDefaultValueProperty);
+        if ( pDefaultValueProperty && pValueProperty )
+        {
+            sal_Bool bNonDefaultValuePropertyValue = sal_False;
+                // is the "value property" part of the sequence?
+
+            // look up this property in our sequence
+            for (   ConstPropertyValueArrayIterator aCheck = m_aValues.begin();
+                    (aCheck != m_aValues.end() ) && !bRestoreValuePropertyValue;
+                    ++aCheck
+                )
+            {
+                if ( aCheck->Name.equalsAscii( pDefaultValueProperty ) )
+                    bRestoreValuePropertyValue = sal_True;
+                else if ( aCheck->Name.equalsAscii( pValueProperty ) )
+                {
+                    bNonDefaultValuePropertyValue = sal_True;
+                    // we need to restore the value property we found here, nothing else
+                    aValuePropertyValue = aCheck->Value;
+                }
+            }
+
+            if ( bRestoreValuePropertyValue && !bNonDefaultValuePropertyValue )
+            {
+                // found it -> need to remember (and restore) the "value property value", which is not set explicitly
+                try
+                {
+                    aValuePropertyValue = m_xElement->getPropertyValue( ::rtl::OUString::createFromAscii( pValueProperty ) );
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while retrieving the current value property!" );
+                }
+            }
+        }
+
+        // let the base class set all the values
         OElementImport::EndElement();
+
+        // restore the "value property value", if necessary
+        if ( bRestoreValuePropertyValue && pValueProperty )
+        {
+            try
+            {
+                m_xElement->setPropertyValue( ::rtl::OUString::createFromAscii( pValueProperty ), aValuePropertyValue );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while restoring the value property!" );
+            }
+        }
     }
 
     //=====================================================================
@@ -1309,6 +1387,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2002/08/22 07:36:10  oj
+ *  #99721# now save image url relative
+ *
  *  Revision 1.27  2001/12/12 16:35:19  fs
  *  #95892# moved the assertion in ListAndComboImport::EndElement to the proper place
  *
