@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: dvo $ $Date: 2001-07-25 13:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     const XMLPropertyMapEntry& rMapEntry,
     const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
     sXMLAttributeName( GetXMLToken(rMapEntry.meXMLName) ),
-    sAPIPropertyName( OUString::createFromAscii(rMapEntry.msApiName) ),
+    sAPIPropertyName( OUString(rMapEntry.msApiName, rMapEntry.nApiNameLength,
+                               RTL_TEXTENCODING_ASCII_US ) ),
     nXMLNameSpace( rMapEntry.mnNameSpace ),
     nType( rMapEntry.mnType ),
     nContextId( rMapEntry.mnContextId ),
