@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,8 +986,8 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text [ spanish ] = "Imαgenes" ;
     Text [ french ] = "Images" ;
     Text [ dutch ] = "Afbeeldingen" ;
-    Text [ swedish ] = "Grafiker" ;
-    Text [ danish ] = "Billeder" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Grafik" ;
     Text [ portuguese ] = "Imagens" ;
     Text [ portuguese_brazilian ] = "Grafiken" ;
     Text[ chinese_simplified ] = "ΝΌΠΞ";
@@ -1044,7 +1044,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text[ japanese ] = "Γ·½ΔΟ°Έ";
     Text[ chinese_traditional ] = "€Ί€εΌΠΕÒ";
     Text[ arabic ] = "ΕΤΗΡΗΚ γΡΜΪνΙ";
-    Text[ greek ] = "Σημάνσεις κειμένου";
+    Text[ greek ] = "Σημάδια κειμένου";
     Text[ korean ] = "Γ₯°₯ΗΗ";
     Text[ turkish ] = "Metin iώareti";
     Text[ language_user1 ] = " ";
@@ -1276,7 +1276,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text [ french ] = "Image" ;
     Text [ dutch ] = "Afbeelding" ;
     Text [ swedish ] = "Grafik" ;
-    Text [ danish ] = "Billede" ;
+    Text [ danish ] = "Grafik" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ portuguese_brazilian ] = "Grafik" ;
     Text[ chinese_simplified ] = "ΝΌΠΞ";
@@ -1333,7 +1333,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text[ japanese ] = "Γ·½ΔΟ°Έ";
     Text[ chinese_traditional ] = "€Ί€εΌΠΕÒ";
     Text[ arabic ] = "ΕΤΗΡΙ γΡΜΪνΙ";
-    Text[ greek ] = "Σήμανση κειμένου";
+    Text[ greek ] = "Σημάδι κειμένου";
     Text[ korean ] = "Γ₯°₯ΗΗ";
     Text[ turkish ] = "Metin iώareti";
     Text[ language_user1 ] = " ";
