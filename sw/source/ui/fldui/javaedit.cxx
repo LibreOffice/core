@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:12:07 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ void SwJavaEditDialog::SetFld()
 
 BOOL SwJavaEditDialog::IsUpdate()
 {
-    return bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText;
+    return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
 /*------------------------------------------------------------------------
