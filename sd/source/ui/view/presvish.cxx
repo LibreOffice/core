@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:38:18 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ void PresentationViewShell::FinishInitialization (
         SetFrameView (pFrameView);
         pFrameView->Connect();
     }
+    SetRuler(false);
     SwitchPage (nPageNumber);
     WriteFrameViewData();
 
