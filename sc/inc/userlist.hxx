@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userlist.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: er $ $Date: 2002-09-23 15:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ public:
             ScUserListData* GetData( const String& rSubStr ) const;
             BOOL            Load( SvStream& rStream );
             BOOL            Store( SvStream& rStream ) const;
+            /// If the list in rStr is already inserted
+            BOOL            HasEntry( const String& rStr ) const;
 
     inline  ScUserListData* operator[]( const USHORT nIndex) const;
     inline  ScUserList&     operator= ( const ScUserList& r );
