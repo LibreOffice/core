@@ -20342,3 +20342,5 @@ _real@8@3fff8666666666666800
 ?resize@?$hashtable@U?$pair@QBUSfxItemPropertyMap@@PBU1@@_STL@@PBUSfxItemPropertyMap@@USfxItemPropertyMapHash@@U?$_Select1st@U?$pair@QBUSfxItemPropertyMap@@PBU1@@_STL@@@2@U?$equal_to@PBUSfxItemPropertyMap@@@2@V?$allocator@U?$pair@QBUSfxItemPropertyMap@@PBU1@@_STL@@@2@@_STL@@QAEXI@Z
 ?resize@?$hashtable@U?$pair@QBUSfxItemPropertyMap@@V?$WeakReference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@PBUSfxItemPropertyMap@@USfxItemPropertyMapHash@@U?$_Select1st@U?$pair@QBUSfxItemPropertyMap@@V?$WeakReference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@U?$equal_to@PBUSfxItemPropertyMap@@@2@V?$allocator@U?$pair@QBUSfxItemPropertyMap@@V?$WeakReference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@@_STL@@QAEXI@Z
 ?s_pType_com_sun_star_uno_XWeak@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXWeak@uno@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?__adjust_heap@_STL@@YAXPAPBUSfxItemPropertyMap@@HHPBU2@P6A_N11@Z@Z
+?__final_insertion_sort@_STL@@YAXPAPBUSfxItemPropertyMap@@0P6A_NPBU2@1@Z@Z
