@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:10:57 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,7 +1227,7 @@ ModalDialog RID_SCDLG_INSCONT
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Rechenoperationen" ;
         Text [ ENGLISH ] = "???" ;
-        Text [ dutch ] = "Rekenoperaties" ;
+        Text [ dutch ] = "Berekeningen" ;
         Text [ english_us ] = "Operations" ;
         Text [ italian ] = "Operazioni di calcolo" ;
         Text [ spanish ] = "Operaciones" ;
@@ -2303,7 +2303,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text [ danish ] = "Vælg" ;
     Text [ french ] = "~Sélection" ;
     Text [ swedish ] = "Urv~al" ;
-    Text [ dutch ] = "Selectie" ;
+    Text [ dutch ] = "~Selectie" ;
     Text [ spanish ] = "Selección" ;
     Text [ english_us ] = "Select" ;
     Moveable = TRUE ;
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
 
 
