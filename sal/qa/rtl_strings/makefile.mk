@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:24:21 $
+#   last change: $Author: vg $ $Date: 2003-05-27 14:20:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,6 +142,13 @@ DEF3NAME    =$(SHL3TARGET)
 DEF3EXPORTFILE= export.exp
 # auto generated Target:FileBase
 # END ------------------------------------------------------------------
+
+#------------------------------- All object files -------------------------------
+# do this here, so we get right dependencies
+SLOFILES=\
+    $(SHL1OBJS) \
+    $(SHL2OBJS) \
+    $(SHL3OBJS)
 
 # --- Targets ------------------------------------------------------
 
