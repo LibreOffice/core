@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-17 15:35:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ break
 #define DOUBLE_SCANLINES()                                                      \
 while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )                \
 {                                                                               \
-    HMEMCPY( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );  \
+    memcpy( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );   \
     nActY++;                                                                    \
 }
 
