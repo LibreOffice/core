@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:56 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 const MapMode       aMap100( MAP_100TH_MM );
                 const MapMode       aMapTwip( MAP_TWIP );
 
-                aGrfAttr.Put(pObj->GetItemSet());
+                aGrfAttr.Put(pObj->GetMergedItemSet());
                 rPool.SetDefaultMetric( SFX_MAPUNIT_TWIP );
 
                 SfxItemSet  aCropDlgAttr( rPool,
