@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:03:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@
     				<author>CD</author>
 					<desc xml:lang="en-US">Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
 					<desc xml:lang="x-comment">Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
+					<desc xml:lang="zh-CN">Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
 				</info>
 			</prop>
 		</group>
