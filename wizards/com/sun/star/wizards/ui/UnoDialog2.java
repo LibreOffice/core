@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDialog2.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $  $Date: 2005-03-08 15:46:25 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.*;
@@ -199,9 +200,11 @@ public class UnoDialog2 extends UnoDialog implements EventNames {
     }
 
     public XControl insertInfoImage(int _posx, int _posy, int _iStep){
-        return insertImage("imgHint",
+         XControl xImgControl = insertImage(Desktop.getUniqueName(xDlgNameAccess, "imgHint"),
                 new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step","Width"},
                 new Object[] { new Short((short)0), new Integer(10), UIConsts.INFOIMAGEURL, new Integer(_posx), new Integer(_posy), Boolean.FALSE, new Integer(_iStep), new Integer(10)});
+        super.getPeerConfiguration().setImageUrl(super.getModel(xImgControl), UIConsts.INFOIMAGEURL, UIConsts.INFOIMAGEURL_HC);
+        return xImgControl;
     }
 
 
