@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:40:51 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 #ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
 #include "ModuleContext.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 
 using namespace connectivity::file;
 using namespace dbtools;
@@ -139,7 +136,6 @@ using namespace com::sun::star::ucb;
 using namespace ::ucb;
 using namespace rtl;
 typedef connectivity::OMetaConnection OConnection_BASE;
-DBG_NAME( file_OConnection )
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
@@ -149,7 +145,6 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bShowDeleted(sal_False)
                          ,m_bCaseSensitiveExtension( sal_True )
 {
-    DBG_CTOR( file_OConnection, NULL );
     ModuleContext::AddRef();
 }
 //-----------------------------------------------------------------------------
@@ -158,7 +153,6 @@ OConnection::~OConnection()
     if(!isClosed(  ))
         close();
     ModuleContext::ReleaseRef();
-    DBG_DTOR( file_OConnection, NULL );
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
@@ -185,65 +179,65 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     osl_incrementInterlockedCount( &m_refCount );
 
+    {
+        sal_Int32 nLen = url.indexOf(':');
+        nLen = url.indexOf(':',nLen+1);
+        ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+
+        String aFileName = aDSN;
+        INetURLObject aURL;
+        aURL.SetSmartProtocol(INET_PROT_FILE);
+        {
+            SvtPathOptions aPathOptions;
+            aFileName = aPathOptions.SubstituteVariable(aFileName);
+        }
+        aURL.SetSmartURL(aFileName);
+
+        setURL(aURL.GetMainURL(INetURLObject::NO_DECODE));
+    }
+
+    ::rtl::OUString aExt;
+    const PropertyValue *pBegin  = info.getConstArray();
+    const PropertyValue *pEnd    = pBegin + info.getLength();
+    for(;pBegin != pEnd;++pBegin)
+    {
+        if(0 == pBegin->Name.compareToAscii("Extension"))
+            pBegin->Value >>= aExt;
+        else if(0 == pBegin->Name.compareToAscii("CharSet"))
+        {
+            ::rtl::OUString sIanaName;
+            pBegin->Value >>= sIanaName;
+
+            ::dbtools::OCharsetMap aLookupIanaName;
+            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+            if (aLookup != aLookupIanaName.end())
+                m_nTextEncoding = (*aLookup).getEncoding();
+            else
+                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                m_nTextEncoding = osl_getThreadTextEncoding();
+
+        }
+        else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
+        {
+            pBegin->Value >>= m_bShowDeleted;
+        }
+    }
+
+    if(aExt.getLength())
+        m_aFilenameExtension = aExt;
+
+
     try
     {
-        {
-            sal_Int32 nLen = url.indexOf(':');
-            nLen = url.indexOf(':',nLen+1);
-            ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
-
-            String aFileName = aDSN;
-            INetURLObject aURL;
-            aURL.SetSmartProtocol(INET_PROT_FILE);
-            {
-                SvtPathOptions aPathOptions;
-                aFileName = aPathOptions.SubstituteVariable(aFileName);
-            }
-            aURL.SetSmartURL(aFileName);
-
-            m_aURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
-        }
-
-        ::rtl::OUString aExt;
-        const PropertyValue *pBegin  = info.getConstArray();
-        const PropertyValue *pEnd    = pBegin + info.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            if(0 == pBegin->Name.compareToAscii("Extension"))
-                pBegin->Value >>= aExt;
-            else if(0 == pBegin->Name.compareToAscii("CharSet"))
-            {
-                ::rtl::OUString sIanaName;
-                pBegin->Value >>= sIanaName;
-
-                ::dbtools::OCharsetMap aLookupIanaName;
-                ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
-                if (aLookup != aLookupIanaName.end())
-                    m_nTextEncoding = (*aLookup).getEncoding();
-                else
-                    m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-                if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-                    m_nTextEncoding = osl_getThreadTextEncoding();
-
-            }
-            else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
-            {
-                pBegin->Value >>= m_bShowDeleted;
-            }
-        }
-
-        if(aExt.getLength())
-            m_aFilenameExtension = aExt;
-
-
         ::ucb::Content aFile;
         try
         {
-            aFile = ::ucb::Content(m_aURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            aFile = ::ucb::Content(getURL(),Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         }
         catch(ContentCreationException&e)
         {
-            throwUrlNotValid(m_aURL,e.Message);
+            throwUrlNotValid(getURL(),e.Message);
         }
 
         // set fields to fetch
@@ -275,15 +269,15 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
         catch(Exception& e) // a execption is thrown when no file exists
         {
-            throwUrlNotValid(m_aURL,e.Message);
+            throwUrlNotValid(getURL(),e.Message);
         }
         if(!m_xDir.is() || !m_xContent.is())
-            throwUrlNotValid(m_aURL,::rtl::OUString());
+            throwUrlNotValid(getURL(),::rtl::OUString());
 
         if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
             throw SQLException();
     }
-    catch( const Exception& )
+    catch(const Exception&)
     {
         osl_decrementInterlockedCount( &m_refCount );
         throw;
