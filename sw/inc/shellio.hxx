@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 15:00:25 $
+ *  last change: $Author: jp $ $Date: 2001-09-19 18:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,6 +673,8 @@ public:
                                     const SfxFilter** ppFlt = 0 );
 
     static FASTBOOL IsValidStgFilter( SvStorage& , const SfxFilter& );
+
+    static const SfxFilter* GetTextFilter( const sal_Char* pBuf, ULONG nLen );
 
     // gebe einen bestimmten Reader zurueck
     static Reader* GetReader( const String& rFltName );
