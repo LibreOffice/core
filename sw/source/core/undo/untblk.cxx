@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 13:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,12 +151,18 @@ SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
                                     BOOL bSttIsTxtNd )
 {
-    nEndNode = rPam.End()->nNode.GetIndex();
-    nEndCntnt = rPam.End()->nContent.GetIndex();
+    const SwPosition* pPos = rPam.End();
+    nEndNode = pPos->nNode.GetIndex();
+    nEndCntnt = pPos->nContent.GetIndex();
     if( rPam.HasMark() )
     {
-        nSttNode = rPam.Start()->nNode.GetIndex();
-        nSttCntnt = rPam.Start()->nContent.GetIndex();
+        if( pPos == rPam.GetPoint() )
+            pPos = rPam.GetMark();
+        else
+            pPos = rPam.GetPoint();
+
+        nSttNode = pPos->nNode.GetIndex();
+        nSttCntnt = pPos->nContent.GetIndex();
 
         if( !bSttIsTxtNd )      // wird eine Tabellenselektion eingefuegt,
         {
