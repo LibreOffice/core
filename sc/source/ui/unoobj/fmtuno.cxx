@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:01:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,10 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                 {
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
                     ScConditionMode eMode = pFormatEntry->GetOperation();
-                    ScAddress aPos = pFormatEntry->GetValidSrcPos();    // #b4974740# valid pos for expressions
-                    String aExpr1 = pFormatEntry->GetExpression( aPos, 0, 0, bEnglish, bCompileXML );
-                    String aExpr2 = pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML );
-                    String aStyle = pFormatEntry->GetStyle();
+                    ScAddress aPos(pFormatEntry->GetValidSrcPos());    // #b4974740# valid pos for expressions
+                    String aExpr1(pFormatEntry->GetExpression( aPos, 0, 0, bEnglish, bCompileXML ));
+                    String aExpr2(pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML ));
+                    String aStyle(pFormatEntry->GetStyle());
 
                     AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, EMPTY_STRING, aStyle );
                 }
@@ -258,7 +258,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
+        String aPropName(rProp.Name);
 
         if ( aPropName.EqualsAscii( SC_UNONAME_OPERATOR ) )
         {
@@ -354,13 +354,12 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSheetConditionalEntry> xEntry = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((USHORT)nIndex));
     if (xEntry.is())
-        aAny <<= xEntry;
+        return uno::makeAny(xEntry);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType() throw(uno::RuntimeException)
@@ -396,16 +395,15 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
-            xEntry = GetObjectByIndex_Impl((USHORT)i);
+            xEntry.set(GetObjectByIndex_Impl((USHORT)i));
             break;
         }
 
-    uno::Any aAny;
     if (xEntry.is())
-        aAny <<= xEntry;
+        return uno::makeAny(xEntry);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
@@ -758,8 +756,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getProper
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -770,7 +768,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
@@ -845,7 +843,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
