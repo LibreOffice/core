@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:10:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2543,7 +2543,7 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        sal_uInt16 nPrefix)
 {
     OUString sQValue =
-        GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue );
+        GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue, sal_False );
     ProcessString( eName, sQValue, bOmitEmpty, nPrefix );
 }
 
