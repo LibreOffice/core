@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:13:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,10 @@ NewObjectDialog::NewObjectDialog(Window * pParent, USHORT nMode,
     else if ( nMode == NEWOBJECTMODE_MOD )
     {
         SetText( String( IDEResId( RID_STR_NEWMOD ) ) );
+    }
+    else if ( nMode == NEWOBJECTMODE_METH )
+    {
+        SetText( String( IDEResId( RID_STR_NEWMETH ) ) );
     }
     else
     {
