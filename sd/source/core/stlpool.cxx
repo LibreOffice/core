@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-10 12:01:50 $
+ *  last change: $Author: thb $ $Date: 2001-09-26 16:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,18 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
             if ( !Find( aName, SFX_STYLE_FAMILY_PARA ) )
             {
                 SfxStyleSheetBase& rNewSheet = Make( aName, SFX_STYLE_FAMILY_PARA );
+
+                // #91588# Also set parent relation for copied style sheets
+                String aParent( pSheet->GetParent() );
+                if( aParent.Len() )
+                {
+                    // looking within the source pool is actually enough here,
+                    // because eventually *every* style sheet of type SFX_STYLE_FAMILY_PARA
+                    // will be copied to new pool, or is already there.
+                    DBG_ASSERT( rSourcePool.Find( aParent, SFX_STYLE_FAMILY_PARA ), "StyleSheet has invalid parent: Family mismatch" );
+                    rNewSheet.SetParent( aParent );
+                }
+
                 rNewSheet.GetItemSet().Put( pSheet->GetItemSet() );
             }
         }
