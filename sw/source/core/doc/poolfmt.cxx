@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-01 10:44:11 $
+ *  last change: $Author: jp $ $Date: 2001-06-28 13:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 
 
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
@@ -131,6 +128,9 @@
 #endif
 #ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -314,6 +314,58 @@ void lcl_SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
         rSet.Put( rItem, nWhCTL );
 }
 
+void lcl_SetDfltFont( USHORT nFntType, SfxItemSet& rSet )
+{
+    static struct {
+        USHORT nResLngId;
+        USHORT nResFntId;
+    } aArr[ 3 ] = {
+        { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT },
+        { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT },
+        { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT }
+    };
+    for( USHORT n = 0; n < 3; ++n )
+    {
+        USHORT nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+                            aArr[n].nResLngId )).GetLanguage();
+        Font aFnt( OutputDevice::GetDefaultFont( nFntType,
+                                nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+
+        rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
+                            aEmptyStr, aFnt.GetPitch(),
+                            aFnt.GetCharSet(), aArr[n].nResFntId ));
+    }
+}
+
+void lcl_SetDfltFont( USHORT nLatinFntType, USHORT nCJKFntType,
+                        USHORT nCTLFntType, SfxItemSet& rSet )
+{
+    static struct {
+        USHORT nResLngId;
+        USHORT nResFntId;
+        USHORT nFntType;
+    } aArr[ 3 ] = {
+        { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, 0 },
+        { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, 0 },
+        { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT, 0 }
+    };
+    aArr[0].nFntType = nLatinFntType;
+    aArr[1].nFntType = nCJKFntType;
+    aArr[2].nFntType = nCTLFntType;
+
+    for( USHORT n = 0; n < 3; ++n )
+    {
+        USHORT nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+                            aArr[n].nResLngId )).GetLanguage();
+        Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
+                                nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+
+        rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
+                            aEmptyStr, aFnt.GetPitch(),
+                            aFnt.GetCharSet(), aArr[n].nResFntId ));
+    }
+}
+
 void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         USHORT nOutLvlBits, BYTE nLevel, BOOL bItalic )
@@ -331,19 +383,8 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
     if( pDoc->IsHTMLMode() )
     {
-//JP 1.6.2001: which font for CJK/CTL ???
-        rSet.Put( SvxFontItem( FAMILY_ROMAN, String::CreateFromAscii(
-#if defined(OW) || defined (MTF) || defined(UNX)
-                            RTL_CONSTASCII_STRINGPARAM("times")
-#elif defined(WNT) || defined(WIN) || defined (PM20)
-                            RTL_CONSTASCII_STRINGPARAM("Times New Roman")
-#elif defined(MAC)
-                            RTL_CONSTASCII_STRINGPARAM("Times")
-#else
-#error Defaultfont fuer diese Plattform?
-#endif
-                            ), aEmptyStr, PITCH_VARIABLE,
-/*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding() ));   // Font
+        ::lcl_SetDfltFont( DEFAULTFONT_LATIN_TEXT, DEFAULTFONT_CJK_TEXT,
+                            DEFAULTFONT_CTL_TEXT, rSet );
     }
 
     if( pColl )
@@ -1075,11 +1116,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_HTML_PRE:
         {
-//JP 1.6.2001: which font for CJK/CTL ???
-            aSet.Put( SvxFontItem( FAMILY_ROMAN,
-                        System::GetStandardFont( STDFONT_FIXED ).GetName(),
-                        aEmptyStr,PITCH_FIXED,
-/*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding() ));   // Font
+            ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
 
 // WORKAROUND: PRE auf 10pt setzten
             ::lcl_SetAllScriptItem( aSet, SvxFontHeightItem(PT_10) );
@@ -1392,11 +1429,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
     case RES_POOLCHR_HTML_KEYBOARD:
     case RES_POOLCHR_HTML_TELETYPE:
         {
-//JP 1.6.2001: which font for CJK/CTL ???
-            aSet.Put( SvxFontItem( FAMILY_ROMAN,
-                        System::GetStandardFont( STDFONT_FIXED ).GetName(),
-                        aEmptyStr,PITCH_FIXED,
-/*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding()));    // Font
+            ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
         }
         break;
 

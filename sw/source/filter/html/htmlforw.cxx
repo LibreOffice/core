@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:54:05 $
+ *  last change: $Author: jp $ $Date: 2001-06-28 13:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTEXTLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#endif
-
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -1279,7 +1275,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
                 ((OUString*)aTmp.getValue())->getLength() )
             {
-                Font aFixedFont( System::GetStandardFont( STDFONT_FIXED ) );
+                Font aFixedFont( OutputDevice::GetDefaultFont(
+                                    DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
+                                    DEFAULTFONT_FLAGS_ONLYONE ) );
                 String aFName( *(OUString*)aTmp.getValue() );
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
@@ -1587,11 +1585,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.4 2001-05-11 09:54:05 th Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.5 2001-06-28 13:26:36 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/05/11 09:54:05  th
+      rtl-string-changes
+
       Revision 1.3  2001/03/23 12:39:50  jl
       replaced: Float->float
 
