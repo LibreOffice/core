@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:16:02 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ korean ] = "ÇöÀç ¹öÀü";
     Text[ turkish ] = "Yürürlükteki sürüm";
     Text[ catalan ] = "Current version";
-    Text[ finnish ] = "Aktuelle Version";
+    Text[ finnish ] = "Nykyinen versio";
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
@@ -105,7 +105,7 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text [ spanish ] = "Insertar" ;
     Text [ french ] = "Insérer" ;
     Text [ dutch ] = "Invoegen" ;
-    Text[ chinese_simplified ] = "ÌùÉÏ";
+    Text[ chinese_simplified ] = "²åÈë";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
     Text[ japanese ] = "‘}“ü";
@@ -115,7 +115,7 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ catalan ] = "Insert";
-    Text[ finnish ] = "Einfügen";
+    Text[ finnish ] = "Lisää";
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
@@ -131,7 +131,7 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text [ spanish ] = "~Insertar" ;
     Text [ french ] = "~Insérer" ;
     Text [ dutch ] = "~Invoegen" ;
-    Text[ chinese_simplified ] = "ÌùÉÏ(~I)";
+    Text[ chinese_simplified ] = "Õ³Ìù(~I)";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
     Text[ japanese ] = "‘}“ü(~I)";
@@ -141,7 +141,7 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text[ korean ] = "»ðÀÔ(~I)";
     Text[ turkish ] = "Ekle";
     Text[ catalan ] = "~Insert";
-    Text[ finnish ] = "~Einfügen";
+    Text[ finnish ] = "~Lisää";
 };
 
 String STR_SFX_IMPORT_ALL
@@ -173,4 +173,5 @@ String STR_SFX_IMPORT_ALL
 };
 
 //******************************************************************** EOF
+
 
