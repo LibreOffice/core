@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-11 12:38:01 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 14:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,7 +994,7 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ russian ] = "Βρςΰβθςό τξπμσλσ";
     SlotName[ greek ] = "Εισαγωγή τύπου";
     SlotName[ dutch ] = "Formule invoegen";
-    SlotName[ french ] = "Insιrer une formule";
+    SlotName[ french ] = "Barre de calcul";
     SlotName[ spanish ] = "Barra de fσrmulas";
     SlotName[ finnish ] = "Lisδδ kaava";
     SlotName[ italian ] = "Barra di calcolo";
@@ -7025,7 +7025,7 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ dutch ] = "Direct-cursor aan/uit";
     SlotName[ chinese_simplified ] = "ε―ε¨ζ–ε…³ι—­η›΄ζ¥ε®δ½ε…‰ζ ‡";
     SlotName[ greek ] = "Άμεσος δρομέας Ναι/Όχι";
-    SlotName[ korean ] = "μ§μ ‘ μ»¤μ„ μ‚¬μ©/μ‚¬μ© μ•ν•¨";
+    SlotName[ korean ] = "λ‹¤μ΄λ ‰νΈ μ»¤μ„ μ‚¬μ©/μ‚¬μ© μ•ν•¨";
     SlotName[ turkish ] = "Serbest imleη aηύk/kapalύ";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Activar/desactivar cursor directo";
@@ -9884,7 +9884,7 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ russian ] = "Close preview";
     SlotName[ greek ] = "Close preview";
     SlotName[ dutch ] = "Close preview";
-    SlotName[ french ] = "Close preview";
+    SlotName[ french ] = "Fermer l'aperηu";
     SlotName[ spanish ] = "Cerrar Vista preliminar";
     SlotName[ finnish ] = "Close preview";
     SlotName[ italian ] = "Chiudi anteprima";
