@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:56:32 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:17:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- BEGIN --------------------------------------------------------
 SHL1OBJS=  \
     $(SLO)$/rtl_Uri.obj
-SHL1TARGET= Uri
+SHL1TARGET= rtl_uri_simple
 SHL1STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -86,9 +86,23 @@ SHL1VERSIONMAP = export.map
 
 # END --------------------------------------------------------------
 
+# --- BEGIN --------------------------------------------------------
+SHL2OBJS=  \
+    $(SLO)$/rtl_testuri.obj
+SHL2TARGET= rtl_Uri
+SHL2STDLIBS=\
+    $(SALLIB) \
+    $(CPPUNITLIB)
+
+SHL2IMPLIB= i$(SHL2TARGET)
+DEF2NAME    =$(SHL2TARGET)
+SHL2VERSIONMAP = export.map
+
+# END --------------------------------------------------------------
+
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
