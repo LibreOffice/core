@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:47:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,9 @@ public:
     void                        SetDefault( BOOL bSet ) { m_bDefault = bSet; }
 
     void                        SelectMacro(const SfxMacroInfoItem*);
+
+    ::com::sun::star::uno::Reference < com::sun::star::container::XNameAccess >
+        GetCommandToLabelMap() { return m_xCommandToLabelMap; }
 };
 
 
