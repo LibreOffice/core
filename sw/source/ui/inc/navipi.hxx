@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 13:49:42 $
+ *  last change: $Author: os $ $Date: 2001-04-23 06:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ public:
     BOOL            IsGlobalDoc() const;
     BOOL            IsGlobalMode() const {return    bGlobalMode;}
 
-    SwView*         GetCreateView() const {return pCreateView;}
+    SwView*         GetCreateView() const;
 };
 
 class SwNavigationChild : public SfxChildWindowContext

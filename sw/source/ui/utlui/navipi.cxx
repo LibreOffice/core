@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-12 14:17:53 $
+ *  last change: $Author: os $ $Date: 2001-04-23 06:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,6 +968,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     GetPageEdit().SetFont(aFont);
 
     StartListening(*SFX_APP());
+    StartListening(*pCreateView);
     SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
@@ -1001,6 +1002,7 @@ __EXPORT SwNavigationPI::~SwNavigationPI()
     }
 
     EndListening(*SFX_APP());
+
     SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
@@ -1125,31 +1127,41 @@ BOOL SwNavigationPI::IsInDrag() const
     Beschreibung:   Benachrichtigung bei geaenderter DocInfo
  --------------------------------------------------------------------*/
 
-void __EXPORT SwNavigationPI::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void __EXPORT SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
-    if(rHint.ISA(SfxEventHint))
+    if(&rBrdc == pCreateView)
     {
-        if( pxObjectShell &&
-                    ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
+        if(rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
         {
-            DELETEZ(pxObjectShell);
+            pCreateView = 0;
         }
-        else if(((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_OPENDOC)
+    }
+    else
+    {
+        if(rHint.ISA(SfxEventHint))
         {
-
-            SwView *pActView = ::GetActiveView();
-            if(pActView)
+            if( pxObjectShell &&
+                        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
             {
-                SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
-                aContentTree.SetActiveShell(pWrtShell);
-                if(aGlobalTree.IsVisible())
+                DELETEZ(pxObjectShell);
+            }
+            else if(((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_OPENDOC)
+            {
+
+                SwView *pActView = ::GetActiveView();
+                if(pActView)
                 {
-                    if(aGlobalTree.Update())
-                        aGlobalTree.Display();
-                    else
-                    // wenn kein Update notwendig, dann zumindest painten
-                    // wg. der roten Eintraege fuer broken links
-                        aGlobalTree.Invalidate();
+                    SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
+                    aContentTree.SetActiveShell(pWrtShell);
+                    if(aGlobalTree.IsVisible())
+                    {
+                        if(aGlobalTree.Update())
+                            aGlobalTree.Display();
+                        else
+                        // wenn kein Update notwendig, dann zumindest painten
+                        // wg. der roten Eintraege fuer broken links
+                            aGlobalTree.Invalidate();
+                    }
                 }
             }
         }
@@ -1538,5 +1550,25 @@ IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
         aPageChgTimer.Stop();
     aPageChgTimer.Start();
     return 0;
+}
+/* -----------------------------23.04.01 07:34--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwView*  SwNavigationPI::GetCreateView() const
+{
+    if(!pCreateView)
+    {
+        SwView* pView = SwModule::GetFirstView();
+        while(pView)
+        {
+            if(&pView->GetViewFrame()->GetBindings() == &rBindings)
+            {
+                ((SwNavigationPI*)this)->pCreateView = pView;
+                break;
+            }
+            pView = SwModule::GetNextView(pView);
+        }
+    }
+    return pCreateView;
 }
 
