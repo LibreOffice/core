@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:47:18 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5008,7 +5008,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 nCharCount--;
 
                 rIn >> nMask;
-                aSet.mnAttrSet = nMask & 0x21fdf7;
+                aSet.mnAttrSet = nMask & 0x207df7;
                 sal_uInt16 nBulFlg = 0;
                 if ( nMask & 0xF )
                     rIn >> nBulFlg; // Bullet-HardAttr-Flags
