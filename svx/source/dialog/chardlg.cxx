@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 11:06:43 $
+ *  last change: $Author: os $ $Date: 2001-03-27 12:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4320,6 +4320,20 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
         m_aEmphasisLB.SelectEntryPos( (USHORT)( eMark & EMPHASISMARK_STYLE ) );
+
+        eMark &= ~EMPHASISMARK_STYLE;
+        ULONG nEntryData = eMark == EMPHASISMARK_POS_ABOVE ?
+                            CHRDLG_POSITION_OVER :
+                                eMark == EMPHASISMARK_POS_BELOW ?
+                                    CHRDLG_POSITION_UNDER : 0;
+        for(int i = 0; i < m_aPositionLB.GetEntryCount(); i++)
+        {
+            if(nEntryData == (ULONG)m_aPositionLB.GetEntryData(i))
+            {
+                m_aPositionLB.SelectEntryPos(i);
+                break;
+            }
+        }
     }
     else
     {
