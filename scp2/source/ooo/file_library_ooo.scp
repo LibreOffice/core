@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.27 $
+*  $Revision: 1.28 $
 *
-*  last change: $Author: kz $ $Date: 2004-07-28 13:13:21 $
+*  last change: $Author: kz $ $Date: 2004-07-30 15:14:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -603,7 +603,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Fwl , fwl)
 // needed for unxlngi4 environment (setup is linked against it).
 
 #if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) )
-#if ( defined( _gcc3 ) && ( defined( C300 ) || defined( C322 ) ))
+#if defined( _gcc3 )
 
 File gid_File_Lib_Gcc
     TXT_FILE_BODY;
@@ -617,7 +617,7 @@ End
 #endif
 
 #if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) )
-#if ( defined( _gcc3 ) && ( defined( C300 ) || defined( C322 ) ))
+#if defined( _gcc3 )
 
 File gid_File_Lib_Stdc
     TXT_FILE_BODY;
