@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:24:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
+        Text[ slovak ] = "Názov";
     };
     FixedText FT_COL
     {
@@ -156,6 +157,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
+        Text[ slovak ] = "~Stĺpce";
     };
     NumericField ED_COL
     {
@@ -205,6 +207,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Řádky";
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "~पंक्तियाँ";
+        Text[ slovak ] = "~Riadky";
     };
     NumericField ED_ROW
     {
@@ -251,6 +254,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
+        Text[ slovak ] = "Veľkosť";
     };
     CheckBox CB_HEADER
     {
@@ -284,6 +288,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "शीर्षक";
+        Text[ slovak ] = "Záhlavie";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -317,6 +322,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Opakovat záhlaví";
         Text[ hebrew ] = "Auf jeder Seite ~wiederholen";
         Text[ hindi ] = "शी~र्षक दुहराना ";
+        Text[ slovak ] = "O~pakovať záhlavie";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -350,6 +356,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Nerozdělovat tabulku";
         Text[ hebrew ] = "Tabelle ~nicht trennen";
         Text[ hindi ] = "सारणी को मत अलगाना";
+        Text[ slovak ] = "Nerozdeľovať tabuľku";
     };
     CheckBox CB_BORDER
     {
@@ -383,6 +390,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Okraj";
         Text[ hebrew ] = "~Umrandung";
         Text[ hindi ] = "किनारा";
+        Text[ slovak ] = "Okraj";
     };
     PushButton BT_AUTOFORMAT
     {
@@ -417,6 +425,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Automatický formát...";
         Text[ hebrew ] = "‮עיצוב אוטומטי...‬";
         Text[ hindi ] = "स्वचालित ~रचना...";
+        Text[ slovak ] = "Automatický ~formát...";
     };
     FixedLine FL_OPTIONS
     {
@@ -449,6 +458,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     OKButton BT_OK
     {
@@ -484,7 +494,10 @@ ModalDialog DLG_INSERT_TABLE
     Text[ czech ] = "Vložit tabulku";
     Text[ hebrew ] = "‮הוספת טבלה‬";
     Text[ hindi ] = "सारणी जोड़ो";
+    Text[ slovak ] = "Vložiť tabuľku";
 };
+
+
 
 
 
