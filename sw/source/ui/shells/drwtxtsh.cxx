@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
+ *  last change: $Author: os $ $Date: 2002-06-27 14:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #endif
 #ifndef _SVX_XFTSFIT_HXX //autogen
 #include <svx/xftsfit.hxx>
+#endif
+#ifndef _MyEDITENG_HXX
+#include <O:/SRX643/wntmsci7/inc/svx/editeng.hxx>
+#endif
+#ifndef _MyEDITVIEW_HXX
+#include <svx/editview.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -526,6 +532,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         {
             SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             pSdrView->SetAttributes(aEmptyAttr, TRUE);
+            pOLV->GetEditView().GetEditEngine()->RemoveFields(TRUE);
         }
         break;
 
