@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:21:21 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
     const OUString sBlowfish            ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) );
     const OUString sPBKDF2              ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) );
-    const OUString sMD5                 ( RTL_CONSTASCII_USTRINGPARAM ( "MD5" ) );
+    const OUString sChecksumType        ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) );
 
     AttributeList * pRootAttrList = new AttributeList;
     pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
@@ -183,7 +183,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             xHandler->ignorableWhitespace ( sWhiteSpace );
             if ( pDigest )
             {
-                pAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sMD5 );
+                pAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
                 pDigest->Value >>= aSequence;
                 Base64Codec::encodeBase64 ( aBuffer, aSequence );
                 pAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
