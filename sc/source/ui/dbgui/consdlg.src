@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:38:07 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
             < "羆璸" ; Default ; > ;
         < "璸计" ; Default ; > ;
-        < "キА计" ; Default ; > ;
+        < "キА" ; Default ; > ;
         < "程" ; Default ; > ;
         < "程" ; Default ; > ;
         < "縩" ; Default ; > ;
@@ -516,7 +516,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ norwegian ] = "Fu~nksjon" ;
         Text [ italian ] = "Fun~zione" ;
         Text [ portuguese_brazilian ] = "Fun~玢o" ;
-        Text [ portuguese ] = "Regra de ~c醠culo" ;
+        Text [ portuguese ] = "U~sar fun玢o" ;
         Text [ finnish ] = "~Funktio" ;
         Text [ danish ] = "Beregningsfunktion" ;
         Text [ french ] = "~Fonction" ;
