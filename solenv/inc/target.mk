@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-21 14:03:04 $
-#*	  $Revision: 1.3 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-22 10:48:26 $
+#*	  $Revision: 1.4 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1979,7 +1979,7 @@ $(MISC)$/s2u_$(TARGET).don:
 .ENDIF			# "$(TF_PACKAGES)"==""
 
 .IF "$(UNIXTEXT)"!=""
-$(UNIXTEXT) :
+$(UNIXTEXT) : $(UNIXTEXT:f)
     @+echo Making $@
     @+-$(RM) -f $@ >& $(NULLDEV)
     @+tr -d "\015" < $(@:f) > $@
