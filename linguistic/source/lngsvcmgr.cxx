@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-11 17:13:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
             Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 INT32 nSvcs = aSvcImplNames.getLength();
                 const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
 #endif
@@ -967,7 +967,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
             Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 INT32 nSvcs = aSvcImplNames.getLength();
                 const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
 #endif
@@ -984,7 +984,7 @@ Reference< XSpellChecker > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     getAvailableLocales( A2OU( SN_SPELLCHECKER ));
 #endif
 
@@ -1004,7 +1004,7 @@ Reference< XHyphenator > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     getAvailableLocales( A2OU( SN_HYPHENATOR ));
 #endif
 
@@ -1024,7 +1024,7 @@ Reference< XThesaurus > SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     getAvailableLocales( A2OU( SN_THESAURUS ));
 #endif
 
@@ -1206,7 +1206,7 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const OUString *pImplNames = rServiceImplNames.getConstArray();
 #endif
 
@@ -1311,7 +1311,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             Sequence< OUString > aSvcImplNames;
             aSvcImplNames = pDsp->GetServiceList( pLocale[i] );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             INT32 nSvcs = aSvcImplNames.getLength();
             const OUString *pSvcImplName = aSvcImplNames.getConstArray();
             for (INT32 j = 0;  j < nSvcs;  ++j)
@@ -1355,7 +1355,7 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
     if (rVal.hasValue())
     {
         rVal >>= aRes;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         INT32 nSvcs = aRes.getLength();
         if (nSvcs)
         {
@@ -1469,7 +1469,7 @@ Sequence< OUString > SAL_CALL
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const OUString *pImplNames = aSvcImplNames.getConstArray();
 #endif
     return aSvcImplNames;
