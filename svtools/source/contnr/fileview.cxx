@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-20 10:41:40 $
+ *  last change: $Author: dv $ $Date: 2001-07-20 11:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ using namespace ::ucb;
 DECLARE_LIST( StringList_Impl, OUString* );
 
 #define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
-#define QUICK_SEARCH_TIMEOUT    2000    // time in mSec before the quicksearch string will be reseted
+#define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
 // structs   -------------------------------------------------------------
 
@@ -273,7 +273,9 @@ public:
     void                    EnableDelete( sal_Bool bEnable ) { mpView->EnableDelete( bEnable ); }
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
-    sal_Bool                SearchNextEntry( sal_uInt32 &nIndex, const OUString& rTitle );
+    sal_Bool                SearchNextEntry( sal_uInt32 &nIndex,
+                                             const OUString& rTitle,
+                                             sal_Bool bWrapAround );
 };
 
 
@@ -494,10 +496,14 @@ void ViewTabListBox_Impl::Resize()
 void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     if ( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
+    {
+        ResetQuickSearch_Impl( NULL );
         GetDoubleClickHdl().Call( this );
+    }
     else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE ) &&
               mbEnableDelete )
     {
+        ResetQuickSearch_Impl( NULL );
         DeleteEntries();
     }
     else if ( ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM ) ||
@@ -506,7 +512,10 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
         DoQuickSearch( rKEvt.GetCharCode() );
     }
     else
+    {
+        ResetQuickSearch_Impl( NULL );
         SvHeaderTabListBox::KeyInput( rKEvt );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -644,14 +653,14 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
 
     maQuickSearchText += OUString( rChar ).toAsciiLowerCase();
 
-    bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText );
+    bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_False );
 
     if ( !bFound && ( aLastText.getLength() == 1 ) &&
          ( aLastText == OUString( rChar ) ) )
     {
         mnSearchIndex = aLastPos + 1;
         maQuickSearchText = aLastText;
-        bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText );
+        bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_True );
     }
 
     if ( bFound )
@@ -659,6 +668,7 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
         SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
         SelectAll( FALSE );
         Select( pEntry );
+        SetCurEntry( pEntry );
         MakeVisible( pEntry );
     }
     else
@@ -1696,14 +1706,13 @@ ULONG SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 
 // -----------------------------------------------------------------------
 sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
-                                            const OUString& rTitle )
+                                            const OUString& rTitle,
+                                            sal_Bool bWrapAround )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     sal_uInt32 nEnd = maContent.size();
-
-    if ( nIndex >= nEnd )
-        return sal_False;
+    sal_uInt32 nStart = nIndex;
 
     while ( nIndex < nEnd )
     {
@@ -1711,6 +1720,18 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
         if ( rTitle.compareTo( pData->maLowerTitle, rTitle.getLength() ) == 0 )
             return sal_True;
         nIndex += 1;
+    }
+
+    if ( bWrapAround )
+    {
+        nIndex = 0;
+        while ( nIndex <= nStart )
+        {
+            SortingData_Impl* pData = maContent[ nIndex ];
+            if ( rTitle.compareTo( pData->maLowerTitle, rTitle.getLength() ) == 0 )
+                return sal_True;
+            nIndex += 1;
+        }
     }
 
     return sal_False;
