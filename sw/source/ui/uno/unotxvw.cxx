@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 15:55:48 $
+ *  last change: $Author: os $ $Date: 2002-04-19 11:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,6 +891,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
     ShellModes  eSelMode = pView->GetShellMode();
     if(eSelMode != SEL_LIST_TEXT      &&
         eSelMode != SEL_TABLE_LIST_TEXT &&
+        eSelMode != SEL_TABLE_TEXT      &&
         eSelMode != SEL_TEXT           )
         return Sequence< Sequence< PropertyValue > > ();
 
@@ -941,6 +942,7 @@ void SAL_CALL SwXTextView::setRubyList(
     ShellModes  eSelMode = pView->GetShellMode();
     if(eSelMode != SEL_LIST_TEXT      &&
         eSelMode != SEL_TABLE_LIST_TEXT &&
+        eSelMode != SEL_TABLE_TEXT      &&
         eSelMode != SEL_TEXT           )
         throw RuntimeException();
 
