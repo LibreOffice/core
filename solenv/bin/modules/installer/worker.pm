@@ -60,6 +60,7 @@
 package installer::worker;
 
 use installer::control;
+use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -68,6 +69,7 @@ use installer::mail;
 use installer::pathanalyzer;
 use installer::scriptitems;
 use installer::systemactions;
+use installer::windows::language;
 
 #####################################################################
 # Unpacking all files ending with tar.gz in a specified directory
@@ -623,6 +625,450 @@ sub install_simple ($$$$$)
         close ($filelist);
     }
 
+}
+
+###########################################################
+# Adding shellnew files into files collector for
+# user installation
+###########################################################
+
+sub add_shellnewfile_into_filesarray
+{
+    my ($filesref, $onefile, $inffile) = @_;
+
+    my %shellnewfile = ();
+    my $shellnewfileref = \%shellnewfile;
+
+    installer::converter::copy_item_object($inffile, $shellnewfileref);
+
+    $shellnewfileref->{'Name'} = $onefile->{'Name'};
+    $shellnewfileref->{'sourcepath'} = $onefile->{'sourcepath'};
+    $shellnewfileref->{'gid'} = $onefile->{'gid'} . "_Userinstall";
+
+    # the destination has to be adapted
+    my $destination = $inffile->{'destination'};
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+    $destination = $destination . $onefile->{'Name'};
+    $shellnewfileref->{'destination'} = $destination;
+
+    # add language specific inffile into filesarray
+    push(@{$filesref}, $shellnewfileref);
+}
+
+###########################################################
+# Replacing one placehoder in template file
+###########################################################
+
+sub replace_in_template_file
+{
+    my ($templatefile, $placeholder, $newstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
+    {
+        ${$templatefile}[$i] =~ s/\Q$placeholder\E/$newstring/g;
+    }
+}
+
+###########################################################
+# Replacing one placehoder with an array in template file
+###########################################################
+
+sub replace_array_in_template_file
+{
+    my ($templatefile, $placeholder, $arrayref) = @_;
+
+    for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
+    {
+        if ( ${$templatefile}[$i] =~ /\Q$placeholder\E/ )
+        {
+            my @return = splice(@{$templatefile}, $i, 1, @{$arrayref});
+        }
+    }
+}
+
+###########################################################
+# Collecting all modules from registry items
+###########################################################
+
+sub collect_all_modules
+{
+    my ($registryitemsref) = @_;
+
+    my @allmodules = ();
+
+    for ( my $i = 0; $i <= $#{$registryitemsref}; $i++ )
+    {
+        $registryitem = ${$registryitemsref}[$i];
+        my $module = $registryitem->{'ModuleID'};
+
+        if ( ! installer::existence::exists_in_array($module, \@allmodules) )
+        {
+            push(@allmodules, $module);
+        }
+    }
+
+    return \@allmodules;
+}
+
+###########################################################
+# Changing the content of the inf file
+###########################################################
+
+sub write_content_into_inf_file
+{
+    my ($templatefile, $filesref, $registryitemsref, $folderref, $folderitemsref, $modulesref, $onelanguage, $inffile, $firstlanguage, $allvariableshashref) = @_;
+
+    # First part: Shellnew files
+    # SHELLNEWFILESPLACEHOLDER
+
+    my $rootmodule = 0;
+    if ( $inffile->{'modules'} =~ /Module_Root/i ) { $rootmodule = 1; }
+
+    if ( $rootmodule )
+    {
+        my $shellnewstring = "";
+
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        {
+            my $onefile = ${$filesref}[$i];
+            my $directory = $onefile->{'Dir'};
+
+            if ( $directory =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )
+            {
+                $shellnewstring = $shellnewstring . $onefile->{'Name'} . "\n";
+                if ( $firstlanguage ) { add_shellnewfile_into_filesarray($filesref, $onefile, $inffile); }
+            }
+        }
+
+        $shellnewstring =~ s/\s*$//;
+        replace_in_template_file($templatefile, "SHELLNEWFILESPLACEHOLDER", $shellnewstring);
+    }
+
+    # Second part: Start menu entries
+
+    # The OfficeMenuFolder is defined as: $productname . " " . $productversion;
+
+    my $productname = $allvariableshashref->{'PRODUCTNAME'};
+    my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
+    my $productkey = $productname . " " . $productversion;
+
+    replace_in_template_file($templatefile, "OFFICEFOLDERPLACEHOLDER", $productkey);
+
+    # Setting name target and infotip for all applications
+
+    for ( my $i = 0; $i <= $#{$folderitemsref}; $i++ )
+    {
+        my $folderitem = ${$folderitemsref}[$i];
+
+        if (( ! $folderitem->{'ismultilingual'} ) || (( $folderitem->{'ismultilingual'} ) && ( $folderitem->{'specificlanguage'} eq $onelanguage )))
+        {
+            my $gid = $folderitem->{'gid'};
+            my $app = $gid;
+            $app =~ s/gid_Folderitem_//;
+            $app = uc($app);
+
+            my $name = $folderitem->{'Name'};
+            my $placeholder = "PLACEHOLDER_FOLDERITEM_NAME_" . $app;
+            replace_in_template_file($templatefile, $placeholder, $name);
+
+            my $tooltip = $folderitem->{'Tooltip'};
+            $placeholder = "PLACEHOLDER_FOLDERITEM_TOOLTIP_" . $app;
+            replace_in_template_file($templatefile, $placeholder, $tooltip);
+
+            my $executablegid = $folderitem->{'FileID'};
+            my $exefile = installer::existence::get_specified_file($filesref, $executablegid);
+            my $exefilename = $exefile->{'Name'};
+            $placeholder = "PLACEHOLDER_FOLDERITEM_TARGET_" . $app;
+            replace_in_template_file($templatefile, $placeholder, $exefilename);
+        }
+    }
+
+    # Third part: Windows registry entries
+
+    # collecting all modules
+
+    my $allmodules = collect_all_modules($registryitemsref);
+
+    my @registryitems = ();
+    my $allsectionsstring = "";
+
+    for ( my $j = 0; $j <= $#{$allmodules}; $j++ )
+    {
+        my $moduleid = ${$allmodules}[$j];
+
+        if ( ! ( $moduleid eq $inffile->{'modules'} )) { next; }
+
+        my $shortmodulename = $moduleid;
+        $shortmodulename =~ s/gid_Module_//;
+        my $sectionname = "InstRegKeys." . $shortmodulename;
+        $allsectionsstring = $allsectionsstring . $sectionname . ",";
+        my $sectionheader = "\[" . $sectionname . "\]" . "\n";
+        push(@registryitems, $sectionheader);
+
+        for ( my $i = 0; $i <= $#{$registryitemsref}; $i++ )
+        {
+            my $registryitem = ${$registryitemsref}[$i];
+
+            if ( ! ( $registryitem->{'ModuleID'} eq $moduleid )) { next; }
+
+            if (( ! $registryitem->{'ismultilingual'} ) || (( $registryitem->{'ismultilingual'} ) && ( $registryitem->{'specificlanguage'} eq $onelanguage )))
+            {
+                # Syntax: HKCR,".bau",,,"soffice.StarConfigFile.6"
+
+                my $regroot = "";
+                my $parentid = "";
+                if ( $registryitem->{'ParentID'} ) { $parentid = $registryitem->{'ParentID'}; }
+                if ( $parentid eq "PREDEFINED_HKEY_CLASSES_ROOT" ) { $regroot = "HKCR"; }
+                if ( $parentid eq "PREDEFINED_HKEY_LOCAL_MACHINE" ) { $regroot = "HKCU"; }
+
+                my $subkey = "";
+                if ( $registryitem->{'Subkey'} ) { $subkey = $registryitem->{'Subkey'}; }
+                if ( $subkey ne "" ) { $subkey = "\"" . $subkey . "\""; }
+
+                my $valueentryname = "";
+                if ( $registryitem->{'Name'} ) { $valueentryname = $registryitem->{'Name'}; }
+                if ( $valueentryname ne "" ) { $valueentryname = "\"" . $valueentryname . "\""; }
+
+                my $flag = "";
+
+                my $value = "";
+                if ( $registryitem->{'Value'} ) { $value = $registryitem->{'Value'}; }
+                if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"//g; } # no more usage of "\""
+                $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
+                $value =~ s/\<progpath\>/\%INSTALLLOCATION\%/g;
+                # $value =~ s/\%INSTALLLOCATION\%\\/\%INSTALLLOCATION\%/g;      # removing "\" after "%INSTALLLOCATION%"
+                if ( $value ne "" ) { $value = "\"" . $value . "\""; }
+
+                my $oneline = $regroot . "," . $subkey . "," . $valueentryname . "," . $flag . "," . $value . "\n";
+
+                push(@registryitems, $oneline);
+            }
+        }
+
+        push(@registryitems, "\n"); # empty line after each section
+    }
+
+    # replacing the $allsectionsstring
+    $allsectionsstring =~ s/\,\s*$//;
+    replace_in_template_file($templatefile, "ALLREGISTRYSECTIONSPLACEHOLDER", $allsectionsstring);
+
+    # replacing the placeholder for all registry keys
+    replace_array_in_template_file($templatefile, "REGISTRYKEYSPLACEHOLDER", \@registryitems);
+
+}
+
+###########################################################
+# Creating inf files for local user system integration
+###########################################################
+
+sub create_inf_file
+{
+    my ($filesref, $registryitemsref, $folderref, $folderitemsref, $modulesref, $languagesarrayref, $languagestringref, $allvariableshashref) = @_;
+
+    # collecting all files with flag INFFILE
+
+    my $inf_files = collect_all_items_with_special_flag($filesref ,"INFFILE");
+
+    if ( $#{$inf_files} > -1 )
+    {
+        # create new language specific inffile
+        installer::logger::include_header_into_logfile("Creating inf files:");
+
+        my $infdirname = "inffiles";
+        my $infdir = installer::systemactions::create_directories($infdirname, $languagestringref);
+
+        my $infoline = "Number of inf files: $#{$inf_files} + 1 \n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        # there are inffiles for all modules
+
+        for ( my $i = 0; $i <= $#{$inf_files}; $i++ )
+        {
+            my $inffile = ${$inf_files}[$i];
+            my $inf_file_name = $inffile->{'Name'};
+
+            my $templatefilename = $inffile->{'sourcepath'};
+
+            if ( ! -f $templatefilename ) { installer::exiter::exit_program("ERROR: Could not find file $templatefilename !", "create_inf_file");;  }
+
+            # iterating over all languages
+
+            for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )   # iterating over all languages
+            {
+                my $firstlanguage = 0;
+                if ( $j == 0 ) { $firstlanguage = 1; }
+
+                my $onelanguage = ${$languagesarrayref}[$j];
+
+                $infoline = "Templatefile: $inf_file_name, Language: $onelanguage \n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                my $templatefile = installer::files::read_file($templatefilename);
+
+                my $linesbefore = $#{$templatefile};
+
+                write_content_into_inf_file($templatefile, $filesref, $registryitemsref, $folderref, $folderitemsref, $modulesref, $onelanguage, $inffile, $firstlanguage, $allvariableshashref);
+
+                $infoline = "Lines change: From $linesbefore to $#{$templatefile}.\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # rename language specific inffile
+                my $language_inf_file_name = $inf_file_name;
+                my $windowslanguage = installer::windows::language::get_windows_language($onelanguage);
+                $language_inf_file_name =~ s/\.inf/_$windowslanguage\.inf/;
+
+                my $sourcepath = $infdir . $installer::globals::separator . $language_inf_file_name;
+                installer::files::save_file($sourcepath, $templatefile);
+
+                $infoline = "Saving file: $sourcepath\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # creating new file object
+
+                my %languageinffile = ();
+                my $languageinifileref = \%languageinffile;
+
+                if ( $j < $#{$languagesarrayref} ) { installer::converter::copy_item_object($inffile, $languageinifileref); }
+                else { $languageinifileref = $inffile; }
+
+                $languageinifileref->{'Name'} = $language_inf_file_name;
+                $languageinifileref->{'sourcepath'} = $sourcepath;
+                # destination and gid also have to be adapted
+                $languageinifileref->{'gid'} = $languageinifileref->{'gid'} . "_" . $onelanguage;
+                my $destination = $languageinifileref->{'destination'};
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+                $destination = $destination . $language_inf_file_name;
+                $languageinifileref->{'destination'} = $destination;
+
+                # add language specific inffile into filesarray
+                if ( $j < $#{$languagesarrayref} ) { push(@{$filesref}, $languageinifileref); }
+            }
+        }
+    }
+}
+
+###########################################################
+# Selecting patch items
+###########################################################
+
+sub select_patch_items
+{
+    my ( $itemsref, $itemname ) = @_;
+
+    installer::logger::include_header_into_logfile("Selecting items for patches. Item: $itemname");
+
+    my @itemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+
+        my $name = $oneitem->{'Name'};
+        if (( $name =~ /\bLICENSE/ ) || ( $name =~ /\bREADME/ ))
+        {
+            push(@itemsarray, $oneitem);
+            next;
+        }
+
+        # Items with style "PATCH" have to be included into the patch
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+        if ( $styles =~ /\bPATCH\b/ ) { push(@itemsarray, $oneitem); }
+    }
+
+    return \@itemsarray;
+}
+
+###########################################################
+# Searching if LICENSE and README, which are not removed
+# in select_patch_items are really needed for the patch.
+# If not, they are removed now.
+###########################################################
+
+sub analyze_patch_files
+{
+    my ( $filesref ) = @_;
+
+    installer::logger::include_header_into_logfile("Analyzing patch files");
+
+    my @filesarray = ();
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if ( !( $styles =~ /\bPATCH\b/) ) { next; } # removing all files without flag PATCH (LICENSE, README, ...)
+        push(@filesarray, $onefile);
+    }
+
+    return \@filesarray;
+}
+
+###########################################################
+# Sorting an array
+###########################################################
+
+sub sort_array
+{
+    my ( $arrayref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        my $under = ${$arrayref}[$i];
+
+        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
+        {
+            my $over = ${$arrayref}[$j];
+
+            if ( $under gt $over)
+            {
+                ${$arrayref}[$i] = $over;
+                ${$arrayref}[$j] = $under;
+                $under = $over;
+            }
+        }
+    }
+}
+
+###########################################################
+# Renaming linux files with flag LINUXLINK
+###########################################################
+
+sub prepare_linuxlinkfiles
+{
+    my ( $filesref ) = @_;
+
+    @installer::globals::linuxlinks = (); # empty this array, because it could be already used
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'} };
+
+        if ( $styles =~ /\bLINUXLINK\b/ )
+        {
+            my %linkfilehash = ();
+            my $linkfile = \%linkfilehash;
+            installer::converter::copy_item_object($onefile, $linkfile);
+
+            my $original_destination = $onefile->{'destination'};
+            # $onefile->{'destination'} is used in the epm list file. This value can be changed now!
+            $onefile->{'destination'} = $onefile->{'destination'} . "\.$installer::globals::linuxlibrarypatchlevel";
+
+            my $infoline = "Flag LINUXLINK: Changing file destination from $original_destination to $onefile->{'destination'} !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            # preparing the collector for the links
+
+            $linkfile->{'destinationfile'} = $linkfile->{'Name'} . "\.$installer::globals::linuxlibrarypatchlevel"; # Setting the new file name as destination of the link
+            push( @installer::globals::linuxlinks, $linkfile );
+
+            $infoline = "Flag LINUXLINK: Created link: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
 }
 
 1;
