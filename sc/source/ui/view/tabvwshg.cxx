@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:09:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -127,7 +129,8 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     aAny <<= rtl::OUString(rName);
     xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "Label" ), aAny );
 
-    aAny <<= rtl::OUString(INetURLObject::RelToAbs(rURL));
+    ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
+    aAny <<= aTmp;
     xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetURL" ), aAny );
 
     if( rTarget.Len() )
