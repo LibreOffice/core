@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:35:27 $
+#   last change: $Author: rt $ $Date: 2004-03-30 15:50:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/fuinsert.obj	
 
 SLOFILES = \
+        $(SLO)$/undoheaderfooter.obj \
         $(SLO)$/undolayer.obj	\
         $(SLO)$/fupoor.obj		\
         $(SLO)$/fudraw.obj		\
