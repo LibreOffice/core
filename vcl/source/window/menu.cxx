@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:32:17 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2990,10 +2990,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
     if ( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_START, pMenu ) );
-    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::MENU );
-#ifdef DEBUG
-    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Menu" ) ) );
-#endif
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
@@ -4141,10 +4137,6 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
-    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::MENU_BAR );
-#ifdef DEBUG
-    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MenuBar" ) ) );
-#endif
 }
 
 MenuBarWindow::~MenuBarWindow()
