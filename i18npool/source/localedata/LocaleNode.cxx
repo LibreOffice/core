@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:39:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-10 09:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,26 +71,36 @@
 #endif
 #include <assert.h>
 
-LocaleNode :: LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
+LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
+    : aName(name)
+    , xAttribs(new Attr(attr))
+    , parent(0)
+    , children(0)
+    , nChildren(0)
+    , childArrSize(0)
+    , nError(0)
 {
-    aName = name;
-    xAttribs = new Attr(attr);
-    nChildren = 0;
-    childArrSize = 0;
-    aValue=OUString();
 }
 
-void LocaleNode::print () {
+int LocaleNode::getError() const
+{
+    int err = nError;
+    for (sal_Int32 i=0;i<nChildren;i++)
+        err += children[i]->getError();
+    return err;
+}
+
+void LocaleNode::print () const {
     printf ("<");
     ::rtl::OUString str (aName);
-    for(int i = 0; i < str.getLength(); i++)
+    for(sal_Int32 i = 0; i < str.getLength(); i++)
         printf( "%c", str[i]);
     printf (">\n");
 }
 
-void LocaleNode::printR () {
+void LocaleNode::printR () const {
     print();
-    for (int i=0;i<nChildren;i++)
+    for (sal_Int32 i=0;i<nChildren;i++)
         children[i]->printR();
     printf ("\t");
     print();
@@ -99,7 +109,7 @@ void LocaleNode::printR () {
 void LocaleNode::addChild ( LocaleNode * node) {
     if (childArrSize <= nChildren) {
         LocaleNode ** arrN = (LocaleNode **)malloc( sizeof (LocaleNode *)*(childArrSize+10) ) ;
-        for (int i = 0; i<childArrSize ; i++)
+        for (sal_Int32 i = 0; i<childArrSize ; i++)
             arrN[i] = children[i];
         if ( childArrSize > 0 )
             free(children);
@@ -114,11 +124,11 @@ void LocaleNode::setParent ( LocaleNode * node) {
     parent = node;
 }
 
-LocaleNode * LocaleNode::findNode ( const sal_Char *name) {
+const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
     if (aName.equalsAscii(name))
         return this;
-    for (int i = 0; i< nChildren; i++)  {
-        LocaleNode *n=children[i]->findNode(name);
+    for (sal_Int32 i = 0; i< nChildren; i++)  {
+        const LocaleNode *n=children[i]->findNode(name);
         if (n)
             return n;
         }
@@ -126,21 +136,8 @@ LocaleNode * LocaleNode::findNode ( const sal_Char *name) {
 }
 
  LocaleNode::~LocaleNode() {
-    for (int i=0; i<nChildren;i++)
+    for (sal_Int32 i=0; i<nChildren;i++)
         delete (children[i]);
-}
-
-static
-void printf_String( const char* fmt, ::rtl::OUString str )
-{
-     const int max = 1024;
-     char buf[ max+1 ];
-     int i;
-
-     for( i = 0; i < str.getLength() && i < max; i++ )
-         buf[i] = str[i];
-     buf[i]='\0';
-     printf( fmt, buf );
 }
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
@@ -177,16 +174,14 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
 //   printf(" name: '%s'\n", p->getName().pData->buffer );
 //   printf("value: '%s'\n", p->getValue().pData->buffer );
 
-void print_OUString( OUString s )
+void print_OUString( const OUString& s )
 {
-    ::rtl::OUString str (s);
-    for(int i=0; i<str.getLength(); i++) printf( "%c", str[i]);
+    printf( "%s", OUStringToOString( s, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-bool is_empty( OUString s )
+bool is_empty( const OUString& s )
 {
-     ::rtl::OUString str(s);
-     return (str.getLength()==0) || (str.getLength()==1 && str[0]=='\n');
+     return (s.getLength()==0) || (s.getLength()==1 && s[0]=='\n');
 }
 
 void print_indent( int depth )
@@ -199,7 +194,7 @@ void print_color( int color )
      printf("\033[%dm", color);
 }
 
-void print_node( LocaleNode* p, int depth=0 )
+void print_node( const LocaleNode* p, int depth=0 )
 {
      if( !p ) return;
 
@@ -211,7 +206,7 @@ void print_node( LocaleNode* p, int depth=0 )
      const Attr* q = p->getAttr();
      if( q )
      {
-          for( int j=0; j<q->getLength(); j++ )
+          for( sal_Int32 j=0; j<q->getLength(); j++ )
           {
                printf(" ");
                print_color(33);
@@ -238,7 +233,7 @@ void print_node( LocaleNode* p, int depth=0 )
           print_color(0);
           printf("\n");
      }
-     for( int i=0; i<p->getNumberOfChildren(); i++ )
+     for( sal_Int32 i=0; i<p->getNumberOfChildren(); i++ )
      {
           print_node( p->getChildAt(i), depth+1 );
      }
@@ -249,17 +244,19 @@ void print_node( LocaleNode* p, int depth=0 )
      printf("\n");
 }
 
-void LocaleNode :: generateCode (const OFileWriter &of) {
-    for (int i=0; i<nChildren;i++)
+void LocaleNode :: generateCode (const OFileWriter &of) const
+{
+    for (sal_Int32 i=0; i<nChildren;i++)
         children[i]->generateCode (of);
 //      print_node( this );
 }
 
-void LCInfoNode::generateCode (const OFileWriter &of) {
+void LCInfoNode::generateCode (const OFileWriter &of) const
+{
 
-    LocaleNode * languageNode = findNode("Language");
-    LocaleNode * countryNode = findNode("Country");
-    LocaleNode * varientNode = findNode("Varient");
+    const LocaleNode * languageNode = findNode("Language");
+    const LocaleNode * countryNode = findNode("Country");
+    const LocaleNode * variantNode = findNode("Variant");
 
     if (languageNode) {
         of.writeParameter("langID", languageNode->getChildAt(0)->getValue());
@@ -269,25 +266,26 @@ void LCInfoNode::generateCode (const OFileWriter &of) {
         of.writeParameter("countryID", countryNode->getChildAt(0)->getValue());
         of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
-    of.writeParameter("Varient", ::rtl::OUString::createFromAscii(""));
+    of.writeParameter("Variant", ::rtl::OUString::createFromAscii(""));
     of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
     of.writeAsciiString("\tcountryID,\n");
     of.writeAsciiString("\tcountryDefaultName,\n");
-    of.writeAsciiString("\tVarient\n");
+    of.writeAsciiString("\tVariant\n");
     of.writeAsciiString("};\n\n");
     of.writeFunction("getLCInfo_", "0", "LCInfoArray");
 }
 
-void LCCTYPENode::generateCode (const OFileWriter &of) {
+void LCCTYPENode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
     ::rtl::OUString str =   getAttr() -> getValueByName("unoid");
-    LocaleNode * sepNode = findNode("DateSeparator");
+    const LocaleNode * sepNode = findNode("DateSeparator");
     of.writeAsciiString("\n\n");
     of.writeParameter("LC_CTYPE_Unoid", str);;
     of.writeParameter("dateSeparator", sepNode->getValue());
@@ -347,7 +345,8 @@ void LCCTYPENode::generateCode (const OFileWriter &of) {
     of.writeFunction("getLocaleItem_", "0", "LCType");
 }
 
-void LCFormatNode::generateCode (const OFileWriter &of) {
+void LCFormatNode::generateCode (const OFileWriter &of) const
+{
     of.writeParameter("replaceFrom", getAttr() -> getValueByName("replaceFrom"));
     of.writeParameter("replaceTo", getAttr() -> getValueByName("replaceTo"));
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
@@ -376,7 +375,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) {
             sal_Int16 formatindex = (sal_Int16)str.toInt32();
             of.writeIntParameter("Formatindex", formatCount, formatindex);
 
-            LocaleNode * n = currNode -> findNode("FormatCode");
+            const LocaleNode * n = currNode -> findNode("FormatCode");
             if (n) {
                 of.writeParameter("FormatCode", n->getValue(), formatCount);
             }
@@ -437,7 +436,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) {
         of.writeFunction("getAllFormats_", "FormatElementsCount", "FormatElementsArray", "replaceFrom", "replaceTo");
 }
 
-void LCCollationNode::generateCode (const OFileWriter &of) {
+void LCCollationNode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getCollatorImplementation_", useLocale);
@@ -465,7 +465,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
         {
             LocaleNode* pCollationOptions = currNode;
             nbOfCollationOptions = pCollationOptions->getNumberOfChildren();
-            for( int i=0; i<nbOfCollationOptions; i++ )
+            for( sal_Int32 i=0; i<nbOfCollationOptions; i++ )
             {
                 of.writeParameter("collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
             }
@@ -503,7 +503,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
     of.writeFunction("getCollationOptions_", "nbOfCollationOptions", "collationOptions");
 }
 
-void LCSearchNode::generateCode (const OFileWriter &of)
+void LCSearchNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
@@ -515,9 +515,9 @@ void LCSearchNode::generateCode (const OFileWriter &of)
     {
         exit(1);
     }
-    int i;
+    sal_Int32 i;
     LocaleNode* pSearchOptions = getChildAt( 0 );
-    int         nSearchOptions = pSearchOptions->getNumberOfChildren();
+    sal_Int32   nSearchOptions = pSearchOptions->getNumberOfChildren();
     for( i=0; i<nSearchOptions; i++ )
     {
         of.writeParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), i );
@@ -538,7 +538,8 @@ void LCSearchNode::generateCode (const OFileWriter &of)
     of.writeFunction("getSearchOptions_", "nbOfSearchOptions", "searchOptions");
 }
 
-void LCIndexNode::generateCode (const OFileWriter &of) {
+void LCIndexNode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getIndexAlgorithm_", useLocale);
@@ -633,7 +634,8 @@ void LCIndexNode::generateCode (const OFileWriter &of) {
     of.writeFunction("getFollowPageWords_", "nbOfPageWords", "FollowPageWordArray");
 }
 
-void LCCalendarNode::generateCode (const OFileWriter &of) {
+void LCCalendarNode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getAllCalendars_", useLocale);
@@ -832,7 +834,8 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
     delete []nbOfEras;
 }
 
-void LCCurrencyNode :: generateCode (const OFileWriter &of) {
+void LCCurrencyNode :: generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getAllCurrencies_", useLocale);
@@ -893,7 +896,8 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) {
     of.writeFunction("getAllCurrencies_", "currencyCount", "currencies");
 }
 
-void LCTransliterationNode::generateCode (const OFileWriter &of) {
+void LCTransliterationNode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
         of.writeRefFunction("getTransliterations_", useLocale);
@@ -927,7 +931,7 @@ struct NameValuePair {
     const sal_Char *value;
 };
 static NameValuePair ReserveWord[] = {
-    { "trueWord", "trur" },
+    { "trueWord", "true" },
     { "falseWord", "false" },
     { "quarter1Word", "1st quarter" },
     { "quarter2Word", "2nd quarter" },
@@ -941,22 +945,23 @@ static NameValuePair ReserveWord[] = {
     { "quarter4Abbreviation", "Q4" }
 };
 
-void LCMiscNode::generateCode (const OFileWriter &of) {
+void LCMiscNode::generateCode (const OFileWriter &of) const
+{
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
     of.writeRefFunction("getForbiddenCharacters_", useLocale);
     of.writeRefFunction("getReservedWords_", useLocale);
     return;
     }
-    LocaleNode * reserveNode = findNode("ReservedWords");
-    LocaleNode * forbidNode = findNode("ForbiddenCharacters");
+    const LocaleNode * reserveNode = findNode("ReservedWords");
+    const LocaleNode * forbidNode = findNode("ForbiddenCharacters");
 
     sal_Int16 nbOfWords = 0;
     ::rtl::OUString str;
     sal_Int16 i;
 
     for ( i = 0; i < sizeof(ReserveWord)/sizeof(NameValuePair); i++,nbOfWords++) {
-        LocaleNode * curNode = reserveNode->findNode (ReserveWord[i].name);
+        const LocaleNode * curNode = reserveNode->findNode (ReserveWord[i].name);
           str = curNode ? curNode -> getValue() : OUString::createFromAscii(ReserveWord[i].value);
           of.writeParameter("ReservedWord", str, nbOfWords);
     }
@@ -986,10 +991,9 @@ void LCMiscNode::generateCode (const OFileWriter &of) {
     of.writeFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
 }
 
-void LCNumberingLevelNode::generateCode (const OFileWriter &of)
+void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> ContinuousNumbering\n");
-#if SUPD > 618
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
     of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
@@ -1002,13 +1006,13 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
 
      // record each attribute of each style in a static C++ variable.
      // determine number of styles on the fly.
-     int nStyles = getNumberOfChildren();
-     int i;
+     sal_Int32 nStyles = getNumberOfChildren();
+     sal_Int32 i;
 
      for( i = 0; i < nStyles; i++ )
      {
           const Attr* q = getChildAt( i )->getAttr();
-          for( int j=0; j<nAttributes; j++ )
+          for( sal_Int32 j=0; j<nAttributes; j++ )
           {
                const char* name = attr[j];
                OUString   value = q->getValueByName( name );
@@ -1030,7 +1034,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
           of.writeAsciiString("\nstatic const sal_Unicode* continuousStyle" );
           of.writeInt( i );
           of.writeAsciiString("[] = {\n");
-          for( int j=0; j<nAttributes; j++)
+          for( sal_Int32 j=0; j<nAttributes; j++)
           {
                of.writeAsciiString("\t");
                of.writeAsciiString( "continuous" );
@@ -1054,14 +1058,12 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
      of.writeAsciiString("\t0\n};\n\n");
      of.writeFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
             "continuousNbOfAttributesPerStyle", "LCContinuousNumberingLevelsArray");
-#endif // SUPD > 618
 }
 
 
-void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
+void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> OutlineNumbering\n");
-#if SUPD > 618
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
     of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
@@ -1087,17 +1089,17 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
 
      // record each attribute of each level of each style in a static C++ variable.
      // determine number of styles and number of levels per style on the fly.
-     int nStyles = getNumberOfChildren();
-     vector<int> nLevels; // may be different for each style?
-     int i;
+     sal_Int32 nStyles = getNumberOfChildren();
+     vector<sal_Int32> nLevels; // may be different for each style?
+     sal_Int32 i;
      for( i = 0; i < nStyles; i++ )
      {
           LocaleNode* p = getChildAt( i );
           nLevels.push_back( p->getNumberOfChildren() );
-          for( int j=0; j<nLevels.back(); j++ )
+          for( sal_Int32 j=0; j<nLevels.back(); j++ )
           {
                const Attr* q = p->getChildAt( j )->getAttr();
-               for( int k=0; k<nAttributes; k++ )
+               for( sal_Int32 k=0; k<nAttributes; k++ )
                {
                     const char* name = attr[k];
                     OUString   value = q->getValueByName( name );
@@ -1128,7 +1130,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
 
      // too complicated for now...
 //     of.writeAsciiString("static const sal_Int16 nbOfOutlineNumberingLevels[] = { ");
-//     for( int j=0; j<nStyles; j++ )
+//     for( sal_Int32 j=0; j<nStyles; j++ )
 //     {
 //          of.writeInt( nLevels[j] );
 //          of.writeAsciiString(", ");
@@ -1138,7 +1140,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
 
      for( i=0; i<nStyles; i++ )
      {
-          for( int j=0; j<nLevels.back(); j++ )
+          for( sal_Int32 j=0; j<nLevels.back(); j++ )
           {
                of.writeAsciiString("static const sal_Unicode* outline");
                of.writeAsciiString("Style");
@@ -1147,7 +1149,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
                of.writeInt( j );
                of.writeAsciiString("[] = { ");
 
-               for( int k=0; k<nAttributes; k++ )
+               for( sal_Int32 k=0; k<nAttributes; k++ )
                {
                     of.writeAsciiString( "outline" );
                     of.writeAsciiString( attr[k] );
@@ -1169,7 +1171,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
           of.writeInt( i );
           of.writeAsciiString("[] = { ");
 
-          for( int j=0; j<nLevels.back(); j++ )
+          for( sal_Int32 j=0; j<nLevels.back(); j++ )
           {
                of.writeAsciiString("outlineStyle");
                of.writeInt( i );
@@ -1192,36 +1194,36 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
      of.writeAsciiString("\tNULL\n};\n\n");
      of.writeFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
             "outlineNbOfAttributesPerLevel", "LCOutlineNumberingLevelsArray");
-#endif // SUPD > 618
 }
 
 Attr::Attr (const Reference< XAttributeList > & attr) {
-    int len = attr->getLength();
+    sal_Int32 len = attr->getLength();
     name.realloc (len);
     value.realloc (len);
-    for (int i =0; i< len;i++) {
+    for (sal_Int32 i =0; i< len;i++) {
         name[i] = attr->getNameByIndex(i);
         value[i] = attr -> getValueByIndex(i);
     }
 }
 
-OUString Attr::getValueByName (const sal_Char *str) const {
-    int len = name.getLength();
-    for (int i = 0;i<len;i++)
+const OUString& Attr::getValueByName (const sal_Char *str) const {
+    static OUString empty;
+    sal_Int32 len = name.getLength();
+    for (sal_Int32 i = 0;i<len;i++)
         if (name[i].equalsAscii(str))
             return value[i];
-    return OUString();
+    return empty;
 }
 
 sal_Int32 Attr::getLength() const{
     return name.getLength();
 }
 
-OUString Attr::getTypeByIndex (sal_Int32 idx) const {
+const OUString& Attr::getTypeByIndex (sal_Int32 idx) const {
     return name[idx];
 }
 
-OUString Attr::getValueByIndex (sal_Int32 idx) const
+const OUString& Attr::getValueByIndex (sal_Int32 idx) const
 {
     return value[idx];
 }
