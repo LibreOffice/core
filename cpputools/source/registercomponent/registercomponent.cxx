@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-17 07:28:51 $
+ *  last change: $Author: jbu $ $Date: 2002-10-02 12:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <cppuhelper/shlib.hxx>
 
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -104,6 +105,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using com::sun::star::container::XSet;
+using com::sun::star::container::XContentEnumerationAccess;
+using com::sun::star::container::XEnumeration;
 
 
 sal_Bool isFileUrl(const OUString& fileName)
@@ -138,19 +141,20 @@ static void usingRegisterImpl()
 {
     fprintf(stderr, "usage: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl] [-s]\n");
     fprintf(stderr, " Parameters:\n");
-    fprintf(stderr, "      -register              = register a new extern component.\n");
-    fprintf(stderr, "      -revoke                = revoke an extern component.\n\n");
+    fprintf(stderr, "      -register              = register a new component.\n");
+    fprintf(stderr, "      -revoke                = revoke a component.\n\n");
     fprintf(stderr, "      -br registryfile       = the name of the registry used for bootstrapping the program.\n"
-                    "                               If the bootstrap registry have the same name as the registration registry\n"
-                    "                               the -r option is optional.\n");
-    fprintf(stderr, "      -r registryfile        = the name of the registry (will be created if not exists).\n");
-    fprintf(stderr, "      -c locationUrls        = the location of a component (DLL, Class name, url of a jar file, ...)\n"
-                    "                               or a list of urls seperated by ';' or ' '. Note if a list of urls is specified, the\n"
-                    "                               components must all need the same loader (quoting is possible with \\ or \"\").\n");
-    fprintf(stderr, "      -l componentLoaderUrl  = the name of the needed loader, if no loader is specified\n"
-                    "                               the 'com.sun.star.loader.SharedLibrary' is used.\n"
-                    "                               loaders: com.sun.star.loader.SharedLibrary | com.sun.star.loader.Java2\n"
-                    "      -s                     = silent, no output on success\n" );
+                    "                               The option can be given twice, each one followed by exactly one registry file.\n"
+                    "                               The registries are used to access both types and registered components.\n");
+    fprintf(stderr, "      -r registryfile        = the name of the target registry (will be created if it does not exists).\n");
+    fprintf(stderr, "      -c locationUrls        = the location of a component (a url to a shared library or a absolute url to a .jar\n"
+                    "                               file) or a list of urls seperated by ';' or ' '. Note if a list of urls is \n"
+                    "                               specified, the components must all need the same loader (quoting is possible with\n"
+                    "                               \\ or \"\").\n");
+    fprintf(stderr, "      -l componentLoaderUrl  = the name of the needed loader. If no loader is specified and the components have a\n"
+                    "                               .jar suffix, the default is 'com.sun.star.loader.Java2'.\n"
+                    "                               Otherwise, the default is com.sun.star.loader.SharedLibrary\n"
+                    "      -s                     = silent, output only on error.\n" );
 }
 
 class IllegalArgument
@@ -176,6 +180,7 @@ struct Options
     sal_Bool bSilent;
     OUString sProgramName;
     OUString sBootRegName;
+    OUString sBootRegName2;
     OUString sRegName;
     OUString sComponentUrls;
     OUString sLoaderName;
@@ -248,7 +253,15 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         if (i < ac - 1 && av[i+1][0] != '-')
                         {
                             i++;
-                            rOptions.sBootRegName = OStringToOUString(av[i], osl_getThreadTextEncoding());
+                            OUString regName = OStringToOUString(av[i], osl_getThreadTextEncoding());
+                            if( ! rOptions.sBootRegName.getLength() )
+                            {
+                                rOptions.sBootRegName = regName;
+                            }
+                            else
+                            {
+                                rOptions.sBootRegName2 = regName;
+                            }
                         } else
                         {
                             OString tmp("'-br', please check");
@@ -539,7 +552,6 @@ void DoIt::operator() (const OUString & url) throw()
             else
             {
                 fprintf(stderr, "revoke component '%s' from registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
-
                 ++ (*_exitCode);
             }
         }
@@ -556,10 +568,130 @@ void DoIt::operator() (const OUString & url) throw()
     }
 }
 
+static bool hasService(
+    const Reference< XMultiServiceFactory > &xSMgr,
+    const sal_Char * service )
+{
+    sal_Bool ret = sal_False;
+
+    Reference< XContentEnumerationAccess > access( xSMgr, UNO_QUERY );
+    if( access.is( ))
+    {
+        Reference< XEnumeration > enumeration = access->createContentEnumeration(
+            OUString::createFromAscii( service ) );
+
+        if( enumeration.is() && enumeration->hasMoreElements() )
+        {
+            ret = sal_True;
+        }
+    }
+    return ret;
+}
+
+static void bootstrap(
+    Options & opt ,
+    const Reference< XMultiServiceFactory > &xSMgr,
+    const Reference< XSimpleRegistry > & reg ) throw ( Exception )
+{
+    if( opt.sRegName.equals( opt.sBootRegName2 ) )
+    {
+        OUString tmp2 = opt.sBootRegName;
+        opt.sBootRegName = opt.sBootRegName2;
+        opt.sBootRegName2 = tmp2;
+    }
+
+    if ( opt.sRegName.equals(opt.sBootRegName) )
+    {
+        if( opt.sBootRegName2.getLength() )
+        {
+            xSMgr = createRegistryServiceFactory(
+                convertToFileUrl(opt.sRegName),
+                convertToFileUrl(opt.sBootRegName2),
+                sal_False );
+        }
+        else
+        {
+            xSMgr = createRegistryServiceFactory(
+                convertToFileUrl(opt.sRegName) , sal_False );
+        }
+    }
+    else
+    {
+        if( opt.sBootRegName2.getLength() )
+        {
+            xSMgr = createRegistryServiceFactory(
+                convertToFileUrl( opt.sBootRegName2 ),
+                convertToFileUrl( opt.sBootRegName ),
+                sal_True );
+        }
+        else if ( opt.sBootRegName.getLength() )
+        {
+            xSMgr = createRegistryServiceFactory(
+                convertToFileUrl( opt.sBootRegName ),
+                sal_True );
+        }
+        else
+        {
+            xSMgr = createServiceFactory();
+        }
+        reg = Reference< XSimpleRegistry >(
+            xSMgr->createInstance(
+                rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
+
+        if (reg.is())
+        {
+            try
+            {
+                reg->open( convertToFileUrl(opt.sRegName), sal_False, sal_True);
+                if (!reg->isValid())
+                {
+                    fprintf(stderr, "ERROR: open|create registry '%s' failed!\n",
+                            OUStringToOString(opt.sRegName, osl_getThreadTextEncoding() ).getStr());
+                    exit(1);
+                }
+            }
+            catch( InvalidRegistryException & e)
+            {
+                OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+                fprintf(stderr,
+                        "ERROR: create registry '%s' failed!\n"
+                        "InvalidRegistryException: %s\n",
+                         OUStringToOString( opt.sRegName, osl_getThreadTextEncoding()).getStr(),
+                        o.getStr() );
+                exit(1);
+            }
+        }
+    }
+
+    if( ! opt.sLoaderName.compareToAscii( "com.sun.star.loader.Java2" ) &&
+        ! hasService( xSMgr, "com.sun.star.loader.Java2" ) )
+    {
+        // we know our java loader, so we check, whether a java-loader is
+        // registered
+        Reference< XInterface > r = loadSharedLibComponentFactory(
+            OUString::createFromAscii( "jen" ), OUString(),
+            OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
+            xSMgr,
+            Reference< XRegistryKey > () );
+        Reference< XInterface > r2 = loadSharedLibComponentFactory(
+            OUString::createFromAscii( "javaloader" ), OUString(),
+            OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
+            xSMgr,
+            Reference< XRegistryKey > () );
+        Reference <XSet> xSet( xSMgr, UNO_QUERY );
+        if( r.is() && r2.is() && xSet.is() )
+        {
+            xSet->insert( makeAny( r ) );
+            xSet->insert( makeAny( r2 ) );
+        }
+    }
+}
+
+
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
-void _cdecl main( int argc, char * argv[] )
+int _cdecl main( int argc, char * argv[] )
 #endif
 {
     sal_Bool    bRet = sal_False;
@@ -579,41 +711,22 @@ void _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
+    if( ! aOptions.sRegName.getLength() )
+    {
+        fprintf( stderr, "ERROR: target registry missing (-r option)\n" );
+        exit( 1 );
+    }
+    if ( aOptions.sComponentUrls.getLength() == 0 )
+    {
+        fprintf(stderr, "ERROR: no component url is specified!\n");
+        exit(1);
+    }
+
     Reference< XMultiServiceFactory >   xSMgr;
     Reference< XSimpleRegistry >        xReg;
-
     try
     {
-        if ( aOptions.sBootRegName.getLength() )
-        {
-            xSMgr = createRegistryServiceFactory( convertToFileUrl(aOptions.sBootRegName) );
-        } else
-          {
-            xSMgr = createServiceFactory();
-
-            // this may be added in future, when the javavm can get its initial settings
-            // from the uno context, now it is quite useless
-//              if( ! aOptions.sLoaderName.compareToAscii( "com.sun.star.loader.Java2" ) )
-//              {
-//                  // we know our java loader, so in order to make it a little easier ...
-//                  Reference< XInterface > r = loadSharedLibComponentFactory(
-//                      OUString::createFromAscii( "jen" ), OUString(),
-//                      OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
-//                      xSMgr,
-//                      Reference< XRegistryKey > () );
-//                  Reference< XInterface > r2 = loadSharedLibComponentFactory(
-//                      OUString::createFromAscii( "javaloader" ), OUString(),
-//                      OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
-//                      xSMgr,
-//                      Reference< XRegistryKey > () );
-//                  Reference <XSet> xSet( xSMgr, UNO_QUERY );
-//                  if( r.is() && r2.is() && xSet.is() )
-//                  {
-//                      xSet->insert( makeAny( r ) );
-//                      xSet->insert( makeAny( r2 ) );
-//                  }
-//              }
-        }
+        bootstrap( aOptions, xSMgr ,xReg );
     }
     catch( Exception& e )
     {
@@ -626,53 +739,11 @@ void _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    OString     sRegName;
-    if ( aOptions.sRegName.getLength() )
-    {
-        sRegName = OUStringToOString(aOptions.sRegName, osl_getThreadTextEncoding());
-    } else
-    {
-        sRegName = OUStringToOString(aOptions.sBootRegName, osl_getThreadTextEncoding());
-    }
-
-
-    OString tmp = OUStringToOString(aOptions.sComponentUrls, osl_getThreadTextEncoding());
-
-    if ( aOptions.sComponentUrls.getLength() == 0 )
-    {
-        fprintf(stderr, "ERROR: no component url is specified!\n");
-        exit(1);
-    }
-
-    if ( !sRegName.equals(OUStringToOString(aOptions.sBootRegName, osl_getThreadTextEncoding())) )
-    {
-        xReg = Reference< XSimpleRegistry >( xSMgr->createInstance(rtl::OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")), UNO_QUERY);
-
-        if (xReg.is())
-        {
-            try
-            {
-                xReg->open( convertToFileUrl(aOptions.sRegName), sal_False, sal_True);
-                if (!xReg->isValid())
-                {
-                    fprintf(stderr, "ERROR: open|create registry '%s' failed!\n", sRegName.getStr());
-                    exit(1);
-                }
-            }
-            catch( InvalidRegistryException & e)
-            {
-                OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-                fprintf(stderr,
-                        "ERROR: create registry '%s' failed!\n"
-                        "InvalidRegistryException: %s\n",
-                         sRegName.getStr(), o.getStr() );
-                exit(1);
-            }
-        }
-    }
-
-    Reference<XImplementationRegistration> xImplRegistration(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
-                                                             UNO_QUERY);
+    Reference<XImplementationRegistration> xImplRegistration(
+        xSMgr->createInstance(
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.registry.ImplementationRegistration"))),
+        UNO_QUERY);
 
     if (xImplRegistration.is())
     {
@@ -695,7 +766,8 @@ void _cdecl main( int argc, char * argv[] )
         // go over the string and parse it, chars can be quoted in strings or with back slash
         while(index < aOptions.sComponentUrls.getLength())
         {
-            if((raw_urls[index] == semikolon.getStr()[0] || raw_urls[index] == space.getStr()[0]) && !quote && !inString) // a semikolon or space?
+            if((raw_urls[index] == semikolon.getStr()[0] ||
+                raw_urls[index] == space.getStr()[0]) && !quote && !inString) // a semikolon or space?
             {
                 tmp_url = tmp_url.trim();
                 if(tmp_url.getLength())
@@ -723,11 +795,13 @@ void _cdecl main( int argc, char * argv[] )
         if(tmp_url.getLength())
             urls.push_back(tmp_url);
 
+        OString sRegName = OUStringToOString( aOptions.sRegName, osl_getThreadTextEncoding() );
         if(aOptions.bRegister || aOptions.bRevoke)
+        {
             for_each(urls.begin(), urls.end(),
                      DoIt(aOptions.bRegister, aOptions.bRevoke, aOptions.bSilent,
                           xReg, sRegName, xImplRegistration, aOptions.sLoaderName, &exitCode));
-
+        }
         else
         {
             ++ exitCode;
@@ -747,7 +821,7 @@ void _cdecl main( int argc, char * argv[] )
     if ( xComponent.is() )
         xComponent->dispose();
 
-    exit(exitCode);
+    return exitCode;
 }
 
 

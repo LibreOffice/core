@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2001-05-25 11:42:34 $
+#   last change: $Author: jbu $ $Date: 2002-10-02 12:00:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ UNOTYPES=\
               com.sun.star.lang.XMultiComponentFactory \
               com.sun.star.lang.XSingleComponentFactory \
              com.sun.star.lang.XComponent \
+             com.sun.star.container.XContentEnumerationAccess \
             com.sun.star.registry.XImplementationRegistration
 
 # --- Files --------------------------------------------------------
