@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:27:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 13:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3333,7 +3333,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
 
     if ( bCnt )
     {
-        ::lcl_ExtendLeftAndRight( aRect, &_rFrm, _rAttrs, _rRectFn );
+        ::lcl_ExtendLeftAndRight( aRect, _rFrm, _rAttrs, _rRectFn );
     }
 
     // OD 06.05.2003 #107169# - adjustments for printer output device
