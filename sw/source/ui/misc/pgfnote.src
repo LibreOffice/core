@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:04:06 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ finnish ] = "Sivun korkeus" ;
         Text [ danish ] = "Op til maksimal sidehøjde" ;
         Text [ french ] = "Hauteur maximale de la p~age" ;
-        Text [ swedish ] = "Höjd maximalt som ~sidan" ;
+        Text [ swedish ] = "Höjd maximalt som ~sida" ;
         Text [ dutch ] = "Pag~inahoogte is max. hoogte" ;
         Text [ spanish ] = "Altura má~xima como página" ;
         Text [ english_us ] = "~Not larger than page area" ;
@@ -110,7 +110,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ finnish ] = "Max. ~Height of Footnote" ;
         Text [ danish ] = "Maks. højde fodnote" ;
         Text [ french ] = "Hauteur max. du ~pied de page" ;
-        Text [ swedish ] = "Fotnotens ma~x höjd" ;
+        Text [ swedish ] = "Fotnotens ma~ximala höjd" ;
         Text [ dutch ] = "~Maximum hoogte" ;
         Text [ spanish ] = "Altura máx. de ~nota al pie" ;
         Text [ english_us ] = "Maximum footnote ~height" ;
@@ -157,7 +157,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ finnish ] = "~Etäisyys runkotekstistä" ;
         Text [ danish ] = "Afstand til brødtekst" ;
         Text [ french ] = "~Écart du corps de texte" ;
-        Text [ swedish ] = "A~vstånd från brödtext" ;
+        Text [ swedish ] = "~Avstånd till brödtext" ;
         Text [ dutch ] = "A~fstand tot tekst" ;
         Text [ spanish ] = "~Distancia al cuerpo del texto" ;
         Text [ english_us ] = "Space to text" ;
@@ -486,7 +486,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ finnish ] = "~Etäisyys" ;
         Text [ danish ] = "Afstand til fodnoteindholdet" ;
         Text [ french ] = "~Écart entre trait et texte" ;
-        Text [ swedish ] = "Avstå~nd till fotnotens innehåll" ;
+        Text [ swedish ] = "Avstån~d till fotnotens innehåll" ;
         Text [ dutch ] = "~Afstand tot inhoud voetnoot" ;
         Text [ spanish ] = "~Espacio al contenido de la nota" ;
         Text [ english_us ] = "~Spacing to footnote contents" ;
@@ -538,8 +538,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "Separator line" ;
         Text[ chinese_simplified ] = "·Ö¸ôÏß";
         Text[ russian ] = "Ğàçäåëèòåëüíàÿ ëèíèÿ";
-        Text[ polish ] = "Linia podzia³u";
-        Text[ japanese ] = "‹æØ‚èü";
+        Text[ polish ] = "Separator";
+        Text[ japanese ] = "‹«ŠEü‚ğˆø‚­";
         Text[ chinese_traditional ] = "¤À¹j½u";
         Text[ arabic ] = "ÇáÎØ ÇáİÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêŞ ãñáììŞ";
