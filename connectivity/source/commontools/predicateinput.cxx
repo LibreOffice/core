@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:31:04 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 07:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,16 @@ namespace dbtools
                         )
                     )
                 {
-                    ::rtl::OUString sSingleQuote( RTL_CONSTASCII_USTRINGPARAM( "'" ) );
-                    ::rtl::OUString sDoubleQuote( RTL_CONSTASCII_USTRINGPARAM( "''" ) );
+                    static const ::rtl::OUString sSingleQuote( RTL_CONSTASCII_USTRINGPARAM( "'" ) );
+                    static const ::rtl::OUString sDoubleQuote( RTL_CONSTASCII_USTRINGPARAM( "''" ) );
 
                     sal_Int32 nIndex = -1;
-                    while ( -1 != ( nIndex = sQuoted.indexOf( '\'' ) ) )
+                    sal_Int32 nTemp = 0;
+                    while ( -1 != ( nIndex = sQuoted.indexOf( '\'',nTemp ) ) )
+                    {
                         sQuoted = sQuoted.replaceAt( nIndex, 1, sDoubleQuote );
+                        nTemp = nIndex+2;
+                    }
 
                     ::rtl::OUString sTemp( sSingleQuote );
                     ( sTemp += sQuoted ) += sSingleQuote;
@@ -420,6 +424,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/09 14:31:04  fs
+ *  initial checkin - helper class for inputting predicate values
+ *
  *
  *  Revision 1.0 04.04.02 15:57:58  fs
  ************************************************************************/
