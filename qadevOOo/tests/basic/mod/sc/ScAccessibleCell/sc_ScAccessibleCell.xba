@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessibleCell.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:08 $ 
+'*  last change:$Date: 2003-05-27 12:09:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -89,7 +89,7 @@ On Error Goto ErrHndl
     oDoc = utils.createDocument("scalc",cObjectName)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,105,"B1")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE_CELL,"B1")
     accText = "Testing object sc.ScAccessibleCell"
     xCell = oDoc.getSheets().getByIndex(0).getCellByPosition(1,0)
     xCell.setFormula(accText)
@@ -99,7 +99,4 @@ ErrHndl:
     Test.Exception()
 End Sub
 
-Sub DisposeObj()
-    oDoc.dispose()
-End Sub
 </script:module>
