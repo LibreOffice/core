@@ -9,10 +9,10 @@ TARGET=copying
 
 CONVERTTAGFLAG = $(MISC)$/converttags_html_files.flag
 
-IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT)$/com -type f -print))}
+IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
-IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT)$/com -type d -print))}
+IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
 DIRLIST = \
     $(DESTDIRDOCU) \
@@ -33,10 +33,9 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Car		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples		\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples		\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/test		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver	\
@@ -44,9 +43,6 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Inspector	\
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
     $(DESTDIRJAVAEXAMPLES)$/ToDo	\
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean	\
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/SimpleBean	\
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/OfficeWriterBean	\
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent   \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet   \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
@@ -70,13 +66,12 @@ DIRLIST = \
 CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclientsample.xml	\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/README           		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
 
 CPP_DOCUMENTLOADER= \
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/DocumentLoader.cxx 		\
-    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/README           		\
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/test.sxw 		\
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/Makefile
 
 CPP_GENERICXMLFILTER= \
@@ -95,19 +90,16 @@ CPP_GENERICXMLFILTER= \
 
 JAVA_DRAW= \
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
-    $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile	  	 		\
-    $(DESTDIRJAVAEXAMPLES)$/draw$/README
+    $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile
 
 JAVA_CALC= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/SCalc.java		   	\
     $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile	  	 		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/README
+    $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile
 
 JAVA_CALC_CHARTTYPECHANGE= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.java		   	\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/Makefile	  	 		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/README
 
 JAVA_WRITER= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/SWriter.java	   		\
@@ -117,43 +109,28 @@ JAVA_WRITER= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/BookmarkInsertion.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/README
+    $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile
 
 JAVA_CAR= \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Car.java \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/Manifest \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Test.java \
+    $(DESTDIRJAVAEXAMPLES)$/Car$/Car.idl \
     $(DESTDIRJAVAEXAMPLES)$/Car$/XAccelerationControl.idl \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/XCar.idl \
     $(DESTDIRJAVAEXAMPLES)$/Car$/XDrivingDirection.idl
 
 JAVA_CALCADDINS= \
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.html		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Manifest			\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/README			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl
     
 JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.sxw	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/manifest		\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
-
-JAVA_COMPSAMPLES= \
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestComponentA.java	\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestComponentB.java	\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestServiceProvider.java	\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/Manifest       \
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/XSomethingA.idl       \
-    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/XSomethingB.idl
 
 JAVA_CONVERTERSERVLET= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
@@ -163,47 +140,38 @@ JAVA_CONVERTERSERVLET= \
 
 JAVA_DOCUMENTCONVERTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/README
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/test$/test1.sxw
 
 JAVA_DOCUMENTLOADER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/DocumentLoader.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/README
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile
 
 JAVA_DOCUMENTPRINTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/DocumentPrinter.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/README
+    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/Makefile
 
 JAVA_DOCUMENTSAVER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/DocumentSaver.java	\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/README
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile
 
 JAVA_GRAPHICSINSERTER= \
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/GraphicsInserter.java	\
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/Makefile	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/OpenOfficeLogo.gif	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/README
+    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/oo_smiley.gif
 
 JAVA_INSPECTOR= \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/index.html \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/install.html \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.jpg \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InspectorThumbnail.jpg \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Manifest \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Test.java \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/README
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl
 
 JAVA_NOTESACCESS= \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/NotesAccess.java \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Stocks.nsf \
-    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/README
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Stocks.nsf
 
 JAVA_TODO= \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.java \
@@ -215,48 +183,18 @@ JAVA_TODO= \
 
 JAVA_WRITERSELECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/WriterSelector.java \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/README
-
-JAVA_OFFICEBEAN_SIMPLEBEAN= \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBean.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBeanBeanInfo.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleViewer.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/manifest.tmp \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile
-
-JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriter.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBeanInfo.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Office.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeBeanInfo.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/DocViewer.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/manifest.tmp
-
-JAVA_OFFICEBEAN_HELPERBEANS= \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeCommand.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BeanInfoAdapter.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconColor32.jpg \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconColor16.jpg \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono32.jpg \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono16.jpg \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BasicOfficeBean.java
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/Makefile
 
 JAVA_MINIMALCOMPONENT= \
-    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/BuildMinimalComponent.xml \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.idl \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.java\
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.xml \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/TestMinimalComponent.java\
-    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/README   \
-    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/Manifest \
     $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/Makefile
 
 JAVA_PROPERTYSET= \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropTest.java \
-    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/readme.txt \
-    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/manifest \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropertySet.sxw \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/Makefile
 
 BASIC_EXAMPLES= \
@@ -326,7 +264,6 @@ EXAMPLESLIST= \
     $(JAVA_WRITER)      \
     $(JAVA_CALCADDINS)  \
     $(JAVA_DEMOCOMP)    \
-    $(JAVA_COMPSAMPLES) \
     $(JAVA_CONVERTERSERVLET)    \
     $(JAVA_DOCUMENTCONVERTER)      \
     $(JAVA_DOCUMENTLOADER)         \
@@ -337,17 +274,13 @@ EXAMPLESLIST= \
     $(JAVA_NOTESACCESS)            \
     $(JAVA_TODO)                   \
     $(JAVA_WRITERSELECTOR)         \
-    $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
-    $(JAVA_OFFICEBEAN_OFFICEWRITERBEAN)  \
-    $(JAVA_OFFICEBEAN_HELPERBEANS)  \
     $(JAVA_MINIMALCOMPONENT) \
     $(JAVA_PROPERTYSET)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
     $(OLE_EXAMPLES_DELPHI_INSERTTABLES)                \
-    $(OLE_EXAMPLES_ACTIVEX)                \
-    $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
+    $(OLE_EXAMPLES_ACTIVEX)
 
 DOCUSTUDIO4INTEGRATIONHTMLFILES= \
     $(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html \
@@ -413,12 +346,13 @@ DOCUSTUDIO4INTEGRATIONGRAPHICSFILES= \
 DOCUHTMLFILES+= \
     $(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
     $(DESTDIR)$/index.html \
-    $(DESTDIRDOCU)$/sdk_styles.css \
     $(DESTDIRDOCU)$/tools.html \
     $(DESTDIRDOCU)$/notsupported.html \
-    $(DESTDIRDOCU)$/devmanual_preview.html \
+    $(DESTDIRDOCU)$/DevelopersGuide_intro.html \
     $(DESTDIRDOCU)$/install.html \
-    $(DESTDIREXAMPLES)$/examples.html
+    $(DESTDIRDOCU)$/sdk_styles.css \
+    $(DESTDIREXAMPLES)$/examples.html \
+    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
 
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
@@ -433,12 +367,15 @@ DOCUFILES+= \
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
     $(DESTDIR)$/configure \
-    $(DESTDIR)$/setsdkenv_unix.in
+    $(DESTDIR)$/setsdkenv_unix.in \
+    $(DESTDIR)$/oo1.0.2_sdk_linkpatch
 .ELSE
 INSTALLSCRIPT= \
     $(DESTDIR)$/configureWindowsNT.bat \
     $(DESTDIR)$/setsdkenv_windows.bat
 .ENDIF
+
+
 
 #--------------------------------------------------
 # TARGETS
@@ -454,14 +391,13 @@ all : 	\
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
     $(DESTDIRCLASSES)$/oosupport.nbm \
+    $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.htm \
+    $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf \
+    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html \
     $(CONVERTTAGFLAG)
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
-
-$(DESTDIRDOCU)$/sdk_styles.css : $(PRJ)$/docs$/sdk_styles.css
-    +-rm -f $(CONVERTTAGFLAG) >& $(NULLDEV)
-    $(MY_COPY) $? $@
 
 $(DESTDIR)$/index.html : $(PRJ)$/index.html
     +-rm -f $@ >& $(NULLDEV)
@@ -479,11 +415,15 @@ $(DESTDIRDOCU)$/notsupported.html : $(PRJ)$/docs$/notsupported.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRDOCU)$/devmanual_preview.html : $(PRJ)$/docs$/devmanual_preview.html
+$(DESTDIRDOCU)$/DevelopersGuide_intro.html : $(PRJ)$/docs$/DevelopersGuide_intro.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCU)$/install.html : $(PRJ)$/docs$/install.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/sdk_styles.css : $(PRJ)$/docs$/sdk_styles.css
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -529,6 +469,13 @@ $(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
     +-chmod 755 $@
 .ENDIF
 
+$(DESTDIR)$/oo1.0.2_sdk_linkpatch : oo1.0.2_sdk_linkpatch
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
+
 $(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
@@ -537,22 +484,130 @@ $(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRCPPEXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRJAVAEXAMPLES)$/% : $(PRJ)$/examples$/java$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIRBASICEXAMPLES)$/% : $(PRJ)$/examples$/basic$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $? $@
 
-$(DESTDIROLEEXAMPLES)$/% : $(PRJ)$/examples$/OLE$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+$(DESTDIREXAMPLES)$/%.sxc : $(PRJ)$/examples$/%.sxc $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
+$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%$/Makefile : $(PRJ)$/examples$/%$/Makefile $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%$/README : $(PRJ)$/examples$/%$/README $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+        
 $(DESTDIRCLASSES)$/unoil.jar : $(BINOUT)$/unoil.jar 
     $(GNUCOPY) -p $? $@
 
@@ -562,8 +617,8 @@ $(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
     $(GNUCOPY) -p $? $@
 
-$(DESTDIRBIN)$/types.rdb : $(BINOUT)$/types.rdb 
-    $(GNUCOPY) -p $(BINOUT)$/types.rdb $@
+$(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
+    $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
 
 $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
@@ -578,9 +633,9 @@ $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     echo DKNAME=${PRODUCT_NAME} >> $@    
 .ENDIF
 .IF "$(GUI)"=="UNX"
-    echo 'DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb' >> $@
+    echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb")' >> $@
 .ELSE
-    echo DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb >> $@
+    echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb") >> $@
 .ENDIF
 
 .IF "$(BUILD_SOSL)"==""
@@ -592,6 +647,19 @@ $(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview2.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 .ENDIF
+
+$(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf : DevelopersGuide.pdf
+    $(GNUCOPY) -p DevelopersGuide.pdf $(DESTDIRDOCU)$/DevelopersGuide
+    
+$(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.htm : DevelopersGuide.zip
+    $(GNUCOPY) -p DevelopersGuide.zip $(DESTDIRDOCU)
+    unzip -quod $(DESTDIRDOCU) $(DESTDIRDOCU)$/DevelopersGuide.zip
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIRDOCU)$/DevelopersGuide.zip >& $(NULLDEV)
+
+$(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html : DevelopersGuideSamples.zip
+    $(GNUCOPY) -p DevelopersGuideSamples.zip $(DESTDIREXAMPLES)
+    unzip -quod $(DESTDIREXAMPLES) $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip >& $(NULLDEV)
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     +-rm -f $@
