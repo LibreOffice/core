@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-02 13:10:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 10:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,3 +1061,23 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ catalan ] = "Image bullet";
     Text[ thai ] = "Image bullet";
 };
+
+String RID_SVXSTR_CHARACTER_SELECTION
+{
+    Text = "Sonderzeichenauswahl" ;
+    Text [ ENGLISH ] = "Special character selection" ;
+};
+
+String RID_SVXSTR_CHAR_SEL_DESC
+{
+    Text = "Wählen Sie Sonderzeichen in diesem Bereich aus." ;
+    Text [ ENGLISH ] = "Select special characters in this area." ;
+};
+
+String RID_SVXSTR_CHARACTER_CODE
+{
+    // The space behind is a must.
+    Text = "Zeichen-Code " ;
+    Text [ ENGLISH ] = "Character code " ;
+};
+

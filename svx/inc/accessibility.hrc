@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-27 16:39:17 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 10:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,11 @@
 #define RID_SVXSTR_A11Y_PARAGRAPH_NAME          (RID_SVXSTR_A11Y_TEXTHELPER_START + 1)
 #define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION (RID_SVXSTR_A11Y_TEXTHELPER_START + 2)
 #define RID_SVXSTR_A11Y_IMAGEBULLET_NAME        (RID_SVXSTR_A11Y_TEXTHELPER_START + 3)
+
+// SvxShowCharSetAcc
+#define RID_SVXSTR_CHARACTER_SELECTION          (RID_SVXSTR_ACCESSIBILITY_START + 80)
+#define RID_SVXSTR_CHARACTER_CODE               (RID_SVXSTR_ACCESSIBILITY_START + 81)
+#define RID_SVXSTR_CHAR_SEL_DESC                (RID_SVXSTR_ACCESSIBILITY_START + 82)
 
 #endif
 
