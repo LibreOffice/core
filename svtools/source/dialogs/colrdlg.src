@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ ModalDialog DLG_COLOR
         Text [ ENGLISH ] = "~Cyan" ;
         Text [ english_us ] = "~Cyan" ;
         Text [ portuguese_brazilian ] = "~Cyan" ;
-        Text [ swedish ] = "~Cyanblått" ;
+        Text [ swedish ] = "~Cyan" ;
         Text [ danish ] = "Cyan" ;
         Text [ italian ] = "~Ciano" ;
         Text [ spanish ] = "~Cian" ;
@@ -287,7 +287,7 @@ ModalDialog DLG_COLOR
         Text [ ENGLISH ] = "~Yellow" ;
         Text [ english_us ] = "~Yellow" ;
         Text [ portuguese_brazilian ] = "~Yellow" ;
-        Text [ swedish ] = "~Gult" ;
+        Text [ swedish ] = "~Yellow" ;
         Text [ danish ] = "Gul" ;
         Text [ italian ] = "~Giallo" ;
         Text [ spanish ] = "~Amarillo" ;
