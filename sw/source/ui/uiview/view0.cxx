@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-09-28 15:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #include "hintids.hxx"
 
+#ifndef _SVX_GALBRWS_HXX_
+#include <svx/galbrws.hxx>
+#endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
@@ -145,7 +148,10 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(FN_REDLINE_ACCEPT);
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
-    SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS, 1);
+    SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
+
+
+        SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS, 1);
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_TOOLS_TOOLBOX) );
@@ -172,6 +178,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:49  hr
+    initial import
+
     Revision 1.72  2000/09/18 16:06:12  willem.vandorp
     OpenOffice header added.
 
