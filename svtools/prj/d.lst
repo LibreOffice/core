@@ -309,6 +309,8 @@ hedabu: ..\inc\pickerhistory.hxx %_DEST%\inc%_EXT%\svtools\pickerhistory.hxx
 hedabu: ..\inc\regoptions.hxx %_DEST%\inc%_EXT%\svtools\regoptions.hxx
 hedabu: ..\inc\accessibilityoptions.hxx %_DEST%\inc%_EXT%\svtools\accessibilityoptions.hxx
 hedabu: ..\inc\cmdoptions.hxx %_DEST%\inc%_EXT%\svtools\cmdoptions.hxx
+hedabu: ..\inc\ctloptions.hxx %_DEST%\inc%_EXT%\svtools\ctloptions.hxx
+hedabu: ..\inc\asianlanguagesoptions.hxx %_DEST%\inc%_EXT%\svtools\asianlanguagesoptions.hxx
 
 hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
 hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx
