@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-08 08:28:27 $
+ *  last change: $Author: jl $ $Date: 2001-11-12 11:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,11 @@ using namespace osl;
 
 namespace stoc_javavm {
 
+static void getINetPropsFromConfig(JVM * pjvm,
+                                   const Reference<XMultiComponentFactory> & xSMgr,
+                                   const Reference<XComponentContext> &xCtx ) throw (Exception);
+
+
     static Sequence< OUString > javavm_getSupportedServiceNames()
     {
         static Sequence < OUString > *pNames = 0;
@@ -273,6 +278,10 @@ namespace stoc_javavm {
 
         JavaVM *                createJavaVM(const JVM & jvm) throw(RuntimeException);
         void                    disposeJavaVM() throw();
+
+    protected:
+        void setINetSettingsInVM( sal_Bool set_reset);
+
     };
 
     OCreatorThread::OCreatorThread(JavaVirtualMachine_Impl * pJavaVirtualMachine_Impl) throw()
@@ -387,6 +396,8 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
     OUString sPropertyName;
     OUString sPropertyValue;
     OUString sPropertyName2;
+    sal_Bool bDone= sal_False;
+
     if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")))
     {
         sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost"));
@@ -414,7 +425,7 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
         Event.Element >>= sPropertyValue;
         sPropertyValue= sPropertyValue.replace((sal_Unicode)';', (sal_Unicode)'|');
     }
-    else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyName")))
+/*  else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyName")))
     {
         sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyHost"));
         Event.Element >>= sPropertyValue;
@@ -424,10 +435,18 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
         sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyPort"));
         sPropertyValue= OUString::valueOf( *(sal_Int32*)Event.Element.getValue());
     }
+*/  else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")))
+    {
+        //Proxy none, manually
+        sal_Int32 value;
+        Event.Element >>= value;
+        setINetSettingsInVM( value);
+        bDone= sal_True;
+    }
     else
         return;
 
-    if (_pVMContext && _pVMContext->_pJavaVM)
+    if ( ! bDone && _pVMContext && _pVMContext->_pJavaVM)
     {
         JNIEnv* pJNIEnv= NULL;
         sal_Bool bThreadAttached= sal_False;
@@ -441,26 +460,62 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
         // call java.lang.System.setProperty
         // String setProperty( String key, String value)
         jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
-        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/lang/System")), Reference<XInterface>());
         jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.setProperty")), Reference<XInterface>());
 
         jstring jsPropName= pJNIEnv->NewString( sPropertyName.getStr(), sPropertyName.getLength());
-        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
-        jstring jsPropValue= pJNIEnv->NewString( sPropertyValue.getStr(), sPropertyValue.getLength());
-        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
-        jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
-        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
 
-        // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
-        // has a value for two java properties
-        if (sPropertyName2.getLength() > 0)
+        // remove the property if it does not have a value ( user left the dialog field empty)
+        // or if the port is set to 0
+        sPropertyValue= sPropertyValue.trim();
+        if( sPropertyValue.getLength() == 0 ||
+            (sPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort"))) ||
+             sPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM("http.proxyPort"))) /*||
+              sPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM("socksProxyPort")))*/) &&
+            sPropertyValue.equals(OUString( RTL_CONSTASCII_USTRINGPARAM("0"))))
         {
-            jstring jsPropName= pJNIEnv->NewString( sPropertyName2.getStr(), sPropertyName2.getLength());
+            // call java.lang.System.getProperties
+            jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getProperties")), Reference<XInterface>());
+            jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.getProperties")), Reference<XInterface>());
+            // call java.util.Properties.remove
+            jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/util/Properties")), Reference<XInterface>());
+            jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.util.Properties.remove")), Reference<XInterface>());
+            jobject joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
+
+            // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+            // has a value for two java properties
+            if (sPropertyName2.getLength() > 0)
+            {
+                jstring jsPropName2= pJNIEnv->NewString( sPropertyName2.getStr(), sPropertyName2.getLength());
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                jobject joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName2);
+            }
+        }
+        else
+        {
+            // Change the Value of the property
             jstring jsPropValue= pJNIEnv->NewString( sPropertyValue.getStr(), sPropertyValue.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
-            jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
-            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+            jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+
+            // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+            // has a value for two java properties
+            if (sPropertyName2.getLength() > 0)
+            {
+                jstring jsPropName= pJNIEnv->NewString( sPropertyName2.getStr(), sPropertyName2.getLength());
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                jstring jsPropValue= pJNIEnv->NewString( sPropertyValue.getStr(), sPropertyValue.getLength());
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+            }
         }
         if (bThreadAttached)
         {
@@ -470,6 +525,166 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
     }
 }
 
+// param true: all Inet setting are set as Java Properties on a live VM.
+// false: the Java net properties are set to empty value.
+void JavaVirtualMachine_Impl::setINetSettingsInVM( sal_Bool set_reset)
+{
+    MutexGuard aGuard( _Mutex);
+    try
+    {
+    if (_pVMContext && _pVMContext->_pJavaVM)
+    {
+        JNIEnv* pJNIEnv= NULL;
+        sal_Bool bThreadAttached= sal_False;
+        jint ret= _pVMContext->_pJavaVM->AttachCurrentThread((void **)&pJNIEnv, (void*)NULL);
+        OSL_ENSURE( !ret,"JavaVM could not attach current thread to VM");
+        if ( ! _pVMContext->isThreadAttached())
+        {
+            bThreadAttached= sal_True;
+        }
+
+        // The Java Properties
+        OUString sFtpProxyHost(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost") );
+        OUString sFtpProxyPort(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort") );
+        OUString sFtpNonProxyHosts (RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts"));
+        OUString sHttpProxyHost(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost") );
+        OUString sHttpProxyPort(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort") );
+        OUString sHttpNonProxyHosts(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts"));
+//      OUString sSocksProxyHost(RTL_CONSTASCII_USTRINGPARAM("socksProxyHost"));
+//      OUString sSocksProxyPort(RTL_CONSTASCII_USTRINGPARAM("socksProxyPort"));
+        // creat Java Properties as JNI strings
+        jstring jsFtpProxyHost= pJNIEnv->NewString( sFtpProxyHost.getStr(), sFtpProxyHost.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+        jstring jsFtpProxyPort= pJNIEnv->NewString( sFtpProxyPort.getStr(), sFtpProxyPort.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+        jstring jsFtpNonProxyHosts= pJNIEnv->NewString( sFtpNonProxyHosts.getStr(), sFtpNonProxyHosts.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+        jstring jsHttpProxyHost= pJNIEnv->NewString( sHttpProxyHost.getStr(), sHttpProxyHost.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+        jstring jsHttpProxyPort= pJNIEnv->NewString( sHttpProxyPort.getStr(), sHttpProxyPort.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+        jstring jsHttpNonProxyHosts= pJNIEnv->NewString( sHttpNonProxyHosts.getStr(), sHttpNonProxyHosts.getLength());
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+//      jstring jsSocksProxyHost= pJNIEnv->NewString( sSocksProxyHost.getStr(), sSocksProxyHost.getLength());
+//      if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+//      jstring jsSocksProxyPort= pJNIEnv->NewString( sSocksProxyPort.getStr(), sSocksProxyPort.getLength());
+//      if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+
+        // prepare java.lang.System.setProperty
+        jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/lang/System")), Reference<XInterface>());
+        jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.setProperty")), Reference<XInterface>());
+
+        // call java.lang.System.getProperties
+        jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getProperties")), Reference<XInterface>());
+        jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.getProperties")), Reference<XInterface>());
+        // prepare java.util.Properties.remove
+        jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
+        if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/util/Properties")), Reference<XInterface>());
+
+        if (set_reset)
+        {
+            // Set all network properties with the VM
+            JVM jvm;
+            getINetPropsFromConfig( &jvm, _xSMgr, _xCtx);
+            const ::std::vector< OUString> & Props = jvm.getProperties();
+            typedef ::std::vector< OUString >::const_iterator C_IT;
+
+            for( C_IT i= Props.begin(); i != Props.end(); i++)
+            {
+                OUString prop= *i;
+                sal_Int32 index= prop.indexOf( (sal_Unicode)'=');
+                OUString propName= prop.copy( 0, index);
+                OUString propValue= prop.copy( index + 1);
+
+                if( propName.equals( sFtpProxyHost))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyHost, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+                else if( propName.equals( sFtpProxyPort))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyPort, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+                else if( propName.equals( sFtpNonProxyHosts))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpNonProxyHosts, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+                else if( propName.equals( sHttpProxyHost))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyHost, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+                else if( propName.equals( sHttpProxyPort))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyPort, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+                else if( propName.equals( sHttpNonProxyHosts))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpNonProxyHosts, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+                }
+/*              else if( propName.equals( sSocksProxyHost))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsSocksProxyHost, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+                }
+                else if( propName.equals( sSocksProxyPort))
+                {
+                    jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+                    jstring jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsSocksProxyPort, jsVal);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("")), Reference<XInterface>());
+                }
+*/          }
+        }
+        else
+        {
+            // call java.util.Properties.remove
+            jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.util.Property.remove")), Reference<XInterface>());
+            jobject joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyHost);
+            joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyPort);
+            joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpNonProxyHosts);
+            joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpProxyHost);
+            joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpProxyPort);
+            joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsHttpNonProxyHosts);
+//          joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsSocksProxyHost);
+//          joPrev= pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsSocksProxyPort);
+        }
+
+        if (bThreadAttached)
+        {
+            jint ret= _pVMContext->_pJavaVM->DetachCurrentThread();
+            OSL_ENSURE( !ret,"JavaVM could not detach current thread to VM");
+        }
+    }
+    }
+    catch( RuntimeException& e)
+    {
+    }
+
+}
 // XEventListenerListener
 void SAL_CALL JavaVirtualMachine_Impl::disposing( const EventObject& Source )
     throw (RuntimeException)
@@ -562,6 +777,8 @@ static void setTimeZone(JVM * pjvm) throw() {
         pjvm->pushProp(OUString::createFromAscii("user.timezone=ECT"));
 }
 
+// Only gets the properties if the "Proxy Server" entry in the option dialog is
+// set to manual (i.e. not to none)
 static void getINetPropsFromConfig(JVM * pjvm,
                                    const Reference<XMultiComponentFactory> & xSMgr,
                                    const Reference<XComponentContext> &xCtx ) throw (Exception)
@@ -577,72 +794,77 @@ static void getINetPropsFromConfig(JVM * pjvm,
     xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")), sal_True, sal_False);
     Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-    // read ftp proxy name
-    Reference<XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyName")));
-    if(ftpProxy_name.is() && ftpProxy_name->getStringValue().getLength()) {
-        OUString ftpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
-        ftpHost += ftpProxy_name->getStringValue();
+//  if ooInetProxyType is not 0 then read the settings
+    Reference<XRegistryKey> proxyEnable= xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetProxyType")));
+    if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
+    {
+        // read ftp proxy name
+        Reference<XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyName")));
+        if(ftpProxy_name.is() && ftpProxy_name->getStringValue().getLength()) {
+            OUString ftpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
+            ftpHost += ftpProxy_name->getStringValue();
 
-        // read ftp proxy port
-        Reference<XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyPort")));
-        if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
-            OUString ftpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort="));
-            ftpPort += OUString::valueOf(ftpProxy_port->getLongValue());
+            // read ftp proxy port
+            Reference<XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyPort")));
+            if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
+                OUString ftpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort="));
+                ftpPort += OUString::valueOf(ftpProxy_port->getLongValue());
 
-            pjvm->pushProp(ftpHost);
-            pjvm->pushProp(ftpPort);
+                pjvm->pushProp(ftpHost);
+                pjvm->pushProp(ftpPort);
+            }
         }
-    }
 
-    // read http proxy name
-    Reference<XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyName")));
-    if(httpProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
-        OUString httpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
-        httpHost += httpProxy_name->getStringValue();
+        // read http proxy name
+        Reference<XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyName")));
+        if(httpProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
+            OUString httpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
+            httpHost += httpProxy_name->getStringValue();
 
-        // read http proxy port
-        Reference<XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyPort")));
-        if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
-            OUString httpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
-            httpPort += OUString::valueOf(httpProxy_port->getLongValue());
+            // read http proxy port
+            Reference<XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyPort")));
+            if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
+                OUString httpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
+                httpPort += OUString::valueOf(httpProxy_port->getLongValue());
 
-            pjvm->pushProp(httpHost);
-            pjvm->pushProp(httpPort);
+                pjvm->pushProp(httpHost);
+                pjvm->pushProp(httpPort);
+            }
         }
-    }
 
-    // read  nonProxyHosts
-    Reference<XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetNoProxy")));
-    if(nonProxies_name.is() && nonProxies_name->getStringValue().getLength()) {
-        OUString httpNonProxyHosts = OUString(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts="));
-        OUString ftpNonProxyHosts= OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts="));
-        OUString value= nonProxies_name->getStringValue();
-        // replace the separator ";" by "|"
-        value= value.replace((sal_Unicode)';', (sal_Unicode)'|');
+        // read  nonProxyHosts
+        Reference<XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetNoProxy")));
+        if(nonProxies_name.is() && nonProxies_name->getStringValue().getLength()) {
+            OUString httpNonProxyHosts = OUString(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts="));
+            OUString ftpNonProxyHosts= OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts="));
+            OUString value= nonProxies_name->getStringValue();
+            // replace the separator ";" by "|"
+            value= value.replace((sal_Unicode)';', (sal_Unicode)'|');
 
-        httpNonProxyHosts += value;
-        ftpNonProxyHosts += value;
+            httpNonProxyHosts += value;
+            ftpNonProxyHosts += value;
 
-        pjvm->pushProp(httpNonProxyHosts);
-        pjvm->pushProp(ftpNonProxyHosts);
-    }
-
-    // read socks settings
-    Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetSOCKSProxyName")));
-    if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
-        OUString socksHost = OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyHost="));
-        socksHost += socksProxy_name->getStringValue();
-
-        // read http proxy port
-        Reference<XRegistryKey> socksProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetSOCKSProxyPort")));
-        if (socksProxy_port.is() && socksProxy_port->getLongValue()) {
-            OUString socksPort = OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyPort="));
-            socksPort += OUString::valueOf(socksProxy_port->getLongValue());
-
-            pjvm->pushProp(socksHost);
-            pjvm->pushProp(socksPort);
+            pjvm->pushProp(httpNonProxyHosts);
+            pjvm->pushProp(ftpNonProxyHosts);
         }
-    }
+
+        // read socks settings
+/*      Reference<XRegistryKey> socksProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetSOCKSProxyName")));
+        if (socksProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
+            OUString socksHost = OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyHost="));
+            socksHost += socksProxy_name->getStringValue();
+
+            // read http proxy port
+            Reference<XRegistryKey> socksProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetSOCKSProxyPort")));
+            if (socksProxy_port.is() && socksProxy_port->getLongValue()) {
+                OUString socksPort = OUString(RTL_CONSTASCII_USTRINGPARAM("socksProxyPort="));
+                socksPort += OUString::valueOf(socksProxy_port->getLongValue());
+
+                pjvm->pushProp(socksHost);
+                pjvm->pushProp(socksPort);
+            }
+        }
+*/  }
     xConfRegistry_simple->close();
 }
 
