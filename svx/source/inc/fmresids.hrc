@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:19:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,24 @@
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVXTBX_FORM                             (RID_FORMS_START + 1)
 #define TBX_FORM                                    (RID_FORMS_START + 2)
-    // FREE
-    // FREE
-#define RID_SVXDLG_ADD_TABLE                        (RID_FORMS_START + 5)
-#define RID_SVXDLG_TAB_ORDER                        (RID_FORMS_START + 6)
-#define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 9)
-#define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 10)
-    // FREE
-#define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 14)
-#define RID_SVXERR_SEARCH_NORECORD                  (RID_FORMS_START + 15)
-#define RID_SVXERR_SEARCH_GENERAL_ERROR             (RID_FORMS_START + 16)
-#define RID_SVX_DLG_INPUTRECORDNO                   (RID_FORMS_START + 17)
-#define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 18)
+#define RID_SVXDLG_ADD_TABLE                        (RID_FORMS_START + 3)
+#define RID_SVXDLG_TAB_ORDER                        (RID_FORMS_START + 4)
+#define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 5)
+#define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
+#define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 7)
+#define RID_SVXERR_SEARCH_NORECORD                  (RID_FORMS_START + 8)
+#define RID_SVXERR_SEARCH_GENERAL_ERROR             (RID_FORMS_START + 9)
+#define RID_SVX_DLG_INPUTRECORDNO                   (RID_FORMS_START + 10)
+#define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 11)
+#define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)
+#define RID_SVXDLG_ADD_CONDITION                    (RID_FORMS_START + 13)
+#define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
+#define RID_SVXDLG_MANAGE_NAMESPACE                 (RID_FORMS_START + 15)
+#define RID_SVXDLG_ADD_SUBMISSION                   (RID_FORMS_START + 16)
+#define RID_SVXDLG_ADD_MODEL                        (RID_FORMS_START + 17)
+#define RID_SVXDLG_ADD_INSTANCE                     (RID_FORMS_START + 18)
+#define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)
+#define RID_SVX_XFORMS_TABPAGES                     (RID_FORMS_START + 20)
 
 // Toolbars ------------------------------------------------------------
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
@@ -145,10 +151,19 @@
 #define MENU_FM_TEXTATTRIBITES_STYLE                (RID_FORMS_START + 7)
 #define MENU_FM_TEXTATTRIBITES_ALIGNMENT            (RID_FORMS_START + 8)
 #define MENU_FM_TEXTATTRIBITES_SPACING              (RID_FORMS_START + 9)
-
+#define RID_MENU_DATANAVIGATOR                      (RID_FORMS_START + 10)
 
 // QueryBox-Id's -----------------------------------------------------------
 #define RID_QRY_SAVEMODIFIED                        (RID_FORMS_START + 1)
+#define RID_QRY_REMOVE_MODEL                        (RID_FORMS_START + 2)
+#define RID_QRY_REMOVE_INSTANCE                     (RID_FORMS_START + 3)
+#define RID_QRY_REMOVE_ELEMENT                      (RID_FORMS_START + 4)
+#define RID_QRY_REMOVE_ATTRIBUTE                    (RID_FORMS_START + 5)
+
+// ErrorBox-Id's -----------------------------------------------------------
+#define RID_ERR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
+#define RID_ERR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
+#define RID_ERR_DOUBLE_MODELNAME                    (RID_FORMS_START + 3)
 
 // String-Id's -----------------------------------------------------------
 #define RID_STR_FORMSHELL                           (RID_FORMS_START +  10)
@@ -255,6 +270,26 @@
 #define RID_STR_CLASSNAME_SCROLLBAR                 (RID_FORMS_START + 121)
 #define RID_STR_CLASSNAME_SPINBUTTON                (RID_FORMS_START + 122)
 #define RID_STR_NAVBAR_CLASSNAME                    (RID_FORMS_START + 123)
+#define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
+#define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)
+#define RID_STR_DATANAV_SUBM_ID                     (RID_FORMS_START + 126)
+#define RID_STR_DATANAV_SUBM_ACTION                 (RID_FORMS_START + 127)
+#define RID_STR_DATANAV_SUBM_METHOD                 (RID_FORMS_START + 128)
+#define RID_STR_DATANAV_SUBM_REF                    (RID_FORMS_START + 129)
+#define RID_STR_DATANAV_SUBM_BIND                   (RID_FORMS_START + 130)
+#define RID_STR_DATANAV_SUBM_REPLACE                (RID_FORMS_START + 131)
+#define RID_STR_DATANAV_ADD_ELEMENT                 (RID_FORMS_START + 132)
+#define RID_STR_DATANAV_EDIT_ELEMENT                (RID_FORMS_START + 133)
+#define RID_STR_DATANAV_REMOVE_ELEMENT              (RID_FORMS_START + 134)
+#define RID_STR_DATANAV_ADD_ATTRIBUTE               (RID_FORMS_START + 135)
+#define RID_STR_DATANAV_EDIT_ATTRIBUTE              (RID_FORMS_START + 136)
+#define RID_STR_DATANAV_REMOVE_ATTRIBUTE            (RID_FORMS_START + 137)
+#define RID_STR_DATANAV_ADD_BINDING                 (RID_FORMS_START + 138)
+#define RID_STR_DATANAV_EDIT_BINDING                (RID_FORMS_START + 139)
+#define RID_STR_DATANAV_REMOVE_BINDING              (RID_FORMS_START + 140)
+#define RID_STR_DATANAV_ADD_SUBMISSION              (RID_FORMS_START + 141)
+#define RID_STR_DATANAV_EDIT_SUBMISSION             (RID_FORMS_START + 142)
+#define RID_STR_DATANAV_REMOVE_SUBMISSION           (RID_FORMS_START + 143)
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)
