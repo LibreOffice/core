@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:05:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,25 +90,7 @@ namespace pcr
         m_aTabControl.SetDeactivatePageHdl(LINK(this, OPropertyEditor, OnPageDeactivate));
         m_aTabControl.SetActivatePageHdl(LINK(this, OPropertyEditor, OnPageActivate));
         m_aTabControl.SetBackground(GetBackground());
-    }
-
-    //------------------------------------------------------------------
-    OPropertyEditor::OPropertyEditor( Window* pParent, const ResId& rResId )
-                : Control(pParent,rResId)
-                  ,m_aTabControl(this)
-                  ,m_nNextId(1)
-    {
-        DBG_CTOR(OPropertyEditor,NULL);
-
-        m_aTabControl.Show();
-        m_aTabControl.SetDeactivatePageHdl(LINK(this, OPropertyEditor, OnPageDeactivate));
-        m_aTabControl.SetActivatePageHdl(LINK(this, OPropertyEditor, OnPageActivate));
-
-        SetHelpId(GetHelpId());
-        m_aTabControl.SetBackground(GetBackground());
         m_aTabControl.SetPaintTransparent(sal_True);
-
-        Resize();
     }
 
     //------------------------------------------------------------------
