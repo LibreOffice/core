@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:22 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 14:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,8 +368,10 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                         ::rtl::OUString aFieldName;
                         try
                         {
-                            // retrieve the fields name
-                            rParam.xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aFieldName;
+                            sal_Int32 nNamePropertyId = PROPERTY_ID_NAME;
+                            if ( rParam.xField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_REALNAME ) ) )
+                                nNamePropertyId = PROPERTY_ID_REALNAME;
+                            rParam.xField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( nNamePropertyId ) ) >>= aFieldName;
                         }
                         catch ( Exception& )
                         {
@@ -378,8 +380,11 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
                         if(pSubTree->count())
                         {
                             const OSQLParseNode* pCol = pSubTree->m_aChilds[pSubTree->count()-1];
-                            if ((SQL_ISRULE(pCol,column_val) && pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)) ||
-                                pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName))
+                            if  (   (   SQL_ISRULE(pCol,column_val)
+                                    &&  pCol->getChild(0)->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                                    )
+                                ||  pCol->getTokenValue().equalsIgnoreAsciiCase(aFieldName)
+                                )
                                 bFilter = sal_True;
                         }
 

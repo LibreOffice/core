@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:12:35 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 14:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,7 +1053,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                                                             sal_False,
                                                             m_aCaseEqual.isCaseSensitive());
                 pColumn->setFunction(sal_True);
-                pColumn->setRealName(rValue);
+                pColumn->setRealName(sFunctionName);
                 m_aParameters->push_back(pColumn);
             }
             else
@@ -1063,7 +1063,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                 {
                     OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
                     pNewColumn->setName(rValue);
-                    pNewColumn->setRealName(rValue);
+                    pNewColumn->setRealName(aColumnName);
                     m_aParameters->push_back(pNewColumn);
                 }
                 else if(aColumnName.getLength())// search in the tables for the right one
@@ -1085,7 +1085,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                                 xColumns->getByName(aColumnName) >>= xColumn;
                                 OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
                                 pNewColumn->setName(rValue);
-                                pNewColumn->setRealName(rValue);
+                                pNewColumn->setRealName(aColumnName);
                                 m_aParameters->push_back(pNewColumn);
                                 break;
                             }
