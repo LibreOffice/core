@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:16:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
     rOutl.SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
 
-    ExtOutputDevice* pXOut = new ExtOutputDevice( pDev );
+    XOutputDevice* pXOut = new XOutputDevice( pDev );
     pXOut->SetOutDev( pDev );
     SdrPaintInfoRec aInfoRec;
 
