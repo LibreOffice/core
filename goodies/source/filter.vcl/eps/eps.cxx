@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 14:31:31 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 16:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,27 +1898,34 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             Size aSize( aVirDev.GetTextWidth( nChar ), aNormSize.Height() );
             switch( maFont.GetAlign() )
             {
-                case( ALIGN_TOP ):
-                    aPos.Y() += aMetric.GetAscent();
+                case( ALIGN_TOP ) :
                 break;
 
-                case( ALIGN_BOTTOM ):
-                    aPos.Y() -= aMetric.GetDescent();
+                case( ALIGN_BOTTOM ) :
+                    aPos.Y() -= aMetric.GetLineHeight();
                 break;
 
                 default:
+                case ( ALIGN_BASELINE ) :
+                    aPos.Y() -= aMetric.GetAscent();
                 break;
+            }
+            if ( nRotation )
+            {
+                aPolyDummy.SetPoint( aPos, 0 );
+                aPolyDummy.Rotate( rPos, nRotation );
+                aPos = aPolyDummy.GetPoint( 0 );
             }
             if ( aVirDev.GetGlyphOutline( nChar, aPolyPoly, sal_True ) )
             {
                 ImplWriteLine( "pum" );
+                // always adjust text position to match baseline alignment
+                ImplTranslate( aPos.X() * fXScaling + fXOrigin, aPos.Y() * fYScaling + fYOrigin );
                 if ( nRotation )
                 {
                     ImplWriteF( nRotation, 1 );
                     *mpPS << "r ";
                 }
-                // always adjust text position to match baseline alignment
-                ImplTranslate( aPos.X() * fXScaling + fXOrigin, aPos.Y() * fYScaling + fYOrigin );
                 ImplPolyPoly( aPolyPoly, sal_True );
                 ImplWriteLine( "pom" );
             }
