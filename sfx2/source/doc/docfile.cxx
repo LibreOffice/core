@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 13:44:00 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 18:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,7 +1610,13 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INET_PROT_NOT_VALID )
         {
-            DBG_ERROR ( "Unknown protocol!" );
+//            DBG_ERROR ( "Unknown protocol!" );
+            INetURLObject aUrl( aLogicName, INET_PROT_FILE );
+            if ( aUrl.GetProtocol() == INET_PROT_FILE )
+            {
+                aLogicName = aUrl.GetMainURL();
+                aName = aUrl.PathToFileName();
+            }
         }
         else
         {
