@@ -7,8 +7,13 @@ SHL1STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL1STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL1STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -320,9 +325,11 @@ $(SHL1TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -340,15 +347,18 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL1STDLIBS)` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL1VERSIONMAP) $@
@@ -419,7 +429,7 @@ SHL2STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL2STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -732,9 +742,11 @@ $(SHL2TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -752,15 +764,18 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL2STDLIBS)` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL2VERSIONMAP) $@
@@ -831,7 +846,7 @@ SHL3STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL3STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -1144,9 +1159,11 @@ $(SHL3TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -1164,15 +1181,18 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL3STDLIBS)` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL3VERSIONMAP) $@
@@ -1243,7 +1263,7 @@ SHL4STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL4STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -1556,9 +1576,11 @@ $(SHL4TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -1576,15 +1598,18 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL4STDLIBS)` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL4VERSIONMAP) $@
@@ -1655,7 +1680,7 @@ SHL5STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL5STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -1968,9 +1993,11 @@ $(SHL5TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -1988,15 +2015,18 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL5STDLIBS)` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL5VERSIONMAP) $@
@@ -2067,7 +2097,7 @@ SHL6STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL6STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -2380,9 +2410,11 @@ $(SHL6TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -2400,15 +2432,18 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL6STDLIBS)` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL6VERSIONMAP) $@
@@ -2479,7 +2514,7 @@ SHL7STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL7STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -2792,9 +2827,11 @@ $(SHL7TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -2812,15 +2849,18 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL7STDLIBS)` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL7VERSIONMAP) $@
@@ -2891,7 +2931,7 @@ SHL8STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL8STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -3204,9 +3244,11 @@ $(SHL8TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -3224,15 +3266,18 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL8STDLIBS)` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL8VERSIONMAP) $@
@@ -3303,7 +3348,7 @@ SHL9STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL9STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -3616,9 +3661,11 @@ $(SHL9TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -3636,15 +3683,18 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL9STDLIBS)` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL9VERSIONMAP) $@
@@ -3715,7 +3765,7 @@ SHL10STDLIBS=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL10STDLIBS+=$(STATICLIB)
 .ENDIF
 
@@ -4028,9 +4078,11 @@ $(SHL10TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+    .IF "$(CVER)"=="C295"
         @echo "------------------------------"
         @echo "Updating static data member initializations"
         @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -4048,15 +4100,18 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL10STDLIBS)` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+    .IF "$(CVER)"=="C295"
+        # This is a hack as libstatic and libcppuhelper have a circular dependency
+        .IF "$(PRJNAME)"=="cppuhelper"
+        @echo "------------------------------"
+        @echo "Rerunning static data member initializations"
+        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+        .ENDIF
+    .ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL10VERSIONMAP) $@
