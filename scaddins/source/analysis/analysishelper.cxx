@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-28 12:49:49 $
+ *  last change: $Author: gt $ $Date: 2001-06-28 12:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ const FuncDataBase pFuncDatas[] =
     FD( Imsin,          Imsin,          unique, STDPAR, 1, FDCat_Tech ),
     FD( Imsub,          Imsub,          unique, STDPAR, 2, FDCat_Tech ),
     FD( Imsqrt,         Imsqrt,         unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imsum,          Imsum,          unique, STDPAR, 2, FDCat_Tech ),
+    FD( Imsum,          Imsum,          unique, STDPAR, 1, FDCat_Tech ),
     FD( Complex,        Complex,        unique, STDPAR, 3, FDCat_Tech ),
     FD( Convert,        Convert_add,    DOUBLE, STDPAR, 3, FDCat_Tech ),
     FD( Amordegrc,      Amordegrc,      unique, INTPAR, 7, FDCat_Finance ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-26 09:00:57 $
+ *  last change: $Author: gt $ $Date: 2001-06-28 12:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6416,8 +6416,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 2 // name of parameter 1         Imsum
         {
-            Text = "Komplexe Zahl 1";
-            Text[ english ] = "Komplexe Zahl 1";
+            Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Inumber 1";
             Text[ portuguese ] = "inumber 1";
@@ -6443,8 +6443,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  Imsum
         {
-            Text = "Komplexe Zahl 1";
-            Text[ english ] = "Komplexe Zahl 1";
+            Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Inumber 1";
             Text[ portuguese ] = "inumber 1";
@@ -6468,59 +6468,6 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ catalan ] = "inumber 1";
         };
 
-        String 4 // name of parameter 2         Imsum
-        {
-            Text = "Komplexe Zahl";
-            Text[ english ] = "Komplexe Zahl";
-            Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 2";
-            Text[ portuguese ] = "inumber 2";
-            Text[ russian ] = " омпл_число 2";
-            Text[ greek ] = "inumber 2";
-            Text[ dutch ] = "inumber 2";
-            Text[ french ] = "inumber 2";
-            Text[ spanish ] = "inumber 2";
-            Text[ finnish ] = "inumber 2";
-            Text[ italian ] = "Numero complesso";
-            Text[ danish ] = "inumber 2";
-            Text[ swedish ] = "Komplext tal";
-            Text[ polish ] = "liczba zesp. 2";
-            Text[ portuguese_brazilian ] = "inumber 2";
-            Text[ japanese ] = "Х°СfРФ 2";
-            Text[ korean ] = "inumber 2";
-            Text[ chinese_simplified ] = "inumber 2";
-            Text[ chinese_traditional ] = "inumber 2";
-            Text[ turkish ] = "inumber 2";
-            Text[ arabic ] = "inumber 2";
-            Text[ catalan ] = "inumber 2";
-        };
-
-        String 5 // description of parameter 2  Imsum
-        {
-            Text = "Komplexe Zahl";
-            Text[ english ] = "Komplexe Zahl";
-            Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 2";
-            Text[ portuguese ] = "inumber 2";
-            Text[ russian ] = "¬торое суммируемое комплексное число.";
-            Text[ greek ] = "inumber 2";
-            Text[ dutch ] = "inumber 2";
-            Text[ french ] = "inumber 2";
-            Text[ spanish ] = "inumber 2";
-            Text[ finnish ] = "inumber 2";
-            Text[ italian ] = "Numero complesso";
-            Text[ danish ] = "inumber 2";
-            Text[ swedish ] = "Komplext tal";
-            Text[ polish ] = "liczba zespolona 2";
-            Text[ portuguese_brazilian ] = "inumber 2";
-            Text[ japanese ] = "Х°СfРФ 2";
-            Text[ korean ] = "inumber 2";
-            Text[ chinese_simplified ] = "inumber 2";
-            Text[ chinese_traditional ] = "inumber 2";
-            Text[ turkish ] = "inumber 2";
-            Text[ arabic ] = "inumber 2";
-            Text[ catalan ] = "inumber 2";
-        };
     };
 
     Resource ANALYSIS_Complex
