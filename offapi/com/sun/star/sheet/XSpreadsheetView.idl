@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheetView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** is the main interface of a <type>SpreadsheetView</type>. It
     manages the active sheet within this view.
  */
-interface XSpreadsheetView: com::sun::star::uno::XInterface
+published interface XSpreadsheetView: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
