@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:26:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,6 +800,8 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     {
         uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
         Paste( aSelection );
+        if ( mpTextEngine->IsModified() )
+            mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
