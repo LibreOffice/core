@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:00:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,7 @@ const rtl::Bootstrap & getBootstrapHandle()
             buf.append( exe.getStr() , nIndex +1 ).appendAscii( SAL_CONFIGFILE("uno") );
             ret = buf.makeStringAndClear();
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString o = rtl::OUStringToOString( ret , RTL_TEXTENCODING_ASCII_US );
         printf( "JavaVM: Used ininame %s\n" , o.getStr() );
 #endif
@@ -782,7 +782,7 @@ rtl::OUString retrieveComponentClassPath( const sal_Char *pVariableName )
             }
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "JavaVM: classpath retrieved from $%s: %s\n", pVariableName,
              rtl::OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr());
 #endif
@@ -818,7 +818,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
     catch(css::uno::Exception & exception) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: can not get INetProps cause of >%s<", message.getStr());
 #endif
@@ -828,7 +828,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
     catch(css::uno::Exception & exception) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: can not get locale cause of >%s<", message.getStr());
 #endif
@@ -848,7 +848,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
     }
     catch(css::uno::Exception & exception)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: couldn't use configuration cause of >%s<", message.getStr());
 #endif
@@ -878,7 +878,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
     catch(css::uno::Exception & exception) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
 #endif
@@ -888,7 +888,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
 
 //For a non product office we use the flag -ea
 // we cannot use -Xcheck:jni, because this prevents debugging (j2re1.4.1_01, netbeans 3.4)
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         if(!getenv( "DISABLE_SAL_DBGBOX" ) )
             jvm.pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ea")));
 #endif
@@ -1826,7 +1826,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
         }
     }catch( css::uno::Exception & e)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: could not set up listener for Configuration because of >%s<", message.getStr());
 #endif
