@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:55:40 $
+ *  last change: $Author: sb $ $Date: 2001-10-23 13:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@
 
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
-#define HID_DLG_PASSWORD (HID_UUI_START+2)
+#define HID_DLG_PASSWORD_UUI (HID_UUI_START+2)
 #define HID_DLG_PASSWORD_CRT (HID_UUI_START+3)
 // HID_UUI_END (aka HID_CHAOS_NEW_DATABASE) is reserved in
 // sfx2/util/hidother.src
