@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:59:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,6 +1693,8 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
         pDev->SetMapMode(aLogicMode);
     }
 */
+
+    aOutputData.AddPDFNotes();      // has no effect if not rendering PDF with notes enabled
 
 //  pDev->SetMapMode(aDrawMode);
 
