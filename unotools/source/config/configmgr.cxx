@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:35:20 $
+ *  last change: $Author: ka $ $Date: 2001-04-19 12:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,15 +313,17 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
  ---------------------------------------------------------------------------*/
 void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
 {
-    OSL_ENSURE(!pMgrImpl->aItemList.empty(), "no ConfigItems available");
-    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
-    for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
+    if( !pMgrImpl->aItemList.empty() )
     {
-        ConfigItemListEntry_Impl& rEntry = *aListIter;
-        if(rEntry.pConfigItem == &rCfgItem)
+        ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
+        for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
         {
-            pMgrImpl->aItemList.erase(aListIter);
-            break;
+            ConfigItemListEntry_Impl& rEntry = *aListIter;
+            if(rEntry.pConfigItem == &rCfgItem)
+            {
+                pMgrImpl->aItemList.erase(aListIter);
+                break;
+            }
         }
     }
 }
