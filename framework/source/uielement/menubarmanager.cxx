@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ const ::rtl::OUString aSlotNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( "slot:5537
 const ::rtl::OUString aCmdNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( ".uno:AddDirect" ));
 const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" ));
 const ::rtl::OUString aCmdAutoPilot( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoPilotMenu" ));
+const ::rtl::OUString aCmdHelpIndex( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpIndex" ));
 
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
@@ -1299,7 +1300,12 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 pMenuItemHandler->xPopupMenuController->updatePopupMenu();
                             }
 
-                            KeyCode aKeyCode = GetKeyCodeFromCommandURL( m_xFrame, aTargetURL.Complete );
+                            // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+                            KeyCode aKeyCode;
+                            if ( aTargetURL.Complete == aCmdHelpIndex )
+                                aKeyCode = KeyCode( KEY_F1 );
+                            else
+                                aKeyCode = GetKeyCodeFromCommandURL( m_xFrame, aTargetURL.Complete );
                             pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
 
                             if ( xMenuItemDispatch.is() )
