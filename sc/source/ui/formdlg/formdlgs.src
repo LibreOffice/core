@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:41:31 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ chinese_traditional ] = "±µ¦¬¨ç¼Æ";
         QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáÏÇáÉ";
         QuickHelpText[ greek ] = "ÅöáñìïãŞ óõíÜñôçóçò";
-        QuickHelpText[ korean ] = "Apply Function";
+        QuickHelpText[ korean ] = "ÇÔ¼ö¡¡Àû¿ë!";
         QuickHelpText[ turkish ] = "Funktion übernehmen";
     };
     ListBox LB_CATEGORY
@@ -440,19 +440,19 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ korean ] =
     {
-            < "¸¶Áö¸· »ç¿ëµÈ" ; Default ; > ;
-        < "ÀüÃ¼" ; Default ; > ;
+            < "¸¶Áö¸·À¸·Î »ç¿ëµÊ" ; Default ; > ;
+        < "¸ğµÎ" ; Default ; > ;
         < "µ¥ÀÌÅÍº£ÀÌ½º" ; Default ; > ;
-        < "ÀÏÀÚ&½Ã°£" ; Default ; > ;
-        < "È¸°èÀÇ" ; Default ; > ;
+        < "³¯Â¥&½Ã°£" ; Default ; > ;
+        < "È¸°è" ; Default ; > ;
         < "Á¤º¸" ; Default ; > ;
-        < "³í¸®ÀûÀÎ" ; Default ; > ;
-        < "¼öÇĞÀûÀÎ" ; Default ; > ;
+        < "³í¸®Àû" ; Default ; > ;
+        < "¼öÇĞ" ; Default ; > ;
         < "Çà·Ä" ; Default ; > ;
         < "Åë°è" ; Default ; > ;
-        < "½ºÇÁ·¹µå ½ÃÆ®" ; Default ; > ;
+        < "½ºÇÁ·¹µå½ÃÆ®" ; Default ; > ;
         < "ÅØ½ºÆ®" ; Default ; > ;
-        < "Ãß°¡" ; Default ; > ;
+        < "¾Öµå¡¡ÀÎ" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -545,7 +545,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ chinese_traditional ] = "¨ç¼Æ(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "ÓõíÜñôçóç";
-        Text[ korean ] = "ÇÔ¼ö(~F)";
+        Text[ korean ] = "ÇÔ¼ö";
         Text[ turkish ] = "~Fonksiyon";
     };
 };
@@ -585,7 +585,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ chinese_traditional ] = "µ²ºc(~S)";
         Text[ arabic ] = "ÇáÈäíÉ";
         Text[ greek ] = "ÄïìŞ";
-        Text[ korean ] = "±¸Á¶(~S)";
+        Text[ korean ] = "±¸Á¶";
         Text[ turkish ] = "~Yapı";
     };
     Bitmap BMP_STR_CLOSE
@@ -768,7 +768,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "¤½¦¡(~M)";
         Text[ arabic ] = "ÕíÛÉ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "¼ö½Ä(~M)";
+        Text[ korean ] = "¼ö½Ä";
         Text[ turkish ] = "F~ormül";
     };
     Control ED_FORMULA
@@ -845,7 +845,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "³æ¶µ­pºâµ²ªG";
         Text[ arabic ] = "ÇáäÊíÌÉ ÇáÌÒÆíÉ";
         Text[ greek ] = "Áğïôİëåóìá ëåéôïõñãßáò";
-        Text[ korean ] = "ÇÔ¼ö °á°ú";
+        Text[ korean ] = "¼Ò°è";
         Text[ turkish ] = "Ara sonuç";
     };
     Window WND_RESULT
@@ -913,7 +913,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "¯x°}(~X)";
         Text[ arabic ] = "ãÕİæİÉ";
         Text[ greek ] = "ÌŞôñá";
-        Text[ korean ] = "Çà·Ä(~M)";
+        Text[ korean ] = "Çà·Ä";
         Text[ turkish ] = "Matri~s";
     };
     Edit ED_REF
@@ -945,7 +945,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ chinese_traditional ] = "©ñ¤j";
         QuickHelpText[ arabic ] = "ÊßÈíÑ";
         QuickHelpText[ greek ] = "Ìåãİèõíóç";
-        QuickHelpText[ korean ] = "Maximize";
+        QuickHelpText[ korean ] = "È®´ë!";
         QuickHelpText[ turkish ] = "Vergrößern";
     };
     /*
@@ -1009,7 +1009,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "<< ªğ¦^(~B)";
         Text[ arabic ] = ">> ÇáÓÇÈŞ";
         Text[ greek ] = "<< Ğßóù";
-        Text[ korean ] = "<<µÚ·Î(~B)";
+        Text[ korean ] = "<<µÚ·Î";
         Text[ turkish ] = "<< ~Geri";
     };
     PushButton BTN_FORWARD
@@ -1037,7 +1037,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "Ä~Äò >>";
         Text[ arabic ] = "ÇáÊÇáí <<";
         Text[ greek ] = "Åğüìåíï >>";
-        Text[ korean ] = "¾ÕÀ¸·Î >>(~N)";
+        Text[ korean ] = "´ÙÀ½ >>";
         Text[ turkish ] = "~İleri >>";
     };
     OKButton BTN_END
@@ -1070,7 +1070,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "¨ç¼Æ¦Û°Ê§U²z";
         Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ";
         Text[ greek ] = "AutoPilot óõíÜñôçóçò";
-        Text[ korean ] = "ÀÚµ¿ ÆÄÀÏ·µ ±â´É";
+        Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ±â´É";
         Text[ turkish ] = "Fonksiyon oto pilotu";
     };
     String STR_TITLE2
@@ -1095,7 +1095,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_traditional ] = "¨ç¼Æ¦Û°Ê§U²z  -";
         Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ  -";
         Text[ greek ] = "AutoPilot óõíÜñôçóçò -  ";
-        Text[ korean ] = "ÀÚµ¿ ÆÄÀÏ·µ ±â´É  -";
+        Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ±â´É  -";
         Text[ turkish ] = "Fonksiyon oto pilotu  -";
     };
 };
