@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-09-23 12:23:22 $
+ *  last change: $Author: iha $ $Date: 2002-11-28 12:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2144,7 +2144,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 //alle Wortrenner loesen die Autokorrektur aus!
 //          case ' ':
 //          case '\t':
-                if( !rAppCC.isLetterNumeric( *pTxt, nPos ))
+                if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
+                        || '/' == cChar )) //  '/' should not be a word seperator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
                     --nPos;     // ++nPos von dem for ungueltig machen !
                     ++bBreak;
