@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
+ *  last change: $Author: bm $ $Date: 2001-03-04 12:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,14 +136,47 @@ extern OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw()
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
 // chart import
+// ------------
 extern uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SchXMLImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// styles
+extern uno::Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// content
+extern uno::Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// meta
+extern uno::Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // chart export
+// ------------
 extern uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SchXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// styles
+extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// content
+extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// meta
+extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 
 // meta export
 extern uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames() throw();
@@ -222,6 +255,18 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // chart
             writeInfo( pKey, SchXMLImport_getImplementationName(), SchXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SchXMLExport_getImplementationName(), SchXMLExport_getSupportedServiceNames() );
+
+            // chart.styles
+            writeInfo( pKey, SchXMLImport_Styles_getImplementationName(), SchXMLImport_Styles_getSupportedServiceNames() );
+            writeInfo( pKey, SchXMLExport_Styles_getImplementationName(), SchXMLExport_Styles_getSupportedServiceNames() );
+
+            // chart.content
+            writeInfo( pKey, SchXMLImport_Content_getImplementationName(), SchXMLImport_Content_getSupportedServiceNames() );
+            writeInfo( pKey, SchXMLExport_Content_getImplementationName(), SchXMLExport_Content_getSupportedServiceNames() );
+
+            // chart.meta
+            writeInfo( pKey, SchXMLImport_Meta_getImplementationName(), SchXMLImport_Meta_getSupportedServiceNames() );
+            writeInfo( pKey, SchXMLExport_Meta_getImplementationName(), SchXMLExport_Meta_getSupportedServiceNames() );
 
             // meta
             writeInfo( pKey, XMLMetaImportComponent_getImplementationName(), XMLMetaImportComponent_getSupportedServiceNames() );
