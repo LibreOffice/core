@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:20:06 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2091,6 +2091,64 @@ String STR_OBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto";
     Text[ finnish ] = "Objekti";
+};
+
+String STR_EDITOBJECT
+{
+    Text = "~Bearbeiten";
+    Text [ English ] = "~Edit";
+    Text [ English_us ] = "~Edit";
+    Text[ portuguese ] = "~Editar";
+    Text[ russian ] = "Ïğàâêà";
+    Text[ dutch ] = "~Bewerken";
+    Text[ french ] = "~Éditer";
+    Text[ spanish ] = "~Editar";
+    Text[ italian ] = "~Modifica";
+    Text[ danish ] = "Rediger";
+    Text[ swedish ] = "~Redigera";
+    Text[ polish ] = "~Edytuj";
+    Text[ portuguese_brazilian ] = "~Edit";
+    Text[ japanese ] = "ç·¨é›†(~E)";
+    Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
+    Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
+    Text[ arabic ] = "ÊÍÑíÑ";
+    Text[ dutch ] = "~Bewerken";
+    Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
+    Text[ greek ] = "~Åğåîåñãáóßá";
+    Text[ korean ] = "í¸ì§‘(~E)";
+    Text[ turkish ] = "~Düzenle";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Editar";
+    Text[ finnish ] = "~Muokkaa";
+};
+
+String STR_OPENOBJECT
+{
+    Text = "~Öffnen";
+    Text [ English ] = "~Open";
+    Text [ English_us ] = "~Open";
+    Text[ portuguese ] = "~Abrir";
+    Text[ russian ] = "Îòêğûòü";
+    Text[ dutch ] = "~Openen";
+    Text[ french ] = "~Ouvrir";
+    Text[ spanish ] = "~Abrir";
+    Text[ italian ] = "~Apri";
+    Text[ danish ] = "Åbn";
+    Text[ swedish ] = "~Öppna";
+    Text[ polish ] = "Otwórz";
+    Text[ portuguese_brazilian ] = "~Open";
+    Text[ japanese ] = "é–‹ã(~O)";
+    Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
+    Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”(~O)";
+    Text[ arabic ] = "İÊÍ";
+    Text[ dutch ] = "~Openen";
+    Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
+    Text[ greek ] = "¢íïéãìá";
+    Text[ korean ] = "ì—´ê¸°(~O)";
+    Text[ turkish ] = "~Aç";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Abrir";
+    Text[ finnish ] = "~Avaa";
 };
 
 // ******************************************************************* EOF

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 16:13:57 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1615,26 +1615,6 @@ sal_Bool SfxApplication::IsPlugin()
 }
 
 //--------------------------------------------------------------------
-
-SvVerbList* SfxApplication::GetVerbList_Impl() const
-{
-    if ( !pAppData_Impl->pVerbs )
-    {
-        // globale Verb-List anlegen
-        pAppData_Impl->pVerbs = new SvVerbList;
-        pAppData_Impl->pVerbs->Append( SvVerb( 0, String( SfxResId( STR_EDITOBJECT ) ) ) );
-//        pAppData_Impl->pVerbs->Append( SvVerb( 1, String( SfxResId( STR_OPENOBJECT ) ) ) );
-        pAppData_Impl->pVerbs->Append( SvVerb( 2, DEFINE_CONST_UNICODE(STARAPP_VERB), sal_True, sal_False ) );
-    }
-
-    return pAppData_Impl->pVerbs;
-}
-
-//--------------------------------------------------------------------
-
-/*  [Beschreibung]
-
-*/
 
 String SfxApplication::LocalizeDBName
 (
