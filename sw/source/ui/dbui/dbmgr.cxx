@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:37:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,9 @@
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
-#ifndef _DBINSDLG_HXX
-#include <dbinsdlg.hxx>
-#endif
+//CHINA001 #ifndef _DBINSDLG_HXX
+//CHINA001 #include <dbinsdlg.hxx>
+//CHINA001 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
@@ -280,7 +280,7 @@
 #include <svtools/numuno.hxx>
 #endif
 
-#include "mailmrge.hxx"
+//CHINA001 #include "mailmrge.hxx"
 #include <unomailmerge.hxx>
 
 #ifndef _SFXEVENT_HXX
@@ -298,6 +298,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include "dbui.hrc" //CHINA001
+#include <envelp.hrc> //CHINA001
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -355,7 +358,7 @@ public:
 struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
-    SwMailMergeDlg*     pMergeDialog;
+    AbstractMailMergeDlg*     pMergeDialog;
     Reference<XEventListener> xDisposeListener;
 
     SwNewDBMgr_Impl(SwNewDBMgr& rDBMgr)
@@ -2313,14 +2316,23 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         return;
     }
 
-    pImpl->pMergeDialog = new SwMailMergeDlg(
-                    &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
-                    sDataSource,
-                    sDataTableOrQuery,
-                    nCmdType,
-                    xConnection,
-                    bWithDataSourceBrowser ? 0 : &aSelection );
-
+//CHINA001     pImpl->pMergeDialog = new SwMailMergeDlg(
+//CHINA001  &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+//CHINA001  sDataSource,
+//CHINA001  sDataTableOrQuery,
+//CHINA001  nCmdType,
+//CHINA001  xConnection,
+//CHINA001  bWithDataSourceBrowser ? 0 : &aSelection );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( ResId(DLG_MAILMERGE),
+                                                        &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+                                                        sDataSource,
+                                                        sDataTableOrQuery,
+                                                        nCmdType,
+                                                        xConnection,
+                                                        bWithDataSourceBrowser ? 0 : &aSelection);
+    DBG_ASSERT(pImpl->pMergeDialog, "Dialogdiet fail!");//CHINA001
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
@@ -2390,11 +2402,20 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     aDBData.sCommand = sDataTableOrQuery;
     aDBData.nCommandType = nCmdType;
 
-    SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
-            rSh.GetView(),
-            xSource,
-            xColSupp,
-            aDBData );
+//CHINA001  SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
+//CHINA001  rSh.GetView(),
+//CHINA001  xSource,
+//CHINA001  xColSupp,
+//CHINA001  aDBData );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstractSwInsertDBColAutoPilot* pDlg = pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
+                                                                                xSource,
+                                                                                xColSupp,
+                                                                                aDBData,
+                                                                                ResId( DLG_AP_INSERT_DB_SEL ));
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( RET_OK == pDlg->Execute() )
     {
         rtl::OUString sDummy;
