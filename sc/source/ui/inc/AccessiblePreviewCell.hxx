@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:20:18 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 14:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ protected:
 public:
 
     virtual void SAL_CALL disposing();
+
+    ///=====  SfxListener  =====================================================
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     //=====  XAccessibleComponent  ============================================
 

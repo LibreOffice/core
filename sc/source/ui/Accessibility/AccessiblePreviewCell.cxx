@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 14:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include "editsrc.hxx"
 #endif
 #include "AccessiblePreviewCell.hxx"
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
 #include "prevloc.hxx"
@@ -133,6 +136,22 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
         DELETEZ(mpTextHelper);
 
     ScAccessibleCellBase::disposing();
+}
+
+void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if (rHint.ISA( SfxSimpleHint ))
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        ULONG nId = rRef.GetId();
+        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            if (mpTextHelper)
+                mpTextHelper->UpdateChildren();
+        }
+    }
+
+    ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
 //=====  XAccessibleComponent  ============================================
