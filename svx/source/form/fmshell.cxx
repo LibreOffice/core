@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:32:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,9 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
+#endif
 #ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
 #endif
@@ -474,16 +476,10 @@ const sal_uInt32 FM_UI_FEATURE_SHOW_EXPLORER            = 0x00000008;
 const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERBAR           = 0x00000010;
 const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERNAVIGATOR     = 0x00000020;
 const sal_uInt32 FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR    = 0x00000040;
-const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_DBFORMS      = 0x00000080;
-const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_XFORMS       = 0x00000100;
-const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS_GENERIC      = 0x00000200;
-const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS  = 0x00000480;
-const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_XFORMS   = 0x00000800;
-const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS_GENERIC  = 0x00001000;
-const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS    = 0x00002000;
-const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_XFORMS     = 0x00004000;
-const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN_GENERIC    = 0x00008000;
-const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR       = 0x00010000;
+const sal_uInt32 FM_UI_FEATURE_TB_CONTROLS              = 0x00000080;
+const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS          = 0x00000100;
+const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN            = 0x00000200;
+const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR       = 0x00000400;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 {
@@ -505,44 +501,17 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_FILTER_NAVIGATOR, FM_UI_FEATURE_SHOW_FILTERNAVIGATOR);
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_SHOW_DATANAVIGATOR, FM_UI_FEATURE_SHOW_DATANAVIGATOR);
 
-    // the usual "Controls" toolbars - one for each possible "forms module"
     SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_CONTROLS_DBFORMS ),
-        FM_UI_FEATURE_TB_CONTROLS_DBFORMS );
+        SVX_RES( RID_SVXTBX_CONTROLS ),
+        FM_UI_FEATURE_TB_CONTROLS );
 
     SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_CONTROLS_XFORMS ),
-        FM_UI_FEATURE_TB_CONTROLS_XFORMS );
+        SVX_RES( RID_SVXTBX_MORECONTROLS ),
+        FM_UI_FEATURE_TB_MORECONTROLS );
 
     SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_CONTROLS_GENERIC ),
-        FM_UI_FEATURE_TB_CONTROLS_GENERIC );
-
-    // the "More controls" toolbars - one for each possible "forms module"
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_MORECONTROLS_DBFORMS ),
-        FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS );
-
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_MORECONTROLS_XFORMS ),
-        FM_UI_FEATURE_TB_MORECONTROLS_XFORMS );
-
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_MORECONTROLS_GENERIC ),
-        FM_UI_FEATURE_TB_MORECONTROLS_GENERIC );
-
-    // the usual "Form design" toolbars - one for each possible "forms module"
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_FORMDESIGN_DBFORMS ),
-        FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS );
-
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_FORMDESIGN_XFORMS ),
-        FM_UI_FEATURE_TB_FORMDESIGN_XFORMS );
-
-    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-        SVX_RES( RID_SVXTBX_FORMDESIGN_GENERIC ),
-        FM_UI_FEATURE_TB_FORMDESIGN_GENERIC );
+        SVX_RES( RID_SVXTBX_FORMDESIGN ),
+        FM_UI_FEATURE_TB_FORMDESIGN );
 }
 
 //========================================================================
@@ -719,26 +688,12 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     {
         bResult = ( GetImpl()->getDocumentType() == eEnhancedForm );
     }
-    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_DBFORMS )
-            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_DBFORMS )
-            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS )
+    else if (  ( ( nFeature & FM_UI_FEATURE_TB_CONTROLS ) == FM_UI_FEATURE_TB_CONTROLS )
+            || ( ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS ) == FM_UI_FEATURE_TB_MORECONTROLS )
+            || ( ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN ) == FM_UI_FEATURE_TB_FORMDESIGN )
             )
     {
-        bResult = ( GetImpl()->getDocumentType() == eDatabaseForm );
-    }
-    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_XFORMS )
-            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_XFORMS )
-            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_XFORMS )
-            )
-    {
-        bResult = ( GetImpl()->getDocumentType() == eEnhancedForm );
-    }
-    else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_GENERIC )
-            || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_GENERIC )
-            || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_GENERIC )
-            )
-    {
-        bResult = ( GetImpl()->getDocumentType() != eDatabaseForm ) && ( GetImpl()->getDocumentType() != eEnhancedForm );
+        bResult = sal_True;
     }
 
     return bResult;
@@ -1246,7 +1201,9 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_FM_USE_WIZARDS:
-                if (!m_bDesignMode || !GetFormModel())
+                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                else if (!m_bDesignMode || !GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, GetImpl()->GetWizardUsing() ) );
@@ -1274,7 +1231,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 if ( GetImpl()->getDocumentType() == eEnhancedForm )
                 {
                     // in XForms mode, several controls are disabled:
-                    rSet.DisableItem( nWhich );
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                     break;
                 }
                 // NO break here!
@@ -1346,10 +1303,9 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 else
                     rSet.DisableItem(nWhich);
 
-                // special case for data navigator: enabled only in XForms
-                if( nWhich == SID_FM_SHOW_DATANAVIGATOR
-                    && ( GetImpl()->getDocumentType() != eEnhancedForm ) )
-                    rSet.DisableItem( nWhich );
+                // special case for data navigator: hide if not in XML form document
+                if ( nWhich == SID_FM_SHOW_DATANAVIGATOR && ( GetImpl()->getDocumentType() != eEnhancedForm ) )
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
             }   break;
 
             case SID_FM_SHOW_PROPERTY_BROWSER:
@@ -1386,7 +1342,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
                 if ( GetImpl()->getDocumentType() == eEnhancedForm )
                 {
-                    rSet.DisableItem( nWhich );
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                     break;
                 }
 
@@ -1411,7 +1367,9 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
             case SID_FM_DESIGN_MODE:
-                if (!m_pFormView || GetImpl()->IsReadonlyDoc() || ( GetImpl()->getDocumentType() == eEnhancedForm ) )
+                if ( GetImpl()->getDocumentType() == eEnhancedForm )
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                else if (!m_pFormView || GetImpl()->IsReadonlyDoc() )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, m_bDesignMode) );
@@ -1459,7 +1417,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_NAVIGATIONBAR :
                 if ( GetImpl()->getDocumentType() == eEnhancedForm )
                 {
-                    rSet.DisableItem( nWhich );
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                     break;
                 }
                 // NO break here!
