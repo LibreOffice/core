@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XReportDocumentsSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: interface com::sun::star::sdb::XReportDocumentsSupplier
 /** provides the access to a container of database reports.
  */
-interface XReportDocumentsSupplier: com::sun::star::uno::XInterface
+published interface XReportDocumentsSupplier: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XReportDocumentsSupplier::getReportDocuments
