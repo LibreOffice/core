@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:03:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@
 #ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeEquation_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#endif
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
 #endif
 #include <vector>
 
@@ -131,6 +131,7 @@ class SvxMSDffAdjustmentHandle;
 // between X_RANGE and Y_RANGE
 
 class SdrPathObj;
+class ExpressionNode;
 class EnhancedCustomShape2d : public SfxItemSet
 {
         SdrObject*                  pCustomShapeObj;
@@ -142,13 +143,21 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         double                      fXScale;
         double                      fYScale;
+        double                      fXRatio;
+        double                      fYRatio;
 
         sal_Int32                   nXRef;
         sal_Int32                   nYRef;
         sal_uInt32                  nFlags;
         sal_uInt32                  nColorData;
 
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >           seqEquations;
+        /*
+
+        */
+        com::sun::star::uno::Sequence< rtl::OUString >                                                          seqEquations;
+        std::vector< ::boost::shared_ptr< ExpressionNode > >                                                    vNodesSharedPtr;
+
+
         com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
         com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
         com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
@@ -158,21 +167,18 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         sal_Bool                    bTextFlow       : 1;
         sal_Bool                    bFilled         : 1;
+        sal_Bool                    bStroked        : 1;
 
         sal_Bool                    bFlipH;
         sal_Bool                    bFlipV;
         sal_Int32                   nRotateAngle;
 
-        double                      GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
-        sal_Int32                   GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
         sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex );
-        sal_Bool                    GetParameter( double& rParameterReturnValue, sal_uInt32& nGeometryFlags,
-                                        const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& ) const;
-        sal_Bool                    GetEquationParameter( double& rParameterReturnValue, sal_uInt32& nGeometryFlags,
-                                        const drafts::com::sun::star::drawing::EnhancedCustomShapeEquation&, const sal_Int32 nIndex ) const;
-        double                      GetEquationValue( sal_Int32 nIndex, sal_uInt32& nGeometryFlags ) const;
-        Point                       GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair&, sal_Bool bScale = sal_True ) const;
+        sal_Bool                    GetParameter( double& rParameterReturnValue,  const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&,
+                                                    const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
+        Point                       GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
+                                                    const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 
         static void                 SwapStartAndEndArrow( SdrObject* pObj );
 
@@ -217,7 +223,32 @@ class EnhancedCustomShape2d : public SfxItemSet
         EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
         ~EnhancedCustomShape2d();
 
-        // just two helper functions which are also used by the import filter:
+        enum EnumFunc
+        {
+            ENUM_FUNC_PI,
+            ENUM_FUNC_LEFT,
+            ENUM_FUNC_TOP,
+            ENUM_FUNC_RIGHT,
+            ENUM_FUNC_BOTTOM,
+            ENUM_FUNC_XSTRETCH,
+            ENUM_FUNC_YSTRETCH,
+            ENUM_FUNC_HASSTROKE,
+            ENUM_FUNC_HASFILL,
+            ENUM_FUNC_WIDTH,
+            ENUM_FUNC_HEIGHT,
+            ENUM_FUNC_LOGWIDTH,
+            ENUM_FUNC_LOGHEIGHT
+        };
+        double                      GetEnumFunc( const EnumFunc eVal ) const;
+
+        double                      GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
+        double                      GetEquationValueAsDouble( const sal_Int32 nIndex ) const;
+        sal_Int32                   GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
+
+        static rtl::OUString        GetEquation( const sal_uInt16 nFlags, sal_Int16 nPara1, sal_Int16 nPara2, sal_Int16 nPara3 );
+
+        static void                 AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
+
         static void                 SetEnhancedCustomShapeEquationParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
         static void                 SetEnhancedCustomShapeParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
