@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:50 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,12 +130,6 @@ namespace abp
     sal_Bool FieldMappingPage::commitPage(COMMIT_REASON _eReason)
     {
         return AddressBookSourcePage::commitPage(_eReason);
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool FieldMappingPage::determineNextButtonState()
-    {
-        return  AddressBookSourcePage::determineNextButtonState();
     }
 
     //---------------------------------------------------------------------
