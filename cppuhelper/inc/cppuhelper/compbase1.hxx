@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
+ *  last change: $Author: dbo $ $Date: 2001-09-04 13:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,79 @@ __DEF_COMPIMPLHELPER( 1 )
 #ifndef _CPPUHELPER_COMPBASE_EX_HXX_
 #include <cppuhelper/compbase_ex.hxx>
 #endif
-
+/*
 __DEF_COMPIMPLHELPER_EX( 1 )
+*/
+
+namespace cppu
+{
+    template< class Ifc1 >
+    class SAL_NO_VTABLE WeakComponentImplHelper1
+        : public WeakComponentImplHelperBase
+        , public ::com::sun::star::lang::XTypeProvider
+        , public Ifc1
+    {
+        static class_data1 s_cd;
+    public:
+        inline WeakComponentImplHelper1( ::osl::Mutex & rMutex ) throw ()
+            : WeakComponentImplHelperBase( rMutex )
+            {}
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return WeakComponentImplHelper_query( rType, (class_data *)&s_cd, this, (WeakComponentImplHelperBase *)this ); }
+        virtual void SAL_CALL acquire() throw ()
+            { WeakComponentImplHelperBase::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { WeakComponentImplHelperBase::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return WeakComponentImplHelper_getTypes( (class_data *)&s_cd ); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return ImplHelper_getImplementationId( (class_data *)&s_cd ); }
+    };
+    template< class Ifc1 >
+    class_data1 WeakComponentImplHelper1< Ifc1 >::s_cd =
+    {
+        1 +1, sal_False, sal_False,
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        {
+            { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc1 > const * ))&getCppuType, ((sal_Int32)(Ifc1 *) (WeakComponentImplHelper1< Ifc1 > *) 16) - 16 },
+            { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakComponentImplHelper1< Ifc1 > *) 16) - 16 }
+        }
+    };
+    template< class Ifc1 >
+    class SAL_NO_VTABLE WeakAggComponentImplHelper1
+        : public WeakAggComponentImplHelperBase
+        , public ::com::sun::star::lang::XTypeProvider
+        , public Ifc1
+    {
+        static class_data1 s_cd;
+    public:
+        inline WeakAggComponentImplHelper1( ::osl::Mutex & rMutex ) throw ()
+            : WeakAggComponentImplHelperBase( rMutex )
+            {}
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return WeakAggComponentImplHelper_queryAgg( rType, (class_data *)&s_cd, this, (WeakAggComponentImplHelperBase *)this ); }
+        virtual void SAL_CALL acquire() throw ()
+            { WeakAggComponentImplHelperBase::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { WeakAggComponentImplHelperBase::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return WeakAggComponentImplHelper_getTypes( (class_data *)&s_cd ); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return ImplHelper_getImplementationId( (class_data *)&s_cd ); }
+    };
+    template< class Ifc1 >
+    class_data1 WeakAggComponentImplHelper1< Ifc1 >::s_cd =
+    {
+        1 +1, sal_False, sal_False,
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        {
+            { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc1 > const * ))&getCppuType, ((sal_Int32)(Ifc1 *) (WeakAggComponentImplHelper1< Ifc1 > *) 16) - 16 },
+            { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (WeakAggComponentImplHelper1< Ifc1 > *) 16) - 16 }
+        }
+    };
+}
 
 #endif /* MACOSX */
 
