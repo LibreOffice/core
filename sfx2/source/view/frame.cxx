@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-23 15:57:13 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,11 @@ sal_Bool SfxFrame::DoClose()
             if ( (!GetCurrentDocument() || !GetCurrentDocument()->Get_Impl()->bDisposing ) && xCloseable.is())
                 xCloseable->close(sal_True);
             else if ( pImp->xFrame.is() )
-                pImp->xFrame->dispose();
+            {
+                Reference < XFrame > xFrame = pImp->xFrame;
+                xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+                xFrame->dispose();
+            }
             else
                 bRet = DoClose_Impl();
         }
@@ -1723,5 +1727,38 @@ const SfxPoolItem* SfxFrame::LoadDocumentSynchron( SfxItemSet& aSet )
     aSet.Put( SfxFrameItem( SID_DOCFRAME, this ) );
     aSet.ClearItem( SID_TARGETNAME );
     return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, aSet );
+}
+
+void SfxFrame::CloseDocument_Impl()
+{
+    Reference < XFrame > xFrame( pImp->xFrame );
+    Window* pContainer = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+    pContainer->SetText( Application::GetDisplayName() );
+
+    Window* pWindow = new Window( pContainer, WB_BORDER );
+    pWindow->Show();
+    pWindow->SetBackground( Wallpaper( pWindow->GetSettings().GetStyleSettings().GetFaceColor() ) );
+    xFrame->setComponent(  VCLUnoHelper::GetInterface( pWindow ), Reference < XController >() );
+    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
+    aMenuRes += String::CreateFromInt32(RID_DEFAULTMENU);
+
+    URL aURL;
+    aURL.Complete = aMenuRes;
+
+    Reference< XURLTransformer >  xTrans ( ::comphelper::getProcessServiceFactory()->createInstance(
+                        ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+    if( xTrans.is() )
+    {
+        // Datei laden
+        xTrans->parseStrict( aURL );
+
+        Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+        if ( xProv.is() )
+        {
+            Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
+            if ( aDisp.is() )
+                aDisp->dispatch( aURL, Sequence<com::sun::star::beans::PropertyValue>() );
+        }
+    }
 }
 
