@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:40:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ protected:
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( );
+                            translateExternalValueToControlValue( ) const;
 
 protected:
     void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
