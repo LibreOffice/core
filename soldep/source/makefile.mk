@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-26 16:37:23 $
+#   last change: $Author: obo $ $Date: 2004-03-11 16:11:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ PRJINC			= $(PRJ)$/source
 PRJNAME         = soldep
 TARGET          = soldep
 
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :settings.mk
@@ -115,8 +114,10 @@ APP1OBJS=$(OBJFILES) \
 
 #APP1LIBS=	$(LB)$/hashtab.lib
 
+APP1ICON=soldep.ico
 APP1STDLIBS= \
             $(SVTOOLLIB)		\
+            $(CPPULIB)			\
             $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB)	\
             $(SVLIB)			\
@@ -127,18 +128,13 @@ APP1STDLIBS= \
             $(UNOLIB)			\
             $(OSLLIB)			\
             $(SALLIB)
+APP1LINKRES=$(MISC)$/$(TARGET).res
+
 
 .IF "$(GUI)" == "UNX"
 LIB1OBJFILES		= $(OBJFILES)
 LIB1ARCHIV              = $(LB)$/libdepper.a
 LIB1TARGET              = $(LB)$/dep.lib
-.ENDIF
-
-.IF "$(UPD)" >= "546"
-.IF "$(USE_NAMESPACE)"!=""
-APP1STDLIBS+= \
-            $(CPPULIB)
-.ENDIF
 .ENDIF
 
 # --- Targets -------------------------------------------------------
