@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: dv $ $Date: 2002-03-27 13:20:51 $
+ *  last change: $Author: cd $ $Date: 2002-04-10 05:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,12 +435,25 @@ ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
     {
-        LanguageType aLanguageType;
-
         String aMgrName = String::CreateFromAscii( "dkt" );
-        aMgrName += String::CreateFromInt32(SOLARUPD);
-        return ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        aMgrName += String::CreateFromInt32(SOLARUPD); // current version number
+
+        // Create desktop resource manager and bootstrap process
+        // was successful. Use default way to get language specific message.
+        if ( Application::IsInExecute() )
+            Desktop::pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+
+        if ( !Desktop::pResMgr )
+        {
+            // Use VCL to get the correct language specific message as we
+            // are in the bootstrap process and not able to get the installed
+            // language!!
+            LanguageType aLanguageType = LANGUAGE_DONTKNOW;
+
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+        }
     }
+
     return Desktop::pResMgr;
 }
 
