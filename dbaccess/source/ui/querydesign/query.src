@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:56:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1834,74 +1834,42 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 */
     };
 };
-QueryBox QUERY_DESIGN_SAVEMODIFIED
+
+String STR_QUERY_SAVEMODIFIED
 {
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message = "Die Abfrage wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
-    Message [ English ] = "The query has been modified.\nDo you want to save your changes?" ;
-    Message [ english_us ] = "The query has been changed.\nDo you want to save the changes?" ;
-    Message[ portuguese ] = "A consulta foi modificada.\nGuardar as modificações?";
-    Message[ russian ] = "Çàïğîñ èçìåíèëñÿ.\nÑîõğàíèòü èçìåíåíèÿ?";
-    Message[ greek ] = "Ôï åñşôçìá ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåõôïıí ïé áëëáãİò;";
-    Message[ dutch ] = "De query is gewijzigd.\nWilt u de wijzigingen opslaan?";
-    Message[ french ] = "La requête a été modifiée.\nEnregistrer les modifications ?";
-    Message[ spanish ] = "La consulta se ha modificado.\n¿Desea guardar las modificaciones?";
-    Message[ italian ] = "La ricerca è cambiata.\nVolete salvare i cambiamenti?";
-    Message[ danish ] = "Forespørgslen er blevet ændret.\nSkal ændringerne gemmes?";
-    Message[ swedish ] = "Sökningen har ändrats.\nSka ändringarna sparas?";
-    Message[ polish ] = "Zmieniono kwerendê.\nCzy zapisaæ zmiany?";
-    Message[ portuguese_brazilian ] = "A consulta foi modificada.\nDeseja salvar as modificações?";
-    Message[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ã¯å¤‰æ›´ã•ã‚Œã¾ã—ãŸã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "ì¿¼ë¦¬ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ ë‚´ìš©ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ chinese_simplified ] = "è¿™ä¸ªæŸ¥è¯¢å·²ç»æ›´æ”¹ã€‚\nè¦å­˜ç›˜æ›´æ”¹çš„å†…å®¹?";
-    Message[ chinese_traditional ] = "é€™å€‹æŸ¥è©¢å·²ç¶“è®Šæ›´ã€‚\nè¦å„²å­˜è®Šæ›´å…§å®¹ï¼Ÿ";
-    Message[ turkish ] = "Sorgu değişti.\nDeğişiklikleri kaydetmek ister misiniz?";
-    Message[ arabic ] = "Êã ÊÛííÑ ÇáÇÓÊİÓÇÑ.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
-    Message[ finnish ] = "Kyselyä on muutettu.\nHaluatko tallentaa muutokset?";
-    Message[ catalan ] = "La consulta ha canviat.\nVoleu desar els canvis?";
-    Message[ thai ] = "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹„à¸”à¹‰à¸¡à¸µà¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "Dotaz byl zmÄ›nÄ›n.\nChcete zmÄ›ny uloÅ¾it?";
-    Message[ hebrew ] = "Die Abfrage wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?";
-    Message[ hindi ] = "à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤•à¥‹ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤\nà¤†à¤ª à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
-    Message[ slovak ] = "Dotaz bol zmenenÃ½.\nChcete uloÅ¾iÅ¥ zmeny?";
-    Message[ hungarian ] = "A lekÃ©rdezÃ©s megvÃ¡ltozott.\nKÃ­vÃ¡nja menteni a vÃ¡ltozÃ¡sokat?";
-    Message[ slovenian ] = "Poizvedba je bila spremenjena.\nAli Å¾elite shraniti spremembe?";
+    Text = "$object$ wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ english ] = "$object$ has been modified.\nDo you want to save your changes?" ;
+    Text [ english_us ] = "$object$ has been changed.\nDo you want to save the changes?" ;
 };
-QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
+
+Resource RSC_QUERY_OBJECT_TYPE
 {
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message = "Die Tabellensicht wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
-    Message [ English ] = "The view has been modified.\nDo you want to save your changes?" ;
-    Message [ english_us ] = "The table view has been changed.\nDo you want to save the changes?" ;
-    Message[ portuguese ] = "A vista da tabela foi modificada.\nGuardar as modificações?";
-    Message[ russian ] = "Âèä òàáëèöû èçìåíèëñÿ.\nÑîõğàíèòü èçìåíåíèÿ?";
-    Message[ greek ] = "Ç ğñïâïëŞ ôïõ ğßíáêá İ÷åé áëëÜîåé.\nÈİëåôå íá áğïèçêåıóåôå ôéò áëëáãİò;";
-    Message[ dutch ] = "De weergave is gewijzigd.\nWilt u de wijzigingen opslaan?";
-    Message[ french ] = "Des modifications ont été effectuées dans la vue.\nDoivent-elles être enregistrées ?";
-    Message[ spanish ] = "Se ha modificado la visualización de la tabla.\n¿Desea guardar las modificaciones?";
-    Message[ finnish ] = "Nykyistä taulunäkymää on muutettu.\nHaluatko tallentaa muutokset?";
-    Message[ italian ] = "La vista tabelle è stata modificata.\nVolete salvare le modifiche?";
-    Message[ danish ] = "Tabelvisningen er blevet ændret.\nSkal ændringerne gemmes?";
-    Message[ swedish ] = "Tabellvyn har ändrats.\nSka ändringarna sparas?";
-    Message[ polish ] = "Zmieniono widok tabeli.\nCzy zapisaæ zmiany?";
-    Message[ portuguese_brazilian ] = "A vista da tabela foi modificada.\nDeseja salvar as modificações?";
-    Message[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ“ãƒ¥ãƒ¼ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "í…Œì´ë¸” ë³´ê¸°ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ ë‚´ìš©ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ chinese_simplified ] = "è¿™ä¸ªè¡¨æ ¼è§†å›¾å·²ç»æ”¹å˜ã€‚\nè¦å­˜ç›˜æ›´æ”¹çš„å†…å®¹?";
-    Message[ chinese_traditional ] = "é€™å€‹æª¢è¦–å·²ç¶“è®Šæ›´ã€‚\nè¦å„²å­˜è®Šæ›´å…§å®¹?";
-    Message[ turkish ] = "Tablo görünümü değişti.\nDeğişiklikleri kaydetmek ister misiniz?";
-    Message[ arabic ] = "The view has been changed.\nDo you want to save the changes?";
-    Message[ catalan ] = "La vista ha canviat.\nVoleu desar els canvis?";
-    Message[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡à¸¡à¸µà¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "Pohled na tabulky byl zmÄ›nÄ›n.\nChcete zmÄ›ny uloÅ¾it?";
-    Message[ hebrew ] = "Die Tabellensicht wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?";
-    Message[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤¦à¥ƒà¤¶à¥à¤¯ à¤®à¥‡à¤‚ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤\nà¤†à¤ª à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
-    Message[ slovak ] = "PohÄ¾ad na tabuÄ¾ku bol zmenenÃ½.\nChcete uloÅ¾iÅ¥ zmeny?";
-    Message[ hungarian ] = "A tÃ¡bla nÃ©zete megvÃ¡ltozott.\nKÃ­vÃ¡nja menteni a vÃ¡ltoztatÃ¡sokat?";
-    Message[ slovenian ] = "Pogled tabele je bil spremenjen.\nAli Å¾elite shraniti spremembe?";
+    String 1
+    {
+        Text [ language_user1 ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
+
+        Text = "Die Abfrage";
+        Text [ english ] = "The query";
+        Text [ english_us ] = "The query";
+    };
+    String 2
+    {
+        Text [ language_user1 ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
+
+        Text = "Die Tabellensicht";
+        Text [ english ] = "The table view";
+        Text [ english_us ] = "The table view";
+    };
+    String 3
+    {
+        Text [ language_user1 ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
+
+        Text = "Der SQL-Befehl";
+        Text [ english ] = "The SQL statement";
+        Text [ english_us ] = "The SQL statement";
+    };
 };
+
 String STR_SVT_SQL_SYNTAX_ERROR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
