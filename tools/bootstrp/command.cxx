@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-10 14:20:06 $
+ *  last change: $Author: mh $ $Date: 2001-10-02 11:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     // default wird eine Shell im Path gesucht,
     // wenn aber compsec gestzt ist holen wir uns die
     // Shell von dort
-    if ( sItem == COMMAND_SHELL )
+    if ( sItem.Equals( COMMAND_SHELL ))
     {
         ByteString aComspec = GetEnv( "COMSPEC" );
         if ( aComspec != "" )
@@ -608,7 +608,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
         }
     }
 
-    if ( sReturn == "" )
+    if ( sReturn.Equals( "" ))
         sReturn = sItem;
 
     return sReturn;
