@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.150 $
+#   $Revision: 1.151 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 13:28:24 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:18:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,15 @@ dmake_test_version:
 .ENDIF
 
 # --- common tool makros --------------------------------------
+
+# only need for ancient workspaces
+.IF "$(OS)"=="SOLARIS"
+wrapper_override_cc_wrapper=AUTO
+#wrapper_override_cc_wrapper=FALSE
+wrapper_use_clean_sourcecheck=TRUE
+.ENDIF          # "$(OS)"=="SOLARIS"
+
+.EXPORT : wrapper_override_cc_wrapper wrapper_use_clean_sourcecheck
 
 # moved temporary wrapper here as it is used in unitools.mk
 .IF "$(USE_SHELL)"!=""
