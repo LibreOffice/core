@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 14:18:01 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 16:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ SFX_IMPL_OBJECTFACTORY(SmDocShell, SFXOBJECTSHELL_STD_NORMAL, smath, SvGlobalNam
    Factory().RegisterHelpFile (C2S("smath.svh"));
 }
 #else
-SFX_IMPL_OBJECTFACTORY_DLL(SmDocShell, smath, SvGlobalName(SO3_SM_CLASSID_50), Sm);
+SFX_IMPL_OBJECTFACTORY_DLL(SmDocShell, smath, SvGlobalName(SO3_SM_CLASSID), Sm);
 #endif
 
 void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
@@ -686,6 +686,7 @@ BOOL SmDocShell::InitNew(SvStorage * pStor)
     {
         bRet = TRUE;
         SetVisArea(Rectangle(Point(0, 0), Size(2000, 1000)));
+#if 0
         if (pStor)
         {
             aDocStream = pStor->OpenStream(String::CreateFromAscii(pStarMathDoc));
@@ -695,6 +696,7 @@ BOOL SmDocShell::InitNew(SvStorage * pStor)
             if (! aDocStream )
                 bRet = FALSE;
         }
+#endif
     }
     return bRet;
 }
@@ -792,11 +794,37 @@ void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 
 BOOL SmDocShell::Save()
 {
+#if 0
     if ( SfxInPlaceObject::Save() && aDocStream.Is() )
     {
         aDocStream->Seek(0);
         ImplSave( aDocStream );
         return TRUE;
+    }
+#endif
+    if ( SfxInPlaceObject::Save() )
+    {
+        SvStorage *pStor = GetStorage();
+        if(pStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
+        {
+            // a math package as a storage
+            SmXMLWrapper aEquation(GetModel());
+            SfxMedium aMedium(pStor);
+            aEquation.SetFlat(sal_False);
+            return aEquation.Export(aMedium);
+        }
+        else
+        {
+            aDocStream = pStor->OpenStream(String::CreateFromAscii(pStarMathDoc));
+            aDocStream->SetVersion (pStor->GetVersion ());
+            GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion()));
+
+            aDocStream->Seek(0);
+            ImplSave( aDocStream );
+
+            aDocStream.Clear();
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -807,7 +835,7 @@ BOOL SmDocShell::SaveAs(SvStorage * pNewStor)
     BOOL bRet = FALSE;
     if ( SfxInPlaceObject::SaveAs( pNewStor ) )
     {
-        if (pNewStor->GetVersion() >= SOFFICE_FILEFORMAT_XML)
+        if (pNewStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
         {
             // a math package as a storage
             SmXMLWrapper aEquation(GetModel());
@@ -864,6 +892,7 @@ BOOL SmDocShell::SaveCompleted(SvStorage * pStor)
 {
     if( SfxInPlaceObject::SaveCompleted( pStor ))
     {
+#if 0
         if (! pStor)
             return TRUE;
 
@@ -873,6 +902,8 @@ BOOL SmDocShell::SaveCompleted(SvStorage * pStor)
         aDocStream->SetBufferSize(DOCUMENT_BUFFER_SIZE);
         aDocStream->SetKey( pStor->GetKey() ); // Passwort setzen
         return aDocStream.Is();
+#endif
+        return TRUE;
     }
     return FALSE;
 }
@@ -1358,7 +1389,9 @@ void SmDocShell::Draw(OutputDevice *pDevice,
 void SmDocShell::HandsOff()
 {
     SfxInPlaceObject::HandsOff();
+#if 0
     aDocStream.Clear();
+#endif
 }
 
 
@@ -1496,7 +1529,9 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
             }
 
             bRet = TRUE;
+#if 0
             aDocStream = aTempStream;
+#endif
         }
     }
 
@@ -1657,9 +1692,16 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_40));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_NOW)
+    else if (nFileFormat == SOFFICE_FILEFORMAT_50)
     {
+        *pClassName     = SvGlobalName(SO3_SM_CLASSID_50);
+        *pFormat        = SOT_FORMATSTR_ID_STARMATH_50;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_50));
+        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
+    }
+    else if (nFileFormat == SOFFICE_FILEFORMAT_60 )
+    {
+        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_60));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
 }

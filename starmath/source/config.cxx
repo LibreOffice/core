@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 13:42:33 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 16:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ int SmConfig::Load(SvStream &rStream)
     // wir diesen hier auf die aktuelle Version, damit beim folgenden (impliziten)
     // einlesen des 'SmFormat' Objekts aus dem Stream dieses entsprechend
     // reagieren kann.
-    rStream.SetVersion(SOFFICE_FILEFORMAT_NOW);
+    rStream.SetVersion(SOFFICE_FILEFORMAT_50);
 
     rStream >> *this;
     SetDefault(FALSE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:18:56 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 16:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9827,6 +9827,11 @@ String RID_DOCUMENTSTR
     Text[ language_user1 ] = " ";
 };
 
+String STR_MATH_DOCUMENT_FULLTYPE_60
+{
+    Text = "%PRODUCTNAME 6.0 Formel" ;
+    Text [ ENGLISH ] = "StarOffice 6.0 Formula" ;
+};
 String STR_MATH_DOCUMENT_FULLTYPE_50
 {
     Text = "%PRODUCTNAME 5.0 Formel" ;
