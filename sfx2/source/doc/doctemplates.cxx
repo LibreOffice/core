@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-02 10:47:35 $
+ *  last change: $Author: dv $ $Date: 2001-04-03 06:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,8 @@ class SfxDocTplService_Impl
     void                        removeFromHierarchy( GroupData_Impl *pGroup );
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 
+    void                        updateData( EntryData_Impl *pData );
+
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
@@ -356,8 +358,6 @@ public:
     void                setHierarchyURL( const OUString& rURL ) { maHierarchyURL = rURL; }
     void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                setType( const OUString& rType ) { maType = rType; }
-
-    int                 Compare( const OUString& rTitle ) const;
 };
 
 DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
@@ -394,26 +394,6 @@ public:
                                   const OUString& rHierURL );
     ULONG               count() { return maEntries.Count(); }
     EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
-
-
-
-
-
-    EntryData_Impl*     GetEntry( ULONG nIndex ) const;
-    EntryData_Impl*     GetEntry( const OUString& rName ) const;
-    EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
-
-
-    ULONG               GetCount() const;
-
-    void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
-
-
-    void                DeleteEntry( ULONG nIndex );
-
-    int                 Compare( const OUString& rTitle ) const
-                            { return maTitle.compareTo( rTitle ); }
-    int                 Compare( GroupData_Impl* pCompareWith ) const;
 };
 
 DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
@@ -922,6 +902,11 @@ void SfxDocTplService_Impl::doUpdate()
                             removeFromHierarchy( pData ); // delete entry in hierarchy
                         else
                             addToHierarchy( pGroup, pData ); // add entry to hierarchy
+                    }
+                    else if ( pData->getUpdateType() ||
+                              pData->getUpdateLink() )
+                    {
+                        updateData( pData );
                     }
                 }
             }
@@ -1795,6 +1780,29 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
 }
 
 //-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::updateData( EntryData_Impl *pData )
+{
+    Content aTemplate;
+
+    if ( ! Content::create( pData->getHierarchyURL(), maCmdEnv, aTemplate ) )
+        return;
+
+    OUString aPropName;
+
+    if ( pData->getUpdateType() )
+    {
+        aPropName = OUString( RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ) );
+        setProperty( aTemplate, aPropName, makeAny( pData->getType() ) );
+    }
+
+    if ( pData->getUpdateLink() )
+    {
+        aPropName = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+        setProperty( aTemplate, aPropName, makeAny( pData->getTargetURL() ) );
+    }
+}
+
+//-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
 {
     OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
@@ -1879,6 +1887,11 @@ EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     else
     {
         pData->setInUse();
+        if ( rTargetURL != pData->getTargetURL() )
+        {
+            pData->setTargetURL( rTargetURL );
+            pData->setUpdateLink( sal_True );
+        }
     }
 
     return pData;
@@ -1889,7 +1902,9 @@ EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
 // -----------------------------------------------------------------------
 EntryData_Impl::EntryData_Impl( const OUString& rTitle )
 {
-    maTitle = rTitle;
-    mbInUse = sal_False;
-    mbInHierarchy = sal_False;
+    maTitle         = rTitle;
+    mbInUse         = sal_False;
+    mbInHierarchy   = sal_False;
+    mbUpdateType    = sal_False;
+    mbUpdateLink    = sal_False;
 }
