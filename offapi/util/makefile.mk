@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-27 09:35:11 $
+#   last change: $Author: fs $ $Date: 2001-05-14 09:19:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssdocument.db \
     $(UCR)$/cssdrawing.db \
     $(UCR)$/cssfcomp.db \
+    $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssform.db \
     $(UCR)$/cssformula.db \
     $(UCR)$/cssframe.db \
