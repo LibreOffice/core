@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 09:01:55 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,13 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYNAME_SECUREURL          OUString(RTL_CONSTASCII_USTRINGPARAM("SecureURL"        ))
 #define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"  ))
+#define PROPERTYNAME_EXECUTEPLUGINS     OUString(RTL_CONSTASCII_USTRINGPARAM("ExecutePlugins"  ))
 
 #define PROPERTYHANDLE_SECUREURL        0
 #define PROPERTYHANDLE_STAROFFICEBASIC  1
+#define PROPERTYHANDLE_EXECUTEPLUGINS   2
 
-#define PROPERTYCOUNT                   2
+#define PROPERTYCOUNT                   3
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -191,6 +193,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
+        sal_Bool    IsExecutePlugins() const;
+        void        SetExecutePlugins( sal_Bool bSet );
         Sequence< OUString >    GetSecureURLs   (                                               ) const ;
         void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList  )       ;
         EBasicSecurityMode      GetBasicMode    (                                               ) const ;
@@ -227,6 +231,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         Sequence< OUString >    m_seqSecureURLs     ;
         EBasicSecurityMode      m_eBasicMode    ;
+        sal_Bool                m_bExecutePlugins;
 };
 
 //_________________________________________________________________________________________________________________
@@ -242,6 +247,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     // Init member then.
     ,   m_seqSecureURLs     ( DEFAULT_SECUREURL         )
     ,   m_eBasicMode    ( DEFAULT_STAROFFICEBASIC   )
+    ,   m_bExecutePlugins( sal_True )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -272,6 +278,12 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
                                                         sal_Int32 nMode;
                                                         seqValues[nProperty] >>= nMode;
                                                         m_eBasicMode = (EBasicSecurityMode)nMode;
+                                                    }
+                                                    break;
+
+            case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
+                                                        if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
+                                                            DBG_ERROR("Wrong type for ExecutePlugins!");
                                                     }
                                                     break;
         }
@@ -313,13 +325,17 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\SecureURL\"?" );
             seqValues[nProperty] >>= m_seqSecureURLs;
         }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\OfficeBasic\"?" );
             sal_Int32 nMode;
             seqValues[nProperty] >>= nMode;
             m_eBasicMode = (EBasicSecurityMode)nMode;
+        }
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_EXECUTEPLUGINS )
+        {
+            if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
+                DBG_ERROR("Wrong type for ExecutePlugins!");
         }
         #ifdef DEBUG
         else DBG_ASSERT( sal_False, "SvtSecurityOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
@@ -347,6 +363,10 @@ void SvtSecurityOptions_Impl::Commit()
 
             case PROPERTYHANDLE_STAROFFICEBASIC :   {
                                                         seqValues[nProperty] <<= (sal_Int32)m_eBasicMode;
+                                                    }
+                                                    break;
+            case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
+                                                        seqValues[nProperty] <<= m_bExecutePlugins;
                                                     }
                                                     break;
         }
@@ -387,6 +407,16 @@ void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
 {
     m_eBasicMode = eMode;
     SetModified();
+}
+
+sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
+{
+    return m_bExecutePlugins;
+}
+
+void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
+{
+    m_bExecutePlugins =  bSet;
 }
 
 //*****************************************************************************************************************
@@ -468,6 +498,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_SECUREURL          ,
         PROPERTYNAME_STAROFFICEBASIC    ,
+        PROPERTYNAME_EXECUTEPLUGINS
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -561,6 +592,18 @@ sal_Bool SvtSecurityOptions::IsSecureURL(   const   OUString&   sURL        ,
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsSecureURL( sURL, sReferer );
+}
+
+sal_Bool SvtSecurityOptions::IsExecutePlugins() const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsExecutePlugins();
+}
+
+void SvtSecurityOptions::SetExecutePlugins( sal_Bool bSet )
+{
+    MutexGuard aGuard( GetInitMutex() );
+    m_pDataContainer->SetExecutePlugins( bSet );
 }
 
 //*****************************************************************************************************************
