@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #endif
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "ehdl.hxx"
 #include "svtdata.hxx"
@@ -219,7 +221,7 @@ static USHORT aWndFunc(
 
 SfxErrorHandler::SfxErrorHandler(USHORT nIdP, ULONG lStartP, ULONG lEndP,
                                  ResMgr *pMgrP)
-    : nId(nIdP), pMgr(pMgrP), lStart(lStartP), lEnd(lEndP)
+    : lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP)
 {
     RegisterDisplay(&aWndFunc);
 }
