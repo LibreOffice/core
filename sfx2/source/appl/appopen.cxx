@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:53:57 $
+ *  last change: $Author: mba $ $Date: 2001-11-26 14:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -80,8 +80,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
@@ -193,23 +196,22 @@ using namespace ::sfx2;
 
 //=========================================================================
 
-class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XStatusListener >
+class SfxOpenDocStatusListener_Impl : public WeakImplHelper1< XDispatchResultListener >
 {
 public:
     BOOL    bFinished;
     BOOL    bSuccess;
-    virtual void SAL_CALL   statusChanged( const FeatureStateEvent& Event ) throw(RuntimeException);
+    virtual void SAL_CALL   dispatchFinished( const DispatchResultEvent& Event ) throw(RuntimeException);
     virtual void SAL_CALL   disposing( const EventObject& Source ) throw(RuntimeException);
                             SfxOpenDocStatusListener_Impl()
                                 : bFinished( FALSE )
                                 , bSuccess( FALSE )
                             {}
-
 };
 
-void SAL_CALL SfxOpenDocStatusListener_Impl::statusChanged( const FeatureStateEvent& Event ) throw(RuntimeException)
+void SAL_CALL SfxOpenDocStatusListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw(RuntimeException)
 {
-    bSuccess = Event.IsEnabled;
+    bSuccess = ( aEvent.State == DispatchResultState::SUCCESS );
     bFinished = TRUE;
 }
 
@@ -1243,22 +1245,24 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, ::rtl::OUString(), 0 ) : Reference < XDispatch >();
             if ( xDisp.is() )
             {
-                // create listener for notification of load success or fail
-                SfxOpenDocStatusListener_Impl* pListener = new SfxOpenDocStatusListener_Impl();
-                pListener->acquire();
-                xDisp->addStatusListener( pListener, aURL );
-                xDisp->dispatch( aURL, aArgs );
+                Reference < XNotifyingDispatch > xNot( xDisp, UNO_QUERY );
+                if ( xNot.is() )
+                {
+                    // create listener for notification of load success or fail
+                    SfxOpenDocStatusListener_Impl* pListener = new SfxOpenDocStatusListener_Impl();
+                    pListener->acquire();
+                    xNot->dispatchWithNotification( aURL, aArgs, pListener );
 
-                // stay on the stack until result has been notified
-                while ( !pListener->bFinished )
-                    Application::Yield();
+                    // stay on the stack until result has been notified
+                    while ( !pListener->bFinished )
+                        Application::Yield();
 
-                if ( pListener->bSuccess )
-                    // successful loading, get loaded controller
-                    xController = xFrame->getController();
+                    if ( pListener->bSuccess )
+                        // successful loading, get loaded controller
+                        xController = xFrame->getController();
 
-                xDisp->removeStatusListener( pListener, aURL );
-                pListener->release();
+                    pListener->release();
+                }
             }
 
             if ( !xController.is() && bIsBlankTarget )
