@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,40 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    sal_Bool OCommonBehaviourTabPage::adjustUTF8(const SfxItemSet& _rSet)
+    {
+        // determine the type of the current URL
+        DATASOURCE_TYPE eDSType = DST_UNKNOWN;
+
+        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
+            eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
+
+        const sal_Bool bAllowUTF8 = (DST_DBASE != eDSType) && (DST_TEXT != eDSType);
+        const sal_Bool bHaveUTF8 = m_aCharsets.size() == m_pCharset->GetEntryCount();
+
+        if (bAllowUTF8 != bHaveUTF8)
+        {
+            OCharsetDisplay::const_iterator aUTF8Pos = m_aCharsets.find(RTL_TEXTENCODING_UTF8);
+            if (m_aCharsets.end() == aUTF8Pos)
+            {
+                DBG_ERROR("OCommonBehaviourTabPage::adjustUTF8: invalid charset map!");
+            }
+            else
+            {
+                ::rtl::OUString sDisplayName = (*aUTF8Pos).getDisplayName();
+                if (!bAllowUTF8)
+                    m_pCharset->RemoveEntry(sDisplayName);
+                else
+                    m_pCharset->RemoveEntry(sDisplayName);
+            }
+        }
+        return bAllowUTF8;
+    }
+
+    // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -219,6 +253,8 @@ namespace dbaui
 
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
+                sal_Bool bAllowUTF8 = adjustUTF8(_rSet);
+
                 OCharsetDisplay::const_iterator aFind = m_aCharsets.find(pCharsetItem->GetValue(), OCharsetDisplay::IANA());
                 if (aFind == m_aCharsets.end())
                 {
@@ -226,10 +262,17 @@ namespace dbaui
                     aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
                     // fallback: system language
                 }
+
+                if (!bAllowUTF8 && (RTL_TEXTENCODING_UTF8 == (*aFind).getEncoding()))
+                {   // the current char set is UTF-8, but it's not allowed for the current URL
+                    aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
+                }
+
                 if (aFind == m_aCharsets.end())
                     m_pCharset->SelectEntry(String());
                 else
                     m_pCharset->SelectEntry((*aFind).getDisplayName());
+
                 if (_bSaveValue)
                     m_pCharset->SaveValue();
             }
@@ -1009,6 +1052,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/04/20 13:38:06  oj
+ *  #85736# new checkbox for odbc
+ *
  *  Revision 1.2  2001/02/05 15:42:07  fs
  *  enlargen the tab pages -> some redesigns
  *
