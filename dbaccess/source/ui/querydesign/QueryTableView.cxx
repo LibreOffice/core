@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:13:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,7 +1013,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
         // damit habe ich das Doc natuerlich modifiziert
         m_pView->getController()->setModified( sal_True );
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
+        m_pView->getController()->InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     }
 }
 
@@ -1091,7 +1091,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
     if(!m_pView->getController()->isReadOnly())
         m_pView->getController()->setModified( sal_True );
 
-    m_pView->getController()->InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
+    m_pView->getController()->InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
 
     return bSuccess;
 }
