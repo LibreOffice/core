@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:58:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,8 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । SDBC ड्रइवर प्रबंधक को लोड़ नहीं कर सकते है ।";
     Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Nemohol byť spustený SDBC driver manager.";
 };
+
+
 
 
 
