@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,11 +182,11 @@
 #define COMPARE_BOOKMARKS(a, b) ::comphelper::compare(a, b)
 
 // damit ich waehrend des Debuggings keine inline-Methoden habe ...
-#if DEBUG || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 #define INLINE_METHOD
 #else
 #define INLINE_METHOD inline
-#endif // DEBUG || DBG_UTIL
+#endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
 #define IFACECAST(c)          ((const Reference< XInterface >&)c)
  // SUN C52 has some ambiguities without this cast ....
@@ -375,7 +375,7 @@ sal_Bool FmSearchEngine::MoveCursor()
             else
                 m_xSearchCursor.previous();
     }
-#if _DEBUG || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 0) || DBG_UTIL
     catch(::com::sun::star::sdbc::SQLException  e)
     {
         String sDebugMessage;
@@ -396,7 +396,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 
         bSuccess = sal_False;
     }
-#endif // _DEBUG || DBG_UTIL
+#endif // (OSL_DEBUG_LEVEL > 0) || DBG_UTIL
     catch(...)
     {
         DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown Exception !");
