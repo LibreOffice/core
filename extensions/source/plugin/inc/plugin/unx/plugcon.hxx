@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-11-12 12:41:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ public:
     {
         NPError* pErr = (NPError*)pMes->GetBytes();
         NPError aErr = *pErr;
-        delete pErr;
+        delete [] pErr;
         return aErr;
     }
 
@@ -220,7 +220,6 @@ enum CommandAtoms
 };
 
 char* GetCommandName( CommandAtoms );
-void resizePlugin( NPP, UINT32, UINT32 );
 
 #define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
 
