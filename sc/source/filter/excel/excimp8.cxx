@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,8 @@
  *
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
 
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "excimp8.hxx"
 
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
@@ -155,9 +150,7 @@
 #include "xipivot.hxx"
 #endif
 
-#include "excimp8.hxx"
 #include "excform.hxx"
-#include "flttools.hxx"
 #include "scextopt.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -223,10 +216,8 @@ void ImportExcel8::Iteration( void )
 
 void ImportExcel8:: WinProtection( void )
 {
-    if( aIn.ReaduInt16() )
-    {
-        GetExtDocOptions().SetWinProtection( true );
-    }
+    if( aIn.ReaduInt16() != 0 )
+        GetExtDocOptions().GetDocSettings().mbWinProtected = true;
 }
 
 void ImportExcel8::Note( void )
@@ -310,8 +301,6 @@ void ImportExcel8::Boundsheet( void )
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nBdshtTab, FALSE );
-    else if( nFirstVisTab == 0xFFFF )
-        nFirstVisTab = static_cast<sal_uInt16>(nBdshtTab);       // first visible for WINDOW2 import
 
     pD->RenameTab( nBdshtTab, aName );
     nBdshtTab++;
@@ -417,33 +406,38 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
     if( bHasBasic )
     {
         String aName( aIn.ReadUniString() );
-
-        if( bWorkbookGlobals )
-            GetExtDocOptions().SetCodename( aName );
-        else
-            GetExtDocOptions().AddCodename( aName );
+        if( aName.Len() )
+        {
+            if( bWorkbookGlobals )
+                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+            else
+                GetExtDocOptions().AppendCodeName( aName );
+        }
     }
 }
 
 
 void ImportExcel8::Dimensions( void )
 {
-    UINT32  nRowFirst, nRowLast;
-    UINT16  nColFirst, nColLast;
+    sal_uInt32 nXclRow1, nXclRow2;
+    XclRange aXclUsedArea( ScAddress::UNINITIALIZED );
+    maStrm >> nXclRow1 >> nXclRow2 >> aXclUsedArea.maFirst.mnCol >> aXclUsedArea.maLast.mnCol;
 
-    aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-
-    if( nRowLast > MAXROW )
-        nRowLast = MAXROW;
-    if( nColLast > static_cast<sal_uInt16>(MAXCOL) )
-        nColLast = static_cast<sal_uInt16>(MAXCOL);
-    if( nRowFirst > nRowLast )
-        nRowFirst = nRowLast;
-    if( nColFirst > nColLast )
-        nColFirst = nColLast;
-
-    pColRowBuff->SetDimension(
-        ScRange( static_cast<SCCOL>(nColFirst), static_cast<SCROW>(nRowFirst), GetCurrScTab(), static_cast<SCCOL>(nColLast), static_cast<SCROW>(nRowLast), GetCurrScTab() ) );
+    if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
+        (nXclRow1 <= static_cast< sal_uInt32 >( GetScMaxPos().Row() )) )
+    {
+        // Excel stores first unused row/column index
+        --nXclRow2;
+        --aXclUsedArea.maLast.mnCol;
+        // convert row indexes to 16-bit values
+        aXclUsedArea.maFirst.mnRow = static_cast< sal_uInt16 >( nXclRow1 );
+        aXclUsedArea.maLast.mnRow = limit_cast< sal_uInt16 >( nXclRow2, aXclUsedArea.maFirst.mnRow, SAL_MAX_UINT16 );
+        // create the Calc range
+        SCTAB nScTab = GetCurrScTab();
+        ScRange& rScUsedArea = GetExtDocOptions().GetOrCreateTabSettings( nScTab ).maUsedArea;
+        GetAddressConverter().ConvertRange( rScUsedArea, aXclUsedArea, nScTab, nScTab, false );
+        // if any error occurs in ConvertRange(), rScUsedArea keeps untouched
+    }
 }
 
 void ImportExcel8::ReadBasic( void )
@@ -631,12 +625,11 @@ void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 
 void XclImpAutoFilterData::SetCellAttribs()
 {
+    ScDocument& rDoc = pExcRoot->pIR->GetDoc();
     for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
-        INT16 nFlag = ((ScMergeFlagAttr*) pExcRoot->pDoc->
-            GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
-        pExcRoot->pDoc->ApplyAttr( nCol, StartRow(), Tab(),
-            ScMergeFlagAttr( nFlag | SC_MF_AUTO) );
+        INT16 nFlag = ((ScMergeFlagAttr*) rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
+        rDoc.ApplyAttr( nCol, StartRow(), Tab(), ScMergeFlagAttr( nFlag | SC_MF_AUTO) );
     }
 }
 
@@ -647,7 +640,7 @@ void XclImpAutoFilterData::InsertQueryParam()
         ScRange aAdvRange;
         BOOL    bHasAdv = pCurrDBData->GetAdvancedQuerySource( aAdvRange );
         if( bHasAdv )
-            pExcRoot->pDoc->CreateQueryParam( aAdvRange.aStart.Col(),
+            pExcRoot->pIR->GetDoc().CreateQueryParam( aAdvRange.aStart.Col(),
                 aAdvRange.aStart.Row(), aAdvRange.aEnd.Col(), aAdvRange.aEnd.Row(),
                 aAdvRange.aStart.Tab(), aParam );
 
@@ -667,10 +660,10 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     UINT16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
 
-    ScQueryConnect  eConn       = (nFlags & EXC_AFFLAG_ANDORMASK) ? SC_OR : SC_AND;
-    BOOL            bTop10      = TRUEBOOL( nFlags & EXC_AFFLAG_TOP10 );
-    BOOL            bTopOfTop10 = TRUEBOOL( nFlags & EXC_AFFLAG_TOP10TOP );
-    BOOL            bPercent    = TRUEBOOL( nFlags & EXC_AFFLAG_TOP10PERC );
+    ScQueryConnect  eConn       = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
+    BOOL            bTop10      = ::get_flag( nFlags, EXC_AFFLAG_TOP10 );
+    BOOL            bTopOfTop10 = ::get_flag( nFlags, EXC_AFFLAG_TOP10TOP );
+    BOOL            bPercent    = ::get_flag( nFlags, EXC_AFFLAG_TOP10PERC );
     UINT16          nCntOfTop10 = nFlags >> 7;
     SCSIZE          nCount      = aParam.GetEntryCount();
 
@@ -850,7 +843,7 @@ void XclImpAutoFilterData::CreateScDBData( const BOOL bUseUnNamed )
     // or if we need to create the Advanced Filter.
     if( bActive || bCriteria)
     {
-        ScDBCollection& rColl = *pExcRoot->pDoc->GetDBCollection();
+        ScDBCollection& rColl = pExcRoot->pIR->GetDatabaseRanges();
         pCurrDBData = rColl.GetDBAtArea( Tab(), StartCol(), StartRow(), EndCol(), EndRow() );
         if( !pCurrDBData )
         {
