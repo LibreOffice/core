@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:33:32 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 06:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1417,47 +1417,16 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             if(m_pTreeView->HasChildPathFocus())
             {
                 SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
+                TransferableHelper* pTransfer = NULL;
+                Reference< XTransferable> aEnsureDelete;
                 EntryType eType = getEntryType(pEntry);
-                switch(eType)
-                {
-                    case ET_QUERY:
-                        implCopyObject( pEntry, CommandType::QUERY );
-                        break;
-                    case ET_TABLE:
-                        {
-                            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::TABLE );
-                            Reference< XTransferable> aEnsureDelete = pTransfer;
-
-                            if (pTransfer)
-                                pTransfer->CopyToClipboard();
-                        }
-                        break;
-                }
+                pTransfer       = implCopyObject( pEntry, eType == ET_QUERY ? CommandType::QUERY : CommandType::TABLE);
+                aEnsureDelete   = pTransfer;
+                if (pTransfer)
+                    pTransfer->CopyToClipboard();
                 break;
             }// else run through
-        case ID_BROWSER_CUT:
-            // first look which side is active
-            if(m_pTreeView->HasChildPathFocus())
-            {
-                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                EntryType eType = getEntryType(pEntry);
-                switch(eType)
-                {
-                    case ET_QUERY:
-                        implCopyObject( pEntry, CommandType::QUERY );
-                        break;
-                    case ET_TABLE:
-                        {
-                            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::TABLE );
-                            Reference< XTransferable> aEnsureDelete = pTransfer;
-
-                            if (pTransfer)
-                                pTransfer->CopyToClipboard();
-                        }
-                        break;
-                }
-                break;
-            } // else run through
+        case ID_BROWSER_CUT:// cut isn't allowed for the treeview
         default:
             SbaXDataBrowserController::Execute(nId);
             break;
@@ -1905,6 +1874,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             // reset the values
             xProp->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
+        }
+        catch(...)
+        {
+            OSL_ENSURE(0,"Unkown Exception in SbaTableQueryBrowser::OnSelectEntry!");
         }
     }
     return 0L;
@@ -2885,8 +2858,13 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             break;
 
         case ID_TREE_QUERY_COPY:
-            implCopyObject( pEntry, CommandType::QUERY );
-            break;
+        {
+            TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::QUERY );
+            Reference< XTransferable> aEnsureDelete = pTransfer;
+            if (pTransfer)
+                pTransfer->CopyToClipboard();
+        }
+        break;
 
         case ID_TREE_TABLE_COPY:
         {
