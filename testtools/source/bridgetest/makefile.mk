@@ -11,19 +11,18 @@ LIBTARGET=NO
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
+DLLPRE =
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
 MY_DLLPOSTFIX=.dll
-MY_DLLPREFIX=
 DESTDIR=$(BIN)
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
 WINTARGETS=$(DESTDIR)$/regcomp.exe $(DESTDIR)$/uno.exe
 .ELSE
 MY_DLLPOSTFIX=.so
-MY_DLLPREFIX=lib
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
@@ -50,7 +49,7 @@ UNOTYPES= \
         com.sun.star.container.XSet		\
         com.sun.star.test.bridge.XBridgeTest 	\
         com.sun.star.bridge.XUnoUrlResolver		\
-        com.sun.star.lang.XSingleComponentFactory	\
+            com.sun.star.lang.XSingleComponentFactory	\
         com.sun.star.uno.XComponentContext          
 
 SLOFILES= \
@@ -63,7 +62,7 @@ LIB1TARGET=$(SLB)$/cppobj.lib
 LIB1OBJFILES= \
         $(SLO)$/cppobj.obj
 
-SHL1TARGET=cppobj
+SHL1TARGET = cppobj.uno
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
@@ -80,7 +79,7 @@ LIB2TARGET=$(SLB)$/bridgetest.lib
 LIB2OBJFILES= \
         $(SLO)$/bridgetest.obj
 
-SHL2TARGET=bridgetest
+SHL2TARGET = bridgetest.uno
 SHL2STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
@@ -148,7 +147,7 @@ $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
 .IF "$(GUI)"=="WNT"
     +echo set CLASSPATH=$(MY_CLASSPATH) >> $@
 .ELSE
-    +echo setenv CLASSPATH $(MY_CLASSPATH) >> $@
+    +echo "CLASSPATH=$(MY_CLASSPATH); export CLASSPATH" >> $@
 .ENDIF
     +echo uno -ro uno_services.rdb -ro uno_types.rdb \
        -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.JavaTestObject >> $@
@@ -159,17 +158,17 @@ $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
 # get the .setdir current directory. AAARGGGGGG !
 $(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
     regcomp -register -r uno_services.rdb \
-        -c $(MY_DLLPREFIX)bridgetest$(MY_DLLPOSTFIX)	\
-        -c $(MY_DLLPREFIX)cppobj$(MY_DLLPOSTFIX)		\
-        -c $(MY_DLLPREFIX)connectr$(MY_DLLPOSTFIX)		\
-        -c $(MY_DLLPREFIX)acceptor$(MY_DLLPOSTFIX)		\
-        -c $(MY_DLLPREFIX)brdgfctr$(MY_DLLPOSTFIX)		\
-        -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)	\
-        -c $(MY_DLLPREFIX)uuresolver$(MY_DLLPOSTFIX)
+        -c bridgetest.uno$(MY_DLLPOSTFIX)	\
+        -c cppobj.uno$(MY_DLLPOSTFIX)		\
+        -c connector.uno$(MY_DLLPOSTFIX)		\
+        -c acceptor.uno$(MY_DLLPOSTFIX)		\
+        -c bridgefac.uno$(MY_DLLPOSTFIX)		\
+        -c remotebridge.uno$(MY_DLLPOSTFIX)	\
+        -c uuresolver.uno$(MY_DLLPOSTFIX)
 .IF "$(SOLAR_JAVA)" != ""
     regcomp -register -r uno_services.rdb \
-        -c $(MY_DLLPREFIX)javaloader$(MY_DLLPOSTFIX)	\
-        -c $(MY_DLLPREFIX)jen$(MY_DLLPOSTFIX)
+        -c javaloader.uno$(MY_DLLPOSTFIX)	\
+        -c javavm.uno$(MY_DLLPOSTFIX)
 
 # currently no chance to construct absolute file url for testComponent.jar
 # 	regmerge regcomp.rdb / $(SOLARBINDIR)$/udkapi.rdb uno_services.rdb
