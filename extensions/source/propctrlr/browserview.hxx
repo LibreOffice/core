@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ namespace pcr
     {
         OPropertyBrowserController*     m_pActiveController;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xObject;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
         OPropertyEditor*        m_pPropBox;
@@ -116,11 +115,6 @@ namespace pcr
         void                        setActiveController( OPropertyBrowserController* pController );
 
         OPropertyEditor*    getPropertyBox() { return m_pPropBox; }
-
-        void    setObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject)
-                { m_xObject = _rxObject; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& getObject() const
-                { return m_xObject; }
 
         // page handling
         sal_uInt16  getActivaPage() const { return m_nActivePage; }
