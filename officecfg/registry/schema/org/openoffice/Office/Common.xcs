@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-08 10:49:12 $
+ *  last change: $Author: fs $ $Date: 2002-07-09 14:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,6 +1654,15 @@
                 </prop>
             </group>
         </group>
+        <group oor:name="FileDialog">
+	        <group oor:name="ImportGraphic">
+                <!-- Responsible: PB -->
+		        <group oor:name="Size">
+		            <prop oor:name="Height" oor:type="xs:short"/>
+		            <prop oor:name="Width" oor:type="xs:short"/>
+				</group>
+			</group>
+		</group>
         <group oor:name="View">
             <prop oor:name="FontScaling" oor:type="xs:short">
                 <!-- OldPath: General/View -->
