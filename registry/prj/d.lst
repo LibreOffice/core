@@ -1,4 +1,4 @@
-dos: mkdir %_DEST%\inc%_EXT%\registry
+mkdir: %_DEST%\inc%_EXT%\registry
 mkdir: %_DEST%\lib%_EXT%\libreg2.dylib.framework
 
 ..\inc\registry\*.h %_DEST%\inc%_EXT%\registry\*.h
