@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 
 #include "condedit.hxx"
 #include "fldpage.hxx"
-
+#ifndef _ACTCTRL_HXX
+#include <actctrl.hxx>
+#endif
 /*--------------------------------------------------------------------
    Beschreibung:
  --------------------------------------------------------------------*/
@@ -105,15 +107,30 @@ class SwFldFuncPage : public SwFldPage
     ConditionEdit   aCond2ED;
     PushButton      aMacroBT;
 
+    //controls of "Input list"
+    FixedText       aListItemFT;
+    ReturnActionEdit aListItemED;
+    PushButton      aListAddPB;
+    FixedText       aListItemsFT;
+    ListBox         aListItemsLB;
+    PushButton      aListRemovePB;
+    PushButton      aListUpPB;
+    PushButton      aListDownPB;
+    FixedText       aListNameFT;
+    Edit            aListNameED;
+
     String          sOldValueFT;
     String          sOldNameFT;
 
     ULONG           nOldFormat;
+    bool            bDropDownLBChanged;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SelectHdl, ListBox* pLB = 0 );
     DECL_LINK( InsertMacroHdl, ListBox* pLB = 0 );
     DECL_LINK( ModifyHdl, Edit *pEd = 0 );
+    DECL_LINK( ListModifyHdl, Control*);
+    DECL_LINK( ListEnableHdl, void*);
 
     // Macro ausw„hlen
     DECL_LINK( MacroHdl, Button * );
