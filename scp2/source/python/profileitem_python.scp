@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profileitem_python.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-04 14:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include "macros.inc"
 
 Profile gid_Profile_Pyuno_Ini
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
   #ifdef UNX
     Name = "pyunorc";
   #else
@@ -74,7 +74,7 @@ End
 
 ProfileItem gid_Profileitem_Pyuno_Shared_Packages
     ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_SHARED_PACKAGES";
@@ -87,7 +87,7 @@ End
 
 ProfileItem gid_Profileitem_Pyuno_User_Packages
     ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_USER_PACKAGES";
@@ -100,7 +100,7 @@ End
 
 ProfileItem gid_Profileitem_Pyuno_Uno_Types
     ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "UNO_TYPES";
@@ -109,7 +109,7 @@ End
 
 ProfileItem gid_Profileitem_Pyuno_Uno_Services
     ProfileID = gid_Profile_Pyuno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "UNO_SERVICES";
@@ -117,7 +117,7 @@ ProfileItem gid_Profileitem_Pyuno_Uno_Services
 End
 
 Profile gid_Profile_Pythonloader_Uno_Ini
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
   #ifdef UNX
     Name = "pythonloader.unorc";
   #else
@@ -129,7 +129,7 @@ End
 
 ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYTHONHOME";
@@ -138,7 +138,7 @@ End
 
 ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
-    ModuleID = gid_Module_Pyuno;
+    ModuleID = gid_Module_Optional_Pyuno;
     Section = "Bootstrap";
     Order = 1;
     Key = "PYTHONPATH";
