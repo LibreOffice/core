@@ -609,7 +609,7 @@ if test "$PERL"; then
    fi
    _perl_major=`echo $_perl_version | $AWK -F"." '{ if ($1 < 5) print "false"; else print "true" }'`
    if test "$_perl_major" = "true"; then
-      PERL=`echo $PERL | $SED -n "s/\/perl//p"`
+      PERL=`echo $PERL | $SED -n "s/\/perl$//p"`
       AC_MSG_RESULT([checked (Perl $_perl_version)])
    else
       AC_MSG_ERROR([found Perl version "$_perl_version", use version 5 of Perl])
