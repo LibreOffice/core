@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:24:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 
     @author OD
 */
-bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId )
+bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 {
     bool bRetVal;
 
