@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:58:08 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 // ============================================================================
 
 #ifndef SC_XEROOT_HXX
@@ -75,6 +69,9 @@
 #include "addincol.hxx"
 #endif
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
@@ -88,8 +85,8 @@
 
 // Global data ================================================================
 
-XclExpRootData::XclExpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rBasePath, CharSet eCharSet, bool bRelUrl ) :
-    XclRootData( eBiff, rDocument, rBasePath, eCharSet ),
+XclExpRootData::XclExpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet, bool bRelUrl ) :
+    XclRootData( eBiff, rDocument, rDocUrl, eCharSet ),
     mbRelUrl( bRelUrl )
 {
 }
@@ -105,6 +102,7 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
     mrExpData( rExpRootData )
 {
+    mrExpData.mpTracer.reset( new XclTracer( GetDocUrl(), CREATE_OUSTRING( "Office.Tracing/Export/Excel" ) ) );
     mrExpData.mpPalette.reset( new XclExpPalette( GetRoot() ) );
     mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( GetRoot() ) );
     mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( GetRoot() ) );
