@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:33:42 $
+ *  last change: $Author: pb $ $Date: 2001-11-01 08:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "srchxtra.hrc"
- // pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_SEARCHFORMAT -----------------------------------------------
 TabDialog RID_SVXDLG_SEARCHFORMAT
@@ -345,7 +344,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     HelpId = HID_SEARCHATTR ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 128 ) ;
+    Size = MAP_APPFONT ( 194 , 128 ) ;
     Text = "Attribute" ;
     Text [ English ] = "Attributes" ;
     Text [ norwegian ] = "Attributes" ;
@@ -366,12 +365,12 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         ClipChildren = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 98 , 108 ) ;
+        Size = MAP_APPFONT ( 114 , 108 ) ;
     };
     FixedLine FL_ATTR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Auswahl" ;
         Text [ English ] = "Choice" ;
         Text [ norwegian ] = "Choice" ;
@@ -399,18 +398,18 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     };
     OKButton BTN_ATTR_OK
     {
-        Pos = MAP_APPFONT ( 122 , 6 ) ;
+        Pos = MAP_APPFONT ( 136 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_ATTR_CANCEL
     {
-        Pos = MAP_APPFONT ( 122 , 23 ) ;
+        Pos = MAP_APPFONT ( 136 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_ATTR_HELP
     {
-        Pos = MAP_APPFONT ( 122 , 43 ) ;
+        Pos = MAP_APPFONT ( 136 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ chinese_simplified ] = " Ù–‘";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-26 14:26:30 $
+ *  last change: $Author: pb $ $Date: 2001-11-01 08:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,8 +1967,9 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
+    eState = rSet.GetItemState( nWhich );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( eState >= SFX_ITEM_DEFAULT )
     {
         const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
@@ -1990,6 +1991,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             }
         }
     }
+    else if ( eState == SFX_ITEM_DONTCARE )
+        m_aEmphasisLB.SetNoSelection( );
     else
     {
         m_aEmphasisFT.Disable( );

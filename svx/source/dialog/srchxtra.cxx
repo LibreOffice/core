@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: pb $ $Date: 2001-11-01 08:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,16 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
+#include "srchxtra.hxx"
+
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
@@ -73,44 +78,61 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
-#pragma hdrstop
 
-#include "srchxtra.hxx"
-
+#ifndef _SVX_DIALOGS_HRC
 #include "dialogs.hrc"
+#endif
+#ifndef _SVX_SRCHXTRA_HRC
 #include "srchxtra.hrc"
+#endif
+#ifndef _SVXITEMS_HRC
 #include "svxitems.hrc"
+#endif
 
+#ifndef _SVX_FLSTITEM_HXX
 #define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
 #include "flstitem.hxx"
-
+#endif
+#ifndef _SVX_CHARDLG_HXX
 #include "chardlg.hxx"
+#endif
+#ifndef _SVX_PARAGRPH_HXX
 #include "paragrph.hxx"
+#endif
+#ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <backgrnd.hxx>
+#endif
+#ifndef _SVX_BACKGRND_HXX
+#include "backgrnd.hxx"
 #endif
 
 // class SvxSearchFormatDialog -------------------------------------------
 
-SvxSearchFormatDialog::SvxSearchFormatDialog( Window* pParent,
-                                              const SfxItemSet& rSet ) :
+SvxSearchFormatDialog::SvxSearchFormatDialog( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHFORMAT ), &rSet )
+    SfxTabDialog( pParent, SVX_RES( RID_SVXDLG_SEARCHFORMAT ), &rSet ),
+
+    pFontList( NULL )
 
 {
-    AddTabPage( RID_SVXPAGE_CHAR_NAME,      SvxCharNamePage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS,   SvxCharEffectsPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION,  SvxCharPositionPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_CHAR_TWOLINES,  SvxCharTwoLinesPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,  SvxStdParagraphTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH,SvxParaAlignTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH,  SvxExtParagraphTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_PARA_ASIAN,     SvxAsianTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_BACKGROUND,     SvxBackgroundTabPage::Create, 0 );
-
-    pFontList = 0;
     FreeResource();
+
+    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_POSITION, SvxCharPositionPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_CHAR_TWOLINES, SvxCharTwoLinesPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH, SvxExtParagraphTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_BACKGROUND, SvxBackgroundTabPage::Create, 0 );
+
+    // remove asian tabpages if necessary
+    SvtCJKOptions aCJKOptions;
+    if ( !aCJKOptions.IsDoubleLinesEnabled() )
+        RemoveTabPage( RID_SVXPAGE_CHAR_TWOLINES );
+    if ( !aCJKOptions.IsAsianTypographyEnabled() )
+        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 }
 
 // -----------------------------------------------------------------------
@@ -187,11 +209,13 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 {
     FreeResource();
 
+    aAttrLB.SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    aAttrLB.GetModel()->SetSortMode( SortAscending );
+
     aOKBtn.SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    DBG_ASSERT( pSh, "Where is the DocShell?" );
-
+    DBG_ASSERT( pSh, "No DocShell" );
 
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
@@ -201,11 +225,9 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     while ( nWhich )
     {
         USHORT nSlot = rPool.GetSlotId( nWhich );
-
         if ( nSlot >= SID_SVX_START )
         {
             BOOL bChecked = FALSE, bFound = FALSE;
-
             for ( USHORT i = 0; !bFound && i < rList.Count(); ++i )
             {
                 if ( nSlot == rList[i].nSlot )
@@ -217,28 +239,29 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             }
 
             USHORT nResId = nSlot - SID_SVX_START + RID_ATTR_BEGIN;
-
-            if ( SID_ATTR_BRUSH_CHAR == nSlot )
-                // Sonderbehandlung f"ur Zeichenhintergrund
-                nResId = RID_SVXITEMS_BRUSH_CHAR;
-            else if ( SID_ATTR_CHAR_CHARSETCOLOR == nSlot )
-                // Sonderbehandlung f"ur Zeichensatzfarbe
-                nResId = RID_ATTR_CHAR_CHARSETCOLOR;
-
-            if ( ( nResId >= RID_ATTR_BEGIN && nResId < RID_ATTR_END ) ||
-                 RID_SVXITEMS_BRUSH_CHAR == nResId || RID_ATTR_CHAR_CHARSETCOLOR == nResId )
-                aAttrLB.InsertEntry( SVX_RESSTR( nResId ) );
+            SvLBoxEntry* pEntry = NULL;
+            ResId aId( nResId );
+            aId.SetRT( RSC_STRING );
+            if ( DIALOG_MGR()->IsAvailable( aId ) )
+                pEntry = aAttrLB.SvTreeListBox::InsertEntry( SVX_RESSTR( nResId ) );
             else
             {
-                DBG_ERRORFILE( "no resource for slot id" );
+                ByteString sError( "no resource for slot id\nslot = " );
+                sError += ByteString::CreateFromInt32( nSlot );
+                sError += ByteString( "\nresid = " );
+                sError += ByteString::CreateFromInt32( nResId );
+                DBG_ERRORFILE( sError.GetBuffer() );
             }
 
-            USHORT nPos = (USHORT)aAttrLB.GetEntryCount() - 1;
-            aAttrLB.CheckEntryPos( nPos, bChecked );
-            aAttrLB.SetEntryData( nPos, (void*)(ULONG)nSlot );
+            if ( pEntry )
+            {
+                aAttrLB.SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+                pEntry->SetUserData( (void*)(ULONG)nSlot );
+            }
         }
         nWhich = aIter.NextWhich();
     }
+
     aAttrLB.SetHighlightRange();
     aAttrLB.SelectEntryPos( 0 );
 }
@@ -273,14 +296,15 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
                 break;
             }
         }
-        if( !j && bChecked )
+
+        if ( !j && bChecked )
         {
             aInvalidItem.nSlot = nSlot;
             rList.Insert( aInvalidItem );
         }
     }
 
-    // ung"ultige Items entfernen (pItem == 0)
+    // remove invalid items (pItem == NULL)
     for ( USHORT n = rList.Count(); n; )
         if ( !rList[ --n ].pItem )
             rList.Remove( n );
@@ -322,5 +346,4 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
     aLongerFld.SetValue( nLonger );
     aRelaxBox.Check( bRelax );
 }
-
 

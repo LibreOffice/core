@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:39:10 $
+ *  last change: $Author: pb $ $Date: 2001-11-01 08:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,7 +1129,6 @@ String RID_SVXITEMS_COLOR_BLUE
 };
 String RID_SVXITEMS_COLOR_GREEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
     Text = "Grün" ;
     Text [ English ] = "Green" ;
     Text [ norwegian ] = "Green" ;
@@ -1346,7 +1345,6 @@ String RID_SVXITEMS_COLOR_LIGHTBLUE
 };
 String RID_SVXITEMS_COLOR_LIGHTGREEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
     Text = "Hellgrün" ;
     Text [ English ] = "Light Green" ;
     Text [ norwegian ] = "Lys Grønn" ;
@@ -1482,7 +1480,6 @@ String RID_SVXITEMS_COLOR_YELLOW
 };
 String RID_SVXITEMS_COLOR_WHITE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
     Text = "Weiß" ;
     Text [ English ] = "White" ;
     Text [ norwegian ] = "White" ;
@@ -1598,7 +1595,6 @@ String RID_SVXITEMS_ITALIC_NONE
 };
 String RID_SVXITEMS_ITALIC_OBLIQUE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Schräger kursiv : Schrõger kursiv */
     Text = "Schräger kursiv" ;
     Text [ English ] = "Oblique italic" ;
     Text [ norwegian ] = "+++Oblique kursiv" ;
@@ -1658,7 +1654,6 @@ String RID_SVXITEMS_WEIGHT_DONTKNOW
 };
 String RID_SVXITEMS_WEIGHT_THIN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? dünn : d³nn */
     Text = "dünn" ;
     Text [ English ] = "thin" ;
     Text [ norwegian ] = "tynn" ;
@@ -1686,7 +1681,6 @@ String RID_SVXITEMS_WEIGHT_THIN
 };
 String RID_SVXITEMS_WEIGHT_ULTRALIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ultra dünn : ultra d³nn */
     Text = "ultra dünn" ;
     Text [ English ] = "ultra thin" ;
     Text [ norwegian ] = "ultra tynn" ;
@@ -2698,7 +2692,6 @@ String RID_SVXITEMS_CASEMAP_TITEL
 };
 String RID_SVXITEMS_CASEMAP_KAPITAELCHEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Kapitälchen : Kapitõlchen */
     Text = "Kapitälchen" ;
     Text [ English ] = "Small caps" ;
     Text [ norwegian ] = "Små bokstaver" ;
@@ -3042,7 +3035,6 @@ String RID_SVXITEMS_TAB_DECIMAL_CHAR
 };
 String RID_SVXITEMS_TAB_FILL_CHAR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Füllzeichen: : F³llzeichen: */
     Text = "Füllzeichen:" ;
     Text [ English ] = "Fill-Char:" ;
     Text [ norwegian ] = "Fyll-Tegn:" ;
@@ -3206,7 +3198,6 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
  // Typ-Namen der SlotIds ----------------------------------------------------
 String RID_ATTR_ZOOM
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maßstab : Ma˜stab */
     Text = "Maßstab" ;
     Text [ English ] = "Zoom" ;
     Text [ norwegian ] = "Zoom" ;
@@ -3354,7 +3345,7 @@ String RID_ATTR_CHAR_FONT
 };
 String RID_ATTR_CHAR_POSTURE
 {
-    Text = "Fontstellung" ;
+    Text = "Schriftstellung" ;
     Text [ English ] = "Fontposture" ;
     Text [ norwegian ] = "Skriftstilling" ;
     Text [ italian ] = "Orientamento del font" ;
@@ -3381,8 +3372,7 @@ String RID_ATTR_CHAR_POSTURE
 };
 String RID_ATTR_CHAR_WEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fontstärke : Fontstõrke */
-    Text = "Fontstärke" ;
+    Text = "Schriftstärke" ;
     Text [ English ] = "Fontweight" ;
     Text [ norwegian ] = "Skriftvekt" ;
     Text [ italian ] = "Spessore del font" ;
@@ -3490,8 +3480,6 @@ String RID_ATTR_CHAR_CONTOUR
 };
 String RID_ATTR_CHAR_STRIKEOUT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgestrichen : Durchstrichen */
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgestrichen : Durchstrichen */
     Text = "Durchgestrichen" ;
     Text [ English ] = "Cross out" ;
     Text [ norwegian ] = "Stryk ut" ;
@@ -3546,8 +3534,7 @@ String RID_ATTR_CHAR_UNDERLINE
 };
 String RID_ATTR_CHAR_FONTHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fonthöhe : Fonth÷he */
-    Text = "Fonthöhe" ;
+    Text = "Schriftgrad" ;
     Text [ English ] = "Fontheight" ;
     Text [ norwegian ] = "Skrifthøyde" ;
     Text [ italian ] = "Altezza font" ;
@@ -3574,8 +3561,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
 };
 String RID_ATTR_CHAR_PROPSIZE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rel. Fontgröße : Rel. Fontgr÷˜e */
-    Text = "Rel. Fontgröße" ;
+    Text = "Rel. Schriftgröße" ;
     Text [ English ] = "rel. Fontsize" ;
     Text [ norwegian ] = "rel. Skriftstørrelse" ;
     Text [ italian ] = "Dimensione font rel." ;
@@ -3602,7 +3588,7 @@ String RID_ATTR_CHAR_PROPSIZE
 };
 String RID_ATTR_CHAR_COLOR
 {
-    Text = "Fontfarbe" ;
+    Text = "Schriftfarbe" ;
     Text [ English ] = "Fontcolor" ;
     Text [ norwegian ] = "Skriftfarge" ;
     Text [ italian ] = "Colore font" ;
@@ -4286,7 +4272,6 @@ String RID_ATTR_PARA_MODEL
 };
 String RID_ATTR_PARA_KEEP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Absätze zusammenhalten : Absõtze zusammenhalten */
     Text = "Absätze zusammenhalten" ;
     Text [ English ] = "Keep paragraphs together" ;
     Text [ norwegian ] = "Hold avsnitt samlet" ;
@@ -4311,6 +4296,116 @@ String RID_ATTR_PARA_KEEP
     Text[ turkish ] = "Paragraflarý bir arada tut";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mantener párrafos juntos";
+};
+String RID_ATTR_FLASH
+{
+    Text = "Blinkend" ;
+    Text [ english_us ] = "Blinking" ;
+};
+String RID_ATTR_PARA_REGISTER
+{
+    Text = "Registerhaltigkeit" ;
+    Text [ english_us ] = "Register-true" ;
+};
+String RID_ATTR_BRUSH_CHAR
+{
+    Text = "Zeichenhintergrund" ;
+    Text[ english_us ] = "Character Background";
+};
+String RID_ATTR_CHAR_CJK_FONT
+{
+    Text = "Asiatische Schrift" ;
+    Text [ english_us ] = "Asian Font" ;
+};
+String RID_ATTR_CHAR_CJK_FONTHEIGHT
+{
+    Text = "Schriftgrad asiatische Schrift" ;
+    Text [ english_us ] = "Size asian font" ;
+};
+String RID_ATTR_CHAR_CJK_LANGUAGE
+{
+    Text = "Sprache asiatische Schrift" ;
+    Text [ english_us ] = "Language asian font" ;
+};
+String RID_ATTR_CHAR_CJK_POSTURE
+{
+    Text = "Schriftstellung asiatische Schrift" ;
+    Text [ english_us ] = "Posture asian font" ;
+};
+String RID_ATTR_CHAR_CJK_WEIGHT
+{
+    Text = "Schriftstärke asiatische Schrift" ;
+    Text [ english_us ] = "Weight asian font" ;
+};
+String RID_ATTR_CHAR_CTL_FONT
+{
+    Text = "Komplexe Skripte" ;
+    Text [ english_us ] = "Complex scripts" ;
+};
+String RID_ATTR_CHAR_CTL_FONTHEIGHT
+{
+    Text = "Schriftgrad komplexe Skripte" ;
+    Text [ english_us ] = "Size complex scripts" ;
+};
+String RID_ATTR_CHAR_CTL_LANGUAGE
+{
+    Text = "Sprache komplexe Skripte" ;
+    Text [ english_us ] = "Language complex scripts" ;
+};
+String RID_ATTR_CHAR_CTL_POSTURE
+{
+    Text = "Schriftstellung komplexe Skripte" ;
+    Text [ english_us ] = "Posture complex scripts" ;
+};
+String RID_ATTR_CHAR_CTL_WEIGHT
+{
+    Text = "Schriftstärke komplexe Skripte" ;
+    Text [ english_us ] = "Weight complex scripts" ;
+};
+String RID_ATTR_CHAR_TWO_LINES
+{
+    Text = "Doppelzeilig";
+    Text [ english_us ] = "Double lined" ;
+};
+String RID_ATTR_CHAR_EMPHASISMARK
+{
+    Text = "Betonungszeichen";
+    Text [ english_us ] = "Emphasis mark" ;
+};
+String RID_ATTR_PARA_SCRIPTSPACE
+{
+    Text = "Text Abstand" ;
+    Text[ english_us ] = "Text spacing";
+};
+String RID_ATTR_PARA_HANGPUNCTUATION
+{
+    Text = "Hängende Interpunktion" ;
+    Text[ english_us ] = "Hanging punctuation";
+};
+String RID_ATTR_PARA_FORBIDDEN_RULES
+{
+    Text = "Verbotene Zeichen" ;
+    Text[ english_us ] = "Forbidden characters";
+};
+String RID_ATTR_CHAR_ROTATED
+{
+    Text = "Rotation";
+    Text [ english_us ] = "Rotation" ;
+};
+String RID_ATTR_CHAR_SCALEWIDTH
+{
+    Text = "Skalierung";
+    Text [ english_us ] = "Scaling" ;
+};
+String RID_ATTR_CHAR_RELIEF
+{
+    Text = "Relief" ;
+    Text[ english_us ] = "Relief";
+};
+String RID_PARA_VERTALIGN
+{
+    Text = "Vertikale Textausrichtung" ;
+    Text[ english_us ] = "Vertical text alignment";
 };
 String RID_SINGLE_LINE0
 {
@@ -4340,7 +4435,6 @@ String RID_SINGLE_LINE0
 };
 String RID_SINGLE_LINE1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Einfach, dünn : Einfach, d³nn */
     Text = "Einfach, dünn" ;
     Text [ English ] = "Single, thin" ;
     Text [ portuguese ] = "Simples, fina" ;
@@ -4471,7 +4565,6 @@ String RID_DOUBLE_LINE0
 };
 String RID_DOUBLE_LINE1
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Haarlinie, Abstand: groß : Doppelt, Haarlinie, Abstand: gro˜ */
     Text = "Doppelt, Haarlinie, Abstand: groß" ;
     Text [ English ] = "Double, Fine line, Dist.: big" ;
     Text [ portuguese ] = "Dupla, linha fina, espaçamento: grande" ;
@@ -4498,7 +4591,6 @@ String RID_DOUBLE_LINE1
 };
 String RID_DOUBLE_LINE2
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, dünn, Abstand: klein : Doppelt, d³nn, Abstand: klein */
     Text = "Doppelt, dünn, Abstand: klein" ;
     Text [ English ] = "Double, thin, Dist.: small" ;
     Text [ portuguese ] = "Dupla, fina, espaçamento: pequeno" ;
@@ -4525,7 +4617,6 @@ String RID_DOUBLE_LINE2
 };
 String RID_DOUBLE_LINE3
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, dick, Abstand: groß : Doppelt, dick, Abstand: gro˜ */
     Text = "Doppelt, dick, Abstand: groß" ;
     Text [ English ] = "Double, thin, Dist.: big" ;
     Text [ portuguese ] = "Dupla, grossa, espaçamento: grande" ;
@@ -4552,7 +4643,6 @@ String RID_DOUBLE_LINE3
 };
 String RID_DOUBLE_LINE4
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: Haarlinie, Außen: dünn, Abstand: groß : Doppelt, Innen: Haarlinie, Au˜en: d³nn, Abstand: gro˜ */
     Text = "Doppelt, Innen: Haarlinie, Außen: dünn, Abstand: groß" ;
     Text [ English ] = "Double, In: Fine line, Out: thin, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: fina, Espaçamento: grande" ;
@@ -4579,7 +4669,6 @@ String RID_DOUBLE_LINE4
 };
 String RID_DOUBLE_LINE5
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: Haarlinie, Außen: dick, Abstand: groß : Doppelt, Innen: Haarlinie, Au˜en: dick, Abstand: gro˜ */
     Text = "Doppelt, Innen: Haarlinie, Außen: dick, Abstand: groß" ;
     Text [ English ] = "Double, In: Fine line, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: grossa, Espaçamento: grande" ;
@@ -4606,7 +4695,6 @@ String RID_DOUBLE_LINE5
 };
 String RID_DOUBLE_LINE6
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: Haarlinie, Außen: sehr dick, Abstand: groß : Doppelt, Innen: Haarlinie, Au˜en: sehr dick, Abstand: gro˜ */
     Text = "Doppelt, Innen: Haarlinie, Außen: sehr dick, Abstand: groß" ;
     Text [ English ] = "Double, In: Fine line, Out: very thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: linhas finas, Exterior: muito grossa, Espaçamento: grande" ;
@@ -4633,7 +4721,6 @@ String RID_DOUBLE_LINE6
 };
 String RID_DOUBLE_LINE7
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: dünn, Außen: dick, Abstand: groß : Doppelt, Innen: d³nn, Au˜en: dick, Abstand: gro˜ */
     Text = "Doppelt, Innen: dünn, Außen: dick, Abstand: groß" ;
     Text [ English ] = "Double, In: thin, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: fina, Exterior: grossa, Espaçamento: grande" ;
@@ -4660,7 +4747,6 @@ String RID_DOUBLE_LINE7
 };
 String RID_DOUBLE_LINE8
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: dick, Außen: dünn, Abstand: klein : Doppelt, Innen: dick, Au˜en: d³nn, Abstand: klein */
     Text = "Doppelt, Innen: dick, Außen: dünn, Abstand: klein" ;
     Text [ English ] = "Double, In: thick, Out: thin, Dist.: small" ;
     Text [ portuguese ] = "Dupla, Interior: grossa, Exterior: fina, Espaçamento: pequeno" ;
@@ -4687,7 +4773,6 @@ String RID_DOUBLE_LINE8
 };
 String RID_DOUBLE_LINE9
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: dick, Außen: sehr dick, Abstand: groß : Doppelt, Innen: dick, Au˜en: sehr dick, Abstand: gro˜ */
     Text = "Doppelt, Innen: dick, Außen: sehr dick, Abstand: groß" ;
     Text [ English ] = "Double, In: thick, Out: very thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: grossa, Exterior: muito grossa, Espaçamento: grande" ;
@@ -4714,7 +4799,6 @@ String RID_DOUBLE_LINE9
 };
 String RID_DOUBLE_LINE10
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Doppelt, Innen: sehr dick, Außen: dick, Abstand: groß : Doppelt, Innen: sehr dick, Au˜en: dick, Abstand: gro˜ */
     Text = "Doppelt, Innen: sehr dick, Außen: dick, Abstand: groß" ;
     Text [ English ] = "Double, In: very thick, Out: thick, Dist.: big" ;
     Text [ portuguese ] = "Dupla, Interior: muito grossa, Exterior: grossa, Espaçamento: grande" ;
@@ -5116,7 +5200,6 @@ String RID_SVXITEMS_ORI_BOTTOMTOP
 };
 String RID_SVXITEMS_ORI_STACKED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Übereinander : šbereinander */
     Text = "Übereinander" ;
     Text [ ENGLISH ] = "Stacked" ;
     Text [ norwegian ] = "Stablet" ;
@@ -5537,7 +5620,6 @@ String RID_SVXITEMS_OPAQUE_FALSE
 };
 String RID_SVXITEMS_FMTKEEP_TRUE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Absätze zusammenhalten : Absõtze zusammenhalten */
     Text = "Absätze zusammenhalten" ;
     Text [ ENGLISH ] = "Keep Paragraphs Together" ;
     Text [ norwegian ] = "Hold Avsnittene Samlet" ;
@@ -5565,7 +5647,6 @@ String RID_SVXITEMS_FMTKEEP_TRUE
 };
 String RID_SVXITEMS_FMTKEEP_FALSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Absätze nicht zusammenhalten : Absõtze nicht zusammenhalten */
     Text = "Absätze nicht zusammenhalten" ;
     Text [ ENGLISH ] = "Not Keep Paragraphs Together" ;
     Text [ norwegian ] = "Hold ikke Avsnittene Samlet" ;
@@ -5647,7 +5728,6 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
 };
 String RID_SVXITEMS_PROT_CONTENT_TRUE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Inhalt geschützt : Inhalt gesch³tzt */
     Text = "Inhalt geschützt" ;
     Text [ ENGLISH ] = "Content protected" ;
     Text [ norwegian ] = "Innholdsbeskyttet" ;
@@ -5675,7 +5755,6 @@ String RID_SVXITEMS_PROT_CONTENT_TRUE
 };
 String RID_SVXITEMS_PROT_CONTENT_FALSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Inhalt nicht geschützt : Inhalt nicht gesch³tzt */
     Text = "Inhalt nicht geschützt" ;
     Text [ ENGLISH ] = "Content not protected" ;
     Text [ norwegian ] = "Innhold ikke beskyttet" ;
@@ -5703,7 +5782,6 @@ String RID_SVXITEMS_PROT_CONTENT_FALSE
 };
 String RID_SVXITEMS_PROT_SIZE_TRUE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größe geschützt : Gr÷˜e gesch³tzt */
     Text = "Größe geschützt" ;
     Text [ ENGLISH ] = "Size protected" ;
     Text [ norwegian ] = "SørrelsesbeskyttetSize protected" ;
@@ -5731,7 +5809,6 @@ String RID_SVXITEMS_PROT_SIZE_TRUE
 };
 String RID_SVXITEMS_PROT_SIZE_FALSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Größe nicht geschützt : Gr÷˜e nicht gesch³tzt */
     Text = "Größe nicht geschützt" ;
     Text [ ENGLISH ] = "Size not protected" ;
     Text [ norwegian ] = "Størrelse ikke beskyttet" ;
@@ -5759,7 +5836,6 @@ String RID_SVXITEMS_PROT_SIZE_FALSE
 };
 String RID_SVXITEMS_PROT_POS_TRUE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Position geschützt : Position gesch³tzt */
     Text = "Position geschützt" ;
     Text [ ENGLISH ] = "Position protected" ;
     Text [ norwegian ] = "Posisjonsbeskyttet" ;
@@ -5787,7 +5863,6 @@ String RID_SVXITEMS_PROT_POS_TRUE
 };
 String RID_SVXITEMS_PROT_POS_FALSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Position nicht geschützt : Position nicht gesch³tzt */
     Text = "Position nicht geschützt" ;
     Text [ ENGLISH ] = "Position not protected" ;
     Text [ norwegian ] = "Posisjon ikke beskyttet" ;
@@ -6274,7 +6349,6 @@ String RID_SVXITEMS_SIZE_WIDTH
 };
 String RID_SVXITEMS_SIZE_HEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Höhe:  : H÷he:  */
     Text = "Höhe: " ;
     Text [ English ] = "Height: " ;
     Text [ norwegian ] = "Høyde: " ;
@@ -6678,7 +6752,6 @@ String RID_SVXITEMS_PAGE_COMPLETE
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Großbuchstaben : Gro˜buchstaben */
     Text = "Großbuchstaben" ;
     Text [ English ] = "Capitals" ;
     Text [ norwegian ] = "Store Bokstaver" ;
@@ -6733,7 +6806,6 @@ String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Römisch groß : R÷misch gro˜ */
     Text = "Römisch groß" ;
     Text [ English ] = "Capital roman" ;
     Text [ norwegian ] = "Stor bokstav roman" ;
@@ -6761,7 +6833,6 @@ String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Römisch klein : R÷misch klein */
     Text = "Römisch klein" ;
     Text [ English ] = "Lower case roman" ;
     Text [ norwegian ] = "Små bokstaver roman" ;
