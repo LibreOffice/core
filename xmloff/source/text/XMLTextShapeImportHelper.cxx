@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 11:41:56 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 18:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,9 @@ void XMLTextShapeImportHelper::addShape(
 {
     if( rShapes.is() )
     {
-        // It's a group shape, so we have to call the base class method.
+        // It's a group shape or 3DScene , so we have to call the base class method.
         XMLShapeImportHelper::addShape( rShape, xAttrList, rShapes );
+        return;
     }
 
     TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
