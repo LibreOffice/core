@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-17 07:37:01 $
+ *  last change: $Author: oj $ $Date: 2000-11-27 08:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,9 @@ void ODbaseTable::fillColumns()
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
+        m_aTypes.push_back(eType);
+        m_aPrecisions.push_back(nPrecision);
+        m_aScales.push_back(aDBFColumn.db_dez);
     }
 }
 // -------------------------------------------------------------------------
@@ -646,7 +649,7 @@ End:
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool bRetrieveData)
+sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
 {
     // Einlesen der Daten
     BOOL bIsCurRecordDeleted = ((char)m_pBuffer[0] == '*') ? TRUE : sal_False;
@@ -672,13 +675,25 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
-        xColumn->getPropertyValue(PROPERTY_PRECISION) >>= nLen;
-        sal_Int32 nType = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+        sal_Int32 nType;
+        if(_bUseTableDefs)
+        {
+            nLen    = m_aPrecisions[(_rCols.end()-aIter)-1];
+            nType   = m_aTypes[(_rCols.end()-aIter)-1];
+        }
+        else
+        {
+            xColumn->getPropertyValue(PROPERTY_PRECISION)   >>= nLen;
+            xColumn->getPropertyValue(PROPERTY_TYPE)        >>= nType;
+        }
         switch(nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(PROPERTY_SCALE)));
+                if(_bUseTableDefs)
+                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[(_rCols.end()-aIter)-1]);
+                else
+                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(PROPERTY_SCALE)));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
@@ -1350,7 +1365,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 
     OValueRow aRow = new OValueVector(_rCols.size());
 
-    if (!fetchRow(aRow,_rCols,TRUE))
+    if (!fetchRow(aRow,_rCols,TRUE,TRUE))
         return sal_False;
 
     Reference<XPropertySet> xCol;
@@ -1837,3 +1852,4 @@ BOOL ODbaseTable::WriteBuffer()
     return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
 }
 // -----------------------------------------------------------------------------
+
