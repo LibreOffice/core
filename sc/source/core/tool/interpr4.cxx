@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:52:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,6 +1595,52 @@ const String& ScInterpreter::GetString()
             SetError(errIllegalParameter);
     }
     return EMPTY_STRING;
+}
+
+
+
+ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
+        String& rString )
+{
+    ScMatValType nMatValType = SC_MATVAL_EMPTY;
+    switch ( GetStackType() )
+    {
+        case svMatrix:
+            {
+                const ScMatrixValue* pMatVal = 0;
+                ScMatrixRef pMat = PopMatrix();
+                if (!pMat)
+                    ;   // nothing
+                else if (!pJumpMatrix)
+                    pMatVal = pMat->Get( 0, 0, nMatValType);
+                else
+                {
+                    SCSIZE nCols, nRows, nC, nR;
+                    pMat->GetDimensions( nCols, nRows);
+                    pJumpMatrix->GetPos( nC, nR);
+                    if ( nC < nCols && nR < nRows )
+                        pMatVal = pMat->Get( nC, nR, nMatValType);
+                    else
+                        SetError( errNoValue);
+                }
+                if (!pMatVal)
+                {
+                    rDouble = 0.0;
+                    rString.Erase();
+                }
+                else if (nMatValType == SC_MATVAL_VALUE)
+                    rDouble = pMatVal->fVal;
+                else
+                    rString = pMatVal->GetString();
+            }
+            break;
+        default:
+            Pop();
+            rDouble = 0.0;
+            rString.Erase();
+            SetError( errIllegalParameter);
+    }
+    return nMatValType;
 }
 
 
@@ -3637,11 +3683,11 @@ StackVar ScInterpreter::Interpret()
                     pResult = PopMatrix();
                     if (pResult)
                     {
-                        BOOL bIsString;
-                        const MatValue* pMatVal = pResult->Get(0, 0, bIsString);
+                        ScMatValType nMatValType;
+                        const ScMatrixValue* pMatVal = pResult->Get(0, 0, nMatValType);
                         if ( pMatVal )
                         {
-                            if (bIsString)
+                            if (nMatValType != SC_MATVAL_VALUE)
                             {
                                 if ( pResult->IsEmptyPath( 0, 0))
                                 {   // result of empty FALSE jump path
