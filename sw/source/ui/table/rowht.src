@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:11:41 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,4 +188,5 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ turkish ] = "Satýr yüksekliði";
     Text[ catalan ] = "Altura de fila";
 };
+
 
