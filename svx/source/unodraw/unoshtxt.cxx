@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:07:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,21 +379,21 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 mbDestroyed = TRUE;
                 break;
 
-            case HINT_OBJLISTCLEAR:
-            {
-                SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
-                while( pObjList )
-                {
-                    if( pSdrHint->GetObjList() == pObjList )
-                    {
-                        mbDestroyed = sal_True;
-                        break;
-                    }
-
-                    pObjList = pObjList->GetUpList();
-                }
-                break;
-            }
+            // #110094#-9
+            //case HINT_OBJLISTCLEAR:
+            //{
+            //    SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
+            //    while( pObjList )
+            //    {
+            //        if( pSdrHint->GetObjList() == pObjList )
+            //        {
+            //            mbDestroyed = sal_True;
+            //            break;
+            //        }
+            //        pObjList = pObjList->GetUpList();
+            //    }
+            //    break;
+            //}
 
             case HINT_BEGEDIT:
                 if( mpObject == pSdrHint->GetObject() )
@@ -505,7 +505,7 @@ void SvxTextEditSourceImpl::SetupOutliner()
         Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // #101029# calc text offset from shape anchor
@@ -528,7 +528,7 @@ void SvxTextEditSourceImpl::UpdateOutliner()
         Rectangle aPaintRect;
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
 
             // #101029# calc text offset from shape anchor
@@ -744,7 +744,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
         if( pTextObj )
         {
-            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
             OutlinerView& rOutlView = *mpView->GetTextEditOutlinerView();
 
             return new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() );
