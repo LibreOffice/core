@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpreader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2003-11-24 17:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,11 @@ throw(SAXException, IOException, RuntimeException)
 
     if (hwpfile.ReadHwpFile(stream))
     {
+#ifdef UDK100
         throw SAXException();
+#else
+          return sal_False;
+#endif
     }
 
     rDocumentHandler->startDocument();
