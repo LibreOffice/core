@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 15:34:40 $
+ *  last change: $Author: cl $ $Date: 2002-04-04 10:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,20 @@
 #include <vector>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+
 #include "unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
+using namespace ::vos;
 
 typedef std::vector< SfxItemSet* > ItemPoolVector;
 
@@ -241,6 +250,8 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
 void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if( hasByName( aApiName ) )
         throw container::ElementExistException();
 
@@ -253,6 +264,8 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const u
 void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     String Name;
     SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, Name );
 
@@ -282,6 +295,8 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     String aName;
     SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
 
@@ -369,6 +384,8 @@ static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool
 uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     String aName;
     SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
 
@@ -416,6 +433,8 @@ static void createNamesForPool( SfxItemPool* pPool, USHORT nWhich, std::set< OUS
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     throw( uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     std::set< OUString, comphelper::UStringLess > aNameSet;
 
     // search model pool for line starts
@@ -441,6 +460,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     throw( uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if( aName.getLength() == 0 )
         return sal_False;
 
@@ -480,6 +501,8 @@ uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     throw( uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     NameOrIndex *pItem;
 
     const USHORT nStartCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;
