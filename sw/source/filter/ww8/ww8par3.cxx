@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:51:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     aFormula.sDefault = GetFieldResult(pF);
 
     //substituting Unicode spacing 0x2002 with double space for layout
-    aFormula.sDefault.SearchAndReplaceAll(String(0x2002),
+    aFormula.sDefault.SearchAndReplaceAll(
+        String(static_cast< sal_Unicode >(0x2002)),
         CREATE_CONST_ASC("  "));
 
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
