@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:57:49 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 16:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( com::sun::star::ucb::ContentCreationException& )
+    catch( ContentCreationException& )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
@@ -543,7 +543,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     INetURLObject aURL( rFolder );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     String aNewFolderURL = aURL.GetMainURL();
-    String aTitle = aURL.getName();
+    String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
