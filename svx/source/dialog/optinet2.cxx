@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:41:07 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1982,10 +1982,25 @@ SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet) :
 {
     FreeResource();
 
-    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
+    aMailerURLPB.SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
 
-    Link aLink(LINK(this, SvxEMailTabPage, FileDialogHdl_Impl));
-    aMailerURLPB.SetClickHdl(aLink);
+    // FixedText not wide enough?
+    long nTxtW = aMailerURLFT.GetCtrlTextWidth( aMailerURLFT.GetText() );
+    long nCtrlW = aMailerURLFT.GetSizePixel().Width();
+    if ( nTxtW >= nCtrlW )
+    {
+        long nDelta = Max( (long)10, nTxtW - nCtrlW );
+        // so FixedText wider
+        Size aNewSz = aMailerURLFT.GetSizePixel();
+        aNewSz.Width() += nDelta;
+        aMailerURLFT.SetSizePixel( aNewSz );
+        // and Edit smaller
+        aNewSz = aMailerURLED.GetSizePixel();
+        aNewSz.Width() -= nDelta;
+        Point aNewPt = aMailerURLED.GetPosPixel();
+        aNewPt.X() += nDelta;
+        aMailerURLED.SetPosSizePixel( aNewPt, aNewSz );
+    }
 }
 
 /* -------------------------------------------------------------------------*/
