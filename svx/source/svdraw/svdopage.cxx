@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:24:35 $
+ *  last change: $Author: aw $ $Date: 2001-02-06 12:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,16 @@
 
 TYPEINIT1(SdrPageObj,SdrObject);
 
-
 SdrPageObj::SdrPageObj(USHORT nNewPageNum):
+    mpPageItemSet(0L),
     nPageNum(nNewPageNum),
     bPainting(FALSE),
     bNotifying(FALSE)
 {
 }
 
-
 SdrPageObj::SdrPageObj(const Rectangle& rRect, USHORT nNewPageNum):
+    mpPageItemSet(0L),
     nPageNum(nNewPageNum),
     bPainting(FALSE),
     bNotifying(FALSE)
@@ -95,6 +95,28 @@ SdrPageObj::SdrPageObj(const Rectangle& rRect, USHORT nNewPageNum):
     aOutRect=rRect;
 }
 
+SdrPageObj::~SdrPageObj()
+{
+    if(mpPageItemSet)
+        delete mpPageItemSet;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// ItemSet access
+
+const SfxItemSet& SdrPageObj::GetItemSet() const
+{
+    if(!mpPageItemSet)
+        ((SdrPageObj*)this)->mpPageItemSet = ((SdrPageObj*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+    return *mpPageItemSet;
+}
+
+SfxItemSet* SdrPageObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    return new SfxItemSet(rPool);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void __EXPORT SdrPageObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const SfxHint& rHint, const TypeId&)
 {
@@ -487,11 +509,6 @@ void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     aCompat.SetID("SdrPageObj");
 #endif
     rIn>>nPageNum;
-}
-
-SfxItemSet* SdrPageObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    return new SfxItemSet(rPool);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
