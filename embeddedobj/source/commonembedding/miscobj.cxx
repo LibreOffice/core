@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 15:59:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,8 +295,6 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 //------------------------------------------------------
 OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
-    OSL_ENSURE( !m_pInterfaceContainer && !m_pDocHolder, "The object was not closed! DISASTER is possible!" );
-
     if ( m_pInterfaceContainer || m_pDocHolder )
     {
         m_refCount++;
@@ -379,6 +377,10 @@ void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
                 {
                     aIt.remove();
                 }
+
+                // the listener could dispose the object.
+                if ( m_bDisposed )
+                    return;
             }
         }
     }
@@ -398,6 +400,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
                     static_cast< embed::XCommonEmbedPersist* >( static_cast< embed::XEmbedPersist* >( this ) ),
                     static_cast< embed::XEmbedPersist* >( this ),
                     static_cast< embed::XLinkageSupport* >( this ),
+                    static_cast< embed::XStateChangeBroadcaster* >( this ),
                     static_cast< embed::XClassifiedObject* >( this ),
                     static_cast< embed::XComponentSupplier* >( this ),
                     static_cast< util::XCloseable* >( this ),
@@ -616,9 +619,6 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         m_pInterfaceContainer->disposeAndClear( aSource );
-
-        delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
     }
 
     m_bDisposed = sal_True; // the object is disposed now for outside
