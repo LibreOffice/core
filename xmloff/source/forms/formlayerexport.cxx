@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 19:02:16 $
+ *  last change: $Author: mh $ $Date: 2000-11-29 10:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
 
 #ifndef _XMLOFF_FORMLAYEREXPORT_HXX_
 #include "formlayerexport.hxx"
@@ -164,6 +166,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/17 19:02:16  fs
+ *  initial checkin - export and/or import the applications form layer
+ *
  *
  *  Revision 1.0 13.11.00 14:58:17  fs
  ************************************************************************/
