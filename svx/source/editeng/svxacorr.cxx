@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 17:16:06 $
+ *  last change: $Author: hjs $ $Date: 2000-11-02 13:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 #include <unotools/charclass.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL_
-#include <com/sun/star/i18n/unicodetype.hdl>
+#include <com/sun/star/i18n/UnicodeType.hdl>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -194,6 +194,7 @@ BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
 #endif
         if( ::com::sun::star::i18n::UnicodeType::PRIVATE_USE ==
                 rCC.getType( rTxt, nStt ))
+            ;
     }
     return FALSE;
 }
