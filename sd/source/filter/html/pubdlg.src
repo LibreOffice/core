@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:17:58 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,12 +131,12 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~New design";
         Text[ portuguese ] = "~Nova configuração";
         Text[ danish ] = "Nyt design";
-        Text[ french ] = "~Nouveau design";
+        Text[ french ] = "Nouveau design";
         Text[ swedish ] = "Ny ~design";
         Text[ dutch ] = "~Nieuw design";
         Text[ spanish ] = "~Nuevo diseño";
         Text[ english_us ] = "New design";
-        Text[ chinese_simplified ] = "æ–°è®¾è®¡æ¨¡æ¿";
+        Text[ chinese_simplified ] = "æ–°çš„è®¾è®¡æ¨¡æ¿";
         Text[ russian ] = "~Íîâûé äèçàéí";
         Text[ polish ] = "Nowy projekt";
         Text[ japanese ] = "æ–°ã—ã„ãƒ‡ã‚¶ã‚¤ãƒ³";
@@ -161,7 +161,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Existing design";
         Text[ portuguese ] = "~Configuração existente";
         Text[ danish ] = "Eksisterende design";
-        Text[ french ] = "~Design existant";
+        Text[ french ] = "Design existant";
         Text[ swedish ] = "~Existerande design";
         Text[ dutch ] = "~Bestaand design";
         Text[ spanish ] = "~Diseño existente";
@@ -202,17 +202,17 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Delete selected design";
         Text[ portuguese ] = "~Eliminar configuração existente";
         Text[ danish ] = "Slet markeret design";
-        Text[ french ] = "~Supprimer le design sélectionné";
+        Text[ french ] = "Supprimer le design sélectionné";
         Text[ swedish ] = "~Radera markerad design";
         Text[ dutch ] = "~Gemarkeerd design wissen";
         Text[ spanish ] = "~Eliminar el diseño seleccionado";
         Text[ english_us ] = "Delete Selected Design";
-        Text[ chinese_simplified ] = "åˆ é™¤é€‰æ‹©çš„è®¾è®¡æ¨¡æ¿";
+        Text[ chinese_simplified ] = "åˆ é™¤é€‰ä¸­çš„è®¾è®¡æ¨¡æ¿";
         Text[ russian ] = "Óäàëèòü âûäåëåííûé äèçàéí";
         Text[ polish ] = "Usuñ zaznaczony projekt";
-        Text[ japanese ] = "ãƒãƒ¼ã‚¯ã—ãŸãƒ‡ã‚¶ã‚¤ãƒ³ã®å‰Šé™¤";
+        Text[ japanese ] = "é¸æŠã—ãŸãƒ‡ã‚¶ã‚¤ãƒ³ã®å‰Šé™¤";
         Text[ greek ] = "ÄéáãñáöŞ åğé~ëåãìİíïõ ó÷åäßïõ";
-        Text[ korean ] = "ì„ íƒí‘œì‹œëœ ë””ìì¸ ì‚­ì œ";
+        Text[ korean ] = "ì„ íƒëœ ë””ìì¸ ì‚­ì œ";
         Text[ chinese_traditional ] = "åˆªé™¤é¸å–çš„è¨­è¨ˆæ¨¡æ¿";
         Text[ arabic ] = "ÍĞİ ÇáÊÕãíã ÇáãÍÏÏ";
         Text[ turkish ] = "Seçili tasarımı sil";
@@ -240,7 +240,7 @@ ModalDialog DLG_PUBLISHING
         Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªç°å­˜çš„è®¾è®¡æ¨¡æ¿æˆ–è€…æ‚¨å»ºç«‹ä¸€ä¸ªæ–°çš„";
         Text[ russian ] = "Âûáåğèòå ñóùåñòâóşùèé äèçàéí èëè ñîçäàéòå íîâûé";
         Text[ polish ] = "Wybierz gotowy projekt lub utwórz nowy";
-        Text[ japanese ] = "æ—¢å­˜ã®ãƒ‡ã‚¶ã‚¤ãƒ³ã€ã¾ãŸã¯æ–°ã—ã„ãƒ‡ã‚¶ã‚¤ãƒ³ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
+        Text[ japanese ] = "æ—¢å­˜ã®ãƒ‡ã‚¶ã‚¤ãƒ³ã‚’é¸æŠã™ã‚‹ã‹ã€æ–°ã—ã„ãƒ‡ã‚¶ã‚¤ãƒ³ã‚’ä½œæˆã—ã¦ãã ã•ã„ã€‚";
         Text[ greek ] = "Ğáñáêáëş åğéëİîôå İíá õğÜñ÷ïí ó÷İäéï Ş äçìéïõñãŞóôå êÜğïéï íİï ó÷İäéï";
         Text[ korean ] = "ê¸°ì¡´ì˜ ë””ìì¸ì„ ì„ íƒí•˜ê±°ë‚˜ ìƒˆ ë””ìì¸ì„ ì‘ì„±í•˜ì‹­ì‹œì˜¤";
         Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡ä¸€å€‹ç¾å­˜çš„è¨­è¨ˆæ¨¡æ¿æˆ–è€…æ‚¨å»ºç«‹ä¸€å€‹æ–°çš„";
@@ -308,7 +308,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Ñòàíäàğòíûé ôîğìàò HTML";
         Text[ greek ] = "Ğñïåğéëåãìİíç ìïñöŞ HTML";
         Text[ dutch ] = "Standaard ~HTLM-formaat";
-        Text[ french ] = "Format ~HTML standard";
+        Text[ french ] = "Format HTML standard";
         Text[ spanish ] = "Formato HTML ~predeterminado";
         Text[ italian ] = "Formato standard ~HTML";
         Text[ danish ] = "Standard HTML-format";
@@ -338,7 +338,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Ñòàíäàğòíûé HTML ñ êàäğàìè";
         Text[ greek ] = "ÂáóéêÜ HTML ìå ğëáßóéá";
         Text[ dutch ] = "Standaard HTLM met ~frames";
-        Text[ french ] = "Format HTML standard avec ~Frames";
+        Text[ french ] = "Format HTML standard avec Frames";
         Text[ spanish ] = "HTML predeterminado con ~frames";
         Text[ italian ] = "HTML standard con ~frame";
         Text[ danish ] = "Standard HTML med frames";
@@ -368,7 +368,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "ÁõôïìÜôùò";
         Text[ dutch ] = "A~utomatisch";
-        Text[ french ] = "~Automatique";
+        Text[ french ] = "Automatique";
         Text[ spanish ] = "~Automático";
         Text[ italian ] = "~Automatico";
         Text[ danish ] = "Automatisk";
@@ -398,7 +398,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~WebCast";
         Text[ greek ] = "~WebCast";
         Text[ dutch ] = "~WebCast";
-        Text[ french ] = "~WebCast";
+        Text[ french ] = "WebCast";
         Text[ spanish ] = "~WebCast";
         Text[ italian ] = "~WebCast";
         Text[ danish ] = "WebCast";
@@ -406,7 +406,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "~WebCast";
         Text[ portuguese_brazilian ] = "~WebCast";
         Text[ japanese ] = "~WebCast";
-        Text[ korean ] = "ì›¹ìŠ¤íƒ€ì¼";
+        Text[ korean ] = "~WebCast";
         Text[ chinese_simplified ] = "~WebCast";
         Text[ chinese_traditional ] = "~WebCast";
         Text[ arabic ] = "~WebCast";
@@ -480,7 +480,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "Dodatki";
         Text[ portuguese_brazilian ] = "Additions";
         Text[ japanese ] = "è©³ç´°";
-        Text[ korean ] = "ì¶”ê°€";
+        Text[ korean ] = "ì¶”ê°€ ì˜µì…˜";
         Text[ chinese_simplified ] = "å…¶å®ƒ";
         Text[ chinese_traditional ] = "å…¶å®ƒ";
         Text[ turkish ] = "Additions";
@@ -499,7 +499,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Create content ~page";
         Text[ portuguese ] = "~Criar página sumário";
         Text[ danish ] = "Opret titelblad";
-        Text[ french ] = "Page de ~garde";
+        Text[ french ] = "Page de garde";
         Text[ swedish ] = "Skapa titel~sida";
         Text[ dutch ] = "Titel~pagina maken";
         Text[ spanish ] = "Crear ~portada";
@@ -579,7 +579,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "Zmiana slajdu";
         Text[ portuguese_brazilian ] = "Advance slides";
         Text[ japanese ] = "ç”»é¢åˆ‡ã‚Šæ›¿ãˆ";
-        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë°”ê¾¸ê¸°";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì „í™˜";
         Text[ chinese_simplified ] = "è½¬æ¢é¡µé¢";
         Text[ chinese_traditional ] = "æ›é ";
         Text[ arabic ] = "ÊÛííÑ ÇáÕİÍÇÊ";
@@ -601,7 +601,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "Êàê çàäàíî â äîêóìåíòå";
         Text[ greek ] = "¼ğùò ïñßóôçêå óôï İããñáöï";
         Text[ dutch ] = "~Zoals aangegeven in document";
-        Text[ french ] = "~Comme indiqué dans le document";
+        Text[ french ] = "Comme indiqué dans le document";
         Text[ spanish ] = "~Como indicado en el documento";
         Text[ italian ] = "Come specificato nel documento";
         Text[ danish ] = "Som angivet i dokumentet";
@@ -609,7 +609,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "Jak podano w dokumencie";
         Text[ portuguese_brazilian ] = "~Document timings, if present";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã§æŒ‡å®šã—ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°(~A)";
-        Text[ korean ] = "ë¬¸ì„œì— ì§€ì •ëœ ë°”ì™€ ê°™ì´(~A)";
+        Text[ korean ] = "ë¬¸ì„œì—ì„œ ì§€ì •ëœ ë°”ì™€ ê°™ì´(~A)";
         Text[ chinese_simplified ] = "å¦‚åŒæ–‡æ¡£å†…å®šä¹‰çš„(~A)";
         Text[ chinese_traditional ] = "å¦‚åŒåœ¨æ–‡ä»¶å…§çš„è¨­å®š(~A)";
         Text[ arabic ] = "ßãÇ åæ ãæÖÍ İí ÇáãÓÊäÏ";
@@ -631,9 +631,9 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ greek ] = "ÁõôïìÜôùò";
         Text[ dutch ] = "A~utomatisch";
-        Text[ french ] = "~Automatique";
+        Text[ french ] = "Automatique";
         Text[ spanish ] = "~Automático";
-        Text[ italian ] = "~Automatico";
+        Text[ italian ] = "Automatico";
         Text[ danish ] = "Automatisk";
         Text[ swedish ] = "A~utomatisk";
         Text[ polish ] = "~Automatycznie";
@@ -661,7 +661,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Ïîêàç ñëàéäà:";
         Text[ greek ] = "ÄéÜñêåéá óôÜóçò:";
         Text[ dutch ] = "~Duur per pagina:";
-        Text[ french ] = "~Durée d'affichage :";
+        Text[ french ] = "Durée d'affichage :";
         Text[ spanish ] = "~Duración:";
         Text[ italian ] = "~Durata:";
         Text[ danish ] = "Sidevisningstid:";
@@ -669,7 +669,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "~Czas projekcji:";
         Text[ portuguese_brazilian ] = "~Duration:";
         Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰è¡¨ç¤ºæ™‚é–“(~S):";
-        Text[ korean ] = "ì§€ì†ì‹œê°„(~S)";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ í‘œì‹œì‹œê°„(~S)";
         Text[ chinese_simplified ] = "æŒç»­æ—¶é—´(~S)ï¼š";
         Text[ chinese_traditional ] = "æŒçºŒæ™‚é–“(~S)ï¼š";
         Text[ arabic ] = "ãÏÉ ÈŞÇÁ ÇáÔÑíÍÉ:";
@@ -708,7 +708,7 @@ ModalDialog DLG_PUBLISHING
         QuickHelpText[ russian ] = "~Äëèòåëüíîñòü";
         QuickHelpText[ greek ] = "ÄéÜñêåéá óôÜóçò";
         QuickHelpText[ dutch ] = "~Duur per pagina";
-        QuickHelpText[ french ] = "~Durée d'affichage";
+        QuickHelpText[ french ] = "Durée d'affichage";
         QuickHelpText[ spanish ] = "~Duración de página";
         QuickHelpText[ italian ] = "~Durata";
         QuickHelpText[ danish ] = "Sidevisningstid";
@@ -737,9 +737,9 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Áåñêîíå÷íî";
         Text[ greek ] = "Óõí~å÷üìåíá";
         Text[ dutch ] = "~Eindeloos";
-        Text[ french ] = "~Continu";
+        Text[ french ] = "Continu";
         Text[ spanish ] = "~Continuo";
-        Text[ italian ] = "Continuo";
+        Text[ italian ] = "~Continuo";
         Text[ danish ] = "Endeløs";
         Text[ swedish ] = "Kontinu~erlig";
         Text[ polish ] = "~Bez koñca";
@@ -779,7 +779,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "WebCast";
         Text[ portuguese_brazilian ] = "WebCast";
         Text[ japanese ] = "WebCast";
-        Text[ korean ] = "ì›¹í˜•ì‹";
+        Text[ korean ] = "WebCast";
         Text[ chinese_simplified ] = "WebCast";
         Text[ chinese_traditional ] = "WebCast";
         Text[ arabic ] = "WebCast";
@@ -800,7 +800,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~Active Server Pages (ASP)";
         Text[ greek ] = "~Active Server Pages (ASP)";
         Text[ dutch ] = "~Active Server Pages (ASP)";
-        Text[ french ] = "~Active Server Pages (ASP)";
+        Text[ french ] = "Active Server Pages (ASP)";
         Text[ spanish ] = "~Active Server Pages (ASP)";
         Text[ italian ] = "~Active Server Pages (ASP)";
         Text[ danish ] = "Active Server Pages (ASP)";
@@ -858,7 +858,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~URL äëÿ ñëóøàòåëåé";
         Text[ greek ] = "URL ãéá áêñïáôİò";
         Text[ dutch ] = "~URL voor toehoorders";
-        Text[ french ] = "~URL pour les auditeurs";
+        Text[ french ] = "URL pour les auditeurs";
         Text[ spanish ] = "~URL para los oyentes";
         Text[ italian ] = "~URL per ascoltatori";
         Text[ danish ] = "URL for tilhørere";
@@ -867,7 +867,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~URL for beamer";
         Text[ japanese ] = "å‚åŠ è€…ç”¨~URL";
         Text[ korean ] = "ì²­ì·¨ììš© ~URL";
-        Text[ chinese_simplified ] = "å¬ä¼—çš„ ~URL";
+        Text[ chinese_simplified ] = "æ˜¾ç¤º ~URL";
         Text[ chinese_traditional ] = "é¡¯ç¤º ~URL";
         Text[ arabic ] = "~URLááÜãÓÊãÚíä";
         Text[ turkish ] = "Dinleyiciler için URL";
@@ -896,7 +896,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "URL äëÿ ~ïğåçåíòàöèè";
         Text[ greek ] = "URL ãéá ğáñïõóßáóç:";
         Text[ dutch ] = "URL voor ~presentatie";
-        Text[ french ] = "URL pour la ~présentation :";
+        Text[ french ] = "URL pour la présentation :";
         Text[ spanish ] = "URL para la ~presentación:";
         Text[ italian ] = "URL per ~presentazione:";
         Text[ danish ] = "URL for præsentation";
@@ -934,7 +934,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "URL äëÿ ñêğèïòîâ ~Perl";
         Text[ greek ] = "URL ãéá ~perl scripts";
         Text[ dutch ] = "URL voor ~perl scripts";
-        Text[ french ] = "URL pour les scripts ~Perl :";
+        Text[ french ] = "URL pour les scripts Perl :";
         Text[ spanish ] = "URL para scripts ~perl:";
         Text[ italian ] = "URL per ~perl scripts:";
         Text[ danish ] = "URL for perl scripts";
@@ -943,7 +943,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "URL for ~perl scripts";
         Text[ japanese ] = "~Perlã‚¹ã‚¯ãƒªãƒ—ãƒˆç”¨URL:";
         Text[ korean ] = "~Perl ìŠ¤í¬ë¦½íŠ¸ë¥¼ ìœ„í•œ URL";
-        Text[ chinese_simplified ] = "~perl è„šæœ¬çš„ URLï¼š";
+        Text[ chinese_simplified ] = "~Perl è„šæœ¬çš„ URL:";
         Text[ chinese_traditional ] = "~perl ç¨‹å¼çš„ URL";
         Text[ arabic ] = "URLÇáÎÇÕÉ ÈÜ perl scripts:";
         Text[ turkish ] = "Perl Skript'leri için URL:";
@@ -1018,7 +1018,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~GIF";
         Text[ portuguese ] = "~GIF - Graphics Interchange Format";
         Text[ danish ] = "GIF - Graphics Interchange Format";
-        Text[ french ] = "~GIF";
+        Text[ french ] = "GIF";
         Text[ swedish ] = "~GIF";
         Text[ dutch ] = "~GIF - Graphics Interchange-Format";
         Text[ spanish ] = "~GIF ";
@@ -1034,7 +1034,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "GIF - Graphics Interchange-Format";
         Text[ catalan ] = "Format ~GIF";
         Text[ finnish ] = "~GIF";
-        Text[ thai ] = "~GIF";
+        Text[ thai ] = "~GIF - Graphics Interchange Format";
     };
 
     RadioButton PAGE3_JPG
@@ -1047,7 +1047,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~JPG - Compressed format";
         Text[ portuguese ] = "~JPG - Formato de ficheiro comprimido";
         Text[ danish ] = "JPG - komprimeret format";
-        Text[ french ] = "~JPG";
+        Text[ french ] = "JPG";
         Text[ swedish ] = "~JPG";
         Text[ dutch ] = "~JPG - gecomprimeerd formaat";
         Text[ spanish ] = "~JPG";
@@ -1063,7 +1063,7 @@ ModalDialog DLG_PUBLISHING
         Text[ turkish ] = "JPG - Sıkıştırılmış dosya formatı";
         Text[ catalan ] = "~JPG - Format de fitxer comprimit";
         Text[ finnish ] = "~JPG (tiivistetty muoto)";
-        Text[ thai ] = "~JPG";
+        Text[ thai ] = "~JPG - à¸¢à¹ˆà¸­à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡";
     };
 
     ComboBox PAGE3_QUALITY
@@ -1153,7 +1153,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Low resolution (~640x480 pixel)";
         Text[ portuguese ] = "Baixa resolução (~640x480 pixéis)";
         Text[ danish ] = "Lav opløsning (640x480 pixel)";
-        Text[ french ] = "Faible résolution (~640x480 pixels)";
+        Text[ french ] = "Faible résolution (640x480 pixels)";
         Text[ swedish ] = "Låg upplösning (~640x480 pixel)";
         Text[ dutch ] = "Lage resolutie (~640x480 pixels)";
         Text[ spanish ] = "Resolución baja (~640x480 píxeles)";
@@ -1182,12 +1182,12 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Medium resolution (~800x600 pixel)";
         Text[ portuguese ] = "Média resolução (~800x600 pixéis)";
         Text[ danish ] = "Medium opløsning (800x600 pixel)";
-        Text[ french ] = "Résolution moyenne (~800x600 pixels)";
+        Text[ french ] = "Résolution moyenne (800x600 pixels)";
         Text[ swedish ] = "Mediumupplösning (~800x600 pixel)";
         Text[ dutch ] = "Medium resolutie (~800x600 pixels)";
         Text[ spanish ] = "Resolución media (~800x600 píxeles)";
         Text[ english_us ] = "Medium resolution (~800x600 pixel)";
-        Text[ chinese_simplified ] = "ä¸­åˆ†è¾¨ç‡(800x600 åƒç´ )";
+        Text[ chinese_simplified ] = "ä¸­åˆ†è¾¨ç‡(~800x600 åƒç´ )";
         Text[ russian ] = "Ñğåäíåå ğàçğåøåíèå (~800x600 ïèêñåëü)";
         Text[ polish ] = "Œrednia rozdzielczoœæ (800x600 pikseli)";
         Text[ japanese ] = "ä¸­è§£åƒåº¦ (800x600 ãƒ”ã‚¯ã‚»ãƒ«)";
@@ -1211,7 +1211,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "High resolution (~1024x768 pixel)";
         Text[ portuguese ] = "Alta resolução (~1024x768 pixéis)";
         Text[ danish ] = "Høj opløsning (1024x768 pixel)";
-        Text[ french ] = "Haute résolution (~1024x768 pixels)";
+        Text[ french ] = "Haute résolution (1024x768 pixels)";
         Text[ swedish ] = "Hög upplösning (~1024x768 pixel)";
         Text[ dutch ] = "Hoge resolutie (~1024x768 pixels)";
         Text[ spanish ] = "Resolución alta (~1024x768 píxeles)";
@@ -1276,7 +1276,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "~İêñïîğò çâóêîâ ïğè ñìåíå ñëàéäîâ";
         Text[ greek ] = "ÅîáãùãŞ Ş÷ïõ ~êáôÜ ôçí áëëáãŞ óåëßäáò";
         Text[ dutch ] = "~Klank bij paginawisseling exporteren";
-        Text[ french ] = "~Exporter les sons de changement de page";
+        Text[ french ] = "Exporter les sons de changement de page";
         Text[ spanish ] = "~Exportar sonidos al pasar páginas";
         Text[ italian ] = "Esporta suoni al cambio di pagina";
         Text[ danish ] = "Eksporter lyde ved sideovergang";
@@ -1385,7 +1385,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "Àäğåñ ıë.ïî÷òû";
         Text[ greek ] = "Äéåıèõíóç E-~Mail";
         Text[ dutch ] = "~E-mail adres";
-        Text[ french ] = "Adresse e-~mail :";
+        Text[ french ] = "Adresse e-mail :";
         Text[ spanish ] = "Dirección de correo ~electrónico";
         Text[ finnish ] = "Sähkö~postiosoite";
         Text[ italian ] = "Indirizzo e~Mail";
@@ -1395,7 +1395,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~email:";
         Text[ japanese ] = "E-~mail ã‚¢ãƒ‰ãƒ¬ã‚¹";
         Text[ korean ] = "ì „ììš°í¸ ì£¼ì†Œ";
-        Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶åœ°å€ï¼š(~M)";
+        Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶åœ°å€";
         Text[ chinese_traditional ] = "é›»å­éƒµä»¶åœ°å€(~M)";
         Text[ turkish ] = "E-posta adresi:";
         Text[ arabic ] = "ÚäæÇä ÇáÈÑíÏ ÇáÅáßÊÑæäí:";
@@ -1423,7 +1423,7 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "Âàøà íà÷àëüíàÿ ñòğàíèöà";
         Text[ greek ] = "~Ç äéêŞ óáò áñ÷éêŞ óåëßäá:";
         Text[ dutch ] = "Uw ~homepage";
-        Text[ french ] = "~Homepage :";
+        Text[ french ] = "Homepage :";
         Text[ spanish ] = "~Página principal";
         Text[ finnish ] = "~Kotisivusi";
         Text[ italian ] = "La vostra ~homepage";
@@ -1433,7 +1433,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Your ~homepage:";
         Text[ japanese ] = "ã‚ãªãŸã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸(~E)";
         Text[ korean ] = "ì‚¬ìš©ì í™ˆí˜ì´ì§€(~E)";
-        Text[ chinese_simplified ] = "æ‚¨çš„ä¸»é¡µï¼š(~E)";
+        Text[ chinese_simplified ] = "æ‚¨çš„ä¸»é¡µ";
         Text[ chinese_traditional ] = "æ‚¨çš„é¦–é (~E)";
         Text[ turkish ] = "Web sayfanız:";
         Text[ arabic ] = "ÕİÍÉ ÇáÅäÊÑäÊ ÇáÎÇÕÉ Èß:";
@@ -1460,17 +1460,17 @@ ModalDialog DLG_PUBLISHING
         Text[ russian ] = "Äîïîëíèòåëüíûå ~ñâåäåíèÿ";
         Text[ greek ] = "Åğ~éğñüóèåôåò ğëçñïöïñßåò:";
         Text[ dutch ] = "Verdere ~informatie";
-        Text[ french ] = "~Complément\nd'information :";
+        Text[ french ] = "Complément d'information :";
         Text[ spanish ] = "~Más información";
         Text[ finnish ] = "~Lisätietoja";
-        Text[ italian ] = "Ulteriori\n~informazioni";
+        Text[ italian ] = "Ulteriori ~informazioni";
         Text[ danish ] = "Flere\ninformationer:";
         Text[ swedish ] = "Mer ~information";
         Text[ polish ] = "Dodatkowe informacje:";
         Text[ portuguese_brazilian ] = "Additional\n~informations:";
-        Text[ japanese ] = "è©³ç´°æƒ…å ±(~I):";
+        Text[ japanese ] = "è©³ç´°æƒ…å ±(~I)";
         Text[ korean ] = "ì¶”ê°€ ì •ë³´(~I)";
-        Text[ chinese_simplified ] = "é™„åŠ ä¿¡æ¯ï¼š(~I)";
+        Text[ chinese_simplified ] = "é™„åŠ ä¿¡æ¯";
         Text[ chinese_traditional ] = "å…¶ä»–è³‡è¨Š(~I)";
         Text[ turkish ] = "Diğer\n bilgiler:";
         Text[ arabic ] = "ãÚáæãÇÊ\nÅÖÇİíÉ:";
@@ -1537,7 +1537,7 @@ ModalDialog DLG_PUBLISHING
         Text[ chinese_simplified ] = "æç¤ºï¼šç”¨ %PRODUCTNAME å»ºç«‹";
         Text[ russian ] = "Ïğèìå÷àíèå: 'ñîçäàíî â %PRODUCTNAME'";
         Text[ polish ] = "Wskazówka:\"Utworzony przez %PRODUCTNAME\"";
-        Text[ japanese ] = "æŒ‡ç¤º:ã€Œ%PRODUCTNAME ã§ä½œæˆã•ã‚Œã¦ã„ã¾ã™ã€";
+        Text[ japanese ] = "æ³¨æ„:ã€Œ%PRODUCTNAME ã§ä½œæˆã•ã‚Œã¦ã„ã¾ã™ã€";
         Text[ greek ] = "Óçìåßùóç: 'ÄçìéïõñãŞèçêå ìå %PRODUCTNAME'";
         Text[ korean ] = "ì°¸ê³ : '%PRODUCTNAMEë¡œ ì‘ì„±ë¨'";
         Text[ chinese_traditional ] = "æç¤ºï¼šä½¿ç”¨ %PRODUCTNAME è£½ä½œ";
@@ -1576,7 +1576,7 @@ ModalDialog DLG_PUBLISHING
         Text[ dutch ] = "Stijl voor knoppen selecteren";
         Text[ spanish ] = "Seleccionar el estilo del botón";
         Text[ english_us ] = "Select button style";
-        Text[ chinese_simplified ] = "é€‰æ‹©æŒ‰é’®å¼æ ·";
+        Text[ chinese_simplified ] = "é€‰æ‹©æŒ‰é’®é£æ ¼";
         Text[ russian ] = "Âûáğàòü ñòèëü êíîïîê";
         Text[ polish ] = "Wybierz rodzaj przycisku";
         Text[ japanese ] = "ãƒœã‚¿ãƒ³ã‚¹ã‚¿ã‚¤ãƒ«ã®é¸æŠ";
@@ -1601,7 +1601,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Text only";
         Text[ portuguese ] = "~Só texto";
         Text[ danish ] = "Kun tekst";
-        Text[ french ] = "~Uniquement du texte";
+        Text[ french ] = "Uniquement du texte";
         Text[ swedish ] = "Bara t~ext";
         Text[ dutch ] = "~Alleen tekst";
         Text[ spanish ] = "Sólo ~texto";
@@ -1656,12 +1656,12 @@ ModalDialog DLG_PUBLISHING
         Text[ dutch ] = "Kleurenschema kiezen";
         Text[ spanish ] = "Seleccionar la combinación de colores";
         Text[ english_us ] = "Select color scheme";
-        Text[ chinese_simplified ] = "é€‰æ‹©å½©è‰²å›¾æ¡ˆ";
+        Text[ chinese_simplified ] = "é€‰æ‹©é¢œè‰²å›¾æ¡ˆ";
         Text[ russian ] = "Âûáğàòü öâåòîâóş ñõåìó";
         Text[ polish ] = "Wybierz schemat kolorów";
         Text[ japanese ] = "é…è‰²ã®é¸æŠ";
         Text[ greek ] = "ÅğéëïãŞ óõíäõáóìïı ÷ñùìÜôùí";
-        Text[ korean ] = "ìƒ‰ì¡° ìŠ¤í‚¤ë§ˆ ì„ íƒ";
+        Text[ korean ] = "ìƒ‰ë„í‘œ ì„ íƒ";
         Text[ chinese_traditional ] = "é¸æ“‡å½©è‰²åœ–æ¡ˆ";
         Text[ arabic ] = "ÇÎÊíÇÑ äÙÇã ÇáÃáæÇä";
         Text[ turkish ] = "Renk seç";
@@ -1681,12 +1681,12 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Convert text c~olor";
         Text[ portuguese ] = "A~plicar esquema de cores do documento";
         Text[ danish ] = "Overtag farveskema fra dokument";
-        Text[ french ] = "~Appliquer le schéma de couleurs du document";
+        Text[ french ] = "Appliquer le schéma de couleurs du document";
         Text[ swedish ] = "Överta färgschema från dokument";
         Text[ dutch ] = "K~leurenschema uit het document overnemen";
         Text[ spanish ] = "Aplicar la combinación de ~colores del documento";
         Text[ english_us ] = "~Apply color scheme from document";
-        Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡æ¡£çš„é¢œè‰²ç¤ºå›¾(~A)";
+        Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡æ¡£çš„é¢œè‰²å›¾æ¡ˆ(~A)";
         Text[ russian ] = "Ïğèíÿòü öâåòîâóş ñõåìó èç äîêóìåíòà";
         Text[ polish ] = "Zastosuj schemat koloru z dokumentu";
         Text[ japanese ] = "é…è‰²ã‚’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‹ã‚‰é©ç”¨(~A)";
@@ -1711,7 +1711,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Use ~standard colors";
         Text[ portuguese ] = "Usar ~cores do browser";
         Text[ danish ] = "Brug browserfarver";
-        Text[ french ] = "Utiliser les couleurs du ~Browser";
+        Text[ french ] = "Utiliser les couleurs du Browser";
         Text[ swedish ] = "Använd browserfärger";
         Text[ dutch ] = "~Browserkleuren gebruiken";
         Text[ spanish ] = "Utilizar los colores del ~navegador web";
@@ -1736,19 +1736,19 @@ ModalDialog DLG_PUBLISHING
         Size = MAP_APPFONT( 246, 10 );
         Text = "~Eigenes Farbschema verwenden";
         Text [ ENGLISH ] = "~User colorscheme";
-        Text[ italian ] = "Usa schema colori p~ersonale";
+        Text[ italian ] = "Usa schema colori personale";
         Text[ portuguese_brazilian ] = "~User colors:";
         Text[ portuguese ] = "Usar ~esquema de cores personalizado";
         Text[ danish ] = "Brug brugerdefineret farveskema";
-        Text[ french ] = "Utiliser un schéma de couleurs ~personnalisé";
+        Text[ french ] = "Utiliser un schéma de couleurs personnalisé";
         Text[ swedish ] = "Använd ~eget färgschema";
         Text[ dutch ] = "~Eigen kleurenschema gebruiken";
         Text[ spanish ] = "Utilizar ~esquema de colores personal";
         Text[ english_us ] = "~Use custom color scheme:";
-        Text[ chinese_simplified ] = "é‡‡ç”¨è‡ªå®šçš„å½©è‰²å›¾(~U)";
+        Text[ chinese_simplified ] = "é‡‡ç”¨è‡ªå®šçš„å½©è‰²å›¾æ¡ˆ(~U)";
         Text[ russian ] = "~Èñïîëüçîâàòü öâåòîâóş ñõåìó ïîëüçîâàòåëÿ:";
         Text[ polish ] = "~Zastosuj w³asny schemat kolorów:";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®é…è‰²ã‚’ä½¿ç”¨(~U):";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®é…è‰²ã‚’ä½¿ç”¨(~U)";
         Text[ greek ] = "×ñŞó~ç ğñïóùğéêïı óõíäõáóìïı ÷ñùìÜôùí:";
         Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìƒ‰ ë„í‘œ ì‚¬ìš©(~U)";
         Text[ chinese_traditional ] = "ä½¿ç”¨è‡ªè¨‚é¡è‰²(~U)";
@@ -1769,7 +1769,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Text";
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "Tekst";
-        Text[ french ] = "~Texte";
+        Text[ french ] = "Texte";
         Text[ swedish ] = "Te~xt";
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
@@ -1777,7 +1777,7 @@ ModalDialog DLG_PUBLISHING
         Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "~Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
         Text[ greek ] = "Êåßìåíï";
         Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
         Text[ chinese_traditional ] = "æ–‡å­—(~T)";
@@ -1799,7 +1799,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "Hyper~link";
         Text[ portuguese ] = "Hiper~ligação";
         Text[ danish ] = "Hyperlink";
-        Text[ french ] = "~Hyperlien";
+        Text[ french ] = "Hyperlien";
         Text[ swedish ] = "Hyper~länk";
         Text[ dutch ] = "Hyper~link";
         Text[ spanish ] = "~Hiperenlace";
@@ -1829,7 +1829,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Active link";
         Text[ portuguese ] = "~Ligação activa";
         Text[ danish ] = "Aktiv hyperlink";
-        Text[ french ] = "Lien ~actif";
+        Text[ french ] = "Lien actif";
         Text[ swedish ] = "~Aktiv länk";
         Text[ dutch ] = "~Actieve link";
         Text[ spanish ] = "~Enlace activo";
@@ -1859,7 +1859,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Visited link";
         Text[ portuguese ] = "Link ~visitado";
         Text[ danish ] = "Besøgt hyperlink";
-        Text[ french ] = "Lien ~visité";
+        Text[ french ] = "Lien visité";
         Text[ swedish ] = "An~vänd länk";
         Text[ dutch ] = "~Bezochte link";
         Text[ spanish ] = "~Enlace visitado";
@@ -1895,7 +1895,7 @@ ModalDialog DLG_PUBLISHING
         Text[ portuguese_brazilian ] = "~Background";
         Text[ portuguese ] = "~Plano de fundo";
         Text[ danish ] = "Baggrund";
-        Text[ french ] = "~Arrière-plan";
+        Text[ french ] = "Arrière-plan";
         Text[ swedish ] = "Ba~kgrund";
         Text[ dutch ] = "~Achtergrond";
         Text[ spanish ] = "~Fondo";
@@ -1931,9 +1931,9 @@ ModalDialog DLG_PUBLISHING
         Text [ ENGLISH ] = "<< ~Prev." ;
         TabStop = TRUE ;
         Text [ english_us ] = "<< Back" ;
-        Text [ italian ] = "<<~Indietro" ;
+        Text [ italian ] = "<< ~Indietro" ;
         Text [ spanish ] = "<< ~Regresar" ;
-        Text [ french ] = "<< ~Précédent" ;
+        Text [ french ] = "<< Précédent" ;
         Text [ dutch ] = "<< Vor~ige" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ danish ] = "<< Tilbage" ;
@@ -1966,7 +1966,7 @@ ModalDialog DLG_PUBLISHING
         Text [ english_us ] = "Next >>" ;
         Text [ italian ] = "Avanti >>" ;
         Text [ spanish ] = "~Siguiente >>" ;
-        Text [ french ] = "~Suivant >>" ;
+        Text [ french ] = "Suivant >>" ;
         Text [ dutch ] = "~Volgende >>" ;
         Text [ swedish ] = "~Nästa >>" ;
         Text [ danish ] = "Næste >>" ;
@@ -1999,7 +1999,7 @@ ModalDialog DLG_PUBLISHING
         Text [ english_us ] = "~Create" ;
         Text [ italian ] = "~Crea" ;
         Text [ spanish ] = "~Crear" ;
-        Text [ french ] = "~Créer" ;
+        Text [ french ] = "Créer" ;
         Text [ swedish ] = "~Färdigställ" ;
         Text [ danish ] = "Udfør" ;
         Text [ portuguese ] = "~Criar" ;
@@ -2113,7 +2113,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ portuguese_brazilian ] = "~Don't save";
         Text[ portuguese ] = "~Não guardar";
         Text[ danish ] = "Gem ikke";
-        Text[ french ] = "~Ne pas enregistrer";
+        Text[ french ] = "Ne pas enregistrer";
         Text[ swedish ] = "Spara i~nte";
         Text[ dutch ] = "~Niet opslaan";
         Text[ spanish ] = "~No guardar";
@@ -2141,12 +2141,12 @@ ModalDialog DLG_DESIGNNAME
     Text[ dutch ] = "Naam voor HTML-design";
     Text[ spanish ] = "Nombre para el diseño HTML";
     Text[ english_us ] = "Name HTML design";
-    Text[ chinese_simplified ] = "HTMLè®¾è®¡çš„åç§°";
+    Text[ chinese_simplified ] = "HTML è®¾è®¡çš„åç§°";
     Text[ russian ] = "Èìÿ äëÿ äèçàéíà â HTML";
     Text[ polish ] = "Nazwa dla projektu HTML";
     Text[ japanese ] = "HTMLãƒ‡ã‚¶ã‚¤ãƒ³å";
     Text[ greek ] = "¼íïìá ãéá ó÷åäéáóìü HTML";
-    Text[ korean ] = "HTML ë””ìì¸ìš© ì´ë¦„";
+    Text[ korean ] = "HTML ë””ìì¸ ëª…";
     Text[ chinese_traditional ] = "HTML è¨­è¨ˆçš„åç¨±";
     Text[ arabic ] = "ÇÓã ÊÕãíã HTML";
     Text[ turkish ] = "HTML tasarımı için ad";
