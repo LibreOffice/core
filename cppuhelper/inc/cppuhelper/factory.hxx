@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 16:52:03 $
+ *  last change: $Author: dbo $ $Date: 2001-05-08 15:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <uno/dispatcher.h>
 #endif
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -151,6 +153,24 @@ typedef uno_Interface* (SAL_CALL * CreateComponentFactoryFunc)(
 /** */ //for docpp
 namespace cppu
 {
+
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
+    SAL_CALL * ComponentFactoryFunc)(
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
+    SAL_THROW( (::com::sun::star::uno::Exception) );
+
+/** Creates a single component factory supporting the XSingleComponentFactory interface.
+
+    @param fptr function pointer for instanciating the object
+    @param rImplementationName implementation name of service
+    @param rServiceNames supported services
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
+SAL_CALL createSingleComponentFactory(
+    ComponentFactoryFunc fptr,
+    ::rtl::OUString const & rImplementationName,
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames )
+    SAL_THROW( () );
 
 /**
  * The type of the instanciate function used as argument of the create*Fcatory functions.

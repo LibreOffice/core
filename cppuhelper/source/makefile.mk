@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:38:30 $
+#   last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,20 +86,33 @@ UNOTYPES= \
         com.sun.star.container.XSet			\
         com.sun.star.uno.XWeak 				\
         com.sun.star.uno.XAggregation 			\
+        com.sun.star.uno.XComponentContext		\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
+        com.sun.star.lang.XMultiComponentFactory 	\
+        com.sun.star.lang.XSingleComponentFactory 	\
         com.sun.star.lang.XServiceInfo 			\
         com.sun.star.lang.XInitialization 		\
+        com.sun.star.lang.XEventListener 		\
         com.sun.star.reflection.XIdlReflection 		\
         com.sun.star.reflection.XIdlClass 		\
         com.sun.star.reflection.XIdlClassProvider	\
         com.sun.star.reflection.XIndirectTypeDescription	\
-        com.sun.star.reflection.XMethodParameter	\
+        com.sun.star.reflection.XMethodParameter		\
         com.sun.star.reflection.XInterfaceMemberTypeDescription	\
+        com.sun.star.reflection.XTypeDescription		\
+        com.sun.star.reflection.XEnumTypeDescription		\
+        com.sun.star.reflection.XArrayTypeDescription		\
+        com.sun.star.reflection.XInterfaceAttributeTypeDescription \
+        com.sun.star.reflection.XInterfaceMethodTypeDescription	\
+        com.sun.star.reflection.XInterfaceTypeDescription	\
+        com.sun.star.reflection.XCompoundTypeDescription	\
+        com.sun.star.reflection.XUnionTypeDescription	\
         com.sun.star.beans.XPropertySet 		\
         com.sun.star.beans.XMultiPropertySet 		\
         com.sun.star.beans.XFastPropertySet 		\
         com.sun.star.beans.PropertyAttribute 		\
+        com.sun.star.container.XHierarchicalNameAccess	\
         com.sun.star.registry.XRegistryKey		\
         com.sun.star.loader.XImplementationLoader	\
         com.sun.star.lang.XTypeProvider			\
@@ -115,8 +128,10 @@ SLOFILES=	\
         $(SLO)$/interfacecontainer.obj	\
         $(SLO)$/stdidlclass.obj 	\
         $(SLO)$/factory.obj		\
+        $(SLO)$/component_context.obj	\
         $(SLO)$/component.obj		\
-        $(SLO)$/shlib.obj
+        $(SLO)$/shlib.obj		\
+        $(SLO)$/tdmgr.obj
 
 SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COM)
 

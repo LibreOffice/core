@@ -29,10 +29,12 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\compbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase12.hxx
 
 ..\inc\cppuhelper\shlib.hxx %_DEST%\inc%_EXT%\cppuhelper\shlib.hxx
+..\inc\cppuhelper\tdmgr.hxx %_DEST%\inc%_EXT%\cppuhelper\tdmgr.hxx
 ..\inc\cppuhelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc%_EXT%\cppuhelper\exc_hlp.hxx
 ..\inc\cppuhelper\typeprovider.hxx %_DEST%\inc%_EXT%\cppuhelper\typeprovider.hxx
 ..\inc\cppuhelper\factory.hxx %_DEST%\inc%_EXT%\cppuhelper\factory.hxx
+..\inc\cppuhelper\component_context.hxx %_DEST%\inc%_EXT%\cppuhelper\component_context.hxx
 ..\inc\cppuhelper\interfacecontainer.hxx %_DEST%\inc%_EXT%\cppuhelper\interfacecontainer.hxx
 ..\inc\cppuhelper\interfacecontainer.h %_DEST%\inc%_EXT%\cppuhelper\interfacecontainer.h
 ..\inc\cppuhelper\component.hxx %_DEST%\inc%_EXT%\cppuhelper\component.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 09:23:17 $
+ *  last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ static OUString makeComponentPath( const OUString & rLibName, const OUString & r
 }
 
 //==================================================================================================
-Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
+Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
     Reference< XMultiServiceFactory > const & xMgr,
@@ -325,7 +325,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
         throw CannotActivateFactoryException( aExcMsg, Reference< XInterface >() );
     }
 
-    Reference< XSingleServiceFactory > xRet;
+    Reference< XInterface > xRet;
 
     void * pSym;
     OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
@@ -409,8 +409,8 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
             }
             else
             {
-                XSingleServiceFactory * pRet = (XSingleServiceFactory *)
-                    (*((component_getFactoryFunc)pSym))( aImplName.getStr(), xMgr.get(), xKey.get() );
+                XInterface * pRet = (XInterface *)(*((component_getFactoryFunc)pSym))(
+                    aImplName.getStr(), xMgr.get(), xKey.get() );
                 if (pRet)
                 {
                     xRet = pRet;

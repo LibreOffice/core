@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-05-08 15:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _CPPUHELPER_SHLIB_HXX_
 #define _CPPUHELPER_SHLIB_HXX_
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
@@ -88,10 +87,12 @@ namespace cppu
            service manager to be provided to the component
     @param xKey
            registry key to be provided to the component
+    @return
+           factory instance
     @throws ::com::sun::star::loader::CannotActivateFactoryException
             if activation failed
 */
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
