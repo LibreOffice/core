@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-19 12:45:23 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 11:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,39 +688,40 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                          * new drag and drop api
                          */
 
-                        // query DropTarget from child window
-                        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
-                            pMouseDownWin->GetDragGestureRecognizer();
-
-                        if( xDragGestureRecognizer.is() )
+                        if( ! pMouseDownWin->IsMouseCaptured() )
                         {
-                            // retrieve mouse position relative to mouse down window
-                            Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
-                                pMouseDownWin->mpFrameData->mnFirstMouseX,
-                                pMouseDownWin->mpFrameData->mnFirstMouseX ) );
+                            // query DropTarget from child window
+                            ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
+                                pMouseDownWin->GetDragGestureRecognizer();
 
-                            // create a uno mouse event out of the available data
-                            ::com::sun::star::awt::MouseEvent aMouseEvent(
-                                static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
-                                nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
-                                nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
-                                nMouseX,
-                                nMouseY,
-                                nClicks,
-                                sal_False );
+                            if( xDragGestureRecognizer.is() )
+                            {
+                                // retrieve mouse position relative to mouse down window
+                                Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
+                                    pMouseDownWin->mpFrameData->mnFirstMouseX,
+                                    pMouseDownWin->mpFrameData->mnFirstMouseX ) );
 
-                            // the X dnd implementation uses a second display connection
-//                          pMouseDownWin->mpFrame->CaptureMouse( sal_False );
+                                // create a uno mouse event out of the available data
+                                ::com::sun::star::awt::MouseEvent aMouseEvent(
+                                    static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
+                                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
+                                    nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE),
+                                    nMouseX,
+                                        nMouseY,
+                                    nClicks,
+                                    sal_False );
 
-                            ULONG nCount = Application::ReleaseSolarMutex();
+                                // the X dnd implementation uses a second display connection
+                                pMouseDownWin->mpFrame->CaptureMouse( sal_False );
 
-                            // FIXME: where do I get Action from ?
-                            static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
-                                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
-                                pMouseDownWin->GetDragSource(),
-                                ::com::sun::star::uno::makeAny( aMouseEvent ) );
+                                ULONG nCount = Application::ReleaseSolarMutex();
 
-                            Application::AcquireSolarMutex( nCount );
+                                // FIXME: where do I get Action from ?
+                                static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
+                                    relLoc.X(), relLoc.Y(), pMouseDownWin->GetDragSource(), ::com::sun::star::uno::makeAny( aMouseEvent ) );
+
+                                Application::AcquireSolarMutex( nCount );
+                            }
                         }
                     }
                 }
