@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:35 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 15:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,18 +1619,25 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 if( aLineColor!=Color( COL_TRANSPARENT ) )
                 {
                     const Polygon&  rPoly = pA->GetPolygon();
-                    const USHORT    nSize = rPoly.GetSize();
+
+                    Polygon aSimplePoly;
+                    if ( rPoly.HasFlags() )
+                        rPoly.GetSimple( aSimplePoly );
+                    else
+                        aSimplePoly = rPoly;
+
+                    const USHORT    nSize = aSimplePoly.GetSize();
                     Point           aLast;
 
                     if ( nSize )
                     {
                         SetAttrForFrame();
-                        aLast = rPoly[0];
+                        aLast = aSimplePoly[0];
 
                         for ( USHORT i = 1; i < nSize; i++ )
                         {
-                            WriteOpcode_Line( aLast, rPoly[i] );
-                            aLast = rPoly[i];
+                            WriteOpcode_Line( aLast, aSimplePoly[i] );
+                            aLast = aSimplePoly[i];
                         }
                     }
                 }
@@ -1641,16 +1648,23 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaPolygonAction* pA = (const MetaPolygonAction*) pMA;
 
+                const Polygon& rPoly = pA->GetPolygon();
+
+                Polygon aSimplePoly;
+                if ( rPoly.HasFlags() )
+                    rPoly.GetSimple( aSimplePoly );
+                else
+                    aSimplePoly = rPoly;
+
                 if (aFillColor!=Color( COL_TRANSPARENT ))
                 {
                     SetAttrForPaint();
-                    WriteOpcode_Poly(PDM_PAINT,pA->GetPolygon());
+                    WriteOpcode_Poly( PDM_PAINT, aSimplePoly );
                 }
-
                 if (aLineColor!=Color( COL_TRANSPARENT ))
                 {
                     SetAttrForFrame();
-                    WriteOpcode_Poly(PDM_FRAME,pA->GetPolygon());
+                    WriteOpcode_Poly( PDM_FRAME, aSimplePoly );
                 }
             }
             break;
@@ -1659,10 +1673,22 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
+                const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
+                sal_uInt16 i, nCount = rPolyPoly.Count();
+                PolyPolygon aSimplePolyPoly( rPolyPoly );
+                for ( i = 0; i < nCount; i++ )
+                {
+                    if ( aSimplePolyPoly[ i ].HasFlags() )
+                    {
+                        Polygon aSimplePoly;
+                        aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+                        aSimplePolyPoly[ i ] = aSimplePoly;
+                    }
+                }
                 if (aFillColor!=Color( COL_TRANSPARENT ))
                 {
                     SetAttrForPaint();
-                    WriteOpcode_Poly(PDM_PAINT,PolyPolygonToPolygon(pA->GetPolyPolygon()));
+                    WriteOpcode_Poly( PDM_PAINT, PolyPolygonToPolygon( aSimplePolyPoly ));
                 }
 
                 if (aLineColor!=Color( COL_TRANSPARENT ))
@@ -1670,8 +1696,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     USHORT nCount,i;
                     SetAttrForFrame();
                     nCount=pA->GetPolyPolygon().Count();
-                    for (i=0; i<nCount; i++)
-                        WriteOpcode_Poly(PDM_FRAME,pA->GetPolyPolygon().GetObject(i));
+                    for ( i = 0; i < nCount; i++ )
+                        WriteOpcode_Poly( PDM_FRAME, aSimplePolyPoly.GetObject( i ) );
                 }
             }
             break;
