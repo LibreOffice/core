@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBar.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:34:03 $
+ *  last change:$Date: 2004-11-02 12:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ public class AccessibleTabBar extends TestCase {
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
