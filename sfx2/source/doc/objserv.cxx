@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:23:35 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,7 +1522,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ErrorHandler::HandleError(lErr);
             ResetError();
             delete pTemplates;
-            DoSaveCompleted();
+
+            if ( IsHandsOff() )
+            {
+                if ( !DoSaveCompleted( pMedium ) )
+                    DBG_ERROR("Case not handled - no way to get a storage!");
+            }
+            else
+                DoSaveCompleted();
+
             SetTemplateConfig( bHasTemplateConfig );
             SetModified(bModified);
             rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
