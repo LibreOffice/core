@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:19:02 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,37 +415,13 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     ///////////////
     // Coordsize //
     ///////////////
-    const rtl::OUString sCoordinateOrigin( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateOrigin" ) );
-    const rtl::OUString sCoordinateSize( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateSize" ) );
-    const Any* pOrigin = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sCoordinateOrigin );
-    const Any* pSize = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sCoordinateSize );
-    if ( pOrigin || pSize )
+    const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+    const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sViewBox );
+    com::sun::star::awt::Rectangle aViewBox;
+    if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
-        sal_Int32 nGeoLeft = 0;
-        sal_Int32 nGeoTop  = 0;
-        sal_Int32 nGeoRight  = 21600;
-        sal_Int32 nGeoBottom = 21600;
-        if ( pOrigin )
-        {
-            com::sun::star::awt::Point aOrigin;
-            if ( *pOrigin >>= aOrigin )
-            {
-                nGeoLeft = aOrigin.X;
-                nGeoTop  = aOrigin.Y;
-            }
-        }
-        if ( pSize )
-        {
-            com::sun::star::awt::Size aSize;
-            if ( *pSize >>= aSize )
-            {
-                nGeoRight = aSize.Width + nGeoLeft;
-                nGeoBottom= aSize.Height+ nGeoTop;
-
-            }
-        }
-        nCoordWidth = labs( nGeoRight - nGeoLeft );
-        nCoordHeight = labs( nGeoBottom - nGeoTop );
+        nCoordWidth = labs( aViewBox.Width );
+        nCoordHeight= labs( aViewBox.Height);
     }
     else if ( pDefCustomShape )
     {
@@ -850,6 +826,10 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     bFlipH              ( sal_False ),
     bFlipV              ( sal_False )
 {
+    // bTextFlow needs to be set before clearing the TextDirection Item
+
+    ClearItem( SDRATTR_TEXTDIRECTION ); //SJ: vertical writing is not required, by removing this item no outliner is created
+
     Point aP( pCustomShapeObj->GetSnapRect().Center() );
     Size aS( pCustomShapeObj->GetLogicRect().GetSize() );
     aP.X() -= aS.Width() / 2;
@@ -1955,7 +1935,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         if ( bLineGeometryNeededOnly )
         {
             SdrPathObj* pStroke = new SdrPathObj( OBJ_PLIN, aPolyPoly );
-            pStroke->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pStroke->SetModel( pCustomShapeObj->GetModel() );
             pStroke->SetMergedItemSet( *this );
             pStroke->SetMergedItem( SdrShadowItem( FALSE ) );
             pStroke->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
@@ -1967,7 +1948,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
             {
                 SdrObjKind eObjKind( bNoFill ? OBJ_PLIN : OBJ_POLY );
                 SdrPathObj* pObj = new SdrPathObj( eObjKind, aPolyPoly );
-                pObj->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//              pObj->SetModel( pCustomShapeObj->GetModel() );
                 pObj->SetMergedItemSet( *this );
                 pObj->SetMergedItem( SdrShadowItem( FALSE ) );
                 if ( !bNoFill )
@@ -1993,7 +1975,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 if ( !bNoStroke )
                 {
                     SdrPathObj* pStroke = new SdrPathObj( OBJ_PLIN, aPolyPoly );
-                    pStroke->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//                  pStroke->SetModel( pCustomShapeObj->GetModel() );
                     pStroke->SetMergedItemSet( *this );
                     pStroke->SetMergedItem( SdrShadowItem( FALSE ) );
                     pStroke->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
@@ -2010,7 +1993,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             rPoly[ rPoly.GetPointCount() ] = aPt0;
                     }
                     SdrPathObj* pFill = new SdrPathObj( OBJ_POLY, aPolyPoly );
-                    pFill->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//                  pFill->SetModel( pCustomShapeObj->GetModel() );
                     pFill->SetMergedItemSet( *this );
                     pFill->SetMergedItem( SdrShadowItem( FALSE ) );
                     pFill->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
@@ -2048,15 +2032,13 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         Color           aFillColor;
         sal_uInt32      nColorCount = nColorData >> 28;
         sal_uInt32      nColorIndex = 0;
+
         if ( nColorCount )
-        {
-            const SfxPoolItem* pPoolItem = NULL;
-            SfxItemState eState( GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem ) );
-            if( ( SFX_ITEM_SET == eState ) && pPoolItem )
-                aBasicColor = ((XFillColorItem*)pPoolItem)->GetValue();
-        }
+            aBasicColor = (((XFillColorItem&)pCustomShapeObj->GetMergedItem( XATTR_FILLCOLOR )).GetValue());
+
         pRet = new SdrObjGroup;
-        pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//      pRet->SetModel( pCustomShapeObj->GetModel() );
 
         if ( bSortFilledObjectsToBack )
         {
@@ -2123,7 +2105,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         {
             XPolyPolygon aXShadowPolyPoly( aShadowUnion );
             SdrPathObj* pShadow = new SdrPathObj( OBJ_POLY, aXShadowPolyPoly );
-            pShadow->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pShadow->SetModel( pCustomShapeObj->GetModel() );
             pShadow->SetMergedItemSet( *this );
             pShadow->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
             pRet->GetSubList()->NbcInsertObject( pShadow, 0 );
@@ -2142,7 +2125,8 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     if ( eSpType == mso_sptRectangle )
     {
         pRet = new SdrRectObj( aLogicRect );
-        pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
     else if ( eSpType == mso_sptRoundRectangle )
@@ -2154,14 +2138,16 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
         double fAdjust = GetAdjustValueAsDouble( 0 ) / 21600.0;
         nW = (sal_Int32)( (double)nW * fAdjust );
         pRet = new SdrRectObj( aLogicRect );
-        pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
         pRet->SetMergedItem( SdrEckenradiusItem( nW ) );
     }
     else if ( eSpType == mso_sptEllipse )
     {
         pRet = new SdrCircObj( OBJ_CIRC, aLogicRect );
-        pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
     else if ( eSpType == mso_sptArc )
@@ -2188,7 +2174,8 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
         {
             pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
             pRet->NbcSetSnapRect( aLogicRect );
-            pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pRet->SetModel( pCustomShapeObj->GetModel() );
             pRet->SetMergedItemSet( *this );
         }
         else
@@ -2248,7 +2235,8 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 
             SdrCircObj* pObjCirc = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
             pObjCirc->SetSnapRect( aPolyArcRect );
-            pObjCirc->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pObjCirc->SetModel( pCustomShapeObj->GetModel() );
             pObjCirc->SetMergedItemSet( *this );
 
             int nSwap = bFlipH ? 1 : 0;
@@ -2258,13 +2246,15 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 
             SdrRectObj* pRect = new SdrRectObj( aPolyArcRect );
             pRect->SetSnapRect( aPolyArcRect );
-            pRect->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pRect->SetModel( pCustomShapeObj->GetModel() );
             pRect->SetMergedItemSet( *this );
             pRect->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
             pRect->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
 
             pRet = new SdrObjGroup();
-            pRet->SetModel( pCustomShapeObj->GetModel() );
+// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
+//          pRet->SetModel( pCustomShapeObj->GetModel() );
             ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pRect );
             ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pObjCirc );
         }
