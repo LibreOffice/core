@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSystemShellExecute.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:54 $
+ *  last change:$Date: 2003-05-27 12:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ public class _XSystemShellExecute extends MultiMethodTest {
     */
     public void _execute() {
         String cClassPath = System.getProperty("DOCPTH");
-        String cResFile = utils.getOfficeTempDirSys(tParam.getMSF())+"SystemShellExecute.txt";
-        String cResURL = utils.getOfficeTemp(tParam.getMSF())+"SystemShellExecute.txt";
+        String cResFile = utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF())+"SystemShellExecute.txt";
+        String cResURL = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+"SystemShellExecute.txt";
         String cArgs = "-classpath " + cClassPath +
                        " SystemShellExecute " + cResFile;
 
@@ -114,7 +114,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
 
         XSimpleFileAccess xFileAccess = null;
         try {
-            XMultiServiceFactory xMSF = tParam.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
             Object fa = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             xFileAccess = (XSimpleFileAccess)
                 UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
