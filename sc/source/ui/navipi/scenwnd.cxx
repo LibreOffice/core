@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scenwnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:55:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ void ScScenarioListBox::UpdateEntries( List* pNewEntryList )
             while ( pEntry )
             {
                 InsertEntry( *pEntry, LISTBOX_APPEND );
-                aEntryList.Next(); // Kommentar ueberspringen
+                aEntryList.Next(); // Skip the comment
+                aEntryList.Next(); // Skip the protection
                 pEntry = (String*)aEntryList.Next();
             }
 
@@ -177,7 +178,7 @@ void ScScenarioListBox::CopyEntryList( List& rNewList )
 
 void __EXPORT ScScenarioListBox::Select()
 {
-    String* pEntry = (String*)aEntryList.GetObject( (GetSelectEntryPos()*2)+1 );
+    String* pEntry = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+1 );
 
     if ( pEntry )
         rParent.SetComment( *pEntry );
@@ -252,6 +253,10 @@ long __EXPORT ScScenarioListBox::Notify( NotifyEvent& rNEvt )
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
         {
+                    String* pProtect = (String*)aEntryList.GetObject( (GetSelectEntryPos()*3)+2 );
+                    if(pProtect && pProtect->GetChar(0) == '0')
+                    {
+
             ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
             aPopup.Execute( this, pCEvt->GetMousePosPixel() );
             if (aPopup.WasHit())
@@ -282,6 +287,7 @@ long __EXPORT ScScenarioListBox::Notify( NotifyEvent& rNEvt )
                                                 &aStringItem, 0L, 0L );
                 }
             }
+                    }
             nHandled = 1;
         }
     }
