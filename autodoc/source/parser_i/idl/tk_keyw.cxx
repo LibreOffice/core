@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:42:51 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,15 +139,15 @@ TokParameterHandling::EV_TokenId    ev_ph_inout(TokParameterHandling::ph_inout,"
 namespace lux
 {
 
-EnumValueMap &
+template<> EnumValueMap &
 TokBuiltInType::EV_TokenId::Values_()       { return G_aTokBuiltInType_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 TokTypeModifier::EV_TokenId::Values_()      { return G_aTokTypeModifier_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 TokMetaType::EV_TokenId::Values_()          { return G_aTokMetaType_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 TokStereotype::EV_TokenId::Values_()        { return G_aTokStereotype_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 TokParameterHandling::EV_TokenId::Values_() { return G_aTokParameterHandling_EV_TokenId_Values; }
 
 }   // namespace lux
