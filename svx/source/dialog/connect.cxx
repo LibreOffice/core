@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include <tools/shl.hxx>
 #endif
 #pragma hdrstop
-
-
+#include "ofaitem.hxx"  // add CHINA001
+#include <sfx2/request.hxx> // add CHINA001
 #define _SVX_CONNECT_CXX
 
 #include "svdoedge.hxx"
@@ -592,5 +592,12 @@ void SvxConnectionPage::FillTypeLB()
         }
     }
 }
+void SvxConnectionPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
+    if (pOfaPtrItem)
+        SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()) );
 
+    Construct();
+}
 
