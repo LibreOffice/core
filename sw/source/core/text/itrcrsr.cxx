@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-27 13:12:42 $
+ *  last change: $Author: fme $ $Date: 2002-06-14 14:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,6 +702,16 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                                   nRubyHeight );
                         }
 #endif
+
+#ifdef BIDI
+                        SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
+                        if ( ((SwMultiPortion*)pPor)->IsBidi() )
+                        {
+                            aLayoutModeModifier.Modify(
+                                ((SwBidiPortion*)pPor)->GetLevel() % 2 );
+                        }
+#endif
+
                         _GetCharRect( pOrig, nOfst, pCMS );
 
 #ifdef VERTICAL_LAYOUT
@@ -1405,6 +1415,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 #ifdef BIDI
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                  nTmpY, nX, nCurrStart, nSpaceAdd );
+
+            SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
+            if ( ((SwMultiPortion*)pPor)->IsBidi() )
+            {
+                aLayoutModeModifier.Modify(
+                    ((SwBidiPortion*)pPor)->GetLevel() % 2 );
+            }
 #else
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
