@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WeakBase.cs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $ $Date: 2003-04-07 09:40:46 $
+ *  last change: $ $Date: 2003-07-16 10:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ public class WeakBase : XWeak, XTypeProvider
 {
     // Contains all WeakAdapter which have been created in this class
     // They have to be notified when this object dies
-    private WeakAdapter m_adapter;
+    private WeakAdapter m_adapter = null;
     
     protected static Hashtable s_types = new Hashtable();
     protected static Hashtable s_impl_ids = new Hashtable();
