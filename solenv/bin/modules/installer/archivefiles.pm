@@ -2,9 +2,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-22 10:20:24 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:55:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,8 @@ sub resolving_archive_flag
 
     my $unziplistfile = $loggingdir . "unziplist_" . $installer::globals::build . "_" . $installer::globals::compiler . "_" . $$languagestringref . ".txt";
 
-    # no more common unzipping, because of race conditions
-    # my $commonunzipdirbase = installer::systemactions::create_directories("unzip", "");   # for zip files from common directory
-    my $platformunzipdirbase = installer::systemactions::create_directories("zipfiles", "");    # for zip files from common directory
+    my $platformunzipdirbase = installer::systemactions::create_directories("zipfiles", $languagestringref);
+    push(@installer::globals::removedirs, $platformunzipdirbase);
 
     installer::logger::include_header_into_logfile("Files with flag ARCHIVE:");
 
@@ -131,13 +130,6 @@ sub resolving_archive_flag
             $onefilename =~ s/\//\_/g;      # only because of /letter/fontunxpsprint.zip, the only zip file with path
             $unzipdir = $unzipdir . $onefilename . $installer::globals::separator;
 
-            my $already_unzipped = 0;
-
-            if ( -d $unzipdir )
-            {
-                $already_unzipped = 1;  # to save time and not to unzip more than once
-            }
-
             if ( $installer::globals::dounzip ) { installer::systemactions::create_directory($unzipdir); }  # creating subdirectories with the names of the zipfiles
 
 
@@ -158,37 +150,33 @@ sub resolving_archive_flag
             else
             {
                 # now really unpacking the files
+                # Parameter -o : overwrite files without prompting
+                # Parameter -q : quiet mode
 
                 if ( $installer::globals::dounzip )         # really unpacking the files
                 {
-                    if (!($already_unzipped))   # only unzip if the directory does not exist already (to save time)
-                    {
-                        $returnvalue = 1;
-                        $systemcall = "$installer::globals::unzippath $sourcepath -d $unzipdir";
-                        $returnvalue = system($systemcall);
+                    $returnvalue = 1;
+                    $systemcall = "$installer::globals::unzippath -o -q $sourcepath -d $unzipdir";
+                    $returnvalue = system($systemcall);
 
+                    $infoline = "Systemcall: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    if ($returnvalue) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
+
+                    if ( ! $installer::globals::iswindowsbuild )
+                    {
+                        # Setting unix rights to "775" for all created directories inside the package
+
+                        $systemcall = "cd $unzipdir; find . -type d -exec chmod 775 \{\} \\\;";
+                        $returnvalue = system($systemcall);
                         $infoline = "Systemcall: $systemcall\n";
                         push( @installer::globals::logfileinfo, $infoline);
 
                         if ($returnvalue)
                         {
-                            installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag");
-                        }
-
-                        if ( ! $installer::globals::iswindowsbuild )
-                        {
-                            # Setting unix rights to "775" for all created directories inside the package
-
-                            $systemcall = "cd $unzipdir; find . -type d -exec chmod 775 \{\} \\\;";
-                            $returnvalue = system($systemcall);
-                            $infoline = "Systemcall: $systemcall\n";
+                            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
                             push( @installer::globals::logfileinfo, $infoline);
-
-                            if ($returnvalue)
-                            {
-                                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-                                push( @installer::globals::logfileinfo, $infoline);
-                            }
                         }
                     }
                 }
