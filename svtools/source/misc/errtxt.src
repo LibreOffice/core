@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:06:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 20:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,14 +242,14 @@ Resource RID_ERRCTX
         Text [ danish ] = "$(ERR) under skrivning af dokumentet $(ARG1) som skabelon" ;
         Text [ portuguese ] = "$(ERR) ao escrever o documento $(ARG1) como modelo" ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Schreiben des Dokumentes $(ARG1) als Vorlage" ;
-        Text[ chinese_simplified ] = "ÔÚ¸²Ğ´ÑùÊ½ÎÄµµ$(ARG1)Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "ÔÚ¸ÄĞ´ÑùÊ½ÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàïèñè äîêóìåíòà $(ARG1) êàê øàáëîíà";
         Text[ polish ] = "$(ERR) przy zapisywaniu dokumentu $(ARG1) jako szablonu";
         Text[ japanese ] = "$(ERR)ÃİÌßÚ°Ä‚Æ‚µ‚ÄÄŞ·­ÒİÄ$(ARG1)‚ğ‘‚«‚ŞÛ";
         Text[ chinese_traditional ] = "¼g¤J¼Ë¦¡¤å¥ó $(ARG1) ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ßÊÇÈÉ ÇáãÓÊäÏ $(ARG1) ßŞÇáÈ";
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon";
-        Text[ chinese_simplified ] = "ÔÚ¸²Ğ´ÑùÊ½ÎÄµµ$(ARG1)Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "ÔÚ¸ÄĞ´ÑùÊ½ÎÄµµ $(ARG1) Ê±·¢Éú $(ERR)";
         Text[ greek ] = "$(ERR) êáôÜ ôçí åããñáöŞ ôïõ åããñÜöïõ $(ARG1) ùò ğñüôõğï";
         Text[ korean ] = "¹®¼­$(ARG1)À»(¸¦) ¼­½Ä ÆÄÀÏ·Î ±â·ÏÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi şablon olarak yazılırken $(ERR)";
@@ -766,14 +766,14 @@ Resource RID_ERRHDL
         Text [ danish ] = "Ukendt" ;
         Text [ portuguese ] = "Desconhecido" ;
         Text [ portuguese_brazilian ] = "Unbekannt" ;
-        Text[ chinese_simplified ] = "²»Ã÷";
+        Text[ chinese_simplified ] = "²»Ã÷µÄ";
         Text[ russian ] = "Íåèçâåñòíî";
         Text[ polish ] = "Nieznany";
         Text[ japanese ] = "•s–¾";
-        Text[ chinese_traditional ] = "¤£©ú";
+        Text[ chinese_traditional ] = "¤£©úªº";
         Text[ arabic ] = "ÛíÑ ãÚÑæİ";
         Text[ dutch ] = "Onbekend";
-        Text[ chinese_simplified ] = "²»Ã÷";
+        Text[ chinese_simplified ] = "²»Ã÷µÄ";
         Text[ greek ] = "¢ãíùóôï";
         Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀ½";
         Text[ turkish ] = "Bilinmiyor";
@@ -1960,14 +1960,14 @@ Resource RID_ERRHDL
         Text [ danish ] = "Dokumentet er blevet åbnet til læsning" ;
         Text [ portuguese ] = "O documento foi aberto para leitura." ;
         Text [ portuguese_brazilian ] = "Das Dokument wurde zum Lesen ge?fnet" ;
-        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸²Ğ´µÄ";
+        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸ÄĞ´µÄ¡£";
         Text[ russian ] = "Äîêóìåíò îòêğûò äëÿ ÷òåíèÿ";
         Text[ polish ] = "Dokument zosta³ otwarty tylko do odczytu";
         Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í“Ç‚İæ‚è—p‚ÉŠJ‚©‚ê‚Ü‚µ‚½";
         Text[ chinese_traditional ] = "¤w¸g¥´¶}Åª¨ú³o­Ó¤å¥ó";
         Text[ arabic ] = "Êã İÊÍ Çáãáİ ááŞÑÇÁÉ İŞØ";
         Text[ dutch ] = "Document geopend als alleen lezen";
-        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸²Ğ´µÄ";
+        Text[ chinese_simplified ] = "Õâ¸ö´ò¿ªµÄÎÄµµÊÇ·À¸ÄĞ´µÄ¡£";
         Text[ greek ] = "Ôï İããñáöï áíïß÷èçêå ìüíï ãéá áíÜãíùóç";
         Text[ korean ] = "¹®¼­´Â ÀĞ±â Àü¿ëÀ¸·Î ¿­·ÁÁ³½À´Ï´Ù.";
         Text[ turkish ] = "Belge, salt okunur olarak açıldı";
@@ -2212,7 +2212,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Ôèëüòğ íå íàéäåí";
         Text[ polish ] = "Filtru nie znaleziono";
         Text[ japanese ] = "Ì¨ÙÀ‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹LÂo¾¹";
+        Text[ chinese_traditional ] = "¨S¦³§ä¨ìÂà´«¾¹";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ";
         Text[ dutch ] = "Geen filter gevonden";
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¹ıÂËÆ÷";
@@ -2998,14 +2998,14 @@ Resource RID_ERRHDL
         Text [ spanish ] = "Función imposible: Solo lectura." ;
         Text [ french ] = "Impossible d'exécuter la fonction : en lecture-seule" ;
         Text [ dutch ] = "Functie niet mogelijk: schrijfbeveiligd." ;
-        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸²Ğ´¡£";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸ÄĞ´";
         Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: óñòàíîâëåíà çàùèòà îò çàïèñè.";
         Text[ polish ] = "Wykonanie funkcji niemo¿liwe: Tylko do odczytu.";
         Text[ japanese ] = "‹@”\\•s‰Â”\\F‘‚«‚İ•ÛŒìB";
         Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G°ßÅª";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ãÍãí ÖÏ ÇáßÊÇÈÉ.";
         Text[ dutch ] = "Functie niet mogelijk: schrijfbeveiligd.";
-        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸²Ğ´¡£";
+        Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£º·À¸ÄĞ´";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá: Ìüíï ãéá áíÜãíùóç";
         Text[ korean ] = "±â´É ºÒ°¡´É: ¾²±â º¸È£µÊ.";
         Text[ turkish ] = "İşlev olanaklı değil: Yazma korumalı.";
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
