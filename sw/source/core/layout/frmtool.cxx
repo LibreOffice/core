@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-19 13:14:58 $
+ *  last change: $Author: ama $ $Date: 2001-05-11 09:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@
 #include "node2lay.hxx"
 #include "ndole.hxx"
 #include "ndtxt.hxx"
+#include "fmtclds.hxx"      // SwFmtCol
 
 #include "mdiexp.hxx"
 #include "statstr.hrc"
@@ -1285,6 +1286,14 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                                 pActualSection->GetSectionFrm()->SimpleFormat();
                                 pFrm->Frm().Width( pLay->Prt().Width() );
                                 pFrm->Prt().Width( pLay->Prt().Width() );
+                                if( ((SwSectionFrm*)pFrm)->Lower() &&
+                                  ((SwSectionFrm*)pFrm)->Lower()->IsColumnFrm())
+                                {
+                                    const SwFmtCol &rCol =
+                                      ((SwSectionFrm*)pFrm)->GetFmt()->GetCol();
+                                      ((SwSectionFrm*)pFrm)->AdjustColumns(
+                                                                &rCol, FALSE );
+                                 }
                             }
                             pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
                             pFrm->InsertBehind( pLay, 0 );
@@ -1351,6 +1360,14 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                                 pActualSection->GetSectionFrm()->SimpleFormat();
                                 pFrm->Frm().Width( pLay->Prt().Width() );
                                 pFrm->Prt().Width( pLay->Prt().Width() );
+                                if( ((SwSectionFrm*)pFrm)->Lower() &&
+                                  ((SwSectionFrm*)pFrm)->Lower()->IsColumnFrm())
+                                {
+                                    const SwFmtCol &rCol =
+                                      ((SwSectionFrm*)pFrm)->GetFmt()->GetCol();
+                                      ((SwSectionFrm*)pFrm)->AdjustColumns(
+                                                                &rCol, FALSE );
+                                 }
                             }
                             pActualSection->SetSectionFrm( (SwSectionFrm*)pFrm );
                             pFrm->InsertBehind( pLay, 0 );
