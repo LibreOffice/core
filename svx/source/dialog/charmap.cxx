@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2000-12-20 16:12:41 $
+ *  last change: $Author: hdu $ $Date: 2001-03-05 17:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,12 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
 
+    // restore last selected unicode
+    int nMapIndex = UnicodeToMapIndex( aFont, cSelectedChar );
+    if( nMapIndex < FirstInView() || nMapIndex > LastInView() )
+        cSelectedChar = MapIndexToUnicode( aFont, FirstInView() );
+    SelectIndex( nMapIndex );
+
     // hide scrollbar when there is nothing to scroll
     BOOL bNeedVscroll = (CountGlyphs(aFont) > ROW_COUNT*COLUMN_COUNT);
 
@@ -499,13 +505,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     SetPosPixel( aNewPos );
     SetOutputSizePixel( aNewSize );
 
-    // restore last selected unicode
-    int nMapIndex = UnicodeToMapIndex( aFont, cSelectedChar );
-    if( nMapIndex < FirstInView() || nMapIndex > LastInView() )
-        cSelectedChar = MapIndexToUnicode( aFont, FirstInView() );
-    SelectIndex( nMapIndex );
     aVscrollSB.Show( bNeedVscroll );
-
     Invalidate();
 }
 
@@ -882,12 +882,14 @@ IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
     if ( bSelect )
     {
         // no sprintf or hex-formatter around :-(
-        char buf[8] = "0x0000";
+        char buf[16] = "0x0000";
         for( int i = 0; i < 4; ++i )
         {
             char h = (c >> (4*i)) & 0x0F;
             buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
         }
+        if( c < 256 )
+            sprintf( buf+6, " (%d)", c );
         aTemp = String::CreateFromAscii( buf );
     }
     aCharCodeText.SetText( aTemp );
