@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 14:38:25 $
+ *  last change: $Author: fme $ $Date: 2002-07-02 10:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,9 +1055,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         }
     }
 
+    // this is the default direction
+    const BYTE nDefaultDir = TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() ?
+                             UBIDI_RTL :
+                             UBIDI_LTR;
+
     // do not call the unicode bidi algorithm if not required
-    if ( ( UBIDI_RTL && ! bComplex ) ||
-         ( UBIDI_LTR && ! bLatin && ! bAsian ) )
+    if ( UBIDI_LTR == nDefaultDir && ! bComplex )
         return;
 
     //
@@ -1066,11 +1070,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
     nError = U_ZERO_ERROR;
-
-    // this is the default direction
-    const BYTE nDefaultDir = TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() ?
-                             UBIDI_RTL :
-                             UBIDI_LTR;
 
     ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
                    nDefaultDir, NULL, &nError );
