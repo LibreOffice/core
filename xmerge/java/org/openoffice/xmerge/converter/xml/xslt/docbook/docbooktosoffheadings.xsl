@@ -158,10 +158,62 @@
                 <style:master-page style:name="Standard" style:page-master-name="pm1"/>
             </office:master-styles>
             <office:body>
+   		    <xsl:call-template name="entities"/>
                 <xsl:apply-templates/>
             </office:body>
         </xsl:element>
     </xsl:template>
+
+
+<xsl:template name="entities">
+	<xsl:element name="text:variable-decls">
+	<xsl:for-each select="/descendant::entity">
+		<xsl:variable name="entname"><xsl:value-of select="@name"/></xsl:variable>
+			<xsl:if test="not(preceding::entity[@name = $entname])">
+          			<xsl:element name="text:variable-decl">
+       				<xsl:attribute name="text:value-type">
+       					<xsl:text>string</xsl:text>	
+       				 </xsl:attribute>
+      					<xsl:attribute name="text:name">
+						<xsl:text>entitydecl_</xsl:text><xsl:value-of select="@name"/>
+      					</xsl:attribute>
+      	 			</xsl:element>
+      	 			</xsl:if>
+      	  </xsl:for-each>
+      	  </xsl:element>
+</xsl:template>
+
+
+
+<xsl:template match="entity">
+	<xsl:variable name="entname"><xsl:value-of select="@name"/></xsl:variable>
+	<xsl:choose>
+		<xsl:when test="not(preceding::entity[@name = $entname])">
+			<xsl:element name="text:variable-set">
+	 			<xsl:attribute name="text:value-type">
+             				<xsl:text>string</xsl:text>	
+            		 	</xsl:attribute>
+		 		<xsl:attribute name="text:name">
+		 			<xsl:text>entitydecl_</xsl:text><xsl:value-of select="@name"/>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:element name="text:variable-get">
+	 			<xsl:attribute name="text:value-type">
+             				<xsl:text>string</xsl:text>	
+            		 	</xsl:attribute>
+		 		<xsl:attribute name="text:name">
+		 			<xsl:text>entitydecl_</xsl:text><xsl:value-of select="@name"/>
+				</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:otherwise>
+	</xsl:choose>
+	 
+</xsl:template>
+
 
 
     <!-- table start -->
@@ -352,20 +404,14 @@
 
     <xsl:template match="articleinfo">
         <xsl:element name="text:section">
-            <xsl:attribute name="text:style-name">Info</xsl:attribute>
-            <xsl:attribute name="text:name">Info</xsl:attribute>
-            <xsl:if test="/article/articleinfo/title !=&apos;&apos;">
-                <xsl:element name="text:p">
-                    <xsl:attribute name="text:style-name">Document Title</xsl:attribute>
-                    <xsl:value-of select="/article/articleinfo/title"/>
-                </xsl:element>
+            <xsl:attribute name="text:style-name">ArticleInfo</xsl:attribute>
+            <xsl:attribute name="text:name">ArticleInfo</xsl:attribute>
                 <xsl:if test="/article/articleinfo/subtitle !=&apos;&apos;">
                     <xsl:element name="text:p">
                         <xsl:attribute name="text:style-name">Document SubTitle</xsl:attribute>
                         <xsl:value-of select="/article/articleinfo/subtitle"/>
                     </xsl:element>
                 </xsl:if>
-            </xsl:if>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
@@ -373,8 +419,8 @@
 
     <xsl:template match="chapterinfo">
         <xsl:element name="text:section">
-            <xsl:attribute name="text:style-name">Info</xsl:attribute>
-            <xsl:attribute name="text:name">Info</xsl:attribute>
+            <xsl:attribute name="text:style-name">ChapterInfo</xsl:attribute>
+            <xsl:attribute name="text:name">ChapterInfo</xsl:attribute>
             <xsl:if test="/chapter/chapterinfo/title !=&apos;&apos; ">
                 <xsl:element name="text:p">
                     <xsl:attribute name="text:style-name">Document Title</xsl:attribute>
@@ -444,310 +490,438 @@
     </xsl:template>
     
     
-    <xsl:template match="articleinfo/subtitle | chapterinfo/subtitle">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.subtitle</xsl:text>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.subtitle</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="articleinfo/edition | chapterinfo/edition">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.edition</xsl:text>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.edition</xsl:text>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="articleinfo/releaseinfo | chapterinfo/releaseinfo">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.releaseinfo_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::releaseinfo)"/>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.releaseinfo_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::releaseinfo)"/>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="author/firstname">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo | ancestor::chapterinfo">
-                        <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                        <xsl:value-of select="count(parent::author[preceding-sibling::author])"/>
-                        <xsl:text disable-output-escaping="yes">.firstname_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::firstname)"/>
-                    </xsl:if>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo | ancestor::chapterinfo">
-                        <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                        <xsl:value-of select="count(parent::author[preceding-sibling::author])"/>
-                        <xsl:text disable-output-escaping="yes">.firstname_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::firstname)"/>
-                    </xsl:if>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="articleinfo/copyright/year | chapterinfo/copyright/year">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo/copyright | ancestor::chapterinfo/copyright">
-                        <xsl:text disable-output-escaping="yes">info.copyright_</xsl:text>
-                        <xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/>
-                        <xsl:text disable-output-escaping="yes">.year_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::year)"/>
-                    </xsl:if>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo/copyright | ancestor::chapterinfo/copyright">
-                        <xsl:text disable-output-escaping="yes">info.copyright_</xsl:text>
-                        <xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/>
-                        <xsl:text disable-output-escaping="yes">.year_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::year)"/>
-                    </xsl:if>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="authorgroup">
-        <xsl:apply-templates/>
-    </xsl:template>
-    
-    
-    <xsl:template match="articleinfo/copyright/holder | chapterinfo/copyright/holder">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo/copyright | ancestor::chapterinfo/copyright ">
-                        <xsl:text disable-output-escaping="yes">info.copyright_</xsl:text>
-                        <xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/>
-                        <xsl:text disable-output-escaping="yes">.holder_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::holder)"/>
-                    </xsl:if>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:if test="ancestor::articleinfo/copyright | ancestor::chapterinfo/copyright">
-                        <xsl:text disable-output-escaping="yes">info.copyright_</xsl:text>
-                        <xsl:value-of select="count(parent::copyright[preceding-sibling::copyright])"/>
-                        <xsl:text disable-output-escaping="yes">.holder_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::holder)"/>
-                    </xsl:if>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template name="affiliation">
-        <xsl:apply-templates/>
-    </xsl:template>
-    
-    
-    <xsl:template match="author/affiliation/address">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                    <xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/>
-                    <xsl:text disable-output-escaping="yes">.affiliation_</xsl:text>
-                    <xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/>
-                    <xsl:text disable-output-escaping="yes">.address_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::address)"/>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                    <xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/>
-                    <xsl:text disable-output-escaping="yes">.affiliation_</xsl:text>
-                    <xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/>
-                    <xsl:text disable-output-escaping="yes">.address_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::address)"/>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="email">
-        <xsl:apply-templates/>
-        <!--<xsl:value-of select="."/>-->
-        <!--<xsl:text disable-output-escaping="yes"></xsl:text>-->
+   <xsl:template match="articleinfo/title">
+	<xsl:element name="text:p">
+		<xsl:attribute name="text:style-name">Document Title</xsl:attribute>
+		<xsl:apply-templates/>
+	</xsl:element>
+</xsl:template>
 
-    </xsl:template>
-    
-    
-    <xsl:template match="author/affiliation/orgname">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="ancestor::articleinfo | ancestor::chapterinfo">
-                    <xsl:attribute name="text:name">
-                        <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                        <xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/>
-                        <xsl:text disable-output-escaping="yes">.affiliation_</xsl:text>
-                        <xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/>
-                        <xsl:text disable-output-escaping="yes">.orgname_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::orgname)"/>
-                    </xsl:attribute>
-                </xsl:if>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:if test="ancestor::articleinfo | ancestor::chapterinfo">
-                    <xsl:attribute name="text:name">
-                        <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                        <xsl:value-of select="count(ancestor::author[preceding-sibling::author])"/>
-                        <xsl:text disable-output-escaping="yes">.affiliation_</xsl:text>
-                        <xsl:value-of select="count(parent::affiliation[preceding-sibling::affiliation])"/>
-                        <xsl:text disable-output-escaping="yes">.orgname_</xsl:text>
-                        <xsl:value-of select="count(preceding-sibling::orgname)"/>
-                    </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
-    
-    <xsl:template match="author/surname">
-        <xsl:element name="text:variable-decls">
-            <xsl:element name="text:variable-decl">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                    <xsl:value-of select="count(parent::author[preceding-sibling::author])"/>
-                    <xsl:text disable-output-escaping="yes">.surname_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::surname)"/>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-        <xsl:element name="text:p">
-            <xsl:element name="text:variable-set">
-                <xsl:attribute name="text:value-type">
-                    <xsl:text>string</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="text:name">
-                    <xsl:text disable-output-escaping="yes">info.author_</xsl:text>
-                    <xsl:value-of select="count(parent::author[preceding-sibling::author])"/>
-                    <xsl:text disable-output-escaping="yes">.surname_</xsl:text>
-                    <xsl:value-of select="count(preceding-sibling::surname)"/>
-                </xsl:attribute>
-                <xsl:apply-templates/>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-    
+<xsl:template match="date">
+	<xsl:element name="text:s"/>
+	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>date_</xsl:text><xsl:value-of select="count(preceding::date)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>date_</xsl:text><xsl:value-of select="count(preceding::date)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="revision">
+	<xsl:element name="text:s"/>
+	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>revision_</xsl:text><xsl:value-of select="count(preceding::revision)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>revision_</xsl:text><xsl:value-of select="count(preceding::revision)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="revnumber">
+	<xsl:element name="text:s"/>
+	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>revnumber_</xsl:text><xsl:value-of select="count(preceding::revnumber)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>revnumber_</xsl:text><xsl:value-of select="count(preceding::revnumber)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="revdescription">
+	<xsl:element name="text:s"/>
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>revdescription_</xsl:text><xsl:value-of select="count(preceding::revdescription)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>revdescription_</xsl:text><xsl:value-of select="count(preceding::revdescription)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="revhistory">
+	<xsl:element name="text:p">
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>revhistory_</xsl:text><xsl:value-of select="count(preceding::revhistory)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>revhistory_</xsl:text><xsl:value-of select="count(preceding::revhistory)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:line-break"/>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="legalnotice">
+	<xsl:element name="text:p">
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>legalnotice_</xsl:text><xsl:value-of select="count(preceding::legalnotice)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>legalnotice_</xsl:text><xsl:value-of select="count(preceding::legalnotice)"/>
+		</xsl:attribute>
+	</xsl:element>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="legalnotice/title">
+	<xsl:element name="text:s"/>
+	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>title_</xsl:text><xsl:value-of select="count(preceding::legalnotice/title)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>title_</xsl:text><xsl:value-of select="count(preceding::legalnotice/title)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="para[ancestor::articleinfo]">
+	<xsl:element name="text:s"/>
+
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>para_</xsl:text><xsl:value-of select="count(preceding::para[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>para_</xsl:text><xsl:value-of select="count(preceding::para[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+
+<xsl:template match="articleinfo/subtitle">
+	<xsl:element name="text:p">
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>subtitle_</xsl:text><xsl:value-of select="count(preceding::articleinfo/subtitle)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>subtitle_</xsl:text><xsl:value-of select="count(preceding::articleinfo/subtitle)"/>
+		</xsl:attribute>
+	</xsl:element>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="articleinfo/edition">
+		<xsl:element name="text:p">
+		<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>edition_</xsl:text><xsl:value-of select="count(preceding::articleinfo/edition)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>edition_</xsl:text><xsl:value-of select="count(preceding::articleinfo/edition)"/>
+		</xsl:attribute>
+	</xsl:element>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="articleinfo/releaseinfo">
+      <xsl:element name="text:p">
+     	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>releaseinfo_</xsl:text><xsl:value-of select="count(preceding::articleinfo/releaseinfo)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>releaseinfo_</xsl:text><xsl:value-of select="count(preceding::articleinfo/releaseinfo)"/>
+		</xsl:attribute>
+	</xsl:element>
+	</xsl:element>
+</xsl:template>
+
+
+<xsl:template match="author/firstname">
+	<xsl:element name="text:s"/>
+         <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>firstname_</xsl:text><xsl:value-of select="count(preceding::author/firstname)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>firstname_</xsl:text><xsl:value-of select="count(preceding::author/firstname)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+
+</xsl:template>
+
+
+
+<xsl:template match="year[ancestor::articleinfo]">
+	<xsl:element name="text:s"/>
+
+        	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>year_</xsl:text><xsl:value-of select="count(preceding::year[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>year_</xsl:text><xsl:value-of select="count(preceding::year[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+
+</xsl:template>
+
+<xsl:template match="authorgroup">
+	<xsl:element name="text:p">
+	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>authorgroup_</xsl:text><xsl:value-of select="count(preceding::authorgroup)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>authorgroup_</xsl:text><xsl:value-of select="count(preceding::authorgroup)"/>
+		</xsl:attribute>
+	</xsl:element>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="articleinfo/copyright/holder">
+	<xsl:element name="text:s"/>
+       <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>holder_</xsl:text><xsl:value-of select="count(preceding::articleinfo/copyright/holder)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>holder_</xsl:text><xsl:value-of select="count(preceding::articleinfo/copyright/holder)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<!--<xsl:element name="text:s"/>-->
+	<xsl:element name="text:line-break"/>
+</xsl:template>
+
+<xsl:template match="articleinfo/copyright">
+	<xsl:element name="text:p">
+       <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>copyright_</xsl:text><xsl:value-of select="count(preceding::articleinfo/copyright)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>copyright_</xsl:text><xsl:value-of select="count(preceding::articleinfo/copyright)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+	</xsl:element>
+</xsl:template>
+
+
+<xsl:template name="affiliation">
+	<xsl:element name="text:s"/>
+	 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>affiliation_</xsl:text><xsl:value-of select="count(preceding::affiliation)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>affiliation_</xsl:text><xsl:value-of select="count(preceding::affiliation)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="author/affiliation/address">
+	<xsl:element name="text:p">
+		 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>address_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/address)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>address_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/address)"/>
+		</xsl:attribute>
+	</xsl:element>
+</xsl:element>
+</xsl:template>
+
+<xsl:template match="authorgroup">
+	<xsl:element name="text:p">
+    		 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>authorgroup_</xsl:text><xsl:value-of select="count(preceding::authorgroup)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>authorgroup_</xsl:text><xsl:value-of select="count(preceding::authorgroup)"/>
+		</xsl:attribute>
+	</xsl:element>
+</xsl:element>
+</xsl:template>
+
+
+<xsl:template match="author">
+	<xsl:element name="text:s"/>
+    	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>author_</xsl:text><xsl:value-of select="count(preceding::author)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>author_</xsl:text><xsl:value-of select="count(preceding::author)"/>
+		</xsl:attribute>
+	</xsl:element>	
+	<!--<xsl:element name="text:s"/>-->
+	<xsl:element name="text:line-break"/>
+</xsl:template>
+
+<xsl:template match="author/affiliation">
+	<xsl:element name="text:s"/>
+    	 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>affiliation_</xsl:text><xsl:value-of select="count(preceding::author/affiliation)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>affiliation_</xsl:text><xsl:value-of select="count(preceding::author/affiliation)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+<xsl:template match="author/affiliation/address">
+	<xsl:element name="text:s"/>
+    	 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>address_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/address)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>address_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/address)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:element name="text:s"/>
+</xsl:template>
+
+
+<xsl:template match="email[ancestor::articleinfo]">
+	<xsl:element name="text:s"/>
+
+    	 <xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>email_</xsl:text><xsl:value-of select="count(preceding::email[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>email_</xsl:text><xsl:value-of select="count(preceding::email[ancestor::articleinfo])"/>
+		</xsl:attribute>
+	</xsl:element>
+		<xsl:element name="text:s"/>
+
+</xsl:template>
+
+<xsl:template match="author/affiliation/orgname">
+	<xsl:element name="text:s"/>
+
+    	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>orgname_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/orgname)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>orgname_</xsl:text><xsl:value-of select="count(preceding::author/affiliation/orgname)"/>
+		</xsl:attribute>
+	</xsl:element>
+		<xsl:element name="text:s"/>
+
+</xsl:template>
+
+
+<xsl:template match="author/surname">
+	<xsl:element name="text:s"/>
+
+   	<xsl:element name="text:bookmark-start">
+		<xsl:attribute name="text:name">
+			<xsl:text>surname_</xsl:text><xsl:value-of select="count(preceding::author/surname)"/>
+		</xsl:attribute>
+	</xsl:element>
+	<xsl:apply-templates/>
+	<xsl:element name="text:bookmark-end">
+		<xsl:attribute name="text:name">
+			<xsl:text>surname_</xsl:text><xsl:value-of select="count(preceding::author/surname)"/>
+		</xsl:attribute>
+	</xsl:element>
+				<xsl:element name="text:s"/>
+
+
+</xsl:template>
+
+
     
     <xsl:template match="para">
         <xsl:choose>
@@ -1552,28 +1726,10 @@
     </xsl:template>
 
 
-    <xsl:template match="comment()">
-        <xsl:choose>
-            <xsl:when test="ancestor::para">
-                <xsl:element name="text:span">
-                    <xsl:attribute name="text:style-name">
-                        <xsl:text>XMLComment</xsl:text>
-                    </xsl:attribute>
-                    <xsl:value-of select="."/>
-                </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:element name="text:p">
-                    <xsl:attribute name="text:style-name">Text body</xsl:attribute>
-                    <xsl:element name="text:span">
-                        <xsl:attribute name="text:style-name">
-                            <xsl:text>XMLComment</xsl:text>
-                        </xsl:attribute>
-                        <xsl:value-of select="."/>
-                    </xsl:element>
-                </xsl:element>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:template match="comment()"> 
+       <xsl:element name="text:p">
+           <xsl:attribute name="text:style-name">XMLComment</xsl:attribute>
+           <xsl:value-of select="."/>
+       </xsl:element>
     </xsl:template>
-    
 </xsl:stylesheet>

@@ -73,6 +73,16 @@
     
 <!-- -->
     <xsl:template match="/office:document">
+	<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+	</xsl:text>
+	<xsl:for-each select="descendant::text:variable-decl">
+		<xsl:variable name="name"><xsl:value-of select="@text:name"/></xsl:variable>
+		<xsl:if test="contains(@text:name,'entitydecl')">
+			<xsl:text disable-output-escaping="yes">&lt;!ENTITY </xsl:text><xsl:value-of select="substring-after(@text:name,'entitydecl_')"/><xsl:text> "</xsl:text><xsl:value-of select="/descendant::text:variable-set[@text:name= $name][1]"/><xsl:text disable-output-escaping="yes">"&gt;</xsl:text>
+		</xsl:if>
+	</xsl:for-each>
+
+	<xsl:text disable-output-escaping="yes">]&gt;</xsl:text>
         <article>
             <xsl:attribute name="lang">
                 <xsl:value-of select="/office:document/office:meta/dc:language"/>
@@ -84,59 +94,30 @@
 
     <xsl:template match="text:section">
         <xsl:choose>
-            <!--<xsl:when test="@text:name='ArticleInfo'">-->
+	<xsl:when test="@text:name='ArticleInfo'">
+		<articleinfo>
+			<xsl:apply-templates/>
+		</articleinfo>
+	</xsl:when>
+	<xsl:when test="@text:name='Abstract'">
+		<abstract>
+			<xsl:apply-templates/>
+		</abstract>
+	</xsl:when>
+	<xsl:when test="@text:name='Appendix'">
+		<appendix>
+			<xsl:apply-templates/>
+		</appendix>
+	</xsl:when>
+	<xsl:otherwise>
+		<xsl:variable name="sectvar"><xsl:text>sect</xsl:text><xsl:value-of select="count(ancestor::text:section)+1"/></xsl:variable>	
+		<xsl:variable name="idvar"><xsl:text> id="</xsl:text><xsl:value-of select="@text:name"/><xsl:text>"</xsl:text></xsl:variable>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="$sectvar"/><xsl:value-of select="$idvar"/><xsl:text  disable-output-escaping="yes">&gt;</xsl:text>
+			<xsl:apply-templates/>
+		<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="$sectvar"/><xsl:text  disable-output-escaping="yes">&gt;</xsl:text>
+	</xsl:otherwise>
+</xsl:choose>
 
-            <xsl:when test="@text:name=&apos;Info&apos;">
-                <articleinfo>
-                    <title>
-                        <xsl:value-of select="text:p[@text:style-name=&apos;Document Title&apos;]"/>
-                    </title>
-                    <subtitle>
-                        <xsl:value-of select="text:p[@text:style-name=&apos;Document SubTitle&apos;]"/>
-                    </subtitle>
-                    <edition>
-                        <xsl:value-of select="text:p/text:variable-set[@text:name=&apos;info.edition&apos;]"/>
-                    </edition>
-                    <xsl:for-each select="text:p/text:variable-set[substring-after(@text:name,&apos;info.releaseinfo&apos;)]">
-                        <releaseinfo>
-                            <xsl:value-of select="."/>
-                        </releaseinfo>
-                    </xsl:for-each>
-                    <xsl:call-template name="Info">
-                        <xsl:with-param name="level" select="0"/>
-                    </xsl:call-template>
-                </articleinfo>
-            </xsl:when>
-            <xsl:when test="@text:name=&apos;Abstract&apos;">
-                <abstract>
-                    <xsl:apply-templates/>
-                </abstract>
-            </xsl:when>
-            <xsl:when test="@text:name=&apos;Appendix&apos;">
-                <appendix>
-                    <xsl:apply-templates/>
-                </appendix>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="sectvar">
-                    <xsl:text>sect</xsl:text>
-                    <xsl:value-of select="count(ancestor::text:section)+1"/>
-                </xsl:variable>
-                <xsl:variable name="idvar">
-                    <xsl:text>id="</xsl:text>
-                    <xsl:value-of select="@text:name"/>
-                    <xsl:text>"</xsl:text>
-                </xsl:variable>
-                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>
-                <xsl:value-of select="$sectvar"/>
-                <xsl:value-of select="$idvar"/>
-                <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-                <xsl:apply-templates/>
-                <xsl:text disable-output-escaping="yes">&lt;/</xsl:text>
-                <xsl:value-of select="$sectvar"/>
-                <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="text:h[@text:level=&apos;1&apos;]">
@@ -217,39 +198,37 @@
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="text:variable-set|text:variable-get">
+	<xsl:choose>
+		<xsl:when test="contains(@text:name,'entitydecl')">
+			<xsl:text disable-output-escaping="yes">&amp;</xsl:text><xsl:value-of select="substring-after(@text:name,'entitydecl_')"/><xsl:text disable-output-escaping="yes">;</xsl:text>
+		</xsl:when>
+	</xsl:choose>
+     </xsl:template>
+
+
+    <xsl:template match="text:p[@text:style-name='XMLComment']">
+         <xsl:comment>
+             <xsl:value-of select="."/>
+         </xsl:comment>
+    </xsl:template>
+
+    <xsl:template match="text:section[@text:name = 'ArticleInfo']/text:p[not(@text:style-name='XMLComment')]">
+           <xsl:apply-templates/>
+    </xsl:template>
 
     <xsl:template match="text:p">
         <!--text:span text:style-name="XrefLabel" -->
         <!--<xsl:if test="not( child::text:span[@text:style-name = 'XrefLabel'] )"> -->
 
-        <para>
+        <xsl:element name="para">
             <xsl:if test="child::text:reference-mark-start">
                 <xsl:value-of select="."/>
             </xsl:if>
             <xsl:apply-templates/>
-        </para>
+        </xsl:element>
         <!-- </xsl:if> -->
 
-    </xsl:template>
-
-
-    <xsl:template match="text:bookmark-start">
-        <xsl:choose>
-            <xsl:when test="contains(@text:name,&apos;menuchoice&apos;)">
-                <xsl:text disable-output-escaping="yes">&lt;menuchoice&gt;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:apply-templates/>
-    </xsl:template>
-
-
-    <xsl:template match="text:bookmark-end">
-        <xsl:choose>
-            <xsl:when test="contains(@text:name,&apos;menuchoice&apos;)">
-                <xsl:text disable-output-escaping="yes">&lt;/menuchoice&gt;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-        <xsl:apply-templates/>
     </xsl:template>
 
 
@@ -295,214 +274,25 @@
     <xsl:template match="office:settings"/>
 
     <xsl:template match="office:font-decls"/>
-
-    <xsl:template name="Info">
-        <xsl:param name="level"/>
-        <xsl:variable name="author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $level)"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[contains(@text:name, $author )]">
-            <xsl:call-template name="Author">
-                <xsl:with-param name="AuthorLevel" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="Copyright">
-                <xsl:with-param name="CopyrightLevel" select="0"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template name="Copyright">
-        <xsl:param name="CopyrightLevel"/>
-        <xsl:variable name="Copyright">
-            <xsl:value-of select="concat(&apos;info.copyright_&apos;,&apos;&apos;, $CopyrightLevel)"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[contains(@text:name,$Copyright)]">
-            <copyright>
-                <xsl:call-template name="Year">
-                    <xsl:with-param name="CopyrightLevel" select="$CopyrightLevel"/>
-                    <xsl:with-param name="YearlLevel" select="0"/>
-                </xsl:call-template>
-                <xsl:call-template name="Holder">
-                    <xsl:with-param name="CopyrightLevel" select="$CopyrightLevel"/>
-                    <xsl:with-param name="HolderlLevel" select="0"/>
-                </xsl:call-template>
-            </copyright>
-        </xsl:if>
+    
+    <xsl:template match="text:bookmark-start">
+	<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="substring-before(@text:name,'_')"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text><xsl:apply-templates/>
     </xsl:template>
 
 
-    <xsl:template name="Year">
-        <xsl:param name="CopyrightLevel"/>
-        <xsl:param name="YearLevel"/>
-        <xsl:variable name="Copyright">
-            <xsl:value-of select="concat(&apos;info.copyright_&apos;,&apos;&apos;, $CopyrightLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Year">
-            <xsl:value-of select="concat($Copyright,&apos;&apos;,concat(&apos;.year_&apos;,&apos;&apos;,$YearLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Year]">
-            <orgname>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Year]"/>
-            </orgname>
-        </xsl:if>
+    <xsl:template match="text:bookmark-end">
+	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="substring-before(@text:name,'_')"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text><xsl:apply-templates/>
     </xsl:template>
 
 
-    <xsl:template name="Holder">
-        <xsl:param name="CopyrightLevel"/>
-        <xsl:param name="HolderLevel"/>
-        <xsl:variable name="Copyright">
-            <xsl:value-of select="concat(&apos;info.copyright_&apos;,&apos;&apos;, $CopyrightLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Holder">
-            <xsl:value-of select="concat($Copyright,&apos;&apos;,concat(&apos;.holder_&apos;,&apos;&apos;,$HolderLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Holder]">
-            <orgname>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Holder]"/>
-            </orgname>
-        </xsl:if>
-    </xsl:template>
+    <xsl:template match="text:p[@text:style-name='Document Title']">
+	<xsl:element name="title">
+		<xsl:apply-templates />
+	</xsl:element>
+     </xsl:template>
 
-
-    <xsl:template name="Author">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[contains(@text:name, $Author )]">
-            <author>
-                <xsl:call-template name="Surname">
-                    <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                    <xsl:with-param name="SurnameLevel" select="0"/>
-                </xsl:call-template>
-                <xsl:call-template name="Firstname">
-                    <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                    <xsl:with-param name="FirstnameLevel" select="0"/>
-                </xsl:call-template>
-                <xsl:call-template name="Affiliation">
-                    <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                    <xsl:with-param name="AffilLevel" select="0"/>
-                </xsl:call-template>
-            </author>
-            <xsl:call-template name="Author">
-                <xsl:with-param name="AuthorLevel" select="$AuthorLevel+1"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template name="Surname">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:param name="SurnameLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Surname">
-            <xsl:value-of select="concat($Author,&apos;&apos;,concat(&apos;.surname_&apos;,&apos;&apos;,$SurnameLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Surname]">
-            <surname>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Surname]"/>
-            </surname>
-            <xsl:call-template name="Surname">
-                <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                <xsl:with-param name="SurnameLevel" select="SurnameLevel+1"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template name="Firstname">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:param name="FirstnameLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Firstname">
-            <xsl:value-of select="concat($Author,&apos;&apos;,concat(&apos;.firstname_&apos;,&apos;&apos;,$FirstnameLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Firstname]">
-            <firstname>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Firstname]"/>
-            </firstname>
-            <xsl:call-template name="Surname">
-                <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                <xsl:with-param name="FirstnameLevel" select="FirstnameLevel+1"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template name="Affiliation">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:param name="AffilLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Affil">
-            <xsl:value-of select="concat($Author,&apos;&apos;,concat(&apos;.affiliation_&apos;,&apos;&apos;,$AffilLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[contains(@text:name,$Affil)]">
-            <affiliation>
-                <xsl:call-template name="Orgname">
-                    <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                    <xsl:with-param name="AffilLevel" select="$AffilLevel"/>
-                    <xsl:with-param name="OrgLevel" select="0"/>
-                </xsl:call-template>
-                <xsl:call-template name="Address">
-                    <xsl:with-param name="AuthorLevel" select="$AuthorLevel"/>
-                    <xsl:with-param name="AffilLevel" select="$AffilLevel"/>
-                    <xsl:with-param name="AddressLevel" select="0"/>
-                </xsl:call-template>
-            </affiliation>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template name="Orgname">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:param name="AffilLevel"/>
-        <xsl:param name="OrgLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Affil">
-            <xsl:value-of select="concat($Author,&apos;&apos;,concat(&apos;.affiliation_&apos;,&apos;&apos;,$AffilLevel))"/>
-        </xsl:variable>
-        <xsl:variable name="Org">
-            <xsl:value-of select="concat($Affil,&apos;&apos;,concat(&apos;.orgname_&apos;,&apos;&apos;,$OrgLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Org]">
-            <orgname>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Org]"/>
-            </orgname>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template name="Address">
-        <xsl:param name="AuthorLevel"/>
-        <xsl:param name="AffilLevel"/>
-        <xsl:param name="AddressLevel"/>
-        <xsl:variable name="Author">
-            <xsl:value-of select="concat(&apos;info.author_&apos;,&apos;&apos;, $AuthorLevel)"/>
-        </xsl:variable>
-        <xsl:variable name="Affil">
-            <xsl:value-of select="concat($Author,&apos;&apos;,concat(&apos;.affiliation_&apos;,&apos;&apos;,$AffilLevel))"/>
-        </xsl:variable>
-        <xsl:variable name="Address">
-            <xsl:value-of select="concat($Affil,&apos;&apos;,concat(&apos;.address_&apos;,&apos;&apos;,$AddressLevel))"/>
-        </xsl:variable>
-        <xsl:if test="text:p/text:variable-set[@text:name=$Address]">
-            <address>
-                <xsl:value-of select="text:p/text:variable-set[@text:name=$Address]"/>
-            </address>
-        </xsl:if>
-    </xsl:template>
-
-
-    <xsl:template match="text:p[@text:style-name=&apos;Document Title&apos;]"/>
+<xsl:template match="text:p[@text:style-name='Document SubTitle']">
+</xsl:template>
 
     <xsl:template match="text:p[@text:style-name=&apos;Document SubTitle&apos;]"/>
 
@@ -822,47 +612,47 @@
         <xsl:choose>
             <xsl:when test="./@text:style-name=&apos;GuiMenu&apos;">
                 <xsl:element name="guimenu">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="./@text:style-name=&apos;GuiSubMenu&apos;">
                 <xsl:element name="guisubmenu">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;GuiMenuItem&apos;">
                 <xsl:element name="guimenuitem">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;GuiButton&apos;">
                 <xsl:element name="guibutton">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;GuiButton&apos;">
                 <xsl:element name="guibutton">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;GuiLabel&apos;">
                 <xsl:element name="guilabel">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;Emphasis&apos;">
                 <xsl:element name="emphasis">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;FileName&apos;">
                 <xsl:element name="filename">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;Application&apos;">
                 <xsl:element name="application">
-                    <xsl:value-of select="."/>
+			<xsl:apply-templates/>	
                 </xsl:element>
             </xsl:when>
             <xsl:when test="@text:style-name=&apos;Command&apos;">
@@ -909,11 +699,6 @@
                 <keycombo>
                     <xsl:apply-templates/>
                 </keycombo>
-            </xsl:when>
-            <xsl:when test="@text:style-name=&apos;XMLComment&apos;">
-                <xsl:comment>
-                    <xsl:value-of select="."/>
-                </xsl:comment>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates/>
