@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:34:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,12 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
 OPreparedStatement::~OPreparedStatement()
 {
     DBG_DTOR(OPreparedStatement, NULL);
-    delete m_pColumns;
+    if ( m_pColumns )
+    {
+        m_pColumns->acquire();
+        m_pColumns->disposing();
+        delete m_pColumns;
+    }
 }
 
 // com::sun::star::lang::XTypeProvider
