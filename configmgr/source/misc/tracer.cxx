@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 12:14:37 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 12:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ namespace configmgr
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
+#include <osl/process.h>
+#include <rtl/ustring.hxx>
 
 #define INFO    1
 #define WARNING 2
@@ -313,7 +316,14 @@ void OConfigTracer::ensureInitalized()
         ++pParamLoop;
         pSettings = pParamLoop;
     }
+
+    // trace some initial information
+    CFG_TRACE_INFO_NI("initialization: process id: 0x%08X", osl_getProcess(0));
+    ::rtl::OUString sExecutable;
+    osl_getExecutableFile(&sExecutable.pData);
+    CFG_TRACE_INFO_NI("initialization: executable file name: %s", OUSTRING2ASCII(sExecutable));
 }
+
 //--------------------------------------------------------------------------
 void OConfigTracer::traceToVirtualDevice(const sal_Char* _pDeviceName, const sal_Char* _pFormat, ...)
 {
@@ -370,6 +380,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.2  2000/11/07 12:14:37  hr
+//  #65293#: includes
+//
 //  Revision 1.1.1.1  2000/09/18 16:13:41  hr
 //  initial import
 //
