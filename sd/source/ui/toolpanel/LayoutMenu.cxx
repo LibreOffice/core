@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "PaneManager.hxx"
 #include "SlideSorterViewShell.hxx"
 
+#ifndef _SFXOBJFACE_HXX
+#include <sfx2/objface.hxx>
+#endif
 #ifndef _SDRESID_HXX
 #include "sdresid.hxx"
 #endif
