@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:33:22 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 11:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     xPropSet( rPageStylePropSet ),
     sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
     sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
-                                                      s: "HeaderShared" ) ),
+                                                      : "HeaderShared" ) ),
     sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
     sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
                                                      : "HeaderTextLeft" ) ),
