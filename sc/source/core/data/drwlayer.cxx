@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:09:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,24 @@ void lcl_ReverseTwipsToMM( Rectangle& rRect )
     ReverseTwipsToMM( rRect.Right() );
     ReverseTwipsToMM( rRect.Top() );
     ReverseTwipsToMM( rRect.Bottom() );
+}
+
+BOOL lcl_MirrorCheckRect(const Rectangle& rRect, BOOL bNegativePage)
+{
+    BOOL bMirrorChange = false;
+
+    if ( bNegativePage )
+    {
+        if(rRect.Left() >= 0 && rRect.Right() > 0)
+            bMirrorChange = true;
+    }
+    else
+    {
+        if(rRect.Left() < 0 && rRect.Right() <= 0)
+            bMirrorChange = true;
+    }
+
+    return bMirrorChange;
 }
 
 // -----------------------------------------------------------------------
@@ -582,7 +600,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
 
     BOOL bArrow = ( pObj->IsPolyObj() && pObj->GetPointCount()==2 );    // Pfeil ?
     BOOL bCircle = ( pObj->ISA(SdrCircObj) );                           // Kreis (Gueltigkeit)
-    BOOL bCaption = ( pObj->ISA(SdrCaptionObj) );                       // Notiz
+    BOOL bCaption = ( pObj->ISA(SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN );        // Notiz
 
     if (bCaption)
     {
@@ -604,28 +622,20 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
         {
             pCaptObj->SetTailPos(aPos);
 
-            //  Rest in gleichem Abstand mitverschieben
-
-            Rectangle aOldLogic = pObj->GetLogicRect();
-            long nDiffX = aOldLogic.Left() - aOldTail.X();
-            long nDiffY = aOldLogic.Top() - aOldTail.Y();
-            Point aNewStart( aPos.X() + nDiffX, aPos.Y() + nDiffY );
-            if ( bNegativePage )
-            {
-                if ( aNewStart.X() + aOldLogic.GetWidth() > 0 )
-                    aNewStart.X() = -aOldLogic.GetWidth();
-            }
-            else
-                if ( aNewStart.X() < 0 ) aNewStart.X() = 0;
-            if ( aNewStart.Y() < 0 ) aNewStart.Y() = 0;
-            Rectangle aNewLogic( aNewStart, aOldLogic.GetSize() );
-
-            if ( aNewLogic != aOldLogic )
-            {
-                if (bRecording)
-                    AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                pObj->SetLogicRect(aNewLogic);
-            }
+                    ScPostIt aNote(pDoc);
+                    if (pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote))
+                    {
+                        Rectangle aRect = pCaptObj->GetLogicRect();
+                        if(lcl_MirrorCheckRect( aRect, bNegativePage ))
+                        {
+                            MirrorRectRTL( aRect );
+                            pCaptObj->SetLogicRect( aRect );
+                            aNote.SetRectangle(aRect);
+                            pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
+                        }
+                    }
+                    if (bRecording)
+                        AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
         }
     }
     else if (bCircle)                   // Kreis (Gueltigkeit)
