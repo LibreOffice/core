@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:28:28 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,8 +689,9 @@ void SwFldVarPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(FALSE);
     aSelectionLB.Clear();
 
-    SvStringsDtor& rLst = GetFldMgr().GetSubTypes(nTypeId);
-    USHORT nCount = rLst.Count();
+    SvStringsDtor aList;
+    GetFldMgr().GetSubTypes(nTypeId, aList);
+    USHORT nCount = aList.Count();
     USHORT nPos;
 
     for (USHORT i = 0; i < nCount; ++i)
@@ -699,7 +700,7 @@ void SwFldVarPage::UpdateSubType()
         {
             if (!IsFldEdit())
             {
-                nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                nPos = aSelectionLB.InsertEntry(*aList[i]);
                 aSelectionLB.SetEntryData(nPos, (void*)i);
             }
             else
@@ -709,7 +710,7 @@ void SwFldVarPage::UpdateSubType()
                 switch (nTypeId)
                 {
                     case TYP_INPUTFLD:
-                        if (*rLst[i] == GetCurField()->GetPar1())
+                        if (*aList[i] == GetCurField()->GetPar1())
                             bInsert = TRUE;
                         break;
 
@@ -718,13 +719,13 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (*rLst[i] == ((SwFormulaField*)GetCurField())->GetFormula())
+                        if (*aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
                             bInsert = TRUE;
                         break;
 
                     case TYP_SETFLD:
                     case TYP_USERFLD:
-                        if (*rLst[i] == GetCurField()->GetTyp()->GetName())
+                        if (*aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = TRUE;
                             if (GetCurField()->GetSubType() & SUB_INVISIBLE)
@@ -735,21 +736,21 @@ void SwFldVarPage::UpdateSubType()
                     case TYP_SETREFPAGEFLD:
                         if ((((SwRefPageSetField*)GetCurField())->IsOn() && i) ||
                             (!((SwRefPageSetField*)GetCurField())->IsOn() && !i))
-                            sOldSel = *rLst[i];
+                            sOldSel = *aList[i];
 
                         // Alle Eintr„ge zur Auswahl zulassen:
-                        nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                        nPos = aSelectionLB.InsertEntry(*aList[i]);
                         aSelectionLB.SetEntryData(nPos, (void*)i);
                         break;
 
                     default:
-                        if (*rLst[i] == GetCurField()->GetPar1())
+                        if (*aList[i] == GetCurField()->GetPar1())
                             bInsert = TRUE;
                         break;
                 }
                 if (bInsert)
                 {
-                    nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                    nPos = aSelectionLB.InsertEntry(*aList[i]);
                     aSelectionLB.SetEntryData(nPos, (void*)i);
                     if (nTypeId != TYP_FORMELFLD)
                         break;
@@ -1122,7 +1123,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                 }
                 pType->UpdateFlds();
 
-                ::GetActiveView()->GetWrtShell().EndAllAction();
+                rSh.EndAllAction();
             }
             else        // Neu
             {
