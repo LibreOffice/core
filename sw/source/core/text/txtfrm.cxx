@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-25 14:29:51 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2330,9 +2330,9 @@ void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
  *                      SwTxtFrm::GetScriptInfo()
  *************************************************************************/
 
-SwScriptInfo* SwTxtFrm::GetScriptInfo()
+const SwScriptInfo* SwTxtFrm::GetScriptInfo() const
 {
-    SwParaPortion* pPara = GetPara();
+    const SwParaPortion* pPara = GetPara();
     return pPara ? &pPara->GetScriptInfo() : 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 14:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ public:
     inline long *GetDelta() { return &nDelta; }
     inline const long *GetDelta() const { return &nDelta; }
     inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
+    inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
 
     // fuer SwTxtFrm::Format: liefert die aktuelle Laenge des Absatzes
     xub_StrLen GetParLen() const;
