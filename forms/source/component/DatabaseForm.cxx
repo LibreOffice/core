@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 11:10:21 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 08:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1763,7 +1763,16 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
                             // and fill the param value
                             aValue = xMasterField->getPropertyValue(PROPERTY_VALUE);
                             // parameters are based at 1
-                            xExecutionParams->setObjectWithInfo(aFind->second + 1, aValue, getINT32(aParamType), nScale);
+                            try
+                            {
+                                xExecutionParams->setObjectWithInfo(aFind->second + 1, aValue, getINT32(aParamType), nScale);
+                            }
+                            catch( const Exception& )
+                            {
+                                OSL_ENSURE( sal_False,
+                                        ::rtl::OString( "ODatabaseForm::fillParameters: master-detail parameter number " )
+                                        +=  ::rtl::OString::valueOf( sal_Int32(aFind->second + 1) ));
+                            }
                             ++aFind;
                         }
                         while ( aFind != m_pParameterInfo->aParamMapping.end() );
