@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:23:52 $
+#   last change: $Author: rt $ $Date: 2004-05-03 07:38:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ JARCOMPRESS		= TRUE
 ZIP1TARGET=$(TARGET)_src
 ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
+ZIP1LIST=com -x "*makefile.mk" -x "com$/sun$/star$/lib$/loader$/*"
 
 # --- Targets ------------------------------------------------------
     
