@@ -20,8 +20,8 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\bin\01\soreport.exe %_DEST%\bin%_EXT%\crashrep.exe
 ..\%__SRC%\bin\soreport.exe.manifest %_DEST%\bin%_EXT%\crashrep.exe.manifest
 %_DEST%\bin%_EXT%\guistdio.com %_DEST%\bin%_EXT%\crashrep.com
-..\%__SRC%\bin\crash_report* %_DEST%\bin%_EXT%\crash_report*
-..\%__SRC%\bin\pstack %_DEST%\bin%_EXT%\pstack.bin
+..\%__SRC%\bin\crash_report.bin %_DEST%\bin%_EXT%\crash_report.bin
+..\scripts\crash_report.sh %_DEST%\bin%_EXT%\crash_report
 ..\%__SRC%\bin\crash_dump.res.01 %_DEST%\bin%_EXT%\01\crash_dump.res
 ..\%__SRC%\bin\crash_dump.res.03 %_DEST%\bin%_EXT%\03\crash_dump.res
 ..\%__SRC%\bin\crash_dump.res.07 %_DEST%\bin%_EXT%\07\crash_dump.res
@@ -41,4 +41,3 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\bin\crash_dump.res.88 %_DEST%\bin%_EXT%\88\crash_dump.res
 ..\%__SRC%\bin\crash_dump.res.90 %_DEST%\bin%_EXT%\90\crash_dump.res
 ..\%__SRC%\bin\crash_dump.res.96 %_DEST%\bin%_EXT%\96\crash_dump.res
-%_DEST%\bin%_EXT%\guistdio.com %_DEST%\bin%_EXT%\crashrep.com
