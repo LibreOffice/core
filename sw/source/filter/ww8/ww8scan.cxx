@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6192,7 +6192,7 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
             fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
             fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
 
-            fUsePrinterMetrics          = ( a32Bit &  0x00200000 ) >> 31 ;
+            fUsePrinterMetrics          = ( a32Bit &  0x80000000 ) >> 31 ;
         }
 
         /*
