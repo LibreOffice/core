@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-09 09:40:07 $
+#   last change: $Author: obo $ $Date: 2004-11-17 10:21:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -258,7 +258,8 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/gal.lib		\
             $(LIBPRE) $(SLB)$/accessibility.lib	\
             $(LIBPRE) $(SLB)$/customshapes.lib\
-            $(LIBPRE) $(SLB)$/toolbars.lib
+            $(LIBPRE) $(SLB)$/toolbars.lib \
+            $(LIBPRE) $(SLB)$/init.lib
 
 .IF "$(BIG_SVX)"==""
 LIB2TARGET      =$(SLB)$/dl.lib
