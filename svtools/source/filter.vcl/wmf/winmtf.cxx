@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #endif
 // ------------------------------------------------------------------------
 
+#define WIN_MTF_MAX_POLYPOLYCOUNT   16
+
 void WinMtfClipPath::ImpUpdateType()
 {
     if ( !aPolyPoly.Count() )
@@ -83,7 +85,7 @@ void WinMtfClipPath::IntersectClipRect( const Rectangle& rRect )
 {
     if ( !aPolyPoly.Count() )
         aPolyPoly = Polygon( rRect );
-    else
+    else if ( aPolyPoly.Count() < WIN_MTF_MAX_POLYPOLYCOUNT )
     {
         Polygon aPolygon( rRect );
         PolyPolygon aIntersection;
@@ -96,7 +98,7 @@ void WinMtfClipPath::IntersectClipRect( const Rectangle& rRect )
 
 void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 {
-    if ( aPolyPoly.Count() )
+    if ( aPolyPoly.Count() && ( aPolyPoly.Count() < WIN_MTF_MAX_POLYPOLYCOUNT ) )
     {
         Polygon aPolygon( rRect );
         PolyPolygon aPolyPolyRect( aPolygon );
@@ -109,10 +111,11 @@ void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 
 void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
 {
-    if ( rPolyPolygon.Count() )
+    if ( !rPolyPolygon.Count() )
+        aPolyPoly = rPolyPolygon;
+    else if ( rPolyPolygon.Count() < WIN_MTF_MAX_POLYPOLYCOUNT )
     {
         PolyPolygon aNewClipPath;
-
         switch ( nClippingMode )
         {
             case RGN_OR :
@@ -133,8 +136,6 @@ void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nCl
         }
         aPolyPoly = aNewClipPath;
     }
-    else
-        aPolyPoly = rPolyPolygon;
     ImpUpdateType();
 }
 
