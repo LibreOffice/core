@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 22:02:42 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ FloatingWindow RID_INSERT_CTRL
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar";
-    Text[ finnish ] = "Lis??";
+    Text[ finnish ] = "Lisää";
 };
 FloatingWindow RID_INSERT_OBJ_CTRL
 {
@@ -241,7 +241,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar objeto";
-    Text[ finnish ] = "Lis?? objekti";
+    Text[ finnish ] = "Lisää objekti";
 };
 Menu RID_INSERT_FIELD_CTRL
 {
@@ -273,7 +273,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ turkish ] = "Tarih";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Fecha";
-            Text[ finnish ] = "P?iv?m??r?";
+            Text[ finnish ] = "Päivämäärä";
         };
         MenuItem
         {
@@ -358,7 +358,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ turkish ] = "Sayfa sayýsý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Contar páginas";
-            Text[ finnish ] = "Sivum??r?";
+            Text[ finnish ] = "Sivumäärä";
         };
         MenuItem
         {
@@ -946,7 +946,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Dizin giriþi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada del índice";
-        Text[ finnish ] = "Hakemistomerkint?";
+        Text[ finnish ] = "Hakemistomerkintä";
     };
     String ST_TABLE_FORMULA
     {
@@ -998,7 +998,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Hatalý tablo formülü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fórmula errónea de tabla";
-        Text[ finnish ] = "V??r? taulukkokaava";
+        Text[ finnish ] = "Väärä taulukkokaava";
     };
     Text [ portuguese ] = "Navegação" ;
     Text [ english_us ] = "Navigation" ;
@@ -1463,7 +1463,7 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text[ turkish ] = "Ýleri dogru ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Continuar búsqueda hacia delante";
-    Text[ finnish ] = "Jatka hakua eteenp?in";
+    Text[ finnish ] = "Jatka hakua eteenpäin";
 };
 String STR_IMGBTN_INDEX_ENTRY_DOWN
 {
@@ -1489,7 +1489,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ turkish ] = "Sonraki dizin giriþi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de índice siguiente";
-    Text[ finnish ] = "Seuraava hakemistomerkint?";
+    Text[ finnish ] = "Seuraava hakemistomerkintä";
 };
 String STR_IMGBTN_NEXT_UP
 {
@@ -1890,7 +1890,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ turkish ] = "Geriye doðru ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Continuar búsqueda en sentido inverso";
-    Text[ finnish ] = "Jatka hakua taaksep?in";
+    Text[ finnish ] = "Jatka hakua taaksepäin";
 };
 String STR_IMGBTN_INDEX_ENTRY_UP
 {
@@ -1916,7 +1916,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ turkish ] = "Önceki dizin giriþi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de índice anterior";
-    Text[ finnish ] = "Edellinen hakemistomerkint?";
+    Text[ finnish ] = "Edellinen hakemistomerkintä";
 };
 String STR_IMGBTN_TBLFML_UP
 {
@@ -2059,6 +2059,7 @@ ImageButton BTN_NAVI
         Text[ finnish ] = "Siirtyminen";
     };
 };
+
 
 
 
