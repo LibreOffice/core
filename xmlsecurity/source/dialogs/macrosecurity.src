@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:34:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@ TabPage RID_XMLSECTP_SECLEVEL
         Text [ x-comment ] = "PB 2004-09-29: perhaps obsolete";
         Hide = TRUE;
     };
+    FixedImage FI_SEC_READONLY
+    {
+        Pos = MAP_APPFONT( SL_COL_1 - 7, SL_ROW_0 + 4 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
     RadioButton RB_VERYHIGH
     {
         Pos = MAP_APPFONT( SL_COL_1, SL_ROW_0 );
@@ -180,6 +185,11 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
         Size = MAP_APPFONT( TS_COL_8-TS_COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Vertrauenswürdige Zertifikate";
         Text [ en-US ] = "Trusted certificates";
+    };
+    FixedImage FI_TRUSTCERT_RO
+    {
+        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_1 );
+        Size = MAP_APPFONT( 6, 6 );
     };
     Control LB_TRUSTCERT
     {
@@ -230,6 +240,11 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
         Text [ de ] = "Vertrauenswürdige Dateiquellen werden nur benutzt, wenn die Sicherheitseinstellungen auf sehr hoch eingestellt sind. Dann werden nur Dokumentmakros aus den folgenden Quellen ausgeführt.";
         Text [ en-US ] = "Trusted file locations are used only if the security level is set to 'very high'. With this setting, document macros are only executed if they have been opened from one of the following locations.";
     };
+    FixedImage FI_TRUSTFILE_RO
+    {
+        Pos = MAP_APPFONT( TS_COL_1 - 7, TS_ROW_5 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
     ListBox LB_TRUSTFILELOC
     {
         Pos = MAP_APPFONT( TS_COL_1, TS_ROW_5 );
@@ -253,5 +268,26 @@ TabPage RID_XMLSECTP_TRUSTSOURCES
         Text [ de ] = "Entfernen";
         Text [ en-US ] = "Remove";
     };
+};
+String RID_XMLSECTP_READONLY_CONFIG_TIP
+{
+    Text [ de ] = "Diese Einstellung wurde vom Administrator gesperrt";
+    Text [ en-US ] = "This setting is protected by the Administrator";
+};
+Image RID_XMLSECTP_LOCK
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lock.bmp";
+    };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+};
+Image RID_XMLSECTP_LOCK_HC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lock_hc.bmp";
+    };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
 
