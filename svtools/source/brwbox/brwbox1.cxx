@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ void BrowseBox::SetColumnWidth( USHORT nItemId, ULONG nWidth )
                 aScrRect.Bottom() = pDataWin->GetSizePixel().Height();
                 getDataWindow()->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
                 Rectangle aInvRect( nX, 0, nX + std::max( nWidth, (ULONG)nOldWidth ), USHRT_MAX );
-                Control::Invalidate( aInvRect );
+                Control::Invalidate( aInvRect, INVALIDATE_NOCHILDREN );
                 ( (BrowserDataWin*)pDataWin )->Invalidate( aInvRect );
             }
             else
