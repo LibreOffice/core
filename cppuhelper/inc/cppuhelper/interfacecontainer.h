@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-06 16:00:30 $
+ *  last change: $Author: pluby $ $Date: 2000-10-07 18:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,9 @@ public:
      */
     inline void SAL_CALL clear();
 
+#ifndef UNX
     typedef key keyType;
+#endif
 private:
     ::std::hash_map< key , void* , hashImpl , equalImpl > *m_pMap;
     ::osl::Mutex &  rMutex;
@@ -351,9 +353,13 @@ struct OBroadcastHelperVar
     /**
      * adds a listener threadsafe.
      **/
+#ifndef UNX
     inline void addListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
+#else
+    inline void addListener( const ::com::sun::star::uno::Type &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
+#endif
     {
-        MutexGuard guard( rMutex );
+        ::osl::MutexGuard guard( rMutex );
         OSL_ENSHURE( !bInDispose, "do not add listeners in the dispose call" );
         OSL_ENSHURE( !bDisposed, "object is disposed" );
         if( ! bInDispose && ! bDisposed  )
@@ -363,9 +369,13 @@ struct OBroadcastHelperVar
     /**
      * removes a listener threadsafe
      **/
+#ifndef UNX
     inline void removeListener( const container::keyType &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
+#else
+    inline void removeListener( const ::com::sun::star::uno::Type &key , const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
+#endif
     {
-        MutexGuard guard( rMutex );
+        ::osl::MutexGuard guard( rMutex );
         OSL_ENSHURE( !bDisposed, "object is disposed" );
         if( ! bInDispose && ! bDisposed  )
             aLC.removeInterface( key , r );
@@ -377,7 +387,11 @@ struct OBroadcastHelperVar
      *         was not created, null was returned. This can be used to optimize
      *         performance ( construction of an event object can be avoided ).
      ***/
+#ifndef UNX
     inline OInterfaceContainerHelper * SAL_CALL getContainer( const container::keyType &key ) const
+#else
+    inline OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type &key ) const
+#endif
     {
         return aLC.getContainer( key );
     }
