@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:45:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
+#endif
+#ifndef SC_XLTABLE_HXX
+#include "xltable.hxx"
 #endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
@@ -289,22 +292,27 @@ void ImportExcel::Blank25( void )
 
     if( pExcRoot->eHauptDateiTyp == Biff2 )
     {
-        aIn.Ignore( 3 );
-        nXF = 0;
+        sal_uInt8 nXFData;
+        aIn >> nXFData;
+        nXF = nXFData & 0x3F;
+        if( nXF == 63 ) nXF = nIxfeIndex;
     }
     else
         aIn >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        pColRowBuff->Used( nCol, nRow );
-        GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
+        pColRowBuff->Used( nScCol, nScRow );
+        GetXFRangeBuffer().SetBlankXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -319,23 +327,25 @@ void ImportExcel::Integer( void )
     aIn.Ignore( 2 );
     aIn >> nInt;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
         sal_uInt16 nXF = nXFData & 0x3F;
         if( nXF == 63 ) nXF = nIxfeIndex;
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( nInt );
-        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab(), pCell );
+        GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -350,29 +360,34 @@ void ImportExcel::Number25( void )
 
     if( pExcRoot->eHauptDateiTyp == Biff2 )
     {
-        aIn.Ignore( 3 );
-        nXF = 0;
+        sal_uInt8 nXFData;
+        aIn >> nXFData;
+        aIn.Ignore( 2 );
+        nXF = nXFData & 0x3F;
+        if( nXF == 63 ) nXF = nIxfeIndex;
     }
     else
         aIn >> nXF;
 
     aIn >> fValue;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( fValue );
-        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab(), pCell );
+        GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -429,7 +444,10 @@ void ImportExcel::Boolerr25( void )
     else
         aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
         double              fVal;
         const ScTokenArray  *pErgebnis;
@@ -438,23 +456,23 @@ void ImportExcel::Boolerr25( void )
 
         // Simulation ueber Formelzelle!
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
-        ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab());
+        ScAddress aPos( nScCol, nScRow, GetCurrScTab());
         ScFormulaCell* pCell = new ScFormulaCell( pD, aPos, pErgebnis );
         pCell->SetDouble( fVal );
         GetDoc().PutCell( aPos, pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
 
         if( bErrOrVal )     // !=0 -> Error
-            GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+            GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
         else                // ==0 -> Boolean
-            GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
+            GetXFRangeBuffer().SetBoolXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -495,8 +513,10 @@ void ImportExcel::Row25( void )
             aIn.Ignore( 2 );    // reserved
             aIn >> nGrbit;
 
-            pRowOutlineBuff->SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
-                TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
+            BYTE nLevel = 0;
+            ::extract_value( nLevel, nGrbit, 0, 3 );
+            pRowOutlineBuff->SetLevel( nRow, nLevel,
+                TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_HIDDEN ) );
 
             pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
         }
@@ -656,15 +676,6 @@ void ImportExcel::Array25( void )
                 static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
                 static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
                 pErgebnis );
-
-/*      UINT16              nRowCnt, nColCnt;
-
-        for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
-            for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
-            {
-                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
-                pColRowBuff->Used( nColCnt, nRowCnt );
-            }*/
     }
 }
 
@@ -721,7 +732,7 @@ void ImportExcel::Colwidth( void )
     if( nColLast > MAXCOL )
         nColLast = static_cast<UINT16>(MAXCOL);
 
-    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    USHORT nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
 }
 
@@ -785,10 +796,9 @@ void ImportExcel::DefColWidth( void )
 
     // #i3006# additional space for default width - Excel adds space depending on font size
     long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
-    fDefWidth += 40960.0 / ::std::max( nFontHt - 15L, 60L ) + 50.0;
-    fDefWidth = ::std::min( fDefWidth, 65535.0 );
+    fDefWidth += XclTools::GetXclDefColWidthCorrection( nFontHt );
 
-    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( static_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );
+    USHORT nScWidth = XclTools::GetScColumnWidth( limit_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );
     pColRowBuff->SetDefWidth( nScWidth );
 }
 
@@ -820,7 +830,7 @@ void ImportExcel::Colinfo( void )
     if( bHidden )
         pColRowBuff->HideColRange( nColFirst, nColLast );
 
-    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
+    USHORT nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
     pColRowBuff->SetDefaultXF( nColFirst, nColLast, nXF );
 }
@@ -833,21 +843,23 @@ void ImportExcel::Rk( void )
 
     aIn >> nRow >> nCol >> nXF >> nRkNum;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
-        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab(), pCell );
+        GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -858,8 +870,8 @@ void ImportExcel::Wsbool( void )
     UINT16 nFlags;
     aIn >> nFlags;
 
-    pRowOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
-    pColOutlineBuff->SetButtonMode( HasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
+    pRowOutlineBuff->SetButtonMode( ::get_flag( nFlags, EXC_WSBOOL_ROWBELOW ) );
+    pColOutlineBuff->SetButtonMode( ::get_flag( nFlags, EXC_WSBOOL_COLBELOW ) );
 
     GetPageSettings().SetFitToPages( ::get_flag( nFlags, EXC_WSBOOL_FITTOPAGE ) );
 }
@@ -966,7 +978,7 @@ void ImportExcel::Palette( void )
 
 void ImportExcel::Standardwidth( void )
 {
-    sal_uInt16 nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
+    USHORT nScWidth = XclTools::GetScColumnWidth( maStrm.ReaduInt16(), GetCharWidth() );
     pColRowBuff->SetDefWidth( nScWidth, TRUE );
 }
 
@@ -1016,30 +1028,32 @@ void ImportExcel::Mulrk( void )
 
     aIn >> nRow >> nColFirst;
 
-    if( nRow <= MAXROW )
+    SCCOL nFirstScCol = static_cast< SCCOL >( nColFirst );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( nScRow <= MAXROW )
     {
-        for( UINT16 nCol = nColFirst ; aIn.GetRecLeft() > 2 ; nCol++ )
+        for( SCCOL nScCol = nFirstScCol ; aIn.GetRecLeft() > 2 ; ++nScCol )
         {
             aIn >> nXF >> nRkNum;
 
-            if( nCol <= MAXCOL )
+            if( nScCol <= MAXCOL )
             {
-                GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+                GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
                 ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
-                GetDoc().PutCell( static_cast<SCCOL>(nCol),
-                        static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
+                GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-                pColRowBuff->Used( nCol, nRow );
+                pColRowBuff->Used( nScCol, nScRow );
             }
         }
         DBG_ASSERT( aIn.GetRecLeft() == 2, "+ImportExcel::Mulrk(): Was'n das?!!!" );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1047,29 +1061,32 @@ void ImportExcel::Mulrk( void )
 
 void ImportExcel::Mulblank( void )
 {
-    UINT16  nRow, nCol, nColFirst, nXF;
+    UINT16  nRow, nColFirst, nXF;
 
     aIn >> nRow >> nColFirst;
 
-    if( nRow <= MAXROW )
+    SCCOL nFirstScCol = static_cast< SCCOL >( nColFirst );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( nScRow <= MAXROW )
     {
-        for( nCol = nColFirst ; aIn.GetRecLeft() > 2 ; nCol++ )
+        for( SCCOL nScCol = nFirstScCol; aIn.GetRecLeft() > 2; ++nScCol )
         {
             aIn >> nXF;
 
-            if( nCol <= MAXCOL )
+            if( nScCol <= MAXCOL )
             {
-                pColRowBuff->Used( nCol, nRow );
-                GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
+                pColRowBuff->Used( nScCol, nScRow );
+                GetXFRangeBuffer().SetBlankXF( nScCol, nScRow, nXF );
             }
         }
         aIn >> nRow;    // nRow zum Testen von letzter Col missbraucht
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1086,7 +1103,10 @@ void ImportExcel::Rstring( void )
 
     aIn >> nCount;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
         if( aString.Len() )
         {
@@ -1096,17 +1116,16 @@ void ImportExcel::Rstring( void )
 
             delete pTextObj;
 
-            GetDoc().PutCell( static_cast<SCCOL>(nCol),
-                    static_cast<SCROW>(nRow), GetCurrScTab(), pZelle );
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pZelle );
         }
-        pColRowBuff->Used( nCol, nRow );
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        pColRowBuff->Used( nScCol, nScRow );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1130,16 +1149,19 @@ void ImportExcel::Blank34( void )
 
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        pColRowBuff->Used( nCol, nRow );
-        GetXFIndexBuffer().SetBlankXF( nCol, nRow, nXF );
+        pColRowBuff->Used( nScCol, nScRow );
+        GetXFRangeBuffer().SetBlankXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1152,21 +1174,23 @@ void ImportExcel::Number34( void )
 
     aIn >> nRow >> nCol >> nXF >> fValue;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( fValue );
-        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab(), pCell );
+        GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
 
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1192,7 +1216,10 @@ void ImportExcel::Boolerr34( void )
 
     aIn >> nRow >> nCol >> nXF;
 
-    if( nRow <= MAXROW && nCol <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nCol );
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
         double              fVal;
         const ScTokenArray* pErgebnis;
@@ -1202,26 +1229,25 @@ void ImportExcel::Boolerr34( void )
         // Simulation ueber Formelzelle!
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
 
-        ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab() );
+        ScAddress aPos( nScCol, nScRow, GetCurrScTab() );
 
         ScFormulaCell*      pZelle = new ScFormulaCell( pD, aPos, pErgebnis );
 
         pZelle->SetDouble( fVal );
 
         GetDoc().PutCell( aPos, pZelle );
-        pColRowBuff->Used( nCol, nRow );
+        pColRowBuff->Used( nScCol, nScRow );
 
         if( bErrOrVal )     // !=0 -> Error
-            GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+            GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
         else                // ==0 -> Boolean
-            GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
+            GetXFRangeBuffer().SetBoolXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -1234,20 +1260,24 @@ void ImportExcel::Row34( void )
     aIn >> nRow;
     aIn.Ignore( 4 );    // Mic und Mac ueberspringen
 
-    if( nRow <= MAXROW )
+    SCROW nScRow = static_cast< SCROW >( nRow );
+
+    if( nScRow <= MAXROW )
     {
         aIn >> nRowHeight;  // direkt in Twips angegeben
         aIn.Ignore( 4 );
 
         aIn >> nGrbit >> nXF;
 
-        pRowOutlineBuff->SetLevel( nRow, EXC_ROW_GETLEVEL( nGrbit ),
-            TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_ZEROHEIGHT ) );
+        BYTE nLevel = 0;
+        ::extract_value( nLevel, nGrbit, 0, 3 );
+        pRowOutlineBuff->SetLevel( nScRow, nLevel,
+            TRUEBOOL( nGrbit & EXC_ROW_COLLAPSED ), TRUEBOOL( nGrbit & EXC_ROW_HIDDEN ) );
 
-        pColRowBuff->SetRowSettings( nRow, nRowHeight, nGrbit );
+        pColRowBuff->SetRowSettings( nScRow, nRowHeight, nGrbit );
 
-        if( nGrbit & EXC_ROW_GHOSTDIRTY )
-            GetXFIndexBuffer().SetRowDefXF( nRow, nXF & EXC_ROW_XFMASK );
+        if( nGrbit & EXC_ROW_USEDEFXF )
+            GetXFRangeBuffer().SetRowDefXF( nScRow, nXF & EXC_ROW_XFMASK );
     }
 }
 
@@ -1303,15 +1333,6 @@ void ImportExcel::Array34( void )
                 static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
                 static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
                 pErgebnis);
-
-/*      UINT16              nRowCnt, nColCnt;
-
-        for( nColCnt = nFirstCol + 1 ; nColCnt <= nLastCol ; nColCnt++ )
-            for( nRowCnt = nFirstRow ; nRowCnt <= nLastRow ; nRowCnt++ )
-            {
-                pCellStyleBuffer->SetXF( nColCnt, nRowCnt, nLastXF );
-                pColRowBuff->Used( nColCnt, nRowCnt );
-            }*/
     }
 
     pLastFormCell = NULL;
@@ -1353,7 +1374,7 @@ void ImportExcel::TableOp( void )
         if( nFirstCol && nFirstRow )
         {
             ScTabOpParam aTabOpParam;
-            aTabOpParam.nMode = (nGrbit & EXC_TABOP_BOTH) ? 2 : ((nGrbit & EXC_TABOP_ROW) ? 1 : 0 );
+            aTabOpParam.nMode = (nGrbit & EXC_TABLEOP_BOTH) ? 2 : ((nGrbit & EXC_TABLEOP_ROW) ? 1 : 0 );
             USHORT nCol = nFirstCol - 1;
             USHORT nRow = nFirstRow - 1;
             SCTAB nTab = GetCurrScTab();
@@ -1529,7 +1550,7 @@ void ImportExcel::Bof5( void )
 void ImportExcel::EndSheet( void )
 {
     pColRowBuff->Apply( GetCurrScTab() );
-    GetXFIndexBuffer().Apply();
+    GetXFRangeBuffer().Apply();
 
     pExcRoot->pExtSheetBuff->Reset();
 
@@ -1749,7 +1770,10 @@ void ImportExcel::PostDocLoad( void )
 
 void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, const UINT16 nXF )
 {
-    if( nR <= MAXROW && nC <= MAXCOL )
+    SCCOL nScCol = static_cast< SCCOL >( nC );
+    SCROW nScRow = static_cast< SCROW >( nR );
+
+    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
     {
         if( r.Len() )
         {
@@ -1766,17 +1790,16 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
             else
                 pZelle = ScBaseCell::CreateTextCell( r, pD );
 
-            GetDoc().PutCell( static_cast<SCCOL>(nC), static_cast<SCROW>(nR),
-                    GetCurrScTab(), pZelle );
+            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pZelle );
         }
-        pColRowBuff->Used( nC, nR );
-        GetXFIndexBuffer().SetXF( nC, nR, nXF );
+        pColRowBuff->Used( nScCol, nScRow );
+        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
     }
     else
-        {
+    {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nR, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nR, MAXROW);
+    }
 }
 
 
