@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:26:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,8 +367,8 @@ void CGM::ImplDoClass4()
 
             case 0x0a : ComOut( CGM_LEVEL1, "Generalized Drawing Primitive" )
             {
-                long    nIdentifier = ImplGetI( pElement->nIntegerPrecision );
-                sal_uInt32  nNumberOfPoints = ImplGetUI( pElement->nIntegerPrecision );
+                ImplGetI( pElement->nIntegerPrecision );  //-Wall is this needed
+                ImplGetUI( pElement->nIntegerPrecision ); //-Wall is this needed
                 mnParaSize = mnElementSize;
             }
             break;
