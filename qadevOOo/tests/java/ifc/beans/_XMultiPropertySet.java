@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertySet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-05-07 16:25:16 $
+ *  last change:$Date: 2005-03-29 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,11 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 isWritable=false;
             }
 
-            if ( isWritable && isNotNull && isBound && !isExcluded) {
+            values = oObj.getPropertyValues(new String[]{property.Name});
+
+            boolean isVoid = util.utils.isVoid(values[0]);
+
+            if ( isWritable && isNotNull && isBound && !isExcluded && !isVoid) {
                 bound+=name+";";
             }
 
