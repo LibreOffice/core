@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestShl2Runner.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-21 11:08:27 $
+ *  last change: $Author: lla $ $Date: 2003-01-21 13:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,8 +283,8 @@ class DatabaseEntry
                 String sKey = (String)aIter.next();
                 CurrentEntry aEntry = (CurrentEntry)aMap.get(sKey);
 
-                String db_line= Quote(aEntry.m_sClassName) + sComma +
-                    Quote( _sProjectName) + sComma +
+                String db_line= Quote(_sProjectName) + sComma +
+                    Quote( aEntry.m_sClassName) + sComma +
                     Quote( aEntry.m_sMethodName) + sComma +
                     Quote( aEntry.getState()) + sComma +
                     Quote( _sEnvironment) + sComma +
@@ -422,6 +422,7 @@ public class TestShl2Runner
 
             //remove old values from db-table
             DBHelper.SQLdeleteValues(m_sProjectName,m_sEnvironment);
+            DBHelper.SQLdeleteValues(m_sProjectName,m_sEnvironment);
 
             //parse the output and store it
             parseOut (aJobList, m_sProjectName, m_sEnvironment, m_sProjectDir);
@@ -523,7 +524,7 @@ public class TestShl2Runner
 
     public String getLogParameter(String job)
     {
-        String sParameter = " -log " + getLogName(job);
+        String sParameter = " -log " + getLogName(job) + " ";
         return sParameter;
     }
 
@@ -531,7 +532,7 @@ public class TestShl2Runner
     {
         // create the ' -log file '
         String fs = System.getProperty("file.separator");
-        String sLogName = getOutputDir() + fs + job + ".log ";
+        String sLogName = getOutputDir() + fs + job + ".log";
         return sLogName;
     }
 
@@ -928,7 +929,8 @@ public class TestShl2Runner
 
             // Process testshl = Runtime.getRuntime().exec(scriptFile);
             ProcessHandler aHandler = new ProcessHandler(scriptFile);
-            return aHandler.executeSynchronously();
+            boolean bBackValue = aHandler.executeSynchronously();
+            return bBackValue;
             // return false;
         }
 }
