@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:18:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
 
        @param documentation the documentation
 
-       @param fileName the file name
+       @param fileName the file name (deprecated, use an empty string)
 
        @param typeClass the type class of the created type writer
 
@@ -160,7 +160,7 @@ public:
 
        @param documentation the documentation of the field
 
-       @param fileName the file name of the field
+       @param fileName the file name of the field (deprecated, use an empty string)
 
        @param flags the flags of the field
 
@@ -176,9 +176,8 @@ public:
      */
     void setFieldData(
         sal_uInt16 index, rtl::OUString const & documentation,
-        rtl::OUString const & fileName, RTFieldAccess flags,
-        rtl::OUString const & name, rtl::OUString const & typeName,
-        RTConstValue const & value)
+        rtl::OUString const & fileName, RTFieldAccess flags, rtl::OUString const & name,
+        rtl::OUString const & typeName, RTConstValue const & value)
     {
         if (!typereg_writer_setFieldData(
                 m_handle, index, documentation.pData, fileName.pData, flags,
