@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:04:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
 #endif
-#ifndef _SCEXTOPT_HXX
+#ifndef SC_SCEXTOPT_HXX
 #include "scextopt.hxx"
 #endif
 #ifndef SC_SCPATATR_HXX
@@ -131,10 +131,20 @@
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
+using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
 
 // Global data ================================================================
+
+#ifdef DBG_UTIL
+XclDebugObjCounter::~XclDebugObjCounter()
+{
+    DBG_ASSERT( mnObjCnt == 0, "XclDebugObjCounter::~XclDebugObjCounter - wrong root object count" );
+}
+#endif
+
+// ----------------------------------------------------------------------------
 
 XclRootData::XclRootData( XclBiff eBiff,
         SfxMedium& rMedium, SotStorageRef xRootStrg, SvStream& rBookStrm,
@@ -154,25 +164,17 @@ XclRootData::XclRootData( XclBiff eBiff,
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbExport( bExport ),
-    mbColTrunc( false ),
-    mbRowTrunc( false ),
-    mbTabTrunc( false ),
     mbHasPassw( false ),
     mxRD( new RootData )//!
 {
-#ifdef DBG_UTIL
-    mnObjCnt = 0;
-#endif
-
     // maximum cell position
     switch( meBiff )
     {
-        case xlBiff2:   maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );   break;
-        case xlBiff3:   maXclMaxPos.Set( EXC_MAXCOL3, EXC_MAXROW3, EXC_MAXTAB3 );   break;
-        case xlBiff4:   maXclMaxPos.Set( EXC_MAXCOL4, EXC_MAXROW4, EXC_MAXTAB4 );   break;
-        case xlBiff5:
-        case xlBiff7:   maXclMaxPos.Set( EXC_MAXCOL5, EXC_MAXROW5, EXC_MAXTAB5 );   break;
-        case xlBiff8:   maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );   break;
+        case EXC_BIFF2: maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );   break;
+        case EXC_BIFF3: maXclMaxPos.Set( EXC_MAXCOL3, EXC_MAXROW3, EXC_MAXTAB3 );   break;
+        case EXC_BIFF4: maXclMaxPos.Set( EXC_MAXCOL4, EXC_MAXROW4, EXC_MAXTAB4 );   break;
+        case EXC_BIFF5: maXclMaxPos.Set( EXC_MAXCOL5, EXC_MAXROW5, EXC_MAXTAB5 );   break;
+        case EXC_BIFF8: maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );   break;
         default:        DBG_ERROR_BIFF();
     }
     maMaxPos.SetCol( ::std::min( maScMaxPos.Col(), maXclMaxPos.Col() ) );
@@ -185,38 +187,34 @@ XclRootData::XclRootData( XclBiff eBiff,
             maDocUrl = pItem->GetValue();
     maBasePath = maDocUrl.Copy( 0, maDocUrl.SearchBackward( '/' ) + 1 );
 
-    // extended document options
-    if( mrDoc.GetExtDocOptions() )
-        mxExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
+    // extended document options - always own object, try to copy existing data from document
+    if( const ScExtDocOptions* pOldDocOpt = mrDoc.GetExtDocOptions() )
+        mxExtDocOpt.reset( new ScExtDocOptions( *pOldDocOpt ) );
     else
         mxExtDocOpt.reset( new ScExtDocOptions );
-
-    // filter tracer
-    mxTracer.reset( new XclTracer( maDocUrl, CREATE_OUSTRING(
-        mbExport ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
 }
 
 XclRootData::~XclRootData()
 {
-#ifdef DBG_UTIL
-    DBG_ASSERT( mnObjCnt == 0, "XclRootData::~XclRootData - wrong object count" );
-#endif
 }
 
 // ----------------------------------------------------------------------------
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
-    mrData( rRootData ),
-    mpRD( rRootData.mxRD.get() )//!
+    mrData( rRootData )
 {
 #ifdef DBG_UTIL
     ++mrData.mnObjCnt;
 #endif
+
+    // filter tracer
+    // do not use CREATE_OUSTRING for conditional expression
+    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), OUString::createFromAscii(
+        IsExport() ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :
-    mrData( rRoot.mrData ),
-    mpRD( rRoot.mpRD )//!
+    mrData( rRoot.mrData )
 {
 #ifdef DBG_UTIL
     ++mrData.mnObjCnt;
@@ -259,10 +257,14 @@ const String& XclRoot::QueryPassword() const
         mrData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
         // set to true, even if dialog has been cancelled (never ask twice)
         mrData.mbHasPassw = true;
-
-        GetExtDocOptions().SetWinEncryption( true );
     }
     return mrData.maPassw;
+}
+
+bool XclRoot::HasVbaStorage() const
+{
+    SotStorageRef xRootStrg = GetRootStorage();
+    return xRootStrg.Is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
 SotStorageRef XclRoot::OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const
@@ -392,59 +394,6 @@ ScExtDocOptions& XclRoot::GetExtDocOptions() const
 XclTracer& XclRoot::GetTracer() const
 {
     return *mrData.mxTracer;
-}
-
-bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const
-{
-    bool bValidCol = (0 <= rPos.Col()) && (rPos.Col() <= rMaxPos.Col());
-    bool bValidRow = (0 <= rPos.Row()) && (rPos.Row() <= rMaxPos.Row());
-    bool bValidTab = (0 <= rPos.Tab()) && (rPos.Tab() <= rMaxPos.Tab());
-    bool bValid = bValidCol && bValidRow && bValidTab;
-    if( !bValid )
-    {
-        mrData.mbColTrunc |= !bValidCol;
-        mrData.mbRowTrunc |= !bValidRow;
-        mrData.mbTabTrunc |= (rPos.Tab() > rMaxPos.Tab());  // do not warn for deleted refs
-        GetTracer().TraceInvalidAddress(rPos, rMaxPos);
-    }
-    return bValid;
-}
-
-bool XclRoot::CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const
-{
-    rRange.Justify();
-
-    // check start position
-    bool bValidStart = CheckCellAddress( rRange.aStart, rMaxPos );
-
-    if( bValidStart )
-    {
-        // check & correct end position
-        ScAddress& rEnd = rRange.aEnd;
-        if( !CheckCellAddress( rEnd, rMaxPos ) )
-        {
-            if( rEnd.Col() > rMaxPos.Col() )
-                rEnd.SetCol( rMaxPos.Col() );
-            if( rEnd.Row() > rMaxPos.Row() )
-                rEnd.SetRow( rMaxPos.Row() );
-            if( rEnd.Tab() > rMaxPos.Tab() )
-                rEnd.SetTab( rMaxPos.Tab() );
-        }
-    }
-
-    return bValidStart;
-}
-
-void XclRoot::CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos ) const
-{
-    sal_uInt32 nIndex = rRanges.Count();
-    while( nIndex )
-    {
-        --nIndex;   // backwards to keep nIndex valid
-        ScRange* pRange = rRanges.GetObject( nIndex );
-        if( pRange && !CheckCellRange( *pRange, rMaxPos ) )
-            delete rRanges.Remove( nIndex );
-    }
 }
 
 // ============================================================================
