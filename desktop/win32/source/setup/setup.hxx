@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 12:39:47 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ public:
     void            GetLanguageName( long nLanguage, LPTSTR sName ) const;
 
     LPCTSTR         GetAppTitle() const { return m_pAppTitle; }
+    LPTSTR          SetProdToAppTitle( LPCTSTR pProdName );
+    HINSTANCE       GetHInst() const { return m_hInst; }
 };
 
 //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 12:39:32 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #define VERSION_SIZE          80
 #define SECTION_SETUP       TEXT( "Setup" )
 #define SECTION_LANGUAGE    TEXT( "Languages" )
+#define PRODUCT_NAME_VAR    TEXT( "%PRODUCTNAME" )
 
 #define ERROR_SHOW_USAGE      -2
 
@@ -142,8 +143,20 @@ BOOL CALLBACK SetupDlgProcX( HWND hDlg, UINT message,
                 SetupAppX* pSetup = (SetupAppX*) lParam;
                 SetWindowText( hDlg, pSetup->GetAppTitle() );
 
-                HWND hList = GetDlgItem( hDlg, IDC_COMBO1 );
+                HWND hText = GetDlgItem( hDlg, IDC_TEXT01 );
+
+                if ( !hText ) return TRUE;
+
+                TCHAR *sText = new TCHAR[ MAX_STR_LENGTH ];
+                int    nChars = 0;
+//              SIZE   aSize;
+
+                nChars = WIN::LoadString( pSetup->GetHInst(), IDS_CHOOSE_LANG, sText, MAX_STR_LENGTH );
+                WIN::SetWindowText( hText, sText );
+//              WIN::GetTextExtentPoint32( GetDC(hText), sText, nChars, &aSize );
+
                 TCHAR *sString = new TCHAR[ MAX_LANGUAGE_LEN ];
+                HWND hList = GetDlgItem( hDlg, IDC_COMBO1 );
                 LRESULT nResult;
 
                 if ( !hList ) return TRUE;
@@ -158,6 +171,7 @@ BOOL CALLBACK SetupDlgProcX( HWND hDlg, UINT message,
 
                 nResult = SendMessage( hList, (UINT) CB_SETCURSEL, 0, NULL );
                 delete [] sString;
+                delete [] sText;
             }
             return TRUE;
         }
@@ -394,6 +408,7 @@ boolean SetupAppX::ReadProfile()
                 {
                     m_pProductName = pValue;
                     Log( TEXT( "    productname = %s\r\n" ), pValue );
+                    m_pAppTitle = SetProdToAppTitle( m_pProductName );
                 }
                 else
                 {
@@ -1627,6 +1642,60 @@ void SetupAppX::ConvertNewline( LPTSTR pText ) const
         else
             i+=1;
     }
+}
+
+//--------------------------------------------------------------------------
+LPTSTR SetupAppX::SetProdToAppTitle( LPCTSTR pProdName )
+{
+    if ( !pProdName ) return m_pAppTitle;
+
+    LPTSTR pAppProdTitle = new TCHAR[ MAX_STR_CAPTION ];
+           pAppProdTitle[0]  = '\0';
+
+    WIN::LoadString( m_hInst, IDS_APP_PROD_TITLE, pAppProdTitle, MAX_STR_CAPTION );
+
+    int nAppLen = lstrlen( pAppProdTitle );
+    int nProdLen = lstrlen( pProdName );
+
+    if ( ( nAppLen == 0 ) || ( nProdLen == 0 ) )
+    {
+        delete [] pAppProdTitle;
+        return m_pAppTitle;
+    }
+
+    int nLen = nAppLen + nProdLen + 3;
+
+    if ( nLen > STRSAFE_MAX_CCH ) return m_pAppTitle;
+
+    LPTSTR pIndex = _tcsstr( pAppProdTitle, PRODUCT_NAME_VAR );
+
+    if ( pIndex )
+    {
+        int nOffset = pIndex - pAppProdTitle;
+        int nVarLen = lstrlen( PRODUCT_NAME_VAR );
+
+        LPTSTR pNewTitle = new TCHAR[ nLen ];
+        pNewTitle[0] = '\0';
+
+        if ( nOffset > 0 )
+        {
+            StringCchCopyN( pNewTitle, nLen, pAppProdTitle, nOffset );
+        }
+
+        StringCchCat( pNewTitle, nLen, pProdName );
+
+        if ( nOffset + nVarLen < nAppLen )
+        {
+            StringCchCat( pNewTitle, nLen, pIndex + nVarLen );
+        }
+
+        delete [] m_pAppTitle;
+        m_pAppTitle = pNewTitle;
+    }
+
+    delete [] pAppProdTitle;
+
+    return m_pAppTitle;
 }
 
 //--------------------------------------------------------------------------
