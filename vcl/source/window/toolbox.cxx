@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-14 12:22:04 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2510,7 +2510,7 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
+static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOOL bColTransform,
                                BOOL bLeft = FALSE, BOOL bTop = FALSE,
                                long nSize = 6 )
 {
@@ -2529,7 +2529,7 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
     {
         case WINDOWALIGN_LEFT:
             if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
+                pBox->SetFillColor( Color( bColTransform ? COL_WHITE : COL_BLACK ) );
             while ( n <= nHalfSize )
             {
                 pBox->DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
@@ -2548,7 +2548,7 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
             break;
         case WINDOWALIGN_TOP:
             if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
+                pBox->SetFillColor( Color( bColTransform ? COL_WHITE : COL_BLACK ) );
             while ( n <= nHalfSize )
             {
                 pBox->DrawRect( Rectangle( nX+n, nY+n, nX+nSize-n, nY+n ) );
@@ -2567,7 +2567,7 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
             break;
         case WINDOWALIGN_RIGHT:
             if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
+                pBox->SetFillColor( Color( bColTransform ? COL_WHITE : COL_BLACK ) );
             while ( n <= nHalfSize )
             {
                 pBox->DrawRect( Rectangle( nX+nHalfSize-n, nY+n, nX+nHalfSize-n, nY+nSize-n ) );
@@ -2586,7 +2586,7 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
             break;
         case WINDOWALIGN_BOTTOM:
             if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
+                pBox->SetFillColor( Color( bColTransform ? COL_WHITE : COL_BLACK ) );
             while ( n <= nHalfSize )
             {
                 pBox->DrawRect( Rectangle( nX+n, nY+nHalfSize-n, nX+nSize-n, nY+nHalfSize-n ) );
@@ -2681,7 +2681,7 @@ void ToolBox::ImplDrawNext( BOOL bIn )
     nY += maNextToolRect.Top();
     SetLineColor();
     SetFillColor( COL_LIGHTBLUE );
-    ImplDrawToolArrow( this, nX, nY, TRUE, bLeft, bTop, 10 );
+    ImplDrawToolArrow( this, nX, nY, TRUE, FALSE, bLeft, bTop, 10 );
 }
 
 // -----------------------------------------------------------------------
@@ -2697,6 +2697,11 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         return;
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    BOOL bHighContrastWhite = FALSE;
+    Wallpaper aWall = GetDisplayBackground();
+    if( aWall.GetColor().IsBright() )
+        bHighContrastWhite = TRUE;
 
     // Im flachen Style werden auch Separatoren gezeichnet
     if ( (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
@@ -2965,6 +2970,11 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
                 nTempOffY-=2;
             }
             */
+            if( bHighlight )
+            {
+                if( bHighContrastWhite )
+                    nImageStyle |= IMAGE_DRAW_COLORTRANSFORM;
+            }
             DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
 
         }
@@ -3066,8 +3076,13 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
 
         Erase( aClearRect );
 
+        BOOL bColTransform = FALSE;
         if( bHighlight || (pItem->meState == STATE_CHECK) )
+        {
             DrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE, FALSE );
+            if( bHighContrastWhite )
+                bColTransform = TRUE;
+        }
 
         BOOL bBlack = FALSE;
 
@@ -3078,7 +3093,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
             SetFillColor( COL_LIGHTGREEN );
             bBlack = TRUE;
         }
-        ImplDrawToolArrow( this, aArrowPos.X(), aArrowPos.Y(), bBlack );
+        ImplDrawToolArrow( this, aArrowPos.X(), aArrowPos.Y(), bBlack, bColTransform );
         SetLineColor( aOldLineColor );
         SetFillColor( aOldFillColor );
     }
