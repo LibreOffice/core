@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:48:21 $
+ *  last change: $Author: cl $ $Date: 2001-12-18 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,14 +960,9 @@ OUString SdGenericDrawPage::getBookmarkURL() const
         if( aFileName.getLength() )
         {
             const OUString aBookmarkName( SdDrawPage::getPageApiNameFromUiName( static_cast<SdPage*>(pPage)->GetBookmarkName() ) );
-            {
-                static ::rtl::OUString ;
-                static String ;
-
-                aRet.append( aFileName );
-                aRet.append( (sal_Unicode)'#' );
-                aRet.append( aBookmarkName );
-            }
+            aRet.append( aFileName );
+            aRet.append( (sal_Unicode)'#' );
+            aRet.append( aBookmarkName );
         }
     }
 
