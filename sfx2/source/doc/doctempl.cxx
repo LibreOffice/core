@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-21 11:59:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2183,6 +2183,9 @@ const OUString& RegionData_Impl::GetTargetURL()
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
 
             getTextProperty_Impl( aRegion, aPropName, maTargetURL );
+            // --> PB 2004-10-27 #i32656# - the targeturl must be substituted: $(baseinsturl)
+            maTargetURL = SvtPathOptions().SubstituteVariable( maTargetURL );
+            // <--
         }
         else
         {
