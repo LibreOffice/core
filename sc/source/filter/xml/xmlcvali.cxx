@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:42:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,13 +291,13 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -394,12 +394,12 @@ void ScXMLContentValidationContext::SetFormulas(const rtl::OUString& sFormulas, 
     while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
     {
         if (sFormulas[i] == '(')
-            nBrakes++;
+            ++nBrakes;
         if (sFormulas[i] == ')')
-            nBrakes--;
+            --nBrakes;
         if (sFormulas[i] == '"')
             bString = !bString;
-        i++;
+        ++i;
     }
     if (sFormulas[i] == ',')
     {
@@ -412,7 +412,7 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         com::sun::star::sheet::ValidationType& aValidationType,
         com::sun::star::sheet::ConditionOperator& aOperator)
 {
-    rtl::OUString sCondition = sTempCondition;
+    rtl::OUString sCondition(sTempCondition);
     if (sCondition.getLength())
     {
         // ToDo: erase all blanks in the condition, but not in formulas or strings
@@ -430,7 +430,7 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         sal_Int32 i = 0;
         sal_Bool bAnd(sal_True);
         while (sCondition[i] != '(' && i < sCondition.getLength())
-            i++;
+            ++i;
         if (sCondition[i] == '(')
         {
             if (i != scell_content_text_length.getLength() &&
@@ -461,7 +461,7 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
             {
                 i = 0;
                 while (sCondition[i] != '(' && i < sCondition.getLength())
-                    i++;
+                    ++i;
                 if (sCondition[i] == '(')
                 {
                     rtl::OUString sTemp = sCondition.copy(0, i);
@@ -632,13 +632,13 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationHelpMessageAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -670,7 +670,7 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( USHORT nPrefix,
         {
             if(nParagraphCount)
                 sMessage.append(static_cast<sal_Unicode>('\n'));
-            nParagraphCount++;
+            ++nParagraphCount;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }
         break;
@@ -703,13 +703,13 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationErrorMessageAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -744,7 +744,7 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( USHORT nPrefix
         {
             if(nParagraphCount)
                 sMessage.append(static_cast<sal_Unicode>('\n'));
-            nParagraphCount++;
+            ++nParagraphCount;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }
         break;
@@ -774,13 +774,13 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
     pValidationContext = pTempValidationContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationErrorMacroAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
