@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:55:10 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1439,7 +1439,7 @@ namespace svx
     const String* SuggestionList::_Next( void )
     {
         const String*   pRet = NULL;
-        while( m_nAct < m_nNumOfEntries && !pRet )
+        while( m_nAct < m_nSize && !pRet )
         {
             pRet = m_ppElements[ m_nAct ];
             if( !pRet )
@@ -1646,6 +1646,9 @@ namespace svx
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
         if( xDict.is() && m_pSuggestions )
         {
+            //delete old entry
+            bool bRemovedSomething = DeleteEntryFromDictionary( m_aOriginal, xDict );
+
             OUString                aLeft( m_aOriginal );
             const String*           pRight = m_pSuggestions->First();
             bool bAddedSomething = false;
@@ -1653,6 +1656,7 @@ namespace svx
             {
                 try
                 {
+                    //add new entry
                     xDict->addEntry( aLeft, *pRight );
                     bAddedSomething = true;
                 }
@@ -1666,7 +1670,7 @@ namespace svx
                 pRight = m_pSuggestions->Next();
             }
 
-            if(bAddedSomething)
+            if(bAddedSomething||bRemovedSomething)
                 InitEditDictDialog( m_nCurrentDict );
         }
         else
@@ -1676,9 +1680,9 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, NOTINTERESTEDIN )
+    bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const OUString& rEntry, const Reference< XConversionDictionary >& xDict  )
     {
-        Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
+        bool bRemovedSomething = false;
         if( xDict.is() )
         {
             OUString                aOrg( m_aOriginal );
@@ -1687,7 +1691,6 @@ namespace svx
 
             sal_uInt32  n = aEntries.getLength();
             OUString*   pEntry = aEntries.getArray();
-            bool bRemovedSomething = false;
             while( n )
             {
                 try
@@ -1702,13 +1705,17 @@ namespace svx
                 ++pEntry;
                 --n;
             }
+        }
+        return bRemovedSomething;
+    }
 
-            if( bRemovedSomething )
-            {
-                m_aOriginal.Erase();
-                m_bModifiedOriginal = true;
-                InitEditDictDialog( m_nCurrentDict );
-            }
+    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, NOTINTERESTEDIN )
+    {
+        if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
+        {
+            m_aOriginal.Erase();
+            m_bModifiedOriginal = true;
+            InitEditDictDialog( m_nCurrentDict );
         }
         return 0;
     }
