@@ -145,6 +145,9 @@ Sub CancelFormWizard()
 	DlgFormDB.EndExecute()
 	DlgFormDB.Dispose()
 	oDocument.Dispose()
+	If Not IsNull(oDBConnection) Then
+		oDBConnection.Dispose()
+	End If
 	Stop
 End Sub
 
@@ -225,31 +228,22 @@ End Sub
 
 
 Sub StoreForm()
-Dim oFileDialog
-Dim iAccept as Integer
-Dim sPath as String
-Dim ListAny(0)
-	ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS
-	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
-	oFileDialog.AppendFilter(sWriterFiltername, &quot;*.sxw&quot;)
-	oFileDialog.AppendFilter(sWriterTemplateFiltername, &quot;*.stw&quot;)
-	oFileDialog.SetCurrentFilter(&quot;Writer 6.0&quot;)
-	oFileDialog.Initialize(ListAny())
-	oFileDialog.SetDisplayDirectory(WorkPath)
-	oFileDialog.SetDefaultName(&quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName
-	iAccept = oFileDialog.Execute()
-	If iAccept = 1 Then
-		sPath = oFileDialog.Files(0)
-		If oFileDialog.GetCurrentFilter() = sWriterTemplateFiltername Then
-			Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
-			oStoreProperties(0).Name = &quot;FilterName&quot;
-			oStoreProperties(0).Value = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
-			oDocument.StoreAsUrl(sPath, oStoreProperties())
-		Else
-			Dim NoArgs() as New com.sun.star.beans.PropertyValue	
-			oDocument.StoreAsUrl(sPath, NoArgs())
-		End If
+Dim bDocIsStored as Boolean
+Dim FilterNames(1,2) as String
+Dim oMasterKey as Object
+Dim oFilters() as Object
+	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
+	oFilters() = oMasterKey.Filters
+	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+	FilterNames(0,1) = &quot;*.sxw&quot;
+	FilterNames(0,2) = &quot;&quot;
+	FilterNames(1,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+	FilterNames(1,1) = &quot;*.stw&quot;
+	FilterNames(1,2) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+	bDocIsStored = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
+	If bDocIsStored Then
 		DlgFormDB.EndExecute()
+		oDBConnection.Dispose
 	End If
 End Sub
 </script:module>

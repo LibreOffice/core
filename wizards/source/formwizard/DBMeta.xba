@@ -47,6 +47,9 @@ Dim bExitLoop as Boolean
 Dim bGetConnection as Boolean
 Dim iMsg as Integer
 Dim Nulllist()
+&apos;	If Not IsNull(oDBConnection) Then
+&apos;		oDBConnection.Dispose()
+&apos;	End If
 	oDatabase = oDBContext.GetByName(sDBName)
 	If Not oDatabase.IsPasswordRequired Then
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)

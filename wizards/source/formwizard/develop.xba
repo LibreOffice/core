@@ -157,7 +157,9 @@ Dim aSize As New com.sun.star.awt.Size
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
 &apos;		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
-		oDBForm.InsertByName(oModel.Name, oModel)
+&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
+&apos; own. therefor the model should be inserted before the shape
+&apos;		oDBForm.InsertByName(oModel.Name, oModel)
 		aPoint = GetPoint(nXTCPos, nYTCPos)
 		aSize = GetSize(nTCWidth,nTCHeight)
 		Set oShape = InsertControl(oModel, aPoint, aSize)
@@ -219,7 +221,9 @@ Dim iColRightX as Long
 		SetNumerics(oDBModel)
 		oShape = InsertControl(oDBModel, aPoint, aSize)
 		Set oDBShapeList(i)= oShape
-		oDBForm.InsertByName(oDBModel.Name, oDBModel)
+&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
+&apos; own. therefor the model should be inserted before the shape		
+&apos;		oDBForm.InsertByName(oDBModel.Name, oDBModel)
 		If CurControlType = cCheckBox Then
 			oDBModel.Label = &quot;&quot;
 		End If
