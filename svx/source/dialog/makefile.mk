@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 12:18:30 $
+#   last change: $Author: obo $ $Date: 2004-04-27 15:47:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 PRJ=..$/..
-
 PRJNAME=svx
 TARGET=dialogs
 VERSION=$(UPD)
@@ -191,6 +190,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/numpages.obj	\
     $(SLO)$/splwrap.obj		\
     $(SLO)$/hangulhanja.obj \
+    $(SLO)$/hangulhanjadlg.obj \
     $(SLO)$/optasian.obj		\
     $(SLO)$/optaccessibility.obj	\
     $(SLO)$/optsave.obj		\
@@ -295,7 +295,6 @@ SLOFILES=\
                 $(SLO)$/grfflt.obj	\
                 $(SLO)$/frmdirlbox.obj \
         $(SLO)$/commonlingui.obj \
-        $(SLO)$/hangulhanjadlg.obj \
         $(SLO)$/dialmgr.obj \
     $(SLO)$/cuiimapwnd.obj \
     $(SLO)$/cuisrchdlg.obj \
