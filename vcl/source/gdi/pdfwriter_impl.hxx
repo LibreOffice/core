@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:19:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@
 
 class SalLayout;
 class ImplLayoutArgs;
-struct ImplFontData;
-struct ImplFontSelectData;
-struct ImplFontMetricData;
+class ImplFontData;
+class ImplFontSelectData;
+class ImplFontMetricData;
 struct FontSubsetInfo;
 class ZCodec;
 class SvMemoryStream;
