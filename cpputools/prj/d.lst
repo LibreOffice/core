@@ -1,5 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\cpputools
 ..\inc\cpputools\jenv.hxx %_DEST%\inc%_EXT%\cpputools\jenv.hxx
+..\inc\cpputools\javainfo.hxx %_DEST%\inc%_EXT%\cpputools\javainfo.hxx
 ..\%__SRC%\lib\jenv.lib %_DEST%\lib%_EXT%\jenv.lib
 ..\%__SRC%\lib\libjenv.so %_DEST%\lib%_EXT%\libjenv.so
 ..\%__SRC%\lib\ijenv.lib %_DEST%\lib%_EXT%\ijenv.lib
