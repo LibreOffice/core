@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:06:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,12 +644,12 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
     {
         Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
         if  (   (aDefaultControl.getValueType().getTypeClass() == TypeClass_STRING)
-            &&  (getString(aDefaultControl).compareTo(FRM_CONTROL_TEXTFIELD) == COMPARE_EQUAL)
+            &&  (getString(aDefaultControl).compareTo(STARDIV_ONE_FORM_CONTROL_TEXTFIELD) == COMPARE_EQUAL)
             )
         {
-            m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(::rtl::OUString(FRM_CONTROL_EDIT)));
-            // Older as well as current versions should understand this : the former knew only the FRM_CONTROL_EDIT,
-            // the latter are registered for both FRM_CONTROL_EDIT and FRM_CONTROL_TEXTFIELD.
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (::rtl::OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
+            // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
+            // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
         }
     }
 }
