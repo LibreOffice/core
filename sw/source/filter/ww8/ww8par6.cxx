@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:51:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -2966,31 +2969,38 @@ SwWW8StyInf *SwWW8ImplReader::GetStyle(USHORT nColl) const
 // Contour und Shadow
 void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
 {
-    static const USHORT nEndIds[ 8 + 2 ] =
+    const int nContigiousWestern = 8;
+    const int nWestern = nContigiousWestern + 1;
+    const int nEastern = 2;
+    const int nIds = nWestern + nEastern;
+    static const USHORT nEndIds[ nIds ] =
     {
         RES_CHRATR_WEIGHT,          RES_CHRATR_POSTURE,
         RES_CHRATR_CROSSEDOUT,      RES_CHRATR_CONTOUR,
         RES_CHRATR_SHADOWED,        RES_CHRATR_CASEMAP,
-        RES_CHRATR_CASEMAP,         RES_CHRATR_CROSSEDOUT,
+        RES_CHRATR_CASEMAP,         RES_CHRATR_HIDDEN,
+
+        RES_CHRATR_CROSSEDOUT,
 
         RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CJK_POSTURE
     };
 
     BYTE nI;
     // die Attribut-Nr fuer "doppelt durchgestrichen" tanzt aus der Reihe
-    if( 0x2A53 != nId )
-        nI = bVer67 ? nId - 85 : nId - 0x0835;  // Index 0..6
+    if (0x2A53 == nId)
+        nI = nContigiousWestern;               // The out of sequence western id
     else
-        nI = 7;                         // Index 7 (Doppelt durchgestrichen)
+        nI = bVer67 ? nId - 85 : nId - 0x0835; // The contigious western ids
 
-    BYTE nMask = 1 << nI;
+    sal_uInt16 nMask = 1 << nI;
 
-    if( nLen < 0 )
+    if (nLen < 0)
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nI ] );
-        // reset the CJK Weight and Posture
-        if( nI < 2 )
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ 8 + nI ] );
+        // reset the CJK Weight and Posture, because they are the same as their
+        // western equivalents in word
+        if (nI < 2)
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nWestern + nI ] );
         pCtrlStck->SetToggleAttr(nI, false);
         return;
     }
@@ -3055,7 +3065,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
     if (nI > 1)
         return;
 
-    BYTE nMask = 1 << nI;
+    sal_uInt16 nMask = 1 << nI;
 
     if( nLen < 0 )
     {
@@ -3106,7 +3116,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
 
 void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
 {
-    switch(nAttrId)
+    switch (nAttrId)
     {
         case 0:
             {
@@ -3122,12 +3132,16 @@ void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
                 NewAttr( aAttr );
             }
             break;
+        default:
+            ASSERT(!this, "Unhandled unknown bidi toggle attribute");
+            break;
+
     }
 }
 
 void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
 {
-    switch( nAttrId )
+    switch (nAttrId)
     {
         case 0:
             {
@@ -3163,8 +3177,14 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
                                              : SVX_CASEMAP_NOT_MAPPED ) );
             break;
         case 7:
+            NewAttr(SvxCharHiddenItem(bOn));
+            break;
+        case 8:
             NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_DOUBLE
                                                 : STRIKEOUT_NONE ) );
+            break;
+        default:
+            ASSERT(!this, "Unhandled unknown toggle attribute");
             break;
     }
 }
@@ -3173,28 +3193,33 @@ void SwWW8ImplReader::_ChkToggleAttr( USHORT nOldStyle81Mask,
                                         USHORT nNewStyle81Mask )
 {
     USHORT i = 1, nToggleAttrFlags = pCtrlStck->GetToggleAttrFlags();
-    BYTE n = 0;
-    for( ; n < 7; ++n, i <<= 1 )
-        if( (i & nToggleAttrFlags) &&
-            ( (i & nOldStyle81Mask) != (i & nNewStyle81Mask)))
+    for (BYTE n = 0; n < 7; ++n, i <<= 1)
+    {
+        if (
+            (i & nToggleAttrFlags) &&
+            ((i & nOldStyle81Mask) != (i & nNewStyle81Mask))
+           )
         {
-            SetToggleAttr( n, 0 != (i & nOldStyle81Mask ) );
+            SetToggleAttr(n, (i & nOldStyle81Mask));
         }
+    }
 }
 
 void SwWW8ImplReader::_ChkToggleBiDiAttr( USHORT nOldStyle81Mask,
                                         USHORT nNewStyle81Mask )
 {
     USHORT i = 1, nToggleAttrFlags = pCtrlStck->GetToggleBiDiAttrFlags();
-    BYTE n = 0;
-    for( ; n < 7; ++n, i <<= 1 )
-        if( (i & nToggleAttrFlags) &&
-            ( (i & nOldStyle81Mask) != (i & nNewStyle81Mask)))
+    for (BYTE n = 0; n < 7; ++n, i <<= 1)
+    {
+        if (
+            (i & nToggleAttrFlags) &&
+            ((i & nOldStyle81Mask) != (i & nNewStyle81Mask))
+           )
         {
-            SetToggleBiDiAttr( n, 0 != (i & nOldStyle81Mask ) );
+            SetToggleBiDiAttr(n, (i & nOldStyle81Mask));
         }
+    }
 }
-
 
 void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
 {
@@ -5167,13 +5192,13 @@ SprmReadInfo aSprmReadTab[] = {
                                                  //129 byte
      {91, &SwWW8ImplReader::Read_BoldUsw},       //"sprmCFCaps", chp.fCaps 0,1,
                                                  //128, or 129 byte
-     {92, &SwWW8ImplReader::Read_Invisible},     //"sprmCFVanish", chp.fVanish
+     {92, &SwWW8ImplReader::Read_BoldUsw},       //"sprmCFVanish", chp.fVanish
                                                  //0,1, 128, or 129 byte
      {93, &SwWW8ImplReader::Read_FontCode},      //"sprmCFtc", chp.ftc ftc word
      {94, &SwWW8ImplReader::Read_Underline},     // "sprmCKul", chp.kul kul byte
      {95, (FNReadRecord)0},                      //"sprmCSizePos", chp.hps,
                                                  //chp.hpsPos 3 bytes
-     {96, &SwWW8ImplReader::Read_Kern},        //"sprmCDxaSpace",
+     {96, &SwWW8ImplReader::Read_Kern},          //"sprmCDxaSpace",
                                                  //chp.dxaSpace dxa word
      {97, &SwWW8ImplReader::Read_Language},      //"sprmCLid", chp.lid LID word
      {98, &SwWW8ImplReader::Read_TxtColor},      //"sprmCIco", chp.ico ico byte
@@ -5592,7 +5617,7 @@ SprmReadInfo aSprmReadTab[] = {
                                                  //129;byte;
     {0x083B, &SwWW8ImplReader::Read_BoldUsw},    //"sprmCFCaps" chp.fCaps;0,1,
                                                  //128, or 129; byte;
-    {0x083C, &SwWW8ImplReader::Read_Invisible},  //"sprmCFVanish" chp.fVanish;0,
+    {0x083C, &SwWW8ImplReader::Read_BoldUsw},    //"sprmCFVanish" chp.fVanish;0,
                                                  //1, 128, or 129; byte;
   //0x4A3D, (FNReadRecord)0,                     //"sprmCFtcDefault" ftc, only
                                                  //used internally, never
