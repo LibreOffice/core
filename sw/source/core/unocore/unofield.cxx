@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 09:57:10 $
+ *  last change: $Author: dvo $ $Date: 2000-12-06 11:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2697,6 +2697,10 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             throw NoSuchElementException();
         nResId = RES_DBFLD;
     }
+    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("Bibliography"))
+    {
+        nResId = RES_AUTHORITY;
+    }
     else
         throw NoSuchElementException();
 
@@ -2761,6 +2765,12 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
             *pString += sDBName;
             aFldNames.Insert(pString, aFldNames.Count());
         }
+        if(RES_AUTHORITY == nWhich)
+        {
+            String* pString = new String(sPrefix);
+            *pString += C2S("Bibliography");
+            aFldNames.Insert(pString, aFldNames.Count());
+        }
     }
 
     uno::Sequence< OUString > aSeq(aFldNames.Count());
@@ -2806,6 +2816,10 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
         if(!lcl_ConvertDatabaseName(sName))
             throw NoSuchElementException();
         nResId = RES_DBFLD;
+    }
+    else if(COMPARE_EQUAL == sTypeName.CompareToAscii("Bibliography"))
+    {
+        nResId = RES_AUTHORITY;
     }
     sName.Erase(0, nFound);
     sal_Bool bRet = nResId != USHRT_MAX && 0 != GetDoc()->GetFldType(nResId, sName);
