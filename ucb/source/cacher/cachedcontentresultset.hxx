@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:37:35 $
+ *  last change: $Author: kso $ $Date: 2001-12-05 13:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 
 //=========================================================================
 
+namespace com { namespace sun { namespace star { namespace script {
+    class XTypeConverter;
+} } } }
+
 class CCRS_PropertySetInfo;
 class CachedContentResultSet
                 : public ContentResultSetWrapper
@@ -173,6 +177,9 @@ class CachedContentResultSet
     };
     //-----------------------------------------------------------------
     //members
+
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+                            m_xSMgr;
 
     //different Interfaces from Origin:
     com::sun::star::uno::Reference< com::sun::star::ucb::XFetchProvider >
@@ -249,11 +256,15 @@ private:
     impl_changeIsRowCountFinal( sal_Bool bOld, sal_Bool bNew );
 
 public:
-    CachedContentResultSet( com::sun::star::uno::Reference<
-                        com::sun::star::sdbc::XResultSet > xOrigin,
-                        com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XContentIdentifierMapping >
-                        xContentIdentifierMapping );
+    CachedContentResultSet(
+                        const com::sun::star::uno::Reference<
+                            com::sun::star::lang::XMultiServiceFactory > &
+                                xSMgr,
+                        const com::sun::star::uno::Reference<
+                            com::sun::star::sdbc::XResultSet > & xOrigin,
+                        const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XContentIdentifierMapping > &
+                                xContentIdentifierMapping );
 
     virtual ~CachedContentResultSet();
 
@@ -509,6 +520,18 @@ public:
     getArray( sal_Int32 columnIndex )
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
+
+    //-----------------------------------------------------------------
+    // Type Converter support
+    //-----------------------------------------------------------------
+
+private:
+    sal_Bool m_bTriedToGetTypeConverter;
+    com::sun::star::uno::Reference<
+        com::sun::star::script::XTypeConverter > m_xTypeConverter;
+
+    const com::sun::star::uno::Reference<
+        com::sun::star::script::XTypeConverter >& getTypeConverter();
 };
 
 //=========================================================================

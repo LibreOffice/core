@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
+ *  last change: $Author: kso $ $Date: 2001-12-05 13:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #endif
@@ -91,6 +95,7 @@
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::script;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
@@ -142,9 +147,32 @@ if( !m_aCache.hasRow( nRow ) )                          \
     }                                                   \
 }                                                       \
 const Any& rValue = m_aCache.getAny( nRow, columnIndex );\
-Type aRet;                                              \
+Type aRet = Type();                                     \
 m_bLastReadWasFromCache = sal_True;                     \
 m_bLastCachedReadWasNull = !( rValue >>= aRet );        \
+/* Last chance. Try type converter service... */        \
+if ( m_bLastCachedReadWasNull && rValue.hasValue() )    \
+{                                                       \
+    Reference< XTypeConverter > xConverter              \
+                                = getTypeConverter();   \
+    if ( xConverter.is() )                              \
+    {                                                   \
+        try                                             \
+        {                                               \
+            Any aConvAny = xConverter->convertTo(       \
+                rValue,                                 \
+                getCppuType( static_cast<               \
+                    const Type * >( 0 ) ) );            \
+            m_bLastCachedReadWasNull = !( aConvAny >>= aRet ); \
+        }                                               \
+        catch ( IllegalArgumentException )              \
+        {                                               \
+        }                                               \
+        catch ( CannotConvertException )                \
+        {                                               \
+        }                                               \
+    }                                                   \
+}                                                       \
 return aRet;
 
 //--------------------------------------------------------------------------
@@ -681,11 +709,14 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
-CachedContentResultSet::CachedContentResultSet( Reference< XResultSet > xOrigin
-                , Reference< XContentIdentifierMapping >
+CachedContentResultSet::CachedContentResultSet(
+                  const Reference< XMultiServiceFactory > & xSMgr
+                , const Reference< XResultSet > & xOrigin
+                , const Reference< XContentIdentifierMapping > &
                     xContentIdentifierMapping )
                 : ContentResultSetWrapper( xOrigin )
 
+                , m_xSMgr( xSMgr )
                 , m_xFetchProvider( NULL )
                 , m_xFetchProviderForContentAccess( NULL )
                 , m_xContentIdentifierMapping( xContentIdentifierMapping )
@@ -710,6 +741,8 @@ CachedContentResultSet::CachedContentResultSet( Reference< XResultSet > xOrigin
                 , m_aCacheContentIdentifierString( m_xContentIdentifierMapping )
                 , m_aCacheContentIdentifier( m_xContentIdentifierMapping )
                 , m_aCacheContent( m_xContentIdentifierMapping )
+                , m_xTypeConverter( NULL )
+                , m_bTriedToGetTypeConverter( sal_False )
 {
     m_xFetchProvider = Reference< XFetchProvider >( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );
@@ -2176,6 +2209,29 @@ Reference< XArray > SAL_CALL CachedContentResultSet
     XROW_GETXXX( getArray, Reference< XArray > );
 }
 
+//-----------------------------------------------------------------
+// Type Converter Support
+//-----------------------------------------------------------------
+
+const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    if ( !m_bTriedToGetTypeConverter && !m_xTypeConverter.is() )
+    {
+        m_bTriedToGetTypeConverter = sal_True;
+        m_xTypeConverter = Reference< XTypeConverter >(
+                                m_xSMgr->createInstance(
+                                    OUString::createFromAscii(
+                                        "com.sun.star.script.Converter" ) ),
+                                UNO_QUERY );
+
+        OSL_ENSURE( m_xTypeConverter.is(),
+                    "PropertyValueSet::getTypeConverter() - "
+                    "Service 'com.sun.star.script.Converter' n/a!" );
+    }
+    return m_xTypeConverter;
+}
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -2239,7 +2295,7 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetFactory
             throw( com::sun::star::uno::RuntimeException )
 {
     Reference< XResultSet > xRet;
-    xRet = new CachedContentResultSet( xSource, xMapping );
+    xRet = new CachedContentResultSet( m_xSMgr, xSource, xMapping );
     return xRet;
 }
 

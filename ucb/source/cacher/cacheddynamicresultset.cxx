@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddynamicresultset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
+ *  last change: $Author: kso $ $Date: 2001-12-05 13:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ void SAL_CALL CachedDynamicResultSet
     OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
-        new CachedContentResultSet( m_xSourceResultOne, m_xContentIdentifierMapping ) );
+        new CachedContentResultSet( m_xSMgr, m_xSourceResultOne, m_xContentIdentifierMapping ) );
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultOne = xCache;
@@ -116,7 +116,7 @@ void SAL_CALL CachedDynamicResultSet
     OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
-        new CachedContentResultSet( m_xSourceResultTwo, m_xContentIdentifierMapping ) );
+        new CachedContentResultSet( m_xSMgr, m_xSourceResultTwo, m_xContentIdentifierMapping ) );
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultTwo = xCache;

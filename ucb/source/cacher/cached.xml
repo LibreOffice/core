@@ -26,6 +26,10 @@
         <supported-service>
             com.sun.star.ucb.CachedContentResultSetFactory
         </supported-service>
+
+        <service-dependency>
+             com.sun.star.script.Converter
+        </service-dependency>
     </component-description>
     <component-description>
         <author>
@@ -115,6 +119,7 @@
     <type> com.sun.star.lang.XSingleServiceFactory             </type>
     <type> com.sun.star.lang.XTypeProvider                     </type>
     <type> com.sun.star.registry.XRegistryKey                  </type>
+    <type> com.sun.star.script.XTypeConverter                  </type>
     <type> com.sun.star.sdbc.FetchDirection                    </type>
     <type> com.sun.star.sdbc.ResultSetType                     </type>
     <type> com.sun.star.sdbc.XCloseable                        </type>
