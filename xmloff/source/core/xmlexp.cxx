@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:33:10 $
+ *  last change: $Author: obo $ $Date: 2004-05-14 16:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,10 +357,10 @@ void SvXMLExport::_InitCtor()
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
     sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 
-    if (xModel.is() && !pEventListener)
+    if (xModel.is() && ! mxEventListener.is())
     {
-        pEventListener = new SvXMLExportEventListener(this);
-        xModel->addEventListener(pEventListener);
+        mxEventListener.set( new SvXMLExportEventListener(this));
+        xModel->addEventListener(mxEventListener);
     }
 }
 
@@ -385,7 +385,6 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( nExportFlags ),
@@ -421,7 +420,6 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL ),
@@ -463,7 +461,6 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL ),
@@ -507,7 +504,6 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL ),
@@ -573,8 +569,8 @@ SvXMLExport::~SvXMLExport()
 
     xmloff::token::ResetTokens();
 
-    if (pEventListener && xModel.is())
-        xModel->removeEventListener(pEventListener);
+    if (mxEventListener.is() && xModel.is())
+        xModel->removeEventListener(mxEventListener);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -586,10 +582,10 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     xModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !xModel.is() )
         throw lang::IllegalArgumentException();
-    if (xModel.is() && !pEventListener)
+    if (xModel.is() && ! mxEventListener.is())
     {
-        pEventListener = new SvXMLExportEventListener(this);
-        xModel->addEventListener(pEventListener);
+        mxEventListener.set( new SvXMLExportEventListener(this));
+        xModel->addEventListener(mxEventListener);
     }
 
     if(!xNumberFormatsSupplier.is() )
@@ -1917,8 +1913,8 @@ XMLErrors* SvXMLExport::GetErrors()
 
 void SvXMLExport::DisposingModel()
 {
-    xModel = 0;
-    pEventListener = NULL;
+    xModel.clear();
+    mxEventListener.clear();
 }
 
 // #110680#
