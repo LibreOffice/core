@@ -179,7 +179,7 @@ public class LetterDocument extends TextDocument {
                 Helper.setUnoPropertyValue(xShape, "SizeType", new Short(SizeType.FIX));
 
                 Helper.setUnoPropertyValue(xFrame, "TextWrap", WrapTextMode.THROUGHT);
-                Helper.setUnoPropertyValue(xFrame, "Opaque", Boolean.FALSE);
+                Helper.setUnoPropertyValue(xFrame, "Opaque", Boolean.TRUE);
                 Helper.setUnoPropertyValue(xFrame, "BackColor", new Integer(15790320));
 
                 BorderLine myBorder = new BorderLine();
