@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-18 10:03:43 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 12:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,13 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
                 pStream->SetError( xLockBytes->GetError() );
             }
         }
-        catch ( CommandAbortedException e )
+        catch ( CommandAbortedException& e )
         {
         }
-        catch ( Exception e )
+        catch ( ContentCreationException& e )
+        {
+        }
+        catch ( Exception& e )
         {
             DBG_ERROR( "Any other exception!" );
         }
