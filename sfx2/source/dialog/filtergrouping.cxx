@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-24 15:32:10 $
+ *  last change: $Author: svesik $ $Date: 2001-10-25 02:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include "filtergrouping.hxx"
 #endif
 #ifndef _SFX_FCONTNR_HXX
-#include <sfx2/fcontnr.hxx>
+#include <fcontnr.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include "filedlghelper.hxx"
@@ -973,6 +973,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/10/24 15:32:10  fs
+ *  #93701# do not add global classes which are empty
+ *
  *  Revision 1.5  2001/10/11 16:10:39  hr
  *  #92924#: lcl_GroupAndClassify(): clear FilterGroupList
  *
