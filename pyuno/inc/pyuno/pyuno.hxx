@@ -131,6 +131,8 @@ public:
 struct stRuntimeImpl;
 typedef struct stRuntimeImpl RuntimeImpl;
 
+enum ConversionMode { ACCEPT_UNO_ANY, REJECT_UNO_ANY };
+
 
 /** The pyuno::Runtime class keeps the internal state of the python UNO bridge
     for the currently in use python interpreter.
@@ -209,7 +211,8 @@ public:
         the global interpreter lock is held and pyuno
         has been initialized
     */
-    com::sun::star::uno::Any pyObject2Any ( const PyRef & source ) const
+    com::sun::star::uno::Any pyObject2Any (
+        const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const
         throw ( com::sun::star::uno::RuntimeException);
 
 
