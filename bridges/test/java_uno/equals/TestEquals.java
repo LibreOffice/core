@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestEquals.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:41:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -124,25 +125,19 @@ public final class TestEquals {
                 XTestFrame.class, bridge.getInstance("TestFrame"));
             XComponentContext context
                 = Bootstrap.createInitialComponentContext(null);
-            XMultiComponentFactory factory = context.getServiceManager();
-            XBridgeFactory bridgeFactory
-                = (XBridgeFactory) UnoRuntime.queryInterface(
-                    XBridgeFactory.class,
-                    factory.createInstanceWithContext(
-                        "com.sun.star.bridge.BridgeFactory", context));
-            XAcceptor acceptor = (XAcceptor) UnoRuntime.queryInterface(
-                XAcceptor.class,
-                factory.createInstanceWithContext(
-                    "com.sun.star.connection.Acceptor", context));
+            XAcceptor acceptor = Acceptor.create(context);
+            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+                XBridgeFactory.class,
+                context.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.bridge.BridgeFactory", context));
             System.out.println("Client, 2nd connection: Accepting...");
             XInstanceProvider prov = new Provider();
             f.notifyAccepting(new Done(), prov.getInstance(INSTANCE1),
                               prov.getInstance(INSTANCE2));
             XConnection connection = acceptor.accept(CONNECTION_DESCRIPTION);
             System.out.println("Client, 2nd connection: ...connected...");
-            XBridge bridge2 = bridgeFactory.createBridge("",
-                                                         PROTOCOL_DESCRIPTION,
-                                                         connection, prov);
+            XBridge bridge2 = factory.createBridge(
+                "", PROTOCOL_DESCRIPTION, connection, prov);
             System.out.println("Client, 2nd connection: ...bridged.");
             synchronized (lock) {
                 while (!done) {
