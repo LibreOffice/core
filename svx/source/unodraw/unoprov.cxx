@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-06 12:00:46 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 17:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,28 +368,9 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
 {
     static SfxItemPropertyMap aGroupPropertyMap_Impl[] =
     {
-        SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_CHAR_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,
-        SHADOW_PROPERTIES
-        LINE_PROPERTIES
-        LINE_PROPERTIES_START_END
-        FILL_PROPERTIES
-        EDGERADIUS_PROPERTIES
-        TEXT_PROPERTIES
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
-        SPECIAL_CONNECTOR_PROPERTIES
-        SPECIAL_DIMENSIONING_PROPERTIES
-        SPECIAL_CIRCLE_PROPERTIES
-        SPECIAL_POLYGON_PROPERTIES
-        SPECIAL_POLYPOLYGON_PROPERTIES
-        SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
-        SPECIAL_GRAPHOBJ_PROPERTIES
-        SPECIAL_3DSCENEOBJECT_PROPERTIES
-        MISC_3D_OBJ_PROPERTIES
-        AUTOSHAPE_PROPERTIES
         {0,0,0,0,0}
     };
 
