@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-22 08:18:21 $
+ *  last change: $Author: ssa $ $Date: 2001-10-15 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ static SOICON soicons[] = {
     {100, _100_player_l_xpm, _100_player_m_xpm, _100_player_s_xpm, _100_player_t_xpm,
         0, 0, 0, 0, 0, 0, 0, 0},
     {500, _500_setup_l_xpm, _500_setup_m_xpm, _500_setup_s_xpm, _500_setup_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {501, _501_printeradmin_l_xpm, _501_printeradmin_m_xpm, _501_printeradmin_s_xpm, _501_printeradmin_t_xpm,
         0, 0, 0, 0, 0, 0, 0, 0},
     {0, NULL, NULL, NULL,
         0, 0, 0, 0, 0, 0, 0, 0}
