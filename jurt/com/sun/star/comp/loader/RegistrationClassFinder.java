@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-16 09:09:13 $
+ *  last change: $Author: kr $ $Date: 2001-03-13 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ public class RegistrationClassFinder {
 
         if(locationUrl.endsWith(".jar")) {
             m_context = ClassContextProxy.create(new java.net.URL(m_locationUrl), null, null);
-            m_manifest = locationUrl.substring(0, locationUrl.lastIndexOf('/') + 1) + "META-INF/MANIFEST.MF";
+            m_manifest = locationUrl + "/META-INF/MANIFEST.MF";
         }
     }
 
