@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-01-15 13:10:20 $
+ *  last change: $Author: cp $ $Date: 2001-03-07 18:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <poll.h>
 
 #include <prex.h>
 #include <X11/Xlocale.h>
@@ -68,6 +69,7 @@
 #include <postx.h>
 
 #include <salunx.h>
+#include <saldisp.hxx>
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
@@ -332,5 +334,103 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
     return mbUseable && (Bool)XFilterEvent( pEvent, window );
 }
+
+// ------------------------------------------------------------------------
+//
+// add a connection watch into the SalXLib yieldTable to allow iiimp
+// connection processing: soffice waits in select() not in XNextEvent(), so
+// there may be requests pending on the iiimp internal connection that will
+// not be processed until XNextEvent is called the next time. If we do not
+// have the focus because the atok12 lookup choice aux window has it we stay
+// deaf and dump otherwise.
+//
+// ------------------------------------------------------------------------
+
+int
+InputMethod_HasPendingEvent(int nFileDescriptor, void *pData)
+{
+    if (pData == NULL)
+        return 0;
+
+    struct pollfd aFileDescriptor;
+    nfds_t        nNumDescriptor = 1;
+
+    aFileDescriptor.fd      = nFileDescriptor;
+    aFileDescriptor.events  = POLLRDNORM;
+    aFileDescriptor.revents = 0;
+
+    int nPoll = poll (&aFileDescriptor, nNumDescriptor, 0 /* timeout */ );
+
+    if (nPoll > 0)
+    {
+        /* at least some conditions in revent are set */
+        if (   (aFileDescriptor.revents & POLLHUP)
+            || (aFileDescriptor.revents & POLLERR)
+            || (aFileDescriptor.revents & POLLNVAL))
+            return 0; /* oops error condition set */
+
+        if (aFileDescriptor.revents & POLLRDNORM)
+            return 1; /* success */
+    }
+
+    /* nPoll == 0 means timeout, nPoll < 0 means error */
+    return 0;
+}
+
+int
+InputMethod_IsEventQueued(int nFileDescriptor, void *pData)
+{
+    return InputMethod_HasPendingEvent (nFileDescriptor, pData);
+}
+
+int
+InputMethod_HandleNextEvent(int nFileDescriptor, void *pData)
+{
+    if (pData != NULL)
+        XProcessInternalConnection((Display*)pData, nFileDescriptor);
+
+    return 0;
+}
+
+extern "C" void
+InputMethod_ConnectionWatchProc (Display *pDisplay, XPointer pClientData,
+    int nFileDescriptor, Bool bOpening, XPointer *pWatchData)
+{
+    SalXLib *pConnectionHandler = (SalXLib*)pClientData;
+
+    if (pConnectionHandler == NULL)
+        return;
+
+    if (bOpening)
+    {
+        pConnectionHandler->Insert (nFileDescriptor, pDisplay,
+                                    InputMethod_HasPendingEvent,
+                                    InputMethod_IsEventQueued,
+                                    InputMethod_HandleNextEvent);
+    }
+    else
+    {
+        pConnectionHandler->Remove (nFileDescriptor);
+    }
+}
+
+Bool
+SalI18N_InputMethod::AddConnectionWatch(Display *pDisplay, void *pConnectionHandler)
+{
+    // sanity check
+    if (pDisplay == NULL || pConnectionHandler == NULL)
+        return False;
+
+    // if we are not ml all the extended text input comes on the stock X queue,
+    // so there is no need to monitor additional file descriptors.
+    if (!mbMultiLingual || !mbUseable)
+        return False;
+
+    // pConnectionHandler must be really a pointer to a SalXLib
+    Status nStatus = XAddConnectionWatch (pDisplay, InputMethod_ConnectionWatchProc,
+                                          (XPointer)pConnectionHandler);
+    return (Bool)nStatus;
+}
+
 
 

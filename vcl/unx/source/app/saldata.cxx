@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: cp $ $Date: 2001-03-07 18:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,6 +544,7 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
     SalDisplay *pSalDisplay = new SalDisplay( wInitWidget );
 
     pInputMethod->CreateMethod( pDisp );
+    pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
 
     sal_Bool bOldErrorSetting = GetIgnoreXErrors();
