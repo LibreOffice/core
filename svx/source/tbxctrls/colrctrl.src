@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:59:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,4 +112,5 @@ DockingWindow RID_SVXCTRL_COLOR
     Text[ finnish ] = "Värit";
 };
  // ********************************************************************** EOF
+
 
