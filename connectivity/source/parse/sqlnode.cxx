@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:47 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
+
 
 
 
@@ -158,6 +162,23 @@ using namespace ::comphelper;
 extern int SQLyyparse (void);
 
 extern ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* pEscapeNode, sal_Bool bInternational);
+
+namespace
+{
+    sal_Bool lcl_convertDateFormat(const Reference< XNumberFormatter > & _xFormatter,sal_Int32 _nKey,const ::rtl::OUString& _sValue,double& _nrValue)
+    {
+        sal_Bool bRet = sal_False;
+        try
+        {
+            _nrValue = _xFormatter->convertStringToNumber(_nKey, _sValue);
+            bRet = sal_True;
+        }
+        catch(Exception&)
+        {
+        }
+        return bRet;
+    }
+}
 //------------------------------------------------------------------
 OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
                                                             const Reference< XNumberFormatter > & _xFormatter, const Reference< XPropertySet > & _xField, const ::com::sun::star::lang::Locale& _rLocale,
@@ -616,39 +637,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                         case DataType::TIME:
                         case DataType::TIMESTAMP:
                             if (m_xFormatter.is())
-                            {
-                                try
-                                {
-                                    // do we have a date
-                                    double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
-                                    nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
-                                }
-                                catch( Exception& )
-                                {
-                                    try
-                                    {
-                                        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
-                                        Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
-                                        if (xFormatTypes.is())
-                                        {
-                                            double fValue = m_xFormatter->convertStringToNumber(
-                                                xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
-                                                                                pLiteral->getTokenValue().getStr());
-                                            nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
-                                        }
-                                        else
-                                        {
-                                            nErg = -1;
-                                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                                        }
-                                    }
-                                    catch( Exception& )
-                                    {
-                                        nErg = -1;
-                                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                                    }
-                                }
-                            }
+                                nErg = buildDate(pLiteral->getTokenValue(),nType,pAppend,pLiteral,pCompare);
                             else
                                 nErg = buildNode(pAppend,pLiteral,pCompare);
 
@@ -663,45 +652,11 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                         case DataType::DATE:
                         case DataType::TIME:
                         case DataType::TIMESTAMP:
+                            nErg = -1;
                             if (m_xFormatter.is())
-                            {
-                                try
-                                {
-                                    // do we have a date
-                                    double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
-                                    nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
-                                }
-                                catch( Exception& )
-                                {
-                                    try
-                                    {
-                                        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
-                                        Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
-                                        if (xFormatTypes.is())
-                                        {
-                                            double fValue = m_xFormatter->convertStringToNumber(
-                                                xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
-                                                                                pLiteral->getTokenValue().getStr());
-                                            nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
-                                        }
-                                        else
-                                        {
-                                            nErg = -1;
-                                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                                        }
-                                    }
-                                    catch( Exception& )
-                                    {
-                                        nErg = -1;
-                                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                                    }
-                                }
-                            }
+                                nErg = buildDate(pLiteral->getTokenValue(),nType,pAppend,pLiteral,pCompare);
                             else
-                            {
-                                nErg = -1;
                                 m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
-                            }
                             break;
                         default:
                             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
@@ -996,6 +951,32 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         else
             *m_pLocale = m_pContext->getPreferredLocale();
 
+        if ( m_xFormatter.is() )
+        {
+            try
+            {
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                if ( xFormatSup.is() )
+                {
+                    Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xFormatSup->getNumberFormats();
+                    if ( xFormats.is() )
+                    {
+                        ::com::sun::star::lang::Locale aLocale;
+                        aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en_US"));
+                        aLocale.Country = aLocale.Language;
+                        ::rtl::OUString sFormat(RTL_CONSTASCII_USTRINGPARAM("YYYY-MM-DD"));
+                        m_nDateFormatKey = xFormats->queryKey(sFormat,aLocale,sal_False);
+                        if ( m_nDateFormatKey == sal_Int32(-1) )
+                            m_nDateFormatKey = xFormats->addNew(sFormat, aLocale);
+                    }
+                }
+            }
+            catch ( Exception& )
+            {
+                OSL_ENSURE(0,"DateFormatKey");
+            }
+        }
+
         switch (nType)
         {
             case DataType::DATE:
@@ -1033,6 +1014,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         m_xField = NULL;
         m_xFormatter = NULL;
         m_nFormatKey = 0;
+        m_nDateFormatKey = 0;
 
         if (!m_sErrorMessage.getLength())
             m_sErrorMessage = s_pScanner->getErrorMessage();
@@ -1059,6 +1041,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         m_xField = NULL;
         m_xFormatter = NULL;
         m_nFormatKey = 0;
+        m_nDateFormatKey = 0;
 
         // Das Ergebnis liefern (den Root Parse Node):
 
@@ -1075,6 +1058,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
            ,m_pParseTree(NULL)
            ,m_pLocale(NULL)
            ,m_nFormatKey(0)
+           ,m_nDateFormatKey(0)
            ,m_xServiceFactory(_xServiceFactory)
 {
 
@@ -1130,10 +1114,40 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 }
 
 // -----------------------------------------------------------------------------
+sal_Int16 OSQLParser::buildDate(const ::rtl::OUString& _sValue,sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare)
+{
+    sal_Int16 nErg = 0;
+    double fValue = 0.0;
 
+    sal_Bool bBuildDate = lcl_convertDateFormat(m_xFormatter,m_nFormatKey,_sValue,fValue);
+    if ( !bBuildDate )
+    {
+        try
+        {
+            Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+            Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
+            sal_Int32 nStandardFormat = 0;
+            if ( xFormatTypes.is() )
+            {
+                nStandardFormat = xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale);
+                bBuildDate = lcl_convertDateFormat(m_xFormatter,nStandardFormat,_sValue,fValue);
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        if ( !bBuildDate )
+            bBuildDate = lcl_convertDateFormat(m_xFormatter,m_nDateFormatKey,_sValue,fValue);
+    }
 
-
-
-
-
+    if ( bBuildDate )
+        nErg = buildNode_Date(fValue, _nType, pAppend,pLiteral,pCompare);
+    else
+    {
+        nErg = -1;
+        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
+    }
+    return nErg;
+}
+// -----------------------------------------------------------------------------
 
