@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 08:55:56 $
+ *  last change: $Author: cl $ $Date: 2002-05-31 10:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+
+#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1154,6 +1157,9 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
         {
             OutputDevice* pDevice = rUDEvt.GetDevice();
 
+            ULONG nOldDrawMode = pDevice->GetDrawMode();
+            pDevice->SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
             XHatch& rXHatch = mpList->Get( rUDEvt.GetItemId() )->GetHatch();
             MapMode aMode( MAP_100TH_MM );
             Hatch aHatch( (HatchStyle) rXHatch.GetHatchStyle(),
@@ -1167,6 +1173,8 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             pDevice->SetLineColor( COL_BLACK );
             pDevice->SetFillColor();
             pDevice->DrawRect( aRect );
+
+            pDevice->SetDrawMode( nOldDrawMode );
 
             // Draw name
             pDevice->DrawText( Point( aRect.nRight+7, aRect.nTop-1 ), mpList->Get( rUDEvt.GetItemId() )->GetName() );
@@ -1849,6 +1857,8 @@ SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputD
 
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle (WINDOW_BORDER_MONO);
+
+    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
 
 // -----------------------------------------------------------------------
