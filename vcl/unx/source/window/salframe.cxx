@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
+ *  last change: $Author: cp $ $Date: 2001-11-09 16:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,6 +985,23 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+void SalFrameData::SetWindowGravity (int nGravity, const Point& rPosition) const
+{
+    XSizeHints* pHint = XAllocSizeHints();
+    long        nFlag;
+
+    XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
+    pHint->flags       |= PWinGravity | PPosition | PSize;
+    pHint->win_gravity  = nGravity;
+    pHint->x            = rPosition.X();
+    pHint->y            = rPosition.Y();
+
+    XSetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint);
+    XSync (GetXDisplay(), False);
+
+    XFree (pHint);
+}
+
 void SalFrameData::Center( )
 {
 
@@ -1065,7 +1082,11 @@ void SalFrameData::Center( )
         nY -= mpParent->maGeometry.nY;
     }
 
-    Point aPoint ( nX, nY );
+    Point aPoint(nX, nY);
+    const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
+    int nGravity         = pWM->getPositionWinGravity();
+
+    SetWindowGravity (nGravity, aPoint);
     SetPosSize( Rectangle( aPoint, Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) ) );
 }
 
@@ -1200,20 +1221,7 @@ SalFrame::SetWindowState( const SalFrameState *pState )
         }
 
          // demand correct positioning from the WM
-         XSizeHints* pHints = XAllocSizeHints();
-         long nSuppliedFlag;
-         Display*    pDisplay = _GetXDisplay();
-         XLIB_Window hWindow  = maFrameData.GetShellWindow();
-         XGetWMNormalHints(pDisplay, hWindow, pHints, &nSuppliedFlag);
-         pHints->flags       |= PWinGravity | PPosition | PSize;
-         pHints->win_gravity = nGravity;
-         pHints->x           = aPosSize.getX();
-         pHints->y           = aPosSize.getY();
-
-         XSetWMNormalHints (pDisplay, hWindow, pHints);
-         XSync (pDisplay, False);
-         XFree (pHints);
-
+         maFrameData.SetWindowGravity (nGravity, Point(aPosSize.getX(), aPosSize.getY()));
          // resize with new args
          if (pWM->supportsICCCMPos())
          {

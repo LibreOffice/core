@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
+ *  last change: $Author: cp $ $Date: 2001-11-09 16:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ class SalFrameData
     void            Minimize();
     void            Maximize();
     void            Restore();
+    void            SetWindowGravity (int nGravity, const Point& rPosition) const;
 
     void            RepositionChildren();
 
