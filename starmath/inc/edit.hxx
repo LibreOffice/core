@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:41:39 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class DataChangedEvent;
 class Menu;
 class SmCmdBoxWindow;
 class SmEditAccessible;
+class CommandEvent;
 
 /**************************************************************************/
 
@@ -178,6 +179,8 @@ public:
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
+
+    BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
