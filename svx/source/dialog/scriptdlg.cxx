@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:37:36 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes ) :
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
 
-    nMode = 0xFF;   // Alles
+    nMode = 0xFF;    // Alles
 }
 
 SFTreeListBox::~SFTreeListBox()
@@ -685,15 +685,15 @@ InputDialog::~InputDialog()
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language )
-    :   SfxModalDialog( pParent, SVX_RES( RID_DLG_SCRIPTORGANIZER ) ),
+    :    SfxModalDialog( pParent, SVX_RES( RID_DLG_SCRIPTORGANIZER ) ),
         aScriptsTxt( this, ResId( SF_TXT_SCRIPTS ) ),
         aScriptsBox( this, ResId( SF_CTRL_SCRIPTSBOX ) ),
-        aRunButton( this, ResId( SF_PB_RUN ) ),
+        aRunButton(    this, ResId( SF_PB_RUN ) ),
         aCloseButton( this, ResId( SF_PB_CLOSE ) ),
         aCreateButton( this, ResId( SF_PB_CREATE ) ),
         aEditButton( this, ResId( SF_PB_EDIT ) ),
         aRenameButton(this, ResId( SF_PB_RENAME ) ),
-        aDelButton( this, ResId( SF_PB_DEL ) ),
+        aDelButton(    this, ResId( SF_PB_DEL ) ),
         aHelpButton( this, ResId( SF_PB_HELP ) ),
         m_sLanguage( language ),
         m_delErrStr( ResId( RID_SVXSTR_DELFAILED ) ),
@@ -963,38 +963,36 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 
                     if ( mspNode.is() )
                     {
-                        Reference< provider::XScript > xScript(
-                            mspNode->getScript( scriptURL ), UNO_QUERY );
-                        if ( xScript.is() )
+                        try
                         {
+                            Reference< provider::XScript > xScript(
+                            mspNode->getScript( scriptURL ), UNO_QUERY_THROW );
+
                             const Sequence< Any > args(0);
                             Any aRet;
                             Sequence< sal_Int16 > outIndex;
                             Sequence< Any > outArgs( 0 );
-                            try
-                            {
-                                aRet = xScript->invoke( args, outIndex, outArgs );
-                            }
-                            catch ( reflection::InvocationTargetException& ite )
-                            {
-                                ::com::sun::star::uno::Any a = makeAny(ite);
-                                ShowErrorDialog(a);
-                            }
-                            catch ( provider::ScriptFrameworkErrorException& ite )
-                            {
-                                ::com::sun::star::uno::Any a = makeAny(ite);
-                                ShowErrorDialog(a);
-                            }
-                            catch ( RuntimeException& re )
-                            {
-                                ::com::sun::star::uno::Any a = makeAny(re);
-                                ShowErrorDialog(a);
-                            }
-                            catch ( Exception& e )
-                            {
-                                ::com::sun::star::uno::Any a = makeAny(e);
-                                ShowErrorDialog(a);
-                            }
+                            aRet = xScript->invoke( args, outIndex, outArgs );
+                        }
+                        catch ( reflection::InvocationTargetException& ite )
+                        {
+                            ::com::sun::star::uno::Any a = makeAny(ite);
+                            ShowErrorDialog(a);
+                        }
+                        catch ( provider::ScriptFrameworkErrorException& ite )
+                        {
+                            ::com::sun::star::uno::Any a = makeAny(ite);
+                            ShowErrorDialog(a);
+                        }
+                        catch ( RuntimeException& re )
+                        {
+                            ::com::sun::star::uno::Any a = makeAny(re);
+                            ShowErrorDialog(a);
+                        }
+                        catch ( Exception& e )
+                        {
+                            ::com::sun::star::uno::Any a = makeAny(e);
+                            ShowErrorDialog(a);
                         }
                     }
                     StoreCurrentSelection();
