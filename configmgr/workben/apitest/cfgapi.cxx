@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:55 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 20:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,16 @@ using namespace std;
 #include <com/sun/star/uno/Any.h>
 #endif
 
+#ifndef _OSL_PROFILE_HXX_
+#include <osl/profile.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
+
 #include "createpropertyvalue.hxx"
 
 #include "typeconverter.hxx"
@@ -141,6 +151,27 @@ void showSequence(const Sequence<OUString> &aSeq)
 }
 
 //=============================================================================
+
+inline void operator <<= (::rtl::OUString& _rUnicodeString, const sal_Char* _pAsciiString)
+{
+    _rUnicodeString = ::rtl::OUString::createFromAscii(_pAsciiString);
+}
+
+inline void operator <<= (::rtl::OUString& _rUnicodeString, const ::rtl::OString& _rAsciiString)
+{
+    _rUnicodeString <<= _rAsciiString.getStr();
+}
+
+inline void operator <<= (Any& _rUnoValue, const sal_Char* _pAsciiString)
+{
+    _rUnoValue <<= ::rtl::OUString::createFromAscii(_pAsciiString);
+}
+
+inline void operator <<= (Any& _rUnoValue, const ::rtl::OString& _rAsciiString)
+{
+    _rUnoValue <<= _rAsciiString.getStr();
+}
+
 //=============================================================================
 void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF);
 //=============================================================================
@@ -170,6 +201,82 @@ void commit()
     }
 }
 
+// -----------------------------------------------------------------------------
+static sal_Bool             s_bInitialized  =   sal_False;
+static const sal_Char*      s_pSourcePath   =   "f:/local/613/SRC613/configmgr/workben/local_io/share";
+static const sal_Char*      s_pUpdatePath   =   "f:/local/613/SRC613/configmgr/workben/local_io/share";
+static const sal_Char*      s_pRootNode     =   "org.openoffice.test";
+static const sal_Char*      s_pServerType   =   "local";
+static const sal_Char*      s_pLocale       =   "de-DE";
+static const sal_Char*      s_pServer       =   "lautrec-3108:19205";
+static const sal_Char*      s_pUser         =   "lars";
+static const sal_Char*      s_pPassword     =   "";
+
+
+// -----------------------------------------------------------------------------
+static void loadDefaults()
+{
+    if (s_bInitialized)
+        return;
+
+    s_bInitialized = sal_True;
+
+    try
+    {
+        // the executable file name
+        ::rtl::OUString sExecutable;
+        osl_getExecutableFile(&sExecutable.pData);
+        // cut the name, add a cfgapi.ini to the path
+        sal_Int32 nLastSep = sExecutable.lastIndexOf('/');
+        if (-1 != nLastSep)
+            sExecutable = sExecutable.copy(0, nLastSep + 1);
+#ifdef UNX
+        sExecutable += ::rtl::OUString::createFromAscii("cfgapirc");
+#else
+        sExecutable += ::rtl::OUString::createFromAscii("cfgapi.ini");
+#endif
+        ::rtl::OUString sNormalized;
+        if (osl_File_E_None == osl_normalizePath(sExecutable.pData, &sNormalized.pData))
+        {
+            ::osl::Profile aProfile(sNormalized);
+
+            static ::rtl::OString   sSection("defaults");
+            static ::rtl::OString   sSourcePath("sourcepath");
+            static ::rtl::OString   sUpdatePath("updatepath");
+            static ::rtl::OString   sRootNode("rootnode");
+            static ::rtl::OString   sServerType("servertype");
+            static ::rtl::OString   sLocale("Locale");
+            static ::rtl::OString   sServer("Server");
+            static ::rtl::OString   sUser("User");
+            static ::rtl::OString   sPassword("Password");
+
+            // read some strings.
+            // Do this static because we want to redirect the global static character pointers to the buffers.
+            static ::rtl::OString s_sSourcePath = aProfile.readString(sSection, sSourcePath, s_pSourcePath);
+            static ::rtl::OString s_sUpdatePath = aProfile.readString(sSection, sUpdatePath, s_pUpdatePath);
+            static ::rtl::OString s_sRootNode   = aProfile.readString(sSection, sRootNode, s_pRootNode);
+            static ::rtl::OString s_sServerType = aProfile.readString(sSection, sServerType, s_pServerType);
+            static ::rtl::OString s_sLocale     = aProfile.readString(sSection, sLocale, s_pLocale);
+            static ::rtl::OString s_sServer     = aProfile.readString(sSection, sServer, s_pServer);
+            static ::rtl::OString s_sUser       = aProfile.readString(sSection, sUser, s_pUser);
+            static ::rtl::OString s_sPassword   = aProfile.readString(sSection, sPassword, s_pPassword);
+
+            // do this redirection
+            s_pSourcePath   =   s_sSourcePath.getStr();
+            s_pUpdatePath   =   s_sUpdatePath.getStr();
+            s_pRootNode     =   s_sRootNode.getStr();
+            s_pServerType   =   s_sServerType.getStr();
+            s_pLocale       =   s_sLocale.getStr();
+            s_pServer       =   s_sServer.getStr();
+            s_pUser         =   s_sUser.getStr();
+            s_pPassword     =   s_sPassword.getStr();
+        }
+    }
+    catch(std::exception& e)
+    {
+        e.what();   // silence warnings
+    }
+}
 
 // -----------------------------------------------------------------------------
 Sequence<Any> createSequence(const OUString &sUser, const OUString &sPasswd)
@@ -264,9 +371,9 @@ rtl::OUString enterValue(const char* _aStr, const char* _aDefault, bool _bIsAPas
 {
     cout << _aStr;
     cout.flush();
-    OString aTxt = input(_aDefault, _bIsAPassword ? '*' : 0);
 
-    OUString sValue = OUString::createFromAscii(aTxt);
+    OUString sValue;
+    sValue <<= input(_aDefault, _bIsAPassword ? '*' : 0);
     return sValue;
 }
 
@@ -296,6 +403,8 @@ int _cdecl main( int argc, char * argv[] )
     // OString aPasswd = input("", '*');
     // cout << endl << "You inserted: " << aPasswd.getStr() << endl;
 
+    loadDefaults();
+
     try
     {
         OUString const sServiceRegistry = OUString::createFromAscii( argc > 1 ? argv[1] : "applicat.rdb" );
@@ -313,22 +422,22 @@ int _cdecl main( int argc, char * argv[] )
 
         Sequence< Any > aCPArgs;
 
-        OUString sServerType = enterValue("Enter Servertype: ", "local", false);
+        OUString sServerType = enterValue("servertype: ", s_pServerType, false);
         cout << endl;
 
 
         rtl::OUString sUser;
 
-        if (!sServerType.equalsIgnoreCase(ASCII("local")))
+        if (!sServerType.equalsIgnoreCase(ASCII("local")) && !sServerType.equalsIgnoreCase(ASCII("setup")))
         {
             rtl::OUString sServer;
-            sServer = enterValue("Enter Server: ", "lautrec-3108:19205",false);
+            sServer =           enterValue("server  : ", s_pServer,false);
             cout << endl;
 
-            sUser =   enterValue("    Enter User: ", "lars", false);
+            sUser =             enterValue("user    : ", s_pUser, false);
             cout << endl;
 
-            OUString sPasswd = enterValue("Enter Password: ", "", true);
+            OUString sPasswd =  enterValue("password: ", s_pPassword, true);
             cout << endl;
 
             aCPArgs = createSequence(sUser, sPasswd);
@@ -344,18 +453,15 @@ int _cdecl main( int argc, char * argv[] )
         else
         {
             rtl::OUString sSharePath, sUserPath;
-            // sFilePath = enterValue("Enter Filepath: ", "f:/local/613/SRC613/configmgr/workben/local_io",false);
-            sSharePath = enterValue("Enter Share Path: ", "f:/local/613/SRC613/configmgr/workben/local_io/share",false);
+            sSharePath =        enterValue("share path: ", s_pSourcePath, false);
             cout << endl;
-            sUserPath = enterValue("Enter User Path: ", "f:/local/613/SRC613/configmgr/workben/local_io",false);
-            // sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
-            // sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
+            sUserPath =         enterValue("user path : ", s_pUpdatePath, false);
             cout << endl;
 
             aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("sharepath"), sSharePath);
+            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("sourcepath"), sSharePath);
             aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("userpath"), sUserPath);
+            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("updatepath"), sUserPath);
         }
 
         aCPArgs.realloc(aCPArgs.getLength() + 1);
@@ -376,18 +482,14 @@ int _cdecl main( int argc, char * argv[] )
 
 
 
-//      char aPath[300] =           "Root/ApplProfile/StarPortal/";
-//      int const nStart = sizeof(  "Root/ApplProfile/StarPortal/"  ) - 1;
         char aPath[300] =           "/";
         int nStart = sizeof(    "/" ) - 1;
 
-        cout << "Configuration Provider created !\n---------------------------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------\n Configuration Provider created !\n---------------------------------------------------------------" << endl;
 
-        OUString sPath =   enterValue("Enter RootPath: ", "org.openoffice.test", false);
+        OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
         cout << endl;
-        OUString sLocale =   enterValue("Enter Locale: ", "de-DE", false);
-        cout << endl;
-        OUString sSetup  =   enterValue("SetupMode: ", "true", false);
+        OUString sLocale =  enterValue("locale  : ", s_pLocale, false);
         cout << endl;
 
         Sequence< Any > aArgs;
@@ -397,11 +499,6 @@ int _cdecl main( int argc, char * argv[] )
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
-        sal_Bool bSetupMode = false;
-        if (sSetup.equals(ASCII("true")))
-            bSetupMode = true;
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("setupmode"), bSetupMode);
 /*
 #else
         OUString aStr = ASCII("String");
@@ -415,7 +512,7 @@ int _cdecl main( int argc, char * argv[] )
         Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
             OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
             aArgs);
-        cout << "Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
 
         xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
 
@@ -729,6 +826,22 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                                     if (xNameReplace.is())
                                     {
                                         xNameReplace->replaceByName(aName, aValueAny);
+                                        commit();
+                                    }
+                                    bInserted = false;
+                                }
+                                else if (aElement.getValueTypeClass() == TypeClass_STRING)
+                                {
+                                    cout << "set value (type = string) to : ";
+                                    cout.flush();
+                                    cin.getline(buf,sizeof buf);
+                                    Any aValue;
+                                    aValue <<= buf;
+
+                                    Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
+                                    if (xNameReplace.is())
+                                    {
+                                        xNameReplace->replaceByName(aName, aValue);
                                         commit();
                                     }
                                     bInserted = false;
