@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 07:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,34 @@ void SwRect::Justify()
     }
 }
 
+
+#ifdef VERTICAL_LAYOUT
+
+// Similiar to the inline methods, but we need the function pointers
+
+void SwRect::_Width( const long nNew ) { nWidth = nNew; }
+void SwRect::_Height( const long nNew ) { nHeight = nNew; }
+void SwRect::_Left( const long nLeft ){ nWidth += nX - nLeft; nX = nLeft; }
+void SwRect::_Right( const long nRight ){ nWidth = nRight - nX + 1; }
+void SwRect::_Top( const long nTop ){ nHeight += nY - nTop; nY = nTop; }
+void SwRect::_Bottom( const long nBottom ){ nHeight = nBottom - nY + 1; }
+
+long SwRect::_Width() const{ return nWidth; }
+long SwRect::_Height() const{ return nHeight; }
+long SwRect::_Left() const{ return nX; }
+long SwRect::_Right() const{ return nWidth ? nX + nWidth - 1 : nX; }
+long SwRect::_Top() const{ return nY; }
+long SwRect::_Bottom() const{ return nHeight ? nY + nHeight - 1 : nY; }
+
+void SwRect::AddWidth( const long nAdd ) { nWidth += nAdd; }
+void SwRect::AddHeight( const long nAdd ) { nHeight += nAdd; }
+void SwRect::SubLeft( const long nSub ){ nWidth += nSub; nX -= nSub; }
+void SwRect::AddRight( const long nAdd ){ nWidth += nAdd; }
+void SwRect::SubTop( const long nSub ){ nHeight += nSub; nY -= nSub; }
+void SwRect::AddBottom( const long nAdd ){ nHeight += nAdd; }
+void SwRect::SetPosX( const long nNew ){ nX = nNew; }
+void SwRect::SetPosY( const long nNew ){ nY = nNew; }
+#endif
 
 #ifndef PRODUCT
 /*************************************************************************

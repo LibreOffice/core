@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: ama $ $Date: 2001-09-11 07:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@
 #endif
 class SvStream;
 
-
 class SwRect
 {
     long nX;
     long nY;
     long nWidth;
     long nHeight;
+
 
 public:
     inline SwRect();
@@ -153,12 +153,39 @@ public:
 
     // Ausgabeoperator fuer die Debugging-Gemeinde
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
+
+
+#ifdef VERTICAL_LAYOUT
+    void _Top(      const long nTop );
+    void _Bottom(   const long nBottom );
+    void _Left(     const long nLeft );
+    void _Right(    const long nRight );
+    void _Width(    const long nNew );
+    void _Height(   const long nNew );
+    long _Top()     const;
+    long _Bottom()  const;
+    long _Left()    const;
+    long _Right()   const;
+    long _Width()   const;
+    long _Height()  const;
+    void SubTop(    const long nSub );
+    void AddBottom( const long nAdd );
+    void SubLeft(   const long nSub );
+    void AddRight(  const long nAdd );
+    void AddWidth(  const long nAdd );
+    void AddHeight( const long nAdd );
+    void SetPosX(   const long nNew );
+    void SetPosY(   const long nNew );
+#endif
 };
 
 // Implementation in in swrect.cxx
 extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
-
+#ifdef VERTICAL_LAYOUT
+typedef void (SwRect:: *SwRectSet)( const long nNew );
+typedef long (SwRect:: *SwRectGet)() const;
+#endif
 
 //---------------------------------- Set-Methoden
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
