@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 15:22:40 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 17:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,11 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 
     if (!pFormShell->GetImpl()->GetWizardUsing())
         return;
+
+    if (sal_True)
+        return;
+    // no wizards at the moment. The wizards need a complete rewriting, that's why this feature is disable at the
+    // moment
 
     ::com::sun::star::uno::Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
 
