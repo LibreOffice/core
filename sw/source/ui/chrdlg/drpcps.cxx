@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:15:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,9 @@ Size SwDropCapsPict::CalcTextSize( void )
         SvxFont&    rFnt = ( nScript == I18N_SCRIPTTYPE::ASIAN )? maCJKFont :
                                 ( ( nScript == I18N_SCRIPTTYPE::COMPLEX )? maCTLFont : maFont );
         ULONG       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
-        maTextWidth[ nIdx++ ] = nWidth;
+
+        if( nIdx < maTextWidth.Count() )
+            maTextWidth[ nIdx++ ] = nWidth;
         nTxtWidth += nWidth;
         switch(nScript)
         {
