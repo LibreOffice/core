@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:16:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@ SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )
 {
     mpImplData          = new ImplData;
-    mbSysWin            = TRUE;
-    mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
+    mpWindowImpl->mbSysWin            = TRUE;
+    mpWindowImpl->mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
 
     mpMenuBar           = NULL;
     mbPined             = FALSE;
@@ -256,7 +256,7 @@ BOOL SystemWindow::Close()
         return FALSE;
     ImplRemoveDel( &aDelData );
 
-    if ( mxWindowPeer.is() && IsCreatedWithToolkit() )
+    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return FALSE;
 
     // Is Window not closeable, ignore close
@@ -306,27 +306,27 @@ void SystemWindow::Resizing( Size& )
 void SystemWindow::SetZLevel( BYTE nLevel )
 {
     Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
-    if ( pWindow->mbOverlapWin && !pWindow->mbFrame )
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+    if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
     {
-        BYTE nOldLevel = pWindow->mpOverlapData->mnTopLevel;
-        pWindow->mpOverlapData->mnTopLevel = nLevel;
+        BYTE nOldLevel = pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
+        pWindow->mpWindowImpl->mpOverlapData->mnTopLevel = nLevel;
         // Wenn der neue Level groesser als der alte ist, schieben
         // wir das Fenster nach hinten
-        if ( !IsReallyVisible() && (nLevel > nOldLevel) && pWindow->mpNext )
+        if ( !IsReallyVisible() && (nLevel > nOldLevel) && pWindow->mpWindowImpl->mpNext )
         {
             // Fenster aus der Liste entfernen
-            if ( pWindow->mpPrev )
-                pWindow->mpPrev->mpNext = pWindow->mpNext;
+            if ( pWindow->mpWindowImpl->mpPrev )
+                pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow->mpWindowImpl->mpNext;
             else
-                pWindow->mpOverlapWindow->mpFirstOverlap = pWindow->mpNext;
-            pWindow->mpNext->mpPrev = pWindow->mpPrev;
-            pWindow->mpNext = NULL;
+                pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap = pWindow->mpWindowImpl->mpNext;
+            pWindow->mpWindowImpl->mpNext->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpPrev;
+            pWindow->mpWindowImpl->mpNext = NULL;
             // und Fenster wieder in die Liste am Ende eintragen
-            pWindow->mpPrev = pWindow->mpOverlapWindow->mpLastOverlap;
-            pWindow->mpOverlapWindow->mpLastOverlap = pWindow;
-            pWindow->mpPrev->mpNext = pWindow;
+            pWindow->mpWindowImpl->mpPrev = pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap;
+            pWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = pWindow;
+            pWindow->mpWindowImpl->mpPrev->mpWindowImpl->mpNext = pWindow;
         }
     }
 }
@@ -343,11 +343,11 @@ void SystemWindow::SetIcon( USHORT nIcon )
     if ( !mbSysChild )
     {
         const Window* pWindow = this;
-        while ( pWindow->mpBorderWindow )
-            pWindow = pWindow->mpBorderWindow;
+        while ( pWindow->mpWindowImpl->mpBorderWindow )
+            pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
-        if ( pWindow->mbFrame )
-            pWindow->mpFrame->SetIcon( nIcon );
+        if ( pWindow->mpWindowImpl->mbFrame )
+            pWindow->mpWindowImpl->mpFrame->SetIcon( nIcon );
     }
 }
 
@@ -356,10 +356,10 @@ void SystemWindow::SetIcon( USHORT nIcon )
 BYTE SystemWindow::GetZLevel() const
 {
     const Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
-    if ( pWindow->mpOverlapData )
-        return pWindow->mpOverlapData->mnTopLevel;
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+    if ( pWindow->mpWindowImpl->mpOverlapData )
+        return pWindow->mpWindowImpl->mpOverlapData->mnTopLevel;
     else
         return FALSE;
 }
@@ -369,11 +369,11 @@ BYTE SystemWindow::GetZLevel() const
 void SystemWindow::EnableSaveBackground( BOOL bSave )
 {
     Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
-    if ( pWindow->mbOverlapWin && !pWindow->mbFrame )
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+    if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
     {
-        pWindow->mpOverlapData->mbSaveBack = bSave;
+        pWindow->mpWindowImpl->mpOverlapData->mbSaveBack = bSave;
         if ( !bSave )
             pWindow->ImplDeleteOverlapBackground();
     }
@@ -384,10 +384,10 @@ void SystemWindow::EnableSaveBackground( BOOL bSave )
 BOOL SystemWindow::IsSaveBackgroundEnabled() const
 {
     const Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
-    if ( pWindow->mpOverlapData )
-        return pWindow->mpOverlapData->mbSaveBack;
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
+    if ( pWindow->mpWindowImpl->mpOverlapData )
+        return pWindow->mpWindowImpl->mpOverlapData->mbSaveBack;
     else
         return FALSE;
 }
@@ -401,8 +401,8 @@ void SystemWindow::ShowTitleButton( USHORT nButton, BOOL bVisible )
         if ( mbDockBtn != bVisible )
         {
             mbDockBtn = bVisible;
-            if ( mpBorderWindow )
-                ((ImplBorderWindow*)mpBorderWindow)->SetDockButton( bVisible );
+            if ( mpWindowImpl->mpBorderWindow )
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetDockButton( bVisible );
         }
     }
     else if ( nButton == TITLE_BUTTON_HIDE )
@@ -410,14 +410,14 @@ void SystemWindow::ShowTitleButton( USHORT nButton, BOOL bVisible )
         if ( mbHideBtn != bVisible )
         {
             mbHideBtn = bVisible;
-            if ( mpBorderWindow )
-                ((ImplBorderWindow*)mpBorderWindow)->SetHideButton( bVisible );
+            if ( mpWindowImpl->mpBorderWindow )
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetHideButton( bVisible );
         }
     }
     else if ( nButton == TITLE_BUTTON_MENU )
     {
-        if ( mpBorderWindow )
-            ((ImplBorderWindow*)mpBorderWindow)->SetMenuButton( bVisible );
+        if ( mpWindowImpl->mpBorderWindow )
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuButton( bVisible );
     }
     else
         return;
@@ -440,8 +440,8 @@ void SystemWindow::SetPin( BOOL bPin )
     if ( bPin != mbPined )
     {
         mbPined = bPin;
-        if ( mpBorderWindow )
-            ((ImplBorderWindow*)mpBorderWindow)->SetPin( bPin );
+        if ( mpWindowImpl->mpBorderWindow )
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetPin( bPin );
     }
 }
 
@@ -457,8 +457,8 @@ void SystemWindow::RollUp()
         if ( !aSize.Width() )
             aSize.Width() = GetOutputSizePixel().Width();
         mbRollUp = TRUE;
-        if ( mpBorderWindow )
-            ((ImplBorderWindow*)mpBorderWindow)->SetRollUp( TRUE, aSize );
+        if ( mpWindowImpl->mpBorderWindow )
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( TRUE, aSize );
         else
             SetOutputSizePixel( aSize );
         mbRollFunc = FALSE;
@@ -472,8 +472,8 @@ void SystemWindow::RollDown()
     if ( mbRollUp )
     {
         mbRollUp = FALSE;
-        if ( mpBorderWindow )
-            ((ImplBorderWindow*)mpBorderWindow)->SetRollUp( FALSE, maOrgSize );
+        if ( mpWindowImpl->mpBorderWindow )
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( FALSE, maOrgSize );
         else
             SetOutputSizePixel( maOrgSize );
     }
@@ -484,14 +484,14 @@ void SystemWindow::RollDown()
 void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
 {
     maMinOutSize = rSize;
-    if ( mpBorderWindow )
+    if ( mpWindowImpl->mpBorderWindow )
     {
-        ((ImplBorderWindow*)mpBorderWindow)->SetMinOutputSize( rSize.Width(), rSize.Height() );
-        if ( mpBorderWindow->mbFrame )
-            mpBorderWindow->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
+        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMinOutputSize( rSize.Width(), rSize.Height() );
+        if ( mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame )
+            mpWindowImpl->mpBorderWindow->mpWindowImpl->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
     }
-    else if ( mbFrame )
-        mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
+    else if ( mpWindowImpl->mbFrame )
+        mpWindowImpl->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
 }
 
 // -----------------------------------------------------------------------
@@ -505,14 +505,14 @@ void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
         aSize.Height() = SHRT_MAX;
 
     mpImplData->maMaxOutSize = aSize;
-    if ( mpBorderWindow )
+    if ( mpWindowImpl->mpBorderWindow )
     {
-        ((ImplBorderWindow*)mpBorderWindow)->SetMaxOutputSize( aSize.Width(), aSize.Height() );
-        if ( mpBorderWindow->mbFrame )
-            mpBorderWindow->mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
+        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMaxOutputSize( aSize.Width(), aSize.Height() );
+        if ( mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame )
+            mpWindowImpl->mpBorderWindow->mpWindowImpl->mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
     }
-    else if ( mbFrame )
-        mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
+    else if ( mpWindowImpl->mbFrame )
+        mpWindowImpl->mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
 }
 
 const Size& SystemWindow::GetMaxOutputSizePixel() const
@@ -629,10 +629,10 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         return;
 
     Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
-    if ( pWindow->mbFrame )
+    if ( pWindow->mpWindowImpl->mbFrame )
     {
         ULONG           nState = rData.GetState();
         SalFrameState   aState;
@@ -656,21 +656,21 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             while( pWin )
             {
                 if( !pWin->ImplIsRealParentPath( this ) &&
-                    pWin->ImplGetWindow()->IsTopWindow() && pWin->mbReallyVisible )
+                    pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                 {
-                    SalFrameGeometry g = pWin->mpFrame->GetGeometry();
+                    SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
                     if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
                     {
                         long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                        if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > aDesktop.nRight ||
-                            aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > aDesktop.nBottom )
+                        if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
+                            aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
                         {
                             // displacing would leave screen
                             aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                             aState.mnY = displacement;
                             if( bWrapped ||
-                                aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > aDesktop.nRight ||
-                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > aDesktop.nBottom )
+                                aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
+                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
                                 break;  // further displacement not possible -> break
                             // avoid endless testing
                             bWrapped = TRUE;
@@ -684,12 +684,12 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                     pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
                     }
                 }
-                pWin = pWin->mpFrameData->mpNextFrame;
+                pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
             }
 
         }
 
-        mpFrame->SetWindowState( &aState );
+        mpWindowImpl->mpFrame->SetWindowState( &aState );
 
         // do a synchronous resize for layout reasons
         //  but use rData only when the window is not to be maximized (#i38089#)
@@ -717,14 +717,14 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         long nY         = rData.GetY();
         long nWidth     = rData.GetWidth();
         long nHeight    = rData.GetHeight();
-        const SalFrameGeometry& rGeom = pWindow->mpFrame->GetGeometry();
+        const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
-        if( nX + nWidth > rGeom.nWidth )
+        if( nX + nWidth > (long) rGeom.nWidth )
             nX = rGeom.nWidth - nWidth;
         if( nY < 0 )
             nY = 0;
-        if( nY + nHeight > rGeom.nHeight )
+        if( nY + nHeight > (long) rGeom.nHeight )
             nY = rGeom.nHeight - nHeight;
         SetPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );
@@ -753,14 +753,14 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         return;
 
     const Window* pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
 
-    if ( pWindow->mbFrame )
+    if ( pWindow->mpWindowImpl->mbFrame )
     {
         SalFrameState aState;
         aState.mnMask = 0xFFFFFFFF;
-        if ( mpFrame->GetWindowState( &aState ) )
+        if ( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
         {
             if ( nValidMask & WINDOWSTATE_MASK_X )
                 rData.SetX( aState.mnX );
@@ -843,7 +843,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
         Window*  pNewWindow=NULL;
         mpMenuBar = pMenuBar;
 
-        if ( mpBorderWindow && (mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
+        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
         {
             if ( pOldMenuBar )
                 pOldWindow = pOldMenuBar->ImplGetWindow();
@@ -857,11 +857,11 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
-                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpBorderWindow, pOldWindow, pMenuBar ) );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar ) );
                 ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, (void*) pMenuBar );
             }
             else
-                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( NULL );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( NULL );
             ImplToBottomChild();
             if ( pOldMenuBar )
                 MenuBar::ImplDestroy( pOldMenuBar, pMenuBar == 0 );
@@ -893,12 +893,12 @@ void SystemWindow::SetMenuBarMode( USHORT nMode )
     if ( mnMenuBarMode != nMode )
     {
         mnMenuBarMode = nMode;
-        if ( mpBorderWindow && (mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
+        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
         {
             if ( nMode == MENUBAR_MODE_HIDE )
-                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarMode( TRUE );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( TRUE );
             else
-                ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarMode( FALSE );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( FALSE );
         }
     }
 }
