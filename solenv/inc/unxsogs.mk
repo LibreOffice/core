@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsogs.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:31:55 $
+#   last change: $Author: kz $ $Date: 2005-03-03 17:37:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,19 +60,16 @@
 #
 #*************************************************************************
 
-# mk file fuer unxsogs
-ASM=
-AFLAGS=
+# mk file for unxsogs
+ASM=/usr/ccs/bin/as
+AFLAGS=-P
 
 SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
- 
-CVER=C295
-CDEFS+=-DCVER=$(CVER)
-CDEFS+=-D_USE_NAMESPACE=1
+CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1 
+
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -93,7 +90,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe
 PICSWITCH:=-fPIC
-#STDOBJVCL=$(L)$/salmain.o
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
@@ -104,7 +100,7 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 CFLAGSOPT=-O2
-CFLAGSNOOPT=-O
+CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
 
 STATIC		= -Wl,-Bstatic
@@ -123,22 +119,30 @@ LINKFLAGSOPT=
 
 LINKVERSIONMAPFLAG=-Wl,--version-script
 
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
 # Reihenfolge der libs NICHT egal!
 
 STDLIBCPP=-lstdc++
 
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-lnsl -lsocket -ldl -lm
-STDLIBCUIST=-lnsl -lsocket -ldl -lm
-STDLIBGUIMT=-lpthread -ldl -lm
-STDLIBCUIMT=-lpthread -ldl -lm
+STDLIBGUIST=$(DYNAMIC) -lstdc++ -lm
+STDLIBCUIST=$(DYNAMIC) -lstdc++ -lm
+STDLIBGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDLIBCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm
-STDSHLCUIMT=-lpthread -ldl -lm
+STDSHLGUIST=$(DYNAMIC) -lstdc++ -lm
+STDSHLCUIST=$(DYNAMIC) -lstdc++ -lm
+STDSHLGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
@@ -162,6 +166,6 @@ RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-DLLPOSTFIX=ss
+DLLPOSTFIX=sogs
 DLLPRE=lib
 DLLPOST=.so
