@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:26:25 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 11:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,18 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ turkish ] = "Yürürlükteki sürüm";
     Text[ catalan ] = "Current version";
     Text[ finnish ] = "Nykyinen versio";
+};
+
+String STR_SFX_EXPLORERFILE_EXPORT
+{
+    Text = "Exporten" ;
+    Text[ English ] = "Export" ;
+};
+
+String STR_SFX_EXPLORERFILE_BUTTONEXPORT
+{
+    Text = "~Exporten" ;
+    Text[ English ] = "~Export" ;
 };
 
 String STR_SFX_EXPLORERFILE_INSERT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-17 16:02:34 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 11:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,9 +367,18 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg(
-                            bAllowOptions ? FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS : FILESAVE_AUTOEXTENSION_PASSWORD,
-                            0L );
+            sal_Int16  aDialogMode = bAllowOptions ?
+                                        FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS :
+                                        FILESAVE_AUTOEXTENSION_PASSWORD;
+            sal_uInt32 aDialogFlags = 0;
+
+            if( bIsExport )
+            {
+                aDialogMode  = FILESAVE_AUTOEXTENSION_SELECTION;
+                aDialogFlags = SFXWB_EXPORT;
+            }
+
+            sfx2::FileDialogHelper aFileDlg( aDialogMode, aDialogFlags );
 
             // fill in filter list
             for ( pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
@@ -461,11 +470,14 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    if ( bAllowOptions )
-                    {
-                        Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
-                        aValue >>= bUseFilterOptions;
-                    }
+                    if ( bIsExport )
+                        bUseFilterOptions = pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS );
+                    else
+                        if ( bAllowOptions )
+                        {
+                            Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+                            aValue >>= bUseFilterOptions;
+                        }
                     pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bUseFilterOptions ) );
                 }
                 catch( IllegalArgumentException ){}
@@ -564,7 +576,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             if( xServiceManager.is() )
             {
                 Reference< XNameAccess > xFilterCFG(
-                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.dun.star.document.FilterFactory" ) ),
                             UNO_QUERY );
 
                 if( xFilterCFG.is() )
@@ -581,7 +593,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                 {
                                     ::rtl::OUString aServiceName;
                                     aProps[nProperty].Value >>= aServiceName;
-                                    Reference< XExecutableDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
+                                    Reference< XDialog > xFilterDialog( xServiceManager->createInstance( aServiceName ), UNO_QUERY );
                                     Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
 
                                     if( xFilterDialog.is() && xFilterProperties.is() )
@@ -589,12 +601,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                         bDialogUsed = sal_True;
 
                                         Sequence< PropertyValue > aPropsForDialog;
-
                                         TransformItems( pRequest->GetSlot(), *pParams, aPropsForDialog, NULL );
-
-                                        aPropsForDialog.realloc( aPropsForDialog.getLength() + 1 );
-                                        aPropsForDialog[ aPropsForDialog.getLength() - 1 ].Name = DEFINE_CONST_UNICODE( "FilterName" );
-                                        aPropsForDialog[ aPropsForDialog.getLength() - 1 ].Value <<= ::rtl::OUString( aFilterName );
                                         xFilterProperties->setPropertyValues( aPropsForDialog ); //???
 
                                         xFilterDialog->execute();
