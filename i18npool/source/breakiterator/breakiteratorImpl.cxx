@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:20:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <breakiteratorImpl.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -201,17 +201,17 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
             prev = skipSpace(Text, nPos, len, rWordType, sal_False);
             if (prev == 0 && next == len) {
                 result.endPos = result.startPos = nPos;
+            } else if (prev == 0 && ! bDirection) {
+                result.endPos = result.startPos = 0;
+            } else if (next == len && bDirection) {
+                result.endPos = result.startPos = len;
             } else {
-                if (next == nPos) {
-                    bDirection = sal_True;
-                    nPos = next;
+                if (next != prev) {
+                    if (next == nPos && next != len)
+                        bDirection = sal_True;
+                    else
+                        nPos = bDirection ? next : prev;
                 }
-                else if (prev == nPos) {
-                    bDirection = sal_False;
-                    nPos = prev;
-                }
-                else
-                    nPos = bDirection ? next : prev;
                 result = LBI->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
             }
         }
@@ -405,47 +405,28 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& Text,
 }
 
 static ScriptTypeList typeList[] = {
-    { UnicodeScript_kBasicLatin,                ScriptType::LATIN },            // 0,
-    { UnicodeScript_kLatin1Supplement,          ScriptType::LATIN },            // 1,
-    { UnicodeScript_kLatinExtendedA,            ScriptType::LATIN },            // 2,
-    { UnicodeScript_kLatinExtendedB,            ScriptType::LATIN },            // 3,
-    { UnicodeScript_kIPAExtension,              ScriptType::LATIN },            // 4,
-    { UnicodeScript_kSpacingModifier,           ScriptType::LATIN },            // 5,
-    { UnicodeScript_kCombiningDiacritical,      ScriptType::LATIN },            // 6,
-    { UnicodeScript_kGreek,                     ScriptType::LATIN },            // 7,
-    { UnicodeScript_kCyrillic,                  ScriptType::LATIN },            // 8,
-
-    { UnicodeScript_kHebrew,                    ScriptType::COMPLEX },          // 10,
-    { UnicodeScript_kArabic,                    ScriptType::COMPLEX },          // 11,
-    { UnicodeScript_kDevanagari,                ScriptType::COMPLEX },          // 14,
-    { UnicodeScript_kThai,                      ScriptType::COMPLEX },          // 24,
-
-    { UnicodeScript_kTibetan,                   ScriptType::LATIN },            // 26,
-
-    { UnicodeScript_kCJKRadicalsSupplement,     ScriptType::ASIAN },            // 57,
-    { UnicodeScript_kKangxiRadicals,            ScriptType::ASIAN },            // 58,
-    { UnicodeScript_kIdeographicDescriptionCharacters, ScriptType::ASIAN },     // 59,
-    { UnicodeScript_kCJKSymbolPunctuation,      ScriptType::ASIAN },            // 60,
-    { UnicodeScript_kHiragana,                  ScriptType::ASIAN },            // 61,
-    { UnicodeScript_kKatakana,                  ScriptType::ASIAN },            // 62,
-    { UnicodeScript_kBopomofo,                  ScriptType::ASIAN },            // 63,
-    { UnicodeScript_kHangulCompatibilityJamo,   ScriptType::ASIAN },            // 64,
-    { UnicodeScript_kKanbun,                    ScriptType::ASIAN },            // 65,
-    { UnicodeScript_kBopomofoExtended,          ScriptType::ASIAN },            // 66,
-    { UnicodeScript_kEnclosedCJKLetterMonth,    ScriptType::ASIAN },            // 67,
-    { UnicodeScript_kCJKCompatibility,          ScriptType::ASIAN },            // 68,
-    { UnicodeScript_k_CJKUnifiedIdeographsExtensionA, ScriptType::ASIAN },      // 69,
-    { UnicodeScript_kCJKUnifiedIdeograph,       ScriptType::ASIAN },            // 70,
-    { UnicodeScript_kYiSyllables,               ScriptType::ASIAN },            // 71,
-    { UnicodeScript_kYiRadicals,                ScriptType::ASIAN },            // 72,
-    { UnicodeScript_kHangulSyllable,            ScriptType::ASIAN },            // 73,
-    { UnicodeScript_kCJKCompatibilityIdeograph, ScriptType::ASIAN },            // 78,
-    { UnicodeScript_kCombiningHalfMark,         ScriptType::ASIAN },            // 81,
-    { UnicodeScript_kCJKCompatibilityForm,      ScriptType::ASIAN },            // 82,
-    { UnicodeScript_kSmallFormVariant,          ScriptType::ASIAN },            // 83,
-    { UnicodeScript_kHalfwidthFullwidthForm,    ScriptType::ASIAN },            // 86,
-
-    { UnicodeScript_kScriptCount,               ScriptType::WEAK }              // 88
+    { UnicodeScript_kBasicLatin, UnicodeScript_kArmenian,   ScriptType::LATIN },    // 0-9,
+    { UnicodeScript_kHebrew, UnicodeScript_kMyanmar,        ScriptType::COMPLEX },  // 10-27,
+    { UnicodeScript_kGeorgian, UnicodeScript_kGeorgian,     ScriptType::LATIN },    // 28,
+    { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, ScriptType::ASIAN },    // 29,
+    { UnicodeScript_kEthiopic, UnicodeScript_kRunic,        ScriptType::LATIN },    // 30-34,
+    { UnicodeScript_kKhmer, UnicodeScript_kMongolian,       ScriptType::COMPLEX },  // 35-36,
+    { UnicodeScript_kLatinExtendedAdditional,
+      UnicodeScript_kGreekExtended,                         ScriptType::LATIN },    // 37-38,
+    { UnicodeScript_kCJKRadicalsSupplement,
+      UnicodeScript_kHangulSyllable,                        ScriptType::ASIAN },    // 57-73,
+    { UnicodeScript_kCJKCompatibilityIdeograph,
+      UnicodeScript_kCJKCompatibilityIdeograph,             ScriptType::ASIAN },    // 78,
+    { UnicodeScript_kArabicPresentationA,
+      UnicodeScript_kArabicPresentationA,                   ScriptType::COMPLEX },  // 80,
+    { UnicodeScript_kCJKCompatibilityForm,
+      UnicodeScript_kCJKCompatibilityForm,                  ScriptType::ASIAN },    // 82,
+    { UnicodeScript_kArabicPresentationB,
+      UnicodeScript_kArabicPresentationB,                   ScriptType::COMPLEX },  // 84,
+    { UnicodeScript_kHalfwidthFullwidthForm,
+      UnicodeScript_kHalfwidthFullwidthForm,                ScriptType::ASIAN },    // 86,
+    { UnicodeScript_kScriptCount,
+      UnicodeScript_kScriptCount,                           ScriptType::WEAK }      // 88
 };
 
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
