@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:12:43 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 09:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ ModalDialog DLG_MACROQUERY
     TEXT[ catalan ] = "Ejecutar macro";
     TEXT[ finnish ] = "Suorita makro";
 };
+
 
 
 
