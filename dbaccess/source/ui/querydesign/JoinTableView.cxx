@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 08:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,5 +1559,11 @@ void OJoinTableView::lookForUiActivities()
 {
 }
 // -----------------------------------------------------------------------------
+void OJoinTableView::GetFocus()
+{
+    GrabTabWinFocus();
+}
+// -----------------------------------------------------------------------------
+
 
 

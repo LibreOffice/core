@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 14:24:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 08:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ namespace dbaui
 
         // window override
         virtual void StateChanged( StateChangedType nStateChange );
+        virtual void GetFocus();
 
         // own methods
         ScrollBar* GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }

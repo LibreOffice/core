@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 08:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,12 @@ void OJoinDesignView::SaveUIConfig()
 void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
 {
     getController()->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
+}
+// -----------------------------------------------------------------------------
+void OJoinDesignView::GetFocus()
+{
+    if ( m_pTableView && m_pTableView->IsVisible() )
+        m_pTableView->GetFocus();
 }
 // -----------------------------------------------------------------------------
 
