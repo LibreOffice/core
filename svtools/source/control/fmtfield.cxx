@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 15:15:19 $
+ *  last change: $Author: fs $ $Date: 2000-11-14 08:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,13 +866,13 @@ void DoubleNumericField::ResetConformanceTester()
         ConvertLanguageToIsoNames( pFormatEntry->GetLanguage(), aLanguage, aCountry );
         LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), Locale( aLanguage, aCountry, aVariant ));
 
-        String sSeparator = aLocaleInfo.GetNumThousandSep();
+        String sSeparator = aLocaleInfo.getNumThousandSep();
         if (sSeparator.Len())
             cSeparatorThousand = sSeparator.GetBuffer()[0];
         // TODO: for real unicode we need the possibility to search for regular expressions allowing something like "\x????"
         // (4 digits instead of 2)
 
-        sSeparator = aLocaleInfo.GetNumDecimalSep();
+        sSeparator = aLocaleInfo.getNumDecimalSep();
         if (sSeparator.Len())
             cSeparatorDecimal = sSeparator.GetBuffer()[0];
     }
