@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-12 11:19:17 $
+ *  last change: $Author: fme $ $Date: 2001-07-12 13:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,6 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
     // do we have to apply additional paragraph attributes?
     if ( bAttrSet && rAS.Count() )
     {
-        // any other paragraph attributes for the default array?
         SfxItemIter aIter( rAS );
         register USHORT nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -403,7 +402,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
                 FontChg( *pItem, rFnt, sal_True );
             }
 
-            if( aIter.IsAtEnd() || nWhich >= RES_TXTATR_END )
+            if( aIter.IsAtEnd() )
                 break;
 
             pItem = aIter.NextItem();
