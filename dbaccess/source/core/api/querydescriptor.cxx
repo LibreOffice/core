@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 14:27:50 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 08:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@ void OQueryDescriptor::registerProperties()
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
                     &m_sUpdateCatalogName, ::getCppuType(&m_sUpdateCatalogName));
+
+    registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, 0,
+                    &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
 //--------------------------------------------------------------------------
@@ -161,6 +164,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
         _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_TABLENAME) >>= m_sUpdateTableName;
         _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME) >>= m_sUpdateSchemaName;
         _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= m_sUpdateCatalogName;
+        _rxForeignDescriptor->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= m_aLayoutInformation;
     }
     catch (UnknownPropertyException&) { }
     catch (WrappedTargetException&) { }
@@ -178,6 +182,7 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     m_sUpdateTableName = _rSource.m_sUpdateTableName;
     m_sUpdateSchemaName = _rSource.m_sUpdateSchemaName;
     m_sUpdateCatalogName = _rSource.m_sUpdateCatalogName;
+    m_aLayoutInformation = _rSource.m_aLayoutInformation;
 
     // immediately read the UI of the columns : we may live much longer than _rSource and it's column's config node,
     // so we can't just remember this node and read when needed, we have to do it here and now
