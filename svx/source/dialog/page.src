@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:37:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Disseny de p�gina";
         Text[ thai ] = "เค้าโครงหน้า";
-        Text[ czech ] = "Vzhled stránky";
+        Text[ czech ] = "Uplatnit na";
         Text[ hebrew ] = "‮פריסת הדף‬";
         Text[ hindi ] = "पृष्ठ अभिन्यास";
         Text[ slovak ] = "Vzhľad stránky";
@@ -915,10 +915,10 @@ TabPage RID_SVXPAGE_PAGE
     };
     StringList [ czech ] =
     {
-         < "Vpravo a vlevo" ; Default ; > ;
+         < "Pravé i levé" ; Default ; > ;
         < "Zrcadleně" ; Default ; > ;
-            < "Pouze vpravo" ; Default ; > ;
-            < "Pouze vlevo" ; Default ; > ;
+            < "Pouze pravé" ; Default ; > ;
+            < "Pouze levé" ; Default ; > ;
         };
     StringList [ hebrew ] =
     {
@@ -969,7 +969,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ catalan ] = "For~mat";
         Text[ finnish ] = "~Numerointitapa";
         Text[ thai ] = "รูปแ~บบ";
-        Text[ czech ] = "Formát";
+        Text[ czech ] = "Formát číslování";
         Text[ hebrew ] = "‮צורה‬";
         Text[ hindi ] = "रच~ना";
         Text[ slovak ] = "For~mát";
@@ -1212,7 +1212,7 @@ TabPage RID_SVXPAGE_PAGE
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
             < "1, 2, 3, ..." ; Default ; > ;
-            < "Žádný" ; Default ; > ;
+            < "Žádné" ; Default ; > ;
         };
     StringList [ hebrew ] =
     {
@@ -1409,7 +1409,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ catalan ] = "~Activa";
         Text[ finnish ] = "Rivirekisteri";
         Text[ thai ] = "ลงทะเบียน-จริง";
-        Text[ czech ] = "Registr";
+        Text[ czech ] = "Dodržovat řádkový rejstřík";
         Text[ hebrew ] = "‮יישור שורות טבלה‬";
         Text[ hindi ] = "रजिस्टर-सही";
         Text[ slovak ] = "Register";
@@ -1443,7 +1443,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ catalan ] = "Estil de ~ref�rencia";
         Text[ finnish ] = "Viitteen ~tyyli";
         Text[ thai ] = "~ลักษณะการอ้างอิง";
-        Text[ czech ] = "Styl odkazu";
+        Text[ czech ] = "Referenční styl rejstříku";
         Text[ hebrew ] = "‮סגנון יחוס‬";
         Text[ hindi ] = "रेफ़रेन्स ~शैली";
         Text[ slovak ] = "Štýl ~odkazu";
@@ -3410,6 +3410,21 @@ ItemList [ thai ] =
         < "Letter" ; PAPERSIZE_B6 ; > ;
         < "Legal" ; PAPERSIZE_B4_JIS ; > ;
         < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
+        < "उपभोक्ता" ; PAPERSIZE_B6_JIS ; > ;
+        < "B6" ; PAPERSIZE_LETTER ; > ;
+        < "C4" ; PAPERSIZE_LEGAL ; > ;
+        < "C5" ; PAPERSIZE_TABLOID ; > ;
+        < "C6" ; PAPERSIZE_USER ; > ;
+        < "C65" ; PAPERSIZE_C4 ; > ;
+        < "DL" ; PAPERSIZE_C5 ; > ;
+        < "स्लइड्" ; PAPERSIZE_C6 ; > ;
+        < "परदा" ; PAPERSIZE_C65 ; > ;
+        < "16 kai" ; PAPERSIZE_DL ; > ;
+        < "32 kai" ; PAPERSIZE_DIA ; > ;
+        < "32 kai बड़ा" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ slovak ] =
     {
@@ -3504,6 +3519,8 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ slovak ] = "[Z nastavenia tlačiarne]";
 };
  // ********************************************************************** EOF
+
+
 
 
 
