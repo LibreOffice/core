@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 16:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,7 +1392,11 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
             // komplett inneliegender...
             bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
             if ( GetStyleSheetPool() && pC->GetStyle().Len() )
-                SetStyleSheet( nPara, (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() ) );
+            {
+                SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
+                DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
+                SetStyleSheet( nPara, pStyle );
+            }
             if ( !bConvertItems )
                 SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), pC->GetParaAttribs() );
             else
