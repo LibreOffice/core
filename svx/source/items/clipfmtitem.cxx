@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipfmtitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:07:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <svtools/svstdarr.hxx>
 #include <clipfmtitem.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_CLIPBOARDFORMATS_HPP_
-#include <drafts/com/sun/star/frame/status/ClipboardFormats.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_CLIPBOARDFORMATS_HPP_
+#include <com/sun/star/frame/status/ClipboardFormats.hpp>
 #endif
 
 struct SvxClipboardFmtItem_Impl
@@ -118,7 +118,7 @@ BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemb
 {
     USHORT nCount = Count();
 
-    drafts::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+    ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
 
     aClipFormats.Identifiers.realloc( nCount );
     aClipFormats.Names.realloc( nCount );
@@ -134,7 +134,7 @@ BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemb
 
 sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    drafts::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+    ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
     {
         USHORT nCount = USHORT( aClipFormats.Identifiers.getLength() );
