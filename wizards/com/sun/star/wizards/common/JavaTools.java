@@ -2,9 +2,9 @@
 *
 *  $RCSfile: JavaTools.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:51:23 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:14:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -59,6 +59,9 @@
 */
 package com.sun.star.wizards.common;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uri.XExternalUriReferenceTranslator;
 import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
 import java.net.URLDecoder;
@@ -376,30 +379,11 @@ public class JavaTools {
     }
 
 
-    /**
-     * @deprecated because the "\" sign is not properly convertered to the pathseparator
-     * @param SystemPath
-     * @return
-     */
-    public static String converttoURLNotation(String SystemPath) {
-        try {
-            java.io.File oFileObject = new java.io.File(SystemPath);
-            char PathSeparator = java.io.File.separatorChar;
-            SystemPath.replace('\\', '/');
-            String URLPath = "file:/" + SystemPath;
-            URLPath = JavaTools.replaceSubString(URLPath, "/", String.valueOf(PathSeparator));
-            java.net.URL oURL = new java.net.URL(URLPath);
-            URLPath = oURL.toExternalForm();
-            URLPath = replaceSubString(URLPath, "file:///", "file:/");
-            return URLPath;
-        } catch (java.io.IOException jexception) {
-            jexception.printStackTrace(System.out);
-            return SystemPath;
-        }
-    }
 
     public static String convertfromURLNotation(String URLPath) {
-        java.io.File oFileObject = new java.io.File(URLPath);
+//      XExternalUriReferenceTranslator xExternalUriReferenceTranslator = (XExternalUriReferenceTranslator)
+//                                      UnoRuntime.queryInterface(XExternalUriReferenceTranslator.class, _xMSF.createInstance("com.sun.star.uri.ExternalUriReferenceTranslator"));
+//      xExternalUriReferenceTranslator.translateToExternal(URLPath);
         char PathSeparator = File.separatorChar;
         java.net.URLDecoder oURL = new java.net.URLDecoder();
         try {
@@ -415,6 +399,8 @@ public class JavaTools {
     public static DateTime getDateTime(long timeMillis) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.setTimeInMillis(timeMillis);
+        //TODO test me!
+        setTimeInMillis(cal, timeMillis);
         DateTime dt = new DateTime();
         dt.Year = (short) cal.get(Calendar.YEAR);
         dt.Day = (short) cal.get(Calendar.DAY_OF_MONTH);
@@ -427,10 +413,23 @@ public class JavaTools {
     }
 
 
+    public static long getTimeInMillis(Calendar _calendar){
+        java.util.Date dDate = _calendar.getTime();
+        return dDate.getTime();
+    }
+
+
+    public static void setTimeInMillis(Calendar _calendar, long _timemillis){
+        java.util.Date dDate = new java.util.Date();
+        dDate.setTime(_timemillis);
+        _calendar.setTime(dDate);
+    }
+
+
     public static long getMillis(DateTime time) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(time.Year, time.Month, time.Day, time.Hours, time.Seconds);
-        return cal.getTimeInMillis();
+        return getTimeInMillis(cal);
     }
 
 
