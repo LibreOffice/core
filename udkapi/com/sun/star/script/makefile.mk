@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ab $ $Date: 2001-02-21 16:37:58 $
+#   last change: $Author: ab $ $Date: 2001-09-13 11:27:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ IDLFILES=\
     XStarBasicDialogInfo.idl\
     XStarBasicLibraryInfo.idl\
     XLibraryContainer.idl\
+    XLibraryContainer2.idl\
     XScriptEventsSupplier.idl\
     XScriptEventsAttacher.idl\
 
