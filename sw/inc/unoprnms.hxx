@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-23 08:18:30 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 11:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,8 +706,11 @@ enum SwPropNameIds
 /* 0626 */  UNO_NAME_DONT_BALANCE_TEXT_COLUMNS,
 /* 0627 */  UNO_NAME_IS_CURRENTLY_VISIBLE,
 /* 0628 */  UNO_NAME_ANCHOR_POSITION,
+/* 0629 */  UNO_NAME_TEXT_READING,
+/* 0630 */  UNO_NAME_PRIMARY_KEY_READING,
+/* 0631 */  UNO_NAME_SECONDARY_KEY_READING,
 
-/* 0629 */  SW_PROPNAME_END
+/* 0632 */  SW_PROPNAME_END
 };
 
 

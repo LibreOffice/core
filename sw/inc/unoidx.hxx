@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:04:51 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ class SwXDocumentIndexMark : public cppu::WeakImplHelper4
     String                      sAltText;
     String                      sPrimaryKey;
     String                      sSecondaryKey;
+    String                      sTextReading;
+    String                      sPrimaryKeyReading;
+    String                      sSecondaryKeyReading;
     String                      sUserIndexName;
 
     void                InitMap(TOXTypes eToxType);

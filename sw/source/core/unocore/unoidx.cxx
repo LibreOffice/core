@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-05 14:57:52 $
+ *  last change: $Author: tl $ $Date: 2002-06-24 11:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,11 +1320,12 @@ sal_Int64 SAL_CALL SwXDocumentIndexMark::getSomething( const uno::Sequence< sal_
 }
 
 TYPEINIT1(SwXDocumentIndexMark, SwClient)
-const sal_Char cBaseMark[] = "com.sun.star.text.BaseIndexMark";
-const sal_Char cContentMark[] = "com.sun.star.text.ContentIndexMark";
-const sal_Char cIdxMark[] = "com.sun.star.text.DocumentIndexMark";
-const sal_Char cUserMark[] = "com.sun.star.text.UserIndexMark";
-const sal_Char cTextContent[] = "com.sun.star.text.TextContent";
+const sal_Char cBaseMark[]      = "com.sun.star.text.BaseIndexMark";
+const sal_Char cContentMark[]   = "com.sun.star.text.ContentIndexMark";
+const sal_Char cIdxMark[]       = "com.sun.star.text.DocumentIndexMark";
+const sal_Char cIdxMarkAsian[]  = "com.sun.star.text.DocumentIndexMarkAsian";
+const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
+const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1341,22 +1342,31 @@ BOOL SwXDocumentIndexMark::supportsService(const OUString& rServiceName) throw( 
         !rServiceName.compareToAscii(cTextContent) ||
         (eType == TOX_USER && !rServiceName.compareToAscii(cUserMark)) ||
         (eType == TOX_CONTENT && !rServiceName.compareToAscii(cContentMark)) ||
-        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMark));
+        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMark)) ||
+        (eType == TOX_INDEX && !rServiceName.compareToAscii(cIdxMarkAsian));
 }
 /* -----------------------------06.04.00 15:07--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXDocumentIndexMark::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(3);
+    INT32 nCnt = (eType == TOX_INDEX) ? 4 : 3;
+    Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U(cBaseMark);
     pArray[1] = C2U(cTextContent);
     switch(eType)
     {
-        case TOX_USER:      pArray[2] = C2U(cUserMark); break;
-        case TOX_CONTENT:   pArray[2] = C2U(cContentMark);break;
-        case TOX_INDEX:     pArray[2] = C2U(cIdxMark);break;
+        case TOX_USER:
+            pArray[2] = C2U(cUserMark);
+        break;
+        case TOX_CONTENT:
+            pArray[2] = C2U(cContentMark);
+        break;
+        case TOX_INDEX:
+            pArray[2] = C2U(cIdxMark);
+            pArray[3] = C2U(cIdxMarkAsian);
+        break;
     }
     return aRet;
 }
@@ -1567,6 +1577,12 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
                     aMark.SetPrimaryKey(sPrimaryKey);
                 if(sSecondaryKey.Len())
                     aMark.SetSecondaryKey(sSecondaryKey);
+                if(sTextReading.Len())
+                    aMark.SetTextReading(sTextReading);
+                if(sPrimaryKeyReading.Len())
+                    aMark.SetPrimaryKeyReading(sPrimaryKeyReading);
+                if(sSecondaryKeyReading.Len())
+                    aMark.SetSecondaryKeyReading(sSecondaryKeyReading);
             break;
             case TOX_USER:
             case TOX_CONTENT:
@@ -1740,6 +1756,15 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 case WID_MAIN_ENTRY:
                     aMark.SetMainEntry(lcl_AnyToBool(aValue));
                 break;
+                case WID_TEXT_READING:
+                    aMark.SetTextReading(lcl_AnyToString(aValue));
+                break;
+                case WID_PRIMARY_KEY_READING:
+                    aMark.SetPrimaryKeyReading(lcl_AnyToString(aValue));
+                break;
+                case WID_SECONDARY_KEY_READING:
+                    aMark.SetSecondaryKeyReading(lcl_AnyToString(aValue));
+                break;
             }
 
             SwTxtTOXMark* pTxtMark = pCurMark->GetTxtTOXMark();
@@ -1807,6 +1832,15 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             case WID_SECONDARY_KEY:
                 sSecondaryKey = lcl_AnyToString(aValue);
             break;
+            case WID_TEXT_READING:
+                sTextReading = lcl_AnyToString(aValue);
+            break;
+            case WID_PRIMARY_KEY_READING:
+                sPrimaryKeyReading = lcl_AnyToString(aValue);
+            break;
+            case WID_SECONDARY_KEY_READING:
+                sSecondaryKeyReading = lcl_AnyToString(aValue);
+            break;
             case WID_USER_IDX_NAME :
             {
                 OUString sTmp(lcl_AnyToString(aValue));
@@ -1857,6 +1891,15 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
                 case WID_SECONDARY_KEY:
                     aRet <<= OUString(pCurMark->GetSecondaryKey());
                 break;
+                case WID_TEXT_READING:
+                    aRet <<= OUString(pCurMark->GetTextReading());
+                break;
+                case WID_PRIMARY_KEY_READING:
+                    aRet <<= OUString(pCurMark->GetPrimaryKeyReading());
+                break;
+                case WID_SECONDARY_KEY_READING:
+                    aRet <<= OUString(pCurMark->GetSecondaryKeyReading());
+                break;
                 case WID_USER_IDX_NAME :
                 {
                     OUString sTmp(pType->GetTypeName());
@@ -1888,6 +1931,15 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_SECONDARY_KEY:
                 aRet <<= OUString(sSecondaryKey);
+            break;
+            case WID_TEXT_READING:
+                aRet <<= OUString(sTextReading);
+            break;
+            case WID_PRIMARY_KEY_READING:
+                aRet <<= OUString(sPrimaryKeyReading);
+            break;
+            case WID_SECONDARY_KEY_READING:
+                aRet <<= OUString(sSecondaryKeyReading);
             break;
             case WID_USER_IDX_NAME :
                 aRet <<= OUString(sUserIndexName);
