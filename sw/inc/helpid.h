@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:54:54 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,5 +957,25 @@
 #define HID_MM_SERVERAUTHENTICATION                 (HID_BASE + 2225 )
 
 #define HID_MEDIA_TOOLBOX                           (HID_BASE + 2227)
-#define HID_MM_NEXT_PAGE                            (HID_BASE + 2228)
-#define HID_MM_PREV_PAGE                            (HID_BASE + 2229)
+#define HID_NID_TBL                                 (HID_BASE + 2228)
+#define HID_NID_FRM                                 (HID_BASE + 2229)
+#define HID_NID_GRF                                 (HID_BASE + 2230)
+#define HID_NID_OLE                                 (HID_BASE + 2231)
+#define HID_NID_PGE                                 (HID_BASE + 2232)
+#define HID_NID_OUTL                                (HID_BASE + 2233)
+#define HID_NID_MARK                                (HID_BASE + 2234)
+#define HID_NID_DRW                                 (HID_BASE + 2235)
+#define HID_NID_CTRL                                (HID_BASE + 2236)
+#define HID_NID_PREV                                (HID_BASE + 2237)
+#define HID_NID_REG                                 (HID_BASE + 2238)
+#define HID_NID_BKM                                 (HID_BASE + 2239)
+#define HID_NID_SEL                                 (HID_BASE + 2240)
+#define HID_NID_FTN                                 (HID_BASE + 2241)
+#define HID_NID_POSTIT                              (HID_BASE + 2242)
+#define HID_NID_SRCH_REP                            (HID_BASE + 2243)
+#define HID_NID_INDEX_ENTRY                         (HID_BASE + 2244)
+#define HID_NID_TABLE_FORMULA                       (HID_BASE + 2245)
+#define HID_NID_TABLE_FORMULA_ERROR                 (HID_BASE + 2246)
+#define HID_NID_NEXT                                (HID_BASE + 2247)
+#define HID_MM_NEXT_PAGE                            (HID_BASE + 2248)
+#define HID_MM_PREV_PAGE                            (HID_BASE + 2249)
