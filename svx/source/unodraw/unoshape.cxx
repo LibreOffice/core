@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
+ *  last change: $Author: cl $ $Date: 2001-05-14 11:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,8 +1428,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 {
                     Rectangle aTmpArea( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
                     xInplace->SetVisArea( aTmpArea );
-                    return;
                 }
+                return;
             }
 #endif
             break;
