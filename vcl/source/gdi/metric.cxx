@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <impfont.hxx>
 #include <metric.hxx>
+
+#include <vector>
+#include <set>
 
 // =======================================================================
 
@@ -468,6 +471,230 @@ sal_uInt32 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
 
     // we can only get here with an out-of-bounds charindex
     return mpRangeCodes[0];
+}
+
+// =======================================================================
+
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
+
+// TODO: move CMAP parsing directly into the ImplFontCharMap class
+bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
+{
+    if( GetUShort( pCmap ) ) // simple check for CMAP corruption
+        return false;
+
+    // find the most interesting subtable in the CMAP
+    rResult.mbRecoded = false;
+    rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
+    int nOffset = 0;
+    int nFormat = -1;
+    int nBestVal = 0;
+    int nSubTables = GetUShort( pCmap + 2 );
+    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
+    {
+        int nPlatform = GetUShort( p );
+        int nEncoding = GetUShort( p+2 );
+        int nPlatformEncoding = (nPlatform << 8) + nEncoding;
+
+        int nValue;
+        rtl_TextEncoding eTmpEncoding = RTL_TEXTENCODING_UNICODE;
+        switch( nPlatformEncoding )
+        {
+            case 0x000: nValue = 20; break;                             // Unicode 1.0
+            case 0x001: nValue = 21; break;                             // Unicode 1.1
+            case 0x002: nValue = 22; break;                             // iso10646_1993
+            case 0x003: nValue = 23; break;                             // UCS-2
+            case 0x004: nValue = 24; break;                             // UCS-4
+            case 0x100: nValue = 22; break;                             // Mac Unicode<2.0
+            case 0x103: nValue = 23; break;                             // Mac Unicode>2.0
+            case 0x300: nValue =  5; rResult.mbSymbolic = true; break;  // Win Symbol
+            case 0x301: nValue = 28; break;                             // Win UCS-2
+            case 0x30A: nValue = 29; break;                             // Win-UCS-4
+            case 0x302: nValue = 11; eTmpEncoding = RTL_TEXTENCODING_SHIFT_JIS; break;
+            case 0x303: nValue = 12; eTmpEncoding = RTL_TEXTENCODING_GB_18030; break;
+            case 0x304: nValue = 11; eTmpEncoding = RTL_TEXTENCODING_BIG5; break;
+            case 0x305: nValue = 11; eTmpEncoding = RTL_TEXTENCODING_MS_949; break;
+            case 0x306: nValue = 11; eTmpEncoding = RTL_TEXTENCODING_MS_1361; break;
+            default:    nValue = 0; break;
+        }
+
+        if( nValue <= 0 )   // ignore unknown encodings
+            continue;
+
+        int nTmpOffset = GetUInt( p+4 );
+        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
+        if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
+            nValue += 3;
+        else if( nTmpFormat != 4 )              // 16bit code -> glyph map format
+            continue;                           // ignore other formats
+
+        if( nBestVal < nValue )
+        {
+            nBestVal = nValue;
+            nOffset = nTmpOffset;
+            nFormat = nTmpFormat;
+            eRecodeFrom = eTmpEncoding;
+        }
+    }
+
+    // parse the best CMAP subtable
+    int nRangeCount = 0;
+    sal_uInt32* pCodePairs = NULL;
+
+    // format 4, the most common 16bit char mapping table
+    if( (nFormat == 4) && ((nOffset+16) < nLength) )
+    {
+        int nSegCount = GetUShort( pCmap + nOffset + 6 );
+        nRangeCount = nSegCount/2 - 1;
+        pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
+        const unsigned char* pLimit = pCmap + nOffset + 14;
+        const unsigned char* pBegin = pLimit + 2 + nSegCount;
+        sal_uInt32* pCP = pCodePairs;
+        for( int i = 0; i < nRangeCount; ++i )
+        {
+            sal_uInt32 cMinChar = GetUShort( pBegin + 2*i );
+            sal_uInt32 cMaxChar = GetUShort( pLimit + 2*i );
+            if( cMinChar > cMaxChar )   // no sane font should trigger this
+                break;
+            if( cMaxChar == 0xFFFF )
+                break;
+            *(pCP++) = cMinChar;
+            *(pCP++) = cMaxChar + 1;
+        }
+        nRangeCount = (pCP - pCodePairs) / 2;
+    }
+    // format 12, the most common 32bit char mapping table
+    else if( (nFormat == 12) && ((nOffset+16) < nLength) )
+    {
+        nRangeCount = GetUInt( pCmap + nOffset + 12 );
+        pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
+        const unsigned char* pGroup = pCmap + nOffset + 16;
+        sal_uInt32* pCP = pCodePairs;
+        for( int i = 0; i < nRangeCount; ++i )
+        {
+            sal_uInt32 cMinChar = GetUInt( pGroup + 0 );
+            sal_uInt32 cMaxChar = GetUInt( pGroup + 4 );
+            pGroup += 12;
+#if 1       // TODO: remove unicode baseplane clipping for UCS-4 support
+            if( cMinChar > 0xFFFF )
+                continue;
+            if( cMaxChar > 0xFFFF )
+                cMaxChar = 0xFFFF;
+#else
+            if( cMinChar > cMaxChar )   // no sane font should trigger this
+                break;
+#endif
+            *(pCP++) = cMinChar;
+            *(pCP++) = cMaxChar + 1;
+        }
+        nRangeCount = (pCP - pCodePairs) / 2;
+    }
+
+    if( nRangeCount <= 0 )
+    {
+        // even when no CMAP is available we know it for symbol fonts
+        if( rResult.mbSymbolic )
+        {
+            nRangeCount = 2;
+            pCodePairs = new sal_uInt32[4];
+            pCodePairs[0] = 0x0020;    // aliased symbols
+            pCodePairs[1] = 0x0100;
+            pCodePairs[2] = 0xF020;    // original symbols
+            pCodePairs[3] = 0xF100;
+            return true;
+        }
+
+        return false;
+    }
+
+    // recode the code ranges to their unicode encoded ranges if needed
+    rtl_TextToUnicodeConverter aConverter = NULL;
+    rtl_UnicodeToTextContext aCvtContext = NULL;
+
+    rResult.mbRecoded = ( eRecodeFrom != RTL_TEXTENCODING_UNICODE );
+    if( rResult.mbRecoded )
+    {
+        aConverter = rtl_createTextToUnicodeConverter( eRecodeFrom );
+        aCvtContext = rtl_createTextToUnicodeContext( aConverter );
+    }
+
+    if( aConverter && aCvtContext )
+    {
+        // determine the set of supported unicodes from encoded ranges
+        typedef std::set<sal_uInt32> IntSet;
+        IntSet aSupportedUnicodes;
+
+        static const int NINSIZE = 64;
+        static const int NOUTSIZE = 64;
+        sal_Char    cCharsInp[ NINSIZE ];
+        sal_Unicode cCharsOut[ NOUTSIZE ];
+        sal_uInt32* pCP = pCodePairs;
+        for( int i = 0; i < nRangeCount; ++i )
+        {
+            sal_uInt32 cMin = *(pCP++);
+            sal_uInt32 cEnd = *(pCP++);
+            while( cMin < cEnd )
+            {
+                int j = 0;
+                for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
+                {
+                    if( cMin >= 0x0100 )
+                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
+                    if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
+                        cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
+                }
+
+                sal_uInt32 nCvtInfo;
+                sal_Size nSrcCvtBytes;
+                int nOutLen = rtl_convertTextToUnicode(
+                    aConverter, aCvtContext,
+                    cCharsInp, j, cCharsOut, NOUTSIZE,
+                    RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
+                    | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
+                    &nCvtInfo, &nSrcCvtBytes );
+
+                for( j = 0; j < nOutLen; ++j )
+                    aSupportedUnicodes.insert( cCharsOut[j] );
+            }
+        }
+
+        rtl_destroyTextToUnicodeConverter( aCvtContext );
+        rtl_destroyTextToUnicodeConverter( aConverter );
+
+        // convert the set of supported unicodes to ranges
+        typedef std::vector<sal_uInt32> IntVector;
+        IntVector aSupportedRanges;
+
+        IntSet::const_iterator itChar = aSupportedUnicodes.begin();
+        for(; itChar != aSupportedUnicodes.end(); ++itChar )
+        {
+            if( aSupportedRanges.empty()
+            || (aSupportedRanges.back() != *itChar) )
+            {
+                // add new range beginning with current unicode
+                aSupportedRanges.push_back( *itChar );
+                aSupportedRanges.push_back( 0 );
+            }
+
+            // extend existing range to include current unicode
+            aSupportedRanges.back() = *itChar + 1;
+        }
+
+        // make a pCodePairs array using the vector from above
+        delete[] pCodePairs;
+        nRangeCount = aSupportedRanges.size() / 2;
+        if( nRangeCount <= 0 )
+            return false;
+        pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
+        IntVector::const_iterator itInt = aSupportedRanges.begin();
+        for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
+            *(pCP++) = *itInt;
+    }
+
+    rResult.mpCodes = pCodePairs;
+    rResult.mnCount = nRangeCount;
+    return true;
 }
 
 // =======================================================================
