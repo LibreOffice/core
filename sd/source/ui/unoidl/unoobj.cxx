@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-10 11:18:50 $
+ *  last change: $Author: cl $ $Date: 2001-08-21 10:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,7 +1047,33 @@ OUString SAL_CALL SdXShape::getImplementationName()
 sal_Bool SAL_CALL SdXShape::supportsService( const ::rtl::OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.shape") ) ||
+        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.LinkTarget") ) )
+    {
+        return sal_True;
+    }
+
+    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TitleTextShape") ) )
+    {
+        SdrObject* pObj = GetSdrObject();
+        return pObj && (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TITLETEXT );
+    }
+
+    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OutlinerShape") ) )
+    {
+        SdrObject* pObj = GetSdrObject();
+        return pObj && (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT );
+    }
+
+    uno::Reference< lang::XServiceInfo > xParentInfo;
+    if(mxShapeAgg.is())
+    {
+        mxShapeAgg->queryAggregation( ITYPE( lang::XServiceInfo )) >>= xParentInfo;
+        if( xParentInfo.is() )
+            return xParentInfo->supportsService( ServiceName );
+    }
+
+    return sal_False;
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
@@ -1057,8 +1083,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
     uno::Reference< lang::XServiceInfo > xParentInfo;
     if(mxShapeAgg.is())
     {
-        uno::Any aAny( mxShapeAgg->queryAggregation( ITYPE( lang::XServiceInfo )));
-        if( aAny >>= xParentInfo )
+        mxShapeAgg->queryAggregation( ITYPE( lang::XServiceInfo )) >>= xParentInfo;
+        if( xParentInfo.is() )
             aSeq = xParentInfo->getSupportedServiceNames();
     }
 
