@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:39:37 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 12:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1368,7 +1368,24 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::
 }
 
 // XRenderable
-uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer()
+sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OGuard      aGuard( Application::GetSolarMutex() );
+    sal_Int32   nRet = 0;
+
+    if( NULL == pDoc )
+        throw lang::DisposedException();
+
+    uno::Sequence< beans::PropertyValue > aRenderer;
+
+    if( pDocShell )
+        nRet = pDoc->GetSdPageCount( PK_STANDARD );
+
+    return nRet;
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 nRenderer )
     throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1381,25 +1398,21 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer()
     if( pDocShell )
     {
         const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
-        const sal_Int32 nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
         awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
 
-        aRenderer.realloc( 3 );
+        aRenderer.realloc( 2 );
 
         aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[ 0 ].Value <<= aPageSize;
 
-        aRenderer[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSizeMeasureUnit" ) );
-        aRenderer[ 1 ].Value <<= util::MeasureUnit::MM_100TH;
-
-        aRenderer[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) );
-        aRenderer[ 2 ].Value <<= nPageCount;
+        aRenderer[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) );
+        aRenderer[ 1 ].Value <<= static_cast< sal_Bool >( nRenderer == 1 || nRenderer == 3 );
     }
 
     return aRenderer;
 }
 
-void SAL_CALL SdXImpressDocument::render( const uno::Sequence< beans::PropertyValue >& rxOptions )
+void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1410,14 +1423,12 @@ void SAL_CALL SdXImpressDocument::render( const uno::Sequence< beans::PropertyVa
     if( pDocShell && pDoc )
     {
         uno::Reference< awt::XDevice >  xRenderDevice;
-        sal_Int32                       nPageNumber = 0;
+        const sal_Int32                 nPageNumber = nRenderer + 1;
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
                 rxOptions[ nProperty].Value >>= xRenderDevice;
-            else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageNumber" ) ) )
-                rxOptions[ nProperty ].Value >>= nPageNumber;
         }
 
         if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= pDoc->GetSdPageCount( PK_STANDARD ) ) )
@@ -1440,6 +1451,7 @@ void SAL_CALL SdXImpressDocument::render( const uno::Sequence< beans::PropertyVa
                 pView->SetGlueVisible( sal_False );
 
                 pView->ShowPage( pSelectedPage, aOrigin );
+                pOut->SetMapMode( MAP_100TH_MM );
                 pOut->IntersectClipRegion( aVisArea );
                 pView->InitRedraw( pOut, aRegion );
 
