@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 14:03:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,24 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
 
     if ( aPropSet.is() )
     {
+        String aText;
+        Reference< XPropertySetInfo > aInfoSet = aPropSet->getPropertySetInfo();
+        if ( aInfoSet.is() )
+        {
+            Sequence< Property > aProps = aInfoSet->getProperties();
+            const Property* pProps  = aProps.getConstArray();
+            sal_uInt32 nCount = aProps.getLength();
+
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
+            {
+                aText += String( pProps[i].Name );
+                aText += '\n';
+            }
+        }
+    }
+
+    if ( aPropSet.is() )
+    {
         m_pEditWin->SetAutoScroll( FALSE );
         USHORT nIndex = 0;
         rtl::OUString aStringValue;
@@ -349,7 +367,8 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
             SvtDocInfoType eInfoType = DocInfoMap_Impl[ nIndex ]._eType;
             Any aValue;
             if ( eInfoType != SIZE_TYPE )
-                aValue = aPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
+                aValue = aPropSet->getPropertyValue(
+                    ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
 
             switch ( eInfoType )
             {
@@ -358,7 +377,7 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
                     if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
                     {
                         String aValueStr;
-                        if ( DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
+                        if ( rURL.Len() > 0 && DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
                         {
                             INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
                             if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
@@ -370,7 +389,9 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
                         }
                         else
                             aValueStr = String( aStringValue );
-                        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aValueStr );
+                        m_pEditWin->InsertEntry(
+                            m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ),
+                            aValueStr );
                     }
                     break;
                 }
@@ -381,14 +402,19 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
                     {
                         DateTime aToolsDT =
                             DateTime( Date( aDateValue.Day, aDateValue.Month, aDateValue.Year ),
-                            Time( aDateValue.Hours, aDateValue.Minutes, aDateValue.Seconds, aDateValue.HundredthSeconds ) );
+                            Time( aDateValue.Hours, aDateValue.Minutes,
+                                  aDateValue.Seconds, aDateValue.HundredthSeconds ) );
                         if ( aToolsDT.IsValid() )
                         {
-                            LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+                            LocaleDataWrapper aLocaleWrapper(
+                                ::comphelper::getProcessServiceFactory(),
+                                Application::GetSettings().GetLocale() );
                             String aDateStr = aLocaleWrapper.getDate( aToolsDT );
                             aDateStr += String( RTL_CONSTASCII_STRINGPARAM(", ") );
                             aDateStr += aLocaleWrapper.getTime( aToolsDT );
-                            m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
+                            m_pEditWin->InsertEntry(
+                                m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ),
+                                aDateStr );
                         }
                     }
                     break;
@@ -397,8 +423,13 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
                 case SIZE_TYPE :
                 {
                     // size
-                    ULONG nDocSize = ::utl::UCBContentHelper::GetSize( rURL );
-                    m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), CreateExactSizeText_Impl( nDocSize ) );
+                    if ( rURL.Len() > 0 )
+                    {
+                        ULONG nDocSize = ::utl::UCBContentHelper::GetSize( rURL );
+                        m_pEditWin->InsertEntry(
+                            m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ),
+                            CreateExactSizeText_Impl( nDocSize ) );
+                    }
                     break;
                 }
             }
@@ -677,9 +708,12 @@ ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
         nPos = 2;
     else if ( aSamplesFolderRootURL.Match( rURL ) == STRING_MATCH )
         nPos = 3;
+    else if ( rURL.Match( aMyDocumentsRootURL ) == STRING_MATCH )
+        nPos = 2;
     else
     {
-        DBG_ERRORFILE( "SvtIconWindow_Impl::GetRootPos(): invalid position" );
+        DBG_WARNING( "SvtIconWindow_Impl::GetRootPos(): invalid position" );
+        nPos = 2;
     }
 
     return nPos;
@@ -711,14 +745,14 @@ void SvtIconWindow_Impl::SelectFolder(sal_Int32 nFolderPosition)
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
 
-SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent, const String& rSamplesFolderURL ) :
+SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
 
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
+
     bIsTemplateFolder   ( sal_False ),
-    aSamplesFolderURL   ( rSamplesFolderURL ),
-    rParent( *pParent )
+    rParent             ( *pParent )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -859,8 +893,11 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
 
 sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
 {
-    return ( INetURLObject( aFileView.GetViewURL() ) != INetURLObject( aCurrentRootURL ) &&
-             aFileView.GetParentURL( rURL ) );
+    INetURLObject aViewObj( aFileView.GetViewURL() );
+    INetURLObject aRootObj( aCurrentRootURL );
+    INetURLObject aMyDocObj( aMyDocumentsURL );
+
+    return ( ( aViewObj != aRootObj || aRootObj == aMyDocObj ) && aFileView.GetParentURL( rURL ) );
 }
 
 String SvtFileViewWindow_Impl::GetFolderTitle() const
@@ -1147,7 +1184,9 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 {
     // create windows
     pIconWin = new SvtIconWindow_Impl( this );
-    pFileWin = new SvtFileViewWindow_Impl( this, pIconWin->GetSamplesFolderURL() );
+    pFileWin = new SvtFileViewWindow_Impl( this );
+    pFileWin->SetMyDocumentsURL( pIconWin->GetMyDocumentsRootURL() );
+    pFileWin->SetSamplesFolderURL( pIconWin->GetSamplesFolderURL() );
     pFrameWin = new SvtFrameWindow_Impl( this );
 
     // set handlers
@@ -1581,7 +1620,14 @@ void SvtTemplateWindow::OpenTemplateRoot()
 
 void SvtTemplateWindow::SetPrevLevelButtonState( const String& rURL )
 {
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, !pIconWin->IsRootURL( rURL ) );
+    // disable the prev level button on root folder of the icon pane (except My Documents)
+    // and on the root of all (file:/// -> count == 0)
+    INetURLObject aObj( rURL );
+    sal_Int32 nCount = aObj.getSegmentCount();
+    sal_Bool bEnable =
+        ( nCount > 0 &&
+            ( !pIconWin->IsRootURL( rURL ) || rURL == pIconWin->GetMyDocumentsRootURL() ) );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, bEnable );
 }
 
 // ------------------------------------------------------------------------
