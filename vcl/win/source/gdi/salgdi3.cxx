@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-01 15:34:48 $
+ *  last change: $Author: pl $ $Date: 2002-10-25 15:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2020,7 +2020,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
-            aTempEncs, nGlyphs, 0, NULL, TTCF_IncludeOS2 );
+            aTempEncs, nGlyphs, 0, NULL, 0 );
     return nRC == SF_OK;
 }
 
