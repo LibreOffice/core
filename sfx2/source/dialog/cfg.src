@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:15:20 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,11 @@
     Text [ danish ] = "Indlæs..." ; \
     Text [ portuguese_brazilian ] = "~Laden..." ; \
     Text [ portuguese ] = "~Carregar..." ; \
-    Text[ chinese_simplified ] = "×°ÔØ(~L)..."; \
+    Text[ chinese_simplified ] = "×°Èë(~L)..."; \
     Text[ russian ] = "Çàãğóçèòü...";   \
     Text[ polish ] = "£aduj...";    \
     Text[ japanese ] = "“Ç‚İ‚İ(~L)...";   \
-    Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";    \
+    Text[ chinese_traditional ] = "¸ü¤J(~L)...";    \
     Text[ arabic ] = "ÊÍãíá...";    \
     Text[ greek ] = "Öüñ~ôùóç...";  \
     Text[ korean ] = "·Îµå(~L)..."; \
@@ -469,11 +469,11 @@ TabPage TP_CONFIG_MENU
         Text [ french ] = "~Charger..." ;
         Text [ dutch ] = "~Laden..." ;
         Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ chinese_simplified ] = "×°Èë(~L)...";
         Text[ russian ] = "Çàãğóçèòü...";
         Text[ polish ] = "£aduj...";
         Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
         Text[ arabic ] = "ÊÍãíá...";
         Text[ greek ] = "Öüñôùóç...";
         Text[ korean ] = "·Îµå(~L)";
@@ -932,11 +932,11 @@ TabPage TP_CONFIG_ACCEL
         Text [ french ] = "~Charger..." ;
         Text [ dutch ] = "~Laden..." ;
         Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ chinese_simplified ] = "×°Èë(~L)...";
         Text[ russian ] = "Çàãğóçèòü...";
         Text[ polish ] = "£aduj...";
         Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
         Text[ arabic ] = "ÊÍãíá...";
         Text[ greek ] = "Öüñôùóç...";
         Text[ korean ] = "·Îµå(~L)...";
@@ -1065,11 +1065,11 @@ TabPage TP_CONFIG_STATBAR
         Text [ french ] = "~Charger..." ;
         Text [ dutch ] = "~Laden..." ;
         Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ chinese_simplified ] = "×°Èë(~L)...";
         Text[ russian ] = "Çàãğóçèòü...";
         Text[ polish ] = "£aduj...";
         Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
         Text[ arabic ] = "ÊÍãíá...";
         Text[ greek ] = "Öüñôùóç...";
         Text[ korean ] = "·Îµå(~L)...";
@@ -1574,7 +1574,7 @@ String STR_FIND
     Text[ russian ] = "Íàéòè";
     Text[ polish ] = "Szukaj";
     Text[ japanese ] = "ŒŸõ";
-    Text[ chinese_traditional ] = "´M§ä";
+    Text[ chinese_traditional ] = "·j´M";
     Text[ arabic ] = "ÈÍË";
     Text[ greek ] = "ÁíáæŞôçóç";
     Text[ korean ] = "Ã£±â";
@@ -1602,7 +1602,7 @@ String STR_FINDBACKWARD
     Text[ russian ] = "Èñêàòü â îáğàòíîì ïîğÿäêå";
     Text[ polish ] = "Szukaj wstecz";
     Text[ japanese ] = "ŒŸõ –ß‚é";
-    Text[ chinese_traditional ] = "¦V«á´M§ä";
+    Text[ chinese_traditional ] = "¦V«á·j´M";
     Text[ arabic ] = "ÇáÈÍË Åáì ÇáÎáİ";
     Text[ greek ] = "ÁíáæŞôçóç ğßóù";
     Text[ korean ] = "µÚ·Î Ã£±â";
@@ -1763,11 +1763,11 @@ String STR_LOADMENUCONFIG
     Text [ danish ] = "Indlæs menukonfiguration" ;
     Text [ portuguese_brazilian ] = "Menükonfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração do menu" ;
-    Text[ chinese_simplified ] = "×°ÔØ²Ëµ¥ÅäÖÃ";
+    Text[ chinese_simplified ] = "×°Èë²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
     Text[ polish ] = "£aduj konfiguracjê menu";
     Text[ japanese ] = "ÒÆ­°İ’è‚Ì“Ç‚İ‚İ";
-    Text[ chinese_traditional ] = "¸Ë¸ü¥\\¯àªí°t¸m";
+    Text[ chinese_traditional ] = "¸ü¤J¥\\¯àªí°t¸m";
     Text[ arabic ] = "ÊÍãíá Êßæíä ÇáŞÇÆãÉ";
     Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ìåíïı";
     Text[ korean ] = "¸Ş´º ±¸¼º ·Îµå";
@@ -1810,11 +1810,11 @@ String STR_LOADACCELCONFIG
     Text [ danish ] = "Indlæs tastaturkonfiguration" ;
     Text [ portuguese_brazilian ] = "Tastaturkonfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração do teclado" ;
-    Text[ chinese_simplified ] = "×°ÔØ¼üÅÌÅäÖÃ";
+    Text[ chinese_simplified ] = "×°Èë¼üÅÌÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş êëàâèàòóğû";
     Text[ polish ] = "£aduj konfiguracjê klawiatury";
     Text[ japanese ] = "·°ÎŞ°ÄŞİ’è‚Ì“Ç‚İ‚İ";
-    Text[ chinese_traditional ] = "¸Ë¸üÁä½L°t¸m";
+    Text[ chinese_traditional ] = "¸ü¤JÁä½L°t¸m";
     Text[ arabic ] = "ÊÍãíá Êßæíä áæÍÉ ÇáãİÇÊíÍ";
     Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ğëçêôñïëïãßïõ";
     Text[ korean ] = "Å°º¸µå ±¸¼º ·Îµå";
@@ -1857,11 +1857,11 @@ String STR_LOADSTATBARCONFIG
     Text [ danish ] = "Indlæs statuslinjekonfiguration" ;
     Text [ portuguese_brazilian ] = "Statusleistenkonfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração da barra de estado" ;
-    Text[ chinese_simplified ] = "×°ÔØ×´Ì¬À¸ÅäÖÃ";
+    Text[ chinese_simplified ] = "×°Èë×´Ì¬À¸ÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ñòğîêè ñîñòîÿíèÿ";
     Text[ polish ] = "£aduj konfiguracjê paska stanu";
     Text[ japanese ] = "½Ã°À½ ÊŞ°İ’è‚Ì“Ç‚İ‚İ";
-    Text[ chinese_traditional ] = "¸Ë¸üª¬ºA¦C°t¸m";
+    Text[ chinese_traditional ] = "¸ü¤Jª¬ºA¦C°t¸m";
     Text[ arabic ] = "ÊÍãíá Êßæíä ÔÑíØ ÇáãÚáæãÇÊ";
     Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ãñáììŞò êáôÜóôáóçò";
     Text[ korean ] = "»óÅÂ¸ğÀ½ ±¸¼º ·Îµå";
