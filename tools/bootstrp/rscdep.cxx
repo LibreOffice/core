@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-19 22:50:08 $
+ *  last change: $Author: armin.theissen $ $Date: 2000-09-22 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 #else
 #include <glibc/config.h>
-#ifdef MACOSX
+#ifndef SOLARIS
 #include <glibc/getopt.h>
 #endif
 #endif

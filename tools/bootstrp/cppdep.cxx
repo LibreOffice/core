@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-19 23:37:08 $
+ *  last change: $Author: armin.theissen $ $Date: 2000-09-22 16:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include <string.h>
+
 #ifdef WNT
 #ifdef BOOTSTRAPPER
 #include <glibc/posix/getopt.h>
@@ -68,6 +69,7 @@
 #include <glibc/getopt.h>
 #endif
 #endif
+
 #ifdef UNX
 #ifdef BOOTSTRAPPER
 #include <glibc/posix/getopt.h>
@@ -80,14 +82,9 @@
 #endif
 #include <unistd.h>
 #endif
-#ifdef MACOSX
+
 #include <sys/stat.h>
-#else
-#include <stat.h>
-#endif
-
 #include <stream.hxx>
-
 #include "cppdep.hxx"
 
 //#define TEST
