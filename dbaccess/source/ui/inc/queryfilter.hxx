@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 11:25:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,13 +165,14 @@ namespace dbaui
         DECL_LINK( ListSelectCompHdl, ListBox * );
         void            SetLine( USHORT nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
         void            EnableLines();
-        ::connectivity::OSQLPredicateType GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
-        USHORT          GetSelectionPos(::connectivity::OSQLPredicateType eType,const ListBox& rListBox) const;
-        ::rtl::OUString getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue) const;
+        sal_Int32       GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
+        USHORT          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
+        void            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
         void            addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition)  const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const ::rtl::OUString& _rFieldName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getQueryColumn( const ::rtl::OUString& _rFieldName ) const;
 
     public:
         DlgFilterCrit(  Window * pParent,
