@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+ *  last change: $Author: hdu $ $Date: 2001-11-30 12:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
                 case 1:     // Single Substitution Format 1
                 {
                     const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
+
                     for(; it != aSubstVector.end(); ++it )
                         (*it).second = (*it).first + nDeltaGlyphId;
                 }
@@ -316,4 +317,10 @@ int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int wmode )
     }
 
     return nGlyph;
+}
+
+int HasVerticalGSUB( struct _TrueTypeFont* pTTFile )
+{
+    GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
+    return pGlyphSubstitution ? +1 : 0;
 }
