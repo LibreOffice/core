@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:38:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 #ifndef _LNKBASE_HXX
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
@@ -130,7 +130,7 @@ class SW_DLLPUBLIC SwSection : public SwClient
     ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
 
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
-    ::so3::SvBaseLinkRef refLink;
+    ::sfx2::SvBaseLinkRef refLink;
 
     SectionType eType;
 
@@ -222,8 +222,8 @@ public:
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
-    const ::so3::SvBaseLink& GetBaseLink() const    { return *refLink; }
-          ::so3::SvBaseLink& GetBaseLink()          { return *refLink; }
+    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
+          ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
 
     void CreateLink( LinkCreateType eType );
 
