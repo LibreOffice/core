@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:15:59 $
+ *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
 #ifdef VERTICAL_LAYOUT
     USHORT nViewWidth = 0;
 
+    // The view width is not depending on the zoom factor anymore.
     if( rInf.GetWin() && nRestWidth )
         nViewWidth = LINE_BREAK_WIDTH;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:15:59 $
+ *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "porexp.hxx"
 
 #ifdef VERTICAL_LAYOUT
-#define RED_ARROW_WIDTH         240
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     220
 #endif

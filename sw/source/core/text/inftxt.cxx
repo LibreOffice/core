@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:09:25 $
+ *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,7 +1069,11 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         KSHORT nOldWidth = rPor.Width();
-        ((SwLinePortion&)rPor).Width( ((SwBreakPortion&)rPor).GetRestWidth() ); //pOpt->GetLineBreakWidth( pWin ) );
+#ifdef VERTICAL_LAYOUT
+        ((SwLinePortion&)rPor).Width( ((SwBreakPortion&)rPor).GetRestWidth() );
+#else
+        ((SwLinePortion&)rPor).Width( pOpt->GetLineBreakWidth( pWin ) );
+#endif
 
         SwRect aRect;
 
@@ -1097,7 +1101,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
 void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 {
-    Size aSize( RED_ARROW_WIDTH, RED_ARROW_WIDTH );
+    Size aSize( SPECIAL_FONT_HEIGHT, SPECIAL_FONT_HEIGHT );
     SwRect aRect( ((SwArrowPortion&)rPor).GetPos(), aSize );
     sal_Unicode cChar;
     if( ((SwArrowPortion&)rPor).IsLeft() )
