@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-07 09:22:26 $
+ *  last change: $Author: sj $ $Date: 2001-12-18 13:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -928,12 +934,29 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             }
             if ( aGraphicUrl.Len() )
             {
-                xub_StrLen nIndex = aGraphicUrl.Search( (sal_Unicode)':', 0 );
+                String aVndUrl( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+                xub_StrLen nIndex = aGraphicUrl.Search( aVndUrl, 0 );
                 if ( nIndex != STRING_NOTFOUND )
                 {
-                    nIndex++;
+                    nIndex += aVndUrl.Len();
                     if ( aGraphicUrl.Len() > nIndex  )
                         aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                }
+                else
+                {
+                    Graphic         aGraphic;
+                    INetURLObject   aTmp( aGraphicUrl );
+                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
+                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+                    if ( pIn )
+                    {
+                        sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
+                        if ( nErrCode == ERRCODE_NONE )
+                        {
+                            aGraphicObject = aGraphic;
+                            aUniqueId = aGraphicObject.GetUniqueID();
+                        }
+                    }
                 }
             }
             if ( aUniqueId.Len() )
