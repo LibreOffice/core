@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: jsc $ $Date: 2000-11-06 15:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,6 @@ OString CppuOptions::prepareHelp()
     help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -L         = getCppuType function with a known leak.\n";
     help += "    -C         = getCppuType function keeps comprehensive type information.\n";
-    help += "    -CS        = getCppuType function keeps comprehensive type information (static version).\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
     help += prepareVersion();
