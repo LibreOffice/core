@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:42:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 #pragma hdrstop
 
 #ifndef _VOS_MUTEX_HXX_
@@ -168,7 +165,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_VERTICAL_GRID_RESOLUTION,
     HANDLE_VERTICAL_GRID_SUBDIVISION,
     HANDLE_UPDATE_FROM_TEMPLATE,
-    HANDLE_PRINTER_INDEPENDENT_LAYOUT
+    HANDLE_PRINTER_INDEPENDENT_LAYOUT,
+    HANDLE_IS_LABEL_DOC
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -195,6 +193,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            CPPUTYPE_BOOLEAN,           0,   0},
 
         { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -516,6 +515,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 throw IllegalArgumentException();
         }
         break;
+        case HANDLE_IS_LABEL_DOC :
+        {
+            sal_Bool bSet;
+            if(!(rValue >>= bSet))
+                throw IllegalArgumentException();
+            mpDoc->SetLabelDoc(bSet);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -680,6 +687,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue <<= nTmp;
         }
         break;
+        case HANDLE_IS_LABEL_DOC:
+        {
+            sal_Bool bLabel = mpDoc->IsLabelDoc();
+            rValue <<= bLabel;
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -716,9 +729,10 @@ sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceN
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( 2 );
+    Sequence< OUString > aSeq( 3 );
     aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
     aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.Settings") );
+    aSeq[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DocumentSettings") );
     return aSeq;
 }
 
