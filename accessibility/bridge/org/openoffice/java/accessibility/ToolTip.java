@@ -61,7 +61,7 @@ import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 /**
  */
