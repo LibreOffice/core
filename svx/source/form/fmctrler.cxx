@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 13:25:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3327,19 +3327,32 @@ void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< XSQLErr
     m_aErrorListeners.removeInterface(aListener);
 }
 
+// XDatabaseParameterBroadcaster2
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::addDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
+{
+    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::addDatabaseParameterListener: Object already disposed!" );
+    m_aParameterListeners.addInterface(aListener);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::removeDatabaseParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
+{
+    OSL_ENSURE( !FmXFormController_BASE1::rBHelper.bDisposed, "FmXFormController::removeDatabaseParameterListener: Object already disposed!" );
+    m_aParameterListeners.removeInterface(aListener);
+}
+
 // XDatabaseParameterBroadcaster
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    m_aParameterListeners.addInterface(aListener);
+    FmXFormController::addDatabaseParameterListener( aListener );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeParameterListener(const Reference< XDatabaseParameterListener > & aListener) throw( RuntimeException )
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    m_aParameterListeners.removeInterface(aListener);
+    FmXFormController::removeDatabaseParameterListener( aListener );
 }
 
 // XDatabaseParameterListener
