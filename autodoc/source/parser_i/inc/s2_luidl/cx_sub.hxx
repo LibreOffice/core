@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_sub.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,10 @@ class Cx_Base : public ::TkpContext
                         Cx_Base(
                             Token_Receiver &    o_rReceiver,
                             TkpContext &        i_rFollowUpContext )
-                                                :   pFollowUpContext(&i_rFollowUpContext),
-                                                    rReceiver(o_rReceiver) {}
+                                                :   rReceiver(o_rReceiver),
+                                                    pFollowUpContext(&i_rFollowUpContext),
+                                                    pNewToken()
+                                                    {}
   protected:
     void                SetToken(
                             DYN Token *         let_dpToken )
