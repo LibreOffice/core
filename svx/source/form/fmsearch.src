@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:15:41 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ polish ] = "Zawartoζ pola jest nierσwna NULL";
         Text[ portuguese_brazilian ] = "Field content is n~ot NULL";
         Text[ japanese ] = "Μ¨°ΩΔή“ΰ—e‚ΝNULL‚Ε‚Ν‚Θ‚Ά";
-        Text[ korean ] = "ΗΚµε ³»ΏλΐΜ NULL°ϊ ΄ΩΈ§(~L)";
+        Text[ korean ] = "ΗΚµε ³»ΏλΐΜ NULLΐΜ΅΅ΎΖ΄Τ";
         Text[ chinese_simplified ] = "ΧΦ¶ΞΔΪΘέ²»ΚΗ NULL(~O)";
         Text[ chinese_traditional ] = "Δζ¦μ¤Ί®e¤£¬O NULL";
         Text[ arabic ] = "γΝΚζνΗΚ ΗαΝήα αΗ ΚΣΗζν ήνγΙ ΞΗανΙ (NULL)";
@@ -208,7 +208,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "°Ο°μ";
         Text[ arabic ] = "δΨΗή ΗαΘΝΛ";
         Text[ greek ] = "Περιοχή";
-        Text[ korean ] = "Γ£ΐ» Ήόΐ§";
+        Text[ korean ] = "Ήόΐ§";
         Text[ turkish ] = "Aranacak bφlόm";
         Text[ language_user1 ] = " ";
     };
@@ -508,7 +508,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "³q°t²Ε-ªνΉF";
         Text[ arabic ] = "ΚΪΘνΡ ΪδΥΡ δΗΖΘ";
         Text[ greek ] = "Παράσταση συμβό~λου κράτησης θέσης";
-        Text[ korean ] = "°³ΓΌ Ζ² Η¥Ηφ";
+        Text[ korean ] = "ΗΓ·ΉΐΜ½ΊΘ¦΄υ΅΅ΐΞΌβ";
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
     };
@@ -713,7 +713,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "Γφ³¬(~C)";
         Text[ arabic ] = "ΕΫαΗή";
         Text[ greek ] = "Κλείσιμο";
-        Text[ korean ] = "΄έ±β(~C)";
+        Text[ korean ] = "΄έ±β";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
     };
@@ -740,7 +740,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "»΅©ϊ(~H)";
         Text[ arabic ] = "γ~ΣΗΪΟΙ";
         Text[ greek ] = "Βοήθεια";
-        Text[ korean ] = "µµΏςΈ»(~H)";
+        Text[ korean ] = "µµΏςΈ»";
         Text[ turkish ] = "Yardύm";
         Text[ language_user1 ] = " ";
     };
@@ -785,7 +785,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ chinese_traditional ] = "¥τ·N¤@­ΣΔζ¦μ΅Q¦bΔζ¦μ°_©l¦μΈm΅QΎγ­ΣΔζ¦μ";
     Text[ arabic ] = "έν Γν γίΗδ έν ΗαΝήαΊ έν ΘΟΗνΚε΅ έν δεΗνΚεΊ Γζ ΗαΝήα ίαε";
     Text[ greek ] = "τυχαία;στην αρχή του πεδίου;στο τέλος του πεδίου;ολόκληρο το πεδίο";
-    Text[ korean ] = "ΗΚµεΏ΅Ό­ ΐΣΐΗ·Ξ;ΗΚµε Γ³ΐ½Ώ΅;ΗΚµε ³΅Ώ΅;ΐόΓΌ ΗΚµε";
+    Text[ korean ] = "ΗΚµεΏ΅Ό­ ΐΣΐΗ·Ξ;ΗΚµε ½ΓΐΫΏ΅;ΗΚµε ³΅Ώ΅;ΐόΓΌ ΗΚµε";
     Text[ turkish ] = "Alanda rasgele;Alan baώύnda;Alan sonunda;Tόm alanda";
 };
 
@@ -836,7 +836,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ chinese_traditional ] = "¨S¦³§δ¨μ²Ε¦X±z«ό©wªΊΈκ®Ζ¶µ¥Ψ΅T";
     Message[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΣΜαΗΚ ΘνΗδΗΚ ΚΚγΗΤμ γΪ ΘνΗδΗΚί !";
     Message[ greek ] = "Δεν βρέθηκαν εγγραφές, οι οποίες να εκπληρώνουν τα δεδομένα σας!";
-    Message[ korean ] = "΄η½ΕΐΗ µ¥ΐΜΕΝΏ΅ ΈΒ΄Β ·ΉΔΪµεΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω!";
+    Message[ korean ] = "»ηΏλΐΪΐΗ µ¥ΐΜΕΝΏ΅ ΈΒ΄Β ·ΉΔΪµεΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω!";
     Message[ turkish ] = "Girdiπiniz verilere uygun veri kόmeleri bulunamadύ!";
     Message[ language_user1 ] = " ";
 };
@@ -862,7 +862,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ chinese_traditional ] = "¥X²{¤@­Σ¤£©ϊªΊΏω»~΅CµLªkµ²§τ·j΄M΅I";
     Message[ arabic ] = "ΝΟΛ ΞΨΓ ΫνΡ γΪΡζέ. ΚΪΠΡ ΕδεΗΑ ΗαΘΝΛ !";
     Message[ greek ] = "Παρουσιάστηκε άγνωστο σφάλμα. Η αναζήτηση δεν ήταν δυνατόν να ολοκληρωθεί!";
-    Message[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω. Γ£±βΈ¦ ΑΎ·αΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω!";
+    Message[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐΊ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω. Γ£±βΈ¦ ΑΎ·αΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω!";
     Message[ turkish ] = "Ayrύntύlarύ bilinmeyen bir hata oluώtu. Arama iώlemi tamamlanamadύ!";
     Message[ language_user1 ] = " ";
 };
@@ -888,7 +888,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ chinese_traditional ] = "·Έ­Θ΅A·j΄M±q°_©l¦μΈmΔ~Δς΅F·Έ­Θ΅A·j΄M±qµ²§ΐ¦μΈmΔ~Δς";
     Text[ arabic ] = "έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαΘΟΗνΙ; έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαδεΗνΙ";
     Text[ greek ] = "Υπερχείλιση, Η αναζήτηση συνεχίστηκε από την αρχή,Υπερχείλιση, Η αναζήτηση συνεχίστηκε από το τέλος";
-    Text[ korean ] = "ΏΐΉφΗΓ·Ξ- Γ£±β΄Β Γ³ΐ½ΊΞΕΝ °θΌΣµΗΎϊΐ½;ΏΐΉφΗΓ·Ξ-Γ£±β΄Β ³΅Ώ΅Ό­ ΊΞΕΝ °θΌΣµΗΎϊΐ½";
+    Text[ korean ] = "ΏΐΉφΗΓ·Ξ- Γ£±β΄Β ½ΓΐΫΊΞΊΠΊΞΕΝ ΑψΗΰµΗΎϊΐ½;ΏΐΉφΗΓ·Ξ-Γ£±β΄Β ³΅Ώ΅Ό­ ΊΞΕΝ ΑψΗΰµΗΎϊΐ½";
     Text[ turkish ] = "Taώma, Arama iώlemine baώtan devam edildi;Taώma, Arama iώlemine sondan devam edildi";
 };
 
