@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 08:53:34 $
+ *  last change: $Author: hr $ $Date: 2002-05-28 16:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SVX_UNOEDACC_HXX_
-#include <svx/unoedacc.hxx>
 #endif
 
 #ifndef _ACCESSIBILITY_HXX_
