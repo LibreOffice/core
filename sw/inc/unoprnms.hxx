@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:17:20 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,4 +695,5 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_KERN_ASIAN_PUNCTUATION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_COMPRESSION_TYPE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR;
 #endif

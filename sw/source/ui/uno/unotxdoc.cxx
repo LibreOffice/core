@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:29:23 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,9 @@
 
 #ifndef _CHCMPRSE_HXX
 #include <chcmprse.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
 
@@ -2065,6 +2068,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
         }
         break;
+        case WID_DOC_TWO_DIGIT_YEAR:
+        {
+            sal_Int16 nYear;
+            aValue >>= nYear;
+            SfxRequest aRequest ( SID_ATTR_YEAR2000, SFX_CALLMODE_SLOT, pDocShell->GetDoc()->GetAttrPool());
+            aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
+            pDocShell->Execute ( aRequest );
+        }
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2211,6 +2222,11 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_CHARACTER_COMPRESSION_TYPE:
         {
             aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetCharCompressType());
+        }
+        break;
+        case WID_DOC_TWO_DIGIT_YEAR:
+        {
+            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( TRUE )->GetYear2000());
         }
         break;
         default:
