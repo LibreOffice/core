@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 13:32:12 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 14:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,11 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
     try
     {
         if( mxTransfer.is() )
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             aRet = mxTransfer->getTransferData( rFlavor );
+            Application::AcquireSolarMutex( nRef );
+        }
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
