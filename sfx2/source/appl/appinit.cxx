@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 09:59:22 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,11 @@ public:
 
 void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& Source ) throw( RuntimeException )
 {
+    Reference< XDesktop > xDesktop( Source.Source, UNO_QUERY );
+    if( xDesktop.is() == sal_True )
+    {
+        xDesktop->removeTerminateListener( this );
+    }
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SFX_APP()->Deinitialize();
 }
@@ -212,6 +217,11 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& aE
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
+    Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
+    if( xDesktop.is() == sal_True )
+    {
+        xDesktop->removeTerminateListener( this );
+    }
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxApplication* pApp = SFX_APP();
     SfxPickList_Impl::Get()->ClearMemCache();
