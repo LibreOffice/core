@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-17 09:21:15 $
+#   last change: $Author: pluby $ $Date: 2001-02-25 09:14:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,10 @@ CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(SYMBOLPREFIX)component_getI
   -Duno_ext_getMapping=lib$(SYMBOLPREFIX)uno_ext_getMapping
 .ENDIF
 
+# Name of library where static data members are initialized
+STATICLIBNAME=static$(UPD)$(DLLPOSTFIX)
+STATICLIB=-l$(STATICLIBNAME)
+
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
 JAVAFLAGSDEBUG=-g
@@ -120,9 +124,10 @@ CFLAGSNOOPT=
 .ENDIF
 CFLAGSOUTOBJ=-o
 
-SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
+SOLARVERSHLLIBS=$(shell -ls $(SOLARLIBDIR)$/*$(DLLPOST)) \
+  $(shell -ls $(PRJ)$/$(ROUT)$/lib$/*$(DLLPOST))
 .IF "$(STLPORT4)"!=""
-SOLARVERSHLLIBS+=$(shell -$(FIND) $(STLPORT4)$/lib -name $(DLLPRE)\*$(DLLPOST))
+SOLARVERSHLLIBS+=$(shell -ls $(STLPORT4)$/lib$/*$(DLLPOST))
 .ENDIF
 
 LINK=cc
