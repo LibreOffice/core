@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-03 13:51:40 $
+#   last change: $Author: pluby $ $Date: 2000-12-03 16:36:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -475,6 +475,10 @@ product!=compact
 .ENDIF
 .ELSE
 dbgutil!=true
+.ENDIF
+
+.IF "$(dbgutil)"!=""
+product!=
 .ENDIF
 
 .IF "$(product)"==""
