@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:10:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrObjEditView::SdrObjEditView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrObjEditView::SdrObjEditView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrGlueEditView(pModel1,pXOut)
 {
     ImpClearVars();
