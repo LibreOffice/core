@@ -104,7 +104,7 @@ public class AccessibilityTree
     protected void expandTree (AccessibleTreeNode aNode, Expander aExpander)
     {
         message ("Expanding tree");
-        maPrinter.println ("Expanding tree:");
+
         setEnabled (false);
         ((AccessibilityTreeModel)getModel()).lock ();
 
@@ -119,7 +119,6 @@ public class AccessibilityTree
 
         setEnabled (true);
         ((AccessibilityTreeModel)getModel()).unlock (aNode);
-        maPrinter.println ("Done.");
         message ("");
     }
 
@@ -175,9 +174,7 @@ public class AccessibilityTree
     }
     public void expandShapes (AccessibleTreeNode aNode)
     {
-        expandTree (
-            new TreePath (aNode.createPath()),
-            new ShapeExpander());
+        expandTree (aNode, new ShapeExpander());
     }
 
     /** Expand all nodes */
@@ -187,9 +184,7 @@ public class AccessibilityTree
     }
     public void expandAll (AccessibleTreeNode aNode)
     {
-        expandTree(
-            new TreePath (aNode.createPath()),
-            new AllExpander() );
+        expandTree (aNode, new AllExpander());
     }
 
 
