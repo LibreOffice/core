@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:30:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,71 +1003,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sStyleName = OUString();
     }
 
-    // hard paragraph properties
-    if( pStyle )
-    {
-        pStyle->FillPropertySet( xPropSet );
-        if( bPara && pStyle->HasMasterPageName() &&
-            xPropSetInfo->hasPropertyByName( sPageDescName ) )
-        {
-            const OUString& rMasterPageName = pStyle->GetMasterPageName();
-            if( !rMasterPageName.getLength() ||
-                (xPageStyles.is() &&
-                 xPageStyles->hasByName( rMasterPageName )) )
-            {
-                Any aAny;
-                aAny <<= rMasterPageName;
-                xPropSet->setPropertyValue( sPageDescName, aAny );
-            }
-        }
-        if( bPara && pStyle->GetDropCapStyleName().getLength() &&
-            xTextStyles.is() &&
-            xTextStyles->hasByName( pStyle->GetDropCapStyleName() ) &&
-            xPropSetInfo->hasPropertyByName( pStyle->sDropCapCharStyleName ) )
-        {
-            Any aAny;
-            aAny <<= pStyle->GetDropCapStyleName();
-            xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
-        }
-
-        // combined characters special treatment
-        if (!bPara && pStyle->HasCombinedCharactersLetter())
-        {
-            // insert combined characters text field
-            if( xServiceFactory.is() )
-            {
-                Reference<XInterface> xIfc =
-                   xServiceFactory->createInstance(sServiceCombinedCharacters);
-                if( xIfc.is() )
-                {
-                    // fix cursor if larger than possible for
-                    // combined characters field
-                    if (rCursor->getString().getLength() >
-                            MAX_COMBINED_CHARACTERS)
-                    {
-                        rCursor->gotoRange(rCursor->getStart(), sal_False);
-                        rCursor->goRight(MAX_COMBINED_CHARACTERS, sal_True);
-                    }
-
-                    // set field value (the combined character string)
-                    Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
-                    Any aAny;
-                    aAny <<= rCursor->getString();
-                    xTmp->setPropertyValue(sContent, aAny);
-
-                    // insert the field over it's original text
-                    Reference<XTextRange> xRange(rCursor, UNO_QUERY);
-                    Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
-                    if (xText.is() && xRange.is())
-                    {
-                        xText->insertTextContent( xRange, xTextContent,
-                                                  sal_True );
-                    }
-                }
-            }
-        }
-    }
-
     if( bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     {
         // Set numbering rules
@@ -1182,6 +1117,71 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             {
                 aAny.clear();
                 xPropSet->setPropertyValue( sNumberingRules, aAny );
+            }
+        }
+    }
+
+    // hard paragraph properties
+    if( pStyle )
+    {
+        pStyle->FillPropertySet( xPropSet );
+        if( bPara && pStyle->HasMasterPageName() &&
+            xPropSetInfo->hasPropertyByName( sPageDescName ) )
+        {
+            const OUString& rMasterPageName = pStyle->GetMasterPageName();
+            if( !rMasterPageName.getLength() ||
+                (xPageStyles.is() &&
+                 xPageStyles->hasByName( rMasterPageName )) )
+            {
+                Any aAny;
+                aAny <<= rMasterPageName;
+                xPropSet->setPropertyValue( sPageDescName, aAny );
+            }
+        }
+        if( bPara && pStyle->GetDropCapStyleName().getLength() &&
+            xTextStyles.is() &&
+            xTextStyles->hasByName( pStyle->GetDropCapStyleName() ) &&
+            xPropSetInfo->hasPropertyByName( pStyle->sDropCapCharStyleName ) )
+        {
+            Any aAny;
+            aAny <<= pStyle->GetDropCapStyleName();
+            xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
+        }
+
+        // combined characters special treatment
+        if (!bPara && pStyle->HasCombinedCharactersLetter())
+        {
+            // insert combined characters text field
+            if( xServiceFactory.is() )
+            {
+                Reference<XInterface> xIfc =
+                   xServiceFactory->createInstance(sServiceCombinedCharacters);
+                if( xIfc.is() )
+                {
+                    // fix cursor if larger than possible for
+                    // combined characters field
+                    if (rCursor->getString().getLength() >
+                            MAX_COMBINED_CHARACTERS)
+                    {
+                        rCursor->gotoRange(rCursor->getStart(), sal_False);
+                        rCursor->goRight(MAX_COMBINED_CHARACTERS, sal_True);
+                    }
+
+                    // set field value (the combined character string)
+                    Reference<XPropertySet> xTmp( xIfc, UNO_QUERY );
+                    Any aAny;
+                    aAny <<= rCursor->getString();
+                    xTmp->setPropertyValue(sContent, aAny);
+
+                    // insert the field over it's original text
+                    Reference<XTextRange> xRange(rCursor, UNO_QUERY);
+                    Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
+                    if (xText.is() && xRange.is())
+                    {
+                        xText->insertTextContent( xRange, xTextContent,
+                                                  sal_True );
+                    }
+                }
             }
         }
     }
