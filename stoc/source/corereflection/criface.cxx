@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
+ *  last change: $Author: pluby $ $Date: 2001-03-14 05:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #include <alloca.h>
 #endif
 #endif
+#ifndef MACOSX
 #include <malloc.h>
+#endif
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
