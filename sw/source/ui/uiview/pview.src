@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:23:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "Distribution";
     TEXT[ chinese_simplified ] = "∑÷≤º";
         TEXT[ russian ] = "–‡ÒÔÂ‰ÂÎÂÌËÂ";
-        TEXT[ polish ] = "Rozdzielanie";
+        TEXT[ polish ] = "Podzia≥";
         TEXT[ japanese ] = "ï™äÑ";
         TEXT[ chinese_traditional ] = "§¿•¨";
         TEXT[ arabic ] = "«· ﬁ”Ì„";
@@ -555,7 +555,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ swedish ] = "Format";
         TEXT[ dutch ] = "Notatie";
         TEXT[ spanish ] = "Formato";
-        TEXT[ english_us ] = "Format";
+        TEXT[ english_us ] = "Numbers";
     TEXT[ chinese_simplified ] = "∏Ò Ω";
         TEXT[ russian ] = "‘ÓÏ‡Ú";
         TEXT[ polish ] = "Format";
@@ -965,3 +965,4 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
