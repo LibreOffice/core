@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: cd $ $Date: 2002-10-11 13:44:30 $
+#   last change: $Author: tpf $ $Date: 2002-10-25 17:26:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ TARGET=schema
 
 XCSFILES= \
     org$/openoffice$/Inet.xcs \
+    org$/openoffice$/Office$/Addons.xcs \
     org$/openoffice$/Office$/Calc.xcs \
     org$/openoffice$/Office$/Chart.xcs \
     org$/openoffice$/Office$/Commands.xcs \
@@ -91,7 +92,6 @@ XCSFILES= \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
     org$/openoffice$/Office$/Security.xcs \
-    org$/openoffice$/Office$/Addons.xcs \
     org$/openoffice$/Setup.xcs \
     org$/openoffice$/UserProfile.xcs \
     org$/openoffice$/VCL.xcs \
@@ -146,4 +146,5 @@ ALLTAR: \
     $(OLDTRANSFORM) \
     $(COMPARE) \
     $(RESOURCES)
+
     
