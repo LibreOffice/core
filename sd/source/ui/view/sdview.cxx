@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:51:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "View.hxx"
+
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -111,29 +113,44 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "sdwindow.hxx"
-#include "sdview.hxx"
-#include "sdclient.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "app.hxx"
 #include "sdpage.hxx"
 #include "glob.hrc"
 #include "sdresid.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "graphpro.hxx"
+#ifndef SD_FU_TEXT_HXX
 #include "futext.hxx"
+#endif
+#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "stlpool.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
 #endif
 
-TYPEINIT1( SdView, FmFormView );
+TYPEINIT1(View, FmFormView);
 
 /*************************************************************************
 |*
@@ -141,8 +158,8 @@ TYPEINIT1( SdView, FmFormView );
 |*
 \************************************************************************/
 
-SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
-               SdViewShell* pViewShell)
+View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
+               ViewShell* pViewShell)
   : FmFormView(pDrawDoc, pOutDev),
     pDoc(pDrawDoc),
     pDocSh( pDrawDoc->GetDocSh() ),
@@ -169,9 +186,9 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     SetMeasureLayer(String(SdResId(STR_LAYER_MEASURELINES)));
 
     // Timer fuer verzoegertes Drop (muss fuer MAC sein)
-    aDropErrorTimer.SetTimeoutHdl( LINK(this, SdView, DropErrorHdl) );
+    aDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
     aDropErrorTimer.SetTimeout(50);
-    aDropInsertFileTimer.SetTimeoutHdl( LINK(this, SdView, DropInsertFileHdl) );
+    aDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
     aDropInsertFileTimer.SetTimeout(50);
 }
 
@@ -181,7 +198,7 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-SdView::~SdView()
+View::~View()
 {
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
@@ -217,7 +234,7 @@ SdView::~SdView()
 |*
 \************************************************************************/
 
-void SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void View::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
     // ausfuehren ??
     if (nLockRedrawSmph == 0)
@@ -275,7 +292,7 @@ void SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 |*
 \************************************************************************/
 
-void SdView::MarkListHasChanged()
+void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 }
@@ -287,7 +304,7 @@ void SdView::MarkListHasChanged()
 |*
 \************************************************************************/
 
-BOOL SdView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
+BOOL View::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
     BOOL bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
     return (bOk);
@@ -300,7 +317,7 @@ BOOL SdView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 |*
 \************************************************************************/
 
-BOOL SdView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
+BOOL View::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
@@ -312,7 +329,7 @@ BOOL SdView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 |*
 \************************************************************************/
 
-BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly) const
+BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -378,12 +395,12 @@ BOOL SdView::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPres
 |*
 \************************************************************************/
 
-void SdView::SelectAll()
+void View::SelectAll()
 {
     if ( IsTextEdit() )
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
-        const Outliner* pOutliner = GetTextEditOutliner();
+        const ::Outliner* pOutliner = GetTextEditOutliner();
         pOLV->SelectRange( 0, (USHORT) pOutliner->GetParagraphCount() );
     }
     else
@@ -399,7 +416,7 @@ void SdView::SelectAll()
 |*
 \************************************************************************/
 
-void SdView::ModelHasChanged()
+void View::ModelHasChanged()
 {
     // Erst SdrView benachrichtigen
     FmFormView::ModelHasChanged();
@@ -411,7 +428,7 @@ void SdView::ModelHasChanged()
 |*
 \************************************************************************/
 
-BOOL SdView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
+BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 {
     // weiter an SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
@@ -424,7 +441,7 @@ BOOL SdView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 |*
 \************************************************************************/
 
-BOOL SdView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
                          BOOL bIsNewObj, SdrOutliner* pGivenOutliner,
                          OutlinerView* pGivenOutlinerView, BOOL bDontDeleteOutliner,
                          BOOL bOnlyOneView)
@@ -436,14 +453,14 @@ BOOL SdView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     if (bReturn)
     {
         // UndoManager an der obersten Shell (SdDrawTextObjectBar) setzen
-        Outliner* pOL = GetTextEditOutliner();
+        ::Outliner* pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
             pOL->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor(pPV) );
 
         SfxUndoManager& rUndoMgr = pOL->GetUndoManager();
         rUndoMgr.Clear();
-        SdViewShell* pViewShell = pDocSh->GetViewShell();
+        ViewShell* pViewShell = pDocSh->GetViewShell();
         DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
         if (pViewShell)
         {
@@ -461,20 +478,20 @@ BOOL SdView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 |*
 \************************************************************************/
 
-SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
+SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
 {
     BOOL bIsTextEdit = IsTextEdit();
 
     SdrEndTextEditKind eKind;
 
-    SdViewShell* pViewShell= pDocSh->GetViewShell();
+    ViewShell* pViewShell= pDocSh->GetViewShell();
 
-    if ( pViewShell && pViewShell->ISA(SdDrawViewShell) )
+    if ( pViewShell && pViewShell->ISA(DrawViewShell) )
     {
-        FuPoor* pFunc = ( (SdDrawViewShell*) pViewShell)->GetActualFunction();
+        FuPoor* pFunc = ( (DrawViewShell*) pViewShell)->GetActualFunction();
 
         if ( !pFunc || !pFunc->ISA(FuText) )
-            pFunc = ( (SdDrawViewShell*) pViewShell)->GetOldFunction();
+            pFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
 
         if ( pFunc && pFunc->ISA(FuText) )
         {
@@ -511,7 +528,7 @@ SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
     {
         // UndoManager an der obersten Shell setzen
         SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        SdViewShell* pViewShell = pDocSh->GetViewShell();
+        ViewShell* pViewShell = pDocSh->GetViewShell();
         DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
         if (pViewShell)
         {
@@ -530,7 +547,7 @@ SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
 |*
 \************************************************************************/
 
-void SdView::SetMarkedOriginalSize()
+void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*pDoc);
     ULONG           nCount = aMark.GetMarkCount();
@@ -597,11 +614,11 @@ void SdView::SetMarkedOriginalSize()
 |*
 \************************************************************************/
 
-VirtualDevice* SdView::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
+VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
                                       ULONG nWidthPixel)
 {
-    SdViewShell*    pViewShell = pDocSh->GetViewShell();
-    SdWindow*       pWin = pViewShell->GetActiveWindow();
+    ViewShell*  pViewShell = pDocSh->GetViewShell();
+    ::sd::Window* pWin = pViewShell->GetActiveWindow();
     VirtualDevice*  pVDev = new VirtualDevice( *pWin );
     MapMode         aMM( MAP_100TH_MM );
 
@@ -670,7 +687,7 @@ VirtualDevice* SdView::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
 |*
 \************************************************************************/
 
-void SdView::DoConnect(SdrOle2Obj* pObj)
+void View::DoConnect(SdrOle2Obj* pObj)
 {
     if (pViewSh)
     {
@@ -678,12 +695,12 @@ void SdView::DoConnect(SdrOle2Obj* pObj)
 
         if( rIPObjRef.Is() )
         {
-            SfxInPlaceClientRef pSdClient = (SdClient*) rIPObjRef->GetIPClient();
+            SfxInPlaceClientRef pSdClient = (Client*) rIPObjRef->GetIPClient();
 
             if ( !pSdClient.Is() )
             {
-                SdWindow* pWindow = pViewSh->GetActiveWindow();
-                pSdClient = new SdClient(pObj, pViewSh, pWindow);
+                ::sd::Window* pWindow = pViewSh->GetActiveWindow();
+                pSdClient = new Client(pObj, pViewSh, pWindow);
 
                 rIPObjRef->DoConnect(pSdClient);
                 Rectangle aRect = pObj->GetLogicRect();
@@ -718,7 +735,7 @@ void SdView::DoConnect(SdrOle2Obj* pObj)
 |*
 \************************************************************************/
 
-BOOL SdView::IsMorphingAllowed() const
+BOOL View::IsMorphingAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkList();
     BOOL                bRet = FALSE;
@@ -770,7 +787,7 @@ BOOL SdView::IsMorphingAllowed() const
 |*
 \************************************************************************/
 
-BOOL SdView::IsVectorizeAllowed() const
+BOOL View::IsVectorizeAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkList();
     BOOL                bRet = FALSE;
@@ -786,11 +803,11 @@ BOOL SdView::IsVectorizeAllowed() const
     return bRet;
 }
 
-void SdView::onAccessibilityOptionsChanged()
+void View::onAccessibilityOptionsChanged()
 {
     if( pViewSh )
     {
-        SdWindow* pWindow = pViewSh->GetActiveWindow();
+        ::sd::Window* pWindow = pViewSh->GetActiveWindow();
         if( pWindow )
         {
             const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
@@ -827,3 +844,5 @@ void SdView::onAccessibilityOptionsChanged()
         }
     }
 }
+
+} // end of namespace sd
