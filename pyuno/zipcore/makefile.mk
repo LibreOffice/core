@@ -45,7 +45,9 @@ target: \
 $(BIN)$/python.sh : python.sh
     -rm -f $@
     cat $? > $@
+.IF "$(GUI)" == "UNX"
     chmod +x $@
+.ENDIF
 
 $(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
     -+cd $(BIN) && find . -name '*.pyc' | xargs rm -f  
@@ -56,7 +58,7 @@ $(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
     +cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
 
 dirs .PHONY:
-    -mkdir $(PYRUNTIME_DIRS) 
+    -+$(MKDIR) $(PYRUNTIME_DIRS) 
 
 $(BIN)$/$(PYDIRNAME)$/lib$/% : $(SOLARLIBDIR)$/python$/%
     -rm -f $@
