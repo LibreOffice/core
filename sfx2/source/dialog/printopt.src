@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:13:28 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ japanese ] = "崅搙側報嶞昳幙";
         Text[ korean ] = "~Good quality";
         Text[ chinese_simplified ] = "优良的打印质量";
-        Text[ chinese_traditional ] = "▆珇借";
+        Text[ chinese_traditional ] = "▆珇借";
         Text[ turkish ] = "~Good quality";
         Text[ arabic ] = "~Good quality";
         Text[ catalan ] = "~Good quality";
@@ -1060,4 +1060,5 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
