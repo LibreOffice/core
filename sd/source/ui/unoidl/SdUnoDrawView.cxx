@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:32:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,27 +129,14 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace {
-enum properties
-{
-    PROPERTY_CURRENTPAGE = 0,
-    PROPERTY_MASTERPAGEMODE,
-    PROPERTY_LAYERMODE,
-    PROPERTY_ACTIVE_LAYER,
-    PROPERTY_ZOOMTYPE,
-    PROPERTY_ZOOMVALUE,
-    PROPERTY_VIEWOFFSET,
-    PROPERTY_WORKAREA,
-    PROPERTY_COUNT
-};
-}
 
 namespace sd {
 
 SdUnoDrawView::SdUnoDrawView(
-    View& rView,
-    DrawViewShell& rViewShell) throw()
-    :   DrawSubController (rView, rViewShell),
+    ViewShellBase& rBase,
+    ViewShell& rViewShell,
+    View& rView) throw()
+    :   DrawController (rBase, rViewShell, rView),
         mbOldMasterPageMode(sal_False),
         mbOldLayerMode(sal_False),
         mpCurrentPage(NULL)
@@ -168,6 +155,7 @@ SdUnoDrawView::~SdUnoDrawView() throw()
 
 DrawViewShell& SdUnoDrawView::GetDrawViewShell (void) const
 {
+    ThrowIfDisposed();
     return static_cast<DrawViewShell&>(mrViewShell);
 }
 
@@ -176,6 +164,7 @@ DrawViewShell& SdUnoDrawView::GetDrawViewShell (void) const
 
 sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
 {
+    ThrowIfDisposed();
     return GetDrawViewShell().GetEditMode() == EM_MASTERPAGE;
 }
 
@@ -184,6 +173,7 @@ sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
 
 void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
 {
+    ThrowIfDisposed();
     if ((GetDrawViewShell().GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
         GetDrawViewShell().ChangeEditMode (
             bMasterPageMode ? EM_MASTERPAGE : EM_PAGE,
@@ -195,6 +185,7 @@ void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
 
 sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 {
+    ThrowIfDisposed();
     return GetDrawViewShell().GetLayerMode();
 }
 
@@ -203,6 +194,7 @@ sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 
 void SdUnoDrawView::setLayerMode (sal_Bool bLayerMode) throw()
 {
+    ThrowIfDisposed();
     if (GetDrawViewShell().GetLayerMode() != bLayerMode)
         GetDrawViewShell().ChangeEditMode (
             GetDrawViewShell().GetEditMode(),
@@ -214,12 +206,13 @@ void SdUnoDrawView::setLayerMode (sal_Bool bLayerMode) throw()
 
 Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 {
+    ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
     Reference<drawing::XLayer> xCurrentLayer;
 
     // Retrieve the layer manager from the model.
-    SdXImpressDocument* pModel = getModel();
+    SdXImpressDocument* pModel = GetModel();
     if (pModel != NULL)
     {
         SdDrawDocument* pSdModel = pModel->GetDoc();
@@ -248,6 +241,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) throw ()
 {
+    ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
     // Get the SdrLayer object corresponding to the given reference.
@@ -329,39 +323,6 @@ void SdUnoDrawView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
 
 
 
-void SdUnoDrawView::FireVisAreaChanged( const Rectangle& rVisArea ) throw()
-{
-    if( maLastVisArea != rVisArea )
-    {
-        Any aNewValue;
-        aNewValue <<= awt::Rectangle(
-            rVisArea.Left(),
-            rVisArea.Top(),
-            rVisArea.GetWidth(),
-            rVisArea.GetHeight() );
-
-        Any aOldValue;
-        aOldValue <<= awt::Rectangle(
-            maLastVisArea.Left(),
-            maLastVisArea.Top(),
-            maLastVisArea.GetWidth(),
-            maLastVisArea.GetHeight() );
-
-        FirePropertyChange (PROPERTY_WORKAREA, aNewValue, aOldValue);
-
-        // Tell the main controller.
-        DrawController* pController =
-            mrViewShell.GetViewShellBase().GetDrawController();
-        if (pController != NULL)
-            pController->FireVisAreaChanged (aNewValue, aOldValue);
-
-        maLastVisArea = rVisArea;
-    }
-}
-
-
-
-
 // XTypeProvider
 
 IMPLEMENT_GET_IMPLEMENTATION_ID(SdUnoDrawView);
@@ -376,6 +337,7 @@ IMPLEMENT_GET_IMPLEMENTATION_ID(SdUnoDrawView);
 OUString SAL_CALL SdUnoDrawView::getImplementationName (void)
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     return OUString(RTL_CONSTASCII_USTRINGPARAM("SdUnoDrawView"));
 }
 
@@ -391,6 +353,8 @@ static sal_Char pImplSdUnoHandoutViewService[sizeof("com.sun.star.presentation.H
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
+
     sal_Bool bServiceIsSupported = sal_False;
 
     switch (mrViewShell.GetShellType())
@@ -429,6 +393,7 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     ViewShell::ShellType eShellType = mrViewShell.GetShellType();
     Sequence<OUString> aServices (
            (eShellType == ViewShell::ST_NOTES)
@@ -478,6 +443,7 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
 sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     throw(lang::IllegalArgumentException, RuntimeException)
 {
+    ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
     vector<SdrObject*> aObjects;
@@ -578,9 +544,10 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 Any SAL_CALL SdUnoDrawView::getSelection()
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdXImpressDocument* pModel = getModel();
+    SdXImpressDocument* pModel = GetModel();
 
     Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
 
@@ -631,65 +598,30 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 /**
  * All Properties of this implementation. Must be sorted by name.
  */
-static beans::Property * getBasicProps()
+void SdUnoDrawView::FillPropertyTable (
+    ::std::vector<beans::Property>& rProperties)
 {
-    static beans::Property *pTable = 0;
+    DrawController::FillPropertyTable (rProperties);
 
-    if( ! pTable )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pTable )
-        {
-            static beans::Property aBasicProps[PROPERTY_COUNT] =
-            {
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,     ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),        PROPERTY_ACTIVE_LAYER,  ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomValue") ),          PROPERTY_ZOOMVALUE,     ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomType") ),           PROPERTY_ZOOMTYPE,      ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOffset") ),         PROPERTY_VIEWOFFSET,    ::getCppuType((const ::com::sun::star::awt::Point*)0), beans::PropertyAttribute::BOUND ),
-                beans::Property(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),
-                    PROPERTY_WORKAREA,
-                    ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
-                    beans::PropertyAttribute::BOUND
-                    | beans::PropertyAttribute::READONLY)
-
-            };
-            pTable = aBasicProps;
-        }
-    }
-    return pTable;
+    static const beans::Property aBasicProps[
+        PROPERTY_FIRST_FREE - PROPERTY_FIRST] = {
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,     ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),        PROPERTY_ACTIVE_LAYER,  ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomValue") ),          PROPERTY_ZOOMVALUE,     ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomType") ),           PROPERTY_ZOOMTYPE,      ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOffset") ),         PROPERTY_VIEWOFFSET,    ::getCppuType((const ::com::sun::star::awt::Point*)0), beans::PropertyAttribute::BOUND ),
+    };
+    int n = PROPERTY_FIRST_FREE - PROPERTY_FIRST;
+    for (int i=0; i<n; i++)
+        rProperties.push_back (aBasicProps[i]);
 }
 
 //----------------------------------------------------------------------
 //------ XPropertySet & OPropertySetHelper -----------------------------
 //----------------------------------------------------------------------
 
-/**
- * Create a table that map names to index values.
- */
-IPropertyArrayHelper & SdUnoDrawView::getInfoHelper()
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    static OPropertyArrayHelper aInfo( getBasicProps(), PROPERTY_COUNT, sal_False );
-    return aInfo;
-}
-
-//----------------------------------------------------------------------
-
-Reference < beans::XPropertySetInfo >  SdUnoDrawView::getPropertySetInfo()
-        throw ( ::com::sun::star::uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    static Reference < beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//----------------------------------------------------------------------
 
 // Return sal_True, value change
 sal_Bool SdUnoDrawView::convertFastPropertyValue
@@ -806,6 +738,8 @@ sal_Bool SdUnoDrawView::convertFastPropertyValue
             break;
 
         default:
+            bResult = DrawController::convertFastPropertyValue
+                (rConvertedValue, rOldValue, nHandle, rValue);
             break;
     }
 
@@ -878,6 +812,10 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
                 SetViewOffset( aOffset );
             }
             break;
+
+        default:
+            DrawController::setFastPropertyValue_NoBroadcast (nHandle, rValue);
+            break;
     }
 }
 
@@ -923,6 +861,8 @@ void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
                 maLastVisArea.GetHeight());
             break;
 
+        default:
+            DrawController::getFastPropertyValue (rRet, nHandle);
     }
 }
 
@@ -957,6 +897,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
 Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
     Reference< drawing::XDrawPage >  xPage;
@@ -964,7 +905,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
     DBG_ASSERT (&mrView!=NULL,
         "view is NULL in SdUnoDrawView::getCurrentPage");
 
-    SdXImpressDocument* pModel = getModel();
+    SdXImpressDocument* pModel = GetModel();
     SdrPageView *pPV = mrView.GetPageViewPvNum(0);
     SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
 
