@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.18 $
- *  last change: $Author: rt $ $Date: 2004-08-20 12:53:39 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 15:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 #include "backendaccess.hxx"
 #endif // CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
+
+#ifndef CONFIGMGR_LOGGER_HXX
+#include "logger.hxx"
+#endif
 
 #ifndef CONFIGMGR_MATCHLOCALE_HXX
 #include "matchlocale.hxx"
@@ -154,16 +158,23 @@ namespace configmgr { namespace backend {
     namespace task = com::sun::star::task;
     typedef uno::Reference< backenduno::XUpdatableLayer > LayerDataRemover;
 
+inline
+uno::Reference<lang::XMultiServiceFactory> BackendAccess::getServiceFactory() const
+{
+    return uno::Reference<lang::XMultiServiceFactory>(mContext->getServiceManager(),uno::UNO_QUERY_THROW);
+}
+//------------------------------------------------------------------------------
+
 BackendAccess::BackendAccess(
         const uno::Reference<backenduno::XBackend>& xBackend,
         const uno::Reference<uno::XComponentContext>& xContext)
-    : mFactory(xContext->getServiceManager(), uno::UNO_QUERY)
+    : mContext(xContext)
     , mBackend(xBackend)
     , mBinaryCache(xContext)
  {
-    OSL_ENSURE(mFactory.is(), "BackendAccess: Context has no ServiceManager (or it is missing an interface)");
-    if (!mFactory.is())
-        throw lang::NullPointerException(OUString::createFromAscii("BackendAccess: Context has no ServiceManager (or it is missing an interface)"), NULL);
+    OSL_ENSURE(mContext.is(), "BackendAccess: Context is missing");
+    if (!mContext.is())
+        throw lang::NullPointerException(OUString::createFromAscii("BackendAccess: NULL Context passed"), NULL);
     if (!xBackend.is())
         throw lang::NullPointerException(OUSTR("Configuration: Trying to create backend access without backend"),NULL);
     if (!uno::Reference<backenduno::XSchemaSupplier>::query(xBackend).is())
@@ -216,7 +227,7 @@ void BackendAccess::merge(
         sal_Int32 * pLayersMerged)
     CFG_UNO_THROW_ALL()
 {
-    LayerMergeHandler * pMerger = new LayerMergeHandler(mFactory, aData, aTemplateProvider );
+    LayerMergeHandler * pMerger = new LayerMergeHandler(mContext, aData, aTemplateProvider );
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::merge()");
@@ -279,7 +290,16 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog1, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::readDefaultData()");
 
-    bool bCacheHit = mBinaryCache.readComponentData(aComponentData, mFactory,
+    Logger logger(mContext);
+    const Logger::Level detail = LogLevel::FINER;
+    bool const bLogDetail = logger.isLogging(detail);
+
+    if (bLogDetail)
+        logger.log( detail, OUString::createFromAscii("Reading data for component ") + aComponent,
+                    "readDefaultData()","configmgr::Backend");
+
+    if (bLogDetail) logger.log(detail, "... attempt to read from binary cache", "readDefaultData()","configmgr::Backend");
+    bool bCacheHit = mBinaryCache.readComponentData(aComponentData, getServiceFactory(),
                                                     aComponent, aOptions.getEntity(), aOptions.getLocale(),
                                                     pLayers, nNumLayers, bIncludeTemplates);
 
@@ -287,29 +307,35 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
     {
         RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::readDefaultData() - not in cache");
 
+        if (bLogDetail) logger.log(detail, "... cache miss - need full merge", "readDefaultData()","configmgr::Backend");
+        if (bLogDetail) logger.log(detail, "... reading schema", "readDefaultData()","configmgr::Backend");
         {
-            SchemaBuilder *schemaBuilder = new SchemaBuilder( aComponent, aComponentData, aTemplateProvider );
+            SchemaBuilder *schemaBuilder = new SchemaBuilder( mContext, aComponent, aComponentData, aTemplateProvider );
             uno::Reference<backenduno::XSchemaHandler> schemaHandler = schemaBuilder ;
 
             uno::Reference<backenduno::XSchema> schema = this->getSchema(aComponent);
             schema->readSchema(schemaHandler) ;
         }
 
+        if (bLogDetail) logger.log(detail, "... merging layers", "readDefaultData()","configmgr::Backend");
         this->merge(aComponentData, pLayers, nNumLayers, aOptions, aTemplateProvider, pLayersMerged );
         promoteToDefault(aComponentData);
 
         if (mBinaryCache.isCacheEnabled(aOptions.getEntity()))
         {
-            bool bWriteSuccess = mBinaryCache.writeComponentData( aComponentData, mFactory,
+            if (bLogDetail) logger.log(detail, "... creating binary cache", "readDefaultData()","configmgr::Backend");
+            bool bWriteSuccess = mBinaryCache.writeComponentData( aComponentData, getServiceFactory(),
                                                                   aComponent, aOptions.getEntity(), aOptions.getLocale(),
                                                                   pLayers, nNumLayers );
 
             if (!bWriteSuccess)
             {
-                OSL_TRACE("Configuration: Cache write failed: disabling binary cache");
+                logger.info("Binary cache write failed - disabling binary cache","readDefaultData()","configmgr::Backend");
                 mBinaryCache.disableCache();
             }
         }
+        else if (bLogDetail)
+            logger.log(detail, "... cache hit", "readDefaultData()","configmgr::Backend");
     }
     else if (pLayersMerged)
         *pLayersMerged = nNumLayers;
@@ -451,6 +477,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
     sal_Int32 nCurrentLayer;
     bool bDefaultRecoveryApproved = false;
 
+    Logger logger(mContext);
     do try // loop to allow recovery from merge failures
     {
         MergedComponentData aComponentData;
@@ -473,6 +500,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
         if (nNumUserLayers > 0)
         {
             //Merge User layer
+            logger.finer("... merging user layer", "getNodeData()","configmgr::Backend");
             merge(aComponentData,
                     layers.getConstArray()+nNumDefaultLayers, nNumUserLayers,
                     aRequest.getOptions(), aTemplateProvider );
@@ -480,6 +508,8 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
             // mark this one as done
             ++nCurrentLayer;
         }
+
+        logger.finer("Reading component data finished successfully", "getNodeData()","configmgr::Backend");
 
         ComponentInstance retCode(aComponentData.extractSchemaTree(),
                                 aComponentData.extractTemplatesTree(),
@@ -506,22 +536,25 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
 
         if (!bDefaultRecoveryApproved || bUserLayerBroken)
         {
+            logger.info("Parsing data layer failed. Requesting approval for automated recovery", "getNodeData()","configmgr::Backend");
             uno::Any theError = cppu::getCaughtException();
             if (!approveRecovery(theError,xBrokenLayer,bUserLayerBroken))
                 cppu::throwException( theError );
         }
+
         // now do the recovery
         discardLayer(layers,nCurrentLayer);
         if (bUserLayerBroken)
         {
+            logger.info("Recovering from broken user data layer - discarding the data", "getNodeData()","configmgr::Backend");
             removeLayerData(xBrokenLayer);
         }
         else
         {
+            logger.info("Recovering from broken default layer - skipping", "getNodeData()","configmgr::Backend");
             bDefaultRecoveryApproved = true;
             --nNumDefaultLayers;
         }
-
     }
     while (true);
 }
@@ -574,7 +607,9 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
         sMessage.append(component);
         sMessage.appendAscii("\" contains no default data. ");
 
-        throw com::sun::star::container::NoSuchElementException(sMessage.makeStringAndClear(),mBackend);
+        OUString const sMsg = sMessage.makeStringAndClear();
+        Logger(mContext).finer(sMsg,"getDefaultData()","configmgr::BackendAccess");
+        throw com::sun::star::container::NoSuchElementException(sMsg,mBackend);
     }
 
     std::auto_ptr<ISubtree> aResultTree = aComponentData.extractSchemaTree();
@@ -592,13 +627,16 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
                 sMessage.append(aPath.toString());
                 sMessage.appendAscii("\" does not exist in the default data. ");
 
-                throw com::sun::star::container::NoSuchElementException(sMessage.makeStringAndClear(),mBackend);
+                OUString const sMsg = sMessage.makeStringAndClear();
+                Logger(mContext).finest(sMsg,"getDefaultData()","configmgr::BackendAccess");
+                throw com::sun::star::container::NoSuchElementException(sMsg,mBackend);
             }
 
             ISubtree *pChildAsSubtree = aChild->asISubtree();
             if(pChildAsSubtree == NULL)
             {
                 OUString sMsg = OUString::createFromAscii("BackendAccess::getDefaultData - Node Expected, Found Property: ").concat(it->getName().toString());
+                Logger(mContext).finer(sMsg,"getDefaultData()","configmgr::BackendAccess");
                 throw MalformedDataException(sMsg, mBackend, uno::Any());
             }
             aResultTree.reset(pChildAsSubtree);
@@ -624,7 +662,7 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
     MergedComponentData aComponentData;
 
     {
-        SchemaBuilder *schemaBuilder = new SchemaBuilder( component, aComponentData ) ;
+        SchemaBuilder *schemaBuilder = new SchemaBuilder( mContext, component, aComponentData ) ;
         uno::Reference<backenduno::XSchemaHandler> handler = schemaBuilder ;
 
         uno::Reference<backenduno::XSchema> schema = this->getSchema(component);
@@ -664,7 +702,9 @@ uno::Reference< backenduno::XSchema > BackendAccess::getSchema(const OUString& a
         sMessage.append(aComponent);
         sMessage.appendAscii("\" is unknown. [No schema available]");
 
-        throw com::sun::star::container::NoSuchElementException(sMessage.makeStringAndClear(),xSchemaBackend);
+        OUString const sMsg = sMessage.makeStringAndClear();
+        Logger(mContext).warning(sMsg,"getSchema()","configmgr::BackendAccess");
+        throw com::sun::star::container::NoSuchElementException(sMsg,xSchemaBackend);
     }
 
     return xSchema;
