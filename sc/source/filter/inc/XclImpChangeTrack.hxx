@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ private:
     inline sal_Bool             ReadBool();
     inline void                 Read2DAddress( ScAddress& rAddress );
     inline void                 Read2DRange( ScRange& rRange );
-    sal_uInt16                  ReadTabNum();
+    SCTAB                       ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
 
     inline void                 ReadString( String& rString );
@@ -174,7 +174,7 @@ public:
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
                                 // ( called by XclImpChTrFmlConverter::Read3DTabReference() )
-    sal_Bool                    Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16& rLastTab );
+    sal_Bool                    Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab );
 
     void                        Apply();
 };
@@ -200,16 +200,16 @@ inline sal_Bool XclImpChangeTrack::ReadBool()
 
 inline void XclImpChangeTrack::Read2DAddress( ScAddress& rAddress )
 {
-    rAddress.SetRow( pStrm->ReaduInt16() );
-    rAddress.SetCol( pStrm->ReaduInt16() );
+    rAddress.SetRow( static_cast<SCROW>(pStrm->ReaduInt16()) );
+    rAddress.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
 }
 
 inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
 {
-    rRange.aStart.SetRow( pStrm->ReaduInt16() );
-    rRange.aEnd.SetRow( pStrm->ReaduInt16() );
-    rRange.aStart.SetCol( pStrm->ReaduInt16() );
-    rRange.aEnd.SetCol( pStrm->ReaduInt16() );
+    rRange.aStart.SetRow( static_cast<SCROW>(pStrm->ReaduInt16()) );
+    rRange.aEnd.SetRow( static_cast<SCROW>(pStrm->ReaduInt16()) );
+    rRange.aStart.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
+    rRange.aEnd.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
 }
 
 inline void XclImpChangeTrack::ReadString( String& rString )
@@ -230,7 +230,7 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 private:
     XclImpChangeTrack&          rChangeTrack;
 
-    virtual BOOL                Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
+    virtual BOOL                Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab );
 
 public:
     inline                      XclImpChTrFmlConverter(
