@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:15:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2378,8 +2378,9 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
         pAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
         pAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
-        if(pOpt->IsReadonly())
-            pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
+        // --> FME 2004-06-29 #114856# Formular view
+        // Always set this option, not only if document is read-only:
+        pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
 }
 
