@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:29:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ namespace dbaui
         virtual void KeyInput( const KeyEvent& rKEvt );
     };
 
-    typedef ::std::pair<USHORT,USHORT>                          TResourcePair;
+    typedef ::std::pair< ::rtl::OUString,USHORT>                TResourcePair;
     typedef ::std::vector< ::std::pair<String, TResourcePair> > TResourceStruct;
 
     class OTasksWindow : public Window
@@ -142,10 +142,10 @@ namespace dbaui
         /** fills the Creation listbox with the necessary strings and images
             @param  _rList
                 The strings and the id of the images and help texts to add.
-            @param  _nImageListId
-                The resource id for the imagelist which contains the images
+            @param  _nImageType
+                The image type.
         */
-        void fillCreationNew(const TResourceStruct& _rList, USHORT _nImageListId);
+        void fillCreationNew(const TResourceStruct& _rList, short _nImageType);
 
         void Clear();
         void setHelpText(USHORT _nId);
@@ -184,6 +184,7 @@ namespace dbaui
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
 
+        OAppBorderWindow* getBorderWin() const { return m_pBorderWin;}
         sal_Bool isCutAllowed() ;
         sal_Bool isCopyAllowed()    ;
         sal_Bool isPasteAllowed();
@@ -336,7 +337,11 @@ namespace dbaui
 
         SvLBoxEntry* getEntry( const Point& _aPoint ) const;
 
-        void onCreationClick( sal_uInt16 _nId);
+        /** a command entry was selected
+            @param  _sCommand
+                The command to be executed.
+        */
+        void onCreationClick( const ::rtl::OUString& _sCommand);
 
         /** disable the controls
             @param  _bDisable

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:30:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@ namespace dbaui
         OApplicationDetailView*             m_pDetailView;
         OApplicationView*                   m_pView;
 
+        void ImplInitSettings();
+    protected:
+        // Window
+        virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
         OAppBorderWindow(OApplicationView* _pParent);
         virtual ~OAppBorderWindow();
@@ -154,7 +158,7 @@ namespace dbaui
 
         IClipboardTest* getActiveChild() const;
 
-
+        void ImplInitSettings();
     protected:
 
 
@@ -164,6 +168,8 @@ namespace dbaui
         // OEventListenerAdapter
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
 
+        // Window
+        virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
         OApplicationView(   Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
@@ -178,7 +184,6 @@ namespace dbaui
 
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
-        virtual void DataChanged( const DataChangedEvent& rDCEvt );
         virtual void GetFocus();
 
         inline IApplicationElementNotification*         getElementNotification() const { return m_pElementNotification; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppTitleWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:30:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@ namespace dbaui
         FixedText   m_aTitle;
         Window*     m_pChild;
         BOOL        m_bShift;
+        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    protected:
+        virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
         OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL _bShift = TRUE);
         virtual ~OTitleWindow();

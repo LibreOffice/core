@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:30:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,6 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent) : Window(_pParent
     ,m_pView(_pParent)
     ,m_pPanel(NULL)
 {
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetBorderStyle(WINDOW_BORDER_MONO);
 
     m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
@@ -188,6 +185,8 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent) : Window(_pParent
 
     m_pDetailView = new OApplicationDetailView(this);
     m_pDetailView->Show();
+
+    ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
 OAppBorderWindow::~OAppBorderWindow()
@@ -240,6 +239,25 @@ void OAppBorderWindow::Resize()
         m_pDetailView->SetPosSizePixel(Point(nX + aFLSize.Width(),0),Size(nOutputWidth - nX - aFLSize.Width(),nOutputHeight));
 }
 // -----------------------------------------------------------------------------
+void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        ImplInitSettings();
+        Invalidate();
+    }
+}
+// -----------------------------------------------------------------------------
+void OAppBorderWindow::ImplInitSettings()
+{
+    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+}
+// -----------------------------------------------------------------------------
 OApplicationView*       OAppBorderWindow::getView()         const { return m_pView; }
 OApplicationSwapWindow* OAppBorderWindow::getPanel()        const { return static_cast<OApplicationSwapWindow*>(m_pPanel->getChildWindow()); }
 OApplicationDetailView* OAppBorderWindow::getDetailView()   const { return m_pDetailView; }
@@ -266,10 +284,8 @@ OApplicationView::OApplicationView( Window* pParent
     ,m_aStatusBar(this,WinBits( WB_LEFT | WB_3DLOOK ))
     ,m_xController(_xController)
 {
-    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     DBG_CTOR(OApplicationView,NULL);
+
     try
     {
         m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
@@ -282,11 +298,9 @@ OApplicationView::OApplicationView( Window* pParent
     m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 
-    m_aStatusBar.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    m_aStatusBar.SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    m_aStatusBar.SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     m_aStatusBar.SetHelpId(HID_APP_STATUS_BAR);
 
+    ImplInitSettings();
 
     sal_Int32 nXSize = LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width();
     USHORT pItems [] = {
@@ -326,9 +340,8 @@ void OApplicationView::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-        SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-        m_aStatusBar.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+        ImplInitSettings();
+        Invalidate();
     }
 }
 //------------------------------------------------------------------------------
@@ -336,6 +349,11 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
 {
     if ( m_pWin && !_rPlayground.IsEmpty() )
     {
+        Size aFLSize = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+        _rPlayground.Move( aFLSize.A(),aFLSize.B() );
+        Size aOldSize = _rPlayground.GetSize();
+        _rPlayground.SetSize( Size(aOldSize.A() - 2*aFLSize.A(), aOldSize.B() - 2*aFLSize.B()) );
+
         Size aStBar = m_aStatusBar.CalcWindowSizePixel();
         _rPlayground.Bottom()   = _rPlayground.Bottom() - 2 - aStBar.Height();
         m_pWin->SetPosSizePixel(_rPlayground.TopLeft() , _rPlayground.GetSize() );
@@ -703,3 +721,13 @@ void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& _r
         showPreview(NULL);
 }
 // -----------------------------------------------------------------------------
+void OApplicationView::ImplInitSettings()
+{
+    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    m_aStatusBar.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    m_aStatusBar.SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    m_aStatusBar.SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+}
+//-----------------------------------------------------------------------------

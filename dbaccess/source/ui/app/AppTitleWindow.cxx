@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppTitleWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:30:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,15 +80,12 @@ OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL
 , m_bShift(_bShift)
 {
     setTitle(_nTitleId);
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    SetBorderStyle(WINDOW_BORDER_MONO);
+    ImplInitSettings( sal_True, sal_True, sal_True );
+
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
     for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
-        Font aFont = pWindows[i]->GetFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        pWindows[i]->SetFont(aFont);
-        pWindows[i]->SetTextColor( rSettings.GetLightColor() );
-        pWindows[i]->SetBackground( Wallpaper( rSettings.GetShadowColor() ) );
         pWindows[i]->Show();
     }
 }
@@ -107,6 +104,7 @@ void OTitleWindow::setChildWindow(Window* _pChild)
 {
     m_pChild = _pChild;
 }
+#define SPACE_BORDER    1
 // -----------------------------------------------------------------------------
 void OTitleWindow::Resize()
 {
@@ -121,16 +119,16 @@ void OTitleWindow::Resize()
     sal_Int32 nYOffset = aTextSize.Height();
     sal_Int32 nHeight = GetTextHeight() + 2*nYOffset;
 
-    m_aSpace1.SetPosSizePixel(  Point(0, 0 ),
-                                Size(nXOffset, nHeight ) );
-    m_aSpace2.SetPosSizePixel(  Point(nXOffset, 0 ),
-                                Size(nOutputWidth - nXOffset, nYOffset) );
-    m_aTitle.SetPosSizePixel(   Point(nXOffset, nYOffset ),
-                                Size(nOutputWidth - nXOffset, nHeight - nYOffset ) );
+    m_aSpace1.SetPosSizePixel(  Point(SPACE_BORDER, SPACE_BORDER ),
+                                Size(nXOffset , nHeight - SPACE_BORDER) );
+    m_aSpace2.SetPosSizePixel(  Point(nXOffset + SPACE_BORDER, SPACE_BORDER ),
+                                Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nYOffset) );
+    m_aTitle.SetPosSizePixel(   Point(nXOffset + SPACE_BORDER, nYOffset + SPACE_BORDER),
+                                Size(nOutputWidth - nXOffset - 2*SPACE_BORDER, nHeight - nYOffset - SPACE_BORDER) );
     if ( m_pChild )
     {
-        m_pChild->SetPosSizePixel(  Point(m_bShift ? nXOffset : sal_Int32(0), nHeight + nXOffset ),
-                                    Size(nOutputWidth - ( m_bShift ? 2*nXOffset : sal_Int32(0) ), nOutputHeight - nHeight - 2*nXOffset) );
+        m_pChild->SetPosSizePixel(  Point(m_bShift ? (nXOffset+SPACE_BORDER) : sal_Int32(SPACE_BORDER), nHeight + nXOffset + SPACE_BORDER),
+                                    Size(nOutputWidth - ( m_bShift ? (2*nXOffset - 2*SPACE_BORDER) : sal_Int32(SPACE_BORDER) ), nOutputHeight - nHeight - 2*nXOffset - 2*SPACE_BORDER) );
     }
 }
 // -----------------------------------------------------------------------------
@@ -154,6 +152,37 @@ long OTitleWindow::GetWidthPixel() const
     sal_Int32 nWidth = GetTextWidth(m_aTitle.GetText());
 
     return nWidth;
+}
+// -----------------------------------------------------------------------
+void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        ImplInitSettings( sal_True, sal_True, sal_True );
+        Invalidate();
+    }
+}
+//-----------------------------------------------------------------------------
+void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+{
+    AllSettings aAllSettings = GetSettings();
+    StyleSettings aStyle = aAllSettings.GetStyleSettings();
+    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
+    aAllSettings.SetStyleSettings(aStyle);
+    SetSettings(aAllSettings);
+
+    Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
+    for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    {
+        Font aFont = pWindows[i]->GetFont();
+        aFont.SetWeight(WEIGHT_BOLD);
+        pWindows[i]->SetFont(aFont);
+        pWindows[i]->SetTextColor( aStyle.GetLightColor() );
+        pWindows[i]->SetBackground( Wallpaper( aStyle.GetShadowColor() ) );
+    }
 }
 // .............................................................
 } // namespace dbaui
