@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:52:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #include <algorithm>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 /* Implementation of EventMultiplexer class */
@@ -171,10 +171,10 @@ namespace presentation
             if( !bEmptyContainer )
             {
                 // precond: rHandlerContainer.size() is now at least 2,
-                // which is ensures by the rHandlerContainer.empty()
+                // which is ensured by the rHandlerContainer.empty()
                 // check above.
 
-                // element was insert, but now we have to keep the
+                // element was inserted, but now we have to keep the
                 // entries sorted
                 ::std::inplace_merge( rHandlerContainer.begin(),
                                       rHandlerContainer.end()-1,
@@ -195,25 +195,37 @@ namespace presentation
 
             if( !maNextEffectHandlers.empty() )
             {
-                // still handlers left, schedule next timeout event
+                // still handlers left, schedule next timeout
+                // event. Will also set mbIsTickEventOn back to true
                 scheduleTick();
             }
         }
 
         void EventMultiplexer::Listener::scheduleTick()
         {
+            EventSharedPtr pEvent( makeDelay( ::boost::bind( &EventMultiplexer::Listener::tick,
+                                                             ::boost::ref( *this ) ),
+                                              mnTimeout ) );
+
+            // store weak reference to generated event, to notice when
+            // the event queue gets cleansed (we then have to
+            // regenerate the tick event!)
+            mpTickEvent = pEvent;
+
             // enabled auto mode: simply schedule a timeout event,
             // which will eventually call our tick() method
-            mrEventQueue.addEvent(
-                makeDelay( ::boost::bind( &EventMultiplexer::Listener::tick,
-                                          ::boost::ref( *this ) ),
-                           mnTimeout ) );
+            mrEventQueue.addEvent( pEvent );
         }
 
         void EventMultiplexer::Listener::handleTicks()
         {
             if( !mbIsAutoMode )
                 return; // nothing to do, don't need no ticks
+
+            EventSharedPtr pTickEvent( mpTickEvent.lock() );
+            if( pTickEvent )
+                return; // nothing to do, there's already a tick
+                        // pending
 
             // schedule initial tick (which reschedules itself
             // after that, all by itself)
@@ -272,6 +284,16 @@ namespace presentation
         void EventMultiplexer::setVolatileMouseCursor( sal_Int16 nCursor )
         {
             mpListener->setVolatileMouseCursor( nCursor );
+        }
+
+        void EventMultiplexer::setLayerManager( const LayerManagerSharedPtr& rMgr )
+        {
+            mpListener->setLayerManager( rMgr );
+        }
+
+        void EventMultiplexer::updateScreenContent( bool bForceUpdate )
+        {
+            mpListener->updateScreenContent( bForceUpdate );
         }
 
         void EventMultiplexer::setAutomaticMode( bool bIsAuto )
@@ -471,6 +493,7 @@ namespace presentation
             maMouseDoubleClickHandlers(),
             maMouseMoveHandlers(),
             mnTimeout( 0.0 ),
+            mpTickEvent(),
             mnMouseCursor( awt::SystemPointer::ARROW ),
             mnVolatileMouseCursor( -1 ),
             mnLastVolatileMouseCursor( mnMouseCursor ),
@@ -577,6 +600,7 @@ namespace presentation
             maMouseClickHandlers.clear();
             maMouseDoubleClickHandlers.clear();
             maMouseMoveHandlers.clear();
+            mpLayerManager.reset();
         }
 
         void EventMultiplexer::Listener::setMouseCursor( sal_Int16 nCursor )
@@ -599,6 +623,35 @@ namespace presentation
             // unwanted).
             if( mnVolatileMouseCursor == -1 )
                 mnVolatileMouseCursor = nCursor;
+        }
+
+        void EventMultiplexer::Listener::setLayerManager( const LayerManagerSharedPtr& rMgr )
+        {
+            mpLayerManager = rMgr;
+        }
+
+        void EventMultiplexer::Listener::updateScreenContent( bool bForceUpdate )
+        {
+            // perform screen update (either if we're forced to do it,
+            // or if the layer manager signals that it needs one).
+            if( bForceUpdate ||
+                (mpLayerManager.get() &&
+                 mpLayerManager->isUpdatePending() ) )
+            {
+                // call update() on the registered
+                // LayerManager. This will only update the
+                // backbuffer, not flush anything to screen
+                if( mpLayerManager.get() )
+                    mpLayerManager->update();
+
+                // call updateScreen() on all registered views (which
+                // will copy the backbuffers to the front). Do NOT use
+                // LayerManager::updateScreen(), we might need screen
+                // updates independent from a valid LayerManager!
+                ::std::for_each( maViews.begin(),
+                                 maViews.end(),
+                                 ::boost::mem_fn( &View::updateScreen ) );
+            }
         }
 
         void EventMultiplexer::Listener::setAutomaticMode( bool bIsAuto )
@@ -639,6 +692,9 @@ namespace presentation
         {
             addHandler( maNextEffectHandlers,
                         rHandler );
+
+            // Enable tick events, if not done already
+            handleTicks();
         }
 
         void EventMultiplexer::Listener::removeNextEffectHandler( const EventHandlerSharedPtr& rHandler )
