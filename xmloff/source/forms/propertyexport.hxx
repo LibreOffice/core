@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 14:33:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace xmloff
         <p>(The name is somewhat misleading. It's not only a PropertyExport, but in real a ElementExport.
         Anyway.)</p>
     */
-    class OPropertyExport : public OAttributeMetaData
+    class OPropertyExport
     {
     private:
         DECLARE_STL_STDKEY_SET(::rtl::OUString, StringSet);
