@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filnot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:54:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,7 @@
 #ifndef _FILNOT_HXX_
 #define _FILNOT_HXX_
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
