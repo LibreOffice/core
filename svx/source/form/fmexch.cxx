@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 06:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,16 +140,12 @@ namespace svxform
     //--------------------------------------------------------------------
     OControlExchange::OControlExchange( )
         :m_pFocusEntry(NULL)
-        ,m_pShell(NULL)
-        ,m_pPage(NULL)
     {
     }
 
     //--------------------------------------------------------------------
     OControlExchange::OControlExchange( SvLBoxEntry* _pFocusEntry )
         :m_pFocusEntry(_pFocusEntry)
-        ,m_pShell(NULL)
-        ,m_pPage(NULL)
     {
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:05:25 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 06:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 class FmFormShell;
@@ -167,9 +170,12 @@ namespace svxform
         FmControlPaths      m_aControlPaths;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                             m_aHiddenControlModels;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                            m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
+                                            // this uniquely identifies the page and the document
+
         SvLBoxEntry*        m_pFocusEntry;
-        FmFormShell*        m_pShell;
-        FmFormPage*         m_pPage;
 
     public:
         OControlExchange( );
@@ -178,7 +184,9 @@ namespace svxform
         void addSelectedEntry( SvLBoxEntry* _pEntry );
         void setFocusEntry( SvLBoxEntry* _pFocusEntry );
 
-        void setShellAndPage( FmFormShell* _pShell, FmFormPage* _pPage ) { m_pShell = _pShell; m_pPage = _pPage; }
+        void setFormsRoot(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxFormsRoot
+            ) { m_xFormsRoot = _rxFormsRoot; }
 
         void buildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
             // baut aus m_aSelectedEntries m_aControlPaths auf
@@ -206,8 +214,8 @@ namespace svxform
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
-        FmFormShell*            getShell() const { return m_pShell; }
-        FmFormPage*             getPage() const { return m_pPage; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                                getFormsRoot() const { return m_xFormsRoot; }
 
     protected:
         virtual void                AddSupportedFormats();
