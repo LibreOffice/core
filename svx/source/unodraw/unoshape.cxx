@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-05 14:31:31 $
+ *  last change: $Author: aw $ $Date: 2001-02-07 10:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,9 +984,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
                 const String aEmpty;
                 const XPolygon aPoly;
                 if( nWID == XATTR_LINEEND )
-                    rSet.Put( XLineStartItem( aEmpty, aPoly ) );
-                else
                     rSet.Put( XLineEndItem( aEmpty, aPoly ) );
+                else
+                    rSet.Put( XLineStartItem( aEmpty, aPoly ) );
 
                 return sal_True;
             }
