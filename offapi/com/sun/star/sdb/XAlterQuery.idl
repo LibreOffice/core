@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAlterQuery.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 // DocMerge from xml: interface com::sun::star::sdb::XAlterQuery
 /** is used to alter the command of a query.
  */
-interface XAlterQuery: com::sun::star::uno::XInterface
+published interface XAlterQuery: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XAlterQuery::alterCommand
