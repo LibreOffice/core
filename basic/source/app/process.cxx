@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 11:01:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 Process::Process()
 : bWasGPF( FALSE )
 , pArgumentList( NULL )
+, pEnvList( NULL )
 , pProcess( NULL )
 , bHasBeenStarted( FALSE )
 {
@@ -105,7 +106,8 @@ Process::Process()
 // Destruktor
 Process::~Process()
 {
-//  delete pArgumentList;
+//    delete pArgumentList;
+//    delete pEnvList;
     delete pProcess;
 }
 
@@ -144,14 +146,15 @@ long Process::ImplGetExitCode()
 ////////////////////////////////////////////////////////////////////////////
 
 // Die Methoden:
-void Process::SetImage( const String &aAppPath, const String &aAppParams )
+void Process::SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv )
 { // Imagedatei des Executables
     if ( pProcess && ImplIsRunning() )
         SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
     else
     {
-        delete pArgumentList;
-        delete pProcess;
+        delete pArgumentList; pArgumentList = NULL;
+        delete pEnvList; pEnvList = NULL;
+        delete pProcess; pProcess = NULL;
 
         xub_StrLen i, nCount = aAppParams.GetQuotedTokenCount( CUniString("\"\"" ), ' ' );
         ::rtl::OUString *pParamList = new ::rtl::OUString[nCount];
@@ -167,12 +170,36 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams )
             }
         }
         pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
+
+
+        ::rtl::OUString *pEnvArray = NULL;
+        if ( pEnv )
+        {
+
+            nCount = pEnv->size();
+            pEnvArray = new ::rtl::OUString[nCount];
+
+            xub_StrLen nEnvCount = 0;
+            Environment::const_iterator aIter = pEnv->begin();
+            while ( aIter != pEnv->end() )
+            {
+                ::rtl::OUString aTemp = ::rtl::OUString( (*aIter).first );
+                aTemp += ::rtl::OUString::createFromAscii( "=" );
+                aTemp += ::rtl::OUString( (*aIter).second );
+                pEnvArray[nEnvCount] = aTemp;
+                nEnvCount++;
+                aIter++;
+            }
+            pEnvList = new NAMESPACE_VOS(OEnvironment)( pEnvArray, nEnvCount );
+        }
+
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
         bHasBeenStarted = FALSE;
 
         delete [] pParamList;
+        delete [] pEnvArray;
     }
 }
 
@@ -188,11 +215,23 @@ BOOL Process::Start()
         try
         {
 #endif
-            bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                        ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
-                        /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
-                        /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
-                        *pArgumentList ) == NAMESPACE_VOS(OProcess)::E_None;
+            if ( pEnvList )
+            {
+                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
+                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
+                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
+                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
+                            *pArgumentList,
+                            *pEnvList ) == NAMESPACE_VOS(OProcess)::E_None;
+            }
+            else
+            {
+                bSuccess = pProcess->execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
+                            ( NAMESPACE_VOS(OProcess)::TOption_SearchPath
+                            /*| NAMESPACE_VOS(OProcess)::TOption_Detached*/
+                            /*| NAMESPACE_VOS(OProcess)::TOption_Wait*/ ),
+                            *pArgumentList ) == NAMESPACE_VOS(OProcess)::E_None;
+            }
 #ifdef WNT
         }
         catch( ... )
