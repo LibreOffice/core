@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 14:07:07 $
+ *  last change: $Author: as $ $Date: 2000-11-24 15:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         if ( SUBSTITUTE_LANGID == aSubString )
         {
                nReplaceLength = REPLACELENGTH_LANGID;
-               aReplacement = OUString::valueOf( (sal_uInt16)m_eLanguageType );
+               aReplacement = OUString::valueOf( (sal_Int32)m_eLanguageType );
         }
         else
 /*
