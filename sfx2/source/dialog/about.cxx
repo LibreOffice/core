@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 13:25:25 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,15 +283,22 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     SetHelpId( SID_ABOUT );
 
     //#112429# replace occurences of "StarOffice" in the "StarSuite" version
+    String sCopyright( aCopyrightText.GetText() );
     if(sProduct.equals(rtl::OUString::createFromAscii("StarSuite")))
     {
-        String sCopyright(aCopyrightText.GetText());
         String sSO(String::CreateFromAscii("StarOffice"));
         sCopyright.SearchAndReplaceAll(sSO, sProduct);
-        aCopyrightText.SetText(sCopyright);
     }
 
-
+#if SUPD == 680
+    String sNewYear( DEFINE_CONST_UNICODE("2005") );
+    xub_StrLen nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2002"), sNewYear );
+    if ( STRING_NOTFOUND == nIdx )
+        nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2003"), sNewYear );
+    if ( STRING_NOTFOUND == nIdx )
+        nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2004"), sNewYear );
+#endif
+    aCopyrightText.SetText( sCopyright );
 }
 
 // -----------------------------------------------------------------------
@@ -447,7 +454,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
         DrawText( aPnt, aDevVersionStr );
 
     nPos += aSize.Height() + 3;
-    USHORT nDevCnt = aDeveloperAry.Count();
+    USHORT nDevCnt = static_cast< USHORT >( aDeveloperAry.Count() );
     USHORT nCount = nDevCnt;
 
 #if SUPD == 645
