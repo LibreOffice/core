@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:57:09 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 12:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,12 @@ inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 //------------------------------------------------------------------------
 
-SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScStyleObj, "ScStyleObj", "stardiv.unknown" )
+#define SCSTYLE_SERVICE         "com.sun.star.style.Style"
+#define SCCELLSTYLE_SERVICE     "com.sun.star.style.CellStyle"
+#define SCPAGESTYLE_SERVICE     "com.sun.star.style.PageStyle"
+
+SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
+SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
 
 //------------------------------------------------------------------------
 
@@ -505,7 +508,10 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference< container::XNameContainer >  xFamily = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xFamily;
+    if (xFamily.is())
+        aAny <<= xFamily;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -530,7 +536,10 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     uno::Reference< container::XNameContainer >  xFamily = GetObjectByName_Impl(aName);
     uno::Any aAny;
-    aAny <<= xFamily;
+    if (xFamily.is())
+        aAny <<= xFamily;
+    else
+        throw container::NoSuchElementException();
     return aAny;
 }
 
@@ -673,8 +682,17 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const 
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
                 pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
+                bDone = sal_True;
             }
+            else
+                throw container::ElementExistException();
         }
+    }
+
+    if (!bDone)
+    {
+        //  other errors are handled above
+        throw lang::IllegalArgumentException();
     }
 }
 
@@ -693,6 +711,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    BOOL bFound = FALSE;
     if ( pDocShell )
     {
         String aString = ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily );
@@ -706,6 +725,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
         SfxStyleSheetBase* pStyle = pStylePool->Find( aString, eFamily );
         if (pStyle)
         {
+            bFound = TRUE;
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
@@ -736,6 +756,9 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
             }
         }
     }
+
+    if (!bFound)
+        throw container::NoSuchElementException();
 }
 
 // container::XIndexAccess
@@ -761,7 +784,10 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference< style::XStyle >  xObj = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xObj;
+    if (xObj.is())
+        aAny <<= xObj;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -787,7 +813,10 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const rtl::OUString& aName )
     uno::Reference< style::XStyle > xObj =
         GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ) );
     uno::Any aAny;
-    aAny <<= xObj;
+    if (xObj.is())
+        aAny <<= xObj;
+    else
+        throw container::NoSuchElementException();
     return aAny;
 }
 
@@ -1505,8 +1534,35 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScStyleObj )
 
+// lang::XServiceInfo
+
+rtl::OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "ScStyleObj" );
+}
+
+sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    BOOL bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    String aServiceStr( rServiceName );
+    return aServiceStr.EqualsAscii( SCSTYLE_SERVICE ) ||
+           aServiceStr.EqualsAscii( bPage ? SCPAGESTYLE_SERVICE
+                                          : SCCELLSTYLE_SERVICE );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    BOOL bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    uno::Sequence<rtl::OUString> aRet(2);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString::createFromAscii( SCSTYLE_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( bPage ? SCPAGESTYLE_SERVICE
+                                                      : SCCELLSTYLE_SERVICE );
+    return aRet;
+}
+
 //------------------------------------------------------------------------
-
-
 
 
