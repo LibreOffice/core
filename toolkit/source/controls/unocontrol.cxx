@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:07:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,17 +270,16 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
         Reference< XWindowPeer >    xCurrentPeer = getPeer();
         setPeer( NULL );
 
-        // Ueber queryInterface, wegen Aggregation...
-        Any aAny = OWeakAggObject::queryInterface( ::getCppuType((const Reference< XControl>*)0) );
+        // queryInterface ourself, to allow aggregation
         Reference< XControl > xMe;
-        aAny >>= xMe;
+        OWeakAggObject::queryInterface( ::getCppuType( &xMe ) ) >>= xMe;
 
         WorkWindow* pWW;
         {
         osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
         pWW = lcl_GetDefaultWindow();
         }
-        xMe->createPeer( Reference< XToolkit >(), pWW->GetComponentInterface( sal_True ) );
+        xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
         xP = getPeer();
         setPeer( xCurrentPeer );
 
@@ -400,6 +399,11 @@ void UnoControl::removeEventListener( const Reference< XEventListener >& rxListe
     maDisposeListeners.removeInterface( rxListener );
 }
 
+sal_Bool UnoControl::requiresNewPeer( const ::rtl::OUString& /* _rPropertyName */ ) const
+{
+    return sal_False;
+}
+
 // XPropertiesChangeListener
 void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 {
@@ -431,23 +435,27 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
             if ( bOwnModel )
             {
                 sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
-                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
-                {
-                    // Im Design-Mode koennen sich Props aendern, die eine
-                    // Neuerzeugung der Peer erfordern...
-                    if ( ( nPType == BASEPROPERTY_BORDER ) ||
-                            ( nPType == BASEPROPERTY_MULTILINE ) ||
-                            ( nPType == BASEPROPERTY_DROPDOWN ) ||
-                            ( nPType == BASEPROPERTY_HSCROLL ) ||
-                            ( nPType == BASEPROPERTY_VSCROLL ) ||
-                            ( nPType == BASEPROPERTY_ORIENTATION ) ||
-                            ( nPType == BASEPROPERTY_SPIN ) ||
-                            ( nPType == BASEPROPERTY_ALIGN ) )
+                if ( mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
                     {
-                        bNeedNewPeer = sal_True;
+                    // if we're in design mode, then some properties can change which
+                    // require creating a *new* peer (since these properties cannot
+                    // be switched at existing peers)
+                    if ( nPType )
+                        bNeedNewPeer = ( nPType == BASEPROPERTY_BORDER )
+                                    || ( nPType == BASEPROPERTY_MULTILINE )
+                                    || ( nPType == BASEPROPERTY_DROPDOWN )
+                                    || ( nPType == BASEPROPERTY_HSCROLL )
+                                    || ( nPType == BASEPROPERTY_VSCROLL )
+                                    || ( nPType == BASEPROPERTY_ORIENTATION )
+                                    || ( nPType == BASEPROPERTY_SPIN )
+                                    || ( nPType == BASEPROPERTY_ALIGN );
+                    else
+                        bNeedNewPeer = requiresNewPeer( pEvents->PropertyName );
+
+                    if ( bNeedNewPeer )
                         break;
                     }
-                }
+
                 if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
                 {
                     // Properties die von anderen abhaengen erst hinterher einstellen,
