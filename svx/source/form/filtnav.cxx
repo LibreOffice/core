@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 14:19:56 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,13 +388,13 @@ public:
 TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 
 //========================================================================
-class FilterClearingHint : public SfxHint
+class FmFilterClearedHint : public SfxHint
 {
 public:
     TYPEINFO();
-    FilterClearingHint(){}
+    FmFilterClearedHint(){}
 };
-TYPEINIT1( FilterClearingHint, SfxHint );
+TYPEINIT1( FmFilterClearedHint, SfxHint );
 
 //========================================================================
 class FmFilterCurrentChangedHint : public SfxHint
@@ -672,11 +672,6 @@ FmFilterModel::~FmFilterModel()
 //------------------------------------------------------------------------
 void FmFilterModel::Clear()
 {
-    // notify
-    FilterClearingHint aClearedHint;
-    Broadcast( aClearedHint );
-
-    // loose endings
     if (m_pAdapter)
     {
         m_pAdapter->dispose();
@@ -693,6 +688,10 @@ void FmFilterModel::Clear()
         delete (*i);
 
     m_aChilds.clear();
+
+    // UI benachrichtigen
+    FmFilterClearedHint aClearedHint;
+    Broadcast( aClearedHint );
 }
 
 //------------------------------------------------------------------------
@@ -1304,16 +1303,12 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
 
     SetDragDropMode(0xFFFF);
 
-    m_aSelectTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnSelect));
     m_aDropActionTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnDropActionTimer));
 }
 
 //------------------------------------------------------------------------
 FmFilterNavigator::~FmFilterNavigator()
 {
-    if (m_aSelectTimer.IsActive())
-        m_aSelectTimer.Stop();
-
     EndListening( *m_pModel );
     delete m_pModel;
 }
@@ -1321,9 +1316,6 @@ FmFilterNavigator::~FmFilterNavigator()
 //------------------------------------------------------------------------
 void FmFilterNavigator::Clear()
 {
-    if (m_aSelectTimer.IsActive())
-        m_aSelectTimer.Stop();
-
     m_pModel->Clear();
 }
 
@@ -1332,12 +1324,6 @@ void FmFilterNavigator::Update(const Reference< ::com::sun::star::container::XIn
 {
     if (xCurrent == m_pModel->GetCurrentController())
         return;
-
-    // stop the selection timer
-    // if a new entry will be selected during the lines below, the timer will be started, again
-    // 21.01.2002 - 96721 - fs@openoffice.org
-    if (m_aSelectTimer.IsActive())
-        m_aSelectTimer.Stop();
 
     m_pModel->Update(xControllers, xCurrent);
 
@@ -1398,12 +1384,13 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
         if (m_pModel->ValidateText((FmFilterItem*)pEntry->GetUserData(), aText, aErrorMsg))
         {
             GrabFocus();
-            // this will set the text at the FmFilterItem, as well as update any filter controls
-            // which are connected to this particular entry
-            m_pModel->SetText( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
+            m_pModel->SetText((FmFilterItem*)pEntry->GetUserData(), aText);
+            SetCursor(pEntry, sal_True);
+            SetEntryText(pEntry, aText);
 
-            SetCursor( pEntry, sal_True );
-            SetEntryText( pEntry, aText );
+            // settting the text asynchron
+            sal_uInt32 nEvent;
+            PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnEdited), pEntry);
         }
         else
         {
@@ -1421,27 +1408,18 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
+IMPL_LINK( FmFilterNavigator, OnEdited, SvLBoxEntry*, pEntry )
 {
-    // now remove the entry
-    m_pModel->Remove((FmFilterData*) pEntry->GetUserData());
+    // invalidate the entry to see the correct text
+    SetEntryText( pEntry, ((FmFilterItem*)pEntry->GetUserData())->GetText());
     return 0L;
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnSelect, void*, EMPTYTAG )
+IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
 {
-    // now activate the controller to be consistent
-    sal_Bool bHadFocus = HasChildPathFocus();
-    Reference< ::com::sun::star::awt::XWindow >  xWindow(m_pModel->GetCurrentController(), UNO_QUERY);
-    if (xWindow.is())
-        xWindow->setFocus();
-    else
-        m_pModel->GetCurrentController()->activateFirst();
-
-    // now grab the focus again
-    if (bHadFocus)
-        GrabFocus();
+    // now remove the entry
+    m_pModel->Remove((FmFilterData*) pEntry->GetUserData());
     return 0L;
 }
 
@@ -1643,10 +1621,6 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     {
         if (bSelect)
         {
-            sal_Bool bSyncController = m_aSelectTimer.IsActive();
-            if (bSyncController)
-                m_aSelectTimer.Stop();
-
             FmFormItem* pFormItem = NULL;
             if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
                 pFormItem = (FmFormItem*)((FmFilterItem*)pEntry->GetUserData())->GetParent()->GetParent();
@@ -1658,18 +1632,12 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
             if (pFormItem)
             {
                 // will the controller be exchanged?
-                bSyncController = bSyncController || (::com::sun::star::form::XFormController*)m_pModel->GetCurrentController().get() != (::com::sun::star::form::XFormController*)pFormItem->GetController().get();
                 if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
                     m_pModel->SetCurrentItems((FmFilterItems*)((FmFilterItem*)pEntry->GetUserData())->GetParent());
                 else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
                     m_pModel->SetCurrentItems((FmFilterItems*)pEntry->GetUserData());
                 else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFormItem))
                     m_pModel->SetCurrentController(((FmFormItem*)pEntry->GetUserData())->GetController());
-            }
-            if (bSyncController)
-            {
-                m_aSelectTimer.SetTimeout(SYNC_DELAY);
-                m_aSelectTimer.Start();
             }
         }
         return sal_True;
@@ -1686,7 +1654,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
         Insert(pHint->GetData(), pHint->GetPos());
     }
-    else if( rHint.ISA(FilterClearingHint) )
+    else if( rHint.ISA(FmFilterClearedHint) )
     {
         SvTreeListBox::Clear();
     }
@@ -2131,13 +2099,6 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 //-----------------------------------------------------------------------
 sal_Bool FmFilterNavigatorWin::Close()
 {
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
-        m_pNavigator->EndEditing();
-
-    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
-        // the EndEditing was vetoed (perhaps of an syntax error or such)
-        return sal_False;
-
     Update( NULL );
     return SfxDockingWindow::Close();
 }

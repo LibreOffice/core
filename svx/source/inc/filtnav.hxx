@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 14:18:51 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 10:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,6 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
 
     FmFilterModel*          m_pModel;
     SvLBoxEntry*            m_pEditingCurrently;
-    Timer                   m_aSelectTimer;
     OFilterExchangeHelper   m_aControlExchange;
 
 
@@ -375,7 +374,7 @@ protected:
     void Remove(FmFilterData* pItem);
 
     DECL_LINK(OnRemove, SvLBoxEntry*);
-    DECL_LINK(OnSelect, void*);
+    DECL_LINK(OnEdited, SvLBoxEntry*);
     DECL_LINK(OnDropActionTimer, void*);
 
 private:
