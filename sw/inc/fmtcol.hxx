@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:31:55 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _FORMAT_HXX
 #include <format.hxx>
 #endif
@@ -209,7 +212,7 @@ enum Master_CollConditions
 };
 
 
-class SwCollCondition : public SwClient
+class SW_DLLPUBLIC SwCollCondition : public SwClient
 {
     ULONG nCondition;
     union
@@ -226,9 +229,14 @@ public:
                     ULONG nSubCond = 0 );
     SwCollCondition( SwTxtFmtColl* pColl, ULONG nMasterCond,
                     const String& rSubExp );
-    SwCollCondition( const SwCollCondition& rCpy );
-
     virtual ~SwCollCondition();
+
+    // @@@ public copy ctor, but no copy assignment?
+    SwCollCondition( const SwCollCondition& rCpy );
+private:
+    // @@@ public copy ctor, but no copy assignment?
+    SwCollCondition & operator= (const SwCollCondition &);
+public:
 
     int operator==( const SwCollCondition& rCmp ) const;
     int operator!=( const SwCollCondition& rCmp ) const
@@ -247,7 +255,7 @@ public:
 typedef SwCollCondition* SwCollConditionPtr;
 SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0, 5 );
 
-class SwConditionTxtFmtColl : public SwTxtFmtColl
+class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
 {
     friend class SwDoc;
 protected:
