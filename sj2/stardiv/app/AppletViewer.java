@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletViewer.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+ *  last change: $Author: jl $ $Date: 2002-06-07 15:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ public class AppletViewer extends Frame implements Observer {
     public AppletViewer(int x, int y, URL doc, Hashtable atts, PrintStream statusMsgStream) {
 //          resourceViewer = new stardiv.util.ResourceViewer();
 //          resourceViewer.show();
-        System.err.println("#*#*#*:" + sun.awt.ScreenUpdater.updater);
+        //sun.awt.ScreenUpdater does not exist in Java 1.4
+//      System.err.println("#*#*#*:" + sun.awt.ScreenUpdater.updater);
         this.statusMsgStream = statusMsgStream;
         this.atts = atts;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentProxy.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+ *  last change: $Author: jl $ $Date: 2002-06-07 15:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Observer;
 import java.util.Observable;
+import java.util.Iterator;
+import java.io.InputStream;
 
 import java.net.URL;
 
@@ -94,6 +96,22 @@ public class DocumentProxy implements AppletContext, Cachable, Observer, LiveCon
         }
 
         return documentProxy;
+    }
+
+    // AppletContext. This method is new since 1.4. We insert it so as to
+    // have the project buildable
+    public void setStream( String key,InputStream stream)
+        throws java.io.IOException {
+    }
+    // AppletContext. This method is new since 1.4. We insert it so as to
+    // have the project buildable
+    public InputStream getStream( String key) {
+        return null;
+    }
+    // AppletContext. This method is new since 1.4. We insert it so as to
+    // have the project buildable
+    public Iterator getStreamKeys() {
+        return null;
     }
 
 
