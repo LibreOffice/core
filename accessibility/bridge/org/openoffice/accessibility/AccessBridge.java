@@ -54,156 +54,203 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.accessibility;
 
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.awt.XWindow;
-
+import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.*;
 import com.sun.star.uno.*;
-import com.sun.star.comp.loader.FactoryHelper;
 
 import org.openoffice.java.accessibility.*;
 
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.awt.XExtendedToolkit;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.accessibility.Accessible;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 
 public class AccessBridge {
-
     //
     protected static java.util.Hashtable topWindowMap = new java.util.Hashtable();
 
-    protected static java.awt.Window getTopWindow(XAccessible xAccessible) {
-        if (xAccessible != null) {
-            // Toolkit reports the VCL peer windows as toplevels. These have an accessible parent
-            // which represents the native frame window
-            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
-            if ((xAccessibleContext != null) && (xAccessibleContext.getAccessibleIndexInParent() != -1)) {
-                return getTopWindow(xAccessibleContext.getAccessibleParent());
+    private static java.awt.Window getTopWindowImpl(XAccessible xAccessible) {
+        // Because it can not be garantied that
+        // WindowsAccessBridgeAdapter.registerTopWindow() is called
+        // before windowOpened(), we have to make this operation
+        // atomic.
+        synchronized (topWindowMap) {
+            String oid = UnoRuntime.generateOid(xAccessible);
+            java.awt.Window w = (java.awt.Window) topWindowMap.get(oid);
+
+            if (w == null) {
+                w = AccessibleObjectFactory.getTopWindow(xAccessible);
+
+                if (w != null) {
+                    topWindowMap.put(oid, w);
+                }
             }
 
-            // Because it can not garantied that WindowsAccessBridgeAdapter.registerTopWindow()
-            // is called before windowOpened(), we have to make this operation atomic.
-            synchronized (topWindowMap) {
-                String oid = UnoRuntime.generateOid(xAccessible);
-                java.awt.Window w = (java.awt.Window) topWindowMap.get(oid);
-                if (w == null) {
-                    w = AccessibleObjectFactory.getTopWindow(xAccessible);
-                    if (w != null) {
-                        topWindowMap.put(oid, w);
-                    }
+            return w;
+        }
+    }
+
+    protected static java.awt.Window getTopWindow(XAccessible xAccessible) {
+        if (xAccessible != null) {
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+            if (xAccessibleContext != null) {
+
+                // Toolkit reports the VCL peer windows as toplevels. These have an
+                // accessible parent which represents the native frame window
+                switch(xAccessibleContext.getAccessibleRole()) {
+                    case AccessibleRole.ROOT_PANE:
+                    case AccessibleRole.POPUP_MENU:
+                        return getTopWindow(xAccessibleContext.getAccessibleParent());
+
+                    case AccessibleRole.WINDOW:
+                    case AccessibleRole.FRAME:
+                    case AccessibleRole.DIALOG:
+                        return getTopWindowImpl(xAccessible);
+
+                    default:
+                        break;
                 }
-                return w;
             }
         }
+
         return null;
     }
 
-    static public class _AccessBridge implements XTopWindowListener, XInitialization {
-        static final String _serviceName = "com.sun.star.accessibility.AccessBridge";
+    protected static java.awt.Window removeTopWindow(XAccessible xAccessible) {
+        if (xAccessible != null) {
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+            if (xAccessibleContext != null) {
 
-        public _AccessBridge(XComponentContext xComponentContext) {
+                // Toolkit reports the VCL peer windows as toplevels. These have an
+                // accessible parent which represents the native frame window
+                switch(xAccessibleContext.getAccessibleRole()) {
+                    case AccessibleRole.ROOT_PANE:
+                    case AccessibleRole.POPUP_MENU:
+                        return removeTopWindow(xAccessibleContext.getAccessibleParent());
 
-            // Try to initialize the WindowsAccessBridgeAdapter
-            String os = (String) System.getProperty("os.name");
-            if(os.startsWith("Windows")) {
-                WindowsAccessBridgeAdapter.attach(xComponentContext);
-            }
-        }
+                    case AccessibleRole.WINDOW:
+                    case AccessibleRole.FRAME:
+                    case AccessibleRole.DIALOG:
+                        return (java.awt.Window) topWindowMap.remove(UnoRuntime.generateOid(xAccessible));
 
-        /*
-        * XInitialization
-        */
-
-        public void initialize(java.lang.Object[] arguments) {
-            try {
-                // FIXME: Currently there is no way to determine if key event forwarding is needed or not,
-                // so we have to do it always ..
-                XExtendedToolkit unoToolkit = (XExtendedToolkit)
-                    AnyConverter.toObject(new Type(XExtendedToolkit.class), arguments[0]);
-
-                if(unoToolkit != null) {
-                    // FIXME this should be done in VCL
-                    unoToolkit.addTopWindowListener(this);
-                    unoToolkit.addKeyHandler(new KeyHandler());
-                } else if( Build.DEBUG) {
-                    System.err.println("argument 0 is not of type XExtendedToolkit.");
-                }
-            } catch(com.sun.star.lang.IllegalArgumentException e) {
-                        // FIXME: output
-            }
-        }
-
-        /*
-        * XTopWindowListener
-        */
-
-        public void windowOpened(com.sun.star.lang.EventObject event){
-            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class, event.Source);
-            java.awt.Window w = getTopWindow(xAccessible);
-        }
-
-        public void windowActivated(com.sun.star.lang.EventObject event){
-        }
-
-        public void windowDeactivated(com.sun.star.lang.EventObject event){
-        }
-
-        public void windowMinimized(com.sun.star.lang.EventObject event){
-        }
-
-        public void windowNormalized(com.sun.star.lang.EventObject event){
-        }
-
-        public void windowClosing(com.sun.star.lang.EventObject event){
-        }
-
-        public void windowClosed(com.sun.star.lang.EventObject event){
-            java.awt.Window w = (java.awt.Window)
-                topWindowMap.remove(UnoRuntime.generateOid(event.Source));
-
-            if (w != null) {
-                w.dispose();
-                if (Build.DEBUG) {
-                    System.err.println("TopWindow closed");
+                    default:
+                        break;
                 }
             }
         }
 
-        public void disposing(com.sun.star.lang.EventObject event) {
-        }
+        return null;
     }
 
-    public static XSingleServiceFactory __getServiceFactory(String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey) {
+    public static XSingleServiceFactory __getServiceFactory(String implName,
+        XMultiServiceFactory multiFactory, XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
 
-        if (implName.equals(AccessBridge.class.getName()) ) {
+        if (implName.equals(AccessBridge.class.getName())) {
             // Initialize toolkit to register at Java <-> Windows access bridge
             java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
 
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(
-                _AccessBridge.class,
-                _AccessBridge._serviceName,
-                multiFactory,
-                regKey
-            );
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(_AccessBridge.class,
+                    _AccessBridge._serviceName, multiFactory, regKey);
         }
 
         return xSingleServiceFactory;
     }
 
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(AccessBridge.class.getName(), _AccessBridge._serviceName, regKey);
+        return FactoryHelper.writeRegistryServiceInfo(AccessBridge.class.getName(),
+            _AccessBridge._serviceName, regKey);
+    }
+
+    static public class _AccessBridge implements XTopWindowListener,
+        XInitialization {
+        static final String _serviceName = "com.sun.star.accessibility.AccessBridge";
+        XComponentContext xComponentContext;
+
+        public _AccessBridge(XComponentContext xComponentContext) {
+            this.xComponentContext = xComponentContext;
+        }
+
+        /*
+        * XInitialization
+        */
+        public void initialize(java.lang.Object[] arguments) {
+            try {
+                // FIXME: Currently there is no way to determine if key event forwarding is needed or not,
+                // so we have to do it always ..
+                XExtendedToolkit unoToolkit = (XExtendedToolkit) AnyConverter.toObject(new Type(
+                            XExtendedToolkit.class), arguments[0]);
+
+                if (unoToolkit != null) {
+                    // FIXME this should be done in VCL
+                    unoToolkit.addTopWindowListener(this);
+
+                    String os = (String) System.getProperty("os.name");
+
+                    // Try to initialize the WindowsAccessBridgeAdapter
+                    if (os.startsWith("Windows")) {
+                        WindowsAccessBridgeAdapter.attach(xComponentContext);
+                    } else {
+                        unoToolkit.addKeyHandler(new KeyHandler());
+                    }
+                } else if (Build.DEBUG) {
+                    System.err.println(
+                        "argument 0 is not of type XExtendedToolkit.");
+                }
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                // FIXME: output
+            }
+        }
+
+        /*
+        * XTopWindowListener
+        */
+        public void windowOpened(com.sun.star.lang.EventObject event) {
+            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
+                    event.Source);
+            java.awt.Window w = getTopWindow(xAccessible);
+        }
+
+        public void windowActivated(com.sun.star.lang.EventObject event) {
+        }
+
+        public void windowDeactivated(com.sun.star.lang.EventObject event) {
+        }
+
+        public void windowMinimized(com.sun.star.lang.EventObject event) {
+        }
+
+        public void windowNormalized(com.sun.star.lang.EventObject event) {
+        }
+
+        public void windowClosing(com.sun.star.lang.EventObject event) {
+        }
+
+        public void windowClosed(com.sun.star.lang.EventObject event) {
+            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface(XAccessible.class,
+                    event.Source);
+
+            java.awt.Window w = removeTopWindow(xAccessible);
+
+            if (w != null) {
+                w.dispose();
+            }
+        }
+
+        public void disposing(com.sun.star.lang.EventObject event) {
+        }
     }
 }
