@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 11:43:05 $
+ *  last change: $Author: hdu $ $Date: 2001-09-19 11:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.8 2001-07-26 11:43:05 pl Exp $
+/* $Id: sft.c,v 1.9 2001-09-19 11:33:24 hdu Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1342,10 +1342,10 @@ static uint16 getGlyph4(const byte *cmap, uint16 c) {
     glyphIndexArray = idRangeOffset + segCount;
 
     if(Int16FromMOTA(idRangeOffset[i]) != 0) {
-        ToReturn = Int16FromMOTA(*(&(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])))));
-    } else {
-        ToReturn = (Int16FromMOTA(idDelta[i]) + c)%65536;
+        c = Int16FromMOTA(*(&(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])))));
     }
+
+    ToReturn = (Int16FromMOTA(idDelta[i]) + c) & 0xFFFF;
     return ToReturn;
 }
 
@@ -1410,7 +1410,6 @@ static void FindCmap(TrueTypeFont *ttf)
     }
 
     if (ttf->cmapType != CMAP_NOT_USABLE) {
-
         switch (GetUInt16(ttf->cmap, 0, 1)) {
             case 0: ttf->mapper = getGlyph0; break;
             case 2: ttf->mapper = getGlyph2; break;
@@ -1606,6 +1605,7 @@ int OpenTTFont(const char *fname, uint32 facenum, TrueTypeFont** ttf) /*FOLD01*/
         ret = SF_FILEIO;
         goto cleanup;
     }
+
     t->fsize = st.st_size;
 
     if ((t->ptr = (byte *) mmap(0, t->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
