@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 11:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,11 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
-#include <com/sun/star/data/XDatabaseDialogs.hpp>
+//#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
+//#include <com/sun/star/data/XDatabaseDialogs.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDDB_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
@@ -1331,9 +1334,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             xControl = xFormCtrler->getCurrentControl();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        xParser = GetImpl()->getParser();
-            ::com::sun::star::uno::Reference< ::com::sun::star::data::XDatabaseDialogs >            xDlgs(xParser, ::com::sun::star::uno::UNO_QUERY);
+//          ::com::sun::star::uno::Reference< ::com::sun::star::data::XDatabaseDialogs >            xDlgs(xParser, ::com::sun::star::uno::UNO_QUERY);
 
-            if (GetImpl()->SaveModified(xFormCtrler) && xDlgs.is())
+            if (GetImpl()->SaveModified(xFormCtrler))
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xSet, ::com::sun::star::uno::UNO_QUERY);
@@ -1352,7 +1355,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     }
                 }
 
-                xDlgs->executeSort(xField);
+                DBG_ERROR("FmFormShell::Execute: missing imlementation replacing the old XDatabaseDialogs!");
+//              xDlgs->executeSort(xField);
 
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
                 FormShellWaitObject aWO(this);
