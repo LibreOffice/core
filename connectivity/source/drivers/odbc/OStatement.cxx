@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-25 12:54:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ using namespace ::comphelper;
 #define THROW_SQL(x) \
     OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define DEBUG_THROW                 \
     try                                 \
     {                                   \
