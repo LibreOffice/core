@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:27 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 14:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ Time DBTypeConversion::toTime(const ::rtl::OUString& _sSQLString)
         if(nIndex != -1)
             nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
     }
-    return Time(0,nHour,nMinute,nSecond);
+    return Time(0,nSecond,nMinute,nHour);
 }
 // -----------------------------------------------------------------------------
 
@@ -504,6 +504,9 @@ Time DBTypeConversion::toTime(const ::rtl::OUString& _sSQLString)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/10/01 11:24:27  oj
+ *  #92613# unbound evaluationrow fixed
+ *
  *  Revision 1.16  2001/08/06 06:21:03  oj
  *  #89430# overflow corrected
  *
