@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:16:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,36 +81,9 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_FT_SOURCE;
             //HelpID = SID_SBA_BRW_INSERT ;
-            Text = "Tabelle" ;
-            Text [ ENGLISH ] = "Table" ;
-            Text[ english_us ] = "Table";
-            Text[ portuguese ] = "Tabela";
-            Text[ russian ] = "Òàáëèöà";
-            Text[ greek ] = "Ğßíáêáò";
-            Text[ dutch ] = "Tabel";
-            Text[ french ] = "Table";
-            Text[ spanish ] = "Tabla";
-            Text[ italian ] = "Tabella";
-            Text[ danish ] = "Tabel";
-            Text[ swedish ] = "Tabell";
-            Text[ polish ] = "Tabela";
-            Text[ portuguese_brazilian ] = "Tabela";
-            Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
-            Text[ korean ] = "í…Œì´ë¸”";
-            Text[ chinese_simplified ] = "è¡¨æ ¼";
-            Text[ chinese_traditional ] = "è¡¨æ ¼";
-            Text[ arabic ] = "ÌÏæá";
-            Text[ turkish ] = "Tablo";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Taula";
-            Text[ finnish ] = "Taulukko";
-            Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
-            Text[ czech ] = "Tabulka";
-            Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
-            Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€";
-            Text[ slovak ] = "TabuÄ¾ka";
-            Text[ hungarian ] = "TÃ¡bla";
-            Text[ slovenian ] = "Tabela";
+            Text [ de ] = "Tabelle" ;
+            Text [ en-US ] = "Table";
+            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -127,35 +100,8 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_FT_QUERY;
             //HelpID = SID_SBA_BRW_INSERT ;
-            Text = "Suchbegriff" ;
-            Text [ ENGLISH ] = "Search key" ;
-            Text[ english_us ] = "Search Key";
-            Text[ portuguese ] = "Expressão procurada";
-            Text[ russian ] = "Èñêîìîå ïîíÿòèå";
-            Text[ greek ] = "¼ñïò áíáæŞôçóçò";
-            Text[ dutch ] = "Zoekbegrip";
-            Text[ french ] = "Terme recherché";
-            Text[ spanish ] = "Expresión de búsqueda";
-            Text[ italian ] = "Termine ricercato";
-            Text[ danish ] = "Søgeord";
-            Text[ swedish ] = "Sökord";
-            Text[ polish ] = "Szukane has³o";
-            Text[ portuguese_brazilian ] = "Chave de pesquisa";
-            Text[ japanese ] = "æ¤œç´¢ã‚­ãƒ¼";
-            Text[ korean ] = "ê²€ìƒ‰ í‚¤";
-            Text[ chinese_simplified ] = "æœå¯»æ¡ç›®";
-            Text[ chinese_traditional ] = "æœå°‹é …ç›®";
-            Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
-            Text[ turkish ] = "Arama ölçütü";
-            Text[ catalan ] = "Clau de cerca";
-            Text[ finnish ] = "Etsittävä";
-            Text[ thai ] = "à¸›à¸¸à¹ˆà¸¡à¸„à¹‰à¸™à¸«à¸²";
-            Text[ czech ] = "Hledat klÃ­ÄovÃ© slovo";
-            Text[ hebrew ] = "Suchbegriff";
-            Text[ hindi ] = "à¤–à¥‹à¤œ à¤•à¤°à¤¨à¥‡ à¤•à¥€ à¤šà¤¾à¤­à¥€";
-            Text[ slovak ] = "HÄ¾adaÅ¥ kÄ¾ÃºÄovÃ© slovo";
-            Text[ hungarian ] = "KeresÃ©si kulcs";
-            Text[ slovenian ] = "KljuÄ za iskanje";
+            Text [ de ] = "Suchbegriff" ;
+            Text [ en-US ] = "Search Key";
         };
         ToolBoxItem
         {
@@ -174,37 +120,10 @@ ToolBox RID_BIB_TOOLBAR
             HelpID = HID_BIB_TBX_AUTOFILTER;
 //            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
             DropDown = TRUE ;
-            Text = "AutoFilter" ;
-            Text [ ENGLISH ] = "AutoFilter" ;
+            Text [ de ] = "AutoFilter" ;
             Command = ".uno:Bib/autoFilter" ;
-            Text[ english_us ] = "AutoFilter";
-            Text[ portuguese ] = "AutoFiltro";
-            Text[ russian ] = "Áûñòğûé ôèëüòğ";
-            Text[ greek ] = "Áõôüìáôï Ößëôñï";
-            Text[ dutch ] = "AutoFilter";
-            Text[ french ] = "AutoFiltre";
-            Text[ spanish ] = "Filtro automático";
-            Text[ italian ] = "Filtro automatico";
-            Text[ danish ] = "AutoFilter";
-            Text[ swedish ] = "AutoFilter";
-            Text[ polish ] = "Autofiltr";
-            Text[ portuguese_brazilian ] = "AutoFiltro";
-            Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚£ãƒ«ã‚¿";
-            Text[ korean ] = "ìë™ í•„í„°";
-            Text[ chinese_simplified ] = "è‡ªåŠ¨ç­›é€‰";
-            Text[ chinese_traditional ] = "è‡ªè¨‚ç¯©é¸";
-            Text[ arabic ] = "İáÊÑ Âáí";
-            Text[ turkish ] = "Otomatik filtre";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Filtre automàtic";
-            Text[ finnish ] = "Automaattinen suodatus";
-            Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-            Text[ czech ] = "AutomatickÃ½ filtr";
-            Text[ hebrew ] = "â€®×¡×™× ×•×Ÿ ××•×˜×•××˜×™â€¬";
-            Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤›à¤¾à¤¨à¤¨à¤¾";
-            Text[ slovak ] = "AutomatickÃ½ filter";
-            Text[ hungarian ] = "Automatikus szÅ±rÅ‘";
-            Text[ slovenian ] = "Samodejni filter";
+            Text [ en-US ] = "AutoFilter";
+            Text [ x-comment ] = " ";
         };
 
         ToolBoxItem
@@ -212,37 +131,10 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_FILTERCRIT ;
             HelpID = SID_FM_FILTERCRIT ;
 //            ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
-            Text = "Standard Filter" ;
-            Text [ ENGLISH ] = "Standard Filter" ;
+            Text [ de ] = "Standard Filter" ;
             Command = ".uno:Bib/standardFilter" ;
-            Text[ english_us ] = "Standard Filter";
-            Text[ portuguese ] = "Filtro padrão";
-            Text[ russian ] = "Ôèëüòğ";
-            Text[ greek ] = "Ößëôñï ğñïåğéëïãŞò";
-            Text[ dutch ] = "Standaardfilter";
-            Text[ french ] = "Filtre standard";
-            Text[ spanish ] = "Filtro predeterminado";
-            Text[ italian ] = "Filtro standard";
-            Text[ danish ] = "Standardfilter";
-            Text[ swedish ] = "Standardfilter";
-            Text[ polish ] = "Filtr standardowy";
-            Text[ portuguese_brazilian ] = "Filtro padrão";
-            Text[ japanese ] = "æ¨™æº–ãƒ•ã‚£ãƒ«ã‚¿";
-            Text[ korean ] = "í‘œì¤€ í•„í„°";
-            Text[ chinese_simplified ] = "æ ‡å‡†ç­›é€‰";
-            Text[ chinese_traditional ] = "æ¨™æº–ç¯©é¸";
-            Text[ arabic ] = "İáÊÑ ŞíÇÓí";
-            Text[ turkish ] = "Standart filtre";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Filtre estàndard";
-            Text[ finnish ] = "Oletussuodatin";
-            Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
-            Text[ czech ] = "StandardnÃ­ filtr";
-            Text[ hebrew ] = "Standard Filter";
-            Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡ à¤«à¤¿à¤²à¥à¤Ÿà¤°";
-            Text[ slovak ] = "BeÅ¾nÃ½ filter";
-            Text[ hungarian ] = "ÃltalÃ¡nos szÅ±rÅ‘";
-            Text[ slovenian ] = "Standardni filter";
+            Text [ en-US ] = "Standard Filter";
+            Text [ x-comment ] = " ";
         };
 
         ToolBoxItem
@@ -250,112 +142,31 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_REMOVEFILTER ;
             HelpID = SID_FM_REMOVE_FILTER_SORT ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
-            Text = "Filter entfernen" ;
-            Text [ ENGLISH ] = "Remove Filter" ;
+            Text [ de ] = "Filter entfernen" ;
             Command = ".uno:Bib/removeFilter" ;
-            Text[ english_us ] = "Remove Filter";
-            Text[ portuguese ] = "Eliminar filtro";
-            Text[ russian ] = "Óäàëèòü ôèëüòğ";
-            Text[ greek ] = "ÄéáãñáöŞ ößëôñïõ";
-            Text[ dutch ] = "Filter verwijderen";
-            Text[ french ] = "Supprimer le filtre";
-            Text[ spanish ] = "Borrar filtro";
-            Text[ italian ] = "Rimuovi filtro";
-            Text[ danish ] = "Fjern filter";
-            Text[ swedish ] = "Ta bort filter";
-            Text[ polish ] = "Usuñ filtr";
-            Text[ portuguese_brazilian ] = "Remover Filtro";
-            Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ã®è§£é™¤";
-            Text[ korean ] = "í•„í„° ì œê±°";
-            Text[ chinese_simplified ] = "åˆ é™¤ç­›é€‰";
-            Text[ chinese_traditional ] = "æ¸…é™¤ç¯©é¸";
-            Text[ arabic ] = "ÅÒÇáÉ İáÊÑ";
-            Text[ turkish ] = "Filtreyi kaldır";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Suprimeix el filtre";
-            Text[ finnish ] = "Poista suodatus";
-            Text[ thai ] = "à¹€à¸­à¸²à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸­à¸­à¸";
-            Text[ czech ] = "Odstranit filtr";
-            Text[ hebrew ] = "Filter entfernen";
-            Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¹à¤Ÿà¤¾à¤“";
-            Text[ slovak ] = "OdstrÃ¡niÅ¥ filter";
-            Text[ hungarian ] = "SzÅ±rÅ‘ tÃ¶rlÃ©se";
-            Text[ slovenian ] = "Odstrani filter";
+            Text [ en-US ] = "Remove Filter";
+            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TBC_BT_COL_ASSIGN ;
             HelpId = HID_BIB_MAPPINGDLG;
-            Text = "Spaltenzuordnung" ;
-            Text[ English ] = "Column assignment" ;
+            Text [ de ] = "Spaltenzuordnung" ;
 //          Command = ".uno:Bib/Mapping" ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
-            Text[ english_us ] = "Column Arrangement";
-            Text[ portuguese ] = "Dispor colunas";
-            Text[ russian ] = "Ğàñïîëîæåíèå ñòîëáöîâ";
-            Text[ greek ] = "ÁíÜèåóç óôŞëçò";
-            Text[ dutch ] = "Kolomindeling";
-            Text[ french ] = "Assignation de colonnes";
-            Text[ spanish ] = "Disposición de columnas";
-            Text[ italian ] = "Assegnazione colonne";
-            Text[ danish ] = "Kolonnetildeling";
-            Text[ swedish ] = "Kolumntilldelning";
-            Text[ polish ] = "Rozmieszczenie kolumn";
-            Text[ portuguese_brazilian ] = "Disposição das Colunas";
-            Text[ japanese ] = "åˆ—ã®åˆ†é¡";
-            Text[ korean ] = "ì—´ ë°°ì¹˜";
-            Text[ chinese_simplified ] = "ç¼–æ’åˆ—(C)";
-            Text[ chinese_traditional ] = "ç·¨æ’æ¬„(C)";
-            Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ";
-            Text[ turkish ] = "Sütun düzeni";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Disposició de les columnes";
-            Text[ finnish ] = "Sarakejärjestys";
-            Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-            Text[ czech ] = "UspoÅ™Ã¡dÃ¡nÃ­ sloupcÅ¯";
-            Text[ hebrew ] = "Spaltenzuordnung";
-            Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‹ à¤•à¥à¤°à¤® à¤®à¥‡à¤‚ à¤°à¤–à¤¨à¤¾";
-            Text[ slovak ] = "Usporiadanie stÄºpcov";
-            Text[ hungarian ] = "Oszlop rendezÃ©se";
-            Text[ slovenian ] = "Razporeditev stolpcev";
+            Text [ en-US ] = "Column Arrangement";
+            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TBC_BT_CHANGESOURCE ;
             HelpId = HID_BIB_CHANGESOURCE;
-            Text = "Datenquelle" ;
-            Text[ English ] = "Data source" ;
             Command = ".uno:Bib/sdbsource" ;
+            Text [ de ] = "Datenquelle" ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Checkable=TRUE;
-            Text[ english_us ] = "Data Source";
-            Text[ portuguese ] = "Fonte de dados";
-            Text[ russian ] = "Èñòî÷íèê äàííûõ";
-            Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-            Text[ dutch ] = "Gegevensbron";
-            Text[ french ] = "Source de données";
-            Text[ spanish ] = "Fuente de datos";
-            Text[ italian ] = "Sorgente dati";
-            Text[ danish ] = "Datakilde";
-            Text[ swedish ] = "Datakälla";
-            Text[ polish ] = "ród³o danych";
-            Text[ portuguese_brazilian ] = "Fonte de dados";
-            Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-            Text[ korean ] = "ë°ì´í„° ì›ë³¸";
-            Text[ chinese_simplified ] = "æ•°æ®æº(D)";
-            Text[ chinese_traditional ] = "è³‡æ–™æº(D)";
-            Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
-            Text[ turkish ] = "Veri Kaynak kodu";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Font de les dades";
-            Text[ finnish ] = "Tietolähde";
-            Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-            Text[ czech ] = "Zdroj dat";
-            Text[ hebrew ] = "â€®××§×•×¨ ×”× ×ª×•× ×™×â€¬";
-            Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤²";
-            Text[ slovak ] = "Zdroj dÃ¡t";
-            Text[ hungarian ] = "AdatforrÃ¡s";
-            Text[ slovenian ] = "Vir podatkov";
+            Text [ en-US ] = "Data Source";
+            Text [ x-comment ] = " ";
         };
 /*
         ToolBoxItem
@@ -369,25 +180,8 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/newEntry" ;
             ItemBitmap = Bitmap { File = "newcard.bmp" ; };
-            Text = "Neue Adresse" ;
-            Text [ ENGLISH ] = "New Address" ;
-            Text[ english_us ] = "New Address";
-            Text[ portuguese ] = "Novo endereço";
-            Text[ russian ] = "Íîâûé àäğåñ";
-            Text[ greek ] = "New Address";
-            Text[ dutch ] = "Nieuw adres";
-            Text[ french ] = "Nouvelle adresse";
-            Text[ spanish ] = "Nueva dirección";
-            Text[ italian ] = "Nuovo indirizzo";
-            Text[ danish ] = "Ny adresse";
-            Text[ swedish ] = "Ny adress";
-            Text[ polish ] = "Nowy adres";
-            Text[ portuguese_brazilian ] = "New Address";
-            Text[ japanese ] = "V‚µ‚¢ZŠ";
-            Text[ korean ] = "New Address";
-            Text[ chinese_simplified ] = "ĞÂµØÖ·";
-            Text[ chinese_traditional ] = "·s¦a§}";
-            Text[ arabic ] = "ÚäæÇä ÌÏíÏ";
+            Text [ de ]= "Neue Adresse" ;
+            Text [ en-US ] = "New Address";
         };
 
         ToolBoxItem
@@ -396,25 +190,8 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/changeEntry" ;
             ItemBitmap = Bitmap { File = "modcard.bmp" ; };
-            Text = "Adresse bearbeiten" ;
-            Text [ ENGLISH ] = "Edit address" ;
-            Text[ english_us ] = "Edit Address";
-            Text[ portuguese ] = "Editar endereço";
-            Text[ russian ] = "Ïğàâêà àäğåñà";
-            Text[ greek ] = "Edit address";
-            Text[ dutch ] = "Adres wijzigen";
-            Text[ french ] = "Éditer une adresse";
-            Text[ spanish ] = "Editar dirección";
-            Text[ italian ] = "Modifica indirizzo";
-            Text[ danish ] = "Rediger adresse";
-            Text[ swedish ] = "Redigera adress";
-            Text[ polish ] = "Edytuj adres";
-            Text[ portuguese_brazilian ] = "Edit address";
-            Text[ japanese ] = "±ÄŞÚ½‚Ì•ÒW";
-            Text[ korean ] = "Edit address";
-            Text[ chinese_simplified ] = "±à¼­µØÖ·";
-            Text[ chinese_traditional ] = "½s¿è¦a§}";
-            Text[ arabic ] = "ÊÍÑíÑ ÚäæÇä";
+            Text [ de ]= "Adresse bearbeiten" ;
+            Text [ en-US ] = "Edit Address";
         };
 
         ToolBoxItem
@@ -423,25 +200,8 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/removeEntry" ;
             ItemBitmap = Bitmap { File = "remcard.bmp" ; };
-            Text = "Adresse löschen" ;
-            Text [ ENGLISH ] = "Remove address" ;
-            Text[ english_us ] = "Remove Address";
-            Text[ portuguese ] = "Eliminar endereço";
-            Text[ russian ] = "Óäàëèòü àäğåñ";
-            Text[ greek ] = "ÄéáãñáöŞ äéåıèõíóçò";
-            Text[ dutch ] = "Adres wissen";
-            Text[ french ] = "Supprimer une adresse";
-            Text[ spanish ] = "Eliminar dirección";
-            Text[ italian ] = "Elimina indirizzo";
-            Text[ danish ] = "Slet adresse";
-            Text[ swedish ] = "Ta bort adress";
-            Text[ polish ] = "Usuñ adres";
-            Text[ portuguese_brazilian ] = "Remove address";
-            Text[ japanese ] = "±ÄŞÚ½‚Ìíœ";
-            Text[ korean ] = "Remove address";
-            Text[ chinese_simplified ] = "É¾³ıµØÖ·";
-            Text[ chinese_traditional ] = "§R°£¦a§}";
-            Text[ arabic ] = "ÍĞİ ÚäæÇä";
+            Text [ de ] = "Adresse löschen" ;
+            Text [ en-US ] = "Remove Address";
         };
 
         ToolBoxItem
@@ -454,25 +214,8 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_INSERT ;
             HelpID = SID_SBA_BRW_INSERT ;
             ItemBitmap = Bitmap { File = "sc12202.bmp" ; };
-            Text = "Daten in Text" ;
-            Text [ ENGLISH ] = "Insert" ;
-            Text[ english_us ] = "Data into Text";
-            Text[ portuguese ] = "Dados no texto";
-            Text[ russian ] = "Äàííûå â òåêñò";
-            Text[ greek ] = "Äåäïìİíá óôï êåßìåíï";
-            Text[ dutch ] = "Gegevens in tekst";
-            Text[ french ] = "Données dans le texte";
-            Text[ spanish ] = "Datos en texto";
-            Text[ italian ] = "Dati nel testo";
-            Text[ danish ] = "Data i tekst";
-            Text[ swedish ] = "Data i text";
-            Text[ polish ] = "Dane w tekœcie";
-            Text[ portuguese_brazilian ] = "Insert";
-            Text[ japanese ] = "•¶‘‚ÉÃŞ°À";
-            Text[ korean ] = "Insert";
-            Text[ chinese_simplified ] = "²åÈëÊı¾İÖÁÎÄ±¾ÖĞ";
-            Text[ chinese_traditional ] = "¼ÆÕuÂà´«¦¨¤å¦r";
-            Text[ arabic ] = "ÈíÇäÇÊ Åáì äÕ";
+            Text [ de ] = "Daten in Text" ;
+            Text [ en-US ] = "Data into Text";
         };
         ToolBoxItem
         {
@@ -492,50 +235,16 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_MAIL ;
             //HelpID = HID_ADDRPI_AUTOMAIL ;
             ItemBitmap = Bitmap { File = "sc06305.bmp" ; };
-            Text = "AutoMail" ;
-            Text [ ENGLISH ] = "AutoMail" ;
-            Text[ english_us ] = "AutoMail";
-            Text[ portuguese ] = "AutoMail";
-            Text[ russian ] = "AutoMail";
-            Text[ greek ] = "AutoMail";
-            Text[ dutch ] = "AutoMail";
-            Text[ french ] = "AutoMail";
-            Text[ spanish ] = "AutoMail";
-            Text[ italian ] = "Mail automatica";
-            Text[ danish ] = "AutoPost";
-            Text[ swedish ] = "AutoMail";
-            Text[ polish ] = "AutoMail";
-            Text[ portuguese_brazilian ] = "AutoMail";
-            Text[ japanese ] = "µ°ÄÒ°Ù";
-            Text[ korean ] = "AutoMail";
-            Text[ chinese_simplified ] = "×Ô¶¯µç×ÓÓÊ¼ş";
-            Text[ chinese_traditional ] = "¦Û°Ê¹q¤l¶l¥ó";
-            Text[ arabic ] = "ÈÑíÏ Âáí";
+            Text [ de ] = "AutoMail" ;
+            Text [ en-US ] = "AutoMail";
         };
         ToolBoxItem
         {
             Identifier = TBC_BT_URL ;
             //HelpID = HID_ADDRPI_AUTOBROWSE ;
             ItemBitmap = Bitmap { File = "sc06304.bmp" ; };
-            Text = "AutoBrowse" ;
-            Text [ ENGLISH ] = "AutoBrowse" ;
-            Text[ english_us ] = "AutoBrowse";
-            Text[ portuguese ] = "AutoBrowse";
-            Text[ russian ] = "Àâòîïğîñìîòğ";
-            Text[ greek ] = "AutoBrowse";
-            Text[ dutch ] = "AutoBrowse";
-            Text[ french ] = "AutoBrowse";
-            Text[ spanish ] = "AutoBrowse";
-            Text[ italian ] = "Browse automatico";
-            Text[ danish ] = "AutoBrowse";
-            Text[ swedish ] = "AutoBrowse";
-            Text[ polish ] = "AutoBrowse";
-            Text[ portuguese_brazilian ] = "AutoBrowse";
-            Text[ japanese ] = "µ°ÄÌŞ×³¾Ş";
-            Text[ korean ] = "AutoBrowse";
-            Text[ chinese_simplified ] = "×Ô¶¯ä¯ÀÀ";
-            Text[ chinese_traditional ] = "¦Û°ÊÂsÄı";
-            Text[ arabic ] = "ÇÓÊÚÑÇÖ Âáí";
+            Text [ de ] = "AutoBrowse" ;
+            Text [ en-US ] = "AutoBrowse";
         };*/
     };
     Scroll = TRUE ;
@@ -546,7 +255,7 @@ ToolBox RID_BIB_TOOLBAR
         SID_FM_AUTOFILTER;      /*10716*/     \
         SID_FM_FILTERCRIT;      /*10715*/     \
         SID_FM_REMOVE_FILTER_SORT ; /*10711*/ \
-    };                                      \
+    };                                     \
     IdCount = { 3; };
 
 ImageList RID_TOOLBAR_IMGLIST
