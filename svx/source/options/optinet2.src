@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 12:59:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,71 +530,71 @@ TabPage RID_SVXPAGE_INET_SECURITY
     FixedLine FL_SEC_SECOPTIONS
     {
         Pos = MAP_APPFONT( COL_0, ROW_0 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Sicherheitsoptionen";
         Text [ en-US ] = "Security Options";
     };
     FixedText FI_SEC_SECOPTIONS
     {
         Pos = MAP_APPFONT( COL_1, ROW_1 );
-        Size = MAP_APPFONT( COL_4-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_5-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "Warnen wenn ein Dokument aufgezeichnete Änderungen, Versionen, versteckte Informartionen oder Notizen enthält";
-        Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes when";
+        Text [ de ] = "Wenn ein Dokument aufgezeichnete Änderungen, Versionen, versteckte Informationen oder Notizen enthält, warnen beim:";
+        Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes:";
     };
     CheckBox CB_SEC_SAVEORSENDDOCS
     {
         Pos = MAP_APPFONT( COL_2, ROW_2 );
-        Size = MAP_APPFONT( COL_3-COL_2, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Speichern oder Senden solcher Dokumente";
-        Text [ en-US ] = "saving or sending documents";
+        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Speichern oder Senden";
+        Text [ en-US ] = "When saving or sending";
     };
     CheckBox CB_SEC_SIGNDOCS
     {
-        Pos = MAP_APPFONT( COL_3, ROW_2 );
-        Size = MAP_APPFONT( COL_5-COL_3, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Dokuemte signieren";
-        Text [ en-US ] = "signing documents";
+        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_2 );
+        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Signieren";
+        Text [ en-US ] = "When signing";
     };
     CheckBox CB_SEC_PRINTDOCS
     {
         Pos = MAP_APPFONT( COL_2, ROW_3 );
-        Size = MAP_APPFONT( COL_3-COL_2, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Dokuemte drucken";
-        Text [ en-US ] = "printing documents";
+        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Drucken";
+        Text [ en-US ] = "When printing";
     };
     CheckBox CB_SEC_CREATEPDF
     {
-        Pos = MAP_APPFONT( COL_3, ROW_3 );
-        Size = MAP_APPFONT( COL_5-COL_3, RSC_CD_CHECKBOX_HEIGHT );
+        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_3 );
+        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "PDF-Dateien erzeugen";
-        Text [ en-US ] = "creating PDF-files";
+        Text [ en-US ] = "When creating PDF files";
     };
     CheckBox CB_SEC_REMOVEPERSINFO
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
-        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Benutzerdaten nicht speichern";
+        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Persönliche Informationen beim Speichern aus Dateien entfernen";
         Text [ en-US ] = "Remove personal information on saving";
     };
     CheckBox CB_SEC_RECOMMPASSWD
     {
         Pos = MAP_APPFONT( COL_1, ROW_5 );
-        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Kennwortschutz beim Speichern empfehlen";
         Text [ en-US ] = "Recommend password protection on saving";
     };
     FixedLine FL_SEC_MACROSEC
     {
         Pos = MAP_APPFONT( COL_0, ROW_6 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Makrosicherheit";
         Text [ en-US ] = "Macro security";
     };
     FixedText FI_SEC_MACROSEC
     {
         Pos = MAP_APPFONT( COL_1, ROW_7 );
-        Size = MAP_APPFONT( COL_3a-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_3-COL_1, ROW_9 - ROW_7 - RSC_SP_FLGR_SPACE_Y );
         Wordbreak = TRUE;
         Text [ de ] = "Anpassen der Sicherheitsstufe für das Ausführen von Makros und Definieren der vertrauenswürdigen Makro-Entwickler.";
         Text [ en-US ] = "Adjust the security level for executing macros and specify trusted macro developers.";
@@ -603,34 +603,34 @@ TabPage RID_SVXPAGE_INET_SECURITY
     {
         Pos = MAP_APPFONT( COL_4, ROW_8 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Makro Sicherheit...";
+        Text [ de ] = "Makrosicherheit...";
         Text [ en-US ] = "Macro Security...";
     };
     FixedLine FL_SEC_FILESHARING
     {
         Pos = MAP_APPFONT( COL_0, ROW_9 );
-        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Optionen für gemeinsame Benutzung des Dokumentes";
         Text [ en-US ] = "File sharing options for this document";
     };
     CheckBox CB_SEC_RECOMMREADONLY
     {
         Pos = MAP_APPFONT( COL_1, ROW_10 );
-        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Empfehlung dieses Dokument schreibgeschützt zu öffnen";
-        Text [ en-US ] = "Recommend to open document read-only";
+        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Dieses Dokument schreibgeschützt öffnen";
+        Text [ en-US ] = "Open this document in read-only mode";
     };
     CheckBox CB_SEC_RECORDCHANGES
     {
         Pos = MAP_APPFONT( COL_1, ROW_11 );
-        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Änderungen aufzeichnen";
         Text [ en-US ] = "Record changes";
     };
     PushButton PB_SEC_PROTRECORDS
     {
         Pos = MAP_APPFONT( COL_2, ROW_12 );
-        Size = MAP_APPFONT( BUTTON_SPECIAL_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
     String STR_SEC_PROTRECORDS
     {
