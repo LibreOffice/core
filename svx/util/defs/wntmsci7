@@ -19793,3 +19793,5 @@ writeInfo
 ?deallocate@?$_STL_alloc_proxy@PAPAVSdrObject@@PAV1@V?$allocator@PAVSdrObject@@@_STL@@@_STL@@QAEXPAPAVSdrObject@@I@Z
 ??0PropertySetInfo@@QAE@ABU0@@Z
 ?clear@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@UPropertyInfo@@@_STL@@U?$_S1st@U?$pair@$$CBVOUString@rtl@@UPropertyInfo@@@_STL@@@4@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@UPropertyInfo@@@_STL@@@4@@_STL@@QAEXXZ
+?GetAllMarkedGraphic@SdrExchangeView@@QBE?AVGraphic@@XZ
+?GetObjGraphic@SdrExchangeView@@SA?AVGraphic@@PAVSdrModel@@PAVSdrObject@@@Z
