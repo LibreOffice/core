@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:56:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,23 @@ public:
     }
 
     /**
+       Appends a single UTF-32 character to this string buffer.
+
+       <p>The single UTF-32 character will be represented within the string
+       buffer as either one or two UTF-16 code units.</p>
+
+       @param c a well-formed UTF-32 code unit (that is, a value in the range
+       <code>0</code>&ndash;<code>0x10FFFF</code>, but excluding
+       <code>0xD800</code>&ndash;<code>0xDFFF</code>)
+
+       @return
+       this string buffer
+     */
+    OUStringBuffer & appendUtf32(sal_uInt32 c) {
+        return insertUtf32(getLength(), c);
+    }
+
+    /**
         Inserts the string into this string buffer.
 
         The characters of the <code>String</code> argument are inserted, in
@@ -729,6 +746,26 @@ public:
     {
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFDOUBLE];
         return insert( offset, sz, rtl_ustr_valueOfDouble( sz, d ) );
+    }
+
+    /**
+       Inserts a single UTF-32 character into this string buffer.
+
+       <p>The single UTF-32 character will be represented within the string
+       buffer as either one or two UTF-16 code units.</p>
+
+       @param offset the offset into this string buffer (from zero to the length
+       of this string buffer, inclusive)
+
+       @param c a well-formed UTF-32 code unit (that is, a value in the range
+       <code>0</code>&ndash;<code>0x10FFFF</code>, but excluding
+       <code>0xD800</code>&ndash;<code>0xDFFF</code>)
+
+       @return this string buffer
+     */
+    OUStringBuffer & insertUtf32(sal_Int32 offset, sal_uInt32 c) {
+        rtl_uStringbuffer_insertUtf32(&pData, &nCapacity, offset, c);
+        return *this;
     }
 
     /** Allows access to the internal data of this OUStringBuffer, for effective
