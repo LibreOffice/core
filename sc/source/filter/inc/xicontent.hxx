@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:05:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XICONTENT_HXX
 #define SC_XICONTENT_HXX
 
@@ -106,11 +104,11 @@ public:
     void                ReadSst( XclImpStream& rStrm );
 
     /** Returns a pointer to the string with the passed index. */
-    inline const XclImpString* GetString( sal_uInt32 nSstIndex ) const;
+    const XclImpString* GetString( sal_uInt32 nSstIndex ) const;
 
     /** Creates a new text cell or edit cell for a Calc document.
         @param nXFIndex  Index to XF for first text portion (checks escapement). */
-    ScBaseCell*         CreateCell( sal_uInt32 nSstIndex, sal_uInt32 nXFIndex = 0 ) const;
+    ScBaseCell*         CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex = 0 ) const;
 
 private:
     typedef ScfDelList< XclImpString > XclImpStringList;
@@ -118,11 +116,6 @@ private:
     XclImpStringList    maStringList;       /// List with formatted and unformatted strings.
     XclImpString        maErrorString;      /// Placeholder for strings not found in the list.
 };
-
-inline const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
-{
-    return maStringList.GetObject( nSstIndex );
-}
 
 // Hyperlinks =================================================================
 
@@ -166,10 +159,10 @@ public:
     void                Apply();
 
 private:
-    typedef ::std::auto_ptr< ScConditionalFormat > ScConditionalFormatPtr;
+    typedef ::std::auto_ptr< ScConditionalFormat > ScCondFmtPtr;
 
     ScRangeList         maRanges;           /// Destination cell ranges.
-    ScConditionalFormatPtr mpScCondFormat;  /// Calc conditional format.
+    ScCondFmtPtr        mxScCondFmt;        /// Calc conditional format.
     sal_uInt32          mnFormatIndex;      /// Index of this conditional format in list.
     sal_uInt16          mnCondCount;        /// Number of conditions to be inserted.
     sal_uInt16          mnCondIndex;        /// Condition index to be inserted next.
@@ -192,8 +185,8 @@ public:
     void                Apply();
 
 private:
-    typedef ScfDelList< XclImpCondFormat > XclImpCondFormatList;
-    XclImpCondFormatList maCondFmtList; /// List with all conditional formattings.
+    typedef ScfDelList< XclImpCondFormat > XclImpCondFmtList;
+    XclImpCondFmtList   maCondFmtList;      /// List with all conditional formattings.
 };
 
 // Data Validation ============================================================
@@ -250,7 +243,7 @@ private:
 class XclImpWebQueryBuffer : protected XclImpRoot
 {
 public:
-    inline explicit     XclImpWebQueryBuffer( const XclImpRoot& rRoot ) : XclImpRoot( rRoot ) {}
+    explicit            XclImpWebQueryBuffer( const XclImpRoot& rRoot );
 
     /** Reads the QSI record and creates a new web query in the buffer. */
     void                ReadQsi( XclImpStream& rStrm );
@@ -267,7 +260,8 @@ public:
     void                Apply();
 
 private:
-    ScfDelList< XclImpWebQuery > maWQList;      /// List of the web query objects.
+    typedef ScfDelList< XclImpWebQuery > XclImpWebQueryList;
+    XclImpWebQueryList  maWQList;       /// List of the web query objects.
 };
 
 // Decryption =================================================================
