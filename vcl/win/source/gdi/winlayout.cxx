@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-20 15:02:50 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
     int i = 0;
     long nOldWidth = mnBaseAdv;
-    for(; i < mnGlyphCount; ++i )
+    for(; i < mnCharCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
         if( j >= 0 )
@@ -983,7 +983,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     }
 
     mnWidth = mnBaseAdv;
-    for( i = 0; i < mnGlyphCount; ++i )
+    for( i = 0; i < mnCharCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
         if( j >= 0 )
