@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,8 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 {
     if (eEditMode != eEMode || bLayerMode != bLMode)
     {
+        USHORT nActualPageNum = 0;
+
         if( pController )
         {
             pController->fireChangeEditMode( eEMode == EM_MASTERPAGE );
@@ -547,7 +549,6 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             aTabControl.Clear();
 
             SdPage* pPage;
-            USHORT nActualPageNum = 0;
             String aPageName;
             USHORT nPageCnt = pDoc->GetSdPageCount(ePageKind);
 
@@ -563,7 +564,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
                 }
             }
 
-            aTabControl.SetCurPageId(nActualPageNum + 1);
+            //          aTabControl.SetCurPageId(nActualPageNum + 1);
 
             SwitchPage(nActualPageNum);
 
@@ -632,6 +633,7 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             aTabControl.Show();
             aLayerTab.Hide();
             aLayerBtn.Check(FALSE);
+            aTabControl.SetCurPageId (nActualPageNum + 1);
         }
 
         ResetActualLayer();
