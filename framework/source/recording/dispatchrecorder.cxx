@@ -255,49 +255,54 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         aValue >>= sVal;
 
         // encode non printable characters or '"' by using the CHR$ function
-        const sal_Unicode* pChars = sVal.getStr();
-        sal_Bool bInString = sal_False;
-        for ( sal_Int32 nChar=0; nChar<sVal.getLength(); nChar ++ )
+        if ( sVal.getLength() )
         {
-            if ( pChars[nChar] < 32 || pChars[nChar] == '"' )
+            const sal_Unicode* pChars = sVal.getStr();
+            sal_Bool bInString = sal_False;
+            for ( sal_Int32 nChar=0; nChar<sVal.getLength(); nChar ++ )
             {
-                // problematic character detected
-                if ( bInString )
+                if ( pChars[nChar] < 32 || pChars[nChar] == '"' )
                 {
-                    // close current string
-                    aArgumentBuffer.appendAscii("\"");
-                    bInString = sal_False;
-                }
+                    // problematic character detected
+                    if ( bInString )
+                    {
+                        // close current string
+                        aArgumentBuffer.appendAscii("\"");
+                        bInString = sal_False;
+                    }
 
-                if ( nChar>0 )
-                    // if this is not the first character, parts of the string have already been added
-                    aArgumentBuffer.appendAscii("+");
-
-                // add the character constant
-                aArgumentBuffer.appendAscii("CHR$(");
-                aArgumentBuffer.append( (sal_Int32) pChars[nChar] );
-                aArgumentBuffer.appendAscii(")");
-            }
-            else
-            {
-                if ( !bInString )
-                {
                     if ( nChar>0 )
                         // if this is not the first character, parts of the string have already been added
                         aArgumentBuffer.appendAscii("+");
 
-                    // start a new string
-                    aArgumentBuffer.appendAscii("\"");
-                    bInString = sal_True;
+                    // add the character constant
+                    aArgumentBuffer.appendAscii("CHR$(");
+                    aArgumentBuffer.append( (sal_Int32) pChars[nChar] );
+                    aArgumentBuffer.appendAscii(")");
                 }
+                else
+                {
+                    if ( !bInString )
+                    {
+                        if ( nChar>0 )
+                            // if this is not the first character, parts of the string have already been added
+                            aArgumentBuffer.appendAscii("+");
 
-                aArgumentBuffer.append( pChars[nChar] );
+                        // start a new string
+                        aArgumentBuffer.appendAscii("\"");
+                        bInString = sal_True;
+                    }
+
+                    aArgumentBuffer.append( pChars[nChar] );
+                }
             }
-        }
 
-        // close string
-        if ( bInString )
-            aArgumentBuffer.appendAscii("\"");
+            // close string
+            if ( bInString )
+                aArgumentBuffer.appendAscii("\"");
+        }
+        else
+            aArgumentBuffer.appendAscii("\"\"");
     }
     else if (aValue.getValueType() == getCppuCharType())
     {
