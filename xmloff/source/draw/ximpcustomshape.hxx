@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:59:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
