@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+#   last change: $Author: os $ $Date: 2000-10-13 10:08:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -324,3 +324,24 @@ kill:
     +-$(RM) $(SLB)$/core1.lib
     +-$(RM) $(SLB)$/core2.lib
 
+attr  : core_1st
+bastyp  : core_1st
+crsr  : core_1st
+doc  : core_1st
+docnode  : core_1st
+draw  : core_1st
+edit  : core_1st
+fields  : core_1st
+frmedt  : core_1st
+graphic  : core_1st
+layout  : core_1st
+ole  : core_1st
+para  : core_1st
+sw3io  : core_1st
+swg  : core_1st
+text  : core_1st
+tox  : core_1st
+txtnode  : core_1st
+unocore  : core_1st
+undo  : core_1st
+view : core_1st

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+#   last change: $Author: os $ $Date: 2000-10-13 10:08:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -317,4 +317,28 @@ kill:
     @+$(RM) $(SLB)$/ui.lst
     @+$(RM) $(SLB)$/ui.lib
 
-
+app      : ui_1st
+cctrl    : ui_1st
+chrdlg   : ui_1st
+config   : ui_1st
+dbui     : ui_1st
+dialog   : ui_1st
+dochdl   : ui_1st
+docvw    : ui_1st
+envelp   : ui_1st
+fldui    : ui_1st
+fmtui    : ui_1st
+frmdlg   : ui_1st
+globdoc  : ui_1st
+index    : ui_1st
+lingu    : ui_1st
+misc     : ui_1st
+ribbar   : ui_1st
+shells   : ui_1st
+table    : ui_1st
+uno	     : ui_1st
+uiview   : ui_1st
+utlui    : ui_1st
+web	     : ui_1st
+wizard	 : ui_1st
+wrtsh    : ui_1st
