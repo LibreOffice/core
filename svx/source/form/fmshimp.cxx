@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 16:37:00 $
+ *  last change: $Author: oj $ $Date: 2002-05-21 08:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,6 +960,8 @@ void FmXFormShell::disposing()
 {
     FmXFormShell_BASE::disposing();
 
+    if ( m_pShell && !m_pShell->IsDesignMode() )
+        setActiveController( NULL );
     // dispose our interceptor helpers
     if (m_pMainFrameInterceptor)
     {
