@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:55:13 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,23 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
 {
 }
 
+SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
+{
+    aDescName = rSrc.aDescName;
+    aNumType = rSrc.aNumType;
+    aMaster = rSrc.aMaster;
+    aLeft = rSrc.aLeft;
 
+    if (rSrc.pFollow == &rSrc)
+        pFollow = this;
+    else
+        pFollow = rSrc.pFollow;
+
+    nRegHeight = rSrc.nRegHeight;
+    nRegAscent = rSrc.nRegAscent;
+    eUse = rSrc.eUse;
+    bLandscape = rSrc.bLandscape;
+}
 
 SwPageDesc::~SwPageDesc()
 {
@@ -491,6 +507,57 @@ BOOL SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
              nBottomDist== rCmp.GetBottomDist() );
 }
 
+SwPageDescExt::SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * _pDoc)
+    : aPageDesc(rPageDesc), pDoc(_pDoc)
+{
+    SetPageDesc(rPageDesc);
+}
 
+SwPageDescExt::SwPageDescExt(const SwPageDescExt & rSrc)
+    : aPageDesc(rSrc.aPageDesc), pDoc(rSrc.pDoc)
+{
+    SetPageDesc(rSrc.aPageDesc);
+}
 
+SwPageDescExt::~SwPageDescExt()
+{
+}
 
+const String & SwPageDescExt::GetName() const
+{
+    return aPageDesc.GetName();
+}
+
+void SwPageDescExt::SetPageDesc(const SwPageDesc & _aPageDesc)
+{
+    aPageDesc = _aPageDesc;
+
+    if (aPageDesc.GetFollow())
+        sFollow = aPageDesc.GetFollow()->GetName();
+}
+
+SwPageDescExt & SwPageDescExt::operator = (const SwPageDesc & rSrc)
+{
+    SetPageDesc(rSrc);
+
+    return *this;
+}
+
+SwPageDescExt & SwPageDescExt::operator = (const SwPageDescExt & rSrc)
+{
+    SetPageDesc(rSrc.aPageDesc);
+
+    return *this;
+}
+
+SwPageDesc SwPageDescExt::operator SwPageDesc() const
+{
+    SwPageDesc aResult(aPageDesc);
+
+    SwPageDesc * pPageDesc = pDoc->GetPageDesc(sFollow);
+
+    if ( 0 != pPageDesc )
+        aResult.SetFollow(pPageDesc);
+
+    return aResult;
+}
