@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:44:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
-#include <offmgr/app.hxx>
+#include <sfx2/app.hxx>
 
 #include "scresid.hxx"
 #include "sc.hrc"       // -> Slot IDs
@@ -685,7 +685,7 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
     Application::SetDefDialogParent( this );
 
     // choose macro dialog
-    String aScriptURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
+    String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
 
     Application::SetDefDialogParent( pOld );
 
