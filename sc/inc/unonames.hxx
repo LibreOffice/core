@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:05:36 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,9 @@
 #define SC_UNONAMES_HXX
 
 // service names
-#define SC_SERVICENAME_VALBIND      "drafts.com.sun.star.table.CellValueBinding"
-#define SC_SERVICENAME_LISTCELLBIND "drafts.com.sun.star.table.ListPositionCellBinding"
-#define SC_SERVICENAME_LISTSOURCE   "drafts.com.sun.star.table.CellRangeListSource"
+#define SC_SERVICENAME_VALBIND      "com.sun.star.table.CellValueBinding"
+#define SC_SERVICENAME_LISTCELLBIND "com.sun.star.table.ListPositionCellBinding"
+#define SC_SERVICENAME_LISTSOURCE   "com.sun.star.table.CellRangeListSource"
 #define SC_SERVICENAME_CELLADDRESS  "com.sun.star.table.CellAddressConversion"
 #define SC_SERVICENAME_RANGEADDRESS "com.sun.star.table.CellRangeAddressConversion"
 #define SC_SERVICENAME_CHDATAPROV   "com.sun.star.chart2.DataProvider"
