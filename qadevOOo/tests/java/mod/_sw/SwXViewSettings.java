@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXViewSettings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:55:24 $
+ *  last change:$Date: 2004-01-05 20:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public class SwXViewSettings extends TestCase {
 
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
 
