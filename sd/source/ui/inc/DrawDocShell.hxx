@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:09:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
 #endif
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 
 class SfxStyleSheetBasePool;
 class SfxStatusBarManager;
@@ -116,7 +119,7 @@ class ViewShell;
 // - DrawDocShell -
 // ------------------
 
-class DrawDocShell
+class SD_DLLPUBLIC DrawDocShell
     : public SfxObjectShell,
       public SfxInPlaceObject
 {
