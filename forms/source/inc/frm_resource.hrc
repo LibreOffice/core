@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:45:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 
 #define RID_STR_XFORMS_CANT_EVALUATE            ( RID_FRM_STRINGS_START + 51 )
 #define RID_STR_XFORMS_PATTERN_DOESNT_MATCH     ( RID_FRM_STRINGS_START + 52 )
+#define RID_STR_XFORMS_BINDING_UI_NAME          ( RID_FRM_STRINGS_START + 53 )
 
 #endif // _FRM_RESOURCE_HRC_
 
