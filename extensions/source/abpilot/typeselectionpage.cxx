@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,14 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#endif
 
 //.........................................................................
 namespace abp
 {
+    using namespace ::com::sun::star::uno;
 //.........................................................................
 
     //=====================================================================
@@ -86,6 +90,7 @@ namespace abp
         ,m_aHint            (this,  ResId(FT_TYPE_HINTS))
         ,m_aTypeSep         (this,  ResId(FL_TYPE))
         ,m_aMORK            (this,  ResId(RB_MORK))
+        ,m_aEvolution       (this,  ResId(RB_EVOLUTION))
         ,m_aLDAP            (this,  ResId(RB_LDAP))
         ,m_aOutlook         (this,  ResId(RB_OUTLOOK))
         ,m_aOE              (this,  ResId(RB_OUTLOOKEXPRESS))
@@ -95,10 +100,32 @@ namespace abp
 
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         m_aMORK.SetClickHdl( aTypeSelectionHandler );
+        m_aEvolution.SetClickHdl( aTypeSelectionHandler );
         m_aLDAP.SetClickHdl( aTypeSelectionHandler );
         m_aOutlook.SetClickHdl( aTypeSelectionHandler );
         m_aOE.SetClickHdl( aTypeSelectionHandler );
         m_aOther.SetClickHdl( aTypeSelectionHandler );
+
+#ifndef UNX
+        sal_Int32 nMoveControlsUp = m_aLDAP.GetPosPixel().Y() - m_aEvolution.GetPosPixel().Y();
+        m_aEvolution.Hide();
+
+        Point aPos = m_aLDAP.GetPosPixel();
+        aPos.Y() -= nMoveControlsUp;
+        m_aLDAP.SetPosPixel( aPos );
+
+        aPos = m_aOutlook.GetPosPixel();
+        aPos.Y() -= nMoveControlsUp;
+        m_aOutlook.SetPosPixel( aPos );
+
+        aPos = m_aOE.GetPosPixel();
+        aPos.Y() -= nMoveControlsUp;
+        m_aOE.SetPosPixel( aPos );
+
+        aPos = m_aOther.GetPosPixel();
+        aPos.Y() -= nMoveControlsUp;
+        m_aOther.SetPosPixel( aPos );
+#endif
 
 #ifdef UNX
         // no Outlook / Outlook Express for ~NIX systems
@@ -110,6 +137,21 @@ namespace abp
         Point aPos = m_aOther.GetPosPixel();
         aPos.Y() -= nMoveControlsUp;
         m_aOther.SetPosPixel( aPos );
+
+        Reference< ::com::sun::star::sdbc::XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
+        if(!(xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:evolution"))).is()))
+        {
+            nMoveControlsUp = m_aLDAP.GetPosPixel().Y() - m_aEvolution.GetPosPixel().Y();
+            m_aEvolution.Hide();
+
+            aPos = m_aLDAP.GetPosPixel();
+            aPos.Y() -= nMoveControlsUp;
+            m_aLDAP.SetPosPixel( aPos );
+
+            aPos = m_aOther.GetPosPixel();
+            aPos.Y() -= nMoveControlsUp;
+            m_aOther.SetPosPixel( aPos );
+        }
 #endif
     }
 
@@ -120,6 +162,8 @@ namespace abp
 
         if (m_aMORK.IsChecked())
             m_aMORK.GrabFocus();
+        else if (m_aEvolution.IsChecked())
+            m_aEvolution.GrabFocus();
         else if (m_aLDAP.IsChecked())
             m_aLDAP.GrabFocus();
         else if (m_aOutlook.IsChecked())
@@ -143,6 +187,7 @@ namespace abp
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
         m_aMORK.Check(AST_MORK == _eType);
+        m_aEvolution.Check(AST_EVOLUTION == _eType);
         m_aLDAP.Check(AST_LDAP == _eType);
         m_aOutlook.Check(AST_OUTLOOK == _eType);
         m_aOE.Check(AST_OE == _eType);
@@ -154,6 +199,8 @@ namespace abp
     {
         if (m_aMORK.IsChecked())
             return AST_MORK;
+        else if (m_aEvolution.IsChecked())
+            return AST_EVOLUTION;
         else if (m_aLDAP.IsChecked())
             return AST_LDAP;
         else if (m_aOutlook.IsChecked())
