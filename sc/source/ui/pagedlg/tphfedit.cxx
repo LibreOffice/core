@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:17:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void ScHFEditPage::FillCmdArr()
 IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
 {
     if ( !pActiveEdWnd )
-        return NULL;
+        return 0;
 
     if ( pBtn == &aBtnText )
     {
@@ -302,13 +302,13 @@ IMPL_LINK( ScHFEditPage, ClickHdl, ImageButton*, pBtn )
     }
     pActiveEdWnd->GrabFocus();
 
-    return NULL;
+    return 0;
 }
 
 IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 {
     if ( !pActiveEdWnd )
-        return NULL;
+        return 0;
 
     if(pBtn!=NULL)
     {
@@ -327,7 +327,7 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
                 break;
         }
     }
-    return NULL;
+    return 0;
 }
 
 //========================================================================
