@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:29:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 #include "backendaccess.hxx"
 #endif // CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
+
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif // CONFIGMGR_MATCHLOCALE_HXX
 
 #ifndef CONFIGMGR_BACKEND_LAYERMERGE_HXX
 #include "layermerge.hxx"
@@ -157,12 +161,27 @@ static void merge(
 
         if (compositeLayer.is())
         {
-            rtl::OUString bestLocale = findBestLocale(
-                    compositeLayer->listSubLayerIds(), aLocale) ;
-
-            if (pMerger->prepareSublayer(bestLocale) )
+            if(localehelper::isAnyLocale(aLocale))
             {
-                compositeLayer->readSubLayerData(xLayerMerger, bestLocale) ;
+                uno::Sequence<rtl::OUString> aLayerIds = compositeLayer->listSubLayerIds();
+                //Loop thru layers
+                for (sal_Int32 i = 0; i < aLayerIds.getLength(); ++i)
+                {
+                    if(pMerger->prepareSublayer(aLayerIds[i]));
+                    {
+                        compositeLayer->readSubLayerData(xLayerMerger,aLayerIds[i]) ;
+                    }
+                }
+            }
+            else
+            {
+                rtl::OUString bestLocale = findBestLocale(
+                        compositeLayer->listSubLayerIds(), aLocale) ;
+
+                if (pMerger->prepareSublayer(bestLocale) )
+                {
+                    compositeLayer->readSubLayerData(xLayerMerger, bestLocale) ;
+                }
             }
         }
     }
