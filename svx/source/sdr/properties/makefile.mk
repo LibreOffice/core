@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-11-24 16:50:51 $
+#   last change: $Author: rt $ $Date: 2004-04-02 14:10:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ SLOFILES=\
         $(SLO)$/defaultproperties.obj		\
         $(SLO)$/attributeproperties.obj		\
         $(SLO)$/textproperties.obj			\
+        $(SLO)$/customshapeproperties.obj	\
         $(SLO)$/rectangleproperties.obj		\
         $(SLO)$/captionproperties.obj		\
         $(SLO)$/circleproperties.obj		\
