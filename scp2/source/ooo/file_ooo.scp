@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.65 $
+*  $Revision: 1.66 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-13 19:11:54 $
+*  last change: $Author: kz $ $Date: 2005-01-21 12:14:20 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -371,6 +371,13 @@ File gid_File_Bin_Uri_Encode
     Styles = (PACKED);
 End
 
+File gid_File_Bin_Gnome_Set_Default_Application
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "gnome-set-default-application";
+    Styles = (PACKED);
+End
+
 #endif
 
 File gid_File_Bin_Senddoc
@@ -391,6 +398,17 @@ File gid_File_Bin_Spadmin_Bin
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "spadmin.bin";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Share_Xdg_Printeradmin
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Xdg;
+    Styles = (PACKED);
+    Name = "printeradmin.desktop";
 End
 
 #endif
@@ -511,6 +529,17 @@ File gid_File_Exe_Sbase
     Dir = gid_Dir_Program;
     Name = EXENAME(sbase);
     Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Share_Xdg_Base
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Xdg;
+    Styles = (PACKED);
+    Name = "base.desktop";
 End
 
 #endif
@@ -1907,61 +1936,6 @@ File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
 End
-
-#ifdef UNX
-
-File gid_File_Script_Functions
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "functions";
-    Styles = (PACKED);
-End
-
-#endif
-
-#ifdef LINUX
-
-File gid_File_Script_Update_Redhat_User_Menus
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "update-redhat-user-menus";
-    Styles = (PACKED);
-End
-
-#endif
-
-#ifdef LINUX
-
-File gid_File_Script_Update_Suse_User_Menus
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "update-suse-user-menus";
-    Styles = (PACKED);
-End
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Script_Update_User_Menus
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "update-user-menus";
-    Styles = (PACKED);
-End
-
-#endif
-
-#ifdef UNX
-
-File gid_File_Script_Update_User_Mime_Data
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "update-user-mime-data";
-    Styles = (PACKED);
-End
-
-#endif
 
 #ifdef UNX
 
