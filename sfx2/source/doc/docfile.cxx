@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 14:45:03 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,7 +1510,7 @@ void SfxMedium::GetMedium_Impl()
         if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP )
             pHandler = NULL;
         BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
-        SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
+        SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUnoAnyItem, SID_INPUTSTREAM, sal_False);
         if ( pStreamItem )
         {
             if ( GetContent().is() && !IsReadOnly() )
@@ -1541,8 +1541,7 @@ void SfxMedium::GetMedium_Impl()
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
 
-            SFX_ITEMSET_ARG( GetItemSet(), pPostStringItem, SfxStringItem, SID_POSTSTRING, sal_False);
-            SFX_ITEMSET_ARG( GetItemSet(), pPostDataItem, SfxLockBytesItem, SID_POSTLOCKBYTES, sal_False);
+            SFX_ITEMSET_ARG( GetItemSet(), pPostDataItem, SfxUnoAnyItem, SID_POSTDATA, sal_False);
             SFX_ITEMSET_ARG( GetItemSet(), pContentTypeItem, SfxStringItem, SID_CONTENT_TYPE, sal_False);
             SFX_ITEMSET_ARG( GetItemSet(), pRefererItem, SfxStringItem, SID_REFERER, sal_False);
 
@@ -1554,7 +1553,7 @@ void SfxMedium::GetMedium_Impl()
             aProps[0].Name = ::rtl::OUString::createFromAscii("Referer");
             aProps[0].Value <<= aReferer;
 
-            if ( pPostDataItem || pPostStringItem )
+            if ( pPostDataItem )
             {
                 DBG_ASSERT( !bIsWritable && bAllowReadOnlyMode, "Strange open mode!" );
                 bIsWritable = FALSE;
@@ -1572,12 +1571,8 @@ void SfxMedium::GetMedium_Impl()
                 Reference < XInputStream > xPostData;
                 if ( pPostDataItem )
                 {
-                    SvLockBytesRef xRef( pPostDataItem->GetValue() );
-                    SvLockBytesStat aStat;
-                    sal_uInt32 nLen = 0;
-                    if ( xRef->Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
-                        nLen = aStat.nSize;
-                    xPostData = new ::utl::OInputStreamHelper( xRef, nLen );
+                    Any aAny = pPostDataItem->GetValue();
+                    aAny >>= xPostData;
                 }
 
                 pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, xPostData, pHandler );
@@ -1626,49 +1621,6 @@ void SfxMedium::GetMedium_Impl()
     if ( pImp->bDownloadDone )
         Done_Impl( GetError() );
 
-#ifdef OLD_CODE_FOR_POSTING
-
-    SFX_ITEMSET_ARG( pSet, pContentType, SfxStringItem, SID_CONTENTTYPE, sal_False);
-    if( pContentType ) pImp->xBinding->SetSendMimeType(
-        pContentType->GetValue() );
-    pImp->xBinding->SetReferer( pImp->aReferer );
-    pImp->xBinding->SetPriority( pImp->nPrio );
-    const SfxPoolItem *pItem = 0;
-    if( pSet )
-    {
-        pSet->GetItemState( SID_POSTSTRING, sal_False, &pItem );
-        if( !pItem )
-            pSet->GetItemState( SID_POSTLOCKBYTES, sal_False, &pItem );
-    }
-
-    if( pItem )
-    {
-        if( pItem->ISA( SfxStringItem ))
-        {
-            SvCacheStream* pCacheStr = new SvCacheStream( 8192 );
-            pCacheStr->WriteByteString( ((SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8 );
-            SvLockBytesRef xRef (new SvLockBytes(pCacheStr, sal_True));
-            pImp->xBinding->GetBindContext().SetPostLockBytes ( xRef);
-        }
-        else if( pItem->ISA( SfxRefItem ))
-        {
-            SvLockBytes* pBytes = new SvLockBytes;
-            int nDiff = (char*)pBytes - (char*)(SvRefBase*)pBytes;
-            SvLockBytes* pLB = (SvLockBytes*)(
-                    (char*)(SvRefBase*)&((SfxRefItem*)pItem )->GetValue() + nDiff );
-            delete pBytes;
-            SvLockBytesRef rTmpLB ( pLB );
-            pImp->xBinding->GetBindContext().SetPostLockBytes ( rTmpLB );
-        }
-        else if( pItem->ISA( SfxLockBytesItem ))
-        {
-            // f"ur sp"ater ...
-            SvLockBytes* pBytes = ((SfxLockBytesItem*)pItem)->GetValue();
-            SvLockBytesRef rTmpLB ( pBytes );
-            pImp->xBinding->GetBindContext().SetPostLockBytes ( rTmpLB );
-        }
-    }
-#endif
 }
 
 //------------------------------------------------------------------
