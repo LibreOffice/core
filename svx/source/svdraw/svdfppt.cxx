@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-06 14:57:35 $
+ *  last change: $Author: sj $ $Date: 2001-09-07 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4136,7 +4136,12 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
     aFont.SetColor( aCol );
     rNumberFormat.SetBulletFont( &aFont );
-    rNumberFormat.SetBulletChar( (sal_uInt16)nBulletChar );
+    sal_uInt16 nBuChar;
+    if ( aFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+        nBuChar = (sal_uInt8)nBulletChar | 0xf000;
+    else
+        nBuChar = (sal_uInt16)nBulletChar;
+    rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( (UINT16)nBulletHeight );
     rNumberFormat.SetBulletColor( aCol );
     UINT16 nAbsLSpace = (UINT16)( ( (UINT32)nTextOfs * 2540 ) / 576 );
@@ -4328,8 +4333,8 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
     if ( nPMask & 0x0010 )
     {
         rIn >> nVal16;
-//      if ( nPMask & 2 )       // hard Attribute ?         #73712#
-        sal_Bool bFontPossible = ( maParaLevel[ nLevel ].mnBulletChar & 0xff00 ) == 0;
+        sal_uInt8 nBuCharHiByte = (sal_uInt8)( maParaLevel[ nLevel ].mnBulletChar >> 8 );
+        sal_Bool bFontPossible = ( nBuCharHiByte == 0 ) || ( nBuCharHiByte == 0xf0 );
         if ( !bFontPossible )   // #90437# if the bullet is a unicode character, symbol
         {                       // fonts are not possible here and standard unicode is used
             PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal16 );
@@ -4342,13 +4347,11 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
     if ( nPMask & 0x0040 )
     {
         rIn >> nVal16;
-//      if ( nPMask & 8 )       // hard Attribute ?         #73712#
             maParaLevel[ nLevel ].mnBulletHeight = nVal16;
     }
     if ( nPMask & 0x0020 )
     {
         rIn >> nVal32;
-//      if ( nPMask & 4 )       // hard Attribute ?         #73712#
         {
             if ( ! ( nVal32 & 0xff000000 ) )
                 nVal32 = PPT_COLSCHEME_HINTERGRUND;
@@ -5482,7 +5485,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                             nCharAnzRead += nLen;
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
-                        pCPropSet->maString = (sal_Unicode)( (sal_uInt8)aString.GetChar( (sal_uInt16)nCharAnzRead ) );
+                        pCPropSet->maString = aString.GetChar( (sal_uInt16)nCharAnzRead );
                         if ( aCharPropSet.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
                             pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
