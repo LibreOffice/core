@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-27 08:06:47 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 12:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
             const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-                SAL_MODULENAME_WITH_VERSION( "dbtools", "2" )
+                SAL_MODULENAME( "dbtools2" )
             );
 
             // load the dbtools library
@@ -254,6 +254,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/07/27 08:06:47  rt
+ *  #87576# sparc compiler comlains about static_cast here
+ *
  *  Revision 1.1  2001/07/25 13:34:38  fs
  *  initial checkin - base class for accessing DBTOOLS with load-on-demand
  *
