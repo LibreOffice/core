@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:09:32 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,7 +881,7 @@ ToolBox RID_DRAWFORM_TOOLBOX
 String RID_BEZIER_TOOLBOX
 {
     Text [ de ] = "Bezierobjektleiste" ;
-    Text [ en-US ] = "Bézier Object Bar" ;
+    Text [ en-US ] = "BÃ©zier Object Bar" ;
     Text [ x-comment ] = " ";
 };
 ToolBox RID_BEZIER_TOOLBOX
@@ -1260,7 +1260,7 @@ String STR_SHELLNAME_DRAWFORM
 String STR_SHELLNAME_BEZIER
 {
     Text [ de ] = "Bezier" ;
-    Text [ en-US ] = "Bézier" ;
+    Text [ en-US ] = "BÃ©zier" ;
     Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAW_TEXT
