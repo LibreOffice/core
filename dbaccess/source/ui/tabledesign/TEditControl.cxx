@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:22:40 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 10:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1776,7 +1776,7 @@ void OTableEditorCtrl::SwitchType( const OTypeInfo* _pType )
     //////////////////////////////////////////////////////////////////////
     // Neue Beschreibung darstellen
     OTableRow* pRow = (*m_pRowList)[nRow];
-    pRow->SetFieldType( _pType );
+    pRow->SetFieldType( _pType, sal_True );
     if(_pType)
     {
         sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
