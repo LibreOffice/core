@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-11 13:13:48 $
+ *  last change: $Author: tl $ $Date: 2001-07-11 13:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ using namespace ::xmloff::token;
 #include "mathtype.hxx"
 #endif
 
+#define IMPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter")
+#define EXPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLExportFilter")
 
 #undef WANTEXCEPT
 sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
@@ -381,7 +383,7 @@ rtl::OUString SAL_CALL SmXMLImport_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLImport_getImplementationName() );
+    const rtl::OUString aServiceName( IMPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
@@ -401,7 +403,7 @@ rtl::OUString SAL_CALL SmXMLExport_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLExport_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLExport_getImplementationName());
+    const rtl::OUString aServiceName( EXPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
@@ -422,7 +424,7 @@ rtl::OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLImportMeta_getImplementationName() );
+    const rtl::OUString aServiceName( IMPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
@@ -442,7 +444,7 @@ rtl::OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLExportMeta_getImplementationName());
+    const rtl::OUString aServiceName( EXPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
@@ -462,7 +464,7 @@ rtl::OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLImportSettings_getImplementationName() );
+    const rtl::OUString aServiceName( IMPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
@@ -482,7 +484,7 @@ rtl::OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
 uno::Sequence< rtl::OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( SmXMLExportSettings_getImplementationName());
+    const rtl::OUString aServiceName( EXPORT_SVC_NAME );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
         return aSeq;
 }
