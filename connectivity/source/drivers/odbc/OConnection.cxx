@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:03:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 
-    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_INTEGER);
+    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_UINTEGER);
     // Verbindung aufbauen
 
 #ifdef LINUX
