@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:04:03 $
+ *  last change: $Author: jl $ $Date: 2000-10-13 15:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
                 // same model -> copy value only
                 VARIANT* pVariant = (VARIANT*) CoTaskMemAlloc(sizeof(VARIANT));
 
-                if (NOERROR != VariantCopy(pVariant, (VARIANT*)modelDepObject.getValue()))
+                if (NOERROR != VariantCopy(pVariant, *(VARIANT**)modelDepObject.getValue()))
                 {
                     CoTaskMemFree(pVariant);
                     throw(IllegalArgumentException());
@@ -460,7 +460,7 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
             else if (destModelType == UNO)
             {
                 // convert variant into UNO any
-                VARIANT* pVariant = (VARIANT*)modelDepObject.getValue();
+                VARIANT* pVariant = *(VARIANT**)modelDepObject.getValue();
 
                 if (!variantToAny(pVariant, ret))
                 {
