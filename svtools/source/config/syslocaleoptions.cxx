@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #define CFG_READONLY_DEFAULT    sal_False
 
@@ -123,12 +129,16 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         SvtBroadcaster          m_aBroadcaster;
         ULONG                   m_nBlockedHint;     // pending hints
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
+        sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
+
 
         sal_Bool                m_bROLocale;
         sal_Bool                m_bROCurrency;
+        sal_Bool                m_bRODecimalSeparator;
 
     static  const Sequence< /* const */ OUString >  GetPropertyNames();
 
+            void                UpdateMiscSettings_Impl();
             ULONG               ChangeLocaleSettings();
             void                ChangeDefaultCurrency() const;
             void                Broadcast( ULONG nHint );
@@ -150,6 +160,9 @@ public:
                                     { return m_aCurrencyString; }
             void                SetCurrencyString( const OUString& rStr );
 
+            sal_Bool            IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
+            void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
+
             SvtBroadcaster&     GetBroadcaster()
                                     { return m_aBroadcaster; }
             void                BlockBroadcasts( BOOL bBlock );
@@ -161,18 +174,21 @@ public:
 
 #define PROPERTYNAME_LOCALE         OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))
 #define PROPERTYNAME_CURRENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
+#define PROPERTYNAME_DECIMALSEPARATOR OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
 
 #define PROPERTYHANDLE_LOCALE       0
 #define PROPERTYHANDLE_CURRENCY     1
+#define PROPERTYHANDLE_DECIMALSEPARATOR 2
 
-#define PROPERTYCOUNT               2
+#define PROPERTYCOUNT               3
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
     static const OUString pProperties[] =
     {
         PROPERTYNAME_LOCALE,
-        PROPERTYNAME_CURRENCY
+        PROPERTYNAME_CURRENCY,
+        PROPERTYNAME_DECIMALSEPARATOR
     };
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
@@ -187,6 +203,9 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_nBroadcastBlocked( 0 )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
+    , m_bDecimalSeparator( sal_True )
+    , m_bRODecimalSeparator(sal_False)
+
 {
     if ( !IsValidConfigMgr() )
         ChangeLocaleSettings();     // assume SYSTEM defaults during Setup
@@ -227,13 +246,24 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     DBG_ERRORFILE( "Wrong property type!" );
                                 m_bROCurrency = pROStates[nProp];
                             }
-                            break;
+                        break;
+                        case  PROPERTYHANDLE_DECIMALSEPARATOR:
+                        {
+                                    sal_Bool bValue;
+                            if ( pValues[nProp] >>= bValue )
+                                m_bDecimalSeparator = bValue;
+                            else
+                                DBG_ERRORFILE( "Wrong property type!" );
+                            m_bRODecimalSeparator = pROStates[nProp];
+                        }
+                        break;
                         default:
                             DBG_ERRORFILE( "Wrong property type!" );
                     }
                 }
             }
         }
+        UpdateMiscSettings_Impl();
         ChangeLocaleSettings();
         EnableNotification( aNames );
     }
@@ -333,6 +363,14 @@ void SvtSysLocaleOptions_Impl::Commit()
                     }
                 }
                 break;
+            case  PROPERTYHANDLE_DECIMALSEPARATOR:
+                if( !m_bRODecimalSeparator )
+                {
+                    pNames[nRealCount] = aOrgNames[nProp];
+                    pValues[nRealCount] <<= m_bDecimalSeparator;
+                    ++nRealCount;
+                }
+            break;
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
@@ -382,6 +420,16 @@ void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
     }
 }
 
+void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
+{
+    if(bSet != m_bDecimalSeparator)
+    {
+        m_bDecimalSeparator = bSet;
+        SetModified();
+        UpdateMiscSettings_Impl();
+    }
+}
+
 
 void SvtSysLocaleOptions_Impl::ChangeDefaultCurrency() const
 {
@@ -414,11 +462,27 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             m_bROCurrency = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
         }
+        else if( seqPropertyNames[nProp] == PROPERTYNAME_DECIMALSEPARATOR )
+        {
+            seqValues[nProp] >>= m_bDecimalSeparator;
+            m_bRODecimalSeparator = seqROStates[nProp];
+            UpdateMiscSettings_Impl();
+        }
     }
     if ( nHint )
         Broadcast( nHint );
 }
+/* -----------------10.02.2004 15:25-----------------
 
+ --------------------------------------------------*/
+void SvtSysLocaleOptions_Impl::UpdateMiscSettings_Impl()
+{
+    AllSettings aAllSettings( Application::GetSettings() );
+    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+    aMiscSettings.SetEnableLocalizedDecimalSep(m_bDecimalSeparator);
+    aAllSettings.SetMiscSettings( aMiscSettings );
+    Application::SetSettings( aAllSettings );
+}
 
 // ====================================================================
 
@@ -527,6 +591,24 @@ LanguageType SvtSysLocaleOptions::GetLocaleLanguageType() const
     MutexGuard aGuard( GetMutex() );
     return pOptions->GetLocaleLanguageType();
 }
+
+/*-- 11.02.2004 13:31:41---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->IsDecimalSeparatorAsLocale();
+}
+/*-- 11.02.2004 13:31:41---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( sal_Bool bSet)
+{
+    MutexGuard aGuard( GetMutex() );
+    pOptions->SetDecimalSeparatorAsLocale(bSet);
+}
+
 
 sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 {
