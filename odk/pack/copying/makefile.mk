@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 16:07:04 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:14:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,9 +122,6 @@ EXELIST = \
     $(DESTDIRBIN)$/uno$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX)
 
-SDKDLLLIST = \
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX)
-
 .IF "$(GUI)"=="WNT"
 LIBLIST = \
     $(DESTDIRLIB)$/istore.lib 	\
@@ -236,14 +233,13 @@ INSTALLSCRIPT= \
     $(DESTDIR)$/setsdkenv_unix.in
 .ELSE
 INSTALLSCRIPT= \
-    $(DESTDIR)$/configureWindowsNT.bat \
+    $(DESTDIR)$/configureWindows.bat \
     $(DESTDIR)$/setsdkenv_windows.bat
 .ENDIF
 
 DIR_FILE_LIST=\
     $(EXELIST) \
     $(XMLLIST) \
-    $(SDKDLLLIST) \
     $(LIBLIST) \
     $(SETTINGSLIST) \
     $(DOCUFILES) \
