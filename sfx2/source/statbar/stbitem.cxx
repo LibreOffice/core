@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:17:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -460,10 +463,7 @@ throw ( ::uno::RuntimeException )
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );;
     if ( pOutDev )
     {
-        ::Rectangle aRect( rOutputRectangle.X,
-                            rOutputRectangle.Y,
-                            rOutputRectangle.Width,
-                            rOutputRectangle.Height );
+        ::Rectangle aRect = VCLRectangle( rOutputRectangle );
         UserDrawEvent aUserDrawEvent( pOutDev, aRect, (USHORT)nItemId, (USHORT)nStyle );
         Paint( aUserDrawEvent );
     }
