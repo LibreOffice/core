@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:02:00 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 16:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 
 #ifdef VERTICAL_LAYOUT
         const long nRemaining =
-                 (GetUpper()->Frm().*fnRect->fnCheckLimit)( nOldBottom );
+                 - (GetUpper()->Frm().*fnRect->fnBottomDist)( nOldBottom );
         if (  nRemaining > 0 && !GetUpper()->IsSctFrm() &&
               nRemaining != ( bVert ?
                               nMyPos - Frm().Right() :
@@ -552,13 +552,16 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                     SwFrm* pCont = FindFtnFrm()->GetUpper();
 
 #ifdef VERTICAL_LAYOUT
-                    if( (pCont->Frm().*fnRect->fnCheckLimit)( nBot ) < 0 )
+                    if( (pCont->Frm().*fnRect->fnBottomDist)( nBot ) > 0 )
 #else
                     if( nBot > pCont->Frm().Top() + pCont->Frm().Height() )
 #endif
                     {
 #ifdef VERTICAL_LAYOUT
                         (Frm().*fnRect->fnAddBottom)( nChgHght );
+                        if( bVert )
+                            Prt().SSize().Width() += nChgHght;
+                        else
 #else
                         Frm().SSize().Height() += nChgHght;
 #endif
@@ -1160,7 +1163,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             if( bPrepMustFit )
             {
 #ifdef VERTICAL_LAYOUT
-                const SwTwips nMust = (GetUpper()->*fnRect->fnGetLimit)();
+                const SwTwips nMust = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 const SwTwips nIs   = (Frm().*fnRect->fnGetBottom)();
 #else
                 const SwTwips nMust = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
@@ -2037,8 +2040,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
             if( aAccess.GetPara()->IsPrepMustFit() )
             {
-                const SwTwips nLimit = (GetUpper()->*fnRect->fnGetLimit)();
-                const SwTwips nDiff = (Frm().*fnRect->fnCheckLimit)( nLimit );
+                const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
+                const SwTwips nDiff = - (Frm().*fnRect->fnBottomDist)( nLimit );
                 if( nDiff > 0 )
                     Shrink( nDiff );
             }
@@ -2150,10 +2153,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 if( pMaster )
                     pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
 #ifdef VERTICAL_LAYOUT
-                SwTwips nMaxY = (GetUpper()->*fnRect->fnGetLimit)();
+                SwTwips nMaxY = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( (Frm().*fnRect->fnOverStep)( nMaxY  ) )
                     (this->*fnRect->fnSetLimit)( nMaxY );
-                else if( (Frm().*fnRect->fnCheckLimit)( nMaxY  ) > 0 )
+                else if( (Frm().*fnRect->fnBottomDist)( nMaxY  ) < 0 )
                     (Frm().*fnRect->fnAddBottom)( -(Frm().*fnRect->fnGetHeight)() );
 #else
                 SwTwips nMaxY = GetUpper()->Frm().Top() +GetUpper()->Prt().Top()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:08:20 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 16:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
         // Der Frm besitzt eine Hoehe, mit der er auf die Seite passt.
 #ifdef VERTICAL_LAYOUT
         SwTwips nHeight =
-            (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetLimit)(), nOrigin );
+            (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), nOrigin );
 #else
         SwTwips nHeight = pFrm->GetUpper()->Frm().Top()
                         + pFrm->GetUpper()->Prt().Top()
@@ -518,8 +518,8 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
 #ifdef VERTICAL_LAYOUT
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
-                const SwTwips nRstHeight = - (pMaster->Frm().*fnRect->fnCheckLimit)
-                            ( (pMaster->GetUpper()->*fnRect->fnGetLimit)() );
+                const SwTwips nRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
+                            ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
                 if ( nRstHeight >=
                      SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
                 {
@@ -569,9 +569,9 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
 #ifdef VERTICAL_LAYOUT
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
-        SwTwips nRstHeight = - (pMaster->Frm().*fnRect->fnCheckLimit)
-                               ( (pMaster->GetUpper()->*fnRect->fnGetLimit)() );
-        if ( nRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+        SwTwips nRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
+                             ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
+        if( nRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
         {
             pMaster->Prepare( PREP_ADJUST_FRM );
             pMaster->_InvalidateSize();

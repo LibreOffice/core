@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-23 14:29:24 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 16:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
 #ifdef VERTICAL_LAYOUT
     SWRECTFN ( pFrm )
-    SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetLimit)();
+    SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
 
     if ( bVert )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 14:09:52 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 16:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         //Hoehe innerhalb des Cont, die ich mir 'eh noch genehmigen darf.
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( pCont )
-        SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetLimit)(),
+        SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
 #else
         SwTwips nTmp = pCont->Frm().Top() + pCont->Prt().Top() +
