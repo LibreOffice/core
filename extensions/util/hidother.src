@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-03-20 16:22:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "../inc/extensio.hrc"
+
+hidspecial HID_BIB_CHANGESOURCE                 { HelpId = HID_BIB_CHANGESOURCE; }
+hidspecial HID_BIB_MAPPINGDLG                   { HelpId = HID_BIB_MAPPINGDLG; }
+hidspecial HID_BIB_TBX_TABLE                    { HelpId = HID_BIB_TBX_TABLE; }
+hidspecial HID_BIB_TBX_SEARCH                   { HelpId = HID_BIB_TBX_SEARCH; }
+hidspecial HID_BIB_TBX_AUTOFILTER               { HelpId = HID_BIB_TBX_AUTOFILTER; }
+
+hidspecial HID_BIB_IDENTIFIER_POS               { HelpId = HID_BIB_IDENTIFIER_POS; }
+hidspecial HID_BIB_AUTHORITYTYPE_POS            { HelpId = HID_BIB_AUTHORITYTYPE_POS; }
+hidspecial HID_BIB_AUTHOR_POS                   { HelpId = HID_BIB_AUTHOR_POS; }
+hidspecial HID_BIB_TITLE_POS                    { HelpId = HID_BIB_TITLE_POS; }
+hidspecial HID_BIB_YEAR_POS                     { HelpId = HID_BIB_YEAR_POS; }
+hidspecial HID_BIB_ISBN_POS                     { HelpId = HID_BIB_ISBN_POS; }
+hidspecial HID_BIB_BOOKTITLE_POS                { HelpId = HID_BIB_BOOKTITLE_POS; }
+hidspecial HID_BIB_CHAPTER_POS                  { HelpId = HID_BIB_CHAPTER_POS; }
+hidspecial HID_BIB_EDITION_POS                  { HelpId = HID_BIB_EDITION_POS; }
+hidspecial HID_BIB_EDITOR_POS                   { HelpId = HID_BIB_EDITOR_POS; }
+hidspecial HID_BIB_HOWPUBLISHED_POS             { HelpId = HID_BIB_HOWPUBLISHED_POS; }
+hidspecial HID_BIB_INSTITUTION_POS              { HelpId = HID_BIB_INSTITUTION_POS; }
+hidspecial HID_BIB_JOURNAL_POS                  { HelpId = HID_BIB_JOURNAL_POS; }
+hidspecial HID_BIB_MONTH_POS                    { HelpId = HID_BIB_MONTH_POS; }
+hidspecial HID_BIB_NOTE_POS                     { HelpId = HID_BIB_NOTE_POS; }
+hidspecial HID_BIB_ANNOTE_POS                   { HelpId = HID_BIB_ANNOTE_POS; }
+hidspecial HID_BIB_NUMBER_POS                   { HelpId = HID_BIB_NUMBER_POS; }
+hidspecial HID_BIB_ORGANIZATIONS_POS            { HelpId = HID_BIB_ORGANIZATIONS_POS; }
+hidspecial HID_BIB_PAGES_POS                    { HelpId = HID_BIB_PAGES_POS; }
+hidspecial HID_BIB_PUBLISHER_POS                { HelpId = HID_BIB_PUBLISHER_POS; }
+hidspecial HID_BIB_ADDRESS_POS                  { HelpId = HID_BIB_ADDRESS_POS; }
+hidspecial HID_BIB_SCHOOL_POS                   { HelpId = HID_BIB_SCHOOL_POS; }
+hidspecial HID_BIB_SERIES_POS                   { HelpId = HID_BIB_SERIES_POS; }
+hidspecial HID_BIB_REPORTTYPE_POS               { HelpId = HID_BIB_REPORTTYPE_POS; }
+hidspecial HID_BIB_VOLUME_POS                   { HelpId = HID_BIB_VOLUME_POS; }
+hidspecial HID_BIB_URL_POS                      { HelpId = HID_BIB_URL_POS; }
+hidspecial HID_BIB_CUSTOM1_POS                  { HelpId = HID_BIB_CUSTOM1_POS; }
+hidspecial HID_BIB_CUSTOM2_POS                  { HelpId = HID_BIB_CUSTOM2_POS; }
+hidspecial HID_BIB_CUSTOM3_POS                  { HelpId = HID_BIB_CUSTOM3_POS; }
+hidspecial HID_BIB_CUSTOM4_POS                  { HelpId = HID_BIB_CUSTOM4_POS; }
+hidspecial HID_BIB_CUSTOM5_POS                  { HelpId = HID_BIB_CUSTOM5_POS; }
+
+hidspecial HID_BIB_DB_TBX                       { HelpId = HID_BIB_DB_TBX; }
+hidspecial HID_BIB_DB_GRIDCTRL                  { HelpId = HID_BIB_DB_GRIDCTRL; }
+hidspecial HID_BIB_CONTROL_PAGE                 { HelpId = HID_BIB_CONTROL_PAGE; }
+hidspecial HID_BIB_CONTROL_PARENT               { HelpId = HID_BIB_CONTROL_PARENT; }
+
+hidspecial HID_GRIDWIZARD_PREVIOUS              { HelpId = HID_GRIDWIZARD_PREVIOUS; };
+hidspecial HID_GRIDWIZARD_NEXT                  { HelpId = HID_GRIDWIZARD_NEXT; }
+hidspecial HID_GRIDWIZARD_CANCEL                { HelpId = HID_GRIDWIZARD_CANCEL; }
+hidspecial HID_GRIDWIZARD_FINISH                { HelpId = HID_GRIDWIZARD_FINISH; }
+hidspecial HID_GROUPWIZARD_PREVIOUS             { HelpId = HID_GROUPWIZARD_PREVIOUS; }
+hidspecial HID_GROUPWIZARD_NEXT                 { HelpId = HID_GROUPWIZARD_NEXT; }
+hidspecial HID_GROUPWIZARD_CANCEL               { HelpId = HID_GROUPWIZARD_CANCEL; }
+hidspecial HID_GROUPWIZARD_FINISH               { HelpId = HID_GROUPWIZARD_FINISH; }
+hidspecial HID_LISTWIZARD_PREVIOUS              { HelpId = HID_LISTWIZARD_PREVIOUS; }
+hidspecial HID_LISTWIZARD_NEXT                  { HelpId = HID_LISTWIZARD_NEXT; }
+hidspecial HID_LISTWIZARD_CANCEL                { HelpId = HID_LISTWIZARD_CANCEL; }
+hidspecial HID_LISTWIZARD_FINISH                { HelpId = HID_LISTWIZARD_FINISH; }
+hidspecial HID_DBIWIZARD_PREVIOUS               { HelpId = HID_DBIWIZARD_PREVIOUS; }
+hidspecial HID_DBIWIZARD_NEXT                   { HelpId = HID_DBIWIZARD_NEXT; }
+hidspecial HID_DBIWIZARD_CANCEL                 { HelpId = HID_DBIWIZARD_CANCEL; }
+hidspecial HID_DBIWIZARD_FINISH                 { HelpId = HID_DBIWIZARD_FINISH; }
+hidspecial UID_DBIWIZARD_SOURCESTATS            { HelpId = UID_DBIWIZARD_SOURCESTATS; }
+hidspecial UID_DBIWIZARD_SOURCEFILE             { HelpId = UID_DBIWIZARD_SOURCEFILE; }
+hidspecial UID_DBIWIZARD_QUERIES                { HelpId = UID_DBIWIZARD_QUERIES; }
+hidspecial UID_DBIWIZARD_FORMS                  { HelpId = UID_DBIWIZARD_FORMS; }
+hidspecial UID_DBIWIZARD_FORMS_SAVETO           { HelpId = UID_DBIWIZARD_FORMS_SAVETO; }
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 20.03.01 16:53:40  fs
+ ************************************************************************/
+
