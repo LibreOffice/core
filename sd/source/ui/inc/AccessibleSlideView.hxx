@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-21 07:53:24 $
+ *  last change: $Author: ka $ $Date: 2002-06-05 07:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ public:
                                 AccessibleSlideViewObject( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxParent, sal_uInt16 nPage, sal_Bool bVisible );
                                 ~AccessibleSlideViewObject();
 
+    void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+
     void                        Destroyed();
 
     sal_uInt16                  GetPageNum() const { return mnPage; }
@@ -246,6 +248,8 @@ public:
                                 AccessibleSlideView( SdDrawDocument& rDoc, SdSlideView& rView, SdWindow& rParentWindow );
                                 ~AccessibleSlideView();
 
+    void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+
     void                        Destroyed();
 
     SdDrawDocument*             GetDrawDocument() const { return mpDoc; }
@@ -254,8 +258,7 @@ public:
 
     void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
     void                        Reset();
-
-    void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    void                        FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
 };
 
 #endif // _SD_ACCESSIBILITY_ACCESSIBLESLIDEVIEW_HXX
