@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:40:08 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 14:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
+const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.Package:";
+const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.GraphicObject:";
 
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
 //{ UNO_NAME_CLIENT_MAP     ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_MAYBEVOID ,MID_URL_CLIENTMAP        },
@@ -1134,15 +1136,37 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
         {
             String sGrfName, sFltName;
+            GraphicObject *pGrfObj = 0;
             pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, &sGrfName, &sFltName );
             OUString uTemp;
             aValue >>= uTemp;
             String sTmp(uTemp);
             UnoActionContext aAction(pFmt->GetDoc());
             if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL))
-                sGrfName = sTmp;
+            {
+                if( sTmp.EqualsAscii( sPackageProtocol,
+                                      0, sizeof( sPackageProtocol )-1 ) )
+                {
+                    pGrfObj = 0; // TODO
+                    sGrfName.Erase();
+                }
+                else if( sTmp.EqualsAscii( sGraphicObjectProtocol,
+                                           0, sizeof(sGraphicObjectProtocol)-1 ) )
+                {
+                    ByteString sId( sTmp.Copy(sizeof(sGraphicObjectProtocol)-1),
+                                    RTL_TEXTENCODING_ASCII_US );
+                    pGrfObj = new GraphicObject( sId );
+                    sGrfName.Erase();
+                }
+                else
+                {
+                    sGrfName = sTmp;
+                }
+            }
             else
+            {
                 sFltName = sTmp;
+            }
 
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1151,10 +1175,15 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 //              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
+                {
+                    delete pGrfObj;
                     throw RuntimeException();
+                }
                 SwPaM aGrfPaM(*pGrfNode);
-                pFmt->GetDoc()->ReRead( aGrfPaM, sGrfName, sFltName, 0, FALSE );
+                pFmt->GetDoc()->ReRead( aGrfPaM, sGrfName, sFltName, 0,
+                                        pGrfObj );
             }
+            delete pGrfObj;
         }
         else if(0 != (bNextFrame = (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_NEXT_NAME)))
             || COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAIN_PREV_NAME))
@@ -1294,14 +1323,35 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
             }
         }
-        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL)||
-            COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
+        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL))
         {
-            String sGrfName, sFltName;
-            pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, &sGrfName, &sFltName );
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL))
-                aAny <<= OUString(sGrfName);
-            else
+            String sGrfName;
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                if(!pGrfNode)
+                    throw RuntimeException();
+                if( pGrfNode->IsGrfLink() )
+                {
+                    pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, &sGrfName, 0 );
+                }
+                else
+                {
+                    String sPrefix( RTL_CONSTASCII_STRINGPARAM(sGraphicObjectProtocol) );
+                    String sId( pGrfNode->GetGrfObj().GetUniqueID(),
+                                RTL_TEXTENCODING_ASCII_US );
+                    (sGrfName = sPrefix) += sId;
+                }
+            }
+            aAny <<= OUString(sGrfName);
+        }
+        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
+        {
+            String sFltName;
+            pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, 0, &sFltName );
                 aAny <<= OUString(sFltName);
         }
         else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_FRAME_STYLE_NAME))
@@ -1739,11 +1789,26 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
 
             uno::Any* pGraphicURL;
             String sGraphicURL;
+            GraphicObject *pGrfObj = 0;
             if(pProps->GetProperty(C2S(UNO_NAME_GRAPHIC_URL), pGraphicURL))
             {
                 OUString uTemp;
                 (*pGraphicURL) >>= uTemp;
                 sGraphicURL = String(uTemp);
+                if( sGraphicURL.EqualsAscii( sPackageProtocol,
+                                               0, sizeof( sPackageProtocol )-1 ) )
+                {
+                    pGrfObj = 0; // TODO
+                    sGraphicURL.Erase();
+                }
+                else if( sGraphicURL.EqualsAscii( sGraphicObjectProtocol,
+                                       0, sizeof(sGraphicObjectProtocol)-1 ) )
+                {
+                    ByteString sId( sGraphicURL.Copy( sizeof(sGraphicObjectProtocol)-1 ),
+                                    RTL_TEXTENCODING_ASCII_US );
+                    pGrfObj = new GraphicObject( sId );
+                    sGraphicURL.Erase();
+                }
             }
 
             String sFltName;
@@ -1755,9 +1820,11 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 sFltName = String(uTemp);
             }
 
-            SwFlyFrmFmt* pGFmt =    pDoc->Insert(aPam,
-                                    sGraphicURL,
-                                    sFltName, 0, &aFrmSet, &aGrSet);
+            SwFlyFrmFmt* pGFmt =
+                pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet)
+                         : pDoc->Insert( aPam, sGraphicURL, sFltName, 0,
+                                        &aFrmSet, &aGrSet );
+            delete pGrfObj;
             if(pGFmt)
             {
                 pGFmt->Add(this);
