@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-25 17:23:13 $
+ *  last change: $Author: sj $ $Date: 2002-03-26 16:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ class SdPage;
 class SdAnimationInfo;
 struct PptAnimationInfoAtom;
 struct PptInteractiveInfoAtom;
-class SdPPTImport : public SdrPowerPointImport
+
+class ImplSdPPTImport : public SdrPowerPointImport
 {
     SfxMedium&      rMed;
     SvStorage&      rStorage;
@@ -113,23 +114,35 @@ class SdPPTImport : public SdrPowerPointImport
     SdrLayerID      nBackgroundLayerID;
     SdrLayerID      nBackgroundObjectsLayerID;
 
-public:
+    void            ImportPageEffect( SdPage* pPage );
 
-    SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
-    virtual ~SdPPTImport();
+    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
+    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim );
 
-    BOOL        Import();
-    void        ImportPageEffect( SdPage* pPage );
-    virtual     SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
-    virtual     SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
+    virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
+    virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
                                             SfxStyleSheet*, SfxStyleSheet** ) const;
 
-    String  ReadSound( UINT32 nSoundRef ) const;
+    String          ReadSound( UINT32 nSoundRef ) const;
 
-protected:
+public:
 
-    void FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
-    void FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim );
+    ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
+    ~ImplSdPPTImport();
+
+    sal_Bool        Import();
+};
+
+class SdPPTImport
+{
+    ImplSdPPTImport* pFilter;
+
+    public:
+
+        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
+        ~SdPPTImport();
+
+        sal_Bool Import();
 };
 
 #endif // _SD_PPTIN_HXX

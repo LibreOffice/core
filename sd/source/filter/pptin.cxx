@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-25 10:54:58 $
+ *  last change: $Author: sj $ $Date: 2002-03-26 16:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,14 +228,54 @@
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Ctor
-//
-//////////////////////////////////////////////////////////////////////////
+SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
+{
 
-SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage_, SfxMedium& rMedium ) :
-    SdrPowerPointImport     ( rDocStream ),
+    sal_uInt32 nImportFlags = 0;
+
+#ifdef DBG_UTIL
+    PropRead* pSummaryInformation = new PropRead( rStorage, String( RTL_CONSTASCII_USTRINGPARAM( "\005SummaryInformation" ) ) );
+    if ( pSummaryInformation->IsValid() )
+    {
+        pSummaryInformation->Read();
+        sal_uInt8 aPropSetGUID[ 16 ] =
+        {
+            0xe0, 0x85, 0x9f, 0xf2, 0xf9, 0x4f, 0x68, 0x10, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9
+        };
+        Section* pSection = (Section*)pSummaryInformation->GetSection( aPropSetGUID );
+        if ( pSection )
+        {
+            PropItem aPropItem;
+            if ( pSection->GetProperty( PID_COMMENTS, aPropItem ) )
+            {
+                String aComment;
+                aPropItem.Read( aComment );
+                if ( aComment.Search( String( RTL_CONSTASCII_USTRINGPARAM( "Applixware" ) ), 0 ) != STRING_NOTFOUND )
+                {
+                    nImportFlags |= PPT_IMPORTFLAGS_NO_TEXT_ASSERT;
+                }
+            }
+        }
+    }
+    delete pSummaryInformation;
+#endif
+
+    PowerPointImportParam aParam( rDocStream, nImportFlags );
+    pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
+}
+
+sal_Bool SdPPTImport::Import()
+{
+    return pFilter->Import();
+}
+
+SdPPTImport::~SdPPTImport()
+{
+    delete pFilter;
+}
+
+ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam ) :
+    SdrPowerPointImport     ( rParam ),
     rMed                    ( rMedium ),
     rStorage                ( rStorage_ ),
     nFilterOptions          ( 0 )
@@ -295,7 +335,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
 //
 //////////////////////////////////////////////////////////////////////////
 
-SdPPTImport::~SdPPTImport()
+ImplSdPPTImport::~ImplSdPPTImport()
 {
     for ( void* pPtr = aSlideNameList.First(); pPtr; pPtr = aSlideNameList.Next() )
         delete (String*)pPtr;
@@ -308,7 +348,7 @@ SdPPTImport::~SdPPTImport()
 //
 //////////////////////////////////////////////////////////////////////////
 
-BOOL SdPPTImport::Import()
+sal_Bool ImplSdPPTImport::Import()
 {
     if ( !bOk )
         return FALSE;
@@ -1370,7 +1410,7 @@ BOOL SdPPTImport::Import()
 //
 //////////////////////////////////////////////////////////////////////////
 
-void SdPPTImport::ImportPageEffect( SdPage* pPage )
+void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
 {
     ULONG nFilePosMerk = rStCtrl.Tell();
 
@@ -1654,7 +1694,7 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
 //
 ///////////////////////////////////////////////////////////////////////////
 
-String SdPPTImport::ReadSound(UINT32 nSoundRef) const
+String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
 {
     String aRetval;
     UINT32 nPosMerk = rStCtrl.Tell();
@@ -2068,7 +2108,7 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
     return eRetval;
 }
 
-void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName )
+void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName )
 {
     // Lokale Informationen in pInfo eintragen
     if( pIAtom->nSoundRef )
@@ -2167,7 +2207,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInf
     }
 }
 
-void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim )
+void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim )
 {
     // Lokale Informationen in pInfo eintragen
     // Praesentationsreihenfolge; diese wird
@@ -2248,7 +2288,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
 //  if ( nFlags & 1 )                                   // Koennen wir nicht: In umgekehrter Reihenfolge an
 }
 
-SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage,
+SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage,
                                         SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
     SfxStyleSheet*  pStyleSheetAry[ 9 ];
@@ -2268,7 +2308,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
             pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
-            DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
+            DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
         }
         break;
         case TSS_TYPE_SUBTITLE :
@@ -2277,7 +2317,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
             pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
-            DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
+            DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
         }
         break;
         case TSS_TYPE_BODY :
@@ -2295,7 +2335,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                     pText->StartListening( *pSheet );
                 pStyleSheetAry[ nLevel - 1 ] = pSheet;
             }
-            DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
+            DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
             if ( pSheet )
                 ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
             ppStyleSheetAry = &pStyleSheetAry[ 0 ];
@@ -2311,12 +2351,12 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                 pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
                 if ( pSheet )
                     ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
-                DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
+                DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
             }
             else
             {
                 pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
-                DBG_ASSERT( pSheet, "SdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
+                DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
                 if ( pSheet )
                     ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
             }
@@ -2574,7 +2614,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
     return pRet;
 }
 
-SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
+SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
 {
     SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );
     // Animationseffekte des Objektes lesen
@@ -2630,7 +2670,7 @@ SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* p
                                 SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pEffObj );
                                 if( !pInfo )
                                     pInfo = new SdAnimationInfo( pDoc );
-                                ( (SdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aAnimationInfo );
+                                ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aAnimationInfo );
 
                                 if ( ( pInfo->eEffect == ::com::sun::star::presentation::AnimationEffect_NONE )
                                     && ( pInfo->eTextEffect == ::com::sun::star::presentation::AnimationEffect_NONE ) )
@@ -2709,7 +2749,7 @@ SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* p
                                     pInfo = new SdAnimationInfo( pDoc );
                                     pObj->InsertUserData( pInfo );
                                 }
-                                ( (SdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
+                                ( (ImplSdPPTImport*) this )->FillSdAnimationInfo( pInfo, &aInteractiveInfoAtom, aMacroName );
                             }
                             break;
                         }
