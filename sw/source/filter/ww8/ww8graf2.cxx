@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 11:30:33 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 12:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,9 +826,27 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     //graphics.
                     if (0x64 == aPic.MFP.mm)
                     {
-                        WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
-                            aPD.nHeight );
-                        aAttrSet.Put(aFlySet);
+                        if (pWFlyPara && pWFlyPara->bGrafApo)
+                        {
+                            WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
+
+                            SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
+                            aAnchor.SetAnchor(pPaM->GetPoint());
+                            aFlySet.Put(aAnchor);
+
+                            aAttrSet.Put(aFlySet);
+                        }
+                        else
+                        {
+                            WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
+                                aPD.nHeight );
+
+                            SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
+                            aAnchor.SetAnchor(pPaM->GetPoint());
+                            aFlySet.Put(aAnchor);
+
+                            aAttrSet.Put(aFlySet);
+                        }
                     }
                     else
                         ProcessEscherAlign(pRecord, 0, aAttrSet, true);
