@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,14 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print")),
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bIsWeb(bWeb)
 {
     bPrintPageBackground = !bWeb;
     bPrintBlackFont = bWeb;
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -203,13 +203,6 @@ void    SwPrintOptions::Commit()
         }
     }
     PutProperties(aNames, aValues);
-}
-/* -----------------------------06.09.00 16:46--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwPrintOptions::Notify( const Sequence<rtl::OUString>& aPropertyNames)
-{
-    DBG_ERROR("properties have been changed")
 }
 
 

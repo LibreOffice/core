@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ class SwContentViewConfig : public utl::ConfigItem
         SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -107,7 +106,6 @@ class SwLayoutViewConfig : public utl::ConfigItem
         SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -125,7 +123,6 @@ class SwGridConfig : public utl::ConfigItem
         SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -142,7 +139,6 @@ class SwCursorConfig : public utl::ConfigItem
         SwCursorConfig(SwMasterUsrPref& rParent);
         ~SwCursorConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -159,7 +155,6 @@ class SwWebColorConfig : public utl::ConfigItem
         SwWebColorConfig(SwMasterUsrPref& rParent);
         ~SwWebColorConfig();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -217,57 +212,89 @@ public:
                 pWebColorConfig->SetModified();
         }
 
-    void SetUpdateLinkMode(sal_Int32 nSet)  {nLinkUpdateMode = nSet; SetModified();}
+    void SetUpdateLinkMode(sal_Int32 nSet, sal_Bool bNoModify = sal_False)
+        {
+            nLinkUpdateMode = nSet;
+            if(!bNoModify)
+                aContentConfig.SetModified();
+        }
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
 
-    void SetUpdateFields(BOOL bSet)
+    void SetUpdateFields(BOOL bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet && nFldUpdateFlags == AUTOUPD_OFF)
             {
                 nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
-                SetModified();
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
             else if(!bSet)
             {
                 nFldUpdateFlags = AUTOUPD_OFF;
-                SetModified();
+                if(!bNoModify)
+                    aContentConfig.SetModified();
             }
         };
     sal_Bool IsUpdateFields()const {return nFldUpdateFlags != AUTOUPD_OFF; }
 
     sal_Int32   GetFldUpdateFlags()const {return nFldUpdateFlags;}
-    void        SetFldUpdateFlags(sal_Int32 nSet){nFldUpdateFlags = nSet;}
+    void        SetFldUpdateFlags(sal_Int32 nSet, sal_Bool bNoModify = sal_False)
+        {
+            nFldUpdateFlags = nSet;
+            if(!bNoModify)
+                aContentConfig.SetModified();
+        }
 
-    void SetUpdateCharts(BOOL bSet)
+    void SetUpdateCharts(BOOL bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet)
             {
                 nFldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
-                SetModified();
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
              else if(nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
              {
                 nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
-                SetModified();
+                if(!bNoModify)
+                    aContentConfig.SetModified();
              }
         };
     sal_Bool IsUpdateCharts()const {return nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
 
     FieldUnit   GetMetric() const { return eUserMetric;}
-    void        SetMetric(FieldUnit eSet) { eUserMetric = eSet; SetModified();};
+    void        SetMetric(FieldUnit eSet, sal_Bool bNoModify = sal_False)
+                {
+                    eUserMetric = eSet;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 
     sal_Bool    IsHScrollMetric()const {return bIsHScrollMetricSet;}
     FieldUnit   GetHScrollMetric() const { return bIsHScrollMetricSet ? eHScrollMetric : eUserMetric;}
-    void        SetHScrollMetric(FieldUnit eSet)
-        { eHScrollMetric = eSet; bIsHScrollMetricSet = sal_True; SetModified();};
+    void        SetHScrollMetric(FieldUnit eSet, sal_Bool bNoModify = sal_False)
+                {
+                    eHScrollMetric = eSet; bIsHScrollMetricSet = sal_True;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 
     sal_Bool    IsVScrollMetric()const {return bIsVScrollMetricSet;}
     FieldUnit   GetVScrollMetric() const { return bIsVScrollMetricSet ? eVScrollMetric : eUserMetric;}
-    void        SetVScrollMetric(FieldUnit eSet)
-        { eVScrollMetric = eSet; bIsVScrollMetricSet = sal_True; SetModified();};
+    void        SetVScrollMetric(FieldUnit eSet, sal_Bool bNoModify = sal_False)
+                {
+                    eVScrollMetric = eSet; bIsVScrollMetricSet = sal_True;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 
     sal_Int32   GetDefTab() const { return nDefTab;}
-    void        SetDefTab( sal_Int32  nSet ) {  nDefTab = nSet; SetModified();}
+    void        SetDefTab( sal_Int32  nSet, sal_Bool bNoModify = sal_False )
+                {
+                    nDefTab = nSet;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 
 };
 

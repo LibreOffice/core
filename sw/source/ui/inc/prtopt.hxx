@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:48:32 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ public:
     SwPrintOptions(sal_Bool bWeb);
     virtual ~SwPrintOptions();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
 
     sal_Bool IsPrintGraphic()   const { return bPrintGraphic; }

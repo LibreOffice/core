@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-22 11:12:40 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,8 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwRevisionConfig::SwRevisionConfig() :
-    ConfigItem(C2U("Office.Writer/Revision"))
+    ConfigItem(C2U("Office.Writer/Revision"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     aInsertAttr.nItemId = SID_ATTR_CHAR_UNDERLINE;
     aInsertAttr.nAttr = UNDERLINE_SINGLE;
@@ -357,12 +358,6 @@ SwRevisionConfig::SwRevisionConfig() :
     aFormatAttr.nAttr = WEIGHT_BOLD;
     aFormatAttr.nColor = COL_BLACK;
 
-#if SUPD>615
-    EnableNotification(GetPropertyNames());
-#else
-    Sequence <OUString> aNames(GetPropertyNames());
-    EnableNotification(aNames);
-#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -370,13 +365,6 @@ SwRevisionConfig::SwRevisionConfig() :
   -----------------------------------------------------------------------*/
 SwRevisionConfig::~SwRevisionConfig()
 {
-}
-/*-- 10.10.00 16:22:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwRevisionConfig::Notify( const Sequence<OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
@@ -587,7 +575,8 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/Insert") : C2U("Office.Writer/Insert")),
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/Insert") : C2U("Office.Writer/Insert"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bIsWeb(bWeb),
     pCapOptions(0),
     pOLEMiscOpt(0)
@@ -600,12 +589,6 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     if(!bIsWeb)
         pCapOptions = new InsCaptionOptArr;
 
-#if SUPD>615
-    EnableNotification(GetPropertyNames());
-#else
-    Sequence <OUString> aNames(GetPropertyNames());
-    EnableNotification(aNames);
-#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -615,13 +598,6 @@ SwInsertConfig::~SwInsertConfig()
 {
     delete pCapOptions;
     delete pOLEMiscOpt;
-}
-/*-- 10.10.00 16:22:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwInsertConfig::Notify( const Sequence<OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
@@ -960,14 +936,9 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwTableConfig::SwTableConfig(sal_Bool bWeb) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/Table") : C2U("Office.Writer/Table"))
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/Table") : C2U("Office.Writer/Table"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
-#if SUPD>615
-    EnableNotification(GetPropertyNames());
-#else
-    Sequence <OUString> aNames(GetPropertyNames());
-    EnableNotification(aNames);
-#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -975,13 +946,6 @@ SwTableConfig::SwTableConfig(sal_Bool bWeb) :
   -----------------------------------------------------------------------*/
 SwTableConfig::~SwTableConfig()
 {
-}
-/*-- 10.10.00 16:22:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwTableConfig::Notify( const Sequence<OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
@@ -1045,7 +1009,8 @@ void SwTableConfig::Load()
 
   -----------------------------------------------------------------------*/
 SwMiscConfig::SwMiscConfig() :
-    ConfigItem(C2U("Office.Writer")),
+    ConfigItem(C2U("Office.Writer"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bDefaultFontsInCurrDocOnly(sal_False),
     bShowIndexPreview(sal_False),
     bGrfToGalleryAsLnk(sal_True),
@@ -1054,12 +1019,6 @@ SwMiscConfig::SwMiscConfig() :
     bIsNameFromColumn(sal_True),
     nMailingFormats(0)
 {
-#if SUPD>615
-    EnableNotification(GetPropertyNames());
-#else
-    Sequence <OUString> aNames(GetPropertyNames());
-    EnableNotification(aNames);
-#endif
     Load();
 }
 /*-- 18.01.01 17:02:47---------------------------------------------------
@@ -1097,13 +1056,6 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
             pNames[i] = C2U(aPropNames[i]);
     }
     return aNames;
-}
-/*-- 18.01.01 17:02:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwMiscConfig::Notify( const Sequence<OUString>& rPropertyNames)
-{
-    Load();
 }
 /*-- 18.01.01 17:02:47---------------------------------------------------
 

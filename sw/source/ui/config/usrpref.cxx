@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content")),
+    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     bWeb(bIsWeb)
 {
@@ -194,13 +195,6 @@ SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
   -----------------------------------------------------------------------*/
 SwContentViewConfig::~SwContentViewConfig()
 {
-}
-/*-- 28.09.00 09:55:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwContentViewConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
@@ -251,7 +245,6 @@ void SwContentViewConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -283,11 +276,11 @@ void SwContentViewConfig::Load()
                     case 17:
                     {
                         sal_Int32 nSet; pValues[nProp] >>= nSet;
-                        rParent.SetUpdateLinkMode(nSet);
+                        rParent.SetUpdateLinkMode(nSet, TRUE);
                     }
                     break;// "Update/Link",
-                    case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
-                    case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
+                    case 18: rParent.SetUpdateFields(bSet, TRUE); break;// "Update/Field",
+                    case 19: rParent.SetUpdateCharts(bSet, TRUE); break;// "Update/Chart"
                 }
             }
         }
@@ -329,7 +322,8 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwLayoutViewConfig::SwLayoutViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Layout") :  C2U("Office.Writer/Layout")),
+    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Layout") :  C2U("Office.Writer/Layout"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     bWeb(bIsWeb)
 {
@@ -339,13 +333,6 @@ SwLayoutViewConfig::SwLayoutViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
   -----------------------------------------------------------------------*/
 SwLayoutViewConfig::~SwLayoutViewConfig()
 {
-}
-/*-- 28.09.00 09:55:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwLayoutViewConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 28.09.00 09:55:36---------------------------------------------------
 
@@ -397,7 +384,6 @@ void SwLayoutViewConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -437,13 +423,13 @@ void SwLayoutViewConfig::Load()
                     case 13:
                     {
                         sal_Int32 nUnit; pValues[nProp] >>= nUnit;
-                        rParent.SetMetric((FieldUnit)nUnit);
+                        rParent.SetMetric((FieldUnit)nUnit, TRUE);
                     }
                     break;// "Other/MeasureUnit",
                     case 14:
                     {
                         sal_Int32 nTab; pValues[nProp] >>= nTab;
-                        rParent.SetDefTab(nTab);
+                        rParent.SetDefTab(nTab, TRUE);
                     }
                     break;// "Other/TabStop",
                 }
@@ -479,7 +465,8 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid")),
+    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Grid") :  C2U("Office.Writer/Grid"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     bWeb(bIsWeb)
 {
@@ -489,13 +476,6 @@ SwGridConfig::SwGridConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
  ---------------------------------------------------------------------------*/
 SwGridConfig::~SwGridConfig()
 {
-}
-/* -----------------------------19.01.01 13:07--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwGridConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /* -----------------------------19.01.01 13:07--------------------------------
 
@@ -533,7 +513,6 @@ void SwGridConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -586,7 +565,8 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem(C2U("Office.Writer/Cursor")),
+    ConfigItem(C2U("Office.Writer/Cursor"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar)
 {
 }
@@ -595,13 +575,6 @@ SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
  ---------------------------------------------------------------------------*/
 SwCursorConfig::~SwCursorConfig()
 {
-}
-/* -----------------------------19.01.01 13:07--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwCursorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /* -----------------------------19.01.01 13:07--------------------------------
 
@@ -636,7 +609,6 @@ void SwCursorConfig::Load()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -668,7 +640,8 @@ void SwCursorConfig::Load()
 
   -----------------------------------------------------------------------*/
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem(C2U("Office.WriterWeb/Background")),
+    ConfigItem(C2U("Office.WriterWeb/Background"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     rParent(rPar),
     aPropNames(1)
 {
@@ -679,13 +652,6 @@ SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
   -----------------------------------------------------------------------*/
 SwWebColorConfig::~SwWebColorConfig()
 {
-}
-/*-- 28.09.00 09:55:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwWebColorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
@@ -709,7 +675,6 @@ void SwWebColorConfig::Commit()
 void SwWebColorConfig::Load()
 {
     Sequence<Any> aValues = GetProperties(aPropNames);
-    EnableNotification(aPropNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aPropNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aPropNames.getLength())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 15:45:46 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ using namespace com::sun::star::uno;
 
  ---------------------------------------------------------------------------*/
 SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
-    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"))
+    ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     for(USHORT i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
         aTbxIdArray[i] = (USHORT)-1;

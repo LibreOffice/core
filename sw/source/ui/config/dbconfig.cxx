@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconfig.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:05:53 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,8 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 SwDBConfig::SwDBConfig() :
-    ConfigItem(C2U("Office.DataAccess/AddressBook")),
+    ConfigItem(C2U("Office.DataAccess/AddressBook"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     pImpl(0)
 {
 };
@@ -135,7 +136,6 @@ void SwDBConfig::Load()
 
         pImpl = new SwDBData;
         pImpl->nCommandType = 0;
-        EnableNotification(rNames);
     }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
@@ -152,13 +152,6 @@ void SwDBConfig::Load()
             }
         }
     }
-}
-/* -----------------------------06.09.00 16:46--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwDBConfig::Notify( const Sequence<rtl::OUString>& aPropertyNames)
-{
-    Load();
 }
 /* -----------------------------20.02.01 12:36--------------------------------
 

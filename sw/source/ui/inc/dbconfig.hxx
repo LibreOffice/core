@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconfig.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:05:23 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,6 @@ public:
     virtual ~SwDBConfig();
 
     void                    Load();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-
     const SwDBData&         GetAddressSource();
 };
 
