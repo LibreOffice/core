@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:45:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,15 @@
 #include "osl/security.hxx"
 #include <string.h>
 #include <ctype.h>
-
+#include "diagnostics.h"
 using namespace rtl;
 using namespace osl;
 namespace jfw_plugin  { //stoc_javadetect
 
+
 //extern OUString ::Impl::usPathDelim();
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
+
 #if OSL_DEBUG_LEVEL >= 2
 class SelfTest
 {
@@ -79,7 +81,6 @@ public:
     SelfTest();
 } test;
 #endif
-
 
 SunVersion::SunVersion():  m_nUpdateSpecial(0),
                            m_preRelease(Rel_NONE),
@@ -231,6 +232,10 @@ bool SunVersion::init(const char *szVersion)
         m_preRelease = getPreRelease(pCur);
         if (m_preRelease == Rel_NONE)
             return false;
+#if defined(FREEBSD)
+        if (m_preRelease == Rel_FreeBSD)
+            return true;
+#endif
     }
     else
     {
@@ -267,13 +272,29 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
         return Rel_RC2;
     else if (! strcmp(szRelease, "rc3"))
         return Rel_RC3;
+#if defined (FREEBSD)
+    else if (! strcmp(szRelease, "p5"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p6"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p7"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p8"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p9"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p10"))
+        return Rel_FreeBSD;
+    else if (! strcmp(szRelease, "p11"))
+        return Rel_FreeBSD;
+#endif
     else
         return Rel_NONE;
 }
 
 SunVersion::~SunVersion()
 {
-//    delete[] strVersion;
+
 }
 
 /* Examples:
@@ -346,7 +367,6 @@ SunVersion::operator bool()
 {
     return m_bValid;
 }
-
 
 #if OSL_DEBUG_LEVEL >= 2
 SelfTest::SelfTest()
@@ -438,8 +458,10 @@ SelfTest::SelfTest()
         if ( ! bRet)
             break;
     }
-    OSL_ENSURE(bRet, "SunVersion self test failed");
-
+    if (bRet)
+        JFW_TRACE2("[Java framework] sunjavaplugin: Testing class SunVersion succeeded.");
+    else
+        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed");
 }
 #endif
 
