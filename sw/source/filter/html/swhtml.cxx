@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:45:26 $
+ *  last change: $Author: mib $ $Date: 2000-12-08 15:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,9 +1989,21 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         if( aToken.Len() > 5 )
         {
             // als Post-It einfuegen
-            String aComment( aToken.Copy( 3, aToken.Len()-5 ) );
-            aComment.EraseLeadingChars().EraseTrailingChars();
-            InsertComment( aComment );
+            // MIB 8.12.2000: If there are no space characters right behind
+            // the <!-- and on front of the -->, leave the comment untouched.
+            if( ' ' == aToken.GetChar( 3 ) &&
+                ' ' == aToken.GetChar( aToken.Len()-3 ) )
+            {
+                String aComment( aToken.Copy( 3, aToken.Len()-5 ) );
+                aComment.EraseLeadingChars().EraseTrailingChars();
+                InsertComment( aComment );
+            }
+            else
+            {
+                String aComment( '<' );
+                (aComment += aToken) += '>';
+                InsertComment( aComment );
+            }
         }
         break;
 
@@ -5237,6 +5249,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 14:45:26  jp
+      UpdateDocState without second parameter
+
       Revision 1.4  2000/11/15 16:26:50  hr
       #65293# includes
 

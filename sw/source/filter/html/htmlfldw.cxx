@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: mib $ $Date: 2000-12-08 15:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,9 +467,12 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         const String& rComment = pFld->GetPar2();
         BOOL bWritten = FALSE;
 
-        if( rComment.Len() >= 6 && '<' == rComment.GetChar(0) &&
+        if( (rComment.Len() >= 6 && '<' == rComment.GetChar(0) &&
             '>' == rComment.GetChar(rComment.Len()-1) &&
-            rComment.Copy( 1, 4 ).EqualsIgnoreCaseAscii(sHTML_meta) )
+            rComment.Copy( 1, 4 ).EqualsIgnoreCaseAscii(sHTML_meta)) ||
+              (rComment.Len() >= 7 &&
+             rComment.Copy( 0, 4 ).EqualsAscii( "<!--" ) &&
+             rComment.Copy( rComment.Len()-3, 3 ).EqualsAscii( "-->" )) )
         {
             // META-Tags direkt ausgeben
             String sComment( rComment );
@@ -546,11 +549,14 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.2 2000-12-08 15:14:18 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.36  2000/09/18 16:04:44  willem.vandorp
       OpenOffice header added.
 
