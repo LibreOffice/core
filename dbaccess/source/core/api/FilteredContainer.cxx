@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:55:09 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 07:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,14 @@ namespace dbaccess
         {
             if (pTableFilters->indexOf('%') != -1)
             {
-                _rOut.push_back(WildCard(pTableFilters[i].replace('%', '*')));
+                _rOut.push_back(WildCard(pTableFilters->replace('%', '*')));
             }
             else
             {
                 if (nShiftPos != i)
-                    pTableFilters[nShiftPos] = pTableFilters[i];
+                {
+                    _rTableFilter.getArray()[nShiftPos] = _rTableFilter.getArray()[i];
+                }
                 ++nShiftPos;
             }
         }
