@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 08:25:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <comphelper/types.hxx>
 #endif
 
+using namespace connectivity;
 using namespace ::comphelper;
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -101,11 +102,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 
-Reference< XNamed > OFlatTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OFlatTables::createObject(const ::rtl::OUString& _rName)
 {
     OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
-    Reference< XNamed > xRet = pRet;
+    sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;
 }
