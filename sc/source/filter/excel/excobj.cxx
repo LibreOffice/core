@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-28 12:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,18 +856,14 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
     UINT32 nStorageId;
     UINT16 nFmlaLen;
     rIn >> nFmlaLen;
-    BOOL bSizeOk = (bLinked && (sizeof(nFmlaLen) + nFmlaLen == nLen))
-        || (!bLinked && (sizeof(nFmlaLen) + nFmlaLen + sizeof(nStorageId) == nLen));
-    DBG_ASSERT( bSizeOk || !bLinked, "ExcEscherOle::ReadPictFmla: bad linked size" );
-    DBG_ASSERT( bSizeOk || bLinked, "ExcEscherOle::ReadPictFmla: bad embedded size" );
-    if ( !bSizeOk )
-        return ;        //2do: what else?
 
     String aUserName;
     ULONG nPos0 = rIn.Tell();       // fmla start
     BOOL bOk = TRUE;
     if ( bLinked )
     {
+        BOOL bSizeOk = (sizeof(nFmlaLen) + nFmlaLen == nLen);
+        DBG_ASSERT( bSizeOk, "ExcEscherOle::ReadPictFmla: bad linked size" );
         UINT16 n16;
         rIn >> n16;     // should be 7 but who knows ...
         bOk = (n16 + 3 <= nFmlaLen);
@@ -915,6 +911,13 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
         }
         rIn.Seek( nPos0 + nFmlaLen );
         rIn >> nStorageId;
+        if ( nStorageId )
+        {
+            BOOL bSizeOk = sizeof(nFmlaLen) + nFmlaLen + sizeof(nStorageId) == nLen;
+            DBG_ASSERT( bSizeOk, "ExcEscherOle::ReadPictFmla: bad embedded size" );
+        }
+        else
+            bOk = FALSE;        // no storage, internal
     }
     if ( bOk )
     {
