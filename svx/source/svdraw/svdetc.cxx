@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-08 12:29:43 $
+ *  last change: $Author: cl $ $Date: 2001-06-25 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,7 @@ SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
     pOutl->SetStyleSheetPool( (SfxStyleSheetPool*) pModel->GetStyleSheetPool() );
     pOutl->SetDefTab( pModel->GetDefaultTabulator() );
     pOutl->SetForbiddenCharsTable( pModel->GetForbiddenCharsTable() );
+    pOutl->SetAsianCompressionMode( pModel->GetCharCompressType() );
 
     return pOutl;
 }
