@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configureucb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:16:05 $
+ *  last change: $Author: sb $ $Date: 2001-10-24 15:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 #ifndef _UCBHELPER_CONFIGUREUCB_HXX_
 #define _UCBHELPER_CONFIGUREUCB_HXX_
 
-#include <vector>
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -74,16 +75,15 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#include <vector>
+
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
     namespace ucb {
         class XContentProvider;
         class XContentProviderManager;
     }
-    namespace uno {
-        class Any;
-        class RuntimeException;
-    }
+    namespace uno { class Any; }
 } } }
 
 namespace ucb {

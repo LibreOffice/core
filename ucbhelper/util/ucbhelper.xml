@@ -115,5 +115,6 @@
     <type> com.sun.star.ucb.XPropertySetRegistryFactory        </type>
     <type> com.sun.star.ucb.XRemoteContentProviderDoneListener </type>
     <type> com.sun.star.ucb.XSourceInitialization              </type>
+    <type> com.sun.star.uno.RuntimeException                   </type>
     <type> com.sun.star.uno.XWeak                              </type>
 </module-description>
