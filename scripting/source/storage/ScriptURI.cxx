@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2003-02-19 16:07:56 $
+ *  last change: $Author: npower $ $Date: 2003-03-05 18:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ Uri ScriptURI::parseIt()
     OUString attr;
     do
     {
-        attr = m_uri.getToken( 0, '+', len );
+        attr = m_uri.getToken( 0, '&', len );
         OSL_TRACE( "chunk: %s\n", ::rtl::OUStringToOString( attr,
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 

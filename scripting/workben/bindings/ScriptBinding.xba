@@ -365,7 +365,9 @@ function getScriptURI( selectedScript as String ) as String
 		end if
 	next n
 
-	getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; + scriptInfo.getLanguage() + &quot;+function=&quot; + scriptInfo.getFunctionName() + &quot;+location=&quot; + location 	
+	getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; _
+		+ scriptInfo.getLanguage() + &quot;&amp;amp;function=&quot; + _
+		scriptInfo.getFunctionName() + &quot;&amp;amp;location=&quot; + location 	
 	
 end function
 
@@ -565,7 +567,11 @@ sub RemoveEventFromDocViaAPI( event as string )
 	dim args(0) as new com.sun.star.beans.PropertyValue
 	args(0).Name = &quot;&quot;
 	args(0).Value = event
-	url.Complete = &quot;script://_$ScriptFrmwrkHelper.removeEvent?language=Java+function=ScriptFrmwrkHelper.removeEvent+location=user&quot;
+
+	url.Complete = &quot;script://_$ScriptFrmwrkHelper.removeEvent?&quot; _
+					+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.removeEvent&quot; _
+					+ &quot;&amp;location=user&quot;
+					
 	parser.parseStrict(url)
 	disp = document.queryDispatch(url,&quot;&quot;,0)
 	disp.dispatch(url,args())
@@ -700,7 +706,8 @@ Sub UpdateCfgFile ( fileName as String )
 	args(0) = ThisComponent
 	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
 	FuncProvider.initialize( args() )
-	Func = FuncProvider.getFunction(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?language=Java+function=ScriptFrmwrkHelper.updateCfgFile+location=user&quot;)
+	Func = FuncProvider.getFunction(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?&quot; _
+		+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.updateCfgFile&amp;location=user&quot;)
 	Dim inArgs(2)
 	Dim outArgs()
 	Dim outIndex()
