@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:27:41 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text [ italian ] = "Definisci area database" ;
     Text [ portuguese_brazilian ] = "Definir Base de Dados" ;
     Text [ portuguese ] = "Definir base de dados" ;
-    Text [ finnish ] = "Määritä tietokannan alue" ;
+    Text [ finnish ] = "M??rit? tietokannan alue" ;
     Text [ danish ] = "Definer database" ;
     Text [ french ] = "Définir une plage de base de données" ;
     Text [ swedish ] = "Definiera databasområde" ;
@@ -181,7 +181,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     FixedLine FL_OPTIONS
     {
@@ -224,7 +224,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Contiene intestazioni colonne" ;
         Text [ portuguese_brazilian ] = "inclui cabe?alhos da coluna" ;
         Text [ portuguese ] = "Incluir ~cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
+        Text [ finnish ] = "~Sis?lt?? sarakkeen otsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
         Text [ french ] = "En-têtes de colonnes inclus" ;
         Text [ swedish ] = "Innehåller ~kolumnhuvuden" ;
@@ -273,7 +273,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ turkish ] = "Hücre ~ekle/sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insertar o eliminar celdas";
-        Text[ finnish ] = "~Lisää tai poista soluja";
+        Text[ finnish ] = "~Lis?? tai poista soluja";
     };
     CheckBox BTN_FORMAT
     {
@@ -303,7 +303,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ turkish ] = "Formatlamayý ~koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~nservar formato";
-        Text[ finnish ] = "~Säilytä muotoilu";
+        Text[ finnish ] = "~S?ilyt? muotoilu";
     };
     CheckBox BTN_STRIPDATA
     {
@@ -333,7 +333,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ turkish ] = "~Ýçe aktarýlan verileri kaydetme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N~o guardar datos importados";
-        Text[ finnish ] = "~Älä tallenna tuotuja tietoja";
+        Text[ finnish ] = "~?l? tallenna tuotuja tietoja";
     };
     FixedText FT_SOURCE
     {
@@ -362,7 +362,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ turkish ] = "Kaynak:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fuente:";
-        Text[ finnish ] = "Lähde:";
+        Text[ finnish ] = "L?hde:";
     };
     FixedText FT_OPERATIONS
     {
@@ -416,7 +416,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "Lägg ~till" ;
@@ -491,7 +491,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ italian ] = "Aggiungi" ;
         Text [ portuguese_brazilian ] = "~Acrescentar" ;
         Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "~Lägg till" ;
@@ -577,6 +577,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir área de base de datos";
 };
+
 
 
 
