@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-10 10:51:43 $
+ *  last change: $Author: cd $ $Date: 2002-03-14 11:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,19 +525,22 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentOb
 
     if( bDocumentContainsTransparentObjects && !aNewPrinterOptions.IsReduceTransparency() )
     {
-        SvtPrintWarningOptions aWarnOpt;
-
-        if( aWarnOpt.IsTransparency() )
+        if ( !Application::IsHeadlessModeEnabled() )
         {
-            TransparencyPrintWarningBox aWarnBox( pUIParent );
-            const USHORT                nRet = aWarnBox.Execute();
+            SvtPrintWarningOptions aWarnOpt;
 
-            if( nRet == RET_CANCEL )
-                bRet = FALSE;
-            else
+            if( aWarnOpt.IsTransparency() )
             {
-                aNewPrinterOptions.SetReduceTransparency( nRet != RET_NO );
-                aWarnOpt.SetTransparency( !aWarnBox.IsNoWarningChecked() );
+                TransparencyPrintWarningBox aWarnBox( pUIParent );
+                const USHORT                nRet = aWarnBox.Execute();
+
+                if( nRet == RET_CANCEL )
+                    bRet = FALSE;
+                else
+                {
+                    aNewPrinterOptions.SetReduceTransparency( nRet != RET_NO );
+                    aWarnOpt.SetTransparency( !aWarnBox.IsNoWarningChecked() );
+                }
             }
         }
     }
