@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdcst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 17:06:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -81,7 +83,7 @@ TYPEINIT0(SfxBroadcaster);
 //====================================================================
 
 //====================================================================
-// broadcast immedeately
+// broadcast immediately
 
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
@@ -119,7 +121,6 @@ void SfxBroadcaster::BroadcastDelayed( const SfxHint& rHint )
 
 // broadcast in idle-handler
 
-
 void SfxBroadcaster::BroadcastInIdle( const SfxHint& rHint )
 {
     DBG_WARNING( "not implemented" );
@@ -128,7 +129,6 @@ void SfxBroadcaster::BroadcastInIdle( const SfxHint& rHint )
 //--------------------------------------------------------------------
 
 // unregister all listeners
-
 
 SfxBroadcaster::~SfxBroadcaster()
 {
@@ -148,7 +148,6 @@ SfxBroadcaster::~SfxBroadcaster()
 //--------------------------------------------------------------------
 
 // simple ctor of class SfxBroadcaster
-
 
 SfxBroadcaster::SfxBroadcaster()
 {
@@ -239,7 +238,6 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 
 //--------------------------------------------------------------------
 
-
 BOOL SfxBroadcaster::HasListeners() const
 {
     for ( USHORT n = 0; n < aListeners.Count(); ++n )
@@ -249,5 +247,3 @@ BOOL SfxBroadcaster::HasListeners() const
 }
 
 //--------------------------------------------------------------------
-
-
