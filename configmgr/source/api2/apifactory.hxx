@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 14:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@ namespace configmgr
         {
             ObjectRegistryHolder m_pRegistry;
             UnoTunnelID const m_aTunnelID;
+
+        private:
+            /// return the element _without_ acquiring it
+            NodeElement*    implFind(configuration::NodeID const& aNode);
+
         public:
             Factory(ObjectRegistryHolder pRegistry);
             virtual ~Factory();
@@ -123,6 +128,9 @@ namespace configmgr
 
             SetElement*     findSetElement(configuration::ElementTree const& aTree);
 
+            /// check for the existence of an element
+            sal_Bool        hasElement(configuration::NodeID const& _rNode) { return NULL != implFind(_rNode); }
+
             void    revokeElement(configuration::NodeID const& aNode);
             void    revokeElement(configuration::NodeID const& aNode, NodeElement& rElement);
 
@@ -132,7 +140,6 @@ namespace configmgr
 
             static ApiTreeImpl const* findDescendantTreeImpl(configuration::NodeID const& aNode, ApiTreeImpl const* pImpl);
         protected:
-            NodeElement*    doFindElement(configuration::NodeID const& aNode);
             void            doRegisterElement(configuration::NodeID const& aNode, NodeElement* pElement);
             void            doRevokeElement(configuration::NodeID const& aNode, NodeElement* pElement);
 

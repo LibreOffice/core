@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:54:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 14:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,9 @@ osl::Mutex& Factory::doGetMutex()
 }
 //-----------------------------------------------------------------------------
 inline
-NodeElement* Factory::doFindElement(configuration::NodeID const& aNode)
+NodeElement* Factory::implFind(configuration::NodeID const& aNode)
 {
-    NodeElement* pFound = m_pRegistry->findElement(aNode);
-    if (pFound) pFound->getUnoInstance()->acquire();
-    return pFound;
+    return m_pRegistry->findElement(aNode);
 }
 //-----------------------------------------------------------------------------
 inline
@@ -180,7 +178,7 @@ void Factory::implHaveNewElement(NodeID aNodeID, NodeElement* pElement)
     if (pElement)
     {
         doRegisterElement(aNodeID,pElement);
-        OSL_ENSURE(doFindElement(aNodeID) == pElement,"WARNING: New API object could not be registered with its factory");
+        OSL_ENSURE(implFind(aNodeID) == pElement,"WARNING: New API object could not be registered with its factory");
     }
 }
 //-----------------------------------------------------------------------------
@@ -202,7 +200,7 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
     osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aNode);
-    NodeElement* pRet = doFindElement(aNodeID);
+    NodeElement* pRet = findElement(aNodeID);
     if (pRet == 0)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aNode);
@@ -238,14 +236,16 @@ UnoInterfaceRef Factory::findUnoElement(NodeID const& aNodeID)
 NodeElement* Factory::findElement(NodeID const& aNodeID)
 {
     osl::MutexGuard aLock(this->doGetMutex());
-    return doFindElement(aNodeID);
+    NodeElement* pReturn = implFind(aNodeID);
+    if (pReturn) pReturn->getUnoInstance()->acquire();
+    return pReturn;
 }
 //-----------------------------------------------------------------------------
 /*
 void Factory::registerElement(NodeID const& aNodeID, NodeElement& rElement)
 {
     osl::MutexGuard aLock(this->doGetMutex());
-    if (NodeElement* pExist = doFindElement(aNodeID))
+    if (NodeElement* pExist = implFind(aNodeID))
     {
         OSL_ENSURE(pExist == &rElement,"ERROR: A different Configuration Element was already registered for the same node");
         OSL_ENSURE(false ,"WARNING: Configuration Element was already registered");
@@ -261,7 +261,7 @@ void Factory::registerElement(NodeID const& aNodeID, NodeElement& rElement)
 void Factory::revokeElement(NodeID const& aNodeID)
 {
     osl::MutexGuard aLock(this->doGetMutex());
-    if (NodeElement* pElement = doFindElement(aNodeID))
+    if (NodeElement* pElement = implFind(aNodeID))
         doRevokeElement(aNodeID, pElement);
 }
 //-----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void Factory::revokeElement(NodeID const& aNodeID)
 void Factory::revokeElement(NodeID const& aNodeID, NodeElement& rElement)
 {
     osl::MutexGuard aLock(this->doGetMutex());
-    if (doFindElement(aNodeID) == &rElement)
+    if (implFind(aNodeID) == &rElement)
         doRevokeElement(aNodeID, &rElement);
 }
 
@@ -291,7 +291,7 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >con
 
     NodeID aNodeID(aTree,aRoot);
     // must be a tree element if it is a tree root
-    TreeElement* pRet = static_cast<TreeElement*>(doFindElement(aNodeID));
+    TreeElement* pRet = static_cast<TreeElement*>(findElement(aNodeID));
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
@@ -322,7 +322,7 @@ NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
     osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aNode);
-    NodeElement* pRet = doFindElement(aNodeID);
+    NodeElement* pRet = findElement(aNodeID);
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aNode);
@@ -366,7 +366,7 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
 
     NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
-    SetElement* pRet = static_cast<SetElement*>( doFindElement(aNodeID) );
+    SetElement* pRet = static_cast<SetElement*>( findElement(aNodeID) );
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
@@ -394,7 +394,7 @@ SetElement* Factory::findSetElement(ElementTree const& aElementTree)
 
     NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
-    SetElement* pRet = static_cast<SetElement*>( doFindElement(aNodeID) );
+    SetElement* pRet = static_cast<SetElement*>( findElement(aNodeID) );
 
     return pRet;
 }
@@ -441,11 +441,8 @@ ApiTreeImpl const* Factory::findDescendantTreeImpl(configuration::NodeID const& 
     ApiTreeImpl* pRet = 0;
     if (pImpl)
     {
-        if ( NodeElement* pElement = pImpl->getFactory().findElement( aNode ) )
-        {
-            UnoInterfaceRef xReleaseIt( implToUno(pElement) );
+        if ( NodeElement* pElement = pImpl->getFactory().implFind( aNode ) )
             pRet = &pElement->getApiTree();
-        }
     }
     return pRet;
 }
