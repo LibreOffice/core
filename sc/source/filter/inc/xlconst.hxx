@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:00:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,6 @@ const sal_uInt32 RECORD_SEEK_TO_END         = ~RECORD_SEEK_TO_BEGIN;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;
 
-const sal_uInt16 EXC_ID_UNKNOWN             = 0xFFFF;
-const sal_uInt16 EXC_ID_CONT                = 0x003C;
-
-
 // String import/export -------------------------------------------------------
 
 /** Flags used to specify import/export mode of strings. */
@@ -184,6 +180,9 @@ const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
 
 const sal_uInt16 EXC_ID_STRING              = 0x0207;
 
+// (0x000A) EOF ---------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_EOF                 = 0x000A;
 
 // (0x001C) NOTE --------------------------------------------------------------
 
@@ -196,6 +195,9 @@ const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
+// (0x003C) CONTINUE ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CONT                = 0x003C;
 
 // (0x003D) WINDOW1 -----------------------------------------------------------
 
@@ -243,6 +245,9 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
 
+// (0xFFFF) unknown record - special ID ---------------------------------------
+
+const sal_uInt16 EXC_ID_UNKNOWN             = 0xFFFF;
 
 // ============================================================================
 
