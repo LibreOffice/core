@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:12:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,28 +746,28 @@ void SdrObjList::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
     }
 }
 
-void SdrObjList::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
-{
-    FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
-    ULONG nObjAnz=GetObjCount();
-    for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
-        nObjNum--;
-        SdrObject* pObj=GetObj(nObjNum);
-        FASTBOOL bThisObjNot=pObj->IsNotPersistent();
-        if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
-            bThisObjNot=TRUE;
-        }
-        if (bThisObjNot) {
-            if (bNoBroadcast) NbcRemoveObject(nObjNum);
-            else RemoveObject(nObjNum);
-        } else {
-            SdrObjList* pOL=pObj->GetSubList();
-            if (pOL!=NULL) {
-                pOL->RemoveNotPersistentObjects(bNoBroadcast);
-            }
-        }
-    }
-}
+//BFS01void SdrObjList::RemoveNotPersistentObjects(FASTBOOL bNoBroadcast)
+//BFS01{
+//BFS01 FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
+//BFS01 ULONG nObjAnz=GetObjCount();
+//BFS01 for (ULONG nObjNum=nObjAnz; nObjNum>0;) {
+//BFS01     nObjNum--;
+//BFS01     SdrObject* pObj=GetObj(nObjNum);
+//BFS01     FASTBOOL bThisObjNot=pObj->IsNotPersistent();
+//BFS01     if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
+//BFS01         bThisObjNot=TRUE;
+//BFS01     }
+//BFS01     if (bThisObjNot) {
+//BFS01         if (bNoBroadcast) NbcRemoveObject(nObjNum);
+//BFS01         else RemoveObject(nObjNum);
+//BFS01     } else {
+//BFS01         SdrObjList* pOL=pObj->GetSubList();
+//BFS01         if (pOL!=NULL) {
+//BFS01             pOL->RemoveNotPersistentObjects(bNoBroadcast);
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 FASTBOOL SdrObjList::ImpGetFillColor(SdrObject* pObj, Color& rCol) const
 {
@@ -856,181 +856,175 @@ void SdrObjList::ForceSwapOutObjects() const
     }
 }
 
-void SdrObjList::Save(SvStream& rOut) const
-{
-    FASTBOOL bNotPersist=pPage!=NULL && pPage->IsObjectsNotPersistent();
-    FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
-    if (!bNotPersist) {
-        SdrObjListIter aIter(*this,IM_FLAT);
-        while (aIter.IsMore()) {
-            SdrObject* pObj=aIter.Next();
-            FASTBOOL bThisObjNot=pObj->IsNotPersistent();
-            if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
-                bThisObjNot=TRUE;
-            }
-            if (!bThisObjNot) rOut<<*pObj;
-            if (pModel!=NULL) pModel->IncProgress();
-        }
-    }
-    SdrIOHeader(rOut,STREAM_WRITE,SdrIOEndeID); // Endemarke
-}
+//BFS01void SdrObjList::Save(SvStream& rOut) const
+//BFS01{
+//BFS01 FASTBOOL bNotPersist=pPage!=NULL && pPage->IsObjectsNotPersistent();
+//BFS01 FASTBOOL bNoOLE=pModel!=NULL && pModel->IsStreamingSdrModel();
+//BFS01 if (!bNotPersist) {
+//BFS01     SdrObjListIter aIter(*this,IM_FLAT);
+//BFS01     while (aIter.IsMore()) {
+//BFS01         SdrObject* pObj=aIter.Next();
+//BFS01         FASTBOOL bThisObjNot=pObj->IsNotPersistent();
+//BFS01         if (!bThisObjNot && bNoOLE && pObj->ISA(SdrOle2Obj)) {
+//BFS01             bThisObjNot=TRUE;
+//BFS01         }
+//BFS01         if (!bThisObjNot) rOut<<*pObj;
+//BFS01         if (pModel!=NULL) pModel->IncProgress();
+//BFS01     }
+//BFS01 }
+//BFS01 SdrIOHeader(rOut,STREAM_WRITE,SdrIOEndeID); // Endemarke
+//BFS01}
 
-void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
-{
-    Clear();
+//BFS01void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
+//BFS01{
+//BFS01 Clear();
+//BFS01
+//BFS01 if (rIn.GetError()!=0)
+//BFS01     return;
+//BFS01
+//BFS01 SdrInsertReason aReason(SDRREASON_STREAMING);
+//BFS01 FASTBOOL        bEnde=FALSE;
+//BFS01
+//BFS01 while( rIn.GetError()==0 && !rIn.IsEof() && !bEnde )
+//BFS01 {
+//BFS01     SdrObjIOHeaderLookAhead aHead(rIn,STREAM_READ);
+//BFS01
+//BFS01     if (!aHead.IsEnde())
+//BFS01     {
+//BFS01         SdrObject* pObj=SdrObjFactory::MakeNewObject(aHead.nInventor,aHead.nIdentifier,&rPage);
+//BFS01
+//BFS01         if( pObj!=NULL )
+//BFS01         {
+//BFS01             rIn >> *pObj;
+//BFS01
+//BFS01#ifndef SVX_LIGHT
+//BFS01             if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) && ( pObj->GetObjInventor() == SdrInventor ) )
+//BFS01             {
+//BFS01                 // convert StarImage OLE objects to normal graphic objects
+//BFS01                 SdrOle2Obj* pOLEObj = (SdrOle2Obj*) pObj;
+//BFS01                 BOOL        bImageOLE = FALSE;
+//BFS01
+//BFS01                 if( pOLEObj->GetProgName() == String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" ) ) )
+//BFS01                     bImageOLE = TRUE;
+//BFS01                 else if( pModel->GetPersist() )
+//BFS01                 {
+//BFS01                     SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetPersistName() ) );
+//BFS01                     const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
+//BFS01                     const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
+//BFS01                     const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
+//BFS01
+//BFS01                     if( xInfo.Is() &&
+//BFS01                         ( xInfo->GetClassName() == aSim30Name ||
+//BFS01                           xInfo->GetClassName() == aSim40Name ||
+//BFS01                           xInfo->GetClassName() == aSim50Name ) )
+//BFS01                     {
+//BFS01                         bImageOLE = TRUE;
+//BFS01                     }
+//BFS01                 }
+//BFS01
+//BFS01                 if( bImageOLE && pOLEObj->GetPersistName().Len() )
+//BFS01                 {
+//BFS01                     SotStorage*     pModelStorage = pModel->GetModelStorage();
+//BFS01                     const String    aSimStorageName( pOLEObj->GetPersistName() );
+//BFS01
+//BFS01                     if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
+//BFS01                     {
+//BFS01                         SotStorageRef xSimStorage( pModelStorage->OpenSotStorage( aSimStorageName ) );
+//BFS01
+//BFS01                         if( xSimStorage.Is() )
+//BFS01                         {
+//BFS01                             String aStmName( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument" ) );
+//BFS01
+//BFS01                             if( xSimStorage->IsStream( aStmName ) ||
+//BFS01                                 xSimStorage->IsStream( aStmName = String( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument 4.0" ) ) ) )
+//BFS01                             {
+//BFS01                                 SotStorageStreamRef xSimStm( xSimStorage->OpenSotStream( aStmName ) );
+//BFS01
+//BFS01                                 if( xSimStm.Is() && !xSimStm->GetError() )
+//BFS01                                 {
+//BFS01                                     Graphic aGraphic;
+//BFS01
+//BFS01                                     xSimStm->SetBufferSize( 32768 );
+//BFS01                                     xSimStm->SetKey( xSimStorage->GetKey() );
+//BFS01                                     *xSimStm >> aGraphic;
+//BFS01                                     xSimStm->SetBufferSize( 0 );
+//BFS01
+//BFS01                                     SdrGrafObj* pNewObj = (SdrGrafObj*) SdrObjFactory::MakeNewObject( SdrInventor, OBJ_GRAF, &rPage );
+//BFS01
+//BFS01                                     if( pNewObj )
+//BFS01                                     {
+//BFS01                                         pNewObj->SetGraphic( aGraphic );
+//BFS01                                         pNewObj->SetLogicRect( pObj->GetLogicRect() );
+//BFS01                                         delete pObj;
+//BFS01                                         pObj = pNewObj;
+//BFS01                                     }
+//BFS01                                 }
+//BFS01                             }
+//BFS01                         }
+//BFS01                     }
+//BFS01                 }
+//BFS01             }
+//BFS01#endif // SVX_LIGHT
+//BFS01
+//BFS01             InsertObject(pObj,CONTAINER_APPEND,&aReason);
+//BFS01         }
+//BFS01         else
+//BFS01         { // aha, das wil keiner. Also ueberlesen.
+//BFS01#ifdef SVX_LIGHT
+//BFS01             if( aHead.nInventor != FmFormInventor )
+//BFS01             {
+//BFS01#endif
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01             ByteString aStr("SdrObjList::Load(): Zeichenobjekt kann von der Factory nicht erzeugt werden:\n");
+//BFS01             UINT32 nPos(GetObjCount());
+//BFS01
+//BFS01             aStr += "Listenposition: ";
+//BFS01             aStr += ByteString::CreateFromInt32( nPos );
+//BFS01             aStr += "\n";
+//BFS01             aStr += "Inventor: ";
+//BFS01                sal_Int32 nInv = SWAPLONG( aHead.nInventor );
+//BFS01                aStr += ByteString::CreateFromInt32( nInv );
+//BFS01             aStr += ", Identifier: ";
+//BFS01             aStr += ByteString::CreateFromInt32( aHead.nIdentifier );
+//BFS01             aStr += "\n";
+//BFS01             aStr += "FilePos: ";
+//BFS01             aStr += ByteString::CreateFromInt32( aHead.GetFilePos() );
+//BFS01             aStr += ", BlockSize: ";
+//BFS01             aStr += ByteString::CreateFromInt32( aHead.GetBlockSize() );
+//BFS01
+//BFS01             DBG_ERROR(aStr.GetBuffer());
+//BFS01#endif
+//BFS01
+//BFS01#ifdef SVX_LIGHT
+//BFS01             }
+//BFS01#endif
+//BFS01             aHead.SkipRecord();
+//BFS01         }
+//BFS01     }
+//BFS01     else
+//BFS01     {
+//BFS01         bEnde=TRUE;
+//BFS01         aHead.SkipRecord(); // die Endemarke weglesen
+//BFS01     }
+//BFS01
+//BFS01     SdrModel* pMd=pModel;
+//BFS01
+//BFS01     if (pMd==NULL)
+//BFS01         pMd=rPage.GetModel();
+//BFS01
+//BFS01     if (pMd!=NULL)
+//BFS01         pMd->DoProgress(rIn.Tell());
+//BFS01 }
+//BFS01}
 
-    if (rIn.GetError()!=0)
-        return;
-
-    SdrInsertReason aReason(SDRREASON_STREAMING);
-    FASTBOOL        bEnde=FALSE;
-
-    while( rIn.GetError()==0 && !rIn.IsEof() && !bEnde )
-    {
-        SdrObjIOHeaderLookAhead aHead(rIn,STREAM_READ);
-
-        if (!aHead.IsEnde())
-        {
-            SdrObject* pObj=SdrObjFactory::MakeNewObject(aHead.nInventor,aHead.nIdentifier,&rPage);
-
-            if( pObj!=NULL )
-            {
-                rIn >> *pObj;
-
-#ifndef SVX_LIGHT
-                if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) && ( pObj->GetObjInventor() == SdrInventor ) )
-                {
-                    // convert StarImage OLE objects to normal graphic objects
-                    SdrOle2Obj* pOLEObj = (SdrOle2Obj*) pObj;
-                    BOOL        bImageOLE = FALSE;
-
-                    if( pOLEObj->GetProgName() == String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" ) ) )
-                        bImageOLE = TRUE;
-                    else if( pModel->GetPersist() )
-                    {
-                        if ( pModel->GetPersist()->GetEmbeddedObjectContainer().HasEmbeddedObject( pOLEObj->GetPersistName() ) )
-                        {
-                            uno::Reference < embed::XEmbeddedObject > xObject =
-                                    pModel->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( pOLEObj->GetPersistName() );
-                            if ( xObject.is() )
-                            {
-                                SvGlobalName aObjClsId( xObject->getClassID() );
-
-                                const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
-                                const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
-                                const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
-
-                                if( aObjClsId == aSim30Name || aObjClsId == aSim40Name || aObjClsId == aSim50Name )
-                                {
-                                    bImageOLE = TRUE;
-                                }
-                            }
-                        }
-                    }
-
-                    if( bImageOLE && pOLEObj->GetPersistName().Len() )
-                    {
-                        SotStorage*     pModelStorage = pModel->GetModelStorage();
-                        const String    aSimStorageName( pOLEObj->GetPersistName() );
-
-                        if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
-                        {
-                            SotStorageRef xSimStorage( pModelStorage->OpenSotStorage( aSimStorageName ) );
-
-                            if( xSimStorage.Is() )
-                            {
-                                String aStmName( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument" ) );
-
-                                if( xSimStorage->IsStream( aStmName ) ||
-                                    xSimStorage->IsStream( aStmName = String( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument 4.0" ) ) ) )
-                                {
-                                    SotStorageStreamRef xSimStm( xSimStorage->OpenSotStream( aStmName ) );
-
-                                    if( xSimStm.Is() && !xSimStm->GetError() )
-                                    {
-                                        Graphic aGraphic;
-
-                                        xSimStm->SetBufferSize( 32768 );
-                                        xSimStm->SetKey( xSimStorage->GetKey() );
-                                        *xSimStm >> aGraphic;
-                                        xSimStm->SetBufferSize( 0 );
-
-                                        SdrGrafObj* pNewObj = (SdrGrafObj*) SdrObjFactory::MakeNewObject( SdrInventor, OBJ_GRAF, &rPage );
-
-                                        if( pNewObj )
-                                        {
-                                            pNewObj->SetGraphic( aGraphic );
-                                            pNewObj->SetLogicRect( pObj->GetLogicRect() );
-                                            delete pObj;
-                                            pObj = pNewObj;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-#endif // SVX_LIGHT
-
-                InsertObject(pObj,CONTAINER_APPEND,&aReason);
-            }
-            else
-            { // aha, das wil keiner. Also ueberlesen.
-#ifdef SVX_LIGHT
-                if( aHead.nInventor != FmFormInventor )
-                {
-#endif
-
-#ifdef DBG_UTIL
-                ByteString aStr("SdrObjList::Load(): Zeichenobjekt kann von der Factory nicht erzeugt werden:\n");
-                UINT32 nPos(GetObjCount());
-
-                aStr += "Listenposition: ";
-                aStr += ByteString::CreateFromInt32( nPos );
-                aStr += "\n";
-                aStr += "Inventor: ";
-                sal_Int32 nInv = SWAPLONG( aHead.nInventor );
-                aStr += ByteString::CreateFromInt32( nInv );
-                aStr += ", Identifier: ";
-                aStr += ByteString::CreateFromInt32( aHead.nIdentifier );
-                aStr += "\n";
-                aStr += "FilePos: ";
-                aStr += ByteString::CreateFromInt32( aHead.GetFilePos() );
-                aStr += ", BlockSize: ";
-                aStr += ByteString::CreateFromInt32( aHead.GetBlockSize() );
-
-                DBG_ERROR(aStr.GetBuffer());
-#endif
-
-#ifdef SVX_LIGHT
-                }
-#endif
-                aHead.SkipRecord();
-            }
-        }
-        else
-        {
-            bEnde=TRUE;
-            aHead.SkipRecord(); // die Endemarke weglesen
-        }
-
-        SdrModel* pMd=pModel;
-
-        if (pMd==NULL)
-            pMd=rPage.GetModel();
-
-        if (pMd!=NULL)
-            pMd->DoProgress(rIn.Tell());
-    }
-}
-
-void SdrObjList::AfterRead()
-{
-    ULONG nAnz=GetObjCount();
-    for (ULONG i=0; i<nAnz; i++) {
-        GetObj(i)->AfterRead();
-    }
-}
+//BFS01void SdrObjList::AfterRead()
+//BFS01{
+//BFS01 ULONG nAnz=GetObjCount();
+//BFS01 for (ULONG i=0; i<nAnz; i++) {
+//BFS01     GetObj(i)->AfterRead();
+//BFS01 }
+//BFS01}
 
 void SdrObjList::FlattenGroups()
 {
@@ -1279,10 +1273,10 @@ SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
     return pPage;
 }
 
-SfxItemPool& SdrPage::GetItemPool() const
-{
-    return pModel->GetItemPool();
-}
+//BFS01SfxItemPool& SdrPage::GetItemPool() const
+//BFS01{
+//BFS01 return pModel->GetItemPool();
+//BFS01}
 
 void SdrPage::SetSize(const Size& aSiz)
 {
@@ -1546,9 +1540,9 @@ const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* pPV, co
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-{
-    DBG_ERROR("SdrPage::ReadData(): binfilter still used, but should not (!)");
+//BFS01void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 DBG_ERROR("SdrPage::ReadData(): binfilter still used, but should not (!)");
 //  if (rIn.GetError()!=0) return;
 //  SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 //#ifdef DBG_UTIL
@@ -1663,11 +1657,11 @@ void SdrPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 //          aMasters.Insert(aDscr);
 //      }
 //  }
-}
+//BFS01}
 
-void SdrPage::WriteData(SvStream& rOut) const
-{
-    DBG_ERROR("SdrPage::WriteData(): binfilter still used, but should not (!)");
+//BFS01void SdrPage::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 DBG_ERROR("SdrPage::WriteData(): binfilter still used, but should not (!)");
 //  SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 //#ifdef DBG_UTIL
 //  aCompat.SetID("SdrPage");
@@ -1704,22 +1698,22 @@ void SdrPage::WriteData(SvStream& rOut) const
 //  rOut << bBackgroundObj;
 //  if( pBackgroundObj )
 //      rOut << *pBackgroundObj;
-}
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrPage& rPg)
-{
-    if (rIn.GetError()!=0) return rIn;
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    rPg.ReadData(aHead,rIn);
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrPage& rPg)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 rPg.ReadData(aHead,rIn);
+//BFS01 return rIn;
+//BFS01}
 
-SvStream& operator<<(SvStream& rOut, const SdrPage& rPg)
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,!rPg.bMaster ? SdrIOPageID : SdrIOMaPgID);
-    rPg.WriteData(rOut);
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrPage& rPg)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,!rPg.bMaster ? SdrIOPageID : SdrIOMaPgID);
+//BFS01 rPg.WriteData(rOut);
+//BFS01 return rOut;
+//BFS01}
 
 XubString SdrPage::GetLayoutName() const
 {
