@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:02:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-23 10:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,8 +868,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
                             >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
 
-                cxDest = abs( cxDest );     // sj: i37894, size can be negative
-                cyDest = abs( cyDest );
+                cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
+                cyDest = abs( (int)cyDest );
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
@@ -918,8 +918,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 *pWMF >> xDest >> yDest >> xSrc >> ySrc >> cxSrc >> cySrc >> offBmiSrc >> cbBmiSrc >> offBitsSrc
                     >> cbBitsSrc >> iUsageSrc >> dwRop >> cxDest >> cyDest;
 
-                cxDest = abs( cxDest );     // sj: i37894, size can be negative
-                cyDest = abs( cyDest );
+                cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
+                cyDest = abs( (int)cyDest );
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
