@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscflag.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:49:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,50 +77,49 @@
 /******************* R s c F l a g ***************************************/
 class RscFlag : public RscConst {
     struct RscFlagInst{
-        USHORT  nFlags;
-        USHORT  nDfltFlags;
+        sal_uInt32  nFlags;
+        sal_uInt32  nDfltFlags;
     };
-    BOOL            bUSHORT;
     RSCINST         CreateBasic( RSCINST * pInst );
 public:
-                    RscFlag( HASHID nId, USHORT nTypId, BOOL bUSHORT = TRUE );
+                    RscFlag( Atom nId, sal_uInt32 nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
-                                  BOOL bOwnClass, HASHID nConsId );
-    USHORT          Size();
+                                  BOOL bOwnClass, Atom nConsId );
+    sal_uInt32          Size();
 
     virtual void    SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
-    BOOL            IsDefault( const RSCINST & rInst, HASHID nConstId );
+    BOOL            IsDefault( const RSCINST & rInst, Atom nConstId );
 
                     // Ist das Flag gesetzt
-    BOOL            IsSet( const RSCINST & rInst, HASHID nConstId );
+    BOOL            IsSet( const RSCINST & rInst, Atom nConstId );
 
                     // Als Default setzen
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
-                                    HASHID nConstId );
+                                    Atom nConstId );
 
-    ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
+    ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
-    ERRTYPE         SetNotConst( const RSCINST & rInst, HASHID nConstId );
+    ERRTYPE         SetNotConst( const RSCINST & rInst, Atom nConstId );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
 };
 
 /******************* R s c C l i e n t ***********************************/
 class RscClient : public RscTop
 {
     RscFlag *   pRefClass;  //Klasse die als Server benutzt wird
-    HASHID      nConstId;   //Id des zu setzenden Wertes
+    Atom      nConstId;   //Id des zu setzenden Wertes
 public:
-                    RscClient( HASHID nId, USHORT nTypId, RscFlag * pClass,
-                               HASHID nConstantId );
+                    RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
+                               Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
-    USHORT          Size(){ return( pRefClass->Size() ); };
+    sal_uInt32          Size(){ return( pRefClass->Size() ); };
 
                     // Eine Zuweisung an eine Variable
     BOOL            IsDefault( const RSCINST & rInst ){
@@ -143,7 +142,7 @@ public:
                         return( ERR_OK );
                     };
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };
 
 #endif // _RSCFLAG_HXX
