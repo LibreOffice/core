@@ -2,9 +2,9 @@
 *
 *  $RCSfile: EditorScriptContext.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-19 08:22:50 $
+*  last change: $Author: rt $ $Date: 2004-10-22 13:57:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -79,7 +79,7 @@ import com.sun.star.uno.Type;
 
 import java.util.HashMap;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.script.framework.log.LogUtils;
 
