@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+#   last change: $Author: mtg $ $Date: 2001-05-16 11:44:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ PACKAGE=com$/sun$/star$/formula
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    FormulaProperties.idl\
+    SymbolDescriptor.idl \
+    FormulaProperties.idl
 
 # ------------------------------------------------------------------
 
