@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:51:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ danish ] = "Brugerudvalg";
         Text[ swedish ] = "Anvδndarurval";
         Text[ polish ] = "Wybσr uΏytkownika";
-        Text[ portuguese_brazilian ] = "Seleηγo do usuαrio";
+        Text[ portuguese_brazilian ] = "Selecionar usuαrio";
         Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌγ®ιΈζ";
         Text[ korean ] = "μ‚¬μ©μ μ„ νƒ";
         Text[ chinese_simplified ] = "δ½Ώη”¨θ€…ι€‰ζ‹©";
@@ -121,7 +121,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[english_us]    = "Us~er:";
         Text[ portuguese ] = "~Utilizador:";
         Text[ russian ] = "Οξλόηξβΰςελό:";
-        Text[ greek ] = "Χρήστης:";
+        Text[ greek ] = "~Χρήστης:";
         Text[ dutch ] = "Gebr~uiker:";
         Text[ french ] = "Utilisateur :";
         Text[ spanish ] = "Usuari~o:";
@@ -170,7 +170,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ english_us ] = "~Add User...";
         Text[ portuguese ] = "~Novo utilizador...";
         Text[ russian ] = "Δξαΰβθςό οξλόηξβΰςελÿ...";
-        Text[ greek ] = "Νέος χρήστης...";
+        Text[ greek ] = "~Προσθήκη χρήστη...";
         Text[ dutch ] = "Gebruiker ~toevoegen...";
         Text[ french ] = "Ajouter un utilisateur...";
         Text[ spanish ] = "~Nuevo usuario...";
@@ -206,7 +206,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ english_us ] = "Change ~Password...";
         Text[ portuguese ] = "~Mudar senha...";
         Text[ russian ] = "Θημενθςό οΰπξλό...";
-        Text[ greek ] = "Αλλαγή κωδικού πρόσβασης...";
+        Text[ greek ] = "Αλλαγή κ~ωδικού πρόσβασης...";
         Text[ dutch ] = "~Wachtwoord wijzigen...";
         Text[ french ] = "Modifier le mot de ~passe...";
         Text[ spanish ] = "Cambiar ~contraseρa...";
@@ -242,7 +242,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ english_us ] = "~Delete User...";
         Text[ portuguese ] = "~Eliminar utilizador...";
         Text[ russian ] = "Σδΰλθςό οξλόηξβΰςελÿ...";
-        Text[ greek ] = "Διαγραφή χρήστη...";
+        Text[ greek ] = "~Διαγραφή χρήστη...";
         Text[ dutch ] = "~Gebruiker wissen...";
         Text[ french ] = "Supprimer l'utilisateur...";
         Text[ spanish ] = "~Borrar usuario...";
@@ -275,7 +275,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ english_us ] = "Access rights for selected user";
         Text[ portuguese ] = "Direitos de acesso para utilizador seleccionado";
         Text[ russian ] = "Οπΰβΰ δξρςσοΰ δλÿ βϋαπΰννξγξ οξλόηξβΰςελÿ";
-        Text[ greek ] = "Δικαιώματα χρήστη για τον επιλεγμένο χρήστη";
+        Text[ greek ] = "Δικαιώματα πρόσβασης για τον επιλεγμένο χρήστη";
         Text[ dutch ] = "Toegangsrechten voor geselecteerde gebruikers";
         Text[ french ] = "Droits d'accθs pour l'utilisateur sιlectionnι";
         Text[ spanish ] = "Derechos de usuario para usuarios seleccionados";
@@ -317,7 +317,7 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ english_us ] = "Do you really want to delete the user?";
     Message[ portuguese ] = "Eliminar utilizador?";
     Message[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξγξ οξλόηξβΰςελÿ?";
-    Message[ greek ] = "Do you really want to delete the select user?";
+    Message[ greek ] = "Είστε βέβαιοι ότι θέλετε να διαγράψετε το χρήστη;";
     Message[ dutch ] = "Wilt u deze gebruikersnaam werkelijk wissen?";
     Message[ french ] = "Voulez-vous vraiment supprimer l'utilisateur ?";
     Message[ spanish ] = "ΏDesea realmente borrar el usuario?";
@@ -366,7 +366,7 @@ ModalDialog DLG_PASSWORD
         Text[ english_us ] = "User \"$name$:  $\"";
         Text[ portuguese ] = "Utilizador \"$Name: not supported by cvs2svn $\"";
         Text[ russian ] = "Οξλόηξβΰςελό \"$Name: not supported by cvs2svn $\"";
-        Text[ greek ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ greek ] = "Χρήστης \"$Name: not supported by cvs2svn $\"";
         Text[ dutch ] = "Gebruiker \"$Name: not supported by cvs2svn $\"";
         Text[ french ] = "Utilisateur \"$name:  $\"";
         Text[ spanish ] = "Usuario \"$name:  $\"";
@@ -399,7 +399,7 @@ ModalDialog DLG_PASSWORD
         Text[ english_us ] = "Old p~assword";
         Text[ portuguese ] = "Se~nha antiga";
         Text[ russian ] = "Ρςΰπϋι οΰπξλό";
-        Text[ greek ] = "Old p~assword";
+        Text[ greek ] = "Παλιός κωδικός πρόσ~βασης";
         Text[ dutch ] = "Oud w~achtwoord";
         Text[ french ] = "Ancien mot de passe";
         Text[ spanish ] = "Contraseρa anterior";
@@ -439,7 +439,7 @@ ModalDialog DLG_PASSWORD
         Text[ english_us ] = "~Password";
         Text[ portuguese ] = "~Senha";
         Text[ russian ] = "Οΰπξλό";
-        Text[ greek ] = " password";
+        Text[ greek ] = "Κ~ωδικός πρόσβασης";
         Text[ dutch ] = "~wachtwoord";
         Text[ french ] = "Mot de passe";
         Text[ spanish ] = "~Contraseρa";
@@ -478,7 +478,7 @@ ModalDialog DLG_PASSWORD
         Text[ english_us ] = "~Confirm  password";
         Text[ portuguese ] = "~Confirmar senha";
         Text[ russian ] = "~Οξδςβεπδθςό οΰπξλό";
-        Text[ greek ] = "~Confirm  password";
+        Text[ greek ] = "~Επιβεβαίωση κωδικού πρόσβασης";
         Text[ dutch ] = "~Wachtwoord bevestigen";
         Text[ french ] = "Confirmation du mot de passe";
         Text[ spanish ] = "~Confirmar contraseρa";
@@ -528,7 +528,7 @@ ModalDialog DLG_PASSWORD
     Text[ english_us ] = "Change Password";
     Text[ portuguese ] = "Modificar senha";
     Text[ russian ] = "Θημενθςό οΰπξλό";
-    Text[ greek ] = "Change Password";
+    Text[ greek ] = "Αλλαγή κωδικού πρόσβασης";
     Text[ dutch ] = "Wachtwoord wijzigen";
     Text[ french ] = "Modification du mot de passe";
     Text[ spanish ] = "Cambiar contraseρa";
@@ -559,7 +559,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ english_us ] = "The passwords do not match. Please enter the password again.";
     Text[ portuguese ] = "As senhas nγo sγo iguais. Indique-as novamente.";
     Text[ russian ] = "Οΰπξλθ νε ρξβοΰδΰώς. Οξβςξπθςε ββξδ οΰπξλÿ.";
-    Text[ greek ] = "Passwords are different, please enter again";
+    Text[ greek ] = "Οι κωδικοί πρόσβασης δεν συμφωνούν. Πληκτρολογήστε τον κωδικό πρόσβασης ξανά.";
     Text[ dutch ] = "De beide wachtwoorden komen niet overeen. Voer het wachtwoord nogmaals in!";
     Text[ french ] = "Les deux mots de passe sont diffιrents. Rιpιtez la saisie  !";
     Text[ spanish ] = "Las contraseρas no coinciden. Introdϊzcalas otra vez.";
@@ -568,7 +568,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ danish ] = "De to adgangskoder stemmer ikke overens, prψv igen!";
     Text[ swedish ] = "De bεda lφsenorden stδmmer inte φverens, mata in lφsenordet igen.";
     Text[ polish ] = "Podane has³a rσΏniΉ siκ. Wpisz ponownie has³o.";
-    Text[ portuguese_brazilian ] = "As senhas nγo sγo iguais. Por favor, redigite novamente.";
+    Text[ portuguese_brazilian ] = "As senhas nγo sγo iguais. Por favor, digite-as novamente.";
     Text[ japanese ] = "ε…¥ε›γ—γοΌ’γ¤γ®γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γ―δΈ€θ‡΄γ—γΎγ›γ‚“γ€‚γ‚‚γ†δΈ€εΊ¦ε…¥ε›γ—γªγγ—γ¦γγ γ•γ„γ€‚";
     Text[ korean ] = "μ•”νΈκ°€ μΌμΉν•μ§€ μ•μµλ‹λ‹¤. λ‹¤μ‹ μ…λ ¥ν•΄μ£Όμ‹­μ‹μ¤.";
     Text[ chinese_simplified ] = "θΏ™δΈ¤δΈªε―†η δΈδΈ€θ‡΄οΌθ―·ι‡ζ–°θΎ“ε…¥ε―†η οΌ";
@@ -582,6 +582,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ hindi ] = "ΰ¤•ΰ¥‚ΰ¤ΰ¤¶ΰ¤¬ΰ¥ΰ¤¦ ΰ¤Έΰ¤®ΰ¤Ύΰ¤¨ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤Ήΰ¥ ΰ¥¤ ΰ¤•ΰ¥ƒΰ¤ªΰ¤―ΰ¤Ύ ΰ¤«ΰ¤Όΰ¤Ώΰ¤° ΰ¤Έΰ¥‡ ΰ¤•ΰ¥‚ΰ¤ΰ¤¶ΰ¤¬ΰ¥ΰ¤¦ ΰ¤•ΰ¥‹ ΰ¤ªΰ¥ΰ¤°ΰ¤µΰ¤Ώΰ¤·ΰ¥ΰ¤ ΰ¤•ΰ¥€ΰ¤ΰ¤Ώΰ¤ ΰ¥¤";
     Text[ slovak ] = "HeslΓ΅ sa nezhodujΓΊ. Zadajte, prosΓ­m, heslo znovu.";
 };
+
 
 
 
