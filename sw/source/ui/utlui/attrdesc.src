@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:36:57 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ String STR_SURROUND_IDEAL
     Text[ russian ] = "îïòèìàëüíîå îáòåêàíèå";
     Text[ polish ] = "Obieg idealny";
     Text[ japanese ] = "Å“K‚ÈÜ‚è•Ô‚µ";
-    Text[ chinese_traditional ] = "³ÌÓì¤å¦rÀôÂ¶";
+    Text[ chinese_traditional ] = "³Ì¾A¦X¤å¦rÀôÂ¶";
     Text[ arabic ] = "ÇáÇáÊİÇİ ÇáÃãËá";
     Text[ dutch ] = "ideale omloop";
     Text[ chinese_simplified ] = "×î¼ÑÎÄ×Ö»·ÈÆ";
@@ -893,7 +893,7 @@ String STR_POS_X
     Text[ russian ] = "X-Êîîğäèíàòà.:";
     Text[ polish ] = "Oœ X.:";
     Text[ japanese ] = "XÀ•W:";
-    Text[ chinese_traditional ] = "X-§¤¼Ğ¡G";
+    Text[ chinese_traditional ] = "X-®y¼Ğ¡G";
     Text[ arabic ] = "ÇáÅÍÏÇËí ÇáÓíäí:";
     Text[ dutch ] = "X-coörd.:";
     Text[ chinese_simplified ] = "X-×ø±ê£º";
@@ -919,7 +919,7 @@ String STR_POS_Y
     Text[ russian ] = "Y-Êîîğäèíàòà.:";
     Text[ polish ] = "Oœ Y.:";
     Text[ japanese ] = "YÀ•W:";
-    Text[ chinese_traditional ] = "Y-§¤¼Ğ¡G";
+    Text[ chinese_traditional ] = "Y-®y¼Ğ¡G";
     Text[ arabic ] = "ÇáÅÍÏÇËí ÇáÕÇÏí:";
     Text[ dutch ] = "Y-coörd.:";
     Text[ chinese_simplified ] = "Y-×ø±ê£º";
@@ -1363,7 +1363,7 @@ String STR_MAX_FTN_HEIGHT
     Text[ russian ] = "Ìàêñ. îáëàñòü ñíîñîê:";
     Text[ polish ] = "Maksymalny obszar przypisów dolnych:";
     Text[ japanese ] = "Å‘å‚Ì‹r’”ÍˆÍ";
-    Text[ chinese_traditional ] = "³Ì¤jªºµù¸}­S³ò¡G";
+    Text[ chinese_traditional ] = "³Ì¤jªºµù¸}½d³ò¡G";
     Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì áäØÇŞ ÇáÍÇÔíÉ ÇáÓİáíÉ:";
     Text[ dutch ] = "max. voetnotenbereik:";
     Text[ chinese_simplified ] = "×î´óµÄ×¢½Å·¶Î§£º";
@@ -1871,7 +1871,7 @@ String STR_DRAWMODE_STD
     Text[ japanese ] = "•W€";
     Text[ korean ] = "Ç¥ÁØ";
     Text[ chinese_simplified ] = "±ê×¼";
-    Text[ chinese_traditional ] = "¼Ğ­ã";
+    Text[ chinese_traditional ] = "¼Ğ·Ç";
     Text[ turkish ] = "Standard";
     Text[ arabic ] = "ŞíÇÓí";
 };
