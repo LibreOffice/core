@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-19 16:20:00 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 08:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,39 @@ namespace svt
     //= OWizardPage
     //=====================================================================
     //---------------------------------------------------------------------
+    OWizardPage::OWizardPage( OWizardMachine* _pParent, WinBits _nStyle )
+        :TabPage( _pParent, _nStyle )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    OWizardPage::OWizardPage( OWizardMachine* _pParent, const ResId& _rResId )
+        :TabPage( _pParent, _rResId )
+    {
+    }
+
+    //---------------------------------------------------------------------
     void OWizardPage::initializePage()
     {
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardPage::ActivatePage()
+    {
+        TabPage::ActivatePage();
+        implCheckNextButton();
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardPage::implCheckNextButton()
+    {
+        static_cast< OWizardMachine* >(GetParent())->enableButtons(WZB_NEXT, determineNextButtonState());
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OWizardPage::determineNextButtonState()
+    {
+        return sal_True;
     }
 
     //---------------------------------------------------------------------
@@ -388,6 +419,47 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    sal_Bool OWizardMachine::skip(sal_Int32 _nSteps)
+    {
+        DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
+        // alowed to leave the current page?
+        if (!implCommitCurrentPage(OWizardPage::CR_TRAVEL_NEXT))
+            return sal_False;
+
+        sal_uInt16 nCurrentState = getCurrentState();
+        sal_uInt16 nNextState = determineNextState(nCurrentState);
+        // loop _nSteps steps
+        while (_nSteps-- > 0)
+        {
+            if (WZS_INVALID_STATE == nNextState)
+                return sal_False;
+
+            // remember the skipped state in the history
+            m_aStateHistory.push(nCurrentState);
+
+            // get the next state
+            nCurrentState = nNextState;
+            nNextState = determineNextState(nCurrentState);
+        }
+
+        // show the (n+1)th page
+        if (!ShowPage(nNextState))
+        {
+            // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
+            // Perhaps we should rollback the skipping here ....
+            DBG_ERROR("OWizardMachine::skip: very unpolite ....");
+                // if somebody does a skip and then does not allow to leave ...
+                // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
+                // somebody behaves really strange ...)
+            return sal_False;
+        }
+
+        // all fine
+        m_aStateHistory.push(nCurrentState);
+        return sal_True;
+    }
+
+    //---------------------------------------------------------------------
     sal_Bool OWizardMachine::travelNext()
     {
         // alowed to leave the current page?
@@ -448,6 +520,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/19 16:20:00  kz
+ *  locale using of projectheaders
+ *
  *  Revision 1.1  2001/02/15 14:08:27  fs
  *  initial checkin - a wizard dialog base class
  *
