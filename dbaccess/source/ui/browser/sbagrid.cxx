@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 13:28:28 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 14:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,7 @@ void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException )
 }
 
 //---------------------------------------------------------------------------------------
-void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
+void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
 {
     SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
     if (!pGrid)
@@ -629,12 +629,13 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, 
     ::com::sun::star::frame::FeatureStateEvent aEvt;
     aEvt.Source = *this;
     aEvt.IsEnabled = !pGrid->IsReadOnlyDB();
+    aEvt.FeatureURL = _rUrl;
 
     if (xControl.is())
         xControl->statusChanged(aEvt);
     else
     {
-        ::cppu::OInterfaceContainerHelper * pIter = m_aStatusListeners.getContainer(aUrl);
+        ::cppu::OInterfaceContainerHelper * pIter = m_aStatusListeners.getContainer(_rUrl);
 
         if (pIter)
         {
