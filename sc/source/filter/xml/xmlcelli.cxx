@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,95 +225,144 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            if (IsXMLToken(aLocalName, XML_STYLE_NAME))
-                pStyleName = new rtl::OUString(sValue);
-            else if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-                nCellsRepeated = sValue.toInt32();
-            else if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
+            sal_uInt32 nLength(aLocalName.getLength());
+
+            switch (nLength)
             {
-                nCellType = GetCellType(sValue);
-                bIsEmpty = sal_False;
-            }
-            else if (IsXMLToken(aLocalName, XML_VALUE))
-            {
-                if (sValue.getLength())
+            case 5 :
                 {
-                    rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (IsXMLToken(aLocalName, XML_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
-            {
-                if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
+                break;
+            case 7 :
                 {
-                    rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (IsXMLToken(aLocalName, XML_FORMULA))
+                    {
+                        if (sValue.getLength())
+                        {
+                            DBG_ASSERT(!pOUFormula, "here should be only one formula");
+                            pOUFormula = new rtl::OUString(sValue);
+                        }
+                    }
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
-            {
-                if (sValue.getLength())
+                break;
+            case 8 :
                 {
-                    rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (IsXMLToken(aLocalName, XML_CURRENCY))
+                        pCurrencySymbol = new rtl::OUString(sValue);
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_BOOLEAN_VALUE))
-            {
-                if (sValue.getLength())
+                break;
+            case 10 :
                 {
-                    if ( IsXMLToken(sValue, XML_TRUE) )
-                        fValue = 1.0;
-                    else if ( IsXMLToken(sValue, XML_FALSE) )
-                        fValue = 0.0;
-                    else
-                        rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
+                    {
+                        nCellType = GetCellType(sValue);
+                        bIsEmpty = sal_False;
+                    }
+                    else if (IsXMLToken(aLocalName, XML_STYLE_NAME))
+                        pStyleName = new rtl::OUString(sValue);
+                    else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
+                    {
+                        if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
+                    else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_STRING_VALUE))
-            {
-                if (sValue.getLength())
+                break;
+            case 12 :
                 {
-                    DBG_ASSERT(!pOUTextValue, "here should be only one string value");
-                    pOUTextValue = new rtl::OUString(sValue);
-                    bIsEmpty = sal_False;
+                    if (IsXMLToken(aLocalName, XML_STRING_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            DBG_ASSERT(!pOUTextValue, "here should be only one string value");
+                            pOUTextValue = new rtl::OUString(sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_FORMULA))
-            {
-                if (sValue.getLength())
+                break;
+            case 13 :
                 {
-                    DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                    pOUFormula = new rtl::OUString(sValue);
+                    if (IsXMLToken(aLocalName, XML_BOOLEAN_VALUE))
+                    {
+                        if (sValue.getLength())
+                        {
+                            if ( IsXMLToken(sValue, XML_TRUE) )
+                                fValue = 1.0;
+                            else if ( IsXMLToken(sValue, XML_FALSE) )
+                                fValue = 0.0;
+                            else
+                                rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                            bIsEmpty = sal_False;
+                        }
+                    }
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_CURRENCY))
-                pCurrencySymbol = new rtl::OUString(sValue);
-            else if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_SPANNED))
-            {
-                bIsMerged = sal_True;
-                nMergedRows = sValue.toInt32();
-            }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_SPANNED))
-            {
-                bIsMerged = sal_True;
-                nMergedCols = sValue.toInt32();
-            }
-            else if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME))
-            {
-                DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
-                pContentValidationName = new rtl::OUString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
-            {
-                bIsMatrix = sal_True;
-                nMatrixCols = sValue.toInt32();
-            }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
-            {
-                bIsMatrix = sal_True;
-                nMatrixRows = sValue.toInt32();
+                break;
+            case 19 :
+                {
+                    if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_SPANNED))
+                    {
+                        bIsMerged = sal_True;
+                        nMergedRows = sValue.toInt32();
+                    }
+                }
+                break;
+            case 22 :
+                {
+                    if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_SPANNED))
+                    {
+                        bIsMerged = sal_True;
+                        nMergedCols = sValue.toInt32();
+                    }
+                }
+                break;
+            case 23 :
+                {
+                    if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
+                        nCellsRepeated = sValue.toInt32();
+                    else if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME))
+                    {
+                        DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
+                        pContentValidationName = new rtl::OUString(sValue);
+                    }
+                }
+                break;
+            case 26 :
+                {
+                    if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
+                    {
+                        bIsMatrix = sal_True;
+                        nMatrixRows = sValue.toInt32();
+                    }
+                }
+                break;
+            case 29 :
+                {
+                    if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
+                    {
+                        bIsMatrix = sal_True;
+                        nMatrixCols = sValue.toInt32();
+                    }
+                }
+                break;
             }
         }
     }
