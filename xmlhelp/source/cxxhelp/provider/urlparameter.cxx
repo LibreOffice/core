@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:16:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,8 @@
 #include <sablot/shandler.h>
 #endif
 #endif
-#ifdef SYSTEM_DB3
-#include <db3/db_cxx.h>
-#else
-#ifndef _DB_CXX_H_
-#include <berkeleydb/db_cxx.h>
-#endif
+#ifndef BERKELEYDBPROXY_DB_HXX_
+#include "db.hxx"
 #endif
 #ifndef _URLPARAMETER_HXX_
 #include <provider/urlparameter.hxx>
@@ -175,6 +171,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
+using namespace berkeleydbproxy;
 using namespace chelp;
 
 
