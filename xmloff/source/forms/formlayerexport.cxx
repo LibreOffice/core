@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace xmloff
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
@@ -190,6 +191,12 @@ namespace xmloff
         m_pImpl->exportAutoControlNumberStyles();
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::excludeFromExport( const Reference< XControlModel > _rxControl )
+    {
+        m_pImpl->excludeFromExport( _rxControl );
+    }
+
     //=========================================================================
     //= OOfficeFormsExport
     //=========================================================================
@@ -213,6 +220,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/28 14:59:18  fs
+ *  #86712# added control number style related functionality
+ *
  *  Revision 1.10  2001/03/20 13:35:38  fs
  *  #83970# +OOfficeFormsExport
  *
