@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:39:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,8 @@ TabDialog TAB_CHAR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text = "Zeichen" ;
-    Text [ ENGLISH ] = "Character" ;
-    Text [ norwegian ] = "Character" ;
-    Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caracter" ;
-    Text [ portuguese ] = "Caracteres" ;
-    Text [ finnish ] = "Merkki" ;
-    Text [ danish ] = "Tegn" ;
-    Text [ french ] = "Caractères" ;
-    Text [ swedish ] = "Tecken" ;
-    Text [ dutch ] = "Teken" ;
-    Text [ spanish ] = "Caracteres" ;
-    Text [ english_us ] = "Character" ;
+    Text [ de ] = "Zeichen" ;
+    Text [ en-US ] = "Character" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dieser Dialog enthaelt OK und/oder Cancel Button (KH)
     TabControl 1
@@ -91,108 +80,25 @@ TabDialog TAB_CHAR
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text = "Schrift" ;
-                Text [ ENGLISH ] = "Character" ;
-                Text [ norwegian ] = "Character" ;
-                Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Fonte" ;
-                Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Fontti" ;
-                Text [ danish ] = "Skrifttype" ;
-                Text [ french ] = "Police" ;
-                Text [ swedish ] = "Teckensnitt" ;
-                Text [ dutch ] = "Lettertype" ;
-                Text [ spanish ] = "Fuente" ;
-                Text [ english_us ] = "Font" ;
+                Text [ de ] = "Schrift" ;
+                Text [ en-US ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text[ chinese_simplified ] = "å­—ä½“";
-                Text[ russian ] = "Øğèôò";
-                Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
-                Text[ chinese_traditional ] = "å­—å‹";
-                Text[ arabic ] = "ÇáÎØ";
-                Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ korean ] = "ê¸€ê¼´";
-                Text[ turkish ] = "Yazı Tipi";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tipus de lletra";
-                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-                Text[ czech ] = "PÃ­smo";
-                Text[ hebrew ] = "â€®×’×•×¤×Ÿâ€¬";
-                Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ";
-                Text[ slovak ] = "PÃ­smo";
-                Text[ hungarian ] = "BetÅ±";
-                Text[ slovenian ] = "Pisava";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text = "Schrifteffekt" ;
-                Text [ ENGLISH ] = "Character Extension" ;
-                Text [ norwegian ] = "Character Extension" ;
-                Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
-                Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Fonttitehosteet" ;
-                Text [ danish ] = "Skrifteffekter" ;
-                Text [ french ] = "Effets de caractères" ;
-                Text [ swedish ] = "Teckeneffekt" ;
-                Text [ dutch ] = "Schrifteffecten" ;
-                Text [ spanish ] = "Efectos de fuente" ;
-                Text [ english_us ] = "Font Effects" ;
+                Text [ de ] = "Schrifteffekt" ;
+                Text [ en-US ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
-                Text[ russian ] = "İôôåêòû øğèôòà";
-                Text[ polish ] = "Efekty czcionki";
-                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
-                Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
-                Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
-                Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
-                Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
-                Text[ turkish ] = "Yazı Tipi Efektleri";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Efectes de lletra";
-                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-                Text[ czech ] = "Efekty pÃ­sma";
-                Text[ hebrew ] = "â€®××¤×§×˜×™× ×œ×’×•×¤× ×™×â€¬";
-                Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ à¤ªà¥à¤°à¤­à¤¾à¤µ";
-                Text[ slovak ] = "Efekty pre pÃ­smo";
-                Text[ hungarian ] = "BetÅ±hatÃ¡sok";
-                Text[ slovenian ] = "UÄinki pisave";
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_POSITION ;
                 PageResID = RID_SVXPAGE_CHAR_POSITION ;
-                Text = "Position" ;
-                Text [ ENGLISH ] = "Position" ;
-                Text[ english_us ] = "Position";
-                Text[ portuguese ] = "Posição";
-                Text[ russian ] = "Ïîëîæåíèå";
-                Text[ greek ] = "Èİóç";
-                Text[ dutch ] = "Positie";
-                Text[ french ] = "Position";
-                Text[ spanish ] = "Posición";
-                Text[ italian ] = "Posizione";
-                Text[ danish ] = "Placering";
-                Text[ swedish ] = "Position";
-                Text[ polish ] = "Pozycja";
-                Text[ portuguese_brazilian ] = "Posição";
-                Text[ japanese ] = "ä½ç½®";
-                Text[ korean ] = "ìœ„ì¹˜";
-                Text[ chinese_simplified ] = "ä½ç½®";
-                Text[ chinese_traditional ] = "ä½ç½®";
-                Text[ turkish ] = "Konum";
-                Text[ arabic ] = "ÇáãæÖÚ";
-                Text[ catalan ] = "Posició";
-                Text[ finnish ] = "Sijainti";
-                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-                Text[ czech ] = "UmÃ­stÄ›nÃ­";
-                Text[ hebrew ] = "â€®××™×§×•×â€¬";
-                Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-                Text[ slovak ] = "Umiestnenie";
-                Text[ hungarian ] = "PozÃ­ciÃ³";
-                Text[ slovenian ] = "PoloÅ¾aj";
+                Text [ de ] = "Position" ;
+                Text [ en-US ] = "Position";
             };
         };
     };
@@ -219,57 +125,12 @@ TabDialog TAB_CHAR
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text = "Zurück" ;
-        Text [ ENGLISH ] = "Return" ;
-        Text [ norwegian ] = "Return" ;
-        Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Retorna" ;
-        Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Takaisin" ;
-        Text [ danish ] = "Tilbage" ;
-        Text [ french ] = "Quitter" ;
-        Text [ swedish ] = "Tillbaka" ;
-        Text [ dutch ] = "Vorige" ;
-        Text [ spanish ] = "Regresar" ;
-        Text [ english_us ] = "Return" ;
+        Text [ de ] = "Zurück" ;
+        Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "è¿”å›";
-        Text[ russian ] = "Âåğíóòüñÿ";
-        Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "æˆ»ã‚‹";
-        Text[ chinese_traditional ] = "è¿”å›";
-        Text[ arabic ] = "ÇáÓÇÈŞ";
-        Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "ë’¤ë¡œ";
-        Text[ turkish ] = "Geri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Torna";
-        Text[ thai ] = "à¸ªà¹ˆà¸‡à¸à¸¥à¸±à¸š";
-        Text[ czech ] = "NÃ¡vrat";
-        Text[ hebrew ] = "ZurÃ¼ck";
-        Text[ hindi ] = "à¤²à¥Œà¤Ÿà¤¨à¤¾";
-        Text[ slovak ] = "NÃ¡vrat";
-        Text[ hungarian ] = "Vissza";
-        Text[ slovenian ] = "Vrnitev";
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "å­—ç¬¦";
-    Text[ russian ] = "Øğèôò";
-    Text[ polish ] = "Znak";
-    Text[ japanese ] = "æ–‡å­—";
-    Text[ chinese_traditional ] = "å­—å…ƒ";
-    Text[ arabic ] = "ÍÑİ";
-    Text[ greek ] = "×áñáêôŞñåò";
-    Text[ korean ] = "ë¬¸ì";
-    Text[ turkish ] = "Yazıtipi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caràcters";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-    Text[ czech ] = "Znak";
-    Text[ hebrew ] = "Zeichen";
-    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°";
-    Text[ slovak ] = "Znak";
-    Text[ hungarian ] = "Karakter";
-    Text[ slovenian ] = "Znak";
+    Text [ x-comment ] = " ";
 };
 
 
