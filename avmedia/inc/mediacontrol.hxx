@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediacontrol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 15:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ private:
     Edit                maTimeEdit;
     Size                maMinSize;
     MediaControlStyle   meControlStyle;
+    bool                mbLocked;
 };
 
 }
