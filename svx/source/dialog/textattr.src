@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:20:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ danish ] = "Tilpas bredde til tekst" ;
         Text [ portuguese ] = "Ajustar ~largura ao texto" ;
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
-        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~W)";
+        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~D)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
         Text[ polish ] = "Dopasuj szeroko~œæ do tekstu";
-        Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~W)";
-        Text[ chinese_traditional ] = "¼e«×©M¤º¤å¹ï»ô(~W)";
+        Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~D)";
+        Text[ chinese_traditional ] = "¼e«×©M¤º¤å¹ï»ô(~D)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³Êºñ ¸ÂÃã(~D)";
@@ -126,11 +126,11 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ danish ] = "Tilpas højde til tekst" ;
         Text [ portuguese ] = "Ajustar ~altura ao texto" ;
         Text [ portuguese_brazilian ] = "H~öhe an Text anpassen" ;
-        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~H)";
+        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~E)";
         Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
         Text[ polish ] = "Dopas~uj wysokoœæ do tekstu";
-        Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~H)";
-        Text[ chinese_traditional ] = "°ª«×©M¤º¤å¹ï»ô(~H)";
+        Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~E)";
+        Text[ chinese_traditional ] = "°ª«×©M¤º¤å¹ï»ô(~E)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ ıøïõò ùò ğñïò êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³ôÀÌ ¸ÂÃã(~E)";
@@ -153,14 +153,14 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ danish ] = "Tilpas til rammen" ;
         Text [ portuguese ] = "Adaptar à ~moldura" ;
         Text [ portuguese_brazilian ] = "Am R~ahmen anpassen" ;
-        Text[ chinese_simplified ] = "ºÍ±ß¿ò´óĞ¡Ïà¶ÔÓ¦(~Z)";
+        Text[ chinese_simplified ] = "ºÍ±ß¿ò´óĞ¡Ïà¶ÔÓ¦(~F)";
         Text[ russian ] = "Ïîäáîğ ïîä ğàìêó";
         Text[ polish ] = "Dopasuj do ramki";
-        Text[ japanese ] = "˜g‚É‡‚í‚¹‚é(~S)";
-        Text[ chinese_traditional ] = "©MÃä®Ø¹ï»ô(~S)";
+        Text[ japanese ] = "˜g‚É‡‚í‚¹‚é(~F)";
+        Text[ chinese_traditional ] = "©MÃä®Ø¹ï»ô(~F)";
         Text[ arabic ] = "ãáÇÁãÉ Úáì ÇáßÇÏÑ";
         Text[ greek ] = "ĞñïóáñìïãŞ óå ğëáßóéï";
-        Text[ korean ] = "ÇÁ·¹ÀÓ¿¡ ¸ÂÃã";
+        Text[ korean ] = "ÇÁ·¹ÀÓ¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Metni ~çerçeveye uydur";
         Text[ language_user1 ] = " ";
     };
