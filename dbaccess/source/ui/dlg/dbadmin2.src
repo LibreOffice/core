@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:44:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,34 +90,6 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ en-US ] = "A password is needed to connect to the data source \"$name$\".";
 };
 
-WarningBox WARN_SAVEFORQUERIES
-{
-    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
-        "Sollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
-    Message [ en-US ] = "To administrate the $objects$ of a data source, that data source must be saved.\nShould all changes made in this dialog be saved now?";
-
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_YES;
-
-    Message[ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-};
-
-ErrorBox ERR_CANTADMINQUERIES
-{
-    Message [ de ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\n"
-        "Allerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\n"
-        "Sie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
-    Message [ en-US ] = "To administrate the $objects$ of a data source, the data source must be saved.\nHowever, the current settings do not allow you to save the changes (due to conflicting names).\n\nYou will not be able to administrate the $objects$ until these conflicts are resolved and the changes are saved.";
-
-    Message[ x-comment ] = "For ; For ; For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
-};
-
-String STR_QUERY_OBJECTS
-{
-    Text [ de ] ="Abfragen";
-    Text [ en-US ] = "queries";
-};
-
 String STR_QUERY_DROP_ALL
 {
     Text [ de ] ="Wollen Sie die alle Selektierten löschen?";
@@ -136,14 +108,6 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text [ en-US ] = "The directory $name$ could not be created.";
 };
 
-QueryBox QUERY_NEED_TO_SAVE_FILTER
-{
-    Message [ de ] = "Um diese Aktion auszuführen, müssen die bis jetzt in diesem Dialog vorgenommene Änderungen gespeichert werden.\nWollen Sie fortfahren?";
-    Message [ en-US ] = "In order to perform this operation, the changes made in this dialog must be saved.\nDo you want to proceed?";
-
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_YES;
-};
 String STR_ADDRESSBOOK_SYSTEM
 {
     Text [ de ] ="Windows Adressbuch";
@@ -168,11 +132,6 @@ String STR_ADDRESSBOOK_LDAP
 {
     Text [ de ] ="LDAP Adressbuch";
     Text[ en-US ] = "LDAP address book";
-};
-String STR_CALCDOC_DOESNOTEXIST
-{
-    Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
-    Text[ en-US ] = "The file \"$file$\" does not exist.";
 };
 
 String STR_HINT_READONLY_CONNECTION
