@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _EXTENSIONS_DBP_CONTROLWIZARD_HXX
 #include "controlwizard.hxx"
+#endif
+#ifndef _EXTENSIONS_DBP_COMMONPAGESDBP_HXX_
+#include "commonpagesdbp.hxx"
 #endif
 
 //.........................................................................
@@ -131,37 +134,6 @@ namespace dbp
     };
 
     //=====================================================================
-    //= OMaybeListSelectionPage
-    //=====================================================================
-    class OMaybeListSelectionPage : public OGBWPage
-    {
-    protected:
-        RadioButton*    m_pYes;
-        RadioButton*    m_pNo;
-        ListBox*        m_pList;
-
-    public:
-        OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId );
-
-    protected:
-        DECL_LINK( OnRadioSelected, RadioButton* );
-
-        // TabPage overridables
-        void ActivatePage();
-
-        // own helper
-        void    announceControls(
-            RadioButton& _rYesButton,
-            RadioButton& _rNoButton,
-            ListBox& _rSelection);
-
-        void implEnableWindows();
-
-        void implInitialize(const String& _rSelection);
-        void implCommit(String& _rSelection);
-    };
-
-    //=====================================================================
     //= ORadioSelectionPage
     //=====================================================================
     class ORadioSelectionPage : public OGBWPage
@@ -212,6 +184,8 @@ namespace dbp
         // OWizardPage overridables
         virtual void        initializePage();
         virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+
+        OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
 
     //=====================================================================
@@ -249,23 +223,16 @@ namespace dbp
     //=====================================================================
     //= OOptionDBFieldPage
     //=====================================================================
-    class OOptionDBFieldPage : public OMaybeListSelectionPage
+    class OOptionDBFieldPage : public ODBFieldPage
     {
-    protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDescription;
-        FixedText       m_aQuestion;
-        RadioButton     m_aStoreYes;
-        RadioButton     m_aStoreNo;
-        ListBox         m_aStoreWhere;
-
     public:
         OOptionDBFieldPage( OControlWizard* _pParent );
 
     protected:
-        // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
+
+        // ODBFieldPage overridables
+        virtual String& getDBFieldSetting();
     };
 
     //=====================================================================
@@ -300,6 +267,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:24:04  fs
  *  initial checkin - form control auto pilots
  *

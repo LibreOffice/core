@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ namespace dbp
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                         getServiceFactory();
         const OControlWizardContext&    getContext();
-        void                            updateContext();
+        sal_Bool                        updateContext();
 
     public:
         OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
@@ -224,7 +224,7 @@ namespace dbp
             getServiceFactory() const { return m_xORB; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
-        void                            updateContext(const OAccessRegulator&);
+        sal_Bool                        updateContext(const OAccessRegulator&);
 
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)
@@ -241,7 +241,7 @@ namespace dbp
         virtual short   Execute();
 
     private:
-        void initContext();
+        sal_Bool initContext();
 
         void implGetDSContext();
         void implDetermineForm();
@@ -261,6 +261,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:22:18  fs
  *  initial checkin - form control auto pilots
  *

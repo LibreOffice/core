@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:20:18 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,20 @@
 #ifndef _EXTENSIONS_DBP_CONTROLWIZARD_HXX
 #include "controlwizard.hxx"
 #endif
+#ifndef _EXTENSIONS_DBP_COMMONPAGESDBP_HXX_
+#include "commonpagesdbp.hxx"
+#endif
 
 //.........................................................................
 namespace dbp
 {
 //.........................................................................
+
+#define LCW_STATE_DATASOURCE_SELECTION  0
+#define LCW_STATE_TABLESELECTION        1
+#define LCW_STATE_FIELDSELECTION        2
+#define LCW_STATE_FIELDLINK             3
+#define LCW_STATE_COMBODBFIELD          4
 
     //=====================================================================
     //= OListComboSettings
@@ -113,6 +122,8 @@ namespace dbp
         virtual sal_Bool onFinish(sal_Int32 _nResult);
 
         virtual sal_Bool approveControlType(sal_Int16 _nClassId);
+
+        sal_uInt16 getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
 
     private:
         void implApplySettings();
@@ -225,6 +236,27 @@ namespace dbp
         DECL_LINK(OnSelectionModified, void*);
     };
 
+    //=====================================================================
+    //= OComboDBFieldPage
+    //=====================================================================
+    class OComboDBFieldPage : public ODBFieldPage
+    {
+    public:
+        OComboDBFieldPage( OControlWizard* _pParent );
+
+    protected:
+        OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }
+
+        // TabPage overridables
+        virtual void ActivatePage();
+
+        // OWizardPage overridables
+        virtual sal_Bool determineNextButtonState();
+
+        // ODBFieldPage overridables
+        virtual String& getDBFieldSetting();
+    };
+
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
@@ -234,6 +266,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/23 15:20:18  fs
+ *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
+ *
  *
  *  Revision 1.0 21.02.01 15:46:59  fs
  ************************************************************************/

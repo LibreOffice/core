@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ namespace dbp
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("Command"), makeAny(::rtl::OUString(m_aTable.GetSelectEntry())));
             rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("CommandType"), makeAny((sal_Int32)CommandType::TABLE));
 
-            updateContext();
+            if (!updateContext())
+                return sal_False;
         }
         catch(Exception&)
         {
@@ -327,6 +328,113 @@ namespace dbp
         }
     }
 
+    //=====================================================================
+    //= OMaybeListSelectionPage
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OMaybeListSelectionPage::OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId )
+        :OControlWizardPage(_pParent, _rId)
+        ,m_pYes(NULL)
+        ,m_pNo(NULL)
+        ,m_pList(NULL)
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OMaybeListSelectionPage::announceControls(RadioButton& _rYesButton, RadioButton& _rNoButton, ListBox& _rSelection)
+    {
+        m_pYes = &_rYesButton;
+        m_pNo = &_rNoButton;
+        m_pList = &_rSelection;
+
+        m_pYes->SetClickHdl(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        m_pNo->SetClickHdl(LINK(this, OMaybeListSelectionPage, OnRadioSelected));
+        implEnableWindows();
+    }
+
+    //---------------------------------------------------------------------
+    IMPL_LINK( OMaybeListSelectionPage, OnRadioSelected, RadioButton*, NOTINTERESTEDIN )
+    {
+        implEnableWindows();
+        return 0L;
+    }
+
+    //---------------------------------------------------------------------
+    void OMaybeListSelectionPage::implInitialize(const String& _rSelection)
+    {
+        DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::implInitialize: no controls announced!");
+        sal_Bool bIsSelection = (0 != _rSelection.Len());
+        m_pYes->Check(bIsSelection);
+        m_pNo->Check(!bIsSelection);
+        m_pList->Enable(bIsSelection);
+
+        m_pList->SelectEntry(bIsSelection ? _rSelection : String());
+    }
+
+    //---------------------------------------------------------------------
+    void OMaybeListSelectionPage::implCommit(String& _rSelection)
+    {
+        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : String();
+    }
+
+    //---------------------------------------------------------------------
+    void OMaybeListSelectionPage::implEnableWindows()
+    {
+        m_pList->Enable(m_pYes->IsChecked());
+    }
+
+    //---------------------------------------------------------------------
+    void OMaybeListSelectionPage::ActivatePage()
+    {
+        OControlWizardPage::ActivatePage();
+
+        DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::ActivatePage: no controls announced!");
+        if (m_pYes->IsChecked())
+            m_pList->GrabFocus();
+        else
+            m_pNo->GrabFocus();
+    }
+
+    //=====================================================================
+    //= ODBFieldPage
+    //=====================================================================
+    //---------------------------------------------------------------------
+    ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
+        :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
+        ,m_aFrame           (this, ResId(FL_DATABASEFIELD_EXPL))
+        ,m_aDescription     (this, ResId(FT_DATABASEFIELD_EXPL))
+        ,m_aQuestion        (this, ResId(FT_DATABASEFIELD_QUEST))
+        ,m_aStoreYes        (this, ResId(RB_STOREINFIELD_YES))
+        ,m_aStoreNo         (this, ResId(LB_STOREINFIELD))
+        ,m_aStoreWhere      (this, ResId(RB_STOREINFIELD_NO))
+    {
+        FreeResource();
+        announceControls(m_aStoreYes, m_aStoreNo, m_aStoreWhere);
+        m_aStoreWhere.SetDropDownLineCount(10);
+    }
+
+    //---------------------------------------------------------------------
+    void ODBFieldPage::initializePage()
+    {
+        OMaybeListSelectionPage::initializePage();
+
+        // fill the fields page
+        fillListBox(m_aStoreWhere, getContext().aFieldNames);
+
+        implInitialize(getDBFieldSetting());
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool ODBFieldPage::commitPage(COMMIT_REASON _eReason)
+    {
+        if (!OMaybeListSelectionPage::commitPage(_eReason))
+            return sal_False;
+
+        implCommit(getDBFieldSetting());
+
+        return sal_True;
+    }
+
 //.........................................................................
 }   // namespace dbp
 //.........................................................................
@@ -334,6 +442,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:21:36  fs
  *  initial checkin - form control auto pilots
  *

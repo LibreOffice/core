@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -98,6 +101,12 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -106,6 +115,12 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
 #endif
 
 //.........................................................................
@@ -125,7 +140,9 @@ namespace dbp
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::sheet;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::task;
     using namespace ::svt;
+    using namespace ::comphelper;
 
     //=====================================================================
     //= OAccessRegulator
@@ -154,9 +171,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OControlWizardPage::updateContext()
+    sal_Bool OControlWizardPage::updateContext()
     {
-        getDialog()->updateContext(OAccessRegulator());
+        return getDialog()->updateContext(OAccessRegulator());
     }
 
     //---------------------------------------------------------------------
@@ -377,17 +394,17 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OControlWizard::updateContext(const OAccessRegulator&)
+    sal_Bool OControlWizard::updateContext(const OAccessRegulator&)
     {
-        initContext();
+        return initContext();
     }
 
     //---------------------------------------------------------------------
-    void OControlWizard::initContext()
+    sal_Bool OControlWizard::initContext()
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OGroupBoxWizard::initContext: have no control model to work with!");
         if (!m_aContext.xObjectModel.is())
-            return;
+            return sal_False;
 
         // reset the context
         m_aContext.xForm.clear();
@@ -397,6 +414,8 @@ namespace dbp
         m_aContext.xObjectShape.clear();
         m_aContext.aFieldNames.realloc(0);
 
+        Any aSQLException;
+        Reference< XPreparedStatement >  xStatement;
         try
         {
             // get the datasource context
@@ -412,7 +431,6 @@ namespace dbp
             implDetermineShape();
 
             // get the columns of the object the settins refer to
-            Reference< XPreparedStatement >  xStatement;
             Reference< XNameAccess >  xColumns;
 
             if (m_aContext.xForm.is())
@@ -475,13 +493,50 @@ namespace dbp
 
             if (xColumns.is())
                 m_aContext.aFieldNames = xColumns->getElementNames();
-
-            ::comphelper::disposeComponent(xStatement);
         }
+        catch(SQLContext& e) { aSQLException <<= e; }
+        catch(SQLWarning& e) { aSQLException <<= e; }
+        catch(SQLException& e) { aSQLException <<= e; }
         catch(Exception&)
         {
             DBG_ERROR("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
         }
+
+        ::comphelper::disposeComponent(xStatement);
+
+        if (aSQLException.hasValue())
+        {   // an SQLException (or derivee) was thrown ...
+
+            // prepend an extra SQLContext explaining what we were doing
+            SQLContext aContext;
+            aContext.Message = String(ModuleRes(RID_STR_COULDNOTOPENTABLE));
+            aContext.NextException = aSQLException;
+
+            // create an interaction handler to display this exception
+            const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
+            Reference< XInteractionHandler > xHandler;
+            try
+            {
+                if (getServiceFactory().is())
+                    xHandler = Reference< XInteractionHandler >(getServiceFactory()->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
+            }
+            catch(Exception&) { }
+            if (!xHandler.is())
+            {
+                ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
+                return sal_False;
+            }
+
+            Reference< XInteractionRequest > xRequest = new OInteractionRequest(makeAny(aContext));
+            try
+            {
+                xHandler->handle(xRequest);
+            }
+            catch(Exception&) { }
+            return sal_False;
+        }
+
+        return 0 != m_aContext.aFieldNames.getLength();
     }
 
     //---------------------------------------------------------------------
@@ -576,6 +631,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:22:07  fs
  *  initial checkin - form control auto pilots
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,15 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
 {
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+};
+
+String RID_STR_LISTWIZARD_TITLE
+{
     Text = "AutoPilot Listenfeld";
     Text [ english ] = "Auto Pilot List field";
     Text [ english_us ] = "Auto Pilot List field";
@@ -118,18 +127,47 @@ ModalDialog RID_DLG_LISTCOMBOWIZARD
     Text[ greek ] = "AutoPilot Ğåäßï ëßóôáò";
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸ñ·Ï ÇÊµå";
     Text[ turkish ] = "OtoPilot Liste alanı";
-
-    OutputSize      = TRUE ;
-    SVLook          = TRUE ;
-    Moveable        = TRUE ;
-    Closeable       = TRUE ;
-    Hide            = TRUE;
 };
 
+String RID_STR_COMBOWIZARD_TITLE
+{
+    Text = "AutoPilot Kombinationsfeld";
+    Text [ english_us ] = "AutoPilot Combo Box";
+    Text [ portuguese ] = "AutoPiloto Caixa de combinação";
+    Text [ russian ] = "Àâòîïèëîò ïîëÿ ñî ñïèñêîì";
+    Text [ dutch ] = "AutoPiloot Combinatieveld";
+    Text [ french ] = "AutoPilote Zone combinée";
+    Text [ spanish ] = "AutoPiloto Campo combinado";
+    Text [ italian ] = "Pilota automatico Casella combinata";
+    Text [ danish ] = "AutoPilot kombinationsboks";
+    Text [ swedish ] = "AutoPilot kombinationsfält";
+    Text [ polish ] = "Pole kombi AutoPilota";
+    Text [ portuguese_brazilian ] = "Option Group AutoPilot";
+    Text [ japanese ] = "µ°ÄÊß²Û¯Ä ºİÎŞÎŞ¯¸½";
+    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
+    Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²Õ¦XÄæ¦ì";
+    Text [ arabic ] = "ÇáãÑÔÏ ÇáÂáí Ü ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
+    Text [ dutch ] = "AutoPiloot Combinatieveld";
+    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
+    Text [ greek ] = "Ğåäßï óõíäõáóìïı ôïõ AutoPilot";
+    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ: ÄŞº¸¹Ú½º";
+    Text [ turkish ] = "OtoPilot Kombinasyon alanı";
+    Text [ language_user1 ] = " ";
+};
+
+String RID_STR_COULDNOTOPENTABLE
+{
+    Text = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
+    Text [ english ] = "The connection to the data source could not be established.";
+    Text [ english_us ] = "The connection to the data source could not be established.";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:22:40  fs
  *  initial checkin - form control auto pilots
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 09:23:45 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,162 +296,6 @@ TabPage RID_PAGE_OPTIONVALUES
     };
 };
 
-TabPage RID_PAGE_OPTION_DBFIELD
-{
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Datenbankfeld";
-    Text [ english ] = "Database Field";
-    Text [ english_us ] = "Database Field";
-    Text [ portuguese ] = "Campo da base de dados";
-    Text [ russian ] = "Ïîëå áàçû äàííûõ";
-    Text [ dutch ] = "databaseveld";
-    Text [ french ] = "Champ de base de données";
-    Text [ spanish ] = "Campo de base de datos";
-    Text [ italian ] = "Campo database";
-    Text [ danish ] = "Databasefelt";
-    Text [ swedish ] = "Databasfält";
-    Text [ polish ] = "Pole bazy danych";
-    Text [ portuguese_brazilian ] = "Datenbankfeld";
-    Text [ japanese ] = "ÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ";
-    Text [ chinese_simplified ] = "£ºÊı¾İ¿â×Ö¶Î";
-    Text [ chinese_traditional ] = "¡G¸ê®Æ®wÄæ¦ì";
-    Text [ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-    Text [ dutch ] = "databaseveld";
-    Text [ chinese_simplified ] = "£ºÊı¾İ¿â×Ö¶Î";
-    Text [ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
-    Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå";
-    Text [ turkish ] = "Veritabanı alanı";
-
-    FixedLine FL_DATABASEFIELD_EXPL
-    {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-    };
-    FixedText FT_DATABASEFIELD_EXPL
-    {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
-        WordBreak = TRUE;
-        Text = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
-        Text [ english ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
-        Text [ english_us ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
-        Text [ portuguese ] = "Poderá guardar o valor do grupo de opções num campo da base de dados ou utilizá-lo para uma acção posterior.";
-        Text [ russian ] = "Çíà÷åíèå ãğóïïû ïàğàìåòğîâ ìîæíî èëè ñîõğàíèòü â ïîëå áàçû äàííûõ, èëè èñïîëüçîâàòü åãî ïîòîì.";
-        Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
-        Text [ french ] = "Vous pouvez soit enregistrer la valeur du groupe d'options dans un champ de base de données, soit l'utiliser pour une action ultérieure.";
-        Text [ spanish ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acción posterior.";
-        Text [ italian ] = "Potete salvare il valore del gruppo di opzioni in un campo database oppure utilizzarlo per un'operazione successiva.";
-        Text [ danish ] = "Du kan enten gemme alternativgruppens værdi i et databasefelt eller bruge den til en senere handling.";
-        Text [ swedish ] = "Du kan antingen spara alternativgruppens värde i ett databasfält eller använda det till en senare åtgärd.";
-        Text [ polish ] = "Wartoœæ grupy opcji mo¿na zapisaæ w polu bazy danych lub u¿yæ jej w póŸniejszej akcji.";
-        Text [ portuguese_brazilian ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
-        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶A‚Ü‚½‚ÍŒã‚Ìì‹Æ‚Ég—p‚Å‚«‚Ü‚·B";
-        Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
-        Text [ chinese_traditional ] = "±z¯à°÷¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s¿ï¶µ¸s²Õªº¼Æ­È¡A¥H³Æ¤µ«á¯à°÷¨Ï¥Î¥¦¡C";
-        Text [ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ Ãæ ÇÓÊÎÏÇãå İí ÚãáíÉ áÇÍŞÉ.";
-        Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
-        Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
-        Text [ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôçò ïìÜäáò åğéëïãŞò óå İíá ğåäßï âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìåëëïíôéêÜ ãéá êÜğïéá åíİñãåéá.";
-        Text [ korean ] = "¿É¼Ç ±×·ìÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ¾ÕÀ¸·ÎÀÇ ÀÛ¾÷¿¡ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
-        Text [ turkish ] = "Seçenek alanının değerini bir veritabanı alanında kaydedebilir ya da bu değeri daha sonra yapılacak bir işlemde kullanabilirsiniz.";
-    };
-    FixedText FT_DATABASEFIELD_QUEST
-    {
-        Pos = MAP_APPFONT ( 7 , 34  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
-        WordBreak = TRUE;
-        Text = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
-        Text [ english ] = "Do you want to save the value in a database field?";
-        Text [ english_us ] = "Do you want to save the value in a database field?";
-        Text [ portuguese ] = "Guardar o valor num campo da base de dados?";
-        Text [ russian ] = "Ñîõğàíèòü ıòî çíà÷åíèå â ïîëå áàçû äàííûõ ?";
-        Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld ?";
-        Text [ french ] = "Souhaitez-vous enregistrer la valeur dans un champ de base de données ?";
-        Text [ spanish ] = "¿Desea guardar el valor en un campo de base de datos?";
-        Text [ italian ] = "Volete salvare il valore in un campo database ?";
-        Text [ danish ] = "Vil du gemme værdien i et databasefelt?";
-        Text [ swedish ] = "Vill Du spara värdet i ett databasfält ?";
-        Text [ polish ] = "Czy zapisaæ tê wartoœæ w polu bazy danych ?";
-        Text [ portuguese_brazilian ] = "Möchten Sie den Wert in einem Datenbankfeld speichern ?";
-        Text [ japanese ] = "’l‚ğÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚µ‚Ü‚·‚©B";
-        Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÅÌµ½Ò»¸öÊı¾İ¿âÀ¸ÄÚ£¿";
-        Text [ chinese_traditional ] = "±z­n¦b¸ê®Æ®wÄæ¦ì¤ºÀx¦s³o­Ó¼Æ­È¡H";
-        Text [ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáŞíãÉ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¿";
-        Text [ dutch ] = "Wilt u de waarde opslaan in een databaseveld ?";
-        Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÅÌµ½Ò»¸öÊı¾İ¿âÀ¸ÄÚ£¿";
-        Text [ greek ] = "Èİëåôå íá ãßíåé áğïèŞêåõóç ôçò ôéìŞò óå İíá ğåäßï âÜóçò äåäïìİíùí;";
-        Text [ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµåÀÇ °ªÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
-        Text [ turkish ] = "Değeri bir veritabanı alanında kaydetmek istiyor musunuz?";
-    };
-    RadioButton RB_STOREINFIELD_YES
-    {
-        Pos = MAP_APPFONT ( 7 , 53  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
-        Group = TRUE;
-        TabStop = TRUE;
-        Text = "~Ja, und zwar in folgendem Datenbankfeld :";
-        Text [ english ] = "~Yes, save it in the following database field:";
-        Text [ english_us ] = "~Yes, save it in the following database field:";
-        Text [ portuguese ] = "Sim, no seguinte:";
-        Text [ russian ] = "Äà. Â ñëåäóşùåì ïîëå áàçû äàííûõ :";
-        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
-        Text [ french ] = "Oui, dans le champ suivant :";
-        Text [ spanish ] = "Sí, en el siguiente campo :";
-        Text [ italian ] = "Sì, nel seguente campo database :";
-        Text [ danish ] = "Ja, den skal gemmes i følgende databasefelt:";
-        Text [ swedish ] = "Ja, i följande databasfält :";
-        Text [ polish ] = "Tak, jest to mo¿liwe w nastêpuj¹cym polu bazy danych :";
-        Text [ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
-        Text [ japanese ] = "‚Í‚¢AŸ‚ÌÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É‚É‚µ‚Ü‚·:";
-        Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿âÀ¸£º";
-        Text [ chinese_traditional ] = "¬O¡A¤U¦Cªº¸ê®Æ®wÄæ¦ì¡G";
-        Text [ arabic ] = "äÚã¡ İí ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÊÇáí:";
-        Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
-        Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿âÀ¸£º";
-        Text [ greek ] = "Íáé, óôï áêüëïõèï ğåäßï âÜóçò äåäïìİíùí :";
-        Text [ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À:";
-        Text [ turkish ] = "Evet, aşağıdaki veritabanı alanında kaydedebilirsiniz :";
-    };
-    ListBox LB_STOREINFIELD
-    {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 51 ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 14 ) ;
-        TabStop = TRUE;
-        SVLook = TRUE ;
-        Border = TRUE ;
-        DropDown = TRUE;
-        AutoHScroll = TRUE ;
-    };
-    RadioButton RB_STOREINFIELD_NO
-    {
-        Pos = MAP_APPFONT ( 7 , 68 ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
-        TabStop = FALSE;
-        Text = "~Nein, ich möchte den Wert nur im Formular speichern.";
-        Text [ english ] = "~No, I only want to save the value in the form.";
-        Text [ english_us ] = "~No, I only want to save the value in the form.";
-        Text [ portuguese ] = "Não. Guardar apenas no formulário.";
-        Text [ russian ] = "Íåò. Ñîõğàíèòü ıòî çíà÷åíèå òîëüêî â ôîğìóëÿğå";
-        Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
-        Text [ french ] = "Non, je souhaite enregistrer la valeur uniquement dans le formulaire.";
-        Text [ spanish ] = "No, deseo guardar el valor solo en el formulario.";
-        Text [ italian ] = "Salva il valore solo nel formulario.";
-        Text [ danish ] = "Nej, jeg vil kun gemme værdien i formularen.";
-        Text [ swedish ] = "Nej, jag vill bara spara värdet i formuläret.";
-        Text [ polish ] = "Nie, ja chcia³bym zapisaæ tê wartoœæ tylko w formularzu.";
-        Text [ portuguese_brazilian ] = "Nein, ich möchte den Wert nur im Formular speichern.";
-        Text [ japanese ] = "‚¢‚¢‚¦A’l‚ÍÌ«°Ñ‚É•Û‘¶‚µ‚Ü‚·B";
-        Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥¡£";
-        Text [ chinese_traditional ] = "§_¡A¥u¦s¤J¤@­Óªí³æ¤º¡C";
-        Text [ arabic ] = "ßáÇ¡ ÃÑíÏ ÍİÙ ÇáŞíãÉ İí ÇáÇÓÊãÇÑÉ İŞØ.";
-        Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
-        Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥¡£";
-        Text [ greek ] = "¼÷é, èİëù íá ãßíåé áğïèŞêåõóç ôçò ôéìŞò ìüíï óôç öüñìá.";
-        Text [ korean ] = "¾Æ´Ï¿À, °ªÀ» ¼ö½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù.";
-        Text [ turkish ] = "Hayır, değeri yalnızca form içinde kaydetmek istiyorum.";
-    };
-};
 TabPage RID_PAGE_OPTIONS_FINAL
 {
     SVLook = TRUE ;
@@ -550,9 +394,38 @@ TabPage RID_PAGE_OPTIONS_FINAL
     };
 };
 
+String RID_STR_GROUPWIZ_DBFIELD
+{
+    Text = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
+    Text [ english ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+    Text [ english_us ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+    Text [ portuguese ] = "Poderá guardar o valor do grupo de opções num campo da base de dados ou utilizá-lo para uma acção posterior.";
+    Text [ russian ] = "Çíà÷åíèå ãğóïïû ïàğàìåòğîâ ìîæíî èëè ñîõğàíèòü â ïîëå áàçû äàííûõ, èëè èñïîëüçîâàòü åãî ïîòîì.";
+    Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
+    Text [ french ] = "Vous pouvez soit enregistrer la valeur du groupe d'options dans un champ de base de données, soit l'utiliser pour une action ultérieure.";
+    Text [ spanish ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acción posterior.";
+    Text [ italian ] = "Potete salvare il valore del gruppo di opzioni in un campo database oppure utilizzarlo per un'operazione successiva.";
+    Text [ danish ] = "Du kan enten gemme alternativgruppens værdi i et databasefelt eller bruge den til en senere handling.";
+    Text [ swedish ] = "Du kan antingen spara alternativgruppens värde i ett databasfält eller använda det till en senare åtgärd.";
+    Text [ polish ] = "Wartoœæ grupy opcji mo¿na zapisaæ w polu bazy danych lub u¿yæ jej w póŸniejszej akcji.";
+    Text [ portuguese_brazilian ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
+    Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ì’l‚ÍAÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶A‚Ü‚½‚ÍŒã‚Ìì‹Æ‚Ég—p‚Å‚«‚Ü‚·B";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
+    Text [ chinese_traditional ] = "±z¯à°÷¦b¤@­Ó¸ê®Æ®w¤ºÀx¦s¿ï¶µ¸s²Õªº¼Æ­È¡A¥H³Æ¤µ«á¯à°÷¨Ï¥Î¥¦¡C";
+    Text [ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ Ãæ ÇÓÊÎÏÇãå İí ÚãáíÉ áÇÍŞÉ.";
+    Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«Ñ¡ÏîĞ¡×éµÄÊıÖµ´æÈëÒ»¸öÊı¾İ¿â»òÒÔºóµ÷ÓÃËü¡£";
+    Text [ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôçò ïìÜäáò åğéëïãŞò óå İíá ğåäßï âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìåëëïíôéêÜ ãéá êÜğïéá åíİñãåéá.";
+    Text [ korean ] = "¿É¼Ç ±×·ìÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ¾ÕÀ¸·ÎÀÇ ÀÛ¾÷¿¡ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text [ turkish ] = "Seçenek alanının değerini bir veritabanı alanında kaydedebilir ya da bu değeri daha sonra yapılacak bir işlemde kullanabilirsiniz.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/21 09:23:45  fs
+ *  initial checkin - form control auto pilots
+ *
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/

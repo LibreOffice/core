@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:20:11 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,6 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
-#define LCW_STATE_DATASOURCE_SELECTION  0
-#define LCW_STATE_TABLESELECTION        1
-#define LCW_STATE_FIELDSELECTION        2
-#define LCW_STATE_FIELDLINK             3
-
 //.........................................................................
 namespace dbp
 {
@@ -134,9 +129,11 @@ namespace dbp
         {
             case FormComponentType::LISTBOX:
                 m_bListBox = sal_True;
+                setTitleBase(String(ModuleRes(RID_STR_LISTWIZARD_TITLE)));
                 return sal_True;
             case FormComponentType::COMBOBOX:
                 m_bListBox = sal_False;
+                setTitleBase(String(ModuleRes(RID_STR_COMBOWIZARD_TITLE)));
                 return sal_True;
         }
         return sal_False;
@@ -145,7 +142,6 @@ namespace dbp
     //---------------------------------------------------------------------
     OWizardPage* OListComboWizard::createPage(sal_uInt16 _nState)
     {
-        // TODO
         switch (_nState)
         {
             case LCW_STATE_DATASOURCE_SELECTION:
@@ -156,6 +152,8 @@ namespace dbp
                 return new OContentFieldSelection(this);
             case LCW_STATE_FIELDLINK:
                 return new OLinkFieldsPage(this);
+            case LCW_STATE_COMBODBFIELD:
+                return new OComboDBFieldPage(this);
         }
 
         return NULL;
@@ -171,10 +169,9 @@ namespace dbp
             case LCW_STATE_TABLESELECTION:
                 return LCW_STATE_FIELDSELECTION;
             case LCW_STATE_FIELDSELECTION:
-                return LCW_STATE_FIELDLINK;
+                return getFinalState();
         }
 
-        // TODO
         return WZS_INVALID_STATE;
     }
 
@@ -184,11 +181,11 @@ namespace dbp
         OControlWizard::enterState(_nState);
 
         enableButtons(WZB_PREVIOUS, m_bHadDataSelection ? (LCW_STATE_DATASOURCE_SELECTION < _nState) : LCW_STATE_TABLESELECTION < _nState);
-        enableButtons(WZB_NEXT, LCW_STATE_FIELDLINK != _nState);
-        if (_nState < LCW_STATE_FIELDLINK)
+        enableButtons(WZB_NEXT, getFinalState() != _nState);
+        if (_nState < getFinalState())
             enableButtons(WZB_FINISH, sal_False);
 
-        if (LCW_STATE_FIELDLINK == _nState)
+        if (getFinalState() == _nState)
             defaultButton(WZB_FINISH);
     }
 
@@ -198,7 +195,7 @@ namespace dbp
         if (!OControlWizard::leaveState(_nState))
             return sal_False;
 
-        if (LCW_STATE_FIELDLINK == _nState)
+        if (getFinalState() == _nState)
             defaultButton(WZB_NEXT);
 
         return sal_True;
@@ -209,29 +206,29 @@ namespace dbp
     {
         try
         {
+            // for quoting identifiers, we need the connection meta data
+            Reference< XConnection > xConn;
+            getContext().xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+            DBG_ASSERT(xConn.is(), "OListComboWizard::implApplySettings: no connection, unable to quote!");
+            Reference< XDatabaseMetaData > xMetaData;
+            if (xConn.is())
+                xMetaData = xConn->getMetaData();
+
+            // do some quotings
+            if (xMetaData.is())
+            {
+                getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField);
+                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable);
+                getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField);
+            }
+
+            // ListSourceType: SQL
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
+
             if (isListBox())
             {
-                // some defaults:
-                // ListSourceType: SQL
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
                 // BoundColumn: 1
                 getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("BoundColumn"), makeAny((sal_Int16)1));
-
-                // for quoting identifiers, we need the connection meta data
-                Reference< XConnection > xConn;
-                getContext().xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
-                DBG_ASSERT(xConn.is(), "OListComboWizard::implApplySettings: no connection, unable to quote!");
-                Reference< XDatabaseMetaData > xMetaData;
-                if (xConn.is())
-                    xMetaData = xConn->getMetaData();
-
-                // do some quotings
-                if (xMetaData.is())
-                {
-                    getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField);
-                    getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable);
-                    getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField);
-                }
 
                 // build the statement to set as list source
                 String sStatement;
@@ -241,18 +238,23 @@ namespace dbp
                 sStatement += getSettings().sLinkedListField;
                 sStatement.AppendAscii(" FROM ");
                 sStatement += getSettings().sListContentTable;
-                    // TODO: Identifier quoting
                 Sequence< ::rtl::OUString > aListSource(1);
                 aListSource[0] = sStatement;
                 getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(aListSource));
-
-                // the bound field
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
             }
             else
             {
-                // TODO
+                // build the statement to set as list source
+                String sStatement;
+                sStatement.AppendAscii("SELECT DISTINCT ");
+                sStatement += getSettings().sListContentField;
+                sStatement.AppendAscii(" FROM ");
+                sStatement += getSettings().sListContentTable;
+                getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("ListSource"), makeAny(::rtl::OUString(sStatement)));
             }
+
+            // the bound field
+            getContext().xObjectModel->setPropertyValue(::rtl::OUString::createFromAscii("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
         }
         catch(Exception&)
         {
@@ -558,6 +560,35 @@ namespace dbp
         return sal_True;
     }
 
+    //=====================================================================
+    //= OComboDBFieldPage
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
+        :ODBFieldPage(_pParent)
+    {
+        setDescriptionText(String(ModuleRes(RID_STR_COMBOWIZ_DBFIELD)));
+    }
+
+    //---------------------------------------------------------------------
+    String& OComboDBFieldPage::getDBFieldSetting()
+    {
+        return getSettings().sLinkedFormField;
+    }
+
+    //---------------------------------------------------------------------
+    void OComboDBFieldPage::ActivatePage()
+    {
+        ODBFieldPage::ActivatePage();
+        getDialog()->enableButtons(WZB_FINISH, sal_True);
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OComboDBFieldPage::determineNextButtonState()
+    {
+        // we're on the last page here, no travelNext allowed ...
+        return sal_False;
+    }
 
 //.........................................................................
 }   // namespace dbp
@@ -566,6 +597,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/23 15:20:11  fs
+ *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
+ *
  *
  *  Revision 1.0 21.02.01 15:51:07  fs
  ************************************************************************/

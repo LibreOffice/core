@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpresid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,15 @@
 #define RID_STRING_START                RID_DBP_START
 #define RID_UNTYPED_START               RID_DBP_START
 #define RID_ERRORBOX_START              RID_DBP_START
+
+//========================================================================
+// dialogs
+
+#define RID_STR_GROUPWIZ_DBFIELD        (RID_STRING_START +  1 )
+#define RID_STR_COMBOWIZ_DBFIELD        (RID_STRING_START +  2 )
+#define RID_STR_LISTWIZARD_TITLE        (RID_STRING_START +  3 )
+#define RID_STR_COMBOWIZARD_TITLE       (RID_STRING_START +  4 )
+#define RID_STR_COULDNOTOPENTABLE       (RID_STRING_START +  5 )
 
 //========================================================================
 // dialogs
@@ -200,6 +209,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/23 15:19:08  fs
+ *  some changes / centralizations - added the list-/combobox wizard
+ *
  *  Revision 1.1  2001/02/21 09:22:51  fs
  *  initial checkin - form control auto pilots
  *

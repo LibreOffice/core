@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:19:54 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,9 +381,38 @@ TabPage RID_PAGE_LCW_FIELDLINK
     };
 };
 
+String RID_STR_COMBOWIZ_DBFIELD
+{
+    Text = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
+    Text [ english ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
+    Text [ english_us ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
+    Text [ portuguese ] = "Poderá guardar o valor da caixa de combinação num campo da base de dados ou utilizá-lo apenas para visualização.";
+    Text [ russian ] = "Çíà÷åíèå ïîëÿ ñî ñïèñêîì ìîæíî èëè ñîõğàíèòü â ïîëå áàçû äàííûõ èëè èñïîëüçîâàòü åãî äëÿ ïîêàçà.";
+    Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
+    Text [ french ] = "Vous pouvez soit enregistrer la valeur de la zone combinée dans un champ de base de données, soit l'utiliser seulement pour l'affichage.";
+    Text [ spanish ] = "Puede guardar el valor del campo combinado en un campo de base de datos o usarlo solo para mostrarlo.";
+    Text [ italian ] = "Potete salvare il valore della casella combinata in un campo database oppure utilizzarlo solo per visualizzarlo.";
+    Text [ danish ] = "Du kan enten gemme kombinationsboksens værdi i et databasefelt eller kun bruge den til visning.";
+    Text [ swedish ] = "Du kan antingen spara kombinationsfältets värde i ett databasfält eller bara använda det för visning.";
+    Text [ polish ] = "Wartoœæ pola kombi mo¿na zapisaæ w polu bazy danych lub u¿yæ jej tylko do wyœwietlenia.";
+    Text [ portuguese_brazilian ] = "Yes, in the following database:";
+    Text [ japanese ] = "ºİÎŞÎŞ¯¸½‚Ì’l‚ÍÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶A‚ ‚é‚¢‚Í•\\¦‚·‚é‚½‚ß‚¾‚¯‚Ég—p‚Å‚«‚Ü‚·B";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text [ chinese_traditional ] = "±z¯à°÷±N²Õ¦XÄæ¦ìªº¼Æ­È¦s¤J¤@­Ó¸ê®Æ®w¤º©ÎÅã¥Ü³o¨Ç¼Æ¾Ú¡C";
+    Text [ arabic ] = "íãßäß ÍİÙ ŞíãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ İí ÍŞá ŞÇÚÏÉ ÈíÇäÇÊ¡ Ãæ ÇÓÊÎÏÇãåÇ ááÚÑÖ İŞØ.";
+    Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
+    Text [ chinese_simplified ] = "ÄúÄÜ¹»½«×éºÏÀ¸ÖĞµÄÊıÖµ´æÈëÊı¾İ¿âÀ¸ÄÚ»òÓÃÓÚÏÔÊ¾¡£";
+    Text [ greek ] = "Ìğïñåßôå íá áğïèçêåıóåôå ôçí ôéìŞ ôïõ ğåäßïõ óõíäõáóìïı óå İíá ğåäßï âÜóçò äåäïìİíùí Ş íá ôï ÷ñçóéìïğïéŞóåôå ìüíï ãéá åìöÜíéóç.";
+    Text [ korean ] = "ÄŞº¸¹Ú½ºÀÇ °ªÀ» µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ°Å³ª ³ªÅ¸³»±â¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text [ turkish ] = "Kombinasyon alanının değerini bir veritabanı alanında kaydedebilir ya da yalnızca görüntüleme için kullanabilirsiniz.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/23 15:19:54  fs
+ *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
+ *
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
