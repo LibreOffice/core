@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:26:22 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
     rDest.ShowPagePgNum( static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)), Point() );
     SdrPageView* pDestPV = rDest.GetPageViewPvNum(0);
-    DBG_ASSERT(pDestPV,"PageView ??!?!");
+    DBG_ASSERT(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount();
