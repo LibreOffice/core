@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:41:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,8 @@ public:
                                       OutputDevice* pDevice2 = NULL,
                                       BOOL bAll = TRUE );
                             ~FontList();
+
+    FontList*               Clone() const;
 
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
