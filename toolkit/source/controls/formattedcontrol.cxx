@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:57:56 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_TABSTOP );
         ImplRegisterProperty( BASEPROPERTY_TEXT );
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
 
         Any aTreatAsNumber;
         aTreatAsNumber <<= (sal_Bool) sal_True;
@@ -228,6 +229,10 @@ namespace toolkit
     {
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
         OSL_ENSURE(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");
+
+        ::rtl::OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
+        ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
+
         ::rtl::OUString sEffectiveValue = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
         ImplSetPropertyValue( sEffectiveValue, xPeer->getProperty( sEffectiveValue ), sal_False );
 
