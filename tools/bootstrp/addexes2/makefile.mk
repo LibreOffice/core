@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2000-11-13 11:36:09 $
+#   last change: $Author: svesik $ $Date: 2000-11-20 01:31:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,9 @@ APP3TARGET=	mkunroll
 APP3OBJS=   $(OBJ)$/mkfilt.obj
 APP3STDLIBS=$(STATIC_LIBS) 
 .IF "$(OS)"=="LINUX"
+APP3STDLIBS+=-lpthread
+.ENDIF
+.IF "$(OS)"=="NETBSD"
 APP3STDLIBS+=-lpthread
 .ENDIF
 APP3LIBS=	$(LB)$/bootstrp.lib
