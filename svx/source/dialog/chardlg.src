@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:06:37 $
+ *  last change: $Author: nf $ $Date: 2000-12-12 09:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,10 +2819,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text [ english_us ] = "Font ~Color" ;
         Text[ portuguese ] = "Font ~Color";
         Text[ russian ] = "Φβες ψπθτςΰ";
-        Text[ greek ] = "Font ~Color";
+        Text[ greek ] = "Χρώμα γραμματοσειράς";
         Text[ dutch ] = "Font ~Color";
         Text[ french ] = "~Couleur de police";
-        Text[ spanish ] = "Font ~Color";
+        Text[ spanish ] = "Color de fuente";
         Text[ italian ] = "Font ~Color";
         Text[ danish ] = "Font ~Color";
         Text[ swedish ] = "Font ~Color";
@@ -3088,7 +3088,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ greek ] = "Χαρακτήρας τονισμού";
         Text[ dutch ] = "~Accentteken";
         Text[ french ] = "Caractθres d'a~ccentuation";
-        Text[ spanish ] = "Carαcter enfatizado";
+        Text[ spanish ] = "Carαcter de entonaciσn";
         Text[ italian ] = "Carattere accentuato";
         Text[ danish ] = "Emphasis character";
         Text[ swedish ] = "~Betoningstecken";
@@ -3319,10 +3319,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text [ english_us ] = "Example";
         Text[ portuguese ] = "Example";
         Text[ russian ] = "Οπθμεπ";
-        Text[ greek ] = "Example";
+        Text[ greek ] = "Παράδειγμα";
         Text[ dutch ] = "Example";
         Text[ french ] = "Exemple";
-        Text[ spanish ] = "Example";
+        Text[ spanish ] = "Ejemplo";
         Text[ italian ] = "Example";
         Text[ danish ] = "Example";
         Text[ swedish ] = "Example";
@@ -3924,7 +3924,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Pos = MAP_APPFONT( 6, 15 );
         Size = MAP_APPFONT( 248, 10 );
         Text = "~Doppelzeilig schreiben";
-        Text [ english_us ] = "~Write in double line" ;
+        Text [ english_us ] = "~Write in double lines" ;
         TabStop = TRUE;
         Text[ portuguese ] = "Two lines each line";
         Text[ russian ] = "Οξμεωΰςό β ξδνξι ρςπξκε δβε ρςπξκθ";
@@ -3955,7 +3955,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ greek ] = "Περικλειόμενοι χαρακτήρες";
         Text[ dutch ] = "Omhullend teken";
         Text[ french ] = "Caractθres englobants";
-        Text[ spanish ] = "Caracteres incluidos";
+        Text[ spanish ] = "Caracteres de inclusiσn";
         Text[ italian ] = "Carattere incluso";
         Text[ danish ] = "Enclose character";
         Text[ swedish ] = "Inneslutande tecken";
@@ -3976,10 +3976,10 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text [ english_us ] = "I~nitial character" ;
         Text[ portuguese ] = "Beginning character";
         Text[ russian ] = "Νΰχΰλόνϋε ηνΰκθ";
-        Text[ greek ] = "Beginning character";
+        Text[ greek ] = "Αρχικός χαρακτήρας";
         Text[ dutch ] = "Beginning character";
         Text[ french ] = "Caractθre de ~dιbut";
-        Text[ spanish ] = "Beginning character";
+        Text[ spanish ] = "Carαcter inicial";
         Text[ italian ] = "Beginning character";
         Text[ danish ] = "Beginning character";
         Text[ swedish ] = "Beginning character";
@@ -4025,10 +4025,10 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text [ english_us ] = "Final charact~er" ;
         Text[ portuguese ] = "End character";
         Text[ russian ] = "Κξνεχνϋε ηνΰκθ";
-        Text[ greek ] = "End character";
+        Text[ greek ] = "Τ~ελικός χαρακτήρας";
         Text[ dutch ] = "End character";
         Text[ french ] = "Caractθre de ~fin";
-        Text[ spanish ] = "End character";
+        Text[ spanish ] = "Carαcter final";
         Text[ italian ] = "End character";
         Text[ danish ] = "End character";
         Text[ swedish ] = "End character";
