@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:54:52 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include <rtl/memory.h>
+#include "osl/file.h"
 
 #include <rtl/ustrbuf.hxx>
 
@@ -102,104 +103,23 @@ using namespace ::com::sun::star::uno;
 
 
 
-static void reg(
-    Reference< registry::XImplementationRegistration > const & xReg,
-    char const * lib,
-    bool upd = false )
-{
-    OUStringBuffer buf( 32 );
-#ifndef SAL_W32
-    buf.appendAsciiL( RTL_CONSTASCII_STRINGPARAM("lib") );
-#endif
-    buf.appendAscii( lib );
 
-    if (upd)
-    {
-        buf.append( (sal_Int32)SUPD );
-#ifdef SAL_W32
-        buf.appendAscii( "mi" );
-#else
-#ifdef SOLARIS
-        buf.appendAscii( "ss" );
-#else
-        buf.appendAscii( "li" );
-#endif
-#endif
-    }
-#ifndef SAL_W32
-    buf.appendAscii( ".so" );
-#endif
-
-    xReg->registerImplementation(
-        OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-        buf.makeStringAndClear(), Reference< registry::XSimpleRegistry >() );
-}
-
-
-Reference< XComponentContext > createInitialComponentContext()
+Reference< XComponentContext > createInitialComponentContext(
+    OUString const & inst_dir )
 {
     Reference< XComponentContext > xContext;
 
     try
     {
-        ::rtl::OUString localRegistry = OUString::createFromAscii( "xmlscript.rdb" ); //"::comphelper::getPathToUserRegistry();
-        ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
+        OUString file_url;
+        oslFileError rc = osl_getFileURLFromSystemPath(
+            inst_dir.pData, &file_url.pData );
+        OSL_ASSERT( osl_File_E_None == rc );
 
-        Reference< registry::XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
-        Reference< registry::XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
-        if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
-        {
-            try
-            {
-                xLocalRegistry->open( localRegistry, sal_False, sal_True);
-            }
-            catch ( registry::InvalidRegistryException& )
-            {
-            }
+        ::rtl::OUString unorc = file_url + OUString(
+            RTL_CONSTASCII_USTRINGPARAM("/program/" SAL_CONFIGFILE("uno")) );
 
-            if ( !xLocalRegistry->isValid() )
-                xLocalRegistry->open(localRegistry, sal_True, sal_True);
-        }
-
-        if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
-            xSystemRegistry->open( systemRegistry, sal_True, sal_False);
-
-        if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
-             (xSystemRegistry.is() && xSystemRegistry->isValid()) )
-        {
-            Reference < registry::XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
-            Sequence< Any > seqAnys(2);
-            seqAnys[0] <<= xLocalRegistry ;
-            seqAnys[1] <<= xSystemRegistry ;
-            Reference< lang::XInitialization > xInit( xReg, UNO_QUERY );
-            xInit->initialize( seqAnys );
-
-            xContext = ::cppu::bootstrap_InitialComponentContext( xReg );
-        }
-        else
-        {
-            throw Exception(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("no registry!") ),
-                Reference< XInterface >() );
-        }
-
-        Reference< XInterface > x( xContext->getServiceManager()->createInstanceWithContext(
-            OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), xContext ) );
-        if (! x.is()) // register only once
-        {
-            Reference < registry::XImplementationRegistration > xReg(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ), xContext ), UNO_QUERY );
-
-            xReg->registerImplementation(
-                OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-                OUString::createFromAscii("sax.uno" SAL_DLLEXTENSION),
-                Reference< registry::XSimpleRegistry >() );
-            reg( xReg, "sax" );
-            reg( xReg, "tk", true );
-            reg( xReg, "svt", true );
-            reg( xReg, "i18n", true );
-        }
+        return defaultBootstrap_InitialComponentContext( unorc );
     }
 
     catch( Exception& rExc )
@@ -286,14 +206,16 @@ MyApp aMyApp;
 
 void MyApp::Main()
 {
-    if (GetCommandLineParamCount() < 1)
+    if (GetCommandLineParamCount() < 2)
     {
-        OSL_ENSURE( 0, "usage: imexp inputfile [outputfile]\n" );
+        OSL_ENSURE( 0, "usage: imexp inst_dir inputfile [outputfile]\n" );
         return;
     }
 
-    Reference< XComponentContext > xContext( createInitialComponentContext() );
-    Reference< lang::XMultiServiceFactory >  xMSF( xContext->getServiceManager(), UNO_QUERY );
+    Reference< XComponentContext > xContext(
+        createInitialComponentContext( OUString( GetCommandLineParam( 0 ) ) ) );
+    Reference< lang::XMultiServiceFactory > xMSF(
+        xContext->getServiceManager(), UNO_QUERY );
 
     try
     {
@@ -303,8 +225,11 @@ void MyApp::Main()
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
 
         // import dialogs
-        OString aParam1( OUStringToOString( OUString( GetCommandLineParam( 0 ) ), RTL_TEXTENCODING_ASCII_US ) );
-        Reference< container::XNameContainer > xModel( importFile( aParam1.getStr(), xContext ) );
+        OString aParam1( OUStringToOString(
+                             OUString( GetCommandLineParam( 1 ) ),
+                             RTL_TEXTENCODING_ASCII_US ) );
+        Reference< container::XNameContainer > xModel(
+            importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
         Reference< awt::XControl > xDlg( xMSF->createInstance(
@@ -314,10 +239,11 @@ void MyApp::Main()
         Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
         xD->execute();
 
-        if (GetCommandLineParamCount() == 2)
+        if (GetCommandLineParamCount() == 3)
         {
             // write modified dialogs
-            OString aParam2( OUStringToOString( OUString( GetCommandLineParam( 1 ) ), RTL_TEXTENCODING_ASCII_US ) );
+            OString aParam2( OUStringToOString(
+                                 OUString( GetCommandLineParam( 2 ) ), RTL_TEXTENCODING_ASCII_US ) );
             exportToFile( aParam2.getStr(), xModel, xContext );
         }
     }
