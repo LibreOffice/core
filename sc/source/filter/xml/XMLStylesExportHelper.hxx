@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:46:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ struct ScMyRowFormatRange
     sal_Int32   nRepeatRows;
     sal_Int32   nIndex;
     sal_Int32   nValidationIndex;
-    sal_Bool    bIsAutoStyle : 1;
+    sal_Bool    bIsAutoStyle;
 
     ScMyRowFormatRange();
     sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
@@ -240,7 +240,7 @@ struct ScMyFormatRange
     sal_Int32                               nStyleNameIndex;
     sal_Int32                               nValidationIndex;
     sal_Int32                               nNumberFormat;
-    sal_Bool                                bIsAutoStyle : 1;
+    sal_Bool                                bIsAutoStyle;
 
     ScMyFormatRange();
     sal_Bool operator< (const ScMyFormatRange& rRange) const;
@@ -298,7 +298,7 @@ public:
 struct ScColumnStyle
 {
     sal_Int32   nIndex;
-    sal_Bool    bIsVisible : 1;
+    sal_Bool    bIsVisible;
 
     ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
 };
