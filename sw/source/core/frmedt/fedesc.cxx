@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:25:33 $
+ *  last change: $Author: os $ $Date: 2002-09-26 12:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,26 @@ SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
     return pDesc;
 }
 
+USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
+{
+    if( GetLayout() )
+    {
+        const SwPageFrm* pPage =
+            static_cast<const SwPageFrm*>( GetLayout()->Lower() );
+        if( pPage )
+        {
+            while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
+                pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+            SwDoc *pDoc = GetDoc();
+            for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
+            {
+                if ( pPage->GetPageDesc() == &pDoc->GetPageDesc(i) )
+                    return i;
+            }
+        }
+    }
+    return 0;
+}
 
 USHORT SwFEShell::GetCurPageDesc( const BOOL bCalcFrm ) const
 {

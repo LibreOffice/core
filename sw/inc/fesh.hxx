@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:50:22 $
+ *  last change: $Author: os $ $Date: 2002-09-26 12:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,7 @@ public:
     //PageDescriptor-Schnittstelle
     void   ChgCurPageDesc( const SwPageDesc& );
     USHORT GetCurPageDesc( const BOOL bCalcFrm = TRUE ) const;
+    USHORT GetMousePageDesc( const Point &rPt ) const;
     USHORT GetPageDescCnt() const;
     SwPageDesc* FindPageDescByName( const String& rName,
                                     BOOL bGetFromPool = FALSE,
