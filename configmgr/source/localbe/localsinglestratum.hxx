@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglestratum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:59:10 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,12 @@
 #include <cppuhelper/compbase4.hxx>
 #endif // _CPPUHELPER_COMPBASE4_HXX_
 
-namespace configmgr { namespace localbe {
+namespace configmgr
+{
+    struct ServiceImplementationInfo;
+
+    namespace localbe
+    {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
@@ -113,17 +118,17 @@ typedef cppu::WeakComponentImplHelper4<backend::XSingleLayerStratum,
 /**
   Implements the SingleLayerStratum service for local file access.
   */
-class LocalSingleStratum : public SingleBackendBase {
+class LocalSingleStratumBase : public SingleBackendBase {
     public :
         /**
           Service constructor from a service factory.
 
           @param xContext   component context
           */
-        LocalSingleStratum(const uno::Reference<uno::XComponentContext>& xContext) ;
+        LocalSingleStratumBase(const uno::Reference<uno::XComponentContext>& xContext) ;
 
         /** Destructor */
-        ~LocalSingleStratum(void) ;
+        ~LocalSingleStratumBase(void) ;
 
 
         // XInitialize
@@ -154,7 +159,7 @@ class LocalSingleStratum : public SingleBackendBase {
         // XServiceInfo
         virtual rtl::OUString SAL_CALL
             getImplementationName(  )
-                throw (uno::RuntimeException) ;
+                throw (uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
             supportsService( const rtl::OUString& aServiceName )
@@ -164,52 +169,36 @@ class LocalSingleStratum : public SingleBackendBase {
             getSupportedServiceNames(  )
                 throw (uno::RuntimeException) ;
 
-        /**
-          Provides the implementation name.
-
-          @return   implementation name
-          */
-        static rtl::OUString SAL_CALL getName(void) ;
-        /**
-          Provides the supported services names
-
-          @return   service names
-          */
-        static uno::Sequence<rtl::OUString> SAL_CALL getServices(void) ;
-
+        // XSingleLayerStratum
         virtual uno::Reference<backend::XLayer> SAL_CALL
-        getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
-            throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException,
-                    uno::RuntimeException) ;
+            getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
+                throw (backend::BackendAccessException,
+                        lang::IllegalArgumentException,
+                        uno::RuntimeException) ;
 
         virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
-        getUpdatableLayer( const rtl::OUString& aLayerId )
-            throw (backend::BackendAccessException,
-                    lang::IllegalArgumentException,
-                    uno::RuntimeException) ;
+            getUpdatableLayer( const rtl::OUString& aLayerId )
+                throw (backend::BackendAccessException,
+                        lang::IllegalArgumentException,
+                        lang::NoSupportException,
+                        uno::RuntimeException) ;
 
-    public: // helpers for other implementation that need to use the same data
-        /**
-          Locates the main layer data and localized data directories in a layer directory hierarchy
-          */
-        static void getLayerSubDirectories( rtl::OUString const & aLayerBaseUrl,
-                                             rtl::OUString& aMainLayerUrl,
-                                             rtl::OUString& aSubLayerUrl);
-        /**
-          Creates a simple readonly non-composite layer for a component in a base directory
-          */
-        static uno::Reference<backend::XLayer>
-            createSimpleLayer(const uno::Reference<lang::XMultiServiceFactory>& xFactory,
-                              rtl::OUString const & aLayerBaseUrl,
-                              rtl::OUString const & aComponent);
+    protected:
+        rtl::OUString const & getBaseUrl() const
+        { return mStrataDataUrl; }
 
+    protected:
         /**
-          Creates a simple readonly non-composite layer for a component in a given file
+          Retrieves the appropriate layer and sublayers base directories.
+
+          @param aLayerUrl      layer base URL, filled on return
+          @param aSubLayerUrl   sublayer base URL, filled on return
           */
-        static uno::Reference<backend::XLayer>
-            createSimpleLayer(const uno::Reference<lang::XMultiServiceFactory>& xFactory,
-                              rtl::OUString const & aComponentUrl);
+        virtual void getLayerDirectories(rtl::OUString& aLayerUrl,
+                                         rtl::OUString& aSubLayerUrl) const = 0;
+    private:
+        virtual const ServiceImplementationInfo * getServiceInfoData() const = 0;
+
     private :
         /** Service factory */
         uno::Reference<lang::XMultiServiceFactory> mFactory ;
@@ -233,17 +222,24 @@ class LocalSingleStratum : public SingleBackendBase {
           @throws com::sun::star::lang::IllegalArgumentException
                   if the layer id is invalid.
           */
-        uno::Reference<backend::XUpdatableLayer> getFileLayer(const rtl::OUString& aLayerId)
+        uno::Reference<backend::XLayer> createReadonlyFileLayer(const rtl::OUString& aLayerId)
             throw (lang::IllegalArgumentException) ;
 
         /**
-          Retrieves the appropriate layer and sublayers base directories.
+          Builds a LocalFileLayer object given a layer id.
+          Since the LocalFileLayer implements the various
+          interfaces a layer can be accessed as, a few methods
+          need one. This method handles the layer id mapping
+          and the existence or not of sublayers.
 
-          @param aLayerUrl      layer base URL, filled on return
-          @param aSubLayerUrl   sublayer base URL, filled on return
+          @param aLayerId   layer id
+          @return   local file layer
+          @throws com::sun::star::lang::IllegalArgumentException
+                  if the layer id is invalid.
           */
-        void getLayerDirectories(rtl::OUString& aLayerUrl,
-                                 rtl::OUString& aSubLayerUrl) ;
+        uno::Reference<backend::XUpdatableLayer> createUpdatableFileLayer(const rtl::OUString& aLayerId)
+            throw (lang::IllegalArgumentException) ;
+
         /**
           Tells if a file is more recent than a given date.
           The date is formatted YYYYMMDDhhmmssZ.
@@ -256,6 +252,72 @@ class LocalSingleStratum : public SingleBackendBase {
                               const rtl::OUString& aTimestamp) ;
 
 } ;
+
+class LocalSingleStratum : public LocalSingleStratumBase
+{
+public:
+    LocalSingleStratum(const uno::Reference<uno::XComponentContext>& xContext)
+        : LocalSingleStratumBase(xContext)
+        {};
+
+private:
+    virtual void getLayerDirectories(rtl::OUString& aLayerUrl, rtl::OUString& aSubLayerUrl) const;
+    virtual const ServiceImplementationInfo * getServiceInfoData() const;
+};
+
+class LocalDataStratum : public LocalSingleStratumBase
+{
+public:
+    LocalDataStratum(const uno::Reference<uno::XComponentContext>& xContext)
+        : LocalSingleStratumBase(xContext)
+        {};
+
+private:
+    virtual void getLayerDirectories(rtl::OUString& aLayerUrl, rtl::OUString& aSubLayerUrl) const;
+    virtual const ServiceImplementationInfo * getServiceInfoData() const;
+};
+
+class LocalReadonlyStratum : public LocalSingleStratumBase
+{
+public:
+    LocalReadonlyStratum(const uno::Reference<uno::XComponentContext>& xContext)
+        : LocalSingleStratumBase(xContext)
+        {};
+
+    // XSingleLayerStratum - readonly implementation
+    virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
+        getUpdatableLayer( const rtl::OUString& aLayerId )
+            throw (backend::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    lang::NoSupportException,
+                    uno::RuntimeException) ;
+
+private:
+    virtual void getLayerDirectories(rtl::OUString& aLayerUrl, rtl::OUString& aSubLayerUrl) const;
+    virtual const ServiceImplementationInfo * getServiceInfoData() const;
+};
+
+class LocalResourceStratum : public LocalSingleStratumBase
+{
+public:
+    LocalResourceStratum(const uno::Reference<uno::XComponentContext>& xContext)
+        : LocalSingleStratumBase(xContext)
+        {};
+
+    // XSingleLayerStratum - readonly implementation
+    virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
+        getUpdatableLayer( const rtl::OUString& aLayerId )
+            throw (backend::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    lang::NoSupportException,
+                    uno::RuntimeException) ;
+
+private:
+    virtual void getLayerDirectories(rtl::OUString& aLayerUrl, rtl::OUString& aSubLayerUrl) const;
+    virtual const ServiceImplementationInfo * getServiceInfoData() const;
+};
+
+
 
 } } // configmgr.localbe
 
