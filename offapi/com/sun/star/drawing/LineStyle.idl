@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineStyle.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** specifies the appearance of the lines of a
     shape.
  */
-enum LineStyle
+published enum LineStyle
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR LineStyle::    NONE,
