@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PipeConnection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:33:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2003-04-15 14:33:59 $
+ * @version     $Revision: 1.4 $ $ $Date: 2004-05-03 07:39:26 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.PipeAcceptor
  * @see         com.sun.star.comp.connections.PipeConnector
@@ -96,8 +96,16 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     static public final boolean DEBUG = false;
 
     static {
-        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(),
-                                        "jpipe");
+    // preload shared libraries whichs import lips are linked to jpipe
+    if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
+    {
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "msvcr70");
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "uwinapi");
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "sal3");
+    }
+
+    // load shared library for JNI code
+        NativeLibraryLoader.loadLibrary(PipeConnection.class.getClassLoader(), "jpipe");
     }
 
     protected String    _aDescription;
