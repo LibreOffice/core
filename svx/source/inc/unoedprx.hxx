@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:33:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
