@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:34:39 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,15 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
             if ( GetScGlobalpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::pTransliteration->isEqual( aStr, rList.GetToken(i,'\t') ) )
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
         }
-        if (!c)
-            c = (sal_Unicode) aStr.ToInt32();       // Ascii
+        if (!c && aStr.Len())
+        {
+            sal_Unicode cFirst = aStr.GetChar( 0 );
+            // #i24235# first try the first character of the string directly
+            if( (aStr.Len() == 1) || (cFirst < '0') || (cFirst > '9') )
+                c = cFirst;
+            else    // keep old behaviour for compatibility (i.e. "39" -> "'")
+                c = (sal_Unicode) aStr.ToInt32();       // Ascii
+        }
     }
     return c;
 }
@@ -268,7 +275,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aNfRow.SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
     // *** Separator characters ***
-    lcl_FillCombo( aCbTextSep, aTextSepList, 34 );      // Default "
+    lcl_FillCombo( aCbTextSep, aTextSepList, '"' );      // Default "
 
     Link aSeparatorHdl =LINK( this, ScImportAsciiDlg, SeparatorHdl );
     aCbTextSep.SetSelectHdl( aSeparatorHdl );
