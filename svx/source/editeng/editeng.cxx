@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
+ *  last change: $Author: mt $ $Date: 2002-02-05 08:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,56 @@ XubString EditEngine::GetWord( sal_uInt16 nPara, sal_uInt16 nIndex )
     EditSelection aSel( pImpEditEngine->CreateSel( aESel ) );
     aSel = pImpEditEngine->SelectWord( aSel );
     return pImpEditEngine->GetSelected( aSel );
+}
+
+ESelection EditEngine::GetWord( const ESelection& rSelection, USHORT nWordType  ) const
+{
+    // ImpEditEngine-Iteration-Methods should be const!
+    EditEngine* pE = (EditEngine*)this;
+
+    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
+    aSel = pE->pImpEditEngine->SelectWord( aSel, nWordType );
+    return pE->pImpEditEngine->CreateESel( aSel );
+}
+
+ESelection EditEngine::WordLeft( const ESelection& rSelection, USHORT nWordType  ) const
+{
+    // ImpEditEngine-Iteration-Methods should be const!
+    EditEngine* pE = (EditEngine*)this;
+
+    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
+    aSel = pE->pImpEditEngine->WordLeft( aSel.Min(), nWordType );
+    return pE->pImpEditEngine->CreateESel( aSel );
+}
+
+ESelection EditEngine::WordRight( const ESelection& rSelection, USHORT nWordType  ) const
+{
+    // ImpEditEngine-Iteration-Methods should be const!
+    EditEngine* pE = (EditEngine*)this;
+
+    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
+    aSel = pE->pImpEditEngine->WordRight( aSel.Max(), nWordType );
+    return pE->pImpEditEngine->CreateESel( aSel );
+}
+
+ESelection EditEngine::CursorLeft( const ESelection& rSelection, USHORT /* nCharacterIteratorMode */ ) const
+{
+    // ImpEditEngine-Iteration-Methods should be const!
+    EditEngine* pE = (EditEngine*)this;
+
+    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
+    aSel = pE->pImpEditEngine->CursorLeft( aSel.Min() );
+    return pE->pImpEditEngine->CreateESel( aSel );
+}
+
+ESelection EditEngine::CursorRight( const ESelection& rSelection, USHORT /* nCharacterIteratorMode */ ) const
+{
+    // ImpEditEngine-Iteration-Methods should be const!
+    EditEngine* pE = (EditEngine*)this;
+
+    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
+    aSel = pE->pImpEditEngine->CursorRight( aSel.Max() );
+    return pE->pImpEditEngine->CreateESel( aSel );
 }
 
 sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView )
