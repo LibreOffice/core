@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellRangeObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-10-06 13:33:47 $
+ *  last change:$Date: 2003-11-18 16:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import ifc.sheet._XCellRangesQuery;
 
 
 /**
@@ -216,13 +217,44 @@ public class ScCellRangeObj extends TestCase {
                     "Error getting cell object from spreadsheet document", e);
         }
 
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("SHEET", oSheet);
+        // add expected results for the XCellRangesQuery interface test
+        String[]expectedResults = new String[7];
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.B1:C1;Sheet1.B3";
+        expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "Sheet1.B2:B3";
+        expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "Sheet1.A1 ... Sheet1.B1 ... Sheet1.B5 ... Sheet1.C3 ... Sheet1.D1";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "Sheet1.C2";
+        expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "Sheet1.D4";
+        expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.A2:A4;Sheet1.C2:D4";
+        expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.A2";
+        tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
+        tEnv.addObjRelation("XCellRangesQuery.CREATEENTRIES", Boolean.TRUE);
 
         XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
+
+        // XSearchable: Add a cell to make a seacrchable entry
+        try {
+            tEnv.addObjRelation("XSearchable.MAKEENTRYINCELL", new XCell[] {
+                        testRange.getCellByPosition(0,0), testRange.getCellByPosition(0,1)});
+        }
+        catch(com.sun.star.lang.IndexOutOfBoundsException e){
+            e.printStackTrace((PrintWriter)log);
+            log.println("Cannot make required object relation 'XSearchable.MAKEENTRYINCELL'.");
+        }
+
+        // XCellRangeData
+/*        Object[][] newData = new Object[5][4];
+        for (int i=0; i<newData.length; i++) {
+            for (int j=0; j<newData[i].length; j++) {
+                newData[i][j] = new Double(i*10+j);
+            }
+        }
+        tEnv.addObjRelation("NewData", newData); */
 
         //Adding relation for util.XSortable
         final PrintWriter finalLog = log;
