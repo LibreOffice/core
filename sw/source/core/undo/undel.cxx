@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-23 16:00:54 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
         pSttTxtNd = pStt->nNode.GetNode().GetTxtNode();
         pEndTxtNd = nSttNode == nEndNode
                     ? pSttTxtNd
-                    : pEndTxtNd = pEnd->nNode.GetNode().GetTxtNode();
+                    : pEnd->nNode.GetNode().GetTxtNode();
     }
 
     BOOL bMoveNds = *pStt == *pEnd      // noch ein Bereich vorhanden ??
@@ -908,81 +908,4 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.pLastUndoObj = this;
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.4 2001-05-23 16:00:54 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/05/18 18:06:50  jp
-      Bug #70454#: Undo - use the correct position for the move
-
-      Revision 1.2  2000/10/25 15:13:25  jp
-      use CharClass/BreakIt instead of old WordSelection
-
-      Revision 1.1.1.1  2000/09/19 00:08:27  hr
-      initial import
-
-      Revision 1.91  2000/09/18 16:04:28  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.90  2000/07/25 19:47:22  jp
-      Bug #73345#: Undo - restore the node inside the last section and in the first
-
-      Revision 1.89  2000/07/20 13:15:28  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.88  2000/05/19 12:53:32  jp
-      use WordSelection class for check chars
-
-      Revision 1.87  2000/05/09 10:03:58  jp
-      Changes for Unicode
-
-      Revision 1.86  1999/12/16 22:51:13  jp
-      Bug #70704#: content objects inside expanded ranges
-
-      Revision 1.85  1998/08/24 14:29:40  JP
-      Bug #55458#: SwUndoDelete - umsetzen vom PageDesc/-Break jetzt per Flag merken
-
-
-      Rev 1.84   24 Aug 1998 16:29:40   JP
-   Bug #55458#: SwUndoDelete - umsetzen vom PageDesc/-Break jetzt per Flag merken
-
-      Rev 1.83   02 Apr 1998 15:12:50   JP
-   Redo: Undo-Flag wird schon von der EditShell abgeschaltet
-
-      Rev 1.82   31 Mar 1998 15:44:46   JP
-   Redo: den richtigen NodeIndex beim Delete benutzen
-
-      Rev 1.81   11 Mar 1998 18:15:28   JP
-   Redo: Selektion sollte noch die richtige Richtung haben
-
-      Rev 1.80   09 Feb 1998 21:02:20   JP
-   Copy-Schnittstelle am Doc hat sich geaendert
-
-      Rev 1.79   06 Feb 1998 18:06:40   JP
-   SwUndoDel: nicht zuviele Nodes verschieben
-
-      Rev 1.78   16 Jan 1998 12:01:16   JP
-   Redlines beachten, auch wenns abgeschaltet ist
-
-      Rev 1.77   06 Jan 1998 16:26:04   JP
-   Redline beachten
-
-      Rev 1.76   19 Dec 1997 12:14:22   JP
-   Undo: Redlining beachten
-
-      Rev 1.75   17 Dec 1997 14:11:22   JP
-   Undo: Range nicht zu gross anlegen
-
-      Rev 1.74   10 Dec 1997 16:21:18   JP
-   Undo: ggfs. den ContentIndex abmelden
-
-      Rev 1.73   10 Dec 1997 16:04:02   AMA
-   New: SwSectionFrm-Einbau
-
-*************************************************************************/
 
