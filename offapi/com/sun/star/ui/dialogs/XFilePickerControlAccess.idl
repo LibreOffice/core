@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerControlAccess.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 08:47:39 $
+ *  last change: $Author: tra $ $Date: 2001-12-12 11:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFilePicker
         Specifies an action to perform with the given value.
         aControlAction has to be one of the values defined in <type>ControlActions</type>.
         Not all of the values are valid for all controls.
+        To add a new filter to the FilePicker use the interface XFilterManager, but
+        optionally an implementation may also support adding new filter using this
+        method.
 
     @param aValue
         The value to set. For checkboxes aValue should be a boolean, which
@@ -109,6 +112,9 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
         Specifies which value to retrieve.
         aControlAction has to be one of the values defined in <type>ControlActions</type>.
         Not all of the values are valid for all controls.
+        To get the currently selected filter of the FilePicker use the interface
+        XFilterManager, but optionally an implementation may also return the currently
+        selected filter through this method.
 
     @returns
         The value of the specified element. If the specified control
@@ -156,6 +162,9 @@ void enableControl( [in] short aControlId, [in] boolean bEnable );
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/10/26 08:47:39  fs
+    #92988# get/setValue now using ControlActions instead of ListboxControlActions
+
     Revision 1.1  2001/08/30 10:20:44  tra
     #88584#moved from drafts
 
