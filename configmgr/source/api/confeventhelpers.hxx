@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,17 @@ namespace configmgr
         template <class Listener>
         void BroadcastImplHelper<Listener>::disposing(IConfigBroadcaster* pSource)
         {
-            osl::MutexGuard aGuard(this->mutex);    // ensure that no notifications are running
+            osl::ClearableMutexGuard aGuard(this->mutex);   // ensure that no notifications are running
 
-            for(FullIterator it = m_aInterfaces.begin(); it != m_aInterfaces.end(); )
+            Interfaces aTargets;
+            aTargets.swap(m_aInterfaces);
+
+            aGuard.clear();
+            for(FullIterator it = aTargets.begin(); it != aTargets.end(); )
             {
                 FullIterator cur = it++;
                 if (*cur)
                     (*cur)->disposing(pSource);
-                m_aInterfaces.erase(cur);
             }
         }
 
@@ -160,7 +163,7 @@ namespace configmgr
             typedef std::set<OUString> Pathes;
 
         public:
-            NodeListenerInfo(INodeListener* pListener)
+            NodeListenerInfo(INodeListenerRef const&    pListener)
                 : m_pListener(pListener)
             {
             }
@@ -173,18 +176,18 @@ namespace configmgr
             //void removeChildPathes(OUString const& sPath);
 
         // behave as pointer for use as a 'reference' class
-            INodeListener* get() const { return m_pListener; }
-            INodeListener* operator->() const { return get(); }
-            INodeListener& operator*() const { return *get(); }
+            INodeListenerRef get() const { return m_pListener; }
+            INodeListenerRef operator->() const { return get(); }
+            INodeListener& operator*() const { return *m_pListener; }
         // needed to allow if (info) ...
             struct HasListener;
-            operator HasListener const*() const { return reinterpret_cast<HasListener*>(m_pListener); }
+            operator HasListener const*() const { return reinterpret_cast<HasListener*>(m_pListener.getBodyPtr()); }
 
             bool operator < (NodeListenerInfo const& aInfo) const
-            { return std::less<INodeListener*>()(m_pListener, aInfo.m_pListener); }
+            { return std::less<INodeListener*>()(m_pListener.getBodyPtr(), aInfo.m_pListener.getBodyPtr()); }
 
             bool operator == (NodeListenerInfo const& aInfo) const
-            { return m_pListener == aInfo.m_pListener; }
+            { return !!( m_pListener == aInfo.m_pListener); }
 
             bool operator > (NodeListenerInfo const& aInfo) const
             { return aInfo.operator < (*this); }
@@ -197,7 +200,7 @@ namespace configmgr
             { return !operator==(aInfo); }
 
         private:
-            INodeListener*  m_pListener;
+            INodeListenerRef m_pListener;
             mutable Pathes m_aPathes; // hack to be mutable as set element
         };
         class ConfigChangesBroadcasterImpl
@@ -206,10 +209,10 @@ namespace configmgr
             ConfigChangesBroadcasterImpl();
             ~ConfigChangesBroadcasterImpl();
 
-            void add(OUString const& aName, INodeListener* pListener);
-            void remove(INodeListener* pListener);
+            void add(OUString const& aName, INodeListenerRef const& pListener);
+            void remove(INodeListenerRef const& pListener);
 
-            void removed(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
+//          void removed(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
 
             void dispatch(Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
             void dispatch(TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource);
@@ -221,8 +224,8 @@ namespace configmgr
             Listeners m_aListeners;
             PathMap m_aPathMap;
         private:
-            void dispatchInner(INodeListener* pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
-            void dispatchOuter(INodeListener* pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchInner(INodeListenerRef const& pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchOuter(INodeListenerRef const& pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
         };
 
     /////////////////////////////////////////////////////////////////////////

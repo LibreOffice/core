@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-06 12:14:34 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 11:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,108 @@ namespace configmgr
         class Factory;
         class Notifier;
 //-----------------------------------------------------------------------------
+class ApiRootTreeImpl::NodeListener : public INodeListener
+{
+    osl::Mutex mutex;
+    ApiRootTreeImpl*    pParent;
+    IConfigBroadcaster* pSource;
+
+    vos::ORef< OOptions > m_xOptions;
+    OUString            m_aLocationPath;
+public:
+    NodeListener(ApiRootTreeImpl& _rParent)
+        : pParent(&_rParent)
+        , pSource(NULL)
+    {}
+    ~NodeListener()
+    {
+        unbind();
+    }
+
+    IConfigBroadcaster* getSource()
+    {
+        osl::MutexGuard aGuard(mutex);
+        return pSource;
+    }
+
+    void setSource(IConfigBroadcaster* pNew)
+    {
+        osl::MutexGuard aGuard(mutex);
+        if (pParent)
+        {
+            if (pNew != pSource)
+            {
+                if (pSource)
+                    pSource->removeListener(m_xOptions, this);
+
+                pSource = pNew;
+                if (pNew)
+                {
+                    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot register for notifications: no location set");
+                    pNew->addListener(m_aLocationPath, m_xOptions, this);
+                }
+            }
+        }
+    }
+
+    void setLocation(OUString const& _aLocation, vos::ORef< OOptions > const& _xOptions)
+    {
+        osl::MutexGuard aGuard(mutex);
+
+        if (pSource && pParent)
+            pSource->removeListener(m_xOptions, this);
+
+        m_aLocationPath = _aLocation;
+        m_xOptions = _xOptions;
+
+        if (pSource && pParent)
+            pSource->addListener(m_aLocationPath, m_xOptions, this);
+    }
+
+    void unbind()
+    {
+        osl::MutexGuard aGuard(mutex);
+        OSL_ASSERT(pParent == 0);
+        pParent = 0;
+        if (pSource)
+        {
+            pSource->removeListener(m_xOptions, this);
+            m_xOptions.unbind();
+            m_aLocationPath = OUString();
+        }
+
+    }
+
+    void clearParent()
+    {
+        osl::ClearableMutexGuard aGuard(mutex);
+        if (pParent)
+        {
+            pParent = 0;
+
+            if (pSource)
+            {
+                IConfigBroadcaster* pOrgSource = pSource;
+                vos::ORef< OOptions > xOptions = m_xOptions;
+
+                pSource = 0;
+                m_xOptions.unbind();
+                m_aLocationPath = OUString();
+
+                aGuard.clear();
+
+                pOrgSource->removeListener(xOptions, this);
+            }
+        }
+    }
+
+    // Interfaces
+    virtual void disposing(IConfigBroadcaster* pSource);
+    virtual void nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource);
+    virtual void nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource);
+};
+
+//-------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
@@ -142,7 +244,7 @@ ApiTreeImpl::~ApiTreeImpl()
 //-------------------------------------------------------------------------
 ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
 : m_aTreeImpl(pInstance, rProvider, aTree, 0)
-, m_pNotificationSource(0)
+, m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
 {
     implSetLocation();
@@ -151,7 +253,11 @@ ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider
 //-------------------------------------------------------------------------
 ApiRootTreeImpl::~ApiRootTreeImpl()
 {
-    implSetNotificationSource(0);
+    if (m_pNotificationListener.isValid())
+    {
+        m_pNotificationListener->setSource(0);
+        m_pNotificationListener->clearParent();
+    }
 }
 //-------------------------------------------------------------------------
 
@@ -220,7 +326,12 @@ bool ApiTreeImpl::disposeTreeNow()
 //-------------------------------------------------------------------------
 bool ApiRootTreeImpl::disposeTree()
 {
-    implSetNotificationSource(0);
+    vos::ORef<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.isValid())
+    {
+        xListener->clearParent();
+        xListener.unbind();
+    }
 
     bool bDisposed = m_aTreeImpl.disposeTreeNow();
 
@@ -425,20 +536,16 @@ IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaste
 {
     osl::MutexGuard aGuard(getApiTree().getApiLock());
 
-    IConfigBroadcaster* pOld = m_pNotificationSource;
+    IConfigBroadcaster* pOld = m_pNotificationListener.isValid() ? m_pNotificationListener->getSource() : 0;
     if (pOld != pNew)
     {
-        OSL_ENSURE(m_xOptions.isValid(), "Cannot change notification csource without options");
+        OSL_ENSURE(m_xOptions.isValid(), "Cannot change notification source without options");
 
-        if (pOld)
-            pOld->removeListener(m_xOptions, this);
+        if (!m_pNotificationListener.isValid())
+            m_pNotificationListener = new NodeListener(*this);
 
-        if (pNew)
-        {
-            OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot register for notifications: no location set");
-            pNew->addListener(m_aLocationPath, m_xOptions, this);
-        }
-        m_pNotificationSource = pNew;
+        m_pNotificationListener->setSource(pNew);
+
     }
     return pOld;
 }
@@ -448,28 +555,27 @@ void ApiRootTreeImpl::implSetLocation()
 {
     osl::MutexGuard aGuard(getApiTree().getApiLock());
 
+    OUString aLocationPath;
     Tree aTree = getApiTree().getTree();
     if (!aTree.isEmpty())
     {
         configuration::Name aRootName = aTree.getRootNode().getName();
-        m_aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
+        aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
     }
     else
     {
         OSL_ENSURE(false, "Setting up a RootTree without data");
-        m_aLocationPath = OUString();
+        aLocationPath = OUString();
     }
-    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Setting up a RootTree without location");
+    OSL_ENSURE(aLocationPath.getLength() > 0, "Setting up a RootTree without location");
 
-    if (m_pNotificationSource)
-    {
-        OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot reregister for notifications: setting empty location");
-        OSL_ENSURE( m_xOptions.isValid(), "Cannot reregister for notifications: no options available" );
+    if (!m_pNotificationListener.isValid())
+        m_pNotificationListener = new NodeListener(*this);
 
-        m_pNotificationSource->removeListener(m_xOptions, this);
-        m_pNotificationSource->addListener(m_aLocationPath, m_xOptions, this);
+    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot reregister for notifications: setting empty location");
+    OSL_ENSURE( m_xOptions.isValid(), "Cannot reregister for notifications: no options available" );
 
-    }
+    m_pNotificationListener->setLocation(aLocationPath, m_xOptions);
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -489,14 +595,29 @@ void ApiRootTreeImpl::releaseData()
 }
 // ---------------------------------------------------------------------------------------------------
 
+void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+
+    OSL_ASSERT( !pSource || _pSource == pSource );
+    if (pParent)
+    {
+        // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        ApiRootTreeImpl* pKeepParent = pParent;
+        aGuard.clear();
+
+        pKeepParent->disposing(_pSource);
+    }
+}
 void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
-    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
-
-    OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
-
-    m_pNotificationSource = 0;
+    vos::ORef<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.isValid())
+    {
+        xListener->clearParent();
+        xListener.unbind();
+    }
 
     if (m_aTreeImpl.disposeTreeNow())
         releaseData(); // not really needed: the whole data is going away anyways
@@ -552,22 +673,35 @@ void disposeRemovedNodes(configuration::NodeChanges const& aChanges, Factory& aF
 }
 // ---------------------------------------------------------------------------------------------------
 //INodeListener : IConfigListener
+void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* _pSource)
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+
+    OSL_ASSERT( !pSource || _pSource == pSource );
+    if (pParent)
+    {
+        // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        ApiRootTreeImpl* pKeepParent = pParent;
+        aGuard.clear();
+
+        pKeepParent->nodeChanged(aChange,sPath,_pSource);
+    }
+}
+// ---------------------------------------------------------------------------------------------------
+
+//INodeListener : IConfigListener
 void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource)
 {
     using configuration::Path;
     using configuration::NodeChanges;
     using configuration::RelativePath;
 
-    // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-    UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
-
     // do not dipatch if we are dying/dead anyway
     if (m_aTreeImpl.isAlive())
     try
     {
         OClearableWriteSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
-
-        OSL_ASSERT( m_pNotificationSource == pSource );
 
         Tree aTree( m_aTreeImpl.getTree() );
 
@@ -629,6 +763,22 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 }
 // ---------------------------------------------------------------------------------------------------
 
+void ApiRootTreeImpl::NodeListener::nodeDeleted(OUString const& sPath, IConfigBroadcaster* _pSource)
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+
+    OSL_ASSERT( !pSource || _pSource == pSource );
+    if (pParent)
+    {
+        // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
+        UnoInterfaceRef xKeepAlive( pParent->m_aTreeImpl.getUnoInstance() );
+        ApiRootTreeImpl* pKeepParent = pParent;
+        aGuard.clear();
+
+        pKeepParent->nodeDeleted(sPath,_pSource);
+    }
+}
+// ---------------------------------------------------------------------------------------------------
 void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource)
 {
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
@@ -653,7 +803,12 @@ void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSo
     }
 #endif
 
-    OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
+    vos::ORef<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.isValid())
+    {
+        xListener->clearParent();
+        xListener.unbind();
+    }
 
     if (m_aTreeImpl.disposeTreeNow())
         releaseData();

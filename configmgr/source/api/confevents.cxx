@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@ namespace configmgr
 
     public:
         // IConfigBroadcaster implementation helper
-        void addListener(OUString const& aName, INodeListener* );
-        void removeListener(INodeListener*);
+        void addListener(OUString const& aName, INodeListenerRef const& );
+        void removeListener(INodeListenerRef const&);
 
-        void removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
+//      void removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
 
         void dispose(IConfigBroadcaster* pSource);
     };
@@ -120,7 +120,7 @@ namespace configmgr
 
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation
-    void ConfigChangeBroadcaster::addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListener* pHandler)
+    void ConfigChangeBroadcaster::addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,true))
         {
@@ -130,7 +130,7 @@ namespace configmgr
             OSL_ASSERT(false);
     }
 
-    void ConfigChangeBroadcaster::removeListener(const vos::ORef < OOptions >& _xOptions, INodeListener* pHandler)
+    void ConfigChangeBroadcaster::removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
         {
@@ -138,14 +138,14 @@ namespace configmgr
         }
     }
 
-    void ConfigChangeBroadcaster::removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel)
+/*  void ConfigChangeBroadcaster::removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
         {
             pHelper->removeNode(aPath, bRemovedFromModel, this);
         }
     }
-
+*/
     /////////////////////////////////////////////////////////////////////////
     void ConfigChangeBroadcaster::fireChanges(TreeChangeList const& rList_, sal_Bool bError_)
     {
@@ -171,21 +171,21 @@ namespace configmgr
     }
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation help
-    void ConfigChangeBroadcastHelper::addListener(OUString const& aName, INodeListener* pHandler)
+    void ConfigChangeBroadcastHelper::addListener(OUString const& aName, INodeListenerRef const& pHandler)
     {
         m_changes.add(aName, pHandler);
     }
 
-    void ConfigChangeBroadcastHelper::removeListener(INodeListener* pHandler)
+    void ConfigChangeBroadcastHelper::removeListener(INodeListenerRef const& pHandler)
     {
         m_changes.remove(pHandler);
     }
 
-    void ConfigChangeBroadcastHelper::removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource)
+/*  void ConfigChangeBroadcastHelper::removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource)
     {
         m_changes.removed(aPath, bRemovedFromModel,pSource);
     }
-
+*/
     /////////////////////////////////////////////////////////////////////////
     void ConfigChangeBroadcastHelper::broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
     {

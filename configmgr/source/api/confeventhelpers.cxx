@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:25:10 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ ConfigChangesBroadcasterImpl::~ConfigChangesBroadcasterImpl()
 }
 
 /////////////////////////////////////////////////////////////////////////
-void ConfigChangesBroadcasterImpl::add(OUString const& aName, INodeListener* pListener)
+void ConfigChangesBroadcasterImpl::add(OUString const& aName, INodeListenerRef const& pListener)
 {
     OSL_ASSERT( ! ConfigurationName(aName).isRelative() );
 
@@ -159,7 +159,7 @@ void ConfigChangesBroadcasterImpl::add(OUString const& aName, INodeListener* pLi
 }
 
 /////////////////////////////////////////////////////////////////////////
-void ConfigChangesBroadcasterImpl::remove(INodeListener* pListener)
+void ConfigChangesBroadcasterImpl::remove(INodeListenerRef const& pListener)
 {
     osl::MutexGuard aGuard(m_aListeners.mutex);
 
@@ -188,7 +188,7 @@ void ConfigChangesBroadcasterImpl::remove(INodeListener* pListener)
         m_aListeners.removeListener(pListener);
     }
 }
-
+/*
 void ConfigChangesBroadcasterImpl::removed(OUString const& aBasePath, bool bRemovedFromModel, IConfigBroadcaster* pSource)
 {
     OSL_ASSERT( ! ConfigurationName(aBasePath).isRelative() );
@@ -204,7 +204,7 @@ void ConfigChangesBroadcasterImpl::removed(OUString const& aBasePath, bool bRemo
         OUString aDispatchPath = it->first;
         OSL_ASSERT( ! ConfigurationName(aDispatchPath).isRelative() );
 
-        INodeListener* pTarget = it->second->get();
+        INodeListenerRef pTarget = it->second->get();
         ++it;
 
         // we allow a listener to remove itself from within the callback
@@ -222,7 +222,7 @@ void ConfigChangesBroadcasterImpl::removed(OUString const& aBasePath, bool bRemo
             it = next;
     }
 }
-
+*/
 
 /////////////////////////////////////////////////////////////////////////
 // This should actually be available from the TreeChangeList
@@ -267,7 +267,7 @@ static Change const* resolvePath(Change const* pChange, ConfigurationName& aRela
 /////////////////////////////////////////////////////////////////////////
 void ConfigChangesBroadcasterImpl::dispatchInner
 (
-    INodeListener* pTarget,
+    INodeListenerRef const& pTarget,
     OUString const& sTargetPath,
     Change const& rBaseChange,
     OUString const& sChangeContext,
@@ -298,7 +298,7 @@ void ConfigChangesBroadcasterImpl::dispatchInner
 /////////////////////////////////////////////////////////////////////////
 void ConfigChangesBroadcasterImpl::dispatchOuter
 (
-    INodeListener* pTarget,
+    INodeListenerRef const& pTarget,
     OUString const& sTargetPath,
     Change const& rBaseChange,
     OUString const& sChangeContext,
@@ -319,6 +319,17 @@ void ConfigChangesBroadcasterImpl::dispatch(TreeChangeList const& rList_, sal_Bo
 {
     dispatch(rList_.root, rList_.pathToRoot,_bError, pSource);
 }
+/////////////////////////////////////////////////////////////////////////
+namespace
+{
+    struct DispatchTarget
+    {
+        INodeListenerRef pTarget;
+        OUString sDispatchPath;
+    };
+    typedef std::vector<DispatchTarget> DispatchTargets;
+}
+/////////////////////////////////////////////////////////////////////////
 void ConfigChangesBroadcasterImpl::dispatch
 (
     Change const& rBaseChange,
@@ -329,8 +340,6 @@ void ConfigChangesBroadcasterImpl::dispatch
 {
     // listeners registered under multiple sub-pathes will be called multiple times !
 
-    osl::MutexGuard aGuard(m_aListeners.mutex);
-
     ConfigurationName aRootName(sChangeContext);
     OSL_ASSERT(!aRootName.isRelative());
 
@@ -340,84 +349,80 @@ void ConfigChangesBroadcasterImpl::dispatch
 
     OSL_ASSERT(aNodeName.getParentName() == aRootName);
 
+    // Collect the targets
+    osl::ClearableMutexGuard aGuard(m_aListeners.mutex);
+
     // Dispatch listeners to ancestors of the change root
-    PathMap::const_iterator const endOuter = m_aPathMap.upper_bound(aRootName.fullName());
-
-    // TODO: Both loops are so similar - they should be a single function
-    for (   PathMap::const_iterator itOuter = m_aPathMap.lower_bound( ConfigurationName::rootname() += aRootName.moduleName() );
-            itOuter != endOuter;
-        )
+    DispatchTargets aOuterTargets;
     {
-        OSL_ASSERT( m_aListeners.find(itOuter->second->get()) != m_aListeners.end() );
 
-        OUString aDispatchPath = itOuter->first;
-        OSL_ASSERT( ! ConfigurationName(aDispatchPath).isRelative() );
+        PathMap::const_iterator itOuter = m_aPathMap.lower_bound( ConfigurationName::rootname() += aRootName.moduleName() );
+        PathMap::const_iterator const endOuter = m_aPathMap.upper_bound(aRootName.fullName());
 
-        INodeListener* pTarget = itOuter->second->get();
-
-        // incrementing here usually is enough
-        ++itOuter;
-
-        // check whether this should be dispatched at all
-        if (aBasePath == aDispatchPath || aNodeName.isNestedIn(aDispatchPath))
+        // TODO: Both loops are so similar - they should be a single function
+        while (itOuter != endOuter)
         {
-            // we allow a listener to remove itself from within the callback
-            // the simple increment above wont work, if the following listener is the same listener
-            // (which really shouldn't happen)
-            PathMap::const_iterator next = itOuter;
-            while (next != m_aPathMap.end() && next->second->get() == pTarget)
-                ++next;
+            OSL_ASSERT( m_aListeners.find(itOuter->second->get()) != m_aListeners.end() );
 
-            this->dispatchOuter(pTarget, aDispatchPath, rBaseChange, sChangeContext, _bError, pSource);
+            OUString aDispatchPath = itOuter->first;
+            OSL_ASSERT( ! ConfigurationName(aDispatchPath).isRelative() );
 
-            // if a listener removes itself from within the callback, it will be missing by now
-            // so we check whether our listener is still there and if necessary patch our position
-            if (m_aListeners.find(pTarget) == m_aListeners.end())
-                itOuter = next;
+            // check whether this should be dispatched at all
+            if (aBasePath == aDispatchPath || aNodeName.isNestedIn(aDispatchPath))
+            {
+                DispatchTarget aTarget;
+                aTarget.sDispatchPath = aDispatchPath;
+                aTarget.pTarget = itOuter->second->get();
+
+                aOuterTargets.push_back(aTarget);
+            }
+            ++itOuter;
         }
     }
-
 
     // Dispatch listeners to descendants of the change root
-    for(    PathMap::const_iterator itInner = m_aPathMap.lower_bound(aBasePath);
-            itInner != m_aPathMap.end() && 0 == aBasePath.compareTo(itInner->first, aBasePath.getLength());
-        )
+    DispatchTargets aInnerTargets;
     {
-        OSL_ASSERT( m_aListeners.find(itInner->second->get()) != m_aListeners.end() );
+        PathMap::const_iterator itInner = m_aPathMap.lower_bound(aBasePath);
 
-        OUString aDispatchPath = itInner->first;
-        OSL_ASSERT( ! ConfigurationName(aDispatchPath).isRelative() );
-
-        INodeListener* pTarget = itInner->second->get();
-        ++itInner;
-
-        // check whether this should be dispatched at all
-        if (aBasePath == aDispatchPath || ConfigurationName(aDispatchPath).isNestedIn(aRootName))
+        while(  itInner != m_aPathMap.end() &&
+                0 == aBasePath.compareTo(itInner->first, aBasePath.getLength()))
         {
-            // we allow a listener to remove itself from within the callback
-            // the simple increment above wont work, if the following listener is the same listener
-            // (which really shouldn't happen)
-            PathMap::const_iterator next = itInner;
-            while (next != m_aPathMap.end() && next->second->get() == pTarget)
-                ++next;
+            OSL_ASSERT( m_aListeners.find(itInner->second->get()) != m_aListeners.end() );
 
-            this->dispatchInner(pTarget, aDispatchPath, rBaseChange, sChangeContext, _bError, pSource);
+            OUString aDispatchPath = itInner->first;
+            OSL_ASSERT( ! ConfigurationName(aDispatchPath).isRelative() );
 
-            // if a listener removes itself from within the callback, it will be missing by now
-            // so we check whether our listener is still there and if necessary patch our position
-            if (m_aListeners.find(pTarget) == m_aListeners.end())
-                itInner = next;
+            // check whether this should be dispatched at all
+            if (aBasePath == aDispatchPath || ConfigurationName(aDispatchPath).isNestedIn(aRootName))
+            {
+                DispatchTarget aTarget;
+                aTarget.sDispatchPath = aDispatchPath;
+                aTarget.pTarget = itInner->second->get();
+
+                aInnerTargets.push_back(aTarget);
+            }
+            ++itInner;
         }
-
     }
+
+    aGuard.clear();
+
+    {for (DispatchTargets::const_iterator it = aOuterTargets.begin(); it != aOuterTargets.end(); ++it){
+        this->dispatchOuter(it->pTarget, it->sDispatchPath, rBaseChange, sChangeContext, _bError, pSource);
+    }}
+    {for (DispatchTargets::const_iterator it = aInnerTargets.begin(); it != aInnerTargets.end(); ++it){
+        this->dispatchInner(it->pTarget, it->sDispatchPath, rBaseChange, sChangeContext, _bError, pSource);
+    }}
 }
 
 /////////////////////////////////////////////////////////////////////////
 void ConfigChangesBroadcasterImpl::disposing(IConfigBroadcaster* pSource)
 {
-    osl::MutexGuard aGuard(m_aListeners.mutex);
-
+    osl::ClearableMutexGuard aGuard(m_aListeners.mutex);
     m_aPathMap.clear();
+
+    aGuard.clear();
     m_aListeners.disposing(pSource);
 }
 

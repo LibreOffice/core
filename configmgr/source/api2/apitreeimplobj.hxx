@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-06 12:14:34 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 11:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ namespace configmgr
         };
 
     //-----------------------------------------------------------------------------
-        class ApiRootTreeImpl : private INodeListener
+        class ApiRootTreeImpl
         {
             typedef configuration::Tree Tree;
             vos::ORef< OOptions > m_xOptions;
@@ -221,16 +221,20 @@ namespace configmgr
             void releaseData();
 
         private:
+            class NodeListener;
+            friend class NodeListener;
+            //IConfigBroadcaster*   m_pNotificationSource;
+
         // IConfigListener
-            virtual void disposing(IConfigBroadcaster* pSource) ;
+            void disposing(IConfigBroadcaster* pSource) ;
         //INodeListener : IConfigListener
-            virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
-            virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
+            void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
+            void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
 
         private:
-            ApiTreeImpl         m_aTreeImpl;
-            OUString            m_aLocationPath;
-            IConfigBroadcaster* m_pNotificationSource;
+            ApiTreeImpl             m_aTreeImpl;
+            OUString                m_aLocationPath;
+            vos::ORef<NodeListener> m_pNotificationListener;
         };
 //-----------------------------------------------------------------------------
     }
