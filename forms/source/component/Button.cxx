@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XMul
     :OImageModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OButtonModel, NULL );
+    implInitializeImageURL();
 }
 
 //------------------------------------------------------------------------------
