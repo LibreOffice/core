@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-27 20:17:58 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 21:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_HEADER
     Text [ italian ] = "Intestazione" ;
     Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalho" ;
-    Text [ finnish ] = "Yläotsikko" ;
+    Text [ finnish ] = "Yl?otsikko" ;
     Text [ danish ] = "Sidehoved" ;
     Text [ french ] = "En-tête" ;
     Text [ swedish ] = "Sidhuvud" ;
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "Attiva riga d'intestazione" ;
         Text [ portuguese_brazilian ] = "Cabe?alho, ~com dist?ncia" ;
         Text [ portuguese ] = "Activar ~cabeçalho" ;
-        Text [ finnish ] = "~Otsikko päällä" ;
+        Text [ finnish ] = "~Otsikko p??ll?" ;
         Text [ danish ] = "Aktiver sidehoved" ;
         Text [ french ] = "Activer l'~en-tête " ;
         Text [ swedish ] = "~Sidhuvud på" ;
@@ -122,7 +122,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
         Text [ portuguese_brazilian ] = "Mesmo ~conte?o esquerda/direita" ;
         Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "~Sama sisältö vasemmalla/oikealla" ;
+        Text [ finnish ] = "~Sama sis?lt?vasemmalla/oikealla" ;
         Text [ danish ] = "Ens indhold venstre/højre" ;
         Text [ french ] = "~Contenu identique gauche/droite" ;
         Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
@@ -258,7 +258,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ turkish ] = "U~zaklýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Espacio";
-        Text[ finnish ] = "~Välit";
+        Text[ finnish ] = "~Objektiv?lit";
     };
     MetricField ED_DIST
     {
@@ -392,7 +392,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ italian ] = "E~xtra..." ;
         Text [ portuguese_brazilian ] = "Op??~s..." ;
         Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??..." ;
         Text [ danish ] = "Flere..." ;
         Text [ french ] = "~Options..." ;
         Text [ swedish ] = "~Fler..." ;
@@ -452,7 +452,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "~Attiva piè di pagina" ;
         Text [ portuguese_brazilian ] = "~Rodap? com dist?ncia" ;
         Text [ portuguese ] = "Activar ~rodapé" ;
-        Text [ finnish ] = "~Alaselite käytössä" ;
+        Text [ finnish ] = "~Alaselite k?yt?s?" ;
         Text [ danish ] = "Aktiver sidefod" ;
         Text [ french ] = "~Activer le pied de page" ;
         Text [ swedish ] = "Sid~fot på" ;
@@ -481,7 +481,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
         Text [ portuguese_brazilian ] = "Mesmo ~conte?o esquerda/direita" ;
         Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
-        Text [ finnish ] = "~Sama sisältö vasemmalla/oikealla" ;
+        Text [ finnish ] = "~Sama sis?lt?vasemmalla/oikealla" ;
         Text [ danish ] = "Ens indhold venstre/højre" ;
         Text [ french ] = "~Contenu identique gauche/droite" ;
         Text [ swedish ] = "Samma ~innehåll till höger/vänster" ;
@@ -616,7 +616,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ turkish ] = "~Uzaklýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~pacio";
-        Text[ finnish ] = "~Välit";
+        Text[ finnish ] = "~Objektiv?lit";
     };
     MetricField ED_DIST
     {
@@ -753,7 +753,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ italian ] = "E~xtra..." ;
         Text [ portuguese_brazilian ] = "~Op??s..." ;
         Text [ portuguese ] = "~Outros..." ;
-        Text [ finnish ] = "~Lisää" ;
+        Text [ finnish ] = "~Lis??..." ;
         Text [ danish ] = "Flere..." ;
         Text [ french ] = "~Options..." ;
         Text [ swedish ] = "~Fler..." ;
@@ -815,6 +815,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
 };
 
  // ********************************************************************** EOF
+
 
 
 
