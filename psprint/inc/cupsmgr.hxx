@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:07:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ class CUPSManager : public PrinterInfoManager
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
     std::hash_map< rtl::OUString, int, rtl::OUStringHash >      m_aCUPSDestMap;
+
+    std::hash_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
 
     rtl::OString                                                m_aUser;
     // this is a security risk, but the CUPS API demands
