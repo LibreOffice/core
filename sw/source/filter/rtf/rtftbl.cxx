@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:37:56 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,8 @@ void SwRTFParser::ReadTable( int nToken )
                     {
                         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
                         SwTableLine* pLine = rLns[ rLns.Count()-1 ];
-                        --nAktBox;
+                        if(nAktBox!=0)
+                            --nAktBox;
                         pFmt = (SwTableBoxFmt*)pLine->GetTabBoxes()[ nAktBox ]->GetFrmFmt();
                     }
                     else
