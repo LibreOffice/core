@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-07 14:43:13 $
+ *  last change: $Author: kr $ $Date: 2001-08-10 16:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #define _SV_SALOBJ_CXX
-
 #include <prex.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
@@ -136,6 +135,8 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
                           NULL );
     XtRealizeWidget( pObject->maObjectData.maPrimary );
     XtRealizeWidget( pObject->maObjectData.maSecondary );
+    XtMapWidget (pObject->maObjectData.maPrimary);
+    XtMapWidget (pObject->maObjectData.maSecondary );
 
     pObjData->pDisplay      = XtDisplay( pObject->maObjectData.maPrimary );
     pObjData->aWindow       = XtWindow( pObject->maObjectData.maSecondary );
@@ -144,6 +145,7 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
     pObjData->nDepth        = pSalDisp->GetVisual()->GetDepth();
     pObjData->aColormap     = pSalDisp->GetColormap().GetXColormap();
     pObjData->pAppContext   = pSalDisp->GetXLib()->GetAppContext();
+    XSync((Display*)pObjData->pDisplay, False);
     return pObject;
 }
 
@@ -262,7 +264,7 @@ SalObject::ResetClipRegion()
     win_size.x      = 0;
     win_size.y      = 0;
     win_size.width  = win_attrib.width;
-    win_size.height = win_attrib.width;
+    win_size.height = win_attrib.height;
 
     XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
                               aShapeWindow,
