@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:50:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,13 @@ namespace dp_registry {
 namespace backend {
 namespace script {
 
+namespace {
+struct StrCannotDetermineLibName : public StaticResourceString<
+    StrCannotDetermineLibName, RID_STR_CANNOT_DETERMINE_LIBNAME> {};
+struct StrLibNameAlreadyExists : public StaticResourceString<
+    StrLibNameAlreadyExists, RID_STR_LIBNAME_ALREADY_EXISTS> {};
+}
+
 //______________________________________________________________________________
 OUString LibraryContainer::get_libname(
     OUString const & url,
@@ -96,9 +103,10 @@ OUString LibraryContainer::get_libname(
     ::ucb::Content ucb_content( url, xCmdEnv );
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
-    if (import.aName.getLength() == 0)
-        throw Exception( getResourceString(RID_STR_CANNOT_DETERMINE_LIBNAME),
+    if (import.aName.getLength() == 0) {
+        throw Exception( StrCannotDetermineLibName::get(),
                          Reference<XInterface>() );
+    }
     return import.aName;
 }
 
@@ -142,12 +150,13 @@ void LibraryContainer::flush(
 }
 
 //______________________________________________________________________________
-void LibraryContainer::verify_init(
+void LibraryContainer::init(
     Reference<XCommandEnvironment> const & xCmdEnv ) const
 {
     ::osl::MutexGuard guard( m_mutex );
     if (! m_inited)
     {
+        m_modified = false;
         ::ucb::Content ucb_content;
         if (create_ucb_content( &ucb_content, m_container_url,
                                 xCmdEnv, false /* no throw */ ))
@@ -159,13 +168,25 @@ void LibraryContainer::verify_init(
             {
                 ::xmlscript::LibDescriptor const & descr =
                       import_array.mpLibs[ nPos ];
-                ::std::pair< t_libs_map::iterator, bool > insertion(
+                // filter dead package entries in xlc file:
+                if (descr.aStorageURL.matchAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") ) &&
+                    !create_ucb_content( 0, descr.aStorageURL, xCmdEnv,
+                                         false /* no throw */ ))
+                {
+                    OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                                    descr.aStorageURL,
+                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                    m_modified = true; // force write back
+                    continue;
+                }
+                ::std::pair<t_libs_map::iterator, bool> insertion(
                     m_map.insert(
                         t_libs_map::value_type( descr.aName, descr ) ) );
                 OSL_ASSERT( insertion.second );
+                (void) insertion;
             }
         }
-        m_modified = false;
         m_inited = true;
     }
 }
@@ -190,7 +211,7 @@ bool LibraryContainer::insert(
     descr.bPasswordProtected = false;
     descr.bPreload = false;
     // all other fields are ignored by xmlscript lib export
-    verify_init( xCmdEnv );
+    init( xCmdEnv );
 
     ::osl::MutexGuard guard( m_mutex );
     t_libs_map::iterator const iFind( m_map.find( descr.aName ) );
@@ -208,10 +229,11 @@ bool LibraryContainer::insert(
     {
         // found one:
         OUString const & storage_url = iFind->second.aStorageURL;
-        if (! insert_url.equals( storage_url ))
+        if (! insert_url.equals( storage_url )) {
             throw container::ElementExistException(
-                getResourceString(RID_STR_LIBNAME_ALREADY_EXISTS) + descr.aName,
+                StrLibNameAlreadyExists::get() + descr.aName,
                 Reference<XInterface>() );
+        }
         return true;
     }
 }
@@ -219,12 +241,12 @@ bool LibraryContainer::insert(
 //______________________________________________________________________________
 bool LibraryContainer::remove(
     OUString const & libname, OUString const & url,
-    Reference< XCommandEnvironment > const & xCmdEnv,
+    Reference<XCommandEnvironment> const & xCmdEnv,
     bool exact )
 {
     bool succ = false;
     ::osl::MutexGuard guard( m_mutex );
-    verify_init( xCmdEnv );
+    init( xCmdEnv );
     if (exact)
     {
         if (libname.getLength() != 0)
@@ -271,16 +293,16 @@ bool LibraryContainer::has(
     Reference< XCommandEnvironment > const & xCmdEnv ) const
 {
     ::osl::MutexGuard guard( m_mutex );
-    verify_init( xCmdEnv );
+    init( xCmdEnv );
     return m_map.find( libname ) != m_map.end();
 }
 
 //______________________________________________________________________________
 t_descr_list LibraryContainer::getLibs(
-    Reference< XCommandEnvironment > const & xCmdEnv ) const
+    Reference<XCommandEnvironment> const & xCmdEnv ) const
 {
     ::osl::MutexGuard guard( m_mutex );
-    verify_init( xCmdEnv );
+    init( xCmdEnv );
     t_descr_list ret;
     t_libs_map::iterator iPos( m_map.begin() );
     t_libs_map::iterator const iEnd( m_map.end() );
