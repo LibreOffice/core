@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:33:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,18 +122,13 @@
 #include "anminfo.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
+#include "sdresid.hxx"
 
 using namespace ::com::sun::star;
 
