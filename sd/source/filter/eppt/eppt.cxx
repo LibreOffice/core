@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 16:57:20 $
+ *  last change: $Author: sj $ $Date: 2001-04-04 15:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2411,6 +2411,37 @@ void PPTExStyleSheet::Write( SvStream& rSt, PptEscherEx* pEx )
         pEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }
 }
+
+sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
+{
+    return 24;
+}
+
+// the TxCFStyleAtom stores the text properties that are used
+// when creating new objects in PowerPoint.
+
+void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
+{
+    const PPTExCharLevel& rCharStyle = mpCharSheet[ EPP_TEXTTYPE_Other ]->maCharLevel[ 0 ];
+    const PPTExParaLevel& rParaStyle = mpParaSheet[ EPP_TEXTTYPE_Other ]->maParaLevel[ 0 ];
+
+    sal_uInt16 nFlags = 0x60        // ??
+                      | 0x02        // fontsize;
+                      | 0x04;       // fontcolor
+
+    sal_uInt32 nCharFlags = rCharStyle.mnFlags;
+    nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
+
+    rSt << (sal_uInt32)( EPP_TxCFStyleAtom << 16 )  // recordheader
+        << SizeOfTxCFStyleAtom() - 8
+        << (sal_uInt16)( 0x80 | nCharFlags )
+        << (sal_uInt16)nFlags
+        << (sal_uInt16)nCharFlags
+        << (sal_Int32)-1                            // ?
+        << rCharStyle.mnFontHeight
+        << rCharStyle.mnFontColor;
+}
+
 
 // ---------------------------------------------------------------------------------------------
 

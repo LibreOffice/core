@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 16:58:14 $
+ *  last change: $Author: sj $ $Date: 2001-04-04 15:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,9 @@ class PPTExStyleSheet
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
                 sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
                 void            Write( SvStream& rSt, PptEscherEx* pEx );
+
+                sal_uInt32      SizeOfTxCFStyleAtom() const;
+                void            WriteTxCFStyleAtom( SvStream& rSt );
 };
 
 
