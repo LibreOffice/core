@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 13:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ void OAdabasTable::refreshIndexes()
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
             ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+            ::rtl::OUString sPreviousRoundName;
             while(xResult->next())
             {
                 aName = xRow->getString(5);
@@ -217,7 +218,12 @@ void OAdabasTable::refreshIndexes()
                     aName += aDot;
                 aName += xRow->getString(6);
                 if(aName.getLength())
-                    aVector.push_back(aName);
+                {
+                    // don't insert the name if the last one we inserted was the same
+                    if (sPreviousRoundName != aName)
+                        aVector.push_back(aName);
+                }
+                sPreviousRoundName = aName;
             }
         }
     }
