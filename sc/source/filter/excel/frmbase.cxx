@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:16:27 $
+ *  last change: $Author: dr $ $Date: 2002-01-08 07:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,10 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
 {
     if( b )
     {
+        // #96263# ignore 3D ranges
+        if( a.Ref1.nTab != a.Ref2.nTab )
+            return;
+
         INT16&  rTab = a.Ref1.nTab;
         if( rTab > MAXTAB )
             rTab = MAXTAB;
