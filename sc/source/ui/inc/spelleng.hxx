@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,45 +65,141 @@
 #include "editutil.hxx"
 
 class ScViewData;
+class ScDocShell;
 class ScDocument;
 class SfxItemPool;
 
+// ============================================================================
 
-class ScSpellingEngine : public ScEditEngineDefaulter
+/** Base class for special type of edit engines, i.e. for spell checker and text conversion. */
+class ScConversionEngineBase : public ScEditEngineDefaulter
 {
-    USHORT nOrgCol;
-    USHORT nOrgRow;
-    USHORT nOrgTab;
-    USHORT nOldCol;
-    USHORT nOldRow;
-    BOOL bInSel;
-    BOOL bIsModifiedAtAll;
-    BOOL bFirstTime;
-    BOOL bFirstTable;
-    LanguageType eOldLnge;
-    ESelection* pEditSel;
-    ScViewData* pViewData;
-    ScDocument* pUndoDoc;
-    ScDocument* pRedoDoc;
 public:
-    ScSpellingEngine( SfxItemPool* pEnginePool, ScViewData* pVData,
-                     ScDocument* pUndoDc, ScDocument* pRedoDc,
-                     USHORT nCol, USHORT nRow, USHORT nTab,
-                     BOOL bInSelection, LanguageType eLge, ESelection* pEdSel)
-        : ScEditEngineDefaulter( pEnginePool ),
-          pViewData ( pVData ), pUndoDoc ( pUndoDc ), pRedoDoc ( pRedoDc ),
-          nOldCol ( nCol ), nOldRow ( nRow ),
-          nOrgCol ( nCol ), nOrgRow ( nRow ), nOrgTab ( nTab ),
-          bInSel( bInSelection ), eOldLnge ( eLge ),
-          pEditSel( pEdSel ) { bIsModifiedAtAll = FALSE;
-                               bFirstTime = TRUE;
-                               bFirstTable = TRUE; }
-    ~ScSpellingEngine() {}
-    virtual BOOL SpellNextDocument();
-    BOOL IsModifiedAtAll() const { return bIsModifiedAtAll; }
+    explicit                ScConversionEngineBase(
+                                SfxItemPool* pEnginePool,
+                                ScViewData& rViewData,
+                                ScDocument* pUndoDoc,
+                                ScDocument* pRedoDoc,
+                                ESelection* pEdSelection,
+                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                bool bCellSelection );
 
-    LanguageType GetLanguage() const { return eOldLnge; }
+    virtual                 ~ScConversionEngineBase();
+
+    /** Derived classes implement to convert all cells in the selection or sheet. */
+    virtual void            ConvertAll( EditView& rEditView ) = 0;
+
+    /** Returns true, if at least one cell has been modified. */
+    inline bool             IsAnyModified() const { return mbIsAnyModified; }
+
+protected:
+    /** Implementation of cell iteration. Finds a cell that needs conversion.
+        @return  true = Current cell needs conversion (i.e. spelling error found). */
+    bool                    FindNextConversionCell();
+
+    /** Derived classes return, if the current text needs conversion (i.e. spelling error found).
+        @return  true = Current edit text needs conversion. */
+    virtual bool            NeedsConversion() = 0;
+
+    /** Derived classes may show a query box that asks whether to restart at top of the sheet.
+        @descr  Default here is no dialog and restart always.
+        @return  true = Restart at top, false = Stop the conversion. */
+    virtual bool            ShowTableWrapDialog();
+    /** Derived classes may show a message box stating that the conversion is finished.
+        @descr  Default here is no dialog. */
+    virtual void            ShowFinishDialog();
+
+private:
+    /** Fills the edit engine from a document cell. */
+    void                    FillFromCell( USHORT nCol, USHORT nRow, USHORT nTab );
+
+protected:  // for usage in derived classes
+    ScViewData&             mrViewData;
+    ScDocShell&             mrDocShell;
+    ScDocument&             mrDoc;
+
+private:
+    ScDocument*             mpUndoDoc;          /// Document stores all old cells for UNDO action.
+    ScDocument*             mpRedoDoc;          /// Document stores all new cells for REDO action.
+    ESelection*             mpEditSel;          /// Cell selection from edit mode or NULL.
+    LanguageType            meCurrLang;         /// Current cell language.
+    USHORT                  mnStartCol;         /// Initial column index.
+    USHORT                  mnStartRow;         /// Initial row index.
+    USHORT                  mnStartTab;         /// Initial sheet index.
+    USHORT                  mnCurrCol;          /// Current column index.
+    USHORT                  mnCurrRow;          /// Current row index.
+    bool                    mbCellSelect;       /// true = Cell selection; false = Entire sheet.
+    bool                    mbIsAnyModified;    /// true = At least one cell has been changed.
+    bool                    mbInitialState;     /// true = Not searched for a cell yet.
+    bool                    mbWrappedInTable;   /// true = Already restarted at top of the sheet.
 };
 
+// ============================================================================
+
+/** Edit engine for spell checking. */
+class ScSpellingEngine : public ScConversionEngineBase
+{
+public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 > XSpellCheckerRef;
+
+    explicit                ScSpellingEngine(
+                                SfxItemPool* pEnginePool,
+                                ScViewData& rViewData,
+                                ScDocument* pUndoDoc,
+                                ScDocument* pRedoDoc,
+                                ESelection* pEdSelection,
+                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                bool bCellSelection,
+                                XSpellCheckerRef xSpeller );
+
+    /** Checks spelling of all cells in the selection or sheet. */
+    virtual void            ConvertAll( EditView& rEditView );
+
+protected:
+    /** Callback from edit engine to check the next cell. */
+    virtual BOOL            SpellNextDocument();
+
+    /** Returns true, if the current text contains a spelling error. */
+    virtual bool            NeedsConversion();
+
+    /** Show a query box that asks whether to restart at top of the sheet.
+        @return  true = Restart at top, false = Stop the conversion. */
+    virtual bool            ShowTableWrapDialog();
+    /** Show a message box stating that spell checking is finished. */
+    virtual void            ShowFinishDialog();
+};
+
+// ============================================================================
+
+/** Edit engine for text conversion. */
+class ScTextConversionEngine : public ScConversionEngineBase
+{
+public:
+    explicit                ScTextConversionEngine(
+                                SfxItemPool* pEnginePool,
+                                ScViewData& rViewData,
+                                ScDocument* pUndoDoc,
+                                ScDocument* pRedoDoc,
+                                ESelection* pEdSelection,
+                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                bool bCellSelection,
+                                LanguageType eConvLanguage );
+
+    /** Converts all cells in the selection or sheet according to set language. */
+    virtual void            ConvertAll( EditView& rEditView );
+
+protected:
+    /** Callback from edit engine to convert the next cell. */
+    virtual BOOL            ConvertNextDocument();
+
+    /** Returns true, if the current text contains text to convert. */
+    virtual bool            NeedsConversion();
+
+private:
+    LanguageType            meConvLang;     /// Language for text conversion.
+};
+
+// ============================================================================
 
 #endif
+
