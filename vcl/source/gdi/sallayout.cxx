@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-11 16:35:49 $
+ *  last change: $Author: hdu $ $Date: 2002-06-13 20:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 
         // adjust start to cluster start
         pG = mpGlyphItems + nStartIndex;
-        while( (pG > mpGlyphItems) && !(pG->mnFlags & GlyphItem::CLUSTER_START) )
+        while( (pG > mpGlyphItems) && !pG->IsClusterStart() )
             --pG;
         nXPos -= pG->maLinearPos.X();
     }
@@ -275,12 +275,12 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
         // find end of last cluster
         pG = mpGlyphItems + nMaxIndex;
         const GlyphItem* pGLimit = mpGlyphItems + mnGlyphCount;
-        while( (++pG < pGLimit) && !(pG->mnFlags & GlyphItem::CLUSTER_START) );
+        while( (++pG < pGLimit) && !pG->IsClusterStart() );
 
         // adjust offset from start to last cluster
         pGLimit = pG;
         for( pG = mpGlyphItems + nStartIndex ; pG < pGLimit; ++pG )
-            nXPos -= pG->mnWidth;
+            nXPos -= pG->mnNewWidth;
     }
 
     return Point( nXPos, 0 );
@@ -308,11 +308,14 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
     for( i = mnGlyphCount; --i >= 0; ++pG )
     {
         // use cluster start to get char index
-        if( 0 != (pG->mnFlags & GlyphItem::CLUSTER_START) )
-            nClusterIndex = pG->mnCharIndex;
+        if( !pG->IsClusterStart() )
+            continue;
 
-        int n = nClusterIndex - mnFirstCharIndex;
-        if( n < 0 || n >= nCharCapacity )
+        int n = pG->mnCharIndex;
+        if( n >= mnEndCharIndex )
+            continue;
+        n -= mnFirstCharIndex;
+        if( n < 0 )
             continue;
 
         // minimum is left extent of cluster
@@ -321,48 +324,32 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
             pMinPos[n] = nXPos;
 
         // maximum is right extent of cluster
-        if( i > 0 )
-            nXPos = pG[1].maLinearPos.X();  // left edge of next glyph
-        else if( pG->mnWidth > 0 )
-            nXPos += pG->mnWidth;           // right edge of last glyph
+        int j = i;
+        while( (--j >= 0) && !pG[i-j].IsClusterStart() );   // advance to next cluster
+        if( j >= 0 )
+            nXPos = pG[i-j].maLinearPos.X();                // left edge of next cluster
+        else if( pG->mnNewWidth > 0 )
+            nXPos += pG->mnNewWidth;                        // right edge of this glyph
         if( pMaxPos[n] < nXPos )
             pMaxPos[n] = nXPos;
-
-        // special case for zero width glyphs in cluster, e.g. in Thai
-        // => they are aligned to cluster start
-        if( pG->mnWidth <= 0 )
-        {
-            int m = nClusterIndex - mnFirstCharIndex;
-            if( n != m )
-                pMinPos[m] = pMaxPos[m] = nXPos;
-        }
     }
 
     // set char width array
+    // clusters (e.g. ligatures) correspond to more than one char index,
+    // so some character widths are still uninitialized. This is solved
+    // by setting the first charwidth of the cluster to the cluster width
+    // TODO: distribute the cluster width proportionally to the characters
     long nCharWidth = 0;
     for( i = 0; i < nCharCapacity; ++i )
     {
         if( pMaxPos[i] < 0 )
         {
-            // untouched chars of cluster get their share
+            // TODO: untouched chars of cluster get their share
             pCharWidths[i] = nCharWidth;
         }
         else
         {
             long nClusterWidth = pMaxPos[i] - pMinPos[i];
-
-            // ligature glyphs correspond to more than one sal_Unicode, so
-            // some character widths are still uninitialized. This is solved
-            // by distributing the cluster width to the involved characters
-            int j = i;
-            while( ++j<nCharCapacity && pMaxPos[j]<0 );
-            int nClusterSize = j - i;
-            if( nClusterSize > 1 )
-            {
-                nCharWidth = (nClusterWidth + (nClusterSize/2)) / nClusterSize;
-                nClusterWidth -= (nClusterSize - 1) * nCharWidth;
-            }
-
             pCharWidths[i] = nClusterWidth;
         }
     }
@@ -394,56 +381,63 @@ long GenericSalLayout::FillDXArray( long* pDXArray ) const
 
 void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 {
-    // get reference positions
+    // determine cluster boundaries and x base offset
     int nChars = mnEndCharIndex - mnFirstCharIndex;
-    long* pOldDX = (long*)alloca( nChars * sizeof(long) );
-    FillDXArray( pOldDX );
-
-    // initialize flags for touched character
-    int i;
-    char* pTouched = (char*)alloca( nChars );
+    int* pLogCluster = (int*)alloca( nChars * sizeof(int) );
+    int i, n;
     for( i = 0; i < nChars; ++i )
-        pTouched[ i ] = 0;
+        pLogCluster[ i ] = -1;
 
-    // get x base offset
-    GlyphItem* pG = mpGlyphItems;
     long nBasePointX = -1;
+    GlyphItem* pG = mpGlyphItems;
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
-    {
-        int n = pG->mnCharIndex;
-        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
-            continue;
-        // initialize x base offset with first matching glyph position
-        nBasePointX = pG->maLinearPos.X();
-        pTouched[ n - mnFirstCharIndex ] = 1;
-        break;
-    }
-
-    // adjust to requested positions
-    long nDelta = 0;
-    for(; i < mnGlyphCount; ++i, ++pG )
     {
         int n = pG->mnCharIndex;
         if( n < mnEndCharIndex )
         {
-            // move with cluster granularity only and inside substring
-            n -= mnFirstCharIndex;
-            if( (n > 0) && !pTouched[n] )
+            if( (n -= mnFirstCharIndex) >= 0 )
             {
-                pTouched[n] = 1;
-                long nNewDelta = pDXArray[n-1];
-                nNewDelta += nBasePointX - pG->maLinearPos.X();
-                nDelta = nNewDelta;
+                pLogCluster[ n ] = i;
+                if( nBasePointX < 0 )
+                    nBasePointX = pG->maLinearPos.X();
             }
         }
-
-        pG->maLinearPos += Point( nDelta, 0 );
     }
 
-    // adjust remaining glyphs
-    if( nDelta )
-        for(; i < mnGlyphCount; ++i, ++pG )
-            pG->maLinearPos += Point( nDelta, 0 );
+    // calculate adjusted cluster widths
+    long* pNewClusterWidths = (long*)alloca( mnGlyphCount * sizeof(long) );
+    for( i = 0; i < mnGlyphCount; ++i )
+        pNewClusterWidths[ i ] = 0;
+
+    for( i = 0; i < nChars; ++i )
+        if( (n = pLogCluster[i]) >= 0 )
+            break;
+    pNewClusterWidths[ n ] = pDXArray[i];
+    long nCurrPos = pDXArray[i];
+    while( ++i < nChars )
+    {
+        if( pLogCluster[i] >= 0 )
+            n = pLogCluster[ i ];
+        pNewClusterWidths[ n ] += pDXArray[i] - nCurrPos;
+        nCurrPos = pDXArray[i];
+    }
+
+    // move cluster positions using the adjusted widths
+    long nDelta = 0;
+    nCurrPos = 0;
+    pG = mpGlyphItems;
+    for( i = 0; i < mnGlyphCount; ++i, ++pG )
+    {
+        if( pG->IsClusterStart() )
+        {
+            long nNewDelta = nCurrPos;
+            nNewDelta += nBasePointX - pG->maLinearPos.X();
+            nDelta = nNewDelta;
+        }
+
+        nCurrPos += pNewClusterWidths[ i ];
+        pG->maLinearPos.X() += nDelta;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -534,7 +528,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
             break;
 
         Point aOldPos = pG->maLinearPos;
-        int nOldWidth = pG->mnWidth;
+        int nOrigWidth = pG->mnOrigWidth;
         ++pG;
 
         // stop when no longer in string
@@ -548,7 +542,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 
         // stop when x-position is unexpected
         if( !pXOffset )
-            if( aOldPos.X() + nOldWidth != pG->maLinearPos.X() )
+            if( aOldPos.X() + nOrigWidth != pG->maLinearPos.X() )
                 break;
     }
 
