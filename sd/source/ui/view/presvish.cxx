@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:09:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,11 +217,6 @@ void PresentationViewShell::FinishInitialization (
     SetRuler(false);
     SwitchPage (nPageNumber);
     WriteFrameViewData();
-
-    SfxBoolItem aShowItem (SID_SHOWPOPUPS, FALSE);
-    SfxUInt16Item aId (SID_CONFIGITEMID, SID_NAVIGATOR);
-    GetViewFrame()->GetDispatcher()->Execute(
-        SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
 
     mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc() );
     mpSlideShow->setRehearseTimings(
