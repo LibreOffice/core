@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:31:15 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,14 +629,14 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ portuguese ] = "Legenda para ~linhas" ;
         Text [ finnish ] = "~Riveittäin" ;
         Text [ danish ] = "Rækkeetiketter" ;
-        Text [ french ] = "É~tiquette de lignes" ;
+        Text [ french ] = "É~tiquette de ligne" ;
         Text [ swedish ] = "Ra~detikett" ;
         Text [ dutch ] = "~Rijkoppen" ;
         Text [ spanish ] = "Etiqueta ~de filas" ;
         Text [ english_us ] = "~Row labels" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ĞĞÊı¾İ±êÖ¾(~R)";
-        Text[ russian ] = "íàçâàíèş ñòğîê";
+        Text[ russian ] = "ïîäïèñè ñòğîê";
         Text[ polish ] = "~nag³ówków wierszy";
         Text[ japanese ] = "¶’[—ñ(~R)";
         Text[ chinese_traditional ] = "¦C¼ĞÃD(~R)";
@@ -725,7 +725,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_simplified ] = "ºÍÔ´Êı¾İÁ¬½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
         Text[ polish ] = "Utwórz ³¹cze z danymi Ÿród³a";
-        Text[ japanese ] = "“‡Œ³ÃŞ°À‚ÖØİ¸‚·‚é(~L)";
+        Text[ japanese ] = "¿°½ÃŞ°À‚ÖØİ¸‚·‚é(~L)";
         Text[ chinese_traditional ] = "©M·½¸ê®Æ³sµ²(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
@@ -789,7 +789,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
         Text [ french ] = "~Supprimer" ;
-        Text [ swedish ] = "~Radera" ;
+        Text [ swedish ] = "R~adera" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
