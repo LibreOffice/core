@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:08:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ czech ] = "URL externího zdroje dat";
         Text[ hebrew ] = "~URL der externen Datenquelle";
         Text[ hindi ] = "~बाहरी ड़ॉटा मूल की URL";
+        Text[ slovak ] = "URL ~externého zdroja dát";
     };
     ComboBox CB_URL
     {
@@ -161,6 +162,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ czech ] = "(Zapište URL zdrojového dokumentu v lokálním souborovém systému nebo v síti Internet)";
         Text[ hebrew ] = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)";
         Text[ hindi ] = "(मूल लेखपत्र का URL को स्थानिक फाइल सिस्टम में अथवा इन्टरनेट् में प्रविष्ट कीजिए ।)";
+        Text[ slovak ] = "(Tu zadajte URL zdrojového dokumentu v lokálnom systéme alebo na internete.)";
     };
     FixedText FT_RANGES
     {
@@ -192,6 +194,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ czech ] = "Dostupné tabulky/oblasti";
         Text[ hebrew ] = "~Verfügbare Tabellen/Bereiche";
         Text[ hindi ] = "~प्राप्य सारणी/फैलाव";
+        Text[ slovak ] = "Dostupné t~abuľky/oblasti";
     };
     MultiListBox LB_RANGES
     {
@@ -232,6 +235,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ czech ] = "Aktualizovat každých";
         Text[ hebrew ] = "~Aktualisierung alle";
         Text[ hindi ] = "हरेक को ~अपडेट् करो";
+        Text[ slovak ] = "Akt~ualizovať každých";
     };
     NumericField NF_DELAY
     {
@@ -274,6 +278,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ czech ] = "sekund";
         Text[ hebrew ] = "‮שניות‬";
         Text[ hindi ] = "सेकन्ड";
+        Text[ slovak ] = "Sekúnd";
     };
     Text[ english_us ] = "External Data";
     Text[ portuguese ] = "Dados externos";
@@ -299,7 +304,10 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ czech ] = "Externí data";
     Text[ hebrew ] = "Externe Daten";
     Text[ hindi ] = "बाहरी ड़ॉटा";
+    Text[ slovak ] = "Externé dáta";
 };
+
+
 
 
 
