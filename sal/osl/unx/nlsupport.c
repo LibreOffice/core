@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:01:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
+#include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 #include <pthread.h>
@@ -75,9 +76,11 @@
 #endif  /* !MACOSX */
 #endif  /* LINUX || SOLARIS || IRIX || NETBSD || MACOSX */
 
-/*****************************************************************************/
-/* typedefs
-/*****************************************************************************/
+#include <string.h>
+
+/*****************************************************************************
+ typedefs
+ *****************************************************************************/
 
 
 typedef struct {
@@ -86,9 +89,9 @@ typedef struct {
 } _pair;
 
 
-/*****************************************************************************/
-/* compare function for binary search
-/*****************************************************************************/
+/*****************************************************************************
+ compare function for binary search
+ *****************************************************************************/
 
 static int
 _pair_compare (const char *key, const _pair *pair)
@@ -97,9 +100,9 @@ _pair_compare (const char *key, const _pair *pair)
     return result;
 }
 
-/*****************************************************************************/
-/* binary search on encoding tables
-/*****************************************************************************/
+/*****************************************************************************
+ binary search on encoding tables
+ *****************************************************************************/
 
 static const _pair*
 _pair_search (const char *key, const _pair *base, unsigned int member )
@@ -130,9 +133,9 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
 }
 
 
-/*****************************************************************************/
-/* convert rtl_Locale to locale string
-/*****************************************************************************/
+/*****************************************************************************
+ convert rtl_Locale to locale string
+ *****************************************************************************/
 
 static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 {
@@ -202,9 +205,9 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
     return NULL;
 }
 
-/*****************************************************************************/
-/* convert locale string to rtl_Locale
-/*****************************************************************************/
+/*****************************************************************************
+ convert locale string to rtl_Locale
+ *****************************************************************************/
 
 static rtl_Locale * _parse_locale( const char * locale )
 {
@@ -567,9 +570,9 @@ const _pair _nl_language_list[] = {
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
-/*****************************************************************************/
-/* return the text encoding corresponding to the given locale
-/*****************************************************************************/
+/*****************************************************************************
+ return the text encoding corresponding to the given locale
+ *****************************************************************************/
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
@@ -638,9 +641,9 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
-/*****************************************************************************/
-/* return the current process locale
-/*****************************************************************************/
+/*****************************************************************************
+ return the current process locale
+ *****************************************************************************/
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -662,9 +665,9 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     pthread_mutex_unlock( &aLocalMutex );
 }
 
-/*****************************************************************************/
-/* set the current process locale
-/*****************************************************************************/
+/*****************************************************************************
+ set the current process locale
+ *****************************************************************************/
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
@@ -790,9 +793,9 @@ const _pair _iso_language_list[] = {
     { "zh",  RTL_TEXTENCODING_BIG5 }
 };
 
-/*****************************************************************************/
-/* return the text encoding corresponding to the given locale
-/*****************************************************************************/
+/*****************************************************************************
+ return the text encoding corresponding to the given locale
+ *****************************************************************************/
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
@@ -854,9 +857,9 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 /* OS X locale discovery function from dylib */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
-/*****************************************************************************/
-/* return the current process locale
-/*****************************************************************************/
+/*****************************************************************************
+ return the current process locale
+ *****************************************************************************/
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -940,9 +943,9 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 
 }
 #else
-/*****************************************************************************/
-/* return the current process locale
-/*****************************************************************************/
+/*****************************************************************************
+ return the current process locale
+ *****************************************************************************/
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -962,9 +965,9 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 }
 #endif
 
-/*****************************************************************************/
-/* set the current process locale
-/*****************************************************************************/
+/*****************************************************************************
+ set the current process locale
+ *****************************************************************************/
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
