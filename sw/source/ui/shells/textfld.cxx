@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 15:37:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,13 @@
 #include <uiparam.hxx>
 #endif
 
+#include <sfx2/lnkbase.hxx>
+
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
-#endif
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -108,6 +104,9 @@
 #ifndef _SVX_HLNKITEM_HXX //autogen
 #include <svx/hlnkitem.hxx>
 #endif
+
+#include <svx/svxdlg.hxx>
+
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
@@ -243,14 +242,17 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         return;
 #endif
 
-                        ::so3::SvBaseLink& rLink = ((SwDDEFieldType*)pFld->GetTyp())->
+                        ::sfx2::SvBaseLink& rLink = ((SwDDEFieldType*)pFld->GetTyp())->
                                                 GetBaseLink();
                         if(rLink.IsVisible())
                         {
-                            ::so3::SvBaseLinksDialog aDlg( pMDI,
-                                            &rSh.GetLinkManager() );
-                            aDlg.SetActLink( &rLink );
-                            aDlg.Execute();
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), FALSE, &rLink );
+                            if ( pDlg )
+                            {
+                                pDlg->Execute();
+                                delete pDlg;
+                            }
                         }
                         break;
                     }
