@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:55:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 #include <list>
 
@@ -179,23 +182,26 @@ public:
 //  ----------------------------------------------------
 //  class UnoEditControl
 //  ----------------------------------------------------
-class UnoEditControl :  public UnoControlBase,
-                        public ::com::sun::star::awt::XTextComponent,
-                        public ::com::sun::star::awt::XTextListener,
-                        public ::com::sun::star::awt::XLayoutConstrains,
-                        public ::com::sun::star::awt::XTextLayoutConstrains
+typedef ::cppu::ImplHelper4  <   ::com::sun::star::awt::XTextComponent
+                             ,   ::com::sun::star::awt::XTextListener
+                             ,   ::com::sun::star::awt::XLayoutConstrains
+                             ,   ::com::sun::star::awt::XTextLayoutConstrains
+                             >   UnoEditControl_Base;
+class UnoEditControl    :public UnoControlBase
+                        ,public UnoEditControl_Base
 {
 private:
     TextListenerMultiplexer maTextListeners;
 
     // Not all fields derived from UnoEditCOntrol have the property "Text"
-    // They only support ::com::sun::star::awt::XTextComponent, so keep the text
+    // They only support XTextComponent, so keep the text
     // here, maybe there is no Peer when calling setText()...
     ::rtl::OUString     maText;
-    BOOL                mbSetTextInPeer;
-
     USHORT              mnMaxTextLen;
-    BOOL                mbSetMaxTextLenInPeer;
+
+    sal_Bool            mbSetTextInPeer;
+    sal_Bool            mbSetMaxTextLenInPeer;
+    sal_Bool            mbHasTextProperty;
 
 public:
 
@@ -205,22 +211,23 @@ public:
 
     void                        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    // disambiguate XInterface
+    DECLARE_XINTERFACE()
 
-    // ::com::sun::star::awt::XTextListener
+    // XAggregation
+    ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XTypeProvider
+    DECLARE_XTYPEPROVIDER()
+
+    // XTextListener
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XTextComponent
+    // XTextComponent
     void SAL_CALL addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
@@ -234,17 +241,19 @@ public:
     void SAL_CALL setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getMaxTextLen(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XLayoutConstrains
+    // XLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XTextLayoutConstrains
+    // XTextLayoutConstrains
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::lang::XServiceInfo
+    // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoEditControl, UnoControlBase, szServiceName2_UnoControlEdit )
+
+    sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 //  ----------------------------------------------------
