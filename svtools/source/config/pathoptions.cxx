@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: nf $ $Date: 2002-03-11 17:44:13 $
+ *  last change: $Author: mba $ $Date: 2002-03-28 15:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ private:
     String          m_aUserConfigPath;
     String          m_aUserDictionaryPath;
     String          m_aWorkPath;
+    String          m_aUIConfigPath;
 
     String          m_aEmptyString;
     String          m_aInstPath;
@@ -251,6 +252,7 @@ public:
     const String&   GetUserConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUserConfigPath); }
     const String&   GetUserDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath ); }
     const String&   GetWorkPath() { return GetPath( &SvtPathOptions_Impl::m_aWorkPath ); }
+    const String&   GetUIConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUIConfigPath ); }
 
     // set the pathes
     void            SetAddinPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAddinPath, rPath ); }
@@ -318,7 +320,8 @@ Sequence< OUString > GetPathPropertyNames()
         "Template",         // PATH_TEMPLATE
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
-        "Work"              // PATH_WORK
+        "Work",             // PATH_WORK
+        "UIConfig"          // PATH_UICONFIG
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -943,6 +946,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                     case SvtPathOptions::PATH_USERCONFIG:   m_aUserConfigPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_USERDICTIONARY: m_aUserDictionaryPath = String( aFullPath );break;
                     case SvtPathOptions::PATH_WORK:         m_aWorkPath = String( aFullPath );          break;
+                    case SvtPathOptions::PATH_UICONFIG:     m_aUIConfigPath = String( aFullPath );      break;
 
                     default:
                         DBG_ERRORFILE( "invalid index to load a path" );
@@ -977,6 +981,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_GALLERY:      aTempStr = OUString( m_aGalleryPath );      bList = sal_True; break;
             case SvtPathOptions::PATH_PLUGIN:       aTempStr = OUString( m_aPluginPath );       bList = sal_True; break;
             case SvtPathOptions::PATH_TEMPLATE:     aTempStr = OUString( m_aTemplatePath );     bList = sal_True; break;
+            case SvtPathOptions::PATH_UICONFIG:     aTempStr = OUString( m_aUIConfigPath );     bList = sal_True; break;
 
             // single pathes
             case SvtPathOptions::PATH_ADDIN:            aTempStr = OUString( m_aAddinPath );            break;
@@ -1200,6 +1205,11 @@ const String& SvtPathOptions::GetTemplatePath() const
 const String& SvtPathOptions::GetUserConfigPath() const
 {
     return pImp->GetUserConfigPath();
+}
+
+const String& SvtPathOptions::GetUIConfigPath() const
+{
+    return pImp->GetUIConfigPath();
 }
 
 // -----------------------------------------------------------------------
@@ -1457,6 +1467,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
+                case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
             }
 
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
