@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-28 13:22:05 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ class ExcEscherTxo;
 class ScDBData;
 
 class XclImpStream;
-
+class XclImpAutoFilterBuffer;
+class XclImpWebQueryBuffer;
 
 class Biff8MSDffManager : public SvxMSDffManager, protected ExcRoot
 {
@@ -488,18 +489,6 @@ class ExcStreamConsumer
 
 
 
-class XclImpTabIdBuffer : protected UINT16List
-{
-private:
-    void                        Append( UINT16 nTabId );
-public:
-    void                        Fill( XclImpStream& rStrm, UINT16 nCount );
-    UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
-};
-
-
-
-
 struct DVData;
 
 
@@ -550,6 +539,9 @@ class ImportExcel8 : public ImportExcel
 
         DVList*                 pDVList;
 
+        XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
+        XclImpWebQueryBuffer*   pWebQBuffer;        // data for web queries
+
         BOOL                    bHasBasic;
 
         void                    Formula( void );                // 0x06
@@ -580,7 +572,9 @@ class ImportExcel8 : public ImportExcel
         void                    SXLi( void );                   // 0xB5
         void                    SXPi( void );                   // 0xB6
         void                    SXDi( void );                   // 0xC5
+        void                    SXString( void );               // 0xCD
         void                    SXIdStm( void );                // 0xD5
+        void                    SXExt_ParamQry( void );         // 0xDC
         void                    Xf( void );                     // 0xE0
         void                    SXVs( void );                   // 0xE3
         void                    Cellmerging( void );            // 0xE5     geraten...
@@ -601,6 +595,7 @@ class ImportExcel8 : public ImportExcel
         void                    Label( void );                  // 0x0204
 
         void                    Tabid( void );                  // 0x013D
+        void                    Qsi( void );                    // 0x01AD
         void                    Supbook( void );                // 0x01AE
         void                    Condfmt( void );                // 0x01B0
         void                    Cf( void );                     // 0x01B1
@@ -612,6 +607,9 @@ class ImportExcel8 : public ImportExcel
         void                    Dimensions( void );             // 0x0200
         void                    Name( void );                   // 0x0218
         void                    Style( void );                  // 0x0293
+
+        void                    WebQrySettings( void );         // 0x0803
+        void                    WebQryTables( void );           // 0x0804
 
         void                    ChartScl( void );               // 0x00A0
         void                    ChartChart( void );             // 0x1002
@@ -706,6 +704,17 @@ class ImportExcel8 : public ImportExcel
 //___________________________________________________________________
 // internal and external 3D reference handling
 
+class XclImpTabIdBuffer : protected UINT16List
+{
+private:
+    void                        Append( UINT16 nTabId );
+public:
+    void                        Fill( XclImpStream& rStrm, UINT16 nCount );
+    UINT16                      GetIndex( UINT16 nTabId, UINT16 nMaxTabId = 0xFFFF ) const;
+};
+
+
+
 struct XclImpSupbookTab
 {
     String                      aName;
@@ -764,6 +773,8 @@ public:
     inline XclImpSupbook*       GetCurrSupbook() { return _Last(); }
 };
 
+
+
 struct XclImpXti
 {
     UINT16                      nSupbook;       // index to supbook
@@ -804,9 +815,50 @@ public:
 
 
 //___________________________________________________________________
+// web queries
+
+enum XclImpWebQueryMode         { xiwqUnknown, xiwqDoc, xiwqAllTables, xiwqSpecTables };
+
+class XclImpWebQuery
+{
+private:
+    static void                 EraseQuotes( String& rToken );
+    static void                 AppendToken( String& rTokenList, const String& rToken, sal_Unicode cSep );
+
+public:
+    String                      aFilename;
+    String                      aTables;
+    ScRange                     aDestRange;
+    XclImpWebQueryMode          eMode;
+    UINT16                      nRefresh;
+
+    inline                      XclImpWebQuery() : eMode( xiwqUnknown ), nRefresh( 0 ) {}
+    BOOL                        IsValid();
+
+    void                        ConvertTableNames();
+};
+
+class XclImpWebQueryBuffer : protected List
+{
+public:
+    virtual                     ~XclImpWebQueryBuffer();
+
+    inline XclImpWebQuery*      First() { return (XclImpWebQuery*) List::First(); }
+    inline XclImpWebQuery*      Next()  { return (XclImpWebQuery*) List::Next(); }
+    inline XclImpWebQuery*      Last()  { return (XclImpWebQuery*) List::Last(); }
+
+    inline void                 Append( XclImpWebQuery* pQuery )
+                                    { List::Insert( pQuery, LIST_APPEND ); }
+
+    void                        Apply( ScDocument* pDoc );
+};
+
+
+
+//___________________________________________________________________
 // classes AutoFilterData, AutoFilterBuffer
 
-class AutoFilterData : private ExcRoot
+class XclImpAutoFilterData : private ExcRoot
 {
 private:
     ScDBData*                   pCurrDBData;
@@ -822,8 +874,10 @@ private:
 
 protected:
 public:
-                                AutoFilterData( RootData* pRoot, const ScRange& rRange,
-                                                const String& rName );
+                                XclImpAutoFilterData(
+                                    RootData* pRoot,
+                                    const ScRange& rRange,
+                                    const String& rName );
 
     inline UINT16               Tab() const         { return aParam.nTab; }
     inline UINT16               StartCol() const    { return aParam.nCol1; }
@@ -841,17 +895,17 @@ public:
 };
 
 
-class AutoFilterBuffer : private List
+class XclImpAutoFilterBuffer : private List
 {
 private:
-    inline AutoFilterData*      _First()    { return (AutoFilterData*) List::First(); }
-    inline AutoFilterData*      _Next()     { return (AutoFilterData*) List::Next(); }
+    inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
+    inline XclImpAutoFilterData* _Next()    { return (XclImpAutoFilterData*) List::Next(); }
 
-    inline void                 Append( AutoFilterData* pData )
+    inline void                 Append( XclImpAutoFilterData* pData )
                                     { List::Insert( pData, LIST_APPEND ); }
 protected:
 public:
-    virtual                     ~AutoFilterBuffer();
+    virtual                     ~XclImpAutoFilterBuffer();
 
     void                        Insert( RootData* pRoot, const ScRange& rRange,
                                                 const String& rName );
@@ -859,7 +913,7 @@ public:
     void                        AddExtractPos( const ScRange& rRange );
     void                        Apply();
 
-    AutoFilterData*             GetByTab( UINT16 nTab );
+    XclImpAutoFilterData*       GetByTab( UINT16 nTab );
     BOOL                        HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab );
 };
 

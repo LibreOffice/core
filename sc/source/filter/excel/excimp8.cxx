@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-28 13:19:48 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/msdffdef.hxx>
 #include <svx/svxmsbas.hxx>
+#include <svx/linkmgr.hxx>
 
 #include <svx/svdorect.hxx>
 #include <svx/svdogrp.hxx>
@@ -113,6 +114,7 @@
 #include <tools/solmath.hxx>
 
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/charclass.hxx>
 
 #ifndef SC_DRWLAYER_HXX
 #include <drwlayer.hxx>
@@ -128,6 +130,8 @@
 #include "dbcolect.hxx"
 #include "editutil.hxx"
 #include "markdata.hxx"
+#include "rangenam.hxx"
+#include "arealink.hxx"
 
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
@@ -1212,43 +1216,6 @@ void ExcCondFormList::Apply( void )
 
 
 
-void XclImpTabIdBuffer::Append( UINT16 nTabId )
-{
-    DBG_ASSERT( nTabId, "XclImpTabIdBuffer::Append - zero value not allowed" );
-    if( nTabId )
-        UINT16List::Append( nTabId );
-}
-
-
-void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
-{
-    Clear();
-    UINT16 nTabId;
-    for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        rStrm >> nTabId;
-        Append( nTabId );
-    }
-}
-
-
-UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
-{
-    UINT16 nReturn = 0;
-    for( UINT32 nIndex = 0; nIndex < Count(); nIndex++ )
-    {
-        UINT16 nValue = Get( nIndex );
-        if( nValue == nTabId )
-            return nReturn;
-        if( nValue <= nMaxTabId )
-            nReturn++;
-    }
-    return 0;
-}
-
-
-
-
 struct DVData
 {
     ULONG               nHandle;
@@ -1331,6 +1298,9 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
     pDVList = NULL;
 
+    pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+    pWebQBuffer = NULL;
+
     pExcRoot->pRootStorage = pStorage;
 
     pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
@@ -1343,15 +1313,16 @@ ImportExcel8::~ImportExcel8()
 {
     if( pActTxo )
         delete pActTxo;
-
     if( pActEscherObj )
         delete pActEscherObj;
-
     if( pCondFormList )
         delete pCondFormList;
-
     if( pDVList )
         delete pDVList;
+    if( pAutoFilterBuffer )
+        delete pAutoFilterBuffer;
+    if( pWebQBuffer )
+        delete pWebQBuffer;
 }
 
 
@@ -1858,10 +1829,9 @@ static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphi
         && ( aBackground.nBitsPerPixel == 24 )
         && ( aBackground.nPlanes == 1 ) )
     {
-        sal_Bool                bAlignment = FALSE;
         sal_uInt32              nWidth = aBackground.nWidth;
         sal_uInt32              nHeight = aBackground.nHeight;
-        sal_uInt16              nPadding = nWidth % 4;
+        sal_uInt32              nPadding = nWidth % 4;
 
         if( rIn.GetRecLeft() == nHeight * (nWidth * 3 + nPadding) )
         {
@@ -2489,12 +2459,14 @@ void ImportExcel8::Name( void )
                 aName += String::CreateFromInt32( (sal_Int32) aRange.aStart.Tab() );
                 bSkip = bAutoFilter;
 
+                if( !pAutoFilterBuffer )
+                    pAutoFilterBuffer = new XclImpAutoFilterBuffer;
                 if( bAutoFilter )
-                    pAutoFilter->Insert( pExcRoot, aRange, aName );
+                    pAutoFilterBuffer->Insert( pExcRoot, aRange, aName );
                 else if( bCriteria )
-                    pAutoFilter->AddAdvancedRange( aRange );
+                    pAutoFilterBuffer->AddAdvancedRange( aRange );
                 else if( bExtract )
-                    pAutoFilter->AddExtractPos( aRange );
+                    pAutoFilterBuffer->AddExtractPos( aRange );
             }
         }
     }
@@ -2551,8 +2523,10 @@ void ImportExcel8::PostDocLoad( void )
 {
     if( pCondFormList )
         pCondFormList->Apply();
-
-    pAutoFilter->Apply();
+    if( pAutoFilterBuffer )
+        pAutoFilterBuffer->Apply();
+    if( pWebQBuffer )
+        pWebQBuffer->Apply( pD );
 
     if( aExcStreamConsumer.GetStream() )
     {
@@ -2623,8 +2597,8 @@ void ImportExcel8::PostDocLoad( void )
                         if( pAnch )
                         {
                             bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                            if( pAutoFilter )
-                                bRangeTest |= pAutoFilter->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                            if( pAutoFilterBuffer )
+                                bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
                         }
                         if( bRangeTest )
                         {
@@ -2806,7 +2780,42 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
 
 //___________________________________________________________________
-// 3D references
+// 3D references, external references
+//  --> records SUPBOOK, XCT, CRN, EXTERNSHEET
+
+void XclImpTabIdBuffer::Append( UINT16 nTabId )
+{
+    DBG_ASSERT( nTabId, "XclImpTabIdBuffer::Append - zero value not allowed" );
+    if( nTabId )
+        UINT16List::Append( nTabId );
+}
+
+void XclImpTabIdBuffer::Fill( XclImpStream& rStrm, UINT16 nCount )
+{
+    Clear();
+    UINT16 nTabId;
+    for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        rStrm >> nTabId;
+        Append( nTabId );
+    }
+}
+
+UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
+{
+    UINT16 nReturn = 0;
+    for( UINT32 nIndex = 0; nIndex < Count(); nIndex++ )
+    {
+        UINT16 nValue = Get( nIndex );
+        if( nValue == nTabId )
+            return nReturn;
+        if( nValue <= nMaxTabId )
+            nReturn++;
+    }
+    return 0;
+}
+
+
 
 void ImportExcel8::Supbook( void )
 {
@@ -2832,65 +2841,62 @@ void ImportExcel8::Xct( void )
 void ImportExcel8::Crn( void )
 {
     XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
-    if( pSupbook )
+    if( pSupbook && pSupbook->HasValidScTab() )
     {
-        if( pSupbook->HasValidScTab() )
+        UINT8       nLastCol;
+        UINT8       nFirstCol;
+        UINT16      nRow;
+        UINT16      nTab = pSupbook->GetCurrScTab();
+        UINT8       nValType;
+
+        aIn >> nLastCol >> nFirstCol >> nRow;
+
+        ScAddress   aAddr( (UINT16) 0, nRow, nTab );
+
+        for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
         {
-            UINT8       nLastCol;
-            UINT8       nFirstCol;
-            UINT16      nRow;
-            UINT16      nTab = pSupbook->GetCurrScTab();
-            UINT8       nValType;
-
-            aIn >> nLastCol >> nFirstCol >> nRow;
-
-            ScAddress   aAddr( (UINT16) 0, nRow, nTab );
-
-            for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
+            aAddr.SetCol( iCol );
+            aIn >> nValType;
+            switch( nValType )
             {
-                aAddr.SetCol( iCol );
-                aIn >> nValType;
-                switch( nValType )
+                case EXC_CRN_DOUBLE:
                 {
-                    case EXC_CRN_DOUBLE:
-                    {
-                        double fVal;
-                        aIn >> fVal;
-                        if( aIn.IsValid() )
-                            pD->SetValue( iCol, nRow, nTab, fVal );
-                    }
-                    break;
-                    case EXC_CRN_STRING:
-                    {
-                        String sText( aIn.ReadUniString( eQuellChar ) );
-                        if( aIn.IsValid() )
-                        {
-                            ScStringCell* pStrCell = new ScStringCell( sText );
-                            pD->PutCell( aAddr, pStrCell );
-                        }
-                    }
-                    break;
-                    case EXC_CRN_BOOL:
-                    case EXC_CRN_ERROR:
-                    {
-                        BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
-                        UINT16  nErrBool;
-                        double  fVal;
-
-                        aIn >> nErrBool;
-                        aIn.Ignore( 6 );
-
-                        if( aIn.IsValid() )
-                        {
-                            const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
-                            ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
-
-                            pCell->SetDouble( fVal );
-                            pD->PutCell( aAddr, pCell );
-                        }
-                    }
-                    break;
+                    double fVal;
+                    aIn >> fVal;
+                    if( aIn.IsValid() )
+                        pD->SetValue( iCol, nRow, nTab, fVal );
                 }
+                break;
+                case EXC_CRN_STRING:
+                {
+                    String sText( aIn.ReadUniString( eQuellChar ) );
+                    if( aIn.IsValid() )
+                    {
+                        ScStringCell* pStrCell = new ScStringCell( sText );
+                        pD->PutCell( aAddr, pStrCell );
+                    }
+                }
+                break;
+                case EXC_CRN_BOOL:
+                case EXC_CRN_ERROR:
+                {
+                    BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
+                    UINT16  nErrBool;
+                    double  fVal;
+
+                    aIn >> nErrBool;
+                    aIn.Ignore( 6 );
+
+                    if( aIn.IsValid() )
+                    {
+                        const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
+                        ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
+
+                        pCell->SetDouble( fVal );
+                        pD->PutCell( aAddr, pCell );
+                    }
+                }
+                break;
             }
         }
     }
@@ -3081,6 +3087,162 @@ const XclImpSupbook* XclImpExternsheetBuffer::GetSupbook( ULONG nXtiIndex ) cons
 
 
 //___________________________________________________________________
+// web queries
+//  --> records QSI, PARAMQRY, SXSTRING, WEBQRYSETTINGS, WEBQRYTABLES
+
+void ImportExcel8::Qsi()
+{
+    aIn.Ignore( 10 );
+    String aName( aIn.ReadUniString( eQuellChar ) );
+    USHORT nIndex;
+    if( pExcRoot->pScRangeName->SearchName( aName, nIndex ) )
+    {
+        const ScRangeData* pRangeData = (*pExcRoot->pScRangeName)[ nIndex ];
+        ScRange aRange;
+        if( pRangeData && pRangeData->IsReference( aRange ) )
+        {
+            if( !pWebQBuffer )
+                pWebQBuffer = new XclImpWebQueryBuffer;
+            XclImpWebQuery* pQuery = new XclImpWebQuery;
+            pQuery->aDestRange = aRange;
+            pWebQBuffer->Append( pQuery );
+        }
+    }
+}
+
+void ImportExcel8::SXExt_ParamQry()
+{
+    XclImpWebQuery* pQuery = pWebQBuffer ? pWebQBuffer->Last() : NULL;
+    if( !pQuery ) return;
+
+    UINT16 nFlags;
+    aIn >> nFlags;
+    if( nFlags & EXC_PQRY_TABLES )
+    {
+// load all tables - not implemented
+        pQuery->eMode = xiwqAllTables;
+    }
+    else
+    {
+        pQuery->eMode = xiwqDoc;
+        pQuery->aTables.AssignAscii( ScFilterTools::pHTMLDocName );
+    }
+}
+
+void ImportExcel8::SXString()
+{
+    XclImpWebQuery* pQuery = pWebQBuffer ? pWebQBuffer->Last() : NULL;
+    if( !pQuery ) return;
+
+    pQuery->aFilename.Erase();
+    aIn.AppendUniString( pQuery->aFilename, eQuellChar );
+}
+
+void ImportExcel8::WebQrySettings()
+{
+    XclImpWebQuery* pQuery = pWebQBuffer ? pWebQBuffer->Last() : NULL;
+    if( !pQuery ) return;
+
+    UINT16 nFlags;
+    aIn.Ignore( 10 );
+    aIn >> nFlags;
+    if( (nFlags & EXC_WQSETT_SPECTABLES) && (pQuery->eMode == xiwqAllTables) )
+        pQuery->eMode = xiwqSpecTables;
+
+    aIn.Ignore( 10 );
+    aIn >> pQuery->nRefresh;
+}
+
+void ImportExcel8::WebQryTables()
+{
+    XclImpWebQuery* pQuery = pWebQBuffer ? pWebQBuffer->Last() : NULL;
+    if( !pQuery ) return;
+
+    if( pQuery->eMode == xiwqSpecTables )
+    {
+        aIn.Ignore( 4 );
+        pQuery->aTables.Erase();
+        aIn.AppendUniString( pQuery->aTables, eQuellChar );
+        pQuery->ConvertTableNames();
+    }
+}
+
+
+
+BOOL XclImpWebQuery::IsValid()
+{
+    return (aFilename.Len() != 0) && (eMode != xiwqUnknown);
+}
+
+void XclImpWebQuery::EraseQuotes( String& rToken )
+{
+    xub_StrLen nLastIx = rToken.Len() - 1;
+    if( (nLastIx > 0) && (rToken.GetChar( 0 ) == '"') && (rToken.GetChar( nLastIx ) == '"') )
+    {
+        rToken.Erase( nLastIx );
+        rToken.Erase( 0, 1 );
+    }
+}
+
+void XclImpWebQuery::AppendToken( String& rTokenList, const String& rToken, sal_Unicode cSep )
+{
+        if( rTokenList.Len() )
+            rTokenList += cSep;
+        rTokenList += rToken;
+}
+
+void XclImpWebQuery::ConvertTableNames()
+{
+    const sal_Unicode cSep = ';';
+    aTables.SearchAndReplaceAll( ',', cSep );
+    String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
+    xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, cSep );
+    String aNewTables;
+    for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
+    {
+        String aToken( aTables.GetQuotedToken( nToken, aQuotedPairs, cSep ) );
+        sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
+        if( nTabNum > 0 )
+            AppendToken( aNewTables, ScFilterTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
+        else
+        {
+            EraseQuotes( aToken );
+            if( aToken.Len() )
+                AppendToken( aNewTables, ScFilterTools::GetNameFromHTMLName( aToken ), cSep );
+        }
+    }
+    aTables = aNewTables;
+}
+
+
+
+XclImpWebQueryBuffer::~XclImpWebQueryBuffer()
+{
+    for( XclImpWebQuery* pQuery = First(); pQuery; pQuery = Next() )
+        delete pQuery;
+}
+
+void XclImpWebQueryBuffer::Apply( ScDocument* pDoc )
+{
+    DBG_ASSERT( pDoc, "XclImpWebQueryBuffer::Apply - no document" );
+
+    for( XclImpWebQuery* pQuery = First(); pQuery; pQuery = Next() )
+    {
+        if( pQuery->IsValid() )
+        {
+            String sFilterName( RTL_CONSTASCII_USTRINGPARAM( "calc_HTML_WebQuery" ) );
+            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(),
+                pQuery->aFilename, sFilterName, EMPTY_STRING, pQuery->aTables,
+                pQuery->aDestRange, (ULONG)pQuery->nRefresh * 60 );
+            pDoc->GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE,
+                pQuery->aFilename, &sFilterName, &pQuery->aTables );
+        }
+    }
+}
+
+
+
+//___________________________________________________________________
 // pivot tables
 
 void ImportExcel8::SXView( void )
@@ -3200,7 +3362,9 @@ void ImportExcel8::FilterMode( void )
 
 void ImportExcel8::AutoFilterInfo( void )
 {
-    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
+    if( !pAutoFilterBuffer ) return;
+
+    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( nTab );
     if( pData )
     {
         pData->SetAdvancedRange( NULL );
@@ -3210,14 +3374,16 @@ void ImportExcel8::AutoFilterInfo( void )
 
 void ImportExcel8::AutoFilter( void )
 {
-    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
+    if( !pAutoFilterBuffer ) return;
+
+    XclImpAutoFilterData* pData = pAutoFilterBuffer->GetByTab( nTab );
     if( pData )
         pData->ReadAutoFilter( aIn );
 }
 
 
 
-AutoFilterData::AutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
+XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
         ExcRoot( pRoot ),
         nFirstEmpty( 0 ),
         bActive( FALSE ),
@@ -3241,13 +3407,13 @@ AutoFilterData::AutoFilterData( RootData* pRoot, const ScRange& rRange, const St
     }
 }
 
-void AutoFilterData::CreateFromDouble( String& rStr, double fVal )
+void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 {
     SolarMath::DoubleToString( rStr, fVal, 'A', INT_MAX,
         ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
 }
 
-void AutoFilterData::SetCellAttribs()
+void XclImpAutoFilterData::SetCellAttribs()
 {
     bHasDropDown = TRUE;
     for ( UINT16 nCol = StartCol(); nCol <= EndCol(); nCol++ )
@@ -3259,7 +3425,7 @@ void AutoFilterData::SetCellAttribs()
     }
 }
 
-void AutoFilterData::InsertQueryParam()
+void XclImpAutoFilterData::InsertQueryParam()
 {
     if( pCurrDBData && !bHasConflict )
     {
@@ -3281,13 +3447,13 @@ void AutoFilterData::InsertQueryParam()
     }
 }
 
-BOOL AutoFilterData::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const
+BOOL XclImpAutoFilterData::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const
 {
     return (bHasDropDown && (StartCol() <= nCol) && (nCol <= EndCol()) &&
             (nRow == StartRow()) && (nTab == Tab()));
 }
 
-void AutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
+void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 {
     UINT16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
@@ -3418,13 +3584,13 @@ void AutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     }
 }
 
-void AutoFilterData::SetAdvancedRange( const ScRange* pRange )
+void XclImpAutoFilterData::SetAdvancedRange( const ScRange* pRange )
 {
     if( pCurrDBData )
         pCurrDBData->SetAdvancedQuerySource( pRange );
 }
 
-void AutoFilterData::SetExtractPos( const ScAddress& rAddr )
+void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
 {
     aParam.nDestCol = rAddr.Col();
     aParam.nDestRow = rAddr.Row();
@@ -3433,7 +3599,7 @@ void AutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.bDestPers = TRUE;
 }
 
-void AutoFilterData::Apply()
+void XclImpAutoFilterData::Apply()
 {
     if( bActive )
     {
@@ -3453,50 +3619,50 @@ void AutoFilterData::Apply()
 
 
 
-AutoFilterBuffer::~AutoFilterBuffer()
+XclImpAutoFilterBuffer::~XclImpAutoFilterBuffer()
 {
-    for( AutoFilterData* pData = _First(); pData; pData = _Next() )
+    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         delete pData;
 }
 
-void AutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange,
-                                const String& rName )
+void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange,
+                                    const String& rName )
 {
     if( !GetByTab( rRange.aStart.Tab() ) )
-        Append( new AutoFilterData( pRoot, rRange, rName ) );
+        Append( new XclImpAutoFilterData( pRoot, rRange, rName ) );
 }
 
-void AutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )
+void XclImpAutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )
 {
-    AutoFilterData* pData = GetByTab( rRange.aStart.Tab() );
+    XclImpAutoFilterData* pData = GetByTab( rRange.aStart.Tab() );
     if( pData )
         pData->SetAdvancedRange( &rRange );
 }
 
-void AutoFilterBuffer::AddExtractPos( const ScRange& rRange )
+void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 {
-    AutoFilterData* pData = GetByTab( rRange.aStart.Tab() );
+    XclImpAutoFilterData* pData = GetByTab( rRange.aStart.Tab() );
     if( pData )
         pData->SetExtractPos( rRange.aStart );
 }
 
-void AutoFilterBuffer::Apply()
+void XclImpAutoFilterBuffer::Apply()
 {
-    for( AutoFilterData* pData = _First(); pData; pData = _Next() )
+    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         pData->Apply();
 }
 
-AutoFilterData* AutoFilterBuffer::GetByTab( UINT16 nTab )
+XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( UINT16 nTab )
 {
-    for( AutoFilterData* pData = _First(); pData; pData = _Next() )
+    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         if( pData->Tab() == nTab )
             return pData;
     return NULL;
 }
 
-BOOL AutoFilterBuffer::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab )
+BOOL XclImpAutoFilterBuffer::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab )
 {
-    for( AutoFilterData* pData = _First(); pData; pData = _Next() )
+    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
         if( pData->HasDropDown( nCol, nRow, nTab ) )
             return TRUE;
     return FALSE;
