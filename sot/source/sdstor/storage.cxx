@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-05 12:46:00 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 10:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nSto
     INIT_SotStorage()
 {
     aName = rName; // Namen merken
-    CreateStorage( FALSE, nMode, nStorageMode );
+    CreateStorage( TRUE, nMode, nStorageMode );
 }
 
 void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, StorageMode nStorageMode  )
@@ -572,10 +572,10 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
     else
     {
         // temporary storage
-//        if ( bForceUCBStorage )
+        if ( bForceUCBStorage )
             pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-//        else
-//            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        else
+            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         aName = pOwnStg->GetName();
     }
 
