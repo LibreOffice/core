@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:42:47 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,19 @@ protected:
         return aSupported;  \
     }   \
 
+#define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    {   \
+        return getSupportedServiceNames_Static();   \
+    }   \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException)   \
+    {   \
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);   \
+        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname1);    \
+        aSupported[1] = ::rtl::OUString::createFromAscii(serviceasciiname2);    \
+        return aSupported;  \
+    }   \
+
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
     {   \
@@ -235,8 +248,13 @@ protected:
 #define IMPLEMENT_SERVICE_INFO2(classname, implasciiname, serviceasciiname1, serviceasciiname2) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)
 
+#define IMPLEMENT_SERVICE_INFO2_STATIC(classname, implasciiname, serviceasciiname1, serviceasciiname2)  \
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1, serviceasciiname2)    \
+    IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname)
 //----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO3(classname, implasciiname, serviceasciiname1, serviceasciiname2, serviceasciiname3)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
