@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:46:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,7 @@ void ScViewFunc::AdjustPrintZoom()
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::SetPrintRanges( const String* pPrint,
+void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                                 const String* pRepCol, const String* pRepRow,
                                 BOOL bAddPrint )
 {
@@ -675,34 +675,33 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
         {
             ScRange aRange( 0,0,nTab );
 
-            USHORT nAdd = 0;
-            if ( bAddPrint )
-                nAdd = pDoc->GetPrintRangeCount( nTab );
-
             //  print ranges
 
-            if ( pPrint )
+            if( !bAddPrint )
+                pDoc->ClearPrintRanges( nTab );
+
+            if( bEntireSheet )
             {
-                if ( !pPrint->Len() )
-                    pDoc->SetPrintRangeCount( nTab, nAdd );     // remove / leave unchanged
-                else
+                pDoc->SetPrintEntireSheet( nTab );
+            }
+            else if ( pPrint )
+            {
+                if ( pPrint->Len() )
                 {
                     USHORT nTCount = pPrint->GetTokenCount();
-                    pDoc->SetPrintRangeCount( nTab, nTCount + nAdd );
                     for (USHORT i=0; i<nTCount; i++)
                     {
                         String aToken = pPrint->GetToken(i);
                         if ( aRange.ParseAny( aToken, pDoc ) & SCA_VALID )
-                            pDoc->SetPrintRange( nTab, i + nAdd, aRange );
+                            pDoc->AddPrintRange( nTab, aRange );
                     }
                 }
             }
-            else        //  use selection (print range is always set)
+            else    // NULL = use selection (print range is always set), use empty string to delete all ranges
             {
                 if ( GetViewData()->GetSimpleArea( aRange ) )
                 {
-                    pDoc->SetPrintRangeCount( nTab, nAdd + 1 );
-                    pDoc->SetPrintRange( nTab, nAdd, aRange );
+                    pDoc->AddPrintRange( nTab, aRange );
                 }
                 else if ( rMark.IsMultiMarked() )
                 {
@@ -712,13 +711,12 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
                     USHORT nCnt = (USHORT) aList->Count();
                     if ( nCnt )
                     {
-                        pDoc->SetPrintRangeCount( nTab, nCnt + nAdd );
                         ScRangePtr pR;
                         USHORT i;
                         for ( pR = aList->First(), i=0; i < nCnt;
                               pR = aList->Next(), i++ )
                         {
-                            pDoc->SetPrintRange( nTab, i + nAdd, *pR );
+                            pDoc->AddPrintRange( nTab, *pR );
                         }
                     }
                 }
