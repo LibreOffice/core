@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _CONNECTIVITY_MAB_CONNECTION_HXX_
 #include <MConnection.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 
 namespace connectivity
@@ -130,10 +133,12 @@ namespace connectivity
 
             sal_Bool getTableStrings( OConnection*                        _pCon,
                                       ::std::vector< ::rtl::OUString >&   _rStrings,
+                                      ::std::vector< ::rtl::OUString >&   _rTypes,
                                       sal_Bool                            forceLoad = sal_False );
 
             sal_Bool getTables( OConnection* _pCon,
                                 const ::rtl::OUString& tableNamePattern,
+                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
 
             const ::rtl::OUString& getErrorString() { return m_aErrorString; }
@@ -143,6 +148,7 @@ namespace connectivity
         private:
             sal_Bool                            m_bProfileExists ;
             ::std::vector< ::rtl::OUString >    m_aTableNames;
+            ::std::vector< ::rtl::OUString >    m_aTableTypes;
             ::rtl::OUString                     m_aErrorString;
 
             void setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI );
