@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 13:02:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ ORTFReader::~ORTFReader()
 // ---------------------------------------------------------------------------
 SvParserState ORTFReader::CallParser()
 {
+    DBG_CHKTHIS(ORTFReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = SvRTFParser::CallParser();
@@ -199,6 +200,7 @@ SvParserState ORTFReader::CallParser()
 // ---------------------------------------------------------------------------
 void ORTFReader::NextToken( int nToken )
 {
+    DBG_CHKTHIS(ORTFReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
 
@@ -350,6 +352,7 @@ void ORTFReader::NextToken( int nToken )
 // ---------------------------------------------------------------------------
 sal_Bool ORTFReader::CreateTable(int nToken)
 {
+    DBG_CHKTHIS(ORTFReader,NULL);
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
@@ -436,11 +439,13 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void ORTFReader::release()
 {
+    DBG_CHKTHIS(ORTFReader,NULL);
     ReleaseRef();
 }
 // -----------------------------------------------------------------------------
 OWizTypeSelect* ORTFReader::createPage(Window* _pParent)
 {
+    DBG_CHKTHIS(ORTFReader,NULL);
     return new OWizRTFExtend(_pParent,rInput);
 }
 // -----------------------------------------------------------------------------
