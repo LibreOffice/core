@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:42:36 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
 {
     Text = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
     Text [ english ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
-    Text [ english_us ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
+    Text [ english_us ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
     Text[ portuguese ] = "Ao carregar este controlo ocorreu um erro. Por esta razγo foi substituνdo por um marcador de posiηγo.";
     Text[ russian ] = "Οπθ ηΰγπσηκε ύςξγξ ύλεμενςΰ σοπΰβλενθÿ (control) οπξθηξψλΰ ξψθακΰ. Οξύςξμσ ξν αϋλ ηΰμενεν μερςξηΰοξλνθςελεμ.";
     Text[ greek ] = "Προέκυψε σφάλμα κατά τη φόρτωση αυτού του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα σύμβολο κράτησης θέσης.";
