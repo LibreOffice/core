@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:48:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2279,7 +2279,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
     m_aActionTbR.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRSelect));
-    m_aActionTbR.SetClickHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRClick));
+    m_aActionTbR.SetDropdownClickHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRClick));
     m_aActionTbL.Show();
     m_aActionTbR.Show();
     Font aFont=aFilterLb.GetFont();
@@ -2629,7 +2629,8 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
 
             pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
             pMenu->Execute( pBox,
-                pBox->GetItemRect(nEntry).BottomLeft());
+                            pBox->GetItemRect(nEntry),
+                            POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
         }
         catch(uno::Exception&)
