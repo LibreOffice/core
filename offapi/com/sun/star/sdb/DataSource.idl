@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,23 +83,23 @@
 
 
  module com {  module sun {  module star {  module sdbc {
-    interface XIsolatedConnection;
-    interface XDataSource;
+     published interface XIsolatedConnection;
+     published interface XDataSource;
  };};};};
 
 
  module com {  module sun {  module star {  module sdb {
 
-interface XCompletedConnection;
-interface XQueryDefinitionsSupplier;
-interface XBookmarksSupplier;
+ published interface XCompletedConnection;
+ published interface XQueryDefinitionsSupplier;
+ published interface XBookmarksSupplier;
 
 
 /** is a factory to establish database connections. It should be registered at
     a <type scope="com::sun::star::uno">NamingService</type>.
     @see com::sun::star::sdb::DatabaseContext
  */
-service DataSource
+published service DataSource
 {
     interface com::sun::star::beans::XPropertySet;
 
