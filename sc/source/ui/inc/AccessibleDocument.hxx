@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:15:35 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@ public:
         ScSplitPos eSplitPos);
 
     virtual void Init();
+
+
+    DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 protected:
     virtual ~ScAccessibleDocument(void);
 public:
@@ -333,6 +336,7 @@ private:
     ScSplitPos      meSplitPos;
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
     ScChildrenShapes* mpChildrenShapes;
+    com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> mxTempAcc;
     sal_Bool mbCompleteSheetSelected;
 
 public:
@@ -353,6 +357,9 @@ private:
     sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    void AddChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
+    void RemoveChild(const com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
 };
 
 

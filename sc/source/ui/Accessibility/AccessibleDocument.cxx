@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef SC_GRIDWIN_HXX
 #include "gridwin.hxx"
+#endif
+#ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
+#include "AccessibleEditObject.hxx"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
@@ -1061,7 +1064,27 @@ ScAccessibleDocument::ScAccessibleDocument(
     mbCompleteSheetSelected(sal_False)
 {
     if (pViewShell)
+    {
         pViewShell->AddAccessibilityObject(*this);
+        Window *pWin = pViewShell->GetWindowByPos(eSplitPos);
+        if( pWin )
+        {
+            pWin->AddChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
+            USHORT nCount =   pWin->GetChildCount();
+            for( sal_uInt16 i=0; i < nCount; ++i )
+            {
+                Window *pChildWin = pWin->GetChild( i );
+                if( pChildWin &&
+                    AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                    AddChild( pChildWin->GetAccessible(), sal_False );
+            }
+        }
+        if (pViewShell->GetViewData()->HasEditView( eSplitPos ))
+        {
+            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, pViewShell->GetViewData()->GetEditView(eSplitPos), pViewShell->GetWindowByPos(eSplitPos), sal_True);
+            AddChild(xAcc, sal_False);
+        }
+    }
 }
 
 void ScAccessibleDocument::Init()
@@ -1087,6 +1110,10 @@ void SAL_CALL ScAccessibleDocument::disposing()
     {
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = NULL;
+
+        Window *pWin = mpViewShell->GetWindowByPos(meSplitPos);
+        if( pWin )
+            pWin->RemoveChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
     }
     if (mpChildrenShapes)
         DELETEZ(mpChildrenShapes);
@@ -1101,6 +1128,38 @@ void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& Source )
 }
 
     //=====  SfxListener  =====================================================
+
+IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
+        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        switch ( pVclEvent->GetId() )
+        {
+        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+            {
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetWindow() );
+                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                {
+                    AddChild( pChildWin->GetAccessible(), sal_True );
+                }
+            }
+            break;
+        case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+            {
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetWindow() );
+                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+                {
+                    RemoveChild( pChildWin->GetAccessible(), sal_True );
+                }
+            }
+            break;
+        }
+    }
+    return 0;
+}
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
@@ -1140,6 +1199,15 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
+        }
+        else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE))
+        {
+            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
+            AddChild(xAcc, sal_True);
+        }
+        else if ((rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE))
+        {
+            RemoveChild(mxTempAcc, sal_True);
         }
     }
 
@@ -1242,10 +1310,14 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    sal_Int32 nShapesCount(0);
+    sal_Int32 nCount(0);
     if (mpChildrenShapes)
-        nShapesCount = mpChildrenShapes->GetCount();
-    return nShapesCount + 1;
+        nCount = mpChildrenShapes->GetCount();
+
+    if (mxTempAcc.is())
+        ++nCount;
+
+    return nCount + 1;
 }
 
     /// Return the specified child or NULL if index is invalid.
@@ -1259,10 +1331,18 @@ uno::Reference<XAccessible> SAL_CALL
     uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
+        sal_Int32 nCount(0);
+        if (mpChildrenShapes)
+            nCount = mpChildrenShapes->GetCount();
+        if (mxTempAcc.is())
+            ++nCount;
+        ++nCount; //there is always a table
         if (nIndex == 0)
             xAccessible = GetAccessibleSpreadsheet();
+        else if ((nIndex == nCount - 1) && mxTempAcc.is())
+            xAccessible = mxTempAcc;
         else if(mpChildrenShapes)
-            mpChildrenShapes->Get(nIndex - 1); // decrement childindex, because the shapes list starts at 0
+            xAccessible = mpChildrenShapes->Get(nIndex - 1); // decrement childindex, because the shapes list starts at 0
     }
     return xAccessible;
 }
@@ -1664,4 +1744,37 @@ sal_Bool ScAccessibleDocument::IsEditable(
 {
     // what is with document protection or readonly documents?
     return sal_True;
+}
+
+void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
+{
+    DBG_ASSERT(!mxTempAcc.is(), "this object should be removed before");
+    if (xAcc.is())
+    {
+        mxTempAcc = xAcc;
+        if( bFireEvent )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.NewValue <<= mxTempAcc;
+            CommitChange( aEvent );
+        }
+    }
+}
+
+void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, sal_Bool bFireEvent)
+{
+    DBG_ASSERT(mxTempAcc.is(), "this object should be added before");
+    if (xAcc.is())
+    {
+        DBG_ASSERT(xAcc.get() == mxTempAcc.get(), "only the same object should be removed");
+        if( bFireEvent )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.OldValue <<= mxTempAcc;
+            CommitChange( aEvent );
+        }
+        mxTempAcc = NULL;
+    }
 }
