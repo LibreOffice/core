@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorageHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:07:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
 import com.sun.star.script.framework.log.LogUtils;
+import com.sun.star.script.framework.provider.PathUtils;
 
 import java.util.*;
 import java.io.*;
@@ -212,7 +213,7 @@ public class XStorageHelper implements XEventListener
     public synchronized static void addNewModel( XModel model )
     {
         // TODO needs to cater for model for untitled document
-        modelMap.put( model.getURL(), model );
+        modelMap.put( PathUtils.getOidForModel( model ), model );
         XComponent xComp = (XComponent)
              UnoRuntime.queryInterface(XComponent.class, model);
 
