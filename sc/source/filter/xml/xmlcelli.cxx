@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 14:06:58 $
+ *  last change: $Author: sab $ $Date: 2000-12-04 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,9 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                         if ( aKey >>= nKey )
                         {
                             sal_Bool bIsStandard;
-                            if (nCellType != (GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED))
+                            sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
+                            if ((nCellType != nCurrentCellType) && !(nCurrentCellType == util::NumberFormat::SCIENTIFIC) &&
+                                !(nCurrentCellType == util::NumberFormat::FRACTION))
                             {
                                 try
                                 {
@@ -582,7 +584,9 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                     if ( aKey >>= nKey )
                     {
                         sal_Bool bIsStandard;
-                        if (nCellType != (GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED))
+                        sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
+                        if ((nCellType != nCurrentCellType) && !(nCurrentCellType == util::NumberFormat::SCIENTIFIC) &&
+                            !(nCurrentCellType == util::NumberFormat::FRACTION))
                         {
                             try
                             {
