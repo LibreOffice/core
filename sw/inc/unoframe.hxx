@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-16 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ public:
 --------------------------------------------------*/
 typedef cppu::WeakImplHelper2
 <
-    ::com::sun::star::text::XTextEmbeddedObject,
+    ::com::sun::star::text::XTextContent,
     ::com::sun::star::document::XEmbeddedObjectSupplier
 >SwXTextEmbeddedObjectBaseClass;
 
@@ -318,10 +318,6 @@ public:
 
     //XEmbeddedObjectSupplier,
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  SAL_CALL getEmbeddedObject(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //XEmbeddedObject
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getObject(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xObject ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
