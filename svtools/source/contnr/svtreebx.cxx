@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-25 12:03:38 $
+ *  last change: $Author: gt $ $Date: 2002-10-28 07:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,10 +819,10 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     }
 #endif
 
-    nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
-
     if( !pImp->KeyInput( rKEvt ) )
         SvLBox::KeyInput( rKEvt );
+
+    nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
 }
 
 void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
