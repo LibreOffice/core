@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:38:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,11 +321,6 @@ class FmXFormShell  :public FmXFormShell_BASE
     // a map from a form access path (like "1/4/2") to the dispatchers array for this form
     DECLARE_STL_USTRINGACCESS_MAP(SingleFormDispatchers, FormsDispatchers);
     FormsDispatchers        m_aNavigationDispatcher;
-
-    FmSearchConfigAdmin m_aConfigDummy;
-        // das sorgt dafuer, das das SearchConfigItem (ein singleton) aufgeraeumt wird, sobald die letzte FormShell
-        // geschlossen wird. Benutzt man keine Suche, dann wird auch kein ConfigItem angezogen (so schlau ist der
-        // ConfigAdmin schon ;)), so dass dieses Member hier nicht weiter stoert
 
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
