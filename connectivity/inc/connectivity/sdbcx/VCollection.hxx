@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:46:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 #ifndef CONNECTIVITY_STDTYPEDEFS_HXX
 #include "connectivity/StdTypeDefs.hxx"
 #endif
+#include <memory>
 
 
 namespace connectivity
@@ -141,19 +142,38 @@ namespace connectivity
                                          ::com::sun::star::lang::XServiceInfo> OCollectionBase;
 
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > Object_BASE;
+
+        class SAL_NO_VTABLE IObjectCollection
+        {
+        public:
+            virtual void reserve(size_t nLength) = 0;
+            virtual bool exists(const ::rtl::OUString& _sName ) = 0;
+            virtual bool empty() = 0;
+            virtual void swapAll() = 0;
+            virtual void swap() = 0;
+            virtual void clear() = 0;
+            virtual void reFill(const TStringVector &_rVector) = 0;
+            virtual void insert(const ::rtl::OUString& _sName,const Object_BASE& _xObject) = 0;
+            virtual bool rename(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName) = 0;
+            virtual sal_Int32 size() = 0;
+            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getElementNames() = 0;
+            virtual ::rtl::OUString getName(sal_Int32 _nIndex) = 0;
+            virtual void disposeAndErase(sal_Int32 _nIndex) = 0;
+            virtual void disposeElements() = 0;
+            virtual sal_Int32 findColumn( const ::rtl::OUString& columnName ) = 0;
+            virtual ::rtl::OUString findColumnAtIndex(  sal_Int32 _nIndex) = 0;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > getObject(sal_Int32 _nIndex) = 0;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > getObject(const ::rtl::OUString& columnName) = 0;
+            virtual void setObject(sal_Int32 _nIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >& _xObject) = 0;
+            virtual sal_Bool isCaseSensitive() const = 0;
+        };
         //************************************************************
         //  OCollection
         //************************************************************
         class SAL_NO_VTABLE OCollection : public OCollectionBase
         {
         protected:
-            typedef ::std::multimap< ::rtl::OUString, Object_BASE, ::comphelper::UStringMixLess> ObjectMap;
-            typedef ObjectMap::iterator ObjectIter;
-
-        //  private:
-            // this combination of map and vector is used to have a fast name and index access
-            ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
-            ObjectMap                               m_aNameMap;         // hold the elements and a name
+            ::std::auto_ptr<IObjectCollection>      m_pElements;
 
             ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
             ::cppu::OInterfaceContainerHelper       m_aRefreshListeners;
@@ -184,7 +204,8 @@ namespace connectivity
                         sal_Bool _bCase,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector,
-                        sal_Bool _bUseIndexOnly = sal_False);
+                        sal_Bool _bUseIndexOnly = sal_False,
+                        sal_Bool _bUseHardRef = sal_True);
 
             /** clear the name map
                 <p>Does <em>not</em> dispose the objects hold by the collection.</p>
@@ -197,18 +218,25 @@ namespace connectivity
 
             /** return the name of element at index _nIndex
             */
-            const ::rtl::OUString& getElementName(sal_Int32 _nIndex)
+            inline ::rtl::OUString getElementName(sal_Int32 _nIndex)
             {
-                return m_aElements[_nIndex]->first;
+                return m_pElements->findColumnAtIndex(_nIndex);
             }
+
+
+            /** return the object, if not existent it creates it.
+                @param  _nIndex
+                    The index of the object to create.
+                @return ::com::sun::star::uno::Reference<::com::sun::star::container::XNamed >
+            */
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > getObject(sal_Int32 _nIndex);
 
         public:
             virtual ~OCollection();
             DECLARE_SERVICE_INFO();
 
-
             void reFill(const TStringVector &_rVector);
-            sal_Bool isCaseSensitive() const { return m_aNameMap.key_comp().isCaseSensitive(); }
+            inline sal_Bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
             void renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper
@@ -254,8 +282,6 @@ namespace connectivity
             void notifyElementRemoved(const ::rtl::OUString& _sName);
             void disposeElements();
             void dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop = sal_True);
-            void dropImpl(const ObjectIter& _rCurrentObject,sal_Bool _bReallyDrop = sal_True);
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > getObject(ObjectIter& _rCurrentObject);
         };
     }
 }
