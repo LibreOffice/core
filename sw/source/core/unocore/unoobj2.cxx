@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-13 12:21:50 $
+ *  last change: $Author: dvo $ $Date: 2002-09-13 08:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,7 @@ void SwXTextRange::setString(const OUString& aString)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(RANGE_IN_CELL == eRangePosition)
+    if(RANGE_IS_TABLE == eRangePosition)
     {
         //setString in Tabellen kann nicht erlaubt werden
         throw uno::RuntimeException();
