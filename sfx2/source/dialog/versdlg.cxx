@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 16:25:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,11 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
     , aSavedByText( this, ResId( FT_SAVEDBY ) )
     , aCommentText( this, ResId( FT_COMMENTS ) )
     , aVersionBox( this, ResId( TLB_VERSIONS ) )
-    , aViewButton( this, ResId( PB_VIEW ) )
+    , aCloseButton( this, ResId( PB_CLOSE ) )
     , aOpenButton( this, ResId( PB_OPEN ) )
+    , aViewButton( this, ResId( PB_VIEW ) )
     , aDeleteButton( this, ResId( PB_DELETE ) )
     , aCompareButton( this, ResId( PB_COMPARE ) )
-    , aCloseButton( this, ResId( PB_CLOSE ) )
     , aHelpButton( this, ResId ( PB_HELP ) )
     , pViewFrame( pFrame )
 {
@@ -249,7 +249,7 @@ IMPL_LINK( SfxVersionDialog, DClickHdl_Impl, Control*, pControl )
 IMPL_LINK( SfxVersionDialog, SelectHdl_Impl, Control*, pControl )
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
-    SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
+    aVersionBox.FirstSelected(); // -Wall required??
     aDeleteButton.Enable( !pObjShell->IsReadOnly() );
     aOpenButton.Enable( TRUE );
     return 0L;
