@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 10:58:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace connectivity
 
     java_util_Properties* createStringPropertyArray(JNIEnv *pEnv,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    template<class T,class JT> ::com::sun::star::uno::Sequence< T > copyArrayAndDelete(JNIEnv *pEnv,jobjectArray _Array,const  T& _rD1,const  JT& _rD2)
+    template<class T,class JT> ::com::sun::star::uno::Sequence< T > copyArrayAndDelete(JNIEnv *pEnv,jobjectArray _Array, const T*, const JT* )
     {
                 ::com::sun::star::uno::Sequence< T > xOut;
         if(_Array)
