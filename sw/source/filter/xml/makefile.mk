@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-08 12:30:20 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:21:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,7 @@ CXXFILES = \
         xmlithlp.cxx \
         xmlitmpr.cxx	\
         xmlimpit.cxx \
-        xmlexpit.cxx 
+        xmlexpit.cxx
 
 SLOFILES =  \
         $(SLO)$/swxml.obj \
@@ -135,6 +135,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmlexp.obj \
         $(SLO)$/xmltext.obj \
         $(SLO)$/xmltexti.obj \
+        $(SLO)$/xmltexte.obj \
         $(SLO)$/xmltbli.obj \
         $(SLO)$/xmltble.obj \
         $(SLO)$/xmlfmt.obj \
