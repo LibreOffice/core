@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:29:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,15 +188,15 @@ ModalDialog DLG_BIB_BASE
         Text [ french ] = "Catégorie" ;
         Text [ swedish ] = "Område" ;
         Text [ dutch ] = "Bereik" ;
-        Text [ spanish ] = "Area" ;
+        Text [ spanish ] = "Área" ;
         Text [ english_us ] = "Category" ;
-        Text[ chinese_simplified ] = "·ÖÀà";
-        Text[ russian ] = "Êàòåãîğèÿ";
-        Text[ polish ] = "Obszar";
-        Text[ japanese ] = "¸ŞÙ°Ìß";
+        Text[ chinese_simplified ] = "·ÖÀà±êÌâ";
+        Text[ russian ] = "Çàãîëîâîê êàòåãîğèè";
+        Text[ polish ] = "Tytu³ kategorii";
+        Text[ japanese ] = "•ª—Ş–¼";
         Text[ chinese_traditional ] = "°Ï°ì";
         Text[ arabic ] = "İÆÉ";
-        Text[ greek ] = "Êáôçãïñßá";
+        Text[ greek ] = "Ôßôëïò êáôçãïñßáò";
         Text[ korean ] = "±¸¿ª";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
@@ -235,6 +235,26 @@ ModalDialog DLG_BIB_BASE
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Pfad" ;
         Text [ ENGLISH ] = "Path" ;
+        Text[ english_us ] = "Path";
+        Text[ portuguese ] = "Path";
+        Text[ russian ] = "Ïóòü";
+        Text[ greek ] = "ÄéáäñïìŞ";
+        Text[ dutch ] = "Path";
+        Text[ french ] = "Chemin";
+        Text[ spanish ] = "Ruta";
+        Text[ finnish ] = "Path";
+        Text[ italian ] = "Path";
+        Text[ danish ] = "Path";
+        Text[ swedish ] = "Sökväg";
+        Text[ polish ] = "Œcie¿ka";
+        Text[ portuguese_brazilian ] = "Path";
+        Text[ japanese ] = "Êß½";
+        Text[ korean ] = "Path";
+        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ chinese_traditional ] = "Path";
+        Text[ turkish ] = "Path";
+        Text[ arabic ] = "Path";
+        Text[ catalan ] = "Path";
     };
     ListBox LB_PATH
     {
@@ -251,6 +271,26 @@ ModalDialog DLG_BIB_BASE
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "Auswahlliste" ;
         Text [ ENGLISH ] = "Group" ;
+        Text[ english_us ] = "Selection list";
+        Text[ portuguese ] = "Group";
+        Text[ russian ] = "Ñïèñîê âûáîğà";
+        Text[ greek ] = "Ëßóôá åğéëïãŞò";
+        Text[ dutch ] = "Group";
+        Text[ french ] = "Liste de sélection";
+        Text[ spanish ] = "Lista de selección";
+        Text[ finnish ] = "Group";
+        Text[ italian ] = "Group";
+        Text[ danish ] = "Group";
+        Text[ swedish ] = "Urvalslista";
+        Text[ polish ] = "Lista wyboru";
+        Text[ portuguese_brazilian ] = "Group";
+        Text[ japanese ] = "‘I‘ğØ½Ä";
+        Text[ korean ] = "Group";
+        Text[ chinese_simplified ] = "Ñ¡ÔñÁĞµ¥";
+        Text[ chinese_traditional ] = "Group";
+        Text[ turkish ] = "Group";
+        Text[ arabic ] = "Group";
+        Text[ catalan ] = "Group";
     };
     Control TLB_GROUPS
     {
@@ -299,3 +339,4 @@ String STR_GLOSSARY_BIB_DLG
     Text [ portuguese ] = "Editar secções" ;
     Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
 };*/
+
