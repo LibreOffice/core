@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-30 16:55:59 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
     sal_Int32 nIndex;
     sal_Int32 nRepeat(0);
     sal_Int32 nEmptyRepeat(0);
-    for (sal_Int32 i = nLast; i > 0; i--)
+    for (sal_Int32 i = nLast; i >= 0; i--)
     {
         if (bRow)
             bResult = pDoc->GetRowDefault(nTable,
@@ -510,8 +510,6 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
                 static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(nLastRow), nPos);
         if (bResult)
         {
-            if (nEmptyRepeat > 1)
-                (*pDefaults)[i + 1].nRepeat = nEmptyRepeat;
             nEmptyRepeat = 0;
             if (!nRepeat)
             {
@@ -530,6 +528,8 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
                     nRepeat = 1;
                     nPrevIndex = GetStyleNameIndex(pCellStyles, nTable, static_cast<sal_Int32>(nPos), i,
                                             bRow, bPrevAutoStyle);
+                    (*pDefaults)[i].nIndex = nPrevIndex;
+                    (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
                 }
                 else
                 {
@@ -543,14 +543,7 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
         }
         else
         {
-            if (nRepeat)
-            {
-                (*pDefaults)[i + 1].nIndex = nPrevIndex;
-                (*pDefaults)[i + 1].bIsAutoStyle = bPrevAutoStyle;
-                if (nRepeat > 1)
-                    (*pDefaults)[i + 1].nRepeat = nRepeat;
-                nRepeat = 0;
-            }
+            nRepeat = 0;
             if (!nEmptyRepeat)
                 nEmptyRepeat = 1;
             else
@@ -560,15 +553,6 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_uInt16 nTable,
                     (*pDefaults)[i].nRepeat = nEmptyRepeat;
             }
         }
-    }
-    if (nEmptyRepeat > 1)
-        (*pDefaults)[i].nRepeat = nEmptyRepeat;
-    else if (nRepeat)
-    {
-        (*pDefaults)[i].nIndex = nPrevIndex;
-        (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-        if (nRepeat > 1)
-            (*pDefaults)[i].nRepeat = nRepeat;
     }
 }
 
