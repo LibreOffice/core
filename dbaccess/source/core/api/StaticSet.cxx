@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:53:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ sal_Bool OStaticSet::fetchRow()
     {
         m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
-        (*(*m_aSetIter))[0] = (sal_Int32)(m_aSet.size());
+        (*(*m_aSetIter))[0] = getRow();
         OCacheSet::fillValueRow(*m_aSetIter,(*(*m_aSetIter))[0]);
     }
     else
@@ -165,7 +165,7 @@ void OStaticSet::fillAllRows()
             ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount());
             m_aSet.push_back(pRow);
             m_aSetIter = m_aSet.end() - 1;
-            (*pRow)[0] = (sal_Int32)(m_aSet.size());
+            (*pRow)[0] = getRow();
             OCacheSet::fillValueRow(pRow,(*pRow)[0]);
         }
         m_bEnd = sal_True;
@@ -349,7 +349,9 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     if(m_bInserted)
     {
         m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
-        m_aSetIter = m_aSet.end()-1;
+        m_aSetIter = m_aSet.end() - 1;
+        (*(*m_aSetIter))[0] = (*_rInsertRow)[0] = getBookmark(_rInsertRow);
+        m_bEnd = sal_False;
     }
 }
 // -------------------------------------------------------------------------
