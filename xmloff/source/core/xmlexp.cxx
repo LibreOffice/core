@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 16:01:11 $
+ *  last change: $Author: sab $ $Date: 2001-03-05 09:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,6 +500,16 @@ void SvXMLExport::ImplExportMeta()
     }
 }
 
+void SvXMLExport::ImplExportSettings()
+{
+    CheckAttrList();
+
+    {
+        _ExportViewSettings();
+        _ExportConfigurationSettings();
+    }
+}
+
 void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 {
     CheckAttrList();
@@ -619,6 +629,11 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
             // export only meta
             pRootService = sXML_document_meta;
         }
+        else if ( EXPORT_SETTINGS == nExportMode )
+        {
+            // export only settings
+            pRootService = sXML_document_settings;
+        }
         else if( EXPORT_STYLES == nExportMode )
         {
             // export only styles
@@ -641,9 +656,9 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
         if( mnExportFlags & EXPORT_META )
             ImplExportMeta();
 
-        // view settings
+        // settings
         if( mnExportFlags & EXPORT_SETTINGS )
-            _ExportViewSettings();
+            ImplExportSettings();
 
         // scripts
         if( mnExportFlags & EXPORT_SCRIPTS )
@@ -683,6 +698,10 @@ void SvXMLExport::_ExportMeta()
 }
 
 void SvXMLExport::_ExportViewSettings()
+{
+}
+
+void SvXMLExport::_ExportConfigurationSettings()
 {
 }
 
