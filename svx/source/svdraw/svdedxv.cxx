@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:14:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
