@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             // die ListSource hat sich geaendert -> neu laden
             if (ListSourceType_VALUELIST != m_eListSourceType)
             {
-                if (m_xCursor.is() && !m_xField.is()) // combobox bereits mit Datenbank verbunden ?
+                if (m_xCursor.is() && !getField().is()) // combobox bereits mit Datenbank verbunden ?
                     // neu laden
                     loadData();
             }
@@ -366,9 +366,9 @@ void OComboBoxModel::fillProperties(
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
         DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,        READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,        BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,               BOUND,READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,               BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,          READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
 
@@ -733,11 +733,12 @@ void OComboBoxModel::loadData()
 //------------------------------------------------------------------------------
 void OComboBoxModel::_loaded(const EventObject& rEvent)
 {
-    if (m_xField.is())
+    Reference<XPropertySet> xField = getField();
+    if (xField.is())
     {
         // jetzt den Key und typ ermitteln
-        m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= m_nFieldType;
-        m_xField->getPropertyValue(PROPERTY_FORMATKEY) >>= m_nFormatKey;
+        xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= m_nFieldType;
+        xField->getPropertyValue(PROPERTY_FORMATKEY) >>= m_nFormatKey;
 
         // XNumberFormatter besorgen
                 Reference<XRowSet> xRowSet(rEvent.Source, UNO_QUERY);
@@ -766,7 +767,7 @@ void OComboBoxModel::_loaded(const EventObject& rEvent)
 //------------------------------------------------------------------------------
 void OComboBoxModel::_unloaded()
 {
-    if (m_xField.is())
+    if (getField().is())
     {
         m_xFormatter = 0;
         m_nFieldType = DataType::OTHER;
