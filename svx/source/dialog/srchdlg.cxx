@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:56:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SV_MOREBTN_HXX //autogen wg. MoreButton
+#ifndef _SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_OK
@@ -172,19 +172,21 @@ struct SearchDlg_Impl
     FixedText   aSearchFormats;
     FixedText   aReplaceFormats;
 
-    BOOL        bMultiLineEdit  : 1,
-                bSaveToModule   : 1,
-                bFocusOnSearch  : 1;
+    BOOL        bMultiLineEdit   : 1,
+                bSaveToModule    : 1,
+                bFocusOnSearch   : 1,
+                bDeltaCalculated : 1;
     USHORT*     pRanges;
     Timer       aSelectionTimer;
 
     SearchDlg_Impl( Window* pParent ) :
-        aSearchFormats( pParent, ResId( FT_SEARCH_FORMATS ) ),
-        aReplaceFormats( pParent, ResId( FT_REPLACE_FORMATS ) ),
-        bMultiLineEdit( FALSE ),
-        bSaveToModule( TRUE ),
-        bFocusOnSearch( TRUE ),
-        pRanges( NULL )
+        aSearchFormats  ( pParent, ResId( FT_SEARCH_FORMATS ) ),
+        aReplaceFormats ( pParent, ResId( FT_REPLACE_FORMATS ) ),
+        bMultiLineEdit  ( FALSE ),
+        bSaveToModule   ( TRUE ),
+        bFocusOnSearch  ( TRUE ),
+        bDeltaCalculated( FALSE ),
+        pRanges         ( NULL )
         {}
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
@@ -372,39 +374,37 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     aReplaceLB      ( this, ResId( ED_REPLACE ) ),                          \
     aReplaceTmplLB  ( this, ResId( LB_REPLACE ) ),                          \
     aReplaceAttrText( this, ResId( FT_REPLACE_ATTR ) ),                     \
-    aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),                      \
     aSearchBtn      ( this, ResId( BTN_SEARCH ) ),                          \
-    aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),                     \
+    aSearchAllBtn   ( this, ResId( BTN_SEARCH_ALL ) ),                      \
+    aSearchCmdLine  ( this, ResId( FL_SEARCH_COMMAND ) ),                   \
     aReplaceBtn     ( this, ResId( BTN_REPLACE ) ),                         \
-    aAttributeBtn   ( this, ResId( BTN_ATTRIBUTE ) ),                       \
-    aCloseBtn       ( this, ResId( BTN_CLOSE ) ),                           \
-    aFormatBtn      ( this, ResId( BTN_FORMAT ) ),                          \
-    aHelpBtn        ( this, ResId( BTN_HELP ) ),                            \
-    aNoFormatBtn    ( this, ResId( BTN_NOFORMAT ) ),                        \
-    pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),          \
-    aWordBtn        ( this, ResId( BTN_CELLS ) ),                           \
+    aReplaceAllBtn  ( this, ResId( BTN_REPLACE_ALL ) ),                     \
     aMatchCaseCB    ( this, ResId( CB_MATCH_CASE ) ),                       \
-    aBackwardsBtn   ( this, ResId( BTN_BACKWARDS ) ),                       \
-    aSelectionBtn   ( this, ResId( BTN_SELECTIONS ) ),                      \
-    aRegExpBtn      ( this, ResId( BTN_REGEXP ) ),                          \
-    aLayoutBtn      ( this, ResId( BTN_LAYOUTS ) ),                         \
+    aWordBtn        ( this, ResId( CB_WHOLE_WORDS ) ),                      \
+    aButtonsFL      ( this, ResId( FL_BUTTONS ) ),                          \
+    pMoreBtn        ( new MoreButton( this, ResId( BTN_MORE ) ) ),          \
+    aHelpBtn        ( this, ResId( BTN_HELP ) ),                            \
+    aCloseBtn       ( this, ResId( BTN_CLOSE ) ),                           \
+    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),                          \
+    aSelectionBtn   ( this, ResId( CB_SELECTIONS ) ),                       \
+    aBackwardsBtn   ( this, ResId( CB_BACKWARDS ) ),                        \
+    aRegExpBtn      ( this, ResId( CB_REGEXP ) ),                           \
     aSimilarityBox  ( this, ResId( CB_SIMILARITY) ),                        \
     aSimilarityBtn  ( this, ResId( PB_SIMILARITY) ),                        \
+    aLayoutBtn      ( this, ResId( CB_LAYOUTS ) ),                          \
     aJapMatchFullHalfWidthCB( this, ResId( CB_JAP_MATCH_FULL_HALF_WIDTH ) ),\
     aJapOptionsCB   ( this, ResId( CB_JAP_SOUNDS_LIKE ) ),                  \
     aJapOptionsBtn  ( this, ResId( PB_JAP_OPTIONS ) ),                      \
-    aOptionsFL      ( this, ResId( FL_OPTIONS ) ),                          \
-    aFormulasBtn    ( this, ResId( BTN_FORMULAS ) ),                        \
-    aValuesBtn      ( this, ResId( BTN_VALUES ) ),                          \
-    aNotesBtn       ( this, ResId( BTN_NOTES ) ),                           \
-    aSearchFL       ( this, ResId( FL_SEARCH ) ),                           \
-    aSearchVertFL   ( this, ResId( FL_SEARCH_VERT ) ),                      \
-    aRowsBtn        ( this, ResId( BTN_ROWS ) ),                            \
-    aColumnsBtn     ( this, ResId( BTN_COLUMNS ) ),                         \
-    aSearchDirFL    ( this, ResId( FL_SEARCHDIR ) ),                        \
-    aSearchDirVertFL( this, ResId( FL_SEARCHDIR_VERT ) ),                   \
-    aAllTablesCB    ( this, ResId( CB_ALLTABLES ) ),                        \
-    aCalcExtrasFL   ( this, ResId( FL_CALCEXTRAS ) ),                       \
+    aAttributeBtn   ( this, ResId( BTN_ATTRIBUTE ) ),                       \
+    aFormatBtn      ( this, ResId( BTN_FORMAT ) ),                          \
+    aNoFormatBtn    ( this, ResId( BTN_NOFORMAT ) ),                        \
+    aCalcFL         ( this, ResId( FL_CALC ) ),                             \
+    aCalcSearchInFT ( this, ResId( FT_CALC_SEARCHIN ) ),                    \
+    aCalcSearchInLB ( this, ResId( LB_CALC_SEARCHIN ) ),                    \
+    aCalcSearchDirFT( this, ResId( FT_CALC_SEARCHDIR ) ),                   \
+    aRowsBtn        ( this, ResId( RB_CALC_ROWS ) ),                        \
+    aColumnsBtn     ( this, ResId( RB_CALC_COLUMNS ) ),                     \
+    aAllSheetsCB    ( this, ResId( CB_ALL_SHEETS ) ),                       \
     aCalcStr        (       ResId( STR_WORDCALC ) ),                        \
     rBindings       ( rBind ),                                              \
     bWriter         ( FALSE ),                                              \
@@ -496,6 +496,9 @@ void SvxSearchDialog::Construct_Impl()
                        aSearchStrings, aSearchLB    );
     ListToStrArr_Impl( SID_SEARCHDLG_REPLACESTRINGS,
                        aReplaceStrings, aReplaceLB  );
+
+    pMoreBtn->SetMoreText( String( ResId( STR_MORE_BTN ) ) );
+    pMoreBtn->SetLessText( String( ResId( STR_LESS_BTN ) ) );
 
     FreeResource();
     InitControls_Impl();
@@ -660,6 +663,127 @@ void SvxSearchDialog::InitControls_Impl()
         LINK( this, SvxSearchDialog, NoFormatHdl_Impl ) );
     aAttributeBtn.SetClickHdl(
         LINK( this, SvxSearchDialog, AttributeHdl_Impl ) );
+
+    // check if buttontext is to wide
+    long nTxtW = Max( pMoreBtn->GetCtrlTextWidth( pMoreBtn->GetMoreText() ),
+                      pMoreBtn->GetCtrlTextWidth( pMoreBtn->GetLessText() ) );
+    nTxtW += ( pMoreBtn->GetTextHeight() * 2 ); // add image size + offset
+    long nBtnW = pMoreBtn->GetSizePixel().Width();
+    if ( nTxtW > nBtnW )
+    {
+        // broaden the button
+        const long nMinDelta = 10;
+        long nDelta = Max( nTxtW - nBtnW, nMinDelta );
+        Size aNewSize = pMoreBtn->GetSizePixel();
+        aNewSize.Width() += nDelta;
+        pMoreBtn->SetSizePixel( aNewSize );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxSearchDialog::CalculateDelta_Impl()
+{
+    DBG_ASSERT( pSearchItem, "no search item" );
+
+    if ( pImpl->bDeltaCalculated )
+        return;
+    else
+        pImpl->bDeltaCalculated = TRUE;
+
+    bool bDrawApp = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_DRAW );
+    pMoreBtn->AddWindow( &aOptionsFL );
+    if ( !bDrawApp )
+        pMoreBtn->AddWindow( &aLayoutBtn );
+    pMoreBtn->AddWindow( &aBackwardsBtn );
+    if ( !bDrawApp )
+        pMoreBtn->AddWindow( &aRegExpBtn );
+    pMoreBtn->AddWindow( &aSimilarityBox );
+    pMoreBtn->AddWindow( &aSimilarityBtn );
+    pMoreBtn->AddWindow( &aSelectionBtn );
+
+    ULONG nDelta = 174, nOffset = 0;
+    SvtCJKOptions aCJKOptions;
+    if ( aCJKOptions.IsCJKFontEnabled() )
+        pMoreBtn->AddWindow( &aJapMatchFullHalfWidthCB );
+    else
+        nOffset += 13;
+    if ( aCJKOptions.IsJapaneseFindEnabled() )
+    {
+        pMoreBtn->AddWindow( &aJapOptionsCB );
+        pMoreBtn->AddWindow( &aJapOptionsBtn );
+    }
+    else
+        nOffset += 17;
+
+    if ( bWriter )
+    {
+        pMoreBtn->AddWindow( &aAttributeBtn );
+        pMoreBtn->AddWindow( &aFormatBtn );
+        pMoreBtn->AddWindow( &aNoFormatBtn );
+    }
+
+    if ( bDrawApp )
+    {
+        // Draw App: "Regular expressions" and "Search for Styles" check boxes are hidden
+        // so align the other buttons
+        const long nAppFontHeight = 13; // checkbox height + space between in APPFONT
+        long nH = LogicToPixel( Size( 0, nAppFontHeight ), MAP_APPFONT ).Height();
+
+        Point aNewPos = aSimilarityBox.GetPosPixel();
+        aNewPos.Y() -= nH;
+        aSimilarityBox.SetPosPixel( aNewPos );
+        aNewPos = aSimilarityBtn.GetPosPixel();
+        aNewPos.Y() -= nH;
+        aSimilarityBtn.SetPosPixel( aNewPos );
+        nH *= 2;
+        nOffset += ( 2 * nAppFontHeight );
+        if ( aCJKOptions.IsCJKFontEnabled() )
+        {
+            aNewPos = aJapMatchFullHalfWidthCB.GetPosPixel();
+            aNewPos.Y() -= nH;
+            aJapMatchFullHalfWidthCB.SetPosPixel( aNewPos );
+        }
+        if ( aCJKOptions.IsJapaneseFindEnabled() )
+        {
+            aNewPos = aJapOptionsCB.GetPosPixel();
+            aNewPos.Y() -= nH;
+            aJapOptionsCB.SetPosPixel( aNewPos );
+            aNewPos = aJapOptionsBtn.GetPosPixel();
+            aNewPos.Y() -= nH;
+            aJapOptionsBtn.SetPosPixel( aNewPos );
+        }
+    }
+
+    if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
+    {
+        Window* pWins[] =
+        {
+            &aCalcFL, &aCalcSearchInFT, &aCalcSearchInLB, &aCalcSearchDirFT,
+            &aRowsBtn, &aColumnsBtn, &aAllSheetsCB
+        };
+        Window** pCurrent = pWins;
+        sal_Int32 i;
+        if ( nOffset > 0 )
+        {
+            long nH = LogicToPixel( Size( 0, nOffset ), MAP_APPFONT ).Height();
+            for ( i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            {
+                Point aNewPos = (*pCurrent)->GetPosPixel();
+                aNewPos.Y() -= nH;
+                (*pCurrent)->SetPosPixel( aNewPos );
+            }
+        }
+        pCurrent = pWins;
+        for ( i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            pMoreBtn->AddWindow( *pCurrent );
+    }
+    else
+        nOffset += 64;
+
+    pMoreBtn->SetDelta( nDelta - nOffset );
+    pMoreBtn->Show();
+    pMoreBtn->Enable();
 }
 
 // -----------------------------------------------------------------------
@@ -711,33 +835,32 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aJapOptionsCB.Check( pSearchItem->IsUseAsianOptions() );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
-    FASTBOOL bDraw = FALSE;
+    CalculateDelta_Impl();
 
+    FASTBOOL bDraw = FALSE;
     if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
     {
         Link aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
-        aFormulasBtn.SetClickHdl( aLink );
-        aNotesBtn.SetClickHdl( aLink );
-        aValuesBtn.SetClickHdl( aLink );
+        aCalcSearchInLB.SetSelectHdl( aLink );
         aRowsBtn.SetClickHdl( aLink );
         aColumnsBtn.SetClickHdl( aLink );
-        aAllTablesCB.SetClickHdl( aLink );
+        aAllSheetsCB.SetClickHdl( aLink );
 
         switch ( pSearchItem->GetCellType() )
         {
             case SVX_SEARCHIN_FORMULA:
                 if ( ( nModifyFlag & MODIFY_FORMULAS ) == 0 )
-                    aFormulasBtn.Check();
+                    aCalcSearchInLB.SelectEntryPos( SVX_SEARCHIN_FORMULA );
                 break;
 
             case SVX_SEARCHIN_VALUE:
                 if ( ( nModifyFlag & MODIFY_VALUES ) == 0 )
-                    aValuesBtn.Check();
+                    aCalcSearchInLB.SelectEntryPos( SVX_SEARCHIN_VALUE );
                 break;
 
             case SVX_SEARCHIN_NOTE:
                 if ( ( nModifyFlag & MODIFY_NOTES ) == 0 )
-                    aNotesBtn.Check();
+                    aCalcSearchInLB.SelectEntryPos( SVX_SEARCHIN_NOTE );
                 break;
         }
         aWordBtn.SetText( aCalcStr.GetToken( 0, '#' ) );
@@ -750,27 +873,12 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             aColumnsBtn.Check();
 
         if ( ( nModifyFlag & MODIFY_ALLTABLES ) == 0 )
-            aAllTablesCB.Check( pSearchItem->IsAllTables() );
+            aAllSheetsCB.Check( pSearchItem->IsAllTables() );
 
         // nur im Writer Suche nach Formatierung
         aFormatBtn.Hide();
         aNoFormatBtn.Hide();
         aAttributeBtn.Hide();
-
-        // Extras beim StarCalc
-        pMoreBtn->AddWindow( &aFormulasBtn );
-        pMoreBtn->AddWindow( &aNotesBtn );
-        pMoreBtn->AddWindow( &aValuesBtn );
-        pMoreBtn->AddWindow( &aSearchFL );
-        pMoreBtn->AddWindow( &aSearchVertFL );
-        pMoreBtn->AddWindow( &aRowsBtn );
-        pMoreBtn->AddWindow( &aColumnsBtn );
-        pMoreBtn->AddWindow( &aSearchDirFL );
-        pMoreBtn->AddWindow( &aSearchDirVertFL );
-        pMoreBtn->AddWindow( &aAllTablesCB );
-        pMoreBtn->AddWindow( &aCalcExtrasFL );
-        pMoreBtn->Show();
-        pMoreBtn->Enable();
     }
     else
     {
@@ -805,15 +913,17 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
             }
+/*
             aFormatBtn.Show();
             aNoFormatBtn.Show();
             aAttributeBtn.Show();
+*/
         }
-        pMoreBtn->SetState( FALSE );
-        pMoreBtn->Hide();
+//       pMoreBtn->SetState( FALSE );
+//       pMoreBtn->Hide();
     }
 
-    if ( !bDraw )
+    if ( 0 && !bDraw ) //!!!!!
     {
         aRegExpBtn.Show();
         aLayoutBtn.Show();
@@ -1041,14 +1151,14 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
+IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 {
-     if ( pButton && !bSet )
-        SetModifyFlag_Impl( pButton );
+    if ( pCtrl && !bSet )
+        SetModifyFlag_Impl( pCtrl );
     else
         bSet = FALSE;
 
-    if ( pButton == &aSimilarityBox )
+    if ( pCtrl == &aSimilarityBox )
     {
         BOOL bIsChecked = aSimilarityBox.IsChecked();
 
@@ -1123,9 +1233,9 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
         }
     }
 
-    if ( &aAllTablesCB == pButton )
+    if ( &aAllSheetsCB == pCtrl )
     {
-        if ( aAllTablesCB.IsChecked() )
+        if ( aAllSheetsCB.IsChecked() )
             aSearchAllBtn.Disable();
         else
         {
@@ -1134,7 +1244,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pButton )
         }
     }
 
-    if ( &aJapOptionsCB == pButton )
+    if ( &aJapOptionsCB == pCtrl )
     {
         BOOL bEnableJapOpt = aJapOptionsCB.IsChecked();
         aMatchCaseCB            .Enable(!bEnableJapOpt );
@@ -1200,15 +1310,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 
         if ( !bWriter )
         {
-            if ( aFormulasBtn.IsChecked() )
-                pSearchItem->SetCellType( SVX_SEARCHIN_FORMULA );
-            else if ( aValuesBtn.IsChecked() )
-                pSearchItem->SetCellType( SVX_SEARCHIN_VALUE );
-            else if ( aNotesBtn.IsChecked() )
-                pSearchItem->SetCellType( SVX_SEARCHIN_NOTE );
+            if ( aCalcSearchInLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+                pSearchItem->SetCellType( aCalcSearchInLB.GetSelectEntryPos() );
 
             pSearchItem->SetRowDirection( aRowsBtn.IsChecked() );
-            pSearchItem->SetAllTables( aAllTablesCB.IsChecked() );
+            pSearchItem->SetAllTables( aAllSheetsCB.IsChecked() );
         }
 
         if ( pBtn == &aSearchBtn )
@@ -1616,6 +1722,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         aFormatBtn.Disable();
         aNoFormatBtn.Disable();
     }
+/*
     if ( ( SEARCH_OPTIONS_MORE & nOptions ) != 0 &&
          pSearchItem && pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
         pMoreBtn->Enable();
@@ -1624,6 +1731,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         pMoreBtn->SetState( FALSE );
         pMoreBtn->Disable();
     }
+*/
     if ( ( SEARCH_OPTIONS_SIMILARITY & nOptions ) != 0 )
     {
         aSimilarityBox.Enable();
@@ -1652,7 +1760,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
     if ( &aSearchAllBtn == pCtrl &&
          ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
     {
-        aSearchAllBtn.Enable( ( bWriter || !aAllTablesCB.IsChecked() ) );
+        aSearchAllBtn.Enable( ( bWriter || !aAllSheetsCB.IsChecked() ) );
         return;
     }
     if ( &aReplaceBtn == pCtrl && ( SEARCH_OPTIONS_REPLACE & nOptions ) != 0 )
@@ -2105,17 +2213,17 @@ void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
         nModifyFlag |= MODIFY_LAYOUT;
     else if ( &aSimilarityBox == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_SIMILARITY;
-    else if ( &aFormulasBtn == (RadioButton*)pCtrl )
+    else if ( &aCalcSearchInLB == (ListBox*)pCtrl )
+    {
         nModifyFlag |= MODIFY_FORMULAS;
-    else if ( &aValuesBtn == (RadioButton*)pCtrl )
         nModifyFlag |= MODIFY_VALUES;
-    else if ( &aNotesBtn == (RadioButton*)pCtrl )
         nModifyFlag |= MODIFY_NOTES;
+    }
     else if ( &aRowsBtn == (RadioButton*)pCtrl )
         nModifyFlag |= MODIFY_ROWS;
     else if ( &aColumnsBtn == (RadioButton*)pCtrl )
         nModifyFlag |= MODIFY_COLUMNS;
-    else if ( &aAllTablesCB == (CheckBox*)pCtrl )
+    else if ( &aAllSheetsCB == (CheckBox*)pCtrl )
         nModifyFlag |= MODIFY_ALLTABLES;
 }
 
@@ -2159,15 +2267,11 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     if ( !bWriter )
     {
-        if ( aFormulasBtn.IsChecked() )
-            pSearchItem->SetCellType( SVX_SEARCHIN_FORMULA );
-        else if ( aValuesBtn.IsChecked() )
-            pSearchItem->SetCellType( SVX_SEARCHIN_VALUE );
-        else if ( aNotesBtn.IsChecked() )
-            pSearchItem->SetCellType( SVX_SEARCHIN_NOTE );
+        if ( aCalcSearchInLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            pSearchItem->SetCellType( aCalcSearchInLB.GetSelectEntryPos() );
 
         pSearchItem->SetRowDirection( aRowsBtn.IsChecked() );
-        pSearchItem->SetAllTables( aAllTablesCB.IsChecked() );
+        pSearchItem->SetAllTables( aAllSheetsCB.IsChecked() );
     }
 
     pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
