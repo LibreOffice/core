@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:58:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #include <rscdef.hxx>
 #endif
 
-#include <list>
+#include <vector>
 
 class RscError;
 class REResourceList;
@@ -129,10 +129,10 @@ DECLARE_LIST( RscSysList, RscSysEntry * )
 class RscTypCont
 {
     CharSet             nSourceCharSet;
-    USHORT              nLangTypeId;        // Globale Sprachtyp
-    USHORT              nDfltLangTypeId;    // fallback fuer globalen Sprachtyp
     USHORT              nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
+    ByteString          aLanguage;          // output language
+    std::vector< USHORT > aLangFallbacks;   // language fallback list (entry 0 is language itself)
     ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
     ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
     USHORT              nUniqueId;          // eindeutiger Id fuer Systemresourcen
@@ -355,7 +355,7 @@ public:
     RscIdRange          aIdLong;
     RscString           aString;
     RscFlag             aWinBits;
-    RscEnum             aLangType;
+    RscLangEnum         aLangType;
     RscLangArray        aLangString;
     RscLangArray        aLangShort;
 
@@ -368,11 +368,8 @@ public:
     Table               aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
-                        RscTypCont( RscError *, LanguageType,
-                                    RSCBYTEORDER_TYPE,
-                                    CharSet nSourceCharSet,
-                                    const ByteString & rSearchPath, USHORT nFlags );
-                        ~RscTypCont();
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, USHORT nFlags );
+    ~RscTypCont();
 
     BOOL            IsPreload() const
                     { return (nFlags & PRELOAD_FLAG) ? TRUE : FALSE; }
@@ -382,22 +379,9 @@ public:
                     { return (nFlags & NOSYSRESTEST_FLAG) ? FALSE : TRUE; }
     BOOL            IsSrsDefault() const
                     { return (nFlags & SRSDEFAULT_FLAG) ? TRUE : FALSE; }
-    LanguageType    GetLanguage() const
-    { return (LanguageType)nLangTypeId; }
-    LanguageType    GetDefLanguage() const
-    { return (LanguageType)nDfltLangTypeId; }
-    LanguageType    ChangeLanguage( LanguageType eLang )
-    {
-        LanguageType nOldLang = (LanguageType)nLangTypeId;
-        nLangTypeId = eLang;
-        return nOldLang;
-    }
-    LanguageType    ChangeDefLanguage( LanguageType eLang )
-    {
-        LanguageType nOldLang = (LanguageType)nDfltLangTypeId;
-        nDfltLangTypeId = eLang;
-        return nOldLang;
-    }
+    ByteString      ChangeLanguage( const ByteString& rNewLang );
+    const std::vector< USHORT >& GetFallbacks() const
+    { return aLangFallbacks; }
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
     CharSet         GetSourceCharSet() const { return nSourceCharSet; }
