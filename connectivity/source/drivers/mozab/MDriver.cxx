@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:20:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ Sequence< ::rtl::OUString > MozabDriver::getSupportedServiceNames_Static(  ) thr
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 
@@ -173,6 +173,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     Reference< XConnection > xCon;
     if (s_pCreationFunc)
     {
+        ::osl::MutexGuard aGuard(m_aMutex);
         OConnection* pCon = reinterpret_cast<OConnection*>((*s_pCreationFunc)(this));
         xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
         pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
@@ -180,7 +181,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     }
     else
     {
-        ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Could not load the library ");
+        ::rtl::OUString sMsg = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Could not load the library "));
         sMsg += ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
         ::dbtools::throwGenericSQLException(sMsg,*this);
     }
@@ -228,7 +229,7 @@ sal_Bool MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( aAddrbookURI.getLength() > 0 )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
+        else if(url == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("sdbc:address:") ))
             return sal_True; // special case here
         else
             return sal_False;
@@ -301,7 +302,7 @@ void MozabDriver::registerClient()
             }
 
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("OMozabConnection_CreateInstance");
+            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OMozabConnection_CreateInstance"));
             // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
             s_pCreationFunc = (OMozabConnection_CreateInstanceFunction)(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
 
