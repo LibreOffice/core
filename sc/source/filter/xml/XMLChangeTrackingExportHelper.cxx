@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:45:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,12 +472,12 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
             }
             rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sMatrixFormula );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sMatrixFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         else
         {
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sFormula );
+            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sFormula, sal_False );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
         }
         if (pFormulaCell->IsValue())
