@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:28:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,35 +67,8 @@
 
  // SID_SFXPAGE_SAVE ------------------------------------------------------
 #define TEXT_SAVEPAGE \
-    Text = "Speichern" ; \
-    Text [ English ] = "Save options" ; \
-    Text [ english_us ] = "Save" ; \
-    Text [ portuguese_brazilian ] = "Salvar" ; \
-    Text [ swedish ] = "Spara" ; \
-    Text [ danish ] = "Gem" ; \
-    Text [ italian ] = "Salva" ; \
-    Text [ spanish ] = "Guardar" ; \
-    Text [ french ] = "Enregistrement" ; \
-    Text [ dutch ] = "Opslaan" ; \
-    Text [ portuguese ] = "Guardar" ; \
-    Text [ finnish ] = "Tallenna" ; \
-    Text[ chinese_simplified ] = "å­˜ç›˜";  \
-    Text[ russian ] = "Ñîõğàíèòü";  \
-    Text[ polish ] = "Zapisz";  \
-    Text[ japanese ] = "ä¿å­˜";    \
-    Text[ chinese_traditional ] = "å„²å­˜"; \
-    Text[ arabic ] = "ÍİÙ"; \
-    Text[ greek ] = "ÁğïèŞêåõóç";   \
-    Text[ korean ] = "ì €ì¥";  \
-    Text[ turkish ] = "Kaydet"; \
-    Text[ catalan ] = "Desa";   \
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";    \
-    Text[ czech ] = "UloÅ¾it";  \
-    Text[ hebrew ] = "â€®×©××™×¨×”â€¬";    \
-    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";    \
-    Text[ slovak ] = "UloÅ¾iÅ¥"; \
-    Text[ hungarian ] = "MentÃ©s";\
-    Text[ slovenian ] = "Shrani";
+    Text [ de ] = "Speichern" ; \
+    Text [ en-US ] = "Save" ;
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -109,140 +82,30 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Laden" ;
-        Text [ English ] = "Load" ;
-        Text[ english_us ] = "Load";
-        Text[ portuguese ] = "Carregar";
-        Text[ russian ] = "Çàãğóçèòü";
-        Text[ greek ] = "Öüñôùóç";
-        Text[ dutch ] = "Laden";
-        Text[ french ] = "Charger";
-        Text[ spanish ] = "Cargar";
-        Text[ finnish ] = "Lataa";
-        Text[ italian ] = "Carica";
-        Text[ danish ] = "Indlæs";
-        Text[ swedish ] = "Ladda";
-        Text[ polish ] = "£aduj";
-        Text[ portuguese_brazilian ] = "Carregar";
-        Text[ japanese ] = "èª­ã¿è¾¼ã‚€";
-        Text[ korean ] = "ë¡œë“œ";
-        Text[ chinese_simplified ] = "è£…å…¥";
-        Text[ chinese_traditional ] = "è¼‰å…¥";
-        Text[ turkish ] = "Yükle";
-        Text[ arabic ] = "ÊÍãíá";
-        Text[ catalan ] = "Carrega";
-        Text[ thai ] = "à¹‚à¸«à¸¥à¸”";
-        Text[ czech ] = "NaÄÃ­tÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×˜×¢×™× ×”â€¬";
-        Text[ hindi ] = "à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-        Text[ slovak ] = "NaÄÃ­taÅ¥";
-        Text[ hungarian ] = "BetÃ¶ltÃ©s";
-        Text[ slovenian ] = "NaloÅ¾i";
+        Text [ de ] = "Laden" ;
+        Text [ en-US ] = "Load";
     };
     CheckBox CB_LOAD_SETTINGS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
-        Text [ English ] = "Load user-defined settings with the document" ;
-        Text[ english_us ] = "Load user-specific settings with the document";
-        Text[ portuguese ] = "~Carregar definições personalizadas com o documento";
-        Text[ russian ] = "Çàãğóæàòü íàñòğîéêè ïîëüçîâàòåëÿ âìåñòå ñ äîêóìåíòîì";
-        Text[ greek ] = "Öüñôùóç ôùí ñõèìßóåùí ôïõ ÷ñŞóôç ìáæß ìå ôï İããñáöï";
-        Text[ dutch ] = "Door gebruiker gedefinieerde instellingen samen met het document laden";
-        Text[ french ] = "Chargement des paramètres utilisateur avec le document";
-        Text[ spanish ] = "Cargar la configuración de usuario al cargar el documento";
-        Text[ finnish ] = "Lataa käyttäjän määrittämät asetukset asiakirjan kanssa";
-        Text[ italian ] = "Carica le impostazioni personalizzate insieme al documento";
-        Text[ danish ] = "Indlæs brugerspecifikke indstillinger sammen med dokumentet";
-        Text[ swedish ] = "Ladda ~användarspecifika inställningar med dokumentet";
-        Text[ polish ] = "£aduj dokument ³¹cznie z ustawieniami indywidualnymi";
-        Text[ portuguese_brazilian ] = "Carregar configurações personalizadas com o documento";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ç‹¬è‡ªã®è¨­å®šã‚’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¨ã¨ã‚‚ã«èª­ã¿è¾¼ã‚€";
-        Text[ korean ] = "ë¬¸ì„œì™€ í•¨ê»˜ ì‚¬ìš©ì ê³ ìœ  ì„¤ì • ë¡œë“œ";
-        Text[ chinese_simplified ] = "è¿åŒä½¿ç”¨è€…çš„è®¾å®šä¸€èµ·è£…å…¥æ–‡æ¡£";
-        Text[ chinese_traditional ] = "é€£åŒä½¿ç”¨è€…çš„è¨­å®šä¸€èµ·è¼‰å…¥æ–‡ä»¶";
-        Text[ turkish ] = "Belge ile birlikte kullanıcı öntanımlı ayarları yükle";
-        Text[ arabic ] = "Load user-defined settings with the document";
-        Text[ catalan ] = "Carrega els paràmetres personalitzats amb el document";
-        Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹€à¸‰à¸à¸²à¸°à¸à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£";
-        Text[ czech ] = "S dokumentem naÄÃ­st nastavenÃ­ specifickÃ¡ pro uÅ¾ivatele";
-        Text[ hebrew ] = "â€®×˜×¢×™× ×ª ×§×‘×™×¢×•×ª ×”××©×ª××© ×‘×™×—×“ ×¢× ×”××¡××šâ€¬";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‡ à¤¸à¤¾à¤¥ à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾-à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£ à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¥‹";
-        Text[ slovak ] = "S dokumentom naÄÃ­taÅ¥ nastavenia Å¡pecifickÃ© pre uÅ¾Ã­vateÄ¾a";
-        Text[ hungarian ] = "FelhasznÃ¡lÃ³i beÃ¡llÃ­tÃ¡sok betÃ¶ltÃ©se a dokumentummal egyÃ¼tt";
-        Text[ slovenian ] = "Z dokumentom naloÅ¾i tudi uporabniÅ¡ko doloÄene nastavitve";
+        Text [ de ] = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
+        Text [ en-US ] = "Load user-specific settings with the document";
     };
     FixedLine GB_SAVE
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Speichern" ;
-        Text [ English ] = "Save" ;
-        Text [ norwegian ] = "Save" ;
-        Text [ italian ] = "Salva" ;
-        Text [ portuguese_brazilian ] = "Salvar" ;
-        Text [ portuguese ] = "Guardar" ;
-        Text [ finnish ] = "Tallenna" ;
-        Text [ danish ] = "Gem" ;
-        Text [ french ] = "Enregistrement" ;
-        Text [ swedish ] = "Spara" ;
-        Text [ dutch ] = "Opslaan" ;
-        Text [ spanish ] = "Guardar" ;
-        Text [ english_us ] = "Save" ;
-        Text[ chinese_simplified ] = "å­˜ç›˜";
-        Text[ russian ] = "Ñîõğàíèòü";
-        Text[ polish ] = "Zapisz";
-        Text[ japanese ] = "ä¿å­˜";
-        Text[ chinese_traditional ] = "å„²å­˜";
-        Text[ arabic ] = "ÍİÙ";
-        Text[ greek ] = "ÁğïèŞêåõóç";
-        Text[ korean ] = "ì €ì¥";
-        Text[ turkish ] = "Kaydet";
-        Text[ catalan ] = "Desa";
-        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
-        Text[ czech ] = "UklÃ¡dÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×©××™×¨×”â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "UloÅ¾iÅ¥";
-        Text[ hungarian ] = "MentÃ©s";
-        Text[ slovenian ] = "Shrani";
+        Text [ de ] = "Speichern" ;
+        Text [ en-US ] = "Save" ;
     };
     CheckBox BTN_DOCINFO
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text = "E~igenschaften vorher bearbeiten" ;
-        Text [ English ] = "~Edit document info before" ;
-        Text [ norwegian ] = "~Lagre dem dokumentinformasjon" ;
-        Text [ italian ] = "Modifica prima le proprietà" ;
-        Text [ portuguese_brazilian ] = "~Editar propriedades do documento antes de salvar" ;
-        Text [ portuguese ] = "~Editar propriedades do documento antes de guardar" ;
-        Text [ finnish ] = "~Muokkaa asiakirjan ominaisuuksia ennen tallennusta" ;
-        Text [ danish ] = "~Rediger dokumentegenskaber før der gemmes" ;
-        Text [ french ] = "Éditer les propriétés avant l'enregistrement" ;
-        Text [ swedish ] = "Redigera egenskaper ~innan" ;
-        Text [ dutch ] = "~Eigenschappen eerst bewerken" ;
-        Text [ spanish ] = "Edi~tar propiedades previamente" ;
-        Text [ english_us ] = "~Edit document properties before saving" ;
+        Text [ de ] = "E~igenschaften vorher bearbeiten" ;
+        Text [ en-US ] = "~Edit document properties before saving" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å…ˆç¼–è¾‘å±æ€§(~E)";
-        Text[ russian ] = "Ïğàâêà ñâîéñòâ äîêóìåíòà äî ñîõğàíåíèÿ";
-        Text[ polish ] = "~Edytuj w³aœciwoœci dokumentu przed zapisaniem";
-        Text[ japanese ] = "ä¿å­˜æ™‚ã«ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ç¢ºèª(~E)";
-        Text[ chinese_traditional ] = "å…ˆç·¨è¼¯å±¬æ€§(~E)";
-        Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
-        Text[ greek ] = "Åğåîåñãáóßá ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
-        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ ì •ë³´ë¥¼ ì €ì¥ ì „ì— í¸ì§‘(~E)";
-        Text[ turkish ] = "Önce özellikleri düzenle";
-        Text[ catalan ] = "~Edita les propietats del document abans de desar";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¹€à¸­à¸à¸ªà¸²à¸£à¸à¹ˆà¸­à¸™à¸šà¸±à¸™à¸—à¸¶à¸";
-        Text[ czech ] = "Upravit vlastnosti dokumentu pÅ™ed uloÅ¾enÃ­m";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×ª ×ª×›×•× ×•×ª ×”××¡××š ×œ×¤× ×™ ×©××™×¨×”â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤¸à¥‡ à¤ªà¤¹à¤¿à¤²à¥‡ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¥‹à¤‚ à¤•à¤¾ ~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~UpraviÅ¥ vlastnosti dokumentu pred uloÅ¾enÃ­m";
-        Text[ hungarian ] = "~DokumentumjellemzÅ‘k szerkesztÃ©se mentÃ©s elÅ‘tt";
-        Text[ slovenian ] = "~Uredi lastnosti dokumenta, preden jih shraniÅ¡";
     };
     FixedImage FI_BACKUP
     {
@@ -254,72 +117,16 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text = "~Sicherungskopie immer erstellen" ;
-        Text [ English ] = "~Backup copy always" ;
-        Text [ norwegian ] = "~Alltid sikkerhetskopi" ;
-        Text [ italian ] = "~Crea sempre copia di backup" ;
-        Text [ portuguese_brazilian ] = "~Sempre criar uma cópia de segurança" ;
-        Text [ portuguese ] = "Criar sempre ~cópia de segurança" ;
-        Text [ finnish ] = "~Luo aina varmuuskopio" ;
-        Text [ danish ] = "Opret altid sikkerhedskopi" ;
-        Text [ french ] = "Toujours créer une copie de sauvegarde" ;
-        Text [ swedish ] = "Skapa alltid ~säkerhetskopia" ;
-        Text [ dutch ] = "Altijd een ~reservekopie maken" ;
-        Text [ spanish ] = "Cre~ar siempre copia de seguridad" ;
-        Text [ english_us ] = "Al~ways create backup copy" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨å»ºç«‹å®‰å…¨å¤‡ä»¶(~W)";
-        Text[ russian ] = "Âñåãäà ñîçäàâàòü ğåçåğâíóş êîïèş";
-        Text[ polish ] = "Zaw~sze wykonuj kopiê zapasow¹";
-        Text[ japanese ] = "å¸¸æ™‚ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚³ãƒ”ãƒ¼ã®ä½œæˆ(~W)";
-        Text[ chinese_traditional ] = "è‡ªå‹•è£½ä½œå®‰å…¨å‚™ä»½(~W)";
-        Text[ arabic ] = "Úãá äÓÎÉ ÇÍÊíÇØíÉ ÏæãÇğ";
-        Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
-        Text[ korean ] = "í•­ìƒ ë°±ì—… ë³µì‚¬(~W)";
-        Text[ turkish ] = "Her zaman yedekle";
-        Text[ catalan ] = "Cre~a sempre còpia de seguretat";
-        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸ªà¸³à¹€à¸™à¸²à¸ªà¸³à¸£à¸­à¸‡à¸—à¸¸à¸~à¸„à¸£à¸±à¹‰à¸‡";
-        Text[ czech ] = "VÅ¾dy vytvoÅ™it zÃ¡loÅ¾nÃ­ kopii";
-        Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×•×ª×§ ×œ×’×™×‘×•×™ ×ª××™×“â€¬";
-        Text[ hindi ] = "à¤¹à¤®à¥‡~à¤¶à¤¾ à¤¬à¥ˆà¤•à¤…à¤ªà¥ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~VÅ¾dy vytvoriÅ¥ zÃ¡loÅ¾nÃº kÃ³piu";
-        Text[ hungarian ] = "~Mindig kÃ©szÃ­tsen biztonsÃ¡gi mÃ¡solatot";
-        Text[ slovenian ] = "Ve~dno ustvari varnostno kopijo";
+        Text [ de ] = "~Sicherungskopie immer erstellen" ;
+        Text [ en-US ] = "Al~ways create backup copy" ;
     };
 
     CheckBox BTN_AUTOSAVE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "~Automatisch speichern alle" ;
-        Text [ English ] = "~Automatic save every" ;
-        Text [ norwegian ] = "~Automatisk lagring etter " ;
-        Text [ italian ] = "~Salva automaticamente ogni" ;
-        Text [ portuguese_brazilian ] = "Salvar ~automaticamente a cada" ;
-        Text [ portuguese ] = "Guardar ~automaticamente cada" ;
-        Text [ finnish ] = "~Automaattinen tallennusväli" ;
-        Text [ danish ] = "~Gem automatisk hvert" ;
-        Text [ french ] = "~Enregistrer automat. toutes les " ;
-        Text [ swedish ] = "Spara automatiskt var" ;
-        Text [ dutch ] = "~Automatisch opslaan alle" ;
-        Text [ spanish ] = "~Guardar automáticamente cada" ;
-        Text [ english_us ] = "~AutoSave every" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨å­˜ç›˜é—´éš”æ—¶é—´(~A)";
-        Text[ russian ] = "Àâòîñîõğàíåíèå êàæäûå";
-        Text[ polish ] = "~Autozapis co";
-        Text[ japanese ] = "è‡ªå‹•çš„ã«ä¿å­˜(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•å„²å­˜é–“éš”æ™‚é–“(~A)";
-        Text[ arabic ] = "ÇáÍİÙ ÊáŞÇÆíÇğ ßá";
-        Text[ greek ] = "Áõôüìáôç áğïèŞêåõóç üëùí";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ ì €ì¥(~A)";
-        Text[ turkish ] = "Otomatik kaydetme sıklığı";
-        Text[ catalan ] = "~Desa automàticament cada";
-        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸—à¸¸à¸à¸„à¸£à¸±à¹‰à¸‡";
-        Text[ czech ] = "UklÃ¡dat kaÅ¾dÃ½ch";
-        Text[ hebrew ] = "â€®×©××™×¨×” ××•×˜×•××˜×™×ª ×‘×›×œâ€¬";
-        Text[ hindi ] = "à¤¸à¥à¤µ~à¤¯à¤‚ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "Ukl~adaÅ¥ kaÅ¾dÃ½ch";
-        Text[ hungarian ] = "~Automatikus mentÃ©s minden";
-        Text[ slovenian ] = "S~amodejno shrani vsake";
+        Text [ de ] = "~Automatisch speichern alle" ;
+        Text [ en-US ] = "~AutoSave every" ;
     };
     NumericField ED_AUTOSAVE
     {
@@ -341,320 +148,75 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 139 , 62 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text = "Minuten" ;
-        Text [ English ] = "minutes" ;
-        Text [ norwegian ] = "...minutter" ;
-        Text [ italian ] = "minuti" ;
-        Text [ portuguese_brazilian ] = "Minutos" ;
-        Text [ portuguese ] = "Minutos" ;
-        Text [ finnish ] = "Pöytäkirja" ;
-        Text [ danish ] = ". minut" ;
-        Text [ french ] = "minutes" ;
-        Text [ swedish ] = "minut" ;
-        Text [ dutch ] = "Minuten" ;
-        Text [ spanish ] = "Minutos" ;
-        Text [ english_us ] = "Minutes" ;
-        Text[ chinese_simplified ] = "åˆ†é’Ÿ";
-        Text[ russian ] = "Ìèíóò(û)";
-        Text[ polish ] = "min";
-        Text[ japanese ] = "åˆ†æ¯ã«è¡Œã†";
-        Text[ chinese_traditional ] = "åˆ†é˜";
-        Text[ arabic ] = "ÏŞÇÆŞ";
-        Text[ greek ] = "ËåğôÜ";
-        Text[ korean ] = "ë¶„";
-        Text[ turkish ] = "Dakikalar";
-        Text[ catalan ] = "Minuts";
-        Text[ thai ] = "à¸™à¸²à¸—à¸µ";
-        Text[ czech ] = "minut";
-        Text[ hebrew ] = "â€®×“×§×•×ªâ€¬";
-        Text[ hindi ] = "à¤®à¤¿à¤¨à¤Ÿà¥‡à¤‚";
-        Text[ slovak ] = "MinÃºty";
-        Text[ hungarian ] = "percben";
-        Text[ slovenian ] = "minut";
+        Text [ de ] = "Minuten" ;
+        Text [ en-US ] = "Minutes" ;
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
         Pos = MAP_APPFONT ( 22 , 74 ) ;
         Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text = "Mit ~Rückfrage" ;
-        Text [ English ] = "~Prompt to save" ;
-        Text [ norwegian ] = "~Anmodning om å lagre" ;
-        Text [ italian ] = "~Richiedi conferma" ;
-        Text [ portuguese_brazilian ] = "~Avisar antes de salvar" ;
-        Text [ portuguese ] = "~Pronta para guardar" ;
-        Text [ finnish ] = "~Kehota tallentamaan" ;
-        Text [ danish ] = "~Spørg før der gemmes" ;
-        Text [ french ] = "Avec confirmation" ;
-        Text [ swedish ] = "Bek~räfta före spara" ;
-        Text [ dutch ] = "~Met bevestiging" ;
-        Text [ spanish ] = "Con c~onsulta" ;
-        Text [ english_us ] = "~Prompt to save" ;
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºè¯¢é—®(~P)";
-        Text[ russian ] = "Çàïğîñ íà ñî~õğàíåíèå";
-        Text[ polish ] = "Mo~nit o zapisanie";
-        Text[ japanese ] = "ç¢ºèªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤º(~P)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºè©¢å•(~P)";
-        Text[ arabic ] = "ÇáãØÇáÈÉ ÈÇáÍİÙ";
-        Text[ greek ] = "Ìå å~ñşôçóç äéåõêñßíéóçò";
-        Text[ korean ] = "ì €ì¥í•  ë•Œ í™•ì¸(~P)";
-        Text[ turkish ] = "Kaydetmek için Önce sor";
-        Text[ catalan ] = "~Pregunta per desar";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸£à¸­à¸£à¸±à¸šà¸„à¹ˆà¸²à¹€à¸à¸·à¹ˆà¸­à¸šà¸±à¸™à¸—à¸¶à¸";
-        Text[ czech ] = "Dotaz pÅ™ed uloÅ¾enÃ­m";
-        Text[ hebrew ] = "â€®×ª×™×–×›×•×¨×ª ×œ×©××•×¨â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ ~à¤‰à¤¤à¥à¤¤à¥‡à¤œà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~PÃ½taÅ¥ sa pred uloÅ¾enÃ­m";
-        Text[ hungarian ] = "~Figyelmeztessen a mentÃ©sre";
-        Text[ slovenian ] = "~Opozori na shranjevanje";
+        Text [ de ] = "Mit ~Rückfrage" ;
+        Text [ en-US ] = "~Prompt to save" ;
     };
 
     CheckBox BTN_NOPRETTYPRINTING
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
-        Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
-        Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
-        Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
-        Text[ russian ] = "Îïòèìèçàöèÿ ğàçìåğà äëÿ ôîğìàòà XML (íåêà÷åñòâåííàÿ ïå÷àòü)";
-        Text[ greek ] = "Âåëôéóôïğïßçóç ìåãİèïõò ãéá ìïñöŞ XML (÷ùñßò pretty printing)";
-        Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
-        Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
-        Text[ spanish ] = "Optimar el tamaño del formato XML (sin 'pretty printing')";
-        Text[ finnish ] = "Koon optimointi ~XML-muodolle (ei siistittyä tulostusta)";
-        Text[ italian ] = "Ottimizza dimensioni del formato XML (senza stampa elegante)";
-        Text[ danish ] = "Optimer størrelse for XML-format (uden Pretty Printing)";
-        Text[ swedish ] = "Storleksoptimering för XML-format (utan snygg utskrift)";
-        Text[ polish ] = "Optymalizacja rozmiaru dla formatu XML (bez ozdobnego wydruku)";
-        Text[ portuguese_brazilian ] = "Tamanho otimizado para formato XML (sem enfeitar impressão)";
-        Text[ japanese ] = "XML å½¢å¼ã§ã‚µã‚¤ã‚ºã‚’æœ€é©åŒ–ã™ã‚‹(pretty printing ãªã—)";
-        Text[ korean ] = "XML íŒŒì¼ìš©ìœ¼ë¡œ í¬ê¸° ìµœì í™” (ê³ ê¸‰ ì¸ì‡„ ì—†ìŒ)";
-        Text[ chinese_simplified ] = "æœ€ä½³åŒ– XML æ ¼å¼çš„å¤§å°(ä¸ä½¿ç”¨ Pretty Printing æŠ€æœ¯)";
-        Text[ chinese_traditional ] = "æœ€ä½³åŒ– XML æ ¼å¼çš„å¤§å°(ä¸ä½¿ç”¨ Pretty Printing æŠ€è¡“)";
-        Text[ turkish ] = "XML formatı için boyut iyileştirmesi yap (güzel yazdırma işlemi yok)";
-        Text[ arabic ] = "Size optimization for XML files (no pretty printing)";
-        Text[ catalan ] = "Optimització de fitxers XML (menys qualitat)";
-        Text[ thai ] = "Size optimization for XML format (no pretty printing)";
-        Text[ czech ] = "Optimalizace na velikost XML formÃ¡tu (nehezkÃ½ tisk)";
-        Text[ hebrew ] = "â€®××•×¤×˜×™××™×–×¦×™×ª ×’×•×“×œ ×¢×‘×•×¨ ×¦×•×¨×ª XML (×œ×œ× ×”×“×¤×¡×” ××¢×•×¦×‘×ª)â€¬";
-        Text[ hindi ] = "XML à¤«à¤¾à¤‡à¤²à¥‹à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤ªà¤°à¤¿à¤®à¤¾à¤£ à¤¯à¥‹à¤—à¥à¤¯ à¤¬à¤¨à¤¾à¤¨à¤¾ (à¤•à¥‹à¤ˆ à¤¸à¥à¤¨à¥à¤¦à¤° à¤›à¤ªà¤¾à¤ˆ à¤¨à¤¹à¥€à¤‚)";
-        Text[ slovak ] = "OptimalizÃ¡cia na veÄ¾kosÅ¥ pre XML formÃ¡t (nepeknÃ¡ tlaÄ)";
-        Text[ hungarian ] = "Az XML formÃ¡tum mÃ©retÃ©nek optimalizÃ¡lÃ¡sa (nincs szÃ©p formÃ¡zÃ¡s)";
-        Text[ slovenian ] = "Optimizacija velikosti za obliko XML (brez posebnega tiskanja)";
+        Text [ de ] = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
+        Text [ en-US ] = "Size optimization for XML format (no pretty printing)" ;
     };
 
     FixedLine GB_RELATIVE
     {
         Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "URLs relativ speichern" ;
-        Text [ English ] = "Save URLs relative" ;
-        Text [ english_us ] = "Save URLs relative to" ;
-        Text [ italian ] = "Salvare URL relativamente" ;
-        Text [ spanish ] = "Guardar URLs relativamente" ;
-        Text [ french ] = "Enregistrement relatif des URL" ;
-        Text [ dutch ] = "URL's relatief opslaan" ;
-        Text [ swedish ] = "Spara URL:er relativt" ;
-        Text [ danish ] = "Gem URL'er relativt til" ;
-        Text [ portuguese_brazilian ] = "Salvar URLs relativas a" ;
-        Text [ portuguese ] = "Guardar URLs relativamente" ;
-        Text[ chinese_simplified ] = "å­˜ç›˜ç›¸å¯¹çš„URLåœ°å€";
-        Text[ russian ] = "Ñîõğàíÿòü URL îòíîñèòåëüíî";
-        Text[ polish ] = "Zapisz adresy URL w sposób relatywny";
-        Text[ japanese ] = "URL ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ç›¸å¯¾ä¿å­˜";
-        Text[ chinese_traditional ] = "å„²å­˜ç›¸å°å¼ URL åœ°å€";
-        Text[ arabic ] = "ÍİÙ ÇáÜ URLs ÍİÙÇğ äÓÈíÇğ İí";
-        Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç ôùí URL";
-        Text[ korean ] = "URLì„ ë‹¤ìŒ ê¸°ì¤€ìœ¼ë¡œ ì €ì¥";
-        Text[ turkish ] = "Bağlantılı URL'yi kaydet";
-        Text[ finnish ] = "URL-osoitteen tallennus suhteessa kohteeseen";
-        Text[ catalan ] = "Desa els URL relatius a";
-        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸ URL à¸ªà¸±à¸¡à¸à¸±à¸—à¸˜à¹Œà¸à¸±à¸š";
-        Text[ czech ] = "UloÅ¾it URL odkazy relativnÄ› k";
-        Text[ hebrew ] = "â€®×©××™×¨×ª URL ×™× ×™×—×¡×™×ª ×œ â€¬";
-        Text[ hindi ] = "à¤¸à¥‡ à¤¸à¤‚à¤¬à¤¨à¥à¤§à¤¿à¤¤ URL à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "UloÅ¾iÅ¥ URL odkazy relatÃ­vne k";
-        Text[ hungarian ] = "Az URL-ek relatÃ­v mentÃ©se";
-        Text[ slovenian ] = "Shrani URL-je glede na";
+        Text [ de ] = "URLs relativ speichern" ;
+        Text [ en-US ] = "Save URLs relative to" ;
     };
     CheckBox BTN_RELATIVE_FSYS
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text = "im Da~teisystem" ;
-        Text [ English ] = "on ~filesystem" ;
-        Text [ english_us ] = "~File system" ;
-        Text [ dutch ] = "~naar bestandssysteem" ;
-        Text [ italian ] = "Al file sys~tem" ;
-        Text [ spanish ] = "~En el sistema de archivos" ;
-        Text [ french ] = "~Système de fichiers" ;
+        Text [ de ] = "im Da~teisystem" ;
+        Text [ en-US ] = "~File system" ;
         TabStop = TRUE ;
-        Text [ swedish ] = "i fils~ystem" ;
-        Text [ danish ] = "~Filsystem" ;
-        Text [ portuguese_brazilian ] = "Sistema de a~rquivo" ;
-        Text [ portuguese ] = "No sistema de ~ficheiros" ;
-        Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶ç³»ç»Ÿå†…(~F)";
-        Text[ russian ] = "Ôàéëîâàÿ ñèñòåìà";
-        Text[ polish ] = "Sys~tem plików";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ (~F)";
-        Text[ chinese_traditional ] = "åœ¨æª”æ¡ˆç³»çµ±å…§(~F)";
-        Text[ arabic ] = "äÙÇã Çáãáİ";
-        Text[ greek ] = "óôï óıóôçìá áñ÷åßùí";
-        Text[ korean ] = "íŒŒì¼ ì‹œìŠ¤í…œ(~F)";
-        Text[ language_user1 ] = "; LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
-        Text[ turkish ] = "Dosya sistemi";
-        Text[ finnish ] = "~Tiedostojärjestelmä";
-        Text[ catalan ] = "Sistema de ~fitxers";
-        Text[ thai ] = "à¸£à¸°à¸šà¸šà¹~à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "souborovÃ©mu systÃ©mu";
-        Text[ hebrew ] = "â€®××¢×¨×›×ª ×§×‘×¦×™×â€¬";
-        Text[ hindi ] = "~à¤«à¤¾à¤‡à¤² à¤¸à¤¿à¤¸à¥à¤Ÿà¤®";
-        Text[ slovak ] = "~SÃºborovÃ©mu systÃ©mu";
-        Text[ hungarian ] = "a fÃ¡jl~rendszerhez kÃ©pest";
-        Text[ slovenian ] = "~DatoteÄni sistem";
+        Text [ x-comment ] = "; LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
     };
     CheckBox BTN_RELATIVE_INET
     {
         Pos = MAP_APPFONT ( 136 , 110 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "im Int~ernet" ;
-        Text [ English ] = "~Internet" ;
-        Text [ english_us ] = "~Internet" ;
-        Text [ italian ] = "A Internet" ;
-        Text [ spanish ] = "En ~Internet" ;
-        Text [ french ] = "Sur ~Internet" ;
-        Text [ dutch ] = "~in Internet" ;
-        Text [ swedish ] = "på Int~ernet" ;
-        Text [ danish ] = "~Internet" ;
-        Text [ portuguese_brazilian ] = "Int~ernet" ;
-        Text [ portuguese ] = "Na Int~ernet" ;
-        Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…(~I)";
-        Text[ russian ] = "Èíòåğíåò";
-        Text[ polish ] = "~Internet";
-        Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆ(~I)";
-        Text[ chinese_traditional ] = "~Internet";
-        Text[ arabic ] = "ÇáÅäÊÑäÊ";
-        Text[ greek ] = "óôï Internet";
-        Text[ korean ] = "ì¸í„°ë„·(~I)";
-        Text[ turkish ] = "İnternet";
-        Text[ finnish ] = "~Internet";
-        Text[ catalan ] = "~Internet";
-        Text[ thai ] = "~à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•";
-        Text[ czech ] = "Internetu";
-        Text[ hebrew ] = "â€®××™× ×˜×¨× ×˜â€¬";
-        Text[ hindi ] = "~à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥";
-        Text[ slovak ] = "~Internetu";
-        Text[ hungarian ] = "az ~internethez kÃ©pest";
-        Text[ slovenian ] = "~Internet";
+        Text [ de ] = "im Int~ernet" ;
+        Text [ en-US ] = "~Internet" ;
     };
     FixedLine FL_FILTER
     {
         Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Standard Dateiformat" ;
-        Text [ English ] = "Standard file format" ;
-        Text[ english_us ] = "Standard file format";
-        Text[ portuguese ] = "Formato de ficheiro padrão";
-        Text[ russian ] = "Ôîğìàò ôàéëà ïî óìîë÷àíèş";
-        Text[ greek ] = "ÂáóéêŞ ìïñöŞ áñ÷åßïõ";
-        Text[ dutch ] = "Standaardbestandsindeling";
-        Text[ french ] = "Format de fichier standard";
-        Text[ spanish ] = "Formato de archivo predeterminado";
-        Text[ italian ] = "Formato file standard";
-        Text[ danish ] = "Standardfilformat";
-        Text[ swedish ] = "Standardfilformat";
-        Text[ polish ] = "Standardowy format pliku";
-        Text[ portuguese_brazilian ] = "Formato de arquivo padrão";
-        Text[ japanese ] = "æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ«å½¢å¼";
-        Text[ korean ] = "í‘œì¤€ íŒŒì¼ í˜•ì‹";
-        Text[ chinese_simplified ] = "æ ‡å‡†æ–‡ä»¶æ ¼å¼";
-        Text[ chinese_traditional ] = "æ¨™æº–æª”æ¡ˆæ ¼å¼";
-        Text[ turkish ] = "Standart dosya formatı";
-        Text[ arabic ] = "Standard file format";
-        Text[ finnish ] = "Vakiotiedostomuoto";
-        Text[ catalan ] = "Format de fitxer estàndard";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
-        Text[ czech ] = "StandardnÃ­ formÃ¡t souboru";
-        Text[ hebrew ] = "â€®×¦×•×¨×ª ×§×•×‘×¥ ×¨×’×™×œâ€¬";
-        Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡ à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "Å tandardnÃ½ formÃ¡t sÃºboru";
-        Text[ hungarian ] = "AlapÃ©rtelmezett fÃ¡jlformÃ¡tum";
-        Text[ slovenian ] = "Standardna oblika zapisa datoteke";
+        Text [ de ] = "Standard Dateiformat" ;
+        Text [ en-US ] = "Standard file format";
     };
     FixedText FT_APP
     {
         Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text = "~Dokumenttyp" ;
-        Text [ English ] = "Document type" ;
-        Text[ english_us ] = "D~ocument type";
-        Text[ portuguese ] = "~Tipo de documento";
-        Text[ russian ] = "Òèï äîêóìåíòà";
-        Text[ greek ] = "~Ôığïò åããñÜöïõ";
-        Text[ dutch ] = "~Documenttype";
-        Text[ french ] = "Type de document";
-        Text[ spanish ] = "Tipo de documento";
-        Text[ finnish ] = "Asiakir~jan tyyppi";
-        Text[ italian ] = "Tipo documento";
-        Text[ danish ] = "~Dokumenttype";
-        Text[ swedish ] = "~Dokumenttyp";
-        Text[ polish ] = "Ty~p dokumentu";
-        Text[ portuguese_brazilian ] = "Tipo de d~ocumento";
-        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ç¨®é¡(~O)";
-        Text[ korean ] = "ë¬¸ì„œ ìœ í˜•(~O)";
-        Text[ chinese_simplified ] = "æ–‡æ¡£ç±»å‹(~O)";
-        Text[ chinese_traditional ] = "æ–‡ä»¶é¡å‹(~O)";
-        Text[ turkish ] = "Belge tipi";
-        Text[ arabic ] = "Document";
-        Text[ catalan ] = "Tipus de document";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”à¹€à¸­~à¸à¸ªà¸²à¸£";
-        Text[ czech ] = "Typ dokumentu";
-        Text[ hebrew ] = "â€®×¡×•×’ ××¡××šâ€¬";
-        Text[ hindi ] = "à¤²à¥‡~à¤–à¤ªà¤¤à¥à¤° à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ d~okumentu";
-        Text[ hungarian ] = "Dokumentum ~tÃ­pusa";
-        Text[ slovenian ] = "Vrsta d~okumenta";
+        Text [ de ] = "~Dokumenttyp" ;
+        Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
         Pos = MAP_APPFONT ( 136 , 137 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text = "Immer spei~chern als" ;
-        Text [ English ] = "Always save as" ;
-        Text[ english_us ] = "Always sa~ve as";
-        Text[ portuguese ] = "G~uardar sempre como";
-        Text[ russian ] = "Âñåãäà ñîõğàíÿòü êàê";
-        Text[ greek ] = "ĞÜíôá á~ğïèŞêåõóç ùò";
-        Text[ dutch ] = "Altijd op~slaan als";
-        Text[ french ] = "Enregistrer systématiquement comme";
-        Text[ spanish ] = "Guardar siempre como";
-        Text[ finnish ] = "~Vakiotallennusmuoto";
-        Text[ italian ] = "Salva sempre come";
-        Text[ danish ] = "Gem altid ~som";
-        Text[ swedish ] = "Spara alltid s~om";
-        Text[ polish ] = "Zawsze zapisuj jako";
-        Text[ portuguese_brazilian ] = "Sempre sal~var como";
-        Text[ japanese ] = "å¸¸ã«æ¬¡ã®å½¢å¼ã§ä¿å­˜(~V)";
-        Text[ korean ] = "í•­ìƒ ë‹¤ìŒ í˜•ì‹ìœ¼ë¡œ ì €ì¥(~V)";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨ä¿å­˜ä¸º(~V)";
-        Text[ chinese_traditional ] = "è‡ªå‹•å¦å­˜ç‚º(~V)";
-        Text[ turkish ] = "Herzaman farklı kaydet";
-        Text[ arabic ] = "File formats";
-        Text[ catalan ] = "Sempre desa com a";
-        Text[ thai ] = "à¸šà¸±à¸™~à¸—à¸¶à¸à¹€à¸›à¹‡à¸™à¹€à¸ªà¸¡à¸­";
-        Text[ czech ] = "VÅ¾dy uklÃ¡dat jako";
-        Text[ hebrew ] = "â€®×œ×©××•×¨ ×ª××™×“ ×›â€¬";
-        Text[ hindi ] = "à¤¹à¤®à¥‡à¤¶à¤¾ à¤¸à¤‚à¤šà¤¿à¤¤ ~à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡";
-        Text[ slovak ] = "~VÅ¾dy ukladaÅ¥ ako";
-        Text[ hungarian ] = "Mi~ndig az alÃ¡bbi formÃ¡tumban mentse:";
-        Text[ slovenian ] = "Vedno s~hrani kot";
+        Text [ de ] = "Immer spei~chern als" ;
+        Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
     {
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 108 , 32 ) ;
         Border = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             < "Textdokument" ;     APP_WRITER    ; > ;
             < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
@@ -663,16 +225,7 @@ TabPage RID_SFXPAGE_SAVE
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
         };
-        StringList [English] =
-        {
-            < "Text document" ; APP_WRITER    ;> ;
-            < "HTML Document" ; APP_WRITER_WEB;> ;
-            < "Spreadsheet" ;   APP_CALC      ;> ;
-            < "Presentation" ;  APP_IMPRESS   ;> ;
-            < "Drawing" ;       APP_DRAW      ;> ;
-            < "Formula" ;       APP_MATH      ;> ;
-        };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < "; Textdokument" ;     APP_WRITER    ; > ;
         < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
@@ -681,7 +234,7 @@ TabPage RID_SFXPAGE_SAVE
         < "; Zeichnung" ;        APP_DRAW      ; > ;
         < "; Formel" ;           APP_MATH      ; > ;
         };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
             < "Text document" ;     APP_WRITER    ; > ;
         < "HTML document" ;    APP_WRITER_WEB;  > ;
@@ -689,240 +242,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentation" ;     APP_IMPRESS   ; > ;
         < "Drawing" ;        APP_DRAW      ; > ;
         < "Formula" ;           APP_MATH      ; > ;
-        };
-    StringList [ portuguese ] =
-    {
-            < "Documento de texto" ;     APP_WRITER    ; > ;
-        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
-        < "Folha de cálculo" ; APP_CALC      ; > ;
-        < "Apresentação" ;     APP_IMPRESS   ; > ;
-        < "Desenho" ;        APP_DRAW      ; > ;
-        < "Fórmula" ;           APP_MATH      ; > ;
-        };
-    StringList [ russian ] =
-    {
-            < "Òåêñòîâûé äîêóìåíò" ;     APP_WRITER    ; > ;
-        < "Âåá-ñòğàíèöà" ;    APP_WRITER_WEB;  > ;
-        < "İëåêòğîííàÿ òàáëèöà" ; APP_CALC      ; > ;
-        < "Ïğåçåíòàöèÿ" ;     APP_IMPRESS   ; > ;
-        < "Ğèñóíîê" ;        APP_DRAW      ; > ;
-        < "Ôîğìóëà" ;           APP_MATH      ; > ;
-        };
-    StringList [ greek ] =
-    {
-            < "¸ããñáöï êåéìİíïõ" ;     APP_WRITER    ; > ;
-        < "¸ããñáöï HTML" ;    APP_WRITER_WEB;  > ;
-        < "Õğïëïãéóôéêü öıëëï " ; APP_CALC      ; > ;
-        < "Ğáñïõóßáóç" ;     APP_IMPRESS   ; > ;
-        < "Ó÷İäéï" ;        APP_DRAW      ; > ;
-        < "Ôığïò" ;           APP_MATH      ; > ;
-        };
-    StringList [ dutch ] =
-    {
-            < "Tekstdocument" ;     APP_WRITER    ; > ;
-        < "HTML-document" ;    APP_WRITER_WEB;  > ;
-        < "Werkbladdocument" ; APP_CALC      ; > ;
-        < "Presentatie" ;     APP_IMPRESS   ; > ;
-        < "Tekening" ;        APP_DRAW      ; > ;
-        < "Formule" ;           APP_MATH      ; > ;
-        };
-    StringList [ french ] =
-    {
-            < "Document texte" ;     APP_WRITER    ; > ;
-        < "Document HTML" ;    APP_WRITER_WEB;  > ;
-        < "Classeur" ; APP_CALC      ; > ;
-        < "Présentation" ;     APP_IMPRESS   ; > ;
-        < "Dessin" ;        APP_DRAW      ; > ;
-        < "Formule" ;           APP_MATH      ; > ;
-        };
-    StringList [ spanish ] =
-    {
-            < "Documento de texto" ;     APP_WRITER    ; > ;
-        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
-        < "Hoja de cálculo" ; APP_CALC      ; > ;
-        < "Presentación" ;     APP_IMPRESS   ; > ;
-        < "Dibujo" ;        APP_DRAW      ; > ;
-        < "Fórmula" ;           APP_MATH      ; > ;
-        };
-    StringList [ finnish ] =
-    {
-            < "Tekstiasiakirja" ;     APP_WRITER    ; > ;
-        < "HTML-asiakirja" ;    APP_WRITER_WEB;  > ;
-        < "Laskentataulukko" ; APP_CALC      ; > ;
-        < "Diaesitys" ;     APP_IMPRESS   ; > ;
-        < "Piirros" ;        APP_DRAW      ; > ;
-        < "Kaava" ;           APP_MATH      ; > ;
-        };
-    StringList [ italian ] =
-    {
-            < "Documento di testo" ;     APP_WRITER    ; > ;
-        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
-        < "Foglio elettronico" ; APP_CALC      ; > ;
-        < "Presentazione" ;     APP_IMPRESS   ; > ;
-        < "Disegno" ;        APP_DRAW      ; > ;
-        < "Formula" ;           APP_MATH      ; > ;
-        };
-    StringList [ danish ] =
-    {
-            < "Tekstdokument" ;     APP_WRITER    ; > ;
-        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
-        < "Regneark" ; APP_CALC      ; > ;
-        < "Præsentation" ;     APP_IMPRESS   ; > ;
-        < "Tegning" ;        APP_DRAW      ; > ;
-        < "Formel" ;           APP_MATH      ; > ;
-        };
-    StringList [ swedish ] =
-    {
-            < "Textdokument" ;     APP_WRITER    ; > ;
-        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
-        < "Tabelldokument" ; APP_CALC      ; > ;
-        < "Presentation" ;     APP_IMPRESS   ; > ;
-        < "Teckning" ;        APP_DRAW      ; > ;
-        < "Formel" ;           APP_MATH      ; > ;
-        };
-    StringList [ polish ] =
-    {
-            < "Dokument tekstowy" ;     APP_WRITER    ; > ;
-        < "Dokument HTML" ;    APP_WRITER_WEB;  > ;
-        < "Arkusz kalkulacyjny" ; APP_CALC      ; > ;
-        < "Prezentacja" ;     APP_IMPRESS   ; > ;
-        < "Rysunek" ;        APP_DRAW      ; > ;
-        < "Formu³a" ;           APP_MATH      ; > ;
-        };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Documento de texto" ;     APP_WRITER    ; > ;
-        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
-        < "Planilha" ; APP_CALC      ; > ;
-        < "Apresentação" ;     APP_IMPRESS   ; > ;
-        < "Desenho" ;        APP_DRAW      ; > ;
-        < "Fórmula" ;           APP_MATH      ; > ;
-        };
-    StringList [ japanese ] =
-    {
-            < "æ–‡æ›¸ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ;     APP_WRITER    ; > ;
-        < "HTML å½¢å¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ;    APP_WRITER_WEB;  > ;
-        < "è¡¨è¨ˆç®—ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ; APP_CALC      ; > ;
-        < "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³" ;     APP_IMPRESS   ; > ;
-        < "å›³å½¢æç”»" ;        APP_DRAW      ; > ;
-        < "æ•°å¼" ;           APP_MATH      ; > ;
-        };
-    StringList [ korean ] =
-    {
-            < "í…ìŠ¤íŠ¸ ë¬¸ì„œ" ;     APP_WRITER    ; > ;
-        < "HTML ë¬¸ì„œ" ;    APP_WRITER_WEB;  > ;
-        < "ìŠ¤í”„ë ˆë“œì‹œíŠ¸" ; APP_CALC      ; > ;
-        < "í”„ë ˆì  í…Œì´ì…˜" ;     APP_IMPRESS   ; > ;
-        < "ê·¸ë¦¬ê¸°" ;        APP_DRAW      ; > ;
-        < "ìˆ˜ì‹" ;           APP_MATH      ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "æ–‡æœ¬æ–‡æ¡£" ;     APP_WRITER    ; > ;
-        < "HTML æ–‡æ¡£" ;    APP_WRITER_WEB;  > ;
-        < "å·¥ä½œè¡¨æ–‡æ¡£" ; APP_CALC      ; > ;
-        < "æ¼”ç¤ºæ–‡ç¨¿" ;     APP_IMPRESS   ; > ;
-        < "ç»˜å›¾" ;        APP_DRAW      ; > ;
-        < "å…¬å¼" ;           APP_MATH      ; > ;
-        };
-    StringList [ chinese_traditional ] =
-    {
-            < "æ–‡å­—æ–‡ä»¶" ;     APP_WRITER    ; > ;
-        < "HTML æ–‡ä»¶" ;    APP_WRITER_WEB;  > ;
-        < "å·¥ä½œè¡¨æ–‡ä»¶" ; APP_CALC      ; > ;
-        < "ç°¡å ±" ;     APP_IMPRESS   ; > ;
-        < "ç¹ªåœ–" ;        APP_DRAW      ; > ;
-        < "å…¬å¼" ;           APP_MATH      ; > ;
-        };
-    StringList [ turkish ] =
-    {
-            < "Metin belgesi" ;     APP_WRITER    ; > ;
-        < "HTML belgesi" ;    APP_WRITER_WEB;  > ;
-        < "Hesap Çizelgesi" ; APP_CALC      ; > ;
-        < "Sunu" ;     APP_IMPRESS   ; > ;
-        < "Çizim" ;        APP_DRAW      ; > ;
-        < "Formül" ;           APP_MATH      ; > ;
-        };
-    StringList [ arabic ] =
-    {
-            < "ãÓÊäÏ äÕ" ;     APP_WRITER    ; > ;
-        < "HTML ãÓÊäÏ" ;    APP_WRITER_WEB;  > ;
-        < "ãÓÊäÏ ÌÏæá" ; APP_CALC      ; > ;
-        < "ÚÑÖ ÊŞÏíãí" ;     APP_IMPRESS   ; > ;
-        < "ÑÓã" ;        APP_DRAW      ; > ;
-        < "ÕíÛÉ" ;           APP_MATH      ; > ;
-        };
-    StringList [ catalan ] =
-    {
-            < "Document de text" ;     APP_WRITER    ; > ;
-        < "Document HTML" ;    APP_WRITER_WEB;  > ;
-        < "Full de càlcul" ; APP_CALC      ; > ;
-        < "Presentació" ;     APP_IMPRESS   ; > ;
-        < "Dibuix" ;        APP_DRAW      ; > ;
-        < "Fórmula" ;           APP_MATH      ; > ;
-        };
-    StringList [ thai ] =
-    {
-         < "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡" ;     APP_WRITER    ; > ;
-        < "à¹€à¸­à¸à¸ªà¸²à¸£ HTML" ;    APP_WRITER_WEB;  > ;
-        < "à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“" ; APP_CALC      ; > ;
-        < "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ;     APP_IMPRESS   ; > ;
-        < "à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›" ;        APP_DRAW      ; > ;
-        < "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“" ;           APP_MATH      ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "TextovÃ½ dokument" ;     APP_WRITER    ; > ;
-        < "HTML dokument" ;    APP_WRITER_WEB;  > ;
-        < "SeÅ¡it" ; APP_CALC      ; > ;
-        < "Prezentace" ;     APP_IMPRESS   ; > ;
-        < "Kresba" ;        APP_DRAW      ; > ;
-        < "Vzorec" ;           APP_MATH      ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®××¡××š ×˜×§×¡×˜â€¬" ;     APP_WRITER    ; > ;
-        < "â€®××¡××š LMTHâ€¬" ;    APP_WRITER_WEB;  > ;
-        < "â€®×’×œ×™×•×Ÿ ××œ×§×˜×¨×•× ×™â€¬" ; APP_CALC      ; > ;
-        < "â€®××¦×’×ªâ€¬" ;     APP_IMPRESS   ; > ;
-        < "â€®×¡×¨×˜×•×˜â€¬" ;        APP_DRAW      ; > ;
-        < "â€®× ×•×¡×—×”â€¬" ;           APP_MATH      ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°" ;     APP_WRITER    ; > ;
-        < "HTML-à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°" ;    APP_WRITER_WEB;  > ;
-        < "à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥" ; APP_CALC      ; > ;
-        < "à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿" ;     APP_IMPRESS   ; > ;
-        < "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°" ;        APP_DRAW      ; > ;
-        < "à¤¸à¥‚à¤¤à¥à¤°" ;           APP_MATH      ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "TextovÃ½ dokument" ;     APP_WRITER    ; > ;
-        < "HTML dokument" ;    APP_WRITER_WEB;  > ;
-        < "ZoÅ¡it" ; APP_CALC      ; > ;
-        < "PrezentÃ¡cia" ;     APP_IMPRESS   ; > ;
-        < "Kresba" ;        APP_DRAW      ; > ;
-        < "Vzorec" ;           APP_MATH      ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "SzÃ¶veges dokumentum" ;     APP_WRITER    ; > ;
-        < "HTML-dokumentum" ;    APP_WRITER_WEB;  > ;
-            < "MunkafÃ¼zet" ; APP_CALC      ; > ;
-            < "BemutatÃ³" ;     APP_IMPRESS   ; > ;
-            < "Rajz" ;        APP_DRAW      ; > ;
-            < "KÃ©plet" ;           APP_MATH      ; > ;
-        };
-    StringList [ slovenian ] =
-    {
-         < "Dokument z besedilom" ;     APP_WRITER    ; > ;
-        < "HTML dokument" ;    APP_WRITER_WEB;  > ;
-            < "Preglednica" ; APP_CALC      ; > ;
-            < "Predstavitev" ;     APP_IMPRESS   ; > ;
-            < "Risba" ;        APP_DRAW      ; > ;
-            < "Formula" ;           APP_MATH      ; > ;
         };
     };
     FixedImage FI_FILTER
@@ -961,46 +280,10 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 9 );
         Wordbreak = TRUE;
-        Text = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
+        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
         "Sollen die Dateiformatänderungen übernommen werden?" ;
-        Text [ English ] = "Saving with \"%1\" may cause information loss.\n"\
-        "Should the changes be applied?" ;
-        Text[ english_us ] = "Using \"%1\" as default file format may cause information loss.\n";
-        Text[ portuguese ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ russian ] = "Èñïîëüçîâàíèå \"%1\" â êà÷åñòâå ôîğìàòà ôàéëà ìîæåò ïğèâåñòè ê ïîòåğå èíôîğìàöèè.\n";
-        Text[ greek ] = "Ç ÷ñŞóç ôïõ \"%1\" ùò ğñïåğéëåãìİíç ìïñöŞ áñ÷åßïõ ìğïñåß íá ğñïêáëİóåé áğşëåéá ğëçñïöïñßáò.\n";
-        Text[ dutch ] = "Het gebruik van \"%1\" als standaardbestandsindeling kan leiden tot verlies van gegevens.\n";
-        Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
-        Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pérdida de información.\n";
-        Text[ finnish ] = "Jos oletustiedostomuotona käytetään muotoa \"%1\", tietoja voi hävitä.\n";
-        Text[ italian ] = "L'uso di \"%1\" quale formato standard può causare la perdita di dati.\n";
-        Text[ danish ] = "Brug af \"%1\" som standard filformat kan medføre informationstab.\n";
-        Text[ swedish ] = "Att använda \"%1\" som standardfilformat kan leda till att information går förlorad.\n";
-        Text[ polish ] = "U¿ycie \"%1\" jako domyœlnego formatu plików mo¿e skutkowaæ utrat¹ informacji.\n";
-        Text[ portuguese_brazilian ] = "Usar '%1' como formato de arquivo padrão pode causar perda de informações.\n";
-        Text[ japanese ] = "\"%1\" ã‚’æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨ã€æƒ…å ±ãŒå¤±ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n";
-        Text[ korean ] = "\"%1\"ì„(ë¥¼) ê¸°ë³¸ íŒŒì¼ í˜•ì‹ìœ¼ë¡œ ì‚¬ìš©í•˜ë©´ ì •ë³´ë¥¼ ì†ì‹¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n";
-        Text[ chinese_simplified ] = "å°† \"%1\" å½“æˆæ ‡å‡†æ–‡ä»¶æ ¼å¼æ¥å­˜ç›˜æ–‡ä»¶å¯èƒ½ä¼šå¼•èµ·æ•°æ®æµå¤±ã€‚\n";
-        Text[ chinese_traditional ] = "å°‡ \"%1\" ç•¶æˆæ¨™æº–æª”æ¡ˆæ ¼å¼ä¾†å„²å­˜æ–‡ä»¶å¯èƒ½æœƒå¼•èµ·è³‡æ–™æµå¤±ã€‚\n";
-        Text[ turkish ] = "Varsayılan dosya formatı olarak \"%1\" kullanmak, bilgi kaybına yolaçabilir.\n";
-        Text[ arabic ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ catalan ] = "Desant-lo com a \"%1\" pot provocar pèrdues d'informació.\n";
-        Text[ thai ] = "Using \"%1\" as default file format may cause information loss.\n";
-        Text[ czech ] = "PouÅ¾itÃ­ \"%1\" jako vÃ½chozÃ­ho formÃ¡tu souboru mÅ¯Å¾e zpÅ¯sobit ztrÃ¡tu informace.\n";
-        Text[ hebrew ] = "â€®×™×ª×›×Ÿ ×©×©×™××•×© ×‘ \"%1\" ×›×¦×•×¨×ª ×§×•×‘×¥ ×‘×¨×™×¨×ª ×”××—×“×œ ×™×’×¨×•× ×œ××•×‘×“×Ÿ × ×ª×•× ×™×.\nâ€¬";
-        Text[ hindi ] = "Using \"%1\" as default file format may cause information loss.\n";
-        Text[ slovak ] = "PouÅ¾itie \"%1\" ako vÃ½chodzieho formÃ¡tu sÃºboru mÃ´Å¾e spÃ´sobiÅ¥ stratu informÃ¡ciÃ­.\n";
-        Text[ hungarian ] = "A \"%1\" hasznÃ¡lata alapÃ©rtelmezett fÃ¡jlformÃ¡tumkÃ©nt informÃ¡ciÃ³vesztÃ©shez vezethet.\n";
-        Text[ slovenian ] = "Uporabljanje \"%1\" kot privzeto obliko zapisa datoteke lahko povzroÄi izgubo informacij.\n";
+        Text [ en-US ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
-/*    CheckBox CB_DONT_SHOW_AGAIN
-    {
-        Pos = MAP_APPFONT( 39, (4 * 9) + 9 );
-        Size = MAP_APPFONT( 175, 12 );
-        Text = "~Diese Warnung nicht mehr anzeigen" ;
-        Text [ English ] = "~Don't show this warning again." ;
-    };
-*/
     OKButton PB_OK
     {
         Pos = MAP_APPFONT( 60, (4 * 9)/*+ 12*/ + 13 );
