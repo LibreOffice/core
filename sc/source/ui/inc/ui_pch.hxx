@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:25:43 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,6 @@
 #include <scitems.hxx>
 #include <vcl/virdev.hxx>
 #include <globstr.hrc>
-#include <segmentc.hxx>
 #include <tcov.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/gdimtf.hxx>
