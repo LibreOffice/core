@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-08-23 14:47:22 $
+#   last change: $Author: fs $ $Date: 2001-08-23 16:12:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ EXCEPTIONSFILES=\
 
 SLOFILES=	\
         $(EXCEPTIONSFILES)				\
+        $(SLO)$/urlcontrol.obj			\
         $(SLO)$/SqlNameEdit.obj			\
         $(SLO)$/listviewitems.obj		\
         $(SLO)$/undosqledit.obj			\
