@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:15:21 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error de sintaxis" ;
         Text [ danish ] = "Syntaksfejl" ;
         Text [ swedish ] = "Syntaxfel" ;
-        Text [ finnish ] = "Syntax error" ;
+        Text [ finnish ] = "Syntaksivirhe" ;
         Text [ english_us ] = "Syntax error" ;
         Text[ chinese_simplified ] = "Уп·ЁґнОу";
         Text[ russian ] = "Синтаксическая ошибка";
@@ -109,7 +109,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Retorno sin Gosub" ;
         Text [ danish ] = "Return uden Gosub" ;
         Text [ swedish ] = "Return utan Gosub" ;
-        Text [ finnish ] = "Return without Gosub" ;
+        Text [ finnish ] = "Takaisin ilman Gosub-komentoa" ;
         Text [ english_us ] = "Return without Gosub" ;
         Text[ chinese_simplified ] = "Return І»ґш Gosub";
         Text[ russian ] = "Возврат без Gosub";
@@ -138,7 +138,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Entrada incorrecta. Intйntelo otra vez" ;
         Text [ danish ] = "Forkert input, gentag venligst" ;
         Text [ swedish ] = "Felaktig inmatning, var vдnlig upprepa" ;
-        Text [ finnish ] = "Incorrect data, please retry" ;
+        Text [ finnish ] = "Virheellinen merkintд; yritд uudelleen" ;
         Text [ english_us ] = "Incorrect entry; please retry" ;
         Text[ chinese_simplified ] = "КдИлОЮР§Ј¬ЗлЦШёґЎЈ";
         Text[ russian ] = "Неправильный ввод данных, прожалуйста, повторите";
@@ -168,7 +168,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Inicio del proceso no vбlido" ;
         Text [ danish ] = "Ugyldigt procedurekald" ;
         Text [ swedish ] = "Ogiltigt proceduranrop" ;
-        Text [ finnish ] = "Invalid procedure call" ;
+        Text [ finnish ] = "Virheellinen toimintokutsu" ;
         Text [ english_us ] = "Invalid procedure call" ;
         Text[ chinese_simplified ] = "ОЮР§µДµчУГ№эіМ";
         Text[ russian ] = "Недействительный вызов процедуры";
@@ -198,7 +198,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Desbordamiento" ;
         Text [ danish ] = "Overlшb" ;
         Text [ swedish ] = "Spill" ;
-        Text [ finnish ] = "Overflow" ;
+        Text [ finnish ] = "Ylivuoto" ;
         Text [ english_us ] = "Overflow" ;
         Text[ chinese_simplified ] = "ТзЦµ";
         Text[ russian ] = "Переполнение";
@@ -228,7 +228,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No hay memoria suficiente" ;
         Text [ danish ] = "Ikke tilstrжkkelig hukommelse" ;
         Text [ swedish ] = "Inte tillrдckligt med minne" ;
-        Text [ finnish ] = "Out of memory" ;
+        Text [ finnish ] = "Ei tarpeeksi muistia" ;
         Text [ english_us ] = "Not enough memory" ;
         Text[ chinese_simplified ] = "ДЪґжІ»Чг";
         Text[ russian ] = "Недостаточно памяти";
@@ -257,7 +257,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Array ya dimensionado" ;
         Text [ danish ] = "Array er allerede dimensioneret" ;
         Text [ swedish ] = "Array redan dimensionerad" ;
-        Text [ finnish ] = "Array already dimensioned" ;
+        Text [ finnish ] = "Matriisitaulukon ulottuvuudet on jo mддritetty" ;
         Text [ english_us ] = "Array already dimensioned" ;
         Text[ chinese_simplified ] = "КэЧйТСѕ­±»¶ЁіЯ¶И";
         Text[ russian ] = "Размерность массива уже задана";
@@ -287,7 +287,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El нndice se encuentra fuera del бrea definida" ;
         Text [ danish ] = "Indeks udenfor det definerede omrеde" ;
         Text [ swedish ] = "Index utanfцr definierat omrеde" ;
-        Text [ finnish ] = "Subscript out of range" ;
+        Text [ finnish ] = "Hakemisto mддritetyn alueen ulkopuolella" ;
         Text [ english_us ] = "Index out of defined range" ;
         Text[ chinese_simplified ] = "¶ЁТе·¶О§Ц®НвµДЛчТэ";
         Text[ russian ] = "Индекс за пределами определенной области";
@@ -316,7 +316,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La definiciуn existe dos veces" ;
         Text [ danish ] = "Dobbelt foreliggende definition" ;
         Text [ swedish ] = "Dubbelt fцrekommande definition" ;
-        Text [ finnish ] = "Duplicate definition" ;
+        Text [ finnish ] = "Kopioi mддritelmд" ;
         Text [ english_us ] = "Duplicate definition" ;
         Text[ chinese_simplified ] = "ґжФЪЛ«ЦШ¶ЁТе";
         Text[ russian ] = "Двойное определение";
@@ -345,7 +345,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Divisiуn por cero" ;
         Text [ danish ] = "Divider med nul" ;
         Text [ swedish ] = "Division med noll" ;
-        Text [ finnish ] = "Division by zero" ;
+        Text [ finnish ] = "Jako nollalla" ;
         Text [ english_us ] = "Division by zero" ;
         Text[ chinese_simplified ] = "іэУЪБг";
         Text[ russian ] = "Деление на ноль";
@@ -374,7 +374,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Variable no definida" ;
         Text [ danish ] = "Variablen er ikke defineret" ;
         Text [ swedish ] = "Variabel inte definierad" ;
-        Text [ finnish ] = "Variable not defined" ;
+        Text [ finnish ] = "Muuttujaa ei mддritetty" ;
         Text [ english_us ] = "Variable not defined" ;
         Text[ chinese_simplified ] = "Г»УР¶ЁТе±дКэ";
         Text[ russian ] = "Переменная не определена";
@@ -404,7 +404,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Los tipos de datos no coinciden" ;
         Text [ danish ] = "Datatyper er uforenelige" ;
         Text [ swedish ] = "Datatyper passar inte ihop" ;
-        Text [ finnish ] = "Data type mismatch" ;
+        Text [ finnish ] = "Tietolajit eivдt tдsmдд" ;
         Text [ english_us ] = "Data type mismatch" ;
         Text[ chinese_simplified ] = "КэѕЭАаРНІ»ЖҐЕд";
         Text[ russian ] = "Несовместимые типы данных";
@@ -434,7 +434,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Parбmetro no vбlido" ;
         Text [ danish ] = "Ugyldig parameter" ;
         Text [ swedish ] = "Ogiltig parameter" ;
-        Text [ finnish ] = "Bad parameter" ;
+        Text [ finnish ] = "Virheellinen parametri" ;
         Text [ english_us ] = "Invalid parameter" ;
         Text[ chinese_simplified ] = "ОЮР§µДЦъ±дКэ";
         Text[ russian ] = "Недействительный параметр";
@@ -463,7 +463,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El proceso ha sido interrumpido por el usuario" ;
         Text [ danish ] = "Processen blev afbrudt af brugeren" ;
         Text [ swedish ] = "Anvдndaren avslutade fцrloppet" ;
-        Text [ finnish ] = "User interrupt occurred" ;
+        Text [ finnish ] = "Kдyttдjд keskeytti toiminnon" ;
         Text [ english_us ] = "Process interrupted by user" ;
         Text[ chinese_simplified ] = "К№УГХЯЦР¶ПФЛЛг№эіМЎЈ";
         Text[ russian ] = "Процесс прерван пользователем";
@@ -492,7 +492,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Resumen sin error" ;
         Text [ danish ] = "Resume uden fejl" ;
         Text [ swedish ] = "Resume utan fel" ;
-        Text [ finnish ] = "Resume without error" ;
+        Text [ finnish ] = "Jatka ilman virheitд" ;
         Text [ english_us ] = "Resume without error" ;
         Text[ chinese_simplified ] = "Resume І»ґш error";
         Text[ russian ] = "Резюме без ошибок";
@@ -522,7 +522,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Desbordamiento de pila" ;
         Text [ danish ] = "Ikke nok stakhukommelse" ;
         Text [ swedish ] = "Inte tillrдckligt med stapelminne" ;
-        Text [ finnish ] = "Out of stack space" ;
+        Text [ finnish ] = "Ei tarpeeksi pinomuistia" ;
         Text [ english_us ] = "Not enough stack memory" ;
         Text[ chinese_simplified ] = "Х»КЅДЪґжІ»Чг";
         Text[ russian ] = "Недостаточно памяти магазинного типа";
@@ -551,7 +551,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Procedimiento de funciуn o subordinado no definido" ;
         Text [ danish ] = "Under- eller funktionsproceduren er ikke defineret" ;
         Text [ swedish ] = "Sub- eller funktionsproceduren inte definierad" ;
-        Text [ finnish ] = "Sub or Function not defined" ;
+        Text [ finnish ] = "Alitoimintoa tai funktiotoimintoa ei ole mддritetty" ;
         Text [ english_us ] = "Sub-procedure or function procedure not defined" ;
         Text[ chinese_simplified ] = "Г»УР¶ЁТе·Ц№эіМ»тєЇКэ№эіМ";
         Text[ russian ] = "Подпроцедура или процедура функции не определена";
@@ -580,7 +580,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error al cargar un archivo DDL" ;
         Text [ danish ] = "Fejl ved indlжsning af DLL-fil" ;
         Text [ swedish ] = "Fel vid laddning av DLL-fil" ;
-        Text [ finnish ] = "Error in loading DLL" ;
+        Text [ finnish ] = "Virhe ladattaessa DLL-tiedostoa" ;
         Text [ english_us ] = "Error loading DLL file" ;
         Text[ chinese_simplified ] = "Ч°Ил DLL ОДјюК±·ўЙъґнОу";
         Text[ russian ] = "Ошибка при загрузке файла DLL";
@@ -609,7 +609,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Convenciуn de la llamada DLL incorrecta" ;
         Text [ danish ] = "Forkert DLL-kaldkonvention" ;
         Text [ swedish ] = "Fel DLL-anropskonvention" ;
-        Text [ finnish ] = "Bad DLL calling convention" ;
+        Text [ finnish ] = "Vддrд DLL-kutsumuoto" ;
         Text [ english_us ] = "Wrong DLL call convention" ;
         Text[ chinese_simplified ] = "ґнОуµД DLLµчУГФј¶Ё";
         Text[ russian ] = "Неправильная конвенция вызова DLL";
@@ -638,7 +638,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error interno $(ARG1)" ;
         Text [ danish ] = "Intern fejl $(ARG1)" ;
         Text [ swedish ] = "Internt fel $(ARG1)" ;
-        Text [ finnish ] = "Internal error $(ARG1)" ;
+        Text [ finnish ] = "Sisдinen virhe $(ARG1)" ;
         Text [ english_us ] = "Internal error $(ARG1)" ;
         Text[ chinese_simplified ] = "ДЪІїґнОу $(ARG1)";
         Text[ russian ] = "Ошибка внутри $(ARG1)";
@@ -667,7 +667,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Nombre o nъmero incorrecto de archivo" ;
         Text [ danish ] = "Forkert filnavn eller -nummer" ;
         Text [ swedish ] = "Ogiltigt filnamn eller filnummer" ;
-        Text [ finnish ] = "Bad file name or number" ;
+        Text [ finnish ] = "Virheellinen tiedostonimi tai tiedostonumero" ;
         Text [ english_us ] = "Invalid file name or file number" ;
         Text[ chinese_simplified ] = "ОЮР§µДОДјю»тєЕВл";
         Text[ russian ] = "Имя или номер файла неправильны";
@@ -696,7 +696,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encuentra el archivo" ;
         Text [ danish ] = "Filen blev ikke fundet" ;
         Text [ swedish ] = "Filen hittades inte" ;
-        Text [ finnish ] = "File not found" ;
+        Text [ finnish ] = "Tiedostoa ei lцydy" ;
         Text [ english_us ] = "File not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅОДјю";
         Text[ russian ] = "Файл не найден";
@@ -725,7 +725,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Modo de archivo incorrecto" ;
         Text [ danish ] = "Forkert filtilstand" ;
         Text [ swedish ] = "Fel fillдge" ;
-        Text [ finnish ] = "Bad file mode" ;
+        Text [ finnish ] = "Virheellinen tiedostotila" ;
         Text [ english_us ] = "Incorrect file mode" ;
         Text[ chinese_simplified ] = "ґнОуµДОДјюДЈКЅ";
         Text[ russian ] = "Неправильный режим файла";
@@ -755,7 +755,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El archivo ya estб abierto" ;
         Text [ danish ] = "Filen er allerede еben" ;
         Text [ swedish ] = "Filen дr redan цppen" ;
-        Text [ finnish ] = "File already open" ;
+        Text [ finnish ] = "Tiedosto on jo avoinna" ;
         Text [ english_us ] = "File already open" ;
         Text[ chinese_simplified ] = "ТСѕ­ґтїЄОДјю";
         Text[ russian ] = "Файл уже открыт";
@@ -785,7 +785,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error de dispositivo E/S" ;
         Text [ danish ] = "I/O-fejl i enhed" ;
         Text [ swedish ] = "Apparat I/O-fel" ;
-        Text [ finnish ] = "Device I/O error" ;
+        Text [ finnish ] = "Laitteen I/O-virhe" ;
         Text [ english_us ] = "Device I/O error" ;
         Text[ chinese_simplified ] = "Йи±ё·ўЙъI/OґнОу";
         Text[ russian ] = "Ошибка устройства Ввода/Вывода";
@@ -814,7 +814,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El archivo ya existe" ;
         Text [ danish ] = "Filen eksisterer allerede" ;
         Text [ swedish ] = "Filen existerar redan" ;
-        Text [ finnish ] = "File already exists" ;
+        Text [ finnish ] = "Tiedosto on jo olemassa" ;
         Text [ english_us ] = "File already exists" ;
         Text[ chinese_simplified ] = "ОДјюТСѕ­ґжФЪ";
         Text[ russian ] = "Файл уже существует";
@@ -844,7 +844,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Longitud errуnea del registro de datos" ;
         Text [ danish ] = "Forkert datapostlжngde" ;
         Text [ swedish ] = "Felaktig datapostlдngd" ;
-        Text [ finnish ] = "Bad record length" ;
+        Text [ finnish ] = "Virheellinen tietuepituus" ;
         Text [ english_us ] = "Incorrect record length" ;
         Text[ chinese_simplified ] = "КэѕЭМхДїі¤¶ИґнОу";
         Text[ russian ] = "Неправильная длина записи данных";
@@ -873,7 +873,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Disquete o disco duro lleno" ;
         Text [ danish ] = "Disketten/harddisken er fuld" ;
         Text [ swedish ] = "Diskett eller hеrddisk full" ;
-        Text [ finnish ] = "Disk full" ;
+        Text [ finnish ] = "Levyke tai kovalevy tдynnд" ;
         Text [ english_us ] = "Disk or hard drive full" ;
         Text[ chinese_simplified ] = "ИнЕМ»тУІЕМТСВъ";
         Text[ russian ] = "Диск или жесткий диск заполнены";
@@ -903,7 +903,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Seguir leyendo tras el final del archivo" ;
         Text [ danish ] = "Lжs ud over filens slutning" ;
         Text [ swedish ] = "Lдsning utцver filens slut" ;
-        Text [ finnish ] = "Input past end of file" ;
+        Text [ finnish ] = "Lukumддritys ylittдд tiedoston lopun" ;
         Text [ english_us ] = "Reading exceeds EOF" ;
         Text[ chinese_simplified ] = "¶БИЎі¬іцОДјю·¶О§";
         Text[ russian ] = "Считывание превышает конец файла";
@@ -932,7 +932,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Nъmero errуneo de registro de datos" ;
         Text [ danish ] = "Forkert datapostnummer" ;
         Text [ swedish ] = "Felaktigt datapostnummer" ;
-        Text [ finnish ] = "Bad record number" ;
+        Text [ finnish ] = "Virheellinen tietuenumero" ;
         Text [ english_us ] = "Incorrect record number" ;
         Text[ chinese_simplified ] = "КэѕЭМхДїєЕВлґнОу";
         Text[ russian ] = "Неправильный номер регистрации данных";
@@ -961,7 +961,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Demasiados archivos" ;
         Text [ danish ] = "Der er for mange filer" ;
         Text [ swedish ] = "Fцr mеnga filer" ;
-        Text [ finnish ] = "Too many files" ;
+        Text [ finnish ] = "Liian monta tiedostoa" ;
         Text [ english_us ] = "Too many files" ;
         Text[ chinese_simplified ] = "М«¶аОДјю";
         Text[ russian ] = "Слишком много файлов";
@@ -991,7 +991,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El dispositivo no estб disponible" ;
         Text [ danish ] = "Enheden er ikke tilgжngelig" ;
         Text [ swedish ] = "Enhet ej tillgдnglig" ;
-        Text [ finnish ] = "Device not available" ;
+        Text [ finnish ] = "Laite ei ole kдytettдvissд" ;
         Text [ english_us ] = "Device not available" ;
         Text[ chinese_simplified ] = "Йи±ёІ»ґжФЪ";
         Text[ russian ] = "Устройство недоступно";
@@ -1020,7 +1020,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Acceso denegado" ;
         Text [ danish ] = "Adgang nжgtet" ;
         Text [ swedish ] = "Еtkomst nekad" ;
-        Text [ finnish ] = "Permission denied" ;
+        Text [ finnish ] = "Kдyttц kielletty" ;
         Text [ english_us ] = "Access denied" ;
         Text[ chinese_simplified ] = "ѕЬѕш¶БИЎ";
         Text[ russian ] = "Доступ запрещен";
@@ -1049,7 +1049,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El disquete no estб preparado" ;
         Text [ danish ] = "Disketten er ikke klar" ;
         Text [ swedish ] = "Disketten дr inte beredd" ;
-        Text [ finnish ] = "Disk not ready" ;
+        Text [ finnish ] = "Levy ei ole valmiina" ;
         Text [ english_us ] = "Disk not ready" ;
         Text[ chinese_simplified ] = "ИнЕМ»№Г»УРЧј±ёєГ";
         Text[ russian ] = "Диск не готов";
@@ -1078,7 +1078,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No implementado" ;
         Text [ danish ] = "Ikke implementeret" ;
         Text [ swedish ] = "Ej implementerad" ;
-        Text [ finnish ] = "Feature not implemented" ;
+        Text [ finnish ] = "Ei kдytцssд" ;
         Text [ english_us ] = "Not implemented" ;
         Text[ chinese_simplified ] = "ЙРОґКµК©";
         Text[ russian ] = "Не реализировано";
@@ -1108,7 +1108,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se puede cambiar nombre en distintas unidades" ;
         Text [ danish ] = "Omdшbning pе forskellige drev er ikke mulig" ;
         Text [ swedish ] = "Omцjligt att byta namn pе olika enheter" ;
-        Text [ finnish ] = "No rename with different drive" ;
+        Text [ finnish ] = "Uudelleennimeдminen eri levyille ei onnistu" ;
         Text [ english_us ] = "Renaming on different drives impossible" ;
         Text[ chinese_simplified ] = "ОЮ·ЁЦШГьГыіЙІ»Н¬µДЗэ¶ЇЕМ";
         Text[ russian ] = "Переименовать на разных дисках невозможно";
@@ -1137,7 +1137,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error de acceso a la ruta o al archivo" ;
         Text [ danish ] = "Sti/Fil adgangsfejl" ;
         Text [ swedish ] = "Sцkvдg/fil еtkomstfel" ;
-        Text [ finnish ] = "Path/File access error" ;
+        Text [ finnish ] = "Polun/tiedoston kдsittelyvirhe" ;
         Text [ english_us ] = "Path/File access error" ;
         Text[ chinese_simplified ] = "¶БИЎВ·ѕ¶/ОДјюК±·ўЙъґнОу";
         Text[ russian ] = "Ошибка доступа пути или файла";
@@ -1166,7 +1166,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу la ruta" ;
         Text [ danish ] = "Stien blev ikke fundet" ;
         Text [ swedish ] = "Sцkvдgen hittades inte" ;
-        Text [ finnish ] = "Path not found" ;
+        Text [ finnish ] = "Polkua ei lцydy" ;
         Text [ english_us ] = "Path not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅВ·ѕ¶";
         Text[ russian ] = "Путь не найден";
@@ -1195,7 +1195,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La variable del objeto no se ha establecido" ;
         Text [ danish ] = "Objektvariablen er ikke optaget" ;
         Text [ swedish ] = "Objektvariablerna inte bestдmda" ;
-        Text [ finnish ] = "Object variable not set" ;
+        Text [ finnish ] = "Objektimuuttujaa ei ole mддritetty" ;
         Text [ english_us ] = "Object variable not set" ;
         Text[ chinese_simplified ] = "»№Г»УРЙи¶Ё¶ФПу±дБї";
         Text[ russian ] = "Переменная объекта не установлена";
@@ -1225,7 +1225,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Secuencia de caracteres no vбlida" ;
         Text [ danish ] = "Ugyldigt strengmшnster" ;
         Text [ swedish ] = "Ogiltig mцnsterstring" ;
-        Text [ finnish ] = "Invalid pattern string" ;
+        Text [ finnish ] = "Virheellinen merkkijoukko" ;
         Text [ english_us ] = "Invalid string pattern" ;
         Text[ chinese_simplified ] = "ОЮР§µДЧЦґ®ДЈКЅ";
         Text[ russian ] = "Недопустимый образец последовательности знаков";
@@ -1255,7 +1255,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se admite el uso del cero" ;
         Text [ danish ] = "Brug af nul er ikke tilladt" ;
         Text [ swedish ] = "Anvдndning av null дr ej tillеtet" ;
-        Text [ finnish ] = "Invalid use of Null" ;
+        Text [ finnish ] = "Nollan kдyttц ei ole sallittua" ;
         Text [ english_us ] = "Use of zero not permitted" ;
         Text[ chinese_simplified ] = "І»ФКРнК№УГУГБгЦµ";
         Text[ russian ] = "Использование нуля недопустимо";
@@ -1284,7 +1284,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error de DDE" ;
         Text [ danish ] = "DDE-fejl" ;
         Text [ swedish ] = "DDE-fel" ;
-        Text [ finnish ] = "DDE Error" ;
+        Text [ finnish ] = "DDE-virhe" ;
         Text [ english_us ] = "DDE Error" ;
         Text[ chinese_simplified ] = "DDE ґнОу";
         Text[ russian ] = "Ошибка DDE";
@@ -1313,7 +1313,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Esperando respuesta en la conexiуn DDE" ;
         Text [ danish ] = "Venter pе svar til DDE-forbindelsen" ;
         Text [ swedish ] = "Vдntar pе svar till DDE-fцrbindelsen" ;
-        Text [ finnish ] = "Awaiting response in DDE-Conversation" ;
+        Text [ finnish ] = "Odotetaan vastausta DDE-yhteyteen" ;
         Text [ english_us ] = "Awaiting response to DDE connection" ;
         Text[ chinese_simplified ] = "ФЪ DDE Б¬ЅУК±µИєтґрёґ";
         Text[ russian ] = "Ожидание ответа во время подключения DDE";
@@ -1343,7 +1343,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No hay canales DDE libres" ;
         Text [ danish ] = "Ingen еbne DDE-kanaler" ;
         Text [ swedish ] = "Inga fria DDE-kanaler" ;
-        Text [ finnish ] = "No more DDE channels" ;
+        Text [ finnish ] = "DDE-kanavia ei ole kдytettдvissд" ;
         Text [ english_us ] = "No DDE channels available" ;
         Text[ chinese_simplified ] = "Г»УРїЙУГµД DDE-РЕµА";
         Text[ russian ] = "Свободных каналов DDE не имеется";
@@ -1372,7 +1372,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No responde ninguna aplicaciуn a la conexiуn DDE deseada" ;
         Text [ danish ] = "Ingen applikation svarer pе DDE-forbindelsesinitialiseringen" ;
         Text [ swedish ] = "Ingen applikation svarar pе DDE-fцrbindelsinitieringen" ;
-        Text [ finnish ] = "No application responded to DDE initiate" ;
+        Text [ finnish ] = "Mikддn sovellus ei vastannut DDE-yhteyden muodostuskutsuun" ;
         Text [ english_us ] = "No application responded to DDE connect initiation" ;
         Text[ chinese_simplified ] = "Г»УРИОєОУ¦УГіМРт»ШУ¦ DDE Б¬ЅУЗлЗу";
         Text[ russian ] = "Никакое приложение не отвечает на требование связи DDE";
@@ -1401,7 +1401,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Demasiadas aplicaciones responden a la conexiуn deseada DDE" ;
         Text [ danish ] = "For mange applikationer svarer pе DDE-forbindelsesinitialiseringen" ;
         Text [ swedish ] = "Alltfцr mеnga applikationer svarar pе DDE-fцrbindelseinitieringen" ;
-        Text [ finnish ] = "Multiple applications responded to DDE initiate" ;
+        Text [ finnish ] = "Liian moni sovellus vastasi DDE-yhteyskutsuun" ;
         Text [ english_us ] = "Too many applications responded to DDE connect initiation" ;
         Text[ chinese_simplified ] = "М«¶аµДУ¦УГіМРт»ШУ¦ DDE Б¬ЅУЗлЗу";
         Text[ russian ] = "Слишком много приложений отвечает на требование подключения DDE";
@@ -1430,7 +1430,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Canal DDE bloqueado" ;
         Text [ danish ] = "DDE-kanalen er lеst" ;
         Text [ swedish ] = "DDE-kanalen дr spдrrad" ;
-        Text [ finnish ] = "DDE channel locked" ;
+        Text [ finnish ] = "DDE-kanava lukittu" ;
         Text [ english_us ] = "DDE channel locked" ;
         Text[ chinese_simplified ] = "DDE РЕµАТСѕ­±»Лш¶Ё";
         Text[ russian ] = "Канал DDE блокирован";
@@ -1460,7 +1460,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Una aplicaciуn externa no puede realizar la operaciуn DDE" ;
         Text [ danish ] = "Den eksterne applikation kan ikke udfшre DDE-operationen" ;
         Text [ swedish ] = "Den externa applikationen kan inte utfцra DDE-operationen" ;
-        Text [ finnish ] = "Foreign application won't perform DDE operation" ;
+        Text [ finnish ] = "Ulkoinen sovellus ei voi suorittaa DDE-toimintoa" ;
         Text [ english_us ] = "External application cannot execute DDE operation" ;
         Text[ chinese_simplified ] = "НвІїµДУ¦УГіМРтОЮ·ЁЦґРР DDE ФЛЛг";
         Text[ russian ] = "Внешние приложения не могут выполнить операцию DDE";
@@ -1490,7 +1490,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se ha excedido el tiempo de espera por una respuesta DDE" ;
         Text [ danish ] = "Timeout mens der blev ventet pе DDE-svar" ;
         Text [ swedish ] = "Tiden har gеtt ut vid vдntandet pе DDE-svar" ;
-        Text [ finnish ] = "Timeout while waiting for DDE response" ;
+        Text [ finnish ] = "Aikakatkaisu odotettaessa DDE-vastausta" ;
         Text [ english_us ] = "Timeout while waiting for DDE response" ;
         Text[ chinese_simplified ] = "µИєт DDE »ШУ¦і¬№эК±ПЮ";
         Text[ russian ] = "Превышение допустимого времени во время ожидания ответа DDE";
@@ -1520,7 +1520,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El usuario presionу la tecla ESC durante la operaciуn DDE" ;
         Text [ danish ] = "Brugeren trykkede pе ESCAPE under DDE-operationen" ;
         Text [ swedish ] = "Anvдndaren tryckte pе ESCAPE under DDE-operationen" ;
-        Text [ finnish ] = "User pressed Escape during DDE operation" ;
+        Text [ finnish ] = "Kдyttдjд painoi ESC-nдppдintд DDE-toiminnon aikana." ;
         Text [ english_us ] = "User pressed ESCAPE during DDE operation." ;
         Text[ chinese_simplified ] = "ФЪЦґРР DDE ФЛЛг№эіМЦРК№УГХЯ°ґ»чБЛ ESCAPE јь";
         Text[ russian ] = "Пользователь нажал ESCAPE во время операции DDE";
@@ -1549,7 +1549,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La aplicaciуn externa no estб lista" ;
         Text [ danish ] = "Den eksterne applikation er ikke klar" ;
         Text [ swedish ] = "Extern applikation upptagen" ;
-        Text [ finnish ] = "Destination application is busy" ;
+        Text [ finnish ] = "Ulkoinen sovellus on varattu" ;
         Text [ english_us ] = "External application busy" ;
         Text[ chinese_simplified ] = "НвІїУ¦УГіМРтГ¦Вµ";
         Text[ russian ] = "Внешнее приложение не готово";
@@ -1578,7 +1578,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Operaciуn DDE sin datos" ;
         Text [ danish ] = "DDE-operation uden data" ;
         Text [ swedish ] = "DDE-operation utan data" ;
-        Text [ finnish ] = "Data not provided in DDE operation" ;
+        Text [ finnish ] = "DDE-toiminto ilman tietoja" ;
         Text [ english_us ] = "DDE operation without data" ;
         Text[ chinese_simplified ] = "Г»УРКэѕЭµД DDE ФЛЛг";
         Text[ russian ] = "Операция DDE без данных";
@@ -1607,7 +1607,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Los datos estбn en un formato falso" ;
         Text [ danish ] = "Data er i forkert format" ;
         Text [ swedish ] = "Data har fel format" ;
-        Text [ finnish ] = "Data in wrong format" ;
+        Text [ finnish ] = "Tiedot ovat vддrдssд muodossa" ;
         Text [ english_us ] = "Data are in wrong format" ;
         Text[ chinese_simplified ] = "КэѕЭёсКЅґнОу";
         Text[ russian ] = "Данные находятся в неправильном формате";
@@ -1636,7 +1636,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La aplicaciуn externa se ha cancelado" ;
         Text [ danish ] = "Den eksterne applikation er blevet afsluttet" ;
         Text [ swedish ] = "Den externa applikationen дr avslutad" ;
-        Text [ finnish ] = "Foreign application quit" ;
+        Text [ finnish ] = "Ulkoinen sovellus on pддttynyt" ;
         Text [ english_us ] = "External application has been terminated" ;
         Text[ chinese_simplified ] = "НвІїУ¦УГіМРтТСѕ­ЅбКш";
         Text[ russian ] = "Внешние приложения закончены";
@@ -1666,7 +1666,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La conexiуn DDE se ha interrumpido o modificado" ;
         Text [ danish ] = "DDE-forbindelsen er blevet afbrudt eller modificeret" ;
         Text [ swedish ] = "DDE-fцrbindelsen дr avbruten eller fцrдndrad" ;
-        Text [ finnish ] = "DDE conversation closed or changed" ;
+        Text [ finnish ] = "DDE-yhteys on keskeytetty tai yhteyttд on muokattu" ;
         Text [ english_us ] = "DDE connection interrupted or modified" ;
         Text[ chinese_simplified ] = "DDEБ¬ЅУТСѕ­ЦР¶П»тХЯТСѕ­ёьёД";
         Text[ russian ] = "Соединение DDE прервано или изменено";
@@ -1695,7 +1695,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se llamу al mйtodo DDE sin un canal DDE abierto" ;
         Text [ danish ] = "DDE-metode blev kaldt uden еben DDE-kanal" ;
         Text [ swedish ] = "DDE-metod anropad utan цppen DDE-kanal" ;
-        Text [ finnish ] = "DDE method invoked with no channel open" ;
+        Text [ finnish ] = "DDE-menetelmд kutsuttu ilman avoimia kanavia" ;
         Text [ english_us ] = "DDE method invoked with no channel open" ;
         Text[ chinese_simplified ] = "ФЪГ»УРґтїЄDDEРЕµАК±µчУГDDE·Ѕ·Ё";
         Text[ russian ] = "Метод DDE вызван без открытого канала DDE";
@@ -1725,7 +1725,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Formato del vнnculo DDE incorrecto" ;
         Text [ danish ] = "Ugyldigt DDE-linkformat" ;
         Text [ swedish ] = "Ogiltigt DDE- linkformat" ;
-        Text [ finnish ] = "Invalid DDE Link format" ;
+        Text [ finnish ] = "Virheellinen DDE-linkin muoto" ;
         Text [ english_us ] = "Invalid DDE link format" ;
         Text[ chinese_simplified ] = "ОЮР§µД DDE БґЅУёсКЅ";
         Text[ russian ] = "Недействительный формат связи DDE";
@@ -1754,7 +1754,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El mensaje DDE se ha perdido" ;
         Text [ danish ] = "DDE-meddelelse er gеet tabt" ;
         Text [ swedish ] = "DDE-meddelandet дr borttappat" ;
-        Text [ finnish ] = "Message queue filled; DDE Message lost" ;
+        Text [ finnish ] = "DDE-sanoma on kadonnut" ;
         Text [ english_us ] = "DDE message has been lost" ;
         Text[ chinese_simplified ] = "DDE РЕПўТЕК§";
         Text[ russian ] = "Сообщение DDE потеряно";
@@ -1784,7 +1784,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Pegar vнnculo ya ejecutado" ;
         Text [ danish ] = "Paste link er allerede udfшrt" ;
         Text [ swedish ] = "Paste link дr redan genomfцrt" ;
-        Text [ finnish ] = "Paste link already performed" ;
+        Text [ finnish ] = "Liitд jo suoritettu linkki" ;
         Text [ english_us ] = "Paste link already performed" ;
         Text[ chinese_simplified ] = "ХіМщБґЅУТСѕ­НкіЙ";
         Text[ russian ] = "Вставка ссылки уже выполнена";
@@ -1814,7 +1814,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se puede establecer el LinkMode debido a un Link Topic incorrecto" ;
         Text [ danish ] = "Linktilstand kan ikke indstilles pе grund af ugyldige linktopics." ;
         Text [ swedish ] = "LinkMode kan inte stдllas in pе grund av ogiltiga Link-Topics" ;
-        Text [ finnish ] = "Cant set LinkMode; invalid Link Topic" ;
+        Text [ finnish ] = "Linkkitilaa ei voi mддrittдд virheellisen linkkiaiheen vuoksi" ;
         Text [ english_us ] = "Link mode cannot be set due to invalid link topic" ;
         Text[ chinese_simplified ] = "УЙУЪОЮР§µДБґЅУ±кМв¶шОЮ·ЁЙи¶ЁБґЅУ±кМв";
         Text[ russian ] = "Из-за недействительного Link-Topic LinkMode установить невозможно";
@@ -1844,7 +1844,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Para el DDE se requiere DDEML.DLL" ;
         Text [ danish ] = "DDE krжver DDEML.DLL" ;
         Text [ swedish ] = "DDE krдver DDEML.DLL" ;
-        Text [ finnish ] = "DDE requires DDEML.DLL" ;
+        Text [ finnish ] = "DDE vaatii tiedoston DDEML.DLL" ;
         Text [ english_us ] = "DDE requires the DDEML.DLL file" ;
         Text[ chinese_simplified ] = "DDE ТЄЗу DDEML.DLL";
         Text[ russian ] = "Для DDE необходим DDEML.DLL";
@@ -1874,7 +1874,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se puede cargar el mуdulo ya que el formato es incorrecto" ;
         Text [ danish ] = "Det er ikke muligt at indlжse modulet; ugyldigt format" ;
         Text [ swedish ] = "Modulen kan inte laddas, ogiltigt format" ;
-        Text [ finnish ] = "Can't load module, invalid format" ;
+        Text [ finnish ] = "Moduulia ei voida ladata; virheellinen muoto" ;
         Text [ english_us ] = "Module cannot be loaded; invalid format" ;
         Text[ chinese_simplified ] = "ёсКЅОЮР§Ј¬Тт¶шОЮ·ЁЧ°ИлХвёціМРтДЈїй";
         Text[ russian ] = "Загрузить модуль невозможно, недействительный формат";
@@ -1904,7 +1904,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Нndice incorrecto del objeto" ;
         Text [ danish ] = "Ugyldigt objektindeks" ;
         Text [ swedish ] = "Ogiltigt objektindex" ;
-        Text [ finnish ] = "Invalid object index" ;
+        Text [ finnish ] = "Virheellinen objektin hakemisto" ;
         Text [ english_us ] = "Invalid object index" ;
         Text[ chinese_simplified ] = "ОЮР§µД¶ФПуЛчТэ";
         Text[ russian ] = "Недействительный индекс объекта";
@@ -1934,7 +1934,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto no estб disponible" ;
         Text [ danish ] = "Objektet er ikke tilgжngeligt" ;
         Text [ swedish ] = "Objektet дr inte tillgдngligt" ;
-        Text [ finnish ] = "Object is not available" ;
+        Text [ finnish ] = "Objekti ei ole kдytettдvissд." ;
         Text [ english_us ] = "Object is not available" ;
         Text[ chinese_simplified ] = "¶ФПуІ»ґжФЪ";
         Text[ russian ] = "Объект недоступен";
@@ -1964,7 +1964,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Valor no vбlido para la propiedad" ;
         Text [ danish ] = "Forkert egenskabsvжrdi" ;
         Text [ swedish ] = "Felaktigt vдrde fцr egenskap" ;
-        Text [ finnish ] = "Bad property value" ;
+        Text [ finnish ] = "Virheellinen ominaisuusarvo" ;
         Text [ english_us ] = "Incorrect property value" ;
         Text[ chinese_simplified ] = "ґнОуµДКфРФКэЦµ";
         Text[ russian ] = "Неправильное значение свойства";
@@ -1994,7 +1994,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Propiedad es solo lectura" ;
         Text [ danish ] = "Egenskaben er skrivebeskyttet" ;
         Text [ swedish ] = "Egenskapen дr skrivskyddad" ;
-        Text [ finnish ] = "Property is read only" ;
+        Text [ finnish ] = "Tдmд ominaisuus on vain lukua varten" ;
         Text [ english_us ] = "This property is read-only" ;
         Text[ chinese_simplified ] = "·АёІРґµДКфРФ";
         Text[ russian ] = "Свойство возможно только прочитать";
@@ -2024,7 +2024,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Propiedad es solo escritura" ;
         Text [ danish ] = "Egenskaben er lжsebeskyttet" ;
         Text [ swedish ] = "Egenskapen дr lдsskyddad" ;
-        Text [ finnish ] = "Property is write only" ;
+        Text [ finnish ] = "Tдmд ominaisuus on vain kirjoitusta varten" ;
         Text [ english_us ] = "This property is write only" ;
         Text[ chinese_simplified ] = "·А¶БИЎµДКфРФ";
         Text[ russian ] = "Свойство возможно только записать";
@@ -2054,7 +2054,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Referencia al objeto no vбlida" ;
         Text [ danish ] = "Ugyldig objektreference" ;
         Text [ swedish ] = "Ogiltig objektreferens" ;
-        Text [ finnish ] = "Invalid object reference" ;
+        Text [ finnish ] = "Virhellinen objektiviite" ;
         Text [ english_us ] = "Invalid object reference" ;
         Text[ chinese_simplified ] = "ОЮР§µД¶ФПуТэУГ";
         Text[ russian ] = "Неправильная ссылка объекта";
@@ -2083,7 +2083,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу la propiedad o el mйtodo" ;
         Text [ danish ] = "Egenskab eller metode blev ikke fundet" ;
         Text [ swedish ] = "Egenskap eller metod hittades inte" ;
-        Text [ finnish ] = "Property or method not found" ;
+        Text [ finnish ] = "Ominaisuutta tai menetelmдд ei lцytynyt" ;
         Text [ english_us ] = "Property or method not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅКфРФ»т·Ѕ·Ё";
         Text[ russian ] = "Свойство или метод не найдены";
@@ -2112,7 +2112,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se requiere un objeto" ;
         Text [ danish ] = "Objekt krжves" ;
         Text [ swedish ] = "Objekt krдvs" ;
-        Text [ finnish ] = "Object required" ;
+        Text [ finnish ] = "Objekti vaaditaan" ;
         Text [ english_us ] = "Object required" ;
         Text[ chinese_simplified ] = "ТЄЗу¶ФПу";
         Text[ russian ] = "Необходим объект";
@@ -2141,7 +2141,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Uso errуneo de un objeto" ;
         Text [ danish ] = "Ugyldig brug af et objekt" ;
         Text [ swedish ] = "Felaktig anvдndning av ett objekt" ;
-        Text [ finnish ] = "Invalid use of object" ;
+        Text [ finnish ] = "Virheellinen objektin kдyttц" ;
         Text [ english_us ] = "Invalid use of an object" ;
         Text[ chinese_simplified ] = "ґнОуК№УГ¶ФПу";
         Text[ russian ] = "Неправильное использование объекта";
@@ -2171,7 +2171,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Este objeto no apoya la automatizaciуn OLE" ;
         Text [ danish ] = "OLE-automatiseringen understшttes ikke af dette objekt" ;
         Text [ swedish ] = "OLE-automatiseringen stцds ej av detta objekt" ;
-        Text [ finnish ] = "Object does not support OLE Automation" ;
+        Text [ finnish ] = "Tдmд objekti ei tue OLE-automaatiota" ;
         Text [ english_us ] = "OLE Automation is not supported by this object" ;
         Text[ chinese_simplified ] = "Хвёц¶ФПуІ»Ц§іЦOLEЧФ¶Ї»Ї";
         Text[ russian ] = "Автоматизация OLE этим объектом не поддерживается";
@@ -2201,7 +2201,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto no apoya esta propiedad o mйtodo" ;
         Text [ danish ] = "Objektet understшtter ikke denne egenskab eller metode" ;
         Text [ swedish ] = "Objektet understцdjer inte denna egenskap eller metod" ;
-        Text [ finnish ] = "Object doesn't support property or method" ;
+        Text [ finnish ] = "Tдmд objekti ei tue tдtд ominaisuutta tai menetelmдд" ;
         Text [ english_us ] = "This property or method is not supported by the object" ;
         Text[ chinese_simplified ] = "¶ФПуІ»Ц§іЦХвёцКфРФ»т·Ѕ·Ё";
         Text[ russian ] = "Объект не поддерживает это свойство или метод";
@@ -2230,7 +2230,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error en la automatizaciуn OLE" ;
         Text [ danish ] = "Fejl ved OLE-automatisering" ;
         Text [ swedish ] = "Fel vid OLE-automatisering" ;
-        Text [ finnish ] = "OLE Automation error" ;
+        Text [ finnish ] = "OLE-automaatiovirhe" ;
         Text [ english_us ] = "OLE Automation Error" ;
         Text[ chinese_simplified ] = "OLE ЧФ¶Ї»ЇґнОу";
         Text[ russian ] = "Ошибка при автоматизации OLE";
@@ -2260,7 +2260,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Esta acciуn no es apoyada por el objeto dado" ;
         Text [ danish ] = "Denne handling understшttes ikke at det angivne objekt." ;
         Text [ swedish ] = "Denna еtgдrd understцds inte av angivet objekt" ;
-        Text [ finnish ] = "Object doesn't support this action" ;
+        Text [ finnish ] = "Annettu objekti ei tue tдtд toimintoa" ;
         Text [ english_us ] = "This action is not supported by given object" ;
         Text[ chinese_simplified ] = "ёш¶ЁµД¶ФПуІ»Ц§іЦХвёцІЩЧч";
         Text[ russian ] = "Эта операция данным объектом не поддерживается";
@@ -2290,7 +2290,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto indicado no apoya los argumentos nombrados" ;
         Text [ danish ] = "Nжvnte argumenter understшttes ikke af det angivne objekt" ;
         Text [ swedish ] = "Angivna argument understцds ej av angivet objekt" ;
-        Text [ finnish ] = "Object doesn't support named args" ;
+        Text [ finnish ] = "Annettu objekti ei tue nimettyjд argumentteja" ;
         Text [ english_us ] = "Named arguments are not supported by given object" ;
         Text[ chinese_simplified ] = "ёш¶Ё¶ФПуІ»Ц§іЦЦё¶ЁµДЧФ±дБї";
         Text[ russian ] = "Названные аргументы данным объектом не поддерживаются";
@@ -2320,7 +2320,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La configuraciуn local actual no es apoyada por el objeto dado" ;
         Text [ danish ] = "Det aktuelle omrеdeskema understшttes ikke af det angivne objekt" ;
         Text [ swedish ] = "De aktuella lokala instдllningarna understцds inte av angivet objekt" ;
-        Text [ finnish ] = "Object doesn't support current locale setting" ;
+        Text [ finnish ] = "Annettu objekti ei tue nykyistд kieliasetusta" ;
         Text [ english_us ] = "The current locale setting is not supported by the given object" ;
         Text[ chinese_simplified ] = "µ±З°µДѕЦІїЙи¶ЁІ»КЬёш¶Ё¶ФПуµДЦ§іЦ";
         Text[ russian ] = "Текущая локальная установка данным объектом не поддерживается";
@@ -2349,7 +2349,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу el argumento nombrado" ;
         Text [ danish ] = "Det nжvnte argument blev ikke fundet" ;
         Text [ swedish ] = "Angivet argument hittades inte" ;
-        Text [ finnish ] = "Named argument not found" ;
+        Text [ finnish ] = "Nimettyд argumenttia ei lцydy" ;
         Text [ english_us ] = "Named argument not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅЦё¶ЁµДЧФ±дБї";
         Text[ russian ] = "Найденный аргумент не найден";
@@ -2378,7 +2378,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El argumento no es opcional" ;
         Text [ danish ] = "Argumentet er ikke valgfrit" ;
         Text [ swedish ] = "Argumentet дr inte valfritt" ;
-        Text [ finnish ] = "Argument not optional" ;
+        Text [ finnish ] = "Argumentti ei ole valinnainen" ;
         Text [ english_us ] = "Argument is not optional" ;
         Text[ chinese_simplified ] = "·ЗїЙСЎµДЧФ±дБї";
         Text[ russian ] = "Аргумент не обязателен";
@@ -2407,7 +2407,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Nъmero errуneo de argumentos" ;
         Text [ danish ] = "Forkert antal argumenter" ;
         Text [ swedish ] = "Felaktigt antal argument" ;
-        Text [ finnish ] = "Wrong number of arguments" ;
+        Text [ finnish ] = "Virheellinen mддrд argumentteja" ;
         Text [ english_us ] = "Invalid number of arguments" ;
         Text[ chinese_simplified ] = "ОЮР§µДЧФ±дБїКэДї";
         Text[ russian ] = "Неправильное число аргументов";
@@ -2436,7 +2436,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto no es una lista" ;
         Text [ danish ] = "Objektet er ingen liste" ;
         Text [ swedish ] = "Objektet дr ingen lista" ;
-        Text [ finnish ] = "Object not a collection" ;
+        Text [ finnish ] = "Objekti ei ole luettelo" ;
         Text [ english_us ] = "Object is not a list" ;
         Text[ chinese_simplified ] = "¶ФПуІ»КЗТ»ёцБРµҐ";
         Text[ russian ] = "Объект не является списком";
@@ -2466,7 +2466,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Nъmero ordinal no vбlido" ;
         Text [ danish ] = "Ugyldigt ordenstal" ;
         Text [ swedish ] = "Ogiltigt ordningstal" ;
-        Text [ finnish ] = "Invalid ordinal" ;
+        Text [ finnish ] = "Virheellinen jдrjestysnumero" ;
         Text [ english_us ] = "Invalid ordinal number" ;
         Text[ chinese_simplified ] = "РтєЕОЮР§";
         Text[ russian ] = "Порядковое число недействительно";
@@ -2495,7 +2495,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу la funciуn DLL especificada" ;
         Text [ danish ] = "Den angivne DDL-funktion blev ikke fundet" ;
         Text [ swedish ] = "Angiven DLL-funktion hittades inte" ;
-        Text [ finnish ] = "Specified DLL function not found" ;
+        Text [ finnish ] = "Mддritettyд DLL-toimintoa ei lцytynyt" ;
         Text [ english_us ] = "Specified DLL function not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅЦё¶ЁµД DLL №¦ДЬ";
         Text[ russian ] = "Данная функция DLL не найдена";
@@ -2525,7 +2525,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Formato de portapapeles no vбlido" ;
         Text [ danish ] = "Ugyldigt udklipsholderformat" ;
         Text [ swedish ] = "Ogiltigt urklippsformat" ;
-        Text [ finnish ] = "Invalid clipboard format" ;
+        Text [ finnish ] = "Virheellinen leikepцydдn muoto" ;
         Text [ english_us ] = "Invalid clipboard format" ;
         Text[ chinese_simplified ] = "ОЮР§µДјфМщ°еёсКЅ";
         Text[ russian ] = "Недействительный формат буфера обмена";
@@ -2554,7 +2554,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto no tiene esta propiedad" ;
         Text [ danish ] = "Objektet har ikke denne egenskab" ;
         Text [ swedish ] = "Objektet har inte denna egenskap" ;
-        Text [ finnish ] = "Object does not have property" ;
+        Text [ finnish ] = "Objektilla ei ole tдtд ominaisuutta" ;
         Text [ english_us ] = "Object does not have this property" ;
         Text[ chinese_simplified ] = "¶ФПуІ»ѕЯ±ёХвёцКфРФ";
         Text[ russian ] = "У объекта нет этого свойства";
@@ -2583,7 +2583,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El objeto no tiene este mйtodo" ;
         Text [ danish ] = "Objekt har ikke denne metode" ;
         Text [ swedish ] = "Objektet har inte denna metod" ;
-        Text [ finnish ] = "Object does not have method" ;
+        Text [ finnish ] = "Objektilla ei ole tдtд menetelmдд" ;
         Text [ english_us ] = "Object does not have this method" ;
         Text[ chinese_simplified ] = "¶ФПуІ»ѕЯ±ёХвёц·Ѕ·Ё";
         Text[ russian ] = "У объекта нет этого метода";
@@ -2612,7 +2612,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Falta el argumento requerido" ;
         Text [ danish ] = "Pеkrжvet argument mangler" ;
         Text [ swedish ] = "Nцdvдndigt argument saknas" ;
-        Text [ finnish ] = "Missing required argument" ;
+        Text [ finnish ] = "Vaadittu argumentti puuttuu" ;
         Text [ english_us ] = "Required argument lacking" ;
         Text[ chinese_simplified ] = "И±ЙЩ±ШТЄµДЧФ±дБї";
         Text[ russian ] = "Нехватка необходимого аргумента";
@@ -2642,7 +2642,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Nъmero de argumentos no vбlido" ;
         Text [ danish ] = "Ugyldigt antal argumenter" ;
         Text [ swedish ] = "Ogiltigt antal argument" ;
-        Text [ finnish ] = "Invalid number of arguments" ;
+        Text [ finnish ] = "Virheellinen mддrд argumentteja" ;
         Text [ english_us ] = "Invalid number of arguments" ;
         Text[ chinese_simplified ] = "ОЮР§µДЧФ±дБїКэДї";
         Text[ russian ] = "Неправильное количество аргументов";
@@ -2672,7 +2672,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Error al ejecutar un mйtodo" ;
         Text [ danish ] = "Fejl ved udfшrelsen af en metode" ;
         Text [ swedish ] = "Fel vid utfцrandet av en metod" ;
-        Text [ finnish ] = "Method failed" ;
+        Text [ finnish ] = "Virhe suoritettaessa menetelmдд" ;
         Text [ english_us ] = "Error executing a method" ;
         Text[ chinese_simplified ] = "ФЛРР·Ѕ·ЁК±·ўЙъґнОу";
         Text[ russian ] = "Ошибка в выполнении метода";
@@ -2701,7 +2701,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se pudo determinar la propiedad" ;
         Text [ danish ] = "Det var ikke muligt at definere egenskaben" ;
         Text [ swedish ] = "Egenskap kunde inte definieras" ;
-        Text [ finnish ] = "Unable to set property" ;
+        Text [ finnish ] = "Ominaisuuden asettaminen ei onnistu" ;
         Text [ english_us ] = "Unable to set property" ;
         Text[ chinese_simplified ] = "ОЮ·ЁИ·¶ЁКфРФ";
         Text[ russian ] = "Свойство установить невозможно";
@@ -2730,7 +2730,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se pudo determinar la propiedad" ;
         Text [ danish ] = "Det var ikke muligt at bestemme egenskaben" ;
         Text [ swedish ] = "Egenskap gick inte att bestдmma" ;
-        Text [ finnish ] = "Unable to get property" ;
+        Text [ finnish ] = "Ominaisuuden mддrittдminen ei onnistu" ;
         Text [ english_us ] = "Unable to determine property" ;
         Text[ chinese_simplified ] = "ОЮ·Ё¶БіцКфРФ";
         Text[ russian ] = "Свойство определить невозможно";
@@ -2760,7 +2760,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Sнmbolo inesperado: $(ARG1)" ;
         Text [ danish ] = "Uventet symbol: $(ARG1)" ;
         Text [ swedish ] = "Ovдntad symbol: $(ARG1)" ;
-        Text [ finnish ] = "Unexpected symbol: $(ARG1)" ;
+        Text [ finnish ] = "Odottamaton symboli: $(ARG1)" ;
         Text [ english_us ] = "Unexpected symbol: $(ARG1)" ;
         Text[ chinese_simplified ] = "ТвНвµДНј±кЈє$(ARG1)";
         Text[ russian ] = "Непредвиденный символ: $(ARG1)";
@@ -2789,7 +2789,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se espera: $(ARG1)" ;
         Text [ danish ] = "Forventet: $(ARG1)" ;
         Text [ swedish ] = "Fцrvдntad: $(ARG1)" ;
-        Text [ finnish ] = "Expected: $(ARG1)" ;
+        Text [ finnish ] = "Odotettiin: $(ARG1)" ;
         Text [ english_us ] = "Expected: $(ARG1)" ;
         Text[ chinese_simplified ] = "µИґэЈє$(ARG1)";
         Text[ russian ] = "Предвидится: $(ARG1)";
@@ -2818,7 +2818,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Sнmbolo esperado" ;
         Text [ danish ] = "Symbol forventes" ;
         Text [ swedish ] = "Symbol fцrvдntad" ;
-        Text [ finnish ] = "Symbol expected" ;
+        Text [ finnish ] = "Symboli oletuksena" ;
         Text [ english_us ] = "Symbol expected" ;
         Text[ chinese_simplified ] = "µИґэНј±к";
         Text[ russian ] = "Предвиденный символ";
@@ -2847,7 +2847,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se requiere una variable" ;
         Text [ danish ] = "Variabel forventes" ;
         Text [ swedish ] = "Variabel fцrvдntad" ;
-        Text [ finnish ] = "Variable expected" ;
+        Text [ finnish ] = "Muuttuja oletuksena" ;
         Text [ english_us ] = "Variable expected" ;
         Text[ chinese_simplified ] = "µИґэ±дБї";
         Text[ russian ] = "Предвиденная переменная";
@@ -2876,7 +2876,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se requiere una etiqueta" ;
         Text [ danish ] = "Etiket forventes" ;
         Text [ swedish ] = "Etikett fцrvдntad" ;
-        Text [ finnish ] = "Label expected" ;
+        Text [ finnish ] = "Nimiц oletuksena" ;
         Text [ english_us ] = "Label expected" ;
         Text[ chinese_simplified ] = "µИґэ±кєЕ";
         Text[ russian ] = "Ожидается этикета";
@@ -2905,7 +2905,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se puede asignar el valor" ;
         Text [ danish ] = "Vжrdien kan ikke tildeles" ;
         Text [ swedish ] = "Vдrdet kan inte tilldelas" ;
-        Text [ finnish ] = "Cannot set value" ;
+        Text [ finnish ] = "Arvoa ei voi kдyttдд" ;
         Text [ english_us ] = "Value cannot be applied" ;
         Text[ chinese_simplified ] = "ОЮ·ЁЦё¶ЁКэЦµ";
         Text[ russian ] = "Применить знначение невозможно";
@@ -2934,7 +2934,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La variable $(ARG1) ya se ha definido" ;
         Text [ danish ] = "Variabel $(ARG1) er allerede defineret" ;
         Text [ swedish ] = "Variabeln $(ARG1) дr redan definierad" ;
-        Text [ finnish ] = "Variable $(ARG1) already defined" ;
+        Text [ finnish ] = "Muuttuja $(ARG1) on jo mддritetty" ;
         Text [ english_us ] = "Variable $(ARG1) already defined" ;
         Text[ chinese_simplified ] = "ТСѕ­¶ЁТеБЛ±дБї $(ARG1)";
         Text[ russian ] = "Переменная $(ARG1) уже определена";
@@ -2963,7 +2963,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El procedimiento de funciуn o subordinado $(ARG1) ya estб definido" ;
         Text [ danish ] = "Under- eller funktionsprocedure $(ARG1) er allerede defineret" ;
         Text [ swedish ] = "Sub- eller funktionsproceduren $(ARG1) дr redan definierad" ;
-        Text [ finnish ] = "Procedure $(ARG1) already defined" ;
+        Text [ finnish ] = "Alitoiminto tai funktiotoiminto $(ARG1) on jo mддritetty" ;
         Text [ english_us ] = "Sub procedure or function procedure $(ARG1) already defined" ;
         Text[ chinese_simplified ] = "ТСѕ­¶ЁТеБЛ·Ц№эіМ»тєЇКэ№эіМ $(ARG1)";
         Text[ russian ] = "Подпроцедура или процедура функции $(ARG1) уже определена";
@@ -2992,7 +2992,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La etiqueta $(ARG1) ya estб definida" ;
         Text [ danish ] = "Etiket $(ARG1) er allerede defineret" ;
         Text [ swedish ] = "Etiketten $(ARG1) дr redan definierad" ;
-        Text [ finnish ] = "Label $(ARG1) already defined" ;
+        Text [ finnish ] = "Nimiц $(ARG1) on jo mддritetty" ;
         Text [ english_us ] = "Label $(ARG1) already defined" ;
         Text[ chinese_simplified ] = "ТСѕ­¶ЁТеБЛ±кјЗ $(ARG1)";
         Text[ russian ] = "Этикета $(ARG1) уже определена";
@@ -3021,7 +3021,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу la variable $(ARG1)" ;
         Text [ danish ] = "Variabel $(ARG1) blev ikke fundet" ;
         Text [ swedish ] = "Variabeln $(ARG1) hittades inte" ;
-        Text [ finnish ] = "Variable $(ARG1) not found" ;
+        Text [ finnish ] = "Muuttujaa $(ARG1) ei lцytynyt" ;
         Text [ english_us ] = "Variable $(ARG1) not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅ±дБї $(ARG1)";
         Text[ russian ] = "Переменная $(ARG1) не найдена";
@@ -3050,7 +3050,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу la matriz o procedimiento $(ARG1)" ;
         Text [ danish ] = "Array eller procedure $(ARG1) blev ikke fundet" ;
         Text [ swedish ] = "Array eller procedur $(ARG1) hittades inte" ;
-        Text [ finnish ] = "Array or function $(ARG1) not found" ;
+        Text [ finnish ] = "Matriisia tai toimintoa $(ARG1) ei lцytynyt" ;
         Text [ english_us ] = "Array or procedure $(ARG1) not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅКэЧй»т№эіМ $(ARG1)";
         Text[ russian ] = "Массив или процедура $(ARG1) не найдены";
@@ -3079,7 +3079,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No se encontrу el procedimiento $(ARG1)" ;
         Text [ danish ] = "Procedure $(ARG1) blev ikke fundet" ;
         Text [ swedish ] = "Proceduren $(ARG1) hittades inte" ;
-        Text [ finnish ] = "Procedure $(ARG1) not found" ;
+        Text [ finnish ] = "Toimintoa $(ARG1) ei lцytynyt" ;
         Text [ english_us ] = "Procedure $(ARG1) not found" ;
         Text[ chinese_simplified ] = "Г»УРХТµЅ№эіМ $(ARG1)";
         Text[ russian ] = "Процедура $(ARG1) не найдена";
@@ -3108,7 +3108,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "La etiqueta $(ARG1) no estб definida" ;
         Text [ danish ] = "Etket $(ARG1) er udefineret" ;
         Text [ swedish ] = "Etiketten $(ARG1) дr odefinierad" ;
-        Text [ finnish ] = "Label $(ARG1) undefined" ;
+        Text [ finnish ] = "Nimiцtд $(ARG1) ei ole mддritetty" ;
         Text [ english_us ] = "Label $(ARG1) undefined" ;
         Text[ chinese_simplified ] = "ЙРОґ¶ЁТе±кјЗ $(ARG1)";
         Text[ russian ] = "Этикета $(ARG1) неопределена";
@@ -3137,7 +3137,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Tipo de datos $(ARG1) desconocido" ;
         Text [ danish ] = "Ukendt datatype $(ARG1)" ;
         Text [ swedish ] = "Okдnd datatyp $(ARG1)" ;
-        Text [ finnish ] = "Unknown data type $(ARG1)" ;
+        Text [ finnish ] = "Tuntematon tietotyyppi $(ARG1)" ;
         Text [ english_us ] = "Unknown data type $(ARG1)" ;
         Text[ chinese_simplified ] = "І»ГчµДКэѕЭАаРН $(ARG1)";
         Text[ russian ] = "Неизвестный тип данных $(ARG1)";
@@ -3166,7 +3166,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Se requiere salida $(ARG1)" ;
         Text [ danish ] = "Exit $(ARG1) forventes" ;
         Text [ swedish ] = "Exit $(ARG1) fцrvдntat" ;
-        Text [ finnish ] = "Exit $(ARG1) erwartet" ;
+        Text [ finnish ] = "Oletuksena Poistu kohteesta $(ARG1)" ;
         Text [ english_us ] = "Exit $(ARG1) expected" ;
         Text[ chinese_simplified ] = "µИєтНЛіц $(ARG1)";
         Text[ russian ] = "Ожидается выход $(ARG1)";
@@ -3195,7 +3195,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Bloque de instrucciones incompleto: falta $(ARG1) " ;
         Text [ danish ] = "Endnu еben instruktionsblok: $(ARG1) mangler" ;
         Text [ swedish ] = "Icke avslutat statementblock: $(ARG1) saknas" ;
-        Text [ finnish ] = "Unterminated statement block: missing $(ARG1)" ;
+        Text [ finnish ] = "Lausekelohko yhд avoinna: $(ARG1) puuttuu" ;
         Text [ english_us ] = "Statement block still open: $(ARG1) missing" ;
         Text[ chinese_simplified ] = "»№И±ЙЩОґЅбКшµД·ЦіМРтїйЈє$(ARG1)";
         Text[ russian ] = "Отсутствует еще открытый блок инструкций: $(ARG1)";
@@ -3224,7 +3224,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Los parйntesis no coinciden" ;
         Text [ danish ] = "Fejl i parentesstrukturen" ;
         Text [ swedish ] = "Parentesfel" ;
-        Text [ finnish ] = "Parentheses do not match" ;
+        Text [ finnish ] = "Sulkeet eivдt vastaa toisiaan" ;
         Text [ english_us ] = "Parentheses do not match" ;
         Text[ chinese_simplified ] = "АЁєЕЧйґнОу";
         Text[ russian ] = "Круглые скобки не соответствуют";
@@ -3253,7 +3253,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El sнmbolo $(ARG1) ya se definiу de otra manera" ;
         Text [ danish ] = "Symbolet $(ARG1) er allerede defineret anderledes" ;
         Text [ swedish ] = "Symbolen $(ARG1) дr redan annorlunda definierad" ;
-        Text [ finnish ] = "Symbol $(ARG1) defined differently" ;
+        Text [ finnish ] = "Symboli $(ARG1) on jo mддritetty toisella tavalla" ;
         Text [ english_us ] = "Symbol $(ARG1) already defined differently" ;
         Text[ chinese_simplified ] = "ТСѕ­БнРР¶ЁТеБЛНј±к $(ARG1)";
         Text[ russian ] = "Символ $(ARG1) уже определен по-другому";
@@ -3282,7 +3282,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Los parбmetros no coinciden con el procedimiento" ;
         Text [ danish ] = "Parametrene svarer ikke til proceduren" ;
         Text [ swedish ] = "Parametern passar inte till proceduren" ;
-        Text [ finnish ] = "Parameters do not match" ;
+        Text [ finnish ] = "Parametrit eivдt vastaa toimintoa" ;
         Text [ english_us ] = "Parameters do not correspond to procedure" ;
         Text[ chinese_simplified ] = "Цъ±дБїєН№эіМІ»ЖҐЕд";
         Text[ russian ] = "Параметры не соответствуют процедуре";
@@ -3312,7 +3312,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Carбcter incorrecto en el nъmero" ;
         Text [ danish ] = "Ugyldigt tegn i tallet" ;
         Text [ swedish ] = "Ogiltigt tecken i talet" ;
-        Text [ finnish ] = "Bad character in number" ;
+        Text [ finnish ] = "Virheellinen merkki luvussa" ;
         Text [ english_us ] = "Invalid character in number" ;
         Text[ chinese_simplified ] = "КэЧЦДЪє¬УРОЮР§µДЧЦ·ы";
         Text[ russian ] = "Недействительный знак в числе";
@@ -3342,7 +3342,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Hay que dimensionar el array" ;
         Text [ danish ] = "Array skal dimensioneres" ;
         Text [ swedish ] = "Array mеste dimensioneras" ;
-        Text [ finnish ] = "Array needs dimensioning" ;
+        Text [ finnish ] = "Matriisin on oltava mitoitettu" ;
         Text [ english_us ] = "Array must be dimensioned" ;
         Text[ chinese_simplified ] = "±ШРлОЄКэЧй¶ЁіЯ¶И";
         Text[ russian ] = "Необходимо задать размерность массива";
@@ -3371,7 +3371,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Else/Endif sin If" ;
         Text [ danish ] = "Else/Endif uden If" ;
         Text [ swedish ] = "Else/Endif utan If" ;
-        Text [ finnish ] = "Else/Endif without If" ;
+        Text [ finnish ] = "Muuten/Ehdollinen lopetus ilman ehtoa" ;
         Text [ english_us ] = "Else/Endif without If" ;
         Text[ chinese_simplified ] = "Else/Endif І»ґш If";
         Text[ russian ] = "Else/Endif без If";
@@ -3401,7 +3401,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "$(ARG1) no estб permitido dentro de un proceso" ;
         Text [ danish ] = "$(ARG1) er ikke tilladt indenfor en procedure" ;
         Text [ swedish ] = "$(ARG1) inte tillеtet inuti en procedur" ;
-        Text [ finnish ] = "$(ARG1) not allowed within a procedure" ;
+        Text [ finnish ] = "$(ARG1) ei sallittu toiminnossa" ;
         Text [ english_us ] = "$(ARG1) not allowed within a procedure" ;
         Text[ chinese_simplified ] = "ФЪТ»ёц№эіМДЪІїІ»ФКРн $(ARG1)";
         Text[ russian ] = "$(ARG1) внутри процедуры недопустим";
@@ -3431,7 +3431,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "$(ARG1) no estб permitido fuera de un proceso" ;
         Text [ danish ] = "$(ARG1) er ikke tilladt udenfor en procedure" ;
         Text [ swedish ] = "$(ARG1) inte tillеtet utanfцr en procedur" ;
-        Text [ finnish ] = "$(ARG1) not allowed outside a procedure" ;
+        Text [ finnish ] = "$(ARG1) ei sallittu toiminnon ulkopuolella" ;
         Text [ english_us ] = "$(ARG1) not allowed outside a procedure" ;
         Text[ chinese_simplified ] = "ФЪТ»ёц№эіМНвІ»ФКРн $(ARG1)";
         Text[ russian ] = "$(ARG1) вне процедуры недопустим";
@@ -3460,7 +3460,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Las dimensiones no coinciden" ;
         Text [ danish ] = "Dimensionsangivelserne svarer ikke til hinanden" ;
         Text [ swedish ] = "Dimensionsangivelser stдmmer inte цverens" ;
-        Text [ finnish ] = "Dimensions do not match" ;
+        Text [ finnish ] = "Mitoitusmддritykset eivдt vastaa toisiaan" ;
         Text [ english_us ] = "Dimension specifications do not match" ;
         Text[ chinese_simplified ] = "¶ЁіЯ¶ИµДЙи¶ЁІ»ЖҐЕд";
         Text[ russian ] = "Спецификации размерности не соответствуют друг другу";
@@ -3489,7 +3489,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Opciуn desconocida: $(ARG1)" ;
         Text [ danish ] = "Ukendt alternativ: $(ARG1)" ;
         Text [ swedish ] = "Obekant alternativ: $(ARG1)" ;
-        Text [ finnish ] = "Unknown option: $(ARG1)" ;
+        Text [ finnish ] = "Tuntematon asetus: $(ARG1)" ;
         Text [ english_us ] = "Unknown option: $(ARG1)" ;
         Text[ chinese_simplified ] = "І»ГчµДСЎПоЈє$(ARG1)";
         Text[ russian ] = "Неизвестная опция: $(ARG1)";
@@ -3518,7 +3518,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "Constante $(ARG1) redefinida" ;
         Text [ danish ] = "Konstanten $(ARG1) er nydefineret" ;
         Text [ swedish ] = "Konstanten $(ARG1) дr nydefinierad" ;
-        Text [ finnish ] = "Constant $(ARG1) redeclared" ;
+        Text [ finnish ] = "Vakio $(ARG1) mддritetty uudelleen" ;
         Text [ english_us ] = "Constant $(ARG1) redefined" ;
         Text[ chinese_simplified ] = "ЦШРВ¶ЁТеіЈКэ $(ARG1)";
         Text[ russian ] = "Константа $(ARG1) определена заново";
@@ -3548,7 +3548,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "El programa es demasiado grande" ;
         Text [ danish ] = "Programmet er for stort" ;
         Text [ swedish ] = "Programmet дr fцr stort" ;
-        Text [ finnish ] = "Program is too large" ;
+        Text [ finnish ] = "Ohjelma on liian suuri" ;
         Text [ english_us ] = "Program too large" ;
         Text[ chinese_simplified ] = "іМРтМ«ґу";
         Text[ russian ] = "Программа слишком большая";
@@ -3578,7 +3578,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No estбn permitidos strings o arrays" ;
         Text [ danish ] = "Strenge eller arrays er ikke tilladte" ;
         Text [ swedish ] = "Strings eller arrays ej tillеtna" ;
-        Text [ finnish ] = "Sorry, no strings or arrays allowed" ;
+        Text [ finnish ] = "Merkkijonot tai matriisit eivдt ole sallittuja" ;
         Text [ english_us ] = "Strings or arrays not permitted" ;
         Text[ chinese_simplified ] = "І»ФКРнЧЦґ®»тКэЧй";
         Text[ russian ] = "Строки знаков или массивы недопустимы";
@@ -3608,7 +3608,7 @@ Resource RID_BASIC_START
         Text [ spanish ] = "No estб contenido en el script VB" ;
         Text [ danish ] = "Ikke indeholdt i VB-script" ;
         Text [ swedish ] = "Innefattas inte i VBScript" ;
-        Text [ finnish ] = "Not implemented in VBScript" ;
+        Text [ finnish ] = "Ei sisдlly VB-komentosarjaan" ;
         Text [ english_us ] = "Not contained in VB script" ;
         Text[ chinese_simplified ] = "Г»УР°ьє¬ФЪ VB script ДЪ";
         Text[ russian ] = "В VBScript не содержится";
@@ -3640,7 +3640,7 @@ String IDS_SBERR_TERMINATED
     Text [ spanish ] = "Se ha interrumpido la macro activa" ;
     Text [ danish ] = "Den aktuelle makro blev afbrudt" ;
     Text [ swedish ] = "Det aktuella makrot avbrцts" ;
-    Text [ finnish ] = "Stopped currently running macro" ;
+    Text [ finnish ] = "Suoritettava makro on keskeytetty" ;
     Text [ english_us ] = "The macro running has been interrupted" ;
     Text[ chinese_simplified ] = "ЦР¶ПФЛРРєкЎЈ";
     Text[ russian ] = "Выполнение макроса прервано";
@@ -3683,7 +3683,7 @@ String IDS_SBERR_STOREREF
     Text [ ENGLISH ] = "reference will not be saved: " ;
     Text [ norwegian ] = "reference will not be saved: " ;
     Text [ italian ] = "Il riferimento non viene salvato:  " ;
-    Text [ finnish ] = "reference will not be saved: " ;
+    Text [ finnish ] = "Viitettд ei tallenneta: " ;
     Text[ catalan ] = "No se guardarб la referencia:  ";
 };
 String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
@@ -3716,6 +3716,7 @@ String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
     Text[ turkish ] = "Kitaplэрэ yьkleme sэrasэnda hata '$(ARG1)'";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al cargar la biblioteca '$(ARG1)'";
+    Text[ finnish ] = "Virhe ladattaessa kirjastoa '$(ARG1)'";
 };
 String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
 {
@@ -3747,6 +3748,7 @@ String ERRCODE_BASMGR_LIBSAVE & ERRCODE_RES_MASK
     Text[ turkish ] = "Kitaplэрэ kaydetme sэrasэnda hata: '$(ARG1)'";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al guardar la biblioteca: '$(ARG1)'";
+    Text[ finnish ] = "Virhe tallennettaessa kirjastoa: $(ARG1)";
 };
 String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
 {
@@ -3778,6 +3780,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text[ turkish ] = "'$(ARG1)' dosyasэndan BASIC kurulamadэ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo inicializar el Basic del archivo '$(ARG1)'";
+    Text[ finnish ] = "Tiedoston '$(ARG1)' BASIC-osuutta ei voitu alustaa";
 };
 String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
 {
@@ -3805,6 +3808,7 @@ String ERRCODE_BASMGR_MGRSAVE & ERRCODE_RES_MASK
     Text[ turkish ] = "BASIC'i kaydetme sэrasэnda hata: '$(ARG1)'";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al guardar BASIC: '$(ARG1)'";
+    Text[ finnish ] = "Virhe tallennettaessa BASIC-kohdetta: $(ARG1)";
 };
 String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
 {
@@ -3832,6 +3836,7 @@ String ERRCODE_BASMGR_REMOVELIB & ERRCODE_RES_MASK
     Text[ turkish ] = "Kitaplэрэ kaldэrma sэrasэnda hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al eliminar la biblioteca";
+    Text[ finnish ] = "Virhe poistettaessa kirjastoa";
 };
 String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
 {
@@ -3859,4 +3864,5 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ turkish ] = "Kitaplэk bellekten silinemedi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo eliminar la biblioteca de la memoria.";
+    Text[ finnish ] = "Kirjastoa ei voitu poistaa muistista.";
 };
