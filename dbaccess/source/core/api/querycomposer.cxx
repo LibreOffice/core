@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 14:29:06 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,8 +549,35 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     Any aValue;
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
+    ::rtl::OUString aSql;
+    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    if(m_pColumns->hasByName(aName))
+    {
+        Reference<XPropertySet> xColumn;
+        m_pColumns->getByName(aName) >>= xColumn;
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
 
-    ::rtl::OUString aSql = aName;
+        ::rtl::OUString sRealName,sTableName;
+        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
+        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+        if(sTableName.indexOf(0,'.') != -1)
+        {
+            ::rtl::OUString aCatlog,aSchema,aTable;
+            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
+            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatlog,aSchema,aTable,sTableName,sal_True);
+        }
+        else
+            sTableName = ::dbtools::quoteName(aQuote,sTableName);
+
+        aSql =  sTableName;
+        aSql += ::rtl::OUString::createFromAscii(".");
+        aSql += ::dbtools::quoteName(aQuote,sRealName);
+    }
+    else
+        aSql = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
+
+    //  ::rtl::OUString aSql = getTableAlias(column) + aName;
 
     switch(nType)
     {
@@ -630,15 +657,41 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OUString aName;
-    column->getPropertyValue(PROPERTY_NAME) >>= aName;
+    ::rtl::OUString aName,aAppendOrder;
+    column->getPropertyValue(PROPERTY_NAME)         >>= aName;
+
     if(!m_xConnection->getMetaData()->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
         throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     // filter anhaengen
     // select ohne where und order by aufbauen
     ::rtl::OUString aSql(m_aWorkSql);
-    ::rtl::OUString aAppendOrder(aName);
+    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    if(m_pColumns->hasByName(aName))
+    {
+        Reference<XPropertySet> xColumn;
+        m_pColumns->getByName(aName) >>= xColumn;
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
+
+        ::rtl::OUString sRealName,sTableName;
+        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
+        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+        if(sTableName.indexOf(0,'.') != -1)
+        {
+            ::rtl::OUString aCatlog,aSchema,aTable;
+            ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
+            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatlog,aSchema,aTable,sTableName,sal_True);
+        }
+        else
+            sTableName = ::dbtools::quoteName(aQuote,sTableName);
+
+        aAppendOrder =  sTableName;
+        aAppendOrder += ::rtl::OUString::createFromAscii(".");
+        aAppendOrder += ::dbtools::quoteName(aQuote,sRealName);
+    }
+    else
+        aAppendOrder = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
 
     if ((m_aOrder.getLength() != 0) && aAppendOrder.getLength())
         m_aOrder += COMMA;
@@ -1045,3 +1098,75 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
     return aResult;
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString OQueryComposer::getTableAlias(const Reference< XPropertySet >& column) const
+{
+    ::rtl::OUString sReturn;
+    if(m_pTables && m_pTables->getCount() > 1)
+    {
+        ::rtl::OUString aCatalog,aSchema,aTable,aComposedName,aColumnName;
+        column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+        column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+        column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
+        column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
+
+        Sequence< ::rtl::OUString> aNames(m_pTables->getElementNames());
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+
+        if(!aTable.getLength())
+        { // we don't found a table name, now we must search every table for this column
+            for(;pBegin != pEnd;++pBegin)
+            {
+                Reference<XColumnsSupplier> xColumnsSupp;
+                m_pTables->getByName(*pBegin) >>= xColumnsSupp;
+
+                if(xColumnsSupp.is() && xColumnsSupp->getColumns()->hasByName(aColumnName))
+                {
+//                  Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
+//                  xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+//                  xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+//                  xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
+                    aTable = *pBegin;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_False);
+
+            // first check if this is the table we want to or has it a tablealias
+
+            if(!m_pTables->hasByName(aComposedName))
+            {
+                ::comphelper::UStringMixEqual aComp(static_cast<::comphelper::UStringMixLess*>(&m_aSqlIterator.getTables().key_comp())->isCaseSensitive());
+                for(;pBegin != pEnd;++pBegin)
+                {
+                    Reference<XPropertySet> xTableProp;
+                    m_pTables->getByName(*pBegin) >>= xTableProp;
+                    OSL_ENSURE(xTableProp.is(),"Table isn't a propertyset!");
+                    if(xTableProp.is())
+                    {
+                        ::rtl::OUString aCatalog2,aSchema2,aTable2;
+                        xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog2;
+                        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema2;
+                        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable2;
+                        if(aComp(aCatalog,aCatalog2) && aComp(aSchema,aSchema2) && aComp(aTable,aTable2))
+                        {
+                            aCatalog    = aCatalog2;
+                            aSchema     = aSchema2;
+                            aTable      = aTable2;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(pBegin != pEnd)
+        {
+            ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,sReturn,sal_True);
+            sReturn += ::rtl::OUString::createFromAscii(".");
+        }
+    }
+    return sReturn;
+}
