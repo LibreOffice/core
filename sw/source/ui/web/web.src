@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:24:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 08:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define MN_SW_WEB
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -70,6 +69,8 @@
 #define ACC_SW_WEB
 #include "toolbox.hrc"
 #include "helpid.h"
+#include "cfgid.h"
+
 String STR_HUMAN_SWWEBDOC_NAME
 {
     Text [ de ] = "HTML" ;
@@ -392,4 +393,7 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+Menu MN_WEB_TEXT_POPUPMENU
+    BASE_TEXT_POPUPMENU_BEGIN
+    BASE_TEXT_POPUPMENU_END
 
