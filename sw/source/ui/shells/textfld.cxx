@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:31:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,8 +915,10 @@ IMPL_LINK( SwTextShell, PostItNextHdl, AbstractSvxPostItDialog *, pBtn )
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
     if( pDlg->IsOkEnabled() )
     {
-        SvtUserOptions aUserOpt;
-        pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+        //SvtUserOptions aUserOpt;
+        //pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+        SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
+        pPostItFldMgr->UpdateCurFld( 0, pPostIt->GetPar1(), pDlg->GetNote() );
     }
     pPostItFldMgr->GoNext();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
@@ -954,8 +956,10 @@ IMPL_LINK( SwTextShell, PostItPrevHdl, AbstractSvxPostItDialog *, pBtn )
 
     if( pDlg->IsOkEnabled() )
     {
-        SvtUserOptions aUserOpt;
-        pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+        //SvtUserOptions aUserOpt;
+        //pPostItFldMgr->UpdateCurFld( 0, aUserOpt.GetID(), pDlg->GetNote() );
+        SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
+        pPostItFldMgr->UpdateCurFld( 0, pPostIt->GetPar1(), pDlg->GetNote() );
     }
     pPostItFldMgr->GoPrev();
     SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
