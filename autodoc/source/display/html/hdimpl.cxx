@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:11:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ Create_ChildListTable( const char * i_sTitle )
     html::TableRow &
             rRow = dpTable->AddRow();
     rRow
-        << new html::BgColorAttr("#CCCCFF")
+        << new html::ClassAttr("subtitle")
         >> *new html::TableCell
                 << new xml::AnAttribute( "colspan","2" )
                 >> *new html::Headline(4)
