@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:17:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ struct ImplTabCtrlData
     std::hash_map< int, int >       maLayoutPageIdToLine;
     std::hash_map< int, int >       maLayoutLineToPageId;
     std::vector< Rectangle >        maTabRectangles;
+    Point                           maItemsOffset;       // offset of the tabitems
 };
 
 // -----------------------------------------------------------------------
@@ -525,13 +526,16 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
 
         ImplTabItem*    pItem;
         Size            aSize;
-        long            nX = 2;
-        long            nY = 2;
+        const long      nOffsetX = 2 + GetItemsOffset().X();
+        const long      nOffsetY = 2 + GetItemsOffset().Y();
+        long            nX = nOffsetX;
+        long            nY = nOffsetY;
         long            nMaxWidth = nWidth;
         USHORT          nPos = 0;
 
         if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
             nMaxWidth = mnMaxPageWidth;
+        nMaxWidth -= GetItemsOffset().X();
 
         mbScroll = FALSE;
         if( 1 )
@@ -548,12 +552,12 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
             {
                 aSize = ImplGetItemSize( pItem, nMaxWidth );
 
-                if ( ((nX+aSize.Width()) > nWidth-2) && (nWidth > 4) )
+                if ( ((nX+aSize.Width()) > nWidth - 2) && (nWidth > 2+nOffsetX) )
                 {
                     if ( nLines == 99 )
                         break;
 
-                    nX  = 2;
+                    nX  = nOffsetX;
                     nY += aSize.Height();
                     nLines++;
                     nLineWidthAry[nLines] = 0;
@@ -591,9 +595,9 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
                 while ( i < nLines+1 )
                 {
                     if ( i <= nCurLine )
-                        nLineHeightAry[i] = nIH*(nLines-(nCurLine-i));
+                        nLineHeightAry[i] = nIH*(nLines-(nCurLine-i)) + GetItemsOffset().Y();
                     else
-                        nLineHeightAry[i] = nIH*(i-nCurLine-1);
+                        nLineHeightAry[i] = nIH*(i-nCurLine-1) + GetItemsOffset().Y();
                     i++;
                 }
 
@@ -609,8 +613,8 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
                             break;
 
                         nIDX = 0;
-                        nDX = (nWidth-2-nLineWidthAry[n]) / (nLinePosAry[n+1]-i);
-                        nModDX = (nWidth-2-nLineWidthAry[n]) % (nLinePosAry[n+1]-i);
+                        nDX = (nWidth-nOffsetX-nLineWidthAry[n]) / (nLinePosAry[n+1]-i);
+                        nModDX = (nWidth-nOffsetX-nLineWidthAry[n]) % (nLinePosAry[n+1]-i);
                         n++;
                     }
 
@@ -1079,6 +1083,19 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     aRect.Right()  += TAB_OFFSET;
     aRect.Bottom() += TAB_OFFSET;
 
+    // if we have an invisible tabpage or no tabpage at all the tabpage rect should be
+    // increased to avoid round corners that might be drawn by a theme
+    // in this case we're only interested in the top border of the tabpage because the tabitems are used
+    // standalone (eg impress)
+    BOOL bNoTabPage = FALSE;
+    TabPage*        pCurPage = (pCurItem) ? pCurItem->mpTabPage : NULL;
+    if( !pCurPage || !pCurPage->IsVisible() )
+    {
+        bNoTabPage = TRUE;
+        aRect.Left()-=10;
+        aRect.Right()+=10;
+    }
+
     BOOL bNativeOK = FALSE;
     if( (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) == TRUE )
     {
@@ -1131,12 +1148,20 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
 
             if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
             {
-                SetLineColor( rStyleSettings.GetShadowColor() );
+                // if we have not tab page the bottom line of the tab page
+                // directly touches the tab items, so choose a color that fits seamlessly
+                if( bNoTabPage )
+                    SetLineColor( rStyleSettings.GetDialogColor() );
+                else
+                    SetLineColor( rStyleSettings.GetShadowColor() );
                 DrawLine( Point( 1, aRect.Bottom()-1 ),
                         Point( aRect.Right()-1, aRect.Bottom()-1 ) );
                 DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
                         Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-                SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                if( bNoTabPage )
+                    SetLineColor( rStyleSettings.GetDialogColor() );
+                else
+                    SetLineColor( rStyleSettings.GetDarkShadowColor() );
                 DrawLine( Point( 0, aRect.Bottom() ),
                         Point( aRect.Right(), aRect.Bottom() ) );
                 DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
@@ -2055,3 +2080,21 @@ Rectangle TabControl::GetTabBounds( USHORT nPageId ) const
 
     return aRet;
 }
+
+// -----------------------------------------------------------------------
+
+void TabControl::SetItemsOffset( const Point& rOffs )
+{
+    if( mpTabCtrlData )
+        mpTabCtrlData->maItemsOffset = rOffs;
+}
+
+Point TabControl::GetItemsOffset() const
+{
+    if( mpTabCtrlData )
+        return mpTabCtrlData->maItemsOffset;
+    else
+        return Point();
+}
+
+// -----------------------------------------------------------------------
