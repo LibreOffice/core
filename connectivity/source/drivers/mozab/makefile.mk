@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: svesik $ $Date: 2002-07-29 15:51:24 $
+#   last change: $Author: hr $ $Date: 2002-08-19 17:23:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,13 @@ PRJNAME=connectivity
 TARGET=$(MOZAB_TARGET)
 TARGET2=$(MOZAB_TARGET)drv
 
+.IF "$(OS)"=="MACOSX"
+all: 
+    @echo "		Not building the mozabsrc stuff in OpenOffice.org build"
+    @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
+
+.ENDIF
+
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
@@ -90,6 +97,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
+
 .INCLUDE :  $(PRJ)$/version.mk
 
 
