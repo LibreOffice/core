@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 07:37:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,aNo(ModuleRes(STR_VALUE_NO))
     ,nDelayedGrabFocusEvent(0)
     ,pActFieldDescr(NULL)
+    ,m_pActFocusWindow(NULL)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -282,6 +283,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,aNo(ModuleRes(STR_VALUE_NO))
     ,nDelayedGrabFocusEvent(0)
     ,pActFieldDescr(0)
+    ,m_pActFocusWindow(NULL)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -1925,6 +1927,8 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
     if (strHelpText.Len() && (pHelp != NULL))
         pHelp->SetHelpText(strHelpText);
 
+    m_pActFocusWindow = pControl;
+
     return 0L;
 }
 
@@ -2070,23 +2074,6 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OFieldDescControl::ChildHasFocus()
-{
-    DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Hat eines der Childs den Focus?
-    Window* pChild;
-    for( sal_uInt16 nChildId=0; nChildId<GetChildCount(); nChildId++ )
-    {
-        pChild = GetChild( nChildId );
-        if( pChild->HasFocus() )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
 void OFieldDescControl::GetFocus()
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
@@ -2127,7 +2114,34 @@ void OFieldDescControl::LoseFocus()
     TabPage::LoseFocus();
 }
 // -----------------------------------------------------------------------------
-
+sal_Bool OFieldDescControl::isCutAllowed()
+{
+    sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
+                        (m_pActFocusWindow == pDefault || m_pActFocusWindow == pFormatSample    ||
+                        m_pActFocusWindow == pTextLen || m_pActFocusWindow == pLength           ||
+                        m_pActFocusWindow == pScale  || m_pActFocusWindow == m_pColumnName) &&
+                        reinterpret_cast<Edit*>(m_pActFocusWindow)->GetSelected().Len() != 0;
+    return bAllowed;
+}
+// -----------------------------------------------------------------------------
+void OFieldDescControl::cut()
+{
+    if(isCutAllowed())
+        reinterpret_cast<Edit*>(m_pActFocusWindow)->Cut();
+}
+// -----------------------------------------------------------------------------
+void OFieldDescControl::copy()
+{
+    if(isCutAllowed()) // this only checks if the focus window is valid
+        reinterpret_cast<Edit*>(m_pActFocusWindow)->Copy();
+}
+// -----------------------------------------------------------------------------
+void OFieldDescControl::paste()
+{
+    if(m_pActFocusWindow) // this only checks if the focus window is valid
+        reinterpret_cast<Edit*>(m_pActFocusWindow)->Paste();
+}
+// -----------------------------------------------------------------------------
 
 
 
