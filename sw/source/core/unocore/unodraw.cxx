@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2003-05-06 13:34:12 $
+ *  last change: $Author: os $ $Date: 2003-05-08 08:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1588,23 +1588,28 @@ void SwXShape::dispose(void) throw( RuntimeException )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
-            {
-                const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-                SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-                const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
-            }
+        SdrObject* pObj = pFmt->FindSdrObject();
+        if(pObj && pObj->IsInserted())
+        {
+            if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+                {
+                    const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
+                    SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+                    const xub_StrLen nIdx = rPos.nContent.GetIndex();
+                    pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                }
             else
                 pFmt->GetDoc()->DelLayoutFmt( pFmt );
-            uno::Any aAgg(xShapeAgg->queryAggregation( ::getCppuType((Reference<XComponent>*)0)));
-            Reference<XComponent> xComp;
-            aAgg >>= xComp;
-            if(xComp.is())
-                xComp->dispose();
+        }
     }
-//  else
-//      throw RuntimeException();
+    if(xShapeAgg.is())
+    {
+        uno::Any aAgg(xShapeAgg->queryAggregation( ::getCppuType((Reference<XComponent>*)0)));
+        Reference<XComponent> xComp;
+        aAgg >>= xComp;
+        if(xComp.is())
+            xComp->dispose();
+    }
 }
 /* -----------------14.04.99 13:02-------------------
  *
