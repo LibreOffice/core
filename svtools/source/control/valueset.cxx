@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:41:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
 
 void ValueSet::ImplInit( WinBits nWinStyle )
 {
-    Size aWinSize       = GetSizePixel();
+    // Size aWinSize        = GetSizePixel();
     mpItemList          = new ValueItemList;
     mpNoneItem          = NULL;
     mpScrBar            = NULL;
@@ -2201,7 +2201,7 @@ void ValueSet::SetFirstLine( USHORT nNewLine )
 
 void ValueSet::SelectItem( USHORT nItemId )
 {
-    USHORT nPos;
+    USHORT nPos = 0;
 
     if ( nItemId )
     {
