@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:37:32 $
+ *  last change: $Author: kz $ $Date: 2002-02-27 13:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,7 +1385,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ chinese_traditional ] = "δΈη§»ε‹•(~I)";
         Text[ arabic ] = "ΘΟζδ ΕÒΗΝΙ";
         Text[ greek ] = "Να μην γίνει μετακίνηση";
-        Text[ korean ] = "λ°€μ–΄λ‚΄μ§€ λ§μ‹­μ‹μ¤.(~I)";
+        Text[ korean ] = "λ°€μ–΄λ‚΄κΈ° κΈμ§€(~I)";
         Text[ turkish ] = "~Taώύma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No desplacis";
