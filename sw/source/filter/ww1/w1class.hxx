@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ public:
         return 256; }
     friend ostream& operator <<(ostream&, Ww1StyleSheet&);
     void Out(Ww1Shell&, Ww1Manager&);
-    friend Ww1Style;
+    friend class Ww1Style;
     BOOL GetError() {
         return !bOK; }
 };
