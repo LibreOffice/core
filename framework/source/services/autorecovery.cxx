@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:39 $
+ *  last change: $Author: as $ $Date: 2004-12-07 10:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,9 +1687,6 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs()
         if (xProgress.is())
             lDescriptor[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
 
-        // Test!
-        lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
-
         sal_Bool bBackupWasTried   = (
                                         ((rInfo.DocumentState & AutoRecovery::E_TRY_LOAD_BACKUP  ) == AutoRecovery::E_TRY_LOAD_BACKUP) || // temp. state!
                                         ((rInfo.DocumentState & AutoRecovery::E_INCOMPLETE       ) == AutoRecovery::E_INCOMPLETE     )    // transport TRY_LOAD_BACKUP from last loop to this new one!
@@ -1748,7 +1745,6 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs()
         {
             sURL = sLoadOriginalURL;
             rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
-            lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
         }
         else
             continue; // TODO ERROR!
