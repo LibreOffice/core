@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:16:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ String RID_STR_NO_RELATIVE
 String RID_STR_NO_REFESH_AFTERLAST
 {
     Text [ de ] = "Eine Zeile kann nicht aktualisiert werden, wenn das ResultSet hinter der letzten Zeile steht.";
-    Text [ en-US ] = "A row  cannot be refreshed when the ResultSet is positioned after  the last row.";
+    Text [ en-US ] = "A row cannot be refreshed when the ResultSet is positioned after the last row.";
 };
 String RID_STR_NO_MOVETOINSERTROW_CALLED
 {
@@ -243,6 +243,6 @@ String RID_STR_COLUMN_ALTER_BY_NAME
 String RID_STR_COLUMN_ALTER_BY_INDEX
 {
     Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
-    Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the  index.";
+    Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the index.";
 };
 
