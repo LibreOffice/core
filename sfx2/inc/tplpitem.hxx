@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:25 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class SfxTemplateItem: public SfxFlagItem
     String aStyle;
 public:
     TYPEINFO();
+    SfxTemplateItem();
     SfxTemplateItem( USHORT nWhich,
                      const String &rStyle,
                      USHORT nMask = 0xffff );
@@ -87,6 +88,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual BYTE            GetFlagCount() const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 #endif
