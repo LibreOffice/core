@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 14:02:13 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -98,31 +104,57 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
-        :m_aTextAlignHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), -1)
+        :m_pTextAlignHandler(NULL)
+        ,m_pControlBorderHandler(NULL)
+        ,m_pRotationAngleHandler(NULL)
+        ,m_pFontWidthHandler(NULL)
     {
     }
 
     //---------------------------------------------------------------------
     OControlPropertyHandlerFactory::~OControlPropertyHandlerFactory()
     {
+        delete m_pTextAlignHandler;
+        delete m_pControlBorderHandler;
+        delete m_pRotationAngleHandler;
+        delete m_pFontWidthHandler;
     }
 
     //---------------------------------------------------------------------
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
     {
+        const XMLPropertyHandler* pHandler = NULL;
+
         switch (_nType)
         {
             case XML_TYPE_TEXT_ALIGN:
-                return &m_aTextAlignHandler;
+                if (!m_pTextAlignHandler)
+                    m_pTextAlignHandler = new OEnumInt16Handler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), -1);
+                pHandler = m_pTextAlignHandler;
+                break;
+
             case XML_TYPE_CONTROL_BORDER:
-                return &m_aControlBorderHandler;
+                if (!m_pControlBorderHandler)
+                    m_pControlBorderHandler = new OControlBorderHandler;
+                pHandler = m_pControlBorderHandler;
+                break;
+
             case XML_TYPE_ROTATION_ANGLE:
-                return &m_aRotationAngleHandler;
+                if (!m_pRotationAngleHandler)
+                    m_pRotationAngleHandler = new ORotationAngleHandler;
+                pHandler = m_pRotationAngleHandler;
+                break;
+
             case XML_TYPE_FONT_WIDTH:
-                return &m_aFontWidthHandler;
-            default:
-                return XMLPropertyHandlerFactory::GetPropertyHandler(_nType);
+                if (!m_pFontWidthHandler)
+                    m_pFontWidthHandler = new OFontWidthHandler;
+                pHandler = m_pFontWidthHandler;
+                break;
         }
+
+        if (!pHandler)
+            pHandler = XMLPropertyHandlerFactory::GetPropertyHandler(_nType);
+        return pHandler;
     }
 
     //=====================================================================
@@ -206,7 +238,7 @@ namespace xmloff
     }
 
     //=====================================================================
-    //= OEnumInt16Handler
+    //= ORotationAngleHandler
     //=====================================================================
     //---------------------------------------------------------------------
     ORotationAngleHandler::ORotationAngleHandler()
@@ -214,7 +246,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
     {
         sal_Bool bSucces = sal_False;
 
@@ -229,7 +261,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
     {
         float fAngle;
         sal_Bool bSuccess = sal_False;
@@ -255,7 +287,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OEnumInt16Handler::importXML(const ::rtl::OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
+    sal_Bool OEnumInt16Handler::importXML(const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
     {
         // extract the value
         sal_uInt16 nValue = m_nVoidValue;
@@ -269,7 +301,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OEnumInt16Handler::exportXML(::rtl::OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
+    sal_Bool OEnumInt16Handler::exportXML(::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
     {
         // extract the value
         sal_Int16 nValue = m_nVoidValue;
@@ -292,6 +324,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/15 14:02:13  fs
+ *  #86823# changed the handling for control borders
+ *
  *  Revision 1.4  2001/02/26 10:28:04  aw
  *  Changed double import/export to use it's own conversion routines
  *  so iots more clear what type is used
