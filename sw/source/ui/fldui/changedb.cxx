@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:26:45 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,14 +258,14 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     USHORT nParent = 0;
     USHORT nChild = 0;
 
-    Image& rTableImg = aImageList.GetImage(IMG_DBTABLE);
-    Image& rDBImg = aImageList.GetImage(IMG_DB);
-    Image& rQueryImg = aImageList.GetImage(IMG_DBQUERY);
-    Image& rHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
-    Image& rHCDBImg = aImageListHC.GetImage(IMG_DB);
-    Image& rHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
-    Image& rToInsert = nCommandType ? rQueryImg : rTableImg;
-    Image& rHCToInsert = nCommandType ? rHCQueryImg : rHCTableImg;
+    Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
+    Image aDBImg = aImageList.GetImage(IMG_DB);
+    Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
+    Image aHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
+    Image aHCDBImg = aImageListHC.GetImage(IMG_DB);
+    Image aHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
+    Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
+    Image& rHCToInsert = nCommandType ? aHCQueryImg : aHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -282,9 +282,9 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
             return pRet;
         }
     }
-    pParent = aUsedDBTLB.InsertEntry(sDBName, rDBImg, rDBImg);
-    aUsedDBTLB.SetExpandedEntryBmp(pParent, rHCDBImg, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pParent, rHCDBImg, BMP_COLOR_HIGHCONTRAST);
+    pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
+    aUsedDBTLB.SetExpandedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
+    aUsedDBTLB.SetCollapsedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
 
     SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
     aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
