@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 07:36:29 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>

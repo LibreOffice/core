@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>

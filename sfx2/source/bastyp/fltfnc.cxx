@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: as $ $Date: 2001-07-06 13:19:11 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@
 #endif
 #ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>

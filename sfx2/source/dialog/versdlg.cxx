@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
@@ -74,20 +80,16 @@
 #include "objsh.hxx"
 #include "sfxsids.hrc"
 #include "dispatch.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "request.hxx"
 
 // **************************************************************************
 
-static String ConvertDateTime_Impl(const SfxStamp &rTime)
+static String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper)
 {
      const String pDelim ( DEFINE_CONST_UNICODE( ", "));
-     const International& rInter = Application::GetAppInternational();
-     String aStr(rInter.GetDate(rTime.GetTime()));
+     String aStr(rWrapper.getDate(rTime.GetTime()));
      aStr += pDelim;
-     aStr += rInter.GetTime(rTime.GetTime(), TRUE, FALSE);
+     aStr += rWrapper.getTime(rTime.GetTime(), TRUE, FALSE);
      return aStr;
 }
 
@@ -164,10 +166,11 @@ void SfxVersionDialog::Init_Impl()
     const SfxVersionTableDtor* pTable = pMedium->GetVersionList();
     if ( pTable )
     {
+        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
         for ( USHORT n=0; n<pTable->Count(); n++ )
         {
             SfxVersionInfo *pInfo = pTable->GetObject(n);
-            String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp );
+            String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
             aEntry += '\t';
             aEntry += pInfo->aCreateStamp.GetName();
             aEntry += '\t';
@@ -322,7 +325,8 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
 {
     FreeResource();
 
-    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreateStamp )) );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper )) );
     aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aCreateStamp.GetName()) );
     aEdit.SetText( rInfo.aComment );
 
