@@ -69,6 +69,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ucb
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\input
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
@@ -132,6 +133,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\util\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\util
 ..\com\sun\star\view\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\view
 ..\com\sun\star\xml\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml
+..\com\sun\star\xml\input*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\input
 ..\com\sun\star\xml\sax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
 ..\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 ..\com\sun\star\ui\dialogs\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
