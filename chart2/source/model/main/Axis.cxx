@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 15:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "Axis.hxx"
 #include "macros.hxx"
 #include "CharacterProperties.hxx"
+#include "LineProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "algohelper.hxx"
 #include "PropertyHelper.hxx"
@@ -132,15 +133,7 @@ enum
     // for Testing only!
     PROP_AXIS_MAJOR_TICKMARKS,
     // for Testing only!
-    PROP_AXIS_MINOR_TICKMARKS,
-
-    // com.sun.star.drawing.LineProperties
-    PROP_AXIS_LINE_STYLE,
-    PROP_AXIS_LINE_WIDTH,
-    PROP_AXIS_LINE_DASH,
-    PROP_AXIS_LINE_COLOR,
-    PROP_AXIS_LINE_TRANSPARENCE,
-    PROP_AXIS_LINE_JOINT
+    PROP_AXIS_MINOR_TICKMARKS
 };
 
 void lcl_AddPropertiesToVector(
@@ -210,44 +203,6 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // com.sun.star.drawing.LineProperties
-    // -----------------------------------
-    rOutProperties.push_back(
-        Property( C2U( "LineStyle" ),
-                  PROP_AXIS_LINE_STYLE,
-                  ::getCppuType( reinterpret_cast< const drawing::LineStyle * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "LineWidth" ),
-                  PROP_AXIS_LINE_WIDTH,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "LineDash" ),
-                  PROP_AXIS_LINE_DASH,
-                  ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( C2U( "LineColor" ),
-                  PROP_AXIS_LINE_COLOR,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "LineTransparence" ),
-                  PROP_AXIS_LINE_TRANSPARENCE,
-                  ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( C2U( "LineJoint" ),
-                  PROP_AXIS_LINE_JOINT,
-                  ::getCppuType( reinterpret_cast< const drawing::LineJoint * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -286,23 +241,6 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_MINOR_TICKMARKS ));
     rOutMap[ PROP_AXIS_MINOR_TICKMARKS ] =
         uno::makeAny( sal_Int32( 0 /* CHAXIS_MARK_NONE */ ) );
-
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_LINE_STYLE ));
-    rOutMap[ PROP_AXIS_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_LINE_WIDTH ));
-    rOutMap[ PROP_AXIS_LINE_WIDTH ] =
-        uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_LINE_COLOR ));
-    rOutMap[ PROP_AXIS_LINE_COLOR ] =
-        uno::makeAny( sal_Int32( 0x000000 ) );  // black
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_LINE_TRANSPARENCE ));
-    rOutMap[ PROP_AXIS_LINE_TRANSPARENCE ] =
-        uno::makeAny( sal_Int16( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_LINE_JOINT ));
-    rOutMap[ PROP_AXIS_LINE_JOINT ] =
-        uno::makeAny( drawing::LineJoint_NONE );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
@@ -317,6 +255,8 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector(
+            aProperties, /* bIncludeStyleProperties = */ true );
+        ::chart::LineProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ true );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
@@ -449,6 +389,9 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
         // initialize defaults
         lcl_AddDefaultsToMap( aStaticDefaults );
         CharacterProperties::AddDefaultsToMap(
+            aStaticDefaults,
+            /* bIncludeStyleProperties = */ true );
+        LineProperties::AddDefaultsToMap(
             aStaticDefaults,
             /* bIncludeStyleProperties = */ true );
     }
