@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:30:14 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,10 @@ public:
 #if SUPD>620
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
 #endif
+
+    // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
+    // <--
 };
 
 inline BOOL SwDocShell::SaveAsChilds( SvStorage *pStor )
