@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:22:28 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,11 @@ TabPage RID_SVXPAGE_GRID
         Text [ PORTUGUESE_BRAZILIAN ] = "~Visible grid" ;
         Text [ SWEDISH ] = "Synligt ~raster" ;
         Text [ PORTUGUESE ] = "~Quadrícula visível" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾Íø¸ñÏß(~I)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾Íø¸ñ(~I)";
         Text[ russian ] = "Ïîêàçàòü ñåòêó";
         Text[ polish ] = "Raster widoczny";
         Text[ japanese ] = "¸ŞØ¯ÄŞü‚ğ•\\¦‚·‚é(~I)";
-        Text[ chinese_traditional ] = "Åã¥Üºô®æ½u(~I)";
+        Text[ chinese_traditional ] = "Åã¥Üºô®æ(~I)";
         Text[ arabic ] = "ÔÈßÉ ãÑÆíÉ";
         Text[ greek ] = "Ğëİãìá ïñá~ôÜ";
         Text[ korean ] = "´«±İÀ» º¸ÀÌ°Ô(~I)";
@@ -499,7 +499,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ê ïîëÿì ñòğàíèöû";
         Text[ polish ] = "Przy marginesach stron";
         Text[ japanese ] = "Íß°¼Ş—]”’‚É(~P)";
-        Text[ chinese_traditional ] = "¹ï­ã­¶Ãä(~P)";
+        Text[ chinese_traditional ] = "¹ï·Ç­¶Ãä(~P)";
         Text[ arabic ] = "İí åæÇãÔ ÇáÕİÍÉ";
         Text[ greek ] = "~Óôá ğåñéèşñéá ôçò óåëßäáò";
         Text[ korean ] = "ÆäÀÌÁö¿¡¼­ º¯°æ(~P)";
@@ -880,6 +880,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ catalan ] = "grados";
     };
 };
+
 
 
 
