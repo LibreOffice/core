@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:45:54 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ FltError ImportExcel::Read( void )
                     case 0x01:  Blank25(); break;       // BLANK        [ 2  5]
                     case 0x02:  Integer(); break;       // INTEGER      [ 2   ]
                     case 0x03:  Number25(); break;      // NUMBER       [ 2  5]
-                    case 0x04:  Label25(); break;       // LABEL        [ 2  5]
+                    case 0x04:  Label(); break;         // LABEL        [ 2  5]
                     case 0x05:  Boolerr25(); break;     // BOOLERR      [ 2  5]
                     case 0x06:  Formula25(); break;     // FORMULA      [ 2  5]
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
@@ -310,7 +310,8 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
-                    case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
+                    case EXC_ID2_FONT:  GetFontBuffer().ReadFont( maStrm );     break;
+                    case EXC_ID_EFONT:  GetFontBuffer().ReadEfont( maStrm );    break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x43:  GetXFBuffer().ReadXF( maStrm );                 break;
@@ -359,7 +360,7 @@ FltError ImportExcel::Read( void )
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                     case 0x0201: Blank34(); break;      // BLANK        [  34 ]
                     case 0x0203: Number34(); break;     // NUMBER       [  34 ]
-                    case 0x0204: Label34(); break;      // LABEL        [  34 ]
+                    case 0x0204: Label(); break;        // LABEL        [  34 ]
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0206: Formula3(); break;     // FORMULA      [  3  ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
@@ -419,7 +420,7 @@ FltError ImportExcel::Read( void )
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                     case 0x0201: Blank34(); break;      // BLANK        [  34 ]
                     case 0x0203: Number34(); break;     // NUMBER       [  34 ]
-                    case 0x0204: Label34(); break;      // LABEL        [  34 ]
+                    case 0x0204: Label(); break;        // LABEL        [  34 ]
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
@@ -525,7 +526,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff4T;
                         break;
                     case 0x0204:                        // LABEL        [  34 ]
-                        Label34();
+                        Label();
                         eAkt = Z_Biff4T;
                         break;
                     case 0x0205:                        // BOOLERR      [  34 ]
@@ -568,7 +569,7 @@ FltError ImportExcel::Read( void )
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x0201: Blank34(); break;      // BLANK        [  34 ]
                     case 0x0203: Number34(); break;     // NUMBER       [  34 ]
-                    case 0x0204: Label34(); break;      // LABEL        [  34 ]
+                    case 0x0204: Label(); break;        // LABEL        [  34 ]
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
@@ -672,7 +673,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5T;
                         break;
                     case 0x04:                          // LABEL        [ 2  5]
-                        Label25();
+                        Label();
                         eAkt = Z_Biff5T;
                         break;
                     case 0x05:                          // BOOLERR      [ 2  5]
@@ -742,7 +743,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5T;
                         break;
                     case 0x0204:                        // LABEL        [  34 ]
-                        Label34();
+                        Label();
                         eAkt = Z_Biff5T;
                         break;
                     case 0x0205:                        // BOOLERR      [  34 ]
@@ -797,7 +798,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x01:  Blank25(); break;       // BLANK        [ 2  5]
                     case 0x03:  Number25(); break;      // NUMBER       [ 2  5]
-                    case 0x04:  Label25(); break;       // LABEL        [ 2  5]
+                    case 0x04:  Label(); break;         // LABEL        [ 2  5]
                     case 0x05:  Boolerr25(); break;     // BOOLERR      [ 2  5]
                     case 0x06:  Formula25(); break;     // FORMULA      [ 2  5]
                     case 0x07:  RecString(); break;     // STRING       [ 2345]
@@ -819,7 +820,7 @@ FltError ImportExcel::Read( void )
                     case 0xD6:  Rstring(); break;       // RSTRING      [    5]
                     case 0x0201: Blank34(); break;      // BLANK        [  34 ]
                     case 0x0203: Number34(); break;     // NUMBER       [  34 ]
-                    case 0x0204: Label34(); break;      // LABEL        [  34 ]
+                    case 0x0204: Label(); break;        // LABEL        [  34 ]
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0206: Formula3(); break;     // FORMULA      [  3  ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
