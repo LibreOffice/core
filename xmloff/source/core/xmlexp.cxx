@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 10:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,9 +387,9 @@ SvXMLExport::~SvXMLExport()
                         xExportInfo->setPropertyValue(sProgressCurrent, aAny);
                     }
                 }
-                if (pNumExport)
+                if (pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
                 {
-                    OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERFORMATS));
+                    OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                     {
                         uno::Sequence<sal_Int32> aWasUsed;
@@ -422,12 +422,12 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         if(xNumberFormatsSupplier.is() && xHandler.is())
             pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
     }
-    if (xExportInfo.is() && pNumExport)
+    if (xExportInfo.is() && pNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERFORMATS));
+            OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
             if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
             {
                 uno::Any aAny = xExportInfo->getPropertyValue(sWrittenNumberFormats);
