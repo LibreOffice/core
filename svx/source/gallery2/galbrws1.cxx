@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:05:20 $
+ *  last change: $Author: ka $ $Date: 2001-10-19 12:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
         else
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
 
-        aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed );
+        aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed && pTheme->GetObjectCount() );
         aMenu.EnableItem( MN_RENAME, bRenameAllowed );
         aMenu.EnableItem( MN_DELETE, bRemoveAllowed );
         aMenu.EnableItem( MN_ASSIGN_ID, bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() );
@@ -376,7 +376,7 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
         case( MN_DELETE  ):
         {
-            if( QueryBox( this, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETETHEME ) ) ).Execute() == RET_YES )
+            if( QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETETHEME ) ) ).Execute() == RET_YES )
                 mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
         }
         break;

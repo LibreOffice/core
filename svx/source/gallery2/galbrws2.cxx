@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
+ *  last change: $Author: ka $ $Date: 2001-10-19 12:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
                 case( MN_DELETE ):
                 {
                     if( !mpCurTheme->IsReadOnly() &&
-                        QueryBox( this, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETEOBJ ) ) ).Execute() == RET_YES )
+                        QueryBox( NULL, WB_YES_NO, String( GAL_RESID( RID_SVXSTR_GALLERY_DELETEOBJ ) ) ).Execute() == RET_YES )
                     {
                         mpCurTheme->RemoveObject( mnCurActionPos );
                     }
