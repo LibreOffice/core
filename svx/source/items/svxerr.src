@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 20:53:17 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 21:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ Resource RID_SVXERRCODE
         TEXT[ japanese ] = "$(ARG1)はｽﾍﾟﾙﾁｪｯｸで支援されません。つまり現在ｱｸﾃｨﾌﾞではありません。\n使用中のﾌﾟﾛｸﾞﾗﾑのｲﾝｽﾄｰﾙをﾁｪｯｸして選択されていなければ、そこでｽﾍﾟﾙﾁｪｯｸに必要な言語をｲﾝｽﾄ-ﾙします。\nあるいはﾒﾆｭｰのﾂｰﾙ → ｵﾌﾟｼｮﾝ → 言語設定 → 文章校正で必要な言語ﾓｼﾞｭｰﾙをｲﾝｽﾄｰﾙします。";
         TEXT[ korean ] = "$(ARG1)을(를) 맞춤법 검사에 이용할 수 없습니다.\n 사용자의 설치를 점검한 다음, 필요시 요구되는  언어를 설치하십시오.";
         TEXT[ chinese_simplified ] = "$(ARG1)不支持拼写检查功能或者目前未启用该功能。\n请您检查安装，如有必要请安装所需的语言模块\n或者借助菜单命令“工具 - 选项... - 语言设定 - 语言规则”启用相应的语言模块。";
-        TEXT[ chinese_traditional ] = "$(ARG1)不存在。\n請您檢查安裝﹐若有必要請您安裝所需的語言版本。";
+        TEXT[ chinese_traditional ] = "$(ARG1) 不受支援或沒有被啓動。\n請檢查程式的安裝。若有必要請安裝所需的語言模塊或按功能表<工具> - <選項> ，在<語言規則>處設定要用的語言模塊。";
         TEXT[ turkish ] = "$(ARG1) yaz�m denetiminde kullan�lam�yor.\nL�tfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         TEXT[ arabic ] = "$(ARG1) ��� ������ ������� ��������.\n������ ��� ������� ����� �ߡ ��� ������ ����� �������ɡ ��� ��� �����.";
         TEXT[ catalan ] = "$(ARG1) no disponible para la revisi�n ortogr�fica.\n Examine por favor su instalaci�n e instale en caso dado el idioma deseado.";
@@ -682,6 +682,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
