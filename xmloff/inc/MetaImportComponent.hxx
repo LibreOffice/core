@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 17:44:36 $
+ *  last change: $Author: sab $ $Date: 2001-09-11 05:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,16 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XDocumentInfo.hpp>
+#endif
 
 class XMLMetaImportComponent : public SvXMLImport
 {
+private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentInfo>  xDocInfo;
+
 public:
     XMLMetaImportComponent() throw();
 
@@ -87,6 +93,9 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
 

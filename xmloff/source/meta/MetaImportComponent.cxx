@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-11 05:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,17 @@ using namespace ::xmloff::token;
 
 class SvXMLMetaDocumentContext : public SvXMLImportContext
 {
+private:
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::document::XDocumentInfo>  xDocInfo;
+
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport, USHORT nPrfx,
                             const rtl::OUString& rLName,
                             const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::document::XDocumentInfo>& rDocInfo);
     virtual ~SvXMLMetaDocumentContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
@@ -96,8 +102,10 @@ public:
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
                         USHORT nPrfx, const rtl::OUString& rLName,
-                        const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+                        const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                        const uno::Reference<document::XDocumentInfo>& rDocInfo) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    xDocInfo(rDocInfo)
 {
     // here are no attributes
 }
@@ -114,7 +122,7 @@ SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext( USHORT nPrefix
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken(rLocalName, XML_META) )
     {
-        return new SfxXMLMetaContext(GetImport(), nPrefix, rLocalName, GetImport().GetModel());
+        return new SfxXMLMetaContext(GetImport(), nPrefix, rLocalName, xDocInfo);
     }
     else
     {
@@ -146,7 +154,7 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
          IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
-        return new SvXMLMetaDocumentContext(*this, nPrefix, rLocalName, xAttrList);
+        return new SvXMLMetaDocumentContext(*this, nPrefix, rLocalName, xAttrList, xDocInfo);
     }
     else
     {
@@ -154,7 +162,13 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     }
 }
 
-
+void SAL_CALL XMLMetaImportComponent::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    xDocInfo = uno::Reference< document::XDocumentInfo >::query( xDoc );
+    if( !xDocInfo.is() )
+        throw lang::IllegalArgumentException();
+}
 
 uno::Sequence< rtl::OUString > SAL_CALL
     XMLMetaImportComponent_getSupportedServiceNames()

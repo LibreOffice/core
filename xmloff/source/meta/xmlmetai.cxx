@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-11 05:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,6 +750,18 @@ SfxXMLMetaContext::SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         xDocInfo = xSupp->getDocumentInfo();
         xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
     }
+    DBG_ASSERT( xInfoProp.is(), "no document info properties" );
+}
+
+SfxXMLMetaContext::SfxXMLMetaContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                    const rtl::OUString& rLName,
+                                    const uno::Reference<document::XDocumentInfo>&  rDocInfo ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    xDocInfo( rDocInfo ),
+    xInfoProp( rDocInfo, uno::UNO_QUERY ),
+    pTokenMap ( NULL ),
+    nUserKeys ( 0 )
+{
     DBG_ASSERT( xInfoProp.is(), "no document info properties" );
 }
 
