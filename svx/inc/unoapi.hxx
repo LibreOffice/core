@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:19:35 $
+ *  last change: $Author: cl $ $Date: 2001-07-11 13:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SVX_UNOAPI_HXX_
 #define _SVX_UNOAPI_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
@@ -72,6 +76,10 @@
 
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
+#endif
+
+#ifndef _SFXPOOLITEM_HXX
+#include <svtools/poolitem.hxx>
 #endif
 
 class SvxShape;
@@ -128,6 +136,12 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
     for the current language.
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
+
+/** converts the given any with a metric to 100th/mm if needed */
+void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw();
+
+/** converts the given any with a metric from 100th/mm to the given metric if needed */
+void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw();
 
 #endif _SVX_UNOAPI_HXX_
 
