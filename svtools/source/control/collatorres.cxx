@@ -55,7 +55,7 @@ class CollatorRessourceData
 //
 // -------------------------------------------------------------------------
 
-#define COLLATOR_RESSOURCE_COUNT 9
+#define COLLATOR_RESSOURCE_COUNT 10
 
 CollatorRessource::CollatorRessource()
 {
@@ -83,6 +83,8 @@ CollatorRessource::CollatorRessource()
                                              RESSTR(STR_SVT_COLLATE_UNICODE));
     mp_Data[8] = CollatorRessourceData (ASCSTR("zhuyin"),
                                              RESSTR(STR_SVT_COLLATE_ZHUYIN));
+    mp_Data[9] = CollatorRessourceData (ASCSTR("phonebook"),
+                                             RESSTR(STR_SVT_COLLATE_PHONEBOOK));
 }
 
 CollatorRessource::~CollatorRessource()

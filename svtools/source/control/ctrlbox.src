@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:43:50 $
+ *  last change: $Author: er $ $Date: 2002-07-12 18:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ arabic ] = "������";
     Text[ catalan ] = "Automatic";
     Text[ finnish ] = "Automaattinen";
+    Text[ thai ] = "อัตโนมัติ";
 };
 
 /*
@@ -138,6 +139,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ turkish ] = "Alphanumeric";
     Text[ arabic ] = "Alphanumeric";
     Text[ catalan ] = "Alphanumeric";
+    Text[ thai ] = "รูปตัวเลขหนังสือ";
 };
 
 String STR_SVT_COLLATE_NORMAL
@@ -165,6 +167,7 @@ String STR_SVT_COLLATE_NORMAL
     Text[ arabic ] = "����";
     Text[ catalan ] = "Normal";
     Text[ finnish ] = "Normaali";
+    Text[ thai ] = "ปกติ";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -192,6 +195,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ arabic ] = "������ ����";
     Text[ catalan ] = "Character Set";
     Text[ finnish ] = "Merkist�";
+    Text[ thai ] = "ชุดตัวอักขระ";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
@@ -219,6 +223,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ arabic ] = "Dictionary";
     Text[ catalan ] = "Dictionary";
     Text[ finnish ] = "Sanasto";
+    Text[ thai ] = "พจนานุกรม";
 };
 
 String STR_SVT_COLLATE_PINYIN
@@ -246,6 +251,7 @@ String STR_SVT_COLLATE_PINYIN
     Text[ arabic ] = "Pinyin";
     Text[ catalan ] = "Pinyin";
     Text[ finnish ] = "Pinyin";
+    Text[ thai ] = "Pinyin";
 };
 
 String STR_SVT_COLLATE_STROKE
@@ -273,6 +279,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ arabic ] = "Stroke";
     Text[ catalan ] = "Stroke";
     Text[ finnish ] = "Viiva";
+    Text[ thai ] = "ขีดลง";
 };
 
 String STR_SVT_COLLATE_RADICAL
@@ -300,6 +307,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ arabic ] = "Radical";
     Text[ catalan ] = "Radical";
     Text[ finnish ] = "Juurimerkki";
+    Text[ thai ] = "รัศมี";
 };
 
 String STR_SVT_COLLATE_UNICODE
@@ -327,6 +335,7 @@ String STR_SVT_COLLATE_UNICODE
     Text[ turkish ] = "Unicode";
     Text[ arabic ] = "Unicode";
     Text[ catalan ] = "Unicode";
+    Text[ thai ] = "Unicode";
 };
 
 String STR_SVT_COLLATE_ZHUYIN
@@ -354,8 +363,16 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ arabic ] = "Zhuyin";
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
+    Text[ thai ] = "Zhuyin";
 };
 
+String STR_SVT_COLLATE_PHONEBOOK
+{
+    /* phone book sorting algorithm. e.g. German */
+    Text = "Telefonbuch" ;
+    Text [ ENGLISH ] = "Phone book" ;
+    Text[ english_us ] = "Phone book";
+};
 
 
 
