@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-28 14:46:09 $
+ *  last change: $Author: kr $ $Date: 2001-02-19 10:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ import com.sun.star.uno.UnoRuntime;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2000-11-28 14:46:09 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-19 10:00:07 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -185,14 +185,19 @@ public class FactoryHelper {
                 instance = _constructor.newInstance(_parameters);
             }
             catch(InvocationTargetException invocationTargetException) {
-                System.err.println("##### " + getClass().getName() + ".createInstance:" + invocationTargetException);
-                invocationTargetException.printStackTrace();
+                Throwable targetException = invocationTargetException.getTargetException();
 
-                Throwable throwable = invocationTargetException.getTargetException();
-                System.err.println("##### " + getClass().getName() + ".createInstance:" + throwable);
-                throwable.printStackTrace();
+                if(targetException instanceof java.lang.RuntimeException)
+                    throw (java.lang.RuntimeException)targetException;
 
-                throw new com.sun.star.uno.Exception(invocationTargetException.toString());
+                else if(targetException instanceof com.sun.star.uno.Exception)
+                    throw (com.sun.star.uno.Exception)targetException;
+
+                else if(targetException instanceof com.sun.star.uno.RuntimeException)
+                    throw (com.sun.star.uno.RuntimeException)targetException;
+
+                else
+                    throw new com.sun.star.uno.Exception(targetException.toString());
             }
             catch(IllegalAccessException illegalAccessException) {
                 throw new com.sun.star.uno.Exception(illegalAccessException.toString());
