@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlctypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ enum ParseState
     PS_AttributeDeclSeen,   // Seen complete attribute declaration
     PS_PropertyDeclSeen,    // Seen complete property declaration
     PS_OperationDeclSeen,   // Seen complete operation declaration
+    PS_InterfaceInheritanceDeclSeen, // Seen complete interface inheritance decl
     PS_ConstantsDeclSeen,   // Seen complete constants declaration
 
     PS_ServiceSeen,         // Seen a SERVICE keyword
