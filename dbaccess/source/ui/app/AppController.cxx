@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:00:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,24 +564,27 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_bSuspended = bSuspend;
-    if ( bSuspend && !suspendDocuments( bSuspend ))
-        return sal_False;
-
     sal_Bool bCheck = sal_True;
-    Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
-    if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
+    if ( m_bSuspended != bSuspend )
     {
-        switch (ExecuteQuerySaveDocument(getView(),getStrippedDatabaseName()))
+        m_bSuspended = bSuspend;
+        if ( bSuspend && !suspendDocuments( bSuspend ))
+            return sal_False;
+
+        Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
+        if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
         {
-            case RET_YES:
-                Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
-                bCheck = !xModi->isModified(); // when we save the table this must be false else some press cancel
-                break;
-            case RET_CANCEL:
-                bCheck = sal_False;
-            default:
-                break;
+            switch (ExecuteQuerySaveDocument(getView(),getStrippedDatabaseName()))
+            {
+                case RET_YES:
+                    Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
+                    bCheck = !xModi->isModified(); // when we save the table this must be false else some press cancel
+                    break;
+                case RET_CANCEL:
+                    bCheck = sal_False;
+                default:
+                    break;
+            }
         }
     }
 
