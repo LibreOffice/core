@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-13 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 08:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+double toDouble(const ByteString& rString);
 //------------------------------------------------------------------
 xub_StrLen OFlatString::GetTokenCount( sal_uInt8 cTok, sal_uInt8 cStrDel ) const
 {
@@ -397,7 +399,7 @@ void OFlatTable::fillColumns()
                 {
                     try
                     {
-                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,String(aField,pConnection->getTextEncoding()));
+                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,String(aField2,pConnection->getTextEncoding()));
                     }
                     catch(Exception&)
                     {
@@ -924,7 +926,8 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
                     else
                         aStrConverted += aStr.GetChar(j) ;
                 }
-                (*_rRow)[i] = aStrConverted.ToDouble();
+                double nVal = toDouble(aStrConverted);
+                (*_rRow)[i] = nVal;
             } break;
             default:
             {
