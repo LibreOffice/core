@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 13:55:03 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 16:26:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,11 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF 
 
+# define default arch flags when needed
+.IF "$(ARCH_FLAGS)"==""
+ARCH_FLAGS=-mcpu=pentiumpro
+.ENDIF
+
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
@@ -99,14 +104,14 @@ CFLAGSENABLESYMBOLS=-g
 .ENDIF
 
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mcpu=pentiumpro
+CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-rtti
+CFLAGSCXX= -pipe $(ARCH_FLAGS) -fno-rtti
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
 .IF "$(BUILD_SPECIAL)"==""
