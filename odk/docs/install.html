@@ -50,10 +50,12 @@
     <td colspan="3" height="8">
       <blockquote>
       <table width="100%" border="0" cellpadding="4">
+        <tr> 
+          <td colspan="4" align=center><a href="../index.html" title="link to the SDK start page">
+	     SDK home</a></td>
+        </tr>
         <tr>
-          <td colspan="4" align=center><font size="6"><b>Installation guide</b></font>
-             &nbsp;&nbsp;<a href="../index.html" title="link to the SDK start page">SDK home</a>
-          </td>
+          <td colspan="4" align=center><font size="6"><b>Installation guide</b></font></td>
         </tr>
         <tr> 
           <td colspan="4">&nbsp;</td>
@@ -69,10 +71,9 @@
               <dt><b>StarOffice&#153 6.0 PP2 or OpenOffice.org 1.0.2 installation</b>
               <dd>The SDK works on top of an existing office installation and uses the same libraries as
                   the office installation.
-              <dt><b>JDK (1.3.1_02 or higher)</b>
+              <dt><b>JDK (1.4.1_01 or higher)</b>
               <dd>A JDK is necessary for developing Java components or applications. An appropriate Java
-                  SDK can be found on <a target="_blank" href="http://java.sun.com/products" title="link to the Java SDK download page (online)">
-                  http://java.sun.com/products</a>.
+                  SDK can be found on <a target="_blank" href="http://java.sun.com/products" title="link to the Java SDK download page (online)">http://java.sun.com/products</a>.
               <dt><b>C++ compiler</b>
               <dd>A C++ compiler is necessary for developing C++ components or applications. UNO depends
                   on a compiler dependent language binding so that we use the appropriate compiler where a 
@@ -130,15 +131,18 @@
                  <tr> 
                    <td widht=35%><b>OO_SDK_CPP_HOME</b></td>
                    <td widht=65%>path to the C++ compiler (under windows the directory where the
-                       vcvar32.bat file can be found)</td>
+                       vcvar32.bat file can be found). The C++ compiler is <b>optional</b> and only 
+		         necessary for building the C++ examples.</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>OO_SDK_MAKE_HOME</b></td>
-                   <td widht=65%>path to GNU make</td>
+                   <td widht=65%>path to GNU make.</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>OO_STLPORT_HOME</b></td>
-                   <td widht=65%>path to the STLPORT installation directory</td>
+                   <td widht=65%>path to the STLPORT installation directory. The STLPORT is <b>optional</b>
+		        and only necessary for the database C++ skeletons or if you want to use the
+			 STLPORT in your own C++ components.</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>SDK_AUTO_DEPLOYMENT</b></td>
@@ -149,8 +153,9 @@
                  </tr>
                </table>
             </p>
-            <p>If you do not want to use the script to set your working environment, you must set the appropriate 
-               environment variables by yourself. The script sets the following environment variables:
+            <p>If you do not want to use the script to set your working environment, you must set the 
+	        appropriate environment variables by yourself. The script sets the following environment 
+		 variables:
             </p>
             <p><b>Environment variables for UNIX</b></p>
             <p>Solaris</p>	    
