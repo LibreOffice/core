@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 08:46:22 $
+ *  last change: $Author: er $ $Date: 2001-07-25 19:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,11 @@
 #ifndef _SVX_XLNDSIT_HXX
 #include "xlndsit.hxx"
 #endif
+
+#ifndef _SVDGLOB_HXX
+#include "svdglob.hxx"
+#endif
+#include "svdstr.hrc"
 
 using namespace ::osl;
 using namespace ::vos;
@@ -1259,7 +1264,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                                 {
                                     // generate a unique name
 
-                                    aName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") );
+                                    aName = ImpGetResStr( STR_ObjOLE2NamePrefix );
+                                    aName += sal_Unicode(' ');
                                     String aStr;
                                     sal_Int32 i = 1;
                                     HACK(Wegen Storage Bug 46033)
