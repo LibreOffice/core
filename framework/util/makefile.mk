@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-08 08:55:30 $
+#   last change: $Author: as $ $Date: 2001-11-08 12:01:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,7 +204,6 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
-                $(SLO)$/fltdlg.obj                  \
                 $(SLO)$/frame.obj					\
                 $(SLO)$/framecontainer.obj			\
                 $(SLO)$/helpagentdispatcher.obj		\
