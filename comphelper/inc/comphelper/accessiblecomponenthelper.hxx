@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef COMPHELPER_ACCESSIBLE_COMPONENT_HELPER_HXX
 #define COMPHELPER_ACCESSIBLE_COMPONENT_HELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEXTENDEDCOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEXTENDEDCOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #endif
 
 #ifndef COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
@@ -107,7 +107,7 @@ namespace comphelper
             note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
                  which itself implements XAccessibleComponent
         */
-        sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -118,7 +118,7 @@ namespace comphelper
     //= OAccessibleComponentHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::drafts::com::sun::star::accessibility::XAccessibleComponent
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleComponent
                                 >   OAccessibleComponentHelper_Base;
 
     /** a helper class for implementing an AccessibleContext which at the same time
@@ -139,7 +139,7 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -150,7 +150,7 @@ namespace comphelper
     //= OAccessibleExtendedComponentHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleExtendedComponent
                                 >   OAccessibleExtendedComponentHelper_Base;
 
     /** a helper class for implementing an AccessibleContext which at the same time
@@ -171,7 +171,7 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleComponent - default implementations
-        virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
