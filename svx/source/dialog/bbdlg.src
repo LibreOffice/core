@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:14:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog RID_SVXDLG_BBDLG
     Text [ portuguese_brazilian ] = "Borda / Plano de Fundo" ;
     Text [ portuguese ] = "Contorno/Plano de fundo" ;
     Text [ finnish ] = "Reuna / tausta" ;
-    Text [ danish ] = "Ramme / Baggrund" ;
+    Text [ danish ] = "Kant / baggrund" ;
     Text [ french ] = "Bordure / Arri�re-plan" ;
     Text [ swedish ] = "Inramning/ Bakgrund" ;
     Text [ dutch ] = "Omranding / achtergrond" ;
@@ -100,7 +100,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -122,6 +122,8 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -155,6 +157,8 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
         };
     };
@@ -174,8 +178,11 @@ TabDialog RID_SVXDLG_BBDLG
     Text[ hebrew ] = "Umrandung / Hintergrund";
     Text[ hindi ] = "किनारा / पृष्ठभाग";
     Text[ slovak ] = "Okraje / Pozadie";
+    Text[ hungarian ] = "Szegély és háttér";
+    Text[ slovenian ] = "Obroba / ozadje";
 };
  // ********************************************************************** EOF
+
 
 
 
