@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:40 $
+ *  last change: $Author: as $ $Date: 2001-05-04 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 //  User can overwrite these adjustment with his own values! We will do it only if nothing is set.
 //*****************************************************************************************************************
 
-#ifndef DEBUG
+#ifndef _DEBUG
     #undef  ENABLE_LOGMECHANISM
     #undef  ENABLE_ASSERTIONS
     #undef  ENABLE_EVENTDEBUG
