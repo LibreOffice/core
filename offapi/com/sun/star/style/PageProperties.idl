@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:15 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,10 @@ service PageProperties
 [optional , property] com::sun::star::text::XTextColumns TextColumns;
 //-----------------------------------------------------------------------------
 /** contains user defined  attributes.
+
+    <p>This <type scope="com::sun::star::container">XNameContainer</type>
+    supports the service
+    <type scope="com::sun::star::xml>AttributeContainer</type>.</p>
  */
 [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 
