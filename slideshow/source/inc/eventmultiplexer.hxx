@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventmultiplexer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:54:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,19 @@ namespace presentation
             void addAudioStoppedHandler( const AnimationEventHandlerSharedPtr&      rHandler );
             void removeAudioStoppedHandler( const AnimationEventHandlerSharedPtr&   rHandler );
 
+            /** Register an event handler that will be called when an
+                XCommand node's with the command STOPAUDIO is activated.
+
+                Note that <em>all</em> registered handlers will be
+                called when the audio stops. This is in contrast to
+                the mouse events below.
+
+                @param rHandler
+                Handler to call when command is activated
+             */
+            void addCommandStopAudioHandler( const AnimationEventHandlerSharedPtr&      rHandler );
+            void removeCommandStopAudioHandler( const AnimationEventHandlerSharedPtr&   rHandler );
+
             /** Register a handler that is called when the show enters
                 or exits pause mode.
              */
@@ -503,6 +516,13 @@ namespace presentation
              */
             bool notifyPauseMode( bool bPauseShow );
 
+            /** Notify that all audio has to be stoped.
+
+                This method is used by XCommand nodes and all sound
+                playing nodes should listen for this command and
+                stop theire sounds when its fired. */
+            void notifyCommandStopAudio( const AnimationNodeSharedPtr& rNode );
+
         public:
             typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XMouseListener,
                                                        ::com::sun::star::awt::XMouseMotionListener >  Listener_UnoBase;
@@ -553,6 +573,8 @@ namespace presentation
                 void removeSlideAnimationsEndHandler( const EventHandlerSharedPtr&      rHandler );
                 void addAudioStoppedHandler     ( const AnimationEventHandlerSharedPtr& rHandler );
                 void removeAudioStoppedHandler  ( const AnimationEventHandlerSharedPtr& rHandler );
+                void addCommandStopAudioHandler     ( const AnimationEventHandlerSharedPtr& rHandler );
+                void removeCommandStopAudioHandler  ( const AnimationEventHandlerSharedPtr& rHandler );
                 void addPauseHandler            ( const PauseEventHandlerSharedPtr& rHandler );
                 void removePauseHandler         ( const PauseEventHandlerSharedPtr& rHandler );
                 void addClickHandler            ( const MouseEventHandlerSharedPtr& rHandler,
@@ -573,6 +595,7 @@ namespace presentation
                 bool notifySlideAnimationsEnd   ();
                 bool notifyAudioStopped         ( const AnimationNodeSharedPtr& rNode );
                 bool notifyPauseMode            ( bool bPauseShow );
+                void notifyCommandStopAudio     ( const AnimationNodeSharedPtr& rNode );
 
                 // internal method implementations
                 virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -589,6 +612,13 @@ namespace presentation
                 virtual void SAL_CALL mouseMoved( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
             private:
+                // actual handler implementations (the UNO interface
+                // overrides above are only stubs)
+                void implMousePressed( const ::com::sun::star::awt::MouseEvent& e );
+                void implMouseReleased( const ::com::sun::star::awt::MouseEvent& e );
+                void implMouseDragged( const ::com::sun::star::awt::MouseEvent& e );
+                void implMouseMoved( const ::com::sun::star::awt::MouseEvent& e );
+
                 bool isMouseListenerRegistered() const;
 
                 struct MouseEventHandlerEntry
@@ -681,6 +711,7 @@ namespace presentation
                 ImplAnimationHandlers       maAnimationEndHandlers;
                 ImplEventHandlers           maSlideAnimationsEndHandlers;
                 ImplAnimationHandlers       maAudioStoppedHandlers;
+                ImplAnimationHandlers       maCommandStopAudioHandlers;
                 ImplPauseHandlers           maPauseHandlers;
                 ImplMouseHandlers           maMouseClickHandlers;
                 ImplMouseHandlers           maMouseDoubleClickHandlers;
