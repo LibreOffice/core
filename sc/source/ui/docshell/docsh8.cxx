@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-05 16:45:00 $
+ *  last change: $Author: nn $ $Date: 2001-06-08 18:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -169,13 +167,9 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
             DBG_ERRORFILE( "transfer command not available" );
         }
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        bRet = sal_False;
-    }
     catch( uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        // ucb may throw different exceptions on failure now
         bRet = sal_False;
     }
 
@@ -197,14 +191,9 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
         aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
                                 comphelper::makeBoolAny( sal_True ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-        bRet = sal_False;
-    }
     catch( uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        // ucb may throw different exceptions on failure now
         bRet = sal_False;
     }
 
@@ -221,21 +210,10 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-    }
-    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
-    {
-        DBG_WARNING( "IllegalIdentifierException" );
-    }
-    catch( ::com::sun::star::ucb::ContentCreationException& )
-    {
-        DBG_WARNING( "ContentCreationException" );
-    }
     catch( uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        // ucb may throw different exceptions on failure now - warning only
+        DBG_WARNING( "Any other exception" );
     }
 
     return bRet;
