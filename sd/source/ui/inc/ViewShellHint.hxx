@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellHint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,10 @@ public:
         // Indicate that an edit mode change is about to begin.
         HINT_CHANGE_EDIT_MODE_START,
         // Indicate that an edit mode change has been completed.
-        HINT_CHANGE_EDIT_MODE_END
+        HINT_CHANGE_EDIT_MODE_END,
+
+        HINT_COMPLEX_MODEL_CHANGE_START,
+        HINT_COMPLEX_MODEL_CHANGE_END
     };
 
     TYPEINFO();
