@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 11:28:02 $
+ *  last change: $Author: er $ $Date: 2001-02-09 11:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bRangeModified = FALSE;
         }
         if ( bOnRefMove )
-            bOnRefMove = (bValChanged || (!bHasRefs && aPos != aOldPos));
+            bOnRefMove = (bValChanged || (aPos != aOldPos));
             // Zelle referiert sich evtl. selbst, z.B. ocColumn, ocRow ohne Parameter
 
         BOOL bColRowNameCompile, bHasRelName, bNewListening, bNewRelName,
