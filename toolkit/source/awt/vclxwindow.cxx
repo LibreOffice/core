@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 13:57:30 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 13:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     }
                 }
             }
+            case BASEPROPERTY_HELPTEXT:
+            {
+                ::rtl::OUString aHelpText;
+                if ( Value >>= aHelpText )
+                {
+                    pWindow->SetQuickHelpText( aHelpText );
+                }
+            }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
             {
@@ -700,6 +708,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_TITLE:
             {
                 ::rtl::OUString aText = GetWindow()->GetText();
+                aProp <<= aText;
+            }
+            break;
+            case BASEPROPERTY_HELPTEXT:
+            {
+                ::rtl::OUString aText = GetWindow()->GetQuickHelpText();
                 aProp <<= aText;
             }
             break;
@@ -906,7 +920,12 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             Size aSz = pWindow->GetSizePixel();
             aSz = pDev->PixelToLogic( aSz );
             Point aP = pDev->PixelToLogic( aPos );
-            pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
+
+            ULONG nFlags = WINDOW_DRAW_NOCONTROLS;
+            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+                nFlags |= WINDOW_DRAW_MONO;
+
+            pWindow->Draw( pDev, aP, aSz, nFlags );
         }
     }
 }

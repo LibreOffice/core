@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 14:26:20 $
+ *  last change: $Author: mt $ $Date: 2001-03-23 13:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "FormatKey" ),          BASEPROPERTY_FORMATKEY,         ::getCppuType((const sal_Int32*)0),                 ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEVOID|::com::sun::star::beans::PropertyAttribute::TRANSIENT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "FormatsSupplier" ),    BASEPROPERTY_FORMATSSUPPLIER,   ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >*)0),    ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEVOID|::com::sun::star::beans::PropertyAttribute::TRANSIENT ),
 
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "HelpText" ),           BASEPROPERTY_HELPTEXT,          ::getCppuType((const ::rtl::OUString*)0),       ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "HelpURL" ),            BASEPROPERTY_HELPURL,           ::getCppuType((const ::rtl::OUString*)0),       ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "HScroll" ),            BASEPROPERTY_HSCROLL,           ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "HardLineBreaks" ),     BASEPROPERTY_HARDLINEBREAKS,    ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
