@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testpropshlp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:11 $
+ *  last change: $Author: jbu $ $Date: 2000-10-09 11:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,12 +218,15 @@ void test_PropertyArrayHelper()
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
           OSL_ENSHURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
+
+        // table to switch to sorted
+        int a[] = { 2 , 1 , 4, 3, 5, 0 };
           for( int i = 0; i < 6; i++ )
           {
-              OSL_ENSHURE( pP[i].Name == getPropertyTable2()[i].Name , "Name not correct" );
-              OSL_ENSHURE( pP[i].Handle == getPropertyTable2()[i].Handle, "Handle not correct" );
-              OSL_ENSHURE( pP[i].Attributes == getPropertyTable2()[i].Attributes, "Attributes not correct" );
-              OSL_ENSHURE( pP[i].Type == getPropertyTable2()[i].Type, "Type not correct" );
+              OSL_ENSHURE( pP[i].Name == getPropertyTable2()[a[i]].Name , "Name not correct" );
+              OSL_ENSHURE( pP[i].Handle == getPropertyTable2()[a[i]].Handle, "Handle not correct" );
+              OSL_ENSHURE( pP[i].Attributes == getPropertyTable2()[a[i]].Attributes, "Attributes not correct" );
+              OSL_ENSHURE( pP[i].Type == getPropertyTable2()[a[i]].Type, "Type not correct" );
           }
     }
 
@@ -233,12 +236,14 @@ void test_PropertyArrayHelper()
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
           OSL_ENSHURE( 3 == aProps.getLength(), "getProperties() gives not all properties" );
+        // table to switch to sorted
+        int a[] = { 2 , 0 , 1 };
           for( int i = 0; i < 3; i++ )
           {
-              OSL_ENSHURE( pP[i].Name == getPropertyTable3()[i].Name , "Name not correct" );
-              OSL_ENSHURE( pP[i].Handle == getPropertyTable3()[i].Handle, "Handle not correct" );
-              OSL_ENSHURE( pP[i].Attributes == getPropertyTable3()[i].Attributes, "Attributes not correct" );
-              OSL_ENSHURE( pP[i].Type == getPropertyTable3()[i].Type, "Type not correct" );
+              OSL_ENSHURE( pP[i].Name == getPropertyTable3()[a[i]].Name , "Name not correct" );
+              OSL_ENSHURE( pP[i].Handle == getPropertyTable3()[a[i]].Handle, "Handle not correct" );
+              OSL_ENSHURE( pP[i].Attributes == getPropertyTable3()[a[i]].Attributes, "Attributes not correct" );
+              OSL_ENSHURE( pP[i].Type == getPropertyTable3()[a[i]].Type, "Type not correct" );
           }
     }
 
@@ -350,7 +355,7 @@ public:
                         // MSCI 4 bug ! :
                         //      OBroadcastHelper == OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper>
                         , OPropertySetHelper(
-                                *SAL_STATIC_CAST(OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper> *,this))
+                                *SAL_STATIC_CAST(OBroadcastHelper *,this))
                         , bBOOL( sal_False )
                         , nINT16( 0 )
                         , nINT32( 0 )
