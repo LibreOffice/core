@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:52:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ public:
             ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             ~ColumnEdit();
 
-    USHORT  GetCol() { return nCol; }
-    void    SetCol( USHORT nColNo );
+    SCCOL   GetCol() { return nCol; }
+    void    SetCol( SCCOL nColNo );
 
 protected:
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -189,14 +189,14 @@ protected:
 
 private:
     ScNavigatorDlg& rDlg;
-    USHORT          nCol;
+    SCCOL           nCol;
     USHORT          nKeyGroup;
 
     void    EvalText        ();
     void    ExecuteCol      ();
-    USHORT  AlphaToNum      ( String& rStr );
-    USHORT  NumStrToAlpha   ( String& rStr );
-    USHORT  NumToAlpha      ( USHORT nColNo, String& rStr );
+    SCCOL   AlphaToNum      ( String& rStr );
+    SCCOL   NumStrToAlpha   ( String& rStr );
+    SCCOL   NumToAlpha      ( SCCOL nColNo, String& rStr );
 };
 
 
@@ -209,8 +209,8 @@ public:
             RowEdit( ScNavigatorDlg* pParent, const ResId& rResId );
             ~RowEdit();
 
-    USHORT  GetRow()                { return (USHORT)GetValue(); }
-    void    SetRow( USHORT nRow ){ SetValue( nRow ); }
+    SCROW   GetRow()                { return (SCROW)GetValue(); }
+    void    SetRow( SCROW nRow ){ SetValue( nRow ); }
 
 protected:
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -311,9 +311,9 @@ private:
     long            nInitListHeight;
     NavListMode     eListMode;
     USHORT          nDropMode;
-    USHORT          nCurCol;
-    USHORT          nCurRow;
-    USHORT          nCurTab;
+    SCCOL           nCurCol;
+    SCROW           nCurRow;
+    SCTAB           nCurTab;
     BOOL            bFirstBig;
 
     ScNavigatorControllerItem** ppBoundItems;
@@ -327,9 +327,9 @@ private:
     BOOL    GetDBAtCursor( String& rStrName );
     BOOL    GetAreaAtCursor( String& rStrName );
 
-    void    SetCurrentCell( USHORT nCol, USHORT Row );
+    void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const String rName );
-    void    SetCurrentTable( USHORT nTab );
+    void    SetCurrentTable( SCTAB nTab );
     void    SetCurrentTableStr( const String rName );
     void    SetCurrentObject( const String rName );
     void    SetCurrentDoc( const String& rDocName );
@@ -338,9 +338,9 @@ private:
     ScNavigatorSettings*    GetSettings();
     BOOL                    GetViewData();
 
-    void    UpdateColumn    ( const USHORT* pCol = NULL );
-    void    UpdateRow       ( const USHORT* pRow = NULL );
-    void    UpdateTable     ( const USHORT* pTab = NULL );
+    void    UpdateColumn    ( const SCCOL* pCol = NULL );
+    void    UpdateRow       ( const SCROW* pRow = NULL );
+    void    UpdateTable     ( const SCTAB* pTab = NULL );
     void    UpdateAll       ();
 
     void    GetDocNames(const String* pSelEntry = NULL);
