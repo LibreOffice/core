@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:25:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,11 +742,16 @@ BOOL SwAutoFormat::DoUnderline()
             aLine.SetDistance( DEF_DOUBLE_LINE6_DIST );
             break;
         }
-
+        SfxItemSet aSet(pDoc->GetAttrPool(),
+                    RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
+                    RES_BOX, RES_BOX,
+                    0);
+        aSet.Put( SwParaConnectBorderItem( FALSE ) );
         SvxBoxItem aBox;
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
-        pDoc->Insert( aDelPam, aBox );
+        aSet.Put(aBox);
+        pDoc->Insert( aDelPam, aSet );
 
         aDelPam.DeleteMark();
     }
