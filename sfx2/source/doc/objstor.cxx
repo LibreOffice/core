@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:46:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,11 @@ sal_Bool SfxObjectShell::DoSave()
         if ( IsOwnStorageFormat_Impl( *GetMedium() ) &&
              GetPasswd_Impl( GetMedium()->GetItemSet(), aPasswd ) )
             GetMedium()->GetStorage()->SetKey( S2BS( aPasswd ) );   //!!! (pb) needs new implementation
-        GetStorage()->SetVersion( GetMedium()->GetFilter()->GetVersion() );
+
+        // #i29292#
+        if(GetMedium()->GetFilter())
+            GetStorage()->SetVersion( GetMedium()->GetFilter()->GetVersion() );
+
         bOk = Save();
     }
 
