@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2004-03-11 14:04:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // den aktuellen Absatz erst einmal nicht numerieren
     {
         BYTE nLvl = nLevel;
-        SetNoNum(&nLevel, TRUE);
+        SetNoNum(&nLvl, TRUE); // #115962#
         SetNodeNum( nLvl );
     }
 
