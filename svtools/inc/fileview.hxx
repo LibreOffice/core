@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 07:51:23 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 12:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
 
 // class SvtFileView -----------------------------------------------------
 
+#define FILEVIEW_ONLYFOLDER         0x0001
+#define FILEVIEW_MULTISELECTION     0x0002
+
+#define FILEVIEW_SHOW_TITLE         0x0010
+#define FILEVIEW_SHOW_SIZE          0x0020
+#define FILEVIEW_SHOW_DATE          0x0040
+#define FILEVIEW_SHOW_ALL           0x0070
+
 class ViewTabListBox_Impl;
 class SvLBoxEntry;
 
@@ -89,6 +97,7 @@ private:
 
 public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
+    SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags );
     ~SvtFileView();
 
     const String&           GetViewURL() const { return maViewURL; }
@@ -119,6 +128,7 @@ public:
     SvLBoxEntry*            FirstSelected() const;
     SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
     void                    EnableAutoResize();
+    void                    SetFocus();
 };
 
 // struct SvtContentEntry ------------------------------------------------
