@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:42:49 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
                 }
 
-                   bool bTextObjWasGrouped = false;
+                bool bTextObjWasGrouped = false;
                 if (pOldFlyFmt && pTextObj && pTextObj->GetUpGroup())
                     bTextObjWasGrouped = true;
 
