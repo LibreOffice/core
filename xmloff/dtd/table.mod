@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.34 2001-05-07 11:45:00 dvo Exp $
+	$Id: table.mod,v 1.35 2001-05-08 14:06:52 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -241,6 +241,7 @@
 	table:number-columns-repeated %positiveInteger; "1"
 	table:style-name %styleName; #IMPLIED
 	table:visibility (visible | collapse | filter) "visible"
+	table:default-cell-style-name %styleName; #IMPLIED
 >
 <!ELEMENT table:table-row-group (table:table-header-rows | table:table-row | table:table-row-group)+>
 <!ATTLIST table:table-row-group
@@ -254,6 +255,7 @@
 	table:number-rows-repeated %positiveInteger; "1"
 	table:style-name %styleName; #IMPLIED
 	table:visibility (visible | collapse | filter) "visible"
+	table:default-cell-style-name %styleName; #IMPLIED
 >
 
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
