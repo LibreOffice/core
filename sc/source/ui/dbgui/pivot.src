@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-23 20:16:15 $
+ *  last change: $Author: kz $ $Date: 2002-05-28 20:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Column";
         Text[ dutch ] = "Column";
         Text[ french ] = "Column";
-        Text[ spanish ] = "Column";
+        Text[ spanish ] = "Columna";
         Text[ finnish ] = "Column";
         Text[ italian ] = "Column";
         Text[ danish ] = "Column";
@@ -121,8 +121,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Column";
         Text[ portuguese_brazilian ] = "Column";
         Text[ japanese ] = "Column";
-        Text[ korean ] = "Column";
-        Text[ chinese_simplified ] = "Column";
+        Text[ korean ] = "열";
+        Text[ chinese_simplified ] = "列";
         Text[ chinese_traditional ] = "欄";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
@@ -147,7 +147,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Row";
         Text[ dutch ] = "Row";
         Text[ french ] = "Row";
-        Text[ spanish ] = "Row";
+        Text[ spanish ] = "Fila";
         Text[ finnish ] = "Row";
         Text[ italian ] = "Row";
         Text[ danish ] = "Row";
@@ -155,8 +155,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Row";
         Text[ portuguese_brazilian ] = "Row";
         Text[ japanese ] = "Row";
-        Text[ korean ] = "Row";
-        Text[ chinese_simplified ] = "Row";
+        Text[ korean ] = "행";
+        Text[ chinese_simplified ] = "行";
         Text[ chinese_traditional ] = "列";
         Text[ turkish ] = "Row";
         Text[ arabic ] = "Row";
@@ -181,7 +181,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Data";
         Text[ dutch ] = "Data";
         Text[ french ] = "Data";
-        Text[ spanish ] = "Data";
+        Text[ spanish ] = "Datos";
         Text[ finnish ] = "Data";
         Text[ italian ] = "Data";
         Text[ danish ] = "Data";
@@ -189,8 +189,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Data";
         Text[ portuguese_brazilian ] = "Data";
         Text[ japanese ] = "Data";
-        Text[ korean ] = "Data";
-        Text[ chinese_simplified ] = "Data";
+        Text[ korean ] = "데이터";
+        Text[ chinese_simplified ] = "数据";
         Text[ chinese_traditional ] = "資料";
         Text[ turkish ] = "Data";
         Text[ arabic ] = "Data";
@@ -307,7 +307,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Remove";
         Text[ dutch ] = "Remove";
         Text[ french ] = "Remove";
-        Text[ spanish ] = "Remove";
+        Text[ spanish ] = "Eliminar";
         Text[ finnish ] = "Remove";
         Text[ italian ] = "Remove";
         Text[ danish ] = "Remove";
@@ -315,8 +315,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Remove";
         Text[ portuguese_brazilian ] = "Remove";
         Text[ japanese ] = "Remove";
-        Text[ korean ] = "Remove";
-        Text[ chinese_simplified ] = "Remove";
+        Text[ korean ] = "삭제";
+        Text[ chinese_simplified ] = "移除";
         Text[ chinese_traditional ] = "移除";
         Text[ turkish ] = "Remove";
         Text[ arabic ] = "Remove";
@@ -336,7 +336,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ greek ] = "Options...";
         Text[ dutch ] = "Options...";
         Text[ french ] = "Options...";
-        Text[ spanish ] = "Options...";
+        Text[ spanish ] = "Opciones...";
         Text[ finnish ] = "Options...";
         Text[ italian ] = "Options...";
         Text[ danish ] = "Options...";
@@ -344,8 +344,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ polish ] = "Options...";
         Text[ portuguese_brazilian ] = "Options...";
         Text[ japanese ] = "Options...";
-        Text[ korean ] = "Options...";
-        Text[ chinese_simplified ] = "Options...";
+        Text[ korean ] = "옵션...";
+        Text[ chinese_simplified ] = "选项...";
         Text[ chinese_traditional ] = "選項...";
         Text[ turkish ] = "Options...";
         Text[ arabic ] = "Options...";
@@ -558,11 +558,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ swedish ] = "Totalresultat kolumner" ;
         Text [ danish ] = "Total kolonner" ;
         Text [ italian ] = "Risultato complessivo ~colonne" ;
-        Text [ spanish ] = "~Columnas de totales" ;
+        Text [ spanish ] = "Columnas de totales" ;
         Text [ french ] = "Total - ~colonnes" ;
         Text [ dutch ] = "Saldo ~kolommen" ;
         Text [ portuguese_brazilian ] = "Gesamtergebnis-~Spalten" ;
-        Text[ chinese_simplified ] = "总计的列(~C)";
+        Text[ chinese_simplified ] = "总计的列";
         Text[ russian ] = "����� ��������";
         Text[ polish ] = "~Podsumowanie kolumn";
         Text[ japanese ] = "列の総計(~C)";
