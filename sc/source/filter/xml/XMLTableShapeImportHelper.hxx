@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,23 +76,20 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 {
     ScXMLImport& rImport;
 
-    ::com::sun::star::awt::Point* pPoint;
+    ::com::sun::star::awt::Point aRefPoint;
     sal_Bool bOnTable;
 public:
 
     XMLTableShapeImportHelper( ScXMLImport& rImp );
     ~XMLTableShapeImportHelper();
 
-    virtual void addShape(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape >& rShape,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes >& rShapes );
+    virtual void finishShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
+            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+            com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
 
-    void SetPoint (::com::sun::star::awt::Point* pTempPoint) { pPoint = pTempPoint; }
-    void SetOnTable (sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
+
+    void SetPoint (const ::com::sun::star::awt::Point& aPoint) { aRefPoint = aPoint; }
+    void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
 };
 
 #endif

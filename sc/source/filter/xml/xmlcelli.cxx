@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,9 +339,9 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     {
     case XML_TOK_TABLE_ROW_CELL_P:
         {
-/*          pContext = new ScXMLContentContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, XML_TOK_TABLE_ROW_CELL_P,
-                                                      this );*/
+/*          bHasTextImport = sal_True;
+            pContext = new ScXMLContentContext( GetScImport(), nPrefix,
+                                                      rLName, xAttrList, sOUCurrentText );*/
             bIsEmpty = sal_False;
             ScXMLImport& rXMLImport = GetScImport();
             if (bIsFirstTextImport)
@@ -435,10 +435,9 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                     awt::Point aPoint;
                     aPoint.X = aRec.Left();
                     aPoint.Y = aRec.Top();
-                    awt::Point* pPoint = &aPoint;
                     XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
                     pTableShapeImport->SetOnTable(sal_False);
-                    pTableShapeImport->SetPoint(pPoint);
+                    pTableShapeImport->SetPoint(aPoint);
                     pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                         rXMLImport, nPrefix, rLName, xAttrList, xShapes);
                     if (pContext)

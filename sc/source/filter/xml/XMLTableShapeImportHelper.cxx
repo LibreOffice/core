@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,12 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 {
 }
 
-void XMLTableShapeImportHelper::addShape(
+void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShape >& rShape,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes )
 {
-    XMLShapeImportHelper::addShape( rShape, xAttrList, rShapes );
+    XMLShapeImportHelper::finishShape( rShape, xAttrList, rShapes );
 
     if (!bOnTable)
     {
@@ -152,8 +152,8 @@ void XMLTableShapeImportHelper::addShape(
             Y += pRect->Top();
             awt::Point aPoint = rShape->getPosition();
             awt::Size aSize = rShape->getSize();
-            aPoint.X += pPoint->X;
-            aPoint.Y += pPoint->Y;
+            aPoint.X += aRefPoint.X;
+            aPoint.Y += aRefPoint.Y;
             aSize.Width = X - aPoint.X;
             aSize.Height = Y - aPoint.Y;
             rShape->setPosition(aPoint);
