@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:13:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
     // return sal_False     // we can't deselect
 }
 
-void SwAccessibleSelectionHelper::selectAllAccessible(  )
+void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
