@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 12:52:50 $
+ *  last change: $Author: os $ $Date: 2002-08-28 14:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,8 +914,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                         aTmpBrush = SvxBrushItem( aBgdGraphic,
                                         eNewPos,
                                         nWhich );
-                    if(bGraphTransparencyChanged)
-                        lcl_SetTransparency(aTmpBrush, aGraphTransMF.GetValue());
+                    lcl_SetTransparency(aTmpBrush, aGraphTransMF.GetValue());
 
                     rCoreSet.Put(aTmpBrush);
                 }
@@ -950,8 +949,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 }
                 if(pTmpBrush)
                 {
-                    if(bGraphTransparencyChanged)
-                        lcl_SetTransparency(*pTmpBrush, aGraphTransMF.GetValue());
+                    lcl_SetTransparency(*pTmpBrush, aGraphTransMF.GetValue());
                     rCoreSet.Put(*pTmpBrush);
                     delete pTmpBrush;
                 }
