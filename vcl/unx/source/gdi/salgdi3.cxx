@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:32:24 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,6 @@
 #include <svapp.hxx>
 #endif
 
-#ifndef ANSI1252_HXX_
-#include "ansi1252.hxx"
-#endif
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
 #endif
@@ -1184,6 +1181,8 @@ private:
     int                 mnFontHeight;
     int                 mnFontWidth;
     bool                mbVertical;
+    bool                mbArtItalic;
+    bool                mbArtBold;
 };
 
 //--------------------------------------------------------------------------
@@ -1195,6 +1194,8 @@ PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
     mnFontHeight = mrPrinterGfx.GetFontHeight();
     mnFontWidth  = mrPrinterGfx.GetFontWidth();
     mbVertical   = mrPrinterGfx.GetFontVertical();
+    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
+    mbArtBold    = mrPrinterGfx.GetArtificialBold();
 }
 
 //--------------------------------------------------------------------------
@@ -1267,6 +1268,8 @@ private:
     int                 mnFontHeight;
     int                 mnFontWidth;
     bool                mbVertical;
+    bool                mbArtItalic;
+    bool                mbArtBold;
 };
 
 PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont )
@@ -1277,12 +1280,14 @@ PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& r
     mnFontHeight = mrPrinterGfx.GetFontHeight();
     mnFontWidth  = mrPrinterGfx.GetFontWidth();
     mbVertical   = mrPrinterGfx.GetFontVertical();
+    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
+    mbArtBold    = mrPrinterGfx.GetArtificialBold();
 }
 
 void PspServerFontLayout::InitFont() const
 {
     mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
-        mnOrientation, mbVertical );
+                          mnOrientation, mbVertical, mbArtItalic, mbArtBold );
 }
 
 //--------------------------------------------------------------------------
@@ -1321,7 +1326,7 @@ void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
 void PspFontLayout::InitFont() const
 {
     mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
-        mnOrientation, mbVertical );
+        mnOrientation, mbVertical, mbArtItalic, mbArtBold );
 }
 
 //--------------------------------------------------------------------------
@@ -1489,17 +1494,34 @@ USHORT SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
         sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
+        bool bArtItalic = false;
+        bool bArtBold = false;
+        if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
+        {
+            psp::italic::type eItalic = maGraphicsData.m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
+            if( eItalic != psp::italic::Italic && eItalic != psp::italic::Oblique )
+                bArtItalic = true;
+        }
+        int nWeight = (int)pEntry->meWeight;
+        int nRealWeight = (int)maGraphicsData.m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
+        if( nRealWeight < nWeight-2 ||
+            ( nRealWeight < (int)psp::weight::SemiBold && nWeight > (int)WEIGHT_NORMAL) )
+        {
+            bArtBold = true;
+        }
+
         // also set the serverside font for layouting
         maGraphicsData.SetFont( pEntry, nFallbackLevel );
 
-        // set the printer and the printer fallback font
-        return maGraphicsData.m_pPrinterGfx->SetFont(
-                                                    nID,
-                                                    pEntry->mnHeight,
-                                                    pEntry->mnWidth,
-                                                    pEntry->mnOrientation,
-                                                    pEntry->mbVertical
-                                                );
+        // set the printer font
+        return maGraphicsData.m_pPrinterGfx->SetFont( nID,
+                                                      pEntry->mnHeight,
+                                                      pEntry->mnWidth,
+                                                      pEntry->mnOrientation,
+                                                      pEntry->mbVertical,
+                                                      bArtItalic,
+                                                      bArtBold
+                                                      );
     }
     else
 #endif
@@ -1946,8 +1968,6 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
 }
 
 // ---------------------------------------------------------------------------
-
-extern unsigned char TranslateCharName( char* );
 
 ULONG
 SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
