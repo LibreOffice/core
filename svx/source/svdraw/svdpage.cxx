@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-23 12:45:11 $
+ *  last change: $Author: aw $ $Date: 2001-08-08 15:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,9 +644,15 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         USHORT nPaintCycles = 1;
         SdrLayerID nLayerId = 0;
 
-        if (pModel)
+        // #85670# if pModel is NULL, try to get model of list owner
+        SdrModel *pLocalModel = pModel;
+        if(!pLocalModel && GetOwnerObj())
+            pLocalModel = GetOwnerObj()->GetModel();
+
+        // #85670# use correct model to get layer ID
+        if(pLocalModel)
         {
-            const SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
+            const SdrLayerAdmin& rLayerAdmin = pLocalModel->GetLayerAdmin();
             nLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), FALSE);
         }
 
