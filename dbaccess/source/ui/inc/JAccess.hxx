@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:20:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,22 @@
 #ifndef DBACCESS_JACCESS_HXX
 #define DBACCESS_JACCESS_HXX
 
-#ifndef DBACCESS_ACCESSIBLEBASE_HXX
-#include "AccessibleBase.hxx"
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 namespace dbaui
 {
     class OJoinTableView;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessible
+                                            > OJoinDesignViewAccess_BASE;
     /** the class OJoinDesignViewAccess represents the accessible object for join views
         like the QueryDesign and the RelationDesign
     */
-    class OJoinDesignViewAccess     :   public OAccessibleBase
+    class OJoinDesignViewAccess     :   public VCLXAccessibleComponent, public OJoinDesignViewAccess_BASE
     {
         OJoinTableView* m_pTableView; // the window which I should give accessibility to
 
@@ -83,13 +88,19 @@ namespace dbaui
     public:
         /** OJoinDesignViewAccess needs a valid view
         */
-        OJoinDesignViewAccess(  OJoinTableView* _pTableView,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent);
+        OJoinDesignViewAccess(  OJoinTableView* _pTableView);
+
+        // XInterface
+        DECLARE_XINTERFACE( )
+        DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo - static methods
         static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
 
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
+
+        // XAccessible
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -97,6 +108,15 @@ namespace dbaui
         virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
 
         OJoinTableView* getTableView() const { return m_pTableView; }
+
+        void notifyAccessibleEvent(
+                    const sal_Int16 _nEventId,
+                    const ::com::sun::star::uno::Any& _rOldValue,
+                    const ::com::sun::star::uno::Any& _rNewValue
+                )
+        {
+            NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);
+        }
     };
 }
 #endif // DBACCESS_JACCESS_HXX
