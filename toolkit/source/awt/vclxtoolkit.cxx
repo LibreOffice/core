@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-25 16:14:31 $
+ *  last change: $Author: obr $ $Date: 2002-08-21 11:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1299,6 +1299,23 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
         m_bEventListener = false;
     }
 }
+
+// virtual
+void SAL_CALL VCLXToolkit::fireFocusGained(
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::XInterface > const & source)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+// virtual
+void SAL_CALL fireFocusLost(
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::XInterface > const & source)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
 
 IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent const *, pEvent)
 {

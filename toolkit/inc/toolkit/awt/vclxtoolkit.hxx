@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-06 14:21:27 $
+ *  last change: $Author: obr $ $Date: 2002-08-21 11:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,16 @@ public:
     virtual void SAL_CALL removeFocusListener(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::awt::XFocusListener > const & rListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL fireFocusGained(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XInterface > const & source)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL fireFocusLost(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XInterface > const & source)
         throw (::com::sun::star::uno::RuntimeException);
 };
 
