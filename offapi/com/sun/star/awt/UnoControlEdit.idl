@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlEdit.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include <com/sun/star/awt/XTextComponent.idl>
 #endif
 
-#ifndef __com_sun_star_awt_XTextListener_idl__
-#include <com/sun/star/awt/XTextListener.idl>
-#endif
-
 #ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
 #endif
@@ -88,25 +84,16 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlEdit
-/** specifies that <type scope="com::sun::star::awt">UnoControlEdit</type> implements an edit control
-    based on <type>UnoControl</type>.
+/** specifies an edit control.
  */
 service UnoControlEdit
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XTextComponent;
 
-    // DocMerge: empty anyway
-    interface com::sun::star::awt::XTextListener;
-
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XLayoutConstrains;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XTextLayoutConstrains;
 
 };
