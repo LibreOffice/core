@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:09 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 12:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,29 +73,78 @@ import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
 
 import java.io.File;
+import java.util.*;
+import com.sun.star.script.framework.log.LogUtils;
 
 public class ScriptBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
     private String name;
-    private ScriptEntry entry;
+    private ScriptMetaData entry;
+    private String location;
     private File basedir;
-
-    public String uri;
+    private static Map editors = new HashMap();
+    private EditorDesc editor = null;
     public boolean editable = false;
     public boolean deletable = false;
+    public String uri;
+    private class EditorDesc
+    {
+        java.lang.reflect.Method m;
+        Class c;
+        EditorDesc( java.lang.reflect.Method m, Class c )
+        {
+           this.m = m;
+           this.c = c;
+        }
+    }
+    public ScriptBrowseNode(ScriptMetaData entry ) {
+        this.entry  = entry;
+        this.location  = entry.getLocationPlaceHolder();
+        String tmp = entry.getParcelLocation();
+        // TODO, this processing should not be necessary,
+        // the code for reading file should deal with urls of
+        // all supported types
+        if ( tmp.startsWith("file://") )
+        {
+            tmp = tmp.substring("file://".length());
+        }
 
-    public ScriptBrowseNode(ScriptEntry entry, String location) {
-        this.entry = entry;
+        this.basedir = new File( tmp );
+        this.name = this.entry.getLanguageName();
+        uri = entry.getShortFormScriptURL();
+        synchronized( this.getClass() )
+        {
+            if ( !editors.containsKey( this.name ) )
+            {
+                String name = "com.sun.star.script.framework.provider." +
+                    entry.getLanguage().toLowerCase() + ".ScriptEditorFor" +
+                    entry.getLanguage();
+                try
+                {
+                    Class c = Class.forName(name);
+                    Class[] types =
+                        new Class[] { XScriptContext.class, ScriptMetaData.class };
 
-        uri = "vnd.sun.star.script://" + entry.getLanguageName() +
-            "?" + "language=" + entry.getLanguage() +
-            "&location=" + location;
+                    java.lang.reflect.Method m = c.getMethod("edit", types);
 
-        name = entry.getLanguageName();
-
-        if (!entry.getLanguage().toLowerCase().equals("java") &&
-            !location.equals("document"))
+                    if ( m != null )
+                    {
+                        editor = new EditorDesc( m,c );
+                    }
+                    editors.put( this.name, editor );
+                }
+                catch (Exception e )
+                {
+                    LogUtils.DEBUG("Caught excpetion: " + e);
+                }
+            }
+            else
+            {
+                editor = (EditorDesc)editors.get( this.name );
+            }
+        }
+        if ( editor != null )
         {
             editable = true;
             deletable = true;
@@ -107,11 +156,6 @@ public class ScriptBrowseNode extends PropertySet
             (short)0, "editable");
         registerProperty("URI", new Type(String.class),
             (short)0, "uri");
-    }
-
-    public ScriptBrowseNode(ScriptEntry entry, String location, File basedir) {
-        this(entry, location);
-        this.basedir = basedir;
     }
 
     public String getName() {
@@ -145,26 +189,12 @@ public class ScriptBrowseNode extends PropertySet
                com.sun.star.script.CannotConvertException,
                com.sun.star.reflection.InvocationTargetException
     {
-        System.out.println("in ScriptBrowseNode.invoke");
-
         if (aFunctionName.equals("Editable")) {
             if (!editable) {
                 throw new com.sun.star.reflection.InvocationTargetException(
                     "Script not editable");
             }
 
-            if (basedir == null || !basedir.exists()) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "Cannot find script directory: " +
-                    basedir.getAbsolutePath());
-            }
-
-            File sourcefile = new File(basedir, entry.getLanguageName());
-            if (!sourcefile.exists()) {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "Cannot find script source file: " +
-                    sourcefile.getAbsolutePath());
-            }
 
             if (aParams == null || aParams.length < 1) {
                 throw new com.sun.star.lang.IllegalArgumentException(
@@ -181,38 +211,10 @@ public class ScriptBrowseNode extends PropertySet
                     aParams[0].getClass().getName());
             }
 
-            String name = "com.sun.star.script.framework.provider." +
-                entry.getLanguage().toLowerCase() + ".ScriptEditorFor" +
-                entry.getLanguage();
-
             try
             {
-                Class c = Class.forName(name);
-                Class[] types =
-                    new Class[] { XScriptContext.class, String.class };
-
-                java.lang.reflect.Method m = c.getMethod("edit", types);
-
-                if (m != null) {
-                    System.out.println("got a script editor");
-                    Object[] args = new Object[] {
-                        ctxt, sourcefile.getAbsolutePath() };
-                    m.invoke(c.newInstance(), args);
-                }
-                else {
-                    throw new com.sun.star.reflection.InvocationTargetException(
-                        "No edit method found for Editor");
-                }
-            }
-            catch ( ClassNotFoundException cnfe )
-            {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + cnfe.getMessage());
-            }
-            catch ( NoSuchMethodException nsme )
-            {
-                throw new com.sun.star.reflection.InvocationTargetException(
-                    "Exception getting Editor: " + nsme.getMessage());
+                Object[] args = new Object[] { ctxt, entry };
+                editor.m.invoke(editor.c.newInstance(), args);
             }
             catch ( InstantiationException ie )
             {
