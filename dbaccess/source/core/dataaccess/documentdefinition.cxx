@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:54:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,7 @@ Reference< XStorage> ODocumentDefinition::getStorage() const
 {
     static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
     static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
-    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bForm ? s_sForms : s_sReports) : NULL;
+    return m_pImpl->m_pDataSource ? m_pImpl->m_pDataSource->getStorage(m_bForm ? s_sForms : s_sReports) : Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::isModified()
