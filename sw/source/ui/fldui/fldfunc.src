@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:01:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,44 +68,15 @@ TabPage TP_FLD_FUNC
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Funktionen" ;
-    Text [ ENGLISH ] = "Functions" ;
+    Text [ de ] = "Funktionen" ;
     FixedText FT_FUNCTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Feldtyp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "~Type" ;
-        Text [ french ] = "~Type de champ" ;
-        Text [ swedish ] = "~Fälttyp" ;
-        Text [ dutch ] = "~Veldtype" ;
-        Text [ spanish ] = "~Tipo de campo" ;
-        Text [ english_us ] = "~Type" ;
+        Text [ de ] = "~Feldtyp" ;
+        Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
-        Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "~Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ turkish ] = "~Alan tipi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCTYPE
     {
@@ -120,39 +91,11 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Auswahl" ;
-        Text [ ENGLISH ] = "Selection" ;
-        Text [ norwegian ] = "Selection" ;
-        Text [ italian ] = "~Selezione" ;
-        Text [ portuguese_brazilian ] = "~Selecionar" ;
-        Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "~Valitse" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "~Sélection" ;
-        Text [ swedish ] = "~Urval" ;
-        Text [ dutch ] = "~Selectie" ;
-        Text [ spanish ] = "Se~lección" ;
-        Text [ english_us ] = "S~elect" ;
+        Text [ de ] = "~Auswahl" ;
+        Text [ en-US ] = "S~elect" ;
         Hide = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "~Wybór";
-        Text[ japanese ] = "é¸æŠ(~E)";
-        Text[ chinese_traditional ] = "é¸æ“‡(~E)";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ(~E)";
-        Text[ turkish ] = "~Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~elecciona";
-        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
-        Text[ czech ] = "Vybrat";
-        Text[ hebrew ] = "~Auswahl";
-        Text[ hindi ] = "à¤šà¥~à¤¨à¥‹";
-        Text[ slovak ] = "Vy~braÅ¥";
-        Text[ hungarian ] = "~KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izb~eri";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCSELECTION
     {
@@ -168,37 +111,10 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "F~ormat" ;
-        Text [ ENGLISH ] = "Format" ;
+        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
-        Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormato" ;
-        Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "~Format" ;
-        Text [ italian ] = "F~ormato" ;
-        Text [ spanish ] = "F~ormato" ;
-        Text [ french ] = "F~ormat" ;
-        Text [ dutch ] = "F~ormaat" ;
-        Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "~Format";
-        Text[ japanese ] = "æ›¸å¼(~O)";
-        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
-        Text[ arabic ] = "ÇáÊäÓíŞ";
-        Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "ì„œì‹(~O)";
-        Text[ turkish ] = "F~ormat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormata";
-        Text[ finnish ] = "M~uotoilu";
-        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "F~ormat";
-        Text[ hindi ] = "à¤°~à¤šà¤¨à¤¾";
-        Text[ slovak ] = "F~ormÃ¡t";
-        Text[ hungarian ] = "~FormÃ¡tum";
-        Text[ slovenian ] = "O~blika";
+        Text [ en-US ] = "F~ormat" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -211,37 +127,10 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "Na~me" ;
-        TEXT [ English ] = "Na~me" ;
+        Text [ de ] = "Na~me" ;
         Left = TRUE ;
-        Text [ english_us ] = "Na~me" ;
-        Text [ portuguese_brazilian ] = "No~me" ;
-        Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Na~vn" ;
-        Text [ italian ] = "No~me" ;
-        Text [ spanish ] = "No~mbre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "Naa~m" ;
-        Text [ portuguese ] = "No~me" ;
-        Text[ chinese_simplified ] = "åç§°(~M)";
-        Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "~Nazwa";
-        Text[ japanese ] = "åå‰(~M)";
-        Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„(~M)";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No~m";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Na~me";
-        Text[ hindi ] = "~à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡~zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "I~me";
+        Text [ en-US ] = "Na~me" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCNAME
     {
@@ -255,38 +144,10 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "~Wert" ;
-        Text [ ENGLISH ] = "Value" ;
-        Text [ norwegian ] = "Verdi" ;
-        Text [ italian ] = "~Valore" ;
-        Text [ portuguese_brazilian ] = "~Valor" ;
-        Text [ portuguese ] = "Valor" ;
-        Text [ finnish ] = "~Arvo" ;
-        Text [ danish ] = "~Værdi" ;
-        Text [ french ] = "Valeur" ;
-        Text [ swedish ] = "~Värde" ;
-        Text [ dutch ] = "~Waarde" ;
-        Text [ spanish ] = "~Valor" ;
-        Text [ english_us ] = "~Value" ;
+        Text [ de ] = "~Wert" ;
+        Text [ en-US ] = "~Value" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
-        Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "W~artoœæ";
-        Text[ japanese ] = "å€¤(~V)";
-        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
-        Text[ arabic ] = "ÇáŞíãÉ";
-        Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "ê°’(~V)";
-        Text[ turkish ] = "D~eğer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor";
-        Text[ thai ] = "~à¸„à¹ˆà¸²";
-        Text[ czech ] = "Hodnota";
-        Text[ hebrew ] = "~Wert";
-        Text[ hindi ] = "~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "~Hodnota";
-        Text[ hungarian ] = "Ã‰~rtÃ©k";
-        Text[ slovenian ] = "~Vrednost";
+        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCVALUE
     {
@@ -300,38 +161,11 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "~Dann" ;
-        Text [ ENGLISH ] = "Then" ;
+        Text [ de ] = "~Dann" ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ english_us ] = "Then" ;
-        Text [ portuguese_brazilian ] = "Então" ;
-        Text [ swedish ] = "~Så" ;
-        Text [ danish ] = "Så" ;
-        Text [ italian ] = "Poi" ;
-        Text [ spanish ] = "Entonces" ;
-        Text [ french ] = "~Alors" ;
-        Text [ dutch ] = "~Dan" ;
-        Text [ portuguese ] = "~Então" ;
-        Text[ chinese_simplified ] = "å°±";
-        Text[ russian ] = "Òîãäà";
-        Text[ polish ] = "Wtedy";
-        Text[ japanese ] = "æ¡ä»¶ã‚’æº€ãŸã™ã¨ã";
-        Text[ chinese_traditional ] = "å°±";
-        Text[ arabic ] = "İí åĞå ÇáÍÇáÉ";
-        Text[ greek ] = "Ôüôå";
-        Text[ korean ] = "ì¡°ê±´ì„ ì¶©ì¡±í•  ê²½ìš°";
-        Text[ turkish ] = "Sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aleshores";
-        Text[ finnish ] = "Sitten";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸™à¸±à¹‰à¸™";
-        Text[ czech ] = "Potom";
-        Text[ hebrew ] = "~Dann";
-        Text[ hindi ] = "Then";
-        Text[ slovak ] = "Potom";
-        Text[ hungarian ] = "Akkor";
-        Text[ slovenian ] = "Potem";
+        Text [ en-US ] = "Then" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCCOND1
     {
@@ -346,38 +180,11 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 57 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "So~nst" ;
-        Text [ ENGLISH ] = "Else" ;
+        Text [ de ] = "So~nst" ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ english_us ] = "Else" ;
-        Text [ portuguese_brazilian ] = "Senão" ;
-        Text [ swedish ] = "A~nnars" ;
-        Text [ danish ] = "Ellers" ;
-        Text [ italian ] = "Altrimenti" ;
-        Text [ spanish ] = "Si no" ;
-        Text [ french ] = "~Sinon" ;
-        Text [ dutch ] = "~Anders" ;
-        Text [ portuguese ] = "~Senão" ;
-        Text[ chinese_simplified ] = "å…¶å®ƒ";
-        Text[ russian ] = "Èíà÷å";
-        Text[ polish ] = "W przeciwnym przypadku";
-        Text[ japanese ] = "æ¡ä»¶ã‚’æº€ãŸã•ãªã„ã¨ã";
-        Text[ chinese_traditional ] = "å¦å‰‡";
-        Text[ arabic ] = "İíãÇ ÚÏÇ Ğáß";
-        Text[ greek ] = "Áëëéşò";
-        Text[ korean ] = "ê¸°íƒ€";
-        Text[ turkish ] = "Değilse";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sinó";
-        Text[ finnish ] = "Muutoin";
-        Text[ thai ] = "à¸­à¸¢à¹ˆà¸²à¸‡à¸­à¸·à¹ˆà¸™";
-        Text[ czech ] = "Jinak";
-        Text[ hebrew ] = "So~nst";
-        Text[ hindi ] = "Else";
-        Text[ slovak ] = "Inak";
-        Text[ hungarian ] = "EgyÃ©bkÃ©nt";
-        Text[ slovenian ] = "DrugaÄe";
+        Text [ en-US ] = "Else" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCCOND2
     {
@@ -392,73 +199,19 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "M~akro..." ;
-        Text [ English ] = "M~acro..." ;
-        Text [ norwegian ] = "Macro..." ;
-        Text [ italian ] = "~Macro..." ;
-        Text [ portuguese_brazilian ] = "~Macro..." ;
-        Text [ portuguese ] = "Macro..." ;
-        Text [ french ] = "~Macro..." ;
-        Text [ dutch ] = "~Macro..." ;
-        Text [ spanish ] = "M~acro..." ;
-        Text [ danish ] = "~Makro..." ;
-        Text [ swedish ] = "M~akro..." ;
-        Text [ finnish ] = "~Makro..." ;
-        Text [ english_us ] = "~Macro..." ;
+        Text [ de ] = "M~akro..." ;
+        Text [ en-US ] = "~Macro..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å®(~M)...";
-        Text[ russian ] = "Ìàêğîñ...";
-        Text[ polish ] = "Ma~kro...";
-        Text[ japanese ] = "ãƒã‚¯ãƒ­(~M)...";
-        Text[ chinese_traditional ] = "å·¨é›†(~M)...";
-        Text[ arabic ] = "ãÇßÑæ...";
-        Text[ greek ] = "ÌáêñïåíôïëŞ...";
-        Text[ korean ] = "ë§¤í¬ë¡œ(~M)...";
-        Text[ turkish ] = "M~akro...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Macro...";
-        Text[ thai ] = "~à¸¡à¸²à¹‚à¸„à¸£...";
-        Text[ czech ] = "Makro...";
-        Text[ hebrew ] = "â€®×”×¤×¢×œ×ª ×××§×¨×•...â€¬";
-        Text[ hindi ] = "~à¤®à¥‰à¤•à¥à¤°à¥‹...";
-        Text[ slovak ] = "~Makro...";
-        Text[ hungarian ] = "~MakrÃ³...";
-        Text[ slovenian ] = "~Makro...";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_LISTITEM
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text = "Eintrag" ;
-        Text [ english_us ] = "Ite~m" ;
-        Text[ portuguese ] = "Ite~m";
-        Text[ russian ] = "Ite~m";
-        Text[ greek ] = "Ôå~ìÜ÷éï";
-        Text[ dutch ] = "Ite~m";
-        Text[ french ] = "Élément";
-        Text[ spanish ] = "~Elemento";
-        Text[ finnish ] = "Ite~m";
-        Text[ italian ] = "Elemento";
-        Text[ czech ] = "PoloÅ¾ka";
-        Text[ slovak ] = "PoloÅ¾~ka";
-        Text[ danish ] = "~Element";
-        Text[ swedish ] = "~Post";
-        Text[ polish ] = "Ite~m";
-        Text[ portuguese_brazilian ] = "Ite~m";
-        Text[ japanese ] = "é …ç›®(~M)";
-        Text[ korean ] = "í•­ëª©(~M)";
-        Text[ chinese_simplified ] = "æ¡ç›®(~M)";
-        Text[ chinese_traditional ] = "é …ç›®(~M)";
-        Text[ turkish ] = "Ite~m";
-        Text[ arabic ] = "Ite~m";
-        Text[ hebrew ] = "Ite~m";
-        Text[ catalan ] = "Ite~m";
-        Text[ thai ] = "Ite~m";
-        Text[ hindi ] = "Ite~m";
-        Text[ hungarian ] = "~Elem";
-        Text[ slovenian ] = "Ele~ment";
+        Text [ de ] = "Eintrag" ;
+        Text [ en-US ] = "Ite~m" ;
     };
     Edit ED_LISTITEM
     {
@@ -474,68 +227,16 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text = "Hi~nzufügen" ;
-        Text [ english_us ] = "~Add" ;
-        Text[ portuguese ] = "~Adicionar";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ greek ] = "ĞñïóèŞê~ç";
-        Text[ dutch ] = "~Toevoegen";
-        Text[ french ] = "Ajouter";
-        Text[ spanish ] = "~Añadir";
-        Text[ finnish ] = "~Lisää";
-        Text[ italian ] = "Aggiungi";
-        Text[ czech ] = "PÅ™idat";
-        Text[ slovak ] = "Prid~aÅ¥";
-        Text[ danish ] = "~Tilføj";
-        Text[ swedish ] = "Lägg ~till";
-        Text[ polish ] = "Dodaj";
-        Text[ portuguese_brazilian ] = "~Adicionar";
-        Text[ japanese ] = "è¿½åŠ (~A)";
-        Text[ korean ] = "ì¶”ê°€(~A)";
-        Text[ chinese_simplified ] = "å¢åŠ (~A)";
-        Text[ chinese_traditional ] = "å¢åŠ (~A)";
-        Text[ turkish ] = "E~kle";
-        Text[ arabic ] = "ÅÖÇİÉ";
-        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-        Text[ catalan ] = "~Afegeix";
-        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
-        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
-        Text[ hungarian ] = "~HozzÃ¡adÃ¡s";
-        Text[ slovenian ] = "Dod~aj";
+        Text [ de ] = "Hi~nzufügen" ;
+        Text [ en-US ] = "~Add" ;
     };
     FixedText FT_LISTITEMS
     {
         Pos = MAP_APPFONT ( 170 , 46 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text = "Listeneinträge" ;
-        Text [ english_us ] = "Items on ~list" ;
-        Text[ portuguese ] = "Items on ~list";
-        Text[ russian ] = "Items on ~list";
-        Text[ greek ] = "ÔåìÜ÷éá óôç ëßóôá";
-        Text[ dutch ] = "Items op de ~lijst";
-        Text[ french ] = "Éléments de la liste";
-        Text[ spanish ] = "Elementos de la ~lista";
-        Text[ finnish ] = "Items on ~list";
-        Text[ italian ] = "Elementi dell'elenco";
-        Text[ czech ] = "PoloÅ¾ky v seznamu";
-        Text[ slovak ] = "Po~loÅ¾ky na zozname";
-        Text[ danish ] = "Elementer på listen";
-        Text[ swedish ] = "Poster i ~lista";
-        Text[ polish ] = "Items on ~list";
-        Text[ portuguese_brazilian ] = "Items on ~list";
-        Text[ japanese ] = "ãƒªã‚¹ãƒˆã®é …ç›®(~L)";
-        Text[ korean ] = "ëª©ë¡ì— ìˆëŠ” í•­ëª©(~L)";
-        Text[ chinese_simplified ] = "åˆ—å•ä¸Šçš„æ¡ç›®(~L)";
-        Text[ chinese_traditional ] = "æ¸…å–®ä¸Šçš„é …ç›®(~L)";
-        Text[ turkish ] = "Items on ~list";
-        Text[ arabic ] = "Items on ~list";
-        Text[ hebrew ] = "Items on ~list";
-        Text[ catalan ] = "Items on ~list";
-        Text[ thai ] = "Items on ~list";
-        Text[ hindi ] = "Items on ~list";
-        Text[ hungarian ] = "Elemek a ~listÃ¡ban";
-        Text[ slovenian ] = "elementi na seznamu";
+        Text [ de ] = "Listeneinträge" ;
+        Text [ en-US ] = "Items on ~list" ;
     };
     ListBox LB_LISTITEMS
     {
@@ -551,136 +252,32 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 203 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text = "Entfernen" ;
-        Text [ english_us ] = "~Remove" ;
-        Text[ portuguese ] = "~Limpar";
-        Text[ russian ] = "Îòìåíèòü";
-        Text[ greek ] = "ÊáôÜñãçóç";
-        Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "Supprimer";
-        Text[ spanish ] = "~Borrar";
-        Text[ finnish ] = "~Poista";
-        Text[ italian ] = "~Elimina";
-        Text[ czech ] = "Odstranit";
-        Text[ slovak ] = "Odst~rÃ¡niÅ¥";
-        Text[ danish ] = "~Fjern";
-        Text[ swedish ] = "Ta ~bort";
-        Text[ polish ] = "Usuñ";
-        Text[ portuguese_brazilian ] = "~Dividir células";
-        Text[ japanese ] = "å‰Šé™¤(~R)";
-        Text[ korean ] = "ì œê±°(~R)";
-        Text[ chinese_simplified ] = "åˆ é™¤(~R)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~R)";
-        Text[ turkish ] = "~Kaldır";
-        Text[ arabic ] = "ÅÒÇáÉ";
-        Text[ hebrew ] = "â€®×”×¡×¨×”â€¬";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
-        Text[ hindi ] = "~à¤¹à¤Ÿà¤¾à¤“";
-        Text[ hungarian ] = "EltÃ¡~volÃ­tÃ¡s";
-        Text[ slovenian ] = "Odstrani";
+        Text [ de ] = "Entfernen" ;
+        Text [ en-US ] = "~Remove" ;
     };
     PushButton PB_LISTUP
     {
         Pos = MAP_APPFONT ( 203 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text = "Nach ~oben" ;
-        Text [ english_us ] = "Move ~Up" ;
-        Text[ portuguese ] = "Move ~Up";
-        Text[ russian ] = "Move ~Up";
-        Text[ greek ] = "Ìåôáêßíçóç ~ğÜíù";
-        Text[ dutch ] = "Naar ~Boven";
-        Text[ french ] = "Vers le haut";
-        Text[ spanish ] = "Desplazar hacia ~arriba";
-        Text[ finnish ] = "Move ~Up";
-        Text[ italian ] = "Verso l'alto";
-        Text[ czech ] = "PÅ™esunout nahoru";
-        Text[ slovak ] = "PresunÃºÅ¥ ~vyÅ¡Å¡ie";
-        Text[ danish ] = "Flyt opad";
-        Text[ swedish ] = "Flytta ~uppåt";
-        Text[ polish ] = "Move ~Up";
-        Text[ portuguese_brazilian ] = "Move ~Up";
-        Text[ japanese ] = "ä¸Šã¸(~U)";
-        Text[ korean ] = "ìœ„ë¡œ(~U)";
-        Text[ chinese_simplified ] = "å‘ä¸Š(~U)";
-        Text[ chinese_traditional ] = "å‘ä¸Š(~U)";
-        Text[ turkish ] = "~Yukarı Taşı";
-        Text[ arabic ] = "Move ~Up";
-        Text[ hebrew ] = "â€®×”×–×–×” ×œ××¢×œ×”â€¬";
-        Text[ catalan ] = "Move ~Up";
-        Text[ thai ] = "Move ~Up";
-        Text[ hindi ] = "Move ~Up";
-        Text[ hungarian ] = "Mo~zgatÃ¡s fel";
-        Text[ slovenian ] = "Pomakni navzgor";
+        Text [ de ] = "Nach ~oben" ;
+        Text [ en-US ] = "Move ~Up" ;
     };
     PushButton PB_LISTDOWN
     {
         Pos = MAP_APPFONT ( 203 , 138 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text = "Nach ~unten" ;
-        Text [ english_us ] = "Move Do~wn" ;
-        Text[ portuguese ] = "Move Do~wn";
-        Text[ russian ] = "Move Do~wn";
-        Text[ greek ] = "Ìåôáêßíçóç ~êÜôù";
-        Text[ dutch ] = "Naar B~eneden";
-        Text[ french ] = "Vers le bas";
-        Text[ spanish ] = "Desplazar hacia ~abajo";
-        Text[ finnish ] = "Move Do~wn";
-        Text[ italian ] = "In basso";
-        Text[ czech ] = "PÅ™esunout dolÅ¯";
-        Text[ slovak ] = "PresunÃºÅ¥ niÅ¾Å¡i~e";
-        Text[ danish ] = "Flyt nedad";
-        Text[ swedish ] = "Fl~ytta nedåt";
-        Text[ polish ] = "Move Do~wn";
-        Text[ portuguese_brazilian ] = "Move Do~wn";
-        Text[ japanese ] = "ä¸‹ã¸(~W)";
-        Text[ korean ] = "ì•„ë˜ë¡œ(~W)";
-        Text[ chinese_simplified ] = "å‘ä¸‹(~W)";
-        Text[ chinese_traditional ] = "å‘ä¸‹(~W)";
-        Text[ turkish ] = "~Aşağı Taşı";
-        Text[ arabic ] = "Move Do~wn";
-        Text[ hebrew ] = "â€®×”×–×–×” ×œ××˜×”â€¬";
-        Text[ catalan ] = "Move Do~wn";
-        Text[ thai ] = "Move Do~wn";
-        Text[ hindi ] = "Move Do~wn";
-        Text[ hungarian ] = "MozgatÃ¡s ~le";
-        Text[ slovenian ] = "Pomakni navzdol";
+        Text [ de ] = "Nach ~unten" ;
+        Text [ en-US ] = "Move Do~wn" ;
     };
     FixedText FT_LISTNAME
     {
         Pos = MAP_APPFONT ( 170 , 156 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text = "Name" ;
-        Text [ english_us ] = "Na~me" ;
-        Text[ portuguese ] = "No~me";
-        Text[ russian ] = "Èìÿ";
-        Text[ greek ] = "¼íïìá";
-        Text[ dutch ] = "Naa~m";
-        Text[ french ] = "Nom";
-        Text[ spanish ] = "~Nombre";
-        Text[ finnish ] = "Ni~mi";
-        Text[ italian ] = "Nome";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ slovak ] = "NÃ¡~zov";
-        Text[ danish ] = "Na~vn";
-        Text[ swedish ] = "Namn";
-        Text[ polish ] = "Nazwa";
-        Text[ portuguese_brazilian ] = "~Nome";
-        Text[ japanese ] = "åå‰(~M)";
-        Text[ korean ] = "ì´ë¦„(~M)";
-        Text[ chinese_simplified ] = "åç§°(~M)";
-        Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ turkish ] = "~Ad";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ hebrew ] = "â€®×©×â€¬";
-        Text[ catalan ] = "N~om";
-        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
-        Text[ hindi ] = "à¤¨à¤¾~à¤®";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "Ime";
+        Text [ de ] = "Name" ;
+        Text [ en-US ] = "Na~me" ;
     };
     Edit ED_LISTNAME
     {
@@ -691,34 +288,8 @@ TabPage TP_FLD_FUNC
         Left = TRUE ;
         Hide = TRUE;
     };
-    Text [ english_us ] = "Functions" ;
-    Text [ portuguese_brazilian ] = "Funções" ;
-    Text [ swedish ] = "Funktioner" ;
-    Text [ danish ] = "Funktioner" ;
-    Text [ italian ] = "Funzioni" ;
-    Text [ spanish ] = "Funciones" ;
-    Text [ french ] = "Fonctions" ;
-    Text [ dutch ] = "Functies" ;
-    Text [ portuguese ] = "Funções" ;
-    Text[ chinese_simplified ] = "åŠŸèƒ½";
-    Text[ russian ] = "Ôóíêöèè";
-    Text[ polish ] = "Funkcje";
-    Text[ japanese ] = "æ©Ÿèƒ½";
-    Text[ chinese_traditional ] = "åŠŸèƒ½";
-    Text[ arabic ] = "ãåÇã";
-    Text[ greek ] = "Ëåéôïõñãßåò";
-    Text[ korean ] = "ê¸°ëŠ¥";
-    Text[ turkish ] = "Fonksiyon";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funcions";
-    Text[ finnish ] = "Toiminnot";
-    Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-    Text[ czech ] = "Funkce";
-    Text[ hebrew ] = "Funktionen";
-    Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸";
-    Text[ slovak ] = "Funkcie";
-    Text[ hungarian ] = "FÃ¼ggvÃ©nyek";
-    Text[ slovenian ] = "Funkcije";
+    Text [ en-US ] = "Functions" ;
+    Text [ x-comment ] = " ";
 };
 
 
