@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:08:50 $
+ *  last change: $Author: os $ $Date: 2001-09-12 11:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
-#ifndef _VIEW_HXX
-#include <view.hxx>
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
@@ -478,8 +478,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
-
-
+                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
                                                GetView().GetWindow(),
                                    aSet, FALSE,
@@ -1041,66 +1041,6 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & SwWrtShell::SEL_GRF) || (nSel & SwWrtShell::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/12/12 10:26:00  os
-    #80119# enable chain buttons for text frames only
-
-    Revision 1.2  2000/10/06 13:36:37  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:46  hr
-    initial import
-
-    Revision 1.199  2000/09/18 16:06:04  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.198  2000/09/07 15:59:29  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.197  2000/08/17 11:42:59  jp
-    remove the SW graphicmanager
-
-    Revision 1.196  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.195  2000/05/10 11:53:01  os
-    Basic API removed
-
-    Revision 1.194  2000/04/20 12:51:52  os
-    GetName() returns String&
-
-    Revision 1.193  2000/04/18 14:58:23  os
-    UNICODE
-
-    Revision 1.192  2000/03/03 15:17:03  os
-    StarView remainders removed
-
-    Revision 1.191  1999/09/24 14:38:32  os
-    hlnkitem.hxx now in SVX
-
-    Revision 1.190  1999/07/30 15:39:08  HR
-    #65293#: conflict with <goodies/grfmgr.hxx>
-
-
-      Rev 1.189   30 Jul 1999 17:39:08   HR
-   #65293#: conflict with <goodies/grfmgr.hxx>
-
-      Rev 1.188   02 Feb 1999 13:35:28   JP
-   Task #58423#: InsertDBCol - optional kann eine Rahmenvorlage mitgegeben werden
-
-      Rev 1.187   29 Jan 1999 17:19:38   JP
-   Task #58423#: Reports mit Bildern aus der Datenbank
-
-      Rev 1.186   27 Nov 1998 15:50:18   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.185   08 Sep 1998 17:03:06   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-------------------------------------------------------------------------*/
 
 
 
