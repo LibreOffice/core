@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-27 08:05:40 $
+ *  last change: $Author: kso $ $Date: 2000-11-02 10:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,6 +1477,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
         // @@@ Existing content should be checked to see if it has
         //     been overwritten at the target
 
+        aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
         {
             // Adapt Additional Core Properties.
@@ -1493,9 +1494,6 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
 
   if ( nChanged > 0 )
     {
-      // @@@ Save changes.
-      //@@@     storeData();
-
       aGuard.clear();
       aChanges.realloc( nChanged );
       notifyPropertiesChange( aChanges );
@@ -1675,7 +1673,7 @@ sal_Bool Content::exchangeIdentity(
     if ( !xNewId.is() )
         return sal_False;
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XContent > xThis = this;
 
@@ -1693,6 +1691,7 @@ sal_Bool Content::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
+        aGuard.clear();
         if ( exchange( xNewId ) )
         {
             if ( isFolder() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-11-02 10:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
     if ( !xNewId.is() )
         return sal_False;
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XContent > xThis = this;
 
@@ -923,6 +923,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
+        aGuard.clear();
         if ( exchange( xNewId ) )
         {
             if ( m_eKind == FOLDER )
@@ -1263,6 +1264,7 @@ void HierarchyContent::setPropertyValues(
         Reference< XContentIdentifier > xOldId = m_xIdentifier;
         Reference< XContentIdentifier > xNewId = getIdentifierFromTitle();
 
+        aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
         {
             // Adapt persistent data.
@@ -1282,7 +1284,6 @@ void HierarchyContent::setPropertyValues(
         if ( m_eState == PERSISTENT )
             storeData();
 
-        aGuard.clear();
         aChanges.realloc( nChanged );
         notifyPropertiesChange( aChanges );
     }
@@ -1391,7 +1392,7 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XContent > xThis = this;
 
@@ -1411,6 +1412,8 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical )
     }
 
     m_eState = DEAD;
+
+    aGuard.clear();
     deleted();
 
     if ( m_eKind == FOLDER )
