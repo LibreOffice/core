@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-12 15:38:50 $
+ *  last change: $Author: af $ $Date: 2002-11-27 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ::osl::ClearableMutexGuard aGuard (maMutex);
 
     // Take care of children of the base class.
     sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
@@ -306,10 +306,15 @@ uno::Reference<XAccessible> SAL_CALL
         else
             nIndex -= nCount;
 
+    // Create a copy of the pointer to the children manager and release the
+    // mutex before calling any of its methods.
+    ChildrenManager* pChildrenManager = mpChildrenManager;
+    aGuard.clear();
+
     // Forward request to children manager.
-    if (mpChildrenManager != NULL)
+    if (pChildrenManager != NULL)
     {
-        return mpChildrenManager->GetChild (nIndex);
+        return pChildrenManager->GetChild (nIndex);
     }
     else
         throw lang::IndexOutOfBoundsException (
