@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-09 17:17:20 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 15:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,47 +569,9 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos
     mpModel( NULL ),
     mpGraphicObject( NULL ),
     mpImageMap( NULL ),
-    mpURL( NULL )
+    mpURL( NULL ),
+    mbInitialized( sal_False )
 {
-    switch( meObjectKind )
-    {
-        case( SGA_OBJ_ANIM ):
-        case( SGA_OBJ_BMP ):
-        case( SGA_OBJ_INET ):
-        {
-            Graphic aGraphic;
-
-            if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                mpGraphicObject = new GraphicObject( aGraphic );
-
-            mpURL = new INetURLObject;
-
-            if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                delete mpURL, mpURL = NULL;
-        }
-        break;
-
-        case( SGA_OBJ_SOUND ):
-        {
-            mpURL = new INetURLObject;
-
-            if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
-                delete mpURL, mpURL = NULL;
-        }
-
-        case( SGA_OBJ_SVDRAW ):
-        {
-            mpModel = new FmFormModel;
-
-            if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
-                delete mpModel, mpModel = NULL;
-        }
-        break;
-
-        default:
-            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
-        break;
-    }
 }
 
 // ------------------------------------------------------------------------
@@ -620,8 +582,60 @@ GalleryTransferable::~GalleryTransferable()
 
 // ------------------------------------------------------------------------
 
+void GalleryTransferable::InitData()
+{
+    if( !mbInitialized )
+    {
+        switch( meObjectKind )
+        {
+            case( SGA_OBJ_ANIM ):
+            case( SGA_OBJ_BMP ):
+            case( SGA_OBJ_INET ):
+            {
+                Graphic aGraphic;
+
+                if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                    mpGraphicObject = new GraphicObject( aGraphic );
+
+                mpURL = new INetURLObject;
+
+                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                    delete mpURL, mpURL = NULL;
+            }
+            break;
+
+            case( SGA_OBJ_SOUND ):
+            {
+                mpURL = new INetURLObject;
+
+                if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                    delete mpURL, mpURL = NULL;
+            }
+
+            case( SGA_OBJ_SVDRAW ):
+            {
+                mpModel = new FmFormModel;
+
+                if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
+                    delete mpModel, mpModel = NULL;
+            }
+            break;
+
+            default:
+                DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
+            break;
+        }
+
+        mbInitialized = sal_True;
+    }
+}
+
+// ------------------------------------------------------------------------
+
 void GalleryTransferable::AddSupportedFormats()
 {
+    InitData();
+
     if( mpModel )
     {
         Graphic     aGraphic;
@@ -685,6 +699,8 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bRet = sal_False;
+
+    InitData();
 
     if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && mpModel )
     {
@@ -763,6 +779,13 @@ void GalleryTransferable::ObjectReleased()
 }
 
 // ------------------------------------------------------------------------
+
+void GalleryTransferable::CopyToClipboard()
+{
+    InitData();
+    TransferableHelper::CopyToClipboard();
+}
+
 
 void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
                                      sal_Int32 nDragPointer, sal_Int32 nDragImage )

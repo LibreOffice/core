@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-12 12:58:16 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 15:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,13 @@
 #include "galdlg.hxx"
 #include "galbrws2.hxx"
 
+// -----------
+// - Defines -
+// -----------
+
+#define GALLERY_DRAG_TIMEOUT 500
+#define DRAG_THRESHOLD 4
+
 // -------------------
 // - GalleryValueSet -
 // -------------------
@@ -97,6 +104,7 @@ private:
     // ValueSet
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseMove( const MouseEvent& rMEvt );
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void        Command( const CommandEvent& rCEvt );
 
@@ -198,12 +206,24 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 void GalleryValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bDefOnly = ( rMEvt.GetClicks() > 1 ) && rMEvt.IsMod1();
+    const USHORT nId = GetItemId( rMEvt.GetPosPixel() );
 
-    ValueSet::MouseButtonDown( rMEvt );
+    if( nId )
+    {
+        GrabFocus();
+        SelectItem( nId );
+        GetSelectHdl().Call( this );
+    }
 
-    if( !bDefOnly )
-        GetParent()->MouseButtonDown( rMEvt );
+    GetParent()->MouseButtonDown( rMEvt );
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryValueSet::MouseMove( const MouseEvent& rMEvt )
+{
+    ValueSet::MouseMove( rMEvt );
+    GetParent()->MouseMove( rMEvt );
 }
 
 // ------------------------------------------------------------------------
@@ -368,12 +388,23 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     {
         EnableItem( MN_DELETE, FALSE );
         EnableItem( MN_TITLE, FALSE );
+
+        if( mpTheme->IsReadOnly() )
+            EnableItem( MN_PASTECLIPBOARD, FALSE );
+
+        if( !mpTheme->GetObjectCount() )
+            EnableItem( MN_COPYCLIPBOARD, FALSE );
     }
     else
     {
         EnableItem( MN_DELETE, !bPreview );
         EnableItem( MN_TITLE, TRUE );
+        EnableItem( MN_COPYCLIPBOARD, TRUE );
+        EnableItem( MN_PASTECLIPBOARD, TRUE );
     }
+
+    if( IsItemEnabled( MN_PASTECLIPBOARD ) && !mpTheme->IsCurrentClipboardSupported() )
+        EnableItem( MN_PASTECLIPBOARD, FALSE );
 
     if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) )
         pAddMenu->EnableItem( MN_BACKGROUND, FALSE );
@@ -418,14 +449,12 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maInfoBar           ( this, WB_BORDER | WB_3DLOOK | WB_CENTER | WB_VCENTER ),
     mnCurActionPos      ( 0xffffffff ),
     mbIsPreview         ( FALSE ),
-    mbCurActionIsLinkage( FALSE )
+    mbCurActionIsLinkage( FALSE ),
+    mbStartDrag         ( FALSE )
 {
     maInfoBar.SetControlForeground( COL_WHITE );
     maInfoBar.SetControlBackground( COL_GRAY );
     maInfoBar.Show();
-
-    maDragTimer.SetTimeout( 100 );
-    maDragTimer.SetTimeoutHdl( LINK( this, GalleryBrowser2, StartDragHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -474,7 +503,10 @@ void GalleryBrowser2::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     switch( rGalleryHint.GetType() )
     {
         case( GALLERY_HINT_THEME_UPDATEVIEW ):
+        {
+            ShowPreview( FALSE );
             ImplUpdateValueSet( (USHORT) rGalleryHint.GetData1() + 1 );
+        }
         break;
 
         default:
@@ -489,14 +521,43 @@ void GalleryBrowser2::MouseButtonDown( const MouseEvent& rMEvt )
     if( rMEvt.GetClicks() > 1 )
         ShowPreview( !mbIsPreview );
     else if( rMEvt.IsLeft() )
-        maDragTimer.Start();
+    {
+        maDragStartPos = rMEvt.GetPosPixel();
+        mbStartDrag = TRUE;
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryBrowser2::MouseMove( const MouseEvent& rMEvt )
+{
+    const Point aCurPos( rMEvt.GetPosPixel() );
+
+    if( mbStartDrag &&
+        ( labs( aCurPos.X() - maDragStartPos.X() ) >= DRAG_THRESHOLD ||
+          labs( aCurPos.Y() - maDragStartPos.Y() ) >= DRAG_THRESHOLD ) )
+    {
+        const USHORT nId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( maDragStartPos );
+
+        mbStartDrag = sal_False;
+
+        if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
+        {
+            if( mbIsPreview )
+                mpPreview->InitDrag();
+            else
+                mpValueSet->InitDrag();
+
+            mpCurTheme->StartDrag( this, nId - 1 );
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
 
 void GalleryBrowser2::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    maDragTimer.Stop();
+    mbStartDrag = FALSE;
     Window::MouseButtonUp( rMEvt );
 }
 
@@ -704,7 +765,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
 
         aPathTmp.removeSegment();
         aPathTmp.Append( rObj.GetURL().GetName() );
-        aRet += aPathTmp.GetMainURL();
+        aRet += aPathTmp.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     }
     else if( rObj.GetTitle().Len() )
     {
@@ -713,14 +774,14 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
         if( rObj.GetObjKind() != SGA_OBJ_SVDRAW )
         {
             aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-            aTitleItemText += rObj.GetURL().GetMainURL();
+            aTitleItemText += rObj.GetURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
             aTitleItemText += ')';
         }
 
         aRet += aTitleItemText;
     }
     else
-        aRet += rObj.GetURL().GetMainURL();
+        aRet += rObj.GetURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
     return aRet;
 }
@@ -875,6 +936,22 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
             }
             break;
 
+            case( MN_COPYCLIPBOARD ):
+            {
+                mpCurTheme->CopyToClipboard( mnCurActionPos );
+            }
+            break;
+
+            case( MN_PASTECLIPBOARD ):
+            {
+                if( !mpCurTheme->IsReadOnly() )
+                {
+                    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+                    mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
+                }
+            }
+            break;
+
             default:
             break;
         }
@@ -895,26 +972,5 @@ IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, p )
 
 IMPL_LINK( GalleryBrowser2, DoubleClickObjectHdl, void*, p )
 {
-    return 0L;
-}
-
-// -----------------------------------------------------------------------------
-
-IMPL_LINK( GalleryBrowser2, StartDragHdl, Timer*, pTimer )
-{
-    pTimer->Stop();
-
-    const USHORT nId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( GetPointerPosPixel() );
-
-    if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
-    {
-        if( mbIsPreview )
-            mpPreview->InitDrag();
-        else
-            mpValueSet->InitDrag();
-
-        mpCurTheme->StartDrag( this, nId - 1 );
-    }
-
     return 0L;
 }

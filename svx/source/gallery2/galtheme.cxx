@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-12 12:58:16 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 15:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,119 +983,153 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
 
 BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos )
 {
-    TransferableDataHelper  aDataHelper( rxTransferable );
-    Graphic*                pGraphic = NULL;
-    BOOL                    bRet = FALSE;
+    BOOL bRet = FALSE;
 
-    if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+    if( rxTransferable.is() )
     {
-        SotStorageStreamRef xModelStm;
+        TransferableDataHelper  aDataHelper( rxTransferable );
+        Graphic*                pGraphic = NULL;
 
-        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
+        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
         {
-            FmFormModel aModel;
+            SotStorageStreamRef xModelStm;
 
-            aModel.GetItemPool().FreezeIdRanges();
-
-            if( SGASvDrawImport( *xModelStm, aModel ) )
-                bRet = InsertModel( aModel, nInsertPos );
-        }
-    }
-    else if( aDataHelper.HasFormat( FORMAT_FILE ) )
-    {
-        String aFile;
-
-        if( aDataHelper.GetString( FORMAT_FILE, aFile ) )
-        {
-            INetURLObject aURL( aFile );
-            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-
-            try
+            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
             {
-                Content     aCnt( aURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
-                sal_Bool    bFolder;
-
-                aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
-
-                if( bFolder )
-                {
-                    uno::Sequence< OUString > aProps( 1 );
-                    aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
-                    uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
-
-                    if( xResultSet.is() )
-                    {
-                        uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-
-                        if( xContentAccess.is() )
-                        {
-                            while( xResultSet->next() )
-                            {
-                                aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-                                bRet = bRet || InsertURL( aURL, nInsertPos );
-                            }
-                        }
-                    }
-                }
-                else
-                    bRet = InsertURL( aURL, nInsertPos );
-            }
-            catch( const ContentCreationException& )
-            {
-                DBG_ERROR( "ContentCreationException" );
-            }
-            catch( const ::com::sun::star::uno::RuntimeException& )
-            {
-                DBG_ERROR( "RuntimeException" );
-            }
-        }
-    }
-    else
-    {
-        Graphic aGraphic;
-        ULONG   nFormat = 0;
-
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
-            nFormat = SOT_FORMATSTR_ID_SVXB;
-        else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
-            nFormat = FORMAT_GDIMETAFILE;
-        else if( aDataHelper.HasFormat( FORMAT_BITMAP ) )
-            nFormat = FORMAT_BITMAP;
-
-        if( nFormat && aDataHelper.GetGraphic( nFormat, aGraphic ) )
-            pGraphic = new Graphic( aGraphic );
-    }
-
-    if( pGraphic )
-    {
-        bRet = FALSE;
-
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
-        {
-            ImageMap aImageMap;
-
-            if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )
-            {
-                FmFormModel         aModel;
-                SgaUserDataFactory  aFactory;
+                FmFormModel aModel;
 
                 aModel.GetItemPool().FreezeIdRanges();
 
-                SdrPage*    pPage = aModel.AllocPage( FALSE );
-                SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
-
-                pGrafObj->InsertUserData( new SgaIMapInfo( aImageMap ) );
-                pPage->InsertObject( pGrafObj );
-                aModel.SetPageNotValid( TRUE );
-                aModel.InsertPage( pPage );
-                bRet = InsertModel( aModel, nInsertPos );
+                if( SGASvDrawImport( *xModelStm, aModel ) )
+                    bRet = InsertModel( aModel, nInsertPos );
             }
         }
+        else if( aDataHelper.HasFormat( FORMAT_FILE ) )
+        {
+            String aFile;
 
-        if( !bRet )
-            bRet = InsertGraphic( *pGraphic, nInsertPos );
+            if( aDataHelper.GetString( FORMAT_FILE, aFile ) )
+            {
+                INetURLObject aURL( aFile );
+                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        delete pGraphic;
+                try
+                {
+                    Content     aCnt( aURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+                    sal_Bool    bFolder;
+
+                    aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
+
+                    if( bFolder )
+                    {
+                        uno::Sequence< OUString > aProps( 1 );
+                        aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
+                        uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
+
+                        if( xResultSet.is() )
+                        {
+                            uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+
+                            if( xContentAccess.is() )
+                            {
+                                while( xResultSet->next() )
+                                {
+                                    aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+                                    bRet = bRet || InsertURL( aURL, nInsertPos );
+                                }
+                            }
+                        }
+                    }
+                    else
+                        bRet = InsertURL( aURL, nInsertPos );
+                }
+                catch( const ContentCreationException& )
+                {
+                    DBG_ERROR( "ContentCreationException" );
+                }
+                catch( const ::com::sun::star::uno::RuntimeException& )
+                {
+                    DBG_ERROR( "RuntimeException" );
+                }
+            }
+        }
+        else
+        {
+            Graphic aGraphic;
+            ULONG   nFormat = 0;
+
+            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
+                nFormat = SOT_FORMATSTR_ID_SVXB;
+            else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
+                nFormat = FORMAT_GDIMETAFILE;
+            else if( aDataHelper.HasFormat( FORMAT_BITMAP ) )
+                nFormat = FORMAT_BITMAP;
+
+            if( nFormat && aDataHelper.GetGraphic( nFormat, aGraphic ) )
+                pGraphic = new Graphic( aGraphic );
+        }
+
+        if( pGraphic )
+        {
+            bRet = FALSE;
+
+            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
+            {
+                ImageMap aImageMap;
+
+                if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )
+                {
+                    FmFormModel         aModel;
+                    SgaUserDataFactory  aFactory;
+
+                    aModel.GetItemPool().FreezeIdRanges();
+
+                    SdrPage*    pPage = aModel.AllocPage( FALSE );
+                    SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
+
+                    pGrafObj->InsertUserData( new SgaIMapInfo( aImageMap ) );
+                    pPage->InsertObject( pGrafObj );
+                    aModel.SetPageNotValid( TRUE );
+                    aModel.InsertPage( pPage );
+                    bRet = InsertModel( aModel, nInsertPos );
+                }
+            }
+
+            if( !bRet )
+                bRet = InsertGraphic( *pGraphic, nInsertPos );
+
+            delete pGraphic;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryTheme::CopyToClipboard( ULONG nPos )
+{
+    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
+    pTransferable->CopyToClipboard();
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GalleryTheme::IsCurrentClipboardSupported() const
+{
+    TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    BOOL                    bRet = FALSE;
+
+    if( aDataHelper.GetFormatCount() )
+    {
+        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) ||
+            aDataHelper.HasFormat( FORMAT_FILE ) ||
+            aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
+            aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) ||
+            aDataHelper.HasFormat( FORMAT_BITMAP ) )
+        {
+            bRet = TRUE;
+        }
     }
 
     return bRet;
@@ -1106,7 +1140,6 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 void GalleryTheme::StartDrag( Window* pWindow, ULONG nPos )
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
-
     pTransferable->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
