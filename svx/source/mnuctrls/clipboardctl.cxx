@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-24 14:29:38 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 14:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,27 +176,22 @@ SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
 }
 
 
-void SvxClipBoardControl::StateChanged(
-        USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxClipBoardControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if (SID_CLIPBOARD_FORMAT_ITEMS == nSID)
+    if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {
-        DELETEZ(pClipboardFmtItem);
-        if (eState >= SFX_ITEM_AVAILABLE)
+        DELETEZ( pClipboardFmtItem );
+        if ( eState >= SFX_ITEM_AVAILABLE )
+        {
             pClipboardFmtItem = pState->Clone();
-    }
-    else
-    {
-        const SfxBoolItem* pDropDownDisabler = PTR_CAST( SfxBoolItem, pState );
-        sal_Bool bEnableDropDown = !pDropDownDisabler || pDropDownDisabler->GetValue();
-
-        // if not, we need to disable the drop-down
-        if ( bEnableDropDown )
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );
+        }
         else
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~TIB_DROPDOWN );
         GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
-
+    }
+    else
+    {
         // enable the item as a whole
         GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
     }
