@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:16:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,31 +501,27 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     {
         mnWidth += mpGlyphAdvances[i];
 
-        // we are only interested in notdef candidates
+        // check with the font face whether it supports the unicode
+        sal_Unicode cChar;
+        int nCharPos;
         if( mbDisableGlyphs )
         {
-            // TODO: improve heurisitics for non-GlyphIndexing NotDef detection
-            if( mpGlyphAdvances[i] != 0 )
-                continue;
+            nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
+            cChar = mpOutGlyphs[i];
         }
         else
         {
-            // TODO: improve heuristic below
-            // problem is that some fonts seem to have NotDef at glyphids 0,3,4
-            if( (mpGlyphAdvances[i] != 0) || (mpOutGlyphs[i] > 4)  )
+            if( mpGlyphAdvances[i] != 0 )
                 if( mpOutGlyphs[i] != 0 )
                     continue;
+            nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
+            cChar = rArgs.mpStr[ nCharPos ];
         }
+        if( mrWinFontData.HasChar( cChar ) )
+            continue;
 
+        // request glyph fallback at this position in the string
         bool bRTL = mpGlyphRTLFlags ? mpGlyphRTLFlags[i] : false;
-        int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
-
-       // double check with the font face, if it has support for the unicode
-       sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
-       if( mrWinFontData.HasChar( cChar ) )
-           continue;
-
-        // request glyph fallback at this position
         rArgs.NeedFallback( nCharPos, bRTL );
 
         if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
@@ -643,7 +639,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
     int nCount = 0;
     while( nCount < nLen )
     {
-        // update return values (nGlyphIndex,nCharPos,nGlyphAdvance)
+        // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
         long nGlyphIndex = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
@@ -973,28 +969,28 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
 void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 {
-    if( nStart >= mnGlyphCount )
+   if( nStart >= mnGlyphCount )
         return;
+
+    // calculate the current x-position of the requested glyph
     // TODO: cache absolute positions
-    int nDelta = mnBaseAdv;
+    int nXPos = mnBaseAdv;
     for( int i = 0; i < nStart; ++i )
-        nDelta += mpGlyphAdvances[ i ];
-    nDelta = nNewXPos - nDelta;
+        nXPos += mpGlyphAdvances[i];
+
+    // calculate the difference to the current glyph position
+    int nDelta = nNewXPos - nXPos;
+
+    // adjust the width of the layout if it was already cached
     if( mnWidth )
-    {
-        // when width is cached it needs to be adjusted
         mnWidth += nDelta;
-    }
+
+    // depending on whether the requested glyph is leftmost in the layout
+    // adjust either the layout's or the requested glyph's relative position
     if( nStart > 0 )
-    {
-        // adjust virtual width when inbetween
         mpGlyphAdvances[ nStart-1 ] += nDelta;
-    }
     else
-    {
-        // change offset when first glyph has fallback
-        mnBaseAdv = nNewXPos;
-    }
+        mnBaseAdv += nDelta;
 }
 
 // -----------------------------------------------------------------------
@@ -1002,19 +998,21 @@ void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 void SimpleWinLayout::DropGlyph( int nStart )
 {
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
+    if( mnWidth )
+        mnWidth -= mpGlyphAdvances[ nStart ];
 }
 
 // -----------------------------------------------------------------------
 
 void SimpleWinLayout::Simplify( bool bIsBase )
 {
-    // return early if no glyph is dropped
+    // return early if no glyph has been dropped
     int i = mnGlyphCount;
     while( (--i >= 0) && (mpOutGlyphs[ i ] != DROPPED_OUTGLYPH) );
     if( i < 0 )
         return;
 
-    // convert to sparse layout when glyphs are dropped
+    // convert the layout to a sparse layout if it is not already
     if( !mpGlyphs2Chars )
     {
         mpGlyphs2Chars = new int[ mnGlyphCount ];
@@ -1022,24 +1020,25 @@ void SimpleWinLayout::Simplify( bool bIsBase )
         // assertion: mnGlyphCount == mnCharCount
         for( int k = 0; k < mnGlyphCount; ++k )
         {
-            mpGlyphs2Chars[ k ] = k + mnMinCharPos;
+            mpGlyphs2Chars[ k ] = mnMinCharPos + k;
             mpCharWidths[ k ] = mpGlyphAdvances[ k ];
         }
     }
 
-    // when glyphs at end have been removed => reduce width
+    // remove dropped glyphs that are rightmost in the layout
     for( i = mnGlyphCount; --i >= 0; )
     {
         if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
             break;
-        mnWidth -= mpGlyphAdvances[ i ];
-        int c = mpGlyphs2Chars[ i ] - mnMinCharPos;
-        if( c >= 0 )
-            mpCharWidths[ c ] = 0;
+        if( mnWidth )
+            mnWidth -= mpGlyphAdvances[ i ];
+        int nRelCharPos = mpGlyphs2Chars[ i ] - mnMinCharPos;
+        if( nRelCharPos >= 0 )
+            mpCharWidths[ nRelCharPos ] = 0;
     }
     mnGlyphCount = i + 1;
 
-    // keep original widths around
+    // keep original glyph widths around
     if( !mpGlyphOrigAdvs )
     {
         mpGlyphOrigAdvs = new int[ mnGlyphCount ];
@@ -1047,36 +1046,37 @@ void SimpleWinLayout::Simplify( bool bIsBase )
             mpGlyphOrigAdvs[ k ] = mpGlyphAdvances[ k ];
     }
 
-    // skip to first dropped glyph
+    // remove dropped glyphs inside the layout
+    int nNewGC = 0;
     for( i = 0; i < mnGlyphCount; ++i )
-        if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
-            break;
-
-    // remove dropped glyphs inbetween
-    int nNewGC = i;
-    for(; i < mnGlyphCount; ++i )
     {
-        mpOutGlyphs[ nNewGC ]     = mpOutGlyphs[ i ];
-        mpGlyphAdvances[ nNewGC ] = mpGlyphAdvances[ i ];
-        mpGlyphOrigAdvs[ nNewGC ] = mpGlyphOrigAdvs[ i ];
-        mpGlyphs2Chars[ nNewGC ]  = mpGlyphs2Chars[ i ];
-
-        if( mpOutGlyphs[ i ] != DROPPED_OUTGLYPH )
+        if( mpOutGlyphs[ i ] == DROPPED_OUTGLYPH )
         {
-            ++nNewGC;
-            continue;
+            // adjust relative position to last valid glyph
+            int nDroppedWidth = mpGlyphAdvances[ i ];
+            mpGlyphAdvances[ i ] = 0;
+            if( nNewGC > 0 )
+                mpGlyphAdvances[ nNewGC-1 ] += nDroppedWidth;
+            else
+                mnBaseAdv += nDroppedWidth;
+
+            // zero the virtual char width for the char that has a fallback
+            int nRelCharPos = mpGlyphs2Chars[ i ] - mnMinCharPos;
+            if( nRelCharPos >= 0 )
+                mpCharWidths[ nRelCharPos ] = 0;
         }
-
-        // zero virtual char width for fallback char
-        int c = mpGlyphs2Chars[ i ] - mnMinCharPos;
-        if( c >= 0 )
-            mpCharWidths[ c ] = 0;
-
-        // adjust positions for dropped glyph
-        if( nNewGC > 0 )
-            mpGlyphAdvances[ nNewGC-1 ] += mpGlyphAdvances[ i ];
         else
-            mnBaseAdv += mpGlyphAdvances[ i ];
+        {
+            if( nNewGC != i )
+            {
+                // rearrange the glyph array to get rid of the dropped glyph
+                mpOutGlyphs[ nNewGC ]     = mpOutGlyphs[ i ];
+                mpGlyphAdvances[ nNewGC ] = mpGlyphAdvances[ i ];
+                mpGlyphOrigAdvs[ nNewGC ] = mpGlyphOrigAdvs[ i ];
+                mpGlyphs2Chars[ nNewGC ]  = mpGlyphs2Chars[ i ];
+            }
+            ++nNewGC;
+        }
     }
 
     mnGlyphCount = nNewGC;
