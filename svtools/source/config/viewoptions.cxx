@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 15:03:39 $
+ *  last change: $Author: as $ $Date: 2000-12-04 12:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,22 +102,42 @@ using namespace ::com::sun::star::beans ;
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_DIALOGS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/Dialogs"     ))
-#define ROOTNODE_TABDIALOGS                 OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/TabDialogs"  ))
-#define ROOTNODE_TABPAGES                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/TabPages"    ))
-#define ROOTNODE_WINDOWS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/Windows"     ))
+#define VIEWPACKAGE                         OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views"             ))
 
-#define PROPERTYNAME_X                      OUString(RTL_CONSTASCII_USTRINGPARAM("/X"                       ))
-#define PROPERTYNAME_Y                      OUString(RTL_CONSTASCII_USTRINGPARAM("/Y"                       ))
-#define PROPERTYNAME_WIDTH                  OUString(RTL_CONSTASCII_USTRINGPARAM("/Width"                   ))
-#define PROPERTYNAME_HEIGHT                 OUString(RTL_CONSTASCII_USTRINGPARAM("/Height"                  ))
-#define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("/PageID"                  ))
-#define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("/Visible"                 ))
-#define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("/UserData"                ))
+#define PROPERTYNAME_DIALOGS                OUString(RTL_CONSTASCII_USTRINGPARAM("Dialogs"                  ))
+#define PROPERTYNAME_TABDIALOGS             OUString(RTL_CONSTASCII_USTRINGPARAM("TabDialogs"               ))
+#define PROPERTYNAME_TABPAGES               OUString(RTL_CONSTASCII_USTRINGPARAM("TabPages"                 ))
+#define PROPERTYNAME_WINDOWS                OUString(RTL_CONSTASCII_USTRINGPARAM("Windows"                  ))
+#define PROPERTYNAME_X                      OUString(RTL_CONSTASCII_USTRINGPARAM("X"                        ))
+#define PROPERTYNAME_Y                      OUString(RTL_CONSTASCII_USTRINGPARAM("Y"                        ))
+#define PROPERTYNAME_WIDTH                  OUString(RTL_CONSTASCII_USTRINGPARAM("Width"                    ))
+#define PROPERTYNAME_HEIGHT                 OUString(RTL_CONSTASCII_USTRINGPARAM("Height"                   ))
+#define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("PageID"                   ))
+#define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("Visible"                  ))
+#define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("UserData"                 ))
 
 #define SEPERATOR_NOT_FOUND                 -1
-#define PATHSEPERATOR                       sal_Unicode('/')
-#define ROOTNODE                            OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
+#define PATHSEPERATOR                       OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
+
+#define ROOTNODE_DIALOGS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Dialogs"                  ))
+#define ROOTNODE_TABDIALOGS                 OUString(RTL_CONSTASCII_USTRINGPARAM("TabDialogs"               ))
+#define ROOTNODE_TABPAGES                   OUString(RTL_CONSTASCII_USTRINGPARAM("TabPages"                 ))
+#define ROOTNODE_WINDOWS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Windows"                  ))
+
+#define SHORTNAME_DIALOGS                   OUString(RTL_CONSTASCII_USTRINGPARAM("dl_"                      ))
+#define SHORTNAME_TABDIALOGS                OUString(RTL_CONSTASCII_USTRINGPARAM("td_"                      ))
+#define SHORTNAME_TABPAGES                  OUString(RTL_CONSTASCII_USTRINGPARAM("tp_"                      ))
+#define SHORTNAME_WINDOWS                   OUString(RTL_CONSTASCII_USTRINGPARAM("wi_"                      ))
+
+#define SHORTNAME_ENDPOSITION               3
+
+#define DEFAULT_X                           0
+#define DEFAULT_Y                           0
+#define DEFAULT_WIDTH                       100
+#define DEFAULT_HEIGHT                      100
+#define DEFAULT_PAGEID                      0
+#define DEFAULT_VISIBLE                     sal_True
+#define DEFAULT_USERDATA                    OUString()
 
 //_________________________________________________________________________________________________________________
 //  initialization!
@@ -229,7 +249,8 @@ class SvtViewDialogOptions_Impl : public ConfigItem
 
     private:
 
-        void impl_ReadWholeList();
+        void    impl_ReadWholeList      (                       );
+        void    impl_CreateIfNotExist   ( const OUString& sName );
 
     private:
 
@@ -238,18 +259,18 @@ class SvtViewDialogOptions_Impl : public ConfigItem
 
 //*****************************************************************************************************************
 SvtViewDialogOptions_Impl::SvtViewDialogOptions_Impl()
-        :   ConfigItem  ( ROOTNODE_DIALOGS )
+        :   ConfigItem  ( VIEWPACKAGE )
 {
     // Read complete list from configuration.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
     // Attention: If you use current existing entry names to do that - you never get a notification
     // for new created items!!!
-    Sequence< OUString > seqNotifyList(1);
-    seqNotifyList[0] = ROOTNODE;
-    EnableNotification( seqNotifyList );
+/*  Sequence< OUString > seqNotifyList(1);
+    seqNotifyList[0] = ROOTNODE_DIALOGS;
+    EnableNotification( seqNotifyList );*/
 }
 
 //*****************************************************************************************************************
@@ -268,37 +289,42 @@ void SvtViewDialogOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::Commit()
 {
-/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
     // We save 5 properties for every hash item. But his names are fix ...
     // Prepare sequence!
-    Sequence< PropertyValue > seqProperties( 5 );
-    seqProperties[0].Name   = PROPERTYNAME_X        ;
-    seqProperties[1].Name   = PROPERTYNAME_Y        ;
-    seqProperties[2].Name   = PROPERTYNAME_WIDTH    ;
-    seqProperties[3].Name   = PROPERTYNAME_HEIGHT   ;
-    seqProperties[4].Name   = PROPERTYNAME_USERDATA ;
+    Sequence< PropertyValue >   seqProperties( 5 )  ;
+    OUString                    sName               ;
 
     for( IMPL_TDialogHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
+        sName  = ROOTNODE_DIALOGS   ;   //  "Dialogs"
+        sName += PATHSEPERATOR      ;   //  "Dialogs/"
+        sName += SHORTNAME_DIALOGS  ;   //  "Dialogs/dl_"
+        sName += pIterator->first   ;   //  "Dialogs/dl_<...>"
+        sName += PATHSEPERATOR      ;   //  "Dialogs/dl_<...>/"
+
+        seqProperties[0].Name   = sName + PROPERTYNAME_X        ;
+        seqProperties[1].Name   = sName + PROPERTYNAME_Y        ;
+        seqProperties[2].Name   = sName + PROPERTYNAME_WIDTH    ;
+        seqProperties[3].Name   = sName + PROPERTYNAME_HEIGHT   ;
+        seqProperties[4].Name   = sName + PROPERTYNAME_USERDATA ;
+
         seqProperties[0].Value  <<= pIterator->second.nX        ;
         seqProperties[1].Value  <<= pIterator->second.nY        ;
         seqProperties[2].Value  <<= pIterator->second.nWidth    ;
         seqProperties[3].Value  <<= pIterator->second.nHeight   ;
         seqProperties[4].Value  <<= pIterator->second.sUserData ;
 
-        OUString sName = pIterator->first;
-        SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+        SetSetProperties( ROOTNODE_DIALOGS, seqProperties ); // The keyname of our hash is the kename of our set!
     }
-*/
 }
 
 //*****************************************************************************************************************
@@ -310,23 +336,30 @@ sal_Bool SvtViewDialogOptions_Impl::Exists( const OUString& sName )
 //*****************************************************************************************************************
 sal_Bool SvtViewDialogOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode  = sName;
-    sal_Bool bState = ClearNodeSet( sNode );
-    if( bState == sal_True )
+    // Set default return value to "element no longer exist"!
+    // It doesnt matter for user if element not exist or was deleted!
+    // Not exist is not exist is ...
+    sal_Bool bDeleteState = sal_True;
+
+    if( m_aList.find( sName ) != m_aList.end() )
     {
-        m_aList.erase( sName );
-        SetModified();
+        bDeleteState = ClearNodeSet( sName );
+        if( bDeleteState == sal_True )
+        {
+            m_aList.erase( sName );
+            SetModified();
+        }
     }
-    return bState;
+    return bDeleteState;
 }
 
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    // If entry not exist before our index call in stl vector will create it automaticly!
+    // But we must change the default values. An we must call "SetModifed()" ... because
+    // we have created a new cache entry.
+    impl_CreateIfNotExist( sName );
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -334,6 +367,7 @@ void SvtViewDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32& n
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX, sal_Int32 nY )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nX = nX;
     m_aList[ sName ].nY = nY;
     SetModified();
@@ -342,17 +376,18 @@ void SvtViewDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::GetSize( const OUString& sName, sal_Int32& nWidth, sal_Int32& nHeight )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
-    nWidth  = m_aList[ sName ].nWidth   ;
-    nHeight = m_aList[ sName ].nHeight  ;
+    // If entry not exist before our index call in stl vector will create it automaticly!
+    // But we must change the default values. An we must call "SetModifed()" ... because
+    // we have created a new cache entry.
+    impl_CreateIfNotExist( sName );
+    nWidth  = m_aList[ sName ].nWidth ;
+    nHeight = m_aList[ sName ].nHeight;
 }
 
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth, sal_Int32 nHeight )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nWidth  = nWidth  ;
     m_aList[ sName ].nHeight = nHeight ;
     SetModified();
@@ -361,16 +396,14 @@ void SvtViewDialogOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth
 //*****************************************************************************************************************
 OUString SvtViewDialogOptions_Impl::GetUserData( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].sUserData;
 }
 
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].sUserData = sData;
     SetModified();
 }
@@ -383,34 +416,66 @@ void SvtViewDialogOptions_Impl::impl_ReadWholeList()
     // At least add these values in our hash map.
     m_aList.clear();
 
-    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
-    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
-    Sequence< OUString >    seqAllNames     ( nCount*5 )                ;
-    sal_uInt32              nItem           = 0                         ;
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( ROOTNODE_DIALOGS )  ;
+    sal_uInt32              nNodeCount      = seqNodeNames.getLength()          ;
+    Sequence< OUString >    seqAllNames     ( nNodeCount*5 )                    ;
+    sal_uInt32              nNodeName       = 0                                 ;
+    sal_uInt32              nProperty       = 0                                 ;
+    OUString                sName                                               ;
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
-        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
-        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_WIDTH     ;
-        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_HEIGHT    ;
-        seqAllNames[nItem+4] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+        sName  = ROOTNODE_DIALOGS       ;
+        sName += PATHSEPERATOR          ;
+        sName += seqNodeNames[nNodeName];
+        sName += PATHSEPERATOR          ;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_X         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_Y         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_WIDTH     ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_HEIGHT    ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
+        ++nProperty;
     }
 
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
 
     // Safe impossible cases.
     // We have asked for ALL our subtree keys and we would get all his values.
-    // It's neccessary for next loop and our index using!
+    // It's important for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set!\n" );
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    nProperty = 0;
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
-        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
-        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nWidth   ;
-        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].nHeight  ;
-        seqAllValues[nItem+4] >>= m_aList[seqNodeNames[nItem]].sUserData;
+        sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
+        seqAllValues[nProperty] >>= m_aList[sName].nX           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nY           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nWidth       ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nHeight      ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
+        ++nProperty;
+    }
+}
+
+//*****************************************************************************************************************
+void SvtViewDialogOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
+{
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        m_aList[sName].nX           = DEFAULT_X         ;
+        m_aList[sName].nY           = DEFAULT_Y         ;
+        m_aList[sName].nWidth       = DEFAULT_WIDTH     ;
+        m_aList[sName].nHeight      = DEFAULT_HEIGHT    ;
+        m_aList[sName].sUserData    = DEFAULT_USERDATA  ;
+        SetModified();
     }
 }
 
@@ -439,7 +504,8 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
 
     private:
 
-        void impl_ReadWholeList();
+        void    impl_ReadWholeList      (                       );
+        void    impl_CreateIfNotExist   ( const OUString& sName );
 
     private:
 
@@ -448,18 +514,18 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
 
 //*****************************************************************************************************************
 SvtViewTabDialogOptions_Impl::SvtViewTabDialogOptions_Impl()
-        :   ConfigItem  ( ROOTNODE_TABDIALOGS )
+        :   ConfigItem  ( VIEWPACKAGE )
 {
     // Read complete list from configuration.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
     // Attention: If you use current existing entry names to do that - you never get a notification
     // for new created items!!!
-    Sequence< OUString > seqNotifyList(1);
-    seqNotifyList[0] = ROOTNODE;
-    EnableNotification( seqNotifyList );
+/*  Sequence< OUString > seqNotifyList(1);
+    seqNotifyList[0] = ROOTNODE_TABDIALOGS;
+    EnableNotification( seqNotifyList );*/
 }
 
 //*****************************************************************************************************************
@@ -478,35 +544,40 @@ void SvtViewTabDialogOptions_Impl::Notify( const Sequence< OUString >& seqProper
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::Commit()
 {
-/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
     // We save 4 properties for every hash item. But his names are fix ...
     // Prepare sequence!
-    Sequence< PropertyValue > seqProperties( 4 );
-    seqProperties[0].Name   = PROPERTYNAME_X        ;
-    seqProperties[1].Name   = PROPERTYNAME_Y        ;
-    seqProperties[2].Name   = PROPERTYNAME_PAGEID   ;
-    seqProperties[3].Name   = PROPERTYNAME_USERDATA ;
+    Sequence< PropertyValue >   seqProperties( 4 )  ;
+    OUString                    sName               ;
 
     for( IMPL_TTabDialogHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
+        sName =  ROOTNODE_TABDIALOGS    ;   //  "TabDialogs"
+        sName += PATHSEPERATOR          ;   //  "TabDialogs/"
+        sName += SHORTNAME_TABDIALOGS   ;   //  "TabDialogs/td_"
+        sName += pIterator->first       ;   //  "TabDialogs/td_<...>"
+        sName += PATHSEPERATOR          ;   //  "TabDialogs/td_<...>/"
+
+        seqProperties[0].Name   = sName + PROPERTYNAME_X        ;
+        seqProperties[1].Name   = sName + PROPERTYNAME_Y        ;
+        seqProperties[2].Name   = sName + PROPERTYNAME_PAGEID   ;
+        seqProperties[3].Name   = sName + PROPERTYNAME_USERDATA ;
+
         seqProperties[0].Value  <<= pIterator->second.nX        ;
         seqProperties[1].Value  <<= pIterator->second.nY        ;
         seqProperties[2].Value  <<= pIterator->second.nPageID   ;
         seqProperties[3].Value  <<= pIterator->second.sUserData ;
 
-        OUString sName = pIterator->first;
-        SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+        SetSetProperties( ROOTNODE_TABDIALOGS, seqProperties ); // The keyname of our hash is the kename of our set!
     }
-*/
 }
 
 //*****************************************************************************************************************
@@ -518,23 +589,30 @@ sal_Bool SvtViewTabDialogOptions_Impl::Exists( const OUString& sName )
 //*****************************************************************************************************************
 sal_Bool SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode  = sName;
-    sal_Bool bState = ClearNodeSet( sNode );
-    if( bState == sal_True )
+    // Set default return value to "element no longer exist"!
+    // It doesnt matter for user if element not exist or was deleted!
+    // Not exist is not exist is ...
+    sal_Bool bDeleteState = sal_True;
+
+    if( m_aList.find( sName ) != m_aList.end() )
     {
-        m_aList.erase( sName );
-        SetModified();
+        bDeleteState = ClearNodeSet( sName );
+        if( bDeleteState == sal_True )
+        {
+            m_aList.erase( sName );
+            SetModified();
+        }
     }
-    return bState;
+    return bDeleteState;
 }
 
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    // If entry not exist before our index call in stl vector will create it automaticly!
+    // But we must change the default values. An we must call "SetModifed()" ... because
+    // we have created a new cache entry.
+    impl_CreateIfNotExist( sName );
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -542,6 +620,7 @@ void SvtViewTabDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX, sal_Int32 nY )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nX = nX;
     m_aList[ sName ].nY = nY;
     SetModified();
@@ -550,16 +629,14 @@ void SvtViewTabDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32
 //*****************************************************************************************************************
 sal_Int32 SvtViewTabDialogOptions_Impl::GetPageID( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].nPageID;
 }
 
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::SetPageID( const OUString& sName, sal_Int32 nID )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nPageID = nID;
     SetModified();
 }
@@ -567,16 +644,14 @@ void SvtViewTabDialogOptions_Impl::SetPageID( const OUString& sName, sal_Int32 n
 //*****************************************************************************************************************
 OUString SvtViewTabDialogOptions_Impl::GetUserData( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].sUserData;
 }
 
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].sUserData = sData;
     SetModified();
 }
@@ -589,17 +664,27 @@ void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
     // At least add these values in our hash map.
     m_aList.clear();
 
-    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
-    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
-    Sequence< OUString >    seqAllNames     ( nCount*4 )                ;
-    sal_uInt32              nItem           = 0                         ;
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( ROOTNODE_TABDIALOGS )   ;
+    sal_uInt32              nNodeCount      = seqNodeNames.getLength()              ;
+    Sequence< OUString >    seqAllNames     ( nNodeCount*4 )                        ;
+    sal_uInt32              nNodeName       = 0                                     ;
+    sal_uInt32              nProperty       = 0                                     ;
+    OUString                sName                                                   ;
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
-        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
-        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_PAGEID    ;
-        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+        sName  = ROOTNODE_TABDIALOGS    ;
+        sName += PATHSEPERATOR          ;
+        sName += seqNodeNames[nNodeName];
+        sName += PATHSEPERATOR          ;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_X         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_Y         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_PAGEID    ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
+        ++nProperty;
     }
 
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
@@ -609,12 +694,31 @@ void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-dialog set!\n" );
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    nProperty = 0;
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
-        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
-        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nPageID  ;
-        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].sUserData;
+        sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
+        seqAllValues[nProperty] >>= m_aList[sName].nX           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nY           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nPageID      ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
+        ++nProperty;
+    }
+}
+
+//*****************************************************************************************************************
+void SvtViewTabDialogOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
+{
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        m_aList[sName].nX           = DEFAULT_X         ;
+        m_aList[sName].nY           = DEFAULT_Y         ;
+        m_aList[sName].nPageID      = DEFAULT_PAGEID    ;
+        m_aList[sName].sUserData    = DEFAULT_USERDATA  ;
+        SetModified();
     }
 }
 
@@ -639,7 +743,8 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
 
     private:
 
-        void impl_ReadWholeList();
+        void    impl_ReadWholeList      (                       );
+        void    impl_CreateIfNotExist   ( const OUString& sName );
 
     private:
 
@@ -648,18 +753,18 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
 
 //*****************************************************************************************************************
 SvtViewTabPageOptions_Impl::SvtViewTabPageOptions_Impl()
-        :   ConfigItem  ( ROOTNODE_TABPAGES )
+        :   ConfigItem  ( VIEWPACKAGE )
 {
     // Read complete list from configuration.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
     // Attention: If you use current existing entry names to do that - you never get a notification
     // for new created items!!!
-    Sequence< OUString > seqNotifyList(1);
-    seqNotifyList[0] = ROOTNODE;
-    EnableNotification( seqNotifyList );
+/*  Sequence< OUString > seqNotifyList(1);
+    seqNotifyList[0] = ROOTNODE_TABPAGES;
+    EnableNotification( seqNotifyList );*/
 }
 
 //*****************************************************************************************************************
@@ -678,29 +783,33 @@ void SvtViewTabPageOptions_Impl::Notify( const Sequence< OUString >& seqProperty
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewTabPageOptions_Impl::Commit()
 {
-/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
     // We save 1 property for every hash item. But his names are fix ...
     // Prepare sequence!
-    Sequence< PropertyValue > seqProperties( 1 );
-    seqProperties[0].Name = PROPERTYNAME_USERDATA;
+    Sequence< PropertyValue >   seqProperties( 1 )  ;
+    OUString                    sName               ;
 
     for( IMPL_TTabPageHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
-        seqProperties[0].Value <<= pIterator->second.sUserData;
+        sName  = ROOTNODE_TABPAGES  ;   //  "TabPages"
+        sName += PATHSEPERATOR      ;   //  "TabPages/"
+        sName += SHORTNAME_TABPAGES ;   //  "TabPages/tp_"
+        sName += pIterator->first   ;   //  "TabPages/tp_<...>"
+        sName += PATHSEPERATOR      ;   //  "TabPages/tp_<...>/"
 
-        OUString sName = pIterator->first;
-        SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+        seqProperties[0].Name   =   sName + PROPERTYNAME_USERDATA;
+        seqProperties[0].Value  <<= pIterator->second.sUserData;
+
+        SetSetProperties( ROOTNODE_TABPAGES, seqProperties ); // The keyname of our hash is the kename of our set!
     }
-*/
 }
 
 //*****************************************************************************************************************
@@ -712,29 +821,34 @@ sal_Bool SvtViewTabPageOptions_Impl::Exists( const OUString& sName )
 //*****************************************************************************************************************
 sal_Bool SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode  = sName;
-    sal_Bool bState = ClearNodeSet( sNode );
-    if( bState == sal_True )
+    // Set default return value to "element no longer exist"!
+    // It doesnt matter for user if element not exist or was deleted!
+    // Not exist is not exist is ...
+    sal_Bool bDeleteState = sal_True;
+
+    if( m_aList.find( sName ) != m_aList.end() )
     {
-        m_aList.erase( sName );
-        SetModified();
+        bDeleteState = ClearNodeSet( sName );
+        if( bDeleteState == sal_True )
+        {
+            m_aList.erase( sName );
+            SetModified();
+        }
     }
-    return bState;
+    return bDeleteState;
 }
 
 //*****************************************************************************************************************
 OUString SvtViewTabPageOptions_Impl::GetUserData( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].sUserData;
 }
 
 //*****************************************************************************************************************
 void SvtViewTabPageOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].sUserData = sData;
     SetModified();
 }
@@ -745,16 +859,27 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
     // Clear cache, get current name list of existing dialogs in configuration.
     // Use these list as SNAPSHOT to read ALL values of our subtree!
     // At least add these values in our hash map.
+
+    // Attention: Method is prepared for more then one properties for one node entry!
+    // That's the reason for two counters "nNodeName" and "nProperty"!
+
     m_aList.clear();
 
-    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
-    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
-    Sequence< OUString >    seqAllNames     ( nCount )                  ;
-    sal_uInt32              nItem           = 0                         ;
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( ROOTNODE_TABPAGES ) ;
+    sal_uInt32              nNodeCount      = seqNodeNames.getLength()          ;
+    Sequence< OUString >    seqAllNames     ( nNodeCount )                      ;
+    sal_uInt32              nNodeName       = 0                                 ;
+    sal_uInt32              nProperty       = 0                                 ;
+    OUString                sName                                               ;
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllNames[nItem] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA    ;
+        sName  = ROOTNODE_TABPAGES      ;
+        sName += PATHSEPERATOR          ;
+        sName += seqNodeNames[nNodeName];
+        sName += PATHSEPERATOR          ;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA;
+        //++nProperty;
     }
 
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
@@ -764,9 +889,22 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabPageOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-page set!\n" );
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    //nProperty = 0;
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllValues[nItem] >>= m_aList[seqNodeNames[nItem]].sUserData;
+        sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
+        seqAllValues[nProperty] >>= m_aList[sName].sUserData;
+        //++nProperty;
+    }
+}
+
+//*****************************************************************************************************************
+void SvtViewTabPageOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
+{
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        m_aList[sName].sUserData = DEFAULT_USERDATA;
+        SetModified();
     }
 }
 
@@ -797,7 +935,8 @@ class SvtViewWindowOptions_Impl : public ConfigItem
 
     private:
 
-        void impl_ReadWholeList();
+        void    impl_ReadWholeList      (                       );
+        void    impl_CreateIfNotExist   ( const OUString& sName );
 
     private:
 
@@ -806,18 +945,18 @@ class SvtViewWindowOptions_Impl : public ConfigItem
 
 //*****************************************************************************************************************
 SvtViewWindowOptions_Impl::SvtViewWindowOptions_Impl()
-        :   ConfigItem  ( ROOTNODE_WINDOWS )
+        :   ConfigItem  ( VIEWPACKAGE )
 {
     // Read complete list from configuration.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
     // Attention: If you use current existing entry names to do that - you never get a notification
     // for new created items!!!
-    Sequence< OUString > seqNotifyList(1);
-    seqNotifyList[0] = ROOTNODE;
-    EnableNotification( seqNotifyList );
+/*  Sequence< OUString > seqNotifyList(1);
+    seqNotifyList[0] = ROOTNODE_WINDOWS;
+    EnableNotification( seqNotifyList );*/
 }
 
 //*****************************************************************************************************************
@@ -836,28 +975,35 @@ void SvtViewWindowOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-//    impl_ReadWholeList();
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::Commit()
 {
-/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
     // We save 6 properties for every hash item. But his names are fix ...
     // Prepare sequence!
-    Sequence< PropertyValue > seqProperties( 6 );
-    seqProperties[0].Name   = PROPERTYNAME_X        ;
-    seqProperties[1].Name   = PROPERTYNAME_Y        ;
-    seqProperties[2].Name   = PROPERTYNAME_WIDTH    ;
-    seqProperties[3].Name   = PROPERTYNAME_HEIGHT   ;
-    seqProperties[4].Name   = PROPERTYNAME_VISIBLE  ;
-    seqProperties[5].Name   = PROPERTYNAME_USERDATA ;
+    Sequence< PropertyValue >   seqProperties( 6 )  ;
+    OUString                    sName               ;
 
     for( IMPL_TWindowHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
+        sName  = ROOTNODE_WINDOWS   ;   //  "Windows"
+        sName += PATHSEPERATOR      ;   //  "Windows/"
+        sName += SHORTNAME_WINDOWS  ;   //  "Windows/wi_"
+        sName += pIterator->first   ;   //  "Windows/wi_<...>"
+        sName += PATHSEPERATOR      ;   //  "Windows/wi_<...>/"
+
+        seqProperties[0].Name   = sName + PROPERTYNAME_X        ;
+        seqProperties[1].Name   = sName + PROPERTYNAME_Y        ;
+        seqProperties[2].Name   = sName + PROPERTYNAME_WIDTH    ;
+        seqProperties[3].Name   = sName + PROPERTYNAME_HEIGHT   ;
+        seqProperties[4].Name   = sName + PROPERTYNAME_VISIBLE  ;
+        seqProperties[5].Name   = sName + PROPERTYNAME_USERDATA ;
+
         seqProperties[0].Value  <<= pIterator->second.nX        ;
         seqProperties[1].Value  <<= pIterator->second.nY        ;
         seqProperties[2].Value  <<= pIterator->second.nWidth    ;
@@ -865,10 +1011,8 @@ void SvtViewWindowOptions_Impl::Commit()
         seqProperties[4].Value  <<= pIterator->second.bVisible  ;
         seqProperties[5].Value  <<= pIterator->second.sUserData ;
 
-        OUString sName = pIterator->first;
-        SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+        SetSetProperties( ROOTNODE_WINDOWS, seqProperties ); // The keyname of our hash is the kename of our set!
     }
-*/
 }
 
 //*****************************************************************************************************************
@@ -880,23 +1024,30 @@ sal_Bool SvtViewWindowOptions_Impl::Exists( const OUString& sName )
 //*****************************************************************************************************************
 sal_Bool SvtViewWindowOptions_Impl::Delete( const OUString& sName )
 {
-    OUString sNode  = sName;
-    sal_Bool bState = ClearNodeSet( sNode );
-    if( bState == sal_True )
+    // Set default return value to "element no longer exist"!
+    // It doesnt matter for user if element not exist or was deleted!
+    // Not exist is not exist is ...
+    sal_Bool bDeleteState = sal_True;
+
+    if( m_aList.find( sName ) != m_aList.end() )
     {
-        m_aList.erase( sName );
-        SetModified();
+        bDeleteState = ClearNodeSet( sName );
+        if( bDeleteState == sal_True )
+        {
+            m_aList.erase( sName );
+            SetModified();
+        }
     }
-    return bState;
+    return bDeleteState;
 }
 
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    // If entry not exist before our index call in stl vector will create it automaticly!
+    // But we must change the default values. An we must call "SetModifed()" ... because
+    // we have created a new cache entry.
+    impl_CreateIfNotExist( sName );
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -904,6 +1055,7 @@ void SvtViewWindowOptions_Impl::GetPosition( const OUString& sName, sal_Int32& n
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX, sal_Int32 nY )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nX = nX;
     m_aList[ sName ].nY = nY;
     SetModified();
@@ -912,10 +1064,10 @@ void SvtViewWindowOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::GetSize( const OUString& sName, sal_Int32& nWidth, sal_Int32& nHeight )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    // If entry not exist before our index call in stl vector will create it automaticly!
+    // But we must change the default values. An we must call "SetModifed()" ... because
+    // we have created a new cache entry.
+    impl_CreateIfNotExist( sName );
     nWidth  = m_aList[ sName ].nWidth ;
     nHeight = m_aList[ sName ].nHeight;
 }
@@ -923,6 +1075,7 @@ void SvtViewWindowOptions_Impl::GetSize( const OUString& sName, sal_Int32& nWidt
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth, sal_Int32 nHeight )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].nWidth  = nWidth  ;
     m_aList[ sName ].nHeight = nHeight ;
     SetModified();
@@ -931,16 +1084,14 @@ void SvtViewWindowOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth
 //*****************************************************************************************************************
 sal_Bool SvtViewWindowOptions_Impl::IsVisible( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].bVisible;
 }
 
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::SetVisible( const OUString& sName, sal_Bool bState )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].bVisible = bState;
     SetModified();
 }
@@ -948,16 +1099,14 @@ void SvtViewWindowOptions_Impl::SetVisible( const OUString& sName, sal_Bool bSta
 //*****************************************************************************************************************
 OUString SvtViewWindowOptions_Impl::GetUserData( const OUString& sName )
 {
-    if( m_aList.find( sName ) == m_aList.end() )
-    {
-        SetModified();
-    }
+    impl_CreateIfNotExist( sName );
     return m_aList[ sName ].sUserData;
 }
 
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
+    impl_CreateIfNotExist( sName );
     m_aList[ sName ].sUserData = sData;
     SetModified();
 }
@@ -970,19 +1119,31 @@ void SvtViewWindowOptions_Impl::impl_ReadWholeList()
     // At least add these values in our hash map.
     m_aList.clear();
 
-    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
-    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
-    Sequence< OUString >    seqAllNames     ( nCount*6 )                ;
-    sal_uInt32              nItem           = 0                         ;
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( ROOTNODE_WINDOWS )  ;
+    sal_uInt32              nNodeCount      = seqNodeNames.getLength()          ;
+    Sequence< OUString >    seqAllNames     ( nNodeCount*6 )                    ;
+    sal_uInt32              nNodeName       = 0                                 ;
+    sal_uInt32              nProperty       = 0                                 ;
+    OUString                sName                                               ;
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
-        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
-        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_WIDTH     ;
-        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_HEIGHT    ;
-        seqAllNames[nItem+4] = seqNodeNames[nItem] + PROPERTYNAME_VISIBLE   ;
-        seqAllNames[nItem+5] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+        sName  = ROOTNODE_WINDOWS       ;
+        sName += PATHSEPERATOR          ;
+        sName += seqNodeNames[nNodeName];
+        sName += PATHSEPERATOR          ;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_X         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_Y         ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_WIDTH     ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_HEIGHT    ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_VISIBLE   ;
+        ++nProperty;
+        seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA  ;
+        ++nProperty;
     }
 
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
@@ -992,14 +1153,37 @@ void SvtViewWindowOptions_Impl::impl_ReadWholeList()
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewWindowOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for window set!\n" );
 
-    for( nItem=0; nItem<nCount; ++nItem )
+    nProperty = 0;
+    for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
-        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
-        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
-        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nWidth   ;
-        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].nHeight  ;
-        seqAllValues[nItem+4] >>= m_aList[seqNodeNames[nItem]].bVisible ;
-        seqAllValues[nItem+5] >>= m_aList[seqNodeNames[nItem]].sUserData;
+        sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
+        seqAllValues[nProperty] >>= m_aList[sName].nX           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nY           ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nWidth       ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].nHeight      ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].bVisible     ;
+        ++nProperty;
+        seqAllValues[nProperty] >>= m_aList[sName].sUserData    ;
+        ++nProperty;
+    }
+}
+
+//*****************************************************************************************************************
+void SvtViewWindowOptions_Impl::impl_CreateIfNotExist( const OUString& sName )
+{
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        m_aList[sName].nX           = DEFAULT_X         ;
+        m_aList[sName].nY           = DEFAULT_Y         ;
+        m_aList[sName].nWidth       = DEFAULT_WIDTH     ;
+        m_aList[sName].nHeight      = DEFAULT_HEIGHT    ;
+        m_aList[sName].bVisible     = DEFAULT_VISIBLE   ;
+        m_aList[sName].sUserData    = DEFAULT_USERDATA  ;
+        SetModified();
     }
 }
 
