@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,8 +699,8 @@ int             delete;                 /* TRUE to delete a symbol      */
         }
         return (dp);
 }
-
-#ifdef DEBUG
+
+#if OSL_DEBUG_LEVEL > 1
 
 dumpdef(why)
 char            *why;
@@ -871,7 +871,7 @@ newline:
             else {                              /* Else get from a file */
                 if ((file->bptr = fgets(file->buffer, NBUFF, file->fp))
                         != NULL) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     if (debug > 1) {            /* Dump it to stdout    */
                         fprintf( pCppOut, "\n#line %d (%s), %s",
                             line, file->filename, file->buffer);
