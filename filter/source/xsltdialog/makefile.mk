@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 16:31:30 $
+#   last change: $Author: nf $ $Date: 2003-04-08 15:06:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=xsltdlg
+PRJNAME=filter
 TARGET=xsltdlg
 
 ENABLE_EXCEPTIONS=TRUE
