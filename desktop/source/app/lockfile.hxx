@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:01:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-15 08:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 using namespace ::rtl;
 namespace desktop {
 
-
     class Lockfile
     {
     public:
@@ -90,7 +89,7 @@ namespace desktop {
 
         // checks the lockfile, asks user when lockfile is
         // found (iff gui) and returns false when we may not continue
-        sal_Bool check( fpExecWarning execWarning = Lockfile_execWarning );
+        sal_Bool check( fpExecWarning execWarning );
 
         // removes the lockfile. should only be called in exceptional situations
         void clean(void);

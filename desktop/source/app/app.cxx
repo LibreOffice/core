@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:34:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-15 08:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,7 +1289,7 @@ void Desktop::Main()
     // there is no other instance using our data files from a remote host
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
     m_pLockfile = new Lockfile;
-    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check()) {
+    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
         // Lockfile exists, and user clicked 'no'
         return;
     }
