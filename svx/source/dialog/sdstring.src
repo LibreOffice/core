@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:37:09 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text [ dutch ] = "Het bestand kon niet worden opgeslagen!" ;
     Text [ spanish ] = "°No se pudo guardar el archivo!" ;
     Text [ danish ] = "Det var ikke muligt at gemme filen!" ;
-    Text [ swedish ] = "Filen kunde inte sparas!" ;
+    Text [ swedish ] = "Det gick inte att spara filen!" ;
     Text [ finnish ] = "The file couldn't be saved!" ;
     Text [ english_us ] = "The file could not be saved!" ;
     Text[ chinese_simplified ] = "Œﬁ∑®±£¥Ê’‚∏ˆŒƒº˛£°";
@@ -932,7 +932,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text [ finnish ] = "Tiedostoa ei voi lukea!" ;
     Text [ danish ] = "Det var ikke muligt at indlÊse filen!" ;
     Text [ french ] = "Impossible de charger le fichier !" ;
-    Text [ swedish ] = "Filen kunde inte laddas!" ;
+    Text [ swedish ] = "Det gick inte att ladda filen!" ;
     Text [ dutch ] = "Het bestand kon niet worden geladen!" ;
     Text [ spanish ] = "°No se pudo cargar el archivo!" ;
     Text [ english_us ] = "The file could not be loaded!" ;
@@ -1880,7 +1880,7 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ italian ] = "Bianco/Nero";
     Text[ danish ] = "Sort-hvid";
     Text[ swedish ] = "Svartvitt";
-    Text[ polish ] = "Bia≥y/Czarny";
+    Text[ polish ] = "Czarno-bia≥y";
     Text[ portuguese_brazilian ] = "Black/White";
     Text[ japanese ] = "îíçï";
     Text[ korean ] = "»Ê/ πÈ";
@@ -3690,7 +3690,7 @@ String RID_SVXSTR_BMP5
     Text[ russian ] = " ÓÒÏÓÒ";
     Text[ greek ] = "ƒÈ‹ÛÙÁÏ·";
     Text[ dutch ] = "Heelal";
-    Text[ french ] = "Galaxie";
+    Text[ french ] = "Cosmos";
     Text[ spanish ] = "Espacio";
     Text[ italian ] = "Spazio";
     Text[ danish ] = "Verdensrum";
@@ -4510,7 +4510,7 @@ String RID_SVXSTR_LEND3
     Text[ greek ] = "√Ò·ÏÏ›Ú ‰È·ÛÙ·ÛÈÔÎ¸„ÁÛÁÚ";
     Text[ dutch ] = "Afmetingseinden";
     Text[ french ] = "ExtrÈmitÈs de cotation";
-    Text[ spanish ] = "Fines de dimensionamiento";
+    Text[ spanish ] = "Fines de dimensiones";
     Text[ italian ] = "Estremit‡ quotatura";
     Text[ danish ] = "Dimensioneringsstreger";
     Text[ swedish ] = "Dimensionerings‰ndar";
