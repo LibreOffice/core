@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:09:38 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@
 // Makro MEMBER()
 #include "macfix.hxx"
 
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBDISAS, SBDISAS_CODE )
 
 #ifdef MACOSX
 static char* pOp1[] = {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:20:53 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,7 @@
  *
  ************************************************************************/
 
-#if STLPORT_VERSION < 321
-#include <tools/presys.h>
 #include <list>
-#include <tools/postsys.h>
-#else
-#include <list>
-#endif
 
 #include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
@@ -105,12 +99,8 @@
 #define CDECL
 #endif
 
-
-// TEST
 #include <stdio.h>
 
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)

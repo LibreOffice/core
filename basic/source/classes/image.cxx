@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:14:43 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #include <string.h>     // memset() etc
 #include "image.hxx"
 #include "filefmt.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
 SbiImage::SbiImage()
 {
