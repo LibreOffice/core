@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:40:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "°³Çà(~L)";
         Text[ turkish ] = "Satýr sonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Salto de ~línea";
     };
     RadioButton RB_PAGE
     {
@@ -166,6 +167,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "ÂÊ¡¡ ³ª´©±â(~P)";
         Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Salto de ~página";
     };
     RadioButton RB_COL
     {
@@ -195,6 +197,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "¿­ ³ª´©±â(~C)";
         Text[ turkish ] = "Sütun sonu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Salto de colu~mna";
     };
     GroupBox GB_BREAK
     {
@@ -223,6 +226,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "ÇüÅÂ";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     FixedText FT_COLL
     {
@@ -253,6 +257,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "À¯Çü(~S)";
         Text[ turkish ] = "~Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Estilo";
     };
     ListBox LB_COLL
     {
@@ -353,6 +358,10 @@ ModalDialog DLG_BREAK
     {
              < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "[Sin]" ; > ;
+    };
     };
     CheckBox CB_PAGENUM
     {
@@ -383,6 +392,7 @@ ModalDialog DLG_BREAK
         Text[ korean ] = "ÂÊ ¡¡¹øÈ£ º¯°æ(~N)";
         Text[ turkish ] = "Sayfa numarasýný deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cam~biar número de página";
     };
     NumericField ED_PAGENUM
     {
@@ -409,4 +419,5 @@ ModalDialog DLG_BREAK
     Text[ korean ] = "³ª´©±â »ðÀÔ";
     Text[ turkish ] = "Kesme ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar salto";
 };
