@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 11:24:46 $
+ *  last change: $Author: os $ $Date: 2002-12-12 17:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
                 SdrView* pTmpView = pSdrView;
 
-                rSh.EndTextEdit();
+                pSdrView->EndTextEdit(TRUE);
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
                             SDRATTR_TEXTDIRECTION,
@@ -524,7 +524,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
             SdrView* pTmpView = pSdrView;
 
-            rSh.EndTextEdit();
+            pSdrView->EndTextEdit(TRUE);
             sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
