@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:53:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2551,6 +2551,10 @@ void SwTxtFrm::CalcBaseOfstForFly()
     SwTxtFly aTxtFly( this );
     aTxtFly.SetIgnoreCurrentFrame( sal_True );
     aTxtFly.SetIgnoreContour( sal_True );
+    // --> OD 2004-12-17 #118809# - ignore objects in page header|footer for
+    // text frames not in page header|footer
+    aTxtFly.SetIgnoreObjsInHeaderFooter( sal_True );
+    // <--
     SwTwips nRet1 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
     aTxtFly.SetIgnoreCurrentFrame( sal_False );
     SwTwips nRet2 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
