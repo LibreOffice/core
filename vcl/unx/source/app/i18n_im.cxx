@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: htajima $ $Date: 2000-12-11 23:20:15 $
+ *  last change: $Author: cp $ $Date: 2001-01-15 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,10 +283,14 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             // get ml-input flag from input-method
             if ( maMethod == (XIM)NULL )
                 mbMultiLingual = False;
+            #if !defined(LINUX)
             else
             if ( XGetIMValues(maMethod,
                     XNMultiLingualInput, &mbMultiLingual, NULL ) != NULL )
                 mbMultiLingual = False;
+            #else
+                mbMultiLingual = False;
+            #endif
         }
         else
         {
