@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:10:06 $
+ *  last change: $Author: mt $ $Date: 2002-08-06 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2235,7 +2235,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
 // =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
-void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex )
+void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex, BYTE nRightToLeft )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
