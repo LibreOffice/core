@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtinfmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,10 @@ class SwFmtINetFmt: public SfxPoolItem
 public:
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
+    SwFmtINetFmt();                     // for TypeInfo
     virtual ~SwFmtINetFmt();
+
+    TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
