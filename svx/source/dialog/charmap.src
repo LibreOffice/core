@@ -3,15 +3,15 @@
  *  $RCSfile: charmap.src,v $
  *
 <<<<<<< charmap.src
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
 =======
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
 >>>>>>> 1.30
  *
 <<<<<<< charmap.src
- *  last change: $Author: kz $ $Date: 2001-08-21 20:54:41 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:57:21 $
 =======
- *  last change: $Author: kz $ $Date: 2001-08-21 20:54:41 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:57:21 $
 >>>>>>> 1.30
  *
  *  The Contents of this file are made available subject to the terms of
@@ -1093,7 +1093,7 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ polish ] = "Og�lna interpunkcja";
         Text[ portuguese_brazilian ] = "General Punctuation";
         Text[ japanese ] = "普通の句読点";
-        Text[ korean ] = "일반 구두점";
+        Text[ korean ] = "일반 구두법";
         Text[ chinese_simplified ] = "普通的标点符号";
         Text[ chinese_traditional ] = "普通的標點符號";
         Text[ turkish ] = "General Punctuation";
@@ -2711,4 +2711,5 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
