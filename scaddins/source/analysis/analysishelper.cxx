@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-19 14:14:44 $
+ *  last change: $Author: gt $ $Date: 2001-08-01 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,7 +1339,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
     rp = p;
 
     fInt += fFrac;
-    sal_Int32   nLog10 = sal_Int32( log( fInt ) );
+    sal_Int32   nLog10 = sal_Int32( log10( fInt ) );
 
     if( bNegExp )
         nExp = -nExp;
