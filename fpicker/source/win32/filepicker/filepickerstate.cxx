@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:04:59 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,9 +275,23 @@ OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
     return aLabel;
 }
 
-//---------------------------------------------
-//
-//---------------------------------------------
+/*  #i26224#
+    When typing file names with drive letter but without '\'
+    in the "File name" box of the FileOpen dialog the FileOpen
+    dialog makes strange paths out of them e.g. "d:.\test.sxw".
+    Such file names will not be accepted by sal so we fix these
+    somehow broken paths here. */
+OUString MatchFixBrokenPath(const OUString& path)
+{
+    OSL_ASSERT(path.getLength() >= 4);
+
+    if (path[1] == ':' && path[2] == '.' && path[3] == '\\')
+    {
+        // skip the '.'
+        return OUString(path, 2) + path.copy(3, path.getLength() - 3);
+    }
+    return path;
+}
 
 Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
 {
@@ -294,21 +308,19 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
     {
         // tokenize the returned string and copy the
         // sub-strings separately into a sequence
-        const sal_Unicode* pTemp = aFilePath.getStr( );
-        const sal_Unicode* pStrEnd = pTemp + aFilePath.getLength( );
+        const sal_Unicode* pTemp = aFilePath.getStr();
+        const sal_Unicode* pStrEnd = pTemp + aFilePath.getLength();
         sal_uInt32 lSubStr;
 
-        while ( pTemp < pStrEnd )
+        while (pTemp < pStrEnd)
         {
-            // detect the length of the next
-            // sub string
-            lSubStr = wcslen( pTemp );
+            // detect the length of the next sub string
+            lSubStr = wcslen(pTemp);
 
-            aFilePathList.realloc(
-                aFilePathList.getLength( ) + 1 );
+            aFilePathList.realloc(aFilePathList.getLength() + 1);
 
-            aFilePathList[aFilePathList.getLength( ) - 1] =
-                OUString( pTemp, lSubStr );
+            aFilePathList[aFilePathList.getLength() - 1] =
+                MatchFixBrokenPath(OUString(pTemp, lSubStr));
 
             pTemp += (lSubStr + 1);
         }
