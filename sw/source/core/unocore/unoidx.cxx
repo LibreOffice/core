@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 20:28:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,10 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 aForm.SetTemplate( 1, SwXStyleFamilies::GetUIName(
                     lcl_AnyToString(aValue), SFX_STYLE_FAMILY_PARA));
             break;
+            case WID_CREATE_FROM_PARAGRAPH_STYLES:
+                nCreate = lcl_AnyToBool(aValue) ?
+                    (nCreate | TOX_TEMPLATE) : (nCreate & ~TOX_TEMPLATE);
+            break;
 
             case WID_PARA_LEV1             :
             case WID_PARA_LEV2             :
@@ -823,7 +827,7 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 bRet = 0 != (nCreate & TOX_GRAPHIC);
             break;
             case WID_CREATE_FROM_EMBEDDED_OBJECTS      :
-                bRet = 0 != (nCreate &= TOX_OLE);
+                bRet = 0 != (nCreate & TOX_OLE);
             break;
             case WID_CREATE_FROM_STAR_MATH:
                 bRet = 0 != (nOLEOptions & TOO_MATH);
@@ -839,6 +843,9 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_CREATE_FROM_OTHER_EMBEDDED_OBJECTS:
                 bRet = 0 != (nOLEOptions & TOO_OTHER);
+            break;
+            case WID_CREATE_FROM_PARAGRAPH_STYLES:
+                bRet = 0 != (nCreate & TOX_TEMPLATE);
             break;
             case WID_PARA_HEAD             :
                 //Header steht an Pos 0

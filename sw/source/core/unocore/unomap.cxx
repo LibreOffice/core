@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 20:28:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,6 +1422,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED                         ), WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_FORMAT                      ), WID_LEVEL_FORMAT                        ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_PARAGRAPH_STYLES            ), WID_LEVEL_PARAGRAPH_STYLES              ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PropertyAttribute::READONLY,     0},
+                    { SW_PROP_NAME(UNO_NAME_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), WID_CREATE_FROM_PARAGRAPH_STYLES, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                 //  { SW_PROP_NAME(UNO_NAME_RECALC_TAB_STOPS                  ), WID_RECALC_TAB_STOPS                    ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                 //  { SW_PROP_NAME(UNO_NAME_???                               ), WID_???                                 ,  &_getReflection  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((uno::Reference<text::XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
@@ -1459,6 +1460,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USE_LEVEL_FROM_SOURCE             ), WID_USE_LEVEL_FROM_SOURCE               ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_FORMAT                      ), WID_LEVEL_FORMAT                        ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_PARAGRAPH_STYLES            ), WID_LEVEL_PARAGRAPH_STYLES              ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PropertyAttribute::READONLY,0},
+                    { SW_PROP_NAME(UNO_NAME_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), WID_CREATE_FROM_PARAGRAPH_STYLES, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_TABLES                ), WID_CREATE_FROM_TABLES                  ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_TEXT_FRAMES           ), WID_CREATE_FROM_TEXT_FRAMES             ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_GRAPHIC_OBJECTS       ), WID_CREATE_FROM_GRAPHIC_OBJECTS         ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
