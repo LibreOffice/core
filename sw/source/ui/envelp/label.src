@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:59:42 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ TabDialog DLG_LAB
                 Text[ turkish ] = "Özel";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Privado";
-                Text[ finnish ] = "Henkil?ohtainen";
+                Text[ finnish ] = "Henkilökohtainen";
             };
             PageItem
             {
@@ -299,7 +299,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "~Testo etichetta" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "~Inscrição" ;
-        Text [ finnish ] = "Nimi?eksti" ;
+        Text [ finnish ] = "Nimiöteksti" ;
         Text [ danish ] = "Etikettekst" ;
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "~Påskrift" ;
@@ -449,7 +449,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Campo database" ;
         Text [ portuguese_brazilian ] = "Campo base de dados" ;
         Text [ portuguese ] = "Campo base de dados" ;
-        Text [ finnish ] = "Tietokantakentt?" ;
+        Text [ finnish ] = "Tietokantakenttä" ;
         Text [ danish ] = "Databasefelt" ;
         Text [ french ] = "~Champ de BD" ;
         Text [ swedish ] = "Databas~fält" ;
@@ -487,7 +487,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Testo etichetta" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "Inscrição" ;
-        Text [ finnish ] = "Kaiverrus" ;
+        Text [ finnish ] = "Liiteteksti" ;
         Text [ danish ] = "Etikettekst" ;
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "Påskrift" ;
@@ -659,7 +659,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Formato" ;
-        Text [ finnish ] = "Muotoile" ;
+        Text [ finnish ] = "Muoto" ;
         Text [ danish ] = "Format" ;
         Text [ french ] = "Format" ;
         Text [ swedish ] = "Format" ;
@@ -718,7 +718,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ turkish ] = "Etiket içeriðini çoðalt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sincronizar etiquetas";
-        Text[ finnish ] = "Synkronoi nimi?";
+        Text[ finnish ] = "Synkronoi nimiöt";
     };
 };
  // String *******************************************************************
@@ -730,7 +730,7 @@ String STR_DOC_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Etiquetas" ;
     Text [ portuguese ] = "Etiquetas" ;
-    Text [ finnish ] = "Nimi?" ;
+    Text [ finnish ] = "Nimiöt" ;
     Text [ danish ] = "Etiketter" ;
     Text [ french ] = "Étiquettes" ;
     Text [ swedish ] = "Etiketter" ;
@@ -1165,7 +1165,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá";
         Text[ catalan ] = "Teléfono/Móvil";
-        Text[ finnish ] = "Telefon/Mobil";
+        Text[ finnish ] = "Puhelin/Matkapuhelin";
     };
     Edit ED_PHONE
     {
@@ -1562,7 +1562,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá";
         Text[ catalan ] = "Teléfono/Móvil";
-        Text[ finnish ] = "Telefon/Mobil";
+        Text[ finnish ] = "Puhelin/Matkapuhelin";
     };
     Edit ED_PHONE
     {
@@ -1601,7 +1601,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Faks";
         Text[ arabic ] = "ÇáÝÇßÓ";
         Text[ catalan ] = "Fax";
-        Text[ finnish ] = "faksi";
+        Text[ finnish ] = "Faksi";
     };
     Edit ED_FAX
     {
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
