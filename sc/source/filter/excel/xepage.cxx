@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:12:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XEPAGE_HXX
 #include "xepage.hxx"
@@ -117,8 +115,9 @@
 #include "xehelper.hxx"
 #endif
 
-
 // Page settings records ======================================================
+
+// Header/footer --------------------------------------------------------------
 
 XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString ) :
     XclExpRecord( nRecId ),
@@ -139,8 +138,7 @@ void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
-// ----------------------------------------------------------------------------
+// General page settings ------------------------------------------------------
 
 XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
     XclExpRecord( EXC_ID_SETUP, 34 ),
@@ -177,7 +175,6 @@ void XclExpSetup::WriteBody( XclExpStream& rStrm )
     }
 }
 
-
 // Manual page breaks ---------------------------------------------------------
 
 XclExpPageBreaks::XclExpPageBreaks( sal_uInt16 nRecId, const ScfUInt16Vec& rPageBreaks, sal_uInt16 nMaxPos ) :
@@ -208,7 +205,6 @@ void XclExpPageBreaks::WriteBody( XclExpStream& rStrm )
             rStrm << sal_uInt16( 0 ) << mnMaxPos;
     }
 }
-
 
 // Background bitmap ----------------------------------------------------------
 
@@ -257,7 +253,6 @@ void XclExpBitmap::Save( XclExpStream& rStrm )
         aBmp.ReleaseAccess( pAccess );
     }
 }
-
 
 // Page settings ==============================================================
 
@@ -318,7 +313,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             maData.mbFitToPages = false;
         }
 
-        maData.mpBrushItem.reset( new SvxBrushItem( GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND ) ) );
+        maData.mxBrushItem.reset( new SvxBrushItem( GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND ) ) );
 
         // *** header and footer ***
 
@@ -391,11 +386,10 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     XclExpDoubleRecord( EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin ).Save( rStrm );
     XclExpSetup( maData ).Save( rStrm );
 
-    if( (GetBiff() >= xlBiff8) && maData.mpBrushItem.get() )
-        if( const Graphic* pGraphic = maData.mpBrushItem->GetGraphic() )
+    if( (GetBiff() >= xlBiff8) && maData.mxBrushItem.get() )
+        if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
             XclExpBitmap( *pGraphic ).Save( rStrm );
 }
-
 
 // ============================================================================
 
