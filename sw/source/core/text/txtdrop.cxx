@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:23 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,12 +348,18 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
                 if ( pPara )
                 {
                     const SwLinePortion* pFirst = pPara->GetFirstPortion();
-                    if ( pFirst->IsDropPortion() )
+                    if (pFirst && pFirst->IsDropPortion())
                     {
-                        SwFont& rFont = ((SwDropPortion*)pFirst)->GetPart()->GetFont();
-                        rFontHeight = rFont.GetSize(rFont.GetActual()).Height();
-                        rDropHeight = ((SwDropPortion*)pFirst)->GetDropHeight();
-                        rDropDescent = ((SwDropPortion*)pFirst)->GetDropDescent();
+                        const SwDropPortion* pDrop = (const SwDropPortion*)pFirst;
+                        rDropHeight = pDrop->GetDropHeight();
+                        rDropDescent = pDrop->GetDropDescent();
+                        if (const SwFont *pFont = pDrop->GetFnt())
+                            rFontHeight = pFont->GetSize(pFont->GetActual()).Height();
+                        else
+                        {
+                            const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get(RES_CHRATR_FONTSIZE);
+                            rFontHeight = rItem.GetHeight();
+                        }
                     }
                 }
             }
@@ -362,7 +368,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
         pLast = ++aClientIter;
     }
 
-    if(rFontHeight==0 && rDropHeight==0 && rDropDescent==0)
+    if (rFontHeight==0 && rDropHeight==0 && rDropDescent==0)
     {
         const USHORT nLines = rDrop.GetLines();
         const USHORT nChars = rDrop.GetChars() ? rDrop.GetChars() : 1;
