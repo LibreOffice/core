@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:58:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@
 #endif
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
@@ -92,7 +92,7 @@
 #include <svx/linkmgr.hxx>
 #endif
 #ifndef _SOERR_HXX
-#include <so3/soerr.hxx>
+#include <svtools/soerr.hxx>
 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
@@ -152,7 +152,7 @@
 
 BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
-TYPEINIT1( SwBaseLink, ::so3::SvBaseLink );
+TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
 SV_IMPL_REF( SwServerObject )
 
@@ -335,10 +335,10 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             //Alle benachrichtigen, die am gleichen Link horchen.
             bInNotifyLinks = TRUE;
 
-            const ::so3::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+            const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
             for( USHORT n = rLnks.Count(); n; )
             {
-                ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+                ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                     pLnk->ISA( SwBaseLink ) && pLnk->GetObj() == GetObj() )
                 {
