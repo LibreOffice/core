@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-09-06 09:50:26 $
+ *  last change: $Author: tra $ $Date: 2002-04-04 13:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,11 +361,11 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Tabed) ) );    //SOT_FORMATSTR_ID_SBA_TABED
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Tabid) ) );    //SOT_FORMATSTR_ID_SBA_TABID
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SBA-JOINFORMAT) ) );//SOT_FORMATSTR_ID_SBA_JOIN
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Object Descriptor) ) );//SOT_FORMATSTR_ID_OBJECTDESCRIPTOR
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Link Source Descriptor) ) );//SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Embed Source) ) );//SOT_FORMATSTR_ID_EMBED_SOURCE
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Link Source) ) );//SOT_FORMATSTR_ID_LINK_SOURCE
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Embedded Object) ) );//SOT_FORMATSTR_ID_EMBEDDED_OBJ
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Object Descriptor (XML)) ) );//SOT_FORMATSTR_ID_OBJECTDESCRIPTOR
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Link Source Descriptor (XML)) ) );//SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Embed Source (XML)) ) );//SOT_FORMATSTR_ID_EMBED_SOURCE
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Link Source (XML)) ) );//SOT_FORMATSTR_ID_LINK_SOURCE
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Star Embedded Object (XML)) ) );//SOT_FORMATSTR_ID_EMBEDDED_OBJ
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR_(CFSTR_FILECONTENTS) ) );  //SOT_FORMATSTR_ID_FILECONTENT
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR_(CFSTR_FILEDESCRIPTOR) ) );//SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR_(CFSTR_FILENAME) ) );  //SOT_FORMATSTR_ID_FILENAME
