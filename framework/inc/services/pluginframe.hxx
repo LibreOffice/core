@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-10-09 09:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         *//*-*****************************************************************************************************/
 
         void impl_tryToLoadDocument();
+        sal_Bool impl_registerRemoteFactories( const css::uno::Reference< css::lang::XMultiServiceFactory >& xRemoteServiceManager );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -495,7 +496,7 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         sal_Bool                                                            m_bILoad                ;   /// PlugInFrame has a valid loader which load the document and wait for finished/cancelled
         sal_Bool                                                            m_bIHaveDocument        ;   /// We have a document loaded successful.
         css::uno::Reference< css::frame::XDispatchProvider >                m_xPlugInDispatcher     ;   /// Dispatcher to forward dispatches to browser
-        css::uno::Reference< css::lang::XMultiServiceFactory >              m_xRemoteServiceManager ;   /// reference to the remote uno service manager of our plugin dll!
+        static sal_Bool                                                     m_bRemoteFactoriesExist ;   /// indicates, if remote factories was already registered (neccessary one times only!)
 
 };      //  class PlugInFrame
 
