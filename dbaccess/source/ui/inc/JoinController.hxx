@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 14:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ namespace dbaui
 
         sal_Bool        m_bEditable;        // is the control readonly or not
         sal_Bool        m_bModified;        // is the data modified
+        sal_Bool        m_bViewsAllowed;    // true when the Add Table dialog should also show views
 
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -132,6 +133,7 @@ namespace dbaui
         // should the statement be parsed by our own sql parser
         sal_Bool        isReadOnly()            const { return !m_bEditable; }
         sal_Bool        isModified()            const { return m_bModified; }
+        sal_Bool        isViewAllowed()         const { return m_bViewsAllowed; }
 
         virtual void    setModified(sal_Bool _bModified=sal_True);
 
