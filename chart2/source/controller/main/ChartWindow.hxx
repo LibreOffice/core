@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartWindow.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ public:
     virtual void GetFocus();
     virtual void LoseFocus();
     virtual void Command( const CommandEvent& rCEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt );
 
 private:
     WindowController*    m_pWindowController;

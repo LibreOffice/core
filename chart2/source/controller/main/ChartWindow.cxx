@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartWindow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:28 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 15:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,25 +113,30 @@ void ChartWindow::Activate()
 {
     m_pWindowController->execute_Activate();
 }
-
 void ChartWindow::Deactivate()
 {
     m_pWindowController->execute_Deactivate();
 }
-
 void ChartWindow::GetFocus()
 {
     m_pWindowController->execute_GetFocus();
 }
-
 void ChartWindow::LoseFocus()
 {
     m_pWindowController->execute_LoseFocus();
 }
+
 void ChartWindow::Command( const CommandEvent& rCEvt )
 {
     m_pWindowController->execute_Command( rCEvt );
 }
+
+void ChartWindow::KeyInput( const KeyEvent& rKEvt )
+{
+    if( !m_pWindowController->execute_KeyInput(rKEvt) )
+        Window::KeyInput(rKEvt);
+}
+
 //.............................................................................
 } //namespace chart
 //.............................................................................
