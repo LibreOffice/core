@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:40:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
     <type scope="com::sun::star::form">DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
     as own services. Instead, they need to be created using the <type scope="com::sun::star::form">XGridColumnFactory</type> interface.</p>
  */
-service GridControl
+published service GridControl
 {
     service com::sun::star::form::FormControlModel;
 

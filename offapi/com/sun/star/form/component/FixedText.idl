@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
     @see com::sun::star::form::DataAwareControlModel::LabelControl
  */
-service FixedText
+published service FixedText
 {
     service com::sun::star::awt::UnoControlFixedTextModel;
 
