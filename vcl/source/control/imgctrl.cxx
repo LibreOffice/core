@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:12:28 $
+ *  last change: $Author: mt $ $Date: 2001-10-12 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,28 @@
 ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
     FixedImage( pParent, nStyle )
 {
+    mnDummy1_mbScaleImage = TRUE;
 }
+
+// -----------------------------------------------------------------------
+
+void ImageControl::SetScaleImage( BOOL bScale )
+{
+    if ( bScale != mnDummy1_mbScaleImage )
+    {
+        mnDummy1_mbScaleImage = bScale;
+        Invalidate();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ImageControl::IsScaleImage() const
+{
+    // Make inline when changing member from dummy...
+    return (BOOL)mnDummy1_mbScaleImage;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -84,9 +105,20 @@ void ImageControl::Resize()
 
 void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    maBmp.Draw( rUDEvt.GetDevice(),
-                rUDEvt.GetRect().TopLeft(),
-                rUDEvt.GetRect().GetSize() );
+    if ( mnDummy1_mbScaleImage )
+    {
+        maBmp.Draw( rUDEvt.GetDevice(),
+                    rUDEvt.GetRect().TopLeft(),
+                    rUDEvt.GetRect().GetSize() );
+    }
+    else
+    {
+        // Center...
+        Point aPos( rUDEvt.GetRect().TopLeft() );
+        aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
+        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
+        maBmp.Draw( rUDEvt.GetDevice(), aPos );
+    }
 }
 
 // -----------------------------------------------------------------------
