@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:31:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Uspořádání čar";
         Text[ hebrew ] = "Linienanordnung";
         Text[ hindi ] = "रेखा को क्रम में रखना";
+        Text[ slovak ] = "Usporiadanie čiar";
     };
     FixedText FT_DEFAULT
     {
@@ -157,6 +158,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~Default";
+        Text[ slovak ] = "Výcho~dzie";
     };
     Control WIN_PRESETS
     {
@@ -195,6 +197,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Definované uživatelem";
         Text[ hebrew ] = "~Benutzerdefiniert";
         Text[ hindi ] = "~User-defined";
+        Text[ slovak ] = "~Užívateľom definované";
     };
     Control WIN_FRAMESEL
     {
@@ -242,6 +245,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Čára";
         Text[ hebrew ] = "Linie";
         Text[ hindi ] = "रेखा";
+        Text[ slovak ] = "Čiara";
     };
     FixedText FT_STYLE
     {
@@ -272,6 +276,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Styl";
         Text[ hebrew ] = "S~til";
         Text[ hindi ] = "St~yle";
+        Text[ slovak ] = "Š~týl";
     };
     ListBox LB_LINESTYLE
     {
@@ -308,6 +313,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~Color";
+        Text[ slovak ] = "~Farba";
     };
     ListBox LB_LINECOLOR
     {
@@ -354,6 +360,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     MetricField MF_LEFT
     {
@@ -401,6 +408,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "R~echts";
         Text[ hindi ] = "दाहिना";
+        Text[ slovak ] = "Vpravo";
     };
     MetricField MF_RIGHT
     {
@@ -448,6 +456,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "Na~vrchu";
     };
     MetricField MF_TOP
     {
@@ -494,6 +503,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~तल";
+        Text[ slovak ] = "Na~spodku";
     };
     MetricField MF_BOTTOM
     {
@@ -541,6 +551,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Synchronizovat";
         Text[ hebrew ] = "S~ynchronisieren";
         Text[ hindi ] = "समीकरण करो";
+        Text[ slovak ] = "Synchronizovať";
     };
     FixedLine FL_DISTANCE
     {
@@ -573,6 +584,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Vzdálenost k obsahu";
         Text[ hebrew ] = "Abstand zum Inhalt";
         Text[ hindi ] = "विषयों के बीच अंतर देना";
+        Text[ slovak ] = "Vzdialenosť k obsahu";
     };
 
     FixedText FT_SHADOWPOS
@@ -607,6 +619,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "~Umiestnenie";
     };
     Control WIN_SHADOWS
     {
@@ -646,6 +659,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "~Distanz";
         Text[ hindi ] = "दू~री";
+        Text[ slovak ] = "~Vzdialenosť";
     };
     MetricField ED_SHADOWSIZE
     {
@@ -694,6 +708,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "Far~be";
         Text[ hindi ] = "रं~ग";
+        Text[ slovak ] = "~Farba";
     };
     ListBox LB_SHADOWCOLOR
     {
@@ -735,6 +750,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ czech ] = "Styl stínování";
         Text[ hebrew ] = "Schatten";
         Text[ hindi ] = "छाया शैली";
+        Text[ slovak ] = "Štýl tieňovania";
     };
 #define _PREVIEW_IDLIST_\
         IdList =                    \
@@ -791,6 +807,7 @@ TabPage RID_SVXPAGE_BORDER
     Text[ czech ] = "Okraje";
     Text[ hebrew ] = "‮צסגרות‬";
     Text[ hindi ] = "किनारें";
+    Text[ slovak ] = "Okraje";
 };
 
 String RID_SVXSTR_TABLE_PRESET_NONE
@@ -820,6 +837,7 @@ String RID_SVXSTR_TABLE_PRESET_NONE
     Text[ czech ] = "Bez rámečku";
     Text[ hebrew ] = "Keine Umrandung zeichnen";
     Text[ hindi ] = "Set No Borders";
+    Text[ slovak ] = "Nastaviť bez ohraničenia";
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
@@ -848,6 +866,7 @@ String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
     Text[ czech ] = "Pouze vnější rámeček";
     Text[ hebrew ] = "Nur äußere Umrandung zeichnen";
     Text[ hindi ] = "Set Outer Border Only";
+    Text[ slovak ] = "Nastaviť len vonkajšie ohraničenie";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
@@ -876,6 +895,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERHORI
     Text[ czech ] = "Vnější rámeček a vodorovné linky";
     Text[ hebrew ] = "Äußere Umrandung und horizontale Linien zeichnen";
     Text[ hindi ] = "Set Outer Border and Horizontal Lines";
+    Text[ slovak ] = "Nastaviť vonkajšie a zvislé ohraničenie";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
@@ -904,6 +924,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERALL
     Text[ czech ] = "Vnější rámeček a všechny vnitřní linky";
     Text[ hebrew ] = "Äußere Umrandung und alle inneren Linien zeichnen";
     Text[ hindi ] = "Set Outer Border and All Inner Lines";
+    Text[ slovak ] = "Nastaviť vonkajšie a vnútorné ohraničenie";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
@@ -932,6 +953,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERINNER
     Text[ czech ] = "Vnější rámeček bez změny vnitřních linek";
     Text[ hebrew ] = "Äußere Umrandung zeichnen ohne innere Linien zu verändern";
     Text[ hindi ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ slovak ] = "Nastaviť vonkajšie ohraničenie bez zmeny vnútorných hraníc";
 };
 String RID_SVXSTR_PARA_PRESET_NONE
 {
@@ -960,6 +982,7 @@ String RID_SVXSTR_PARA_PRESET_NONE
     Text[ czech ] = "Bez rámečku";
     Text[ hebrew ] = "Keine Umrandung zeichnen";
     Text[ hindi ] = "Set No Border";
+    Text[ slovak ] = "Nastaviť bez ohraničenia";
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
@@ -988,6 +1011,7 @@ String RID_SVXSTR_PARA_PRESET_ALL
     Text[ czech ] = "Rámeček na všech 4 stranách ";
     Text[ hebrew ] = "Komplette Umrandung zeichnen";
     Text[ hindi ] = "Set All Four Borders";
+    Text[ slovak ] = "Nastaviť všetky štyri ohraničenia";
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
@@ -1016,6 +1040,7 @@ String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
     Text[ czech ] = "Rámeček pouze vlevo a vpravo";
     Text[ hebrew ] = "Nur rechten und linken Rand zeichnen";
     Text[ hindi ] = "Set Left and Right Borders Only";
+    Text[ slovak ] = "Nastaviť len ľavé a pravé ohraničenie";
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
 {
@@ -1044,6 +1069,7 @@ String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
     Text[ czech ] = "Rámeček pouze nahoře a dole";
     Text[ hebrew ] = "Nur oberen und unteren Rand zeichnen";
     Text[ hindi ] = "Set Top and Bottom Borders Only";
+    Text[ slovak ] = "Nastaviť len horné a dolné ohraničenie";
 };
 String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
@@ -1072,6 +1098,7 @@ String RID_SVXSTR_PARA_PRESET_ONLYLEFT
     Text[ czech ] = "Rámeček pouze vlevo";
     Text[ hebrew ] = "Nur linken Rand zeichnen";
     Text[ hindi ] = "Set Left Border Only";
+    Text[ slovak ] = "Nastaviť len ľavé ohraničenie";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
@@ -1100,6 +1127,7 @@ String RID_SVXSTR_SHADOW_STYLE_NONE
     Text[ czech ] = "Žádný stín";
     Text[ hebrew ] = "Kein Schatten";
     Text[ hindi ] = "कोई छाया नहीं";
+    Text[ slovak ] = "Bez tieňovania";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
 {
@@ -1128,6 +1156,7 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
     Text[ czech ] = "Vrhat stín vpravo dolů";
     Text[ hebrew ] = "Schatten nach rechts unten werfen";
     Text[ hindi ] = "Cast Shadow to Bottom Right";
+    Text[ slovak ] = "Tieňovanie dole vpravo";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
 {
@@ -1156,6 +1185,7 @@ String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
     Text[ czech ] = "Vrhat stín vpravo nahoru";
     Text[ hebrew ] = "Schatten nach rechts oben werfen";
     Text[ hindi ] = "Cast Shadow to Top Right";
+    Text[ slovak ] = "Tieňovanie hore vpravo";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
 {
@@ -1184,6 +1214,7 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
     Text[ czech ] = "Vrhat stín vlevo dolů";
     Text[ hebrew ] = "Schatten nach links unten werfen";
     Text[ hindi ] = "Cast Shadow to Bottom Left";
+    Text[ slovak ] = "Tieňovanie dole vľavo";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
 {
@@ -1196,7 +1227,7 @@ String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
     Text[ swedish ] = "Kasta skugga upp�t �t v�nster";
     Text[ polish ] = "Cast Shadow to Top Left";
     Text[ portuguese_brazilian ] = "Cast Shadow to Top Left";
-    Text[ japanese ] = "右上に影を付ける";
+    Text[ japanese ] = "左上に影を付ける";
     Text[ korean ] = "왼쪽 위 방향으로 그림자 효과내기";
     Text[ turkish ] = "Sol �ste G�lge Ekle";
     Text[ thai ] = "Cast Shadow to Top Left";
@@ -1212,9 +1243,12 @@ String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
     Text[ czech ] = "Vrhat stín vlevo nahoru";
     Text[ hebrew ] = "Schatten nach links oben werfen";
     Text[ hindi ] = "Cast Shadow to Top Left";
+    Text[ slovak ] = "Tieňovanie hore vľavo";
 };
 
 // **********************************************************************
+
+
 
 
 
