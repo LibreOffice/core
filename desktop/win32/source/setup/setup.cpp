@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-09 15:58:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,17 +144,21 @@ BOOL CALLBACK SetupDlgProcX( HWND hDlg, UINT message,
                 SetupAppX* pSetup = (SetupAppX*) lParam;
                 SetWindowText( hDlg, pSetup->GetAppTitle() );
 
-                HWND hText = GetDlgItem( hDlg, IDC_TEXT01 );
-
-                if ( !hText ) return TRUE;
-
+                HWND hOKButton = GetDlgItem( hDlg, IDOK );
+                if ( !hOKButton ) return TRUE;
                 TCHAR *sText = new TCHAR[ MAX_STR_LENGTH ];
-                int    nChars = 0;
-//              SIZE   aSize;
+                WIN::LoadString( pSetup->GetHInst(), IDS_APP_OK, sText, MAX_STR_LENGTH );
+                WIN::SetWindowText( hOKButton, sText );
 
-                nChars = WIN::LoadString( pSetup->GetHInst(), IDS_CHOOSE_LANG, sText, MAX_STR_LENGTH );
+                HWND hCancelButton = GetDlgItem( hDlg, IDCANCEL );
+                if ( !hCancelButton ) return TRUE;
+                WIN::LoadString( pSetup->GetHInst(), IDS_APP_CANCEL, sText, MAX_STR_LENGTH );
+                WIN::SetWindowText( hCancelButton, sText );
+
+                HWND hText = GetDlgItem( hDlg, IDC_TEXT01 );
+                if ( !hText ) return TRUE;
+                WIN::LoadString( pSetup->GetHInst(), IDS_CHOOSE_LANG, sText, MAX_STR_LENGTH );
                 WIN::SetWindowText( hText, sText );
-//              WIN::GetTextExtentPoint32( GetDC(hText), sText, nChars, &aSize );
 
                 TCHAR *sString = new TCHAR[ MAX_LANGUAGE_LEN ];
                 HWND hList = GetDlgItem( hDlg, IDC_COMBO1 );
@@ -162,15 +166,44 @@ BOOL CALLBACK SetupDlgProcX( HWND hDlg, UINT message,
 
                 if ( !hList ) return TRUE;
 
+                LANGID nUserDefLang = GetUserDefaultLangID();
+                LANGID nSysDefLang = GetSystemDefaultLangID();
+                long nUserIndex = -1;
+                long nSystemIndex = -1;
+
                 for ( long i=0; i<pSetup->GetLanguageCount(); i++ )
                 {
                     long nLanguage = pSetup->GetLanguageID( i );
                     pSetup->GetLanguageName( nLanguage, sString );
                     nResult = SendMessage( hList, (UINT) CB_ADDSTRING, NULL, (LPARAM) sString );
                     pSetup->Log( TEXT( "    Info: added Language: %s\r\n" ), sString );
+
+                    if ( nLanguage == nUserDefLang )
+                        nUserIndex = i;
+                    if ( nLanguage == nSysDefLang )
+                        nSystemIndex = i;
                 }
 
-                nResult = SendMessage( hList, (UINT) CB_SETCURSEL, 0, NULL );
+                if ( nUserIndex != -1 )
+                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, nUserIndex, NULL );
+                else if ( nSystemIndex != -1 )
+                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, nSystemIndex, NULL );
+                else
+                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, 0, NULL );
+
+                NONCLIENTMETRICS aNonClientMetrics;
+                aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+                if ( SystemParametersInfo( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
+                {
+                    HFONT aSysFont = CreateFontIndirect( &aNonClientMetrics.lfMessageFont );
+                    LRESULT lResult;
+                    lResult = SendMessage( hDlg, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
+                    lResult = SendMessage( hOKButton, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
+                    lResult = SendMessage( hCancelButton, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
+                    lResult = SendMessage( hText, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
+                    lResult = SendMessage( hList, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
+                }
+
                 delete [] sString;
                 delete [] sText;
             }
@@ -218,6 +251,7 @@ SetupAppX::SetupAppX()
     m_pErrorText    = new TCHAR[ MAX_STR_LENGTH ];
     m_pErrorText[0] = '\0';
 
+    m_nLanguageID     = 0;
     m_nLanguageCount  = 0;
     m_ppLanguageList  = NULL;
 
@@ -599,15 +633,55 @@ boolean SetupAppX::ChooseLanguage( long& rLanguage )
     // to do here
     if ( m_nLanguageCount > 1 )
     {
-        rLanguage = (long) DialogBoxParam( m_hInst, MAKEINTRESOURCE( IDD_LANGUAGE ),
-                                           NULL, SetupDlgProcX, (LPARAM) this );
-        if ( rLanguage >= 0 )
-            rLanguage = GetLanguageID( rLanguage );
+        TCHAR *sString = new TCHAR[ MAX_LANGUAGE_LEN ];
+
+        LANGID nUserDefLang = GetUserDefaultLangID();
+        LANGID nSysDefLang = GetSystemDefaultLangID();
+
+        long nUserIndex = -1;
+        long nSystemIndex = -1;
+        long nParamIndex = -1;
+
+        for ( long i=0; i<GetLanguageCount(); i++ )
+        {
+            long nLanguage = GetLanguageID( i );
+            GetLanguageName( nLanguage, sString );
+            Log( TEXT( "    Info: found Language: %s\r\n" ), sString );
+
+            if ( nLanguage == nUserDefLang )
+                nUserIndex = i;
+            if ( nLanguage == nSysDefLang )
+                nSystemIndex = i;
+            if ( m_nLanguageID && ( nLanguage == m_nLanguageID ) )
+                nParamIndex = i;
+        }
+
+        if ( m_nLanguageID && ( nParamIndex == -1 ) )
+        {
+            Log( TEXT( "Warning: Language chosen with parameter -lang not found.\r\n" ) );
+        }
+
+        if ( nParamIndex != -1 )
+        {
+            Log( TEXT( "Info: Found language chosen with parameter -lang.\r\n" ) );
+            rLanguage = GetLanguageID( nParamIndex );
+        }
+        else if ( nUserIndex != -1 )
+        {
+            Log( TEXT( "Info: Found user default language.\r\n" ) );
+            rLanguage = GetLanguageID( nUserIndex );
+        }
+        else if ( nSystemIndex != -1 )
+        {
+            Log( TEXT( "Info: Found system default language.\r\n" ) );
+            rLanguage = GetLanguageID( nSystemIndex );
+        }
         else
         {
-            Log( TEXT( "Info: User aborted choose language dialog." ) );
-            return false;
+            Log( TEXT( "Info: Use default language from ini file.\r\n" ) );
+            rLanguage = GetLanguageID( 0 );
         }
+        delete [] sString;
     }
 
     return true;
@@ -1399,52 +1473,70 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
         {
             LPTSTR pSub = CharNext( pStart );
             if ( (*pSub) == 'l' || (*pSub) == 'L' )
-            {   // --- handle the l(og) parameter ---
-                boolean bAppend = false;
-                LPTSTR  pFileName = NULL;
-
-                while ( *pSub )
-                {
-                    if ( *pSub == '+' )
+            {
+                pSub = CharNext( pSub );
+                if ( (*pSub) == 'a' || (*pSub) == 'A' )
+                {   // --- handle the lang parameter ---
+                    LPTSTR pLanguage = NULL;
+                    LPTSTR pLastChar;
+                    if ( GetNextArgument( pNext, &pLanguage, &pNext, true ) != ERROR_SUCCESS )
                     {
-                        bAppend = true;
+                        StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
+                        nRet = ERROR_INVALID_PARAMETER;
                         break;
                     }
-                    pSub = CharNext( pSub );
-                }
 
-                if ( GetNextArgument( pNext, &pFileName, &pNext, true ) != ERROR_SUCCESS )
-                {
-                    StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
-                    nRet = ERROR_INVALID_PARAMETER;
-                    break;
+                    m_nLanguageID = _tcstol( pLanguage, &pLastChar, 10 );
+                    delete [] pLanguage;
                 }
-
-                if ( FAILED( StringCchCat( pNewCmdLine, nSize, pStart ) ) )
-                {
-                    nRet = ERROR_OUTOFMEMORY;
-                    break;
-                }
-                // we need to append a '+' otherwise msiexec would overwrite our log file
-                if ( !bAppend && FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( "+" ) ) ) )
-                {
-                    nRet = ERROR_OUTOFMEMORY;
-                    break;
-                }
-                if ( FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( " \"" ) ) ) ||
-                     FAILED( StringCchCat( pNewCmdLine, nSize, pFileName ) ) ||
-                     FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( "\" " ) ) ) )
-                {
-                    nRet = ERROR_OUTOFMEMORY;
-                    break;
-                }
-
-                if ( bAppend )
-                    m_pLogFile = _tfopen( pFileName, TEXT( "ab" ) );
                 else
-                    m_pLogFile = _tfopen( pFileName, TEXT( "wb" ) );
+                {   // --- handle the l(og) parameter ---
+                    boolean bAppend = false;
+                    LPTSTR  pFileName = NULL;
 
-                delete [] pFileName;
+                    while ( *pSub )
+                    {
+                        if ( *pSub == '+' )
+                        {
+                            bAppend = true;
+                            break;
+                        }
+                        pSub = CharNext( pSub );
+                    }
+
+                    if ( GetNextArgument( pNext, &pFileName, &pNext, true ) != ERROR_SUCCESS )
+                    {
+                        StringCchCopy( m_pErrorText, MAX_STR_LENGTH, pStart );
+                        nRet = ERROR_INVALID_PARAMETER;
+                        break;
+                    }
+
+                    if ( FAILED( StringCchCat( pNewCmdLine, nSize, pStart ) ) )
+                    {
+                        nRet = ERROR_OUTOFMEMORY;
+                        break;
+                    }
+                    // we need to append a '+' otherwise msiexec would overwrite our log file
+                    if ( !bAppend && FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( "+" ) ) ) )
+                    {
+                        nRet = ERROR_OUTOFMEMORY;
+                        break;
+                    }
+                    if ( FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( " \"" ) ) ) ||
+                        FAILED( StringCchCat( pNewCmdLine, nSize, pFileName ) ) ||
+                        FAILED( StringCchCat( pNewCmdLine, nSize, TEXT( "\" " ) ) ) )
+                    {
+                        nRet = ERROR_OUTOFMEMORY;
+                        break;
+                    }
+
+                    if ( bAppend )
+                        m_pLogFile = _tfopen( pFileName, TEXT( "ab" ) );
+                    else
+                        m_pLogFile = _tfopen( pFileName, TEXT( "wb" ) );
+
+                    delete [] pFileName;
+                }
             }
             else if ( (*pSub) == 'q' || (*pSub) == 'Q' )
             {   // --- Handle quiet file parameter ---
