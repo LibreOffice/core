@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:45:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #include <vcl/pngread.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
+#include <svx/svdpage.hxx>
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -127,9 +128,12 @@
 #include "unmovss.hxx"
 #include "sdresid.hxx"
 #include "tools/IdleDetection.hxx"
+#include "pres.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+//#define RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
 
 namespace {
 
@@ -690,8 +694,7 @@ MasterPageContainer::Implementation::Implementation (void)
                     SdXImpressDocument::getUnoTunnelId()))->GetDoc();
         }
 
-        // Create one slide that is used to render previews of empty pages
-        // (master pages that have not been loaded).
+        // Create slides that are used to render previews of empty pages.
         uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
             mxModel, uno::UNO_QUERY);
         if (xSlideSupplier.is())
@@ -699,7 +702,10 @@ MasterPageContainer::Implementation::Implementation (void)
             uno::Reference<drawing::XDrawPages> xSlides (
                 xSlideSupplier->getDrawPages(), uno::UNO_QUERY);
             if (xSlides.is())
+            {
                 xSlides->insertNewByIndex (0);
+                xSlides->insertNewByIndex (1);
+            }
         }
     }
     catch (...)
@@ -768,7 +774,7 @@ IMPL_LINK(MasterPageContainer::Implementation,
         sal_Int32 nIdleState (tools::IdleDetection::GetIdleState());
         if (nIdleState != tools::IdleDetection::IDET_IDLE)
         {
-            if (nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE != 0)
+            if ((nIdleState&tools::IdleDetection::IDET_FULL_SCREEN_SHOW_ACTIVE) != 0)
                 bIsShowingFullScreenShow = true;
             break;
         }
@@ -1175,7 +1181,11 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
             // We have the page in memory so we can render it in the desired
             // size.
             aPreview = maPreviewRenderer.RenderPage(
+#ifdef RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
                 maContainer[aToken].mpMasterPage,
+#else
+                maContainer[aToken].mpSlide,
+#endif
                 nWidth,
                 String::CreateFromAscii(""));
             maContainer[aToken].maPreview = aPreview;
@@ -1241,7 +1251,11 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
         // We have the page in memory so we can render it in the desired
         // size.
         aPreview = maPreviewRenderer.RenderPage(
+#ifdef RENDER_MASTER_PAGES_WITH_PRESENTATION_OBJECTS
                 maContainer[aToken].mpMasterPage,
+#else
+                maContainer[aToken].mpSlide,
+#endif
                 nWidth,
                 String::CreateFromAscii(""));
         maContainer[aToken].maPreview = aPreview;
@@ -1496,17 +1510,25 @@ void MasterPageContainer::Implementation::FillContainer (void)
         Image aPreview;
         String aEmpty;
         Token aResult = maContainer.size();
-        USHORT nDefaultMasterIndex = 0;
-        SdPage* pLocalMasterPage = mpDocument->GetMasterSdPage(
-                                                nDefaultMasterIndex, PK_STANDARD);
-        if(pLocalMasterPage)
+        USHORT nDefaultPageIndex = 1;
+        SdPage* pLocalSlide = mpDocument->GetSdPage(nDefaultPageIndex, PK_STANDARD);
+        SdPage* pLocalMasterPage = NULL;
+        if (pLocalSlide != NULL && pLocalSlide->TRG_HasMasterPage())
+            pLocalMasterPage = static_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
+
+        if (pLocalMasterPage!=NULL)
         {
+            // Assign the title,text layout to the slide so that its preview
+            // is consistent with that of the tumbnails of the other master
+            // pages.
+            pLocalSlide->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
+
             maContainer.push_back (MasterPageDescriptor (
                 aEmpty/*sURL*/,
                 pLocalMasterPage->GetName()/*sPageName*/,
                 pLocalMasterPage->GetName()/*rStyleName*/,
                 pLocalMasterPage,
-                GetSlideForMasterPage(pLocalMasterPage)/*pLocalSlide*/,
+                pLocalSlide,
                 aPreview,
                 aResult));
         }
