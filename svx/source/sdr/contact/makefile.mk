@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-11-24 16:44:01 $
+#   last change: $Author: rt $ $Date: 2004-04-02 14:09:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES=\
         $(SLO)$/objectcontactofpageview.obj			\
         $(SLO)$/viewobjectcontact.obj				\
         $(SLO)$/vocbitmapbuffer.obj					\
-        $(SLO)$/viewobjectcontactlist.obj	
+        $(SLO)$/viewobjectcontactlist.obj			\
+        $(SLO)$/viewcontactofsdrobjcustomshape.obj
 
 .INCLUDE :  target.mk
