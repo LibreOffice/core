@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-21 17:58:31 $
+ *  last change: $Author: ab $ $Date: 2001-01-17 11:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,20 +661,22 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
     AddStatus( BASWIN_INRESCHEDULE );
 
-    if( BasicIDE::GetBasicDialogCount() )
-    {
-        Application::GetDefModalDialogParent()->EnableInput( TRUE, TRUE );
-    }
+    // #80085 removed
+    //if( BasicIDE::GetBasicDialogCount() )
+    //{
+        //Application::GetDefModalDialogParent()->EnableInput( TRUE, TRUE );
+    //}
 
     BasicIDE::InvalidateDebuggerSlots();
 
     while( aStatus.bIsRunning )
         Application::Yield();
 
-    if( BasicIDE::GetBasicDialogCount() )
-    {
-        Application::GetDefModalDialogParent()->EnableInput( FALSE, TRUE );
-    }
+    // #80085 removed
+    //if( BasicIDE::GetBasicDialogCount() )
+    //{
+        //Application::GetDefModalDialogParent()->EnableInput( FALSE, TRUE );
+    //}
 
     aStatus.bIsInReschedule = FALSE;
     aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
