@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:13:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,19 +215,9 @@ TabPage RID_SFXPAGE_SAVE
             < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
             < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
             < "Tabellendokument" ; APP_CALC      ; > ;
-            < "Prï¿½sentation" ;     APP_IMPRESS   ; > ;
+            < "Präsentation" ;     APP_IMPRESS   ; > ;
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < "; Textdokument" ;     APP_WRITER    ; > ;
-        < "; HTML-Dokument" ;    APP_WRITER_WEB;  > ;
-        < "; Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
-        < "; Tabellendokument" ; APP_CALC      ; > ;
-        < "; Prï¿½sentation" ;     APP_IMPRESS   ; > ;
-        < "; Zeichnung" ;        APP_DRAW      ; > ;
-        < "; Formel" ;           APP_MATH      ; > ;
         };
         StringList [ en-US ] =
         {
@@ -276,8 +266,8 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 9 );
         Wordbreak = TRUE;
-        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust fï¿½hren.\n"\
-        "Sollen die Dateiformatï¿½nderungen ï¿½bernommen werden?" ;
+        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
+        "Sollen die Dateiformatänderungen übernommen werden?" ;
         Text [ en-US ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
     OKButton PB_OK
