@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,20 +78,22 @@
 #endif
 #include <memory.h> // for memcpy
 
-class ZipPackageBuffer :
-                public com::sun::star::io::XInputStream,
-                public com::sun::star::io::XOutputStream,
-                public com::sun::star::io::XSeekable,
-                public cppu::OWeakObject
+class ZipPackage;
+class OutputThread;
+
+class ZipPackageBuffer : public com::sun::star::io::XInputStream,
+                         public com::sun::star::io::XOutputStream,
+                         public com::sun::star::io::XSeekable,
+                         public cppu::OWeakObject
 {
+    friend class OutputThread;
 protected:
-    sal_Int64 nBufferSize;
-    sal_Int64 nEnd;
-    sal_Int64 nCurrent;
+    com::sun::star::uno::Sequence < sal_Int8 > m_aBuffer;
+    sal_Int64 m_nBufferSize, m_nEnd, m_nCurrent;
+    sal_Bool m_bMustInitBuffer;
 public:
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
-    ~ZipPackageBuffer(void);
+    virtual ~ZipPackageBuffer(void);
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
         throw(com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(void)
