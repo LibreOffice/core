@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 13:55:43 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:39:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,8 @@ PRJ=..$/..
 PRJNAME=cpputools
 TARGET=sp2bv
 TARGETTYPE=CUI
-.IF "$(OS)"!="IRIX"
+.IF "$(OS)"!="IRIX" && "$(OS)" != "MACOSX"
+# hack to get stdc++ linked
 NO_DEFAULT_STL=TRUE
 .ENDIF
 LIBTARGET=NO
