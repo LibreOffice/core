@@ -25,4 +25,4 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
 ..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.hxx
 
-
+..\source\unotypes\fw?.xml %_DEST%\xml\*.xml
