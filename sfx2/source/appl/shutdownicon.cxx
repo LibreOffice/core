@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:24:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#include "sfxresid.hxx"
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
@@ -185,12 +187,14 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 {
 #ifdef WNT
     OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
-    if( SFX_APP() && SFX_APP()->GetSfxResManager() )
+    ResMgr* pMgr = SfxResId::GetResMgr();
+    if( pMgr )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        UniString aRes( ResId( STR_QUICKSTART_LNKNAME, SFX_APP()->GetSfxResManager() ) );
+        UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
         aShortcutName = OUString( aRes );
     }
+
     aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
 
     SetAutostartW32( aShortcutName, bActivate );
@@ -201,10 +205,11 @@ bool ShutdownIcon::GetAutostart( )
 {
 #ifdef WNT
     OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
-    if( SFX_APP() && SFX_APP()->GetSfxResManager() )
+    ResMgr* pMgr = SfxResId::GetResMgr();
+    if( pMgr )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        UniString aRes( ResId( STR_QUICKSTART_LNKNAME, SFX_APP()->GetSfxResManager() ) );
+        UniString aRes( SfxResId( STR_QUICKSTART_LNKNAME ) );
         aShortcutName = OUString( aRes );
     }
     aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
@@ -543,8 +548,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 if( !bQuickstart && !GetAutostart() )
                     return;
 
-                m_pResMgr = SFX_APP()->GetSfxResManager();
-
+                m_pResMgr = SfxResId::GetResMgr();
                 m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
                                                             DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
                                                         UNO_QUERY );
