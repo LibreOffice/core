@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:57:04 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,7 +1050,7 @@ Menu RID_POPUP_EDIT
                         Text[ russian ] = "Δβξινξε οξδχεπκθβΰνθε";
                         Text[ polish ] = "Podwσjne podkrelenie";
                         Text[ japanese ] = "“ρd‰Ίό(~U)";
-                        Text[ chinese_traditional ] = "Βω¤UΉΊ½u(~U)";
+                        Text[ chinese_traditional ] = "Βω©³½u(~U)";
                         Text[ arabic ] = "ΚΝΚε ΞΨ γÒΟζΜ";
                         Text[ greek ] = "Δι~πλή υπογράμμιση";
                         Text[ korean ] = "ΐΜΑί ΉΨΑΩ(~U)";
@@ -1179,7 +1179,7 @@ String RID_POPUP_AUDIT
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ πεζθμΰ ηΰλθβκθ ηΰβθρθμξρςθ";
     Text[ polish ] = "Menu podrκczne dla trybu wype³niania detektywa";
     Text[ japanese ] = "ΔΪ°½QΖ³ΎΩ–ξσ•\\¦Σ°Δή‚ΜΞί―Μί±―ΜίÒΖ­°";
-    Text[ chinese_traditional ] = "°»±΄-¥R¶ρ-¥\\―ΰªν";
+    Text[ chinese_traditional ] = "°»±΄-¶ρ¤J-¥\\―ΰªν";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αζΦΪ ΚΪΘΖΙ ΗαγΞΘΡ";
     Text[ greek ] = "Αναδυόμενο μενού για την κατάσταση γεμίσματος του ανιχνευτή";
     Text[ korean ] = "Γ¤Ώμ±β ΈπµεΓίΐϋ ΖΛΎχΈή΄Ί";
@@ -1542,7 +1542,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ russian ] = "Σαπΰςό βρε πΰηπϋβϋ";
             Text[ polish ] = "Usuρ wszystkie rκczne podzia³y";
             Text[ japanese ] = "‚·‚Χ‚Δ‚Μ‰όΝί°Όή‚Μν";
-            Text[ chinese_traditional ] = "§R°£¥ώ³΅ªΊ¤β¤u¤ΐΉj²Ε(~R)";
+            Text[ chinese_traditional ] = "§R°£¥ώ³΅¤β°Κ¤ΐΉj²Ε(~R)";
             Text[ arabic ] = "ΕÒΗαΙ ία ΗαέζΗΥα ΗανΟζνΙ";
             Text[ greek ] = "Διαγραφή όλων των ~χειροκίνητων αλλαγών";
             Text[ korean ] = "Έπµη ΌφµΏ ³ª΄©±β »θΑ¦";
