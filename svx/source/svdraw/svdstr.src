@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:33:02 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2062,7 +2062,7 @@ String STR_ObjNameSingulTEXTLNK
     Text[ russian ] = "ñâÿçàííàÿ òåêñòîâàÿ ğàìêà";
     Text[ polish ] = "Po³¹czona ramka tekstu";
     Text[ japanese ] = "˜AŒ‹‚³‚ê‚½Ã·½Ä˜g";
-    Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
+    Text[ chinese_traditional ] = "³sµ²ªº¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ ÇáäÕ ÇáãÑÊÈØ";
     Text[ dutch ] = "Gekoppeld tekstkader";
     Text[ chinese_simplified ] = "Á´½ÓµÄÎÄ±¾¿ò";
@@ -7264,14 +7264,14 @@ String STR_UndoDelLayer
     Text [ spanish ] = "Eliminar nivel" ;
     Text [ french ] = "Supprimer le niveau" ;
     Text [ dutch ] = "Niveau wissen" ;
-    Text[ chinese_simplified ] = "É¾³ı·Ö²ã";
+    Text[ chinese_simplified ] = "É¾³ı¼¶";
     Text[ russian ] = "Óäàëèòü ñëîé";
     Text[ polish ] = "Usuñ warstwê";
     Text[ japanese ] = "‘w‚Ìíœ";
     Text[ chinese_traditional ] = "§R°£¤À¼h";
     Text[ arabic ] = "ÍĞİ ØÈŞÉ";
     Text[ dutch ] = "Niveau wissen";
-    Text[ chinese_simplified ] = "É¾³ı·Ö²ã";
+    Text[ chinese_simplified ] = "É¾³ı¼¶";
     Text[ greek ] = "ÄéáãñáöŞ åğéğİäïõ";
     Text[ korean ] = "°èÃş »èÁ¦";
     Text[ turkish ] = "Düzey sil";
@@ -7354,14 +7354,14 @@ String STR_ItemValON
     Text [ spanish ] = "activado" ;
     Text [ french ] = "activé" ;
     Text [ dutch ] = "aan" ;
-    Text[ chinese_simplified ] = "¼¤»î";
+    Text[ chinese_simplified ] = "Æô¶¯";
     Text[ russian ] = "âêë.";
     Text[ polish ] = "w³¹cz";
     Text[ japanese ] = "µİ";
     Text[ chinese_traditional ] = "±Ò°Ê";
     Text[ arabic ] = "ÊÔÛíá";
     Text[ dutch ] = "aan";
-    Text[ chinese_simplified ] = "¼¤»î";
+    Text[ chinese_simplified ] = "Æô¶¯";
     Text[ greek ] = "íáé";
     Text[ korean ] = "Àû¿ë";
     Text[ turkish ] = "Açık";
@@ -7382,14 +7382,14 @@ String STR_ItemValOFF
     Text [ spanish ] = "desactivado" ;
     Text [ french ] = "désactivé" ;
     Text [ dutch ] = "uit" ;
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ russian ] = "âûêë.";
     Text[ polish ] = "wy³¹cz";
     Text[ japanese ] = "µÌ";
     Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "uit";
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ greek ] = "ü÷é";
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalı";
@@ -7664,14 +7664,14 @@ String STR_ItemValFITTOSIZENONE
     Text [ spanish ] = "Desactivado" ;
     Text [ french ] = "Désactivé" ;
     Text [ dutch ] = "Uit" ;
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ russian ] = "Âûêë.";
     Text[ polish ] = "Wy³¹cz";
     Text[ japanese ] = "µÌ";
     Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "Uit";
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ greek ] = "¼÷é";
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalı";
@@ -8060,14 +8060,14 @@ String STR_ItemValTEXTANI_NONE
     Text [ spanish ] = "desactivado" ;
     Text [ french ] = "off" ;
     Text [ dutch ] = "uit" ;
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ russian ] = "âûêë.";
     Text[ polish ] = "wy³¹cz";
     Text[ japanese ] = "µÌ";
     Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "uit";
-    Text[ chinese_simplified ] = "Ê§»î";
+    Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
     Text[ greek ] = "ü÷é";
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalı";
@@ -11340,7 +11340,7 @@ String SIP_XA_FILLFLOATTRANSPARENCE
     Text[ russian ] = "Ïğîçğà÷íàÿ ãğàäèåíòíàÿ";
     Text[ italian ] = "Sfumatura trasparente";
     Text[ danish ] = "Transparent graduering";
-    Text[ polish ] = "Przezroczysty gradient";
+    Text[ polish ] = "PrzeŸroczysty gradient";
     Text[ portuguese_brazilian ] = "Transparent gradient";
     Text[ japanese ] = "“§‰ß«‚Ì‚ ‚é¸Ş×ÃŞ°¼®İ";
     Text[ korean ] = "Åõ¸í ±×¶óµ¥ÀÌ¼Ç";
@@ -13707,11 +13707,11 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ polish ] = "Pocz¹tek przesuwaj¹cego siê pisma wewn¹trz";
     Text[ portuguese_brazilian ] = "Ticker start inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚Ìn‚Ü‚è";
-    Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "®Ø¤º²¾°Ê¤å¦r";
+    Text[ chinese_simplified ] = "»î¶¯ÎÄ×ÖµÄ¿ªÊ¼ÔÚ¿òÄÚ";
+    Text[ chinese_traditional ] = "²¾°Ê¤å¦rªº?©l¦b®Ø¤º";
     Text[ arabic ] = "ÈÏÁ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie vanaf midden";
-    Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
+    Text[ chinese_simplified ] = "»î¶¯ÎÄ×ÖµÄ¿ªÊ¼ÔÚ¿òÄÚ";
     Text[ greek ] = "Åêêßíçóç êéíïıìåíïõ êåéìİíïõ åóùôåñéêÜ";
     Text[ korean ] = "Æ¼Ä¿ ½ÃÀÛ ¹üÀ§";
     Text[ turkish ] = "Hareketli yazı başlangıcı:";
@@ -13735,11 +13735,11 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ polish ] = "Koniec przesuwaj¹cego siê pisma";
     Text[ portuguese_brazilian ] = "Ticker stop inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚ÌI‚í‚è";
-    Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "®Ø¤º°±¤î²¾°Ê¤å¦r";
+    Text[ chinese_simplified ] = "»î¶¯ÎÄ×ÖÍ£ÁôÔÚ¿òÄÚ";
+    Text[ chinese_traditional ] = "²¾°Ê¤å¦r°±¯d¦b®Ø¤º";
     Text[ arabic ] = "ÅíŞÇİ ÇáßÊÇÈÉ ÇáãÊÍÑß ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie stoppen vanaf midden";
-    Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
+    Text[ chinese_simplified ] = "»î¶¯ÎÄ×ÖÍ£ÁôÔÚ¿òÄÚ";
     Text[ greek ] = "ÓôÜóç êéíïıìåíïõ êåéìİíïõ åóùôåñéêÜ";
     Text[ korean ] = "Æ¼Ä¿ Á¤Áö ¹üÀ§";
     Text[ turkish ] = "Hareketli yazı durağı:";
@@ -13756,7 +13756,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ portuguese ] = "Quantidade de animações";
     Text[ russian ] = "Êîëè÷åñòâî ïğîãîíîâ áåãóùåé ñòğîêè";
     Text[ dutch ] = "Snelheid tekstanimatie";
-    Text[ french ] = "Nombre de défilements";
+    Text[ french ] = "Cycles d'animation";
     Text[ spanish ] = "Cantidad de animaciones";
     Text[ italian ] = "Numero passi scritta scorrevole";
     Text[ danish ] = "Antal tekstanimationsgennemløb";
@@ -15703,11 +15703,11 @@ String SIP_SA_LAYERNAME
     Text[ polish ] = "Warstwa";
     Text[ portuguese_brazilian ] = "Layer";
     Text[ japanese ] = "‘w";
-    Text[ chinese_simplified ] = "²ã";
-    Text[ chinese_traditional ] = "¼h";
+    Text[ chinese_simplified ] = "·Ö²ã";
+    Text[ chinese_traditional ] = "¤À¼h";
     Text[ arabic ] = "ØÈŞÉ";
     Text[ dutch ] = "Niveau";
-    Text[ chinese_simplified ] = "²ã";
+    Text[ chinese_simplified ] = "·Ö²ã";
     Text[ greek ] = "Åğßğåäï";
     Text[ korean ] = "·¹º§";
     Text[ turkish ] = "Düzey";
@@ -16900,7 +16900,7 @@ String SIP_EE_CHAR_FONTHEIGHT
     Text[ portuguese_brazilian ] = "Font size";
     Text[ japanese ] = "Ì«İÄ »²½Ş";
     Text[ chinese_simplified ] = "×ÖÌå´óĞ¡";
-    Text[ chinese_traditional ] = "¦r«¬";
+    Text[ chinese_traditional ] = "¦r«¬¤j¤p";
     Text[ arabic ] = "ÍÌã ÇáÎØ";
     Text[ dutch ] = "Schriftgrootte";
     Text[ chinese_simplified ] = "×ÖÌå´óĞ¡";
@@ -17632,6 +17632,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
