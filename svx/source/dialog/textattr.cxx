@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 15:04:50 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 11:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,13 +647,19 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
     aTsbFitToSize.Enable( !( ( bAutoGrowWidth || bAutoGrowHeight ) && bAutoGrowSizeEnabled ) &&
                           !( bContour && bContourEnabled ) );
 
+    // #101901# enable/disable metric fields and decorations dependent of contour
+    aMtrFldLeft.Enable(!bContour);
+    aMtrFldRight.Enable(!bContour);
+    aMtrFldTop.Enable(!bContour);
+    aMtrFldBottom.Enable(!bContour);
+    aFlDistance.Enable(!bContour);
+    aFtLeft.Enable(!bContour);
+    aFtRight.Enable(!bContour);
+    aFtTop.Enable(!bContour);
+    aFtBottom.Enable(!bContour);
+
     if( bContour && bContourEnabled )
     {
-        aMtrFldLeft.Enable( FALSE );
-        aMtrFldRight.Enable( FALSE );
-        aMtrFldTop.Enable( FALSE );
-        aMtrFldBottom.Enable( FALSE );
-
         aMtrFldLeft.SetValue( 0 );
         aMtrFldRight.SetValue( 0 );
         aMtrFldTop.SetValue( 0 );
