@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:03:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,15 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+SRS1NAME=component
+SRC1FILES = \
+            warnbox.src
+
 SLOFILES=   \
             $(SLO)$/documentdigitalsignatures.obj   \
             $(SLO)$/registerservices.obj   \
-            
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
