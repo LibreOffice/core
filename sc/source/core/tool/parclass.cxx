@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $  $Date: 2004-03-08 11:49:13 $
+ *  last change: $Author: rt $  $Date: 2004-10-22 07:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocAveDev,          {{ Reference                              },   true }},
     { ocAverage,         {{ Reference                              },   true }},
     { ocAverageA,        {{ Reference                              },   true }},
+    { ocCell,            {{ Value, Reference                       }}},
     { ocColumn,          {{ Reference                              }}},
     { ocColumns,         {{ Reference                              },   true }},
     { ocCorrel,          {{ ForceArray, ForceArray                 }}},
