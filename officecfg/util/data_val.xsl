@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:48:15 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,18 @@
 <xsl:param name="xcs"/>
 <xsl:param name="schemaRoot">.</xsl:param>
 
-<xsl:variable name="schemaRootURL"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:variable>
-<xsl:variable name="schemaURL"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:variable>
+<xsl:variable name="schemaRootURL">
+    <xsl:choose>
+        <xsl:when test="function-available('filehelper:makeAbs')"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="$schemaRoot"/></xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="schemaURL">
+    <xsl:choose>
+        <xsl:when test="function-available('filehelper:makeAbs')"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="$xcs"/></xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ************************************** -->
 <!-- * oor:component-data							*** -->
@@ -127,7 +137,7 @@
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message terminate="true">ERROR: The schema element for node <xsl:value-of select="$path"/>
+                <xsl:message terminate="yes">ERROR: The schema element for node <xsl:value-of select="$path"/>
                                               is a <xsl:value-of select="$schema-type"/> and should not have a node-type.
                 </xsl:message>
             </xsl:otherwise>
@@ -282,7 +292,7 @@
 	<xsl:template name="composeFileURL">
 		<xsl:param name="componentName"/>
 		<xsl:variable name="fileURL">
-			<xsl:value-of select="$schemaRootURL"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcs
+			<xsl:value-of select="$schemaRootURL"/>/<xsl:value-of select="translate($componentName,'.','/')"/><xsl:text>.xcs</xsl:text>
 		</xsl:variable>		
 		<xsl:value-of select="$fileURL"/>
 	</xsl:template>
