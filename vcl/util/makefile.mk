@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hdu $ $Date: 2002-04-18 16:44:23 $
+#   last change: $Author: vg $ $Date: 2002-04-23 14:30:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,8 +200,7 @@ LIB1FILES+= \
     LIB1FILES +=    $(SLB)$/glyphs.lib
     SHL1STDLIBS+=   $(FREETYPELIBST)
 .IF "$(ENABLE_CTL)"!=""
-    SHL1STDLIBS+= -licule
-    SHL1STDLIBS+= -licuuc
+    SHL1STDLIBS+= $(ICUI18NLIB)
 .ENDIF
 .ENDIF
 
