@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 09:04:36 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,40 @@ static void ImplSetMousePointer( Window* pChild )
         pChild->mpFrame->SetPointer( POINTER_HELP );
     else
         pChild->mpFrame->SetPointer( pChild->ImplGetMousePointer() );
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
+                             BOOL bMouse = FALSE, Point* pPos = NULL )
+{
+    Point aPos;
+    if ( pPos )
+        aPos = *pPos;
+    else
+        aPos = pChild->GetPointerPosPixel();
+
+    CommandEvent        aCEvt( aPos, nEvt, bMouse, pData );
+    NotifyEvent         aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
+    ImplDelData         aDelData;
+    BOOL                bPreNotify;
+    pChild->ImplAddDel( &aDelData );
+    if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
+    {
+        bPreNotify = FALSE;
+
+        pChild->mbCommand = FALSE;
+        pChild->Command( aCEvt );
+    }
+    else
+        bPreNotify = TRUE;
+    if ( aDelData.IsDelete() )
+        return FALSE;
+    pChild->ImplRemoveDel( &aDelData );
+    if ( !bPreNotify && pChild->mbCommand )
+        return TRUE;
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -864,77 +898,38 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 
     pChild->ImplRemoveDel( &aDelData );
 
-    // ContextMenu
-    if ( !bDrag && ((nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP)) )
+    if ( nSVEvent == EVENT_MOUSEMOVE )
     {
-        // StartAutoScrollMode-Command-Event
-        if ( /*(nRet == 0) &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
-             (nCode == MOUSE_MIDDLE) )
+        // set new mouse pointer
+        if ( !bMouseLeave )
+            ImplSetMousePointer( pChild );
+    }
+    else if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP) )
+    {
+        if ( !bDrag )
         {
-            BOOL            bPreNotify;
-            CommandEvent    aCEvt( aChildPos, COMMAND_STARTAUTOSCROLL, TRUE );
-            NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
-            ImplDelData     aDelData;
-            pChild->ImplAddDel( &aDelData );
-            if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
-            {
-                bPreNotify = FALSE;
-
-                pChild->mbCommand = FALSE;
-                pChild->Command( aCEvt );
-            }
+            // StartAutoScrollMode-Command-Event
+            if ( /*(nRet == 0) &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
+                 (nCode == MOUSE_MIDDLE) )
+                nRet = !ImplCallCommand( pChild, COMMAND_STARTAUTOSCROLL, NULL, TRUE, &aChildPos );
             else
-                bPreNotify = TRUE;
-            if ( aDelData.IsDelete() )
-                return 1;
-            pChild->ImplRemoveDel( &aDelData );
-            if ( !bPreNotify && pChild->mbCommand )
-                nRet = 0;
-            else
-                nRet = 1;
-        }
-        else
-        {
-            const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
-            if ( (nCode == rMSettings.GetContextMenuCode()) &&
-                 (nClicks == rMSettings.GetContextMenuClicks()) )
             {
-                BOOL bContextMenu;
-                if ( rMSettings.GetContextMenuDown() )
-                    bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONDOWN);
-                else
-                    bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONUP);
-                if ( bContextMenu )
+                // ContextMenu
+                const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
+                if ( (nCode == rMSettings.GetContextMenuCode()) &&
+                     (nClicks == rMSettings.GetContextMenuClicks()) )
                 {
-                    BOOL            bPreNotify;
-                    CommandEvent    aCEvt( aChildPos, COMMAND_CONTEXTMENU, TRUE );
-                    NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
-                    ImplDelData     aDelData;
-                    pChild->ImplAddDel( &aDelData );
-                    if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
-                    {
-                        bPreNotify = FALSE;
-
-                        pChild->mbCommand = FALSE;
-                        pChild->Command( aCEvt );
-                    }
+                    BOOL bContextMenu;
+                    if ( rMSettings.GetContextMenuDown() )
+                        bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONDOWN);
                     else
-                        bPreNotify = TRUE;
-                    if ( aDelData.IsDelete() )
-                        return 1;
-                    pChild->ImplRemoveDel( &aDelData );
-                    if ( !bPreNotify && pChild->mbCommand )
-                        nRet = 0;
-                    else
-                        nRet = 1;
+                        bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONUP);
+                    if ( bContextMenu )
+                        nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, TRUE, &aChildPos );
                 }
             }
         }
     }
-
-    // set new mouse pointer
-    if ( (nSVEvent == EVENT_MOUSEMOVE) && !bMouseLeave )
-        ImplSetMousePointer( pChild );
 
     return nRet;
 }
@@ -1127,26 +1122,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
             // ContextMenu
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift()) )
-            {
-                CommandEvent    aCEvt( pChild->GetPointerPosPixel(), COMMAND_CONTEXTMENU, FALSE );
-                NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
-                ImplDelData     aDelData;
-                pChild->ImplAddDel( &aDelData );
-                if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
-                {
-                    bPreNotify = FALSE;
-
-                    pChild->mbCommand = FALSE;
-                    pChild->Command( aCEvt );
-                }
-                else
-                    bPreNotify = TRUE;
-                if ( aDelData.IsDelete() )
-                    return 1;
-                pChild->ImplRemoveDel( &aDelData );
-                if ( !bPreNotify && pChild->mbCommand )
-                    nRet = 0;
-            }
+                nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, FALSE );
             else if ( (nCode == KEY_F1) || (nCode == KEY_HELP) )
             {
                 if ( !aKeyCode.GetModifier() )
@@ -1188,38 +1164,10 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 
 // -----------------------------------------------------------------------
 
-static long ImplCallExtTextInput( Window* pChild, USHORT nEvt,
-                                  void* pData = NULL )
-{
-    CommandEvent        aCEvt( pChild->GetPointerPosPixel(), nEvt, FALSE, pData );
-    NotifyEvent         aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
-    ImplDelData         aDelData;
-    BOOL                bPreNotify;
-    pChild->ImplAddDel( &aDelData );
-    if ( !ImplCallPreNotify( aNCmdEvt ) && !aDelData.IsDelete() )
-    {
-        bPreNotify = FALSE;
-
-        pChild->mbCommand = FALSE;
-        pChild->Command( aCEvt );
-    }
-    else
-        bPreNotify = TRUE;
-    if ( aDelData.IsDelete() )
-        return FALSE;
-    pChild->ImplRemoveDel( &aDelData );
-    if ( !bPreNotify && pChild->mbCommand )
-        return TRUE;
-
-    return FALSE;
-}
-// -----------------------------------------------------------------------
-
 static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
                                     const XubString& rText,
                                     const USHORT* pTextAttr,
-                                    ULONG nCursorPos, USHORT nCursorFlags,
-                                    ULONG nDeltaStart, BOOL bOnlyCursor )
+                                    ULONG nCursorPos, USHORT nCursorFlags )
 {
     Window* pChild;
 
@@ -1232,26 +1180,74 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
             return 0;
     }
 
+    // If it is the first ExtTextInput call, we inform the information
+    // and allocate the data, which we must store in this mode
+    ImplWinData* pWinData = pChild->ImplGetWinData();
     if ( !pChild->mbExtTextInput )
     {
         pChild->mbExtTextInput = TRUE;
-        pChild->ImplGetWinData()->mnExtOldTextLen = 0;
+        if ( !pWinData->mpExtOldText )
+            pWinData->mpExtOldText = new UniString;
+        else
+            pWinData->mpExtOldText->Erase();
+        if ( pWinData->mpExtOldAttrAry )
+        {
+            delete pWinData->mpExtOldAttrAry;
+            pWinData->mpExtOldAttrAry = NULL;
+        }
         pChild->mpFrameData->mpExtTextInputWin = pChild;
-        ImplCallExtTextInput( pChild, COMMAND_STARTEXTTEXTINPUT );
+        ImplCallCommand( pChild, COMMAND_STARTEXTTEXTINPUT );
     }
 
-    // For kompatibility through the next version
-    if ( nCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE )
-        nCursorFlags = 0;
-    else
-        nCursorFlags = TRUE;
+    // Test for changes
+    BOOL        bOnlyCursor = FALSE;
+    xub_StrLen  nMinLen = Min( pWinData->mpExtOldText->Len(), rText.Len() );
+    xub_StrLen  nDeltaStart = 0;
+    while ( nDeltaStart < nMinLen )
+    {
+        if ( pWinData->mpExtOldText->GetChar( nDeltaStart ) != rText.GetChar( nDeltaStart ) )
+            break;
+        nDeltaStart++;
+    }
+    if ( pWinData->mpExtOldAttrAry || pTextAttr )
+    {
+        if ( !pWinData->mpExtOldAttrAry || !pTextAttr )
+            nDeltaStart = 0;
+        else
+        {
+            xub_StrLen i = 0;
+            while ( i < nDeltaStart )
+            {
+                if ( pWinData->mpExtOldAttrAry[i] != pTextAttr[i] )
+                {
+                    nDeltaStart = i;
+                    break;
+                }
+                i++;
+            }
+        }
+    }
+    if ( (nDeltaStart >= nMinLen) &&
+         (pWinData->mpExtOldText->Len() == rText.Len()) )
+        bOnlyCursor = TRUE;
+
+    // Call Event and store the information
     CommandExtTextInputData aData( rText, pTextAttr,
-                                   (USHORT)nCursorPos, nCursorFlags,
-                                   (USHORT)nDeltaStart,
-                                   pChild->ImplGetWinData()->mnExtOldTextLen,
+                                   (xub_StrLen)nCursorPos, nCursorFlags,
+                                   nDeltaStart, pWinData->mpExtOldText->Len(),
                                    bOnlyCursor );
-    pChild->ImplGetWinData()->mnExtOldTextLen = rText.Len();
-    return ImplCallExtTextInput( pChild, COMMAND_EXTTEXTINPUT, &aData );
+    *pWinData->mpExtOldText = rText;
+    if ( pWinData->mpExtOldAttrAry )
+    {
+        delete pWinData->mpExtOldAttrAry;
+        pWinData->mpExtOldAttrAry = NULL;
+    }
+    if ( pTextAttr )
+    {
+        pWinData->mpExtOldAttrAry = new USHORT[rText.Len()];
+        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.Len()*sizeof( USHORT ) );
+    }
+    return !ImplCallCommand( pChild, COMMAND_EXTTEXTINPUT, &aData );
 }
 
 // -----------------------------------------------------------------------
@@ -1265,8 +1261,18 @@ static long ImplHandleEndExtTextInput( Window* pWindow )
     {
         pChild->mbExtTextInput = FALSE;
         pChild->mpFrameData->mpExtTextInputWin = NULL;
-        pChild->ImplGetWinData()->mnExtOldTextLen = 0;
-        nRet = ImplCallExtTextInput( pChild, COMMAND_ENDEXTTEXTINPUT );
+        ImplWinData* pWinData = pChild->ImplGetWinData();
+        if ( pWinData->mpExtOldText )
+        {
+            delete pWinData->mpExtOldText;
+            pWinData->mpExtOldText = NULL;
+        }
+        if ( pWinData->mpExtOldAttrAry )
+        {
+            delete pWinData->mpExtOldAttrAry;
+            pWinData->mpExtOldAttrAry = NULL;
+        }
+        nRet = !ImplCallCommand( pChild, COMMAND_ENDEXTTEXTINPUT );
     }
 
     return nRet;
@@ -1283,6 +1289,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
 
     if ( pChild )
     {
+        ImplCallCommand( pChild, COMMAND_CURSORPOS );
         const Rectangle* pRect = pChild->GetCursorRect();
         if ( pRect )
             rRect = pChild->ImplLogicToDevicePixel( *pRect );
@@ -1308,7 +1315,9 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
 
 static long ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
 {
-    return 0;
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    CommandInputContextData aData( eNewLang );
+    return !ImplCallCommand( pChild, COMMAND_INPUTCONTEXTCHANGE, &aData );
 }
 
 // -----------------------------------------------------------------------
@@ -1979,8 +1988,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             SalExtTextInputEvent* pEvt = (SalExtTextInputEvent*)pEvent;
             nRet = ImplHandleExtTextInput( (Window*)pInst, pEvt->mnTime,
                                            pEvt->maText, pEvt->mpTextAttr,
-                                           pEvt->mnCursorPos, pEvt->mnCursorFlags,
-                                           pEvt->mnDeltaStart, pEvt->mbOnlyCursor );
+                                           pEvt->mnCursorPos, pEvt->mnCursorFlags );
             }
             break;
         case SALEVENT_ENDEXTTEXTINPUT:
