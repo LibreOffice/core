@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rschash.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,10 @@ HashString::~HashString(){
 |*
 *************************************************************************/
 USHORT HashString :: HashFunc( const void * pElement ){
+    return( Hash_Func( pElement ));
+}
+
+USHORT HashString :: Hash_Func( const void * pElement ){
     const char    *pStr;
     USHORT        nHash = 0;  // hash value
 
@@ -235,7 +239,6 @@ USHORT HashString :: HashFunc( const void * pElement ){
     }
     return( nHash );
 }
-
 /*************************************************************************
 |*
 |*    HashString::IsEntry()
