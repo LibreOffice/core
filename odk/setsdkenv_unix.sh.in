@@ -3,6 +3,12 @@
 # This script starts a new shell and sets all enviroment variables, which
 # are necessary for building the examples of the Office Development Kit.
 # The Script was developed for the operating systems Solaris and Linux.
+sdkscript=`echo $0 | grep setsdkenv_unix`
+if [ "$sdkscript" = "" ]
+then
+sdkscript=`history 1 | sed "s/.*\. //"`
+fi
+sdkdir=`dirname $sdkscript`
 
 # The SDK name
 OO_SDK_NAME=@OO_SDK_NAME@
@@ -77,12 +83,12 @@ then
 fi
 
 # Get the operating system.
-sd_platform=`./config.guess | cut -d"-" -f3,4`
+sd_platform=`$sdkdir/config.guess | cut -d"-" -f3,4`
 
 # Set the directory name.
 case $sd_platform in
   solaris*)
-    sd_proctype=`./config.guess | cut -d"-" -f1`
+    sd_proctype=`$sdkdir/config.guess | cut -d"-" -f1`
     if [ "$sd_proctype" = "sparc" ]
     then
         directoryname=solsparc
@@ -97,8 +103,11 @@ case $sd_platform in
     ;;
 
   darwin)
-    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    export SDK_GXX_INCLUDE_PATH
+    if [ -n "$OO_SDK_CPP_HOME" ]
+    then
+	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	export SDK_GXX_INCLUDE_PATH
+    fi	
 
     directoryname=macosx
     exampleout=MACOSXexample.out
@@ -108,8 +117,11 @@ case $sd_platform in
     ;;
 
   linux-gnu)
-    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    export SDK_GXX_INCLUDE_PATH
+    if [ -n "$OO_SDK_CPP_HOME" ]
+    then
+	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	export SDK_GXX_INCLUDE_PATH
+    fi	
 
     directoryname=linux
     exampleout=LINUXexample.out
@@ -117,9 +129,13 @@ case $sd_platform in
     LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
+
   freebsd)
-    SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    export SDK_GXX_INCLUDE_PATH
+    if [ -n "$OO_SDK_CPP_HOME" ]
+    then
+	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	export SDK_GXX_INCLUDE_PATH
+    fi	
 
     directoryname=freebsd
     exampleout=FREEBSDexample.out
