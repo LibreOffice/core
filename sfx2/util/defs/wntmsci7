@@ -8659,3 +8659,4 @@ _TI1?AVException@uno@star@sun@com@@
 ?SetLoadEnvironment@SfxMedium@@QAEXPAVSfxLoadEnvironment@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx269911123@@YAXABVSbxVariableRef@@PAX@Z
 ?getFilterOptions@RequestFilterOptions@@QAE?AV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@XZ
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2970217559@@YAXABVSbxVariableRef@@PAX@Z
