@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-22 18:15:15 $
+#   last change: $Author: hjs $ $Date: 2002-05-08 16:31:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ INCLUDE!:=$(shell echo $(INCLUDE) | sed "s/[ \t]*-I/;/g" )
 .IF "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(shell echo "$(EXT_INCLUDE:s/\stl//)" )
 .ELSE			# "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell echo "$(EXT_INCLUDE))" )
+INCLUDE!:=$(shell echo "$(EXT_INCLUDE)")
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .EXPORT : INCLUDE
