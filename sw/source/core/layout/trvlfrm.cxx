@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:27:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2645,7 +2645,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
                                                 ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
                 if ( bBody == pCntnt->IsInDocBody() &&
-                    ( !pCellBox && !pTmpCellBox || pCellBox == pTmpCellBox ) )
+                    ( !pCellBox || pCellBox == pTmpCellBox ) )
                 {
                     SwRect aCRect( pCntnt->UnionFrm( sal_True ) );
                     aCRect.Intersection( pCntnt->PaintArea() );
