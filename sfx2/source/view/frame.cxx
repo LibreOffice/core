@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:28:01 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ void SfxFrame::CancelTransfers( sal_Bool bCancelLoadEnv )
             if( !pFrm )
             {
                 pObj->CancelTransfers();
-                pObj->Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+                GetCurrentDocument()->Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
             }
         }
 

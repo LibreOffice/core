@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:23:12 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3803,10 +3803,10 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
     return pWork;
 }
 
-/*void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
+void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
 {
     SetChildWindow( nId, bOn, TRUE );
-}*/
+}
 
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn, BOOL bSetFocus )
 {

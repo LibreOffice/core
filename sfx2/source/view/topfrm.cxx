@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:39:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-10 10:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,13 +838,9 @@ String SfxTopViewFrame::UpdateTitle()
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
-    if ( GetFrame()->GetWindow().GetText() != aTitle )
-    {
-        GetFrame()->GetWindow().SetText( aTitle );
-        if ( GetTopFrame_Impl()->GetTopWindow_Impl() )
-            GetTopFrame_Impl()->GetTopWindow_Impl()->SetText( aTitle );
-    }
-
+    Window* pWindow = GetTopFrame_Impl()->GetTopWindow_Impl();
+    if ( pWindow && pWindow->GetText() != aTitle )
+        pWindow->SetText( aTitle );
     return aTitle;
 }
 
