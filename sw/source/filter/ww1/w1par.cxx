@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1par.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:03:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ static ULONG WW1_Read_FieldIniFlags()
 // Diese werden dann einfach per Pipe 'uebertragen'.
 //
 
-ULONG WW1Reader::Read(SwDoc& rDoc, SwPaM& rPam, const String& cName)
+ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& cName)
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
     ASSERT(pStrm!=NULL, "W1-Read ohne Stream");
@@ -133,7 +133,7 @@ ULONG WW1Reader::Read(SwDoc& rDoc, SwPaM& rPam, const String& cName)
         // erstmal eine shell konstruieren: die ist schnittstelle
         // zum writer-dokument
         ULONG nFieldFlags = WW1_Read_FieldIniFlags();
-        Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, bNew, nFieldFlags );
+        Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
         if( pRdr )
         {
             // dann den manager, der liest die struktur des word-streams
@@ -182,8 +182,8 @@ ULONG WW1Reader::Read(SwDoc& rDoc, SwPaM& rPam, const String& cName)
 // in einen Stream werden alle Informationen, die aus der Datei
 // gelesen werden, in die shell ge'piped'.
 //
-Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, BOOL bNew, ULONG nFieldFlags)
-    : SwFltShell(&rD, rPam, bNew, nFieldFlags)
+Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags)
+    : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }
 
