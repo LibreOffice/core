@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-04 12:32:41 $
+#   last change: $Author: hjs $ $Date: 2002-09-19 11:27:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,7 @@ $(UCR)$/applicat.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 $(OUT)$/ucrdoc$/applicat_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
-    +$(GNUCOPY) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+    +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
 .ELSE
 ALL : ALLDEP
