@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:51:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,14 @@ ModalDialog DLG_ASS
         Text [ x-comment ] = " ";
     };
 
+    PushButton PB_PAGE1_OPEN
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 18 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 18 ) ;
+        TabStop = TRUE ;
+    };
+
     ListBox LB_PAGE1_REGION
     {
         Pos = MAP_APPFONT ( 12 , 90  );
@@ -164,14 +172,14 @@ ModalDialog DLG_ASS
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 106  ) ;
-        Size = MAP_APPFONT ( 120 , 56 ) ;
+        Size = MAP_APPFONT ( 120 , 59 ) ;
         HelpId = HID_SD_AUTOPILOT_TEMPLATES ;
     };
 
     ListBox LB_PAGE1_OPEN
     {
-        Pos = MAP_APPFONT ( 12 , 90  );
-        Size = MAP_APPFONT ( 120 , 72 );
+        Pos = MAP_APPFONT ( 18 , 110  );
+        Size = MAP_APPFONT ( 120 , 55 );
         TabStop = TRUE;
         Border = TRUE;
         HelpId = HID_SD_AUTOPILOT_OPEN ;
