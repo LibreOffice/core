@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.13 $
- *  last change: $Author: vg $ $Date: 2003-05-02 14:56:16 $
+ *  $Revision: 1.14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,6 @@ int Sys2SolarError_Impl( int nSysErr )
 
 #ifndef BOOTSTRAP
 
-#if SUPD>=380
 FSysRedirector* FSysRedirector::_pRedirector = 0;
 BOOL FSysRedirector::_bEnabled = TRUE;
 #ifdef UNX
@@ -314,7 +313,6 @@ FSysRedirector* FSysRedirector::Redirector()
                 Register( new FSysRedirector );
         return _pRedirector;
 }
-#endif
 
 #endif // BOOTSTRAP
 
@@ -1874,13 +1872,6 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 |*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
-#if SUPD<=381
-BOOL DirEntry::Find( const String& rPfad )
-{
-        return Find( rPfad, SEARCHDELIM(DEFSTYLE)[0] );
-}
-#endif
-
 BOOL DirEntry::Find( const String& rPfad, char cDelim )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
