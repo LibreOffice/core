@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:11 $
+ *  last change: $Author: as $ $Date: 2001-05-21 06:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,22 +162,22 @@ class CheckedIterator
 
             @seealso    -
 
-            @param      "pContainer", must be a valid pointer to an existing container.
+            @param      "rContainer", must be a valid reference to an existing container.
             @return     -
 
             @onerror    An assertion is thrown.
         *//*-*****************************************************************************************************/
 
-        inline void initialize( const TContainer* pContainer, sal_Bool bReverse = sal_False )
+        inline void initialize( const TContainer& rContainer, sal_Bool bReverse = sal_False )
         {
             // Check incoming parameter. We don't accept all!
-            LOG_ASSERT2( pContainer ==NULL      , "CheckedIterator::initialize()", "Invalid parameter detected!"                        )
+            LOG_ASSERT2( &rContainer==NULL      , "CheckedIterator::initialize()", "Invalid parameter detected!"                        )
             LOG_ASSERT2( m_eEndState!=E_UNKNOWN , "CheckedIterator::initialize()", "Instance already initialized! Don't do it again."   )
 
             if( m_eEndState == E_UNKNOWN )
             {
                 // Set new container and actualize other member.
-                m_pContainer        = pContainer                ;
+                m_pContainer        = &rContainer               ;
                 m_bReverse          = bReverse                  ;
                 m_eEndState         = E_BEFOREEND               ;
                 m_nForward          = 0                         ;
