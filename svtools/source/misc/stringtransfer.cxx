@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringtransfer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 08:18:15 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 09:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,17 +101,17 @@ namespace svt
     //= OStringTransfer
     //====================================================================
     //--------------------------------------------------------------------
-    void OStringTransfer::CopyString( const ::rtl::OUString& _rContent )
+    void OStringTransfer::CopyString( const ::rtl::OUString& _rContent, Window* _pWindow )
     {
         OStringTransferable* pTransferable = new OStringTransferable( _rContent );
         Reference< XTransferable > xTransfer = pTransferable;
-        pTransferable->CopyToClipboard();
+        pTransferable->CopyToClipboard( _pWindow );
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OStringTransfer::PasteString( ::rtl::OUString& _rContent )
+    sal_Bool OStringTransfer::PasteString( ::rtl::OUString& _rContent, Window* _pWindow )
     {
-        TransferableDataHelper aClipboardData = TransferableDataHelper::CreateFromSystemClipboard();
+        TransferableDataHelper aClipboardData = TransferableDataHelper::CreateFromSystemClipboard( _pWindow );
 
         // check for a string format
         const DataFlavorExVector& rFormats = aClipboardData.GetDataFlavorExVector();
@@ -147,6 +147,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/28 08:18:15  fs
+ *  +StartStringDrag
+ *
  *  Revision 1.1  2001/03/27 14:35:35  fs
  *  initial checkin - helper classes for clipboard handling of strings
  *

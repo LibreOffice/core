@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 13:04:12 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 09:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,45 +852,25 @@ void TransferableHelper::ObjectReleased()
 
 // -----------------------------------------------------------------------------
 
-void TransferableHelper::CopyToClipboard() const
-{
-    mxClipboard = GetSystemClipboard();
-
-    if( mxClipboard.is() && !mxTerminateListener.is() )
-    {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
-        {
-            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
-
-            if( xFact.is() )
-            {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
-
-                if( xDesktop.is() )
-                {
-                    TransferableHelper* pThis = (TransferableHelper*) this;
-                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
-                }
-            }
-
-            mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        Application::AcquireSolarMutex( nRef );
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 {
+    Reference< XClipboard > xClipboard;
+
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    mxClipboard = pWindow->GetClipboard();
+
+    if( pWindow )
+        xClipboard = pWindow->GetClipboard();
+    else
+    {
+        // temporary fix: as long as it is not ensured that pWindow is not null,
+        // we must have this fallback here.
+        Window *pTmpWin = new Window( NULL, 0 );
+        xClipboard = pTmpWin->GetClipboard();
+        delete pTmpWin;
+    }
+
+    if( xClipboard.is() )
+        mxClipboard = xClipboard;
 
     if( mxClipboard.is() && !mxTerminateListener.is() )
     {
@@ -1769,43 +1749,23 @@ void TransferableDataHelper::StopClipboardListening( )
 
 // -----------------------------------------------------------------------------
 
-TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
-{
-    Reference< XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
-    TransferableDataHelper  aRet;
-
-    if( xClipboard.is() )
-    {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
-        {
-            Reference< XTransferable > xTransferable( xClipboard->getContents() );
-
-            if( xTransferable.is() )
-            {
-                aRet = TransferableDataHelper( xTransferable );
-                aRet.mxClipboard = xClipboard;
-            }
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        Application::AcquireSolarMutex( nRef );
-    }
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------------
-
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window * pWindow )
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
        TransferableDataHelper   aRet;
-    Reference< XClipboard > xClipboard( pWindow->GetClipboard() );
+    Reference< XClipboard > xClipboard;
+
+    if( pWindow )
+        xClipboard = pWindow->GetClipboard();
+    else
+    {
+        // temporary fix: as long as it is not ensured that pWindow is not null,
+        // we must have this fallback here.
+        Window *pTmpWin = new Window( NULL, 0 );
+        xClipboard = pTmpWin->GetClipboard();
+        delete pTmpWin;
+    }
 
     if( xClipboard.is() )
        {
