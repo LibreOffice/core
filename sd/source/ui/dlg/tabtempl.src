@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:01:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Čára";
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
+                Text[ slovak ] = "Úsečka";
             };
             PageItem
             {
@@ -154,6 +155,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Oblast";
                 Text[ hebrew ] = "Fläche";
                 Text[ hindi ] = "विस्तीर्ण";
+                Text[ slovak ] = "Oblasť";
             };
             PageItem
             {
@@ -186,6 +188,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Stínování";
                 Text[ hebrew ] = "Schatten";
                 Text[ hindi ] = "छाया";
+                Text[ slovak ] = "Tieňovanie";
             };
             PageItem
             {
@@ -216,6 +219,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Průhlednost";
                 Text[ hebrew ] = "Transparenz";
                 Text[ hindi ] = "पारदर्शकता";
+                Text[ slovak ] = "Priehľadnosť";
             };
             PageItem
             {
@@ -249,6 +253,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -282,6 +287,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Efekty písma";
                 Text[ hebrew ] = "Schrifteffekt";
                 Text[ hindi ] = "Font Effect";
+                Text[ slovak ] = "Efekty písma";
             };
             PageItem
             {
@@ -316,6 +322,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Odsazení a proklad";
                 Text[ hebrew ] = "‮שוליים ברווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a riadkovanie";
             };
             PageItem
             {
@@ -348,6 +355,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Text";
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
+                Text[ slovak ] = "Text";
             };
             PageItem
             {
@@ -380,6 +388,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Animace textu";
                 Text[ hebrew ] = "Lauftext";
                 Text[ hindi ] = "टेक्स्ट् हुलास";
+                Text[ slovak ] = "Animácia textu";
             };
             PageItem
             {
@@ -413,6 +422,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Kótování";
                 Text[ hebrew ] = "Bemaßung";
                 Text[ hindi ] = "परिमाण देना";
+                Text[ slovak ] = "Zmena rozmerov";
             };
             PageItem
             {
@@ -444,6 +454,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Spojnice";
                 Text[ hebrew ] = "Verbinder";
                 Text[ hindi ] = "कनेक्टर";
+                Text[ slovak ] = "Spojnica";
             };
             PageItem
             {
@@ -475,6 +486,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -508,6 +520,7 @@ TabDialog TAB_TEMPLATE
                 Text[ czech ] = "Tabulátory";
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
+                Text[ slovak ] = "Tabulátory";
             };
         };
     };
@@ -563,6 +576,7 @@ TabDialog TAB_TEMPLATE
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
+        Text[ slovak ] = "Späť";
     };
     Text[ chinese_simplified ] = "图形对象样式";
     Text[ russian ] = "����� ����������� ��������";
@@ -579,7 +593,10 @@ TabDialog TAB_TEMPLATE
     Text[ czech ] = "Grafické styly";
     Text[ hebrew ] = "Grafikobjektvorlage";
     Text[ hindi ] = "सुचित्र शैलियाँ";
+    Text[ slovak ] = "Grafické štýly";
 };
+
+
 
 
 
