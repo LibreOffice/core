@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:24:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,11 +553,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     MSHORT nLineCnt = rLine.GetLineNr();
 
     // Erstmal die Orphansregel und den Initialenwunsch erfuellen ...
-#ifndef USED
     const MSHORT nMinLines = Max( GetOrphansLines(), rLine.GetDropLines() );
-#else
-    const MSHORT nMinLines = rLine.GetDropLines();
-#endif
     if ( nLineCnt < nMinLines )
         return sal_False;
 
