@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:01:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-04 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2012,11 +2012,12 @@ KSHORT SwTxtFrm::GetParHeight() const
     KSHORT nHeight = pLineLayout->GetRealHeight();
     if( GetOfst() && !IsFollow() )  // Ist dieser Absatz gescrollt? Dann ist unsere
         nHeight *= 2;               // bisherige Hoehe mind. eine Zeilenhoehe zu gering
-    do
+    // OD 2004-03-04 #115793#
+    while ( pLineLayout && pLineLayout->GetNext() )
     {
         pLineLayout = pLineLayout->GetNext();
         nHeight += pLineLayout->GetRealHeight();
-    } while ( pLineLayout->GetNext() );
+    }
 
     return nHeight;
 }
