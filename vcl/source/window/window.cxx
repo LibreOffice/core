@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-10 13:53:00 $
+ *  last change: $Author: ssa $ $Date: 2002-12-12 13:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6628,6 +6628,8 @@ void Window::SetPosSizePixel( long nX, long nY,
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+    BOOL bHasValidSize = !mbDefSize;
+
     if ( nFlags & WINDOW_POSSIZE_POS )
         mbDefPos = FALSE;
     if ( nFlags & WINDOW_POSSIZE_SIZE )
@@ -6666,7 +6668,7 @@ void Window::SetPosSizePixel( long nX, long nY,
                 nX = aRect.nLeft;
             }
         }
-        if( !(nFlags & WINDOW_POSSIZE_X) && pWindow->mpFrame->maGeometry.nWidth )
+        if( !(nFlags & WINDOW_POSSIZE_X) && bHasValidSize && pWindow->mpFrame->maGeometry.nWidth )
         {
             // --- RTL ---  make sure the old right aligned position is not changed
             //              system windows will always grow to the right
