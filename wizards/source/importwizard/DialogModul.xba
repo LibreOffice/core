@@ -394,20 +394,20 @@ Sub	SetupMSConfiguration()
 &apos; See definition of Filtername-Array about meaning of fields
 	MSFilterName(0,0) = &quot;doc&quot;
 	MSFilterName(0,1) = &quot;writer8&quot;
-	MSFilterName(0,2) = &quot;oot&quot;
+	MSFilterName(0,2) = &quot;odt&quot;
 	MSFilterName(0,3) = sMSDocumentCheckBox(0)
 	MSFilterName(0,4) = &quot;Word&quot;
 	
 
 	MSFilterName(1,0) = &quot;xls&quot;
 	MSFilterName(1,1) = &quot;calc8&quot;
-	MSFilterName(1,2) = &quot;oos&quot;
+	MSFilterName(1,2) = &quot;ods&quot;
 	MSFilterName(1,3) = sMSDocumentCheckBox(1)
 	MSFilterName(1,4) = &quot;Excel&quot;
 
 	MSFilterName(2,0) = &quot;ppt&quot;
 	MSFilterName(2,1) = &quot;impress8&quot;
-	MSFilterName(2,2) = &quot;oop&quot;
+	MSFilterName(2,2) = &quot;odp&quot;
 	MSFilterName(2,3) = sMSDocumentCheckBox(2)
 	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
@@ -477,22 +477,22 @@ Sub SetupXMLConfiguration()
 
 	XMLFilterName(0,0) = &quot;sdw|sxw&quot;
 	XMLFilterName(0,1) = &quot;writer8|writer8&quot;
-	XMLFilterName(0,2) = &quot;oot|oot&quot;
+	XMLFilterName(0,2) = &quot;odt|odt&quot;
 	XMLFilterName(0,3) = sDocumentCheckBox(0)
 
 	XMLFilterName(1,0) = &quot;sdc|sxc&quot;
 	XMLFilterName(1,1) = &quot;calc8|calc8&quot;
-	XMLFilterName(1,2) = &quot;oos|oos&quot;
+	XMLFilterName(1,2) = &quot;ods|ods&quot;
 	XMLFilterName(1,3) = sDocumentCheckBox(1)
 
 	XMLFilterName(2,0) = &quot;sdd|sda|sxi|sxd&quot;
 	XMLFilterName(2,1) = &quot;impress8|draw8|impress8|draw8&quot;
-	XMLFilterName(2,2) = &quot;oop|ood|oop|ood&quot;
+	XMLFilterName(2,2) = &quot;odp|odd|odp|odd&quot;
 	XMLFilterName(2,3) = sDocumentCheckBox(2)
 	
 	XMLFilterName(3,0) = &quot;smf|sxm&quot;
 	XMLFilterName(3,1) = &quot;math8|math8&quot;
-	XMLFilterName(3,2) = &quot;oof|oof&quot;
+	XMLFilterName(3,2) = &quot;odf|odf&quot;
 	XMLFilterName(3,3) = sDocumentCheckBox(3)	
 
 	XMLFilterName(4,0) = &quot;application/x-openoffice-starwriter|application/vnd.stardivision.writer/web|application/vnd.sun.xml.writer|application/vnd.sun.xml.writerweb&quot;
@@ -515,7 +515,7 @@ Sub SetupXMLConfiguration()
 	
 	XMLFilterName(7,0) = &quot;sgl|sxg&quot;
 	XMLFilterName(7,1) = &quot;writerglobal8|writerglobal8&quot;
-	XMLFilterName(7,2) = &quot;oom|oom&quot;
+	XMLFilterName(7,2) = &quot;odm|odm&quot;
 	XMLFilterName(7,3) = sTemplateCheckBox(3)
 End Sub
 
