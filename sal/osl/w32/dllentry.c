@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:28:41 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 //------------------------------------------------------------------------------
 
 extern HRESULT (WINAPI *_CoInitializeEx) (LPVOID pvReserved, DWORD dwCoInit);
-extern LPWSTR           *lpArgvW;
 
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
@@ -263,8 +262,6 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
         case DLL_PROCESS_DETACH:
 
             WSACleanup( );
-            if ( lpArgvW )
-                GlobalFree( lpArgvW );
 
             TlsFree( g_dwTLSTextEncodingIndex );
             DeleteCriticalSection( &g_ThreadKeyListCS );
