@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:40:01 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ String STR_BTN_NEW_DOC
     Text[ dutch ] = "~Nieuw document";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
     Text[ turkish ] = "~Yeni belge";
     Text[ language_user1 ] = " ";
 };
@@ -171,7 +171,7 @@ String STR_BTN_NEWDOC
     Text[ dutch ] = "~Nieuw doc.";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
     Text[ turkish ] = "~Yeni blg.";
     Text[ language_user1 ] = " ";
 };
