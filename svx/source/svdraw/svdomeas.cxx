@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,8 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
     aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet);
+    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
 
     // Shadows
     BOOL bShadOn = ((SdrShadowItem&)(aSet.Get(SDRATTR_SHADOW))).GetValue();
@@ -1430,7 +1431,8 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut, BOOL bForceHair) const
+void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut,
+    BOOL bForceHair, BOOL bIsLineDraft) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon;
@@ -1439,8 +1441,8 @@ void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& r
     // get LineStyleParameterPack
     SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
     TakeAttributes(aSet, FALSE, TRUE);
-    LineStyleParameterPack aLineAttr(aSet, bForceHair, rOut);
-    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine);
+    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
+    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
     Polygon3D aPoly3D;
     UINT16 nLoopStart(0);

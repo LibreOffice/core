@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3182,14 +3182,15 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 \************************************************************************/
 
 void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
-    BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted)
+    BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted,
+    BOOL bIsLineDraft, BOOL bIsFillDraft)
 {
     bDrawObject = (nDrawFlags & E3D_DRAWFLAG_FILLED);
     if(bDrawObject)
     {
         // Attribute aus dem Objekt holen
         const XFillAttrSetItem* pFillAttr = GetFillAttr();
-        if(pFillAttr && !rOut.GetIgnoreFillAttr())
+        if(pFillAttr && !bIsFillDraft)
         {
             const SfxItemSet& rSet = pFillAttr->GetItemSet();
             UINT16 nFillTrans = ITEMVALUE(rSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
@@ -3557,7 +3558,7 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                     Get(XATTR_LINESTYLE))).GetValue();
                 INT32 nLineWidth = ((const XLineWidthItem&) (rSet.
                     Get(XATTR_LINEWIDTH))).GetValue();
-                if(nLineWidth && !rOut.GetIgnoreLineAttr())
+                if(nLineWidth && !bIsLineDraft)
                 {
                     Point aPnt(nLineWidth, 0);
                     aPnt = pBase3D->GetOutputDevice()->LogicToPixel(aPnt)
@@ -4387,8 +4388,11 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
         // Ausgabeparameter setzen
         BOOL bDrawOutline;
         BOOL bDrawObject;
+        BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+        BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
         SetBase3DParams(rOut, pBase3D, bDrawObject, bDrawOutline, nDrawFlags,
-            (rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE);
+            (rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE,
+            bIsLineDraft, bIsFillDraft);
 
         // Culling?
         pBase3D->SetCullMode(GetDoubleSided() ? Base3DCullNone : Base3DCullBack);

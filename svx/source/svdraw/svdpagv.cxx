@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1471,13 +1471,13 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
             DebOut(*pPage);
     #endif
             if (bPrinter) {
-                if (rView.IsLineDraftPrn()) pXOut->SetIgnoreLineAttr(TRUE);
-                if (rView.IsFillDraftPrn()) pXOut->SetIgnoreFillAttr(TRUE);
+                if (rView.IsLineDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+                if (rView.IsFillDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
                 if (rView.IsTextDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
                 if (rView.IsGrafDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
             } else {
-                if (rView.IsLineDraft()) pXOut->SetIgnoreLineAttr(TRUE);
-                if (rView.IsFillDraft()) pXOut->SetIgnoreFillAttr(TRUE);
+                if (rView.IsLineDraft()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+                if (rView.IsFillDraft()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
                 if (rView.IsTextDraft()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
                 if (rView.IsGrafDraft()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
                 if (rView.IsHideGrafDraft()) nPaintMode|=SDRPAINTMODE_HIDEDRAFTGRAF;
@@ -1520,9 +1520,6 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
 
             // Zeichnen
             pPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
-
-            pXOut->SetIgnoreLineAttr(FALSE);
-            pXOut->SetIgnoreFillAttr(FALSE);
             pXOut->SetOffset(Point(0,0));
 
             if (!bPrinter) { // Raster und Hilfslinien malen
@@ -2028,13 +2025,13 @@ void SdrPageView::RedrawOneLayer(SdrLayerID nId, const Rectangle& rRect, OutputD
             aInfoRec.pPaintProc=pPaintProc;
 
             if (bPrinter) {
-                if (rView.IsLineDraftPrn()) pXOut->SetIgnoreLineAttr(TRUE);
-                if (rView.IsFillDraftPrn()) pXOut->SetIgnoreFillAttr(TRUE);
+                if (rView.IsLineDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+                if (rView.IsFillDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
                 if (rView.IsTextDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
                 if (rView.IsGrafDraftPrn()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
             } else {
-                if (rView.IsLineDraft()) pXOut->SetIgnoreLineAttr(TRUE);
-                if (rView.IsFillDraft()) pXOut->SetIgnoreFillAttr(TRUE);
+                if (rView.IsLineDraft()) nPaintMode|=SDRPAINTMODE_DRAFTLINE;
+                if (rView.IsFillDraft()) nPaintMode|=SDRPAINTMODE_DRAFTFILL;
                 if (rView.IsTextDraft()) nPaintMode|=SDRPAINTMODE_DRAFTTEXT;
                 if (rView.IsGrafDraft()) nPaintMode|=SDRPAINTMODE_DRAFTGRAF;
                 if (rView.IsHideGrafDraft()) nPaintMode|=SDRPAINTMODE_HIDEDRAFTGRAF;
@@ -2049,9 +2046,6 @@ void SdrPageView::RedrawOneLayer(SdrLayerID nId, const Rectangle& rRect, OutputD
             }
 
             pPage->Paint(*pXOut,aInfoRec,rView.bRestoreColors);
-
-            pXOut->SetIgnoreLineAttr(FALSE);
-            pXOut->SetIgnoreFillAttr(FALSE);
             pXOut->SetOffset(Point(0,0));
         }
         if (bTextEdit)

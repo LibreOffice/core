@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,8 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 
 static double SMALLEST_DASH_WIDTH(26.95);
 
-LineStyleParameterPack::LineStyleParameterPack(const SfxItemSet& rSet, BOOL bForceHair, OutputDevice& rOut)
+LineStyleParameterPack::LineStyleParameterPack(const SfxItemSet& rSet,
+    BOOL bForceHair, OutputDevice& rOut)
 :   mrOut(rOut),
     rStartPolygon(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetValue()),
     rEndPolygon(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetValue()),
@@ -1039,7 +1040,8 @@ void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
 
         if(nCount)
         {
-            if(!mrLineAttr.GetLineWidth() && mrLineAttr.GetLineStyle() == XLINE_SOLID)
+            if(!mrLineAttr.GetLineWidth()
+                && (mbLineDraft || mrLineAttr.GetLineStyle() == XLINE_SOLID))
             {
                 // LineWidth zero, solid line -> add directly to linePoly
                 mrPolyLine3D.Insert(aPoly);
@@ -1091,7 +1093,7 @@ void LineGeometryCreator::ImpCreateLineGeometry(const Polygon3D& rSourcePoly)
                     }
 
                     // positions are in pPrev, pLeft, pRight and pNext.
-                    if(mrLineAttr.GetLineStyle() == XLINE_DASH)
+                    if(!mbLineDraft && mrLineAttr.GetLineStyle() == XLINE_DASH)
                         ImpCreateSegmentsForLine(pPrev, pLeft, pRight, pNext, fPolyPos);
                     else
                         ImpCreateLineSegment(pPrev, pLeft, pRight, pNext);
@@ -1408,7 +1410,8 @@ FASTBOOL SdrObject::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfo
     return TRUE;
 }
 
-void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut, BOOL bForceHair) const
+void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut,
+    BOOL bForceHair, BOOL bIsLineDraft) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon;
@@ -1417,8 +1420,8 @@ void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPoly
     // get LineStyleParameterPack
     SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
     TakeAttributes(aSet, FALSE, TRUE);
-    LineStyleParameterPack aLineAttr(aSet, bForceHair, rOut);
-    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine);
+    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
+    LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
 
     // compute single lines
     for(UINT16 a=0;a<aTmpPolyPolygon.Count();a++)
@@ -1788,7 +1791,8 @@ void PolyPolygon3D_BuildSkeletonsAndGrow(const PolyPolygon3D& rPolyPoly)
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const SfxItemSet& rSet) const
+ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const SfxItemSet& rSet,
+    BOOL bIsLineDraft) const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
     if(eXLS != XLINE_NONE)
@@ -1809,7 +1813,8 @@ ImpLineGeometry* SdrObject::ImpPrepareLineGeometry(ExtOutputDevice& rXOut, const
             bForceTwoPixel = FALSE;
 
         // create line geometry
-        CreateLinePoly(aPolyPoly3D, aLinePoly3D, *rXOut.GetOutDev(), bForceOnePixel || bForceTwoPixel);
+        CreateLinePoly(aPolyPoly3D, aLinePoly3D, *rXOut.GetOutDev(),
+            bForceOnePixel || bForceTwoPixel, bIsLineDraft);
 
         if(aPolyPoly3D.Count() || aLinePoly3D.Count())
             return new ImpLineGeometry(aPolyPoly3D, aLinePoly3D, bForceOnePixel, bForceTwoPixel);
@@ -3512,7 +3517,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
         PolyPolygon3D aPolyPoly3D;
         PolyPolygon3D aLinePoly3D;
-        pRet->CreateLinePoly(aPolyPoly3D, aLinePoly3D, aVDev, FALSE);
+        pRet->CreateLinePoly(aPolyPoly3D, aLinePoly3D, aVDev, FALSE, FALSE);
 
         //  || aLinePoly3D.Count() removed; the conversion is ONLY
         // useful when new closed filled polygons are created

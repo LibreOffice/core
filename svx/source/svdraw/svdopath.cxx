@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,9 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
         return TRUE;
 
-    FASTBOOL bHideContour=IsHideContour();
+    BOOL bHideContour(IsHideContour());
+    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
     SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
@@ -311,7 +313,7 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
 
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(rXOut,!IsClosed()))
@@ -345,8 +347,18 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     // avoid line drawing in XOut
     rXOut.SetLineAttr(aXLSet);
 
-    if(pFillAttr && (IsClosed() || bHideContour))
-        rXOut.SetFillAttr(*pFillAttr);
+    if(bIsFillDraft)
+    {
+        // perepare ItemSet to avoid XOut filling
+        XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
+        aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
+        rXOut.SetFillAttr(aXFSet);
+    }
+    else
+    {
+        if(pFillAttr && (IsClosed() || bHideContour))
+            rXOut.SetFillAttr(*pFillAttr);
+    }
 
     if (!bHideContour) {
         if (!IsClosed()) {

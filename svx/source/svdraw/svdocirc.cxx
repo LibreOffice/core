@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,9 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
         return TRUE;
 
-    FASTBOOL bHideContour=IsHideContour();
+    BOOL bHideContour(IsHideContour());
+    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
+    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
     // prepare ItemSet of this object
     SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
@@ -338,10 +340,11 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aXLSet.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet);
+    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, aSet, bIsLineDraft);
 
     // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rXOut,eKind==OBJ_CARC)) {
+    if(!bHideContour && ImpSetShadowAttributes(rXOut,eKind==OBJ_CARC || bIsFillDraft))
+    {
         UINT32 nXDist=((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
         UINT32 nYDist=((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
 
@@ -388,8 +391,18 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     rXOut.SetLineAttr(aXLSet);
 
-    if(pFillAttr)
-        rXOut.SetFillAttr(*pFillAttr);
+    if(bIsFillDraft)
+    {
+        // perepare ItemSet to avoid XOut filling
+        XFillAttrSetItem aXFSet((SfxItemPool*)GetItemPool());
+        aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
+        rXOut.SetFillAttr(aXFSet);
+    }
+    else
+    {
+        if(pFillAttr)
+            rXOut.SetFillAttr(*pFillAttr);
+    }
 
     if (!bHideContour) {
         if (PaintNeedsXPoly()) {

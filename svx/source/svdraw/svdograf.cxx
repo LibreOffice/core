@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-27 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     if(OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() && bEmptyPresObj)
         return TRUE;
 
-    FASTBOOL      bDraft=(rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF) !=0;
+    FASTBOOL      bDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF));
     FASTBOOL      bLoading=FALSE;
     OutputDevice* pOutDev=rOut.GetOutDev();
     OutDevType    eOutDevType=pOutDev!=NULL ? pOutDev->GetOutDevType() : OUTDEV_DONTKNOW;
