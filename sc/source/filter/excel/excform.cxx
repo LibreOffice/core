@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,11 @@
  *
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
+#include "excform.hxx"
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
-
-//#include <string.h>
 
 #include "cell.hxx"
 #include "document.hxx"
@@ -78,17 +72,15 @@
 
 #include "imp_op.hxx"
 #include "root.hxx"
-#include "excform.hxx"
-#include "flttools.hxx"
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
 #ifndef SC_XINAME_HXX
 #include "xiname.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
 #endif
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;
@@ -106,7 +98,7 @@ void ImportExcel::Formula25()
 
     aIn >> nRow >> nCol;
 
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
+    if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
         BYTE nDummy;
 
@@ -237,7 +229,7 @@ ExcelToSc::~ExcelToSc()
 
 void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 {
-    aPool.Store( _STRINGCONST( "Dummy()" ) );
+    aPool.Store( CREATE_STRING( "Dummy()" ) );
     aPool >> aStack;
     pErgebnis = aPool[ aStack.Get() ];
 }
@@ -246,6 +238,7 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
+    RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen, nByte;
     UINT16          nUINT16;
     INT16           nINT16;
@@ -271,7 +264,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( _STRINGCONST( "-/-" ) );
+        aPool.Store( CREATE_STRING( "-/-" ) );
         aPool >> aStack;
         pErgebnis = aPool[ aStack.Get() ];
         return ConvOK;
@@ -294,7 +287,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x02: // Data Table                            [325 277]
                 nUINT16 = 3;
 
-                if( meBiff != xlBiff2 )
+                if( meBiff != EXC_BIFF2 )
                     nUINT16++;
 
                 aIn.Ignore( nUINT16 );
@@ -457,7 +450,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 aIn >> nOpt;
 
-                if( meBiff == xlBiff2 )
+                if( meBiff == EXC_BIFF2 )
                 {
                     nData = aIn.ReaduInt8();
                     nFakt = 1;
@@ -480,11 +473,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x1A: // External Reference                    [330    ]
                 switch( meBiff )
                 {
-                    case xlBiff2:   aIn.Ignore( 7 );    break;
-                    case xlBiff3:
-                    case xlBiff4:   aIn.Ignore( 10 );   break;
-                    case xlBiff5:
-                    case xlBiff7:
+                    case EXC_BIFF2: aIn.Ignore( 7 );    break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: aIn.Ignore( 10 );   break;
+                    case EXC_BIFF5:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
                     default:
                         DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
@@ -493,11 +485,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x1B: // End External Reference                [330    ]
                 switch( meBiff )
                 {
-                    case xlBiff2:   aIn.Ignore( 3 );    break;
-                    case xlBiff3:
-                    case xlBiff4:   aIn.Ignore( 4 );    break;
-                    case xlBiff5:
-                    case xlBiff7:
+                    case EXC_BIFF2: aIn.Ignore( 3 );    break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: aIn.Ignore( 4 );    break;
+                    case EXC_BIFF5:
                         DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
                     default:
                         DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
@@ -553,7 +544,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
             {
                 sal_uInt16 nXclFunc;
-                if( meBiff <= xlBiff3 )
+                if( meBiff <= EXC_BIFF3 )
                     nXclFunc = aIn.ReaduInt8();
                 else
                     aIn >> nXclFunc;
@@ -571,7 +562,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 sal_uInt8 nParamCount;
                 aIn >> nParamCount;
                 nParamCount &= 0x7F;
-                if( meBiff <= xlBiff3 )
+                if( meBiff <= EXC_BIFF3 )
                     nXclFunc = aIn.ReaduInt8();
                 else
                     aIn >> nXclFunc;
@@ -588,11 +579,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 aIn >> nUINT16;
                 switch( meBiff )
                 {
-                    case xlBiff2:   aIn.Ignore( 5 );    break;
-                    case xlBiff3:
-                    case xlBiff4:   aIn.Ignore( 8 );    break;
-                    case xlBiff5:
-                    case xlBiff7:   aIn.Ignore( 12 );   break;
+                    case EXC_BIFF2: aIn.Ignore( 5 );    break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: aIn.Ignore( 8 );    break;
+                    case EXC_BIFF5: aIn.Ignore( 12 );   break;
                     default:
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
@@ -683,7 +673,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( (meBiff == xlBiff2) ? 4 : 6 );
+                aIn.Ignore( (meBiff == EXC_BIFF2) ? 4 : 6 );
                 break;
             case 0x4C:
             case 0x6C:
@@ -736,7 +726,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                aIn.Ignore( (meBiff == xlBiff2) ? 1 : 2 );
+                aIn.Ignore( (meBiff == EXC_BIFF2) ? 1 : 2 );
                 break;
             case 0x58:
             case 0x78:
@@ -757,14 +747,14 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 if( nINT16 >= 0 )
                 {
                     const ExtName*  pExtName;
-                    pExtName = mpRD->pExtNameBuff->GetName( nUINT16 );
+                    pExtName = rR.pExtNameBuff->GetName( nUINT16 );
                     if( pExtName && pExtName->IsDDE() &&
-                        mpRD->pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
+                        rR.pExtSheetBuff->IsLink( ( UINT16 ) nINT16 ) )
                     {
                         String          aAppl, aExtDoc;
                         TokenId         nPar1, nPar2;
 
-                        mpRD->pExtSheetBuff->GetLink( ( UINT16 ) nINT16 , aAppl, aExtDoc );
+                        rR.pExtSheetBuff->GetLink( ( UINT16 ) nINT16 , aAppl, aExtDoc );
                         nPar1 = aPool.Store( aAppl );
                         nPar2 = aPool.Store( aExtDoc );
                         nMerk0 = aPool.Store( pExtName->aName );
@@ -799,7 +789,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 if( nExtSheet >= 0 )
                 {   // von extern
-                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -870,7 +860,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -969,6 +959,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, const FORMULA_TYPE eFT )
 {
+    RootData&       rR = GetOldRoot();
     BYTE            nOp, nLen;
     UINT16          nIgnore;
     UINT16          nUINT16;
@@ -1009,11 +1000,11 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
-                nIgnore = (meBiff == xlBiff2) ? 3 : 4;
+                nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
                 bArrayFormula = TRUE;
                 break;
             case 0x02: // Data Table                            [325 277]
-                nIgnore = (meBiff == xlBiff2) ? 3 : 4;
+                nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
                 break;
             case 0x03: // Addition                              [312 264]
             case 0x04: // Subtraction                           [313 264]
@@ -1047,7 +1038,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
 
                 aIn >> nOpt;
 
-                if( meBiff == xlBiff2 )
+                if( meBiff == EXC_BIFF2 )
                 {
                     nData = aIn.ReaduInt8();
                     nFakt = 1;
@@ -1068,22 +1059,20 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x1A: // External Reference                    [330    ]
                 switch( meBiff )
                 {
-                    case xlBiff2:   nIgnore = 7;    break;
-                    case xlBiff3:
-                    case xlBiff4:   nIgnore = 10;   break;
-                    case xlBiff5:
-                    case xlBiff7:   DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
+                    case EXC_BIFF2: nIgnore = 7;    break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: nIgnore = 10;   break;
+                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1A gibt's nicht in Biff5!" );
                     default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
             case 0x1B: // End External Reference                [330    ]
                 switch( meBiff )
                 {
-                    case xlBiff2:   nIgnore = 3;        break;
-                    case xlBiff3:
-                    case xlBiff4:   nIgnore = 4;        break;
-                    case xlBiff5:
-                    case xlBiff7:   DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
+                    case EXC_BIFF2: nIgnore = 3;        break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: nIgnore = 4;        break;
+                    case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1B gibt's nicht in Biff5!" );
                     default:        DBG_WARNING( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
@@ -1105,23 +1094,22 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x41:
             case 0x61:
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
-                nIgnore = (meBiff <= xlBiff3) ? 1 : 2;
+                nIgnore = (meBiff <= EXC_BIFF3) ? 1 : 2;
                 break;
             case 0x42:
             case 0x62:
             case 0x22: // Function, Variable Number of Arg.     [333 283]
-                nIgnore = (meBiff <= xlBiff3) ? 2 : 3;
+                nIgnore = (meBiff <= EXC_BIFF3) ? 2 : 3;
                 break;
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
                 switch( meBiff )
                 {
-                    case xlBiff2:   nIgnore = 7;    break;
-                    case xlBiff3:
-                    case xlBiff4:   nIgnore = 10;   break;
-                    case xlBiff5:
-                    case xlBiff7:   nIgnore = 14;   break;
+                    case EXC_BIFF2: nIgnore = 7;    break;
+                    case EXC_BIFF3:
+                    case EXC_BIFF4: nIgnore = 10;   break;
+                    case EXC_BIFF5: nIgnore = 14;   break;
                     default:        DBG_ERROR( "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
                 break;
@@ -1176,7 +1164,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x48:
             case 0x68:
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                nIgnore = (meBiff == xlBiff2) ? 4 : 6;
+                nIgnore = (meBiff == EXC_BIFF2) ? 4 : 6;
                 break;
             case 0x4A:
             case 0x6A:
@@ -1239,7 +1227,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
-                nIgnore = (meBiff == xlBiff2) ? 1 : 2;
+                nIgnore = (meBiff == EXC_BIFF2) ? 1 : 2;
                 break;
             case 0x58:
             case 0x78:
@@ -1266,7 +1254,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -1321,7 +1309,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
                 if( nExtSheet >= 0 )
                     // von extern
                 {
-                    if( mpRD->pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
+                    if( rR.pExtSheetBuff->GetScTabIndex( nExtSheet, nTabLast ) )
                     {
                         nTabFirst = nTabLast;
                         nExtSheet = 0;      // gefunden
@@ -1610,7 +1598,7 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen 
 
             aIn >> nRow >> nCol;
 
-            aStack << aPool.Store( mpRD->pShrfmlaBuff->Find(
+            aStack << aPool.Store( GetOldRoot().pShrfmlaBuff->Find(
                 ScAddress( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab() ) ) );
 
             bRet = TRUE;
