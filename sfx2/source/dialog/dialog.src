@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:13:19 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ CheckBox CB_USE_PASSWD
     Text [ dutch ] = "~Wachtwoord" ;
     Text [ spanish ] = "~Contraseña" ;
     Text [ english_us ] = "~Password" ;
-    Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+    Text[ chinese_simplified ] = "ÃÜÂë(~P)";
     Text[ russian ] = "Ïàğîëü";
     Text[ polish ] = "Has³o";
     Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
@@ -415,7 +415,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ dutch ] = "Wachtwoord niet juist" ;
     MESSAGE [ spanish ] = "Contraseña no válida." ;
     MESSAGE [ english_us ] = "Invalid password." ;
-    MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
+    MESSAGE[ chinese_simplified ] = "´íÎóµÄÃÜÂë¡£";
     MESSAGE[ russian ] = "Íåïğàâèëüíûé ïàğîëü.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
     MESSAGE[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ¡";
@@ -1040,7 +1040,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
     MESSAGE[ portuguese_brazilian ] = "Wrong confirmation of the password";
     MESSAGE[ japanese ] = "Êß½Ü°ÄŞ‚ÌŠm”F‚ª‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ";
     MESSAGE[ korean ] = "ÆĞ½º¿öµå È®ÀÎÀÌ Àß¸øµÇ¾ú½À´Ï´Ù.";
-    MESSAGE[ chinese_simplified ] = "È·ÈÏ¿ÚÁîÊ±³ö´í";
+    MESSAGE[ chinese_simplified ] = "È·ÈÏÃÜÂëÊ±³ö´í";
     MESSAGE[ chinese_traditional ] = "Åçµı±K½XµL®Ä";
     MESSAGE[ arabic ] = "ÊÃßíÏ ÛíÑ ÕÍíÍ áßáãÉ ÇáÓÑ";
     MESSAGE[ turkish ] = "Şifre onayı hatalı";
