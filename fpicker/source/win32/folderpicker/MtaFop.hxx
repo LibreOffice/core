@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-10 14:45:06 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 08:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,12 @@ public:
     virtual void SAL_CALL setTitle( const rtl::OUString& aTitle );
     rtl::OUString  SAL_CALL getTitle( );
 
+    //-----------------------------------------------------
+    // XCancellable
+    //-----------------------------------------------------
+
+    virtual void SAL_CALL cancel( );
+
 protected:
     void SAL_CALL enableOk( sal_Bool bEnable );
     void SAL_CALL setSelection( const rtl::OUString& aDirectory );
@@ -200,7 +206,6 @@ private:
     unsigned                    m_uStaThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndStaRequestWnd;
-    HWND                        m_hwndFolderPicker;
     rtl::OUString               m_dialogTitle;
     rtl::OUString               m_Description;
     rtl::OUString               m_displayDir;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-11 09:18:11 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 08:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_hStaThread( NULL ),
     m_uStaThreadId( 0 ),
     m_hEvtThrdReady( NULL ),
-    m_hwndStaRequestWnd( NULL ),
-    m_hwndFolderPicker( NULL )
+    m_hwndStaRequestWnd( NULL )
 {
     m_hInstance = GetModuleHandleA( FOLDERPICKER_SRV_DLL_NAME );
     OSL_ENSURE( m_hInstance, "The name of the FolderPicker service dll must have changed" );
@@ -399,6 +398,24 @@ void SAL_CALL CMtaFolderPicker::setTitle( const OUString& aTitle )
 OUString SAL_CALL CMtaFolderPicker::getTitle( )
 {
     return m_dialogTitle;
+}
+
+//-----------------------------------------------------
+// XCancellable
+//-----------------------------------------------------
+
+void SAL_CALL CMtaFolderPicker::cancel( )
+{
+    if ( IsWindow( m_hwnd ) )
+    {
+        // simulate a mouse click to the
+        // cancel button
+        PostMessageA(
+            m_hwnd,
+            WM_COMMAND,
+            MAKEWPARAM( IDCANCEL, BN_CLICKED ),
+            (LPARAM)GetDlgItem( m_hwnd, IDCANCEL ) );
+    }
 }
 
 //--------------------------------------------------------------------

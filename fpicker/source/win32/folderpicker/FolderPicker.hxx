@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderPicker.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:15:44 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 08:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  includes of other projects
 //---------------------------------------------------------
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -82,6 +82,10 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
+#include <com/sun/star/util/XCancellable.hpp>
+#endif
+
 #include <memory>
 
 #ifndef _FPIMPLBASE_HXX_
@@ -93,9 +97,10 @@
 //----------------------------------------------------------
 
 class CFolderPicker :
-    public  cppu::WeakImplHelper2<
+    public  cppu::WeakImplHelper3<
                 com::sun::star::ui::dialogs::XFolderPicker,
-                com::sun::star::lang::XServiceInfo >
+                com::sun::star::lang::XServiceInfo,
+                com::sun::star::util::XCancellable >
 {
 public:
 
@@ -140,6 +145,12 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XCancellable
+    //------------------------------------------------
+
+    virtual void SAL_CALL cancel( );
 
     //------------------------------------------------
     // overwrite base class method, which is called
