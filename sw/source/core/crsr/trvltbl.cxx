@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:04:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,9 +437,22 @@ FASTBOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         FASTBOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
+
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
     if( pTblNd )
-        aIdx.Assign( *pTblNd, - 1 );
+    {
+        // #i26532#: If we are inside a table, we may not go backward
+        // to the table start node, because we would miss any tables
+        // inside this table.
+        SwTableNode* pInnerTblNd = 0;
+        SwNodeIndex aTmpIdx( aIdx );
+        while( aTmpIdx.GetIndex() &&
+                0 == ( pInnerTblNd = aTmpIdx.GetNode().FindStartNode()->GetTableNode()) )
+            aTmpIdx--;
+
+        if( pInnerTblNd == pTblNd )
+            aIdx.Assign( *pTblNd, - 1 );
+    }
 
     do {
         while( aIdx.GetIndex() &&
