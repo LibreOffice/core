@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-12 12:41:50 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,19 @@ public class ParcelZipper
 
     private boolean isDirectoryOverwriteNeeded(File parcel, File target) {
         String parcelDir = getParcelDirFromParcelZip(parcel.getName());
-        File[] children = target.listFiles();
+
+        File langdir;
+        try {
+            langdir = new File(target, getParcelLanguage(parcel));
+        }
+        catch (IOException ioe) {
+            return false;
+        }
+
+        if (langdir.exists() == false)
+            return false;
+
+        File[] children = langdir.listFiles();
 
         for (int i = 0; i < children.length; i++)
             if (children[i].getName().equals(parcelDir))
