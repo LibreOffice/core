@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerucb.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:23:55 $
+ *  last change: $Author: sb $ $Date: 2001-02-06 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ struct ContentProviderRegistrationInfo;
     @param pInfo  If not null, this output parameter is filled with
     information about the (atemptively) registered provider.
  */
-void
+bool
 registerAtUcb(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerucb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-15 13:40:44 $
+ *  last change: $Author: sb $ $Date: 2001-02-06 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace ucb {
 //
 //============================================================================
 
-void
+bool
 registerAtUcb(
     uno::Reference< star::ucb::XContentProviderManager > const & rManager,
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
@@ -119,26 +119,27 @@ registerAtUcb(
                                    copy(RTL_CONSTASCII_LENGTH("{noproxy}")) :
                                rArguments);
 
-    uno::Reference< star::ucb::XContentProviderFactory > xProxyFactory;
+    // First, try to instantiate proxy for provider:
+    uno::Reference< star::ucb::XContentProvider > xProvider;
     if (!bNoProxy)
+    {
+        uno::Reference< star::ucb::XContentProviderFactory > xProxyFactory;
         try
         {
             xProxyFactory
                 = uno::Reference< star::ucb::XContentProviderFactory >(
                       rServiceFactory->
                           createInstance(
-                              rtl::OUString::createFromAscii(
-                                  "com.sun.star.ucb."
-                                      "ContentProviderProxyFactory")),
+                              rtl::OUString(
+                                  RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.ucb.ContentProviderProxyFactory"))),
                       uno::UNO_QUERY);
         }
-        catch (uno::RuntimeException const &) { throw; }
         catch (uno::Exception const &) {}
-
-    // First, try to instantiate proxy for provider:
-    uno::Reference< star::ucb::XContentProvider > xProvider;
-    if (xProxyFactory.is())
-        xProvider = xProxyFactory->createContentProvider(rName);
+        VOS_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
+        if (xProxyFactory.is())
+            xProvider = xProxyFactory->createContentProvider(rName);
+    }
 
     // Then, try to instantiate provider directly:
     if (!xProvider.is())
@@ -160,10 +161,9 @@ registerAtUcb(
         uno::Reference< star::ucb::XContentProvider > xInstance;
         try
         {
-            xInstance
-                = xParameterized->registerInstance(rTemplate,
-                                                   aProviderArguments,
-                                                   true);
+            xInstance = xParameterized->registerInstance(rTemplate,
+                                                         aProviderArguments,
+                                                         true);
                 //@@@ if this call replaces an old instance, the commit-or-
                 // rollback code below will not work
         }
@@ -173,10 +173,12 @@ registerAtUcb(
             xProvider = xInstance;
     }
 
+    bool bSuccess = false;
     if (rManager.is() && xProvider.is())
         try
         {
             rManager->registerContentProvider(xProvider, rTemplate, true);
+            bSuccess = true;
         }
         catch (star::ucb::DuplicateProviderException const &)
         {
@@ -187,7 +189,6 @@ registerAtUcb(
                                                        aProviderArguments);
                 }
                 catch (lang::IllegalArgumentException const &) {}
-            xOriginalProvider = 0;
         }
         catch (...)
         {
@@ -198,15 +199,17 @@ registerAtUcb(
                                                        aProviderArguments);
                 }
                 catch (lang::IllegalArgumentException const &) {}
+                catch (uno::RuntimeException const &) {}
             throw;
         }
 
-    if (pInfo)
+    if (bSuccess && pInfo)
     {
         pInfo->m_xProvider = xOriginalProvider;
         pInfo->m_aArguments = aProviderArguments;
         pInfo->m_aTemplate = rTemplate;
     }
+    return bSuccess;
 }
 
 //============================================================================
@@ -240,7 +243,7 @@ deregisterFromUcb(
             xProvider = xInstance;
     }
 
-    if (rManager.is() && xProvider.is())
+    if (rManager.is())
         rManager->deregisterContentProvider(xProvider, rInfo.m_aTemplate);
             //@@@ if this fails, a roll-back of deregisterInstance() is
             // missing

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configureucb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:23:55 $
+ *  last change: $Author: sb $ $Date: 2001-02-06 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,16 +218,15 @@ configureUcb(
                              &aProviderArguments))
         {
             ContentProviderRegistrationInfo aInfo;
-            registerAtUcb(rManager,
-                          rServiceFactory,
-                          aIt->ServiceName,
-                          aProviderArguments,
-                          aIt->URLTemplate,
-                          &aInfo);
-            VOS_ENSURE(aInfo.m_xProvider.is(),
-                       "ucb::configureUcb(): Bad content provider");
+            bool bSuccess = registerAtUcb(rManager,
+                                          rServiceFactory,
+                                          aIt->ServiceName,
+                                          aProviderArguments,
+                                          aIt->URLTemplate,
+                                          &aInfo);
+            VOS_ENSURE(bSuccess, "ucb::configureUcb(): Bad content provider");
 
-            if (pInfos)
+            if (bSuccess && pInfos)
                 pInfos->push_back(aInfo);
         }
         else
