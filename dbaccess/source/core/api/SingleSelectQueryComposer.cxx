@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:01:24 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,24 +294,24 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& comma
 // -----------------------------------------------------------------------------
 void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
 {
-    const OSQLParseNode* pSqlParseNode = m_aSqlIterator.getParseTree();
-    m_aSqlIterator.setParseTree(NULL);
-    delete pSqlParseNode;
-
     ::rtl::OUString aErrorMsg;
-    pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,command);
-    if ( !pSqlParseNode )
+    const OSQLParseNode* pNewSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,command);
+    if ( !pNewSqlParseNode )
     {
         SQLException aError2(aErrorMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
         SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError2));
         throw SQLException(m_aSqlParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
     }
 
-    m_aSqlIterator.setParseTree(pSqlParseNode);
+    const OSQLParseNode* pSqlParseNode = m_aSqlIterator.getParseTree();
+    m_aSqlIterator.setParseTree(NULL);
+    delete pSqlParseNode;
+
+    m_aSqlIterator.setParseTree(pNewSqlParseNode);
     m_aSqlIterator.traverseAll();
     if ((   m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT
         &&  m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
-        ||  SQL_ISRULE(pSqlParseNode,union_statement) ) // #i4229# OJ
+        ||  SQL_ISRULE(pNewSqlParseNode,union_statement) ) // #i4229# OJ
     {
         SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
         throw SQLException(DBACORE_RESSTRING(RID_STR_ONLY_QUERY),*this,
@@ -319,10 +319,10 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
     }
 
     m_aWorkSql = STR_SELECT;
-    pSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
-    pSqlParseNode->getChild(2)->parseNodeToStr(m_aWorkSql,m_xMetaData);
+    pNewSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
+    pNewSqlParseNode->getChild(2)->parseNodeToStr(m_aWorkSql,m_xMetaData);
     m_aWorkSql += STR_FROM;
-    pSqlParseNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
+    pNewSqlParseNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
 
     getColumns();
     getTables();
@@ -666,6 +666,8 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                                         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     pColumn->setRealName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_REALNAME)));
                                     pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
+                                    pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))));
+                                    pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction")))));
                                     (*aCols)[i-1] = pColumn;
                                 }
                             }
@@ -822,6 +824,9 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
         case SQL_NODE_EQUAL:
             nPredicate = SQLFilterOperator::EQUAL;
             break;
+        case SQL_NODE_NOTEQUAL:
+            nPredicate = SQLFilterOperator::NOT_EQUAL;
+            break;
         case SQL_NODE_LESS:
             nPredicate = SQLFilterOperator::LESS;
             break;
@@ -875,6 +880,10 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                     // don't display the equal
                     i--;
                     aItem.Handle = SQLFilterOperator::EQUAL;
+                    break;
+                case SQL_NODE_NOTEQUAL:
+                    i--;
+                    aItem.Handle = SQLFilterOperator::NOT_EQUAL;
                     break;
                 case SQL_NODE_LESS:
                     // take the opposite as we change the order
@@ -1163,64 +1172,67 @@ namespace
         const Sequence< PropertyValue >* pOrEnd = pOrIter + filter.getLength();
         while ( pOrIter != pOrEnd )
         {
-            sRet += L_BRACKET;
-            const PropertyValue* pAndIter = pOrIter->getConstArray();
-            const PropertyValue* pAndEnd = pAndIter + pOrIter->getLength();
-            while ( pAndIter != pAndEnd )
+            if ( pOrIter->getLength() )
             {
-                sRet += pAndIter->Name;
-                ::rtl::OUString sValue;
-                pAndIter->Value >>= sValue;
-                switch( pAndIter->Handle )
+                sRet += L_BRACKET;
+                const PropertyValue* pAndIter = pOrIter->getConstArray();
+                const PropertyValue* pAndEnd = pAndIter + pOrIter->getLength();
+                while ( pAndIter != pAndEnd )
                 {
-                    case SQLFilterOperator::EQUAL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::NOT_EQUAL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <> "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::LESS:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" < "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::GREATER:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" > "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::LESS_EQUAL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <= "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::GREATER_EQUAL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" >= "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::LIKE:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::NOT_LIKE:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT LIKE "));
-                        sRet += sValue;
-                        break;
-                    case SQLFilterOperator::SQLNULL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) ;
-                        break;
-                    case SQLFilterOperator::NOT_SQLNULL:
-                        sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NOT NULL")) ;
-                        break;
-                    default:
-                        throw IllegalArgumentException();
+                    sRet += pAndIter->Name;
+                    ::rtl::OUString sValue;
+                    pAndIter->Value >>= sValue;
+                    switch( pAndIter->Handle )
+                    {
+                        case SQLFilterOperator::EQUAL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::NOT_EQUAL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <> "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::LESS:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" < "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::GREATER:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" > "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::LESS_EQUAL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <= "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::GREATER_EQUAL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" >= "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::LIKE:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::NOT_LIKE:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT LIKE "));
+                            sRet += sValue;
+                            break;
+                        case SQLFilterOperator::SQLNULL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) ;
+                            break;
+                        case SQLFilterOperator::NOT_SQLNULL:
+                            sRet += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NOT NULL")) ;
+                            break;
+                        default:
+                            throw IllegalArgumentException();
+                    }
+                    ++pAndIter;
+                    if ( pAndIter != pAndEnd )
+                        sRet += STR_AND;
                 }
-                ++pAndIter;
-                if ( pAndIter != pAndEnd )
-                    sRet += STR_AND;
+                sRet += R_BRACKET;
             }
-            sRet += R_BRACKET;
             ++pOrIter;
-            if ( pOrIter != pOrEnd )
+            if ( pOrIter != pOrEnd && sRet.getLength() )
                 sRet += STR_OR;
         }
         return sRet;
@@ -1269,6 +1281,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"))),"Property AggregateFunctionnot available!");
 
         ::rtl::OUString sRealName,sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
@@ -1282,9 +1295,15 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
-        aSql =  sTableName;
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-        aSql += ::dbtools::quoteName(aQuote,sRealName);
+        if ( !::comphelper::getBOOL(xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))) )
+        {
+            aSql =  sTableName;
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+            aSql += ::dbtools::quoteName(aQuote,sRealName);
+        }
+        else
+            aSql += sRealName;
+
     }
     else
         aSql = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
