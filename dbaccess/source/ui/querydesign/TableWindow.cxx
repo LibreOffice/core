@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 12:28:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
 //------------------------------------------------------------------------------
 OTableWindow::~OTableWindow()
 {
+    DBG_DTOR(OTableWindow,NULL);
     Reference<XComponent> xComponent(m_xTable,UNO_QUERY);
     if(xComponent.is())
         stopComponentListening(xComponent);
@@ -199,7 +200,6 @@ OTableWindow::~OTableWindow()
         m_pListBox = NULL;
     }
     m_pAccessible = NULL;
-    DBG_DTOR(OTableWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 const OJoinTableView* OTableWindow::getTableView() const
@@ -289,7 +289,7 @@ BOOL OTableWindow::FillListBox()
                         xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                         if(KeyType::PRIMARY == nKeyType)
                         {
-                            xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                            xColumnsSupplier.set(xProp,UNO_QUERY);
                             break;
                         }
                     }
