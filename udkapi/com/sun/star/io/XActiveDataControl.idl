@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActiveDataControl.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,12 @@ module com {  module sun {  module star {  module io {
     <p>This interface should be supported by objects which implement
     <type>XActiveDataSource</type> or <type>XActiveDataSink</type>.</p>
  */
-interface XActiveDataControl: com::sun::star::uno::XInterface
+published interface XActiveDataControl: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataControl::addListener
     /** registers an object to receive events from this data source.
-
        <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
      */
