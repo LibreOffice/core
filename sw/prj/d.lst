@@ -1,5 +1,13 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\sw
+mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal
+mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar
+
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
@@ -11,3 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\sw
 ..\%__SRC%\bin\sw?????.res %_DEST%\bin%_EXT%\sw?????.res
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+
+..\uiconfig\swriter\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\swriter\menubar\*.xml
+..\uiconfig\sweb\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sweb\menubar\*.xml
+..\uiconfig\sglobal\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar\*.xml
