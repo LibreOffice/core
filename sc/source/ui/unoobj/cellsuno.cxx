@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-26 10:14:20 $
+ *  last change: $Author: dr $ $Date: 2002-07-17 16:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4883,6 +4883,8 @@ void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
             ScDocFunc aFunc(*pDocSh);
             aFunc.AutoFormat( aRange, NULL, nIndex, TRUE, TRUE );
         }
+        else
+            throw lang::IllegalArgumentException();
     }
 }
 
