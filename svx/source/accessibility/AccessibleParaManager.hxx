@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,12 @@ namespace accessibility
         AccessibleParaManager();
         ~AccessibleParaManager();
 
-        // changing the state of the AccessibleParaManager itself
+        /** Set the number of paragraphs
+
+            @param nNumPara
+            The total number of paragraphs the EditEngine currently
+            has (_not_ the number of currently visible children)
+         */
         void SetNum( sal_Int32 nNumParas );
 
         // iterators
@@ -221,10 +226,12 @@ namespace accessibility
         sal_Bool IsReferencable( sal_Int32 nChild ) const;
         static void ShutdownPara( const WeakChild& rChild );
 
-        Child GetChild( sal_Int32                                                                                       nChild,
-                        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xFrontEnd,
-                        SvxEditSourceAdapter&                                                                           rEditSource,
-                        sal_Int32                                                                                       nParagraphIndex );
+        Child CreateChild( sal_Int32                                                                                        nChild,
+                           const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xFrontEnd,
+                           SvxEditSourceAdapter&                                                                            rEditSource,
+                           sal_Int32                                                                                        nParagraphIndex );
+
+        WeakChild GetChild( sal_Int32 nParagraphIndex );
 
         // forwarder to all paragraphs
         void SetEEOffset        ( const Point& rOffset );
@@ -238,9 +245,16 @@ namespace accessibility
                         const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
                         const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
-        // functor adapter for ForEach template, accessing only the
-        // paragraph object and hiding the fact that our children are
-        // held weakly
+        /** Functor adapter for ForEach template
+
+            Adapts giving functor such that only the paragraph objects
+            are accessed and the fact that our children are held
+            weakly is hidden
+
+            The functor must provide the following method:
+            void operator() ( AccessibleEditablePara& )
+
+        */
         template < typename Functor > class WeakChildAdapter : public ::std::unary_function< const WeakChild&, void >
         {
         public:
@@ -258,8 +272,39 @@ namespace accessibility
             Functor& mrFunctor;
         };
 
-        // generic algorithm on given paragraphs (non-mutating, i.e. the
-        // original vector is unchanged). convenience.
+        /** Adapter for unary member functions
+
+            Since STL's binder don't work with const& arguments (and
+            BOOST's neither, at least on MSVC), have to provide our
+            own adapter for unary member functions.
+
+            Create with pointer to member function of
+            AccessibleEditableTextPara and the corresponding argument.
+         */
+        template < typename Argument > class MemFunAdapter : public ::std::unary_function< const WeakChild&, void >
+        {
+        public:
+            typedef void (accessibility::AccessibleEditableTextPara::*FunctionPointer)( Argument );
+
+            MemFunAdapter( FunctionPointer aFunPtr, Argument aArg ) : maFunPtr(aFunPtr), maArg(aArg) {}
+            void operator()( const WeakChild& rPara )
+            {
+                // retrieve hard reference from weak one
+                WeakPara::HardRefType aHardRef( rPara.first.get() );
+
+                if( aHardRef.is() )
+                    (*aHardRef.*maFunPtr)( maArg );
+            }
+
+        private:
+            FunctionPointer maFunPtr;
+            Argument maArg;
+        };
+
+        /** Generic algorithm on given paragraphs
+
+            Convenience method, that already adapts the given functor with WeakChildAdapter
+        */
         template < typename Functor > void ForEach( Functor& rFunctor )
         {
             ::std::for_each( begin(), end(), WeakChildAdapter< Functor >(rFunctor) );

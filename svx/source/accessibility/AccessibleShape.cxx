@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:10:58 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@ void AccessibleShape::Init (void)
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine
     // accessible.
-#if 0
     SdrView* pView = maShapeTreeInfo.GetSdrView ();
     const Window* pWindow = maShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL)
@@ -207,7 +206,6 @@ void AccessibleShape::Init (void)
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
-#endif
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 17:34:57 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,13 @@ namespace accessibility
         mxParent( rParent ),
         maStateListeners( maMutex )
     {
+        // Create the state set.
+        ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
+        mxStateSet = pStateSet;
+
+        // these are always on
+        pStateSet->AddState( AccessibleStateType::MULTILINE );
+        pStateSet->AddState( AccessibleStateType::FOCUSABLE );
     }
 
     AccessibleEditableTextPara::~AccessibleEditableTextPara()
@@ -181,35 +188,34 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
     {
-        sal_Int32 nOldIndex = mnParagraphIndex;
-
-        if( nOldIndex != nIndex )
-        {
-            // index and therefore description changed
-            LostPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
-            LostPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
-        }
-
-        mnParagraphIndex = nIndex;
+        uno::Any aOldDesc;
+        uno::Any aOldName;
 
         try
         {
-            if( HaveChildren() )
-            {
-                WeakBullet::HardRefType aChild( maImageBullet.get() );
+            aOldDesc <<= getAccessibleDescription();
+            aOldName <<= getAccessibleName();
+        }
+        catch( const uno::Exception& ) {} // optional behaviour
 
-                if( aChild.is() )
-                    aChild->SetParagraphIndex(mnParagraphIndex);
+        sal_Int32 nOldIndex = mnParagraphIndex;
+
+        mnParagraphIndex = nIndex;
+
+        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        if( aChild.is() )
+            aChild->SetParagraphIndex(mnParagraphIndex);
+
+        try
+        {
+            if( nOldIndex != nIndex )
+            {
+                // index and therefore description changed
+                FireEvent( AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT, uno::makeAny( getAccessibleDescription() ), aOldDesc );
+                FireEvent( AccessibleEventId::ACCESSIBLE_NAME_EVENT, uno::makeAny( getAccessibleName() ), aOldName );
             }
         }
-        catch( const uno::RuntimeException& ) {}
-
-        if( nOldIndex != nIndex )
-        {
-            // index and therefore description changed
-            GotPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
-            GotPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
-        }
+        catch( const uno::Exception& ) {} // optional behaviour
     }
 
     sal_Int32 AccessibleEditableTextPara::GetParagraphIndex() const throw (uno::RuntimeException)
@@ -219,24 +225,21 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
+        SvxEditSource* pOldEditSource = mpEditSource;
+
         mpEditSource = pEditSource;
 
-        try
-        {
-            if( HaveChildren() )
-            {
-                WeakBullet::HardRefType aChild( maImageBullet.get() );
-
-                if( aChild.is() )
-                    aChild->SetEditSource(pEditSource);
-            }
-        }
-        catch( const uno::RuntimeException& ) {}
+        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        if( aChild.is() )
+            aChild->SetEditSource(pEditSource);
 
         if( !mpEditSource )
         {
             // going defunc
-            FireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            UnSetState( AccessibleStateType::SHOWING );
+            UnSetState( AccessibleStateType::VISIBLE );
+            SetState( AccessibleStateType::INVALID );
+            SetState( AccessibleStateType::DEFUNC );
 
             try
             {
@@ -245,7 +248,15 @@ namespace accessibility
                 lang::EventObject aEvent (xThis);
                 maStateListeners.disposeAndClear( aEvent );
             }
-            catch( const uno::RuntimeException& ) {}
+            catch( const uno::Exception& ) {}
+        }
+        else if( !pOldEditSource )
+        {
+            // going alive
+            UnSetState( AccessibleStateType::DEFUNC );
+            UnSetState( AccessibleStateType::INVALID );
+            SetState( AccessibleStateType::VISIBLE );
+            SetState( AccessibleStateType::SHOWING );
         }
     }
 
@@ -464,13 +475,9 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
     {
-        if( HaveChildren() )
-        {
-            WeakBullet::HardRefType aChild( maImageBullet.get() );
-
-            if( aChild.is() )
-                aChild->SetEEOffset(rOffset);
-        }
+        WeakBullet::HardRefType aChild( maImageBullet.get() );
+        if( aChild.is() )
+            aChild->SetEEOffset(rOffset);
 
         maEEOffset = rOffset;
     }
@@ -493,7 +500,7 @@ namespace accessibility
                 {
                     xListener->notifyEvent( aEvent );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const uno::Exception& )
                 {
 #ifdef DBG_UTIL
                     DBG_ERROR("AccessibleEditableTextPara::FireEvent: Caught runtime exception from listener, removing object (bridge/listener dead?)");
@@ -511,6 +518,28 @@ namespace accessibility
     void AccessibleEditableTextPara::LostPropertyEvent( const uno::Any& rOldValue, const sal_Int16 nEventId ) const
     {
         FireEvent( nEventId, uno::Any(), rOldValue );
+    }
+
+    void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if( pStateSet != NULL &&
+            !pStateSet->contains(nStateId) )
+        {
+            pStateSet->AddState( nStateId );
+            GotPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
+    }
+
+    void AccessibleEditableTextPara::UnSetState( const sal_Int16 nStateId )
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if( pStateSet != NULL &&
+            pStateSet->contains(nStateId) )
+        {
+            pStateSet->RemoveState( nStateId );
+            LostPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
     }
 
     uno::Any SAL_CALL AccessibleEditableTextPara::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
@@ -664,45 +693,13 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        utl::AccessibleStateSetHelper* aStateSet = new utl::AccessibleStateSetHelper();
-        uno::Reference< XAccessibleStateSet > xStateSet( static_cast< cppu::OWeakObject* > (aStateSet), uno::UNO_QUERY );
+        // Create a copy of the state set and return it.
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        // are we defunc?
-        if( !mpEditSource )
-        {
-            aStateSet->AddState( AccessibleStateType::DEFUNC );
-            aStateSet->AddState( AccessibleStateType::INVALID );
-        }
+        if( !pStateSet )
+            return uno::Reference<XAccessibleStateSet>();
 
-        // are we editable?
-        if( IsActive() )
-        {
-            aStateSet->AddState( AccessibleStateType::ACTIVE );
-            aStateSet->AddState( AccessibleStateType::SELECTED );
-            aStateSet->AddState( AccessibleStateType::EDITABLE );
-        }
-
-        if( isFocusTraversable() )
-        {
-            aStateSet->AddState( AccessibleStateType::FOCUSABLE );
-        }
-
-        // TODO: handle focus state
-        // AccessibleStateType::FOCUSED
-
-        // these are always on
-        aStateSet->AddState( AccessibleStateType::MULTILINE );
-        // meaningful only for XAccessibleSelection interface
-        // aStateSet->AddState( AccessibleStateType::SELECTABLE );
-
-        // are we visible?
-        if( IsVisible() )
-        {
-            aStateSet->AddState( AccessibleStateType::SHOWING );
-            aStateSet->AddState( AccessibleStateType::VISIBLE );
-        }
-
-        return xStateSet;
+        return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*pStateSet) );
     }
 
     lang::Locale SAL_CALL AccessibleEditableTextPara::getLocale() throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
@@ -743,21 +740,39 @@ namespace accessibility
         return aRect.IsInside( aPoint );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAt( const awt::Point& aPoint ) throw (uno::RuntimeException)
+    uno::Reference< XAccessible > SAL_CALL AccessibleEditableTextPara::getAccessibleAt( const awt::Point& _aPoint ) throw (uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         if( HaveChildren() )
         {
-            // create accessible object for bitmap bullet
-            // TODO
-            return uno::Reference< XAccessible >();
+            // make given position relative
+            Point aPoint( _aPoint.X, _aPoint.Y );
+            awt::Point aRefPoint = getLocationOnScreen();
+            aPoint -= Point( aRefPoint.X, aRefPoint.Y );
+
+            // respect EditEngine offset to surrounding shape/cell
+            aPoint -= GetEEOffset();
+
+            // convert to EditEngine coordinate system
+            SvxTextForwarder& rCacheTF = GetTextForwarder();
+            Point aLogPoint( GetViewForwarder().PixelToLogic( aPoint, rCacheTF.GetMapMode() ) );
+
+            EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( static_cast< USHORT > (GetParagraphIndex()) );
+
+            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+                aBulletInfo.bVisible &&
+                aBulletInfo.nType == SVX_NUM_BITMAP )
+            {
+                Rectangle aRect = aBulletInfo.aBounds;
+
+                if( aRect.IsInside( aLogPoint ) )
+                    return getAccessibleChild(0);
+            }
         }
-        else
-        {
-            // as we have no children, empty reference
-            return uno::Reference< XAccessible >();
-        }
+
+        // no children at all, or none at given position
+        return uno::Reference< XAccessible >();
     }
 
     awt::Rectangle SAL_CALL AccessibleEditableTextPara::getBounds() throw (uno::RuntimeException)
@@ -1162,16 +1177,14 @@ namespace accessibility
 
         switch( aTextType )
         {
-            case AccessibleTextType::GLYPH:
-                // TODO
-                break;
-
             case AccessibleTextType::ATTRIBUTE_RUN:
                 // GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
                 // beware: array is sorted in start positions, the end positions can overlap!
                 // TODO
                 break;
 
+            case AccessibleTextType::GLYPH:
+                // TODO: CTL?
             case AccessibleTextType::CHARACTER:
                 aRetVal = String( getCharacter( nIndex ) );
                 break;
@@ -1233,14 +1246,12 @@ namespace accessibility
 
         switch( aTextType )
         {
-            case AccessibleTextType::GLYPH:
-                // TODO
-                break;
-
             case AccessibleTextType::ATTRIBUTE_RUN:
                 // TODO
                 break;
 
+            case AccessibleTextType::GLYPH:
+                // TODO: CTL?
             case AccessibleTextType::CHARACTER:
                 aRetVal = nIndex > 0 ? String(getCharacter( nIndex-1 )) : String();
                 break;
@@ -1326,14 +1337,12 @@ namespace accessibility
 
         switch( aTextType )
         {
-            case AccessibleTextType::GLYPH:
-                // TODO
-                break;
-
             case AccessibleTextType::ATTRIBUTE_RUN:
                 // TODO
                 break;
 
+            case AccessibleTextType::GLYPH:
+                // TODO: CTL?
             case AccessibleTextType::CHARACTER:
                 aRetVal = nIndex < nTextLen-1 ? String(getCharacter( nIndex+1 )) : String();
                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-23 10:04:33 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,16 +246,9 @@ namespace accessibility
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
         void LostPropertyEvent( const ::com::sun::star::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
 
-        /** Query the visibility state
-
-            @attention This method does not lock the SolarMutex,
-            leaving that to the calling code. This is because only
-            there potential deadlock situations can be resolved. Thus,
-            make sure SolarMutex is locked when calling this.
-
-            @return the visibility state. Per definition, a defunc object is no longer visible
-         */
-        sal_Bool IsVisible() const;
+        // maintain state set and send STATE_CHANGE events
+        void SetState( const sal_Int16 nStateId );
+        void UnSetState( const sal_Int16 nStateId );
 
         SvxEditSource& GetEditSource() const throw (::com::sun::star::uno::RuntimeException);
 
@@ -290,6 +283,9 @@ namespace accessibility
 
         // the offset of the underlying EditEngine from the shape/cell (guarded by solar mutex)
         Point maEEOffset;
+
+        // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
         mutable osl::Mutex  maMutex;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 17:35:10 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,24 +205,13 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        utl::AccessibleStateSetHelper* aStateSet = new utl::AccessibleStateSetHelper();
-        uno::Reference< XAccessibleStateSet > xStateSet( static_cast< cppu::OWeakObject* > (aStateSet), uno::UNO_QUERY );
+        // Create a copy of the state set and return it.
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        // are we defunc?
-        if( !mpEditSource )
-        {
-            aStateSet->AddState( AccessibleStateType::DEFUNC );
-            aStateSet->AddState( AccessibleStateType::INVALID );
-        }
+        if( !pStateSet )
+            return uno::Reference<XAccessibleStateSet>();
 
-        // are we visible?
-        if( IsVisible() )
-        {
-            aStateSet->AddState( AccessibleStateType::SHOWING );
-            aStateSet->AddState( AccessibleStateType::VISIBLE );
-        }
-
-        return xStateSet;
+        return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*pStateSet) );
     }
 
     lang::Locale SAL_CALL AccessibleImageBullet::getLocale() throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
@@ -350,16 +339,19 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleImageBullet::isShowing(  ) throw (uno::RuntimeException)
     {
-        return IsVisible();
+        // TODO: remove
+        return sal_False;
     }
 
     sal_Bool SAL_CALL AccessibleImageBullet::isVisible(  ) throw (uno::RuntimeException)
     {
-        return IsVisible();
+        // TODO: remove
+        return sal_False;
     }
 
     sal_Bool SAL_CALL AccessibleImageBullet::isFocusTraversable(  ) throw (uno::RuntimeException)
     {
+        // TODO: remove
         return sal_False;
     }
 
@@ -437,12 +429,17 @@ namespace accessibility
 
     void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
     {
+        SvxEditSource* pOldEditSource = mpEditSource;
+
         mpEditSource = pEditSource;
 
         if( !mpEditSource )
         {
             // going defunc
-            FireEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            UnSetState( AccessibleStateType::SHOWING );
+            UnSetState( AccessibleStateType::VISIBLE );
+            SetState( AccessibleStateType::INVALID );
+            SetState( AccessibleStateType::DEFUNC );
 
             try
             {
@@ -451,7 +448,15 @@ namespace accessibility
                 lang::EventObject aEvent (xThis);
                 maStateListeners.disposeAndClear( aEvent );
             }
-            catch( const uno::RuntimeException& ) {}
+            catch( const uno::Exception& ) {}
+        }
+        else if( !pOldEditSource )
+        {
+            // going alive
+            UnSetState( AccessibleStateType::DEFUNC );
+            UnSetState( AccessibleStateType::INVALID );
+            SetState( AccessibleStateType::VISIBLE );
+            SetState( AccessibleStateType::SHOWING );
         }
     }
 
@@ -473,7 +478,7 @@ namespace accessibility
                 {
                     xListener->notifyEvent( aEvent );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const uno::Exception& )
                 {
 #ifdef DBG_UTIL
                     DBG_ERROR("AccessibleImageBullet::FireEvent: Caught runtime exception from listener, removing object (bridge/listener dead?)");
@@ -493,30 +498,54 @@ namespace accessibility
         FireEvent( nEventId, uno::Any(), rOldValue );
     }
 
-    sal_Bool AccessibleImageBullet::IsVisible() const
+    void AccessibleImageBullet::SetState( const sal_Int16 nStateId )
     {
-        return mpEditSource ? sal_True : sal_False ;
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if( pStateSet != NULL &&
+            !pStateSet->contains(nStateId) )
+        {
+            pStateSet->AddState( nStateId );
+            GotPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
+    }
+
+    void AccessibleImageBullet::UnSetState( const sal_Int16 nStateId )
+    {
+        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        if( pStateSet != NULL &&
+            pStateSet->contains(nStateId) )
+        {
+            pStateSet->RemoveState( nStateId );
+            LostPropertyEvent( uno::makeAny( nStateId), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
     }
 
     void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
     {
-        sal_Int32 nOldIndex = mnParagraphIndex;
+        uno::Any aOldDesc;
+        uno::Any aOldName;
 
-        if( nOldIndex != nIndex )
+        try
         {
-            // index and therefore description changed
-            LostPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
-            LostPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
+            aOldDesc <<= getAccessibleDescription();
+            aOldName <<= getAccessibleName();
         }
+        catch( const uno::Exception& ) {} // optional behaviour
+
+        sal_Int32 nOldIndex = mnParagraphIndex;
 
         mnParagraphIndex = nIndex;
 
-        if( nOldIndex != nIndex )
+        try
         {
-            // index and therefore description changed
-            GotPropertyEvent( uno::makeAny( getAccessibleDescription() ), AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT );
-            GotPropertyEvent( uno::makeAny( getAccessibleName() ), AccessibleEventId::ACCESSIBLE_NAME_EVENT );
+            if( nOldIndex != nIndex )
+            {
+                // index and therefore description changed
+                FireEvent( AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT, uno::makeAny( getAccessibleDescription() ), aOldDesc );
+                FireEvent( AccessibleEventId::ACCESSIBLE_NAME_EVENT, uno::makeAny( getAccessibleName() ), aOldName );
+            }
         }
+        catch( const uno::Exception& ) {} // optional behaviour
     }
 
     sal_Int32 AccessibleImageBullet::GetParagraphIndex() const throw (uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,15 +166,20 @@ namespace accessibility
         return IsReferencable( maChildren[ nChild ].first.get() );
     }
 
-    AccessibleParaManager::Child AccessibleParaManager::GetChild( sal_Int32                             nChild,
-                                                                  const uno::Reference< XAccessible >&  xFrontEnd,
-                                                                  SvxEditSourceAdapter&                 rEditSource,
-                                                                  sal_Int32                             nParagraphIndex )
+    AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_Int32 nParagraphIndex )
+    {
+        return maChildren[ nParagraphIndex ];
+    }
+
+    AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                          nChild,
+                                                                     const uno::Reference< XAccessible >&   xFrontEnd,
+                                                                     SvxEditSourceAdapter&              rEditSource,
+                                                                     sal_Int32                          nParagraphIndex )
     {
         // retrieve hard reference from weak one
-        WeakPara::HardRefType aChild( maChildren[ nChild ].first.get() );
+        WeakPara::HardRefType aChild( maChildren[ nParagraphIndex ].first.get() );
 
-        if( !IsReferencable( nChild ) )
+        if( !IsReferencable( nParagraphIndex ) )
         {
             // there is no hard reference available, create object then
             AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd );
@@ -189,53 +194,25 @@ namespace accessibility
             aChild->SetIndexInParent( nChild );
             aChild->SetParagraphIndex( nParagraphIndex );
 
-            maChildren[ nChild ] = WeakChild( aChild, pChild->getBounds() );
+            maChildren[ nParagraphIndex ] = WeakChild( aChild, pChild->getBounds() );
         }
 
-        return Child( aChild.getRef(), maChildren[ nChild ].second );
+        return Child( aChild.getRef(), maChildren[ nParagraphIndex ].second );
     }
-
-    // TODO: refactor these functors to a single template
-    class SetChildrenEEOffset : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
-    {
-    public:
-        SetChildrenEEOffset( const Point& rOffset ) : mrOffset( rOffset ) {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
-        {
-            rPara.SetEEOffset( mrOffset );
-        }
-
-    private:
-        const Point& mrOffset;
-    };
 
     void AccessibleParaManager::SetEEOffset( const Point& rOffset )
     {
-        SetChildrenEEOffset aFunctor( rOffset );
-        ForEach( aFunctor );
+        MemFunAdapter< const Point& > aAdapter( &accessibility::AccessibleEditableTextPara::SetEEOffset, rOffset );
+        ::std::for_each( begin(), end(), aAdapter );
     }
-
-    // TODO: refactor these functors to a single template
-    class SetChildrenEditSource : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
-    {
-    public:
-        SetChildrenEditSource( SvxEditSourceAdapter* pEditSource ) : mpEditSource( pEditSource ) {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
-        {
-            rPara.SetEditSource( mpEditSource );
-        }
-
-    private:
-        SvxEditSourceAdapter* mpEditSource;
-    };
 
     void AccessibleParaManager::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
-        SetChildrenEditSource aFunctor( pEditSource );
-        ForEach( aFunctor );
+        MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
+        ::std::for_each( begin(), end(), aAdapter );
     }
 
-    // TODO: refactor these functors to a single template (EffSTL or MExC++)
+    // not generic yet, too many method arguments...
     class StateChangeEvent : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
     {
     public:
@@ -269,9 +246,9 @@ namespace accessibility
         ::std::advance( front, nStartPara );
         ::std::advance( back, nEndPara );
 
-    StateChangeEvent aFunctor( nEventId, rNewValue, rOldValue );
+        StateChangeEvent aFunctor( nEventId, rNewValue, rOldValue );
 
-        ::std::for_each( front, back, AccessibleParaManager::WeakChildAdapter< StateChangeEvent > ( aFunctor ) );
+        ::std::for_each( front, back, AccessibleParaManager::WeakChildAdapter< StateChangeEvent >( aFunctor ) );
     }
 
     class ReleaseChild : public ::std::unary_function< const AccessibleParaManager::WeakChild&, AccessibleParaManager::WeakChild >
@@ -291,8 +268,8 @@ namespace accessibility
         VectorOfChildren::iterator front = maChildren.begin();
         VectorOfChildren::iterator back = front;
 
-        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( front, nStartPara );
-        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( back, nEndPara );
+        ::std::advance( front, nStartPara );
+        ::std::advance( back, nEndPara );
 
         ::std::transform( front, back, front, ReleaseChild() );
     }

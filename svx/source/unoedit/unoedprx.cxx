@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 17:35:51 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,11 @@ public:
         mnIndex(0),
         mnEEIndex(0),
         mnFieldOffset(0),
-        mbInField(sal_False),
         mnFieldLen(0),
+        mbInField(sal_False),
         mnBulletOffset(0),
-        mbInBullet(sal_False),
-        mnBulletLen(0) {};
+        mnBulletLen(0),
+        mbInBullet(sal_False) {};
     ~SvxAccessibleTextIndex() {};
 
     // Get/Set current paragraph
@@ -196,13 +196,6 @@ private:
 
 ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
 {
-    // check overflow
-    DBG_ASSERT(rStart.GetParagraph() >= 0 && rStart.GetParagraph() <= USHRT_MAX &&
-               rStart.GetEEIndex() >= 0 && rStart.GetEEIndex() <= USHRT_MAX &&
-               rEnd.GetParagraph() >= 0 && rEnd.GetParagraph() <= USHRT_MAX &&
-               rEnd.GetEEIndex() >= 0 && rEnd.GetEEIndex() <= USHRT_MAX,
-               "MakeEESelection: index value overflow");
-
     // deal with field special case: to really get a field contained
     // within a selection, the start index must be before or on the
     // field, the end index after it.
@@ -236,11 +229,6 @@ ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAcces
 
 ESelection MakeEESelection( const SvxAccessibleTextIndex& rIndex )
 {
-    // check overflow
-    DBG_ASSERT(rIndex.GetParagraph() >= 0 && rIndex.GetParagraph() <= USHRT_MAX &&
-               rIndex.GetEEIndex() >= 0 && rIndex.GetEEIndex() <= USHRT_MAX,
-               "MakeEESelection: index value overflow");
-
     return ESelection( rIndex.GetParagraph(), rIndex.GetEEIndex(),
                        rIndex.GetParagraph(), rIndex.GetEEIndex() + 1 );
 }
@@ -1246,7 +1234,12 @@ sal_Bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) cons
     aStartIndex.SetEEIndex( aSelection.nStartPara, aSelection.nStartPos, *mrTextForwarder );
     aEndIndex.SetEEIndex( aSelection.nEndPara, aSelection.nEndPos, *mrTextForwarder );
 
-    rSel = MakeEESelection( aStartIndex, aEndIndex );
+    DBG_ASSERT(aStartIndex.GetIndex() >= 0 && aStartIndex.GetIndex() <= USHRT_MAX &&
+               aEndIndex.GetIndex() >= 0 && aEndIndex.GetIndex() <= USHRT_MAX,
+               "SvxAccessibleTextEditViewAdapter::GetSelection: index value overflow");
+
+    rSel = ESelection( aStartIndex.GetParagraph(), static_cast< USHORT > (aStartIndex.GetIndex()),
+                       aEndIndex.GetParagraph(), static_cast< USHORT > (aEndIndex.GetIndex()) );
 
     return sal_True;
 }

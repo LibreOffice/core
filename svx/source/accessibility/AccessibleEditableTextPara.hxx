@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:17 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,11 @@ namespace accessibility
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
+        /// Sets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
+        void SetState( const sal_Int16 nStateId );
+        /// Unsets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
+        void UnSetState( const sal_Int16 nStateId );
+
         static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder );
 
     private:
@@ -387,6 +392,9 @@ namespace accessibility
 
         // the offset of the underlying EditEngine from the shape/cell (guarded by solar mutex)
         Point maEEOffset;
+
+        // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
         mutable osl::Mutex  maMutex;
 

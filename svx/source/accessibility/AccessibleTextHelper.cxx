@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
+ *  last change: $Author: thb $ $Date: 2002-05-23 12:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,16 @@ namespace accessibility
         void SetOffset( const Point& );
         const Point& GetOffset() const { return maOffset; } // Strictly correct only with locked solar mutex!
 
+        void SetChildrenOffset( sal_Int32 nOffset );
+        sal_Int32 GetChildrenOffset() const { return mnStartIndex; }
+
         sal_Bool IsSelected() const;
 
         // do NOT hold object mutex when calling this! Danger of deadlock
         void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
+
+        void SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
+        sal_Bool HaveFocus() throw (::com::sun::star::uno::RuntimeException);
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
@@ -226,6 +232,9 @@ namespace accessibility
 
         // shutdown usage of current edit source on myself and the children.
         void ShutdownEditSource() throw (uno::RuntimeException);
+
+        void SetChildrenState( const sal_Int16 nStateId );
+        void UnSetChildrenState( const sal_Int16 nStateId );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -264,11 +273,17 @@ namespace accessibility
         sal_Int32 mnFirstVisibleChild;
         sal_Int32 mnLastVisibleChild;
 
+        // offset to add to all our children
+        sal_Int32 mnStartIndex;
+
         // the object handling our children (guarded by solar mutex)
         accessibility::AccessibleParaManager maParaManager;
 
-        // spin lock to prevent notify in notify
+        // spin lock to prevent notify in notify (guarded by solar mutex)
         sal_Bool mbInNotify;
+
+        // whether we have the focus set (guarded by solar mutex)
+        sal_Bool mbHaveFocus;
 
         // must be before maStateListeners, has to live longer
         mutable ::osl::Mutex maMutex;
@@ -290,7 +305,9 @@ namespace accessibility
         maLastSelection( 0,0,0,0 ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
+        mnStartIndex( 0 ),
         mbInNotify( sal_False ),
+        mbHaveFocus( sal_False ),
         maStateListeners( maMutex )
     {
     }
@@ -304,7 +321,7 @@ namespace accessibility
             // shutdown and release edit source
             SetEditSource( ::std::auto_ptr< SvxEditSource >() );
         }
-        catch( const uno::RuntimeException& ) {}
+        catch( const uno::Exception& ) {}
 
         // owner is responsible for dispose and clear on listeners
     }
@@ -384,9 +401,84 @@ namespace accessibility
             ESelection aSelection;
             bRet = GetEditViewForwarder().GetSelection( aSelection );
         }
-        catch( const uno::RuntimeException& ) {}
+        catch( const uno::Exception& ) {}
 
         return bRet;
+    }
+
+    // functor for sending child events (no stand-alone function, they are maybe not inlined)
+    class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    {
+    public:
+        AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
+        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        {
+            rPara.SetIndexInParent( rPara.GetIndexInParent() + mnDifference );
+        }
+
+    private:
+        const sal_Int32 mnDifference;
+    };
+
+    void AccessibleTextHelper_Impl::SetChildrenOffset( sal_Int32 nOffset )
+    {
+        sal_Int32 nOldOffset( mnStartIndex );
+
+        mnStartIndex = nOffset;
+
+        if( nOldOffset != nOffset )
+        {
+            // update children
+            AccessibleTextHelper_OffsetChildIndex aFunctor( nOffset - nOldOffset );
+
+            ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                             AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_OffsetChildIndex > (aFunctor) );
+        }
+    }
+
+    void AccessibleTextHelper_Impl::SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        sal_Bool bOldFocus( mbHaveFocus );
+
+        mbHaveFocus = bHaveFocus;
+
+        if( IsActive() )
+        {
+            try
+            {
+                // find the one with the cursor and get/set focus accordingly
+                ESelection aSelection;
+                if( GetEditViewForwarder().GetSelection( aSelection ) )
+                {
+                    AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild(aSelection.nEndPara).first.get() );
+                    if( maParaManager.IsReferencable(aSelection.nEndPara) )
+                    {
+                        if( mbHaveFocus )
+                            aChild->SetState( AccessibleStateType::FOCUSED );
+                        else
+                            aChild->UnSetState( AccessibleStateType::FOCUSED );
+                    }
+                }
+            }
+            catch( const uno::Exception& ) {}
+        }
+        else if( bOldFocus != bHaveFocus )
+        {
+            if( mbHaveFocus )
+                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+            else
+                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+        }
+    }
+
+    sal_Bool AccessibleTextHelper_Impl::HaveFocus() throw (::com::sun::star::uno::RuntimeException)
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        if( mbHaveFocus && !IsActive() )
+            return sal_True;
+        else
+            return sal_False;
     }
 
     sal_Bool AccessibleTextHelper_Impl::IsActive() const throw (uno::RuntimeException)
@@ -430,15 +522,18 @@ namespace accessibility
         }
     }
 
-    // functor for sending child events
-    class AccessibleTextHelper_SendAccessibleChildEvent : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    // functor for sending child events (no stand-alone function, they are maybe not inlined)
+    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&, void >
     {
     public:
-        AccessibleTextHelper_SendAccessibleChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
+        void operator()( const accessibility::AccessibleParaManager::WeakChild& rPara )
         {
-            uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > ( &rPara ), uno::UNO_QUERY );
-            mrImpl.FireEvent(AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), uno::makeAny( xChild ) );
+            // retrieve hard reference from weak one
+            accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
+
+            if( aHardRef.is() )
+                mrImpl.FireEvent(AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
         }
 
     private:
@@ -453,8 +548,8 @@ namespace accessibility
         maParaManager.SetEditSource( NULL );
 
         // loosing all children
-        AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
-        maParaManager.ForEach( aFunctor );
+        AccessibleTextHelper_LostChildEvent aFunctor( *this );
+        ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
         maParaManager.SetNum(0);
 
         // quit listen on stale edit source
@@ -558,7 +653,7 @@ namespace accessibility
                 }
             }
         }
-        catch( const uno::RuntimeException& )
+        catch( const uno::Exception& )
         {
             DBG_ERROR("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
 
@@ -566,13 +661,13 @@ namespace accessibility
             mnFirstVisibleChild = -1;
             mnLastVisibleChild = -2;
 
-            AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
-            maParaManager.ForEach( aFunctor );
+            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+            ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
             maParaManager.SetNum(0);
         }
     }
 
-    // functor for checking changes in paragraph bounding boxes
+    // functor for checking changes in paragraph bounding boxes (no stand-alone function, maybe not inlined)
     class AccessibleTextHelper_UpdateChildBounds : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&,
                                                       accessibility::AccessibleParaManager::WeakChild >
     {
@@ -638,6 +733,20 @@ namespace accessibility
     }
 #endif
 
+    void AccessibleTextHelper_Impl::SetChildrenState( const sal_Int16 nStateId )
+    {
+        ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                         AccessibleParaManager::MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::SetState,
+                                                                                  nStateId ) );
+    }
+
+    void AccessibleTextHelper_Impl::UnSetChildrenState( const sal_Int16 nStateId )
+    {
+        ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                         AccessibleParaManager::MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::UnSetState,
+                                                                                  nStateId ) );
+    }
+
     void AccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         // do not recurse
@@ -646,6 +755,7 @@ namespace accessibility
 
         mbInNotify = sal_True;
 
+        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
         const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
         const TextHint* pTextHint = PTR_CAST( TextHint, &rHint );
         const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
@@ -737,11 +847,9 @@ namespace accessibility
                                 ::std::advance( begin, nFirst );
                                 ::std::advance( end, nLast );
 
-                                AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
+                                AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
-                                ::std::for_each( begin, end,
-                                                 ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                                 ( aFunctor ) );
+                                ::std::for_each( begin, end, aFunctor );
                             }
 #ifdef DBG_UTIL
                             else
@@ -763,7 +871,7 @@ namespace accessibility
                                     UpdateSelection( ESelection() );
                             }
                             // maybe we're not in edit mode (this is not an error)
-                            catch( const uno::RuntimeException& ) {}
+                            catch( const uno::Exception& ) {}
                             break;
                     }
 
@@ -815,10 +923,8 @@ namespace accessibility
                             ::std::advance( begin, pTextHint->GetValue() );
                             ::std::advance( end, nParas );
 
-                        AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
-                            ::std::for_each( begin, end,
-                                             ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                             ( aFunctor ) );
+                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                            ::std::for_each( begin, end, aFunctor );
                             break;
                         }
 
@@ -844,10 +950,8 @@ namespace accessibility
                             ::std::advance( begin, pTextHint->GetValue() );
                             ::std::advance( end, nParas );
 
-                            AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
-                            ::std::for_each( begin, end,
-                                             ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                             ( aFunctor ) );
+                            AccessibleTextHelper_LostChildEvent aFunctor( *this );
+                            ::std::for_each( begin, end, aFunctor );
 
                             // resize child vector to the current child count
                             maParaManager.SetNum( nParas );
@@ -888,6 +992,37 @@ namespace accessibility
                         break;
                 }
             }
+            else if( pSdrHint )
+            {
+                switch( pSdrHint->GetKind() )
+                {
+                    case HINT_BEGEDIT:
+                    {
+                        // change children state
+                        SetChildrenState( AccessibleStateType::ACTIVE );
+                        SetChildrenState( AccessibleStateType::EDITABLE );
+
+                        // find the one selected
+                        ESelection aSelection;
+                        if( GetEditViewForwarder().GetSelection( aSelection ) )
+                        {
+                            AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild(aSelection.nEndPara).first.get() );
+                            if( maParaManager.IsReferencable(aSelection.nEndPara) )
+                            {
+                                aChild->SetState( AccessibleStateType::SELECTED );
+                            }
+                        }
+                        break;
+                    }
+
+                    case HINT_ENDEDIT:
+                        // change children state
+                        UnSetChildrenState( AccessibleStateType::EDITABLE );
+                        UnSetChildrenState( AccessibleStateType::ACTIVE );
+                        UnSetChildrenState( AccessibleStateType::SELECTED );
+                        break;
+                }
+            }
             // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
             else if( pSimpleHint )
             {
@@ -901,13 +1036,13 @@ namespace accessibility
                             // Note: cannot destroy it here, since we're called from there!
                             ShutdownEditSource();
                         }
-                        catch( const uno::RuntimeException& ) {}
+                        catch( const uno::Exception& ) {}
 
                         break;
                 }
             }
         }
-        catch( const uno::RuntimeException& )
+        catch( const uno::Exception& )
         {
 #ifdef DBG_UTIL
             DBG_ERROR("AccessibleTextHelper_Impl::Notify: Unhandled exception.");
@@ -941,7 +1076,7 @@ namespace accessibility
                 {
                     xListener->notifyEvent( aEvent );
                 }
-                catch( const uno::RuntimeException& )
+                catch( const uno::Exception& )
                 {
 #ifdef DBG_UTIL
                     DBG_ERROR("AccessibleTextHelper_Impl::StateChangeEvent: Caught runtime exception from listener (bridge/listener dead?).");
@@ -963,13 +1098,15 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
+        i -= GetChildrenOffset();
+
         if( 0 > i || i > getAccessibleChildCount() ||
             GetTextForwarder().GetParagraphCount() <= i )
         {
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")), mxFrontEnd);
         }
 
-        return maParaManager.GetChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
+        return maParaManager.CreateChild( i, mxFrontEnd, GetEditSource(), mnFirstVisibleChild + i ).first;
     }
 
     void SAL_CALL AccessibleTextHelper_Impl::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -1081,13 +1218,30 @@ namespace accessibility
 
     void AccessibleTextHelper::SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException)
     {
-        // TODO
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        mpImpl->SetFocus( bHaveFocus );
+
+        mpImpl->CheckInvariants();
+#else
+        mpImpl->SetFocus( bHaveFocus );
+#endif
     }
 
     sal_Bool AccessibleTextHelper::HaveFocus() throw (::com::sun::star::uno::RuntimeException)
     {
-        // TODO
-        return sal_False;
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        sal_Bool bRet( mpImpl->HaveFocus() );
+
+        mpImpl->CheckInvariants();
+
+        return bRet;
+#else
+        return mpImpl->HaveFocus();
+#endif
     }
 
     void AccessibleTextHelper::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
@@ -1133,13 +1287,30 @@ namespace accessibility
 
     void AccessibleTextHelper::SetChildrenOffset( sal_Int32 nOffset )
     {
-        // TODO
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        mpImpl->SetChildrenOffset( nOffset );
+
+        mpImpl->CheckInvariants();
+#else
+        mpImpl->SetChildrenOffset( nOffset );
+#endif
     }
 
     sal_Int32 AccessibleTextHelper::GetChildrenOffset() const
     {
-        // TODO
-        return 0;
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+
+        sal_Int32 nOffset = mpImpl->GetChildrenOffset();
+
+        mpImpl->CheckInvariants();
+
+        return nOffset;
+#else
+        return mpImpl->GetChildrenOffset();
+#endif
     }
 
     void AccessibleTextHelper::UpdateChildren() throw (::com::sun::star::uno::RuntimeException)
