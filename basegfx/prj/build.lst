@@ -1,4 +1,4 @@
-fx	basegfx	:	sal offuh tools cppuhelper cppu NULL
+fx	basegfx	:	sal offuh cppuhelper cppu NULL
 fx	basegfx									usr1	-	all	fx_mkout NULL
 fx	basegfx\inc								get		-	all	fx_inc NULL
 fx	basegfx\prj								get		-	all	fx_prj NULL
