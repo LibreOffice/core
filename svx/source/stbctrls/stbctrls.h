@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #define PSZ_FUNC_SUM        9
 #define PSZ_FUNC_NONE       16
 
+#define XMLSEC_CALL         1
 
 #endif
 
