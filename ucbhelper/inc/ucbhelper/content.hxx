@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:21:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySetInfo;
@@ -141,7 +144,7 @@ class Content_Impl;
   * convenient API for frequently used functionality then the "raw"
   * UCB-API does.
   */
-class Content
+class UCBHELPER_DLLPUBLIC Content
 {
     vos::ORef< Content_Impl > m_xImpl;
 
