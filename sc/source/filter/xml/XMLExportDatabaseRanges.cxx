@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,9 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             aUseRegularExpressions >>= bUseRegularExpressions;
             sal_Bool bAnd = sal_False;
             sal_Bool bOr = sal_False;
-            for (sal_Int32 i = 1; i < nTableFilterFields; i++)
+            sal_Int32 i;
+
+            for ( i = 1; i < nTableFilterFields; i++)
             {
                 if (aTableFilterFields[i].Connection == sheet::FilterConnection_AND)
                     bAnd = sal_True;
@@ -503,7 +505,9 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
     table::CellAddress aOutputPosition;
     sal_Int32 nUserListIndex;
     sal_Int32 nProperties = aSortProperties.getLength();
-    for (sal_Int32 i = 0; i < nProperties; i++)
+    sal_Int32 i;
+
+    for ( i = 0; i < nProperties; i++)
     {
         if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_BINDFMT) == 0)
         {
