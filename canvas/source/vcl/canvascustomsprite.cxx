@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:26:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
@@ -101,7 +107,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 namespace vclcanvas
@@ -118,13 +123,11 @@ namespace vclcanvas
         maSize( ::vcl::unotools::sizeFromRealSize2D( rSpriteSize ) ),
         mxClipPoly(),
         mfAlpha(0.0),
-        mbActive(false)
+        mbActive(false),
+        mbIsContentFullyOpaque( false )
     {
         ENSURE_AND_THROW( rDevice.get() && rSpriteCanvas.get(),
                           "CanvasBitmap::CanvasBitmap(): Invalid device or sprite canvas" );
-
-        // to prevent truncations due to round-offs
-        maSize.Width() += 1; maSize.Height() += 1;
 
         // setup graphic device
         maCanvasHelper.setGraphicDevice( rDevice );
@@ -176,6 +179,54 @@ namespace vclcanvas
 
         // forward to parent
         CanvasCustomSprite_Base::disposing();
+    }
+
+    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::drawBitmap( const uno::Reference< rendering::XBitmap >&  xBitmap,
+                                                                                           const rendering::ViewState&                  viewState,
+                                                                                           const rendering::RenderState&                renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        const ::BitmapEx& rBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
+
+        // check whether bitmap is non-alpha, and whether its
+        // transformed size covers the whole sprite.
+        if( !rBmpEx.IsTransparent() )
+        {
+            // TODO(Q2): Factor out to canvastools or similar
+
+            ::basegfx::B2DHomMatrix aTransform;
+            ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+                                                         viewState,
+                                                         renderState);
+
+            const geometry::IntegerSize2D& rSize( xBitmap->getSize() );
+
+            ::basegfx::B2DPolygon aPoly(
+                ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::B2DRectangle( 0.0,0.0,
+                                             rSize.Width+1,
+                                             rSize.Height+1 ) ) );
+            aPoly.transform( aTransform );
+
+            if( ::basegfx::tools::isInside(
+                    aPoly,
+                    ::basegfx::tools::createPolygonFromRect(
+                        ::basegfx::B2DRectangle( 0.0,0.0,
+                                                 maSize.Width(),
+                                                 maSize.Height() ) ),
+                    true ) )
+            {
+                // bitmap will fully cover the sprite, set flag
+                // appropriately
+                mbIsContentFullyOpaque = true;
+            }
+        }
+
+        // delegate to base
+        return CanvasCustomSprite_Base::drawBitmap( xBitmap,
+                                                    viewState,
+                                                    renderState );
     }
 
     void SAL_CALL CanvasCustomSprite::setAlpha( double alpha ) throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -340,10 +391,13 @@ namespace vclcanvas
         // surface content has changed (we cleared it, at least)
         mbSurfaceDirty = true;
 
+        // just cleared content to fully transparent
+        mbIsContentFullyOpaque = false;
+
         return this;
     }
 
-#define SERVICE_NAME "drafts.com.sun.star.rendering.CanvasCustomSprite"
+#define SERVICE_NAME "com.sun.star.rendering.CanvasCustomSprite"
 
     ::rtl::OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
     {
@@ -406,7 +460,7 @@ namespace vclcanvas
 
                     aPolyPoly.Translate( rOutputPos );
 
-                    const Region aClipRegion( aPolyPoly );
+                    const Region aClipRegion( Region::GetRegionFromPolyPolygon( aPolyPoly ) );
 
                     rTargetSurface.SetClipRegion( aClipRegion );
                 }
@@ -420,23 +474,37 @@ namespace vclcanvas
                 mbSurfaceDirty = false;
 
                 Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
-                Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
 
-                if( aMask.GetBitCount() != 1 )
+                if( mbIsContentFullyOpaque )
                 {
-                    OSL_ENSURE(false,
-                               "CanvasCustomSprite::redraw(): Mask bitmap is not monochrome (performance!)");
-                    aMask.MakeMono(255);
+                    // optimized case: content canvas is fully opaque
+                    // maContent = BitmapEx( aBmp.CreateDisplayBitmap( &rTargetSurface ) );
+                    maContent = BitmapEx( aBmp );
                 }
+                else
+                {
+                    Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
 
-                maContent = BitmapEx( aBmp.CreateDisplayBitmap( &rTargetSurface ),
-                                      aMask.CreateDisplayBitmap( &rTargetSurface ) );
+                    if( aMask.GetBitCount() != 1 )
+                    {
+                        OSL_ENSURE(false,
+                                   "CanvasCustomSprite::redraw(): Mask bitmap is not monochrome (performance!)");
+                        aMask.MakeMono(255);
+                    }
+
+                    // maContent = BitmapEx( aBmp.CreateDisplayBitmap( &rTargetSurface ),
+                    //                       aMask.CreateDisplayBitmap( &rTargetSurface ) );
+                    maContent = BitmapEx( aBmp, aMask );
+                }
             }
 
             if( ::rtl::math::approxEqual(mfAlpha, 1.0) )
             {
-                // fully opaque -> copy to output
-                rTargetSurface.DrawBitmapEx( rOutputPos, *maContent );
+                // no alpha modulation -> just copy to output
+                if( maContent->IsTransparent() )
+                    rTargetSurface.DrawBitmapEx( rOutputPos, *maContent );
+                else
+                    rTargetSurface.DrawBitmap( rOutputPos, maContent->GetBitmap() );
             }
             else
             {
@@ -448,7 +516,8 @@ namespace vclcanvas
                 AlphaMask aAlpha( maSize, &nColor );
 
                 // mask out fully transparent areas
-                aAlpha.Replace( maContent->GetMask(), 255 );
+                if( maContent->IsTransparent() )
+                    aAlpha.Replace( maContent->GetMask(), 255 );
 
                 // alpha-blend to output
                 rTargetSurface.DrawBitmapEx( rOutputPos,
