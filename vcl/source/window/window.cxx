@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-04 17:34:39 $
+ *  last change: $Author: ssa $ $Date: 2002-12-05 09:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,12 +447,15 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
         sal_Bool bTmp, bAutoHCMode = sal_True;
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::createWithServiceFactory(
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
             OUString::createFromAscii( "org.openoffice.Office.Common/Accessibility" ) );    // note: case sensisitive !
-        ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "AutoDetectSystemHC" ) );
-        if( aValue >>= bTmp )
-            bAutoHCMode = bTmp;
+        if ( aNode.isValid() )
+        {
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "AutoDetectSystemHC" ) );
+            if( aValue >>= bTmp )
+                bAutoHCMode = bTmp;
+        }
         if( bAutoHCMode )
         {
             if( rSettings.GetStyleSettings().GetFaceColor().GetLuminance() < 8 )
