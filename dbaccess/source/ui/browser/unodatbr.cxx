@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:43:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,19 +1534,14 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         WaitObject aWaitCursor(getBrowserView());
         if(!pFirstData->xObject.is())
         {
-            UnoDataBrowserView* pView = static_cast<UnoDataBrowserView*>(getView());
-            if (pView)
-            {
-                String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
-                sConnecting.SearchAndReplaceAscii("$name$", pString->GetText());
-                pView->showStatus(sConnecting);
-            }
+            // show the "connecting to ..." status
+            String sConnecting(ModuleRes(STR_CONNECTING_DATASOURCE));
+            sConnecting.SearchAndReplaceAscii("$name$", pString->GetText());
+            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sConnecting);
 
+            // connect
             xConnection = connect(pString->GetText());
             pFirstData->xObject = xConnection;
-
-            if (pView)
-                pView->hideStatus();
         }
         if(xConnection.is())
         {
@@ -1834,6 +1829,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(aName));
             // the formatter depends on the data source we're working on, so rebuild it here ...
             initFormatter();
+
+            String sStatus(ModuleRes( CommandType::TABLE == nCommandType ? STR_LOADING_QUERY : STR_LOADING_TABLE ));
+            sStatus.SearchAndReplaceAscii("$name$", aName);
+            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
             // switch the grid to design mode while loading
             getBrowserView()->getGridControl()->setDesignMode(sal_True);
