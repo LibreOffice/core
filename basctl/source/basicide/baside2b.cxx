@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-12-20 16:15:59 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,7 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
             String aSource( pEditEngine->GetText() );
             DBG_ASSERT( pModulWindow->GetModule(), "Kein Modul?!" );
             pModulWindow->GetModule()->SetSource( aSource );
+            BasicIDE::UpdateModuleInLibrary( pModulWindow->GetModule() );
             pEditEngine->SetModified( FALSE );
             BasicIDE::MarkDocShellModified( pModulWindow->GetBasic() );
             bChanged = TRUE;

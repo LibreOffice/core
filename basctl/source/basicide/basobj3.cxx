@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-05 08:46:58 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,16 @@
 
 #include <baside2.hxx>
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+
 
 // In bastype3.cxx:
 USHORT GetDialogSbxId();
@@ -141,6 +151,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
 
     aSource += aSubStr;
     pModule->SetSource( aSource );
+    BasicIDE::UpdateModuleInLibrary( pModule );
 //  SbxObject* pObject = pModule->GetParent();
 //  DBG_ASSERT( pObject->ISA( StarBASIC ), "Kein Basic! (GetParent)" );
 //  ((StarBASIC*)pObject)->Compile( pModule );
@@ -257,7 +268,56 @@ StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
     return (StarBASIC*)pSbx;
 }
 
+void BasicIDE::UpdateModuleInLibrary( SbModule* pMod )
+{
+    if( !pMod )
+        return;
 
+    SbxObject* pParent = pMod->GetParent();
+    StarBASIC* pLib = PTR_CAST(StarBASIC,pParent);
+    if( !pLib )
+        return;
+
+    Reference< script::XLibraryContainer > xLibContainer;
+    BasicManager* pBasMgr = FindBasicManager( pLib );
+    if ( pBasMgr )
+    {
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+        if ( pShell )
+        {
+            xLibContainer = uno::Reference< script::XLibraryContainer >
+                ( pShell->GetBasicContainer(), uno::UNO_QUERY );
+        }
+        else
+        {
+            xLibContainer = uno::Reference< script::XLibraryContainer >
+                ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
+        }
+    }
+
+    if( xLibContainer.is() )
+    {
+        String aLibName = pLib->GetName();
+        if( !xLibContainer->hasByName( aLibName ) )
+            xLibContainer->createLibrary( aLibName );
+
+        Any aLibAny = xLibContainer->getByName( aLibName );
+        Reference< container::XNameContainer > xLib;
+        aLibAny >>= xLib;
+        if( xLib.is() )
+        {
+            ::rtl::OUString aModName = pMod->GetName();
+            ::rtl::OUString aSource = pMod->GetSource();
+            Any aSourceAny;
+            aSourceAny <<= aSource;
+            if( xLib->hasByName( aModName ) )
+                xLib->replaceByName( aModName, aSourceAny );
+            else
+                xLib->insertByName( aModName, aSourceAny );
+        }
+    }
+
+}
 
 BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
 {
