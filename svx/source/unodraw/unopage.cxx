@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-14 11:38:52 $
+ *  last change: $Author: aw $ $Date: 2001-06-12 13:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,12 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewP[0] = Vector3D(0,0,0);
                 aNewP[1] = Vector3D(0,1,0);
                 aNewP[2] = Vector3D(1,0,0);
+
+                // #87922#
+                // To avoid that CreateGeometry(...) sets the DoubleSided
+                // item at once, use a closed poylgon.
+                aNewP.SetClosed(TRUE);
+
                 PolyPolygon3D aNewPP(aNewP);
                 pObj->SetExtrudePolygon(aNewPP);
                 pObj->SetExtrudeCharacterMode(TRUE);
@@ -524,6 +530,12 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewP[0] = Vector3D(0,0,0);
                 aNewP[1] = Vector3D(0,1,0);
                 aNewP[2] = Vector3D(1,0,0);
+
+                // #87922#
+                // To avoid that CreateGeometry(...) sets the DoubleSided
+                // item at once, use a closed poylgon.
+                aNewP.SetClosed(TRUE);
+
                 PolyPolygon3D aNewPP(aNewP);
                 pObj->SetPolyPoly3D(aNewPP);
                 pObj->SetLatheCharacterMode(TRUE);
