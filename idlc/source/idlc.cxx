@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:07:30 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _IDLC_ASTBASETYPE_HXX_
 #include <idlc/astbasetype.hxx>
 #endif
+#include "idlc/astdeclaration.hxx"
+#include "idlc/asttype.hxx"
+#include "idlc/asttypedef.hxx"
 
 using namespace ::rtl;
 
@@ -324,4 +327,11 @@ sal_Bool SAL_CALL canBeRedefined(AstDeclaration *pDecl)
         default:
             return sal_False;
     }
+}
+
+AstType const * resolveTypedefs(AstType const * type) {
+    while (type->getNodeType() == NT_typedef) {
+        type = static_cast< AstTypeDef const * >(type)->getBaseType();
+    }
+    return type;
 }
