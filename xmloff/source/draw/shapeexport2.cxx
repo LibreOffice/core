@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:09:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 08:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1393,13 +1393,15 @@ void XMLShapeExport::ImpExportConnectorShape(
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
-    uno::Reference< uno::XInterface > xRef;
+    // #i39320#
+    uno::Reference< uno::XInterface > xRefS;
+    uno::Reference< uno::XInterface > xRefE;
 
     // export start connection
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) ) >>= xRef;
-    if( xRef.is() )
+    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) ) >>= xRefS;
+    if( xRefS.is() )
     {
-        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRefS );
         rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")) );
@@ -1414,10 +1416,10 @@ void XMLShapeExport::ImpExportConnectorShape(
     }
 
     // export end connection
-    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) ) >>= xRef;
-    if( xRef.is() )
+    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) ) >>= xRefE;
+    if( xRefE.is() )
     {
-        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRefE );
         rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")) );
