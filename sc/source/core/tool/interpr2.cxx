@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:47:36 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 15:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,6 +756,23 @@ void ScInterpreter::ScMIRR()
                 PushDouble( fResult - 1.0 );
             }
         }
+    }
+}
+
+
+void ScInterpreter::ScISPMT()
+{   // rate ; period ; total_periods ; invest
+    if( MustHaveParamCount( GetByte(), 4 ) )
+    {
+        double fInvest = GetDouble();
+        double fTotal = GetDouble();
+        double fPeriod = GetDouble();
+        double fRate = GetDouble();
+
+        if( nGlobalError )
+            SetIllegalParameter();
+        else
+            PushDouble( fInvest * fRate * (fPeriod / fTotal - 1.0) );
     }
 }
 

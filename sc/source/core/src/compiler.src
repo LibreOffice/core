@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:52:31 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 15:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3077,6 +3077,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ chinese_traditional ] = "MIRR";
         Text[ turkish ] = "MIRR";
         Text[ arabic ] = "MIRR";
+    };
+    String SC_OPCODE_ISPMT
+    {
+        Text = "ISPMT" ;
+        Text [ english ] = "ISPMT" ;
     };
     String SC_OPCODE_VAR
     {
@@ -7351,6 +7356,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_NBW { Text = "NPV" ; };
     String SC_OPCODE_IKV { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
+    String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
     String SC_OPCODE_VAR { Text = "VAR" ; };
     String SC_OPCODE_VAR_A { Text = "VARA" ; };
     String SC_OPCODE_VAR_P { Text = "VARP" ; };

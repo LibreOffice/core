@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-08 11:50:36 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 15:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,7 @@ void ScConvert();
 void ScNBW();
 void ScIKV();
 void ScMIRR();
+void ScISPMT();
 
 double ScGetBw(double fZins, double fZzr, double fRmz,
                       double fZw, double fF);

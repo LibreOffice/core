@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 15:41:54 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 15:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,7 +1850,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocCountEmptyCells,  // XlfCountblank
         ocNoName,           // XlfScenarioGet
         ocNoName,           // XlfOptionsListsGet
-        ocNoName,           // XlfIspmt
+        ocISPMT,            // XlfIspmt
         ocGetDiffDate,      // XlfDatedif
         ocNoName,           // XlfDatestring
         ocNoName,           // XlfNumberstring
@@ -2263,7 +2263,7 @@ BYTE ExcelToSc::IndexToAnzahl( UINT16 nIndex )
         1,      // XlfCountblank
         0,      // XlfScenarioGet
         0,      // XlfOptionsListsGet
-        0,      // XlfIspmt
+        4,      // XlfIspmt
         0,      // XlfDatedif
         0,      // XlfDatestring
         0,      // XlfNumberstring

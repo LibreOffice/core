@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-08 11:48:19 $
+ *  last change: $Author: dr $ $Date: 2001-03-13 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,9 +383,10 @@
 #define SC_OPCODE_ROMAN             383
 #define SC_OPCODE_MIRR              384
 #define SC_OPCODE_CELL              385
-#define SC_OPCODE_END_2_PAR         386
+#define SC_OPCODE_ISPMT             386
+#define SC_OPCODE_END_2_PAR         387
 
-#define SC_OPCODE_LAST_OPCODE_ID    385     /* letzter OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    386     /* letzter OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9995
