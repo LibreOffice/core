@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:21:40 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,38 +79,38 @@ namespace sw
         enum Problem
         {
             ePrinterMetrics = 1,
-            eExtraLeading = 2,
-            eTabStopDistance = 3,
-            eDontUseHTMLAutoSpacing = 4,
-            eAutoWidthFrame = 5
+            eExtraLeading,
+            eTabStopDistance,
+            eDontUseHTMLAutoSpacing,
+            eAutoWidthFrame,
+            eRowCanSplit,
+            eTabInNumbering,
+            eNegativeVertPlacement
         };
 
         enum Environment
         {
             eDocumentProperties,
             eMainText,
-            eSubDoc
+            eSubDoc,
+            eTable
         };
 
         class Tracer
         {
+        private:
             MSFilterTracer *mpTrace;
+            rtl::OUString GetContext(Environment eContext) const;
+            rtl::OUString GetDetails(Environment eContext) const;
         public:
             Tracer(const SfxMedium &rMedium);
             MSFilterTracer *GetTrace() const { return mpTrace; }
+            void EnterEnvironment(Environment eContext);
+            void EnterEnvironment(Environment eContext,
+                const rtl::OUString &rDetails);
             void Log(Problem eProblem);
+            void LeaveEnvironment(Environment eContext);
             ~Tracer();
-        };
-
-        class Context
-        {
-        private:
-            MSFilterTracer *mpTrace;
-            rtl::OUString msContext;
-            rtl::OUString msDetails;
-        public:
-            Context(const Tracer &rTracer, Environment eContext);
-            ~Context();
         };
     }
 }
