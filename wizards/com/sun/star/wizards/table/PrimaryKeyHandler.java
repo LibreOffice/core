@@ -2,9 +2,9 @@
 *
 *  $RCSfile: PrimaryKeyHandler.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:22:41 $
+*  last change: $Author: hr $ $Date: 2005-04-06 10:19:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -258,15 +258,13 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
     public boolean isAutoIncremented(){
     boolean bischecked = false;
-    try {
-        boolean bisAutomaticMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "Enabled"));
-        boolean bisExistingMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(UnoDialog.getModel(optUseExisting), "Enabled"));
+    if (chkcreatePrimaryKey.getState() == 1){
+        boolean bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "State")).shortValue() == (short) 1;
+        boolean bisExistingMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optUseExisting), "State")).shortValue() == (short) 1;
         if (bisAutomaticMode)
             bischecked = chkApplyAutoValueAutomatic.getState() == (short)1;
         else if (bisExistingMode)
             bischecked = chkApplyAutoValueExisting.getState() == (short)1;
-    } catch (IllegalArgumentException e) {
-        e.printStackTrace(System.out);
     }
     return bischecked;
     }
