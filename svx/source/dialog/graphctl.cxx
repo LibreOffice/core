@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,13 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     bool bForward = !aCode.IsShift();
                     // select next object
-                    pView->MarkNextObj( bForward );
+                    if ( ! pView->MarkNextObj( bForward ))
+                    {
+                        // At first or last object.  Cycle to the other end
+                        // of the list.
+                        pView->UnmarkAllObj();
+                        pView->MarkNextObj (bForward);
+                    }
                     bProc = TRUE;
                 }
                 else if(aCode.IsMod1())
