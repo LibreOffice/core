@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:45:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include "comphelper/scopeguard.hxx"
 
 #ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
@@ -80,25 +81,26 @@
 #include <activitiesqueue.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace presentation
 {
     namespace internal
     {
-        ActivitiesQueue::ActivitiesQueue( const UnoViewContainer& rViews ) :
-            mpLayerManager(),
+        ActivitiesQueue::ActivitiesQueue( const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&    pPresTimer,
+                                          EventMultiplexer&                                             rEventMultiplexer ) :
+            mpTimer( pPresTimer ),
             maCurrentActivitiesWaiting(),
             maCurrentActivitiesReinsert(),
-            mrViews( rViews ),
+            mrEventMultiplexer( rEventMultiplexer ),
             mbCurrentRoundNeedsScreenUpdate( false )
         {
         }
 
         ActivitiesQueue::~ActivitiesQueue()
         {
-            // dispose all queues
+            // dispose all queue entries
             ::std::for_each( maCurrentActivitiesWaiting.begin(),
                              maCurrentActivitiesWaiting.end(),
                              ::boost::mem_fn(&Disposable::dispose) );
@@ -124,11 +126,25 @@ namespace presentation
         {
             VERBOSE_TRACE( "ActivitiesQueue: outer loop heartbeat" );
 
-            bool bPerformScreenUpdate( false );
+            // accumulate time lag for all activities, and lag time
+            // base if necessary:
+            ActivityQueue::const_iterator iPos(
+                maCurrentActivitiesWaiting.begin() );
+            const ActivityQueue::const_iterator iEnd(
+                maCurrentActivitiesWaiting.end() );
+            double fLag = 0.0;
+            for ( ; iPos != iEnd; ++iPos )
+                fLag = std::max<double>( fLag, (*iPos)->calcTimeLag() );
+            if (fLag > 0.0) {
+                mpTimer->adjustTimer( -fLag );
+            }
 
-            // was:
-            // if( !maCurrentActivitiesWaiting.empty() )
-            // for low-prio activities
+            // This list collects all activities which did not request
+            // a reinsertion. After the screen update has been
+            // performed, those are notified via dequeued(). This
+            // facilitates cleanup actions taking place _after_ the
+            // current frame has been displayed.
+            ActivityQueue aDequeuedActivities;
 
             // process list of activities
             while( !maCurrentActivitiesWaiting.empty() )
@@ -182,9 +198,15 @@ namespace presentation
 
                 if( bReinsert )
                     maCurrentActivitiesReinsert.push_back( pActivity );
+                else
+                    aDequeuedActivities.push_back( pActivity );
 
                 VERBOSE_TRACE( "ActivitiesQueue: inner loop heartbeat" );
             }
+
+            // when true, the code below has determined that a screen
+            // update is necessary.
+            bool bPerformScreenUpdate( false );
 
             // waiting activities exhausted? Then update screen, and
             // reinsert
@@ -218,26 +240,13 @@ namespace presentation
             // updates. OTOH, this makes it necessary to always call
             // BOTH event queue and activities queue, such that no
             // pending update is unduly delayed)
-            if( bPerformScreenUpdate ||
-                (mpLayerManager.get() &&
-                 mpLayerManager->isUpdatePending() ) )
-            {
-                // call update() on the registered
-                // LayerManager. This will only update the
-                // backbuffer, not flush anything to screen
-                if( mpLayerManager.get() )
-                    mpLayerManager->update();
+            mrEventMultiplexer.updateScreenContent( bPerformScreenUpdate );
 
-                // call updateScreen() on all registered views (which
-                // will copy the backbuffers to the front). Do NOT use
-                // LayerManager::updateScreen(), we might need screen
-                // updates independent from a valid LayerManager.
-                ::std::for_each( mrViews.begin(),
-                                 mrViews.end(),
-                                 ::boost::mem_fn( &View::updateScreen ) );
-
-                VERBOSE_TRACE( "ActivitiesQueue: update done" );
-            }
+            // notify all dequeued activities, but only _after_ the
+            // screen update.
+            ::std::for_each( aDequeuedActivities.begin(),
+                             aDequeuedActivities.end(),
+                             ::boost::mem_fn( &Activity::dequeued ) );
         }
 
         bool ActivitiesQueue::isEmpty()
@@ -245,18 +254,10 @@ namespace presentation
             return maCurrentActivitiesWaiting.empty() && maCurrentActivitiesReinsert.empty();
         }
 
-        void ActivitiesQueue::setLayerManager( const LayerManagerSharedPtr& rMgr )
-        {
-            mpLayerManager = rMgr;
-        }
-
         void ActivitiesQueue::clear()
         {
-            ActivityQueue aTmp0;
-            maCurrentActivitiesWaiting.swap( aTmp0 );
-
-            ActivityQueue aTmp1;
-            maCurrentActivitiesReinsert.swap( aTmp1 );
+            maCurrentActivitiesWaiting.clear();
+            maCurrentActivitiesReinsert.clear();
 
             mbCurrentRoundNeedsScreenUpdate = false;
         }
