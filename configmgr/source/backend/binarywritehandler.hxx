@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:04:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include "attributes.hxx"
 #endif
 
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
@@ -105,10 +109,10 @@ namespace configmgr
         public:
             BinaryWriteHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, MultiServiceFactory const & _aFactory);
 
-            bool generateHeader(   const uno::Reference<backenduno::XLayer> * pLayers,
+            bool generateHeader(    const uno::Reference<backenduno::XLayer> * pLayers,
                                      sal_Int32 nNumLayers,
                                     const OUString& aEntity,
-                                    const OUString& aLocale )
+                                    const localehelper::LocaleSequence & aKnownLocales )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeComponentTree(const ISubtree * _pComponentTree)
@@ -123,7 +127,9 @@ namespace configmgr
             virtual void handle(ISubtree  const & aSubtree);
             virtual void handle(ValueNode const & aValue);
         private:
-            void writeFileHeader(rtl::OUString const & _aOwnerEntity, rtl::OUString const & _aLocale )
+            void writeFileHeader(   rtl::OUString const & _aOwnerEntity,
+                                    const uno::Sequence<OUString> & aKnownLocales,
+                                    const uno::Sequence<OUString> & aDataLocales  )
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeLayerInfoList(uno::Reference<backenduno::XLayer> const * pLayers, sal_Int32 nNumlayers)
