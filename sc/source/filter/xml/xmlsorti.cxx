@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 #define SC_USERLIST "UserList"

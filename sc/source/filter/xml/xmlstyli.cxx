@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 15:11:35 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
 #include <xmloff/xmlprcon.hxx>

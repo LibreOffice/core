@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 #define SC_LOCALE           "Locale"

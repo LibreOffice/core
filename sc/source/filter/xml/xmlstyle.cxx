@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 #include <rtl/ustrbuf.hxx>
