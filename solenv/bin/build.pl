@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-28 17:14:35 $
+#   last change: $Author: vg $ $Date: 2001-07-04 12:29:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.26 $ ';
+$id_str = ' $Revision: 1.27 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -611,7 +611,7 @@ sub GetDependenciesArray {
         } else {
             if ((exists($prj_platform{$ParentPrj})) &&
                 ($prj_platform{$ParentPrj} ne 'all') ) {
-                print "$ParentPrj is a wrong used alias!\n";
+                print "$ParentPrj is a wrong used dependency identifier!\nCheck if it is platform dependent\n";
                 exit (1);
             };
             push(@Dependencies, $ParentPrj);
