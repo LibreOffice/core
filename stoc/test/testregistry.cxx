@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:27:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sal/main.h>
 #ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>
 #endif
@@ -726,13 +727,7 @@ void test_DefaultRegistry(
 }
 
 
-
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     setStarUserRegistry();
     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
