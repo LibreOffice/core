@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:22:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
 void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const HeaderFooterSettings& rNewSettings )
 {
     pUndoGroup->AddAction(new SdHeaderFooterUndoAction(mpDoc, pPage, rNewSettings ));
-    pPage->getHeaderFooterSettings() = rNewSettings;
+    pPage->setHeaderFooterSettings( rNewSettings );
 }
 
 ///////////////////////////////////////////////////////////////////////
