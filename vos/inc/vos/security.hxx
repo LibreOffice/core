@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 10:43:10 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #ifndef _VOS_OBJECT_HXX_
 #   include <vos/object.hxx>
 #endif
-#ifndef _RTL_USTRING_
+#ifndef _RTL_USTRING_HXX_
 #   include <rtl/ustring.hxx>
 #endif
 #ifndef _OSL_SECURITY_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 10:42:45 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #ifndef _VOS_REFOBJ_HXX_
 #   include <vos/refobj.hxx>
 #endif
-#ifndef _RTL_USTRING_
+#ifndef _RTL_USTRING_HXX_
 #   include <rtl/ustring.hxx>
 #endif
 #ifndef _OSL_SOCKET_H_

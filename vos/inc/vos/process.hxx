@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 10:44:23 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _VOS_PROCESS_HXX_
 #define _VOS_PROCESS_HXX_
 
-#ifndef _RTL_USTRING_
+#ifndef _RTL_USTRING_HXX_
 #   include <rtl/ustring.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_

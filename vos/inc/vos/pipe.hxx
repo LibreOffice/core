@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 10:44:47 $
+ *  last change: $Author: th $ $Date: 2001-05-10 10:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #ifndef _VOS_SECURITY_HXX_
 #   include <vos/security.hxx>
 #endif
-#ifndef _RTL_USTRING_
+#ifndef _RTL_USTRING_HXX_
 #   include <rtl/ustring.hxx>
 #endif
 
