@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:48:07 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:23:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,7 +154,14 @@ SHL1STDLIBS= -Bdynamic -ldl -lpthread -lposix4 -lsocket -lnsl
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
+.IF "$(OS)"=="IRIX"
+SHL1STDLIBS= -lexc
+.ENDIF
 .ENDIF # UNX
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS+=-lstlport_gcc -framework CoreFoundation
+.ENDIF
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
