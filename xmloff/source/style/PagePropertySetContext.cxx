@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,13 @@ PagePropertySetContext::PagePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
+                 sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aTempType ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap, nStartIndex, nEndIndex )
+    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
+                             rProps, rMap, nStartIndex, nEndIndex )
 {
     aType = aTempType;
 }
