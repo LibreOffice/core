@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-17 14:05:17 $
+ *  last change: $Author: gt $ $Date: 2002-07-18 07:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     ChangeState( S_NoUpdate );
 
-//  SetExchangeSupport( TRUE ); // not used for this tabpage BUT necessary if DeactivatePage() should be called in SfxTabDialog::PrepareLeaveCurrentPage()!
+    SetExchangeSupport( TRUE ); // not used for this tabpage BUT necessary if DeactivatePage() should be called in SfxTabDialog::PrepareLeaveCurrentPage()!
 }
 
 
