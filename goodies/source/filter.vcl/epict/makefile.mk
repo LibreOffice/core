@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:08:15 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:00:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ DEPTARGET=vepict
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES =	dlgepct.src	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	dlgepct.src	\
             epictstr.src
 
 SLOFILES =  $(SLO)$/epict.obj \
