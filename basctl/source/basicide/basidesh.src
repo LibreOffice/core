@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:44:30 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,20 +445,36 @@ String RID_STR_STACK
     Text [ de ] = "Aufrufe: " ;
     Text [ en-US ] = "Calls: " ;
 };
-/*
-String RID_STR_INSERTMODE
+String RID_STR_USERMACROS
 {
-    Text [ de ] = "EINFG" ;
-    Text [ en-US ] = "INS" ;
+    Text [ de ] = "Meine Makros" ;
+    Text [ en-US ] = "My Macros" ;
 };
-
-String RID_STR_OVERWRITEMODE
+String RID_STR_USERDIALOGS
 {
-    Text [ de ] = "ÜBER" ;
-    Text [ en-US ] = "OVR" ;
+    Text [ de ] = "Meine Dialoge" ;
+    Text [ en-US ] = "My Dialogs" ;
 };
-
-*/
+String RID_STR_USERMACROSDIALOGS
+{
+    Text [ de ] = "Meine Makros & Dialoge" ;
+    Text [ en-US ] = "My Macros & Dialogs" ;
+};
+String RID_STR_SHAREMACROS
+{
+    Text [ de ] = "%PRODUCTNAME Makros" ;
+    Text [ en-US ] = "%PRODUCTNAME Macros" ;
+};
+String RID_STR_SHAREDIALOGS
+{
+    Text [ de ] = "%PRODUCTNAME Dialoge" ;
+    Text [ en-US ] = "%PRODUCTNAME Dialogs" ;
+};
+String RID_STR_SHAREMACROSDIALOGS
+{
+    Text [ de ] = "%PRODUCTNAME Makros & Dialoge" ;
+    Text [ en-US ] = "%PRODUCTNAME Macros & Dialogs" ;
+};
 ImageList RID_DEFAULTIMAGELIST_SC
 {
     Prefix = "sc";
@@ -840,40 +856,6 @@ Menu RID_POPUP_DLGED
         };
     };
 };
-ImageList RID_IMGLST_OBJECTS
-{
-    Prefix = "im";
-    MASKCOLOR
-    IdList =
-    {
-        IMGID_APPICON ;
-        IMGID_LIB ;
-        IMGID_MODULE ;
-        IMGID_MACRO ;
-        IMGID_OBJECT ;
-        IMGID_SUBOBJ ;
-        IMGID_PROP ;
-        IMGID_DOCUMENT ;
-        IMGID_LIBNOTLOADED ;
-    };
-};
-ImageList RID_IMGLST_OBJECTS_HC
-{
-    Prefix = "imh";
-    MASKCOLOR
-    IdList =
-    {
-        IMGID_APPICON ;
-        IMGID_LIB ;
-        IMGID_MODULE ;
-        IMGID_MACRO ;
-        IMGID_OBJECT ;
-        IMGID_SUBOBJ ;
-        IMGID_PROP ;
-        IMGID_DOCUMENT ;
-        IMGID_LIBNOTLOADED ;
-    };
-};
 ImageList RID_IMGLST_LAYOUT
 {
     Prefix = "im";
@@ -906,6 +888,96 @@ Image RID_IMG_LOCKED
 Image RID_IMG_LOCKED_HC
 {
     ImageBitmap = Bitmap { File = "locked_h.bmp" ; };
+    MASKCOLOR
+};
+Image RID_IMG_INSTALLATION
+{
+    ImageBitmap = Bitmap { File = "harddisk_16.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_INSTALLATION_HC
+{
+    ImageBitmap = Bitmap { File = "harddisk_16_h.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DOCUMENT
+{
+    ImageBitmap = Bitmap { File = "im30826.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DOCUMENT_HC
+{
+    ImageBitmap = Bitmap { File = "imh30826.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODLIB
+{
+    ImageBitmap = Bitmap { File = "im30820.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODLIB_HC
+{
+    ImageBitmap = Bitmap { File = "imh30820.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODLIBNOTLOADED
+{
+    ImageBitmap = Bitmap { File = "im30827.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODLIBNOTLOADED_HC
+{
+    ImageBitmap = Bitmap { File = "imh30827.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODULE
+{
+    ImageBitmap = Bitmap { File = "im30821.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MODULE_HC
+{
+    ImageBitmap = Bitmap { File = "imh30821.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MACRO
+{
+    ImageBitmap = Bitmap { File = "im30822.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_MACRO_HC
+{
+    ImageBitmap = Bitmap { File = "imh30822.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DLGLIB
+{
+    ImageBitmap = Bitmap { File = "dialogfolder_16.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DLGLIB_HC
+{
+    ImageBitmap = Bitmap { File = "dialogfolder_16_h.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DLGLIBNOTLOADED
+{
+    ImageBitmap = Bitmap { File = "dialogfoldernot_16.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DLGLIBNOTLOADED_HC
+{
+    ImageBitmap = Bitmap { File = "dialogfoldernot_16_h.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DIALOG
+{
+    ImageBitmap = Bitmap { File = "im30823.png"; };
+    MASKCOLOR
+};
+Image RID_IMG_DIALOG_HC
+{
+    ImageBitmap = Bitmap { File = "imh30823.png"; };
     MASKCOLOR
 };
 String RID_STR_QUERYREPLACEMACRO
