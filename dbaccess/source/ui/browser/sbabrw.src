@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 18:34:39 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text = "aktuellen Datensatz speichern" ; \
     Text [ ENGLISH ] = "aktuellen Datensatz speichern" ; \
     Hide = FALSE ;  \
-    Text[ english_us ] = "Save current record"; \
+    Text[ english_us ] = "Save Current Record"; \
     Text[ portuguese ] = "Guardar registo de dados activo"; \
     Text[ russian ] = "Ñîõğàíèòü òåêóùóş çàïèñü";   \
     Text[ dutch ] = "Actuele record opslaan";   \
@@ -160,7 +160,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text = "Rückgängig : Dateneingabe" ; \
     Text [ ENGLISH ] = "Rückgängig : Dateneingabe" ; \
     Hide = FALSE ;  \
-    Text[ english_us ] = "Undo: Entry"; \
+    Text[ english_us ] = "Undo: Data Input";    \
     Text[ portuguese ] = "Anular: entrada de dados";    \
     Text[ russian ] = "Îòìåíèòü : ââîä äàííûõ"; \
     Text[ dutch ] = "Ongedaan maken: Gegevensinvoer";   \
@@ -268,7 +268,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text = "Daten bearbeiten" ; \
     Text [ ENGLISH ] = "Daten bearbeiten" ; \
     Hide = FALSE ; \
-    Text[ english_us ] = "Edit data"; \
+    Text[ english_us ] = "Edit Data"; \
     Text[ portuguese ] = "Editar dados"; \
     Text[ russian ] = "Ïğàâêà äàííûõ"; \
     Text[ dutch ] = "Gegegens bewerken"; \
@@ -452,7 +452,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
 #define MID_EXPLORER_PREVLEVEL \
     Identifier = ID_BROWSER_EXPL_PREVLEVEL; \
     Text = "Übergeordnete Ebene";\
-    Text [ english_us] = "parent level";    \
+    Text [ english_us] = "Parent Level";    \
     Text[ portuguese ] = "Nível superior";  \
     Text[ greek ] = "áíşôåñï ğåäßï";    \
     Text[ dutch ] = "Hoger niveau"; \
@@ -462,7 +462,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ russian ] = "Íà óğîâåíü âûøå";\
     Text[ italian ] = "Livello superiore";\
     Text[ danish ] = "Overordnet niveau";\
-    Text[ polish ] = "poziom nadrzêdny";\
+    Text[ polish ] = "Poziom nadrzêdny";\
     Text[ portuguese_brazilian ] = "previous level";\
     Text[ japanese ] = "ˆê‚Âã‚ÌÚÍŞÙ";\
     Text[ korean ] = "»óÀ§ ·¹º§";\
@@ -828,7 +828,7 @@ String RID_STR_LOADING_DATASOURCE
     Text[ russian ] = "Çàãğóçèòü äàííûå";
     Text[ italian ] = "Carica dati";
     Text[ danish ] = "Indlæs data";
-    Text[ polish ] = "³adowaæ dane";
+    Text[ polish ] = "£aduj dane";
     Text[ portuguese_brazilian ] = "load data";
     Text[ japanese ] = "ÃŞ°À‚Ì“Ç‚İ‚İ";
     Text[ korean ] = "µ¥ÀÌÅÍ ·Îµå";
@@ -853,8 +853,8 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ spanish ] = "El registro actual ha sido modificado.\n¿Desea guardar las modificaciones?";
     Message[ italian ] = "Il record di dati attuale è stato modificato.\nVolete salvare le modifiche?";
     Message[ danish ] = "Den aktuelle datapost er blevet ændret.\nSkal ændringerne gemmes?";
-    Message[ swedish ] = "Den aktuella dataposten har ändrats.\nSkall ändringarna sparas?";
-    Message[ polish ] = "Aktualny rekord zosta³ zmodyfikowany.\nCzy chcesz zapisaæ zmodyfikowane dane?";
+    Message[ swedish ] = "Den aktuella dataposten har ändrats.\nSka ändringarna sparas?";
+    Message[ polish ] = "Aktualny rekord zosta³ zmodyfikowany.\nCzy zapisaæ zmodyfikowane dane?";
     Message[ portuguese_brazilian ] = "Soll der geänderter Datensatz gespeichert werden?";
     Message[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
@@ -884,7 +884,7 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ spanish ] = "(filtrado)";
     Text[ chinese_simplified ] = "(ÒÑ¾­É¸Ñ¡)";
     Text[ russian ] = "(îòôèëüòğîâàíî)";
-    Text[ polish ] = "(przefiltrowany)";
+    Text[ polish ] = "(przefiltrowane)";
     Text[ japanese ] = "(Ì¨ÙÀÏ‚İ)";
     Text[ chinese_traditional ] = "(¤w¸g¿z¿ï)";
     Text[ arabic ] = "(ãõÕİøì)";
@@ -909,7 +909,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ spanish ] = "Error al definir los criterios de ordenación";
     Text[ italian ] = "Errore nell'impostare i criteri";
     Text[ danish ] = "Fejl ved definition af sorteringskriterierne";
-    Text[ swedish ] = "fel vid definition av sorteringskriterier";
+    Text[ swedish ] = "Fel vid definition av sorteringskriterier";
     Text[ polish ] = "B³¹d podczas osadzania kryteriów sortowania";
     Text[ portuguese_brazilian ] = "error setting the sort criteria";
     Text[ japanese ] = "•À‚×‘Ö‚¦ğŒ‚Ìİ’è‚Ì´×°";
@@ -932,7 +932,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ spanish ] = "Error al definir los criterios de filtro";
     Text[ italian ] = "Errore nell'impostare i criteri";
     Text[ danish ] = "Fejl ved definition af filterkriterierne";
-    Text[ swedish ] = "fel vid definition av filterkriterier";
+    Text[ swedish ] = "Fel vid definition av filterkriterier";
     Text[ polish ] = "B³¹d podczas osadzania kryteriów filtra";
     Text[ portuguese_brazilian ] = "error setting the filter criteria";
     Text[ japanese ] = "Ì¨ÙÀğŒ‚Ìİ’è‚Ì´×°";
@@ -961,7 +961,7 @@ String RID_STR_CONNECTION_LOST
     Text[ portuguese_brazilian ] = "connection lost";
     Text[ japanese ] = "Ú‘±‚Ì’†’f";
     Text[ korean ] = "¿¬°áÀ» ÀÒÀ½";
-    Text[ chinese_simplified ] = "Á¬½ÓÊ§°Ü";
+    Text[ chinese_simplified ] = "Ê§È¥Á¬½Ó";
     Text[ chinese_traditional ] = "³s½u¤w¸g¤¤Â_";
     Text[ arabic ] = "Êã İŞÏÇä ÇáÇÊÕÇá";
     Text[ turkish ] = "Bağlantı koptu";
