@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleFixedText.xba,v $ 
 '*
-'*  $Revision: 1.5 $ 
+'*  $Revision: 1.6 $ 
 '*
-'*  last change:$Date: 2003-06-11 16:32:18 $ 
+'*  last change:$Date: 2003-10-06 13:27:42 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -76,6 +76,8 @@ Global accText As String
 Global accButton As Object
 Global readOnly as Boolean
 
+Global oText as Object
+
 Sub CreateObj()
 
 '*************************************************************************
@@ -89,46 +91,41 @@ On Error Goto ErrHndl
     Dim url As New com.sun.star.util.URL
     Dim noProps()
 
-    oDoc = utils.createDocument("swriter", cObjectName)
+'    oDoc = utils.createDocument("swriter", cObjectName)
+
+    Dim xText as object
+    oText = createUnoService("com.sun.star.awt.UnoControlFixedText")
+    xText = createUnoService("com.sun.star.awt.UnoControlFixedTextModel")
+    oText.setModel(xText)
+    oText.setText("FixedText")
+    
+    Dim oDialog as object
+    Dim xDialog as Object
+    oDialog = createUnoService("com.sun.star.awt.UnoControlDialog")
+    xDialog = createUnoService("com.sun.star.awt.UnoControlDialogModel")
+    oDialog.setModel(xDialog)
+    oDialog.addControl("Text", oText)
+    oDialog.setVisible(true)
+    oDialog.setPosSize(0, 0, 200, 100, com.sun.star.awt.PosSize.SIZE)
+    
+    
     tk = createUNOService("com.sun.star.awt.Toolkit")
     wait(500)
-
-    xController = oDoc.getCurrentController()
-    urlTransformer = createUNOService("com.sun.star.util.URLTransformer")
-    url.Complete = ".uno:HyperlinkDialog"
-    urlTransformer.parseStrict(url)
-    xDispatcher = xController.queryDispatch(url,"",0)
-
-    if (NOT isNull(xDispatcher)) then 
-        xDispatcher.dispatch(url, noProps())
-        wait(500)
-        oWin = tk.getActiveTopWindow
-        xRoot = utils.at_getAccessibleObject(oWin)
-        oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.LABEL,"","AccessibleFixedText")
-        accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Close")
-        Out.Log("Implementation name: "+oObj.getImplementationName())
-        accText = oObj.getText()
-        readOnly = true
-    else
-        Out.Log("QueryDispatch FAILED. Cannot open Hyperlink dialog...")
-    End If
-
+    oWin = tk.getActiveTopWindow
+    xRoot = utils.at_getAccessibleObject(oWin)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.LABEL)
+    Out.Log("Implementation name: "+oObj.getImplementationName())
+    accText = oObj.getText()
+    readOnly = true
+ 
 Exit Sub
 ErrHndl:
     Test.Exception()
 End Sub
 
-Sub DisposeObj()
-    if NOT isNull(accButton) then
-        accButton.doAccessibleAction(0)
-        wait(1000)
-    End If
-    utils.closeObject(oDoc)
-End Sub
-
 Sub fireEvent()
-    oObj.grabFocus()
-    accButton.grabFocus()
+    oText.setEnable(false)
+    oText.setEnable(true)
 End Sub
 
 </script:module>
