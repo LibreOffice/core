@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:39:54 $
+ *  last change: $Author: pl $ $Date: 2001-03-16 15:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 
 #include "cc50_solaris_sparc.hxx"
 
+#include <hash.cxx>
+
 // need a += operator for OString and sal_Char
 namespace rtl
 {
@@ -148,36 +150,14 @@ static OString toRTTIname( const OString & rUNOname )
 }
 //==================================================================================================
 
-static int replaceQdDdD( const OString& rIn, OString& rOutdD, OString& rOutdDdD )
-{
-    int nRet = 0;
-    int nLen = rIn.getLength(), i, n;
-    rOutdD      = OString();
-    rOutdDdD    = OString();
-    for( i = 0, n = 0; ( i = rIn.indexOf( 'Q', i ) ) != -1 && i < nLen; i++ )
-    {
-        rOutdD   += rIn.copy( n, i-n+1 );
-        rOutdDdD += rIn.copy( n, i-n+1 );
-        n = i+1;
-        rOutdD += "dD";
-        rOutdDdD += "dDdD";
-        nRet++;
-    }
-    rOutdD += rIn.copy( n );
-    rOutdDdD += rIn.copy( n );
-    return nRet;
-}
-
-static OString toRTTIsymbolname( const OString & rRTTIname )
+static OString toRTTImangledname( const OString & rRTTIname )
 {
     if( ! rRTTIname.getLength() )
         return OString();
 
     OString aRet;
-    OString aPrefix;
 
     int nUnoTokens = rRTTIname.getTokenCount( ':' );
-    int nAdjust = 0;
     for( int i = 0; i < nUnoTokens; i++ )
     {
         OString aToken( rRTTIname.getToken( i, ':' ) );
@@ -193,54 +173,12 @@ static OString toRTTIsymbolname( const OString & rRTTIname )
             else
                 aAdd += (sal_Char)( nBytes + 'A' );
             aRet += aAdd;
-            // special case "Q"
-            if( ( ( nBytes % 26 ) +'A' ) == 'Q' )
-            {
-                aRet += "dD";
-                nAdjust += 2;
-            }
-
-            OString adD, adDdD;
-            int nRepl = replaceQdDdD( aToken, adD, adDdD );
-            if( nUnoTokens == 1 )
-            {
-                // must replace "Q" by "QdD"
-                aRet += adD;
-                nAdjust += 2* nRepl;
-            }
-            else
-            {
-                // must replace "Q" by "QdDdD"
-                aRet += adDdD;
-                nAdjust += 4* nRepl;
-            }
-
-            if( i < nUnoTokens - 1  )
-            {
-                aPrefix += aAdd;
-                // must replace "Q" by "QdD"
-                aPrefix += adD;
-            }
+            aRet += aToken;
         }
     }
     aRet += '_';
 
-    if( aPrefix.getLength() )
-    {
-        int nBytes = aRet.getLength() - nAdjust + 10;
-        if( nBytes > 25 )
-        {
-            aPrefix += (sal_Char)( nBytes/26 + 'a' );
-                aPrefix += (sal_Char)( nBytes % 26 + 'A' );
-        }
-        else
-            aPrefix += (sal_Char)( nBytes + 'A' );
-
-
-        aRet = "__1c" + aPrefix + "__RTTI__1n" + aRet + "_";
-    }
-    else
-        aRet = "__RTTI__1n"+aRet;
+    aRet = "__1n"+aRet;
 
     return aRet;
 }
@@ -261,8 +199,14 @@ public:
     static void* insertRTTI( const OString& rTypename );
     static void* insertRTTI_UnoName( const OString& rTypename )
         { return insertRTTI( toRTTIname( rTypename ) ); }
+    static void* generateRTTI( typelib_CompoundTypeDescription* pCompTypeDescr );
 };
 
+/*
+ *  note: the contents of this map are not freed causing a leak
+ *  this was suggested by dbo because the bridge may
+ *  even be called while being unloaded (sounds like a bug, but ...)
+ */
 std::map< OString, void* > RTTIHolder::aAllRTTI;
 
 #ifdef DEBUG
@@ -276,43 +220,30 @@ void* RTTIHolder::getRTTI( const OString& rTypename )
     element = aAllRTTI.find( rTypename );
     if( element != aAllRTTI.end() )
         return (*element).second;
-    // get rtti
-    // look for existing type info
-    static void* pMain = dlopen( NULL, RTLD_NOW | RTLD_GLOBAL );
 
-    void* pSymbol = dlsym( pMain, toRTTIsymbolname( rTypename ).getStr() );
+    // create rtti structure
+    element = aAllRTTI.find( rTypename );
+    if( element != aAllRTTI.end() )
+        return (*element).second;
 
-    if( pSymbol )
-    {
-        // there exists type info, use it (otherwise it will not be equal
-        // since addresses - not contents - are matched in RTTI compare)
-        aAllRTTI[ rTypename ] = pSymbol;
-        return pSymbol;
-    }
-
-#ifdef DEBUG
-    fprintf( stderr, "exception type \"%s\" not found via dlsym !!!\n", toRTTIsymbolname( rTypename ).getStr() );
-#endif
-
-    // no type found (time for plan b: look for base type )
     return NULL;
 }
 
-static long nMagicId = 1;
-
 void* RTTIHolder::insertRTTI( const OString& rTypename )
 {
-#ifdef DEBUG
-    fprintf( stderr, "generating base RTTI for type %s\n", rTypename.getStr() );
-#endif
+    OString aMangledName( toRTTImangledname( rTypename ) );
+    NIST_Hash aHash( aMangledName.getStr(), aMangledName.getLength() );
+
     void** pRTTI = new void*[ 19 ];
-    memset( pRTTI, 0, 19*sizeof( void* ) );
     pRTTI[  0 ] = (void*)strdup( rTypename.getStr() );
+    pRTTI[  1 ] = NULL;
     pRTTI[  2 ] = (void*)(7*sizeof(void*));
-    pRTTI[  3 ] = (void*)nMagicId++;
-    pRTTI[  4 ] = (void*)nMagicId++;
-    pRTTI[  5 ] = (void*)nMagicId++;
-    pRTTI[  6 ] = (void*)nMagicId++;
+    pRTTI[  3 ] = (void*)aHash.getHash()[0];
+    pRTTI[  4 ] = (void*)aHash.getHash()[1];
+    pRTTI[  5 ] = (void*)aHash.getHash()[2];
+    pRTTI[  6 ] = (void*)aHash.getHash()[3];
+    pRTTI[  7 ] = NULL;
+    pRTTI[  8 ] = NULL;
 
     pRTTI[  9 ] = pRTTI[ 3 ];
     pRTTI[ 10 ] = pRTTI[ 4 ];
@@ -321,37 +252,83 @@ void* RTTIHolder::insertRTTI( const OString& rTypename )
     pRTTI[ 13 ] = (void*)0x80000000;
 
     aAllRTTI[ rTypename ] = (void*)pRTTI;
+#ifdef DEBUG
+    fprintf( stderr,
+             "generating base RTTI for type %s:\n"
+             "   mangled: %s\n"
+             "   hash: %.8x %.8x %.8x %.8x\n",
+             rTypename.getStr(),
+             aMangledName.getStr(),
+             pRTTI[ 3 ], pRTTI[ 4 ], pRTTI[ 5 ], pRTTI[ 6 ]
+             );
+#endif
     return pRTTI;
 }
 
 //--------------------------------------------------------------------------------------------------
 
-static void* generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
+void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
 {
     static ::osl::Mutex aMutex;
     ::osl::Guard< ::osl::Mutex > guard( aMutex );
 
-    OString aCompTypeName( OUStringToOString( pCompTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+    OString aUNOCompTypeName( OUStringToOString( pCompTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+    OString aRTTICompTypeName( toRTTIname( aUNOCompTypeName ) );
 
-    void* pRTTI = RTTIHolder::getRTTI_UnoName( aCompTypeName );
-    if( pRTTI )
-        return pRTTI;
-
-    // uh oh. Compiler did not generate RTTI for this type
-    // but that means that this was neither thrown nor caught explicitly
-    // then let's downcast it until we find real RTTI
-    // since the object will be destructed by deleteException which does
-    // this with the correct type description all should be well
+    void* pHaveRTTI = RTTIHolder::getRTTI( aRTTICompTypeName );
+    if( pHaveRTTI )
+        return pHaveRTTI;
 
     if( ! pCompTypeDescr->pBaseTypeDescription )
-        // this is a base type (and a bad case, we should not need to generate any RTTI)
-        return RTTIHolder::insertRTTI_UnoName( aCompTypeName );
+        // this is a base type
+        return RTTIHolder::insertRTTI( aRTTICompTypeName );
 
     // get base class RTTI
     void* pSuperRTTI = generateRTTI( pCompTypeDescr->pBaseTypeDescription );
-    OSL_ENSURE( pSuperRTTI, "could not generate RTTI for supertype!" );
+    OSL_ENSURE( pSuperRTTI, "could not generate RTTI for supertype !" );
 
-    return pSuperRTTI;
+    // find out the size to allocate for RTTI
+    void** pInherit = (void**)((sal_uInt32)pSuperRTTI + ((sal_uInt32*)pSuperRTTI)[2] + 8);
+    int nInherit;
+    for( nInherit = 1; pInherit[ nInherit*5-1 ] != (void*)0x80000000; nInherit++ )
+        ;
+
+    OString aMangledName( toRTTImangledname( aRTTICompTypeName ) );
+    NIST_Hash aHash( aMangledName.getStr(), aMangledName.getLength() );
+
+    void** pRTTI = new void*[ 14 + nInherit * 5 ];
+    pRTTI[  0 ] = (void*)strdup( aRTTICompTypeName.getStr() );
+    pRTTI[  1 ] = NULL;
+    pRTTI[  2 ] = (void*)(7*sizeof(void*));
+    pRTTI[  3 ] = (void*)aHash.getHash()[0];
+    pRTTI[  4 ] = (void*)aHash.getHash()[1];
+    pRTTI[  5 ] = (void*)aHash.getHash()[2];
+    pRTTI[  6 ] = (void*)aHash.getHash()[3];
+    pRTTI[  7 ] = NULL;
+    pRTTI[  8 ] = NULL;
+
+    memcpy( pRTTI+9, pInherit, 4*nInherit*5 );
+    pRTTI[ 8 +nInherit*5 ] = NULL;
+    pRTTI[ 9 +nInherit*5 ] = pRTTI[ 3 ];
+    pRTTI[ 10+nInherit*5 ] = pRTTI[ 4 ];
+    pRTTI[ 11+nInherit*5 ] = pRTTI[ 5 ];
+    pRTTI[ 12+nInherit*5 ] = pRTTI[ 6 ];
+    pRTTI[ 13+nInherit*5 ] = (void*)0x80000000;
+
+    aAllRTTI[ aRTTICompTypeName ] = (void*)pRTTI;
+
+#ifdef DEBUG
+    fprintf( stderr,
+             "generating struct RTTI for type %s:\n"
+             "   mangled: %s\n"
+             "   hash: %.8x %.8x %.8X %.8x\n",
+             aRTTICompTypeName.getStr(),
+             aMangledName.getStr(),
+             pRTTI[ 3 ], pRTTI[ 4 ], pRTTI[ 5 ], pRTTI[ 6 ]
+             );
+#endif
+
+    return pRTTI;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -375,7 +352,7 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
 
-    void* pRTTI = generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
+    void* pRTTI = RTTIHolder::generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
 
     // a must be
     OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
