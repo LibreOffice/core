@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,41 +1152,41 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
 }
 
 // check for all changed parameter and create UNO out parameters
-void IUnknownWrapper_Impl::processOutParameters(VARIANT* pOrgParams,
-                                 VARIANT* pResultParams,
-                                 sal_uInt32 n,
-                                 Sequence< sal_Int16 >& OutParamIndex,
-                                 Sequence< Any >& OutParam)
-{
-    for (sal_uInt32 i = 0; i < n; i++)
-    {
-        VARIANT* pOrgElement = &(pOrgParams[n - (i + 1)]);
-         VARIANT* pResultElement = &(pResultParams[n - (i + 1)]);
-        Any aOutParam;
-
-        // check for changes in element
-        if (memcmp(pOrgElement, pResultElement, sizeof(VARIANT)) != 0)
-        {
-            // out parameters are only valid if the new type matches the original type
-            if (V_VT(pOrgElement) == V_VT(pResultElement))
-            {
-                variantToAny(pResultElement, aOutParam);
-            }
-        }
-
-//      if (aOutParam.getReflection() != Void_getReflection())
-        if( aOutParam.getValueTypeClass() != TypeClass_VOID)
-        {
-            sal_uInt32 outParamCount = OutParam.getLength() + 1;
-
-            OutParam.realloc(outParamCount);
-            OutParamIndex.realloc(outParamCount);
-
-            OutParam.getArray()[outParamCount - 1] = aOutParam;
-            OutParamIndex.getArray()[outParamCount - 1] = i;
-        }
-    }
-}
+//void IUnknownWrapper_Impl::processOutParameters(VARIANT* pOrgParams,
+//                               VARIANT* pResultParams,
+//                               sal_uInt32 n,
+//                               Sequence< sal_Int16 >& OutParamIndex,
+//                               Sequence< Any >& OutParam)
+//{
+//  for (sal_uInt32 i = 0; i < n; i++)
+//  {
+//      VARIANT* pOrgElement = &(pOrgParams[n - (i + 1)]);
+//      VARIANT* pResultElement = &(pResultParams[n - (i + 1)]);
+//      Any aOutParam;
+//
+//      // check for changes in element
+//      if (memcmp(pOrgElement, pResultElement, sizeof(VARIANT)) != 0)
+//      {
+//          // out parameters are only valid if the new type matches the original type
+//          if (V_VT(pOrgElement) == V_VT(pResultElement))
+//          {
+//              variantToAny(pResultElement, aOutParam);
+//          }
+//      }
+//
+//  //      if (aOutParam.getReflection() != Void_getReflection())
+//      if( aOutParam.getValueTypeClass() != TypeClass_VOID)
+//      {
+//          sal_uInt32 outParamCount = OutParam.getLength() + 1;
+//
+//          OutParam.realloc(outParamCount);
+//          OutParamIndex.realloc(outParamCount);
+//
+//          OutParam.getArray()[outParamCount - 1] = aOutParam;
+//          OutParamIndex.getArray()[outParamCount - 1] = i;
+//      }
+//  }
+//}
 
 
 // It would be desirable if every COM component could handle parameters of VT_BYREF be it
@@ -1223,6 +1223,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
     CComVariant* arArgs = NULL;
     CComVariant* arRefArgs= NULL; // referenced arguments
 
+    // Obtain type information via the IDispatch interface
+    getParameterInfo();
+
+    dispparams.cArgs= m_seqCurrentParamTypes.getLength();
     if (dispparams.cArgs == 0)
     {
         dispparams.rgvarg = NULL;
@@ -1232,10 +1236,6 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
         arArgs = new CComVariant[dispparams.cArgs];
         arRefArgs= new CComVariant[dispparams.cArgs];
 
-        // converting orginal parameters
-        // if the object uses ATL with a dual interface, then VT_VARIANT| VT_BYREF does not suffice
-//      prepareOutParams( orgArgs, dispparams.cArgs);
-        getParameterInfo();
 
         for (i = 0; i < dispparams.cArgs; i++)
         {
@@ -1265,7 +1265,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
                 VARTYPE type= m_seqCurrentVartypes[i] ^ VT_BYREF;
                 CComVariant var;
                 anyToVariant( &arRefArgs[revIndex],
-                         Params.getConstArray()[i]);
+                         Params.getConstArray()[i], m_seqCurrentVartypes[i]);
 
                 if( type == VT_VARIANT )
                 {
@@ -1284,10 +1284,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(DISPID dispID,
             {
                 if( m_seqCurrentVartypes[i] & VT_BYREF)
                     anyToVariant( &arRefArgs[revIndex],
-                        Params.getConstArray()[i]);
+                        Params.getConstArray()[i], m_seqCurrentVartypes[i]);
                 else
                     anyToVariant( &arArgs[revIndex],
-                        Params.getConstArray()[i]);
+                        Params.getConstArray()[i], m_seqCurrentVartypes[i]);
             }
 
         }
@@ -1490,6 +1490,10 @@ sal_Bool IUnknownWrapper_Impl::getParameterInfo()
     return ret;
 }
 
+// Gets the element type in a VARIANT like style. E.g. if desc->lptdesc contains
+// a VT_PTR than it is replaced by VT_BYREF and VT_SAFEARRAY is replaced by VT_ARRAY
+// If the TYPEDESC describes an SAFEARRAY then varType is a combination of VT_ARRAY
+// and the element type
 sal_Bool IUnknownWrapper_Impl::getElementTypeDesc( TYPEDESC *desc, VARTYPE& varType )
 {
     sal_Bool ret= sal_True;
