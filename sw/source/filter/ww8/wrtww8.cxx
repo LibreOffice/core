@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:18:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2565,11 +2565,12 @@ ULONG SwWW8Writer::WriteStorage()
     return nRet;
 }
 
-SwWW8Writer::SwWW8Writer(const String& rFltName)
+SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
     pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
     mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
 {
+    SetBaseURL( rBaseURL );
     bWrtWW8 = rFltName.EqualsAscii(FILTER_WW8);
 }
 
@@ -2583,9 +2584,9 @@ SwWW8Writer::~SwWW8Writer()
     delete pOleMap;
 }
 
-void GetWW8Writer( const String& rFltName, WriterRef& xRet )
+void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    xRet = new SwWW8Writer( rFltName );
+    xRet = new SwWW8Writer( rFltName, rBaseURL );
 }
 
 bool WW8_WrPlcFtnEdn::WriteTxt( SwWW8Writer& rWrt )
