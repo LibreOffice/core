@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:46:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
+#include <sfx2/viewfrm.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/svxids.hrc> //CHINA001
