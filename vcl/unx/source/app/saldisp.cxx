@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:56:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2711,7 +2711,7 @@ void SalDisplay::PrintInfo() const
                  pRootVisual_->GetVisualId() );
 }
 
-void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
+void SalDisplay::GetScreenFontResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) const
 {
     rDPIX = aResolution_.A();
     rDPIY = aResolution_.B();
