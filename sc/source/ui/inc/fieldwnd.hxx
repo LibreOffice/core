@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 10:56:54 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@ public:
 
     /** @return The name of the control without shortcut. */
     String                  GetName()const              { return aName; }
+
+    /** @return The description of the control which is used for the accessibility objects. */
+    String                  GetDescription()const;
 
     /** Grabs focus and sets new selection. */
     void                    GrabFocusWithSel( long nIndex );

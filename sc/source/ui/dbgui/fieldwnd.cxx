@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 10:57:49 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 
 #ifndef _SC_ACCESSIBLEDATAPILOTCONTROL_HXX
 #include "AccessibleDataPilotControl.hxx"
+#endif
+#ifndef SC_SCRESID_HXX
+#include "scresid.hxx"
+#endif
+#ifndef SC_SC_HRC
+#include "sc.hrc"
 #endif
 
 //===================================================================
@@ -718,6 +724,27 @@ void ScDPFieldWindow::GetExistingIndex( const Point& rPos, long& rnIndex )
     }
     else
         rnIndex = 0;
+}
+
+String ScDPFieldWindow::GetDescription()const
+{
+    String sDescription;
+    switch( eType )
+    {
+        case TYPE_COL:
+            sDescription = ScResId(STR_ACC_DATAPILOT_COL_DESCR);
+        break;
+        case TYPE_ROW:
+            sDescription = ScResId(STR_ACC_DATAPILOT_ROW_DESCR);
+        break;
+        case TYPE_DATA:
+            sDescription = ScResId(STR_ACC_DATAPILOT_DATA_DESCR);
+        break;
+        case TYPE_SELECT:
+            sDescription = ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
+        break;
+    }
+    return sDescription;
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScDPFieldWindow::CreateAccessible()
