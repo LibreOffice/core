@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+#   last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ CXXFILES = \
         txtexppr.cxx \
         txtflde.cxx \
         txtfldi.cxx \
+        txtftne.cxx \
         txtimp.cxx \
         txtimppr.cxx \
         txtparae.cxx \
@@ -91,21 +92,24 @@ CXXFILES = \
         txtstyle.cxx \
         txtstyli.cxx \
         txtvfldi.cxx \
-        txtftne.cxx \
-        XMLTextNumRuleInfo.cxx \
+        XMLFootnoteBodyImportContext.cxx \
+        XMLFootnoteConfigurationImportContext.cxx \
+        XMLFootnoteImportContext.cxx \
+        XMLPropertyBackpatcher.cxx \
+        XMLTextColumnsContext.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
         XMLTextFrameHyperlinkContext.cxx \
+        XMLTextHeaderFooterContext.cxx \
         XMLTextListAutoStylePool.cxx \
         XMLTextListBlockContext.cxx \
-        XMLFootnoteImportContext.cxx \
-        XMLFootnoteBodyImportContext.cxx \
-        XMLFootnoteConfigurationImportContext.cxx \
-        XMLTextMarkImportContext.cxx \
-        XMLTextColumnsContext.cxx \
         XMLTextListItemContext.cxx \
-        XMLTextPropertySetContext.cxx \
-        XMLPropertyBackpatcher.cxx
+        XMLTextMarkImportContext.cxx \
+        XMLTextMasterPageContext.cxx \
+        XMLTextMasterPageExport.cxx \
+        XMLTextMasterStylesContext.cxx \
+        XMLTextNumRuleInfo.cxx \
+        XMLTextPropertySetContext.cxx
 
 SLOFILES =	\
         $(SLO)$/txtdrope.obj \
@@ -113,6 +117,7 @@ SLOFILES =	\
         $(SLO)$/txtexppr.obj \
         $(SLO)$/txtfldi.obj \
         $(SLO)$/txtflde.obj \
+        $(SLO)$/txtftne.obj \
         $(SLO)$/txtimp.obj \
         $(SLO)$/txtimppr.obj \
         $(SLO)$/txtparae.obj \
@@ -122,21 +127,24 @@ SLOFILES =	\
         $(SLO)$/txtstyle.obj \
         $(SLO)$/txtstyli.obj \
         $(SLO)$/txtvfldi.obj \
-        $(SLO)$/txtftne.obj \
+        $(SLO)$/XMLFootnoteBodyImportContext.obj \
+        $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
+        $(SLO)$/XMLFootnoteImportContext.obj \
+        $(SLO)$/XMLPropertyBackpatcher.obj \
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \
         $(SLO)$/XMLTextFrameHyperlinkContext.obj \
+        $(SLO)$/XMLTextHeaderFooterContext.obj \
         $(SLO)$/XMLTextListAutoStylePool.obj \
         $(SLO)$/XMLTextListBlockContext.obj \
-        $(SLO)$/XMLFootnoteImportContext.obj \
-        $(SLO)$/XMLFootnoteBodyImportContext.obj \
-        $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
-        $(SLO)$/XMLTextMarkImportContext.obj \
         $(SLO)$/XMLTextListItemContext.obj \
+        $(SLO)$/XMLTextMarkImportContext.obj \
+        $(SLO)$/XMLTextMasterPageContext.obj \
+        $(SLO)$/XMLTextMasterPageExport.obj \
+        $(SLO)$/XMLTextMasterStylesContext.obj \
         $(SLO)$/XMLTextNumRuleInfo.obj \
-        $(SLO)$/XMLTextPropertySetContext.obj \
-        $(SLO)$/XMLPropertyBackpatcher.obj
+        $(SLO)$/XMLTextPropertySetContext.obj
 
 
 # --- Tagets -------------------------------------------------------

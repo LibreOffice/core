@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-06 13:12:07 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 18:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,17 @@ static __FAR_DATA SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_server_map, XML_TOK_TEXT_HYPERLINK_SERVER_MAP },
     XML_TOKEN_MAP_END
 };
+
+static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
+{
+    { XML_NAMESPACE_STYLE, sXML_header, XML_TOK_TEXT_MP_HEADER },
+    { XML_NAMESPACE_STYLE, sXML_footer, XML_TOK_TEXT_MP_FOOTER },
+    { XML_NAMESPACE_STYLE, sXML_header_left, XML_TOK_TEXT_MP_HEADER_LEFT },
+    { XML_NAMESPACE_STYLE, sXML_footer_left, XML_TOK_TEXT_MP_FOOTER_LEFT },
+
+    XML_TOKEN_MAP_END
+};
+
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM ) :
@@ -392,6 +403,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     pTextFieldAttrTokenMap( 0 ),
     pTextFrameAttrTokenMap( 0 ),
     pTextHyperlinkAttrTokenMap( 0 ),
+    pTextMasterPageElemTokenMap( 0 ),
     pPrevFrmNames( 0 ),
     pNextFrmNames( 0 ),
     pRenameMap( 0 ),
@@ -460,6 +472,13 @@ XMLTextImportHelper::XMLTextImportHelper(
             Any aAny( xFamilies->getByName( aFrameStyles ) );
             aAny >>= xFrameStyles;
         }
+
+        const OUString aPageStyles(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
+        if( xFamilies->hasByName( aPageStyles ) )
+        {
+            Any aAny( xFamilies->getByName( aPageStyles ) );
+            aAny >>= xPageStyles;
+        }
     }
 
     Reference < XTextFramesSupplier > xTFS( rModel, UNO_QUERY );
@@ -495,6 +514,7 @@ XMLTextImportHelper::~XMLTextImportHelper()
     delete pTextFieldAttrTokenMap;
     delete pTextFrameAttrTokenMap;
     delete pTextHyperlinkAttrTokenMap;
+    delete pTextMasterPageElemTokenMap;
 
     delete pRenameMap;
 
@@ -541,6 +561,11 @@ SvXMLTokenMap *XMLTextImportHelper::_GetTextFrameAttrTokenMap()
 SvXMLTokenMap *XMLTextImportHelper::_GetTextHyperlinkAttrTokenMap()
 {
     return new SvXMLTokenMap( aTextHyperlinkAttrTokenMap );
+}
+
+SvXMLTokenMap *XMLTextImportHelper::_GetTextMasterPageElemTokenMap()
+{
+    return new SvXMLTokenMap( aTextMasterPageElemTokenMap );
 }
 
 sal_Bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
