@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-24 21:45:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,16 @@
 #include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP__
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP__
+#include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP__
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -102,6 +112,7 @@
 
 #include <basegfx/tools/canvastools.hxx>
 
+#include <limits>
 
 
 using namespace ::drafts::com::sun::star;
@@ -177,27 +188,32 @@ namespace basegfx
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                 const ::basegfx::B2DPolygon&                        rPoly    )
         {
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
             if( !xGraphicDevice.is() )
-                return uno::Reference< rendering::XPolyPolygon2D >();
+                return xRes;
 
             if( rPoly.areControlPointsUsed() )
             {
                 uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( 1 );
                 outputSequence[0] = bezierSequenceFromB2DPolygon( rPoly );
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
-                    xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
-                    uno::UNO_QUERY );
+                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
+                          uno::UNO_QUERY );
             }
             else
             {
                 uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( 1 );
                 outputSequence[0] = pointSequenceFromB2DPolygon( rPoly );
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
-                    xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
-                    uno::UNO_QUERY );
+                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
+                          uno::UNO_QUERY );
             }
+
+            if( xRes.is() && rPoly.isClosed() )
+                xRes->setClosed( 0, sal_True );
+
+            return xRes;
         }
 
         //---------------------------------------------------------------------------------------
@@ -205,8 +221,10 @@ namespace basegfx
         uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromB2DPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&  xGraphicDevice,
                                                                                     const ::basegfx::B2DPolyPolygon&                    rPolyPoly    )
         {
+            uno::Reference< rendering::XPolyPolygon2D > xRes;
+
             if( !xGraphicDevice.is() )
-                return uno::Reference< rendering::XPolyPolygon2D >();
+                return xRes;
 
             const sal_uInt32 nNumPolies( rPolyPoly.count() );
             sal_uInt32 i;
@@ -220,9 +238,8 @@ namespace basegfx
                     outputSequence[i] = bezierSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
                 }
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
-                    xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
-                    uno::UNO_QUERY );
+                xRes.set( xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence ),
+                          uno::UNO_QUERY );
             }
             else
             {
@@ -233,10 +250,95 @@ namespace basegfx
                     outputSequence[i] = pointSequenceFromB2DPolygon( rPolyPoly.getB2DPolygon(i) );
                 }
 
-                return uno::Reference< rendering::XPolyPolygon2D >(
-                    xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
-                    uno::UNO_QUERY );
+                xRes.set( xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence ),
+                          uno::UNO_QUERY );
             }
+
+            for( i=0; i<nNumPolies; ++i )
+            {
+                if( rPolyPoly.getB2DPolygon(i).isClosed() )
+                    xRes->setClosed( i, sal_True );
+            }
+
+            return xRes;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        ::basegfx::B2DPolygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
+        {
+            const sal_Int32 nCurrSize( points.getLength() );
+
+            ::basegfx::B2DPolygon aPoly;
+
+            for( sal_Int32 nCurrPoint=0; nCurrPoint<nCurrSize; ++nCurrPoint )
+                aPoly.append( b2DPointFromRealPoint2D( points[nCurrPoint] ) );
+
+            return aPoly;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
+        {
+            ::basegfx::B2DPolyPolygon aRes;
+
+            for( sal_Int32 nCurrPoly=0; nCurrPoly<points.getLength(); ++nCurrPoly )
+            {
+                aRes.append( polygonFromPoint2DSequence( points[nCurrPoly] ) );
+            }
+
+            return aRes;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        ::basegfx::B2DPolygon polygonFromBezier2DSequence( const uno::Sequence< geometry::RealBezierSegment2D >& curves )
+        {
+            const sal_Int32 nSize( curves.getLength() );
+
+            ::basegfx::B2DPolygon aPoly;
+
+            for( sal_Int32 nCurrPoint=0; nCurrPoint<nSize; ++nCurrPoint )
+            {
+                const geometry::RealBezierSegment2D aCurrSegment( curves[nCurrPoint] );
+
+                if( aCurrSegment.Px == aCurrSegment.C1x &&
+                    aCurrSegment.Px == aCurrSegment.C2x &&
+                    aCurrSegment.Py == aCurrSegment.C1y &&
+                    aCurrSegment.Py == aCurrSegment.C2y     )
+                {
+                    aPoly.append( ::basegfx::B2DPoint( aCurrSegment.Px,
+                                                       aCurrSegment.Py ) );
+                }
+                else
+                {
+                    aPoly.append( ::basegfx::B2DPoint( aCurrSegment.Px,
+                                                       aCurrSegment.Py ) );
+                    aPoly.setControlPointA( nCurrPoint,
+                                            ::basegfx::B2DPoint( aCurrSegment.C1x,
+                                                                 aCurrSegment.C1y ) );
+                    aPoly.setControlPointB( nCurrPoint,
+                                            ::basegfx::B2DPoint( aCurrSegment.C2x,
+                                                                 aCurrSegment.C2y ) );
+                }
+            }
+
+            return aPoly;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >& curves )
+        {
+            ::basegfx::B2DPolyPolygon aRes;
+
+            for( sal_Int32 nCurrPoly=0; nCurrPoly<curves.getLength(); ++nCurrPoly )
+            {
+                aRes.append( polygonFromBezier2DSequence( curves[nCurrPoly] ) );
+            }
+
+            return aRes;
         }
 
         //---------------------------------------------------------------------------------------
@@ -346,6 +448,53 @@ namespace basegfx
         {
             return ::basegfx::B2IRange( rRectangle.X1, rRectangle.Y1,
                                         rRectangle.X2, rRectangle.Y2 );
+        }
+
+        awt::Size awtSizeFromB2ISize( const ::basegfx::B2IVector& rVec )
+        {
+            return awt::Size( rVec.getX(),
+                              rVec.getY() );
+        }
+
+        awt::Point awtPointFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
+        {
+            return awt::Point( rPoint.getX(),
+                               rPoint.getY() );
+        }
+
+        awt::Rectangle awtRectangleFromB2IRectangle( const ::basegfx::B2IRange& rRect )
+        {
+            OSL_ENSURE( rRect.getWidth() < ::std::numeric_limits< sal_Int32 >::max() &&
+                        rRect.getWidth() > ::std::numeric_limits< sal_Int32 >::min(),
+                        "awtRectangleFromB2IRectangle(): width overflow" );
+            OSL_ENSURE( rRect.getHeight() < ::std::numeric_limits< sal_Int32 >::max() &&
+                        rRect.getHeight() > ::std::numeric_limits< sal_Int32 >::min(),
+                        "awtRectangleFromB2IRectangle(): height overflow" );
+
+            return awt::Rectangle( rRect.getMinX(),
+                                   rRect.getMinY(),
+                                   static_cast< sal_Int32 >(rRect.getWidth()),
+                                   static_cast< sal_Int32 >(rRect.getHeight()) );
+        }
+
+        ::basegfx::B2IVector b2ISizeFromAwtSize( const awt::Size& rSize )
+        {
+            return ::basegfx::B2IVector( rSize.Width,
+                                         rSize.Height );
+        }
+
+        ::basegfx::B2IPoint b2IPointFromAwtPoint( const awt::Point& rPoint )
+        {
+            return ::basegfx::B2IPoint( rPoint.X,
+                                        rPoint.Y );
+        }
+
+        ::basegfx::B2IRange b2IRectangleFromAwtRectangle( const awt::Rectangle& rRect )
+        {
+            return ::basegfx::B2IRange( rRect.X,
+                                        rRect.Y,
+                                        rRect.X + rRect.Width,
+                                        rRect.Y + rRect.Height );
         }
 
     } // namespace bgfxtools
