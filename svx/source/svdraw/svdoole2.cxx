@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:33:16 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,7 +979,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
             mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
         }
 
-        if( pModel && rObj.GetModel() )
+        if( pModel && rObj.GetModel() && xObjRef.is() )
         {
             SfxObjectShell* pDestPers = pModel->GetPersist();
             SfxObjectShell* pSrcPers = rObj.GetModel()->GetPersist();
@@ -1015,6 +1015,7 @@ FASTBOOL SdrOle2Obj::HasSpecialDrag() const
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
     GetObjRef();
+    if (xObjRef.is())
     {
         sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
         if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) && svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
