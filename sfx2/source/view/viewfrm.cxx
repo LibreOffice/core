@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:04:20 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ using namespace ::com::sun::star::frame;
 #include "virtmenu.hxx"
 #include "macro.hxx"
 #include "tbxcust.hxx"
+#include "minfitem.hxx"
 
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
@@ -3336,6 +3337,21 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                 xLib,
                 com::sun::star::uno::UNO_QUERY);
             xModulCont->insertByName(sModule,aTemp);
+        }
+
+        // #i17355# update the Basic IDE
+        for ( SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell; pViewShell = SfxViewShell::GetNext( *pViewShell ) )
+        {
+            if ( pViewShell->GetName().EqualsAscii( "BasicIDE" ) )
+            {
+                SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+                SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+                if ( pDispatcher )
+                {
+                    SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, String(), String() );
+                    pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
+                }
+            }
         }
 
         pSfxApp->LeaveBasicCall();
