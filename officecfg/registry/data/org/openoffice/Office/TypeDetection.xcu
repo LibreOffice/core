@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:22:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@
     </node>
     <node oor:name="draw_StarOffice_XML_Draw" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">%productname% 6/7 Zeichnung</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Zeichnung</value>
       </prop>
       <prop oor:name="Data">
         <value>1,application/vnd.sun.xml.draw,Draw%206.0,private:factory/sdraw*,sxd,20002,</value>
@@ -548,7 +548,7 @@
     </node>
     <node oor:name="impress_StarOffice_XML_Impress" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">%productname% 6/7 Präsentation</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Präsentation</value>
       </prop>
       <prop oor:name="Data">
         <value>1,application/vnd.sun.xml.impress,Impress%206.0,private:factory/simpress*,sxi,20002,</value>
@@ -628,7 +628,7 @@
     </node>
     <node oor:name="math_StarOffice_XML_Math" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">%productname% 6/7 Formel</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Formel</value>
       </prop>
       <prop oor:name="Data">
         <value>0,application/vnd.sun.xml.math,Math%206.0,private:factory/smath*,sxm,20602,</value>
@@ -1028,7 +1028,7 @@
     </node>
     <node oor:name="writer_Lotus_1_2_3_10_DOS_StarWriter" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">Lotus 1-2-3 1.0 (DOS) (%productname% 6/7 Writer)</value>
+        <value xml:lang="en-US">Lotus 1-2-3 1.0 (DOS) (%productname% 6.0/7 Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,,,,wk1;wks,20002,</value>
@@ -1036,7 +1036,7 @@
     </node>
     <node oor:name="writer_Lotus_1_2_3_10_WIN_StarWriter" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">Lotus 1-2-3 1.0 (WIN) (%productname% 6/7 Writer)</value>
+        <value xml:lang="en-US">Lotus 1-2-3 1.0 (WIN) (%productname% 6.0/7 Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,,,,wk1;wks,20002,</value>
@@ -1420,7 +1420,7 @@
     </node>
     <node oor:name="writer_StarOffice_XML_Writer" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">%productname% 6/7 Textdokument</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Textdokument</value>
       </prop>
       <prop oor:name="Data">
         <value>0,application/vnd.sun.xml.writer,Writer%206.0,private:factory/swriter,sxw,20002,</value>
@@ -1452,7 +1452,7 @@
     </node>
     <node oor:name="writer_StarWriter_30" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">StarWriter 3.0 (%productname% 6/7 Globaldokument)</value>
+        <value xml:lang="en-US">StarWriter 3.0 (%productname% 6.0/7 Globaldokument)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,application/x-starwriter,StarWriter%203.0,,sdw,20002,</value>
@@ -1468,7 +1468,7 @@
     </node>
     <node oor:name="writer_StarWriter_40" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">StarWriter 4.0 (%productname% 6/7 Globaldokument)</value>
+        <value xml:lang="en-US">StarWriter 4.0 (%productname% 6.0/7 Globaldokument)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,application/x-starwriter,StarWriter%204.0,,sdw,20002,</value>
@@ -1484,7 +1484,7 @@
     </node>
     <node oor:name="writer_StarWriter_50" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">StarWriter 5.0 (%productname% 6/7 Globaldokument)</value>
+        <value xml:lang="en-US">StarWriter 5.0 (%productname% 6.0/7 Globaldokument)</value>
       </prop>
       <prop oor:name="Data">
         <value>1,application/vnd.stardivision.writer,StarWriter%205.0,,sdw,20002,</value>
@@ -3647,33 +3647,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Tabellendokument Vorlage</value>
-        <value xml:lang="x-translate">%productname% 6/7 Tabellendokument Vorlage</value>
-        <value xml:lang="x-comment">%productname% 6/7 Tabellendokument Vorlage</value>
-        <value xml:lang="en-US">%productname% 6/7 Spreadsheet Template</value>
-        <value xml:lang="pt">%productname% 6/7 Modelo de folha de cálculo</value>
-        <value xml:lang="ru">%productname% 6/7 - Шаблон электронной таблицы</value>
+        <value xml:lang="de">%productname% 6.0/7 Tabellendokument Vorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Tabellendokument Vorlage</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Tabellendokument Vorlage</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Spreadsheet Template</value>
+        <value xml:lang="pt">%productname% 6.0/7 Modelo de folha de cálculo</value>
+        <value xml:lang="ru">%productname% 6.0/7 - Шаблон электронной таблицы</value>
         <value xml:lang="el">Calc 6.0 - Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6/7 Sjabloon voor werkbladdocumenten</value>
-        <value xml:lang="fr">%productname% 6/7 Modèle de classeur</value>
-        <value xml:lang="es">Plantilla de hoja de cálculo %productname% 6/7</value>
+        <value xml:lang="nl">%productname% 6.0/7 Sjabloon voor werkbladdocumenten</value>
+        <value xml:lang="fr">%productname% 6.0/7 Modèle de classeur</value>
+        <value xml:lang="es">Plantilla de hoja de cálculo %productname% 6.0/7</value>
         <value xml:lang="fi">Calc 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6/7 Modello di foglio elettronico</value>
+        <value xml:lang="it">%productname% 6.0/7 Modello di foglio elettronico</value>
         <value xml:lang="da">Calc 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6/7 tabelldokument mall</value>
-        <value xml:lang="pl">%productname% 6/7 - Szablon arkusza kalkulacyjnego</value>
+        <value xml:lang="sv">%productname% 6.0/7 tabelldokument mall</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Szablon arkusza kalkulacyjnego</value>
         <value xml:lang="pt-BR">Calc 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6/7 表計算ドキュメント テンプレート</value>
-        <value xml:lang="ko">%productname% 6/7 스프레드시트 서식 파일</value>
-        <value xml:lang="zh-CN">%productname% 6/7 工作表文档样式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 工作表樣式</value>
-        <value xml:lang="tr">%productname% 6/7 Hesapçizelgesi Şablonu</value>
+        <value xml:lang="ja">%productname% 6.0/7 表計算ドキュメント テンプレート</value>
+        <value xml:lang="ko">%productname% 6.0/7 스프레드시트 서식 파일</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 工作表文档样式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 工作表樣式</value>
+        <value xml:lang="tr">%productname% 6.0/7 Hesapçizelgesi Şablonu</value>
         <value xml:lang="ar">Calc 6.0 Vorlage</value>
-        <value xml:lang="ca">%productname% 6/7 Spreadsheet Template</value>
-        <value xml:lang="th">แม่แบบกระดาษคำนวณ %productname% 6/7 </value>
-        <value xml:lang="cs">%productname% 6/7 Spreadsheet Template</value>
-        <value xml:lang="he">‮תבנית גליון עבודה %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Spreadsheet Template</value>
+        <value xml:lang="ca">%productname% 6.0/7 Spreadsheet Template</value>
+        <value xml:lang="th">แม่แบบกระดาษคำนวณ %productname% 6.0/7 </value>
+        <value xml:lang="cs">%productname% 6.0/7 Spreadsheet Template</value>
+        <value xml:lang="he">‮תבנית גליון עבודה %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Spreadsheet Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,calc_StarOffice_XML_Calc_Template,com.sun.star.sheet.SpreadsheetDocument,,55,,6200,,</value>
@@ -3717,33 +3717,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Zeichnungsvorlage</value>
-        <value xml:lang="x-translate">%productname% 6/7 Zeichnungsvorlage</value>
-        <value xml:lang="x-comment">%productname% 6/7 Zeichnungsvorlage</value>
-        <value xml:lang="en-US">%productname% 6/7 Drawing Template</value>
-        <value xml:lang="pt">%productname% 6/7 Modelo de desenho</value>
-        <value xml:lang="ru">%productname% 6/7 Шаблон документа рисунка</value>
+        <value xml:lang="de">%productname% 6.0/7 Zeichnungsvorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Zeichnungsvorlage</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Zeichnungsvorlage</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Drawing Template</value>
+        <value xml:lang="pt">%productname% 6.0/7 Modelo de desenho</value>
+        <value xml:lang="ru">%productname% 6.0/7 Шаблон документа рисунка</value>
         <value xml:lang="el">Draw 6.0 - Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6/7 Sjabloon voor tekeningen</value>
-        <value xml:lang="fr">%productname% 6/7 Modèle de dessin</value>
-        <value xml:lang="es">Plantilla de dibujo %productname% 6/7</value>
+        <value xml:lang="nl">%productname% 6.0/7 Sjabloon voor tekeningen</value>
+        <value xml:lang="fr">%productname% 6.0/7 Modèle de dessin</value>
+        <value xml:lang="es">Plantilla de dibujo %productname% 6.0/7</value>
         <value xml:lang="fi">Draw 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6/7 Modello di disegno</value>
+        <value xml:lang="it">%productname% 6.0/7 Modello di disegno</value>
         <value xml:lang="da">Draw 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6/7 teckningsmall</value>
-        <value xml:lang="pl">%productname% 6/7 - Szablon rysunku</value>
+        <value xml:lang="sv">%productname% 6.0/7 teckningsmall</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Szablon rysunku</value>
         <value xml:lang="pt-BR">Draw 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6/7 図形描画テンプレート</value>
-        <value xml:lang="ko">%productname% 6/7 그리기 서식 파일</value>
-        <value xml:lang="zh-CN">%productname% 6/7 绘图样式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 繪圖樣式</value>
-        <value xml:lang="tr">%productname% 6/7 Çizim Şablonu</value>
+        <value xml:lang="ja">%productname% 6.0/7 図形描画テンプレート</value>
+        <value xml:lang="ko">%productname% 6.0/7 그리기 서식 파일</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 绘图样式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 繪圖樣式</value>
+        <value xml:lang="tr">%productname% 6.0/7 Çizim Şablonu</value>
         <value xml:lang="ar">Draw 6.0 قالب</value>
-        <value xml:lang="ca">%productname% 6/7 Drawing Template</value>
-        <value xml:lang="th">แม่แบบวาดรูป %productname% 6/7  </value>
-        <value xml:lang="cs">%productname% 6/7 Drawing Template</value>
-        <value xml:lang="he">‮תבנית סרטוט %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Drawing Template</value>
+        <value xml:lang="ca">%productname% 6.0/7 Drawing Template</value>
+        <value xml:lang="th">แม่แบบวาดรูป %productname% 6.0/7  </value>
+        <value xml:lang="cs">%productname% 6.0/7 Drawing Template</value>
+        <value xml:lang="he">‮תבנית סרטוט %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Drawing Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,draw_StarOffice_XML_Draw_Template,com.sun.star.drawing.DrawingDocument,,55,CXMLV,6200,,</value>
@@ -3897,33 +3897,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Zeichnung (%productname% Impress)</value>
-        <value xml:lang="x-translate">%productname% 6/7 Zeichnung (%productname% Impress)</value>
-        <value xml:lang="x-comment">%productname% 6/7 Zeichnung (%productname% Impress)</value>
-        <value xml:lang="en-US">%productname% 6/7 Drawing (%productname% Impress)</value>
-        <value xml:lang="pt">%productname% 6/7 Desenho (%productname% Impress)</value>
-        <value xml:lang="ru">%productname% 6/7 Рисунок (%productname% Impress)</value>
+        <value xml:lang="de">%productname% 6.0/7 Zeichnung (%productname% Impress)</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Zeichnung (%productname% Impress)</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Zeichnung (%productname% Impress)</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Drawing (%productname% Impress)</value>
+        <value xml:lang="pt">%productname% 6.0/7 Desenho (%productname% Impress)</value>
+        <value xml:lang="ru">%productname% 6.0/7 Рисунок (%productname% Impress)</value>
         <value xml:lang="el">Draw 6.0 (Impress)</value>
-        <value xml:lang="nl">%productname% 6/7 Tekening (%productname% Impress</value>
-        <value xml:lang="fr">%productname% 6/7 Dessin (%productname% Impress)</value>
-        <value xml:lang="es">%productname% 6/7 Dibujo (%productname% Impress)</value>
+        <value xml:lang="nl">%productname% 6.0/7 Tekening (%productname% Impress</value>
+        <value xml:lang="fr">%productname% 6.0/7 Dessin (%productname% Impress)</value>
+        <value xml:lang="es">%productname% 6.0/7 Dibujo (%productname% Impress)</value>
         <value xml:lang="fi">Draw 6.0 (Impress)</value>
-        <value xml:lang="it">%productname% 6/7 Disegno (%productname% Impress)</value>
+        <value xml:lang="it">%productname% 6.0/7 Disegno (%productname% Impress)</value>
         <value xml:lang="da">Draw 6.0 (Impress)</value>
-        <value xml:lang="sv">%productname% 6/7 teckning (%productname% Impress)</value>
-        <value xml:lang="pl">%productname% 6/7 - Rysunek (%productname% Impress)</value>
+        <value xml:lang="sv">%productname% 6.0/7 teckning (%productname% Impress)</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Rysunek (%productname% Impress)</value>
         <value xml:lang="pt-BR">Draw 6.0 (Impress)</value>
-        <value xml:lang="ja">%productname% 6/7 図形描画 (%productname% Impress)</value>
-        <value xml:lang="ko">%productname% 6/7 그리기 (%productname% Impress)</value>
-        <value xml:lang="zh-CN">%productname% 6/7 绘图 (%productname% Impress)</value>
-        <value xml:lang="zh-TW">%productname% 6/7 繪圖 (%productname% Impress)</value>
-        <value xml:lang="tr">%productname% 6/7 Drawing (%productname% Impress)</value>
+        <value xml:lang="ja">%productname% 6.0/7 図形描画 (%productname% Impress)</value>
+        <value xml:lang="ko">%productname% 6.0/7 그리기 (%productname% Impress)</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 绘图 (%productname% Impress)</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 繪圖 (%productname% Impress)</value>
+        <value xml:lang="tr">%productname% 6.0/7 Drawing (%productname% Impress)</value>
         <value xml:lang="ar">Draw 6.0 (Impress)</value>
-        <value xml:lang="ca">%productname% 6/7 Drawing (%productname% Impress)</value>
-        <value xml:lang="th">โปรแกรมวาดรูป %productname% 6/7  (%productname% Impress)</value>
-        <value xml:lang="cs">%productname% 6/7 Drawing (%productname% Impress)</value>
-        <value xml:lang="he">‮ציור %productname% 6/7 (%productname% Impress)‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Drawing (%productname% Impress)</value>
+        <value xml:lang="ca">%productname% 6.0/7 Drawing (%productname% Impress)</value>
+        <value xml:lang="th">โปรแกรมวาดรูป %productname% 6.0/7  (%productname% Impress)</value>
+        <value xml:lang="cs">%productname% 6.0/7 Drawing (%productname% Impress)</value>
+        <value xml:lang="he">‮ציור %productname% 6.0/7 (%productname% Impress)‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Drawing (%productname% Impress)</value>
       </prop>
       <prop oor:name="Data">
         <value>5,draw_StarOffice_XML_Draw,com.sun.star.presentation.PresentationDocument,,39,XML,6200,,</value>
@@ -3934,33 +3934,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Präsentationsvorlage</value>
-        <value xml:lang="x-translate">%productname% 6/7 Präsentationsvorlage</value>
-        <value xml:lang="x-comment">%productname% 6/7 Präsentationsvorlage</value>
-        <value xml:lang="en-US">%productname% 6/7 Presentation Template</value>
-        <value xml:lang="pt">%productname% 6/7 Modelo de apresentação</value>
+        <value xml:lang="de">%productname% 6.0/7 Präsentationsvorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Präsentationsvorlage</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Präsentationsvorlage</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Presentation Template</value>
+        <value xml:lang="pt">%productname% 6.0/7 Modelo de apresentação</value>
         <value xml:lang="ru">Impress 6.0 Шаблон презентации</value>
         <value xml:lang="el">Impress 6.0 - Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6/7 Sjabloon voor presentaties</value>
-        <value xml:lang="fr">%productname% 6/7 Modèle de présentation</value>
-        <value xml:lang="es">%productname% 6/7 - Plantilla de presentación</value>
+        <value xml:lang="nl">%productname% 6.0/7 Sjabloon voor presentaties</value>
+        <value xml:lang="fr">%productname% 6.0/7 Modèle de présentation</value>
+        <value xml:lang="es">%productname% 6.0/7 - Plantilla de presentación</value>
         <value xml:lang="fi">Impress 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6/7 Modello di presentazione</value>
+        <value xml:lang="it">%productname% 6.0/7 Modello di presentazione</value>
         <value xml:lang="da">Impress 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6/7 presentationsmall</value>
-        <value xml:lang="pl">%productname% 6/7 - Szablon prezentacji</value>
+        <value xml:lang="sv">%productname% 6.0/7 presentationsmall</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Szablon prezentacji</value>
         <value xml:lang="pt-BR">Impress 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6/7 プレゼンテーションテンプレート</value>
-        <value xml:lang="ko">%productname% 6/7 프레젠테이션 서식 파일</value>
-        <value xml:lang="zh-CN">%productname% 6/7 演示文稿样式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 簡報樣式</value>
-        <value xml:lang="tr"> %productname% 6/7 Gösterim Şablonu</value>
+        <value xml:lang="ja">%productname% 6.0/7 プレゼンテーションテンプレート</value>
+        <value xml:lang="ko">%productname% 6.0/7 프레젠테이션 서식 파일</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 演示文稿样式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 簡報樣式</value>
+        <value xml:lang="tr"> %productname% 6.0/7 Gösterim Şablonu</value>
         <value xml:lang="ar">Impress 6.0 قالب</value>
-        <value xml:lang="ca">%productname% 6/7 Presentation Template</value>
-        <value xml:lang="th">แม่แบบการนำเสนอ %productname% 6/7  </value>
-        <value xml:lang="cs">%productname% 6/7 Presentation Template</value>
-        <value xml:lang="he">‮תבנית מצגת %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Presentation Template</value>
+        <value xml:lang="ca">%productname% 6.0/7 Presentation Template</value>
+        <value xml:lang="th">แม่แบบการนำเสนอ %productname% 6.0/7  </value>
+        <value xml:lang="cs">%productname% 6.0/7 Presentation Template</value>
+        <value xml:lang="he">‮תבנית מצגת %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Presentation Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,impress_StarOffice_XML_Impress_Template,com.sun.star.presentation.PresentationDocument,,55,CXMLV,6200,,</value>
@@ -4806,33 +4806,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Tabellendokument</value>
-        <value xml:lang="x-translate">%productname% 6/7 Tabellendokument</value>
-        <value xml:lang="x-comment">%productname% 6/7 Tabellendokument</value>
-        <value xml:lang="en-US">%productname% 6/7 Spreadsheet</value>
-        <value xml:lang="pt">%productname% 6/7 Folha de cálculo</value>
-        <value xml:lang="ru">%productname% 6/7 Электронная таблица</value>
+        <value xml:lang="de">%productname% 6.0/7 Tabellendokument</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Tabellendokument</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Tabellendokument</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Spreadsheet</value>
+        <value xml:lang="pt">%productname% 6.0/7 Folha de cálculo</value>
+        <value xml:lang="ru">%productname% 6.0/7 Электронная таблица</value>
         <value xml:lang="el">Calc 6.0</value>
-        <value xml:lang="nl">%productname% 6/7 Werkbladdocument</value>
-        <value xml:lang="fr">%productname% 6/7 Classeur</value>
-        <value xml:lang="es">%productname% 6/7 Hoja de cálculo</value>
+        <value xml:lang="nl">%productname% 6.0/7 Werkbladdocument</value>
+        <value xml:lang="fr">%productname% 6.0/7 Classeur</value>
+        <value xml:lang="es">%productname% 6.0/7 Hoja de cálculo</value>
         <value xml:lang="fi">Calc 6.0</value>
-        <value xml:lang="it">%productname% 6/7 Foglio elettronico</value>
-        <value xml:lang="da">%productname% 6/7 Spreadsheet</value>
-        <value xml:lang="sv">%productname% 6/7 tabelldokument</value>
-        <value xml:lang="pl">%productname% 6/7 - Arkusz kalkulacyjny</value>
-        <value xml:lang="pt-BR">Planilha %productname% 6/7 </value>
-        <value xml:lang="ja">%productname% 6/7 表計算ドキュメント</value>
-        <value xml:lang="ko">%productname% 6/7 스프레드시트</value>
-        <value xml:lang="zh-CN">%productname% 6/7 工作表文档</value>
-        <value xml:lang="zh-TW">%productname% 6/7 工作表文件</value>
-        <value xml:lang="tr">%productname% 6/7 Hesap Çizelgesi</value>
+        <value xml:lang="it">%productname% 6.0/7 Foglio elettronico</value>
+        <value xml:lang="da">%productname% 6.0/7 Spreadsheet</value>
+        <value xml:lang="sv">%productname% 6.0/7 tabelldokument</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Arkusz kalkulacyjny</value>
+        <value xml:lang="pt-BR">Planilha %productname% 6.0/7 </value>
+        <value xml:lang="ja">%productname% 6.0/7 表計算ドキュメント</value>
+        <value xml:lang="ko">%productname% 6.0/7 스프레드시트</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 工作表文档</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 工作表文件</value>
+        <value xml:lang="tr">%productname% 6.0/7 Hesap Çizelgesi</value>
         <value xml:lang="ar">Calc 6.0</value>
-        <value xml:lang="ca">%productname% 6/7 Spreadsheet</value>
-        <value xml:lang="th">%productname% 6/7 Spreadsheet</value>
-        <value xml:lang="cs">%productname% 6/7 Spreadsheet</value>
-        <value xml:lang="he">‮גליון עבודה %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Spreadsheet</value>
+        <value xml:lang="ca">%productname% 6.0/7 Spreadsheet</value>
+        <value xml:lang="th">%productname% 6.0/7 Spreadsheet</value>
+        <value xml:lang="cs">%productname% 6.0/7 Spreadsheet</value>
+        <value xml:lang="he">‮גליון עבודה %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Spreadsheet</value>
       </prop>
       <prop oor:name="Data">
         <value>1,calc_StarOffice_XML_Calc,com.sun.star.sheet.SpreadsheetDocument,,295,,6200,,</value>
@@ -4924,33 +4924,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Diagramm</value>
-        <value xml:lang="x-translate">%productname% 6/7 Diagramm</value>
-        <value xml:lang="x-comment">%productname% 6/7 Diagramm</value>
-        <value xml:lang="en-US">%productname% 6/7 Chart</value>
-        <value xml:lang="pt">%productname% 6/7 Gráfico</value>
-        <value xml:lang="ru">%productname% 6/7 Диаграмма</value>
-        <value xml:lang="el">%productname% 6/7 Chart</value>
-        <value xml:lang="nl">%productname% 6/7 Diagram</value>
-        <value xml:lang="fr">%productname% 6/7 Diagramme</value>
-        <value xml:lang="es">%productname% 6/7 - Diagrama</value>
-        <value xml:lang="fi">%productname% 6/7 Chart</value>
-        <value xml:lang="it">%productname% 6/7 Diagramma</value>
-        <value xml:lang="da">%productname% 6/7 Chart</value>
-        <value xml:lang="sv">%productname% 6/7 diagram</value>
-        <value xml:lang="pl">%productname% 6/7 - Wykres</value>
-        <value xml:lang="pt-BR">Gráfico %productname% 6/7 </value>
-        <value xml:lang="ja">%productname% 6/7 グラフ</value>
-        <value xml:lang="ko">%productname% 6/7 차트</value>
-        <value xml:lang="zh-CN">%productname% 6/7 图表</value>
-        <value xml:lang="zh-TW">%productname% 6/7 圖表</value>
-        <value xml:lang="tr">%productname% 6/7 Chart</value>
-        <value xml:lang="ar">%productname% 6/7 Chart</value>
-        <value xml:lang="ca">%productname% 6/7 Chart</value>
-        <value xml:lang="th">%productname% 6/7 Chart</value>
-        <value xml:lang="cs">%productname% 6/7 Chart</value>
-        <value xml:lang="he">‮תרשים %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Chart</value>
+        <value xml:lang="de">%productname% 6.0/7 Diagramm</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Diagramm</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Diagramm</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Chart</value>
+        <value xml:lang="pt">%productname% 6.0/7 Gráfico</value>
+        <value xml:lang="ru">%productname% 6.0/7 Диаграмма</value>
+        <value xml:lang="el">%productname% 6.0/7 Chart</value>
+        <value xml:lang="nl">%productname% 6.0/7 Diagram</value>
+        <value xml:lang="fr">%productname% 6.0/7 Diagramme</value>
+        <value xml:lang="es">%productname% 6.0/7 - Diagrama</value>
+        <value xml:lang="fi">%productname% 6.0/7 Chart</value>
+        <value xml:lang="it">%productname% 6.0/7 Diagramma</value>
+        <value xml:lang="da">%productname% 6.0/7 Chart</value>
+        <value xml:lang="sv">%productname% 6.0/7 diagram</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Wykres</value>
+        <value xml:lang="pt-BR">Gráfico %productname% 6.0/7 </value>
+        <value xml:lang="ja">%productname% 6.0/7 グラフ</value>
+        <value xml:lang="ko">%productname% 6.0/7 차트</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 图表</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 圖表</value>
+        <value xml:lang="tr">%productname% 6.0/7 Chart</value>
+        <value xml:lang="ar">%productname% 6.0/7 Chart</value>
+        <value xml:lang="ca">%productname% 6.0/7 Chart</value>
+        <value xml:lang="th">%productname% 6.0/7 Chart</value>
+        <value xml:lang="cs">%productname% 6.0/7 Chart</value>
+        <value xml:lang="he">‮תרשים %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Chart</value>
       </prop>
       <prop oor:name="Data">
         <value>0,chart_StarOffice_XML_Chart,com.sun.star.chart.ChartDocument,,12577,XML,6200,,</value>
@@ -5255,33 +5255,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Zeichnung</value>
-        <value xml:lang="x-translate">%productname% 6/7 Zeichnung</value>
-        <value xml:lang="x-comment">%productname% 6/7 Zeichnung</value>
-        <value xml:lang="en-US">%productname% 6/7 Drawing</value>
-        <value xml:lang="pt">%productname% 6/7 Desenho</value>
-        <value xml:lang="ru">%productname% 6/7 Рисунок</value>
-        <value xml:lang="el">%productname% 6/7 Drawing</value>
-        <value xml:lang="nl">%productname% 6/7 Tekening</value>
-        <value xml:lang="fr">%productname% 6/7 Dessin</value>
-        <value xml:lang="es">%productname% 6/7 Dibujo</value>
-        <value xml:lang="fi">%productname% 6/7 Drawing</value>
-        <value xml:lang="it">%productname% 6/7 Disegno</value>
-        <value xml:lang="da">%productname% 6/7 Drawing</value>
-        <value xml:lang="sv">%productname% 6/7 teckning</value>
-        <value xml:lang="pl">%productname% 6/7 - Rysunek</value>
-        <value xml:lang="pt-BR">Desenho %productname% 6/7 </value>
-        <value xml:lang="ja">%productname% 6/7 図形描画</value>
-        <value xml:lang="ko">%productname% 6/7 그리기</value>
-        <value xml:lang="zh-CN">%productname% 6/7 绘图</value>
-        <value xml:lang="zh-TW">%productname% 6/7 繪圖</value>
-        <value xml:lang="tr">%productname% 6/7 Drawing</value>
-        <value xml:lang="ar">%productname% 6/7 Drawing</value>
-        <value xml:lang="ca">%productname% 6/7 Drawing</value>
-        <value xml:lang="th">%productname% 6/7 Drawing</value>
-        <value xml:lang="cs">%productname% 6/7 Drawing</value>
-        <value xml:lang="he">‮סרטוט %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Drawing</value>
+        <value xml:lang="de">%productname% 6.0/7 Zeichnung</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Zeichnung</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Zeichnung</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="pt">%productname% 6.0/7 Desenho</value>
+        <value xml:lang="ru">%productname% 6.0/7 Рисунок</value>
+        <value xml:lang="el">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="nl">%productname% 6.0/7 Tekening</value>
+        <value xml:lang="fr">%productname% 6.0/7 Dessin</value>
+        <value xml:lang="es">%productname% 6.0/7 Dibujo</value>
+        <value xml:lang="fi">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="it">%productname% 6.0/7 Disegno</value>
+        <value xml:lang="da">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="sv">%productname% 6.0/7 teckning</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Rysunek</value>
+        <value xml:lang="pt-BR">Desenho %productname% 6.0/7 </value>
+        <value xml:lang="ja">%productname% 6.0/7 図形描画</value>
+        <value xml:lang="ko">%productname% 6.0/7 그리기</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 绘图</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 繪圖</value>
+        <value xml:lang="tr">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="ar">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="ca">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="th">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="cs">%productname% 6.0/7 Drawing</value>
+        <value xml:lang="he">‮סרטוט %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Drawing</value>
       </prop>
       <prop oor:name="Data">
         <value>1,draw_StarOffice_XML_Draw,com.sun.star.drawing.DrawingDocument,,268435751,XML,6200,,</value>
@@ -5657,33 +5657,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Präsentation</value>
-        <value xml:lang="x-translate">%productname% 6/7 Präsentation</value>
-        <value xml:lang="x-comment">%productname% 6/7 Präsentation</value>
-        <value xml:lang="en-US">%productname% 6/7 Presentation</value>
-        <value xml:lang="pt">%productname% 6/7 Apresentação</value>
-        <value xml:lang="ru">%productname% 6/7 Презентация</value>
-        <value xml:lang="el">%productname% 6/7 Prδsentation</value>
-        <value xml:lang="nl">%productname% 6/7 Presentatie</value>
-        <value xml:lang="fr">%productname% 6/7 Présentation</value>
-        <value xml:lang="es">%productname% 6/7 - Presentación</value>
-        <value xml:lang="fi">%productname% 6/7 Presentation</value>
-        <value xml:lang="it">%productname% 6/7 Presentazione</value>
-        <value xml:lang="da">%productname% 6/7 Presentation</value>
-        <value xml:lang="sv">%productname% 6/7 presentation</value>
-        <value xml:lang="pl">%productname% 6/7 - Prezentacja</value>
-        <value xml:lang="pt-BR">Apresentação %productname% 6/7 </value>
-        <value xml:lang="ja">%productname% 6/7 プレゼンテーション</value>
-        <value xml:lang="ko">%productname% 6/7 프레젠테이션</value>
-        <value xml:lang="zh-CN">%productname% 6/7 演示文稿</value>
-        <value xml:lang="zh-TW">%productname% 6/7 簡報</value>
-        <value xml:lang="tr">%productname% 6/7 Sunumu</value>
-        <value xml:lang="ar">%productname% 6/7 Prنsentation</value>
-        <value xml:lang="ca">%productname% 6/7 Presentation</value>
-        <value xml:lang="th">%productname% 6/7 Presentation</value>
-        <value xml:lang="cs">%productname% 6/7 Presentation</value>
-        <value xml:lang="he">‮מצגת %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Presentation</value>
+        <value xml:lang="de">%productname% 6.0/7 Präsentation</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Präsentation</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Präsentation</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="pt">%productname% 6.0/7 Apresentação</value>
+        <value xml:lang="ru">%productname% 6.0/7 Презентация</value>
+        <value xml:lang="el">%productname% 6.0/7 Prδsentation</value>
+        <value xml:lang="nl">%productname% 6.0/7 Presentatie</value>
+        <value xml:lang="fr">%productname% 6.0/7 Présentation</value>
+        <value xml:lang="es">%productname% 6.0/7 - Presentación</value>
+        <value xml:lang="fi">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="it">%productname% 6.0/7 Presentazione</value>
+        <value xml:lang="da">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="sv">%productname% 6.0/7 presentation</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Prezentacja</value>
+        <value xml:lang="pt-BR">Apresentação %productname% 6.0/7 </value>
+        <value xml:lang="ja">%productname% 6.0/7 プレゼンテーション</value>
+        <value xml:lang="ko">%productname% 6.0/7 프레젠테이션</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 演示文稿</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 簡報</value>
+        <value xml:lang="tr">%productname% 6.0/7 Sunumu</value>
+        <value xml:lang="ar">%productname% 6.0/7 Prنsentation</value>
+        <value xml:lang="ca">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="th">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="cs">%productname% 6.0/7 Presentation</value>
+        <value xml:lang="he">‮מצגת %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Presentation</value>
       </prop>
       <prop oor:name="Data">
         <value>1,impress_StarOffice_XML_Impress,com.sun.star.presentation.PresentationDocument,,268435751,XML,6200,,</value>
@@ -5760,33 +5760,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Formel</value>
-        <value xml:lang="x-translate">%productname% 6/7 Formel</value>
-        <value xml:lang="x-comment">%productname% 6/7 Formel</value>
-        <value xml:lang="en-US">%productname% 6/7 Formula</value>
-        <value xml:lang="pt">%productname% 6/7 Fórmula</value>
-        <value xml:lang="ru">%productname% 6/7 Формула</value>
-        <value xml:lang="el">%productname% 6/7 Formula</value>
+        <value xml:lang="de">%productname% 6.0/7 Formel</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Formel</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Formel</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Formula</value>
+        <value xml:lang="pt">%productname% 6.0/7 Fórmula</value>
+        <value xml:lang="ru">%productname% 6.0/7 Формула</value>
+        <value xml:lang="el">%productname% 6.0/7 Formula</value>
         <value xml:lang="nl">%PRODUCTNAME 6.0 Formule</value>
-        <value xml:lang="fr">%productname% 6/7 Formule</value>
-        <value xml:lang="es">%productname% 6/7 - Fórmula</value>
-        <value xml:lang="fi">%productname% 6/7 Formula</value>
-        <value xml:lang="it">%productname% 6/7 Formula</value>
-        <value xml:lang="da">%productname% 6/7 Formula</value>
-        <value xml:lang="sv">%productname% 6/7 formel</value>
-        <value xml:lang="pl">%productname% 6/7 - Formuła</value>
-        <value xml:lang="pt-BR">Fórmula %productname% 6/7 </value>
-        <value xml:lang="ja">%productname% 6/7 数式</value>
-        <value xml:lang="ko">%productname% 6/7 수식</value>
-        <value xml:lang="zh-CN">%productname% 6/7 公式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 公式</value>
-        <value xml:lang="tr">%productname% 6/7 Formula</value>
-        <value xml:lang="ar">%productname% 6/7 Formula</value>
-        <value xml:lang="ca">%productname% 6/7 Formula</value>
-        <value xml:lang="th">%productname% 6/7 Formula</value>
-        <value xml:lang="cs">%productname% 6/7 Formula</value>
-        <value xml:lang="he">‮נוסחה %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Formula</value>
+        <value xml:lang="fr">%productname% 6.0/7 Formule</value>
+        <value xml:lang="es">%productname% 6.0/7 - Fórmula</value>
+        <value xml:lang="fi">%productname% 6.0/7 Formula</value>
+        <value xml:lang="it">%productname% 6.0/7 Formula</value>
+        <value xml:lang="da">%productname% 6.0/7 Formula</value>
+        <value xml:lang="sv">%productname% 6.0/7 formel</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Formuła</value>
+        <value xml:lang="pt-BR">Fórmula %productname% 6.0/7 </value>
+        <value xml:lang="ja">%productname% 6.0/7 数式</value>
+        <value xml:lang="ko">%productname% 6.0/7 수식</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 公式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 公式</value>
+        <value xml:lang="tr">%productname% 6.0/7 Formula</value>
+        <value xml:lang="ar">%productname% 6.0/7 Formula</value>
+        <value xml:lang="ca">%productname% 6.0/7 Formula</value>
+        <value xml:lang="th">%productname% 6.0/7 Formula</value>
+        <value xml:lang="cs">%productname% 6.0/7 Formula</value>
+        <value xml:lang="he">‮נוסחה %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Formula</value>
       </prop>
       <prop oor:name="Data">
         <value>1,math_StarOffice_XML_Math,com.sun.star.formula.FormulaProperties,,295,,6200,,</value>
@@ -6575,33 +6575,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Textdokument</value>
-        <value xml:lang="x-translate">%productname% 6/7 Textdokument</value>
-        <value xml:lang="x-comment">%productname% 6/7 Textdokument</value>
-        <value xml:lang="en-US">%productname% 6/7 Text Document</value>
-        <value xml:lang="pt">%productname% 6/7 Texto</value>
-        <value xml:lang="ru">%productname% 6/7 Текстовый документ</value>
-        <value xml:lang="el">%productname% 6/7 Text Document</value>
-        <value xml:lang="nl">%productname% 6/7 Tekstdocument</value>
-        <value xml:lang="fr">%productname% 6/7 Texte</value>
-        <value xml:lang="es">%productname% 6/7 Documento de texto</value>
+        <value xml:lang="de">%productname% 6.0/7 Textdokument</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Textdokument</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Textdokument</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="pt">%productname% 6.0/7 Texto</value>
+        <value xml:lang="ru">%productname% 6.0/7 Текстовый документ</value>
+        <value xml:lang="el">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="nl">%productname% 6.0/7 Tekstdocument</value>
+        <value xml:lang="fr">%productname% 6.0/7 Texte</value>
+        <value xml:lang="es">%productname% 6.0/7 Documento de texto</value>
         <value xml:lang="fi">Writer 6.0</value>
-        <value xml:lang="it">%productname% 6/7 Documento di testo</value>
-        <value xml:lang="da">%productname% 6/7 Text Document</value>
-        <value xml:lang="sv">%productname% 6/7 textdokument</value>
-        <value xml:lang="pl">%productname% 6/7 - Dokument tekstowy</value>
-        <value xml:lang="pt-BR">%productname% 6/7 Text Document</value>
-        <value xml:lang="ja">%productname% 6/7 文書ドキュメント</value>
-        <value xml:lang="ko">%productname% 6/7 텍스트 문서</value>
-        <value xml:lang="zh-CN">%productname% 6/7 文本文档</value>
-        <value xml:lang="zh-TW">%productname% 6/7 文字文件</value>
-        <value xml:lang="tr">%productname% 6/7 Metin Belgesi</value>
-        <value xml:lang="ar">%productname% 6/7 Text Document</value>
-        <value xml:lang="ca">%productname% 6/7 Text Document</value>
+        <value xml:lang="it">%productname% 6.0/7 Documento di testo</value>
+        <value xml:lang="da">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="sv">%productname% 6.0/7 textdokument</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Dokument tekstowy</value>
+        <value xml:lang="pt-BR">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="ja">%productname% 6.0/7 文書ドキュメント</value>
+        <value xml:lang="ko">%productname% 6.0/7 텍스트 문서</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 文本文档</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 文字文件</value>
+        <value xml:lang="tr">%productname% 6.0/7 Metin Belgesi</value>
+        <value xml:lang="ar">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="ca">%productname% 6.0/7 Text Document</value>
         <value xml:lang="th">เอกสารข้อความ %productname%  (ต้นฉบับเอกสาร %productname% )</value>
-        <value xml:lang="cs">%productname% 6/7 Text Document</value>
-        <value xml:lang="he">‮מסמך טקסט %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Text Document</value>
+        <value xml:lang="cs">%productname% 6.0/7 Text Document</value>
+        <value xml:lang="he">‮מסמך טקסט %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Text Document</value>
       </prop>
       <prop oor:name="Data">
         <value>1,writer_StarOffice_XML_Writer,com.sun.star.text.TextDocument,,268435751,CXML,6200,,</value>
@@ -6973,33 +6973,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Textdokumentvorlage</value>
-        <value xml:lang="x-translate">%productname% 6/7 Textdokumentvorlage</value>
-        <value xml:lang="x-comment">%productname% 6/7 Textdokument Vorlage</value>
-        <value xml:lang="en-US">%productname% 6/7 Text Document Template</value>
-        <value xml:lang="pt">%productname% 6/7 Modelo de texto</value>
-        <value xml:lang="ru">%productname% 6/7 Шаблон текстового документа</value>
+        <value xml:lang="de">%productname% 6.0/7 Textdokumentvorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Textdokumentvorlage</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Textdokument Vorlage</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Text Document Template</value>
+        <value xml:lang="pt">%productname% 6.0/7 Modelo de texto</value>
+        <value xml:lang="ru">%productname% 6.0/7 Шаблон текстового документа</value>
         <value xml:lang="el">Writer 6.0 Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6/7 Sjabloon voor tekstdocumenten</value>
-        <value xml:lang="fr">%productname% 6/7 Modèle de texte</value>
-        <value xml:lang="es">%productname% 6/7 - Plantilla de texto</value>
+        <value xml:lang="nl">%productname% 6.0/7 Sjabloon voor tekstdocumenten</value>
+        <value xml:lang="fr">%productname% 6.0/7 Modèle de texte</value>
+        <value xml:lang="es">%productname% 6.0/7 - Plantilla de texto</value>
         <value xml:lang="fi">Writer 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6/7 Modello di documento di testo</value>
+        <value xml:lang="it">%productname% 6.0/7 Modello di documento di testo</value>
         <value xml:lang="da">Writer 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6/7 textdokumentmall</value>
-        <value xml:lang="pl">%productname% 6/7 - Szablon dokumentu tekstowego</value>
+        <value xml:lang="sv">%productname% 6.0/7 textdokumentmall</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Szablon dokumentu tekstowego</value>
         <value xml:lang="pt-BR">Writer 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6/7 文書ドキュメント テンプレート</value>
-        <value xml:lang="ko">%productname% 6/7 텍스트 문서 서식 파일</value>
-        <value xml:lang="zh-CN">%productname% 6/7 文本文档样式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 文字文件樣式</value>
-        <value xml:lang="tr">%productname% 6/7 Metin Belge Taslakları</value>
+        <value xml:lang="ja">%productname% 6.0/7 文書ドキュメント テンプレート</value>
+        <value xml:lang="ko">%productname% 6.0/7 텍스트 문서 서식 파일</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 文本文档样式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 文字文件樣式</value>
+        <value xml:lang="tr">%productname% 6.0/7 Metin Belge Taslakları</value>
         <value xml:lang="ar">Writer 6.0 قالب</value>
-        <value xml:lang="ca">%productname% 6/7 Text Document Template</value>
-        <value xml:lang="th">แม่แบบเอกสารข้อความ %productname% 6/7 </value>
-        <value xml:lang="cs">%productname% 6/7 Text Document Template</value>
-        <value xml:lang="he">‮תבנית מסמך טקסט %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Text Document Template</value>
+        <value xml:lang="ca">%productname% 6.0/7 Text Document Template</value>
+        <value xml:lang="th">แม่แบบเอกสารข้อความ %productname% 6.0/7 </value>
+        <value xml:lang="cs">%productname% 6.0/7 Text Document Template</value>
+        <value xml:lang="he">‮תבנית מסמך טקסט %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Text Document Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,writer_StarOffice_XML_Writer_Template,com.sun.star.text.TextDocument,,55,CXMLV,6200,,</value>
@@ -7010,33 +7010,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Textdokument </value>
-        <value xml:lang="x-translate">%productname% 6/7 Textdokument </value>
+        <value xml:lang="de">%productname% 6.0/7 Textdokument </value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Textdokument </value>
         <value xml:lang="x-comment">%productname% Textdokument (%productname% Globaldokument)</value>
-        <value xml:lang="en-US">%productname% 6/7 Text Document </value>
+        <value xml:lang="en-US">%productname% 6.0/7 Text Document </value>
         <value xml:lang="pt">%productname% Texto (%productname% Documento-mestre)</value>
-        <value xml:lang="ru">%productname% 6/7 Текстовый документ </value>
+        <value xml:lang="ru">%productname% 6.0/7 Текстовый документ </value>
         <value xml:lang="el">Writer 6.0</value>
-        <value xml:lang="nl">%productname% 6/7 Tekstdocument </value>
-        <value xml:lang="fr">%productname% 6/7 Texte </value>
-        <value xml:lang="es">%productname% 6/7 Documento de texto </value>
+        <value xml:lang="nl">%productname% 6.0/7 Tekstdocument </value>
+        <value xml:lang="fr">%productname% 6.0/7 Texte </value>
+        <value xml:lang="es">%productname% 6.0/7 Documento de texto </value>
         <value xml:lang="fi">Writer 6.0</value>
-        <value xml:lang="it">%productname% 6/7 Documento di testo </value>
+        <value xml:lang="it">%productname% 6.0/7 Documento di testo </value>
         <value xml:lang="da">Writer 6.0</value>
-        <value xml:lang="sv">%productname% 6/7 textdokument </value>
-        <value xml:lang="pl">%productname% 6/7 </value>
+        <value xml:lang="sv">%productname% 6.0/7 textdokument </value>
+        <value xml:lang="pl">%productname% 6.0/7 </value>
         <value xml:lang="pt-BR">Writer 6.0</value>
-        <value xml:lang="ja">%productname% 6/7 文書ドキュメント </value>
-        <value xml:lang="ko">%productname% 6/7 텍스트 문서</value>
-        <value xml:lang="zh-CN">%productname% 6/7 文本文档 </value>
-        <value xml:lang="zh-TW">%productname% 6/7 文字文件</value>
-        <value xml:lang="tr">%productname% 6/7  Metin Belgesi</value>
+        <value xml:lang="ja">%productname% 6.0/7 文書ドキュメント </value>
+        <value xml:lang="ko">%productname% 6.0/7 텍스트 문서</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 文本文档 </value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 文字文件</value>
+        <value xml:lang="tr">%productname% 6.0/7  Metin Belgesi</value>
         <value xml:lang="ar">Writer 6.0</value>
-        <value xml:lang="ca">%productname% 6/7 Text Document </value>
+        <value xml:lang="ca">%productname% 6.0/7 Text Document </value>
         <value xml:lang="th">เอกสารข้อความ %productname%  (ต้นฉบับเอกสาร %productname% )</value>
-        <value xml:lang="cs">%productname% 6/7 Text Document </value>
-        <value xml:lang="he">‮מסמך טקסט %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Text Document </value>
+        <value xml:lang="cs">%productname% 6.0/7 Text Document </value>
+        <value xml:lang="he">‮מסמך טקסט %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Text Document </value>
       </prop>
       <prop oor:name="Data">
         <value>4,writer_StarOffice_XML_Writer,com.sun.star.text.GlobalDocument,,6,CXML,6200,,</value>
@@ -7047,33 +7047,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Globaldokument</value>
-        <value xml:lang="x-translate">%productname% 6/7 Globaldokument</value>
-        <value xml:lang="x-comment">%productname% 6/7 Globaldokument</value>
-        <value xml:lang="en-US">%productname% 6/7 Master Document</value>
-        <value xml:lang="pt">%productname% 6/7 Documento-mestre</value>
-        <value xml:lang="ru">%productname% 6/7 Главный документ</value>
+        <value xml:lang="de">%productname% 6.0/7 Globaldokument</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Globaldokument</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Globaldokument</value>
+        <value xml:lang="en-US">%productname% 6.0/7 Master Document</value>
+        <value xml:lang="pt">%productname% 6.0/7 Documento-mestre</value>
+        <value xml:lang="ru">%productname% 6.0/7 Главный документ</value>
         <value xml:lang="el">Writer 6.0 Κύριο έγγραφο</value>
-        <value xml:lang="nl">%productname% 6/7 Masterdocument</value>
-        <value xml:lang="fr">%productname% 6/7 Document maître</value>
-        <value xml:lang="es">%productname% 6/7 Documento maestro</value>
+        <value xml:lang="nl">%productname% 6.0/7 Masterdocument</value>
+        <value xml:lang="fr">%productname% 6.0/7 Document maître</value>
+        <value xml:lang="es">%productname% 6.0/7 Documento maestro</value>
         <value xml:lang="fi">Writer 6.0 -pääasiakirja</value>
-        <value xml:lang="it">%productname% 6/7 Documento master</value>
+        <value xml:lang="it">%productname% 6.0/7 Documento master</value>
         <value xml:lang="da">Writer 6.0 Globaldokument</value>
-        <value xml:lang="sv">%productname% 6/7 samlingsdokument</value>
-        <value xml:lang="pl">%productname% 6/7 - Dokument główny</value>
+        <value xml:lang="sv">%productname% 6.0/7 samlingsdokument</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Dokument główny</value>
         <value xml:lang="pt-BR">Writer 6.0 Globaldokument</value>
-        <value xml:lang="ja">%productname% 6/7 マスタードキュメント</value>
-        <value xml:lang="ko">%productname% 6/7 마스터 문서</value>
-        <value xml:lang="zh-CN">%productname% 6/7 主控文档</value>
-        <value xml:lang="zh-TW">%productname% 6/7 主控文件</value>
-        <value xml:lang="tr">%productname% 6/7 Ana Belgesi</value>
+        <value xml:lang="ja">%productname% 6.0/7 マスタードキュメント</value>
+        <value xml:lang="ko">%productname% 6.0/7 마스터 문서</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 主控文档</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 主控文件</value>
+        <value xml:lang="tr">%productname% 6.0/7 Ana Belgesi</value>
         <value xml:lang="ar">Writer 6.0 مستند شامل</value>
-        <value xml:lang="ca">%productname% 6/7 Master Document</value>
-        <value xml:lang="th">ต้นฉบับเอกสาร %productname% 6/7 </value>
-        <value xml:lang="cs">%productname% 6/7 Master Document</value>
-        <value xml:lang="he">‮מסמך אב %productname% 6/7‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 Master Document</value>
+        <value xml:lang="ca">%productname% 6.0/7 Master Document</value>
+        <value xml:lang="th">ต้นฉบับเอกสาร %productname% 6.0/7 </value>
+        <value xml:lang="cs">%productname% 6.0/7 Master Document</value>
+        <value xml:lang="he">‮מסמך אב %productname% 6.0/7‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 Master Document</value>
       </prop>
       <prop oor:name="Data">
         <value>1,writer_globaldocument_StarOffice_XML_Writer_GlobalDocument,com.sun.star.text.GlobalDocument,,268435751,CXML,6200,,</value>
@@ -7095,24 +7095,24 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 Textdokument (%productname% Writer/Web)</value>
-        <value xml:lang="x-translate">%productname% 6/7 Textdokument (%productname% Writer/Web)</value>
-        <value xml:lang="x-comment">%productname% 6/7 Textdokument (%productname% Writer/Web)</value>
+        <value xml:lang="de">%productname% 6.0/7 Textdokument (%productname% Writer/Web)</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 Textdokument (%productname% Writer/Web)</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 Textdokument (%productname% Writer/Web)</value>
         <value xml:lang="en-US">%productname% Text Document (%productname% Writer/Web)</value>
         <value xml:lang="pt">%productname% Texto (%productname% Writer/Web)</value>
-        <value xml:lang="ru">%productname% 6/7 Текстовый документ (%productname% 6/7 Writer/Web)</value>
+        <value xml:lang="ru">%productname% 6.0/7 Текстовый документ (%productname% 6.0/7 Writer/Web)</value>
         <value xml:lang="el">Writer 6.0</value>
         <value xml:lang="nl">%productname% Tekstdocument (%productname% Writer/Web)</value>
         <value xml:lang="fr">%productname% Texte 6.0 (%productname% Writer/Web)</value>
-        <value xml:lang="es">%productname% 6/7 Documento de texto (%productname% Writer/Web)</value>
+        <value xml:lang="es">%productname% 6.0/7 Documento de texto (%productname% Writer/Web)</value>
         <value xml:lang="fi">Writer 6.0</value>
-        <value xml:lang="it">%productname% 6/7 Documento di testo (%productname% Writer/Web)</value>
+        <value xml:lang="it">%productname% 6.0/7 Documento di testo (%productname% Writer/Web)</value>
         <value xml:lang="da">Writer 6.0</value>
-        <value xml:lang="sv">%productname% 6/7 textdokument (%productname% Writer/Web)</value>
+        <value xml:lang="sv">%productname% 6.0/7 textdokument (%productname% Writer/Web)</value>
         <value xml:lang="pl">%productname% - Dokument tekstowy (%productname% Writer/Web)</value>
         <value xml:lang="pt-BR">Writer 6.0</value>
         <value xml:lang="ja">%productname% 文書ドキュメント (%productname% Writer/Web)</value>
-        <value xml:lang="ko">%productname% 6/7 텍스트 문서 (%productname% Writer/Web)</value>
+        <value xml:lang="ko">%productname% 6.0/7 텍스트 문서 (%productname% Writer/Web)</value>
         <value xml:lang="zh-CN">%productname% 文本文档 (%productname% Writer/Web)</value>
         <value xml:lang="zh-TW">%productname% 文字文件 (%productname% Writer/Web)</value>
         <value xml:lang="tr">%productname% Metin Belgesi (%productname% Writer/Web)</value>
@@ -7120,7 +7120,7 @@
         <value xml:lang="ca">%productname% Text Document (%productname% Writer/Web)</value>
         <value xml:lang="th">%productname% Text Document (%productname% Writer/Web)</value>
           <value xml:lang="cs">%productname% Text Document (%productname% Writer/Web)</value>
-        <value xml:lang="he">‮מסמך טקסט %productname% 6/7 (%productname% Writer/Web)‬</value>
+        <value xml:lang="he">‮מסמך טקסט %productname% 6.0/7 (%productname% Writer/Web)‬</value>
           <value xml:lang="hi-IN">%productname% Text Document (%productname% Writer/Web)</value>
       </prop>
       <prop oor:name="Data">
@@ -7132,33 +7132,33 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6/7 HTML-Dokumentvorlage</value>
-        <value xml:lang="x-translate">%productname% 6/7 HTML-Dokumentvorlage</value>
-        <value xml:lang="x-comment">%productname% 6/7 HTML-Dokumentvorlage</value>
-        <value xml:lang="en-US">%productname% 6/7 HTML Template</value>
-        <value xml:lang="pt">%productname% 6/7 Modelo de páginas Web</value>
-        <value xml:lang="ru">%productname% 6/7 Шаблон Web-страниц</value>
+        <value xml:lang="de">%productname% 6.0/7 HTML-Dokumentvorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0/7 HTML-Dokumentvorlage</value>
+        <value xml:lang="x-comment">%productname% 6.0/7 HTML-Dokumentvorlage</value>
+        <value xml:lang="en-US">%productname% 6.0/7 HTML Template</value>
+        <value xml:lang="pt">%productname% 6.0/7 Modelo de páginas Web</value>
+        <value xml:lang="ru">%productname% 6.0/7 Шаблон Web-страниц</value>
           <value xml:lang="el">Writer/Web 6.0 Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6/7 Sjabloon voor webpagina&apos;s</value>
-        <value xml:lang="fr">%productname% 6/7 Modèle HTLM</value>
-        <value xml:lang="es">%productname% 6/7 - Plantilla HTML</value>
+        <value xml:lang="nl">%productname% 6.0/7 Sjabloon voor webpagina&apos;s</value>
+        <value xml:lang="fr">%productname% 6.0/7 Modèle HTLM</value>
+        <value xml:lang="es">%productname% 6.0/7 - Plantilla HTML</value>
           <value xml:lang="fi">Writer/Web 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6/7 Modello di documento HTML</value>
+        <value xml:lang="it">%productname% 6.0/7 Modello di documento HTML</value>
           <value xml:lang="da">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6/7 HTML-dokumentmall</value>
-        <value xml:lang="pl">%productname% 6/7 - Szablon stron WWW</value>
+        <value xml:lang="sv">%productname% 6.0/7 HTML-dokumentmall</value>
+        <value xml:lang="pl">%productname% 6.0/7 - Szablon stron WWW</value>
           <value xml:lang="pt-BR">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6/7 HTML ドキュメントテンプレート</value>
-        <value xml:lang="ko">%productname% 6/7 HTML 서식 파일</value>
-        <value xml:lang="zh-CN">%productname% 6/7 HTML 文档样式</value>
-        <value xml:lang="zh-TW">%productname% 6/7 HTML 文件樣式</value>
-        <value xml:lang="tr">%productname% 6/7 HTML Taslağı</value>
+        <value xml:lang="ja">%productname% 6.0/7 HTML ドキュメントテンプレート</value>
+        <value xml:lang="ko">%productname% 6.0/7 HTML 서식 파일</value>
+        <value xml:lang="zh-CN">%productname% 6.0/7 HTML 文档样式</value>
+        <value xml:lang="zh-TW">%productname% 6.0/7 HTML 文件樣式</value>
+        <value xml:lang="tr">%productname% 6.0/7 HTML Taslağı</value>
           <value xml:lang="ar">Writer/Web 6.0 قالب</value>
-        <value xml:lang="ca">%productname% 6/7 HTML Template</value>
-        <value xml:lang="th">%productname% 6/7 HTML Template</value>
-        <value xml:lang="cs">%productname% 6/7 HTML Template</value>
-        <value xml:lang="he">‮תבנית %productname% 6/7 HTML‬</value>
-        <value xml:lang="hi-IN">%productname% 6/7 HTML Template</value>
+        <value xml:lang="ca">%productname% 6.0/7 HTML Template</value>
+        <value xml:lang="th">%productname% 6.0/7 HTML Template</value>
+        <value xml:lang="cs">%productname% 6.0/7 HTML Template</value>
+        <value xml:lang="he">‮תבנית %productname% 6.0/7 HTML‬</value>
+        <value xml:lang="hi-IN">%productname% 6.0/7 HTML Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,writer_web_StarOffice_XML_Writer_Web_Template,com.sun.star.text.WebDocument,,55,CXMLVWEB,6200,,</value>
