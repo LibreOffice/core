@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-18 10:00:59 $
+ *  last change: $Author: dr $ $Date: 2002-07-09 14:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,44 +1804,48 @@ void ExcBlankMulblank::AddEntries(
         ExcTable& rExcTab )
 {
     DBG_ASSERT( nCount > 0, "ExcBlankMulblank::AddEntries - count==0!" );
+    DBG_ASSERT( rPos.Col() + nCount <= MAXCOL + 1, "ExcBlankMulblank::AddEntries - column overflow" );
 
     ScAddress   aCurrPos( rPos );
     UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
+    sal_uInt16  nTmpCount = nCount;
 
-    if( nCount > MAXCOL )
-    {   // set format at row
-        rExcTab.SetDefRowXF( nCellXF, rPos.Row() );
-
-        bDummy = TRUE;
-    }
-    else
+    while( nTmpCount )
     {
-        while( nCount )
+        UINT16 nMergeXF, nMergeCount;
+        if( rRootData.pCellMerging->FindMergeBaseXF( aCurrPos, nMergeXF, nMergeCount ) )
         {
-            UINT16 nMergeXF, nMergeCount;
-            if( rRootData.pCellMerging->FindMergeBaseXF( aCurrPos, nMergeXF, nMergeCount ) )
-            {
-                nMergeCount = Min( nMergeCount, nCount );
-                Append( nMergeXF, nMergeCount );
-                nCount -= nMergeCount;
-                aCurrPos.IncCol( nMergeCount );
-            }
-            else
-            {
-                UINT16 nMergeCol;
-                UINT16 nColCount = nCount;
+            nMergeCount = Min( nMergeCount, nTmpCount );
+            Append( nMergeXF, nMergeCount );
+            nTmpCount -= nMergeCount;
+            aCurrPos.IncCol( nMergeCount );
+        }
+        else
+        {
+            UINT16 nMergeCol;
+            UINT16 nColCount = nTmpCount;
 
-                if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
-                    nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nCount );
+            if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
+                nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nTmpCount );
 
-                if( nColCount )
-                {
-                    Append( nCellXF, nColCount );
-                    nCount -= nColCount;
-                    aCurrPos.IncCol( nColCount );
-                }
+            if( nColCount )
+            {
+                Append( nCellXF, nColCount );
+                nTmpCount -= nColCount;
+                aCurrPos.IncCol( nColCount );
             }
         }
+    }
+
+    // #98133# set default row formatting from last cell in the row
+    if( ScfUInt32List::Count() && (rPos.Col() + nCount > MAXCOL) )
+    {
+        sal_uInt16 nXF = GetXF( ScfUInt32List::Last() );
+        rExcTab.SetDefRowXF( nXF, rPos.Row() );
+        if( ScfUInt32List::Count() == 1 )
+            bDummy = TRUE;
+        else
+            ScfUInt32List::Remove( ScfUInt32List::Count() - 1 );
     }
 }
 
