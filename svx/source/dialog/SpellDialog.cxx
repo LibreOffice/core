@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:26:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 #include "optlingu.hxx"
 #include "dialmgr.hxx"
 #include "svxerr.hxx"
+#include "treeopt.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -512,6 +513,9 @@ void SpellDialog::StartSpellOptDlg_Impl()
     sal_uInt16 aSpellInfos[] =
     {
         SID_ATTR_SPELL,SID_ATTR_SPELL,
+        SID_SPELL_MODIFIED, SID_SPELL_MODIFIED,
+        SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
+        SID_AUTOSPELL_MARKOFF, SID_AUTOSPELL_MARKOFF,
         0
     };
     SfxItemSet aSet( SFX_APP()->GetPool(), aSpellInfos);
@@ -521,11 +525,17 @@ void SpellDialog::StartSpellOptDlg_Impl()
     SfxTabPage* pPage = SvxLinguTabPage::Create( pDlg, aSet );
     ( (SvxLinguTabPage*)pPage )->HideGroups( GROUP_MODULES );
     pDlg->SetTabPage( pPage );
-    pDlg->Execute();
+    if(RET_OK == pDlg->Execute())
+    {
+
+        // Benutzerb"ucher anzeigen
+        InitUserDicts();
+        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+        if(pOutSet)
+            OfaTreeOptionsDialog::ApplyLanguageOptions(*pOutSet);
+    }
     delete pDlg;
 
-    // Benutzerb"ucher anzeigen
-    InitUserDicts();
 }
 
 // -----------------------------------------------------------------------
