@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:10:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include <memory>
 #include <hash_map>
-
 
 namespace dp_registry
 {
