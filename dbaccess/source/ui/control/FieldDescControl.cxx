@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:52 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 13:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,7 +2092,9 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                 ::rtl::OUString sFormat;
                 xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
 
-                sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,GetLocale(),sal_True);
+                Locale aLocale;
+                ::comphelper::getNumberFormatProperty(GetFormatter(),nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
+                sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }
         }
         catch(const Exception&)
