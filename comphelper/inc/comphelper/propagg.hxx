@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,10 @@ public:
     virtual sal_Bool SAL_CALL fillAggregatePropertyInfoByHandle(::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
 
+    /** returns information about a property given by handle
+    */
+    sal_Bool getPropertyByHandle( sal_Int32 _nHandle, ::com::sun::star::beans::Property& _rProperty ) const;
+
 
     enum PropertyOrigin
     {
@@ -221,27 +225,34 @@ protected:
 };
 
 //==================================================================
+namespace internal
+{
+    class PropertyForwarder;
+};
+
 /**
  * helper class for implementing the property-set-related interfaces
  * for an object doin' aggregation
  * supports at least XPropertySet and XMultiPropertySet
  *
  */
-
 class OPropertySetAggregationHelper :public OPropertyStateHelper
                                     ,public ::com::sun::star::beans::XPropertiesChangeListener
                                     ,public ::com::sun::star::beans::XVetoableChangeListener
 {
+    friend class internal::PropertyForwarder;
+
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>      m_xAggregateState;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>            m_xAggregateSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xAggregateSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>   m_xAggregateMultiSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>        m_xAggregateFastSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>    m_xAggregateFastSet;
 
-    sal_Bool                    m_bListening : 1;
+    internal::PropertyForwarder*    m_pForwarder;
+    sal_Bool                        m_bListening : 1;
+
 public:
-    OPropertySetAggregationHelper(::cppu::OBroadcastHelper& rBHelper)
-        :OPropertyStateHelper(rBHelper) ,m_bListening(sal_False) { }
+    OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type& aType) throw(::com::sun::star::uno::RuntimeException);
 
@@ -268,7 +279,7 @@ public:
 
 // XPropertyState
     virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL                       setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL                                   setPropertyToDefault(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL             getPropertyDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
@@ -277,12 +288,71 @@ public:
     */
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() = 0;
 
+    /** only implemented for "forwarded" properties, every other property must be handled
+        in the derivee, and will assert if passed herein
+    */
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
+
+    /** only implemented for "forwarded" properties, every other property must be handled
+        in the derivee, and will assert if passed herein
+    */
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw ( ::com::sun::star::uno::Exception );
+
 protected:
+    ~OPropertySetAggregationHelper();
 
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
     virtual void SAL_CALL disposing();
 
-    sal_Int32   getOriginalHandle(sal_Int32 nHandle) const;
+    sal_Int32       getOriginalHandle( sal_Int32 _nHandle ) const;
+    ::rtl::OUString getPropertyName( sal_Int32 _nHandle ) const;
+
+    /** declares the property with the given (public) handle as one to be forwarded to the aggregate
+
+        Sometimes, you might want to <em>overwrite</em> properties at the aggregate. That is,
+        though the aggregate implements this property, and still is to hold the property value,
+        you want to do additional handling upon setting the property, but then forward the value
+        to the aggregate.
+
+        Use this method to declare such properties.
+
+        When a "forwarded property" is set from outside, the class first calls
+        <member>forwardingPropertyValue</member> for any preprocessing, then forwards the property
+        value to the aggregate, and then calls <member>forwardedPropertyValue</member>.
+
+        When you declare a property as "forwarded", the class takes care for some multi-threading
+        issues, for instance, it won't fire any property change notifications which result from
+        forwarding a property value, unless it's safe to do so (i.e. unless our mutex is
+        released).
+
+        @see forwardingPropertyValue
+        @see forwardedPropertyValue
+    */
+    void declareForwardedProperty( sal_Int32 _nHandle );
+
+    /** checks whether we're actually forwarding a property value to our aggregate
+
+        @see declareForwardedProperty
+        @see forwardingPropertyValue
+        @see forwardedPropertyValue
+    */
+    bool    isCurrentlyForwardingProperty( sal_Int32 _nHandle ) const;
+
+    /** called immediately before a property value which is overwritten in this instance
+        is forwarded to the aggregate
+
+        @see declareForwardedProperty
+        @see forwardedPropertyValue
+    */
+    virtual void SAL_CALL forwardingPropertyValue( sal_Int32 _nHandle );
+
+    /** called immediately after a property value which is overwritten in this instance
+        has been forwarded to the aggregate
+
+        @see declareForwardedProperty
+        @see forwardingPropertyValue
+    */
+    virtual void SAL_CALL forwardedPropertyValue( sal_Int32 _nHandle, bool _bSuccess );
 
     /// must be called before aggregation, if aggregation is used
     void setAggregation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&) throw( ::com::sun::star::lang::IllegalArgumentException );
