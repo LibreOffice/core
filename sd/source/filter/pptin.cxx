@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:38:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3007,8 +3007,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
 SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
 {
-    SdrObject* pObj = rObjData.nSpFlags & SP_FGROUP ? pRet :
-        SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );   //#114758#
+    SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );
 
     // Animationseffekte des Objektes lesen
     if ( pObj )
