@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-19 13:45:30 $
+ *  last change: $Author: fs $ $Date: 2002-04-16 07:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2373,34 +2373,50 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
         bInsertRow = getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW));
     if (bInsertRow)
     {
-        // Iterate through all columns and set the default value
-//      Reference< XColumnsSupplier > xColsSuppl(m_xAggregateSet, UNO_QUERY);
-//      Reference< XIndexAccess > xIndexCols(xColsSuppl->getColumns(), UNO_QUERY);
-//      for (sal_Int32 i = 0; i < xIndexCols->getCount(); i++)
-//      {
-//          Reference< XPropertySet > xColProps;
-//          xIndexCols->getByIndex(i) >>= xColProps;
-//
-//          //  ::rtl::OUString sDefault;
-//          xColProps->getPropertyValue(PROPERTY_DEFAULT_VALUE) >>= sDefault;
-//          // TODO: the rowset needs columns which have a default value ....
-//
-//          // OJ: it isn't valid to set everything to null see #88888#
-//          if (!::cppu::any2bool(xColProps->getPropertyValue(PROPERTY_ISREADONLY)))
-//          {
-//              try
-//              {
-//                  Reference< XColumnUpdate > xColUpdate(xColProps, UNO_QUERY);
-//                  if (sDefault.getLength())
-//                      xColUpdate->updateString(sDefault);
-//                  else
-//                      xColUpdate->updateNull();
-//              }
-//              catch(Exception&)
-//              {
-//              }
-//          }
-//      }
+        try
+        {
+            // Iterate through all columns and set the default value
+            Reference< XColumnsSupplier > xColsSuppl( m_xAggregateSet, UNO_QUERY );
+            Reference< XIndexAccess > xIndexCols( xColsSuppl->getColumns(), UNO_QUERY );
+            for (sal_Int32 i = 0; i < xIndexCols->getCount(); ++i)
+            {
+                Reference< XPropertySet > xColProps;
+                xIndexCols->getByIndex(i) >>= xColProps;
+
+                Reference< XColumnUpdate > xColUpdate( xColProps, UNO_QUERY );
+                if ( !xColUpdate.is() )
+                    continue;
+
+                Reference< XPropertySetInfo > xPSI;
+                if ( xColProps.is() )
+                    xPSI = xColProps->getPropertySetInfo( );
+
+                static const ::rtl::OUString PROPERTY_CONTROLDEFAULT( RTL_CONSTASCII_USTRINGPARAM( "ControlDefault" ) );
+                if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
+                {
+                    Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
+
+                    sal_Bool bReadOnly = sal_False;
+                    if ( xPSI->hasPropertyByName( PROPERTY_ISREADONLY ) )
+                        xColProps->getPropertyValue( PROPERTY_ISREADONLY ) >>= bReadOnly;
+
+                    if ( !bReadOnly )
+                    {
+                        try
+                        {
+                            if ( aDefault.hasValue() )
+                                xColUpdate->updateObject( aDefault );
+                        }
+                        catch(Exception&)
+                        {
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception&)
+        {
+        }
 
         if (m_bSubForm)
         {
@@ -3846,9 +3862,31 @@ void SAL_CALL ODatabaseForm::moveToInsertRow() throw( SQLException, RuntimeExcep
     Reference<XResultSetUpdate>  xUpdate;
     if (query_aggregation( m_xAggregate, xUpdate))
     {
-        // do we go on the insert row?
-        if (!getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW)))
-            xUpdate->moveToInsertRow();
+        // _always_ move to the insert row
+        //
+        // Formerly, the following line was conditioned with a "not is new", means we did not move the aggregate
+        // to the insert row if it was already positioned there.
+        //
+        // This prevented the RowSet implementation from resetting it's column values. We, ourself, formerly
+        // did this reset of columns in reset_impl, where we set every column to the ControlDefault, or, if this
+        // was not present, to NULL. However, the problem with setting to NULL was #88888#, the problem with
+        // _not_ setting to NULL (which was the original fix for #88888#) was #97955#.
+        //
+        // So now we
+        // * move our aggregate to the insert row
+        // * in reset_impl
+        //   - set the control defaults into the columns if not void
+        //   - do _not_ set the columns to NULL if no control default is set
+        // This fixes both #88888# and #97955#
+        //
+        // Still, there is #72756#. During fixing this bug, DG introduced not calling the aggregate here. So
+        // in theory, we re-introduced #72756#. But the bug described therein does not happen anymore, as the
+        // preliminaries for it changed (no display of guessed values for new records with autoinc fields)
+        //
+        // BTW: the public Issuezilla bug for #97955# is #i2815#
+        //
+        // 16.04.2002 - 97955 - fs@openoffice.org
+        xUpdate->moveToInsertRow();
 
         // then set the default values and the parameters given from the parent
         reset();
