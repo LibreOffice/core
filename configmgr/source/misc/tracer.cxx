@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-11 02:16:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-13 15:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,23 +152,38 @@ struct OTracerSetup
 //==========================================================================
 ::osl::Mutex    OConfigTracer::s_aMutex;
 OTracerSetup*   OConfigTracer::s_pImpl = NULL;
+#ifdef WNT
+timeb           OConfigTracer::s_aStartTime;
+#else
 timeval         OConfigTracer::s_aStartTime;
-
+#endif
 
 //--------------------------------------------------------------------------
 void OConfigTracer::startGlobalTimer()
 {
+#ifdef WNT
+    ftime( &s_aStartTime );
+#else
     gettimeofday( &s_aStartTime, NULL );
+#endif
 }
 
 //--------------------------------------------------------------------------
 sal_uInt32 OConfigTracer::getGlobalTimer()
 {
+#ifdef WNT
+    struct timeb currentTime;
+    sal_uInt32 nSeconds;
+    ftime( &currentTime );
+    nSeconds = (sal_uInt32)( currentTime.time - s_aStartTime.time );
+    return ( nSeconds * 1000 ) + (long)( currentTime.millitm - s_aStartTime.millitm );
+#else
     struct timeval currentTime;
     sal_uInt32 nSeconds;
     gettimeofday( &currentTime, NULL );
     nSeconds = (sal_uInt32)( currentTime.tv_sec - s_aStartTime.tv_sec );
     return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - s_aStartTime.tv_usec );
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -521,6 +536,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.7  2001/03/11 02:16:13  pluby
+//  Replaced ftime() calls with gettimeofday() since ftime() is obsolete on Linux and Mac OS X
+//
 //  Revision 1.6  2001/02/27 14:27:25  jb
 //  Correction: Do not print the message type twice
 //

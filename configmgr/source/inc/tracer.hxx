@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-11 02:16:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-13 15:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,12 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+
+#ifdef WNT
+#include <sys/timeb.h>
+#else
 #include <sys/time.h>
+#endif
 
 #define OUSTRING2ASCII(rtlOUString) ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
 
@@ -103,7 +108,11 @@ class OConfigTracer
 protected:
     static  ::osl::Mutex    s_aMutex;
     static OTracerSetup*    s_pImpl;
+#ifdef WNT
+    static timeb            s_aStartTime;
+#else
     static timeval          s_aStartTime;
+#endif
 
 private:
     OConfigTracer();    // never implemented, no instantiation of this class allowed, only static members
@@ -161,6 +170,9 @@ public:
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.3  2001/03/11 02:16:12  pluby
+//  Replaced ftime() calls with gettimeofday() since ftime() is obsolete on Linux and Mac OS X
+//
 //  Revision 1.2  2001/02/13 09:47:14  dg
 //  #83239# timing output
 //
