@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:26:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE|CONVERT_TWIPS, pSize);
         uno::Any* pSizeType = 0;
         GetProperty(RES_FRM_SIZE, MID_FRMSIZE_SIZE_TYPE, pSizeType);
+        uno::Any* pWidthType = 0;
+        GetProperty(RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE, pWidthType);
         if( pWidth || pHeight ||pRelH || pRelW || pSize ||pSizeType ||
-            pSyncWidth || pSyncHeight )
+            pWidthType ||pSyncWidth || pSyncHeight )
         {
             rSizeFound = sal_True;
             SwFmtFrmSize aFrmSz ( static_cast < const SwFmtFrmSize& > ( rFromSet.Get ( RES_FRM_SIZE ) ) );
@@ -647,6 +649,8 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             if(pSizeType)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE);
+            if(pWidthType)
+                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pWidthType, MID_FRMSIZE_WIDTH_TYPE);
             if(!aFrmSz.GetWidth())
                 aFrmSz.SetWidth(MINFLY);
             if(!aFrmSz.GetHeight())
