@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-23 07:40:42 $
+ *  last change: $Author: hdu $ $Date: 2002-04-23 08:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4350,7 +4350,7 @@ static BOOL ImplIsLineCharacter( sal_Unicode c )
 void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     FontStrikeout eStrikeout, FontUnderline eUnderline, BOOL bWordLine, BOOL bUnderlineAbove )
 {
-/* TODO: enable bWordLining for CTL
+#if 0 // TODO: enable bWordLining for CTL
     if( bWordLine )
     {
         BOOL        bLine = FALSE;
