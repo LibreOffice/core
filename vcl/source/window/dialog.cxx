@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-01-29 15:48:32 $
+ *  last change: $Author: mt $ $Date: 2001-02-14 18:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <dialog.hxx>
+#endif
+
+#ifndef _SV_DECOVIEW_HXX
+#include <decoview.hxx>
 #endif
 
 #ifdef DBG_UTIL
@@ -830,6 +834,43 @@ void Dialog::GrabFocusToFirstControl()
     if ( pFocusControl )
         pFocusControl->ImplControlFocus( GETFOCUS_INIT );
 }
+
+void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+{
+    ImplInitSettings();
+
+    Point aPos = pDev->LogicToPixel( rPos );
+    Size aSize = pDev->LogicToPixel( rSize );
+//  Font aFont = GetDrawPixelFont( pDev );
+    OutDevType eOutDevType = pDev->GetOutDevType();
+
+    pDev->Push();
+    pDev->SetMapMode();
+//  pDev->SetFont( aFont );
+//  pDev->SetTextFillColor();
+
+    // Border/Background
+    pDev->SetLineColor();
+    pDev->SetFillColor();
+    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    if ( bBorder || bBackground )
+    {
+        Rectangle aRect( aPos, aSize );
+        if ( bBorder )
+        {
+            DecorationView aDecoView( pDev );
+            aRect = aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+        }
+        if ( bBackground )
+        {
+            pDev->SetFillColor( GetControlBackground() );
+            pDev->DrawRect( aRect );
+        }
+    }
+    pDev->Pop();
+}
+
 
 // =======================================================================
 
