@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:21:18 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "com/sun/star/uno/XInterface.idl"
 
-module test { module java_uno { module acquire {
+module test { module javauno { module acquire {
 
 interface XBase: com::sun::star::uno::XInterface {};
 
@@ -72,39 +72,31 @@ interface XTest: com::sun::star::uno::XInterface
     void setInterfaceToInterface([in] com::sun::star::uno::XInterface obj);
     void setBaseToInterface([in] XBase obj);
     void setDerivedToInterface([in] XDerived obj);
-    void setAnyToInterface([in] any obj);
     com::sun::star::uno::XInterface getInterfaceFromInterface();
+    void clearInterface();
 
     void setBaseToBase([in] XBase obj);
     void setDerivedToBase([in] XDerived obj);
-    void setAnyToBase([in] any obj);
     com::sun::star::uno::XInterface getInterfaceFromBase();
     XBase getBaseFromBase();
+    void clearBase();
 
     void setDerivedToDerived([in] XDerived obj);
-    void setAnyToDerived([in] any obj);
     com::sun::star::uno::XInterface getInterfaceFromDerived();
     XBase getBaseFromDerived();
     XDerived getDerivedFromDerived();
-
-    void setAnyToAny([in] any obj);
-    any getAnyFromAny();
+    void clearDerived();
 
     com::sun::star::uno::XInterface roundTripInterfaceToInterface(
         [in] com::sun::star::uno::XInterface obj);
     com::sun::star::uno::XInterface roundTripBaseToInterface([in] XBase obj);
     com::sun::star::uno::XInterface roundTripDerivedToInterface(
         [in] XDerived obj);
-    com::sun::star::uno::XInterface roundTripAnyToInterface([in] any obj);
 
     XBase roundTripBaseToBase([in] XBase obj);
     XBase roundTripDerivedToBase([in] XDerived obj);
-    XBase roundTripAnyToBase([in] any obj);
 
     XDerived roundTripDerivedToDerived([in] XDerived obj);
-    XDerived roundTripAnyToDerived([in] any obj);
-
-    any roundTripAnyToAny([in] any obj);
 };
 
 }; }; };
