@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-26 12:00:32 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 09:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2345,8 +2345,14 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             ::StartProgress( STR_STATSTR_W4WREAD, 0, 100, rDoc.GetDocShell() );
 
 
-            rDoc.SetParaSpaceMax( TRUE, TRUE ); // Abstand zwischen zwei Absaetzen ist
-            // die SUMME von unterem Abst. des ersten und oberem Abst. des zweiten
+            if ( bNew )
+            {
+                // Abstand zwischen zwei Absaetzen ist
+                // die SUMME von unterem Abst. des ersten und oberem Abst. des zweiten
+                rDoc.SetParaSpaceMax( TRUE, TRUE );
+                // move tabs on alignment
+                rDoc.SetTabCompat( TRUE );
+            }
 
 
             // read Font Table
@@ -3112,11 +3118,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.20 2001-04-26 12:00:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.21 2001-05-03 09:58:00 fme Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/04/26 12:00:32  cmc
+      ##777## bInTableApo not saved/restored
+
       Revision 1.19  2001/04/20 14:54:47  cmc
       base table handling on logical character positions and by using new property finding algorithm
 
