@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 15:57:10 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 16:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ Sequence< OUString > GetPathPropertyNames()
         "Bitmap",           // PATH_BITMAP
         "Config",           // PATH_CONFIG
 #if SUPD < 615
-        //"Database",           // PATH_DATABASE
+//!!! (pb) hack till 615
         "Temp",             // PATH_DATABASE
 #endif
         "Dictionary",       // PATH_DICTIONARY
@@ -319,7 +319,7 @@ Sequence< OUString > GetPathPropertyNames()
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
 #if SUPD < 615
-        //"Trash",          // PATH_TRASH
+//!!! (pb) hack till 615
         "Temp",             // PATH_TRASH
 #endif
         "UserConfig",       // PATH_USERCONFIG
@@ -884,6 +884,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
 #if SUPD < 615
+//!!! (pb) hack till 615
             case SvtPathOptions::PATH_DATABASE:         aTempStr = OUString( m_aTempPath );             break;
 #endif
             case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
@@ -898,6 +899,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
 #if SUPD < 615
+//!!! (pb) hack till 615
             case SvtPathOptions::PATH_TRASH:            aTempStr = OUString( m_aTempPath );             break;
 #endif
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
@@ -1411,7 +1413,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             {
                 INetURLObject aObj;
                 aObj.SetSmartProtocol( INET_PROT_FILE );
-                aObj.SetSmartURL( aPath.GetToken( i, SEARCHPATH_DELIMITER, nIdx ) );
+                aObj.SetSmartURL( aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx ) );
                 aObj.insertName( aIniFile );
                 bRet = IniFileExists_Impl( aObj.GetMainURL() );
 
