@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:16:01 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:43:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,15 +78,19 @@ CONFIG_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Config$/ConfigExamples.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Config$/Makefile
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(CONFIG_FILES) \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_config_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_config.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
