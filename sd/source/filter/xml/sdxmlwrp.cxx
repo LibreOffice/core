@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:24:14 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,33 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _DRAWDOC_HXX
+#include "drawdoc.hxx"
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
+#endif
+
+#ifndef MAC
+#ifndef SVX_LIGHT
+#include "../../ui/inc/docshell.hxx"
+#endif //!SVX_LIGHT
+#else  //MAC
+#ifndef SVX_LIGHT
+#include "docshell.hxx"
+#endif //!SVX_LIGHT
+#endif //!MAC
+#include "sdxmlwrp.hxx"
+
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
@@ -82,24 +104,6 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _SFXDOCFILE_HXX
-#include <sfx2/docfile.hxx>
-#endif
-#ifndef _DRAWDOC_HXX
-#include "drawdoc.hxx"
-#endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
-#include <unotools/streamwrap.hxx>
-#endif
-#ifndef _XMLGRHLP_HXX
-#include <svx/xmlgrhlp.hxx>
-#endif
-
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -107,8 +111,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
-
-#include "sdxmlwrp.hxx"
 
 using namespace com::sun::star;
 using namespace rtl;
@@ -123,26 +125,22 @@ char __READONLY_DATA sXML_contentStreamName[] = "Content.xml";
 // - SdXMLWrapper -
 // ----------------
 
-SdXMLWrapper::SdXMLWrapper( uno::Reference<frame::XModel>& xRef,
-                            SfxMedium& rMedium, BOOL bIsDraw, BOOL bShowProg ) :
-    mxLocalModel    ( xRef ),
-    mrMedium        ( rMedium ),
-    mbIsDraw        ( bIsDraw ),
-    mbShowProgress  ( bShowProg )
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+    SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL SdXMLWrapper::Import()
+sal_Bool SdXMLFilter::Import()
 {
-    if( !mxLocalModel.is() )
+    if( !mxModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLImport");
         return FALSE;
     }
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxLocalModel, uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxModel, uno::UNO_QUERY);
 
     if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
     {
@@ -166,8 +164,8 @@ BOOL SdXMLWrapper::Import()
         return FALSE;
     }
 
-    UINT16  nStyleFamilyMask = 0;
-    BOOL    bLoadDoc = TRUE;
+    UINT16      nStyleFamilyMask = 0;
+    sal_Bool    bLoadDoc = TRUE;
 
 // this is stuff for loading only styles or add-load documents, needed later
 //  USHORT nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
@@ -255,35 +253,18 @@ BOOL SdXMLWrapper::Import()
                 xGrfResolver = pGraphicHelper;
             }
 
-            uno::Reference< task::XStatusIndicator > xStatusIndicator;
             if( mbShowProgress )
             {
-                uno::Reference<frame::XController> xController(mxLocalModel->getCurrentController());
-                if(xController.is())
-                {
-                    uno::Reference<frame::XFrame> xFrame(xController->getFrame());
-                    if(xFrame.is())
-                    {
-                        uno::Reference<task::XStatusIndicatorSupplier> xFactory(xFrame, uno::UNO_QUERY);
-                        if(xFactory.is())
-                        {
-                            xStatusIndicator = xFactory->getStatusIndicator();
+                CreateStatusIndicator();
 
-                            // add progress view
-                            if(xStatusIndicator.is())
-                            {
-                                const OUString aText(RTL_CONSTASCII_USTRINGPARAM("XML Export"));
-                                xStatusIndicator->start(aText, 100);
-                            }
-                        }
-                    }
-                }
+                if( mxStatusIndicator.is() )
+                    mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Import" ), 100 );
             }
 
             uno::Sequence< uno::Any > aArgs( 2 );
             uno::Any* pArgs = aArgs.getArray();
             *pArgs++ <<= xGrfResolver;
-            *pArgs   <<= xStatusIndicator;
+            *pArgs   <<= mxStatusIndicator;
 
             const sal_Char * pService = IsDraw() ? "com.sun.star.office.sax.importer.Draw" : "com.sun.star.office.sax.importer.Impress";
             uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pService ), aArgs), uno::UNO_QUERY );
@@ -291,7 +272,7 @@ BOOL SdXMLWrapper::Import()
             if( xDocHandler.is() )
             {
                 uno::Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY );
-                uno::Reference< lang::XComponent > xComponent( mxLocalModel, uno::UNO_QUERY );
+                uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
                 if( xImporter.is() )
                 {
                     xImporter->setTargetDocument( xComponent );
@@ -324,17 +305,17 @@ BOOL SdXMLWrapper::Import()
 
 // -----------------------------------------------------------------------------
 
-BOOL SdXMLWrapper::Export()
+sal_Bool SdXMLFilter::Export()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = FALSE;
 
-    if( !mxLocalModel.is() )
+    if( !mxModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLExport");
         return FALSE;
     }
 
-    uno::Reference< lang::XServiceInfo > xServiceInfo( mxLocalModel, uno::UNO_QUERY );
+    uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
 
     if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
     {
@@ -360,31 +341,6 @@ BOOL SdXMLWrapper::Export()
 
     SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
 
-    uno::Reference< task::XStatusIndicator > xStatusIndicator;
-    if( mbShowProgress )
-    {
-        uno::Reference<frame::XController> xController(mxLocalModel->getCurrentController());
-        if(xController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame(xController->getFrame());
-            if(xFrame.is())
-            {
-                uno::Reference<task::XStatusIndicatorSupplier> xFactory(xFrame, uno::UNO_QUERY);
-                if(xFactory.is())
-                {
-                    xStatusIndicator = xFactory->getStatusIndicator();
-
-                    // add progress view
-                    if(xStatusIndicator.is())
-                    {
-                        const OUString aText(RTL_CONSTASCII_USTRINGPARAM("XML Export"));
-                        xStatusIndicator->start(aText, 100);
-                    }
-                }
-            }
-        }
-    }
-
     if( pStorage )
     {
         SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) ),
@@ -402,15 +358,21 @@ BOOL SdXMLWrapper::Export()
         xSrc->setOutputStream( new ::utl::OOutputStreamWrapper( *xOStm ) );
         try
         {
-            uno::Reference< task::XStatusIndicator > xStatusIndicator; // for later use
-
             SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
             uno::Reference< document::XGraphicObjectResolver > xGrfResolver( pGraphicHelper );
+
+            if( mbShowProgress )
+            {
+                CreateStatusIndicator();
+
+                if( mxStatusIndicator.is() )
+                    mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Export" ), 100 );
+            }
 
             uno::Sequence< uno::Any > aArgs( 3 );
             uno::Any* pArgs = aArgs.getArray();
             *pArgs++ <<= xGrfResolver;
-            *pArgs++ <<= xStatusIndicator;
+            *pArgs++ <<= mxStatusIndicator;
             *pArgs   <<= xHandler;
 
             const sal_Char* pService = IsDraw() ? "com.sun.star.office.sax.exporter.Draw" : "com.sun.star.office.sax.exporter.Impress";
@@ -424,7 +386,7 @@ BOOL SdXMLWrapper::Export()
                 pProps[0].Value <<= OUString( mrMedium.GetName() );
 
                 uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );
-                uno::Reference< lang::XComponent > xComponent( mxLocalModel, uno::UNO_QUERY );
+                uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
                 if( xExporter.is() )
                 {
                     xExporter->setSourceDocument( xComponent );

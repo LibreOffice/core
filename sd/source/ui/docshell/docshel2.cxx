@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:11:14 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVX_SVXIFACT_HXX //autogen
 #include <svx/svxifact.hxx>
+#endif
+#ifndef _SVX_DLGNAME_HXX //autogen
+#include <svx/dlgname.hxx>
 #endif
 
 #pragma hdrstop
@@ -399,11 +405,11 @@ SvDataMemberObjectRef __EXPORT SdDrawDocShell::CreateSnapshot()
         nPageNum = 1;
     }
 
-    SdrPageView* pPageView = pSdViewIntern->ShowPagePgNum( nPageNum, Point() );
+    SdrPageView* pPageView = pSdViewIntern->ShowPagePgNum( (USHORT) nPageNum, Point() );
     ((SdrMarkView*)pSdViewIntern)->MarkAll(pPageView);
     Rectangle aVisArea = pSdViewIntern->GetAllMarkedRect();
 
-    SdrPage* pPage = pDoc->GetPage(nPageNum);
+    SdrPage* pPage = pDoc->GetPage( (USHORT) nPageNum);
     pPage->SetSize( aVisArea.GetSize() );
 
     ULONG nObjCount = pPage->GetObjCount();
@@ -526,3 +532,93 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 }
 
 
+/*************************************************************************
+|*
+|* Pruefen, ob die Seite vorhanden ist und dann den Anwender zwingen einen
+|* noch nicht vorhandenen Namen einzugeben. Wird FALSE zurueckgegeben,
+|* wurde die Aktion vom Anwender abgebrochen.
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
+{
+    BOOL bUnique = FALSE;
+
+    String aStrPage( SdResId( STR_SD_PAGE ) );
+
+    if( rName.Search( aStrPage ) != STRING_NOTFOUND
+        && ( rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0'
+        &&  rName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' ))
+    {
+        rName = String();
+        return( TRUE );
+    }
+
+
+    // Ist der Seitenname schon vorhanden?
+    USHORT nPgNum = pDoc->GetPageByName( rName );
+    if( nPgNum != SDRPAGE_NOTFOUND )
+    {
+        String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
+        SvxNameDialog* pDlg = new SvxNameDialog( pWin, rName, aDesc );
+
+        if( pViewShell->GetActualFunction() )
+        {
+            KeyCode aKeyCode( KEY_ESCAPE );
+            KeyEvent aKeyEvent( 27, aKeyCode );
+            pViewShell->KeyInput( aKeyEvent, (SdWindow*)pWin );
+        }
+
+        while( !bUnique && pDlg->Execute() == RET_OK )
+        {
+            pDlg->GetName( rName );
+
+            nPgNum = pDoc->GetPageByName( rName );
+            if( nPgNum == SDRPAGE_NOTFOUND )
+            {
+                bUnique = TRUE;
+            }
+        }
+        delete pDlg;
+    }
+    else
+        bUnique = TRUE;
+
+    return( bUnique );
+}
+
+/*************************************************************************
+|*
+|* Prfen, ob das Objekt vorhanden ist und dann den Anwender zwingen einen
+|* noch nicht vorhandenen Namen einzugeben. Wird FALSE zurueckgegeben,
+|* wurde die Aktion vom Anwender abgebrochen (s.o.).
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::CheckObjectName( Window* pWin, String& rName )
+{
+    BOOL bUnique = FALSE;
+
+    // Ist der Objektname schon vorhanden?
+    SdrObject* pObj = pDoc->GetObj( rName );
+    if( pObj )
+    {
+//        String aDesc( SdResId( STR_WARN_OBJECT_EXISTS ) );
+        String aDesc = String( SdResId( STR_WARN_OBJECT_EXISTS ) );
+        SvxNameDialog* pDlg = new SvxNameDialog( pWin, rName, aDesc );
+
+        while( !bUnique && pDlg->Execute() == RET_OK )
+        {
+            pDlg->GetName( rName );
+
+            pObj = pDoc->GetObj( rName );
+            if( !pObj )
+                bUnique = TRUE;
+        }
+        delete pDlg;
+    }
+    else
+        bUnique = TRUE;
+
+    return( bUnique );
+}

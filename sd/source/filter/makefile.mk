@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sj $ $Date: 2001-01-25 17:24:21 $
+#   last change: $Author: ka $ $Date: 2001-02-13 12:10:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,13 +61,8 @@
 #*************************************************************************
 
 PRJ=..$/..
-
-PROJECTPCH=sd
-PROJECTPCHSOURCE=$(PRJ)$/util\sd
 PRJNAME=sd
 TARGET=filter
-
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
@@ -78,16 +73,12 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = $(PRJ)$/util$/sd.cxx \
-                pptin.cxx		\
-                propread.cxx	\
-                sdpptwrp.cxx
-
-SLOFILES =	$(SLO)$/pptin.obj	\
-            $(SLO)$/propread.obj\
-            $(SLO)$/sdpptwrp.obj
+SLOFILES =\
+        $(SLO)$/sdfilter.obj	\
+        $(SLO)$/pptin.obj		\
+        $(SLO)$/propread.obj	\
+        $(SLO)$/sdpptwrp.obj	
 
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-

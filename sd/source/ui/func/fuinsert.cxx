@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:13:25 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include "strings.hrc"
 #include "graphpro.hxx"
 #include "drawdoc.hxx"
+#include "sdgrffilter.hxx"
 #include "sdxfer.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -238,10 +239,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                 }
             }
             else if ( nError )
-            {
-                ( (SdDrawDocShell*) pViewSh->GetViewFrame()->
-                GetObjectShell() )->HandleFilterError( nError, GetGrfFilter()->GetLastError().nStreamError );
-            }
+                SdGRFFilter::HandleGraphicFilterError( nError, GetGrfFilter()->GetLastError().nStreamError );
         }
         break;
 

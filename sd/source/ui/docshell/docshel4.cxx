@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:11:14 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,6 @@
 #include "app.hrc"
 #include "glob.hrc"
 #include "strings.hrc"
-
 #include "strmname.h"
 #include "frmview.hxx"
 #include "docshell.hxx"
@@ -159,15 +158,11 @@
 #include "new_foil.hxx"
 #include "sdmod.hxx"
 #include "outlnvsh.hxx"
-
-#ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-#define SO2_DECL_SVSTORAGESTREAM_DEFINED
-SO2_DECL_REF(SvStorageStream)
-#endif
-
-#define POOL_BUFFER_SIZE        (USHORT)32768
-#define BASIC_BUFFER_SIZE       (USHORT)8192
-#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
+#include "sdxmlwrp.hxx"
+#include "sdpptwrp.hxx"
+#include "sdcgmfilter.hxx"
+#include "sdgrffilter.hxx"
+#include "sdbinfilter.hxx"
 
 /*************************************************************************
 |*
@@ -354,527 +349,73 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::Load( SvStorage * pStor )
+BOOL SdDrawDocShell::Load( SvStorage* pStore )
 {
-    BOOL bRet = FALSE;
+    ULONG   nStoreFmt = pStore->GetFormat();
+    BOOL    bRet = FALSE;
+    BOOL    bXML = ( nStoreFmt == SOT_FORMATSTR_ID_STARIMPRESS_60 ||
+                     nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_60 );
+    BOOL    bBinary = ( nStoreFmt == SOT_FORMATSTR_ID_STARIMPRESS_50 ||
+                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_50    ||
+                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_40    ||
+                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW );
 
-    ULONG nStorFmt = pStor->GetFormat();
-
-    if ( nStorFmt == SOT_FORMATSTR_ID_STARIMPRESS_60 ||
-         nStorFmt == SOT_FORMATSTR_ID_STARIMPRESS_50 ||
-         nStorFmt == SOT_FORMATSTR_ID_STARDRAW_60    ||
-         nStorFmt == SOT_FORMATSTR_ID_STARDRAW_50    ||
-         nStorFmt == SOT_FORMATSTR_ID_STARDRAW_40    ||
-         nStorFmt == SOT_FORMATSTR_ID_STARDRAW )
+    if( bBinary || bXML )
     {
-        StreamMode aStreamMode = STREAM_STD_READWRITE;
-
-        pDoc = new SdDrawDocument(eDocType, this);
-        SetModel(new SdXImpressDocument(this));
-
         SfxItemSet* pSet = GetMedium()->GetItemSet();
 
-        if (pSet                                                 &&
-            SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW)      &&
-            ((SfxBoolItem&) (pSet->Get(SID_PREVIEW))).GetValue())
+        pDoc = new SdDrawDocument( eDocType, this );
+        SetModel( new SdXImpressDocument( this ) );
+
+        if( pSet && ( SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) &&
+            ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            // Bei einer Template-Preview (Vorlagen-Dialog) sollen nur die ersten
-            // drei Seiten geladen werden (Handzettel-, 1.Standard- und 1.Notizseite)
-            pDoc->SetStarDrawPreviewMode(TRUE);
+            pDoc->SetStarDrawPreviewMode( TRUE );
         }
 
         SetPool( &pDoc->GetItemPool() );
         pUndoManager = new SfxUndoManager;
-        SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
+        SetStyleFamily( 5 ); //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
 
-        if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-            pProgress = NULL;
-        else
+        bRet = SfxInPlaceObject::Load( pStore );
+
+        if( bRet )
         {
-            if( mpSpecialProgress )
-                pProgress = mpSpecialProgress;
-            else
-                pProgress = new SfxProgress( this, String( SdResId( STR_OPEN_DOCUMENT )), 100 );
-        }
+            SfxMedium   aMedium( pStore );
+            SdFilter*   pFilter = NULL;
 
-        if( pProgress )
-        {
-            if( mpSpecialProgress )
-                pDoc->SetIOProgressHdl( *mpSpecialProgressHdl );
-            else
-            {
-                pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
+            if( bBinary )
+                pFilter = new SdBINFilter( aMedium, *this, sal_True );
+            else if( bXML )
+                pFilter = new SdXMLFilter( aMedium, *this, sal_True );
 
-                pProgress->SetState( 0, 100 );
-            }
-        }
-
-        bRet = SfxInPlaceObject::Load(pStor);
-
-        BOOL bIsEmptyStreams = FALSE;
-
-        if (pStor->IsStream(pSfxStyleSheets))
-        {
-            SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets,
-                                                            aStreamMode);
-            bRet = aPoolStm->GetError() == 0;
-
-            if (!bRet)
-            {
-                // Stream konnte nicht geoeffnet werden
-                // Kann der Stream denn als read geoeffnet werden?
-                aPoolStm.Clear();
-                aStreamMode = STREAM_STD_READ;
-                aPoolStm = pStor->OpenStream(pSfxStyleSheets, aStreamMode);
-                bRet = aPoolStm->GetError() == 0;
-            }
-
-            // Pool laden
-            if (bRet)
-            {
-                aPoolStm->SetVersion(pStor->GetVersion());
-                GetPool().SetFileFormatVersion(pStor->GetVersion());
-                aPoolStm->SetBufferSize(POOL_BUFFER_SIZE);
-                GetPool().Load(*aPoolStm);
-            }
-            bRet = aPoolStm->GetError() == 0;
-            DBG_ASSERT(bRet, "Fehler beim Laden des Item-Pools");
-
-            // StyleSheet-Pool laden
-            if (bRet)
-            {
-                SfxStyleSheetPool* pSSSP = (SfxStyleSheetPool*)GetStyleSheetPool();
-                GetStyleSheetPool()->Load(*aPoolStm);
-                aPoolStm->SetBufferSize(0);
-                bRet = aPoolStm->GetError() == 0;
-                DBG_ASSERT(bRet, "Fehler beim Laden des StyleSheet-Pools");
-            }
-
-            if ( !bRet || aPoolStm->GetErrorCode() )
-                SetError( aPoolStm->GetErrorCode() );
-        }
-        else
-        {
-            // wenn der Stream gar nicht vorhanden ist, gilt das trotzdem als
-            // Erfolg (fuer das Laden ungeaenderter OLE-Objekte)
-            bIsEmptyStreams = TRUE;
-            bRet = TRUE;
-        }
-
-        // Model der Drawing Engine laden
-        if (bRet)
-        {
-            // altes oder neues Format enthalten?
-            BOOL bAcceptableStreamFound = FALSE;
-            SvStorageStreamRef aDocStm;
-            if (pStor->IsStream(pStarDrawDoc))
-            {
-                bAcceptableStreamFound = TRUE;
-                aDocStm = pStor->OpenStream(pStarDrawDoc, aStreamMode);
-            }
-            else if (pStor->IsStream(pStarDrawDoc3))
-            {
-                bAcceptableStreamFound = TRUE;
-                aDocStm = pStor->OpenStream(pStarDrawDoc3, aStreamMode);
-            }
-
-            if (bAcceptableStreamFound)
-            {
-                aDocStm->SetVersion(pStor->GetVersion());
-                bRet = aDocStm->GetError() == 0;
-                if(bRet)
-                {
-                    aDocStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-                    aDocStm->SetKey( pStor->GetKey() ); // Passwort setzen
-                    pDoc->SetModelStorage( pStor );
-                    *aDocStm >> *pDoc;
-                    pDoc->SetModelStorage( NULL );
-                    bRet = aDocStm->GetError() == 0;
-
-                    if (!bRet)
-                    {
-                        if (pStor->GetKey().Len() == 0)
-                            SetError(ERRCODE_SFX_DOLOADFAILED);  // kein Passwort gesetzt --> Datei marode
-                        else
-                            SetError(ERRCODE_SFX_WRONGPASSWORD); // Passwort gesetzt --> war wohl falsch
-                    }
-                    else if ( aDocStm->GetErrorCode() )
-                        SetError( aDocStm->GetErrorCode() );
-
-                    aDocStm->SetBufferSize(0);
-                }
-                bIsEmptyStreams = FALSE;
-            }
-            // wenn der Stream gar nicht vorhanden ist, gilt das trotzdem als
-            // Erfolg (fuer das Laden ungeaenderter OLE-Objekte)
-        }
-
-        if (bRet && pDoc)
-        {
-            if (bIsEmptyStreams == TRUE)
-            {
-                pDoc->NewOrLoadCompleted(NEW_DOC);
-            }
-            else
-            {
-                pDoc->NewOrLoadCompleted(DOC_LOADED);
-            }
-        }
-
-        if( pProgress && !mpSpecialProgress )
-        {
-            delete pProgress;
-            pProgress = NULL;
-        }
-
-        if (bRet)
-        {
-            UpdateTablePointers();
-
-            if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
-                SfxInPlaceObject::GetVisArea().IsEmpty())
-            {
-                // Leere VisArea: auf Seitengroesse setzen
-                SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-
-                if (pPage)
-                    SetVisArea(Rectangle(pPage->GetAllObjBoundRect()));
-            }
-
-            FinishedLoading(SFX_LOADED_ALL);
+            bRet = pFilter ? pFilter->Import() : FALSE;
+            delete pFilter;
         }
     }
     else
-    {
-        pStor->SetError(SVSTREAM_WRONGVERSION);
-    }
-
-    return bRet;
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void SdDrawDocShell::HandsOff()
-{
-    SfxInPlaceObject::HandsOff();
-    xPictureStorage = SvStorageRef();
-    pDocStor = NULL;
-}
-
-/*************************************************************************
-|*
-|* Save: Pools und Dokument in die offenen Streams schreiben
-|*
-\************************************************************************/
-
-BOOL SdDrawDocShell::Save()
-{
-    BOOL bRet;
-
-    // Late-Init muss fertig sein
-    pDoc->StopWorkStartupDelay();
-
-    if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
-    {
-        // Normal bearbeitet -> keine VisArea
-        SvInPlaceObject::SetVisArea( Rectangle() );
-    }
-
-    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        bRet=SfxInPlaceObject::Save();
-    else
-        bRet=TRUE;
-
-    if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        pProgress = NULL;
-    else
-        pProgress = new SfxProgress( this, String(SdResId( STR_SAVE_DOCUMENT )), 100 );
-
-    if( pProgress )
-    {
-        pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
-
-        pProgress->SetState( 0, 100 );
-    }
-
-    // komprimiert/native speichern?
-    SvtSaveOptions                          aOptions;
-    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
-    const BOOL                              bSaveCompressed = ( bSaveNative || ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode ) );
-
-    pDoc->SetSaveCompressed( bSaveCompressed );
-    pDoc->SetSaveNative( bSaveNative );
+        pStore->SetError( SVSTREAM_WRONGVERSION );
 
     if( bRet )
     {
-//-/        pDoc->PrepareStore();
-        pDoc->PreSave();
+        UpdateTablePointers();
 
-        SvStorage* pStor = GetStorage();
-        SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-        aPoolStm->SetVersion(pStor->GetVersion());
-
-        if ( !aPoolStm->GetError() )
+        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) &&
+            SfxInPlaceObject::GetVisArea().IsEmpty() )
         {
-            aPoolStm->SetSize(0);
-            aPoolStm->SetBufferSize(POOL_BUFFER_SIZE);
-            const long nVersion = pStor->GetVersion();
-            GetPool().SetFileFormatVersion( nVersion );
-            const USHORT nOldComprMode = aPoolStm->GetCompressMode();
-            USHORT       nNewComprMode = nOldComprMode;
+            SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
 
-            if( SOFFICE_FILEFORMAT_40 <= nVersion )
-            {
-                if( bSaveCompressed )
-                    nNewComprMode |= COMPRESSMODE_ZBITMAP;
-
-                if( bSaveNative )
-                    nNewComprMode |= COMPRESSMODE_NATIVE;
-
-                aPoolStm->SetCompressMode( nNewComprMode );
-            }
-
-            GetPool().Store(*aPoolStm);
-
-            // der StyleSheetPool benutzt beim Speichern intern First()/Next(),
-            // setzt aber nicht die Suchmasken zurueck, darum machen
-            // wir das selbst
-            GetStyleSheetPool()->SetSearchMask(SFX_STYLE_FAMILY_ALL);
-            // FALSE = auch unbenutzte Vorlagen speichern
-            GetStyleSheetPool()->Store(*aPoolStm, FALSE);
-            aPoolStm->SetBufferSize(0);
-
-            if( nOldComprMode != nNewComprMode )
-                aPoolStm->SetCompressMode( nOldComprMode );
-        }
-        else bRet = FALSE;
-        bRet = bRet && (aPoolStm->GetError() == 0);
-        DBG_ASSERT(bRet, "Fehler beim Schreiben der Pools");
-        if ( !bRet || aPoolStm->GetErrorCode() )
-            SetError( aPoolStm->GetErrorCode() );
-
-        if ( GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        {
-            // Hat der Dokument-Stream noch den alten Namen? Wenn ja, wird er
-            // umbenannt, denn es wird in jedem Fall das neue Format
-            // geschrieben.
-            if (pStor->IsStream(pStarDrawDoc))
-            {
-                BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
-                DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
-            }
-
-            SvStorageStreamRef aDocStm = pStor->OpenStream(pStarDrawDoc3, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-            aDocStm->SetVersion(pStor->GetVersion());
-            if ( !aDocStm->GetError() )
-            {
-                aDocStm->SetSize(0);
-                aDocStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-                aDocStm->SetKey( pStor->GetKey() ); // Passwort setzen
-                *aDocStm << *pDoc;
-                aDocStm->SetBufferSize(0);
-            }
-            else bRet = FALSE;
-            if (bRet)
-                bRet = aDocStm->GetError() == 0;
-            DBG_ASSERT(bRet, "Fehler beim Schreiben des Models");
-            if ( !bRet || aDocStm->GetErrorCode() )
-                SetError( aDocStm->GetErrorCode() );
+            if( pPage )
+                SetVisArea( Rectangle( pPage->GetAllObjBoundRect() ) );
         }
 
-        if (bRet && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-            AddXMLAsZipToTheStorage( *pStor );
-
-        pDoc->PostSave();
+        FinishedLoading( SFX_LOADED_ALL );
     }
-
-    if( pProgress )
-    {
-        delete pProgress;
-        pProgress = NULL;
-    }
-
-    return bRet;
-}
-
-/*************************************************************************
-|*
-|* SaveAs: Pools und Dokument in den angegebenen Storage sichern
-|*
-\************************************************************************/
-
-BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
-{
-    // Late-Init muss fertig sein
-    pDoc->StopWorkStartupDelay();
-
-    if (GetCreateMode() == SFX_CREATE_MODE_STANDARD)
-    {
-        // Normal bearbeitet -> keine VisArea
-        SvInPlaceObject::SetVisArea( Rectangle() );
-    }
-
-    UINT32 nVBWarning = ERRCODE_NONE;
-    BOOL bRet = SfxInPlaceObject::SaveAs(pStor);
-    if ( bRet )
-    {
-        OfficeApplication* pApplication = OFF_APP();
-        if ( pApplication )
-        {
-            OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
-            if ( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
-        }
-    }
-    // komprimiert/native speichern?
-    SvtSaveOptions                          aOptions;
-    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
-    const BOOL                              bSaveCompressed = ( bSaveNative || ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode ) );
-
-    pDoc->SetSaveCompressed( bSaveCompressed );
-    pDoc->SetSaveNative( bSaveNative );
-
-    if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        pProgress = NULL;
     else
-    {
-        if( mpSpecialProgress )
-            pProgress = mpSpecialProgress;
-        else
-            pProgress = new SfxProgress( this, String(SdResId( STR_SAVE_DOCUMENT )), 100 );
-    }
+        pStore->SetError( SVSTREAM_WRONGVERSION );
 
-    if( pProgress )
-    {
-        if( mpSpecialProgress )
-            pDoc->SetIOProgressHdl( *mpSpecialProgressHdl );
-        else
-        {
-            pDoc->SetIOProgressHdl( LINK( this, SdDrawDocShell, IOProgressHdl ) );
-
-            pProgress->SetState( 0, 100 );
-        }
-    }
-
-    if (bRet)
-    {
-//-/        pDoc->PrepareStore();
-        pDoc->PreSave();
-
-        SvStorageStreamRef aStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-        aStm->SetVersion(pStor->GetVersion());
-
-        if( !aStm->GetError() )
-        {
-            aStm->SetBufferSize(POOL_BUFFER_SIZE);
-            const long nVersion = pStor->GetVersion();
-            GetPool().SetFileFormatVersion( nVersion );
-            const USHORT nOldComprMode = aStm->GetCompressMode();
-            USHORT       nNewComprMode = nOldComprMode;
-
-            if( SOFFICE_FILEFORMAT_40 <= nVersion )
-            {
-                if( bSaveCompressed )
-                    nNewComprMode |= COMPRESSMODE_ZBITMAP;
-
-                if( bSaveNative )
-                    nNewComprMode |= COMPRESSMODE_NATIVE;
-
-                aStm->SetCompressMode( nNewComprMode );
-            }
-
-            GetPool().Store(*aStm);
-
-            // der StyleSheetPool benutzt beim Speichern intern First()/Next(),
-            // setzt aber nicht die Suchmasken zurueck, darum machen
-            // wir das selbst
-            GetStyleSheetPool()->SetSearchMask(SFX_STYLE_FAMILY_ALL);
-            // FALSE = auch unbenutzte Vorlagen speichern
-            GetStyleSheetPool()->Store(*aStm, FALSE);
-            aStm->SetBufferSize(0);
-
-            if( nOldComprMode != nNewComprMode )
-                aStm->SetCompressMode( nOldComprMode );
-        }
-        else bRet = FALSE;
-        if (bRet)
-            bRet = aStm->GetError() == 0;
-        DBG_ASSERT(bRet, "Fehler beim Schreiben der Pools");
-        if ( !bRet || aStm->GetErrorCode() )
-            SetError( aStm->GetErrorCode() );
-
-        if ( GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        {
-            aStm = pStor->OpenStream(pStarDrawDoc3, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-            aStm->SetVersion(pStor->GetVersion());
-            if ( !aStm->GetError() )
-            {
-                aStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-                aStm->SetKey( pStor->GetKey() ); // Passwort setzen
-                *aStm << *pDoc;
-                aStm->SetBufferSize(0);
-            }
-            else bRet = FALSE;
-            if (bRet)
-                bRet = aStm->GetError() == 0;
-            DBG_ASSERT(bRet, "Fehler beim Schreiben des Models");
-            if ( !bRet || aStm->GetErrorCode() )
-                SetError( aStm->GetErrorCode() );
-        }
-
-        pDoc->PostSave();
-    }
-
-    if (bRet && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        AddXMLAsZipToTheStorage( *pStor );
-
-    if( pProgress && !mpSpecialProgress )
-    {
-        delete pProgress;
-        pProgress = NULL;
-    }
-    if ( GetError() == ERRCODE_NONE )
-        SetError( nVBWarning );
     return bRet;
 }
-
-/*************************************************************************
-|*
-|* SaveCompleted: die eigenen Streams wieder oeffnen, damit kein anderer
-|*                                sie "besetzt"
-|*
-\************************************************************************/
-
-BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
-{
-    BOOL bRet = FALSE;
-
-    if ( SfxInPlaceObject::SaveCompleted(pStor) )
-    {
-        pDoc->NbcSetChanged(FALSE); // Nbc.. damit keine Rekursion auftritt
-
-        if (pViewShell && pViewShell->ISA(SdOutlineViewShell))
-        {
-            ((SdOutlineView*) pViewShell->GetView())->GetOutliner()->ClearModifyFlag();
-        }
-
-        bRet = TRUE;
-
-        // Damit der Navigator nach dem Speichern updaten kann!
-        ( ( pViewShell && pViewShell->GetViewFrame() ) ?
-          pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-          GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
-    }
-    return bRet;
-}
-
 
 /*************************************************************************
 |*
@@ -903,8 +444,8 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
     bRet2 = aPoolStm->GetError() == 0;
     if (bRet2)
     {
-        aPoolStm->SetBufferSize(POOL_BUFFER_SIZE);
-        GetPool().SetFileFormatVersion(pStor->GetVersion());
+        aPoolStm->SetBufferSize( 32768 );
+        GetPool().SetFileFormatVersion((USHORT)pStor->GetVersion());
         GetPool().Load(*aPoolStm);
         bRet2 = aPoolStm->GetError() == 0;
         DBG_ASSERT(bRet2, "Fehler beim Laden des Item-Pools");
@@ -922,6 +463,219 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 
     bRet = bRet1 || bRet2;
     return bRet;
+}
+
+/*************************************************************************
+|*
+|* ConvertFrom: aus Fremdformat laden
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
+{
+    const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
+    SdFilter*       pFilter = NULL;
+    BOOL            bRet = FALSE;
+
+    SetWaitCursor( TRUE );
+
+    if( aFilterName == pFilterPowerPoint97 || aFilterName == pFilterPowerPoint97Template)
+    {
+        pDoc->StopWorkStartupDelay();
+        pFilter = new SdPPTFilter( rMedium, *this, sal_True );
+    }
+    else if (aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND || aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND )
+    {
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+        pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+    }
+    else if( aFilterName.EqualsAscii( "CGM - Computer Graphics Metafile" ) )
+    {
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+        pFilter = new SdCGMFilter( rMedium, *this, sal_True );
+    }
+    else
+    {
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+        pFilter = new SdGRFFilter( rMedium, *this, sal_True );
+    }
+
+    bRet = pFilter ? pFilter->Import() : FALSE;
+    rMedium.Close();
+    FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
+    delete pFilter;
+
+    SetWaitCursor( FALSE );
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|* Save: Pools und Dokument in die offenen Streams schreiben
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::Save()
+{
+    pDoc->StopWorkStartupDelay();
+
+    if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
+        SvInPlaceObject::SetVisArea( Rectangle() );
+
+    BOOL bRet = SfxInPlaceObject::Save();
+
+    if( bRet )
+    {
+        SvStorage*  pStore = GetStorage();
+        SfxMedium   aMedium( pStore );
+        SdFilter*   pFilter = NULL;
+
+        if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+            pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+        else
+            pFilter = new SdBINFilter( aMedium, *this, sal_True );
+
+        bRet = pFilter ? pFilter->Export() : FALSE;
+        delete pFilter;
+    }
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|* SaveAs: Pools und Dokument in den angegebenen Storage sichern
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
+{
+    pDoc->StopWorkStartupDelay();
+
+    if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
+        SvInPlaceObject::SetVisArea( Rectangle() );
+
+    UINT32  nVBWarning = ERRCODE_NONE;
+    BOOL    bRet = SfxInPlaceObject::SaveAs( pStore );
+
+    if( bRet )
+    {
+        OfficeApplication*  pApplication = OFF_APP();
+        SfxMedium           aMedium( pStore );
+        SdFilter*           pFilter = NULL;
+
+        if( pApplication )
+        {
+            OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
+
+            if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
+                nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
+        }
+
+        if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+            pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+        else
+            pFilter = new SdBINFilter( aMedium, *this, sal_True );
+
+        bRet = pFilter ? pFilter->Export() : FALSE;
+        delete pFilter;
+    }
+
+    if( GetError() == ERRCODE_NONE )
+        SetError( nVBWarning );
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|* ConvertTo: im Fremdformat speichern
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
+{
+    BOOL bRet = FALSE;
+
+    if( pDoc->GetPageCount() )
+    {
+        String      aFilterName( rMedium.GetFilter()->GetFilterName() );
+        SdFilter*   pFilter = NULL;
+
+        if( aFilterName.SearchAscii( "MS PowerPoint 97" ) != STRING_NOTFOUND )
+        {
+            pFilter = new SdPPTFilter( rMedium, *this, sal_True );
+        }
+        else if ( aFilterName.SearchAscii( "CGM - Computer Graphics Metafile" ) != STRING_NOTFOUND )
+        {
+            pFilter = new SdCGMFilter( rMedium, *this, sal_True );
+        }
+        else if( ( aFilterName.SearchAscii("StarOffice XML (Draw)" )  != STRING_NOTFOUND ) ||
+                 ( aFilterName.SearchAscii("StarOffice XML (Impress)")  != STRING_NOTFOUND ) )
+        {
+            pFilter = new SdXMLFilter( rMedium, *this, sal_True );
+            UpdateDocInfoForSave();
+        }
+
+        if( pFilter )
+        {
+            const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
+
+            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+
+            if( !( bRet = pFilter->Export() ) )
+                pDoc->SetSwapGraphicsMode( nOldSwapMode );
+
+            delete pFilter;
+        }
+    }
+
+    return  bRet;
+}
+
+/*************************************************************************
+|*
+|* SaveCompleted: die eigenen Streams wieder oeffnen, damit kein anderer
+|*                                sie "besetzt"
+|*
+\************************************************************************/
+
+BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
+{
+    BOOL bRet = FALSE;
+
+    if( SfxInPlaceObject::SaveCompleted(pStor) )
+    {
+        pDoc->NbcSetChanged( FALSE );
+
+        if( pViewShell && pViewShell->ISA( SdOutlineViewShell ) )
+            ((SdOutlineView*) pViewShell->GetView())->GetOutliner()->ClearModifyFlag();
+
+        bRet = TRUE;
+
+        // Damit der Navigator nach dem Speichern updaten kann!
+        ( ( pViewShell && pViewShell->GetViewFrame() ) ?
+          pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+          GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+    }
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+void SdDrawDocShell::HandsOff()
+{
+    SfxInPlaceObject::HandsOff();
+    xPictureStorage = SvStorageRef();
+    pDocStor = NULL;
 }
 
 /*************************************************************************
@@ -1078,8 +832,6 @@ BOOL SdDrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
     return SfxObjectShell::SaveAsOwnFormat(rMedium);
 }
-
-
 
 /*************************************************************************
 |*

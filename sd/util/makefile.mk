@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-28 16:13:23 $
+#   last change: $Author: ka $ $Date: 2001-02-13 12:17:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,14 +180,18 @@ LIB2OBJFILES=   \
 LIB3TARGET=$(SLB)$/sdraw3.lib
 LIB3FILES=      \
             $(SLB)$/view.lib        \
-            $(SLB)$/app.lib \
+            $(SLB)$/app.lib			\
             $(SLB)$/func.lib        \
             $(SLB)$/docshell.lib    \
-            $(SLB)$/dlg.lib \
-            $(SLB)$/core.lib \
-            $(SLB)$/filter.lib \
-            $(SLB)$/unoidl.lib \
-            $(SLB)$/xml.lib
+            $(SLB)$/dlg.lib			\
+            $(SLB)$/core.lib		\
+            $(SLB)$/xml.lib			\
+            $(SLB)$/cgm.lib			\
+            $(SLB)$/grf.lib			\
+            $(SLB)$/bin.lib			\
+            $(SLB)$/filter.lib		\
+            $(SLB)$/unoidl.lib		
+
 
 LIB4TARGET=$(LB)$/sdlib.lib
 LIB4ARCHIV=$(LB)$/libsdlib.a
