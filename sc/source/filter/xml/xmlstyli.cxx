@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: sab $ $Date: 2001-01-17 12:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,8 @@ TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles ) :
-    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles ),
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
+    XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
     sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     sDataStyleName(),
     pStyles(&rStyles)
@@ -585,7 +585,7 @@ void XMLTableStyleContext::FillPropertySet(
     if (sDataStyleName.len())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_False);
+            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
         if (!pStyle)
         {
             XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
@@ -627,7 +627,7 @@ void XMLTableStyleContext::Finish( sal_Bool bOverwrite )
     {
         Any aAny;
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_False);
+            XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
         if (pStyle)
         {
             sal_Int32 nNumberFormat = pStyle->GetKey();
@@ -655,7 +655,7 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         case XML_STYLE_FAMILY_TABLE_ROW:
         case XML_STYLE_FAMILY_TABLE_TABLE:
             pStyle = new XMLTableStyleContext( GetScImport(), nPrefix, rLocalName,
-                                               xAttrList, *this );
+                                               xAttrList, *this, nFamily );
             break;
         }
     }
