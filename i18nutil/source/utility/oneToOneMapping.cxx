@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oneToOneMapping.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:26:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-11 11:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ oneToOneMapping::~oneToOneMapping()
     if( hasIndex )
         for (int i = 0; i < 256; i++)
         if (index[i])
-            delete index[i];
+            delete [] index[i];
 }
 
 sal_Unicode oneToOneMapping::find(const sal_Unicode key) const
