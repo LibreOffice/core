@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-19 08:33:31 $
+#   last change: $Author: obo $ $Date: 2004-07-06 13:33:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,9 @@ SLOFILES = \
     $(SLO)$/srchitem.obj \
     $(SLO)$/sorgitm.obj \
         $(SLO)$/macro.obj \
-    $(SLO)$/macrconf.obj
+    $(SLO)$/macrconf.obj \
+    $(SLO)$/querystatus.obj \
+    $(SLO)$/sfxstatuslistener.obj
 
 # --- Targets -------------------------------------------------------
 
