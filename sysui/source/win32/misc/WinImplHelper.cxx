@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-15 15:26:07 $
+ *  last change: $Author: tra $ $Date: 2001-06-28 10:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,9 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
     OSL_ASSERT( IsWindow( hwnd ) );
 
     if ( !aPosition.hasValue( ) ||
-         aPosition.getValueType( ) != getCppuType((sal_Int32*)0) )
+         ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
+           (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
+           (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
             rXInterface,
@@ -273,7 +275,9 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
     OSL_ASSERT( IsWindow( hwnd ) );
 
      if ( !aPosition.hasValue( ) ||
-         aPosition.getValueType( ) != getCppuType((sal_Int32*)0) )
+         ( (aPosition.getValueType( ) != getCppuType((sal_Int32*)0)) &&
+           (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
+           (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
          throw IllegalArgumentException(
             OUString::createFromAscii( "invalid value type or any has no value" ),
             rXInterface,
