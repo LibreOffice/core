@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ sal_Bool implHasByName(NodeAccess& rNode, const OUString& sName ) throw(RuntimeE
 
         return hasChildOrElement(lock.getTree(), lock.getNode(), aChildName);
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     catch (configuration::InvalidName& ex)
     {
         ExceptionMapper e(ex);
