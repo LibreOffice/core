@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 11:42:21 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,11 @@
 #include <com/sun/star/form/NavigationBarMode.idl>
 #endif
 
+#ifndef __com_sun_star_form_XLoadable_idl__
+#include <com/sun/star/form/XLoadable.idl>
+#endif
+
+
 
 //=============================================================================
 
@@ -102,6 +107,17 @@ service DataForm
     /** is used to initialize a data row which should be inserted.
     */
     interface com::sun::star::form::XReset;
+
+    /** used to load/unload the form
+        <p>Loading a form is basically the same as executing the underlying row set. In fact, all the
+        functionality of this interface could be simulated by using setting some properties manually,
+        <method scope="com.sun.star.sdbc">XRowSet::execute</method>, moving the row set cursor and so on.</p>
+
+        <p>One main difference between <method>XLoadable::load</method> and <method scope="com.sun.star.sdbc">XRowSet::execute</method>
+        is that if you use the former, the row set is positioned on the first record, while in the latter case
+        it is position <em>before</em> the it.</p>
+    */
+    interface com::sun::star::form::XLoadable;
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR DatabaseForm::MasterFields
