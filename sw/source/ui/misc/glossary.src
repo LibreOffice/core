@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:29:39 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "ΧΤ¶―ΟΤΚΎΚδΘλΞΔΜαΚΎ(~D)";
         Text[ russian ] = "Οπθ ββξδε οξκΰηϋβΰςό βερό ΰβςξςεκρς κΰκ οξδρκΰηκσ";
         Text[ polish ] = "Wywietl pozosta³Ή czκζ nazwy przy wprowadzaniu jako wskazσwkκ";
-        Text[ japanese ] = "“ό—Ν’†‚Ι“ό—Νx‰‡€–Ϊ–Ό‚π•\\¦‚·‚ι(~D)";
+        Text[ japanese ] = "“ό—Ν’†‚Ι€–Ϊ–Ό‚πƒqƒ“ƒg•\\¦‚·‚ι(~D)";
         Text[ chinese_traditional ] = "¦Ϋ°Κ§Ή¦¨Εγ¥ά(~D)";
         Text[ arabic ] = "ΪΡΦ ΘήνΙ ΕΟΞΗα ΗαδΥ ΗαΚαήΗΖν ΓΛδΗΑ ΗαίΚΗΘΙ Ϊαμ Τία ΚαγνΝ";
         Text[ greek ] = "Εμφάνιση του υπόλοιπου τμήματος του ονόματος ως συμβουλή κατά την εισαγωγή";
@@ -325,7 +325,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "ΤΪΞΔΌώΟµΝ³ΔΪ(~F)";
         Text[ russian ] = "Β ρθρςεμε τΰιλξβ";
         Text[ polish ] = "W systemie plikσw";
-        Text[ japanese ] = "Μ§²Ω Ό½ΓΡ‚Ι(~F)";
+        Text[ japanese ] = "Μ§²ΩΌ½ΓΡ‚Ι(~F)";
         Text[ chinese_traditional ] = "ΐΙ®Χ¨t²Ξ(~F)";
         Text[ arabic ] = "έν δΩΗγ Ηαγαέ";
         Text[ greek ] = "στο σύστημα αρχείων";
@@ -506,7 +506,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "·Φΐΰ(~A)...";
         Text[ russian ] = "Κΰςεγξπθθ...";
         Text[ polish ] = "Obszary...";
-        Text[ japanese ] = "”ΝΝ(~A)...";
+        Text[ japanese ] = "ΈήΩ°Μί(~A)...";
         Text[ chinese_traditional ] = "°Ο°μ(~A)...";
         Text[ arabic ] = "έΖΗΚ...";
         Text[ greek ] = "Κατηγορίες...";
@@ -817,7 +817,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ swedish ] = "~Importera...";
                 Text[ polish ] = "~Importuj...";
                 Text[ portuguese_brazilian ] = "~Import...";
-                Text[ japanese ] = "²έΞί°Δ‚·‚ι(~I)...";
+                Text[ japanese ] = "²έΞί°Δ(~I)...";
                 Text[ korean ] = "°΅Α®Ώΐ±β(~I)...";
                 Text[ chinese_simplified ] = "ΚδΘλ(~I)...";
                 Text[ chinese_traditional ] = "Ώι¤J(~I)...";
@@ -860,7 +860,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ chinese_traditional ] = "¤wΈg¨Ο¥Ξ¤F³o­ΣΑYΌg΅C½Π±zΏι¤J¤@­Σ¤£¦PªΊ¦WΊΩ΅T";
     MESSAGE[ arabic ] = "εΠΗ ΗαΗΞΚΥΗΡ γζΜζΟ ΘΗαέΪα. ΗαΡΜΗΑ ΗΣΚΞΟΗγ ΗΣγ ΜΟνΟ!";
     MESSAGE[ greek ] = "Το όνομα συντόμευσης υπάρχει ήδη. Παρακαλώ δώστε ένα άλλο όνομα!";
-    MESSAGE[ korean ] = "ΉΩ·Ξ°΅±β ΐΜΈ§ΐΜ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω. ΄ΩΈ¥ ΐΜΈ§ΐ» Ό±ΕΓΗΨ ΑΦ½Κ½ΓΏΐ";
+    MESSAGE[ korean ] = "ΉΩ·Ξ°΅±β ΐΜΈ§ΐΜ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω. ΄ΩΈ¥ ΐΜΈ§ΐ» Ό±ΕΓΗΟΏ© ΑΦ½Κ½ΓΏΐ";
     MESSAGE[ turkish ] = "Bu kύsaltma mevcut durumda. Baώka bir ad seηin!";
     MESSAGE[ language_user1 ] = " ";
 };
@@ -909,7 +909,7 @@ String STR_QUERY_DELETE_GROUP1
     Text[ chinese_simplified ] = "ÒªΙΎ³ύΥβΈφΗψΣς ";
     Text[ russian ] = "Σδΰλθςό  ";
     Text[ polish ] = "Czy ten obszar  ";
-    Text[ japanese ] = "‚±‚Μ•ª—ή‚πν‚µ‚ά‚·‚©H ";
+    Text[ japanese ] = "ΈήΩ°Μί ";
     Text[ chinese_traditional ] = "­n§R°£³o­Σ°Ο°μ ";
     Text[ arabic ] = "εα ΚΡνΟ ΝΠέ ΗαέΖΙ ";
     Text[ greek ] = "Θέλετε η κατηγορία ";
@@ -934,7 +934,7 @@ String STR_QUERY_DELETE_GROUP2
     Text[ chinese_simplified ] = "£Ώ";
     Text[ russian ] = "ξαλΰρςό?";
     Text[ polish ] = "ma zostaζ usuniκty?";
-    Text[ japanese ] = "ν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = " ‚πν‚µ‚ά‚·‚©H";
     Text[ chinese_traditional ] = "?";
     Text[ arabic ] = "Ώ";
     Text[ language_user1 ] = " ";
@@ -956,7 +956,7 @@ String STR_GLOSSARY
     Text [ danish ] = "Tekstelement : " ;
     Text [ swedish ] = "Textblock :  " ;
     Text [ finnish ] = "Textblock : " ;
-    Text [ english_us ] = "Text block : " ;
+    Text [ english_us ] = "AutoText : " ;
     Text[ chinese_simplified ] = "΄ΚΜυ: ";
     Text[ russian ] = "Òεκρςξβϋι αλξκ :  ";
     Text[ polish ] = "Blok tekstu :  ";
@@ -1080,7 +1080,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ chinese_simplified ] = "ΠΒ½¨(~N)";
         Text[ russian ] = "Ρξηδ~ΰςό";
         Text[ polish ] = "Nowy";
-        Text[ japanese ] = "V‹Kμ¬(~N)";
+        Text[ japanese ] = "V‹K(~N)";
         Text[ chinese_traditional ] = "¶}±Ò·sΐΙ(~N)";
         Text[ arabic ] = "ΜΟνΟ";
         Text[ greek ] = "Δημιουργία";
@@ -1137,7 +1137,7 @@ ModalDialog DLG_RENAME_GLOS
         Size = MAP_APPFONT ( 219 , 41 ) ;
     };
     Text [ dutch ] = "Naam tekstbouwsteen wijzigen" ;
-    Text [ english_us ] = "Rename Text Block" ;
+    Text [ english_us ] = "Rename AutoText" ;
     Text [ italian ] = "Rinomina modulo di testo" ;
     Text [ spanish ] = "Cambiar nombre al mσdulo de texto" ;
     Text [ french ] = "Renommer le module de texte" ;
@@ -1167,7 +1167,7 @@ String STR_SAVE_GLOSSARY
     Text[ swedish ] = "Spara textblock";
     Text[ dutch ] = "Tekstbouwsteen opslaan";
     Text[ spanish ] = "Guardar mσdulo de texto";
-    Text[ english_us ] = "Save Text Block";
+    Text[ english_us ] = "Save AutoText";
     Text[ chinese_simplified ] = "΄ζΕΜ΄ΚΜυ";
     Text[ russian ] = "Ρξυπΰνθςό ςεκρςξβϋι αλξκ";
     Text[ polish ] = "Zapisz blok tekstu";
