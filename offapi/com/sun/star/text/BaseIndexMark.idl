@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseIndexMark.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
     as an index entry. This is the base service of index marks for <type>DocumentIndex</type>,
      <type>ContentIndex</type>, and <type>UserIndex</type>.
  */
-service BaseIndexMark
+published service BaseIndexMark
 {
     service com::sun::star::text::TextContent;
     //-------------------------------------------------------------------------
