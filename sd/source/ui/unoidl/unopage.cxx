@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 20:00:09 $
+ *  last change: $Author: cl $ $Date: 2000-12-08 18:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,14 +1596,20 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
                 if( xStyleSet.is() )
                 {
                     uno::Reference< beans::XPropertySetInfo >  xSetInfo( xSet->getPropertySetInfo() );
+                    uno::Reference< beans::XPropertyState > xSetStates( xSet, uno::UNO_QUERY );
 
                     const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
                     while( pMap->pName )
                     {
                         const OUString aPropName( OUString::createFromAscii(pMap->pName) );
                         if( xSetInfo->hasPropertyByName( aPropName ) )
-                            xStyleSet->setPropertyValue( aPropName,
-                                    xSet->getPropertyValue( aPropName ) );
+                        {
+                            if( !xSetStates.is() || xSetStates->getPropertyState( aPropName ) == beans::PropertyState_DIRECT_VALUE )
+                                xStyleSet->setPropertyValue( aPropName,
+                                        xSet->getPropertyValue( aPropName ) );
+                            else
+                                xSetStates->setPropertyToDefault( aPropName );
+                        }
 
                         ++pMap;
                     }
