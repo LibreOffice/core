@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:04:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,12 +191,15 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             {
                 //Zur Verfuegung stehenden Raum berechnen.
                 nSpace = (aRect.*fnRectX->fnGetHeight)();
+
                 if ( IsInFtn() || GetAttrSet()->GetDoc()->IsBrowseMode() ||
+                     pNewUpper->IsCellFrm() ||
                      ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
                        ( pNewUpper->IsColBodyFrm() &&
                          !pNewUpper->GetUpper()->GetPrev() &&
                          !pNewUpper->GetUpper()->GetNext() ) ) ) )
                     nSpace += pNewUpper->Grow( LONG_MAX PHEIGHT, TRUE );
+
                 if ( nSpace )
                 {
                     //Keine Beruecksichtigung der Fussnoten die an dem Absatz
@@ -556,7 +559,8 @@ void SwFrm::MakePos()
             /// NOTE: Footer frame is <ColLocked()> during its
             ///     <FormatSize(..)>, which is called from <Format(..)>, which
             ///     is called from <MakeAll()>, which is called from <Calc()>.
-            if ( !GetUpper()->IsSctFrm() &&
+            if ( !GetUpper()->IsTabFrm() &&
+                 !GetUpper()->IsSctFrm() &&
                  !( GetUpper()->IsFooterFrm() &&
                     GetUpper()->IsColLocked() )
                )
@@ -1263,8 +1267,11 @@ void SwCntntFrm::MakeAll()
         //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts
         //geflossen sein.
         BOOL bDummy;
-        if ( !lcl_Prev( this ) && !bMovedFwd && (bMoveable || (bFly && !bTab)) &&
-             (!bFtn || !GetUpper()->FindFtnFrm()->GetPrev()) && MoveBwd( bDummy ))
+        if ( !lcl_Prev( this ) &&
+             !bMovedFwd &&
+             ( bMoveable || ( bFly && !bTab ) ) &&
+             ( !bFtn || !GetUpper()->FindFtnFrm()->GetPrev() )
+             && MoveBwd( bDummy ) )
         {
             SWREFRESHFN( this )
             bMovedBwd = TRUE;
@@ -1353,8 +1360,9 @@ void SwCntntFrm::MakeAll()
         //Fertig?
         // Achtung, wg. Hoehe==0, ist es besser statt Bottom() Top()+Height() zu nehmen
         // (kommt bei Undersized TxtFrms an der Unterkante eines spaltigen Bereichs vor)
-        if( (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)() )
-            >= 0 )
+        const long nPrtBottom = (GetUpper()->*fnRect->fnGetPrtBottom)();
+        const long nBottomDist =  (Frm().*fnRect->fnBottomDist)( nPrtBottom );
+        if( nBottomDist >= 0 )
         {
             if ( bKeep && bMoveable )
             {
@@ -1436,6 +1444,11 @@ void SwCntntFrm::MakeAll()
             bDontMoveMe = !pBoss->IsInSct() ||
                           ( !pBoss->Lower()->GetNext() && !pBoss->GetPrev() );
         }
+
+        // Finally, we are able to split table rows. Therefore, bDontMoveMe
+        // can be set to FALSE:
+        if( bDontMoveMe && IsInTab() && ( NULL != IsInSplitTableRow() ) )
+            bDontMoveMe = FALSE;
 
         if ( bDontMoveMe && (Frm().*fnRect->fnGetHeight)() >
                             (GetUpper()->Prt().*fnRect->fnGetHeight)() )
