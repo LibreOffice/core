@@ -31,10 +31,19 @@ file != FILENAME {
     sReplaceTo = ""
     sMatchReplace = ""
     sRefCurrencyFromLocale = ""
+    crlf = 0
 }
 
 {
     ++line
+    # If run under Unix a CrLf spoils ...$ line end checks. DOS line endings
+    # are boo anyways.
+    if ( /\x0D$/ )
+    {
+        print "Error: not Unix line ending in line " line
+        crlf = 1
+        exit(1)
+    }
     if ( $1 ~ /^<LC_FORMAT$/ )
     {
         if ( $0 ~ /replaceFrom="\[CURRENCY\]"/ )
@@ -121,7 +130,7 @@ file != FILENAME {
 
 
 END {
-    if ( file )
+    if ( file && !crlf )
         checkIt()
 }
 
