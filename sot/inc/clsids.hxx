@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clsids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-05 18:10:33 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 10:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 
 /* aktuell */
 
-#define SO3_SW_CLASSID SO3_SW_CLASSID_50
+#define SO3_SW_CLASSID SO3_SW_CLASSID_60
 
 /*
  * StarWriter/Web
@@ -117,7 +117,7 @@
 
 /* aktuell */
 
-#define SO3_SWWEB_CLASSID SO3_SWWEB_CLASSID_50
+#define SO3_SWWEB_CLASSID SO3_SWWEB_CLASSID_60
 
 
 /*
@@ -144,7 +144,7 @@
 
 /* aktuell */
 
-#define SO3_SWGLOB_CLASSID SO3_SWGLOB_CLASSID_50
+#define SO3_SWGLOB_CLASSID SO3_SWGLOB_CLASSID_60
 
 
 
@@ -180,7 +180,7 @@
 
 /* aktuell */
 
-#define SO3_SC_CLASSID SO3_SC_CLASSID_50
+#define SO3_SC_CLASSID SO3_SC_CLASSID_60
 
 
 
@@ -214,7 +214,7 @@
 
 /* aktuell */
 
-#define SO3_SIMPRESS_CLASSID  SO3_SIMPRESS_CLASSID_50
+#define SO3_SIMPRESS_CLASSID  SO3_SIMPRESS_CLASSID_60
 
 
 
@@ -235,7 +235,7 @@
 
 /* aktuell */
 
-#define SO3_SDRAW_CLASSID  SO3_SDRAW_CLASSID_50
+#define SO3_SDRAW_CLASSID  SO3_SDRAW_CLASSID_60
 
 
 
@@ -269,7 +269,7 @@
 
 /* aktuell */
 
-#define SO3_SCH_CLASSID  SO3_SCH_CLASSID_50
+#define SO3_SCH_CLASSID  SO3_SCH_CLASSID_60
 
 
 
@@ -331,7 +331,7 @@
 
 /* aktuell */
 
-#define SO3_SM_CLASSID  SO3_SM_CLASSID_50
+#define SO3_SM_CLASSID  SO3_SM_CLASSID_60
 
 
 
