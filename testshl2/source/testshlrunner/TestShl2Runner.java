@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestShl2Runner.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:05:21 $
+ *  last change: $Author: lla $ $Date: 2003-01-21 11:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,43 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
+import java.util.Properties;
+
+import java.io.FileInputStream;
 
 // -----------------------------------------------------------------------------
 /**
  *  This class offers helper function, to easily connect to a database
  *  delete values and insert values.
  */
+
+class PropertyHelper
+{
+    public static Properties getProperties(String name)
+        {
+        Properties prop = new Properties();
+        FileInputStream propFile = null;
+        try {
+            propFile = new FileInputStream(name);
+            prop.load(propFile);
+            propFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return prop;
+    }
+
+    public static void setProperties(Properties prop, String name) {
+        FileOutputStream propFile = null;
+        try {
+            propFile = new FileOutputStream(name);
+            prop.store(propFile,"");
+            propFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 class DBHelper
 {
@@ -299,9 +330,11 @@ class DatabaseEntry
 public class TestShl2Runner
 {
 
+    Properties m_aProps;
+
     String m_sVersion = "udk399";
     String m_sExtension = "";
-    String m_sBaseDir = "";
+    String m_sProjectDir = "";
     String m_sEnvironment = "";
     String m_sProjectName = "";
     String m_sShellExecutable="";
@@ -317,21 +350,19 @@ public class TestShl2Runner
      * Systems to ensure that the created scripts run in an 4NT-shell
      */
 
-    public TestShl2Runner(String bdir, String pf, String project, String ver, String pre, String localenv)
+//    public TestShl2Runner(String bdir, String pf, String project, String ver, String pre, String localenv)
+    public TestShl2Runner(String filename)
         {
-            String prefix="tcsh ";
+            String fs = System.getProperty("file.separator");
 
-            if (pre.length() > 1)
-            {
-                prefix = pre + " ";
-            }
+            m_aProps = PropertyHelper.getProperties(filename);
 
-            m_sBaseDir = bdir;
-            m_sEnvironment = pf;
-            m_sProjectName = project;
-            m_sVersion = ver;
-            m_sShellExecutable = prefix;
-            m_sLocalEnv = localenv;
+            m_sEnvironment     = m_aProps.getProperty("ENV");         // unxsols3.pro
+            m_sProjectName     = m_aProps.getProperty("PROJECTNAME"); // sal
+            m_sProjectDir      = m_aProps.getProperty("BASEDIR") + fs + m_sProjectName;  // /usr/qaapi/projects/udk/sal
+            m_sVersion         = m_aProps.getProperty("BUILD");       // udk305
+            m_sShellExecutable = m_aProps.getProperty("SHELL");       // /bin/tcsh
+            m_sLocalEnv        = m_aProps.getProperty("LOCALENV");    // /usr/qaapi/projects/solartmp
 
             // if (m_sVersion.indexOf("-pro") > 1) m_sExtension=".pro";
 
@@ -344,32 +375,14 @@ public class TestShl2Runner
      */
     public static void main(String args[])
         {
-
-            if (args.length < 4)
+            if (args.length != 1)
             {
-                System.out.println("Usage: TestShl2Runner <bdir> <platform> <module> <version> <shell> <localenv>");
-                System.out.println("Example: TestShl2Runner /usr/qaapi/projects/udk/sal unxsols3 sal udk304");
+                System.out.println("Usage: TestShl2Runner <config.file>");
+                System.out.println("Example: TestShl2Runner /usr/qaapi/projects/udk/sal/qa/configfile");
                 System.exit(1);
             }
 
-            String sShellExecutable="tcsh ";
-
-            if (args.length >= 5)
-            {
-                sShellExecutable = args[4] + " ";
-            }
-
-            // m_sBaseDir = args[0];
-            // m_sEnvironment = args[1];
-            // m_sModulName = args[2];
-            // m_sVersion = args[3];
-
-            // if (m_sVersion.indexOf("-pro") > 1) m_sExtension=".pro";
-
-            TestShl2Runner aRunner = new TestShl2Runner(args[0], args[1], args[2], args[3], sShellExecutable, args[5]);
-            // aRunner.startAll();
-
-            // System.exit(0);
+            TestShl2Runner aRunner = new TestShl2Runner(args[0]);
         }
 
     // -----------------------------------------------------------------------------
@@ -377,7 +390,7 @@ public class TestShl2Runner
     ArrayList getJobs()
     {
         String fs = System.getProperty("file.separator");
-        String sJobFile = m_sBaseDir + fs + "qa" + fs + "jobs.txt";
+        String sJobFile = m_sProjectDir + fs + m_aProps.getProperty("INPUT") + fs + m_aProps.getProperty("JOBFILE");
         ArrayList aLines = getLines(sJobFile);
         return aLines;
     }
@@ -393,7 +406,7 @@ public class TestShl2Runner
             ArrayList aJobList = getJobs();
 
             //cleanup scenorio-files and return a working array
-            // Object[] the_array = cleanup(m_sBaseDir + fs + "qa" + fs + "sce" + fs,scene_files);
+            // Object[] the_array = cleanup(m_sProjectDir + fs + "qa" + fs + "sce" + fs,scene_files);
             // System.out.println("...done");
 
             //create a script to build the sources and run the tests
@@ -403,7 +416,7 @@ public class TestShl2Runner
 
             //start the script
             System.out.println("starting script for testprocess");
-            String sScript = m_sShellExecutable + getOutputDir() + fs + scriptName;
+            String sScript = m_sShellExecutable + " " + getOutputDir() + fs + scriptName;
             executeScript(sScript);
             System.out.println("...done");
 
@@ -411,7 +424,7 @@ public class TestShl2Runner
             DBHelper.SQLdeleteValues(m_sProjectName,m_sEnvironment);
 
             //parse the output and store it
-            parseOut (aJobList, m_sProjectName, m_sEnvironment, m_sBaseDir);
+            parseOut (aJobList, m_sProjectName, m_sEnvironment, m_sProjectDir);
         }
 
     /**
@@ -517,14 +530,23 @@ public class TestShl2Runner
     public String getLogName(String job)
     {
         // create the ' -log file '
-        String sLogName = job + ".log ";
+        String fs = System.getProperty("file.separator");
+        String sLogName = getOutputDir() + fs + job + ".log ";
         return sLogName;
     }
+
+    public String getInputDir()
+        {
+            String fs = System.getProperty("file.separator");
+            String sInputDir = m_sProjectDir + fs + m_aProps.getProperty("INPUT");
+            return sInputDir;
+        }
+
 
     public String getOutputDir()
         {
             String fs = System.getProperty("file.separator");
-            String sOutputDir = m_sBaseDir + fs + m_sEnvironment + fs + "qa";
+            String sOutputDir = m_sProjectDir + fs + m_sEnvironment + fs + m_aProps.getProperty("OUTPUT");
 
             File aFile = new File(sOutputDir);
             aFile.mkdirs();
@@ -535,7 +557,7 @@ public class TestShl2Runner
     {
         String sCAX = " ";
         // Due to the fu....g java that we havn't access to our well formed ;-)
-        // environment variables the switch -cax do not longer work :-(
+        // environment variables the simple switch -cax do not longer work :-(
 
         // String sSolTmp = System.getenv("SOL_TMP");
         if (m_sLocalEnv.length() > 0)
@@ -580,40 +602,102 @@ public class TestShl2Runner
      * @param qajobs jobs to be done
      */
 
-    public String createwntmsci(ArrayList _aJobList) throws IOException
+    public void PreNPost(FileWriter out, String _sWhat) throws IOException
         {
-            String fs = System.getProperty("file.separator");
             String ls = System.getProperty("line.separator");
 
-            String sOutputDir = getOutputDir();
-            String sBatchFile = "runTestshl.btm";
-            File outputFile = new File(sOutputDir, sBatchFile);
-            FileWriter out = new FileWriter(outputFile.toString());
+            out.write(getRemark() + " do " + _sWhat + ls);
+            for (int i = 1;i<9;i++)
+            {
+                String sWhat = m_aProps.getProperty(_sWhat + i);
+                if (sWhat != null)
+                {
+                    out.write(sWhat + ls);
+                }
+            }
+            out.write(ls);
+        }
 
-            out.write("@rem do not edit, will be created automatically by TestShl2Runner.java" + ls);
-            out.write("@rem @echo off" + ls);
+    public String getChangeDirFkt()
+        {
+            if (m_sEnvironment.startsWith("wnt"))
+            {
+                return "cdd";
+            }
+            return "cd";
+        }
+    public String getRemark()
+        {
+            if (m_sEnvironment.startsWith("wnt"))
+            {
+                return "rem ";
+            }
+            return "# ";
+        }
 
-            // String sBuildEnvironment = "wntmsci9";
-            out.write("set path=r:\\etw;%PATH%" + ls);
-            out.write("call setsolar -" + m_sVersion + getCAXParameter() + getProParameter() + getCompEnvName() + ls);
-            out.write("cdd " + sOutputDir + ls);
+    public void do_setsolar(FileWriter out, String _sPreExec) throws IOException
+        {
+            String ls = System.getProperty("line.separator");
 
-            out.write("set DISABLE_SAL_DBGBOX=t" + ls);
+            out.write(getRemark() + " do a setsolar" + ls);
+            out.write(_sPreExec + " setsolar -" + m_sVersion + getCAXParameter() + getProParameter() + getCompEnvName() + ls);
+            out.write(ls);
+        }
+
+    public void do_cvs(FileWriter out, String _sPreExec) throws IOException
+        {
+            String ls = System.getProperty("line.separator");
+            out.write(getRemark() + " do a cvs and a dmake" + ls);
+            out.write(getChangeDirFkt() + " " + getInputDir() + ls);
+            // setenv VCSID lla
+            // set VCSID=lla
+            out.write(getRemark() + " " + _sPreExec + " " + "cvs update -d" + ls);
+            out.write(getRemark() + " " + _sPreExec + " " + "dmake -u" + ls);
+            out.write(ls);
+        }
+
+    public void do_testtool(FileWriter out, String _sPreExec, ArrayList _aJobList) throws IOException
+        {
+            String ls = System.getProperty("line.separator");
+            out.write(getRemark() + " call the test tool" + ls);
+            out.write(getChangeDirFkt() + " " + getOutputDir() + ls);
+            if (m_sEnvironment.startsWith("wnt"))
+            {
+                out.write("set DISABLE_SAL_DBGBOX=t" + ls);
+            }
 
             for (int i=0; i<_aJobList.size();i++)
             {
                 String sLine = (String) _aJobList.get(i);
                 // String sJob = getJob(sLine);
-                out.write("call testshl2 " + getLibName(sLine, m_sEnvironment) + getLogParameter(sLine) + ls);
+                out.write(_sPreExec + " " + m_aProps.getProperty("TESTTOOL") + " " + getLibName(sLine, m_sEnvironment) + getLogParameter(sLine) + ls);
             }
+            out.write(ls);
+        }
 
-            // for (int j=0; j<qajobs.length;j++)
-            // {
-            //     String job = (String) qajobs[j];
-            //     out.write("rem call testshl2 " + getLibName(job,sBuildEnvironment) + getLogName(job) + ls);
-            // }
+    public String createwntmsci(ArrayList _aJobList) throws IOException
+        {
+            String fs = System.getProperty("file.separator");
+            String ls = System.getProperty("line.separator");
 
-            // out.write("echo \"done\" > " + sOutputDir + fs + sBatchFile + ".done" + ls);
+            String sBatchFile = m_aProps.getProperty("BATCHFILE");
+            File outputFile = new File(getOutputDir(), sBatchFile);
+            FileWriter out = new FileWriter(outputFile.toString());
+
+            out.write("rem do not edit, will be created automatically by TestShl2Runner.java" + ls);
+
+            // String sBuildEnvironment = "wntmsci9";
+            PreNPost(out, "PRE");
+
+            String sBatchPreExec = "call";
+            do_setsolar(out, sBatchPreExec);
+            do_cvs(out, sBatchPreExec);
+            do_testtool(out, sBatchPreExec, _aJobList);
+
+            PreNPost(out, "POST");
+
+            // the exit is alsolute need here, because we do not get back, until
+            // shell is stopped with exit.
             out.write("exit" + ls);
             out.close();
             return sBatchFile;
@@ -630,37 +714,28 @@ public class TestShl2Runner
         {
             String fs = System.getProperty("file.separator");
             String ls = System.getProperty("line.separator");
-            String sBatchFile = "runTestshl";
-            String sOutputDir = getOutputDir();
-            File outputFile = new File(sOutputDir, sBatchFile);
+
+            String sBatchFile = m_aProps.getProperty("BATCHFILE");
+            File outputFile = new File(getOutputDir(), sBatchFile);
             FileWriter out = new FileWriter(outputFile.toString());
 
-            out.write("#!/bin/tcsh" + ls);
-            out.write("setenv SHELL /bin/tcsh" + ls);
+            out.write("#!/bin/tcsh" + ls);          // shebang
+            out.write("# do not edit, will be created automatically by TestShl2Runner.java" + ls);
 
-            // special for LINUX
-            if (m_sEnvironment.startsWith("unxlngi"))
-            {
-                out.write("source ~/staroffice.cshrc" + ls);
-            }
+            PreNPost(out, "PRE");
 
-            out.write("setsolar -" + m_sVersion + getCAXParameter() + getProParameter() + getCompEnvName() + ls);
-            out.write("cd " + sOutputDir + ls);
-            // out.write("cd " + basedir + ps + "qa" + ls);
-            // out.write("dmake" + ls);
+            String sBatchPreExec = "";
+            do_setsolar(out, sBatchPreExec);
+            do_cvs(out, sBatchPreExec);
+            do_testtool(out, sBatchPreExec, _aJobList);
 
-            // for (int j=0; j<qajobs.length;j++)
-            // {
-            //     String job = (String) qajobs[j];
-            //     out.write("testshl " + getLibName(job,pform) + " ../qa/sce/" + job +
-            //               " -log -msg" + ls);
-            // }
-            out.write("echo \"done\" > " + sOutputDir + fs + sBatchFile + ".done" + ls);
+            PreNPost(out, "POST");
+
             out.write("exit" + ls);
             out.close();
 
             // set excution bits
-            String sExec = "chmod u+x " + sOutputDir + fs + sBatchFile;
+            String sExec = "chmod u+x " + getOutputDir() + fs + sBatchFile;
             Runtime.getRuntime().exec(sExec);
             return sBatchFile;
         }
@@ -703,12 +778,13 @@ public class TestShl2Runner
             // we are in the wntmsci9[.pro]/qa directory
             // to go to the bin directory we have to go to
             // ../bin or ../lib
-            res = ".." + fs + purelibname;
+            res = m_sProjectDir + fs + m_sEnvironment + fs + purelibname;
             return res;
         }
 
     // -----------------------------------------------------------------------------
 
+/*
     public Object[] cleanup(String sceneDir, String[] scene_files)
         {
             ArrayList res = new ArrayList();
@@ -732,6 +808,7 @@ public class TestShl2Runner
             return res.toArray();
         }
 
+
     public void removeRemark(String sceneDir,String scene_file)
         throws IOException
         {
@@ -751,6 +828,7 @@ public class TestShl2Runner
             }
             out.close();
         }
+*/
 
     public void parseOut (ArrayList sJobList, String _sProjectName, String _sEnvironment, String basedir)
         {
@@ -759,8 +837,7 @@ public class TestShl2Runner
             for (int i=0; i<sJobList.size();i++)
             {
                 String sJob = (String) sJobList.get(i);
-                String unitName = "";
-                String outFile = getOutputDir() + fs + getLogName(sJob);
+                String outFile = getLogName(sJob);
                 ArrayList out_lines = getLines(outFile);
                 String date="";
 
