@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:16:06 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,6 +834,9 @@ SalDisplay::~SalDisplay( )
         delete mpInputMethod;
         delete mpKbdExtension;
         XCloseDisplay( pDisp_ );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "display %p closed\n", pDisp_ );
+#endif
     }
 
 #ifdef HAVE_LIBSN
@@ -911,9 +914,26 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
     m_bXinerama         = false;
     aSize_              = Size( DisplayWidth ( pDisp_, nScreen_ ),
                                 DisplayHeight( pDisp_, nScreen_ ) );
-    aResolution_        =
-        Pair( DPI( aSize_.Width(),  DisplayWidthMM ( pDisp_, nScreen_ ) ),
-              DPI( aSize_.Height(), DisplayHeightMM( pDisp_, nScreen_ ) ) );
+
+    const char *value;
+    /*  #i15507#
+     *  Xft resolution should take precedence since
+     *  it is what modern desktops use.
+     */
+    if ((value = XGetDefault (pDisp_, "Xft", "dpi")))
+    {
+        rtl::OString str (value);
+        long dpi = (long) str.toDouble();
+        aResolution_ = Pair( dpi, dpi );
+        mbExactResolution = true;
+    }
+    else
+    {
+        aResolution_     =
+            Pair( DPI( aSize_.Width(),  DisplayWidthMM ( pDisp_, nScreen_ ) ),
+                  DPI( aSize_.Height(), DisplayHeightMM( pDisp_, nScreen_ ) ) );
+        mbExactResolution   = false;
+    }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
     if( !nMaxRequestSize_ )
@@ -1474,9 +1494,6 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
             break;
 
         #if !defined (SunXK_Undo)
-            #define SunXK_Undo      0x0000FF65  // XK_Undo
-            #define SunXK_Again     0x0000FF66  // XK_Redo
-            #define SunXK_Find      0x0000FF68  // XK_Find
             #define SunXK_Stop      0x0000FF69  // XK_Cancel
             #define SunXK_Props     0x1005FF70
             #define SunXK_Front     0x1005FF71
@@ -1487,28 +1504,28 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         #endif
 
         case KEY_REPEAT:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Again : XK_L2;
+            nKeySym = XK_Redo;
             break;
         case KEY_PROPERTIES:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Props : XK_L3;
+            nKeySym = SunXK_Props;
             break;
         case KEY_UNDO:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Undo  : XK_L4;
+            nKeySym = XK_Undo;
             break;
         case KEY_FRONT:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Front : XK_L5;
+            nKeySym = SunXK_Front;
             break;
         case KEY_COPY:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Copy  : XK_L6;
+            nKeySym = SunXK_Copy;
             break;
         case KEY_OPEN:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Open  : XK_L7;
+            nKeySym = SunXK_Open;
             break;
         case KEY_PASTE:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Paste : XK_L8;
+            nKeySym = SunXK_Paste;
             break;
         case KEY_FIND:
-            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Find  : XK_L9;
+            nKeySym = XK_Find;
             break;
         case KEY_CUT:
             nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
@@ -1540,8 +1557,8 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         case KEY_EQUAL:
             nKeySym = XK_equal;
             break;
-        case KEY_FRONT+1: // KEY_HELP
-            nKeySym = XK_F1; // XK_Help; ???
+        case KEY_HELP:
+            nKeySym = XK_Help;
             break;
 
         default:
@@ -1718,7 +1735,8 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 break;
             // - - - - - Sun X-Server Tastatur ??? - - - - - - - - - - - -
             case XK_L1: // XK_F11:
-                nKey = KEY_F11; // KEY_CANCEL
+                nKey = KEY_F11; // on a sun keyboard this actually is usally SunXK_Stop,
+                // but VCL doesn't have a key defintion for that
                 break;
             case XK_L2: // XK_F12:
                 if ( GetServerVendor() == vendor_sun )
@@ -1805,8 +1823,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 nKey = KEY_FIND;
                 break;
             case XK_Help:
-                nKey = KEY_FRONT+1; // KEY_HELP
-                nKey = KEY_F1;
+                nKey = KEY_HELP;
                 break;
             case XK_Menu:
                 nKey = KEY_F10;
@@ -2996,17 +3013,18 @@ void SalDisplay::PrintInfo() const
 
 void SalDisplay::GetScreenFontResolution( long& rDPIX, long& rDPIY ) const
 {
-    int   nThreshold;
+    rDPIX = aResolution_.A();
+    rDPIY = aResolution_.B();
+    if( mbExactResolution )
+        return;
 
+    int   nThreshold;
     if (aSize_.Height() <= 600)
         nThreshold =  96;
     else if (aSize_.Height() <= 768)
         nThreshold = 108;
     else
         nThreshold = 120;
-
-    rDPIX = aResolution_.A();
-    rDPIY = aResolution_.B();
 
     if( rDPIY < nThreshold )
     {
