@@ -1675,7 +1675,7 @@ EOF
 
 fi
 
-for ac_hdr in fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h
+for ac_hdr in fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
@@ -2185,6 +2185,9 @@ if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
    _os="WINNT"
 fi
 
+
+## The following allows like systems to share settings this is not meant to
+## Imply that these OS are the same thing.
 case "$_os" in
 	"SunOS")
 	  OS_VERSION=solaris  
@@ -2212,6 +2215,9 @@ case "$_os" in
 	  ;;
 	"IRIX64")
 	  OS_VERSION=sysvr4
+	  ;;
+	"GNU")
+	  OS_VERSION=linux
 	  ;;
    *)
       { echo "configure: error: $_os operating system is not suitable to build dmake!" 1>&2; exit 1; }
@@ -2331,7 +2337,7 @@ ac_given_INSTALL="$INSTALL"
 trap 'rm -fr `echo "Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
-		dmakeroot.h  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+		startup/unix/cygwin/Makefile dmakeroot.h  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2440,7 +2446,7 @@ cat >> $CONFIG_STATUS <<EOF
 CONFIG_FILES=\${CONFIG_FILES-"Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
-		dmakeroot.h "}
+		startup/unix/cygwin/Makefile dmakeroot.h "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -2679,7 +2685,6 @@ chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
-###		startup/unix/cygwin/Makefile )
 
 
 
