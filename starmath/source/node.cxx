@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-19 11:54:24 $
+ *  last change: $Author: tl $ $Date: 2001-06-28 13:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,8 +774,6 @@ void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one row with some extra space between
 {
-    SmRect::operator = (SmRect());
-
     SmNode *pNode;
     USHORT  nSize = GetNumSubNodes();
     USHORT i;
@@ -816,7 +814,7 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                 aPos.X() += nDist;
 
             pNode->MoveTo(aPos);
-            ExtendBy(*pNode, i ? RCP_XOR : RCP_ARG);
+            ExtendBy( *pNode, RCP_XOR );
         }
 }
 
