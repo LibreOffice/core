@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:24:29 $
+ *  last change: $Author: nn $ $Date: 2002-04-16 18:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 // STATIC DATA -----------------------------------------------------------
 
 //==================================================================
+
+#define SC_PREVIEW_SHADOWSIZE   2
 
 long lcl_GetDisplayStart( USHORT nTab, ScDocument* pDoc, long* pPages )
 {
@@ -342,6 +344,19 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
     BOOL bDoPrint = ( pFillLocation == NULL );
 
+    if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) )
+    {
+        SetMapMode( aMMMode );
+        SetLineColor();
+        SetFillColor(COL_LIGHTGRAY);
+
+        Size aWinSize = GetOutputSize();
+        if ( aOffset.X() < 0 )
+            DrawRect(Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
+        if ( aOffset.Y() < 0 )
+            DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
+    }
+
     Size aPageSize;
     if ( nPageNo < nTotalPages )
     {
@@ -411,6 +426,38 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                     DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
             }
         }
+
+        //  draw border
+
+        if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
+        {
+            SetLineColor( COL_BLACK );      //! from settings
+            SetFillColor();
+
+            Rectangle aPixel( LogicToPixel( Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
+            --aPixel.Right();
+            --aPixel.Bottom();
+            DrawRect( PixelToLogic( aPixel ) );
+        }
+
+        //  draw shadow
+
+        SetLineColor();
+        SetFillColor( COL_BLACK );          //! from settings
+
+        Rectangle aPixel;
+
+        aPixel = LogicToPixel( Rectangle( nPageEndX, -aOffset.Y(), nPageEndX, nPageEndY ) );
+        aPixel.Top() += SC_PREVIEW_SHADOWSIZE;
+        aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
+        aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
+        DrawRect( PixelToLogic( aPixel ) );
+
+        aPixel = LogicToPixel( Rectangle( -aOffset.X(), nPageEndY, nPageEndX, nPageEndY ) );
+        aPixel.Left() += SC_PREVIEW_SHADOWSIZE;
+        aPixel.Right() += SC_PREVIEW_SHADOWSIZE - 1;
+        aPixel.Bottom() += SC_PREVIEW_SHADOWSIZE - 1;
+        DrawRect( PixelToLogic( aPixel ) );
     }
 }
 
@@ -579,6 +626,13 @@ USHORT ScPreview::GetOptimalZoom(BOOL bWidthOnly)
     double nWinScaleX = ScGlobal::nScreenPPTX / pDocShell->GetOutputFactor();
     double nWinScaleY = ScGlobal::nScreenPPTY;
     Size aWinSize = GetOutputSizePixel();
+
+    //  desired margin is 0.25cm in default MapMode (like Writer),
+    //  but some additional margin is introduced by integer scale values
+    //  -> add only 0.10cm, so there is some margin in all cases.
+    Size aMarginSize( LogicToPixel( Size( 100, 100 ), MAP_100TH_MM ) );
+    aWinSize.Width()  -= 2 * aMarginSize.Width();
+    aWinSize.Height() -= 2 * aMarginSize.Height();
 
     Size aPageSize = lcl_GetDocPageSize( pDocShell->GetDocument(), nTab );
     if ( aPageSize.Width() && aPageSize.Height() )
