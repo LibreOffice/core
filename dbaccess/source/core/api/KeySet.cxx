@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:35:31 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 08:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     m_aComposedTableName = getComposedTableName(sCatalog,sSchema,sTable);
 
     ::rtl::OUString sComposedName;
+    sCatalog = sSchema = sTable = ::rtl::OUString();
     ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable);
     ::dbtools::composeTableName(xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
     // create the where clause
@@ -1394,6 +1395,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.35  2002/08/26 12:35:31  oj
+    #98671# change type for sequence to VARBINARY
+
     Revision 1.34  2002/08/22 10:07:04  oj
     #102394# insert even into key row if no auto increment exists
 
