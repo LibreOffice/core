@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:15:20 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,36 +69,45 @@
 #include <vector>
 
 #ifndef WW_TYPES
-#include "types.hxx"
+#   include "types.hxx"
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>     //SfxItemPool
+#   include <svtools/itempool.hxx>     //SfxItemPool
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>      //SfxItemSet
+#   include <svtools/itemset.hxx>      //SfxItemSet
 #endif
 #ifndef _FORMAT_HXX
-#include <format.hxx>               //SwFmt
+#   include <format.hxx>               //SwFmt
 #endif
 #ifndef _NODE_HXX
-#include <node.hxx>                 //SwCntntNode
+#   include <node.hxx>                 //SwCntntNode
 #endif
 #ifndef _DOC_HXX
-#include <doc.hxx>                  //SwDoc
+#   include <doc.hxx>                  //SwDoc
+#endif
+#ifndef _PAM_HXX
+#   include <pam.hxx>                  //SwPaM
 #endif
 #ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>            //SvInPlaceObjectRef
+#   include <so3/ipobj.hxx>            //SvInPlaceObjectRef
 #endif
 #ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>           //Polygon, PolyPolygon
+#   include <tools/poly.hxx>           //Polygon, PolyPolygon
 #endif
+
+//Uncomment to dump debugging streams of graphics
+#define DEBUGDUMP
 
 class SwDoc;
 class SwTxtFmtColl;
+class SwCharFmt;
 class SdrObject;
 class SdrOle2Obj;
 class SvPersist;
+class OutlinerParaObject;
+class SdrTextObj;
 class SwNumFmt;
 class SwTxtNode;
 class SwNoTxtNode;
@@ -109,6 +118,118 @@ namespace sw
     typedef std::vector<SwTxtFmtColl *> ParaStyles;
     /// STL iterator for ParaStyles
     typedef std::vector<SwTxtFmtColl *>::iterator ParaStyleIter;
+
+
+    /** Make exporting a Writer Frame easy
+
+        In word all frames are effectively anchored to character or as
+        character. This is nice and simple, writer is massively complex in this
+        area, so this sw::Frame simplies matters by providing a single unified
+        view of the multitute of elements in writer and their differing quirks.
+
+        A sw::Frame wraps a writer frame and is guaranted to have a suitable
+        anchor position available from it. It hides much of the needless
+        complexity of the multitude of floating/inline elements in writer, it...
+
+        Guarantees an anchor position for a frame.
+        Provides a readable way to see if we are anchored inline. (as character)
+        Provides a simple way to flag what type of entity this frame describes.
+        Provides the size of the element as drawn by writer.
+
+        @author
+        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+    */
+    class Frame
+    {
+    public:
+        enum WriterSource {eTxtBox, eGraphic, eOle, eDrawing, eFormControl};
+    private:
+        const SwFrmFmt* mpFlyFrm;
+        SwPosition maPos;
+        Size maSize;
+        WriterSource meWriterType;
+        const SwNode *mpStartFrameContent;
+        bool mbIsInline;
+    public:
+        Frame(const SwFrmFmt &rFlyFrm, const SwPosition &rPos);
+
+        /** Get the writer SwFrmFmt that this object describes
+
+            @return
+            The wrapped SwFrmFmt
+        */
+        const SwFrmFmt &GetFrmFmt() const { return *mpFlyFrm; }
+
+        /** Get the position this frame is anchored at
+
+            @return
+            The anchor position of this frame
+        */
+        const SwPosition &GetPosition() const { return maPos; }
+
+        /** Get the node this frame is anchored into
+
+            @return
+            The SwTxtNode this frame is anchored inside
+        */
+        const SwCntntNode *GetCntntNode() const
+            { return maPos.nNode.GetNode().GetCntntNode(); }
+
+        /** Get the type of frame that this wraps
+
+            @return
+            a WriterSource which describes the source type of this wrapper
+        */
+        WriterSource GetWriterType() const { return meWriterType; }
+
+        /** Is this frame inline (as character)
+
+            @return
+            whether this is inline or not
+        */
+        bool IsInline() const;
+
+
+        /** Even if the frame isn't an inline frame, force it to behave as one
+
+            There are a variety of circumstances where word cannot have
+            anything except inline elements, e.g. inside frames. So its easier
+            to force this sw::Frame into behaving as one, instead of special
+            casing export code all over the place.
+
+        */
+        void ForceTreatAsInline();
+
+        /** Get the first node of content in the frame
+
+         @return
+         the first node of content in the frame, might not be any at all.
+        */
+        const SwNode *GetContent() const { return mpStartFrameContent; }
+
+
+        /** Does this sw::Frame refer to the same writer content as another
+
+         @return
+         if the two sw::Frames are handling the same writer frame
+        */
+        bool RefersToSameFrameAs(const Frame &rOther) const
+        {
+            return (mpFlyFrm == rOther.mpFlyFrm);
+        }
+
+        /** The Size of the contained element
+
+         @return
+         the best size to use to export to word
+        */
+        const Size GetSize() const { return maSize; }
+    };
+
+    /// STL container of Frames
+    typedef std::vector<Frame> Frames;
+    /// STL iterator for Frames
+    typedef std::vector<Frame>::iterator FrameIter;
 }
 
 namespace sw
@@ -364,6 +485,39 @@ namespace sw
             return item_cast<T>(rSet.GetItem(eType));
         }
 
+        /** Return a pointer to a SfxPoolItem derived class if it exists in an
+            SwFmt
+
+            Writer's attributes are retrieved by passing a numeric identifier
+            and receiving a SfxPoolItem reference which must then typically be
+            cast back to its original type which is both tedious and verbose.
+
+            HasItem returns a pointer to the requested SfxPoolItem for a given
+            property id if it exists in the SwFmt e.g. fontsize
+
+            HasItem uses item_cast () on the retrived pointer to test that the
+            retrived property is of the type that the developer thinks it is.
+
+            @param rSet
+            The SwFmt whose property we want
+
+            @param eType
+            The numeric identifier of the default property to be retrieved
+
+            @tplparam T
+            A SfxPoolItem derived class of the retrieved property
+
+            @return The T requested or 0 if no T found with id eType
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        template<class T> const T* HasItem(const SwFmt &rFmt,
+            sal_uInt16 eType)
+        {
+            return HasItem<T>(rFmt.GetAttrSet(), eType);
+        }
+
         /** Get the Paragraph Styles of a SwDoc
 
             Writer's styles are in one of those dreaded macro based pre-STL
@@ -380,6 +534,43 @@ namespace sw
         */
         ParaStyles GetParaStyles(const SwDoc &rDoc);
 
+
+        /** Get a Paragraph Style which fits a given name
+
+            Its surprisingly tricky to get a style when all you have is a name,
+            but that's what this does
+
+            @param rDoc
+            The SwDoc document to search in
+
+            @param rName
+            The name of the style to search for
+
+            @return A Paragraph Style if one exists which matches the name
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const String& rName);
+
+        /** Get a Character Style which fits a given name
+
+            Its surprisingly tricky to get a style when all you have is a name,
+            but that's what this does
+
+            @param rDoc
+            The SwDoc document to search in
+
+            @param rName
+            The name of the style to search for
+
+            @return A Character Style if one exists which matches the name
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const String& rName);
+
         /** Sort sequence of Paragraph Styles by outline numbering level
 
             Sort ParaStyles in ascending order of outline level, e.g.  given
@@ -393,6 +584,94 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void SortByOutline(ParaStyles &rStyles);
+
+        /** Get the Floating elements in a SwDoc
+
+            Writer's FrmFmts may or may not be anchored to some text content,
+            e.g. Page Anchored elements will not be. For the winword export we
+            need them to have something to be anchored to. So this method
+            returns all the floating elements in a document as a STL container
+            of sw::Frames which are guaranteed to have an appropiate anchor.
+            This will include drawing objects, use GetNonDrawingFrames if
+            you are not interested in the drawing objects.
+
+            @param rDoc
+            The SwDoc document to get the styles from
+
+            @param pPaM
+            The SwPam to describe the selection in the document to get the
+            elements from. 0 means the entire document.
+
+            @return A Frames containing the selections Floating elements
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Frames GetAllFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
+
+        /** Get the Floating elements in a SwDoc
+
+            Writer's FrmFmts may or may not be anchored to some text content,
+            e.g. Page Anchored elements will not be. For the winword export we
+            need them to have something to be anchored to. So this method
+            returns all the floating elements in a document as a STL container
+            of sw::Frames which are guaranteed to have an appropiate anchor.
+            This will not include drawing objects, use GetAllFrames if you
+            are interested in the drawing objects.
+
+            @param rDoc
+            The SwDoc document to get the styles from
+
+            @param pPaM
+            The SwPam to describe the selection in the document to get the
+            elements from. 0 means the entire document.
+
+            @return A Frames containing the selections Floating elements
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Frames GetNonDrawingFrames(const SwDoc &rDoc, SwPaM *pPaM = 0);
+
+        /** Get the Frames anchored to a given node
+
+            Given a container of frames, find the ones anchored to a given node
+
+            @param rFrames
+            The container of frames to search in
+
+            @param rNode
+            The SwNode to check for anchors to
+
+            @return the Frames in rFrames anchored to rNode
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
+
+        /** Get the Frames anchored for all nodes between two points
+
+            Given a container of frames, find the ones anchored to the nodes
+            from start to end. Half open sequence, i.e. those anchored to
+            start, but not those anchored to end
+
+            @param rFrames
+            The container of frames to search in
+
+            @param rStart
+            The SwNode to start check for anchors from
+
+            @param rEnd
+            The SwNode to end check for anchors from
+
+            @return the Frames in rFrames anchored to rNode
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Frames GetFramesBetweenNodes(const Frames &rFrames,
+                const SwNode &rStart, const SwNode &rEnd);
 
         /** Get the Numbering Format used on a paragraph
 
@@ -494,10 +773,8 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
-    }
 
-    namespace hack
-    {
+
         /** Make setting a drawing object's layer in a Writer document easy
 
 
@@ -546,7 +823,10 @@ namespace sw
             SetLayer(const SetLayer &rOther) throw();
             SetLayer& operator=(const SetLayer &rOther) throw();
         };
+    }
 
+    namespace hack
+    {
         /** Make inserting an OLE object into a Writer document easy
 
             The rest of Office uses SdrOle2Obj for their OLE objects, Writer
@@ -607,6 +887,62 @@ namespace sw
             /// No copying allowed
             DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
         };
+
+        /** Get the Outliner Object from a SdrTextObj that contains the visible
+            text
+
+            A SdrTextObj contains an object which describes its text, but
+            frustratingly if the object is being actively edited this new text
+            outliner object is stored seperately from the previous preedit
+            outliner. So objects being edited have to be handled differently
+            from those that are not to return the currently being edited
+            outliner if its exists, and the normal outliner if not. This method
+            just gives me the text outliner that contains the visible text,
+            which is all anyone could really care about.
+
+            See OpenOffice.org issue 13885
+            (http://www.openoffice.org/issues/show_bug.cgi?id=13885)
+
+            @param SdrTextObj
+            The SdrTextObj from which we want to get the text content.
+
+            @return the OutlinerParaObject that describes the user visible text
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        const OutlinerParaObject* GetOutlinerParaObject(const SdrTextObj &rObj);
+
+
+#ifdef DEBUGDUMP
+        /** Create a SvStream to dump data to during debugging
+
+            This creates a file in the program dir of OOo, delete the SvStream
+            after you are done with it
+
+            @param rSuffix
+            The suffix that will be appened to this debugging file
+
+            @return a SvStream to dump data to
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SvStream *CreateDebuggingStream(const String &rSuffix);
+
+        /** Dump one SvStream to another
+
+            @param rSrc
+            The source stream
+
+            @param rDest
+            The destination stream
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        void DumpStream(const SvStream &rSrc, SvStream &rDest);
+#endif
     }
 }
 
