@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-16 20:13:54 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ swedish ] = "Textjustering";
         Text[ polish ] = "Wyrównanie tekstu";
         Text[ portuguese_brazilian ] = "Text alignment";
-        Text[ japanese ] = "æ–‡ç« ã®é…ç½®";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®é…ç½®";
         Text[ korean ] = "í…ìŠ¤íŠ¸ ë§ì¶¤";
         Text[ chinese_simplified ] = "æ–‡å­—å¯¹é½";
         Text[ chinese_traditional ] = "æ–‡å­—å°é½Š";
@@ -136,7 +136,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ swedish ] = "H~orisontell";
         Text[ polish ] = "Poziomo";
         Text[ portuguese_brazilian ] = "H~orizontal";
-        Text[ japanese ] = "æ¨ªã«(~Z)";
+        Text[ japanese ] = "æ¨ª(~Z)";
         Text[ korean ] = "ìˆ˜í‰ìœ¼ë¡œ(~Z)";
         Text[ chinese_simplified ] = "æ°´å¹³(~Z)";
         Text[ chinese_traditional ] = "æ°´å¹³(~Z)";
@@ -407,7 +407,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ swedish ] = "~Vertikal";
         Text[ polish ] = "Pionowo";
         Text[ portuguese_brazilian ] = "~Vertical";
-        Text[ japanese ] = "ç¸¦ã«(~V)";
+        Text[ japanese ] = "ç¸¦(~V)";
         Text[ korean ] = "ì„¸ë¡œ(~V)";
         Text[ chinese_simplified ] = "å‚ç›´(~V)";
         Text[ chinese_traditional ] = "å‚ç›´(~V)";
@@ -662,7 +662,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ swedish ] = "~Vinkel";
         Text[ polish ] = "K¹t";
         Text[ portuguese_brazilian ] = "Gra~d";
-        Text[ japanese ] = "åº¦(~G)";
+        Text[ japanese ] = "è§’åº¦(~G)";
         Text[ korean ] = "ê°ë„(~G)";
         Text[ chinese_simplified ] = "è§’åº¦(~G)";
         Text[ chinese_traditional ] = "è§’åº¦(~G)";
@@ -1005,24 +1005,24 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "Automatischer Zeilenumbru~ch" ;
         Text [ ENGLISH ] = "Linebrea~k" ;
         Text [ norwegian ] = "Linebrea~k" ;
-        Text [ italian ] = "Testo a capo" ;
+        Text [ italian ] = "Testo a capo automatico" ;
         Text [ portuguese_brazilian ] = "Interrup?~ao de linha" ;
         Text [ portuguese ] = "Quebra de ~linha" ;
         Text [ finnish ] = "Rivinvaihto" ;
         Text [ danish ] = "Linjeskift" ;
-        Text [ french ] = "Renvoi à la ligne" ;
-        Text [ swedish ] = "Rad~brytning" ;
+        Text [ french ] = "Renvoi à la ligne automatique" ;
+        Text [ swedish ] = "Automatisk rad~brytning" ;
         Text [ dutch ] = "~Regelafbreking" ;
-        Text [ spanish ] = "Salto de ~línea" ;
+        Text [ spanish ] = "Salto de ~línea automático" ;
         Text [ english_us ] = "Automatic ~line break" ;
-        Text[ chinese_simplified ] = "æ¢è¡Œ";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ";
         Text[ russian ] = "Ğàçğûâ ñòğîêè";
         Text[ polish ] = "Podzia³ wierszy";
-        Text[ japanese ] = "æŠ˜ã‚Šè¿”ã™";
+        Text[ japanese ] = "è‡ªå‹•çš„ã«æŠ˜ã‚Šè¿”ã™";
         Text[ chinese_traditional ] = "è‡ªå‹•æ›è¡Œ";
         Text[ arabic ] = "İÇÕá ÃÓØÑ";
         Text[ dutch ] = "~Regelafbreking";
-        Text[ chinese_simplified ] = "æ¢è¡Œ";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ";
         Text[ greek ] = "ÁëëáãŞ ãñáììŞò";
         Text[ korean ] = "ìë™ ë‹¨ë½";
         Text[ turkish ] = "Satır son~u";
@@ -1156,7 +1156,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ chinese_simplified ] = "æ–‡å­—åªåœ¨å•å…ƒæ ¼å†…æ‰©å±•ã€‚";
         Text[ russian ] = "Ğàñòÿæåíèå òåêñòà òîëüêî âíóòğè ÿ÷åéêè.";
         Text[ polish ] = "Rozci¹gniêcie tekstu tylko wewn¹trz komórki.";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ã¿å‚¾ã‘ã‚‹";
+        Text[ japanese ] = "ã‚»ãƒ«å†…ã§ã®ã¿å‚¾ã‘ã‚‹";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "æ–‡å­—åªåœ¨å„²å­˜æ ¼å…§å»¶ä¼¸ã€‚";
         Text[ arabic ] = "ÊãÏíÏ ÇáäÕ ÏÇÎá ÇáÎáíÉ İŞØ.";
