@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:41:13 $
+ *  last change: $Author: os $ $Date: 2001-03-19 08:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1947,7 +1947,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     sal_Int16 nSet;
                     pData->aVal >>= nSet;
-                    if(nSet <= (sal_Int16)SVX_NUM_CHARS_LOWER_LETTER_N)
+                    if(nSet >= 0)
                         aFmt.SetNumberingType(nSet);
                     else
                         bWrongArg = sal_True;
