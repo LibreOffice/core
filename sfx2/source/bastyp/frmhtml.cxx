@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:05:17 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame,
                 break;
             }
         case HTML_O_SRC:
-            pFrame->SetURL( INetURLObject::RelToAbs(pOption->GetString()) );
+            pFrame->SetURL(
+                String(INetURLObject::RelToAbs(pOption->GetString()) ));
             break;
         case HTML_O_NAME:
             pFrame->SetName( pOption->GetString() );
