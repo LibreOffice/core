@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
+#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -131,6 +134,7 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
+using namespace ::drafts::com::sun::star::form;
 
 const sal_uInt16 WIDTH              = 0x0001;
 const sal_uInt16 ALIGN              = 0x0002;
@@ -263,6 +267,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
     // though our aggregate may be an XFormComponent or an XServiceInfo, we aren't anymore
     if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
+        ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
         )
         return aReturn;
 
@@ -362,10 +367,6 @@ OGridColumn::~OGridColumn()
 
     DBG_DTOR(OGridColumn,NULL);
 }
-
-// XCloneable
-//------------------------------------------------------------------------------
-//IMPLEMENT_DEFAULT_CLONING( OGridColumn )
 
 // XChild
 //------------------------------------------------------------------------------
