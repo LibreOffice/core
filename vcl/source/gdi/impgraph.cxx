@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 11:47:43 $
+ *  last change: $Author: ka $ $Date: 2001-08-07 11:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,13 +120,13 @@
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
 
-#define SYS_WINMETAFILE         0x00000003UL
-#define SYS_WNTMETAFILE         0x00000004UL
-#define SYS_OS2METAFILE         0x00000005UL
-#define SYS_MACMETAFILE         0x00000006UL
+#define SYS_WINMETAFILE             0x00000003UL
+#define SYS_WNTMETAFILE             0x00000004UL
+#define SYS_OS2METAFILE             0x00000005UL
+#define SYS_MACMETAFILE             0x00000006UL
 
-#define GRAPHIC_FORMAT_50       COMPAT_FORMAT( 'G', 'R', 'F', '5' )
-#define NATIVE_FORMAT_50        COMPAT_FORMAT( 'N', 'A', 'T', '5' )
+#define GRAPHIC_FORMAT_50           COMPAT_FORMAT( 'G', 'R', 'F', '5' )
+#define NATIVE_FORMAT_50            COMPAT_FORMAT( 'N', 'A', 'T', '5' )
 
 // ---------------
 // - ImpSwapFile -
@@ -503,32 +503,34 @@ Bitmap ImpGraphic::ImplGetBitmap() const
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
+        // use corner points of graphic to determine the pixel
+        // extent of the graphic (rounding errors are possible else)
         VirtualDevice   aVDev;
-        Size            aSizePix( aVDev.LogicToPixel( maMetaFile.GetPrefSize(),
-                                                      maMetaFile.GetPrefMapMode() ) );
+        const Point     aNullPt;
+        const Point     aTLPix( aVDev.LogicToPixel( aNullPt, maMetaFile.GetPrefMapMode() ) );
+        const Point     aBRPix( aVDev.LogicToPixel( Point( maMetaFile.GetPrefSize().Width() - 1, maMetaFile.GetPrefSize().Height() - 1 ), maMetaFile.GetPrefMapMode() ) );
+        Size            aDrawSize( aVDev.LogicToPixel( maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode() ) );
+        Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
 
         if( aSizePix.Width() && aSizePix.Height() &&
             ( aSizePix.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aSizePix.Height() > GRAPHIC_MTFTOBMP_MAXEXT ) )
         {
-            double fWH = (double) aSizePix.Width() / aSizePix.Height();
+            const Size  aOldSizePix( aSizePix );
+            double      fWH = (double) aSizePix.Width() / aSizePix.Height();
 
             if( fWH <= 1.0 )
-            {
-                aSizePix.Width() = FRound( fWH * GRAPHIC_MTFTOBMP_MAXEXT );
-                aSizePix.Height() = GRAPHIC_MTFTOBMP_MAXEXT;
-            }
+                aSizePix.Width() = FRound( GRAPHIC_MTFTOBMP_MAXEXT * fWH ), aSizePix.Height() = GRAPHIC_MTFTOBMP_MAXEXT;
             else
-            {
-                aSizePix.Width() = GRAPHIC_MTFTOBMP_MAXEXT;
-                aSizePix.Height() = FRound( GRAPHIC_MTFTOBMP_MAXEXT / fWH );
-            }
+                aSizePix.Width() = GRAPHIC_MTFTOBMP_MAXEXT, aSizePix.Height() = FRound(  GRAPHIC_MTFTOBMP_MAXEXT / fWH );
+
+            aDrawSize.Width() = FRound( ( (double) aDrawSize.Width() * aSizePix.Width() ) / aOldSizePix.Width() );
+            aDrawSize.Height() = FRound( ( (double) aDrawSize.Height() * aSizePix.Height() ) / aOldSizePix.Height() );
         }
 
         if( aVDev.SetOutputSizePixel( aSizePix ) )
         {
-            const Point aPt;
-            ImplDraw( &aVDev, aPt, aSizePix );
-            aRetBmp =  aVDev.GetBitmap( aPt, aSizePix );
+            ImplDraw( &aVDev, aNullPt, aDrawSize );
+            aRetBmp =  aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() );
         }
     }
 
