@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:11:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         {
             aAnchor.SetType( FLY_PAGE );
         }
+        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
@@ -288,6 +289,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetType( FLY_AT_CNTNT );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
+        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( VERT_NONE != eVertOri )
