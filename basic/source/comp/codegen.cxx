@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,10 +273,14 @@ void SbiCodeGen::Save()
         p->AddString( pPool->Find( i ) );
 
     // Typen einfuegen
-
     USHORT nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
+
+    // Insert enum objects
+    nCount = pParser->rEnumArray->Count();
+    for (i = 0; i < nCount; i++)
+         p->AddEnum((SbxObject *)pParser->rEnumArray->Get(i));
 
     if( !p->IsError() )
         rMod.pImage = p;
