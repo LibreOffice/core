@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:36:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,52 +88,30 @@ SwMovedFwdFrmsByObjPos::~SwMovedFwdFrmsByObjPos()
 void SwMovedFwdFrmsByObjPos::Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
                                      const sal_uInt32 _nToPageNum )
 {
-    sal_uInt32 nDummy;
-    if ( !FrmMovedFwdByObjPos( _rMovedFwdFrmByObjPos, nDummy ) )
+    if ( maMovedFwdFrms.end() ==
+         maMovedFwdFrms.find( _rMovedFwdFrmByObjPos.GetTxtNode() ) )
     {
-        Entry* pNewEntry = new Entry;
-
-        pNewEntry->mpTxtNode = _rMovedFwdFrmByObjPos.GetTxtNode();
-        pNewEntry->mnToPageNum = _nToPageNum;
-
-        maMovedFwdFrms.push_back( pNewEntry );
+        const NodeMapEntry aEntry( _rMovedFwdFrmByObjPos.GetTxtNode(), _nToPageNum );
+        maMovedFwdFrms.insert( aEntry );
     }
 }
 
-// --> OD 2005-01-12 #i40155#
 void SwMovedFwdFrmsByObjPos::Remove( const SwTxtFrm& _rTxtFrm )
 {
-    std::vector< Entry* >::iterator aIter = maMovedFwdFrms.begin();
-    for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
-    {
-        const Entry* pCurrEntry = *(aIter);
-        if ( pCurrEntry->mpTxtNode == _rTxtFrm.GetTxtNode() )
-        {
-            maMovedFwdFrms.erase( aIter );
-            break;
-        }
-    }
-}
-// <--
+    maMovedFwdFrms.erase( _rTxtFrm.GetTxtNode() );
+};
 
 bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                                   sal_uInt32& _ornToPageNum ) const
 {
-    bool bFrmMovedFwd( false );
-
-    std::vector< Entry* >::const_iterator aIter = maMovedFwdFrms.begin();
-    for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
+    NodeMapIter aIter = maMovedFwdFrms.find( _rTxtFrm.GetTxtNode() );
+    if ( maMovedFwdFrms.end() != aIter )
     {
-        const Entry* pCurrEntry = *(aIter);
-        if ( pCurrEntry->mpTxtNode == _rTxtFrm.GetTxtNode() )
-        {
-            bFrmMovedFwd = true;
-            _ornToPageNum = pCurrEntry->mnToPageNum;
-            break;
-        }
+        _ornToPageNum = (*aIter).second;
+        return true;
     }
 
-    return bFrmMovedFwd;
+    return false;
 }
 
 // --> OD 2004-10-05 #i26945#
@@ -143,13 +121,13 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
 
     const sal_uInt32 nPageNumOfRow = _rRowFrm.FindPageFrm()->GetPhyPageNum();
 
-    std::vector< Entry* >::const_iterator aIter = maMovedFwdFrms.begin();
+    NodeMapIter aIter = maMovedFwdFrms.begin();
     for ( ; aIter != maMovedFwdFrms.end(); ++aIter )
     {
-        const Entry* pCurrEntry = *(aIter);
-        if ( pCurrEntry->mnToPageNum >= nPageNumOfRow )
+        const NodeMapEntry& rEntry = *(aIter);
+        if ( rEntry.second >= nPageNumOfRow )
         {
-            SwClientIter aIter( *(const_cast<SwTxtNode*>(pCurrEntry->mpTxtNode)) );
+            SwClientIter aIter( *const_cast<SwTxtNode*>( rEntry.first ) );
             for( SwTxtFrm* pTxtFrm = (SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
                  pTxtFrm;
                  pTxtFrm = (SwTxtFrm*)aIter.Next() )
@@ -170,11 +148,3 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
 }
 // <--
 
-void SwMovedFwdFrmsByObjPos::Clear()
-{
-    while ( maMovedFwdFrms.size() )
-    {
-        delete maMovedFwdFrms.back();
-        maMovedFwdFrms.pop_back();
-    }
-}
