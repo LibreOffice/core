@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-11 10:03:35 $
+ *  last change: $Author: tbe $ $Date: 2001-10-22 15:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,12 +632,19 @@ void LibPage::DeleteCurrent()
     SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
     DBG_ASSERT( pCurEntry && aLibBox.GetModel()->GetAbsPos( pCurEntry ), "Kann nicht loeschen!" );
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
-    BOOL bReference = FALSE;
-    // TODO: check, if library is Reference/Link
-    // old code:
-    //USHORT nLib = pBasMgr->GetLibId( aLibName );
-    //BOOL bReference = pBasMgr->IsReference( nLib );
-    if ( QueryDelLib( aLibName, bReference, this ) )
+
+    // check, if library is link
+    BOOL bIsLibraryLink = FALSE;
+    ::rtl::OUString aOULibName( aLibName );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+    if ( ( xModLibContainer.is() && xModLibContainer->isLibraryLink( aOULibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+    {
+        bIsLibraryLink = TRUE;
+    }
+
+    if ( QueryDelLib( aLibName, bIsLibraryLink, this ) )
     {
         // inform BasicIDE
         String aLib( CreateMgrAndLibStr( aCurBasMgr, aLibName ) );
@@ -652,11 +659,8 @@ void LibPage::DeleteCurrent()
         }
 
         // remove library from module and dialog library containers
-        ::rtl::OUString aOULibName( aLibName );
-        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             xModLibContainer->removeLibrary( aOULibName );
-        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             xDlgLibContainer->removeLibrary( aOULibName );
 
@@ -1004,6 +1008,18 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         return FALSE;
     }
 
+    // check, if library is readonly
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+    ::rtl::OUString aOULibName( aLibName );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+    if ( ( xModLibContainer.is() && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+    {
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
+        return FALSE;
+    }
+
     // TODO: check if library is reference/link
 
     // Prueffen, ob Referenz...
@@ -1026,44 +1042,41 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
     String aCurText( GetEntryText( pEntry, 0 ) );
     if ( bValid && ( aCurText != rNewText ) )
     {
-        // Prueffen, ob Lib mit dem Namen existiert!
         DBG_ASSERT( pBasMgr, "BasMgr nicht gesetzt!" );
-        if ( pBasMgr->HasLib( rNewText ) )
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+        try
+        {
+            ::rtl::OUString aOUOldName( aCurText );
+            ::rtl::OUString aOUNewName( rNewText );
+
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() )
+            {
+                xModLibContainer->renameLibrary( aOUOldName, aOUNewName );
+            }
+
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( xDlgLibContainer.is() )
+            {
+                xDlgLibContainer->renameLibrary( aOUOldName, aOUNewName );
+            }
+
+            BasicIDE::MarkDocShellModified( pShell );
+            BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
+            BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );
+        }
+        catch ( container::ElementExistException& )
         {
             ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
             return FALSE;
         }
-        USHORT nLib = pBasMgr->GetLibId( aCurText );
-        DBG_ASSERT( nLib != LIB_NOTFOUND, "Lib nicht gefunden!" );
-        //pBasMgr->SetLibName( nLib, rNewText );
-
-        // new
-
-        /*
-        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-
-        ::rtl::OUString aOUOldName( aCurText );
-        ::rtl::OUString aOUNewName( rNewText );
-
-        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOUOldName ) && !xModLibContainer->hasByName( aOUNewName ) )
+        catch ( container::NoSuchElementException& e )
         {
-            xModLibContainer->renameLibrary( aOUOldName, aOUNewName );
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+            return FALSE;
         }
-
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOUOldName ) && !xDlgLibContainer->hasByName( aOUNewName ) )
-        {
-            xDlgLibContainer->renameLibrary( aOUOldName, aOUNewName );
-        }
-        */
-
-        // end of new
-
-
-        BasicIDE::MarkDocShellModified( pBasMgr->GetStdLib() );
-        BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
-        BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );
     }
 
     if ( !bValid )
@@ -1073,6 +1086,7 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
         else
             ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
     }
+
     return bValid;
 }
 
