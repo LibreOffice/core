@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 15:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,7 +742,7 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
     const beans::PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
-    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+    sal_Bool bShowRedlineChanges = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
@@ -766,13 +766,9 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
             pValue->Value >>= nTmp;
             aRect.setHeight( nTmp );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineInsertions" ) ) )
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
         {
-            bShowInserts = *(sal_Bool *)(pValue->Value.getValue());
-        }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineDeletions" ) ) )
-        {
-            bShowDeletes = *(sal_Bool *)(pValue->Value.getValue());
+            bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
         {
@@ -791,14 +787,10 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
     pDoc->SetFootInBrowse ( bShowFooter );
 
     sal_uInt16 eOld = pDoc->GetRedlineMode();
-    if ( bShowInserts )
-        eOld |= REDLINE_SHOW_INSERT;
+    if ( bShowRedlineChanges )
+        eOld |= (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
     else
-        eOld &= ~REDLINE_SHOW_INSERT;
-    if ( bShowDeletes )
-        eOld |= REDLINE_SHOW_DELETE;
-    else
-        eOld &= ~REDLINE_SHOW_DELETE;
+        eOld &= ~(REDLINE_SHOW_INSERT|REDLINE_SHOW_INSERT);
     pDoc->SetRedlineMode( eOld );
 
 }
