@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.43 $
+*  $Revision: 1.44 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 11:55:30 $
+*  last change: $Author: hr $ $Date: 2004-11-09 12:38:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -709,6 +709,11 @@ UNO_JAR_FILE( gid_File_Jar_Fax, fax )
 
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
+STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
 #ifdef SOLAR_JAVA
