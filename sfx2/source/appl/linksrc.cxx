@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:27:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@ struct SvLinkSource_Impl
     String              aDataMimeType;
     SvLinkSourceTimer * pTimer;
     ULONG               nTimeout;
+    com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
+    m_xInputStreamToLoadFrom;
+    sal_Bool m_bIsReadOnly;
 
     SvLinkSource_Impl() : pTimer( 0 ), nTimeout( 3000 ) {}
     ~SvLinkSource_Impl();
@@ -217,6 +220,20 @@ SvLinkSource::SvLinkSource()
 SvLinkSource::~SvLinkSource()
 {
     delete pImpl;
+}
+
+
+SvLinkSource::StreamToLoadFrom SvLinkSource::getStreamToLoadFrom()
+{
+    return StreamToLoadFrom(
+        pImpl->m_xInputStreamToLoadFrom,
+        pImpl->m_bIsReadOnly);
+}
+
+void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
+{
+    pImpl->m_xInputStreamToLoadFrom = xInputStream;
+    pImpl->m_bIsReadOnly = bIsReadOnly;
 }
 
 void  SvLinkSource::Closed()
