@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:48:17 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,8 @@ void SwFrm::CheckDirChange()
                                     (SwDrawContact*)GetUserCall(pObj);
                                 if ( pContact && pContact->GetAnchor() == this )
                                 {
+                                    // OD 30.06.2003 #108784# - Note: only 'at page'
+                                    // anchored drawing objects are considered here.
                                     // change anchor position
                                     pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
                                     // check if the new position
@@ -387,12 +389,28 @@ void SwFrm::CheckDirChange()
                 {
                     // change anchor position
                     pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                    SwPageFrm* pPage = FindPageFrm();
-                    if ( pPage )
+                    // OD 30.06.2003 #108784# - consider 'virtual' drawing objects:
+                    if ( pObj->ISA(SwDrawVirtObj) )
                     {
-                        // check if the new position
-                        // would not exceed the margins of the page
-                        CaptureDrawObj( *pObj, pPage->Frm() );
+                        static_cast<SwDrawVirtObj*>(pObj)->AdjustRelativePosToReference();
+                    }
+                    else
+                    {
+                        SwPageFrm* pPage = FindPageFrm();
+                        if ( pPage )
+                        {
+                            // check if the new position
+                            // would not exceed the margins of the page
+                            CaptureDrawObj( *pObj, pPage->Frm() );
+                        }
+                        // OD 30.06.2003 #108784# - correct relative position
+                        // of 'virtual' drawing objects.
+                        SwDrawContact* pDrawContact =
+                            static_cast<SwDrawContact*>(pObj->GetUserCall());
+                        if ( pDrawContact )
+                        {
+                            pDrawContact->CorrectRelativePosOfVirtObjs();
+                        }
                     }
                 }
             }
@@ -462,8 +480,14 @@ SwFrm::~SwFrm()
             SdrObject *pObj = (*pDrawObjs)[--i];
             if ( pObj->IsWriterFlyFrame() )
                 delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-            else if ( pObj->GetUserCall() )
-                ((SwDrawContact*)pObj->GetUserCall())->DisconnectFromLayout();
+            else
+            // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+            {
+                if ( pObj->GetUserCall() )
+                {
+                    ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
+                }
+            }
         }
         if ( pDrawObjs )
             delete pDrawObjs;
@@ -577,6 +601,7 @@ SwLayoutFrm::~SwLayoutFrm()
             //dem Remove nicht mehr bei der Seite abmelden.
             //Falls sich einer nicht abmeldet wollen wir nicht gleich
             //endlos schleifen.
+
             USHORT nCnt;
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
@@ -585,11 +610,17 @@ SwLayoutFrm::~SwLayoutFrm()
                 if ( pObj->IsWriterFlyFrame() )
                     delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 else if ( pObj->GetUserCall() )
-                    ((SwDrawContact*)pObj->GetUserCall())->DisconnectFromLayout();
+                {
+                    // OD 19.06.2003 #108784# - adjustments for drawing objects
+                    // in header/footer.
+                    ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
+                }
 
                 if ( pFrm->GetDrawObjs() &&
                      nCnt == pFrm->GetDrawObjs()->Count() )
+                {
                     pFrm->GetDrawObjs()->Remove( 0 );
+                }
             }
             pFrm->Remove();
             delete pFrm;
@@ -604,7 +635,11 @@ SwLayoutFrm::~SwLayoutFrm()
             if ( pObj->IsWriterFlyFrame() )
                 delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             else if ( pObj->GetUserCall() )
-                ((SwDrawContact*)pObj->GetUserCall())->DisconnectFromLayout();
+            {
+                // OD 19.06.2003 #108784# - adjustments for drawing objects
+                // in header/footer.
+                ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
+            }
 
             if ( GetDrawObjs() && nCnt == GetDrawObjs()->Count() )
                 GetDrawObjs()->Remove( 0 );
