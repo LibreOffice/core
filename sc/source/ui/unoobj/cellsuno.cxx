@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-25 14:22:40 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 14:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1343,9 +1343,26 @@ void ScCellRangesBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
         const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+
         if ( aRanges.UpdateReference( rRef.GetMode(), pDocShell->GetDocument(), rRef.GetRange(),
-                                        rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
+                                    rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
+        {
+            if (rRef.GetMode() == URM_INSDEL &&
+                aRanges.Count() == 1 &&
+                ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ))
+            {
+                // #101755#; the range size of a sheet does not change
+                ScRange* pR = aRanges.First();
+                if (pR)
+                {
+                    pR->aStart.SetCol(0);
+                    pR->aStart.SetRow(0);
+                    pR->aEnd.SetCol(MAXCOL);
+                    pR->aEnd.SetRow(MAXROW);
+                }
+            }
             RefChanged();
+        }
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
