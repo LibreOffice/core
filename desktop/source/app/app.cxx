@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-19 12:33:51 $
+ *  last change: $Author: cd $ $Date: 2001-07-20 09:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
@@ -576,8 +579,12 @@ void Desktop::Main()
             // the shutdown icon sits in the systray and allows the user to keep
             // the office instance running for quicker restart
             // this will only be activated if -quickstart was specified on cmdline
-            Reference < XComponent > xQuickstart( xSMgr->createInstance(
-                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )), UNO_QUERY );
+            sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
+            Sequence< Any > aSeq( 1 );
+            aSeq[0] <<= bQuickstart;
+            Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
+                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
+                                                  UNO_QUERY );
 
             if ( pCmdLineArgs->IsPlugin() )
             {
@@ -606,6 +613,7 @@ void Desktop::Main()
                                                             UNO_QUERY );
             }
 
+            // Release solar mutex just before we wait for our client to connect
             int nAcquireCount = 0;
             ::vos::IMutex& rMutex = Application::GetSolarMutex();
             if ( rMutex.tryToAcquire() )
@@ -618,6 +626,7 @@ void Desktop::Main()
             // minimize the risk that this message overtakes type detection contruction!!
             Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
+            // Acquire solar mutex just before we enter our message loop
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "call Application::Execute()" );
             if ( nAcquireCount )
                 Application::AcquireSolarMutex( nAcquireCount );
@@ -927,15 +936,19 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             Reference < XPrintable > xDoc ( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs ), UNO_QUERY );
             if ( rAppEvent.IsPrintEvent() )
             {
-                if( aPrinterName.Len() && xDoc.is() )
+                if ( xDoc.is() )
                 {
-                    // create the printer
-                    Sequence < PropertyValue > aPrinterArgs( 1 );
-                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
-                    aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
-                    xDoc->setPrinter( aPrinterArgs );
+                    if ( aPrinterName.Len() )
+                    {
+                        // create the printer
+                        Sequence < PropertyValue > aPrinterArgs( 1 );
+                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                        aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
+                        xDoc->setPrinter( aPrinterArgs );
+                    }
 
                     // print ( also without user interaction )
+                    Sequence < PropertyValue > aPrinterArgs( 1 );
                     aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Silent");
                     aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
                     xDoc->print( aPrinterArgs );
@@ -975,6 +988,26 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         else
             // no visible task that could be activated found
             OpenDefault();
+    }
+    else if ( rAppEvent.GetEvent() == "QUICKSTART" )
+    {
+        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+
+        if ( !pCmdLineArgs->IsQuickstart() )
+        {
+            // If the office was started the second time its command line arguments are sent through a pipe
+            // connection to the first office. We want to reuse the quickstart option for the first office.
+            // NOTICE: The quickstart service must be initialized inside the "main thread"!!!
+            sal_Bool bQuickstart( sal_True );
+            Sequence< Any > aSeq( 1 );
+            aSeq[0] <<= bQuickstart;
+
+            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )),
+                                                  UNO_QUERY );
+            if ( xQuickstart.is() )
+                xQuickstart->initialize( aSeq );
+        }
     }
 }
 
