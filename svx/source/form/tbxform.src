@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 10:22:26 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 12:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,11 +518,11 @@ FloatingWindow RID_SVXTBX_FORM
                 Identifier = SID_FM_AUTOCONTROLFOCUS ;
                 HelpID = SID_FM_AUTOCONTROLFOCUS ;
             };
-//          ToolBoxItem
-//          {
-//              Identifier = SID_FM_USE_WIZARDS ;
-//              HelpID = SID_FM_USE_WIZARDS ;
-//          };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_USE_WIZARDS ;
+                HelpID = SID_FM_USE_WIZARDS ;
+            };
         };
     };
     Text [ english_us ] = "Form Functions" ;
