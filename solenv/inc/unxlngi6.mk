@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:23 $
+#   last change: $Author: rt $ $Date: 2004-10-27 15:17:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
