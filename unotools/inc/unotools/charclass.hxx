@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:15:02 $
+ *  last change: $Author: er $ $Date: 2000-12-08 17:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@ const sal_Int32 nCharClassLetterTypeMask =
     nCharClassAlphaTypeMask |
     ::com::sun::star::i18n::KCharacterType::LETTER;
 
+const sal_Int32 nCharClassNumericType =
+    ::com::sun::star::i18n::KCharacterType::DIGIT;
+
+const sal_Int32 nCharClassNumericTypeMask =
+    nCharClassNumericType |
+    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
+    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
+
+
 class CharClass
 {
     ::com::sun::star::lang::Locale  aLocale;
@@ -178,19 +187,17 @@ public:
     /// whether type is pure numeric or not, e.g. return of getStringType
     static  inline  sal_Bool    isNumericType( sal_Int32 nType )
         {
-            return ((nType &
-                ::com::sun::star::i18n::KCharacterType::DIGIT) != 0) &&
-                ((nType & ~(::com::sun::star::i18n::KCharacterType::DIGIT |
-                ::com::sun::star::i18n::KCharacterType::PRINTABLE)) == 0);
+            return ((nType & nCharClassNumericType) != 0) &&
+                ((nType & ~(nCharClassNumericTypeMask)) == 0);
         }
 
     /// whether type is pure alphanumeric or not, e.g. return of getStringType
     static  inline  sal_Bool    isAlphaNumericType( sal_Int32 nType )
         {
             return ((nType & (nCharClassAlphaType |
-                ::com::sun::star::i18n::KCharacterType::DIGIT)) != 0) &&
+                nCharClassNumericType)) != 0) &&
                 ((nType & ~(nCharClassAlphaTypeMask |
-                ::com::sun::star::i18n::KCharacterType::DIGIT)) == 0);
+                nCharClassNumericTypeMask)) == 0);
         }
 
     /// whether type is pure letter or not, e.g. return of getStringType
@@ -204,9 +211,9 @@ public:
     static  inline  sal_Bool    isLetterNumericType( sal_Int32 nType )
         {
             return ((nType & (nCharClassLetterType |
-                ::com::sun::star::i18n::KCharacterType::DIGIT)) != 0) &&
+                nCharClassNumericType)) != 0) &&
                 ((nType & ~(nCharClassLetterTypeMask |
-                ::com::sun::star::i18n::KCharacterType::DIGIT)) == 0);
+                nCharClassNumericTypeMask)) == 0);
         }
 
 
