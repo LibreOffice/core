@@ -19,7 +19,6 @@ common
         *copyprj
 		__mgrdir
         rsc_once
-		use_shell
         *zipdep
 		BIG_GOODIES
 		BIG_SVX
@@ -119,6 +118,7 @@ common
 		RES_TURK
 		ROOTDIR
 		RSCRES
+		SCPLINKVERSION
 		SET_EXCEPTIONS
 		SHARED_SOLARVERSION
 		SOLAR_JAVA
@@ -149,6 +149,7 @@ common
 		USE_NAMESPACE
 		USE_NEW_RSC
 		USE_NEWCHARSET
+		USE_SHELL
 		use_shl_versions
         VCL
 		WST
