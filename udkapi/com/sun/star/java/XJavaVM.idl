@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:53:38 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 12:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,33 @@ interface XJavaVM: com::sun::star::uno::XInterface
     /** returns the address of the Java Virtual Machine.
 
         <p>If the VM is not already instantiated, it will be now. </p>
+
+        <p>If the <code>processID</code> is a normal 16-byte ID, the returned
+        <code>any</code> contains a JNI <code>JavaVM</code> pointer as a
+        <code>long</code> or <code>hyper</code> integer (depending on the
+        platform).  If the <code>processID</code> does not match the current
+        process, an empty <code>any</code> is returned.</p>
+
+        <p>If the <code>processID</code> has an additional 17th byte of value
+        zero, the returned <code>any</code> contains a non-reference-counted
+        pointer to a (reference-counted) instance of the C++
+        <code>jvmaccess::VirtualMachine</code> class.  The pointer is guaranteed
+        to be valid as long as the reference to this
+        <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
+        pointer should be converted into a reference-counted reference as soon
+        as possible).  Again, if the first 16 bytes of the
+        <code>processID</code> do not match the current process, an empty
+        <code>any</code> is returned.</p>
+
+        <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
+        mainly for backwards compatibility, new code should use the second form
+        (returning a pointer to a <code>jvmaccess::VirtualMachine</code>).  For
+        example, one advantage of using <code>jvmaccess::VirtualMachine</code>
+        instead of the raw <code>JavaVM</code> pointer is that whenever you
+        attach a native thread to the Java virtual machine, that thread's
+        context <code>ClassLoader</code> (see
+        <code>java.lang.Thread.getContextClassLoader</code>) will automatically
+        be set to a meaningful value.</p>
      */
     any getJavaVM( [in] sequence<byte> processID );
 
@@ -116,6 +143,9 @@ interface XJavaVM: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 14:53:38  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
