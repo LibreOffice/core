@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-05 18:13:45 $
+ *  last change: $Author: rt $ $Date: 2001-12-06 22:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,18 +1201,18 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ russian ] = "Local drive";
     Text[ greek ] = "Local drive";
     Text[ dutch ] = "Local drive";
-    Text[ french ] = "Local drive";
-    Text[ spanish ] = "Local drive";
+    Text[ french ] = "Unit� locale";
+    Text[ spanish ] = "Unidad local";
     Text[ finnish ] = "Local drive";
     Text[ italian ] = "Local drive";
     Text[ danish ] = "Local drive";
-    Text[ swedish ] = "Local drive";
+    Text[ swedish ] = "Lokal enhet";
     Text[ polish ] = "Local drive";
     Text[ portuguese_brazilian ] = "Local drive";
-    Text[ japanese ] = "Local drive";
+    Text[ japanese ] = "ﾛｰｶﾙのﾄﾞﾗｲﾌﾞ";
     Text[ korean ] = "Local drive";
     Text[ chinese_simplified ] = "局部驱动器";
-    Text[ chinese_traditional ] = "Local drive";
+    Text[ chinese_traditional ] = "本機磁碟";
     Text[ turkish ] = "Local drive";
     Text[ arabic ] = "Local drive";
     Text[ catalan ] = "Local drive";
@@ -1230,18 +1230,18 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ russian ] = "CD-ROM drive";
     Text[ greek ] = "CD-ROM drive";
     Text[ dutch ] = "CD-ROM drive";
-    Text[ french ] = "CD-ROM drive";
-    Text[ spanish ] = "CD-ROM drive";
+    Text[ french ] = "Unit� CD-ROM";
+    Text[ spanish ] = "Unidad de CD ROM ";
     Text[ finnish ] = "CD-ROM drive";
     Text[ italian ] = "CD-ROM drive";
     Text[ danish ] = "CD-ROM drive";
-    Text[ swedish ] = "CD-ROM drive";
+    Text[ swedish ] = "Cd-romenhet";
     Text[ polish ] = "CD-ROM drive";
     Text[ portuguese_brazilian ] = "CD-ROM drive";
-    Text[ japanese ] = "CD-ROM drive";
+    Text[ japanese ] = "CD-ROM ﾄﾞﾗｲﾌﾞ";
     Text[ korean ] = "CD-ROM drive";
     Text[ chinese_simplified ] = "光盘驱动器";
-    Text[ chinese_traditional ] = "CD-ROM drive";
+    Text[ chinese_traditional ] = "光碟機";
     Text[ turkish ] = "CD-ROM drive";
     Text[ arabic ] = "CD-ROM drive";
     Text[ catalan ] = "CD-ROM drive";
@@ -1254,18 +1254,18 @@ String STR_DESCRIPTION_REMOTE_VOLUME
     Text[ russian ] = "Network connection";
     Text[ greek ] = "Network connection";
     Text[ dutch ] = "Network connection";
-    Text[ french ] = "Network connection";
-    Text[ spanish ] = "Network connection";
+    Text[ french ] = "Connexion r�seau";
+    Text[ spanish ] = "Conexi�n de red";
     Text[ finnish ] = "Network connection";
     Text[ italian ] = "Network connection";
     Text[ danish ] = "Network connection";
-    Text[ swedish ] = "Network connection";
+    Text[ swedish ] = "N�tverkskoppling";
     Text[ polish ] = "Network connection";
     Text[ portuguese_brazilian ] = "Network connection";
-    Text[ japanese ] = "Network connection";
+    Text[ japanese ] = "ﾈｯﾄﾜｰｸの接続";
     Text[ korean ] = "Network connection";
     Text[ chinese_simplified ] = "网络连接";
-    Text[ chinese_traditional ] = "Network connection";
+    Text[ chinese_traditional ] = "網路連線";
     Text[ turkish ] = "Network connection";
     Text[ arabic ] = "Network connection";
     Text[ catalan ] = "Network connection";
@@ -1274,16 +1274,77 @@ String STR_DESCRIPTION_POWERPOINT
 {
     Text = "MS PowerPoint Dokument" ;
     Text [ English ] = "MS PowerPoint Document" ;
+    Text[ english_us ] = "MS PowerPoint Document";
+    Text[ portuguese ] = "MS PowerPoint Document";
+    Text[ russian ] = "MS PowerPoint Document";
+    Text[ greek ] = "MS PowerPoint Document";
+    Text[ dutch ] = "MS PowerPoint Document";
+    Text[ french ] = "MS PowerPoint Document";
+    Text[ spanish ] = "MS PowerPoint Document";
+    Text[ finnish ] = "MS PowerPoint Document";
+    Text[ italian ] = "MS PowerPoint Document";
+    Text[ danish ] = "MS PowerPoint Document";
+    Text[ swedish ] = "MS PowerPoint Document";
+    Text[ polish ] = "MS PowerPoint Document";
+    Text[ portuguese_brazilian ] = "MS PowerPoint Document";
+    Text[ japanese ] = "MS PowerPoint Document";
+    Text[ korean ] = "MS PowerPoint Document";
+    Text[ chinese_simplified ] = "MS PowerPoint Document";
+    Text[ chinese_traditional ] = "MS PowerPoint Document";
+    Text[ turkish ] = "MS PowerPoint Document";
+    Text[ arabic ] = "MS PowerPoint Document";
+    Text[ catalan ] = "MS PowerPoint Document";
 };
 
 String STR_DESCRIPTION_POWERPOINT_TEMPLATE
 {
     Text = "MS PowerPoint Vorlage" ;
     Text [ English ] = "MS PowerPoint Template" ;
+    Text[ english_us ] = "MS PowerPoint Template";
+    Text[ portuguese ] = "MS PowerPoint Template";
+    Text[ russian ] = "MS PowerPoint Template";
+    Text[ greek ] = "MS PowerPoint Template";
+    Text[ dutch ] = "MS PowerPoint Template";
+    Text[ french ] = "MS PowerPoint Template";
+    Text[ spanish ] = "MS PowerPoint Template";
+    Text[ finnish ] = "MS PowerPoint Template";
+    Text[ italian ] = "MS PowerPoint Template";
+    Text[ danish ] = "MS PowerPoint Template";
+    Text[ swedish ] = "MS PowerPoint Template";
+    Text[ polish ] = "MS PowerPoint Template";
+    Text[ portuguese_brazilian ] = "MS PowerPoint Template";
+    Text[ japanese ] = "MS PowerPoint Template";
+    Text[ korean ] = "MS PowerPoint Template";
+    Text[ chinese_simplified ] = "MS PowerPoint Template";
+    Text[ chinese_traditional ] = "MS PowerPoint Template";
+    Text[ turkish ] = "MS PowerPoint Template";
+    Text[ arabic ] = "MS PowerPoint Template";
+    Text[ catalan ] = "MS PowerPoint Template";
 };
 
 String STR_DESCRIPTION_POWERPOINT_SHOW
 {
     Text = "MS PowerPoint Show" ;
     Text [ English ] = "MS PowerPoint Show" ;
+    Text[ english_us ] = "MS PowerPoint Show";
+    Text[ portuguese ] = "MS PowerPoint Show";
+    Text[ russian ] = "MS PowerPoint Show";
+    Text[ greek ] = "MS PowerPoint Show";
+    Text[ dutch ] = "MS PowerPoint Show";
+    Text[ french ] = "MS PowerPoint Show";
+    Text[ spanish ] = "MS PowerPoint Show";
+    Text[ finnish ] = "MS PowerPoint Show";
+    Text[ italian ] = "MS PowerPoint Show";
+    Text[ danish ] = "MS PowerPoint Show";
+    Text[ swedish ] = "MS PowerPoint Show";
+    Text[ polish ] = "MS PowerPoint Show";
+    Text[ portuguese_brazilian ] = "MS PowerPoint Show";
+    Text[ japanese ] = "MS PowerPoint Show";
+    Text[ korean ] = "MS PowerPoint Show";
+    Text[ chinese_simplified ] = "MS PowerPoint Show";
+    Text[ chinese_traditional ] = "MS PowerPoint Show";
+    Text[ turkish ] = "MS PowerPoint Show";
+    Text[ arabic ] = "MS PowerPoint Show";
+    Text[ catalan ] = "MS PowerPoint Show";
 };
+
