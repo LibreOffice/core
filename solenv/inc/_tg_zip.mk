@@ -3,10 +3,10 @@
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP1TARGETN)"!=""
@@ -38,9 +38,9 @@ $(ZIP1TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP1LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP1LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -53,9 +53,9 @@ $(ZIP1TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP1LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP1LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -84,10 +84,10 @@ $(ZIP1TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP2TARGETN)"!=""
@@ -119,9 +119,9 @@ $(ZIP2TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP2LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP2LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -134,9 +134,9 @@ $(ZIP2TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP2LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP2LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -165,10 +165,10 @@ $(ZIP2TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP3TARGETN)"!=""
@@ -200,9 +200,9 @@ $(ZIP3TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP3LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP3LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -215,9 +215,9 @@ $(ZIP3TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP3LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP3LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -246,10 +246,10 @@ $(ZIP3TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP4TARGETN)"!=""
@@ -281,9 +281,9 @@ $(ZIP4TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP4LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP4LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -296,9 +296,9 @@ $(ZIP4TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP4LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP4LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -327,10 +327,10 @@ $(ZIP4TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP5TARGETN)"!=""
@@ -362,9 +362,9 @@ $(ZIP5TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP5LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP5LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -377,9 +377,9 @@ $(ZIP5TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP5LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP5LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -408,10 +408,10 @@ $(ZIP5TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP6TARGETN)"!=""
@@ -443,9 +443,9 @@ $(ZIP6TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP6LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP6LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -458,9 +458,9 @@ $(ZIP6TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP6LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP6LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -489,10 +489,10 @@ $(ZIP6TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP7TARGETN)"!=""
@@ -524,9 +524,9 @@ $(ZIP7TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP7LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP7LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -539,9 +539,9 @@ $(ZIP7TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP7LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP7LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -570,10 +570,10 @@ $(ZIP7TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP8TARGETN)"!=""
@@ -605,9 +605,9 @@ $(ZIP8TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP8LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP8LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -620,9 +620,9 @@ $(ZIP8TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP8LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP8LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -651,10 +651,10 @@ $(ZIP8TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP9TARGETN)"!=""
@@ -686,9 +686,9 @@ $(ZIP9TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP9LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP9LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -701,9 +701,9 @@ $(ZIP9TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP9LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP9LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
@@ -732,10 +732,10 @@ $(ZIP9TARGETN) :
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
-avoid_cvs_dir=-x "CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ELSE
 command_seperator=;
-avoid_cvs_dir=-x "*/CVS/*"
+avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP10TARGETN)"!=""
@@ -767,9 +767,9 @@ $(ZIP10TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR))
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP10LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP10LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.new >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
@@ -782,9 +782,9 @@ $(ZIP10TARGETN) :
 .ENDIF			# "$(GUI)"=="UNX"
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIPDIR)" != ""
-    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP10LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
+    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$@} $(ZIP10LIST:s/LANGDIR/./) -x delzip  $(avoid_cvs_dir)
 .ELSE			# "$(ZIPDIR)" != ""
-    @+-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) -x delzip
+    +-zip $(ZIPFLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIPDIR)" != ""
 #	+$(TOUCH) $@
 .ENDIF			# "$(common_build_zip)"!=""
