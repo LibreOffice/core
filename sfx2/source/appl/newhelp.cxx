@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:39:24 $
+ *  last change: $Author: os $ $Date: 2001-08-02 10:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,24 +1875,32 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         case TBI_BOOKMARKS :
         {
             String aURL = pHelpInterceptor->GetCurrentURL();
-            Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
-            if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
-            {
-                ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
-                rtl::OUString aValue;
-                if ( aAny >>= aValue )
+            if(aURL.Len())
+                try
                 {
-                    String aTitle( aValue );
-                    SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_False );
-                    aDlg.SetTitle( aTitle );
-                    if ( aDlg.Execute() == RET_OK )
+                    Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+                    if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                     {
-                        aTitle = aDlg.GetTitle();
-                        pIndexWin->AddBookmarks( aTitle, aURL );
+                        ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
+                        rtl::OUString aValue;
+                        if ( aAny >>= aValue )
+                        {
+                            String aTitle( aValue );
+                            SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_False );
+                            aDlg.SetTitle( aTitle );
+                            if ( aDlg.Execute() == RET_OK )
+                            {
+                                aTitle = aDlg.GetTitle();
+                                pIndexWin->AddBookmarks( aTitle, aURL );
+                            }
+                        }
                     }
                 }
-            }
+                catch(Exception& rEx)
+                {
+                    DBG_ERROR("exception caught")
+                }
             break;
         }
     }
