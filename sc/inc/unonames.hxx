@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:32:12 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 20:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,11 @@
 #define SC_UNO_REPEATIF             "RepeatIfEmpty"
 #define SC_UNO_DATADESC             "DataDescription"
 #define SC_UNO_NUMBERFO             "NumberFormat"
+
+//  range selection
+#define SC_UNONAME_INITVAL          "InitialValue"
+#define SC_UNONAME_TITLE            "Title"
+#define SC_UNONAME_CLOSEONUP        "CloseOnMouseRelease"
 
 #endif
 
