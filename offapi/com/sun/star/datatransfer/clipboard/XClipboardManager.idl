@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
-interface XClipboard;
+ published interface XClipboard;
 
 //=============================================================================
 /** This interface is used to retrieve, add, or remove clipboard instances.
@@ -90,7 +90,7 @@ interface XClipboard;
     @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
-interface XClipboardManager: com::sun::star::uno::XInterface
+published interface XClipboardManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Get a clipboard instance by name.
