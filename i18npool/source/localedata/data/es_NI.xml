@@ -41,6 +41,7 @@
 <LC_FORMAT ref="es_GT" replaceTo="[$C$-4C0A] "/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="es_ES"/>
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
