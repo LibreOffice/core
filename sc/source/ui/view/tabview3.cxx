@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-14 14:44:19 $
+ *  last change: $Author: nn $ $Date: 2002-10-16 12:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,7 +1881,13 @@ void ScTabView::PaintArea( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, U
                 USHORT nScrX = aViewData.GetPosX( eHWhich );
                 USHORT nScrY = aViewData.GetPosY( eVWhich );
                 if (nCol1 < nScrX) nCol1 = nScrX;
-                if (nCol2 < nScrX) bOut = TRUE;             // ausserhalb
+                if (nCol2 < nScrX)
+                {
+                    if ( eMode == SC_UPDATE_ALL )   // #91240# for UPDATE_ALL, paint anyway
+                        nCol2 = nScrX;              // (because of extending strings to the right)
+                    else
+                        bOut = TRUE;                // completely outside the window
+                }
                 if (nRow1 < nScrY) nRow1 = nScrY;
                 if (nRow2 < nScrY) bOut = TRUE;
 
