@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 12:37:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 14:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
     else
     {
         // standard-deviation / sqrt(n)
-        fResult = sqrt( fVar ) / sqrt( nValCount );
+        fResult = sqrt( fVar ) / sqrt( double(nValCount) );
     }
 
     return fResult;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScaleAutomatism.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:13:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 14:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ExplicitIncrementData getExplicitIncrementAndScaleForLogarithm(
             double fRange = rExplicitScale.Maximum - rExplicitScale.Minimum;
             double fSlice = fRange/nMaximumAutomaticMainIncrementCount;
             //make a fine value out of fSlice now:
-            double fSliceMagnitude = pow (10, floor (log10 (fSlice)));
+            double fSliceMagnitude = pow ( (double)10, floor (log10 (fSlice)));
             aRet.Distance = static_cast<sal_Int32>(fSlice/fSliceMagnitude)*fSliceMagnitude;
         }
     }
@@ -267,7 +267,7 @@ ExplicitIncrementData getExplicitIncrementAndScaleForLinear(
         double fSlice = fRange/nMaximumAutomaticMainIncrementCount;
 
         //make a fine value out of fSlice now:
-        double fSliceMagnitude = pow (10, floor (log10 (fSlice)));
+        double fSliceMagnitude = pow ( (double)10, floor (log10 (fSlice)));
         fSlice /= fSliceMagnitude;
         if(fSlice<=1.0)
             fSlice=1.0;
