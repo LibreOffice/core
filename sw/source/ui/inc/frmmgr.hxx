@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:00:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #endif
 
 class   SwWrtShell;
-struct  SwFrmValid;
+struct  SvxSwFrameValidation;
+struct  SwPosition;
+
 
 class   SwFmt;
 class   SwFmtCol;
@@ -177,7 +179,9 @@ public:
                                    BOOL           bAbsPos = FALSE);
 
     // Metriken pruefen und  aendern
-    void                ValidateMetrics(SwFrmValid& rVal, BOOL bOnlyPercentRefValue = FALSE);
+    void                ValidateMetrics(SvxSwFrameValidation& rVal,
+                            const SwPosition* pToCharCntntPos,
+                            BOOL bOnlyPercentRefValue = FALSE);
 
     void                DelAttr(USHORT nId);
 
@@ -199,51 +203,6 @@ public:
     long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
     long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung: Validierung von Metriken
- --------------------------------------------------------------------*/
-
-// OD 18.09.2003 #i18732# - extend by new member <bFollowTextFlow>
-// OD 12.11.2003 #i22341# - extend by new member <pToCharCntntPos>
-struct SwFrmValid
-{
-    RndStdIds           eArea;
-    SwHoriOrient        eHori;
-    SvxFrameVertOrient  eVert;
-    SwRelationOrient    eHRel;
-    SwRelationOrient    eVRel;
-    BOOL                bAutoHeight;
-    BOOL                bAutoWidth;
-    BOOL                bMirror;
-    // OD 18.09.2003 #i18732#
-    bool                bFollowTextFlow;
-    // OD 12.11.2003 #i22341# - proposed content position of character for
-    // to character anchored objects horizontal/vertical aligned at character
-    // respectively vertical aligned at top of line
-    const SwPosition* pToCharCntntPos;
-
-    SwTwips nHPos;
-    SwTwips nMaxHPos;
-    SwTwips nMinHPos;
-
-    SwTwips nVPos;
-    SwTwips nMaxVPos;
-    SwTwips nMinVPos;
-
-    SwTwips nWidth;
-    SwTwips nMinWidth;
-    SwTwips nMaxWidth;
-
-    SwTwips nHeight;
-    SwTwips nMinHeight;
-    SwTwips nMaxHeight;
-
-    Size    aPercentSize;   // Size fuer 100%-Wert
-
-    SwFrmValid();
-};
-
 
 inline const Size& SwFlyFrmAttrMgr::GetSize() const
 {
