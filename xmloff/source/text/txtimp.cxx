@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:07:00 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -182,7 +185,9 @@
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #include "XMLEventsImportContext.hxx"
 #endif
-
+#ifndef _XMLOFF_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
+#include "XMLTrackedChangesImportContext.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -194,7 +199,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
-
+using ::com::sun::star::util::DateTime;
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -222,6 +227,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_alphabetical_index, XML_TOK_TEXT_ALPHABETICAL_INDEX },
     { XML_NAMESPACE_TEXT, sXML_bibliography, XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
     { XML_NAMESPACE_TEXT, sXML_index_title,     XML_TOK_TEXT_INDEX_TITLE },
+    { XML_NAMESPACE_TEXT, sXML_tracked_changes, XML_TOK_TEXT_TRACKED_CHANGES },
 
     XML_TOKEN_MAP_END
 };
@@ -384,6 +390,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
     // Calc fields
     { XML_NAMESPACE_TEXT, sXML_sheet_name, XML_TOK_TEXT_SHEET_NAME },
+
+    // redlining (aka change tracking)
+    { XML_NAMESPACE_TEXT, sXML_change_start, XML_TOK_TEXT_CHANGE_START },
+    { XML_NAMESPACE_TEXT, sXML_change_end  , XML_TOK_TEXT_CHANGE_END },
+    { XML_NAMESPACE_TEXT, sXML_change, XML_TOK_TEXT_CHANGE },
 
     XML_TOKEN_MAP_END
 };
@@ -1174,6 +1185,11 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
         break;
 
+    case XML_TOK_TEXT_TRACKED_CHANGES:
+        pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
+                                                       rLocalName);
+        break;
+
     default:
         if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
         {
@@ -1436,4 +1452,33 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
 {
     Reference< XPropertySet> xPropSet;
     return xPropSet;
+}
+
+
+// redline helper: dummy implementation to be overridden in sw/filter/xml
+void XMLTextImportHelper::RedlineAdd(
+    const OUString& rType,
+    const OUString& rId,
+    const OUString& rAuthor,
+    const OUString& rComment,
+    const DateTime& rDateTime)
+{
+    // dummy implementation: do nothing
+}
+
+Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
+    Reference<XTextCursor> xOldCursor,
+    const OUString& rId)
+{
+    // dummy implementation: do nothing
+    Reference<XTextCursor> xRet;
+    return xRet;
+}
+
+void XMLTextImportHelper::RedlineSetCursor(
+    const OUString& rId,
+    sal_Bool bStart,
+    Reference<XTextRange> & rRange)
+{
+    // dummy implementation: do nothing
 }

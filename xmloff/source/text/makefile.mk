@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mib $ $Date: 2001-01-05 17:05:03 $
+#   last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,9 @@ CXXFILES = \
         txtstyle.cxx \
         txtstyli.cxx \
         txtvfldi.cxx \
+        XMLChangedRegionImportContext.cxx \
+        XMLChangeElementImportContext.cxx \
+        XMLChangeInfoContext.cxx \
         XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
@@ -141,7 +144,8 @@ CXXFILES = \
         XMLTextPropertySetContext.cxx \
         XMLTextShapeImportHelper.cxx \
         XMLTextShapeStyleContext.cxx \
-        XMLTextTableContext.cxx
+        XMLTextTableContext.cxx \
+        XMLTrackedChangesImportContext.cxx
 
 SLOFILES =	\
         $(SLO)$/txtdrope.obj \
@@ -160,6 +164,9 @@ SLOFILES =	\
         $(SLO)$/txtstyle.obj \
         $(SLO)$/txtstyli.obj \
         $(SLO)$/txtvfldi.obj \
+        $(SLO)$/XMLChangedRegionImportContext.obj \
+        $(SLO)$/XMLChangeElementImportContext.obj \
+        $(SLO)$/XMLChangeInfoContext.obj \
         $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
@@ -208,7 +215,8 @@ SLOFILES =	\
         $(SLO)$/XMLTextPropertySetContext.obj \
         $(SLO)$/XMLTextShapeImportHelper.obj \
         $(SLO)$/XMLTextShapeStyleContext.obj \
-        $(SLO)$/XMLTextTableContext.obj
+        $(SLO)$/XMLTextTableContext.obj \
+        $(SLO)$/XMLTrackedChangesImportContext.obj
 
 
 # --- Tagets -------------------------------------------------------

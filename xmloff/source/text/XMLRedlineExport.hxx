@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:38:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
+    namespace beans { struct PropertyValue; }
  } } }
 namespace rtl {
     class OUString;
@@ -114,8 +115,6 @@ class XMLRedlineExport
     SvXMLExport& rExport;
 
     ChangesListType aChangesList;   /// list of changes
-    sal_Int32 nCountCallsExportChangedRegion;
-    sal_Int32 nCountCallsExportChangeInline;
 
 
 public:
@@ -156,20 +155,23 @@ private:
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    /// export an change-info element
+    /// export an change-info element (from a PropertySet)
     void ExportChangeInfo(
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet);
 
+    /// export an change-info element (from PropertyValues)
+    void ExportChangeInfo(
+        const ::com::sun::star::uno::Sequence<
+                    ::com::sun::star::beans::PropertyValue> & rValues);
+
     /// convert the change type from API to XML names
     const ::rtl::OUString ConvertTypeName(const ::rtl::OUString& sApiName);
 
-    // HACK: IDs need to be dealt with properly!!!
     /// Get ID string!
     const ::rtl::OUString GetRedlineID(
         const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet,
-        sal_Bool bFirstPass, sal_Bool bIsStart);
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
 
 };
 
