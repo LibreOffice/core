@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-28 17:43:34 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 10:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,26 @@ import com.sun.star.uno.UnoRuntime;
 
 import java.util.Hashtable;
 
+/** Bootstrap offers functionality to obtain a context or simply
+    a service manager.
+    The service manager can create a few basic services, whose implementations  are:
+    <ul>
+    <li>com.sun.star.comp.loader.JavaLoader</li>
+    <li>com.sun.star.comp.urlresolver.UrlResolver</li>
+    <li>com.sun.star.comp.bridgefactory.BridgeFactory</li>
+    <li>com.sun.star.comp.connections.Connector</li>
+    <li>com.sun.star.comp.connections.Acceptor</li>
+    <li>com.sun.star.comp.servicemanager.ServiceManager</li>
+    </ul>
 
+    Other services can be inserted into the service manager by
+    using its XSet interface:
+    <pre>
+        XSet xSet = (XSet)UnoRuntime.queryInterface( XSet.class, aMultiComponentFactory );
+        // insert the service manager
+        xSet.insert( aSingleComponentFactory );
+    </pre>
+*/
 public class Bootstrap {
 
     private static void insertBasicFactories(
@@ -109,6 +128,9 @@ public class Bootstrap {
 
     /** Bootstraps an initial component context with service manager and basic
         jurt components inserted.
+        @param context_entries the hash table contains mappings of entry names (type string) to
+        context entries (type class ComponentContextEntry).
+        @return a new context.
     */
     static public XComponentContext createInitialComponentContext( Hashtable context_entries )
         throws Exception

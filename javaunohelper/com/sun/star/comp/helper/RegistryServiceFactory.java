@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-02 12:12:59 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 10:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.RuntimeException;
 
-
+/** The class provides a set of methods which create instances of the
+    com.sun.star.lang.RegistryServiceManager service.
+*/
 public class RegistryServiceFactory {
     static {
         System.loadLibrary("juh");
@@ -89,8 +91,7 @@ public class RegistryServiceFactory {
       *                             file will be created if necessary.
       * @param readRegistryFile     file name of the second registry file of the nested registry
       *                             which will be opened with readonly rights.
-      *
-      * @author Markus Herzog
+     * @return a new RegistryServiceFactory.
       */
     public static XMultiServiceFactory create(String writeRegistryFile, String readRegistryFile)
         throws com.sun.star.uno.Exception
@@ -113,7 +114,7 @@ public class RegistryServiceFactory {
      *                              readonly rights. Default is FALSE. If this flag is used the registry
      *                              will not be created if not exist.
      *
-      * @author Markus Herzog
+      * @return a new RegistryServiceFactory
       */
     public static XMultiServiceFactory create(String writeRegistryFile, String readRegistryFile, boolean readOnly)
         throws com.sun.star.uno.Exception
@@ -159,7 +160,7 @@ public class RegistryServiceFactory {
      * @param registryFile          file name of the registry to use/ create; if this is an empty
      *                              string, the default registry is used instead
      *
-     * @author Markus Herzog
+     * @return a new RegistryServiceFactory.
      */
     public static XMultiServiceFactory create(String registryFile)
         throws com.sun.star.uno.Exception
@@ -176,7 +177,7 @@ public class RegistryServiceFactory {
      *                              readonly rights. Default is FALSE. If this flag is used the registry
      *                              will not be created if not exist.
      *
-     * @author Markus Herzog
+     * @return a new RegistryServiceFactory.
      */
     public static XMultiServiceFactory create(String registryFile, boolean readOnly)
         throws com.sun.star.uno.Exception
@@ -185,9 +186,9 @@ public class RegistryServiceFactory {
     }
 
     /**
-     * This bootstraps a service factory without initilaize a registry.
+     * This bootstraps a service factory without initialize a registry.
      *<BR>
-     * @author Markus Herzog
+     * @return a new RegistryServiceFactory.
      */
     public static XMultiServiceFactory create() throws com.sun.star.uno.Exception {
         return create( null, null, false );
