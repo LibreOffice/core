@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:15:08 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,12 +562,12 @@ Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int
     return out==0 ? 0 : new java_sql_Ref( t.pEnv, out );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL java_sql_CallableStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_CallableStatement::acquire() throw()
 {
     java_sql_PreparedStatement::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL java_sql_CallableStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_CallableStatement::release() throw()
 {
     java_sql_PreparedStatement::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:15:08 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,12 +1760,12 @@ void java_sql_ResultSet::getFastPropertyValue(
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL java_sql_ResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::acquire() throw()
 {
     java_sql_ResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL java_sql_ResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::release() throw()
 {
     java_sql_ResultSet_BASE::release();
 }
