@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:23:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,10 +259,6 @@ public:
     // falls der Node in einem Fly steht, dann wird das entsprechende Format
     // returnt
     SwFrmFmt* GetFlyFmt() const;
-
-    // liefert das Format, an dem die LayoutFrames des StartNodes registriert sind,
-    // wird von SwSectionNode::MakeFrms benutzt
-    const SwFrmFmt* GetFrmFmt() const;
 
     // falls der Node in einer Tabelle steht, dann wird die entsprechende
     // TabellenBox returnt
