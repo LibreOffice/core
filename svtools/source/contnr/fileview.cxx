@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:33:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,7 +1500,7 @@ FileViewResult SvtFileView::ExecuteFilter( const String& rFilter, const FileView
     mpImp->maCurrentFilter.ToLowerAscii();
 
     mpImp->Clear();
-    FileViewResult eResult = mpImp->GetFolderContent_Impl( FolderDescriptor( mpImp->maViewURL ), pAsyncDescriptor );
+    FileViewResult eResult = mpImp->GetFolderContent_Impl( mpImp->maViewURL, pAsyncDescriptor );
     OSL_ENSURE( ( eResult != eStillRunning ) || pAsyncDescriptor, "SvtFileView::ExecuteFilter: we told it to read synchronously!" );
     return eResult;
 }
@@ -1883,29 +1883,16 @@ void SvtFileView_Impl::Clear()
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder, const FileViewAsyncAction* pAsyncDescriptor )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
+    INetURLObject aFolderObj( rFolder );
+    DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 
-    try
-    {
-        INetURLObject aFolderObj( rFolder );
-        DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+    // prepare name translation
+    SetActualFolder( aFolderObj );
 
-        // prepare name translation
-        SetActualFolder( aFolderObj );
+    FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        aGuard.clear();
-        return GetFolderContent_Impl( aFolder, pAsyncDescriptor );
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "GetFolderContents: CommandAbortedException" );
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
-    }
-    return eFailure;
+    aGuard.clear();
+    return GetFolderContent_Impl( aFolder, pAsyncDescriptor );
 }
 
 // -----------------------------------------------------------------------
