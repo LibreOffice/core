@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:26:17 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,6 +1820,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PRINTER_NAME),                  WID_DOC_PRINTER_NAME,       &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_IS_KERN_ASIAN_PUNCTUATION),     WID_DOC_IS_KERN_ASIAN_PUNCTUATION,      &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CHARACTER_COMPRESSION_TYPE),    WID_DOC_CHARACTER_COMPRESSION_TYPE, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_TWO_DIGIT_YEAR),                WID_DOC_TWO_DIGIT_YEAR, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
             }
