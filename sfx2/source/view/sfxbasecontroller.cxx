@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-15 07:43:38 $
+ *  last change: $Author: hr $ $Date: 2001-09-12 16:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,14 @@ public:
                                 , pWorkWindow( pWork )
                             {}
 
-    virtual void SAL_CALL   start(const ::rtl::OUString& aText, sal_Int32 nRange);
-    virtual void SAL_CALL   end(void);
-    virtual void SAL_CALL   setText(const ::rtl::OUString& aText);
-    virtual void SAL_CALL   setValue(sal_Int32 nValue);
-    virtual void SAL_CALL   reset();
+    virtual void SAL_CALL   start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   end(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   reset() throw(::com::sun::star::uno::RuntimeException);
 };
 
-void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange)
+void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( wOwner.get().is() )
@@ -179,7 +179,7 @@ void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 
     }
 }
 
-void SAL_CALL SfxStatusIndicator::end(void)
+void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( wOwner.get().is() )
@@ -190,7 +190,7 @@ void SAL_CALL SfxStatusIndicator::end(void)
     }
 }
 
-void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText)
+void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( wOwner.get().is() )
@@ -224,7 +224,7 @@ void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText)
     }
 }
 
-void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue )
+void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( wOwner.get().is() )
@@ -236,7 +236,7 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue )
     }
 }
 
-void SAL_CALL SfxStatusIndicator::reset()
+void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( wOwner.get().is() )
