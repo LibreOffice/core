@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuleTerm.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module ucb {
 
     <p>A term is used to select objects to which a rule should apply.
 */
-struct RuleTerm
+published struct RuleTerm
 {
     //-------------------------------------------------------------------------
     /** the name of the property used to match the term.
