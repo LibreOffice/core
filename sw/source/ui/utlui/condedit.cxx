@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-05 10:07:03 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
-#ifndef _SV_EVENT_HXX //autogen
-#include <vcl/event.hxx>
-#endif
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
@@ -88,61 +82,64 @@
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId ) :
-        Edit( pParent, rResId ),
-        bBrackets(TRUE)
+ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
+    : Edit( pParent, rResId ),
+    DropTargetHelper( this ),
+    bBrackets( TRUE ), bEnableDrop( TRUE )
 {
-//    EnableDrop();
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Drop moeglich, bzw Format bekannt?
  --------------------------------------------------------------------*/
 
-/*BOOL ConditionEdit::QueryDrop( DropEvent& rDEvt )
+sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    rDEvt.SetAction(DROP_COPY);
-
-    if (DragServer::HasFormat(0, SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ))
+    sal_Int8 nRet = DND_ACTION_NONE;
+    if( bEnableDrop && ( DND_ACTION_COPY & rEvt.mnAction ) )
     {
-        BOOL bString = FALSE;
+        DataFlavorExVector& rDFE = GetDataFlavorExVector();
+        DataFlavorExVector::iterator aIter( rDFE.begin() ), aEnd( rDFE.end() );
 
-        for (USHORT nItem = 0; nItem < DragServer::GetItemCount(); nItem++)
+        while( aIter != aEnd )
         {
-            if (DragServer::HasFormat(nItem, FORMAT_STRING))
+            if( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == (*aIter++).mnSotId )
             {
-                bString = TRUE;
-                break;
-            }
-        }
-        if (!bString)   // String reinpacken, um DD-Cursor zu erhalten
-        {
-            if (DragServer::HasFormat(0, SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE))
-            {
-                USHORT nLen = (USHORT)DragServer::GetDataLen(0, SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE) - 1;
-                DBG_ASSERT(!(nLen%2), "not a UniString")
-                String sTxt;
-                sal_Unicode *pTxt = sTxt.AllocBuffer(nLen / 2);
-
-                DragServer::PasteData(0, pTxt, nLen, SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
-
-                String sDBName;
-                if (bBrackets)
-                    sDBName += '[';
-                sDBName += sTxt.GetToken(0, DB_DD_DELIM);
-                sDBName += '.';
-                sDBName += sTxt.GetToken(1, DB_DD_DELIM);
-                sDBName += '.';
-                sDBName += sTxt.GetToken(3, DB_DD_DELIM);   // ColumnName
-                if (bBrackets)
-                    sDBName += ']';
-                DragServer::CopyString(sDBName);
+                nRet = DND_ACTION_COPY;
+                aIter = aEnd;
             }
         }
     }
-
-    return Edit::QueryDrop( rDEvt );
+    return nRet;
 }
-*/
+
+sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    sal_Int8 nRet = DND_ACTION_NONE;
+    if( bEnableDrop )
+    {
+        String sTxt;
+        TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+        if( aData.GetString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, sTxt ) &&
+            sTxt.Len() )
+        {
+            String sDBName;
+            if (bBrackets)
+                sDBName += '[';
+            sDBName += sTxt.GetToken(0, DB_DD_DELIM);
+            sDBName += '.';
+            sDBName += sTxt.GetToken(1, DB_DD_DELIM);
+            sDBName += '.';
+            sDBName += sTxt.GetToken(3, DB_DD_DELIM);   // ColumnName
+            if (bBrackets)
+                sDBName += ']';
+
+            SetText( sDBName );
+
+            nRet = DND_ACTION_COPY;
+        }
+    }
+    return nRet;
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-05 10:06:18 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,23 +64,29 @@
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 
-class DropEvent;
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-class ConditionEdit : public Edit
+class ConditionEdit : public Edit, public DropTargetHelper
 {
-    BOOL bBrackets;
+    BOOL bBrackets, bEnableDrop;
 
-//    virtual BOOL QueryDrop( DropEvent& rEvt );
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
     ConditionEdit( Window* pParent, const ResId& rResId );
 
-    inline void ShowBrackets(BOOL bShow) { bBrackets = bShow; }
+    inline void ShowBrackets(BOOL bShow)        { bBrackets = bShow; }
+
+    inline void SetDropEnable( BOOL bFlag )     { bEnableDrop = bFlag; }
+    inline BOOL IsDropEnable() const            { return bEnableDrop; }
 };
 
 

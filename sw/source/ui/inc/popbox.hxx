@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-05 10:06:18 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,26 @@
 #define _POPBOX_HXX
 
 
-#ifndef _TOOLBOX_HXX //autogen
+#ifndef _TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 
-class SwHelpToolBox: public ToolBox
+class SwNavigationPI;
+
+class SwHelpToolBox: public ToolBox, public DropTargetHelper
 {
     Link aDoubleClickLink;
     Link aRightClickLink;       // Link bekommt MouseEvent als Parameter !!!
 protected:
     virtual void MouseButtonDown(const MouseEvent &rEvt);
     virtual long DoubleClick(ToolBox *);
-//    virtual BOOL    Drop( const DropEvent& rEvt);
-//    virtual BOOL    QueryDrop( DropEvent& rEvt);
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 public:
-    SwHelpToolBox(Window* pParent, const ResId &);
+    SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
     ~SwHelpToolBox();
     void SetDoubleClickLink(const Link &);      // inline
     void SetRightClickLink(const Link &);       // inline

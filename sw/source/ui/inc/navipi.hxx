@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 14:55:55 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,6 @@ protected:
     virtual         BOOL Close();
     virtual         void Resize();
 
-//  virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-//  virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
-    sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-    sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     // zum App-Ende rechtzeitig ObjectShellLock loslassen
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -213,6 +209,9 @@ public:
     USHORT          GetRegionDropMode() const {return nRegionMode;}
     void            SetRegionDropMode(USHORT nNewMode);
     BOOL            IsInDrag() const;
+
+    sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     BOOL            IsGlobalDoc() const;
     BOOL            IsGlobalMode() const {return    bGlobalMode;}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-05 10:07:03 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,27 @@
 
 #pragma hdrstop
 
-#include "cmdid.h"
-#include "swtypes.hxx"
-#include "segmentc.hxx"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 
-#include "popbox.hxx"
+#ifndef _POPBOX_HXX
+#include <popbox.hxx>
+#endif
+#ifndef _NAVIPI_HXX
+#include <navipi.hxx>
+#endif
 
 
 // --- class SwHelpToolBox ---------------------------------------------
 
 
-SwHelpToolBox::SwHelpToolBox( Window* pParent, const ResId& rResId ) :
-                ToolBox( pParent, rResId )
+SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
+    : ToolBox( pParent, rResId ),
+    DropTargetHelper( this )
 {
 }
 
@@ -87,9 +96,9 @@ void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
         // Dessen Returnwert entscheidet ueber andere Verarbeitung
         // Doppelclickhandler nur, wenn nicht auf einen Button geclickt wurde
     if(rEvt.GetButtons() == MOUSE_RIGHT &&
-        0 == GetItemId(rEvt.GetPosPixel())) {
+        0 == GetItemId(rEvt.GetPosPixel()))
+    {
         aRightClickLink.Call((MouseEvent *)&rEvt);
-        return;
     }
     else
         ToolBox::MouseButtonDown(rEvt);
@@ -99,7 +108,8 @@ void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 {
         // kein Doppelklick auf einen Button
-    if(0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0)) return TRUE;
+    if( 0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0) )
+        return TRUE;
     return FALSE;
 }
 
@@ -110,16 +120,14 @@ long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 
 SwHelpToolBox::~SwHelpToolBox() {}
 
+sal_Int8 SwHelpToolBox::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    return ((SwNavigationPI*)GetParent())->AcceptDrop( rEvt );
+}
 
-//BOOL    SwHelpToolBox::Drop( const DropEvent& rEvt)
-//{
-//    return GetParent()->Drop(rEvt);
-//}
-
-
-//BOOL    SwHelpToolBox::QueryDrop( DropEvent& rEvt)
-//{
-//    return GetParent()->QueryDrop(rEvt);
-//}
+sal_Int8 SwHelpToolBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    return ((SwNavigationPI*)GetParent())->ExecuteDrop( rEvt );
+}
 
 
