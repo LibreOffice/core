@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 13:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,15 +147,18 @@ const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection
 const sal_Char sAPI_IsProtected[] = "IsProtected";
 const sal_Char sAPI_Condition[] = "Condition";
 const sal_Char sAPI_IsVisible[] = "IsVisible";
+const sal_Char sAPI_IsCurrentlyVisible[] = "IsCurrentlyVisible";
 const sal_Char sAPI_ProtectionKey[] = "ProtectionKey";
 
-enum XMLSectionToken {
+enum XMLSectionToken
+{
     XML_TOK_SECTION_STYLE_NAME,
     XML_TOK_SECTION_NAME,
     XML_TOK_SECTION_CONDITION,
     XML_TOK_SECTION_DISPLAY,
     XML_TOK_SECTION_PROTECT,
-    XML_TOK_SECTION_PROTECTION_KEY
+    XML_TOK_SECTION_PROTECTION_KEY,
+    XML_TOK_SECTION_IS_HIDDEN
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
@@ -166,6 +169,7 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_DISPLAY, XML_TOK_SECTION_DISPLAY },
     { XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TOK_SECTION_PROTECT },
     { XML_NAMESPACE_TEXT, XML_PROTECTION_KEY, XML_TOK_SECTION_PROTECTION_KEY},
+    { XML_NAMESPACE_TEXT, XML_IS_HIDDEN, XML_TOK_SECTION_IS_HIDDEN },
     // compatibility with SRC629 (or earlier) versions
     { XML_NAMESPACE_TEXT, XML_PROTECT, XML_TOK_SECTION_PROTECT },
     XML_TOKEN_MAP_END
@@ -192,6 +196,7 @@ XMLSectionImportContext::XMLSectionImportContext(
         sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
         sProtectionKey(RTL_CONSTASCII_USTRINGPARAM(sAPI_ProtectionKey)),
         sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
+        sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCurrentlyVisible)),
         sStyleName(),
         sName(),
         sCond(),
@@ -201,7 +206,9 @@ XMLSectionImportContext::XMLSectionImportContext(
         bIsVisible(sal_True),
         bSequenceOK(sal_False),
         bProtect(sal_False),
-        bHasContent(sal_False)
+        bHasContent(sal_False),
+        bIsCurrentlyVisible(sal_True),
+        bIsCurrentlyVisibleOK(sal_False)
 {
 }
 
@@ -264,6 +271,17 @@ void XMLSectionImportContext::StartElement(
                     Any aAny;
                     aAny.setValue( &bIsVisible, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sIsVisible, aAny );
+
+                    // #97450# hidden sections must be hidden on reload
+                    // For backwards compatibilty, set flag only if it is
+                    // present
+                    if( bIsCurrentlyVisibleOK )
+                    {
+                        aAny.setValue( &bIsCurrentlyVisible,
+                                       ::getBooleanCppuType() );
+                        xPropSet->setPropertyValue( sIsCurrentlyVisible, aAny);
+                    }
+
                     if (bCondOK)
                     {
                         aAny <<= sCond;
@@ -363,6 +381,16 @@ void XMLSectionImportContext::ProcessAttributes(
                     bIsVisible = sal_False;
                 }
                 // else: ignore
+                break;
+            case XML_TOK_SECTION_IS_HIDDEN:
+                {
+                    sal_Bool bTmp;
+                    if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                    {
+                        bIsCurrentlyVisible = !bTmp;
+                        bIsCurrentlyVisibleOK = sal_True;
+                    }
+                }
                 break;
             case XML_TOK_SECTION_PROTECTION_KEY:
                 SvXMLUnitConverter::decodeBase64(aSequence, sAttr);

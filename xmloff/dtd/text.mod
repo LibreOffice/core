@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.48 2002-02-28 14:42:15 dvo Exp $
+	$Id: text.mod,v 1.49 2002-04-26 13:14:38 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -734,6 +734,7 @@
 <!ATTLIST text:section text:display (true|none|condition) "true">
 <!ATTLIST text:section text:condition %formula; #IMPLIED>
 <!ATTLIST text:section text:protection-key CDATA #IMPLIED>
+<!ATTLIST text:section text:is-hidden %boolean; #IMPLIED>
 
 <!ELEMENT text:section-source EMPTY>
 <!ATTLIST text:section-source xlink:href %string; #IMPLIED>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 13:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ XMLSectionExport::XMLSectionExport(
         sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm")),
         sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
         sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
+        sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible")),
         sEmpty()
 {
 }
@@ -555,6 +556,14 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sCond);
         eDisplay = XML_CONDITION;
+
+        // #97450# store hidden-status (of conditional sections only)
+        aAny = xPropSet->getPropertyValue(sIsCurrentlyVisible);
+        if (! *(sal_Bool*)aAny.getValue())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_IS_HIDDEN,
+                                     XML_TRUE);
+        }
     }
     else
     {
