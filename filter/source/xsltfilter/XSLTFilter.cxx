@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -203,8 +204,17 @@ sal_Bool XSLTFilter::importer(
     if(!xSaxParser.is())return sal_False;
 
     // create transformer
-    Sequence< Any > args(1);
-    args[0] <<= udStyleSheet;
+    Sequence< Any > args(3);
+    NamedValue nv;
+
+    nv.Name = OUString::createFromAscii("StylesheetURL");
+    nv.Value <<= udStyleSheet; args[0] <<= nv;
+    nv.Name = OUString::createFromAscii("SourceURL");
+    nv.Value <<= aURL; args[1] <<= nv;
+    nv.Name = OUString::createFromAscii("SourceBaseURL");
+    nv.Value <<= OUString(INetURLObject(aURL).getBase());
+    args[2] <<= nv;
+
     m_tcontrol = Reference< XActiveDataControl >(m_rServiceFactory->createInstanceWithArguments(
         OUString::createFromAscii("com.sun.star.comp.JAXTHelper"), args), UNO_QUERY);
     m_tcontrol->addListener(Reference< XStreamListener >(this));
@@ -272,8 +282,6 @@ sal_Bool XSLTFilter::exporter(
     OUString udImport = msUserData[2];
     OUString udStyleSheet = rel2abs(msUserData[5]);
 
-
-
     // read source data
     // we are especialy interested in the output stream
     // since that is where our xml-writer will push the data
@@ -308,19 +316,34 @@ sal_Bool XSLTFilter::exporter(
     }
 
     // create transformer
-    Sequence< Any > args(3);
-    args[0] <<= udStyleSheet;
-    args[1] <<= aDoctypeSystem;
-    args[2] <<= aDoctypePublic;
+    Sequence< Any > args(4);
+    NamedValue nv;
+    nv.Name = OUString::createFromAscii("StylesheetURL");
+    nv.Value <<= udStyleSheet; args[0] <<= nv;
+    nv.Name = OUString::createFromAscii("TargetURL");
+    nv.Value <<= sURL; args[1] <<= nv;
+    nv.Name = OUString::createFromAscii("DoctypeSystem");
+    nv.Value <<= aDoctypeSystem; args[2] <<= nv;
+    nv.Name = OUString::createFromAscii("DoctypePublic");
+    nv.Value <<= aDoctypePublic; args[3] <<= nv;
+    nv.Name = OUString::createFromAscii("TargetBaseURL");
+    INetURLObject ineturl(sURL);
+    ineturl.removeSegment();
+    nv.Value <<= OUString(ineturl.GetMainURL(INetURLObject::NO_DECODE));
+    args[3] <<= nv;
+
+
     m_tcontrol = Reference< XActiveDataControl >(m_rServiceFactory->createInstanceWithArguments(
         OUString::createFromAscii("com.sun.star.comp.JAXTHelper"), args), UNO_QUERY);
-    m_tcontrol->addListener(Reference< XStreamListener >(this));
 
     OSL_ASSERT(m_rDocumentHandler.is());
     OSL_ASSERT(m_rOutputStream.is());
     OSL_ASSERT(m_tcontrol.is());
     if (m_tcontrol.is() && m_rOutputStream.is() && m_rDocumentHandler.is())
     {
+        // we want to be notfied when the processing is done...
+        m_tcontrol->addListener(Reference< XStreamListener >(this));
+
         // create pipe
         Reference< XOutputStream > pipeout(m_rServiceFactory->createInstance(
             OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
