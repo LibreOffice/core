@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-25 14:22:13 $
+ *  last change: $Author: cl $ $Date: 2002-02-08 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,15 +670,8 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 {
                     // if this is a masterpage, there is always a background shape with the ord num 0
                     // so we add one to the api ordnum to hide the background shape over the api
-                    if( nOrdNum > 0 )
-                    {
-                        nOrdNum++;
-                        aAny <<= nOrdNum;
-                    }
-                    else
-                    {
-                        DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
-                    }
+                    nOrdNum++;
+                    aAny <<= nOrdNum;
                 }
             }
         }
