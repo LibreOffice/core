@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 09:07:55 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ russian ] = "Οξπÿδξκ ρξπςθπξβκθ, ξοπεδελεννϋι οξλόηξβΰςελεμ";
         Text[ polish ] = "Kolejnoζ sortowania okrelona przez uΏytkownika";
         Text[ japanese ] = "‡‚Μw’θ(~O)";
-        Text[ chinese_traditional ] = "¦Ϋ­q±Ζ§Η³W«h(~O)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞªΜ¦Ϋ­q±Ζ§Η³W«h(~O)";
         Text[ arabic ] = "ΚΡΚνΘ ΗαέΡÒ ΚΘΪΗπ αΚΪΡνέ ΗαγΣΚΞΟγ";
         Text[ greek ] = "Σειρά ταξινόμησης οριζόμενη από τον χρήστη";
         Text[ korean ] = "»ηΏλΐΪ°΅ Α¤ΐΗΗΡ Α¤·Δ ΌψΌ­(~O)";
