@@ -118,7 +118,7 @@ case `basename $MAILER | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}$2
+                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo file://$2 | uri-encode`
                     shift
                     ;;
                 *)
@@ -183,8 +183,9 @@ case `basename $MAILER | sed 's/-.*$//'` in
             shift;
         done
 
-        ${MAILER} --composer ${CC:+--cc} "${CC:-}" ${BCC:+--bcc} "${BCC:-}" ${SUBJECT:+--subject} \
-            "${SUBJECT:-}" ${BODY:+--body} "${BODY}" ${ATTACH} "${TO}"
+        ${MAILER} --composer ${CC:+--cc} ${CC:+"${CC}"} ${BCC:+--bcc} ${BCC:+"${BCC}"} \
+            ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"} ${BODY:+--body} ${BODY:+"${BODY}"} \
+            ${ATTACH} ${TO:+"${TO}"}
         ;;
 
     evolution)
@@ -229,28 +230,26 @@ case `basename $MAILER | sed 's/-.*$//'` in
         ${MAILER} "${MAILTO}" &
         ;;
 
-# FIXME: dtmail dows not accept file urls, so we need to convert them
-# to system paths !
-#   dtmail)
-#
-#       while [ "$1" != "" ]; do
-#           case $1 in
-#               --to)
-#                   TO=${TO:-}${TO:+,}$2
-#                   shift
-#                   ;;
-#               --attach)
-#                    ATTACH="${ATTACH:-}${ATTACH:+ } $2"
-#                   shift
-#                   ;;
-#               *)
-#                   ;;
-#           esac
-#           shift;
-#       done
-#
-#        ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:-}
-#       ;;
+    dtmail)
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --to)
+                    TO=${TO:-}${TO:+,}$2
+                    shift
+                    ;;
+                --attach)
+                     ATTACH="${ATTACH:-}${ATTACH:+ } $2"
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+         ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:-}
+        ;;
     *)
         if [ "$MAILER" != "" ]; then
             echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
