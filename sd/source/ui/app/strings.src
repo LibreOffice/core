@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:32:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3057,7 +3057,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text[ portuguese ] = "Title, vertical text";
     Text[ russian ] = "«аголовок, вертикальный текст";
     Text[ greek ] = "‘яфлпт, кбфбкьсхцп кеяменп";
-    Text[ dutch ] = "Title, vertical text";
+    Text[ dutch ] = "Titel, verticale tekst";
     Text[ french ] = "Titre, texte vertical";
     Text[ spanish ] = "Tнtulo, texto vertical";
     Text[ italian ] = "Titolo, testo verticale";
@@ -3080,7 +3080,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ portuguese ] = "Title, vertical text, clipart";
     Text[ russian ] = "«аголовок, вертикальный текст, картинка";
     Text[ greek ] = "‘яфлпт, кбфбкьсхцп кеяменп, Clipart";
-    Text[ dutch ] = "Title, vertical text, clipart";
+    Text[ dutch ] = "Titel, verticale tekst, clipart";
     Text[ french ] = "Titre, texte vertical, clipart";
     Text[ spanish ] = "Tнtulo, texto vertical, clipart";
     Text[ italian ] = "Titolo, testo verticale, clipart";
@@ -3103,7 +3103,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text[ portuguese ] = "Vertical title, text, chart";
     Text[ russian ] = "¬ертикальный заголовок, текст, диаграмма";
     Text[ greek ] = "Kбфбкьсхцпт фяфлпт, кеяменп, дй№гсбммб";
-    Text[ dutch ] = "Vertical title, text, chart";
+    Text[ dutch ] = "Verticale titel, tekst, diagram";
     Text[ french ] = "Titre vertical, texte, diagramme";
     Text[ spanish ] = "Tнtulo vertical, texto, diagrama";
     Text[ italian ] = "Titolo verticale, testo, diagramma";
@@ -3126,7 +3126,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text[ portuguese ] = "Vertical title, vertical text";
     Text[ russian ] = "¬ертикальный заголовок, вертикальный текст";
     Text[ greek ] = " бфбкьсхцпт фяфлпт, кбфбкьсхцп кеяменп";
-    Text[ dutch ] = "Vertical title, vertical text";
+    Text[ dutch ] = "Verticale titel, verticale tekst";
     Text[ french ] = "Titre vertical, texte vertical";
     Text[ spanish ] = "Tнtulo vertical, texto vertical";
     Text[ italian ] = "Titolo verticale, testo verticale";
