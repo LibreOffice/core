@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 09:58:56 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         aOpt.SetNumRules( bLoadStyleNumbering );
         aOpt.SetMerge( !bLoadStyleOverwrite );
 
-        ULONG nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, TRUE );
+        ULONG nErr = 0; //pDocShell->LoadStylesFromFile( rURL, aOpt, TRUE );
         if( nErr )
             throw io::IOException();
     }
@@ -1717,6 +1717,25 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
                     aBase.GetCollection()->SetPoolFmtId( nId );
                 }
                 break;
+                case SID_SWREGISTER_COLLECTION:
+                {
+                    SfxItemSet& rStyleSet = aBase.GetItemSet();
+                    SfxItemSet aSet(*rStyleSet.GetPool(),
+                                    SID_SWREGISTER_MODE,
+                                    SID_SWREGISTER_COLLECTION);
+                    aSet.Put(rStyleSet);
+                    OUString sName;
+                    aValue >>= sName;
+                    SwRegisterItem aReg( sName.getLength() != 0);
+                    aReg.SetWhich(SID_SWREGISTER_MODE);
+                    aSet.Put(aReg);
+
+                    aSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
+                                    SwXStyleFamilies::GetUIName(sName,
+                                                    SFX_STYLE_FAMILY_PARA) ));
+                    aBase.SetItemSet(aSet);
+                }
+                break;
                 case RES_PARATR_DROP:
                 {
                     if( MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId)
@@ -1890,6 +1909,19 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
                             break;
                     }
                     aRet <<= nRet;
+                }
+                break;
+                case SID_SWREGISTER_COLLECTION:
+                {
+                    const SwPageDesc *pPageDesc = aStyle.GetPageDesc();
+                    const SwTxtFmtColl* pCol = 0;
+                    OUString sName;
+                    if( pPageDesc )
+                        pCol = pPageDesc->GetRegisterFmtColl();
+                    if( pCol )
+                        sName = SwXStyleFamilies::GetProgrammaticName(
+                                    pCol->GetName(), SFX_STYLE_FAMILY_PARA );
+                    aRet <<= sName;
                 }
                 break;
                 default:

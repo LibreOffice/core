@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 14:13:20 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,8 +898,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),            SID_ATTR_PAGE,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE , MID_PAGE_NUMTYPE       },
                     { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_LAYOUT),         SID_ATTR_PAGE,          &::getCppuType((const style::PageStyleLayout*)0),   PROPERTY_NONE ,MID_PAGE_LAYOUT     },
                     { SW_PROP_NAME(UNO_NAME_PRINTER_PAPER_TRAY),        RES_PAPER_BIN,          &::getCppuType((const sal_Int8*)0),             PROPERTY_NONE , 0 },
-                    { SW_PROP_NAME(UNO_NAME_REGISTER_MODE_ACTIVE),  SID_SWREGISTER_MODE,    &::getBooleanCppuType(),            PROPERTY_NONE , 0 },
-                    { SW_PROP_NAME(UNO_NAME_REGISTER_PARAGRAPH_STYLE),SID_ATTR_PAGE_EXT1,   &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0 },
+//                  { SW_PROP_NAME(UNO_NAME_REGISTER_MODE_ACTIVE),  SID_SWREGISTER_MODE,    &::getBooleanCppuType(),            PROPERTY_NONE , 0 },
+                    { SW_PROP_NAME(UNO_NAME_REGISTER_PARAGRAPH_STYLE),SID_SWREGISTER_COLLECTION,    &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0 },
                     { SW_PROP_NAME(UNO_NAME_SIZE),                  SID_ATTR_PAGE_SIZE,     &::getCppuType((const awt::Size*)0),            PROPERTY_NONE,   MID_SIZE_SIZE|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_WIDTH),                 SID_ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_SIZE_WIDTH|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_HEIGHT),                SID_ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_SIZE_HEIGHT|CONVERT_TWIPS            },
