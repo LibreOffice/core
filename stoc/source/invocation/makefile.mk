@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:38:19 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:09:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		inv
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = invocation.uno
+NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = inv
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = inv.map
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
