@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-25 14:42:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+    sal_uInt16 i;
+
     for (property; property != rProperties.end(); property++)
     {
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
@@ -189,7 +191,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
         }
     }
-    for (sal_uInt16 i = 0; i < 4; i++)
+    for ( i = 0; i < 4; i++)
     {
         if (pAllPaddingProperty && !pPadding[i])
             pNewPadding[i] = new XMLPropertyState(maPropMapper->FindEntryIndex(aPaddingCTF[i]), pAllPaddingProperty->maValue);
