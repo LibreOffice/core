@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementwrapperbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:57:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace framework
 DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                            ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElement      ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement      ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet    ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
@@ -136,7 +136,7 @@ DEFINE_XINTERFACE_8     (   UIElementWrapperBase                                
 
 DEFINE_XTYPEPROVIDER_8  (   UIElementWrapperBase                        ,
                             ::com::sun::star::lang::XTypeProvider       ,
-                            ::drafts::com::sun::star::ui::XUIElement    ,
+                            ::com::sun::star::ui::XUIElement    ,
                             ::com::sun::star::beans::XMultiPropertySet  ,
                             ::com::sun::star::beans::XFastPropertySet   ,
                             ::com::sun::star::beans::XPropertySet       ,

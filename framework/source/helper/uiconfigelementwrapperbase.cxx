@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:57:21 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -128,7 +128,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -139,28 +139,28 @@ namespace framework
 DEFINE_XINTERFACE_10    (   UIConfigElementWrapperBase                                               ,
                             OWeakObject                                                              ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                  ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElement               ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIElementSettings       ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement               ),
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementSettings       ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet             ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet              ),
                             DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                  ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization                ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                     ),
                             DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable                     ),
-                            DIRECT_INTERFACE( ::drafts::com::sun::star::ui::XUIConfigurationListener )
+                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener )
                         )
 
 DEFINE_XTYPEPROVIDER_10 (   UIConfigElementWrapperBase                              ,
                             ::com::sun::star::lang::XTypeProvider                   ,
-                            ::drafts::com::sun::star::ui::XUIElement                ,
-                            ::drafts::com::sun::star::ui::XUIElementSettings        ,
+                            ::com::sun::star::ui::XUIElement                ,
+                            ::com::sun::star::ui::XUIElementSettings        ,
                             ::com::sun::star::beans::XMultiPropertySet              ,
                             ::com::sun::star::beans::XFastPropertySet               ,
                             ::com::sun::star::beans::XPropertySet                   ,
                             ::com::sun::star::lang::XInitialization                 ,
                             ::com::sun::star::lang::XComponent                      ,
                             ::com::sun::star::util::XUpdatable                      ,
-                            ::drafts::com::sun::star::ui::XUIConfigurationListener
+                            ::com::sun::star::ui::XUIConfigurationListener
                         )
 
 UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
@@ -245,17 +245,17 @@ void SAL_CALL UIConfigElementWrapperBase::update() throw (::com::sun::star::uno:
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
 
-void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigElementWrapperBase::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
     // can be implemented by derived class
 }
@@ -512,7 +512,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
     static const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE  , UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< drafts::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE  , UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< ::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_FRAME         , UIELEMENT_PROPHANDLE_FRAME          , ::getCppuType((const Reference< com::sun::star::frame::XFrame >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_PERSISTENT    , UIELEMENT_PROPHANDLE_PERSISTENT     , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_RESOURCEURL   , UIELEMENT_PROPHANDLE_RESOURCEURL    , ::getCppuType((const ::rtl::OUString*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY ),
