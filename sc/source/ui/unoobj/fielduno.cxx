@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 17:01:11 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 18:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,11 @@ const SfxItemPropertyMap* lcl_GetHeaderFieldPropertyMap()
 
 //------------------------------------------------------------------------
 
-SC_SIMPLE_SERVICE_INFO( ScCellFieldObj, "ScCellFieldObj", "com.sun.star.text.TextField" )
-SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScHeaderFieldObj, "ScHeaderFieldObj", "com.sun.star.text.TextField" )
-SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "stardiv.unknown" )
+#define SCTEXTFIELD_SERVICE         "com.sun.star.text.TextField"
+#define SCTEXTCONTENT_SERVICE       "com.sun.star.text.TextContent"
+
+SC_SIMPLE_SERVICE_INFO( ScCellFieldsObj, "ScCellFieldsObj", "com.sun.star.text.TextFields" )
+SC_SIMPLE_SERVICE_INFO( ScHeaderFieldsObj, "ScHeaderFieldsObj", "com.sun.star.text.TextFields" )
 
 //------------------------------------------------------------------------
 
@@ -789,6 +790,31 @@ ScCellFieldObj* ScCellFieldObj::getImplementation(
     return pRet;
 }
 
+// XServiceInfo
+
+rtl::OUString SAL_CALL ScCellFieldObj::getImplementationName() throw(uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "ScCellFieldObj" );
+}
+
+sal_Bool SAL_CALL ScCellFieldObj::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    String aServiceStr( rServiceName );
+    return aServiceStr.EqualsAscii( SCTEXTFIELD_SERVICE ) ||
+           aServiceStr.EqualsAscii( SCTEXTCONTENT_SERVICE );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    uno::Sequence<rtl::OUString> aRet(2);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    return aRet;
+}
+
 //------------------------------------------------------------------------
 
 ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, USHORT nP, USHORT nT) :
@@ -1265,6 +1291,31 @@ ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(
     if (xUT.is())
         pRet = (ScHeaderFieldObj*) xUT->getSomething( getUnoTunnelId() );
     return pRet;
+}
+
+// XServiceInfo
+
+rtl::OUString SAL_CALL ScHeaderFieldObj::getImplementationName() throw(uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "ScHeaderFieldObj" );
+}
+
+sal_Bool SAL_CALL ScHeaderFieldObj::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    String aServiceStr( rServiceName );
+    return aServiceStr.EqualsAscii( SCTEXTFIELD_SERVICE ) ||
+           aServiceStr.EqualsAscii( SCTEXTCONTENT_SERVICE );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScHeaderFieldObj::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    uno::Sequence<rtl::OUString> aRet(2);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    return aRet;
 }
 
 //------------------------------------------------------------------------
