@@ -12372,3 +12372,7 @@ _real@bff0000000000000
 ?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0x482f843d@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
 ?isAsciiLetter@?A0x482f843d@xmloff@@YA_NG@Z
 ?toUpperAscii@?A0x482f843d@xmloff@@YAGG@Z
+??0?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?clear@?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@QAAXXZ
+?clear@?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@QAAXXZ
+?set@?$Reference@VXEventListener@lang@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEventListener@lang@345@@Z
