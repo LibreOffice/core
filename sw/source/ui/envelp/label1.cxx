@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 09:32:33 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,14 @@
 
 #pragma hdrstop
 
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
-#include <com/sun/star/util/XRefreshable.hpp>
-#endif
 #ifndef _SV_WAITOBJ_HXX //autogen
 #include <vcl/waitobj.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -108,28 +99,12 @@
 #ifndef _LABIMG_HXX
 #include <labimg.hxx>
 #endif
-#ifndef _DOC_HXX //autogen wg. SwDoc
+#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _UNOCRSR_HXX //autogen wg. SwUnoCrsr
-#include <unocrsr.hxx>
 #endif
 #ifndef _UNOTOOLS_HXX
 #include <unotools.hxx>
 #endif
-#ifndef _UNOATXT_HXX //autogen wg. SwXAutoTextEntry
-#include <unoatxt.hxx>
-#endif
-#ifndef _UNOOBJ_HXX //
-#include <unoobj.hxx>
-#endif
-#ifndef _UNOPRNMS_HXX //
-#include <unoprnms.hxx>
-#endif
-#ifndef _SWDOCSH_HXX //autogen wg. SwDocShell
-#include <docsh.hxx>
-#endif
-
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
@@ -146,157 +121,41 @@
 #ifndef _LABEL_HRC
 #include <label.hrc>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-using namespace ::com::sun::star;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
-using namespace ::comphelper;
-using namespace ::rtl;
-
-#define C2U(char) rtl::OUString::createFromAscii(char)
-
-
-// dont use RTL_CONSTASCII_STRINGPARAM for UNO_NAME ...
-// #define CL2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
-
-#define USER_FIELD_FIRSTNAME        "BC_PRIV_FIRSTNAME"
-#define USER_FIELD_NAME             "BC_PRIV_NAME"
-#define USER_FIELD_PRIVSHORTCUT     "BC_PRIV_INITIALS"
-#define USER_FIELD_FIRSTNAME_2      "BC_PRIV_FIRSTNAME_2"
-#define USER_FIELD_NAME_2           "BC_PRIV_NAME_2"
-#define USER_FIELD_PRIVSHORTCUT_2   "BC_PRIV_INITIALS_2"
-
-#define USER_FIELD_PRIVSTREET       "BC_PRIV_STREET"
-#define USER_FIELD_PRIVZIP          "BC_PRIV_ZIP"
-#define USER_FIELD_PRIVCITY         "BC_PRIV_CITY"
-#define USER_FIELD_PRIVCOUNTRY      "BC_PRIV_COUNTRY"
-#define USER_FIELD_PRIVSTATE        "BC_PRIV_STATE"
-#define USER_FIELD_PRIVTITLE        "BC_PRIV_TITLE"
-#define USER_FIELD_PRIVPROFESSION   "BC_PRIV_PROFESSION"
-#define USER_FIELD_PRIVPHONE        "BC_PRIV_PHONE"
-#define USER_FIELD_PRIVMOBILE       "BC_PRIV_MOBILE"
-#define USER_FIELD_PRIVFAX          "BC_PRIV_FAX"
-#define USER_FIELD_PRIVWWW          "BC_PRIV_WWW"
-#define USER_FIELD_PRIVMAIL         "BC_PRIV_MAIL"
-#define USER_FIELD_COMPCOMPANY      "BC_COMP_COMPANY"
-#define USER_FIELD_COMPCOMPANYEXT   "BC_COMP_COMPANYEXT"
-#define USER_FIELD_COMPSLOGAN       "BC_COMP_SLOGAN"
-#define USER_FIELD_COMPSTREET       "BC_COMP_STREET"
-#define USER_FIELD_COMPZIP          "BC_COMP_ZIP"
-#define USER_FIELD_COMPCITY         "BC_COMP_CITY"
-#define USER_FIELD_COMPCOUNTRY      "BC_COMP_COUNTRY"
-#define USER_FIELD_COMPSTATE        "BC_COMP_STATE"
-#define USER_FIELD_COMPPOSITION     "BC_COMP_POSITION"
-#define USER_FIELD_COMPPHONE        "BC_COMP_PHONE"
-#define USER_FIELD_COMPMOBILE       "BC_COMP_MOBILE"
-#define USER_FIELD_COMPFAX          "BC_COMP_FAX"
-#define USER_FIELD_COMPWWW          "BC_COMP_WWW"
-#define USER_FIELD_COMPMAIL         "BC_COMP_MAIL"
 
 SV_IMPL_PTRARR( SwLabRecs, SwLabRec* );
 
-inline sal_Bool NextToken( String &rStr, sal_uInt16 &nPos, sal_uInt16 &nPos2 )
+void SwLabRec::SetFromItem( const SwLabItem& rItem )
 {
-    nPos  = nPos2+1;
-    nPos2 = rStr.Search( ';', nPos );
-    return nPos2 != STRING_NOTFOUND;
+    lHDist  = rItem.lHDist;
+    lVDist  = rItem.lVDist;
+    lWidth  = rItem.lWidth;
+    lHeight = rItem.lHeight;
+    lLeft   = rItem.lLeft;
+    lUpper  = rItem.lUpper;
+    nCols   = rItem.nCols;
+    nRows   = rItem.nRows;
+    bCont   = rItem.bCont;
 }
 
-
-
-SwLabRec::SwLabRec( String& rStr, MetricField& rField )
+void SwLabRec::FillItem( SwLabItem& rItem ) const
 {
-    //Fuer die ersten beiden Token duefen nur Trailing und Leading Blanks
-    //vernichtet werden.
-    sal_uInt16 nPos = rStr.Search( ';' );
-    if ( nPos == STRING_NOTFOUND )
-        return;
-    aMake = rStr.Copy( 0, nPos );
-    ++nPos;
-    sal_uInt16 nPos2 = rStr.Search( ';', nPos );
-    if ( nPos2 == STRING_NOTFOUND )
-        return;
-    aType = rStr.Copy( nPos, nPos2 - nPos );
-
-    aMake.EraseLeadingChars(); aMake.EraseTrailingChars();
-    aType.EraseLeadingChars(); aType.EraseTrailingChars();
-
-    //Fuer alle weiteren Token koennen alle Blanks vernichtet werden.
-    rStr.EraseAllChars();
-    nPos  = rStr.Search( ';' );
-    nPos2 = rStr.Search( ';', nPos+1 );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    bCont = (rStr.GetChar(nPos) == 'C' || rStr.GetChar(nPos) == 'c') ? sal_True : sal_False;
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lHDist = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lVDist = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lWidth = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lHeight = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lLeft = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-    lUpper = GetLong( rStr.Copy( nPos, nPos2 - nPos ), rField );
-
-    if ( !::NextToken( rStr, nPos, nPos2 ) )
-        return;
-
-    nCols = rStr.Copy( nPos, nPos2 - nPos ).ToInt32();
-
-    nPos = nPos2+1;
-    nRows = rStr.Copy( nPos ).ToInt32();
-
-    // Ggf. Zeilenanzahl fuer Endlosetiketten automatisch berechnen
-    if ( bCont && !nRows )
-    {
-        static const long lMax = 31748; // 56 cm
-        nRows = (sal_uInt16)((lMax - lUpper) / Max(1L, lVDist));
-    }
+    rItem.lHDist  = lHDist;
+    rItem.lVDist  = lVDist;
+    rItem.lWidth  = lWidth;
+    rItem.lHeight = lHeight;
+    rItem.lLeft   = lLeft;
+    rItem.lUpper  = lUpper;
+    rItem.nCols   = nCols;
+    rItem.nRows   = nRows;
 }
 
-// --------------------------------------------------------------------------
-
-
-
-long SwLabRec::GetLong(const String& rStr, MetricField& rField)
-{
-    rField.SetText( rStr );
-    rField.Reformat();
-    return GETFLDVAL( rField );
-}
 // --------------------------------------------------------------------------
 void SwLabDlg::_ReplaceGroup( const String &rMake, SwLabItem *pItem )
 {
     //Die alten Eintraege vernichten.
     pRecs->Remove( 1, pRecs->Count() - 1 );
-    aLabelsCfg.FillLabels(OUString(rMake), *pRecs);
+    aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
 
@@ -368,15 +227,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     SwLabRec* pRec = new SwLabRec;
     const String aTmp( SW_RES( STR_CUSTOM ) );
     pRec->aMake   = pRec->aType = aTmp;
-    pRec->lHDist  = aItem.lHDist;
-    pRec->lVDist  = aItem.lVDist;
-    pRec->lWidth  = aItem.lWidth;
-    pRec->lHeight = aItem.lHeight;
-    pRec->lLeft   = aItem.lLeft;
-    pRec->lUpper  = aItem.lUpper;
-    pRec->nCols   = aItem.nCols;
-    pRec->nRows   = aItem.nRows;
-    pRec->bCont   = aItem.bCont;
+    pRec->SetFromItem( aItem );
 
     sal_Bool bDouble = sal_False;
 
@@ -394,13 +245,13 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pRecs->C40_INSERT( SwLabRec, pRec, 0 );
 
     sal_uInt16 nLstGroup = 0;
-    const Sequence<OUString>& rMan = aLabelsCfg.GetManufacturers();
-    const OUString* pMan = rMan.getConstArray();
+    const UNO_NMSPC::Sequence<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const rtl::OUString* pMan = rMan.getConstArray();
     for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
     {
         aMakes.Insert( new String(pMan[nMan]), aMakes.Count() );
         if ( pMan[nMan] == aItem.aLstMake )
-            nLstGroup = nMan;
+            nLstGroup = (sal_uInt16) nMan;
     }
 
     if ( aMakes.Count() )
@@ -433,14 +284,7 @@ void SwLabDlg::MakeConfigItem( SwLabItem& rItem ) const
     if ( String(rItem.aType) != String(SW_RES(STR_CUSTOM)) )
     {
         SwLabRec* pRec = (*pRecs)[0];
-        rItem.lHDist  = pRec->lHDist;
-        rItem.lVDist  = pRec->lVDist;
-        rItem.lWidth  = pRec->lWidth;
-        rItem.lHeight = pRec->lHeight;
-        rItem.lLeft   = pRec->lLeft;
-        rItem.lUpper  = pRec->lUpper;
-        rItem.nCols   = pRec->nCols;
-        rItem.nRows   = pRec->nRows;
+        pRec->FillItem( rItem );
     }
     const SwLabItem& rActItem = (const SwLabItem&)GetExampleSet()->Get(FN_LABEL);
     rItem.bCont    = rActItem.bCont;
@@ -468,15 +312,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
         // benutzerdefinierbaren Einstellungen. Daher richtige Werte
         // direkt aus dem Record besorgen:
         SwLabRec* pRec = GetRecord(rItem.aType, rItem.bCont);
-
-        rItem.lHDist  = pRec->lHDist;
-        rItem.lVDist  = pRec->lVDist;
-        rItem.lWidth  = pRec->lWidth;
-        rItem.lHeight = pRec->lHeight;
-        rItem.lLeft   = pRec->lLeft;
-        rItem.lUpper  = pRec->lUpper;
-        rItem.nCols   = pRec->nCols;
-        rItem.nRows   = pRec->nRows;
+        pRec->FillItem( rItem );
     }
 }
 
@@ -663,7 +499,7 @@ IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 {
-    sActDBName = SFX_APP()->LocalizeDBName(NATIONAL2INI, aDatabaseLB.GetSelectEntry());
+    sActDBName = aDatabaseLB.GetSelectEntry();
 
     WaitObject aObj( GetParent() );
 
@@ -823,11 +659,11 @@ SwLabRec* SwLabPage::GetSelectedEntryPos()
 
 void SwLabPage::InitDatabaseBox()
 {
-    if(GetNewDBMgr())
+    if( GetNewDBMgr() )
     {
         aDatabaseLB.Clear();
-        Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
-        const OUString* pDataNames = aDataNames.getConstArray();
+        UNO_NMSPC::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        const rtl::OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);
         String sDBName = sActDBName.GetToken( 0, DB_DELIM );
@@ -877,15 +713,7 @@ void SwLabPage::FillItem(SwLabItem& rItem)
     rItem.sDBName  = sActDBName;
 
     SwLabRec* pRec = GetSelectedEntryPos();
-
-    rItem.lHDist  = pRec->lHDist;
-    rItem.lVDist  = pRec->lVDist;
-    rItem.lWidth  = pRec->lWidth;
-    rItem.lHeight = pRec->lHeight;
-    rItem.lLeft   = pRec->lLeft;
-    rItem.lUpper  = pRec->lUpper;
-    rItem.nCols   = pRec->nCols;
-    rItem.nRows   = pRec->nRows;
+    pRec->FillItem( rItem );
 
     rItem.aLstMake = aMakeBox.GetSelectEntry();
     rItem.aLstType = aTypeBox.GetSelectEntry();
@@ -950,24 +778,24 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
   -----------------------------------------------------------------------*/
 //-----------------------------------------------------------------------------
-void lcl_ClearUserData( SvTreeListBox& rAutoTextLB )
+void SwVisitingCardPage::ClearUserData()
 {
-    SvLBoxEntry* pEntry = rAutoTextLB.First();
+    SvLBoxEntry* pEntry = aAutoTextLB.First();
     while(pEntry)
     {
         delete (String*)pEntry->GetUserData();
-        pEntry = rAutoTextLB.Next(pEntry);
+        pEntry = aAutoTextLB.Next(pEntry);
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void lcl_SetUserData( SvTreeListBox& rAutoTextLB, sal_uInt32 nCnt,
-                    const OUString* pNames, const OUString* pValues )
+void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
+                const rtl::OUString* pNames, const rtl::OUString* pValues )
 {
     for( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        SvLBoxEntry* pEntry = rAutoTextLB.InsertEntry( pNames[ i ] );
+        SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry( pNames[ i ] );
         pEntry->SetUserData( new String( pValues[ i ] ));
     }
 }
@@ -1010,7 +838,7 @@ SwVisitingCardPage::~SwVisitingCardPage()
         delete (String*)aAutoTextGroupLB.GetEntryData( i );
     _xAutoText = 0;
 
-    lcl_ClearUserData( aAutoTextLB );
+    ClearUserData();
     delete pExampleFrame;
 }
 /*-- 08.07.99 14:00:03---------------------------------------------------
@@ -1094,7 +922,8 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 
     sal_Bool bFound = sal_False;
     for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
-        if(String(aLabItem.sGlossaryGroup) == *(String*)aAutoTextGroupLB.GetEntryData( i ))
+        if( String(aLabItem.sGlossaryGroup) ==
+            *(String*)aAutoTextGroupLB.GetEntryData( i ))
         {
             bFound = sal_True;
             break;
@@ -1118,220 +947,6 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
             }
         }
     }
-}
-/* -----------------08.07.99 15:15-------------------
-
- --------------------------------------------------*/
-void SwVisitingCardPage::InitFrameControl()
-{
-    Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
-    pExampleFrame = new SwOneExampleFrame( aExampleWIN,
-                                    EX_SHOW_BUSINESS_CARDS, &aLink );
-
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-    //now the AutoText ListBoxes have to be filled
-
-    uno::Reference< uno::XInterface >  xAText =
-        xMgr->createInstance( C2U("com.sun.star.text.AutoTextContainer") );
-    _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
-
-    uno::Sequence<OUString> aNames = _xAutoText->getElementNames();
-    const OUString* pGroups = aNames.getConstArray();
-    OUString uTitleName( C2U(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
-
-    for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
-    {
-        uno::Any aGroup = _xAutoText->getByName(pGroups[i]);
-        uno::Reference< text::XAutoTextGroup >  xGroup;
-        aGroup >>= xGroup;
-        uno::Reference< container::XIndexAccess >  xIdxAcc(xGroup, uno::UNO_QUERY);
-        if(!xIdxAcc.is() || xIdxAcc->getCount())
-        {
-            uno::Reference< beans::XPropertySet >  xPrSet(xGroup, uno::UNO_QUERY);
-            uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
-            OUString uTitle;
-            aTitle >>= uTitle;
-            String sGroup(pGroups[i]);
-            sal_uInt16 nEntry = aAutoTextGroupLB.InsertEntry(uTitle);
-            aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
-        }
-    }
-    if(aAutoTextGroupLB.GetEntryCount())
-    {
-        if(LISTBOX_ENTRY_NOTFOUND == aAutoTextGroupLB.GetSelectEntryPos())
-            aAutoTextGroupLB.SelectEntryPos(0);
-        String sCurGroupName(
-            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
-        if(_xAutoText->hasByName(sCurGroupName))
-        {
-            uno::Any aGroup = _xAutoText->getByName(sCurGroupName);
-            try
-            {
-                uno::Reference< text::XAutoTextGroup >  xGroup;
-                aGroup >>= xGroup;
-                uno::Sequence< OUString > aBlockNames = xGroup->getElementNames();
-                uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
-
-                ::lcl_SetUserData( aAutoTextLB, aBlockNames.getLength(),
-                                    aTitles.getConstArray(),
-                                    aBlockNames.getConstArray() );
-            }
-            catch( uno::RuntimeException& )
-            {
-                // we'll be her if path settings were wrong
-            }
-        }
-    }
-}
-/* -----------------01.10.99 13:19-------------------
-
- --------------------------------------------------*/
-IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
-{
-    SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
-    String sEntry;
-    if( pSel )
-        sEntry = *(String*)pSel->GetUserData();
-    uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
-    OUString uEntry(sEntry);
-
-    String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
-                                aAutoTextGroupLB.GetSelectEntryPos() ) );
-    uno::Any aGroup = _xAutoText->getByName(sGroup);
-    uno::Reference< text::XAutoTextGroup >  xGroup;
-    aGroup >>= xGroup;
-
-    if( sEntry.Len() && xGroup->hasByName( uEntry ) )
-    {
-        uno::Any aEntry(xGroup->getByName(uEntry));
-        uno::Reference< text::XAutoTextEntry >  xEntry;
-        aEntry >>= xEntry;
-        if(xEntry.is())
-        {
-            uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
-            xEntry->applyTo(xRange);
-        }
-        UpdateFields();
-    }
-    return 0;
-}
-/* -----------------22.07.99 11:06-------------------
-
- --------------------------------------------------*/
-IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
-{
-    if(_xAutoText.is())
-    {
-        if( &aAutoTextGroupLB == pBox )
-        {
-            String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
-                                    aAutoTextGroupLB.GetSelectEntryPos()));
-            uno::Any aGroup = _xAutoText->getByName(sGroup);
-            uno::Reference< text::XAutoTextGroup >  xGroup;
-            aGroup >>= xGroup;
-
-            lcl_ClearUserData( aAutoTextLB );
-            aAutoTextLB.Clear();
-
-            uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
-            uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
-            ::lcl_SetUserData( aAutoTextLB, aBlockNames.getLength(),
-                                aTitles.getConstArray(),
-                                aBlockNames.getConstArray() );
-        }
-        if(pExampleFrame->IsInitialized())
-            pExampleFrame->ClearDocument( TRUE );
-    }
-    return 0;
-}
-
-/* -----------------01.10.99 11:59-------------------
-
- --------------------------------------------------*/
-void    SwVisitingCardPage::UpdateFields()
-{
-    uno::Reference< frame::XModel >  xModel;
-    if(pExampleFrame && (xModel = pExampleFrame->GetModel()).is())
-    {
-        SwLabDlg::UpdateFieldInformation(xModel, aLabItem);
-    }
-}
-/* -----------------01.10.99 15:16-------------------
-
- --------------------------------------------------*/
-void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, const SwLabItem& rItem)
-{
-    uno::Reference< text::XTextFieldsSupplier >  xFlds(xModel, uno::UNO_QUERY);
-    uno::Reference< container::XNameAccess >  xFldMasters = xFlds->getTextFieldMasters();
-
-    static const struct _SwLabItemMap {
-        const char* pName;
-        rtl::OUString SwLabItem:: *pValue;
-    }  aArr[] = {
-        { USER_FIELD_FIRSTNAME      , &SwLabItem::aPrivFirstName },
-        { USER_FIELD_NAME           , &SwLabItem::aPrivName },
-        { USER_FIELD_PRIVSHORTCUT   , &SwLabItem::aPrivShortCut },
-        { USER_FIELD_FIRSTNAME_2    , &SwLabItem::aPrivFirstName2 },
-        { USER_FIELD_NAME_2         , &SwLabItem::aPrivName2 },
-        { USER_FIELD_PRIVSHORTCUT_2 , &SwLabItem::aPrivShortCut2 },
-        { USER_FIELD_PRIVSTREET     , &SwLabItem::aPrivStreet },
-        { USER_FIELD_PRIVZIP        , &SwLabItem::aPrivZip },
-        { USER_FIELD_PRIVCITY       , &SwLabItem::aPrivCity },
-        { USER_FIELD_PRIVCOUNTRY    , &SwLabItem::aPrivCountry },
-        { USER_FIELD_PRIVSTATE      , &SwLabItem::aPrivState },
-        { USER_FIELD_PRIVTITLE      , &SwLabItem::aPrivTitle },
-        { USER_FIELD_PRIVPROFESSION , &SwLabItem::aPrivProfession },
-        { USER_FIELD_PRIVPHONE      , &SwLabItem::aPrivPhone },
-        { USER_FIELD_PRIVMOBILE     , &SwLabItem::aPrivMobile },
-        { USER_FIELD_PRIVFAX        , &SwLabItem::aPrivFax },
-        { USER_FIELD_PRIVWWW        , &SwLabItem::aPrivWWW },
-        { USER_FIELD_PRIVMAIL       , &SwLabItem::aPrivMail },
-        { USER_FIELD_COMPCOMPANY    , &SwLabItem::aCompCompany },
-        { USER_FIELD_COMPCOMPANYEXT , &SwLabItem::aCompCompanyExt },
-        { USER_FIELD_COMPSLOGAN     , &SwLabItem::aCompSlogan },
-        { USER_FIELD_COMPSTREET     , &SwLabItem::aCompStreet },
-        { USER_FIELD_COMPZIP        , &SwLabItem::aCompZip },
-        { USER_FIELD_COMPCITY       , &SwLabItem::aCompCity },
-        { USER_FIELD_COMPCOUNTRY    , &SwLabItem::aCompCountry },
-        { USER_FIELD_COMPSTATE      , &SwLabItem::aCompState },
-        { USER_FIELD_COMPPOSITION   , &SwLabItem::aCompPosition },
-        { USER_FIELD_COMPPHONE      , &SwLabItem::aCompPhone },
-        { USER_FIELD_COMPMOBILE     , &SwLabItem::aCompMobile },
-        { USER_FIELD_COMPFAX        , &SwLabItem::aCompFax },
-        { USER_FIELD_COMPWWW        , &SwLabItem::aCompWWW },
-        { USER_FIELD_COMPMAIL       , &SwLabItem::aCompMail },
-        { 0, 0 }
-    };
-
-    try
-    {
-        String sFldName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.FieldMaster.User." )));
-        OUString uCntName( C2U( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
-        for( const _SwLabItemMap* p = aArr; p->pName; ++p )
-        {
-            String sCurFldName( sFldName );
-            sCurFldName.AppendAscii( p->pName );
-            OUString uFldName( sCurFldName );
-            if( xFldMasters->hasByName( uFldName ))
-            {
-                uno::Any aFirstName = xFldMasters->getByName( uFldName );
-                uno::Reference< beans::XPropertySet >  xFld;
-                aFirstName >>= xFld;
-                uno::Any aContent;
-                aContent <<= rItem.*p->pValue;
-                xFld->setPropertyValue( uCntName, aContent );
-            }
-        }
-    }
-    catch( uno::RuntimeException&)
-    {
-        //
-    }
-
-    uno::Reference< container::XEnumerationAccess >  xFldAcc = xFlds->getTextFields();
-    uno::Reference< util::XRefreshable >  xRefresh(xFldAcc, uno::UNO_QUERY);
-    xRefresh->refresh();
 }
 
 /* -----------------29.09.99 08:55-------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2001-03-07 13:40:13 $
+#   last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ SLOFILES =  \
         $(SLO)$/envprt.obj  \
         $(SLO)$/labelcfg.obj  \
         $(SLO)$/label1.obj  \
+        $(SLO)$/labelexp.obj \
         $(SLO)$/labfmt.obj  \
         $(SLO)$/labprt.obj  \
         $(SLO)$/labimg.obj  \
@@ -116,7 +117,7 @@ SLOFILES =  \
         $(SLO)$/syncbtn.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/label1.obj      \
+        $(SLO)$/labelexp.obj      \
         $(SLO)$/mailmrge.obj
 
 # --- Targets -------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 11:51:54 $
+ *  last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,12 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
-#include "label.hxx"
-#include "labimg.hxx"
+#ifndef _LABEL_HXX
+#include <label.hxx>
+#endif
+#ifndef _LABIMG_HXX
+#include <labimg.hxx>
+#endif
 
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
@@ -229,11 +233,11 @@ class SwNewDBMgr;
 
 class SwLabRec
 {
-    long GetLong(const String& rStr, MetricField& rField);
-
 public:
     SwLabRec() {}
-    SwLabRec( String& rStr, MetricField& rField );
+
+    void SetFromItem( const SwLabItem& rItem );
+    void FillItem( SwLabItem& rItem ) const;
 
     String          aMake;
     String          aType;
@@ -344,6 +348,11 @@ class SwVisitingCardPage : public SfxTabPage
 
     void            InitFrameControl();
     void            UpdateFields();
+
+    void            ClearUserData();
+    void            SetUserData( sal_uInt32 nCnt,
+                                    const rtl::OUString* pNames,
+                                    const rtl::OUString* pValues );
 
     SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
     ~SwVisitingCardPage();
