@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericTextDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:04:45 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,22 +200,22 @@ published service GenericTextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::text::XBookmarksSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::text::XTextFieldsSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::text::XTextFramesSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::text::XTextSectionsSupplier;
 
-    /// @since #107627#
+    /// @since OOo 1.1.2
     [optional] interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
 
@@ -267,14 +267,14 @@ published service GenericTextDocument
          *  When no concordance file should be used the string is empty.
          *  Used for text documents only.
      *
-     *  @since #107627#
+     *  @since OOo 1.1.2
          */
         [optional, property] string IndexAutoMarkFileURL;
 
         //-------------------------------------------------------------------------
         /** specifies if change recording is active.
      *
-     *  @since #107627#
+     *  @since OOo 1.1.2
          */
         [optional, property] boolean RecordChanges;
 
@@ -287,7 +287,7 @@ published service GenericTextDocument
          *    Oct-12-30 will be interpreted as Oct-12-1930
          *    Oct-12-02 will be interpreted as Oct-12-2002
      *
-     *  @since #107627#
+     *  @since OOo 1.1.2
          */
         [optional, property] short TwoDigitYear;
 };
