@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-01-15 16:12:12 $
+ *  last change: $Author: os $ $Date: 2002-02-26 12:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         // Shellwechsel in ApplyStyles
                         nRet = ApplyStyles(aParam, nFamily, pActShell,
                                rReq.GetModifier() );
-                        // nur, wenn es kein API-Call war
-                        if(!pActShell)
-                            pView->GetEditWin().GrabFocus();
                         break;
                     case SID_STYLE_WATERCAN:
                         nRet = DoWaterCan(aParam, nFamily);
