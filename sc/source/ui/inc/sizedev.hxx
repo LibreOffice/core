@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sizedev.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 16:22:51 $
+ *  last change: $Author: nn $ $Date: 2001-05-15 13:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_SIZEDEV_HXX
 #define SC_SIZEDEV_HXX
 
-#ifndef _SOLAR_H
-#include <tools/solar.h>
+#ifndef _SV_MAPMOD_HXX
+#include <vcl/mapmod.hxx>
 #endif
 
 class OutputDevice;
@@ -75,6 +75,7 @@ class ScSizeDeviceProvider
     BOOL            bOwner;
     double          nPPTX;
     double          nPPTY;
+    MapMode         aOldMapMode;
 
 public:
                 ScSizeDeviceProvider( ScDocShell* pDocSh );

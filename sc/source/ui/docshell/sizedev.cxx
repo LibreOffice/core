@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sizedev.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 16:23:52 $
+ *  last change: $Author: nn $ $Date: 2001-05-15 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
     {
         pDevice = pDocSh->GetPrinter();
         bOwner = FALSE;
+
+        aOldMapMode = pDevice->GetMapMode();
+        pDevice->SetMapMode( MAP_PIXEL );       // GetNeededSize needs pixel MapMode
     }
     else
     {
@@ -101,5 +104,7 @@ ScSizeDeviceProvider::~ScSizeDeviceProvider()
 {
     if (bOwner)
         delete pDevice;
+    else
+        pDevice->SetMapMode( aOldMapMode );
 }
 
