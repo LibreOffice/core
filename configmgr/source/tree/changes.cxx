@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 15:44:05 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ AddNode::AddNode(const AddNode& _aObj)
 , m_bReplacing(_aObj.m_bReplacing)
 , m_aOwnNewNode(_aObj.m_aOwnNewNode.cloneSegment())
 , m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
-, m_aInsertedTree()
+, m_aInsertedTree(_aObj.m_aInsertedTree)
 {
 }
 
