@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2000-11-30 11:36:36 $
+ *  last change: $Author: mfe $ $Date: 2000-12-01 17:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,7 +1387,7 @@ static rtl_TextEncoding GetSystemCharSetFromEnvironment()
 #if defined(SOLARIS)
 
 const _pair _nl_language_list[] = {
-    { "5601",           RTL_TEXTENCODING_DONTKNOW       }, /* ko_KR.EUC */
+    { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
     { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
     { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
     { "BIG5",           RTL_TEXTENCODING_BIG5           },
@@ -1410,9 +1410,12 @@ const _pair _nl_language_list[] = {
     { "KOI8-R",         RTL_TEXTENCODING_KOI8_R         },
     { "PCK",            RTL_TEXTENCODING_MS_932         },
     { "SUN_EU_GREEK",   RTL_TEXTENCODING_ISO_8859_7     }, /* 8859-7 + Euro */
-    { "TIS620.2533",    RTL_TEXTENCODING_DONTKNOW       }, /* th_TH.TIS620 */
+    { "TIS620.2533",    RTL_TEXTENCODING_MS_874         }, /* th_TH.TIS620 */
     { "UTF-8",          RTL_TEXTENCODING_UTF8           }
 };
+
+/* XXX MS-874 is an extension to tis620, so this is not
+ * really equivalent */
 
 #elif defined(LINUX)
 
