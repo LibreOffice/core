@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceControlEntry.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:43:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleText;
-interface XAccessibleComponent;
+ published interface XAccessibleText;
+ published interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -85,7 +85,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleIconChoiceControlEntry
+published service AccessibleIconChoiceControlEntry
 {
     /** This interface gives access to the structural information of an icon choice control entry:
 
