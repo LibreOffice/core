@@ -1,3 +1,3 @@
-xh      neon  :  soltools external NULL
+xh      neon  :  soltools external expat NULL
 xh      neon     usr1           -       all     xh_mkout NULL
 xh      neon     nmake          -       all     xh_neon NULL
