@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 15:03:13 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 07:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
 |
 \**********************************************************************/
 
-void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
                                    const Image& rChoiceIcon,
                                    CreatePage pCreateFunc /* != 0 */,
                                    GetPageRanges pRangesFunc /* darf 0 sein */,
@@ -474,9 +474,10 @@ void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
     USHORT *pId = new USHORT ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
     pEntry->SetUserData ( (void*) pId );
+    return pEntry;
 }
 
-void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
                                    const Image& rChoiceIcon,
                                    const Image& rChoiceIconHC,
                                    CreatePage pCreateFunc /* != 0 */,
@@ -494,6 +495,7 @@ void IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
     USHORT *pId = new USHORT ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
+    return pEntry;
 }
 
 /**********************************************************************
