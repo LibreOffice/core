@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:29 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
         String aTmp;
 
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFile, aTmp ) )
-            aURL = aTmp;
+            aURL = INetURLObject(aTmp);
     }
 
     if( aURL.GetProtocol() == INET_PROT_FILE )
