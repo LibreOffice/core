@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:18:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ String RID_POPUP_CELLS
     Text[ korean ] = "¼¿ ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Hücreler için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para celdas";
 };
 
 Menu RID_POPUP_CELLS
@@ -138,6 +139,7 @@ Menu RID_POPUP_CELLS
             Text[ greek ] = "~ÐñïåðéëïãÞ";
             Text[ korean ] = "±âº»°ª(~D)";
             Text[ turkish ] = "~Standart";
+            Text[ catalan ] = "~Predeterminado";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -169,6 +171,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Formatear celdas...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -205,6 +208,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¼¿ »ðÀÔ(~E)...";
             Text[ turkish ] = "Hücre ekle...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Insertar celdas...";
         };
         MenuItem
         {
@@ -238,6 +242,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¼¿ »èÁ¦(~L)...";
             Text[ turkish ] = "Hücre sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar celdas...";
         };
         MenuItem
         {
@@ -271,6 +276,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "³»¿ë »èÁ¦(~O)...";
             Text[ turkish ] = "Ýçerikleri sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar contenidos...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -303,6 +309,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "Àß¶ó³»±â(~T)";
             Text[ turkish ] = "~Kes";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Cortar";
         };
         MenuItem
         {
@@ -331,6 +338,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "º¹»ç(~C)";
             Text[ turkish ] = "K~opyala";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "C~opiar";
         };
 
         MenuItem
@@ -360,6 +368,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "ºÙ¿©³Ö±â(~P)";
             Text[ turkish ] = "~Ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "P~egar";
         };
 
         MenuItem
@@ -389,6 +398,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â(~A)...";
             Text[ turkish ] = "Özel yapýþtýr...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Pega~do especial...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -418,6 +428,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¸Þ¸ð  ³ªÅ¸³»±â(~W)";
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Mostrar nota";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -450,6 +461,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "¼±ÅÃ¸ñ·Ï(~S)...";
             Text[ turkish ] = "Seçim listesi...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Lista de selección...";
         };
     };
 };
@@ -480,6 +492,7 @@ String RID_POPUP_TAB
     Text[ korean ] = "½ÃÆ® ¹ÙÀÇ¡¡ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Tablo çubuðu için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para la barra de hojas";
 };
 
 Menu RID_POPUP_TAB
@@ -515,6 +528,7 @@ Menu RID_POPUP_TAB
             Text[ korean ] = "»ðÀÔ(~I)...";
             Text[ turkish ] = "~Ekle...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Insertar...";
         };
         MenuItem
         {
@@ -545,6 +559,7 @@ Menu RID_POPUP_TAB
             Text[ korean ] = "»èÁ¦(~D)...";
             Text[ turkish ] = "~Sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar...";
         };
         MenuItem
         {
@@ -573,6 +588,7 @@ Menu RID_POPUP_TAB
             Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)...";
             Text[ turkish ] = "Ye~niden adlandýr...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Cambiar nombre...";
         };
         MenuItem
         {
@@ -601,6 +617,7 @@ Menu RID_POPUP_TAB
             Text[ korean ] = "ÀÌµ¿/º¹»ç(~M)...";
             Text[ turkish ] = "Taþý/kopyala...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Desplazar/Copiar...";
         };
         MenuItem
         {
@@ -634,6 +651,7 @@ Menu RID_POPUP_TAB
             Text[ korean ] = "¸ðµç ½ÃÆ® ¼±ÅÃ(~H)";
             Text[ turkish ] = "Tüm tablolarý seç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Seleccionar todas";
         };
     };
 };
@@ -664,6 +682,7 @@ String RID_POPUP_PIVOT
     Text[ korean ] = "Å×ÀÌÅÍÆÄÀÏ·µ ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Veri pilotu için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente del piloto de datos";
 };
 
 Menu RID_POPUP_PIVOT
@@ -697,6 +716,7 @@ Menu RID_POPUP_PIVOT
             Text[ korean ] = "È£Ãâ(~S)...";
             Text[ turkish ] = "Baþlat...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Activar...";
         };
         MenuItem
         {
@@ -728,6 +748,7 @@ Menu RID_POPUP_PIVOT
             Text[ korean ] = "»õ·Î°íÄ§(~R)";
             Text[ turkish ] = "Güncelle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "A~ctualizar";
         };
         MenuItem
         {
@@ -761,6 +782,7 @@ Menu RID_POPUP_PIVOT
             Text[ korean ] = "»èÁ¦(~D)";
             Text[ turkish ] = "~Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
     };
 };
@@ -791,6 +813,7 @@ String RID_POPUP_PREVIEW
     Text[ korean ] = "ÂÊ ¹Ì¸®º¸±âÀÇ ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Sayfa önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú para previsualización";
 };
 
 Menu RID_POPUP_PREVIEW
@@ -825,6 +848,7 @@ Menu RID_POPUP_PREVIEW
             Text[ korean ] = "ÀÌÀü ÂÊ(~P)";
             Text[ turkish ] = "Önceki sayfa";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Página ~anterior";
         };
         MenuItem
         {
@@ -855,6 +879,7 @@ Menu RID_POPUP_PREVIEW
             Text[ korean ] = "´ÙÀ½ ÂÊ(~N)";
             Text[ turkish ] = "Sonraki sayfa";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Página siguiente";
         };
         MenuItem
         {
@@ -886,6 +911,7 @@ Menu RID_POPUP_PREVIEW
             Text[ korean ] = "ÂÊ ·¹ÀÌ¾Æ¿ô(~G)...";
             Text[ turkish ] = "Sayfa düzeni...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Diseño de página...";
         };
         MenuItem
         {
@@ -916,6 +942,7 @@ Menu RID_POPUP_PREVIEW
             Text[ korean ] = "´Ý±â(~C)";
             Text[ turkish ] = "Kapa~t";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Cerrar";
         };
     };
 };
@@ -945,6 +972,7 @@ String RID_POPUP_EDIT
     Text[ korean ] = "ÅØ½ºÆ®ÀÔ·Â ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Metin giriþi için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para entrada de texto";
 };
 
 Menu RID_POPUP_EDIT
@@ -979,6 +1007,7 @@ Menu RID_POPUP_EDIT
             Text[ korean ] = "±âº»°ª(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Predeterminado";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1056,6 +1085,7 @@ Menu RID_POPUP_EDIT
                         Text[ korean ] = "ÀÌÁß ¹ØÁÙ(~U)";
                         Text[ turkish ] = "Altýný çift çiz";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Subrayado ~doble";
                     };
                     MenuItem
                     {
@@ -1100,6 +1130,7 @@ Menu RID_POPUP_EDIT
                         Text[ korean ] = "À­ Ã·ÀÚ(~U)";
                         Text[ turkish ] = "Üst simge";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Superíndice";
                     };
                     MenuItem
                     {
@@ -1128,6 +1159,7 @@ Menu RID_POPUP_EDIT
                         Text[ korean ] = "¾Æ·¡ Ã·ÀÚ(~B)";
                         Text[ turkish ] = "Alt simge";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Subíndice";
                     };
                 };
             };
@@ -1150,6 +1182,7 @@ Menu RID_POPUP_EDIT
             Text[ korean ] = "½ºÅ¸ÀÏ(~Y)";
             Text[ turkish ] = "Biçim";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Estilo";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1185,6 +1218,7 @@ String RID_POPUP_AUDIT
     Text[ korean ] = "ÃßÀûÃ¤¿ì±â ¸ðµåÀÇ ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Doldurma kipi (dedektif) için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para el modo Detective de relleno";
 };
 
 Menu RID_POPUP_AUDIT
@@ -1222,6 +1256,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "¼±·Ê ÃßÀû(~P)";
             Text[ turkish ] = "Öncekini izle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Rastrear ~precedentes";
         };
         MenuItem
         {
@@ -1254,6 +1289,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "¼±·Ê ÃßÀû Á¦°Å(~R)";
             Text[ turkish ] = "Öncekinin izini sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar rastro a precedente";
         };
         MenuItem
         {
@@ -1285,6 +1321,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "Á¾¼Ó ÃßÀû(~T)";
             Text[ turkish ] = "Sonrakinin izini sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Rastrear ~dependientes";
         };
         MenuItem
         {
@@ -1316,6 +1353,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "Á¾¼Ó ÃßÀû Á¦°Å";
             Text[ turkish ] = "Sonrakinin izini sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar rastro a dependiente";
         };
         MenuItem
         {
@@ -1344,6 +1382,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "¸ðµç ÃßÀû Á¦°Å(~A)";
             Text[ turkish ] = "Tüm izleri kaldýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar ~todos los rastros";
         };
         MenuItem
         {
@@ -1374,6 +1413,7 @@ Menu RID_POPUP_AUDIT
             Text[ korean ] = "Ã¤¿ì±â ¸ðµå Á¾·á";
             Text[ turkish ] = "Doldurma kipinden çýk";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Salir del modo de relleno";
         };
     };
 };
@@ -1402,6 +1442,7 @@ String RID_POPUP_PAGEBREAK
     Text[ korean ] = "ÂÊ ³ª´©±â ¹Ì¸®º¸±âÀÇ ÆË¾÷¸Þ´º";
     Text[ turkish ] = "Sayfa sonu önizlemesi için popup mönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Menú emergente para previsualización de saltos de página";
 };
 
 Menu RID_POPUP_PAGEBREAK
@@ -1433,6 +1474,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "±âº»°ª(~D)";
             Text[ turkish ] = "~Standart";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Predeterminado";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1464,6 +1506,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "¼¿ Æ÷¸ËÆÃ(~F)...";
             Text[ turkish ] = "Hücreleri formatla...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Formatear ~celdas...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1494,6 +1537,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "°³Çà »ðÀÔ(~R)";
             Text[ turkish ] = "Satýr sonu ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar salto de ~fila";
         };
         MenuItem
         {
@@ -1521,6 +1565,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "¿­³ª´©±â »ðÀÔ(~C)";
             Text[ turkish ] = "Sütun sonu ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Insertar salto de ~columna";
         };
         MenuItem
         {
@@ -1548,6 +1593,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "¸ðµç ¼öµ¿ ³ª´©±â »èÁ¦";
             Text[ turkish ] = "Tüm manüel kesmeleri sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar todos los saltos ~manuales";
         };
         MenuItem
         {
@@ -1574,6 +1620,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "¹èÀ² ÇØÁ¦";
             Text[ turkish ] = "Ölçeklendirmeyi kaldýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Restablecer ~escala";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1603,6 +1650,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "ÀÎ¼â¹üÀ§ Á¤ÀÇ";
             Text[ turkish ] = "Yazdýrma aralýðýný tanýmla";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Definir área de impresión";
         };
         MenuItem
         {
@@ -1630,6 +1678,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "ÀÎ¼â¹üÀ§ Ãß°¡";
             Text[ turkish ] = "Yazdýrma aralýðýný ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Añadir área de impresión";
         };
         MenuItem
         {
@@ -1656,6 +1705,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "ÀÎ¼â¹üÀ§  ½ÇÇàÃë¼Ò";
             Text[ turkish ] = "Yazdýrma aralýðýný kaldýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Restablecer área de impresión";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1685,6 +1735,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "ÂÊ ¼­½Ä...";
             Text[ turkish ] = "Sayfa formatý...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Formato de ~página...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -1714,6 +1765,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "¸Þ¸ð ³ªÅ¸³»±â(~W)";
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Mostrar ~nota";
         };
     };
 };
