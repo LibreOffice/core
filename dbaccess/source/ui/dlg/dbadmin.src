@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 22:07:41 $
+ *  last change: $Author: vg $ $Date: 2001-10-25 20:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text [ english ] = "Ne~w data source";
             Text [ english_us ] = "New Data Source";
             Text [ portuguese ] = "Nova fonte de dados";
-            Text [ russian ] = "Ќовый источник данных";
+            Text [ russian ] = "Ќовые исходные данные";
             Text [ greek ] = "ƒзмйпхсгяб рспЁлехузт дедпмЁнщн";
             Text [ dutch ] = "Nieuwe gegevensbron";
             Text [ french ] = "Nouvelle source de donnйes";
@@ -485,7 +485,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ catalan ] = "Enllaзos";
     };
     Text [ portuguese ] = "Gerir fontes de dados";
-    Text [ russian ] = "”правление источником данных";
+    Text [ russian ] = "”правление исходными данными";
     Text [ greek ] = "ƒйбчеясйуз рспЁлехузт дедпмЁнщн";
     Text [ dutch ] = "Gegevensbron beheren";
     Text [ french ] = "Gestion des sources de donnйes";
@@ -789,7 +789,7 @@ TabPage PAGE_GENERAL
                 "globally unique, you have to choose another one.";
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
         Text [ portuguese ] = "Jб existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser ъnicos, por esta razгo й recomendбvel seleccionar outro nome.";
-        Text [ russian ] = "ѕод таким именем уже существует один источник данных. ѕоскольку имена источников данных должны быть уникальными, необходимо присвоить другое им€.";
+        Text [ russian ] = "ѕод таким именем уже существуют исходные данные. ѕоскольку имена исходных данных должны быть уникальными, необходимо присвоить другое им€.";
         Text [ greek ] = "’р№счей ёдз мйб рспЁлехуз дедпмЁнщн ме бхфь фп ьнпмб.  №ие ьнпмб фщн рспелеэуещн фщн дедпмЁнщн ерйфсЁрефбй нб хр№счей мьнп мйб цпс№. –бсбкб ";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a dйjа йtй attribuй а une autre source de donnйes. …tant donnй que les sources de donnйes doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
@@ -814,7 +814,7 @@ TabPage PAGE_GENERAL
         Text [ english ] = "This data source is scheduled to be deleted.";
         Text [ english_us ] = "You have deleted this data source.";
         Text [ portuguese ] = "Esta fonte de dados foi eliminada.";
-        Text [ russian ] = "Ётот источник данных удален.";
+        Text [ russian ] = "Ёти исходные данные удалены.";
         Text [ greek ] = "Ѕхфё з рспЁлехуз дедпмЁнщн Ёчей дйбгсбцея.";
         Text [ dutch ] = "U heeft deze gegevensbron gewist.";
         Text [ french ] = "Vous avez supprimй cette source de donnйes.";
@@ -839,7 +839,7 @@ TabPage PAGE_GENERAL
         Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
         Text [ portuguese ] = "Ou foi impossнvel carregar a biblioteca #lib# do programa ou esta estб com defeito. A selecзгo da fonte de dados ODBC nгo estб disponнvel.";
-        Text [ russian ] = "Ѕиблиотека программы #lib# не загружаетс€ или она повреждена. ¬ыбор источника данных ODBC не доступен.";
+        Text [ russian ] = "Ѕиблиотека программы #lib# не загружаетс€ или она повреждена. ¬ыбор исходных данных ODBC недоступен.";
         Text [ greek ] = "« вйвлйпиёкз фпх рспгс№ммбфпт #lib# ден ёфбн дхнбфьн нб цпсфщиея ё еянбй елбффщмбфйкё. « ерйлпгё фзт рспЁлехузт фщн дедпмЁнщн фпх ODBC ден еянб? ";
         Text [ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbronnen kiezen is niet beschikbaar.";
         Text [ french ] = "La bibliothиque de programme #lib# n'a pas pu кtre chargйe ou est dйfectueuse. La sйlection de la source de donnйes ODBC n'est pas disponible.";
@@ -889,7 +889,7 @@ TabPage PAGE_GENERAL
         Text [ english ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text [ english_us ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
         Text[ portuguese ] = "Esta plataforma nгo tem suporte para este tipo de fonte de dados.\nPoderб modificar as definiзхes, contudo a ligaзгo а base de dados й improvбvel.";
-        Text[ russian ] = "“ип этого источника данных на этой платформе на поддерживаетс€.\n¬ы можете изменить настройки, но тогда, веро€тнее всего, ¬ы не сможете сединитьс€ с этой базой данных.";
+        Text[ russian ] = "“ип этих исходных данных на этой платформе не поддерживаетс€.\n¬ы можете изменить настройки, но тогда, веро€тнее всего, соединитьс€ с этой базой данных станет невозможным.";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ dutch ] = "Dit type gegevensbron wordt op dit platform niet ondersteund.\nU kunt wel de instellingen veranderen, maar vermoedelijk geen verbinding met de database tot stand brengen.";
         Text[ french ] = "Ce type de source de donnйes n'est pas supportй par la plateforme en question.\nMкme si les paramиtres sont modifiables, une connexion а la BD n'est pas garantie.";
@@ -2566,7 +2566,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message [ english ] = "There are no registered data sources, at present.";
     Message [ english_us ] = "There are no registered data sources, at present.";
     Message[ portuguese ] = "De momento, nгo hб fontes de dados registadas.";
-    Message[ russian ] = "¬ данный момент источник данных не зарегистрирован.";
+    Message[ russian ] = "¬ данный момент ни одни исходные данные не зарегистрированы.";
     Message[ greek ] = "–спт фп рбсьн ден хр№счей кбмяб дзлщмЁнз рспЁлехуз дедпмЁнщн.";
     Message[ dutch ] = "Er zijn momenteel geen gegevensbronnen geregistreerd.";
     Message[ french ] = "Aucune source de donnйes n'est inscrite pour l'instant.";
@@ -2591,7 +2591,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message [ english ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message [ english_us ] = "The name of the deleted data source has already been given to another data source. You have to rename the latter before you can restore the former.";
     Message[ portuguese ] = "O nome da fonte de dados eliminada jб foi atribuнdo a outra fonte de dados! Primeiro terб que mudar o nome a esta ъltima para poder restaurar a actual.";
-    Message[ russian ] = "¬ы уже присвоили другому источнику данных им€ удаленого источника. ¬ы должны переименовать прежний источник дл€ восстановлени€ текущего.";
+    Message[ russian ] = "¬ы уже присвоили другим исходным данным им€ удаленых исходных данных. ¬ы должны переименовать прежние исходные данные дл€ восстановлени€ текущих.";
     Message[ greek ] = "‘п ьнпмб фзт рспЁлехузт дедпмЁнщн рпх дйбгс№цзке, дьизке ёдз уе мйб №ллз рспЁлехуз дедпмЁнщн! »б рсЁрей нб мефпнпм№уефе фзн хр№счпхуб рспЁ? ";
     Message[ dutch ] = "De naam van de gewiste gegevensbron heeft u reeds gebruikt voor een andere! Wilt u de gewiste gegevensbron weer herstellen dan moet u eerst de naam van de andere wijzigen.";
     Message[ french ] = "Le nom de la source de donnйes supprimйe a dйjа йtй attribuй а une autre source que vous devez commencer par renommer afin de pouvoir restaurer l'ancienne.";
@@ -2617,7 +2617,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ english ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text [ english_us ] = "A password is needed to connect to the data source \"$name$\".";
     Text [ portuguese ] = "A ligaзгo а fonte de dados \"$name$\" requere senha.";
-    Text [ russian ] = "—оединение с источником данных  \"$name$\" требует ввода парол€.";
+    Text [ russian ] = "—оединение с исходными данными \"$name$\" требует ввода парол€.";
     Text [ greek ] = "√йб нб гяней з уэндеуз ме фзн рспЁлехуз фщн дедпмЁнщн \"$name$\" брбйфеяфбй з ейубгщгё фпх кщдйкпэ рсьувбузт.";
     Text [ dutch ] = "Voor het tot stand brengen van de verbinding met gegevensbron \"$name$\" moet u een wachtwoord aangeven.";
     Text [ french ] = "Vous devez saisir un mot de passe pour la connexion а la source de donnйes \"$name$\".";
@@ -2667,7 +2667,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text [ english ] = "The data source name must not be empty!";
     Text [ english_us ] = "The data source name must not be empty!";
     Text [ portuguese ] = "O nome da fonte de dados nгo pode encontrar-se vazio!";
-    Text [ russian ] = "»м€ источника данных не должно оставатьс€ пустым!";
+    Text [ russian ] = "»м€ исходных данных не должно оставатьс€ пустым!";
     Text [ greek ] = "‘п ьнпмб фзт рспЁлехузт фщн дедпмЁнщн ден ерйфсЁрефбй нб еянбй кень!";
     Text [ dutch ] = "De naam van de gegevensbron moet worden aangegeven!";
     Text [ french ] = "Le nom de la source de donnйes ne peut pas кtre vide !";
@@ -2699,7 +2699,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ english ] = "new data source" ;
             Text [ english_us ] = "New Data Source" ;
             Text [ portuguese ] = "Nova fonte de dados";
-            Text [ russian ] = "Ќовый источник данных";
+            Text [ russian ] = "Ќовые исходные данные";
             Text [ greek ] = "ƒзмйпхсгяб рспЁлехузт дедпмЁнщн";
             Text [ dutch ] = "nieuwe gegevensbron";
             Text [ french ] = "Nouvelle source de donnйes";
@@ -2726,7 +2726,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ english ] = "delete data source" ;
             Text [ english_us ] = "Delete Data Source" ;
             Text [ portuguese ] = "Eliminar fonte de dados";
-            Text [ russian ] = "”далить источник данных";
+            Text [ russian ] = "”далить исходные данные";
             Text [ greek ] = "ƒйбгсбцё рспЁлехузт дедпмЁнщн";
             Text [ dutch ] = "Gegevensbron wissen";
             Text [ french ] = "Source de donnйes supprimйe";
@@ -2753,7 +2753,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ english ] = "restore data source" ;
             Text [ english_us ] = "Restore Data Source" ;
             Text [ portuguese ] = "Restaurar fonte de dados";
-            Text [ russian ] = "¬осстановить источник данных";
+            Text [ russian ] = "¬осстановить исходные данные";
             Text [ greek ] = "≈рбнбцпс№ рспЁлехузт дедпмЁнщн";
             Text [ dutch ] = "Gegevensbron herstellen";
             Text [ french ] = "Restaurer une source de donnйes";
@@ -2898,7 +2898,7 @@ Menu RID_NEW_FORM
             Text [ english ] = "From Templ~ate...";
             Text [ english_us ] = "From Templ~ate...";
             Text[ portuguese ] = "A partir de ~modelo...";
-            Text[ russian ] = "»з шаблонов...";
+            Text[ russian ] = "»з шаблона...";
             Text[ greek ] = "From Templ~ate";
             Text[ dutch ] = "Uit ~sjabloon...";
             Text[ french ] = "ј partir d'un ~modиle...";
@@ -2934,7 +2934,7 @@ WarningBox WARN_SAVEFORQUERIES
 
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
     Message[ portuguese ] = "… necessбrio guardar a fonte de dados para poder gerir os respectivos $objects$.\nGuardar todas as modificaзхes efectuadas atй agora nesta caixa de diбlogo?";
-    Message[ russian ] = "ƒл€ управлени€ $objects$ источника данных, необходимо этот источник данных сохранить.\n—охранить все изменени€, выполненные в этом диалоге?";
+    Message[ russian ] = "ƒл€ управлени€ $objects$ исходных данных, необходимо эти исходные данные сохранить.\n—охранить все изменени€, выполненные в этом диалоге?";
     Message[ greek ] = "√йб нб еянбй дхнбфё з дйбчеясйуз фщн есщфзм№фщн мйбт рспЁлехузт иб рсЁрей рсюфб нб брпизкехфея.\n»Ёлефе нб брпизкехфпэн ьлет пй бллбгЁт рпх ";
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze zijn opgeslagen.\nWilt u de wijzigingen die u in deze dialoog heeft aangebracht nu opslaan?";
     Message[ french ] = "Vous devez enregistrer la source de donnйes afin de pouvoir en gйrer les $objects$.\nEnregistrer toutes les modifications effectuйes dans cette boоte de dialogue ?";
@@ -2966,7 +2966,7 @@ ErrorBox ERR_CANTADMINQUERIES
 
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
     Message[ portuguese ] = "… necessбrio guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parвmetros actuais nгo permitem guardar as modificaзхes (hб conflito de nomes).\n\nNгo й possнvel gerir $objects$ enquanto estes conflitos nгo forem resolvidos e as modificaзхes guardadas.";
-    Message[ russian ] = "ƒл€ управлени€ $objects$ источника данных необходимо этот источник данных сохранить.\nќднако текущие настройки не позвол€ют сохранить изменени€ (из-за конфликта имен).\n\nƒо тех пор, пока этот конфликт не устранен, а изменени€ не сохранены, управление $objects$ невозможно.";
+    Message[ russian ] = "ƒл€ управлени€ $objects$ исходных данных необходимо эти исходные данные сохранить.\nќднако текущие настройки не позвол€ют сохранить изменени€ (из-за конфликта имен).\n\nƒо тех пор, пока этот конфликт не устранен, а изменени€ не сохранены, управление $objects$ невозможно.";
     Message[ greek ] = "√йб нб еянбй дхнбфё з дйбчеясйуз фщн есщфзм№фщн мйбт рспЁлехузт дедпмЁнщн, бхфё иб рсЁрей рсюфб нб брпизкехфея.\nѕй фсЁчпхует ейубгщгЁт ден ерйфсЁрпхн ьмщт фзн брпиёкехуз фщн бллбгюн ерейдё хр№счпхн дйенЁоейт пнпм№фщн.\n\n« дйбчеясйуз фщн есщфзм№фщн ден еянбй дхнбфё ьуп ухнечяжпхн нб хр№счпхн бхфЁт пй дйенЁоейт кбй ден мрпспэн нб брпизкехфпэн пй бллбгЁт.";
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de $objects$ niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de donnйes afin de pouvoir en gйrer les $objects$.\nLes paramиtres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas йtй enregistrйes, la gestion des $objects$ sera impossible.";
@@ -2996,7 +2996,7 @@ ErrorBox ERR_CANTDOTABLEACTION
         "As long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message [ english_us ] = "For this operation, the changes to the data source must be saved.\nHowever, they cannot be saved due to conflicting names of different data sources.\n\nYou must resolve this conflict in order to perform the operation.";
     Message[ portuguese ] = "Para poder executar esta operaзгo terб que guardar as modificaзхes na fonte de dados.\nContudo, as actuais indicaзхes nгo o permitem, uma vez que existe conflito de nomes entre vбrias fontes de dados.\n\nTerб que solucionar primeiro estes conflitos para poder executar a operaзгo.";
-    Message[ russian ] = "ƒл€ этой операции необходимо сохранить изменени€ в источнике данных.\nќднако текущие настройки не позвол€ют этого, т.к. существует конфликт имен между различными источниками данных.\n\nƒо тех пор, пока эти конфликты не разрешены, эта операци€ не выполнима.";
+    Message[ russian ] = "ƒл€ этой операции необходимо сохранить изменени€ в исходных данных.\nќднако текущие настройки не позвол€ют этого, т.к. существует конфликт имен между различными исходными данными.\n\nƒо тех пор, пока эти конфликты не разрешены, эта операци€ не выполнима.";
     Message[ greek ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ dutch ] = "Om dit commando te kunnen uitvoeren moet de gegevensbron opgeslagen worden.\nMet de bestaande gegevens is dit niet mogelijk, daar er problemen zijn met de namen van de verschillende gegevensbronnen.\n\nU moet deze problemen eerst oplossen voordat u dit commando kunt uitvoeren.";
     Message[ french ] = "Vous devez enregistrer les modifications apportйes а la source de donnйes afin de pouvoir exйcuter cette opйration.\nLes paramиtres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de donnйes.\n\nTant que ces conflits persisteront, l'exйcution de cette opйration sera impossible.";
@@ -3076,20 +3076,20 @@ String STR_QUERY_DROP_ALL
 {
     Text = "Wollen Sie die alle Selektierten lцschen?";
     Text [ english ] = "Do you want to delete all selected?";
-    Text[ english_us ] = "Do you want to delete all selected?";
+    Text[ english_us ] = "Do you want to delete all selected items?";
     Text[ portuguese ] = "Do you want to delete all selected?";
-    Text[ russian ] = "Do you want to delete all selected?";
+    Text[ russian ] = "”далить все, что выделено?";
     Text[ greek ] = "Do you want to delete all selected?";
     Text[ dutch ] = "Do you want to delete all selected?";
-    Text[ french ] = "Do you want to delete all selected?";
-    Text[ spanish ] = "Do you want to delete all selected?";
+    Text[ french ] = "Supprimer la totalitй de la sйlection ?";
+    Text[ spanish ] = "њDesea eliminar todas las seleccionadas?";
     Text[ finnish ] = "Do you want to delete all selected?";
     Text[ italian ] = "Do you want to delete all selected?";
     Text[ danish ] = "Do you want to delete all selected?";
     Text[ swedish ] = "Vill du radera alla markerade?";
-    Text[ polish ] = "Do you want to delete all selected?";
+    Text[ polish ] = "Usunєж wszystkie zaznaczone miejsca?";
     Text[ portuguese_brazilian ] = "Do you want to delete all selected?";
-    Text[ japanese ] = "Do you want to delete all selected?";
+    Text[ japanese ] = "йБЄжКЮгБЧгБЯй†ЕзЫЃгВТгБЩгБєгБ¶еЙКйЩ§гБЧгБЊгБЩгБЛгАВ";
     Text[ korean ] = "Do you want to delete all selected?";
     Text[ chinese_simplified ] = "и¶БеИ†йЩ§еЕ®йГ®йАЙдЄ≠пЉЯ";
     Text[ chinese_traditional ] = "и¶БеИ™йЩ§еЕ®йГ®зЪДйБЄеПЦпЉЯ";
@@ -3106,7 +3106,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
         "Note: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text [ english_us ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be deleted, not the document itself.";
     Text[ portuguese ] = "Eliminar a ligaзгo \"$name$\" do documento?\n\nObservaзгo: apenas serб eliminada a atribuiзгo do documento а fonte de dados, nгo o documento propriamente dito.";
-    Text[ russian ] = "¬ы хотите удалить ссылку \"$name$\"?\n\n”чтите, что удалено будет только отношение этого документа к источнику данных, но не сам документ.";
+    Text[ russian ] = "¬ы хотите удалить ссылку \"$name$\"?\n\n”чтите, что удалено будет только отношение этого документа к исходным данным, но не сам документ.";
     Text[ greek ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ dutch ] = "Wilt u de documentenkoppeling \"$name$\" wissen?\n\nLet op: alleen de link van dit document met de gegevensbron wordt gewist.";
     Text[ french ] = "Voulez-vous supprimer le lien \"$name$\" (document) ?\n\nRemarque : la suppression ne concernera que l'assignation de ce document а la base de donnйes et pas le document en soi.";
@@ -3248,7 +3248,7 @@ String STR_ADDRESSBOOK_OUTLOOK
     Text[ swedish ] = "MS Outlook";
     Text[ polish ] = "MS Outlook";
     Text[ portuguese_brazilian ] = "MS Outlook";
-    Text[ japanese ] = "MS Outlook";
+    Text[ japanese ] = "Microsoft Outlook";
     Text[ korean ] = "MS Outlook";
     Text[ chinese_simplified ] = "MS Outlook";
     Text[ chinese_traditional ] = "MS Outlook";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.76  2001/10/19 22:07:41  kz
+ *  Merge SRC641: 20.10.01 - 00:06:18
+ *
  *  Revision 1.75  2001/10/05 06:57:19  oj
  *  #84000# impl multiselction for queries and link docs
  *
@@ -3410,6 +3413,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
