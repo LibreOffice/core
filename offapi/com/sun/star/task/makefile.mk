@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2001-05-03 08:38:04 $
+#   last change: $Author: mav $ $Date: 2001-05-07 16:31:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
+    UrlRecord.idl\
+    UserRecord.idl\
     XInteractionAbort.idl\
     XInteractionApprove.idl\
     XInteractionContinuation.idl\
@@ -83,6 +85,7 @@ IDLFILES=\
     XInteractionHandler.idl\
     XInteractionRequest.idl\
     XInteractionRetry.idl\
+    XPasswordContainer.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl\
