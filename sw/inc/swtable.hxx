@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:39:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,6 @@ public:
           SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
 
-        // gebe den Zellnamen zu der angebenen Row/Col zurueck. Das ist
-        // nur fuer ausgeglichene Tabellen interessant, weil diese keine
-        // "Sub"Boxen kennen. Es wird z.B. aus (0,0) ein "A1".
-    static String GetBoxName( USHORT nRow, USHORT nCol );
         // lese die 1. Nummer und loesche sie aus dem String
         // (wird von GetTblBox und SwTblFld benutzt)
     static USHORT _GetBoxNum( String& rStr, BOOL bFirst = FALSE );
