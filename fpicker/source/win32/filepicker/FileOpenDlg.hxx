@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:12:37 $
+ *  last change: $Author: tra $ $Date: 2001-08-16 06:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,9 @@ protected:
     // we connect the instance with the dialog window using
     // SetProp, with this function we can reconnect from
     // callback functions to this instance
-    static CFileOpenDialog* getCurrentInstance( HWND hwnd );
+    static CFileOpenDialog* SAL_CALL getCurrentInstance( HWND hwnd );
+
+    void SAL_CALL centerPositionToParent( ) const;
 
 private:
     // FileOpen or FileSaveDialog

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:12:37 $
+ *  last change: $Author: tra $ $Date: 2001-08-16 06:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,7 @@ void SAL_CALL CFileOpenDialog::onHelp( )
 
 void SAL_CALL CFileOpenDialog::onInitDone()
 {
+    centerPositionToParent( );
 }
 
 //------------------------------------------------------------------------
@@ -583,7 +584,6 @@ void SAL_CALL CFileOpenDialog::onTypeChanged( sal_uInt32 nFilterIndex )
 
 void SAL_CALL CFileOpenDialog::onInitDialog( HWND hwndDlg, HWND hwndChild )
 {
-
 }
 
 //------------------------------------------------------------------------
@@ -748,9 +748,71 @@ unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
 //
 //------------------------------------------------------------------------
 
-CFileOpenDialog* CFileOpenDialog::getCurrentInstance( HWND hwnd )
+CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance( HWND hwnd )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
     return reinterpret_cast< CFileOpenDialog* >(
         GetPropA( hwnd, CURRENT_INSTANCE ) );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+void SAL_CALL CFileOpenDialog::centerPositionToParent( ) const
+{
+    OSL_PRECOND( IsWindow( m_hwndFileOpenDlg ), "no dialog window, call method only after or in onInitDone" );
+
+    HDC hdc = GetDC( m_hwndFileOpenDlg );
+
+    HWND hwndParent = m_ofn.hwndOwner;
+
+    if ( !IsWindow( hwndParent ) )
+        hwndParent = GetDesktopWindow( );
+
+    OSL_ASSERT( IsWindow( hwndParent ) );
+
+    RECT rcParent;
+    GetWindowRect( hwndParent, &rcParent );
+
+    RECT rcDialog;
+    GetWindowRect( m_hwndFileOpenDlg, &rcDialog );
+
+    LONG lParentWidth  = rcParent.right  - rcParent.left;
+    LONG lParentHeight = rcParent.bottom - rcParent.top;
+
+    LONG lDialogWidth  = rcDialog.right  - rcDialog.left;
+    LONG lDialogHeight = rcDialog.bottom - rcDialog.top;
+
+    int xParentMid = rcParent.left + (lParentWidth  / 2);
+    int yParentMid = rcParent.top  + (lParentHeight / 2);
+
+    int x = xParentMid - (lDialogWidth  / 2);
+    int y = yParentMid - (lDialogHeight / 2);
+
+    int xScreen = GetDeviceCaps( hdc, HORZRES );
+    int yScreen = GetDeviceCaps( hdc, VERTRES );
+
+    if ( x < 0 )
+        x = 0;
+
+    if ( y < 0 )
+        y = 0;
+
+    if ( (x + lDialogWidth) > xScreen )
+        x = xScreen - lDialogWidth;
+
+    if ( (y + lDialogHeight) > yScreen )
+        y = yScreen - lDialogHeight;
+
+    SetWindowPos(
+        m_hwndFileOpenDlg,
+        NULL,
+        x,
+        y,
+        0,
+        0,
+        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );
+
+    ReleaseDC( m_hwndFileOpenDlg, hdc );
 }
