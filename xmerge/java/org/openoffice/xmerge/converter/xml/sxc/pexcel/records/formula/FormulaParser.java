@@ -227,6 +227,23 @@ public class FormulaParser {
      }
 
      /**
+      * Identify numbers
+     *
+     * @param  c The character which is to be identified
+     * @return A boolean returning the result of the comparison
+      */
+     private boolean isPercent(char c) {
+
+        boolean eq;
+
+         if(c=='%')
+             eq = true;
+         else
+             eq = false;
+         return eq;
+     }
+
+     /**
       * Identify letters or numbers
      *
      * @param  c The character which is to be identified
@@ -428,6 +445,7 @@ public class FormulaParser {
       */
      private void getNum() throws FormulaParsingException {
 
+        Debug.log(Debug.TRACE,"getNum : ");
          if(!isDigit(look))
              throw new FormulaParsingException("Expected Integer");
          else {
@@ -440,6 +458,11 @@ public class FormulaParser {
              } while((isDigit(look) || ((look == '.') && isDigit(formulaStr.charAt(index)))) && status);
              skipWhite();
             tokenVector.add(tokenFactory.getOperandToken(num, "INTEGER"));
+            if(isPercent(look)) {
+                match(look);
+                tokenVector.add(tokenFactory.getOperatorToken("%", 1));
+                Debug.log(Debug.TRACE,"Added Percent token to Vector: ");
+            }
             Debug.log(Debug.TRACE,"Number parsed : " + num);
          }
      }

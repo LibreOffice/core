@@ -82,6 +82,7 @@ public class PrecedenceTable {
     static {
         map = new HashMap();
 
+        map.put("%", new Integer(UNARY_PRECEDENCE));
         map.put("+", new Integer(ADDOP_PRECEDENCE));
         map.put("-", new Integer(ADDOP_PRECEDENCE));
         map.put("*", new Integer(MULTOP_PRECEDENCE));

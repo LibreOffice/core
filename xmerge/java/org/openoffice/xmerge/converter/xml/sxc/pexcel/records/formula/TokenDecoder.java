@@ -137,6 +137,12 @@ public class TokenDecoder {
                                 v.add(readFunctionToken(bis));
                                 Debug.log(Debug.TRACE, "Decoded function: " + v.lastElement());
                                 break;
+                case TokenConstants.TUPLUS:
+                case TokenConstants.TUMINUS:
+                case TokenConstants.TPERCENT:
+                                v.add(readOperatorToken(b, 1));
+                                Debug.log(Debug.TRACE, "Decoded Unary operator : " + v.lastElement());
+                                break;
                 case TokenConstants.TADD :
                 case TokenConstants.TSUB :
                 case TokenConstants.TMUL :
@@ -147,10 +153,10 @@ public class TokenDecoder {
                 case TokenConstants.TGTEQUALS :
                 case TokenConstants.TGREATER :
                 case TokenConstants.TNEQUALS :
-                                v.add(readOperatorToken(b));
-
-                                Debug.log(Debug.TRACE, "Decoded binary operator : " + v.lastElement());
+                                v.add(readOperatorToken(b, 2));
+                                Debug.log(Debug.TRACE, "Decoded Binary operator : " + v.lastElement());
                                 break;
+
                 default :
                                 Debug.log(Debug.TRACE, "Unrecognized byte : " + b);
             }
@@ -287,11 +293,21 @@ public class TokenDecoder {
      * Read an Operator token from the <code>ByteArrayInputStream</code>
      *
      * @param b A Pocket Excel number representing an operator.
+     * @param args The number of arguments this operator takes.
      * @return The decoded Operator <code>Token</code>
      */
-    private Token readOperatorToken(int b) {
+    private Token readOperatorToken(int b, int args) {
 
-        return tf.getOperatorToken(operatorLookup.getStringFromID(b), 2);
+        Token t;
+
+        if(b==TokenConstants.TUPLUS) {
+            t = tf.getOperatorToken("+", args);
+        } else if(b==TokenConstants.TUMINUS) {
+            t = tf.getOperatorToken("-", args);
+        } else {
+            t = tf.getOperatorToken(operatorLookup.getStringFromID(b), args);
+        }
+        return t;
      }
 
     /**

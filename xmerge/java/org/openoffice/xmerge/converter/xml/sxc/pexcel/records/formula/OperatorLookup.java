@@ -87,6 +87,7 @@ public class OperatorLookup {
         idToString = new HashMap();
         addEntry("UNARY_PLUS", TokenConstants.TUPLUS);
         addEntry("UNARY_MINUS", TokenConstants.TUMINUS);
+        addEntry("%", TokenConstants.TPERCENT);
         addEntry("+", TokenConstants.TADD);
         addEntry("-", TokenConstants.TSUB);
         addEntry("*", TokenConstants.TMUL);
