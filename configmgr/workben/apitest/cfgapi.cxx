@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 13:32:56 $
+ *  last change: $Author: jb $ $Date: 2001-12-06 16:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ inline void operator <<= (Any& _rUnoValue, const ::rtl::OString& _rAsciiString)
 }
 
 //=============================================================================
-void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF);
+bool test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF);
 //=============================================================================
 struct prompt_and_wait
 {
@@ -205,8 +205,8 @@ void commit()
 // -----------------------------------------------------------------------------
 static sal_Bool             s_bInitialized  =   sal_False;
 
-static const sal_Char*      s_pSourcePath   =   "../share";
-static const sal_Char*      s_pUpdatePath   =   "../user";
+static const sal_Char*      s_pSourcePath   =   "../share/config/registry";
+static const sal_Char*      s_pUpdatePath   =   "../user/config/registry";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.Common";
 static const sal_Char*      s_pServerType   =   "local";
 static const sal_Char*      s_pLocale       =   "en-US";
@@ -502,45 +502,38 @@ int _cdecl main( int argc, char * argv[] )
         char aPath[300] =           "/";
         int nStart = sizeof(    "/" ) - 1;
 
-        cout << "---------------------------------------------------------------\n Configuration Provider created !\n---------------------------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------\n Configuration Provider created !";
 
-        Sequence< Any > aArgs;
-        aArgs = createSequence(sUser, ASCII(""));
-
-        OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
-        cout << endl;
-
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
-
-        if (!bLocal)
+        bool bQuit = true;
+        do
         {
+            cout << "\n---------------------------------------------------------------" << endl;
+
+            Sequence< Any > aArgs(2);
+
+            OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
+            cout << endl;
+
+            aArgs[0] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
+
             OUString sLocale =  enterValue("locale  : ", s_pLocale, false);
             cout << endl;
-            aArgs.realloc(aArgs.getLength() + 1);
-            aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
+
+            aArgs[1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
+
+            Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
+                aArgs);
+            cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
+
+            xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
+
+            Sequence<OUString> aSeq = xCfgProvider->getAvailableServiceNames();
+            showSequence(aSeq);
+
+            bQuit = test_read_access(xIFace, xCfgProvider);
         }
-/*
-#else
-        OUString aStr = ASCII("String");
-        sal_Int32 nDepth = 10;
-        Sequence< Any > aArgs(2);
-
-        aArgs[0] <<= aStr;
-        aArgs[1] <<= nDepth;
-#endif
-*/
-        Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
-            aArgs);
-        cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
-
-        xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
-
-        Sequence<OUString> aSeq = xCfgProvider->getAvailableServiceNames();
-        showSequence(aSeq);
-
-        test_read_access(xIFace, xCfgProvider);
+        while (!bQuit);
     }
     catch (Exception& e)
     {
@@ -596,15 +589,17 @@ void write(Reference< XChild >& xChild)
         if (xChild.is())
             cout << "\n[ P ] -\tParent";
         else
-            cout << "BUG: Parent not available (no XChild)";
+            cout << "\n ROOT -\tParent not available ";
         cout << endl;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-bool ask(Reference< XInterface >& xIface, Reference<XMultiServiceFactory> &);
+bool ask(Reference< XInterface >& xIface, Reference<XMultiServiceFactory> &, bool&);
 
-void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
+bool test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
 {
+    bool bQuit = true;
+
     using com::sun::star::uno::UNO_QUERY;
     do
     {
@@ -620,14 +615,17 @@ void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceF
         write(xAccess);
         write(xChild);
     }
-    while (ask(xIface, xMSF));
+    while (ask(xIface, xMSF, bQuit));
+
+    return bQuit;
 }
 
-bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
+bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF, bool& rbQuit)
 {
-    cout << "\n[ Q ] -> <Quit>";
     cout << "\n[ S ] -> <SetValue> ";
     cout << "\n[ D ] -> <SetToDefault> ";
+    cout << "\n[ N ] -> <New Access>";
+    cout << "\n[ Q ] -> <Quit>";
     cout << endl;
 
     cout << "\n:> " << flush;
@@ -643,6 +641,12 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
             Reference< XInterface > xNext;
             if ((buf[0] == 'q' || buf[0] == 'Q') && (0 == buf[1]))
             {
+                rbQuit = true;
+                return false;
+            }
+            else if ((buf[0] == 'n' || buf[0] == 'N') && (0 == buf[1]))
+            {
+                rbQuit = false;
                 return false;
             }
             else if (buf[0] == 0)
