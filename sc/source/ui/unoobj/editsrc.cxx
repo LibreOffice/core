@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:32:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,8 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
 
     if ( pDocShell )
     {
-        ScPostIt aNote;
         ScDocument* pDoc = pDocShell->GetDocument();
+        ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
 
         pEditEngine->SetText( aNote.GetText() );        // incl. Umbrueche
