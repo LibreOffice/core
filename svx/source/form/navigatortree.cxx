@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:13:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ namespace svxform
 
                             Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
                             if( !xTabController.is() ) break;
-                            FmTabOrderDlg aTabDlg(m_xORB, GetpApp()->GetAppWindow(), GetNavModel()->GetFormShell() );
+                            FmTabOrderDlg aTabDlg(m_xORB, Application::GetDefDialogParent(), GetNavModel()->GetFormShell() );
                             aTabDlg.Execute();
 
                         }
