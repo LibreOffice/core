@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdf.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:24:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,35 +64,8 @@
 
 String PDF_PROGRESS_BAR
 {
-    Text = "Exportieren als PDF";
-    Text[ ENGLISH ] = "Export as PDF";
-    Text[ english_us ] = "Export as PDF";
-    Text[ french ] = "Export au format PDF";
-    Text[ spanish ] = "Exportar en PDF";
-    Text[ italian ] = "Esporta come file PDF";
-    Text[ swedish ] = "Exportera som PDF";
-    Text[ japanese ] = "PDF としてエクスポート";
-    Text[ korean ] = "PDF로 내보내기";
-    Text[ chinese_simplified ] = "输出成 PDF";
-    Text[ chinese_traditional ] = "匯出成 PDF";
-    Text[ turkish ] = "PDF Olarak D��a Aktar";
-    Text[ greek ] = "������� �� PDF";
-    Text[ dutch ] = "Als PDF Exporteren";
-    Text[ finnish ] = "Export as PDF";
-    Text[ czech ] = "Exportovat jako PDF";
-    Text[ danish ] = "Eksporter som PDF";
-    Text[ arabic ] = "Export as PDF";
-    Text[ hebrew ] = "‮יצוא כ PDF‬";
-    Text[ catalan ] = "Export as PDF";
-    Text[ portuguese ] = "Export as PDF";
-    Text[ russian ] = "Export as PDF";
-    Text[ polish ] = "Export as PDF";
-    Text[ portuguese_brazilian ] = "Exportar como PDF";
-    Text[ thai ] = "Export as PDF";
-    Text[ hindi ] = "Export as PDF";
-    Text[ slovak ] = "Export do PDF";
-    Text[ hungarian ] = "Exportálás PDF-be";
-    Text[ slovenian ] = "Izvozi v PDF";
+    Text [ de ] = "Exportieren als PDF";
+    Text [ en-US ] = "Export as PDF";
 };
 
 
