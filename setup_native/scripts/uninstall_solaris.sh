@@ -25,9 +25,9 @@ tail +$linenum $0 > $GETUID_SO
 PKGLIST=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep -v core`
 COREPKG=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep core`
 
-echo "####################################################################"
-echo "#     Deinstallation of StarOffice packages                        #"
-echo "####################################################################"
+echo "#############################################"
+echo "#     Deinstallation of Office packages     #"
+echo "#############################################"
 echo
 echo "Path to the root directory :  " $MY_ROOT
 echo
