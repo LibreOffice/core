@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:07:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,6 +768,8 @@ void SwXMLImport::endDocument( void )
             }
         }
     }
+
+    GetTextImport()->RedlineAdjustStartNodeCursor( sal_False );
 
     if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
         ((getImportFlags() & IMPORT_MASTERSTYLES) != 0 && IsStylesOnlyMode()) )
