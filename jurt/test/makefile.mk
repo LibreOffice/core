@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 13:14:16 $
+#   last change: $Author: obo $ $Date: 2004-06-03 14:36:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 # Quick and dirty way to run all tests in sub-directories; probably only works
 # on Unix.
 # Can be removed once tests are included in regular builds.
@@ -70,6 +69,6 @@ all .PHONY:
     cd com/sun/star/lib/uno/bridges/java_remote && dmake
     cd com/sun/star/lib/uno/environments/java && dmake
     cd com/sun/star/lib/uno/environments/remote && dmake
-    cd com/sun/star/lib/uno/protocols && dmake
+    cd com/sun/star/lib/uno/protocols/urp && dmake
     cd com/sun/star/lib/util && dmake
     cd com/sun/star/uno && dmake
