@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:42:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     mbFocusSelectionHide = FALSE;
     mbIgnoreTab = FALSE;
     mbActivePopup = FALSE;
+    mbSelectOnTab = TRUE;
 
     SetPointer( Pointer( POINTER_TEXT ) );
 
