@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:53:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,23 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <so3/svstor.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <sot/clsids.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"
@@ -112,15 +119,12 @@ SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const String& r
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart(pObject) )
                     {
-                        SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                        if (aIPObj.Is())
+                        uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                        if ( xObj.is() )
                         {
-                            SvInfoObject* pInfoObj = pDocShell->Find( aIPObj );
-                            if (pInfoObj)
-                            {
-                                if ( pInfoObj->GetObjName() == rName )
-                                    return (SdrOle2Obj*)pObject;
-                            }
+                            String aObjName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
+                            if ( aObjName == rName )
+                                return (SdrOle2Obj*)pObject;
                         }
                     }
                     pObject = aIter.Next();
@@ -179,13 +183,9 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                     {
                         if ( nPos == nIndex )
                         {
-                            SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                            if (aIPObj.Is())
-                            {
-                                SvInfoObject* pInfoObj = pDocShell->Find( aIPObj );
-                                if (pInfoObj)
-                                    aName = pInfoObj->GetObjName();
-                            }
+                            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                            if ( xObj.is() )
+                                aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
                             break;  // nicht weitersuchen
                         }
                         ++nPos;
@@ -253,15 +253,13 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     }
     ScRangeListRef xNewRanges( pList );
 
-    SvInPlaceObjectRef aIPObj;
+    uno::Reference < embed::XEmbeddedObject > xObj;
+    ::rtl::OUString aTmp( aNameString );
     if ( SvtModuleOptions().IsChart() )
-        aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-    if ( aIPObj.Is() )
+        xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aTmp );
+    if ( xObj.is() )
     {
-        SvEmbeddedInfoObject* pInfoObj = pDocShell->InsertObject( aIPObj, aNameString );
-        if ( pInfoObj )
-        {
-            String aObjName = pInfoObj->GetObjName();       // wirklich eingefuegter Name...
+            String aObjName = aNameString;       // wirklich eingefuegter Name...
 
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
@@ -273,16 +271,21 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
             Rectangle aInsRect( aRectPos, aRectSize );
 
+            sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
             Size aSize = aInsRect.GetSize();
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aIPObj->GetMapUnit() ) );
-            aIPObj->SetVisAreaSize(aSize);
+            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+            awt::Size aSz;
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
 
             Window* pWin = NULL;
 
             ScChartArray aParam( pDoc, xNewRanges, String() );
             aParam.SetHeaders( bColumnHeaders, bRowHeaders );
             SchMemChart* pMemChart = aParam.CreateMemChart();
-            SchDLL::Update( aIPObj, pMemChart, pWin );
+            // TODO/LATER: looks like there is no need here to update the replacement. But it should be checked.
+            SchDLL::Update( xObj, pMemChart, pWin );
             delete pMemChart;
 
             ScChartListener* pChartListener =
@@ -290,7 +293,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             pDoc->GetChartListenerCollection()->Insert( pChartListener );
             pChartListener->StartListeningTo();
 
-            SdrOle2Obj* pObj = new SdrOle2Obj( aIPObj, aObjName, aInsRect );
+            SdrOle2Obj* pObj = new SdrOle2Obj( xObj, aObjName, aInsRect );
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
@@ -298,8 +301,6 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             // Dies veranlaesst Chart zum sofortigen Update
             //SvData aEmpty;
             //aIPObj->SendDataChanged( aEmpty );
-            aIPObj->SendViewChanged();
-        }
     }
 }
 
@@ -427,13 +428,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart(pObject) )
                     {
                         String aName;
-                        SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                        if (aIPObj.Is())
-                        {
-                            SvInfoObject* pInfoObj = pDocShell->Find( aIPObj );
-                            if (pInfoObj)
-                                aName = pInfoObj->GetObjName();
-                        }
+                        uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                        if ( xObj.is() )
+                            aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
+
                         DBG_ASSERT(nPos<nCount, "huch, verzaehlt?");
                         pAry[nPos++] = aName;
                     }
@@ -630,20 +628,12 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
 {
     ScUnoGuard aGuard;
     SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
-    if (pObject)
+    if (pObject && pObject->GetObjRef().is() )
     {
-        SvInPlaceObjectRef aIPObj = pObject->GetObjRef();
-        if (aIPObj.Is())
-        {
-            SfxInPlaceObjectRef aSfxObj( aIPObj );
-            if (aSfxObj.Is())
-            {
-                SfxObjectShell* pObjSh = aSfxObj->GetObjectShell();
-                if (pObjSh)
-                    return pObjSh->GetBaseModel().get();
-            }
-        }
+        //TODO/LATER: is it OK that something is returned for *all* objects, not only own objects?
+        return uno::Reference < lang::XComponent > ( pObject->GetObjRef()->getComponent(), uno::UNO_QUERY );
     }
+
     return NULL;
 }
 
