@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 09:45:10 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 13:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,37 @@ XMLAnimationsExporter::~XMLAnimationsExporter()
 {
     delete mpImpl;
     mpImpl = NULL;
+}
+
+void XMLAnimationsExporter::prepare( Reference< XShape > xShape )
+{
+    try
+    {
+        // check for presentation shape service
+        {
+            Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.shape" ) ) ) )
+                return;
+        }
+
+        Reference< XPropertySet > xProps( xShape, UNO_QUERY );
+        if( xProps.is() )
+        {
+            AnimationEffect eEffect;
+            xProps->getPropertyValue( mpImpl->msEffect ) >>= eEffect;
+            if( eEffect == AnimationEffect_PATH )
+            {
+                Reference< XShape > xPath;
+                xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
+                if( xPath.is() )
+                    mpImpl->mxShapeExp->createShapeId( xPath );
+            }
+        }
+    }
+    catch( Exception e )
+    {
+        DBG_ERROR("exception catched while collection animation information!");
+    }
 }
 
 void XMLAnimationsExporter::collect( Reference< XShape > xShape )
