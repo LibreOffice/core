@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:11:38 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,6 +1617,7 @@ void OTableController::reSyncRows()
 
     }
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
+
     getUndoMgr()->Clear();      // clear all undo redo things
     setModified(sal_False);     // and we are not modified yet
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:24:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,15 @@ OTableDesignHelpBar::~OTableDesignHelpBar()
 {
     DBG_DTOR(OTableDesignHelpBar,NULL);
     delete m_pTextWin;
+    m_pTextWin = NULL;
 }
 
 //------------------------------------------------------------------------------
 void OTableDesignHelpBar::SetHelpText( const String& rText )
 {
     DBG_CHKTHIS(OTableDesignHelpBar,NULL);
-    m_pTextWin->SetText( rText );
+    if(m_pTextWin)
+        m_pTextWin->SetText( rText );
     Invalidate();
 }
 
@@ -114,9 +116,10 @@ void OTableDesignHelpBar::Resize()
 
     //////////////////////////////////////////////////////////////////////
     // TextWin anpassen
-    m_pTextWin->SetPosSizePixel( Point(STANDARD_MARGIN+1, STANDARD_MARGIN+1),
-        Size(aOutputSize.Width()-(2*STANDARD_MARGIN)-2,
-             aOutputSize.Height()-(2*STANDARD_MARGIN)-2) );
+    if(m_pTextWin)
+        m_pTextWin->SetPosSizePixel( Point(STANDARD_MARGIN+1, STANDARD_MARGIN+1),
+            Size(aOutputSize.Width()-(2*STANDARD_MARGIN)-2,
+                 aOutputSize.Height()-(2*STANDARD_MARGIN)-2) );
 
 }
 

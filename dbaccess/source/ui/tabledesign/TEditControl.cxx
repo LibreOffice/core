@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,8 +313,8 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
 
     //////////////////////////////////////////////////////////////////////
     // ::com::sun::star::beans::Property Controls disablen
-    if (pDescrWin)
-        pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
+//  if (pDescrWin)
+//      pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
 
     //////////////////////////////////////////////////////////////////////
     // Cursor des Browsers anpassen
@@ -1780,7 +1780,16 @@ OTableDesignView* OTableEditorCtrl::GetView() const
     return static_cast<OTableDesignView*>(GetParent()->GetParent());
 }
 // -----------------------------------------------------------------------------
-
+void OTableEditorCtrl::DeactivateCell(sal_Bool bUpdate)
+{
+    OTableRowView::DeactivateCell(bUpdate);
+    // now we have to deactivate the field description
+    long nRow(GetCurRow());
+    sal_uInt16 nCol(GetCurColumnId());
+    if (pDescrWin)
+        pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
+}
+// -----------------------------------------------------------------------------
 
 
 
