@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:55 $
+ *  last change: $Author: os $ $Date: 2001-07-20 13:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,7 +749,7 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
             const OUString* pQueries = aQueries.getConstArray();
             for(long i = 0; i < aQueries.getLength(); i++)
             {
-                pListBox->InsertEntry(pQueries[i]);
+                USHORT nEntry = pListBox->InsertEntry(pQueries[i]);
                 pListBox->SetEntryData(nEntry, (void*)1);
             }
         }
