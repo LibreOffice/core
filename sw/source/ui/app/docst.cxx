@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:49:35 $
+ *  last change: $Author: os $ $Date: 2001-10-02 12:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     else
                         aName = *SwStyleNameMapper::GetTextUINameArray()[
                             RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
-
-                    rSet.Put(SfxTemplateItem(nWhich, aName));
                 }
+                rSet.Put(SfxTemplateItem(nWhich, aName));
                 break;
 
             case SID_STYLE_FAMILY2:
@@ -242,6 +241,9 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     aItem.SetValue(nMask);
                     rSet.Put(aItem);
                 }
+                else
+                    rSet.Put(SfxTemplateItem(nWhich, aEmptyStr));
+
                 break;
 
             case SID_STYLE_FAMILY3:
@@ -252,10 +254,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 {
                     SwFrmFmt* pFmt = pShell->GetCurFrmFmt();
                     if(pFmt && pShell->IsFrmSelected())
-                    {
                         aName = pFmt->GetName();
-                        rSet.Put(SfxTemplateItem(nWhich, aName));
-                    }
+                    rSet.Put(SfxTemplateItem(nWhich, aName));
                 }
                 break;
 
@@ -1200,6 +1200,9 @@ Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/19 16:49:35  mtg
+    #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
+
     Revision 1.3  2000/11/14 11:12:26  os
     #79626# set metric attribute
 
