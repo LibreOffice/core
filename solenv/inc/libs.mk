@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2001-07-25 14:42:42 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,6 @@ MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
 ONELIB=
 UNOLIB=
-S2ULIB=-lstu$(UPD)$(DLLPOSTFIX)
 SVLIBDEPEND=$(L)$/libvcl$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 SVLIB=-lvcl$(UPD)$(DLLPOSTFIX)
 ICOLIB=-lico$(UPD)$(DLLPOSTFIX)
@@ -269,7 +268,6 @@ MOZBASELIBST=$(LIBPRE) nspr4_s.lib $(LIBPRE) xpcombase_s.lib
 MOZBASELIB=$(LIBPRE) nspr4.lib $(LIBPRE) xpcom.lib
 ONELIB=
 UNOLIB=
-S2ULIB=$(LIBPRE) stu.lib
 PAPILIB=$(LIBPRE) ipap.lib
 TRACERLIB=$(LIBPRE) itrc.lib
 TRCLIB=$(TRACERLIB)

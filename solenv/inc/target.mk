@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: nf $ $Date: 2001-07-09 13:08:40 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -222,114 +222,12 @@ APP8TARGET=
 APP9TARGET=
 .ENDIF
 
-.IF "$(TF_PACKAGES)"==""
-
-.IF "$(IDLFILES)"!=""
-.IF "$(GUI)"=="UNX"
-MISC_:=$(MISC)/
-INC_:=$(INCCOM)$/$(PRJNAME)/
-SLO_:=$(SLO)/
-.ELSE			# "$(GUI)"=="UNX"
-MISC_:=$(MISC)$(/)$/
-INC_:=$(INCCOM)$/$(PRJNAME)$(/)$/
-SLO_:=$(SLO)$(/)$/
-.ENDIF			# "$(GUI)"=="UNX"
-.IF "$(NODEFAULTUNO)"==""
-.IF "$(NOSMARTUNO)"==""
-UNOIDLTARGETS+=$(IDLFILES:s/.idl/.smr/:f:^$(MISC_:s/\r/\\r/))
-SMRTARGETS+=$(IDLFILES:s/.idl/.smr/:f:^$(MISC_:s/\r/\\r/))
-.ENDIF			# "$(NOSMARTUNO)"==""
-UNOIDLTARGETS+=$(IDLFILES:s/.idl/.cxx/:f:^$(MISC_:s/\r/\\r/))
-UNOIDLTARGETS+=$(IDLFILES:s/.idl/.obj/:f:^$(SLO_:s/\r/\\r/))
-SLOFILES+=$(IDLFILES:s/.idl/.obj/:f:^$(SLO_:s/\r/\\r/))
-.ENDIF			# "$(NODEFAULTUNO)"==""
-.ENDIF			# "$(IDLFILES)"!=""
-
-.IF "$(s2u)"!=""
-SLOPRE_:=$(SLO)$(/)s2u_
-UNOIDLTARGETS+=$(MISC)$/s2u_$(TARGET).don
-SLOFILES+=$(IDLFILES:s/.idl/.obj/:f:^$(SLOPRE_:s/\r/\\r/))
-.ENDIF
-
-.ELSE		# "$(TF_PACKAGES)"==""
-
 .IF "$(BUILD_URD_ONLY)" != ""
 NOURD=
 URD=TRUE
-NODEFAULTUNO=TRUE
-s2u=
-javauno=
 .ENDIF			# "$(URD_ONLY)" != ""
 
 .IF "$(IDLFILES)"!=""
-.IF "$(NODEFAULTUNO)"==""
-
-.IF "$(NOSMARTUNO)"==""
-INC_:=$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE)$/
-SLO_=$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/
-MISC_:=$(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/
-CXX_:=$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/
-_PACKAGE=$(IDLPACKAGE)
-#UNOIDLTARGETS+=$(foreach,i,$(IDLFILES:s/.idl/.hxx/:f) $(INC_)$i)
-SMRSLOFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(SLO_)$i)
-SMRFILES+=$(foreach,i,$(IDLFILES:s/.idl/.smr/:f) $(MISC_)$i)
-SMRSLOTARGET=$(SLB)$/smr$(TARGET).lib
-
-.IF "$(TF_PACKAGES_NO_S2U)"==""
-.IF "$(s2u)"!=""
-SLOPRE_=$(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$(/)s2u_
-
-# does this context make sense?
-UNOIDLTARGETS+=$(foreach,i,$(IDLFILES:s/.idl/.h/:f) $(INC_)$i)
-
-S2USLOFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(SLOPRE_)$i)
-S2USLOTARGET=$(SLB)$/s2u$(TARGET).lib
-.ENDIF		# "$(s2u)"!=""
-.ENDIF 		# "$(TF_PACKAGES_NO_S2U)"==""
-
-.ELSE		# "$(NOSMARTUNO)"==""
-.IF "$(PACKAGE)"==""
-MISC_:=$(MISC)$/
-CXX_:=$(MISC)$/
-INC_:=$(INCCOM)$/$(PRJNAME)$/
-SLO_=$(SLO)$/
-OBJ_=$(OBJ)$/
-UNOIDLTARGETS+=$(foreach,i,$(IDLFILES:s/.idl/.cxx/:f) $(MISC_)$i)
-.IF "$(IDLSTATICOBJS)"==""
-SLOFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(SLO_)$i)
-.ELSE
-OBJFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(OBJ_)$i)
-.ENDIF
-.ELSE			# "$(PACKAGE)"==""
-INC_:=$(INCCOM)$/$(IDLPACKAGE)$/
-SLO_=$(SLO)$/$(IDLPACKAGE)$/
-OBJ_=$(OBJ)$/$(IDLPACKAGE)$/
-MISC_:=$(MISC)$/$(IDLPACKAGE)$/
-CXX_:=$(OUTCXX)$/$(IDLPACKAGE)$/
-_PACKAGE=$(IDLPACKAGE)
-UNOIDLTARGETS+=$(foreach,i,$(IDLFILES:s/.idl/.cxx/:f) $(CXX_)$i)
-.IF "$(IDLSTATICOBJS)"==""
-.IF "$(GUI)"=="UNX"
-IDLSLOFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(SLO_)$i)
-.ELSE
-SLOFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(SLO_)$i)
-.ENDIF		# "$(GUI)"=="UNX"
-.ELSE			# "$(IDLSTATICOBJS)"==""
-.IF "$(GUI)"=="UNX"
-IDLOBJFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(OBJ_)$i)
-.ELSE
-OBJFILES+=$(foreach,i,$(IDLFILES:s/.idl/.obj/:f) $(OBJ_)$i)
-.ENDIF		# "$(GUI)"=="UNX"
-.ENDIF			# "$(IDLSTATICOBJS)"==""
-
-.ENDIF		# "$(PACKAGE)"==""
-.ENDIF		# "$(NOSMARTUNO)"==""
-
-.IF "$(NOURD)"==""
-URD=TRUE
-.ENDIF
-
-.ENDIF		# "$(NODEFAULTUNO)"==""
 
 .IF "$(URD)" != ""
 URDTARGET:=$(MISC)$/urd_$(TARGET).don
@@ -353,7 +251,6 @@ LOCALDOCDBTARGET=$(OUT)$/ucrdoc$/$(TARGET).db
 .ENDIF			# "$(URD)" != ""
 
 .ENDIF		# "$(IDLFILES)"!=""
-.ENDIF		# "$(TF_PACKAGES)"==""
 
 .IF "$(NOURD)"==""
 .IF "$(UNOIDLDBFILES)"!=""
@@ -664,12 +561,6 @@ JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
-.IF "$(javauno)"!=""
-.IF "$(IDLFILES)"!=""
-JAVATARGET=$(MISC)$/$(TARGET)_dummy.java
-UNOIDLTARGETS+=$(MISC)$/$(TARGET)genjava.don
-.ENDIF			# "$(IDLFILES)"!=""
-.ENDIF			# "$(javauno)"!=""
 
 .IF "$(JARTARGET)"!=""
 JARCLASSDIRS*=.
@@ -1912,22 +1803,6 @@ CONVERTUNIXTEXT:=$(UNIXTEXT)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(UNIXTEXT)"!=""
 
-.IF "$(IDLFILES)"!=""
-.IF "$(TF_PACKAGES)"!=""
-.IF "$(NODEFAULTUNO)"==""
-UNOIDLDEPTARGETS+=$(MISC)$/$(TARGET).dp1
-.ENDIF
-.IF "$(NOSMARTUNO)"==""
-.IF "$(s2u)"!=""
-UNOIDLDEPTARGETS+=$(MISC)$/$(TARGET).dp2
-.ENDIF			# "$(s2u)"!=""
-.ENDIF			# "$(NOSMARTUNO)"==""
-.IF "$(javauno)"!=""
-UNOIDLDEPTARGETS+=$(MISC)$/$(TARGET).dp3
-.ENDIF			# "$(javauno)"!=""
-.ENDIF			# "$(TF_PACKAGES)"!=""
-.ENDIF			# "$(IDLFILES)"!=""
-
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!="" || "$(javauno)"!=""
 .IF "$(L10N-framework)"==""
 TARGETDPJ=$(MISC)$/$(TARGET).dpj
@@ -2081,7 +1956,6 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(JAVATARGET)	\
         $(TARGETDPJ) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
-        $(S2USLOTARGET) \
         $(SVXLIGHTSLOTARGET) \
         $(SVXLIGHTOBJTARGET) \
         $($(SECOND_BUILD)SLOTARGET) \
@@ -2237,27 +2111,10 @@ $(GENJAVAFILES) : $(RDB)
 $(JAVATARGET) : $(GENJAVAFILES)
 .ENDIF			# "$(GENJAVAFILES)"!=""
 
-#mhtest:
-#	@echo MYUNOIDLTARGETS : $(MYUNOIDLTARGETS) $(SLOFILES)
-#	@echo MHMISC_ : $(UNOIDLTARGETS) $(IDLPACKAGE) xxxx $(_PACKAGE)
-#	@+-echo "#define" SUPD "$(UPD)" >> ttt.mk
-
 .INCLUDE : tg_dir.mk
 
 .INCLUDE : tg_idl.mk
 
-
-.IF "$(TF_PACKAGES)"==""
-
-.IF "$(s2u)"!=""
-$(MISC)$/s2u_$(TARGET).don:
-    +-$(RM) $@
-    +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) -Wb,c -OH$(INCCOM)$/$(PACKAGE:s/ttt/\/) $(DEPIDLFILES)
-    +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) -Bs2u -P$(PACKAGE:s/ttt/\/) -OH$(INCCOM)$/$(PACKAGE) -OI$(MISC)  $(SMRTARGETS:s/ttt/\/)
-    +-$(TOUCH) $@
-.ENDIF
-
-.ENDIF			# "$(TF_PACKAGES)"==""
 
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
@@ -2274,7 +2131,7 @@ make_uno_doc:
 
 makedoc:
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 #		+-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
@@ -2524,14 +2381,12 @@ last_target: $(LAZY_DEPS_WARNING)
 $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 
 .IF "$(IDLFILES)"!=""
-.IF "$(TF_PACKAGES)"!=""
-
 .IF "$(URD)"!=""
 
 $(URDTARGET) : $(DEPIDLFILES)
 .IF "$(MAXPROCESS)"<="1"
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
-#		+$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+#		+$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 
@@ -2540,63 +2395,12 @@ $(URDTARGET) : $(DEPIDLFILES)
 $(URDDOCTARGET) : $(DEPIDLFILES)
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
 .IF "$(MAXPROCESS)"<="1"
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
-#		+$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+        +idlc @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+#		+$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
 .ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 .ENDIF			# "$(URDDOC)"!=""
 .ENDIF			# "$(URD)"!=""
-
-.IF "$(NODEFAULTUNO)"==""
-.INCLUDE : $(MISC)$/$(TARGET).dp1
-$(MISC)$/$(TARGET).dp1: $(IDLFILES)
-#makefile.mk
-.ENDIF
-
-# nosmart, but s2u ????
-#.IF "$(NOSMARTUNO)"==""
-.IF "$(s2u)"!=""
-.INCLUDE : $(MISC)$/$(TARGET).dp2
-$(MISC)$/$(TARGET).dp2: $(IDLFILES) $(foreach,i,$(IDLFILES:s/.idl/.smr/) $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/$i)
-#makefile.mk
-.ENDIF			# "$(s2u)"!=""
-#.ENDIF			# "$(NOSMARTUNO)"==""
-
-.IF "$(javauno)"!=""
-$(MISC)$/$(TARGET)genjava.don: $(IDLFILES)
-# $(MISC)$/$(TARGET).dp3 : $(IDLFILES)
-.ENDIF			# "$(javauno)"!=""
-
-
-.IF "$(javauno)"!=""
-.INCLUDE : $(MISC)$/$(TARGET).dp3
-$(MISC)$/$(TARGET).dp3 : $(IDLFILES)
-#makefile.mk
-
-JAVAFILES+=$(IDL_JAVA_FILES)
-JAVACLASSFILES+=$(subst,misc$/java,class $(IDL_JAVA_FILES:s/.java/.class/))
-JAVATARGET*=$(MISC)$/$(TARGET)_dummy.java
-
-.ENDIF			# "$(javauno)"!=""
-
-.IF "$(NODEFAULTUNO)"==""
-# line moved
-#.INCLUDE : $(MISC)$/$(TARGET).dp1
-.IF "$(NOSMARTUNO)"==""
-CXXFILES+=$(IDL_SMART_CXX_FILES)
-.ELSE
-CXXFILES+=$(IDL_CPP_CXX_FILES)
-.ENDIF
-.ENDIF			# "$(NODEFAULTUNO)"==""
-
-.IF "$(NOSMARTUNO)"==""
-.IF "$(s2u)"!=""
-# line moved
-#.INCLUDE : $(MISC)$/$(TARGET).dp2
-CXXFILES+=$(IDL_S2U_FILES)
-.ENDIF			# "$(s2u)"!=""
-.ENDIF			# "$(NOSMARTUNO)"==""
-.ENDIF			# "$(TF_PACKAGES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!=""
@@ -2984,49 +2788,6 @@ warn_target_empty:
 .ELSE
 warn_target_empty:
     @+echo generated makefile.rc detected
-.ENDIF
-
-$(MISC)$/$(TARGET)genjava.mk: 	# $(IDLFILES)
-    @+echo *
-    @+echo *
-    @+echo *	bitte aendern - HJS
-    @+echo *
-    @+echo *
-        @-+$(RM) $@
-.IF "$(SOLAR_JAVA)"!=""
-        @+-$(RM) this.is.a.dummy.java
-        @+-$(TOUCH) this.is.a.dummy.java
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bjava -P$(PRJNAME) -OH$(MISC)$/java $(IDLFILES)
-.IF "$(GUI)"=="UNX"
-        @+echo JAVAFILES+= \\ > $@
-        find $(MISC)$/java -type f | awk -f ./nodollar.awk >> $@
-        @+echo "" >> $@
-.ELSE
-        @+echo JAVAFILES+= \ > $@
-        @+dir /hbsa:-d $(MISC)$/java | gawk '!/.*[!$$].*/ { print $$0 " \\" }' >> $@
-        @+echo this.is.a.dummy.java >> $@
-.ENDIF
-        dmake BUILDJAVA=t $(MFLAGS) $(CALLMACROS)
-        @+-$(RM) this.is.a.dummy.java
-.ELSE
-        @+-$(TOUCH) $@
-        dmake BUILDJAVA=t $(MFLAGS) $(CALLMACROS)
-.ENDIF
-
-.IF "$(IDLFILES)"!=""
-.IF "$(javauno)"!=""
-$(JAVACLASSFILES) : $(JAVAFILES)
-$(JAVAFILES) : $(MISC)$/$(TARGET)genjava.don
-
-$(MISC)$/$(TARGET)genjava.don :
-    @-+$(RM) $@
-.IF "$(SOLAR_JAVA)"!=""
-    +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bjava -P$(PRJNAME) -OH$(MISC)$/java $(DEPIDLFILES))
-.ELSE
-    @+echo SOLAR_JAVA nicht gesetzt
-.ENDIF
-    @+-$(TOUCH) $@
-.ENDIF
 .ENDIF
 
 .IF "$(UNOTYPES)" != ""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2001-03-28 16:06:38 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -613,6 +613,3 @@ JAVA_RUNTIME=javai_g.lib
 
 .ENDIF
 
-.IF "$(TFDEF)"!=""
-CFLAGS+=-D$(TFDEF)
-.ENDIF

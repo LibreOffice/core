@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-20 08:58:57 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,86 +77,11 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(IDLSLOFILES:f) $(RSLO)$/$(IDLPACKAGE)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
     +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="MAC"
-    +echo $(foreach,i,$(IDLSLOFILES:f) $(RSLO)$/$(IDLPACKAGE)$/$(i)) | xargs -n1 > $@
-    +echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i)) | xargs -n1 >> $@
-.ENDIF			# "$(GUI)"=="MAC"
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(SLOFILES:+"\n+":^"&")
-.ELSE			# "$(COM)"=="BLC"
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
-.IF "$(GUI)"=="OS2"
-    @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(&:+"&\n");)
-.ELSE
-    $(LIBMGR) r $@ $(SLOFILES)
-.ENDIF			# "$(COM)"=="ICC"
-.ENDIF			# "$(GUI)"=="OS2"
-
 .ENDIF			# "$(SLOTARGET)"!=""
 
 
-.IF "$(SMRSLOTARGET)"!=""
-$(SMRSLOTARGET):  $(SMRSLOFILES)
-.IF "$(MDB)" != ""
-    @+echo $(SMRSLOTARGET:s/ttt/\/)
-    @+echo $(SMRSLOFILES)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $@
-.IF "$(GUI)"=="WNT"
-    @-$(TYPE) $(mktmp $(&:+"\n":s/ttt/\/)) > $(MISC)$/$(TARGET).lin
-    $(LIBMGR) $(LIBFLAGS) /OUT:$(@:s/ttt/\/) @$(mktmp $(&:+"\n":s/ttt/\/))
-.ENDIF			# "$(GUI)"=="WNT"
-.IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(SMRSLOFILES:f:s/ttt/\/) $(RPACKAGESLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
-.ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LIBMGR) $(@:s/ttt/\/) $(LIBFLAGS) +$(SMRSLOFILES:+"\n+":^"&":s/ttt/\/)
-.ELSE			# "$(COM)"=="BLC"
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
-.IF "$(GUI)"=="OS2"
-    @+-$(RM) $(@:s/ttt/\/)
-    $(LIBMGR) $(LIBFLAGS) $(@:s/ttt/\/) @$(mktmp $(&:+"&\n":s/ttt/\/);)
-.ENDIF			# "$(GUI)"=="OS2"
-.ENDIF			# "$(SMRSLOTARGET)"!=""
-
-
-.IF "$(S2USLOTARGET)"!=""
-$(S2USLOTARGET): $(S2USLOFILES:s/ttt/\/)
-.IF "$(MDB)" != ""
-    @echo $(S2USLOTARGET)
-    @echo $(&:+"\n":s/ttt/\/)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(@:s/ttt/\/)
-.IF "$(GUI)"=="WNT"
-    @-$(TYPE) $(mktmp $(&:+"\n":s/ttt/\/)) > $(MISC)$/$(TARGET).lin
-    $(LIBMGR) $(LIBFLAGS) /OUT:$(@:s/ttt/\/) @$(mktmp $(&:+"\n":s/ttt/\/))
-.ENDIF			# "$(GUI)"=="WNT"
-.IF "$(GUI)"=="UNX"
-    +echo $(foreach,i,$(S2USLOFILES:f:s/ttt/\/) $(RPACKAGESLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
-.ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LIBMGR) $(@:s/ttt/\/) $(LIBFLAGS) +$(S2USLOFILES:+"\n+":^"&":s/ttt/\/)
-.ELSE			# "$(COM)"=="BLC"
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
-.IF "$(GUI)"=="OS2"
-    @+-$(RM) $(@:s/ttt/\/)
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(&:+"&\n":s/ttt/\/);)
-.ENDIF			# "$(GUI)"=="OS2"
-.ENDIF			# "$(S2USLOTARGET)"!=""
 
 
 .IF "$(SVXLIGHTSLOTARGET)"!=""
@@ -174,17 +99,6 @@ $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
 .IF "$(GUI)"=="UNX"
     +echo $(foreach,i,$(REAL_SVXLIGHTSLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_SVXLIGHTSLOFILES:+"\n+":^"&")
-.ELSE			# "$(COM)"=="BLC"
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
-.IF "$(GUI)"=="OS2"
-    @+-$(RM) $@
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(&:+"&\n");)
-.ENDIF			# "$(GUI)"=="OS2"
 .ENDIF			# "$(SVXLIGHTSLOTARGET)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
@@ -203,17 +117,6 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
 .IF "$(GUI)"=="UNX"
     +echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(REAL_$(SECOND_BUILD)_SLOFILES:+"\n+":^"&")
-.ELSE			# "$(COM)"=="BLC"
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
-.IF "$(GUI)"=="OS2"
-    @+-$(RM) $@
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(&:+"&\n");)
-.ENDIF			# "$(GUI)"=="OS2"
 .ENDIF			# "$($(SECOND_BUILD)SLOTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
 

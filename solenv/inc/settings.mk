@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-06 15:34:06 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -296,14 +296,6 @@ PROFILE=
 # weitergereicht, aber case significant ausgewertet!
 # ---------------------------------------------------------------------------
 
-.IF "$(TFDEF)"!=""
-tfdef=$(TFDEF)
-TF_STARONE=TRUE
-tf_starone=TRUE
-TF_CHAOS=TRUE
-tf_chaos=TRUE
-.ENDIF
-
 DMAKE_WORK_DIR*:=$(subst,/,$/ $(PWD))
 
 .IF "$(TMP)"!=""
@@ -554,11 +546,7 @@ TARGETTYPE=CUI
 .ENDIF
 
 # Neues Enironment setzen
-.IF "$(NOSMARTUNO)"==""
-.SUFFIXES : .exe .lst .lin .smr .dll .obj .dlo .asm .lib .c .hxx .cxx .res .rc .src .srs .hlp .y .yxx .odl .java .class .hid .cpp
-.ELSE
 .SUFFIXES : .exe .lst .lin .dll .obj .dlo .asm .lib .c .hxx .cxx .res .rc .src .srs .hlp .y .yxx .odl .idl .java .class .hid .cpp
-.ENDIF
 
 # --- Pfade setzen -------------------------------------------------
 
@@ -690,24 +678,18 @@ IDLPACKAGENAME=$(PRJNAME)
 OBJ=$(OUT)$/obj
 SLO=$(OUT)$/slo
 ROBJ=$(ROUT)$/obj
-RPACKAGEOBJ=$(ROUT)$/obj$(SMARTPRE)$/$(IDLPACKAGE)
 RSLO=$(ROUT)$/slo
-RPACKAGESLO=$(ROUT)$/slo$(SMARTPRE)$/$(IDLPACKAGE)
 .ELSE
 OBJ=$(OUT)$/dbo
 SLO=$(OUT)$/dso
 ROBJ=$(ROUT)$/dbo
-RPACKAGEOBJ=$(ROUT)$/dbo$/$(IDLPACKAGE)
 RSLO=$(ROUT)$/dso
-RPACKAGESLO=$(ROUT)$/dso$/$(IDLPACKAGE)
 .ENDIF
 .ELSE
 OBJ=$(OUT)$/obj
 SLO=$(OUT)$/slo
 ROBJ=$(ROUT)$/obj
-RPACKAGEOBJ=$(ROUT)$/obj$(SMARTPRE)$/$(IDLPACKAGE)
 RSLO=$(ROUT)$/slo
-RPACKAGESLO=$(ROUT)$/slo$(SMARTPRE)$/$(IDLPACKAGE)
 .ENDIF
 
 # Particle Path
@@ -1022,10 +1004,6 @@ UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
 UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
-.IF "$(TF_ONE51)"=="$(WORK_STAMP)"
-UNOIDLDEFS+=-DTF_ONE51
-.ENDIF
-
 .IF "$(PRE)"!=""
 UNOIDLINC!:=-I$(PRE)$/idl $(UNOIDLINC)
 .ENDIF
@@ -1071,9 +1049,6 @@ CDEFS+=-DTF_FILEURL
 
 .IF "$(GUI)"=="UNX"
 CDEFS+=-DCVER=$(CVER)
-.ENDIF
-.IF "$(TFDEF)"!=""
-CDEFS+= -D$(TFDEF)
 .ENDIF
 
 .IF "$(USE_NAMESPACE)"==""
@@ -1201,12 +1176,6 @@ RSCDEFS+= -DSO3
 .IF "$(OLD_CHAOS)"!=""
 RSCDEFS+= -DOLD_CHAOS
 .ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_UCB)" != ""
-RSCDEFS+=-DTF_UCB
-.ENDIF
-
 
 UNOIDL=unoidl
 
@@ -1471,17 +1440,9 @@ RCFLAGS+= $(ENVRCFLAGS)
 RCLINKFLAGS+= $(ENVRCLINKFLAGS)
 
 
+#to be removed soon!!!
 .IF "$(TF_CNTEX)"=="$(WORK_STAMP)"
 CDEFS+= -DTF_CNTEX
-.ENDIF
-
-.IF "$(TF_PACKAGES)"=="$(WORK_STAMP)"
-CDEFS+= -DTF_PACKAGES
-TF_PACKAGES_DEF=-DTF_PACKAGES
-.ENDIF
-
-.IF "$(TF_ONE51)"=="$(WORK_STAMP)"
-CDEFS+= -DTF_ONE51
 .ENDIF
 
 #.IF "$(UPDATER)"=="YES"
@@ -1490,6 +1451,7 @@ CDEFS+=-DUPD=\"$(UPD)\" -DMINOR=\"$(LAST_MINOR)\" -DBUILD_ID=\"$(BUILD)\"
 .ENDIF
 #.ENDIF
 
+#to be removed soon!!!
 .IF "$(TF_NEWEX)"!=""
 CDEFS+= -DTF_NEWEX
 .ENDIF

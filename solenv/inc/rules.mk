@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2001-03-16 18:06:34 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -593,45 +593,7 @@ $(MISC)$/%.dpz :
     @+echo "#" > $@
 .ENDIF
 
-# Dependencies fuer unoidl - Files
-
-$(MISC)$/%.dp2 : makefile.mk
-.IF "$(nodep)"==""
-    @+echo Making dp2...
-.IF "$(NOSMARTUNO)"==""
-    $(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLDEPFLAGS) -Bs2u $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUT)$/cxx$(SMARTPRE)$/$(IDLPACKAGE) $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp2
-.ENDIF   #NOSMARTUNO
-.ELSE
-    @+echo not making dp2...
-    @+echo "#" > $@
-.ENDIF
-
-$(MISC)$/%.dp1 : makefile.mk
-.IF "$(nodep)"==""
-    @+echo Making dp1...
-.IF "$(NOSMARTUNO)"==""
-    +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLDEPFLAGS) -Bsmart $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE) -OI$(OUT)$/cxx$(SMARTPRE)$/$(IDLPACKAGE) $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp1
-.ELSE   #NOSMARTUNO
-.IF "$(PACKAGE)"==""
-    $(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLDEPFLAGS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUT)$/cxx $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp1
-.ELSE
-    +echo $(UNOIDL) $(UNOIDLDEFS) $(UNOIDLDEPFLAGS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -I$(SOLARIDLDIR)$/$(PACKAGE) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUT)$/cxx$/$(IDLPACKAGE) $(DEPIDLFILES) 
-    $(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLDEPFLAGS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -I$(SOLARIDLDIR)$/$(PACKAGE) -I$(SOLARIDLDIR) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUT)$/cxx$/$(IDLPACKAGE) $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp1
-.ENDIF
-.ENDIF   #NOSMARTUNO
-.ELSE
-    @+echo not making dp1...
-    @+echo "#" > $@
-.ENDIF
-
-$(MISC)$/%.dp3 : makefile.mk
-.IF "$(nodep)"==""
-    @+echo Making dp3.....
-    +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) $(UNOIDLDEPFLAGS) -Bjava -P$(PRJNAME) -OH$(MISC)$/java $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp3
-.ELSE
-    @+echo not making dp3...
-    @+echo "#" > $@
-.ENDIF
+# Dependencies fuer java - Files
 
 $(MISC)$/%.dpj : makefile.mk
     @+echo Making dpj...
@@ -698,154 +660,6 @@ $(OBJ)$/%.obj : %.asm
 
 .SOURCE.idl : . $(SOLARVER)$/$(INPATH)$/idl$/remote $(SOLARVER)$/$(INPATH)$/idl $(SOLARVER)$/$(INPATH)$/idl$(UPDMINOREXT)$/$(PACKAGE)
 
-.IF "$(TF_PACKAGES)"==""
-.IF "$(NOSMARTUNO)"==""
-# smart uno mapping files fuer den unoidl generieren !
-$(MISC)$/%.smr : %.idl
-    @+echo Making for nix $@
-.IF "$(GUI)"=="UNX"
-        @+-echo mapping > $@
-        @+-echo \{ >> $@
-.IF "$(IDLMAP)"!=""
-        @+-echo "#import <$(IDLMAP)>" >> $@
-        @+-echo "#import <$*.idl>" >> $@
-.ELSE
-        @+-echo "#import <$(PRJNAME)map.idl>" >> $@
-        @+-echo "#import <$(PRJNAME)$/$*.idl>" >> $@
-.ENDIF
-        @+-echo "};" >> $@
-.ELSE
-        @+-echo mapping > $@
-        @+-echo { >> $@
-.IF "$(IDLMAP)"!=""
-        @+-echo `#import <$(IDLMAP)>` >> $@
-        @+-echo `#import <$*.idl>` >> $@
-.ELSE
-        @+-echo `#import <$(PRJNAME)map.idl>` >> $@
-        @+-echo `#import <$(PRJNAME)$/$*.idl>` >> $@
-.ENDIF
-        @+-echo }; >> $@
-.ENDIF
-
-# call unoidl 
-$(MISC)$/%.cxx : $(MISC)$/%.smr
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGENAME) -OH$(INCCOM)$/$(IDLPACKAGE) -OI$(MISC) $<
-        +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -P$(PRJNAME) -OH$(OUT)$/ucr $(DEPIDLFILES)
-.IF "$(UPDATER)$(GUI)"=="YESWNT"
-.IF "$(NOUNODOC)"==""
-        +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(PACKAGE) -OH$(PRJ)$/..$/unodoc $(@:b).idl
-.ENDIF
-.ENDIF
-$(INCCOM)$/$(IDLPACKAGE)$/%.hxx : $(MISC)$/%.smr
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) -P$(IDLPACKAGENAME) -OH$(INCCOM)$/$(IDLPACKAGE) -OI$(MISC) $<
-
-.ELSE		#  "$(NOSMARTUNO)"==""
-
-$(MISC)$/%.cxx : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(PRJNAME) -OH$(INCCOM)$/$(PRJNAME) -OI$(MISC) $<
-        +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -P$(PRJNAME) -OH$(OUT)$/ucr $<
-$(INCCOM)$/$(PRJNAME)$/%.hxx : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) -P$(PRJNAME) -OH$(INCCOM)$/$(PRJNAME) -OI$(MISC) $<
-
-.ENDIF  			# "$(NOSMARTUNO)"==""
-
-.ELSE		# "$(TF_PACKAGES)"==""
-
-.IF "$(NOSMARTUNO)"==""
-# smart uno mapping files fuer den unoidl generieren !
-$(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr : %.idl
-    @+echo Making for TF_PACKAGES $@
-    @+-$(MKDIRHIER) $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)
-.IF "$(GUI)"=="UNX"
-        @+-echo mapping > $@
-        @+-echo \{ >> $@
-.IF "$(IDLMAP)"!=""
-        @+-echo "#import <$(IDLMAP)>" >> $@
-.IF "$(UCE)"==""
-        @+-echo "#import <$*.idl>" >> $@
-.ELSE
-        @+-echo "#import <$(IDLPACKAGE)$/$*.idl>" >> $@
-.ENDIF
-.ELSE			# "$(IDLMAP)"!=""
-        @+-echo "#import <$(PRJNAME)map.idl>" >> $@
-        @+-echo "#import <$(PRJNAME)$/$*.idl>" >> $@
-.ENDIF			# "$(IDLMAP)"!=""
-        @+-echo "};" >> $@
-.ELSE			# "$(GUI)"=="UNX"
-        @+-echo mapping > $(@)
-        @+-echo { >>  $(@)
-.IF "$(IDLMAP)"!=""
-        @+-echo `#import <$(IDLMAP)>` >>  $(@)
-.IF "$(UCE)"==""
-        @+-echo `#import <$*.idl>` >> $(@)
-.ELSE
-        @+-echo `#import <$(IDLPACKAGE)$/$*.idl>` >> $(@)
-.ENDIF
-.ELSE
-        @+-echo `#import <$(PRJNAME)map.idl>` >>  $(@)
-        @+-echo `#import <$(PRJNAME)$/$*.idl>` >> $(@)
-.ENDIF
-        @+-echo }; >> $(@)
-.ENDIF			# "$(GUI)"=="UNX"
-
-# call unoidl 
-$(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE)$/%.hxx $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/%.cxx .UPDATEALL : $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr
-        +$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(SMARTPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE) $(<)
-.IF "$(UPDATER)$(GUI)"=="YESWNT"
-.IF "$(NOUNODOC)"==""
-        +-$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(@:b).idl
-.ENDIF
-.ENDIF
-
-$(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $< )
-#		+$(UNOIDL) -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $<
-
-$(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
-        +idlc @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $< )		
-#		+$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $<
-
-$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/s2u_%.cxx : $(MISC)$(SMARTPRE)$/$(IDLPACKAGE)$/%.smr
-    +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) $(TF_PACKAGES_DEF) -Bs2u -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE) $(<)
-
-$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE)$/%.h : %.idl
-    +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) $(TF_PACKAGES_DEF) -Wb,c -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) $<
-
-.ELSE		#  "$(NOSMARTUNO)"==""
-
-.IF "$(PACKAGE)"==""
-$(MISC)$/%.cxx : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$/$(IDLPACKAGE) -OI$(MISC) $<
-$(INCCOM)$/$(PRJNAME)$/%.hxx : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$/$(IDLPACKAGE) -OI$(MISC) $<
-.ELSE
-$(OUTCXX)$/$(IDLPACKAGE)$/%.cxx : %.idl
-        +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$/$(IDLPACKAGE) $< )
-$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE)$/%.hxx : %.idl
-        +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINC) -P$(IDLPACKAGE) -OH$(INCCOM)$(UNOPRE)$/$(IDLPACKAGE) -OI$(OUTCXX)$/$(IDLPACKAGE) $< )
-.ENDIF
-
-$(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
-        +$(UNOIDL) $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $<
-
-.ENDIF  			# "$(NOSMARTUNO)"==""
-
-.IF "$(javauno)"!=""
-.IF "$(IDLFILES)"!=""
-# idl to java...
-$(MISC)$/java$/%.java :
-    +$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bjava -P$(PRJNAME) -OH$(MISC)$/java $(DEPIDLFILES)
-.ENDIF
-.ENDIF
-
-.ENDIF
-
-.IF "$(make_uno_ext)"!=""
-$(MISC)$/%.uno : $(MISC)$/%.smr
-        +-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Buno -prefixswitch -P$(PRJNAME) -OI$(MISC) -OH$(OUT)$/inc $(@:b).idl
-        $(TOUCH) $(MISC)$/$(@:b).uno
-.ENDIF
-    
 .IF "$(GUI)"=="WNTtest"
 $(MISC)$/%.hid : %.src
     +echo Making hids...

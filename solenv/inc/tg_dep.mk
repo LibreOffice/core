@@ -7,9 +7,6 @@ ALLDEP .PHONY:
 .ENDIF
     @+-$(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dp1 >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dp2 >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dp3 >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
 .IF "$(DEPFILES)" != ""
