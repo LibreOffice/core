@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConversion.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:56:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ module com { module sun { module star { module i18n {
 /** offers generic text conversion.
 
     <p>This is an abstract service which does not make sense to be instatiated.
+
+     @since #107627#
 */
 service TextConversion
 {
