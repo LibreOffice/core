@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-19 13:04:52 $
+ *  last change: $Author: ka $ $Date: 2002-07-22 15:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <vector>
 #include "editeng.hxx"
 #include "xexch.hxx"
 #include "xflclit.hxx"
@@ -705,23 +706,48 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
 
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
 {
-    // Wenn das sortieren der MarkList mal stoeren sollte,
-    // werde ich sie mir wohl kopieren muessen.
     ((SdrExchangeView*)this)->aMark.ForceSort();
-    // Hier kann noch optimiert werden ... (SetOffset)
     pXOut->SetOutDev(&rOut);
     SdrPaintInfoRec aInfoRec;
     aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
 
-    for (ULONG nm=0; nm<aMark.GetMarkCount(); nm++) {
-        SdrMark* pM=aMark.GetMark(nm);
-        SdrObject* pO=pM->GetObj();
-        Point aOfs(-rOfs.X(),-rOfs.Y());
-        aOfs+=pM->GetPageView()->GetOffset();
-        if (aOfs!=pXOut->GetOffset()) pXOut->SetOffset(aOfs);
-        pO->Paint(*pXOut,aInfoRec);
+    ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
+    ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
+    ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
+    const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
+    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
+    sal_uInt32                                  n, nCount;
+
+    for( n = 0, nCount = aMark.GetMarkCount(); n < nCount; n++ )
+    {
+        SdrMark* pMark = aMark.GetMark( n );
+
+        // paint objects on control layer on top of all otherobjects
+        if( nControlLayerId == pMark->GetObj()->GetLayer() )
+            rObjVector2.push_back( pMark );
+        else
+            rObjVector1.push_back( pMark );
     }
-    pXOut->SetOffset(Point(0,0));
+
+    for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
+    {
+        ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
+
+        for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+        {
+            SdrMark*    pMark = rObjVector[ i ];
+            Point       aOfs( -rOfs.X(),-rOfs.Y() );
+
+            aOfs += pMark->GetPageView()->GetOffset();
+
+            if( aOfs != pXOut->GetOffset() )
+                pXOut->SetOffset(aOfs);
+
+            pMark->GetObj()->Paint( *pXOut, aInfoRec );
+        }
+    }
+
+    pXOut->SetOffset( Point(0,0) );
 }
 
 // -----------------------------------------------------------------------------
@@ -734,37 +760,58 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     SdrModel* pNeuMod=pMod->AllocModel();
     SdrPage* pNeuPag=pNeuMod->AllocPage(FALSE);
     pNeuMod->InsertPage(pNeuPag);
-    ULONG nCloneErrCnt=0;
-    ULONG nMarkAnz=aMark.GetMarkCount();
-    ULONG nm;
 
-    for (nm=0; nm<nMarkAnz; nm++)
+    ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
+    ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
+    ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
+    const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
+    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), FALSE );
+    sal_uInt32                                  n, nCount, nCloneErrCnt;
+
+    for( n = 0, nCount = aMark.GetMarkCount(); n < nCount; n++ )
     {
-        const SdrMark*      pM = aMark.GetMark( nm );
-        const SdrObject*    pObj = pM->GetObj();
-        SdrObject*          pNeuObj;
+        SdrMark* pMark = aMark.GetMark( n );
 
-        if( pObj->ISA( SdrPageObj ) )
-        {
-            // convert SdrPageObj's to a graphic representation, because
-            // virtual connection to referenced page gets lost in new model
-            pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
-            pNeuObj->SetPage( pNeuPag );
-            pNeuObj->SetModel( pNeuMod );
-        }
+        // paint objects on control layer on top of all otherobjects
+        if( nControlLayerId == pMark->GetObj()->GetLayer() )
+            rObjVector2.push_back( pMark );
         else
-            pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
-
-        if( pNeuObj )
-        {
-            Point aP(pM->GetPageView()->GetOffset());
-            if (aP.X()!=0 || aP.Y()!=0) pNeuObj->NbcMove(Size(aP.X(),aP.Y()));
-            SdrInsertReason aReason(SDRREASON_VIEWCALL);
-            pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
-        }
-        else
-            nCloneErrCnt++;
+            rObjVector1.push_back( pMark );
     }
+
+    for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
+    {
+        ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
+
+        for( sal_uInt32 i = 0; i < rObjVector.size(); i++ )
+        {
+               const SdrMark*      pMark = rObjVector[ i ];
+            const SdrObject*    pObj = pMark->GetObj();
+            SdrObject*          pNeuObj;
+
+            if( pObj->ISA( SdrPageObj ) )
+            {
+                // convert SdrPageObj's to a graphic representation, because
+                // virtual connection to referenced page gets lost in new model
+                pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, const_cast< SdrObject* >( pObj ) ), pObj->GetLogicRect() );
+                pNeuObj->SetPage( pNeuPag );
+                pNeuObj->SetModel( pNeuMod );
+            }
+            else
+                pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
+
+            if( pNeuObj )
+            {
+                Point aP(pMark->GetPageView()->GetOffset());
+                if (aP.X()!=0 || aP.Y()!=0) pNeuObj->NbcMove(Size(aP.X(),aP.Y()));
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+            }
+            else
+                nCloneErrCnt++;
+        }
+    }
+
     // und nun zu den Konnektoren
     // Die Objekte in pNeuPag werden auf die MarkList abgebildet
     // und so die Objektverbindungen hergestellt.
@@ -774,8 +821,8 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {
-        for (nm=0; nm<nMarkAnz; nm++) {
-            SdrMark* pM=aMark.GetMark(nm);
+        for (n=0; n<aMark.GetMarkCount(); n++) {
+            SdrMark* pM=aMark.GetMark(n);
             SdrObject* pO=pM->GetObj();
             SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pO);
             if (pSrcEdge!=NULL) {
@@ -784,7 +831,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // Listenuebergreifend
                 if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // ist (noch) nicht
                 if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
-                    SdrObject* pDstEdgeTmp=pNeuPag->GetObj(nm);
+                    SdrObject* pDstEdgeTmp=pNeuPag->GetObj(n);
                     SdrEdgeObj* pDstEdge=PTR_CAST(SdrEdgeObj,pDstEdgeTmp);
                     if (pDstEdge!=NULL) {
                         if (pSrcNode1!=NULL) {
