@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:08:20 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,44 +232,53 @@ void ScfTools::ConvertToScDefinedName( String& rName )
 
 // *** streams and storages *** -----------------------------------------------
 
-SotStorageRef ScfTools::OpenStorageRead( SotStorage* pStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageRead( SotStorageRef xStrg, const String& rStrgName )
 {
     SotStorageRef xSubStrg;
-    if( pStrg && pStrg->IsContained( rStrgName ) )
-        xSubStrg = pStrg->OpenSotStorage( rStrgName, STREAM_STD_READ );
+    if( xStrg.Is() && xStrg->IsContained( rStrgName ) )
+        xSubStrg = xStrg->OpenSotStorage( rStrgName, STREAM_STD_READ );
     return xSubStrg;
 }
 
-SotStorageRef ScfTools::OpenStorageWrite( SotStorage* pStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageWrite( SotStorageRef xStrg, const String& rStrgName )
 {
     SotStorageRef xSubStrg;
-    if( pStrg )
-        xSubStrg = pStrg->OpenSotStorage( rStrgName, STREAM_STD_WRITE );
+    if( xStrg.Is() )
+        xSubStrg = xStrg->OpenSotStorage( rStrgName, STREAM_STD_WRITE );
     return xSubStrg;
 }
 
-SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorage* pStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorageRef xStrg, const String& rStrmName )
 {
     SotStorageStreamRef xStrm;
-    if( pStrg && pStrg->IsContained( rStrmName ) && pStrg->IsStream( rStrmName ) )
-        xStrm = pStrg->OpenSotStream( rStrmName, STREAM_STD_READ );
+    if( xStrg.Is() && xStrg->IsContained( rStrmName ) && xStrg->IsStream( rStrmName ) )
+        xStrm = xStrg->OpenSotStream( rStrmName, STREAM_STD_READ );
     return xStrm;
 }
 
-SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorage* pStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const String& rStrmName )
 {
-    DBG_ASSERT( !pStrg || !pStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
+    DBG_ASSERT( !xStrg || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     SotStorageStreamRef xStrm;
-    if( pStrg )
-        xStrm = pStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
+    if( xStrg.Is() )
+        xStrm = xStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
     return xStrm;
 }
 
 // *** item handling *** ------------------------------------------------------
 
-bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
+bool ScfTools::CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep )
 {
     return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
+}
+
+bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep )
+{
+    DBG_ASSERT( pnWhichIds, "ScfTools::CheckItems - no which id list" );
+    for( const USHORT* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
+        if( CheckItem( rItemSet, *pnWhichId, bDeep ) )
+            return true;
+    return false;
 }
 
 void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, sal_uInt16 nWhichId, bool bSkipPoolDef )
