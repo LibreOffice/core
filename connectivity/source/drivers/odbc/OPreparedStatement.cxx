@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 13:01:52 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
     if(!isPrepared())
         prepareStatement();
     OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
-    if(m_xMetaData.is())
+    if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_aStatementHandle);
     return m_xMetaData;
 }
@@ -1226,7 +1226,7 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
 
 void OPreparedStatement::FreeParams()
 {
-    delete boundParams;
+    delete [] boundParams;
     boundParams = NULL;
 }
 // -------------------------------------------------------------------------
