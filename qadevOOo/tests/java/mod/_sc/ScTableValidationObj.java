@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableValidationObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 17:08:23 $
+ *  last change:$Date: 2003-05-27 13:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheet;
@@ -103,7 +104,7 @@ public class ScTableValidationObj extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
