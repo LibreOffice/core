@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:41:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 #ifndef _VCL_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -523,16 +523,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                 }
             break;
-            case SID_ATTR_ADDRESS:
-            {
-                SvxAddressItem aAddress;
-                aAddress.SetWhich( nWhich );
-                rSet.Put( aAddress );
-            }
-            break;
-            case SID_ATTR_UNDO_COUNT:
-                rSet.Put(SfxUInt16Item( SID_ATTR_UNDO_COUNT, SwEditShell::GetUndoActionCount()));
-            break;
             case SID_ATTR_METRIC:
                 rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, ::GetDfltMetric(bWebView)));
             break;
@@ -843,42 +833,6 @@ void SwModule::ExecOther(SfxRequest& rReq)
             InsertLab(rReq, nWhich == FN_LABEL);
             break;
 
-        case SID_ATTR_ADDRESS:
-        {
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
-            {
-                ((SvxAddressItem*)pItem)->Store();
-            }
-        }
-        break;
-        case SID_ATTR_UNDO_COUNT:
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
-        {
-            const int nNew = ((SfxUInt16Item*)pItem)->GetValue();
-            const int nOld = SwEditShell::GetUndoActionCount();
-            if(!nNew || !nOld)
-            {
-                sal_Bool bUndo = nNew != 0;
-                //ueber DocShells iterieren und Undo umschalten
-
-                TypeId aType(TYPE(SwDocShell));
-                SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
-                while( pDocShell )
-                {
-                    pDocShell->GetDoc()->DoUndo( bUndo );
-                    pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
-                }
-            }
-            SwEditShell::SetUndoActionCount( nNew );
-            // intern kommt der Request aus dem Dialog, dort werden die Options gesetzt
-            if( rReq.IsAPI() )
-            {
-                SvtUndoOptions aOpt;
-                aOpt.SetUndoCount(  nNew );
-            }
-            break;
-        }
-        break;
         case SID_ATTR_METRIC:
         if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
         {
@@ -983,10 +937,6 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if(pList->IsActive())
                 pList->Update();
         }
-
-        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().
-                    GetItemState( SID_ATTR_ADDRESS, sal_False ))
-            bAuthorInitialised = FALSE;
     }
     else if(rHint.ISA(SfxSimpleHint))
     {
@@ -1042,6 +992,29 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 pObjSh = SfxObjectShell::GetNext(*pObjSh);
             }
         }
+        else if(SFX_HINT_USER_OPTIONS_CHANGED == nHintId)
+        {
+            bAuthorInitialised = FALSE;
+        }
+        else if(SFX_HINT_UNDO_OPTIONS_CHANGED == nHintId)
+        {
+            const int nNew = GetUndoOptions().GetUndoCount();
+            const int nOld = SwEditShell::GetUndoActionCount();
+            if(!nNew || !nOld)
+            {
+                sal_Bool bUndo = nNew != 0;
+                //ueber DocShells iterieren und Undo umschalten
+
+                TypeId aType(TYPE(SwDocShell));
+                SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+                while( pDocShell )
+                {
+                    pDocShell->GetDoc()->DoUndo( bUndo );
+                    pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+                }
+            }
+            SwEditShell::SetUndoActionCount(nNew);
+        }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -1062,6 +1035,10 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ(pAccessibilityOptions);
             EndListening(*pCTLOptions);
             DELETEZ(pCTLOptions);
+            EndListening(*pUserOptions);
+            DELETEZ(pUserOptions);
+            EndListening(*pUndoOptions);
+            DELETEZ(pUndoOptions);
         }
     }
 }
@@ -1160,6 +1137,30 @@ SvtCTLOptions& SwModule::GetCTLOptions()
         StartListening(*pCTLOptions);
     }
     return *pCTLOptions;
+}
+/* -----------------07.07.2003 09:31-----------------
+
+ --------------------------------------------------*/
+SvtUserOptions& SwModule::GetUserOptions()
+{
+    if(!pUserOptions)
+    {
+        pUserOptions = new SvtUserOptions;
+        StartListening(*pUserOptions);
+    }
+    return *pUserOptions;
+}
+/* -----------------18.07.2003 13:31-----------------
+
+ --------------------------------------------------*/
+SvtUndoOptions& SwModule::GetUndoOptions()
+{
+    if(!pUndoOptions)
+    {
+        pUndoOptions = new SvtUndoOptions;
+        StartListening(*pUndoOptions);
+    }
+    return *pUndoOptions;
 }
 /*-----------------30.01.97 08.30-------------------
 
