@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-20 14:19:26 $
+ *  last change: $Author: sab $ $Date: 2001-06-26 11:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     eType       (rScRangeData.eType),
     pDoc        (rScRangeData.pDoc),
     nIndex      (rScRangeData.nIndex),
-    pCode       (rScRangeData.pCode->Clone()),      // echte Kopie erzeugen (nicht copy-ctor)
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray),      // echte Kopie erzeugen (nicht copy-ctor)
     bModified   (rScRangeData.bModified)
 {}
 
