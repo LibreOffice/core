@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: as $ $Date: 2001-12-05 13:33:54 $
+ *  last change: $Author: cd $ $Date: 2001-12-11 14:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@ static oslModule            aTestToolModule     = 0;
 // ----------------------------------------------------------------------------
 
 char const INSTALLER_INITFILENAME[] = "initialize.ini";
+char const INSTALLMODE_STANDALONE[] = "STANDALONE";
+char const INSTALLMODE_NETWORK[]    = "NETWORK";
 #ifndef BUILD_SOSL
 char const OEM_PRELOAD_SECTION[]    = "Bootstrap";
 char const OEM_PRELOAD[]            = "Preload";
@@ -728,21 +730,34 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
             if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
             {
-                OUString aAskSetupStr( GetMsgString(
-                    STR_ASK_START_SETUP,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
+                // Check installation mode to suppress error message if we are currently running with a network installation.
+                OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
 
-                aBuffer.append( aAskSetupStr );
-                aMessage = aBuffer.makeStringAndClear();
-
-                ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-                aBootstrapFailedBox.SetText( aProductKey );
-                int nResult = aBootstrapFailedBox.Execute();
-
-                if ( nResult == RET_YES )
+                aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
+                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
                 {
+                    // network installation => start setup without error message
                     OUString aParameters;
                     StartSetup( aParameters );
+                }
+                else
+                {
+                    OUString aAskSetupStr( GetMsgString(
+                        STR_ASK_START_SETUP,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
+
+                    aBuffer.append( aAskSetupStr );
+                    aMessage = aBuffer.makeStringAndClear();
+
+                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                    aBootstrapFailedBox.SetText( aProductKey );
+                    int nResult = aBootstrapFailedBox.Execute();
+
+                    if ( nResult == RET_YES )
+                    {
+                        OUString aParameters;
+                        StartSetup( aParameters );
+                    }
                 }
             }
             else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
