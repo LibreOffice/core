@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:54:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,8 +239,6 @@ static const char* const EventNames[] =
     "ClientMessage",
     "MappingNotify"
 };
-
-static UINT32 nIn___, nOut___;
 
 // -=-= global inline =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -609,11 +607,11 @@ extern "C" {
 #endif /* HAVE_LIBSN */
 
 SalDisplay::SalDisplay( Display *display, Colormap aColMap ) :
-        pDisp_( display ),
+        mpInputMethod( NULL ),
         mpFallbackFactory ( NULL ),
-        m_pWMAdaptor( NULL ),
+        pDisp_( display ),
         hRefWindow_( None ),
-        mpInputMethod( NULL )
+        m_pWMAdaptor( NULL )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -1020,7 +1018,11 @@ void SalDisplay::Init( Colormap hXColmap, Visual *pVisual )
         // - - - - - - - - - - Window Manager  - - - - - - - - - - -
         const char *pWM = getenv( "SAL_WM" );
         if( pWM )
-            sscanf( pWM, "%li", &eWindowManager_ );
+        {
+            long int nWM = 0;
+            sscanf( pWM, "%li", &nWM );
+            eWindowManager_ = SalWM(nWM);
+        }
         else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
             eWindowManager_ = FourDwm;
         else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
@@ -1197,19 +1199,26 @@ void SalDisplay::Beep() const
 String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
     String aRet;
-    if( !nKeySym )
-        aRet = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "???" ) );
-    else
+
+    // return an empty string for keysyms that are not bound to
+    // any key code
+    XLIB_KeyCode aKeyCode = XKeysymToKeycode( GetDisplay(), nKeySym );
+    if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
-        aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
-        if( ! aRet.Len() )
+        if( !nKeySym )
+            aRet = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "???" ) );
+        else
         {
-            const char *pString = XKeysymToString( nKeySym );
-            int n = strlen( pString );
-            if( n > 2 && pString[n-2] == '_' )
-                aRet = String( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
-            else
-                aRet = String( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+            aRet = ::vcl_sal::getKeysymReplacementName( const_cast<SalDisplay*>(this)->GetKeyboardName(), nKeySym );
+            if( ! aRet.Len() )
+            {
+                const char *pString = XKeysymToString( nKeySym );
+                int n = strlen( pString );
+                if( n > 2 && pString[n-2] == '_' )
+                    aRet = String( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                else
+                    aRet = String( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+            }
         }
     }
     return aRet;
@@ -2287,6 +2296,7 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 // Fonts
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+#ifndef USE_BUILTIN_RASTERIZER
 static BOOL
 sal_IsValidFontpath( const ByteString &rFontPath,
                      const srv_vendor_t eServerVendor )
@@ -2304,6 +2314,7 @@ sal_IsValidFontpath( const ByteString &rFontPath,
 
     return TRUE;
 }
+#endif
 
 void SalDisplay::AddFontPath( const ByteString &rPath ) const
 {
@@ -2529,7 +2540,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
         default:
 
             if (   GetKbdExtension()->UseExtension()
-                && GetKbdExtension()->GetEventBase() == pEvent->type )
+                && GetKbdExtension()->GetEventBase() == sal_uInt32(pEvent->type) )
             {
                 GetKbdExtension()->Dispatch( pEvent );
                 return 1;
@@ -2946,7 +2957,7 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVisual::~SalVisual()
 {
-    if( -1 == screen && -1 == visualid ) delete visual;
+    if( -1 == screen && VisualID(-1) == visualid ) delete visual;
 }
 
 // Konvertiert die Reihenfolge der Bytes eines Pixel in Bytes eines SalColors
@@ -3185,14 +3196,14 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
     : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
-      nUsed_( rPalette.GetEntryCount() ),
-      nBlackPixel_( 0xFFFFFFFF ),
+      pLookupTable_( NULL ),
       nWhitePixel_( 0xFFFFFFFF ),
-      pLookupTable_( NULL )
+      nBlackPixel_( 0xFFFFFFFF ),
+      nUsed_( rPalette.GetEntryCount() )
 {
     pPalette_ = new SalColor[nUsed_];
 
-    for( int i = 0; i < nUsed_; i++ )
+    for( unsigned int i = 0; i < nUsed_; i++ )
     {
         const BitmapColor &rColor = rPalette[i];
         pPalette_[i] = MAKE_SALCOLOR( rColor.GetRed(),
@@ -3210,10 +3221,10 @@ SalColormap::SalColormap()
     : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pVisual_( NULL ),
-      nUsed_( 2 ),
-      nBlackPixel_( 0 ),
+      pLookupTable_( NULL ),
       nWhitePixel_( 1 ),
-      pLookupTable_( NULL )
+      nBlackPixel_( 0 ),
+      nUsed_( 2 )
 {
     pPalette_ = new SalColor[nUsed_];
 
@@ -3226,10 +3237,10 @@ SalColormap::SalColormap( USHORT nDepth )
     : pDisplay_( GetSalData()->GetDisplay() ),
       hColormap_( None ),
       pPalette_( NULL ),
-      nUsed_( 1 << nDepth ),
+      pLookupTable_( NULL ),
       nWhitePixel_( (1 << nDepth) - 1 ),
       nBlackPixel_( 0x00000000 ),
-      pLookupTable_( NULL )
+      nUsed_( 1 << nDepth )
 
 {
     SalVisual *pVisual  = pDisplay_->GetVisual();
