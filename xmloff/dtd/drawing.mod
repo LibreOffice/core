@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.69 2001-09-20 17:47:53 dvo Exp $
+	$Id: drawing.mod,v 1.70 2001-11-15 17:07:26 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -367,6 +367,7 @@
 <!ATTLIST style:properties draw:green %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:blue %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:color-inversion %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:mirror %boolean; #IMPLIED>
 
 <!-- shadow attributes -->
 <!ATTLIST style:properties draw:shadow (visible|hidden) #IMPLIED>
@@ -557,6 +558,7 @@
 <!ATTLIST draw:text-box %draw-transform; >
 <!ATTLIST draw:text-box draw:id %draw-shape-id;>
 <!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:text-box draw:corner-radius %nonNegativeLength; #IMPLIED>
 
 <!-- image -->
 <!ELEMENT draw:image (office:binary-data?,office:events?,draw:image-map?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>

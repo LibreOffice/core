@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "AdjustBlue",                      XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     MAP( "GraphicCrop",                     XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, 0 ), // exists in SW, too, with same property name
     MAP( "Transparency",                    XML_NAMESPACE_DRAW, XML_TRANSPARENCY,           XML_TYPE_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name
+    MAP( "IsMirrored",                      XML_NAMESPACE_DRAW, XML_MIRROR,                 XML_TYPE_BOOL, 0 ),
 
     // animation text attributes
     MAP( "TextAnimationKind",               XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
