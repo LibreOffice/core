@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-08 09:14:28 $
+ *  last change: $Author: kr $ $Date: 2001-02-08 09:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-02-08 09:14:28 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-02-08 09:18:35 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -567,12 +567,18 @@ public class TypeDescription {
         _memberTypeInfosByName = new Hashtable();
 
         for(int i = 0; i < fields.length; ++ i) {
-            MemberTypeInfo memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
+            MemberTypeInfo memberTypeInfo = null;
+
+            if(_superType != null)
+                memberTypeInfo = _superType.getMemberTypeInfo(fields[i].getName());
+
+            if(memberTypeInfo == null)
+                memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
 
             if(memberTypeInfo == null)
                 memberTypeInfo = new MemberTypeInfo(fields[i].getName(), 0);
 
-                _memberTypeInfosByName.put(memberTypeInfo.getName(), memberTypeInfo);
+            _memberTypeInfosByName.put(memberTypeInfo.getName(), memberTypeInfo);
         }
     }
 
