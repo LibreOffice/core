@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:54:06 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3999,6 +3999,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "Aus~geblendet" ;
         Text [ english_us ] = "H~idden" ;
+        Text[ chinese_simplified ] = "隐入";
     };
     Window WIN_EFFECTS_PREVIEW
     {
