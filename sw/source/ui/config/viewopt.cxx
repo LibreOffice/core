@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:36:59 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,8 @@ SwViewOption::SwViewOption() :
     aRetoucheColor( COL_TRANSPARENT ),
     nShdwCrsrFillMode( FILL_TAB ),
     bStarOneSetting(FALSE),
-    bIsPagePreview(FALSE)
+    bIsPagePreview(FALSE),
+    bBookview(FALSE)
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
@@ -525,6 +526,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     sSymbolFont     = rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
+    bBookview       = rVOpt.bBookview;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;
@@ -558,6 +560,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     sSymbolFont     = rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
+    bBookview       = rVOpt.bBookview;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;
