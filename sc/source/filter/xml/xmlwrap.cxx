@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:19:34 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         catch( packages::WrongPasswordException& )
         {
             return ERRCODE_SFX_WRONGPASSWORD;
+        }
+        catch( packages::zip::ZipIOException& )
+        {
+            return ERRCODE_IO_BROKENPACKAGE;
         }
         catch( uno::Exception& )
         {
