@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tra $ $Date: 2002-11-14 10:46:59 $
+#   last change: $Author: tra $ $Date: 2002-11-14 12:32:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,21 +92,24 @@ TESTAPP=testftmp
 # --- Files --------------------------------------------------------
 
 .IF "$(TESTAPP)" == "testftmp"
-
-    CFLAGS+=/Ob1
     
     OBJFILES=$(OBJ)$/testftmp.obj
 
-    APP1TARGET=	testftmp
+    APP1TARGET=testftmp
     APP1OBJS=$(OBJFILES)
 
-    APP1STDLIBS=kernel32.lib
-
-    APP1LIBS=$(LB)$/isal.lib
-
-    APP1DEPN=$(LB)$/isal.lib
+    .IF "$(GUI)"=="WNT"
+        CFLAGS+=/Ob1
+        APP1STDLIBS=kernel32.lib
+        APP1LIBS=$(LB)$/isal.lib
+        APP1DEPN=$(LB)$/isal.lib		
+    .ELSE
+        APP1STDLIBS=$(SALLIB)
+        APP1DEPN=$(SLB)$/sal.lib
+    .ENDIF
 
 .ENDIF
+
 
 .IF "$(TESTAPP)" == "getlocaleinfotest"
 
