@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:26:32 $
+ *  last change: $Author: os $ $Date: 2001-06-11 10:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@ ModelessDialog RID_SVXDLG_RUBY
     SVLook = TRUE ;
     HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 227 , 195 ) ;
-    Text = "Phonetisches Leitzeichen" ;
+    Size = MAP_APPFONT ( 207 , 195 ) ;
+    Text = "Ruby" ;
     Text [ ENGLISH ] = "Ruby" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
