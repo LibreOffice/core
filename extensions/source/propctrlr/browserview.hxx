@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:00:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ namespace pcr
 {
 //............................................................................
 
-    class OPropertyBrowserController;
     class OPropertyEditor;
 
     //========================================================================
@@ -90,8 +89,6 @@ namespace pcr
     //========================================================================
     class OPropertyBrowserView : public Window
     {
-        OPropertyBrowserController*     m_pActiveController;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
 
         OPropertyEditor*        m_pPropBox;
@@ -109,10 +106,6 @@ namespace pcr
                         Window* pParent, const ResId& rId);
 
         virtual ~OPropertyBrowserView();
-
-        OPropertyBrowserController* getActiveController() const
-                { return m_pActiveController; }
-        void                        setActiveController( OPropertyBrowserController* pController );
 
         OPropertyEditor*    getPropertyBox() { return m_pPropBox; }
 
