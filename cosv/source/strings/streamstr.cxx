@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: np $ $Date: 2002-03-22 13:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,13 @@ StreamStr::MoveData( char *        i_pStart,
             *pDest = *pSrc;
         }
     }
+}
+
+// Dummy, needed for debug-versions of some compilers.
+void
+c_str()
+{
+    // Does nothing.
 }
 
 
