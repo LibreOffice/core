@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treesegment.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,17 +101,6 @@ namespace configmgr
         using memory::Pointer;
 
 // -----------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-// -----------------------------------------------------------------------------
-struct TreeSegment::Impl : salhelper::SimpleReferenceObject
-{
-    Impl(RawTreeData& _tree) : tree(_tree), data() {}
-    RawTreeData         tree;
-    memory::Segment     data;
-};
-
-// -----------------------------------------------------------------------------
-#else // SHARABLE_DATA
 // -----------------------------------------------------------------------------
 struct TreeSegment::Impl : salhelper::SimpleReferenceObject
 {
@@ -122,7 +111,6 @@ struct TreeSegment::Impl : salhelper::SimpleReferenceObject
     data::TreeAddress   base;
 };
 // -----------------------------------------------------------------------------
-#endif // SHARABLE_DATA
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
@@ -180,89 +168,6 @@ TreeAccessor    TreeSegment::getTreeAccess() const
 }
 
 // -----------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-// -----------------------------------------------------------------------------
-TreeSegment::Impl* TreeSegment::createNewSegment(RawTreeData& _aTree)
-{
-    return new Impl(_aTree);
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment TreeSegment::cloneSegment() const
-{
-    if (!is()) return TreeSegment();
-
-    // TODO: Improve cloning for shared data
-
-    RawTreeData aClonedTree = this->cloneData();
-
-    return createNew( aClonedTree );
-}
-
-// -----------------------------------------------------------------------------
-bool TreeSegment::is() const
-{
-    return hasData() && (m_pImpl->tree.get() != NULL);
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::Name TreeSegment::getName() const
-{
-    OSL_ENSURE(is(), "Operation requires a valid tree");
-
-    if (!is()) return Name();
-
-    return configuration::makeElementName( getTreeData()->getName(), Name::NoValidate() );
-}
-
-// -----------------------------------------------------------------------------
-void TreeSegment::setName(Name const & _aNewName)
-{
-    OSL_ENSURE(is(), "Operation requires a valid tree");
-
-    if (is()) getTreeDataForUpdate()->setName(_aNewName.toString());
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::RawTreeData TreeSegment::cloneData() const
-{
-    OSL_ENSURE(is(), "Accessing tree data requires a valid tree");
-    RawTreeData aResult;
-    if (is())
-    {
-        aResult = m_pImpl->tree->clone();
-    }
-    return aResult;
-}
-
-// -----------------------------------------------------------------------------
-TreeAddress TreeSegment::getBaseAddress() const
-{
-    return TreeAddress(Pointer(getTreeData()));
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeDataPtr TreeSegment::getTreeData() const
-{
-    return hasData() ? m_pImpl->tree.get() : 0;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::TreeDataUpdatePtr TreeSegment::getTreeDataForUpdate(memory::UpdateAccessor& _anUpdater) const
-{
-    OSL_ASSERT(_anUpdater.is());
-    return hasData() ? m_pImpl->tree.get() : 0;
-}
-
-// -----------------------------------------------------------------------------
-TreeSegment::NodeDataPtr TreeSegment::getSegmentRootNode() const
-{
-    return getTreeData();
-}
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-#else  // SHARABLE_DATA
 // -----------------------------------------------------------------------------
 TreeSegment::Impl::~Impl()
 {
@@ -408,21 +313,6 @@ TreeSegment::NodeDataPtr TreeSegment::getSegmentRootNode() const
         return NULL;
 }
 // -----------------------------------------------------------------------------
-#endif   // SHARABLE_DATA
-// -----------------------------------------------------------------------------
-#if 0
-TreeSegment::RawTreeData TreeSegment::releaseData()
-{
-    OSL_ENSURE(is(), "Accessing tree data requires a valid tree");
-    RawTreeData aResult;
-    if (hasData())
-    {
-        aResult = m_pImpl->tree;
-        m_pImpl.clear();
-    }
-    return aResult;
-}
-#endif
 // -----------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------

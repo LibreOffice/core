@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodevisitor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,98 +96,6 @@ namespace configmgr
 typedef NodeVisitor::Result Result;
 
 // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-    // -------------------------------------------------------------------------
-    #define applyToTree     applyToNode
-    #define applyToElements applyToChildren
-    // -------------------------------------------------------------------------
-    struct NodeVisitor::Dispatcher : NodeAction
-    {
-        NodeVisitor& m_target;
-        Accessor     m_accessor;
-        Result       m_result;
-
-        Dispatcher(NodeVisitor& _rTarget, Accessor const& _aAccessor)
-        : m_target(_rTarget)
-        , m_accessor(_aAccessor)
-        , m_result(NodeVisitor::CONTINUE)
-        {}
-
-        virtual void handle(ValueNode const&);
-        virtual void handle(ISubtree const&);
-
-        Result dispatch(ISubtree const&);
-    };
-
-    // -------------------------------------------------------------------------
-
-    inline
-    Result NodeVisitor::Dispatcher::dispatch(ISubtree const& _aNode)
-    {
-        if (_aNode.isSetNode())
-            return m_target.handle( SetNodeAccess(m_accessor, &_aNode) );
-
-        else
-            return m_target.handle( GroupNodeAccess(m_accessor, &_aNode) );
-    }
-    // -------------------------------------------------------------------------
-
-    void NodeVisitor::Dispatcher::handle(ValueNode const& _aNode)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = m_target.handle( ValueNodeAccess(m_accessor, &_aNode) );
-    }
-    // -------------------------------------------------------------------------
-
-    void NodeVisitor::Dispatcher::handle(ISubtree const& _aNode)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = dispatch( _aNode );
-    }
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-    struct SetVisitor::Dispatcher : NodeAction
-    {
-        SetVisitor&  m_target;
-        Accessor     m_accessor;
-        Result       m_result;
-
-        Dispatcher(SetVisitor& _rTarget, Accessor const& _aAccessor)
-        : m_target(_rTarget)
-        , m_accessor(_aAccessor)
-        , m_result(NodeVisitor::CONTINUE)
-        {}
-
-        virtual void handle(ValueNode const&);
-        virtual void handle(ISubtree const&);
-
-        Result dispatch(INode const&);
-    };
-
-    // -------------------------------------------------------------------------
-
-    inline
-    Result SetVisitor::Dispatcher::dispatch(INode const& _aRootNode)
-    {
-        return m_target.handle( TreeAccessor(m_accessor, &_aRootNode) );
-    }
-    // -------------------------------------------------------------------------
-
-    void SetVisitor::Dispatcher::handle(ValueNode const& _aNode)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = dispatch( _aNode );
-    }
-    // -------------------------------------------------------------------------
-
-    void SetVisitor::Dispatcher::handle(ISubtree const& _aNode)
-    {
-        if (m_result != NodeVisitor::DONE)
-            m_result = dispatch( _aNode );
-    }
-    // -------------------------------------------------------------------------
-#else // SHARABLE_DATA
     // -------------------------------------------------------------------------
     struct NodeVisitor::Dispatcher
     {
@@ -292,7 +200,6 @@ typedef NodeVisitor::Result Result;
 
     }
     // -------------------------------------------------------------------------
-#endif // SHARABLE_DATA
 // -------------------------------------------------------------------------
 
 Result NodeVisitor::visitNode(NodeAccess const& _aNode)

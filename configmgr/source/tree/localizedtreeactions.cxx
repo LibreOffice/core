@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,14 +365,6 @@ data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale)
 //--------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-// -----------------------------------------------------------------------------
-data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale, bool bMakeWritable)
-{
-    return old_cloneExpandedForLocale(_aTree.getName().toString(), _aTree.getDataPtr(),_sLocale,bMakeWritable);
-}
-// -----------------------------------------------------------------------------
-#else // SHARABLE_DATA
 //--------------------------------------------------------------------------
 data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale, bool bMakeWritable)
 {
@@ -381,7 +373,6 @@ data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUSt
     return old_cloneExpandedForLocale(_aTree.getName().toString(), aOldTree.get(),_sLocale,bMakeWritable);
 }
 // -----------------------------------------------------------------------------
-#endif // SHARABLE_DATA
 //--------------------------------------------------------------------------
 /*
 // convert to the given locale format, assuming the original representation was expanded

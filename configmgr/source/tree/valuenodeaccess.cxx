@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenodeaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,39 +85,6 @@ namespace configmgr
             return static_cast<ValueNodeAddress::DataType*>( _rUpdateAccess.validate(_p) );
         }
     // -------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-    // -------------------------------------------------------------------------
-
-        Pointer ValueNodeAccess::check(NodeAccess const& _aNode)
-        {
-            if (INode const* pNode = _aNode.getDataPtr())
-                return pNode->asValueNode();
-
-            else
-                return NULL;
-        }
-    // -------------------------------------------------------------------------
-
-        void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue)
-        {
-            accessValue(_aValueNode.m_pData,_aUpdater)->setValue(_aValue);
-        }
-    // -------------------------------------------------------------------------
-
-        void ValueNodeAccess::setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode)
-        {
-            accessValue(_aValueNode.m_pData,_aUpdater)->setDefault();
-        }
-    // -------------------------------------------------------------------------
-
-        void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue)
-        {
-            accessValue(_aValueNode.m_pData,_aUpdater)->setValue(_aValue);
-        }
-    // -------------------------------------------------------------------------
-
-    // -------------------------------------------------------------------------
-#else  // SHARABLE_DATA
     // -------------------------------------------------------------------------
 
         Pointer ValueNodeAccess::check(NodeAccess const& _aNode)
@@ -277,8 +244,6 @@ void ValueNode::clearData(data::Allocator const & _aAlloc)
 }
 */
 //-----------------------------------------------------------------------------
-#endif // SHARABLE_DATA
-    // -------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------
 } // namespace configmgr
