@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:03:01 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@ struct SfxProgress_Impl : public SfxCancellable
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
     SfxStatusBarManager*    pMgr;
-    SfxApplication*         pApp;
     SfxWorkWindow*          pWorkWin;
 
                             SfxProgress_Impl( const String& );
@@ -223,10 +222,10 @@ void Enable_Impl(SfxObjectShell *pDoc, BOOL bEnable)
 // -----------------------------------------------------------------------
 
 SfxProgress_Impl::SfxProgress_Impl( const String &rTitle )
-    :   SfxCancellable( ( pApp = SFX_APP(), pApp->GetCancelManager() ), rTitle ),
+    :   SfxCancellable( SFX_APP()->GetCancelManager(), rTitle ),
         pActiveProgress( 0 )
-
 {
+    SFX_APP()->GetCancelManager()->RemoveCancellable(this);
 }
 
 // -----------------------------------------------------------------------
@@ -264,6 +263,21 @@ SfxProgress::SfxProgress
     pImp->bRunning = TRUE;
     pImp->bAllowRescheduling = Application::IsInExecute();;
 
+    if ( pObjSh )
+    {
+        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjSh ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pObjSh ) )
+        {
+            pFrame->GetCancelManager()->InsertCancellable( pImp );
+/*
+            SfxBindings& rBindings = pFrame->GetBindings();
+            rBindings.Invalidate( SID_BROWSE_STOP );
+            if ( !rBindings.IsInRegistrations() )
+                rBindings.Update( SID_BROWSE_STOP );
+            rBindings.Invalidate( SID_BROWSE_STOP );
+ */
+        }
+    }
+
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;
     pImp->nMax = nRange;
@@ -275,7 +289,6 @@ SfxProgress::SfxProgress
     DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
                   rText.GetBuffer(), pImp->nCreate ) );
     pImp->bAllDocs = bAll;
-    //pImp->pApp = SFX_APP();
     pImp->pMgr = 0;
     pImp->pWorkWin = 0;
 
@@ -283,7 +296,7 @@ SfxProgress::SfxProgress
     if ( pObjSh )
         pObjSh->SetProgress_Impl(this);
     else if( !pImp->pActiveProgress )
-        pImp->pApp->SetProgress_Impl(this);
+        SFX_APP()->SetProgress_Impl(this);
     Resume();
 }
 
@@ -302,6 +315,14 @@ SfxProgress::~SfxProgress()
     Stop();
     if( pImp->bIsStatusText == TRUE )
         GetpApp()->HideStatusText( );
+    SfxObjectShell* pDoc = pImp->xObjSh;
+    if ( pDoc )
+    {
+        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDoc ) )
+            pFrame->GetCancelManager()->RemoveCancellable( pImp );//Invalidate( SID_BROWSE_STOP );
+    }
+    else
+        SFX_APP()->Invalidate( SID_BROWSE_STOP );
     delete pImp;
 }
 
@@ -331,7 +352,7 @@ void SfxProgress::Stop()
     if ( pImp->xObjSh.Is() )
         pImp->xObjSh->SetProgress_Impl(0);
     else
-        pImp->pApp->SetProgress_Impl(0);
+        SFX_APP()->SetProgress_Impl(0);
     if ( pImp->bLocked )
     {
         if ( pImp->xObjSh.Is() && !pImp->bAllDocs )
@@ -503,7 +524,7 @@ BOOL SfxProgress::SetState
                       nPercent, MAXPERCENT_PROGRESS ) );
         if ( nTimeDiff > TIMEOUT_PROGRESS && nPercent <= MAXPERCENT_PROGRESS )
         {
-            pImp->pWorkWin = pImp->pApp->GetWorkWindow_Impl( SfxViewFrame::Current() );
+            pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( SfxViewFrame::Current() );
             if( pImp->pWorkWin )
             {
                 pImp->pWorkWin->SetTempStatusBar_Impl( TRUE );
@@ -740,12 +761,13 @@ void SfxProgress::Reschedule()
     SFX_STACK(SfxProgress::Reschedule);
 
     if( pImp->pActiveProgress ) return;
-    if ( pImp->bLocked && 0 == pImp->pApp->Get_Impl()->nRescheduleLocks )
+    SfxApplication* pApp = SFX_APP();
+    if ( pImp->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
     {
-        DBG_ASSERTWARNING( pImp->pApp->IsInAsynchronCall_Impl(),
+        DBG_ASSERTWARNING( pApp->IsInAsynchronCall_Impl(),
                             "Reschedule in synchron-call-stack" );
 
-        SfxAppData_Impl *pAppData = pImp->pApp->Get_Impl();
+        SfxAppData_Impl *pAppData = pApp->Get_Impl();
         ++pAppData->nInReschedule;
         Application::Reschedule();
         --pAppData->nInReschedule;
