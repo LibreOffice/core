@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 16:29:29 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 08:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1742,13 +1742,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
         long y2=pPage->GetHgt()-pPage->GetLwrBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=pPage->GetGridFrameList(this,NULL);
         USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
-
-#ifdef VCL
         long* pBuf = NULL;
-#else // VCL
-        long* pBuf = new long[ nBufSiz ];
-#endif // VCL
-
         unsigned nGridPaintAnz=1;
         if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
         for (unsigned nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
@@ -1788,16 +1782,13 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
             while (yFinOrg>=y1) yFinOrg-=ny2;
             while (yFinOrg<y1) yFinOrg+=ny2;
 
-#ifdef VCL
-
-            // VCL hat eine DrawGrid-Methode (toll, nicht wahr!?)
             if( x1 <= x2 && y1 <= y2 )
             {
                 if( bHoriLines )
                 {
                     ULONG nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
                     UINT16 nSteps = nx1 / nx2;
-                    UINT32 nRestPerStepMul1000 = ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L);
+                    UINT32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
                     UINT32 nStepOffset = 0;
                     UINT16 nPointOffset = 0;
 
@@ -1824,7 +1815,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
                 {
                     ULONG nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
                     UINT16 nSteps = ny1 / ny2;
-                    UINT32 nRestPerStepMul1000 = ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L);
+                    UINT32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
                     UINT32 nStepOffset = 0;
                     UINT16 nPointOffset = 0;
 
@@ -1847,104 +1838,10 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect)
                     // rOut.DrawGrid( Rectangle( xo + xBigOrg, yo + yFinOrg, x2, y2 ), Size( nx1, ny2 ), nGridFlags );
                 }
             }
-
-#else // VCL
-            long nStp;
-            FASTBOOL b1st;
-            USHORT nCnt;
-            long nZw;
-            long i,j;
-
-            if (x1<=x2 && y1<=y2) {
-                if (bHoriLines) {
-                    nStp=nx2;
-                    nZw=ny1;
-                    j=yBigOrg; b1st=TRUE;
-                    while (j<y2) {
-                        if (!bHoriSolid) {
-                            Point aTmpPnt(0,yo+j);
-                            if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                            aPnt.Y()=rOut.LogicToPixel(aTmpPnt).Y();
-                            i=xFinOrg; nCnt=0;
-                            while (i<x2) {
-                                if (b1st || nCnt>=nBufSiz) {
-                                    Point aTmpPnt(xo+i,0);
-                                    if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                                    aPnt.X()=rOut.LogicToPixel(aTmpPnt).X();
-                                    if (nCnt<nBufSiz) pBuf[nCnt]=aPnt.X();
-                                } else aPnt.X()=pBuf[nCnt];
-#if defined WIN // SetPixel-Profiling fuer Windows
-                                SetPixel(aWinhDC,(int)aPnt.X(),(int)aPnt.Y(),aWinColRef);
-#elif defined OS2 // SetPixel-Profiling fuer OS/2
-                                POINTL aOS2Pt;
-                                aOS2Pt.x=aPnt.X();
-                                aOS2Pt.y=nOS2MaxYPix-aPnt.Y();
-                                GpiSetPel(aOS2hPS,&aOS2Pt);
-#else // Optimierung fuer Mac und Unit fehlt noch !
-                                if (rOut.IsMapModeEnabled()) rOut.EnableMapMode(FALSE);
-                                rOut.DrawPixel(aPnt,aCol);
-#endif
-                                i+=nStp;
-                                nCnt++;
-                            }
-                        } else {
-                            if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                            rOut.DrawLine(Point(xo+x1,yo+j),Point(xo+x2,yo+j));
-                        }
-                        b1st=FALSE; j+=nZw;
-                    }
-                }
-                if (bVertLines) {
-                    nStp=ny2;
-                    nZw=nx1;
-                    j=xBigOrg; b1st=TRUE;
-                    while (j<x2) {
-                        if (!bVertSolid) {
-                            Point aTmpPnt(xo+j,0);
-                            if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                            aPnt.X()=rOut.LogicToPixel(aTmpPnt).X();
-                            i=yFinOrg; nCnt=0;
-                            while (i<y2) {
-                                if (b1st || nCnt>=nBufSiz) {
-                                    Point aTmpPnt(0,yo+i);
-                                    if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                                    aPnt.Y()=rOut.LogicToPixel(aTmpPnt).Y();
-                                    if (nCnt<nBufSiz) pBuf[nCnt]=aPnt.Y();
-                                } else aPnt.Y()=pBuf[nCnt];
-#if defined WIN // SetPixel-Profiling fuer Windows
-                                SetPixel(aWinhDC,(int)aPnt.X(),(int)aPnt.Y(),aWinColRef);
-#elif defined OS2 // SetPixel-Profiling fuer OS/2
-                                POINTL aOS2Pt;
-                                aOS2Pt.x=aPnt.X();
-                                aOS2Pt.y=nOS2MaxYPix-aPnt.Y();
-                                GpiSetPel(aOS2hPS,&aOS2Pt);
-#else // Optimierung fuer Mac und Unit fehlt noch !
-                                if (rOut.IsMapModeEnabled()) rOut.EnableMapMode(FALSE);
-                                rOut.DrawPixel(aPnt,aCol);
-#endif
-                                i+=nStp;
-                                nCnt++;
-                            }
-                        } else {
-                            if (rOut.IsMapModeEnabled()!=bMap0) rOut.EnableMapMode(bMap0);
-                            rOut.DrawLine(Point(xo+j,yo+y1),Point(xo+j,yo+y2));
-                        }
-                        b1st=FALSE; j+=nZw;
-                    }
-                }
-            }
-
-#endif // VCL
-
         }
         delete [] pBuf;
         rOut.EnableMapMode(bMap0);
-#ifndef VCL
-        if (bHoriSolid || bVertSolid)
-#endif
-        {
-            rOut.SetLineColor(aColorMerk);
-        }
+        rOut.SetLineColor(aColorMerk);
 #ifdef OS2 // SetPixel-Profiling fuer OS/2
         // OS2-LineAttribute restaurieren
         GpiSetAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,0,&aOS2BundleMerker);
