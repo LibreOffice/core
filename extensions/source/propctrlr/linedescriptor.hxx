@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linedescriptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:03:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 #define _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 
@@ -101,17 +100,17 @@ namespace pcr
         sal_Bool                    bHaveMinMax     :1;
 
         OLineDescriptor()
-            :eControlType(BCT_UNDEFINED)
+            :pDataPtr(NULL)
+            ,pControl(NULL)
+            ,eControlType(BCT_UNDEFINED)
             ,nHelpId(0)
+            ,nUniqueButtonId(0)
+            ,nDigits(0)
+            ,nMinValue(0)
+            ,nMaxValue(-1)
             ,bUnknownValue(sal_False)
             ,bHasDefaultValue(sal_False)
             ,bIsLocked(sal_False)
-            ,pDataPtr(NULL)
-            ,pControl(NULL)
-            ,nDigits(0)
-            ,nUniqueButtonId(0)
-            ,nMinValue(0)
-            ,nMaxValue(-1)
             ,bHaveMinMax(sal_False)
             ,eDisplayUnit( FUNIT_NONE )
             ,eValueUnit( FUNIT_NONE )
