@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 14:19:27 $
+#   last change: $Author: hr $ $Date: 2004-11-09 14:04:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,11 @@ LIB1FILES = \
         $(SLB)$/deployment_registry_configuration.lib \
         $(SLB)$/deployment_registry_component.lib \
         $(SLB)$/deployment_registry_script.lib \
-        $(SLB)$/deployment_registry_sfwk.lib                  \
+        $(SLB)$/deployment_registry_sfwk.lib \
         $(SLB)$/deployment_registry_package.lib \
         $(SLB)$/deployment_registry.lib \
         $(SLB)$/deployment_manager.lib \
+        $(SLB)$/deployment_migration.lib \
         $(SLB)$/deployment_misc.lib
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
