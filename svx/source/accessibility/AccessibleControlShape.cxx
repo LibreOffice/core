@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-20 10:50:27 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,19 +407,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const util::ModeChangeEvent& 
         // parent to replace this object with a new one.  Disposing this
         // object and sending notifications about the replacement are the
         // task of our parent.
-        AccessibleShape* pShape =
-            ShapeTypeHandler::Instance().CreateAccessibleObject (
-                AccessibleShapeInfo (
-                    mxShape, getAccessibleParent(), mpParent, mnIndex),
-                maShapeTreeInfo);
-
-        Reference<XAccessible> xShape( pShape );
-        pShape->Init();
-        // Now that there is a reference to the new accessible shape we
-        // can safely call its Init() method.  The following call transfers
-        // owenership to our parent so that at the end of the scope we can
-        // safely release the reference.
-        OSL_VERIFY( mpParent->ReplaceChild ( this, pShape ) );
+        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
     }
 #ifdef _DEBUG
     else
