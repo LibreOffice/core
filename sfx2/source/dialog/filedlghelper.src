@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:40:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ String STR_CB_SELECTION
     Text[ danish ] = "Markering" ;
     Text[ portuguese ] = "S~elecção" ;
     Text[ portuguese_brazilian ] = "S~elektion" ;
-    Text[ chinese_simplified ] = "Ñ¡Ôñ(~S)";
+    Text[ chinese_simplified ] = "Ñ¡ÖÐ(~S)";
     Text[ russian ] = "Âûäåëåíèå";
     Text[ polish ] = "Selekcja";
     Text[ japanese ] = "‘I‘ð”ÍˆÍ(~S)";
@@ -545,6 +545,7 @@ String STR_LB_VERSION
 };
 
 //******************************************************************** EOF
+
 
 
 
