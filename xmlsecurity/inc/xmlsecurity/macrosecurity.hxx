@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-04 06:13:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,16 @@ namespace dcss = ::com::sun::star;
 
 class MacroSecurityTP;
 
+class ReadOnlyImage : public FixedImage
+{
+public:
+    ReadOnlyImage(Window* pParent, const ResId rResId);
+    ~ReadOnlyImage();
+
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
+    static const String& GetHelpTip();
+};
+
 class MacroSecurity : public TabDialog
 {
 private:
@@ -137,6 +147,7 @@ class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
     FixedLine           maSecLevelFL;
+    ReadOnlyImage       maSecReadonlyFI;
     RadioButton         maVeryHighRB;
     RadioButton         maHighRB;
     RadioButton         maMediumRB;
@@ -158,11 +169,13 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
     FixedLine           maTrustCertFL;
+    ReadOnlyImage       maTrustCertROFI;
     SvxSimpleTable      maTrustCertLB;
     PushButton          maAddCertPB;
     PushButton          maViewCertPB;
     PushButton          maRemoveCertPB;
     FixedLine           maTrustFileLocFL;
+    ReadOnlyImage       maTrustFileROFI;
     FixedInfo           maTrustFileLocFI;
     ListBox             maTrustFileLocLB;
     PushButton          maAddLocPB;
@@ -170,6 +183,8 @@ private:
 
     cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
+    sal_Bool            mbAuthorsReadonly;
+    sal_Bool            mbURLsReadonly;
 
     DECL_LINK(          ViewCertPBHdl, void* );
     DECL_LINK(          RemoveCertPBHdl, void* );
