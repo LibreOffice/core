@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,6 +1490,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             nByteOffset += nLen;
             continue;
         }
+
+        sal_Bool bHadError = sal_False;
+        Any aSQLError;
         try
         {
             switch (nType)
@@ -1581,7 +1584,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 }   break;
             }
         }
-        catch ( Exception& )
+        catch( SQLException& e ) { aSQLError <<= e; bHadError = sal_True; }
+        catch ( Exception& ) { bHadError = sal_True; }
+
+        if ( bHadError )
         {
             m_pColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
@@ -1590,7 +1596,14 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
             sMsg += aColName;
             sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+
+            throw SQLException(
+                    sMsg,
+                    *this,
+                    OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),
+                    1000,
+                    aSQLError
+                );
         }
         // Und weiter ...
         nByteOffset += nLen;
