@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-02 13:18:19 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#include <sfx2/request.hxx> //CHINA001
+#include <svx/svxids.hrc> //add CHINA001
+#include <svtools/intitem.hxx> //add CHINA001
 
 // class TabWin_Impl -----------------------------------------------------
 
@@ -785,5 +788,11 @@ IMPL_LINK( SvxTabulatorTabPage, ModifyHdl_Impl, MetricBox *, EMPTYARG )
     aDelBtn.Disable();
     return 0;
 }
-
-
+//add CHINA001 Begin
+void        SvxTabulatorTabPage::PageCreated(SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pControlItem,SfxUInt16Item,SID_SVXTABULATORTABPAGE_CONTROLFLAGS,sal_False);
+    if (pControlItem)
+        DisableControls(pControlItem->GetValue());
+}
+//end of CHINA001
