@@ -1,0 +1,12 @@
+    <node oor:name="writer_MS_Word_2003_XML" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>xml</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>MS Word 2003 XML</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Microsoft Word 2003 XML</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>doctype:wordDocument</value></prop>
+    </node>
