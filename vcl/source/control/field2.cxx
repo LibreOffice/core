@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:20:46 $
+ *  last change: $Author: th $ $Date: 2001-03-09 14:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,6 @@ using namespace ::com::sun::star;
 #define EDITMASK_NUMSPACE      'n'
 #define EDITMASK_ALLCHAR       'x'
 #define EDITMASK_UPPERALLCHAR  'X'
-
-
 
 const sal_Int32 nCharClassAlphaType =
     ::com::sun::star::i18n::KCharacterType::UPPER |
@@ -1856,7 +1854,7 @@ void DateFormatter::Reformat()
         else
         {
             ImplSetText( ImplGetSVEmptyStr() );
-            ImplGetEmptyFieldValue() = TRUE;
+            SetEmptyFieldValueData( TRUE );
         }
     }
 }
@@ -1979,7 +1977,7 @@ long DateField::Notify( NotifyEvent& rNEvt )
             else if ( !bTextLen && IsEmptyFieldValueEnabled() )
             {
                 ResetLastDate();
-                ImplGetEmptyFieldValue() = TRUE;
+                SetEmptyFieldValueData( TRUE );
             }
         }
     }
@@ -2202,7 +2200,7 @@ long DateBox::Notify( NotifyEvent& rNEvt )
             else if ( !bTextLen && IsEmptyFieldValueEnabled() )
             {
                 ResetLastDate();
-                ImplGetEmptyFieldValue() = TRUE;
+                SetEmptyFieldValueData( TRUE );
             }
         }
     }
@@ -2565,7 +2563,7 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
         Selection aSelection( GetField()->GetSelection() );
 
         // Area suchen
-        if ( meFormat != TIMEF_SEC_CS )
+        if ( GetFormat() != TIMEF_SEC_CS )
         {
             for ( xub_StrLen i = 1, nPos = 0; i <= 4; i++ )
             {
@@ -2606,7 +2604,7 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
                 aAddTime = -aAddTime;
 
             aTime += aAddTime;
-            if ( !mbDuration )
+            if ( !IsDuration() )
             {
                 Time aAbsMaxTime( 23, 59, 59, 99 );
                 if ( aTime > aAbsMaxTime )
@@ -2740,7 +2738,7 @@ void TimeFormatter::SetTime( const Time& rNewTime )
 {
     SetUserTime( rNewTime );
     maFieldTime = maLastTime;
-    ImplGetEmptyFieldValue() = FALSE;
+    SetEmptyFieldValueData( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -2960,7 +2958,7 @@ long TimeField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), mbDuration, meFormat, GetInternational() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetInternational() ) )
             return 1;
     }
 
@@ -3131,7 +3129,7 @@ long TimeBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), mbDuration, meFormat, GetInternational() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetInternational() ) )
             return 1;
     }
 
@@ -3201,9 +3199,9 @@ void TimeBox::InsertTime( const Time& rTime, USHORT nPos )
 
     BOOL bSec    = FALSE;
     BOOL b100Sec = FALSE;
-    if ( meFormat == TIMEF_SEC )
+    if ( GetFormat() == TIMEF_SEC )
         bSec = TRUE;
-    if ( meFormat == TIMEF_100TH_SEC || meFormat == TIMEF_SEC_CS )
+    if ( GetFormat() == TIMEF_100TH_SEC || GetFormat() == TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
     ComboBox::InsertEntry( GetInternational().GetTime( aTime, bSec, b100Sec ), nPos );
 }
@@ -3214,9 +3212,9 @@ void TimeBox::RemoveTime( const Time& rTime )
 {
     BOOL bSec    = FALSE;
     BOOL b100Sec = FALSE;
-    if ( meFormat == TIMEF_SEC )
+    if ( GetFormat() == TIMEF_SEC )
         bSec = TRUE;
-    if ( meFormat == TIMEF_100TH_SEC || TIMEF_SEC_CS )
+    if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
     ComboBox::RemoveEntry( GetInternational().GetTime( rTime, bSec, b100Sec ) );
 }
@@ -3227,7 +3225,7 @@ Time TimeBox::GetTime( USHORT nPos ) const
 {
     Time aTime( 0, 0, 0 );
     ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime,
-                      meFormat, mbDuration, GetInternational() );
+                      GetFormat(), IsDuration(), GetInternational() );
     return aTime;
 }
 
@@ -3237,9 +3235,9 @@ USHORT TimeBox::GetTimePos( const Time& rTime ) const
 {
     BOOL bSec    = FALSE;
     BOOL b100Sec = FALSE;
-    if ( meFormat == TIMEF_SEC )
+    if ( GetFormat() == TIMEF_SEC )
         bSec = TRUE;
-    if ( meFormat == TIMEF_100TH_SEC || TIMEF_SEC_CS )
+    if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
     return ComboBox::GetEntryPos( GetInternational().GetTime( rTime, bSec, b100Sec ) );
 }
