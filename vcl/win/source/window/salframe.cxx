@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:57:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5655,7 +5655,15 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
-    LRESULT nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    LRESULT nRet = 0;
+    __try
+    {
+        nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    }
+    // #112221# exception should not be caught in user32
+    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    {
+    }
     if ( bDef )
         nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
     return nRet;
@@ -5664,7 +5672,15 @@ LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
-    LRESULT nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    LRESULT nRet = 0;
+    __try
+    {
+        nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    }
+    // #112221# exception should not be caught in user32
+    __except(UnhandledExceptionFilter(GetExceptionInformation())) // #112221#
+    {
+    }
     if ( bDef )
         nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
