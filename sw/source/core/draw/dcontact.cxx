@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:45:17 $
+ *  last change: $Author: fme $ $Date: 2002-10-29 08:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,29 @@ SwRect GetBoundRect( const SdrObject* pObj )
         aRet.SSize().Width()  += rLR.GetRight();
     }
     return aRet;
+}
+
+/*****************************************************************************
+ *
+ *  Moves a SdrObj so that it fits to a given frame
+ *
+ *****************************************************************************/
+
+void CaptureDrawObj( SdrObject& rObj, const SwRect& rFrm )
+{
+    Rectangle aRect( rObj.GetBoundRect() );
+    if ( aRect.Right() >= rFrm.Right() + 10 )
+    {
+        Size aSize( rFrm.Right() - aRect.Right(), 0 );
+        rObj.Move( aSize );
+        aRect = rObj.GetBoundRect();
+    }
+
+    if ( aRect.Left() + 10 <= rFrm.Left() )
+    {
+        Size aSize( rFrm.Left() - aRect.Left(), 0 );
+        rObj.Move( aSize );
+    }
 }
 
 //Liefert den UserCall ggf. vom Gruppenobjekt

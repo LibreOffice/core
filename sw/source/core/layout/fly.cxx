@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-11 13:26:47 $
+ *  last change: $Author: fme $ $Date: 2002-10-29 08:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2185,20 +2185,14 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                 if( !pFrmFmt ||
                     FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                 {
+                    // change anchor position
                     pO->SetAnchorPos( GetAnchorPos() );
-
-                    // check if the new position
-                    // would not exceed the margins of the page
-                    Rectangle aRect( pO->GetBoundRect() );
-
                     SwPageFrm* pPage = FindPageFrm();
-
-                    if ( pPage &&
-                            ( aRect.Right() <= pPage->Frm().Left() + 10 ||
-                              aRect.Left() + 10 >= pPage->Frm().Right() ) )
+                    if ( pPage )
                     {
-                        Point aNewRel( 0, pO->GetRelativePos().Y() );
-                        pO->SetRelativePos( aNewRel );
+                        // check if the new position
+                        // would not exceed the margins of the page
+                        CaptureDrawObj( *pO, pPage->Frm() );
                     }
 
                     ((SwDrawContact*)GetUserCall(pO))->ChkPage();

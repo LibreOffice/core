@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-11 13:26:48 $
+ *  last change: $Author: fme $ $Date: 2002-10-29 08:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,13 +352,7 @@ void SwFrm::CheckDirChange()
                                     pObj->SetAnchorPos( GetAnchorPos() );
                                     // check if the new position
                                     // would not exceed the margins of the page
-                                    Rectangle aRect( pObj->GetBoundRect() );
-                                    Point aNewRel( pObj->GetRelativePos() );
-                                    if ( aRect.Right() <= Frm().Left() + 10 )
-                                        aNewRel.X() = 0;
-                                    else if ( aRect.Left() + 10 >= Frm().Right() )
-                                        aNewRel.X() -= aRect.Right() - Frm().Right();
-                                    pObj->SetRelativePos( aNewRel );
+                                    CaptureDrawObj( *pObj, Frm() );
                                 }
                             }
                         }
@@ -401,13 +395,7 @@ void SwFrm::CheckDirChange()
                     {
                         // check if the new position
                         // would not exceed the margins of the page
-                        Rectangle aRect( pObj->GetBoundRect() );
-                        if ( aRect.Right()     <= pPage->Frm().Left() + 10 ||
-                             aRect.Left() + 10 >= pPage->Frm().Right() )
-                        {
-                            Point aNewRel( 0, pObj->GetRelativePos().Y() );
-                            pObj->SetRelativePos( aNewRel );
-                        }
+                        CaptureDrawObj( *pObj, pPage->Frm() );
                     }
                 }
             }

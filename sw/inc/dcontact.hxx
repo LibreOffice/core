@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: fme $ $Date: 2002-10-29 08:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ void ClrContourCache( const SdrObject *pObj );
 
 // liefert BoundRect inklusive Abstand
 SwRect GetBoundRect( const SdrObject* pObj );
+
+// Moves a SdrObj so that it fits to a given frame
+void CaptureDrawObj( SdrObject& rObj, const SwRect& rFrm );
 
 //Liefert den UserCall ggf. vom Gruppenobjekt
 SdrObjUserCall* GetUserCall( const SdrObject* );
