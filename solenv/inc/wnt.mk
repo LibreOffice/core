@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:22 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:35:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,7 +174,7 @@ CFLAGS+=-Zm500 /wd4290 /wd4786 /wd4800
 .IF "$(seg)" == ""
 .IF "$(demo)" == ""
 CDEFS+= -D_X86_=1 $(OLE2DEF)
-CFLAGS+=-c -nologo -W3 -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE) -Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
+CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE) -Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .IF "$(bndchk)" == ""
 CFLAGS+= -Ob1
 .ENDIF
@@ -182,7 +182,7 @@ CFLAGS+= -Ob1
 .ENDIF
 .ELSE	# ist keine product...
 CDEFS+= -D_X86_=1 $(OLE2DEF)
-CFLAGS+=-c -nologo -W3 -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
+CFLAGS+=-c -nologo -Gs $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(bndchk)" == ""
 CFLAGS+= -Ob1
 .ENDIF
@@ -260,7 +260,12 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-Ox
 CFLAGSNOOPT=-Od
 CFLAGSOUTOBJ=-Fo
-CFLAGSWALL=/W4
+.IF "$(COMEX)"=="8"
+CFLAGSWALL=-Wall -wd4294 -wd4640
+.ELSE			# "$(COMEX)"=="8"
+CFLAGSWALL=-W4
+.ENDIF			# "$(COMEX)"=="8"
+CFLAGSDFLTWARN=-W3
 
 .IF "$(syntax)"!=""
 CFLAGS=-v -fsyntax-only -Wall $(INCLUDE) 
