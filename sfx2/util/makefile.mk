@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: cd $ $Date: 2001-08-21 09:37:17 $
+#   last change: $Author: hjs $ $Date: 2001-09-28 17:08:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,9 +210,7 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 .INCLUDE :  target.mk
 
-ALLTAR:\
-    $(MISC)$/linkinc.ls		\
-    $(SRS)$/hidother.hid
+ALLTAR : $(SRS)$/hidother.hid
 
 # --- SFX-Filter-Datei ---
 
