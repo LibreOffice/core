@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:00:46 $
+ *  last change: $Author: aw $ $Date: 2001-04-24 11:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,13 +717,33 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
 
 void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create rectangle shape
-    AddShape("com.sun.star.drawing.LineShape");
+    // #85920# use SetTransformation() to handle import of simple lines.
+    // This is necessary to kake into account all anchor positions and
+    // other things. All shape imports use the same import schemata now.
+    // create necessary shape (Line Shape)
+    AddShape("com.sun.star.drawing.PolyLineShape");
+
     if(mxShape.is())
     {
         // Add, set Style and properties from base shape
         SetStyle();
         SetLayer();
+
+        // get sizes and offsets
+        awt::Point aTopLeft(mnX1, mnY1);
+        awt::Point aBottomRight(mnX2, mnY2);
+
+        if(mnX1 > mnX2)
+        {
+            aTopLeft.X = mnX2;
+            aBottomRight.X = mnX1;
+        }
+
+        if(mnY1 > mnY2)
+        {
+            aTopLeft.Y = mnY2;
+            aBottomRight.Y = mnY1;
+        }
 
         // set local parameters on shape
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -735,14 +755,23 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             awt::Point* pInnerSequence = pOuterSequence->getArray();
             uno::Any aAny;
 
-            *pInnerSequence = awt::Point( mnX1, mnY1 );
+            *pInnerSequence = awt::Point( mnX1 - aTopLeft.X, mnY1 - aTopLeft.Y);
             pInnerSequence++;
-            *pInnerSequence = awt::Point( mnX2, mnY2 );
+            *pInnerSequence = awt::Point( mnX2 - aTopLeft.X, mnY2 - aTopLeft.Y);
 
             aAny <<= aPolyPoly;
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
         }
+
+        // set sizes for transformation
+        maSize.Width = aBottomRight.X - aTopLeft.X;
+        maSize.Height = aBottomRight.Y - aTopLeft.Y;
+        maPosition.X = aTopLeft.X;
+        maPosition.Y = aTopLeft.Y;
+
+        // set pos, size, shear and rotate and get copy of matrix
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
