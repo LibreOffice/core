@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:24:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese_brazilian ] = "~Pesquisar" ;
         Text [ portuguese ] = "~Procurar" ;
         Text [ finnish ] = "~Etsi" ;
-        Text [ danish ] = "Sl� op" ;
+        Text [ danish ] = "~S�g" ;
         Text [ french ] = "Rechercher" ;
         Text [ swedish ] = "~Sl� upp" ;
         Text [ dutch ] = "~Opzoeken" ;
@@ -130,6 +130,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "~खोज";
         Text[ slovak ] = "~Hľadať";
+        Text[ hungarian ] = "Ke~resés";
+        Text[ slovenian ] = "~Iskanje";
     };
     PushButton BTN_LANGUAGE
     {
@@ -143,7 +145,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ spanish ] = "~Idioma..." ;
         Text [ french ] = "~Langue..." ;
         Text [ swedish ] = "S~pr�k..." ;
-        Text [ danish ] = "Sprog..." ;
+        Text [ danish ] = "~Sprog..." ;
         Text [ portuguese ] = "L�~ngua..." ;
         Text [ portuguese_brazilian ] = "~Idioma..." ;
         Text[ chinese_simplified ] = "语言(~L)...";
@@ -163,6 +165,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮שפה...‬";
         Text[ hindi ] = "~भाषा...";
         Text[ slovak ] = "~Jazyk...";
+        Text[ hungarian ] = "~Nyelv...";
+        Text[ slovenian ] = "~Jezik...";
     };
     HelpButton BTN_THES_HELP
     {
@@ -180,7 +184,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese_brazilian ] = "~Palavra" ;
         Text [ portuguese ] = "~Palavra" ;
         Text [ finnish ] = "Sa~na" ;
-        Text [ danish ] = "Ord" ;
+        Text [ danish ] = "~Ord" ;
         Text [ french ] = "Mot" ;
         Text [ swedish ] = "~Ord" ;
         Text [ dutch ] = "~Woord" ;
@@ -203,6 +207,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮מילה‬";
         Text[ hindi ] = "~शब्द";
         Text[ slovak ] = "~Slovo";
+        Text[ hungarian ] = "~Vizsgált szó";
+        Text[ slovenian ] = "~Beseda";
     };
     ListBox LB_WORD
     {
@@ -221,7 +227,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese_brazilian ] = "~Significado " ;
         Text [ portuguese ] = "~Significado " ;
         Text [ finnish ] = "~Merkitys " ;
-        Text [ danish ] = "Betydning " ;
+        Text [ danish ] = "~Betydning " ;
         Text [ french ] = "~Signification " ;
         Text [ swedish ] = "~Betydelse  " ;
         Text [ dutch ] = "~Betekenis" ;
@@ -244,6 +250,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮משמעות‬";
         Text[ hindi ] = "~अर्थ ";
         Text[ slovak ] = "Význa~m ";
+        Text[ hungarian ] = "~Jelentés";
+        Text[ slovenian ] = "~Pomen";
     };
     ListBox LB_MEAN
     {
@@ -263,7 +271,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese_brazilian ] = "Si~n�nimo" ;
         Text [ portuguese ] = "Si~n�nimo" ;
         Text [ finnish ] = "~Synonyymi" ;
-        Text [ danish ] = "Synonym" ;
+        Text [ danish ] = "Sy~nonym" ;
         Text [ french ] = "S~ynonyme" ;
         Text [ swedish ] = "Sy~nonym" ;
         Text [ dutch ] = "Sy~noniem" ;
@@ -286,6 +294,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮מילה נרדפת‬";
         Text[ hindi ] = "पर्या~य शब्द";
         Text[ slovak ] = "Sy~nonymum";
+        Text[ hungarian ] = "Szi~nonima";
+        Text[ slovenian ] = "So~pomenka";
     };
     ListBox LB_SYNON
     {
@@ -305,7 +315,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese_brazilian ] = "S~ubstituir" ;
         Text [ portuguese ] = "S~ubstituir" ;
         Text [ finnish ] = "~Korvaa" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Erstat" ;
         Text [ french ] = "Remplacer par" ;
         Text [ swedish ] = "~Ers�tt" ;
         Text [ dutch ] = "~Vervangen" ;
@@ -328,6 +338,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्था~पन";
         Text[ slovak ] = "Nah~radiť";
+        Text[ hungarian ] = "~Helyettesítő szó";
+        Text[ slovenian ] = "~Zamenjaj";
     };
     Edit ED_REPL
     {
@@ -369,6 +381,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮ניסוחים חלפיים‬";
         Text[ hindi ] = "रूपान्तर";
         Text[ slovak ] = "Iné voľby";
+        Text[ hungarian ] = "Változatok";
+        Text[ slovenian ] = "Variante";
     };
     String STR_ERR_WORDNOTFOUND
     {
@@ -401,6 +415,8 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ hebrew ] = "‮מילה לא נמצאת בתזאורוס‬";
         Text[ hindi ] = "विश्वकोश में शब्द नहीं मिला";
         Text[ slovak ] = "Výraz sa nenachádza v slovníku synoným";
+        Text[ hungarian ] = "A szó nem található a szókincstárban.";
+        Text[ slovenian ] = "Besede ni v slovarju sopomenk";
     };
     Text[ chinese_simplified ] = "同义词词典";
     Text[ russian ] = "��������";
@@ -418,6 +434,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     Text[ hebrew ] = "‮תזאורוס‬";
     Text[ hindi ] = "विश्वकोश";
     Text[ slovak ] = "Slovník synoným";
+    Text[ hungarian ] = "Szókincstár";
+    Text[ slovenian ] = "Slovar sopomenk";
 };
  // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
 ModalDialog RID_SVXDLG_THES_LANGUAGE
@@ -479,6 +497,8 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text[ hebrew ] = "‮בחירה‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kiválasztás";
+        Text[ slovenian ] = "Izbor";
     };
     OKButton BTN_LANG_OK
     {
@@ -513,8 +533,11 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ hebrew ] = "‮בחירת שפה‬";
     Text[ hindi ] = "भाषा चुनो";
     Text[ slovak ] = "Vybrať jazyk";
+    Text[ hungarian ] = "Válasszon nyelvet";
+    Text[ slovenian ] = "Izberi jezik";
 };
  // ********************************************************************** EOF
+
 
 
 
