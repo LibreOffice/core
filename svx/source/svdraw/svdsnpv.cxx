@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:39 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
-            Rectangle aRect(pO->GetBoundRect());
+            Rectangle aRect(pO->GetCurrentBoundRect());
             aRect.Left  ()-=mx;
             aRect.Right ()+=mx;
             aRect.Top   ()-=my;
