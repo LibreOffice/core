@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,7 +1144,18 @@ BOOL ODbaseTable::DropImpl()
             }
             //  aFile.SetBase(m_Name);
             aURL.setExtension(String::CreateFromAscii("inf"));
-            bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
+
+            // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
+            // 89711 - 16.07.2001 - frank.schoenheit@sun.com
+            try
+            {
+                ::ucb::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+                aDeleteContent.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+            }
+            catch(Exception&)
+            {
+                // silently ignore this ....
+            }
         }
     }
     if(!bDropped)
