@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:28:53 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "sc.hrc"
@@ -82,6 +85,7 @@
 #include "tabvwsh.hxx"
 #include "drwlayer.hxx"
 #include "scresid.hxx"
+#include "userdat.hxx"
 
 // #97016#
 #ifndef SC_DOCSHELL_HXX
@@ -331,8 +335,41 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             break;
 
         case KEY_DELETE:                    //! ueber Accelerator
+        {
+            const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
+            if(rNoteMarkList.GetMarkCount() == 1)
+            {
+            SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+            if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+
+                {
+                    ScAddress aTabPos;
+                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+                    if( pData )
+                        aTabPos = pData->aStt;
+                    ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
+                    ScPostIt aNote(pDoc);
+                    pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // with Undo
+
+                    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+                    if (pModel)
+                    {
+                        SdrPage* pPage = pModel->GetPage( aTabPos.Tab() );
+                        if(pPage)
+            {
+                ScViewData* pViewData = pViewShell->GetViewData();
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                pDocSh->GetUndoManager()->AddUndoAction( new SdrUndoRemoveObj( *pObj));
+                            pPage->RemoveObject( pObj->GetOrdNum() );
+            }
+                    }
+                    bReturn = TRUE;
+                    break;
+                }
+            }
             pView->DeleteMarked();
             bReturn = TRUE;
+        }
             break;
 
         case KEY_RETURN:
@@ -491,6 +528,19 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             // there is a object selected yet
             if(pView->AreObjectsMarked())
             {
+
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                if(rMarkList.GetMarkCount() == 1)
+                {
+                    // disable cursor travelling on note objects as the tail connector position
+                    // must not move.
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    if(pObj && pObj->ISA(SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
+                    {
+                            break;
+                    }
+                }
+
                 long nX = 0;
                 long nY = 0;
                 USHORT nCode = rKEvt.GetKeyCode().GetCode();
