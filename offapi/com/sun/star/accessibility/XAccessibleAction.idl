@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleAction.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleKeyBinding;
+ published interface XAccessibleKeyBinding;
 
 /** Implement this interface to give access to actions that can be executed
     for accessible objects.
@@ -83,7 +83,7 @@ interface XAccessibleKeyBinding;
 
     @since #107627#
 */
-interface XAccessibleAction : ::com::sun::star::uno::XInterface
+published interface XAccessibleAction : ::com::sun::star::uno::XInterface
 {
     /** Returns the number of accessible actions available in this object.
 
