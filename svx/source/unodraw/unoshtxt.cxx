@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:28:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,18 +552,20 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         if( mpOutliner == NULL )
         {
-            if( HasView() )
-            {
-                // #101029#, #104157# Setup outliner _before_ filling it
-                SetupOutliner();
-            }
-
             SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
             USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
 
             mpOutliner = mpModel->createOutliner( nOutlMode );
+
+            // #109151# Do the setup after outliner creation, would be useless otherwise
+            if( HasView() )
+            {
+                // #101029#, #104157# Setup outliner _before_ filling it
+                SetupOutliner();
+            }
+
             mpOutliner->SetTextObjNoInit( pTextObj );
 /*
             mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
