@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 12:18:11 $
+ *  last change: $Author: rt $ $Date: 2002-11-04 17:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3379,7 +3379,7 @@ Menu RID_BASICMENU
                                     Text [ spanish ] = "Barra de ~herramientas" ;
                                     Text [ french ] = "Barre d'~instruments" ;
                                     Text [ dutch ] = "Werk~tuigbalk" ;
-                                    Text [ portuguese_brazilian ] = "Werk~zeugleiste" ;
+                                    Text [ portuguese_brazilian ] = "~Barra de ferramentas" ;
                                     Text [ portuguese ] = "~Barra de ferramentas" ;
                                     Text[ chinese_simplified ] = "дё»е·Ґе…·ж Џ(~T)";
                                     Text[ russian ] = "Панель инструментов";
@@ -3417,7 +3417,7 @@ Menu RID_BASICMENU
                                     Text [ french ] = "~Personnaliser..." ;
                                     Text [ dutch ] = "~Bewerken..." ;
                                     Text [ portuguese ] = "~Personalizar..." ;
-                                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+                                    Text [ portuguese_brazilian ] = "~Editar..." ;
                                     Text[ chinese_simplified ] = "зј–иѕ‘(~Z)...";
                                     Text[ russian ] = "Правка...";
                                     Text[ polish ] = "Edytuj...";
@@ -3798,7 +3798,7 @@ Menu RID_BASICPLUGINMENU
                                     Text [ spanish ] = "Barra de ~herramientas" ;
                                     Text [ french ] = "Barre d'~instruments" ;
                                     Text [ dutch ] = "Werk~tuigbalk" ;
-                                    Text [ portuguese_brazilian ] = "Werk~zeugleiste" ;
+                                    Text [ portuguese_brazilian ] = "~Barra de ferramentas" ;
                                     Text [ portuguese ] = "~Barra de ferramentas" ;
                                     Text[ chinese_simplified ] = "дё»е·Ґе…·ж Џ(~T)";
                                     Text[ russian ] = "Панель инструментов";
@@ -3836,7 +3836,7 @@ Menu RID_BASICPLUGINMENU
                                     Text [ french ] = "~Personnaliser..." ;
                                     Text [ dutch ] = "~Bewerken..." ;
                                     Text [ portuguese ] = "~Personalizar..." ;
-                                    Text [ portuguese_brazilian ] = "~Bearbeiten..." ;
+                                    Text [ portuguese_brazilian ] = "~Editar..." ;
                                     Text[ chinese_simplified ] = "зј–иѕ‘(~Z)...";
                                     Text[ russian ] = "Правка...";
                                     Text[ polish ] = "Edytuj...";
