@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-21 09:02:34 $
+ *  last change: $Author: kz $ $Date: 2002-05-23 20:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,10 +755,10 @@ ErrorBox MSG_ERROR_RESCAN
     Message [ finnish ] = "Päivityksiä ei voitu tallentaa." ;
     Message [ danish ] = "Det var ikke muligt at gemme opdateringen." ;
     Message [ french ] = "Impossible d'enregistrer les actualisations !" ;
-    Message [ swedish ] = "Det gick inte att spara uppdateringen." ;
+    Message [ swedish ] = "Det gick inte att spara uppdateringarna." ;
     Message [ dutch ] = "De wijzigingen kunnen niet worden opgeslagen." ;
     Message [ spanish ] = "No se pudieron guardar las actualizaciones." ;
-    Message [ english_us ] = "The updates could not be saved." ;
+    Message [ english_us ] = "The update could not be saved." ;
     Message[ chinese_simplified ] = "æ— æ³•å­˜ç›˜æ›´æ–°ã€‚";
     Message[ russian ] = "Ñîõğàíèòü îáíîâëåíèÿ íå óäàåòñÿ.";
     Message[ polish ] = "Aktualizacje nie mog³y zostaæ zapisane.";
