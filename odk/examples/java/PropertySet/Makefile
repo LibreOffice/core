@@ -39,24 +39,25 @@ ALL : JavaPropertySetExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_CLASS))
-
-$(OUT_COMP_CLASS)/%.Manifest : $(OUT_COMP_GEN)
+$(OUT_COMP_CLASS)/%.Manifest :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
-$(CLASSFILES) : $(OUT_COMP_GEN) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(OUT_COMP_CLASS) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(OUT_CLASS) && jar cvfM ../bin/$(@F) $(^F)
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
