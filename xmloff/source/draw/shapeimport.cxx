@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 10:19:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,8 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE       },
 
     { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
+
+    { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
 
     XML_TOKEN_MAP_END
 };
@@ -880,6 +882,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             break;
         }
         case XML_TOK_GROUP_CAPTION:
+        case XML_TOK_GROUP_ANNOTATION:
         {
             // draw:caption inside group context
             pContext = new SdXMLCaptionShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
