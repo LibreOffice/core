@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:04:32 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 05:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2145,17 +2145,10 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                         GetCellType(aCell.nNumberFormat, bIsStandard);
                         if (bIsStandard)
                         {
-                            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
-                            if ( xSpreadDoc.is() )
-                            {
-                                if (pDoc)
-                                {
-                                    pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0);
-                                    pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
-                                        pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                        aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
-                                }
-                            }
+                            if (pDoc)
+                                pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
+                                    pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
+                                    aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
                         }
                         else
                             pNumberFormatAttributesExportHelper->SetNumberFormatAttributes(
