@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:55:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,9 +383,10 @@ sal_Bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 sal_Bool SwHTMLWriter::HasControls() const
 {
     sal_uInt32 nStartIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    sal_uInt16 i;
 
     // Skip all controls in front of the current paragraph
-    for( sal_uInt16 i=0; i < aHTMLControls.Count() &&
+    for( i = 0; i < aHTMLControls.Count() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
         ;
 
@@ -414,7 +415,8 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
                                     : pCurPam->GetPoint()->nNode.GetIndex();
 
     // Ueberspringen von Controls vor dem interesanten Bereich
-    for( sal_uInt16 i=0; i < aHTMLControls.Count() &&
+    sal_uInt16 i;
+    for( i = 0; i < aHTMLControls.Count() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
         ;
 
