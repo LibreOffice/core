@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:36:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@ XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rD
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
-    maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
-    maXclMaxPos( EXC_MAXCOL_BIFF2, EXC_MAXROW_BIFF2, EXC_MAXTAB_BIFF2 ),
+    maScMaxPos( SCMAXCOL, SCMAXROW, SCMAXTAB ),
+    maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbTruncated( false ),
@@ -220,12 +220,12 @@ void XclRoot::SetMaxPos()
 {
     switch( GetBiff() )
     {
-        case xlBiff2:
-        case xlBiff3:   mrData.maXclMaxPos.Set( EXC_MAXCOL_BIFF2, EXC_MAXROW_BIFF2, EXC_MAXTAB_BIFF2 );    break;
-        case xlBiff4:
+        case xlBiff2:   mrData.maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );    break;
+        case xlBiff3:   mrData.maXclMaxPos.Set( EXC_MAXCOL3, EXC_MAXROW3, EXC_MAXTAB3 );    break;
+        case xlBiff4:   mrData.maXclMaxPos.Set( EXC_MAXCOL4, EXC_MAXROW4, EXC_MAXTAB4 );    break;
         case xlBiff5:
-        case xlBiff7:   mrData.maXclMaxPos.Set( EXC_MAXCOL_BIFF4, EXC_MAXROW_BIFF4, EXC_MAXTAB_BIFF4 );    break;
-        case xlBiff8:   mrData.maXclMaxPos.Set( EXC_MAXCOL_BIFF8, EXC_MAXROW_BIFF8, EXC_MAXTAB_BIFF8 );    break;
+        case xlBiff7:   mrData.maXclMaxPos.Set( EXC_MAXCOL5, EXC_MAXROW5, EXC_MAXTAB5 );    break;
+        case xlBiff8:   mrData.maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );    break;
         default:        DBG_ERROR_BIFF();
     }
 }
