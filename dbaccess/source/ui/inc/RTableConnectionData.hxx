@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:07:39 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
+#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#include <unotools/eventlisteneradapter.hxx>
+#endif
 
 namespace dbaui
 {
@@ -83,8 +86,10 @@ namespace dbaui
 
     class OConnectionLineData;
     //==================================================================
-    class ORelationTableConnectionData : public OTableConnectionData
+    class ORelationTableConnectionData :    public OTableConnectionData,
+                                            public ::utl::OEventListenerAdapter
     {
+        ::osl::Mutex    m_aMutex;
         ::rtl::OUString m_sDatabaseName;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xSource;
@@ -98,6 +103,8 @@ namespace dbaui
         BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,EConnectionSide _eEConnectionSide) const;
         BOOL IsSourcePrimKey()  const { return checkPrimaryKey(m_xSource,JTCS_FROM);    }
         BOOL IsDestPrimKey()    const { return checkPrimaryKey(m_xDest,JTCS_TO);        }
+        void addListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxComponent);
+        void removeListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxComponent);
 
     protected:
         virtual OConnectionLineData* CreateLineDataObj();
@@ -139,6 +146,9 @@ namespace dbaui
         BOOL        IsConnectionPossible();
         void        ChangeOrientation();
         BOOL        DropRelation();
+
+        // OEventListenerAdapter
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
     };
 }
 

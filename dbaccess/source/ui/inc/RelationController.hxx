@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:43:46 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@ namespace dbaui
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
         void loadData();
         sal_Bool existsTable(const ::rtl::OUString& _rComposedTableName) const;
+        // ask the user if the design should be saved when it is modified
+        short saveModified();
+        // load the window positions out of the datasource
+        void loadLayoutInformation();
     public:
         ORelationController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-22 10:24:09 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1474,6 +1474,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
 
             case ID_BROWSER_ORDERCRIT:
             case ID_BROWSER_FILTERCRIT:
+                if (!m_xParser.is())
+                    break;
                 // we are not in the handle column
                 aReturn.bEnabled = getBrowserView()->getVclControl()->GetCurColumnId() != 0;
                 // a native statement can't be filtered or sorted

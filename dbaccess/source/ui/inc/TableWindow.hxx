@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:07:01 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
+#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#include <unotools/eventlisteneradapter.hxx>
+#endif
 
 class SvLBoxEntry;
 namespace dbaui
@@ -98,10 +101,13 @@ namespace dbaui
     class OJoinDesignView;
     class OJoinTableView;
 
-    class OTableWindow : public Window
+    class OTableWindow : public Window,
+                         public ::utl::OEventListenerAdapter
     {
         friend class OTableWindowTitle;
         friend class OTableWindowListBox;
+
+        mutable ::osl::Mutex    m_aMutex;
     protected:
         // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
         OTableWindowTitle       m_aTitle;
@@ -138,10 +144,6 @@ namespace dbaui
         virtual void OnEntryDoubleClicked(SvLBoxEntry* pEntry) { }
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
 
-        // die unterliegende Tabellendefinition (un)locken
-        //  void LockTable() { if (m_xTableDef.Is()) m_xTableDef->AddUsage(); }
-        //  void UnlockTable() { if (m_xTableDef.Is()) m_xTableDef->ReleaseUsage(); }
-
     public:
         TYPEINFO();
         OTableWindow( Window* pParent, OTableWindowData* pTabWinData);
@@ -168,8 +170,8 @@ namespace dbaui
         ::rtl::OUString             GetComposedName() const { return m_pData->GetComposedName(); }
         OTableWindowListBox*        GetListBox() const { return m_pListBox; }
         OTableWindowData*           GetData() const { return m_pData; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> GetOriginalColumns() const { return m_xColumns; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    GetTable() const { return m_xTable; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> GetOriginalColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    GetTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
 
         UINT16                      GetSizingFlags() const { return m_nSizingFlags; }
 
@@ -184,6 +186,9 @@ namespace dbaui
         BOOL ExistsAConn() const;
 
         virtual void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
+
+        // OEventListenerAdapter
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
     };
 }
 #endif //DBAUI_TABLEWINDOW_HXX

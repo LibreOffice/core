@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 12:57:05 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 DBG_NAME(ORelationTableConnectionData);
 //========================================================================
@@ -125,6 +126,9 @@ ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNa
     ,m_xTables(_xTables)
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
+    Reference<XComponent> xComponent(m_xTables,UNO_QUERY);
+    if(xComponent.is())
+        startComponentListening(xComponent);
 }
 
 //------------------------------------------------------------------------
@@ -140,11 +144,20 @@ ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNa
     ,m_xTables(_xTables)
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    OSL_ENSURE(m_xTables.is(),"ORelationTableConnectionData::ORelationTableConnectionData No Tables!");
+    addListening(m_xTables);
+
     SetCardinality();
-    if(m_xTables->hasByName(rSourceWinName))
+    if(m_xTables.is() && m_xTables->hasByName(rSourceWinName))
         m_xTables->getByName(rSourceWinName) >>= m_xSource;
-    if(m_xTables->hasByName(rDestWinName))
+    if(m_xTables.is() && m_xTables->hasByName(rDestWinName))
         m_xTables->getByName(rDestWinName) >>= m_xDest;
+
+    addListening(m_xSource);
+    addListening(m_xDest);
 }
 
 //------------------------------------------------------------------------
@@ -159,12 +172,17 @@ ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTable
 ORelationTableConnectionData::~ORelationTableConnectionData()
 {
     DBG_DTOR(ORelationTableConnectionData,NULL);
+
+    removeListening(m_xDest);
+    removeListening(m_xSource);
+    removeListening(m_xTables);
 }
 
 //------------------------------------------------------------------------
 BOOL ORelationTableConnectionData::DropRelation()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
+    ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
     // Relation loeschen
     Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
@@ -220,6 +238,8 @@ void ORelationTableConnectionData::ChangeOrientation()
     m_aSourceWinName    = m_aDestWinName;
     m_aDestWinName      = sTempString;
 
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     Reference<XPropertySet> xTemp;
     xTemp       = m_xSource;
     m_xSource   = m_xDest;
@@ -229,17 +249,30 @@ void ORelationTableConnectionData::ChangeOrientation()
 //------------------------------------------------------------------------
 void ORelationTableConnectionData::SetSourceWinName( const String& rSourceWinName )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     OTableConnectionData::SetSourceWinName(rSourceWinName);
     if(m_xTables->hasByName(rSourceWinName))
+    {
+        removeListening(m_xDest);
         m_xTables->getByName(rSourceWinName) >>= m_xSource;
+        addListening(m_xDest);
+    }
 }
 
 //------------------------------------------------------------------------
 void ORelationTableConnectionData::SetDestWinName( const String& rDestWinName )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     OTableConnectionData::SetDestWinName(rDestWinName);
+
     if(m_xTables->hasByName(rDestWinName))
+    {
+        removeListening(m_xDest);
         m_xTables->getByName(rDestWinName) >>= m_xDest;
+        addListening(m_xDest);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -304,6 +337,8 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
 BOOL ORelationTableConnectionData::IsConnectionPossible()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     if( !m_xSource.is() || !m_xDest.is() )
         return FALSE;
 
@@ -348,11 +383,20 @@ ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORe
     m_nDeleteRules = rConnData.GetDeleteRules();
     m_nCardinality = rConnData.GetCardinality();
 
-    //  m_sDatabaseName = rConnData.getTablesName();
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    removeListening(m_xDest);
+    removeListening(m_xSource);
+    removeListening(m_xTables);
 
     m_xTables   = rConnData.getTables();
     m_xSource   = rConnData.getSource();
     m_xDest     = rConnData.getDest();
+
+    addListening(m_xDest);
+    addListening(m_xSource);
+    addListening(m_xTables);
 
     return *this;
 }
@@ -360,6 +404,7 @@ ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORe
 //------------------------------------------------------------------------
 BOOL ORelationTableConnectionData::Update()
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
     // Alte Relation loeschen
     {
@@ -508,6 +553,29 @@ BOOL ORelationTableConnectionData::Update()
     SetCardinality();
 
     return TRUE;
+}
+// -----------------------------------------------------------------------------
+void ORelationTableConnectionData::addListening(const Reference<XInterface>& _rxComponent)
+{
+    Reference<XComponent> xComponent(_rxComponent,UNO_QUERY);
+    if(xComponent.is())
+        startComponentListening(xComponent);
+}
+// -----------------------------------------------------------------------------
+void ORelationTableConnectionData::removeListening(const Reference<XInterface>& _rxComponent)
+{
+    Reference<XComponent> xComponent(_rxComponent,UNO_QUERY);
+    if(xComponent.is())
+        stopComponentListening(xComponent);
+}
+// -----------------------------------------------------------------------------
+void ORelationTableConnectionData::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    // it doesn't matter which one was disposed
+    m_xTables   = NULL;
+    m_xSource   = NULL;
+    m_xDest     = NULL;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:03:02 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,14 @@ namespace dbaui
         OTableWindowMap*            GetTabWinMap() { return &m_aTableMap; }
         const OTableWindowMap*      GetTabWinMap() const { return &m_aTableMap; }
         ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
-        //  ::std::vector<OTableConnection*>*   GetTabConnList() const { return &m_vTableConnection; }
 
 
         BOOL                        ExistsAConn(const OTableWindow* pFromWin) const;
         OTableConnection*           GetTabConn(OTableWindow* pLhs,OTableWindow* pRhs, OTableConnection* _rpFirstAfter = NULL);
+
+        // clears the window map and connection vector without destroying it
+        // that means teh data of the windows and connection will be untouched
+        void clearLayoutInformation();
 
         // set the focus to that tab win which most recently had it (or to the first available one)
         void GrabTabWinFocus();

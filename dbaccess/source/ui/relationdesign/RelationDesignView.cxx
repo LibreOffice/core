@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -130,14 +133,16 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
+DBG_NAME(ORelationDesignView);
 ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :OJoinDesignView(_pParent,_pController,_rFactory)
 {
-
+    DBG_CTOR(ORelationDesignView,NULL);
 }
 // -----------------------------------------------------------------------------
 ORelationDesignView::~ORelationDesignView()
 {
+    DBG_DTOR(ORelationDesignView,NULL);
 }
 // -------------------------------------------------------------------------
 void ORelationDesignView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
@@ -148,6 +153,7 @@ void ORelationDesignView::Construct(const Reference< ::com::sun::star::awt::XCon
 // -----------------------------------------------------------------------------
 void ORelationDesignView::initialize()
 {
+    m_pTableView->clearLayoutInformation();
     m_pTableView->ReSync();
 
     OJoinDesignView::initialize();
