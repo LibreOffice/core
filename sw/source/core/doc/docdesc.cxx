@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 16:00:16 $
+ *  last change: $Author: obo $ $Date: 2003-04-02 13:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
                               GetPrt(), FALSE );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
-            lcl_GetFrameDirection(GetAppLanguage())
+            GetDefaultFrameDirection(GetAppLanguage())
             : FRMDIR_HORI_LEFT_TOP;
 
         pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
