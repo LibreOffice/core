@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestRemote.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:34:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,14 @@ package test.java_uno.anytest;
 
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
+import com.sun.star.lib.TestBed;
 import com.sun.star.uno.UnoRuntime;
-import test.java_uno.TestBed;
 
 public final class TestRemote {
     public static void main(String[] args) throws Exception {
-        new TestBed().execute(new Provider(), false, Client.class, 0);
+        System.out.println(
+            "success? "
+            + new TestBed().execute(new Provider(), false, Client.class, 0));
     }
 
     public static final class Client extends TestBed.Client {
