@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:42:42 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "swstyle.h"
 #include "comcore.hrc"
 #include "shells.hrc"
-
+#include "helpid.h"
 
 String RID_SW_NAME
 {
@@ -3360,3 +3360,36 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message[ catalan ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ thai ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
 };
+QueryBox MSG_INS_MERGE_FIELDS
+{
+    HelpId = HID_MAIL_MERGE_INSERT_FIELDS;
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message = "Möchten Sie Namen und Adressen aus einer Datenbank verwenden?";
+    Message[english_us] = "Do you want to use names and addresses from a database?";
+};
+QueryBox MSG_PRINT_AS_MERGE
+{
+    HelpId = HID_PRINT_AS_MERGE;
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message = "Ihr Dokument enthält Adressdatenbank-Felder. Möchten Sie einen Serienbrief drucken?";
+    Message[english_us] = "Your document contains address database fields. Do you want to print a form letter?";
+};
+WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
+{
+    HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_YES ;
+    Message = "Die Datenquelle \"%1\" konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
+    Message[english_us] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+};
+QueryBox MSG_DATA_SOURCES_UNAVAILABLE
+{
+    HelpId = HID_DATA_SOURCES_UNAVAILABLE;
+    Buttons = WB_OK_CANCEL;
+    DefButton = WB_DEF_YES ;
+    Message = "Es steht keine Datenquelle zur Verfügung. Möchten Sie die Verbindung zu einer Datenquelle herstellen?";
+    Message[english_us] = "There is no data source available.\nDo you want to establish a data source connnection?";
+};
+
