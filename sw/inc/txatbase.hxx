@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 11:16:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class SvxTwoLinesItem;
 class SvxEmphasisMarkItem;
 class SvxCharScaleWidthItem;
 class SvxCharRotateItem;
+class SvxCharReliefItem;
 
 class SwFmtCharFmt;
 class SwFmtINetFmt;
@@ -205,6 +206,7 @@ public:
     inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
     inline const SvxCharScaleWidthItem  &GetCharScaleW() const;
     inline const SvxCharRotateItem      &GetCharRotate() const;
+    inline const SvxCharReliefItem      &GetCharRelief() const;
 
 private:
     SwTxtAttr( const SwTxtAttr& );
@@ -459,10 +461,19 @@ inline const SvxCharRotateItem& SwTxtAttr::GetCharRotate() const
     return (const SvxCharRotateItem&)*pAttr;
 }
 
+inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_RELIEF, "Falsche Abfrage" );
+    return (const SvxCharReliefItem&)*pAttr;
+}
+
 
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/28 11:16:12  ama
+      New: RedlineAttr-flag public
+
       Revision 1.8  2001/02/28 10:58:56  ama
       New: RedlineAttr-flag
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:10:38 $
+ *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ class SvxEmphasisMarkItem;
 class SvxTwoLinesItem;
 class SvxCharScaleWidthItem;
 class SvxCharRotateItem;
+class SvxCharReliefItem;
 
 // Frame-Attribute
 class SwFmtFillOrder;
@@ -281,6 +282,7 @@ public:
     inline const SvxTwoLinesItem        &Get2Lines( BOOL = TRUE ) const;
     inline const SvxCharScaleWidthItem  &GetCharScaleW( BOOL = TRUE ) const;
     inline const SvxCharRotateItem      &GetCharRotate( BOOL = TRUE ) const;
+    inline const SvxCharReliefItem      &GetCharRelief( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx
     inline const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
@@ -356,6 +358,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/15 20:10:38  jp
+      new character attribute: rotate and scalewidth
+
       Revision 1.6  2000/11/29 17:18:49  os
       #80913# forbidden rules
 
