@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: dbo $ $Date: 2000-11-29 12:50:25 $
+#   last change: $Author: pluby $ $Date: 2000-12-15 03:00:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,13 @@ SLOFILES = \
     $(SLO)$/fontoptions.obj				\
     $(SLO)$/addxmltostorageoptions.obj	\
     $(SLO)$/miscopt.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbconfig.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

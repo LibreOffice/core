@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mba $ $Date: 2000-12-13 11:16:37 $
+#   last change: $Author: pluby $ $Date: 2000-12-15 03:00:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -246,13 +246,6 @@ SLOFILES=   \
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbuno.obj
-.ENDIF
-
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  \
             $(SLO)$/addrtempuno.obj	\
@@ -263,6 +256,12 @@ LIB1OBJFILES=  \
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+LIB1OBJFILES+=$(SLO)$/staticmbuno.obj
+.ENDIF
 
 .ENDIF
 
