@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:19:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-06 08:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,12 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "Choose a data source:";
         Text [ english_us ] = "Choose a data source:";
         Text[ portuguese ] = "Seleccionar fonte de dados:";
-        Text[ russian ] = "Choose a data source:";
+        Text[ russian ] = "Βϋαεπθςε θρςξχνθκ δΰννϋυ:";
         Text[ greek ] = "Επιλέξτε μια προέλευση δεδομένων:";
         Text[ dutch ] = "Choose a data source:";
         Text[ french ] = "Choisissez une source de donnιes :";
         Text[ spanish ] = "Seleccione una fuente de datos:";
-        Text[ italian ] = "Choose a data source:";
+        Text[ italian ] = "Scegli una sorgente dati:";
         Text[ danish ] = "Choose a data source:";
         Text[ swedish ] = "Vδlj en datakδlla:";
         Text[ polish ] = "Wybierz rσd³o danych:";
@@ -211,12 +211,12 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
         Text[ portuguese ] = "Ou foi impossνvel carregar a biblioteca #lib# do programa ou esta estα com defeito. A configuraηγo da fonte de dados ODBC nγo estα disponνvel.";
-        Text[ russian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ russian ] = "Αθαλθξςεκΰ οπξγπΰμμϋ #lib# νε ηΰγπσζΰεςρÿ θλθ ξνΰ οξβπεζδενΰ. Βϋαξπ θρςξχνθκΰ δΰννϋυ ODBC νε δξρςσοεν.";
         Text[ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η διαμόρφωση των προελεύσεων των δεδομένων του ODBC δεν είναι διαθέσιμη.";
         Text[ dutch ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ french ] = "La bibliothθque de programme #lib# n'a pas pu κtre chargιe ou est dιfectueuse. La configuration de la source de donnιes ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizαs estι daρada. La configuraciσn de fuente de datos ODBC no estα disponible.";
-        Text[ italian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ italian ] = "Impossibile caricare la program library  #lib# oppure θ difettosa. La configurazione della sorgente dati ODBC non θ disponibile.";
         Text[ danish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller sε δr det defekt. Konfigurationen av ODBC-datakδllor δr inte tillgδnglig.";
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o moΏliwe. Jest ona byζ moΏe uszkodzona. Wybσr rσd³a danych ODBC nie jest moΏliwy.";
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/27 15:19:09  kz
+ *  Merge SRC610: 27.10.00 - 17:18:52 (NoBranch)
+ *
  *  Revision 1.1  2000/10/24 12:14:02  fs
  *  initial checkin - dialog for selecting system datasources
  *
