@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:48:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,7 @@ static USHORT __FAR_DATA aPageRg[] = {
     RES_FRM_SIZE, RES_FRM_SIZE,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,
+    RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW,
     0
 };
 static USHORT __FAR_DATA aAddPgRg[] = {
@@ -1733,6 +1734,7 @@ void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
     RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
     aHeightED.LockAutoCalculation(sal_False);
     aWidthED.LockAutoCalculation(sal_False);
+    aFollowTextFlowCB.SaveValue();
 }
 
 int SwFrmPage::DeactivatePage(SfxItemSet * pSet)
