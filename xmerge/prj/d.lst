@@ -1,6 +1,6 @@
 ..\%__SRC%\class\xmerge.jar %_DEST%\bin%_EXT%\xmerge.jar
 ..\%__SRC%\class\pexcel.jar %_DEST%\bin%_EXT%\pexcel.jar
 .\%__SRC%\class\htmlsoff.jar %_DEST%\bin%_EXT%\htmlsoff.jar
-..\%__SRC%\doc\xmerge_javadoc.zip %_DEST%\doc\xmerge_javadoc.zip
-mkdir: %_DEST%\doc\xmerge
-..\%__SRC%\doc\javadoc\package-list %_DEST%\doc\xmerge\package-list
+..\%__SRC%\doc%_EXT%\xmerge_javadoc.zip %_DEST%\doc%_EXT%\xmerge_javadoc.zip
+mkdir: %_DEST%\doc%_EXT%\xmerge
+..\%__SRC%\doc%_EXT%\javadoc\package-list %_DEST%\doc%_EXT%\xmerge\package-list
