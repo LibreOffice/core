@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:01:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "optdlg.hrc"
 
 /**************************************************************************/
@@ -673,15 +672,15 @@ TabPage RID_SCPAGE_LAYOUT
     FixedText FT_UNIT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 53 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ de ] = "~Maﬂeinheit" ;
         Text [ en-US ] = "Measurement ~unit";
     };
     ListBox LB_UNIT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 65 , 14 ) ;
-        Size = MAP_APPFONT ( 53 , 52 ) ;
+        Pos = MAP_APPFONT ( 72 , 14 ) ;
+        Size = MAP_APPFONT ( 46 , 52 ) ;
         DropDown = TRUE ;
     };
     StringArray ST_UNIT
@@ -726,15 +725,15 @@ TabPage RID_SCPAGE_LAYOUT
     FixedText FT_TAB
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 53 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ de ] = "~Tabulator" ;
         Text [ en-US ] = "~Tab stops";
     };
     MetricField MF_TAB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 65 , 30 ) ;
-        Size = MAP_APPFONT ( 53 , 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 30 ) ;
+        Size = MAP_APPFONT ( 46 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
