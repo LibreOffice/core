@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 14:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,9 +808,9 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
         break;
 
     case XATTR_LINEDASH:
-        nApiResIds = RID_SVXSTR_DASH0_DEF;
-        nIntResIds = RID_SVXSTR_DASH0;
-        nCount = RID_SVXSTR_DASH10_DEF - RID_SVXSTR_DASH0_DEF + 1;
+        nApiResIds = RID_SVXSTR_DASH_DEF_START;
+        nIntResIds = RID_SVXSTR_DASH_START;
+        nCount = RID_SVXSTR_DASH_DEF_END - RID_SVXSTR_DASH_DEF_START + 1;
         break;
 
     case XATTR_LINESTART:
