@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:53:11 $
+ *  last change: $Author: os $ $Date: 2002-05-29 09:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #endif
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
+#endif
+#ifndef _SVX_FMVIEW_HXX
+#include <svx/fmview.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -208,6 +214,32 @@ void SwView::ExecDraw(SfxRequest& rReq)
             {
                 bDeselect = sal_True;
                 GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button soll rauspoppen
+            }
+        }
+    }
+    else if( nSlotId == SID_FM_CREATE_FIELDCONTROL)
+    {
+        FmFormView* pFormView = PTR_CAST( FmFormView, pSdrView );
+        if ( pFormView )
+        {
+            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+            DBG_ASSERT( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+            if( pDescriptorItem )
+            {
+                ::svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
+                SdrObject* pObj = pFormView->CreateFieldControl( aDescriptor );
+
+                if ( pObj )
+                {
+                    // calc a default position
+                    Size aWinSize( GetEditWin().GetSizePixel() );
+                    Point aCenter( aWinSize.Width()/2, aWinSize.Height() / 2 );
+                    aCenter = GetEditWin().PixelToLogic( aCenter );
+
+                    // TODO: unmark all other
+                    pWrtShell->EnterStdMode();
+                    pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aCenter );
+                }
             }
         }
     }
