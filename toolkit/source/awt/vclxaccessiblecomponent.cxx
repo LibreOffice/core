@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 15:35:15 $
+ *  last change: $Author: tbe $ $Date: 2002-06-10 17:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ TRANSIENT
 // accessibility::XAccessibleContext
 sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Int32 nChildren = 0;
     if ( GetWindow() )
@@ -435,10 +435,10 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::Runtime
 
 uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    OExternalLockGuard aGuard( this );
+
     if ( i >= getAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
-
-    OContextEntryGuard( this );
 
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
@@ -465,7 +465,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getVclPare
 
 uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     uno::Reference< accessibility::XAccessible > xAcc( implGetForeignControlledParent() );
     if ( !xAcc.is() )
@@ -477,7 +477,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 
 sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Int32 nIndex = -1;
 
@@ -511,7 +511,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
 
 sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Int16 nRole = 0;
 
@@ -523,7 +523,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
 
 ::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     ::rtl::OUString aDescription;
 
@@ -535,7 +535,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
 
 ::rtl::OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     ::rtl::OUString aName;
     if ( GetWindow() )
@@ -552,13 +552,14 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
 
 uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
+
     return NULL;
 }
 
 uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
     uno::Reference< accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
@@ -569,18 +570,14 @@ uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::ge
 
 lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
-    lang::Locale aLocale;
-    if ( GetWindow() )
-        aLocale = GetWindow()->GetSettings().GetUILocale();
-
-    return aLocale;
+    return Application::GetSettings().GetLocale();
 }
 
 uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAt( const awt::Point& rPoint ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     uno::Reference< accessibility::XAccessible > xAcc;
 
@@ -637,7 +634,7 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
 
 awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     awt::Point aPos;
     if ( GetWindow() )
@@ -652,7 +649,7 @@ awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeE
 
 void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     uno::Reference< accessibility::XAccessibleStateSet > xStates = getAccessibleStateSet();
     if ( mxWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
@@ -661,7 +658,7 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
 
 uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     uno::Any aRet;
 
@@ -693,7 +690,7 @@ uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeE
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
     if ( GetWindow() )
@@ -704,7 +701,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
     if ( GetWindow() )
@@ -725,7 +722,7 @@ awt::FontDescriptor SAL_CALL VCLXAccessibleComponent::getFontMetrics( const uno:
 
 sal_Bool SAL_CALL VCLXAccessibleComponent::isEnabled(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     sal_Bool bEnabled = sal_False;
     if ( GetWindow() )
@@ -736,7 +733,7 @@ sal_Bool SAL_CALL VCLXAccessibleComponent::isEnabled(  ) throw (uno::RuntimeExce
 
 ::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     ::rtl::OUString sRet;
     if ( GetWindow() )
@@ -747,7 +744,7 @@ sal_Bool SAL_CALL VCLXAccessibleComponent::isEnabled(  ) throw (uno::RuntimeExce
 
 ::rtl::OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException)
 {
-    OContextEntryGuard( this );
+    OExternalLockGuard aGuard( this );
 
     ::rtl::OUString sRet;
     if ( GetWindow() )
