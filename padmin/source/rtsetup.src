@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:18:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,7 +924,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ czech ] = "Odebrat";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
-        Text[ slovak ] = "Odob~rať";
+        Text[ slovak ] = "Odst~rániť";
     };
     FixedText RID_RTS_FS_FROM_TXT
     {
@@ -1759,6 +1759,8 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ hindi ] = "कृपया फ़ॉक्स संख्या को प्रविष्ट कीजिए ।";
     Text[ slovak ] = "Prosím zadajte faxové číslo.";
 };
+
+
 
 
 
