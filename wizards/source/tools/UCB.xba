@@ -160,17 +160,13 @@ End Function
 
 
 Function CopyRecursively(SourceFilePath as String, SourceStemDir as String, TargetStemDir as String)
-Dim oUcb as Object
 Dim TargetDir as String
 Dim TargetFile as String
 
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	TargetFile= ReplaceString(SourceFilePath, TargetStemDir, SourceStemDir)
 	TargetFileName = FileNameoutofPath(TargetFile,&quot;/&quot;)
 	TargetDir = DeleteStr(TargetFile, TargetFileName)
-	If Not oUcb.Exists(TargetDir) Then
-		oUcb.CreateFolder(TargetDir)
-	End If
+	CreateFolder(TargetDir)
 	CopyRecursively() = TargetFile
 End Function
 
@@ -273,5 +269,5 @@ NOSPACEONDRIVE:
 		CreateFolder = False
 		Resume GOON
 	End If
-GOON:		
+GOON:
 End Function</script:module>
