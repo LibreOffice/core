@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
         aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
 
-        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect );
+        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, POPUPMENU_NOMOUSEUPCLOSE );
         if ( nId == MN_IGNORE )
         {
             String aWord = pImpEditView->SpellIgnoreOrAddWord( sal_False );
