@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 14:14:30 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 12:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,11 @@
  *
  *
  ************************************************************************/
-
 #include <limits>  // included here to prevent problems if compiling with C52
 
+#ifdef LINUX
+#include <iostream>
+#endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
@@ -110,6 +112,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <algorithm>
+
+
 using namespace connectivity;
 using namespace connectivity::file;
 using namespace cppu;
