@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:37:04 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 
 #define ITEMID_FIELD    0
 #include "flditem.hxx"
-#include "adritem.hxx"
 
 #include "svdfield.hxx"
 
@@ -1070,12 +1069,14 @@ SvxAuthorField::SvxAuthorField()
 
 //----------------------------------------------------------------------------
 
-SvxAuthorField::SvxAuthorField( const SvxAddressItem& rAdrItem,
+SvxAuthorField::SvxAuthorField( const XubString& rFirstName,
+                                const XubString& rLastName,
+                                const XubString& rShortName,
                                     SvxAuthorType eT, SvxAuthorFormat eF )
 {
-    aName      = rAdrItem.GetName();
-    aFirstName = rAdrItem.GetFirstName();
-    aShortName = rAdrItem.GetShortName();
+    aName      = rLastName;
+    aFirstName = rFirstName;
+    aShortName = rShortName;
     eType   = eT;
     eFormat = eF;
 }
