@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextCursor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,58 +78,82 @@ interface XTextCursor: com::sun::star::text::XTextRange
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::collapseToStart
     /** sets the end of the position to the start.
      */
     [oneway] void collapseToStart();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::collapseToEnd
     /** sets the start of the position to the end.
      */
     [oneway] void collapseToEnd();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::isCollapsed
     /** determines if the start and end positions are the same.
      */
     boolean isCollapsed();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::goLeft
     /** moves the cursor the specified number of characters to the left.
+
+        @param nCount
+            the number of characters to move.
+
+        @param bExpand
+            specifies if the current selection of the cursor should
+            be expanded or not.
+
+        @returns
+            <TRUE/> if the command was successfully completed.
+            <FALSE/> otherwise.
+
+            <p>Note: Even if the command was not completed successfully
+            it may be completed partially. E.g. if it was required to move
+            5 characters but it is only possible to move 3 <FALSE/> will
+            be returned and the cursor moves only those 3 characters.<p>
      */
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::goRight
     /** moves the cursor the specified number of characters to the right.
+
+        @param nCount
+            the number of characters to move.
+
+        @param bExpand
+            specifies if the current selection of the cursor should
+            be expanded or not.
+
+        @returns
+            <TRUE/> if the command was successfully completed.
+            <FALSE/> otherwise.
+
+            <p>Note: Even if the command was not completed successfully
+            it may be completed partially. E.g. if it was required to move
+            5 characters but it is only possible to move 3 <FALSE/> will
+            be returned and the cursor moves only those 3 characters.<p>
      */
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::gotoStart
     /** moves the cursor to the start of the text.
      */
     void gotoStart( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::gotoEnd
     /** moves the cursor to the end of the text.
      */
     void gotoEnd( [in] boolean bExpand );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextCursor::gotoRange
     /** moves or expands the cursor to a specified <type>TextRange</type>.
      */
     void gotoRange( [in] com::sun::star::text::XTextRange xRange,
