@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject, public SfxLis
                                   String* pAppName,
                                   String* pFullTypeName,
                                   String* pShortTypeName,
-                                  long    nFileFormat = SOFFICE_FILEFORMAT_NOW) const;
+                                  long    nFileFormat = SOFFICE_FILEFORMAT_CURRENT) const;
 
     virtual const       SvDataTypeList& GetTypeList() const;
     virtual BOOL        GetData(SvData *pData);

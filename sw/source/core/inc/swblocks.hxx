@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 18:10:49 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ class Sw3Persist : public SvPersist
                             String * pAppName,
                             String * pLongUserName,
                             String * pUserName,
-                            long nFileFormat=SOFFICE_FILEFORMAT_NOW ) const;
+                            long nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
     virtual BOOL Save();
     virtual BOOL SaveCompleted( SvStorage * );
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 17:02:17 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
         long nFFVersion = xRoot->GetVersion();
         ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31 ||
                 nFFVersion == SOFFICE_FILEFORMAT_40 ||
-                nFFVersion == SOFFICE_FILEFORMAT_NOW,
+                nFFVersion == SOFFICE_FILEFORMAT_50,
                 "Am Root-Storage ist keine FF-Version gesetzt!" );
 
         // Wenn eine 3.1-Clipboard-ID gesetzt ist, die Fileformat-Version
@@ -259,6 +259,15 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
             ASSERT( nFFVersion == SOFFICE_FILEFORMAT_40,
                     "Fileformat-Version auf 4.0 umgesetzt" );
             xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_40 );
+        }
+        else if( ( SOT_FORMATSTR_ID_STARWRITER_50 == xRoot->GetFormat() ||
+                   SOT_FORMATSTR_ID_STARWRITERWEB_50 == xRoot->GetFormat() ||
+                   SOT_FORMATSTR_ID_STARWRITERGLOB_50 == xRoot->GetFormat() ) &&
+                 nFFVersion != SOFFICE_FILEFORMAT_50 )
+        {
+            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_50,
+                    "Fileformat-Version auf 4.0 umgesetzt" );
+            xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_50 );
         }
 
         pRet = xRoot->OpenStream( sDrawStrmNm,

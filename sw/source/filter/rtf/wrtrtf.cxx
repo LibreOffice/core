@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 09:57:36 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ void SwRTFWriter::OutDocInfoStat()
 
     // fuer interne Zwecke - Versionsnummer rausschreiben
     Strm() << '{' << sRTF_COMMENT << " StarWriter}{" << sRTF_VERN;
-    OutLong( Strm(), SOFFICE_FILEFORMAT_NOW ) << '}';
+    OutLong( Strm(), SUPD*10 ) << '}';
 
     Strm() << '}';
 }
@@ -1418,11 +1418,14 @@ void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.3 2000-11-16 09:57:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/wrtrtf.cxx,v 1.4 2001-02-06 15:55:19 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/16 09:57:36  jp
+      export CJK attributes
+
       Revision 1.2  2000/10/09 13:31:40  jp
       Bug #78626#: _OutFont - dontknow is a valid value
 
