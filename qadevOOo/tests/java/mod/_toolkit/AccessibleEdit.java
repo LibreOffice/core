@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEdit.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-05-27 13:58:01 $
+ *  last change: $Date: 2003-09-08 12:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,8 @@
 
 package mod._toolkit;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleEditableText;
-import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -88,6 +70,25 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 
 /**
  * Test for object which is represented by edit field
@@ -132,9 +133,6 @@ public class AccessibleEdit extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
@@ -191,8 +189,6 @@ public class AccessibleEdit extends TestCase {
             AccessibleRole.PUSH_BUTTON, "Close");
         action = (XAccessibleAction)
             UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
-        final XAccessibleComponent buttonAccComp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT);
 
@@ -200,8 +196,6 @@ public class AccessibleEdit extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
 
         final XAccessibleEditableText edText = (XAccessibleEditableText)
             UnoRuntime.queryInterface(XAccessibleEditableText.class,oObj) ;
