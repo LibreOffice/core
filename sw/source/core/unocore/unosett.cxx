@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+ *  last change: $Author: os $ $Date: 2001-07-03 11:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,6 +1817,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
         SvxBrushItem* pSetBrush = 0;
         Size* pSetSize = 0;
         SwFmtVertOrient* pSetVOrient = 0;
+        BOOL bCharStyleNameSet = FALSE;
 
         for(sal_uInt16 i = 0; i < nPropNameCount && !bExcept && !bWrongArg; i++)
         {
@@ -1863,6 +1864,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 break;
                 case 4: //"CharStyleName",
                 {
+                    bCharStyleNameSet = TRUE;
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sCharFmtName(
@@ -2121,6 +2123,12 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     (SvxFrameVertOrient)pSetVOrient->GetVertOrient() : SVX_VERT_NONE;
                 aFmt.SetGraphicBrush( pSetBrush, pSetSize, SVX_VERT_NONE == eOrient ? 0 : &eOrient );
             }
+        }
+        if((!bCharStyleNameSet || !sNewCharStyleNames[(sal_uInt16)nIndex].Len()) &&
+                aFmt.GetNumberingType() == NumberingType::BITMAP && !aFmt.GetCharFmt()
+                    && SwXNumberingRules::GetInvalidStyle() != sNewCharStyleNames[(sal_uInt16)nIndex])
+        {
+            sNewCharStyleNames[(sal_uInt16)nIndex] = String(SW_RES(STR_POOLCHR_PRGM_BUL_LEVEL));
         }
         delete pSetBrush;
         delete pSetSize;
