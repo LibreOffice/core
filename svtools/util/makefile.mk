@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.27 $
+#*  $Revision: 1.28 $
 #*
-#*  last change: $Author: hjs $ $Date: 2001-09-03 10:14:40 $
+#*  last change: $Author: ka $ $Date: 2001-09-26 09:34:32 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -285,6 +285,25 @@ APP1STDLIBS+= svtool.lib
 .ELSE
 APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
 APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
+.ENDIF
+
+# --- g2g application --------------------------------------------------
+
+APP2TARGET	=	g2g
+APP2BASE	=	0x10000000
+APP2DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
+APP2OBJS	=   $(OBJ)$/g2g.obj	
+
+APP2STDLIBS	=	$(SVLIB)		\
+                $(TOOLSLIB)		\
+                $(VOSLIB) 		\
+                $(SALLIB)
+
+.IF "$(GUI)"!="UNX"
+APP2STDLIBS+= svtool.lib
+.ELSE
+APP2STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX)
+APP2STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
