@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:45:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,11 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XISTYLE_HXX
 #define SC_XISTYLE_HXX
+
+#include <list>
 
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
@@ -72,6 +75,9 @@
 #include "patattr.hxx"
 #endif
 
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
+#endif
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -619,6 +625,9 @@ public:
     /** Inserts a new XF index for all cells in a column. */
     void                SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex );
 
+    /** Inserts a range of hyperlink cells. */
+    void                SetHyperlink( const XclRange& rXclRange, const String& rUrl );
+
     /** Inserts the first cell of a merged cell range. */
     void                SetMerge( SCCOL nScCol, SCROW nScRow );
     /** Inserts a complete merged cell range. */
@@ -650,9 +659,13 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
 
 private:
-    typedef ::std::auto_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnPtr;
+    typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;
+    typedef ::std::vector< XclImpXFRangeColumnRef > XclImpXFRangeColumnVec;
+    typedef ::std::pair< XclRange, String >         XclImpHyperlinkRange;
+    typedef ::std::list< XclImpHyperlinkRange >     XclImpHyperlinkList;
 
-    XclImpXFRangeColumnPtr* mppColumns;     /// Array of pointers to column XF index buffers.
+    XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
+    XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.
     ScRangeList         maMergeList;        /// List of merged cell ranges.
 };
 
