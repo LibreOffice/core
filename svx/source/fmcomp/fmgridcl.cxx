@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 10:42:03 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
                 ::cppu::extractInterface(xColumn, xColumns->getByIndex(nPos));
                 ::rtl::OUString aHelpText;
                 xColumn->getPropertyValue(FM_PROP_HELPTEXT) >>= aHelpText;
-                if ( aHelpText.len() )
+                if ( aHelpText.getLength() )
                 {
                     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText );
@@ -664,7 +664,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
 
                 sFieldService = FieldServiceFromId(nPreferedType);
                 Reference< XPropertySet >  xThisRoundCol;
-                if (sFieldService.len())
+                if (sFieldService.getLength())
                 {
                     xThisRoundCol = xFactory->createColumn(sFieldService);
                     if (xThisRoundCol.is() && ::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xThisRoundCol))
@@ -1076,7 +1076,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             break;
     }
 
-    if (aFieldType.len())
+    if (aFieldType.getLength())
     {
         Reference< ::com::sun::star::form::XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
         Reference< ::com::sun::star::beans::XPropertySet >  xCol = xFactory->createColumn(aFieldType);
@@ -1707,7 +1707,7 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
         xCol->getPropertyValue(FM_PROP_CONTROLSOURCE) >>= aFieldName;
         Reference< ::com::sun::star::beans::XPropertySet >  xField;
 
-        if (aFieldName.len() && xFieldsAsNames->hasByName(aFieldName))
+        if (aFieldName.getLength() && xFieldsAsNames->hasByName(aFieldName))
         {
             ::cppu::extractInterface(xField, xFieldsAsNames->getByName(aFieldName));
         }

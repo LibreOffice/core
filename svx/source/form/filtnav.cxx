@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 12:28:51 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
     FmFilterRow& rRow = rRows[nRowPos];
 
     // do we have a new filter
-    if (rText.len())
+    if (rText.getLength())
         rRow[xText] = rText;
     else
     {
@@ -612,7 +612,7 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
         FmFilterItem* pFilterItem = pFilter->Find(xText);
         if (pFilterItem)
         {
-            if (xText->getText().len())
+            if (xText->getText().getLength())
             {
                 pFilterItem->SetText(xText->getText());
                 // UI benachrichtigen

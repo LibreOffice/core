@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1886,13 +1886,13 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             {
                 Reference< ::com::sun::star::sdbc::XRowSet >            xRowSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 Reference< ::com::sun::star::beans::XPropertySet >      xSet(GetImpl()->getActiveForm(), UNO_QUERY);
-                bEnable = ::dbtools::getConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).len();
+                bEnable = ::dbtools::getConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).getLength();
             }   break;
             case SID_FM_FORM_FILTERED:
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
-                if (aFilter.len())
+                if (aFilter.getLength())
                 {
                     rSet.Put(SfxBoolItem(nWhich, ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_APPLYFILTER))));
                     bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_INSERTONLY));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:29:14 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1407,7 +1407,7 @@ Sequence< ::rtl::OUString> getEventMethods(const Type& type)
                 reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
             *pNames = pRealMemberDescription->pMemberName;
         }
-     }
+    }
 
     typelib_typedescription_release( (typelib_TypeDescription *)pType );
     return aNames;
@@ -1954,8 +1954,8 @@ sal_Bool isLoadable(const Reference< XInterface>& xLoad)
             Reference< XInterface> xConn;
             xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
             return (xConn.is() ||
-                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
-                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
+                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).getLength() ||
+                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).getLength() ||
                     ::findConnection(xLoad).is());
         }
         catch(Exception&)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2837,7 +2837,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
 
             ::rtl::OUString aFieldName(::comphelper::getString(xFieldSet->getPropertyValue(FM_PROP_NAME)));
 
-            if (!xColumn->getString().len() && xColumn->wasNull())
+            if (!xColumn->getString().getLength() && xColumn->wasNull())
             {
                 Sequence< Reference< ::com::sun::star::awt::XControl > > aControls(getControls());
                 sal_Int32 nLength = aControls.getLength();
@@ -2867,7 +2867,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                 aMsg.SearchAndReplace('#', aFieldName.getStr());
 
                 SvxDBMsgBox aDlg(getDialogParentWindow(), aTitle, aMsg, WB_OK | WB_DEF_OK,
-                                 SvxDBMsgBox::Info);
+                                SvxDBMsgBox::Info);
                 aDlg.Execute();
                 if ( i < nLength)
                 {

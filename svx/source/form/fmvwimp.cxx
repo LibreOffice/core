@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:12:48 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
                         {
                             // wenn es eine Datenquelle gibt, dann als aktive ::com::sun::star::form setzen
                             ::rtl::OUString aSource = ::comphelper::getString(xFormSet->getPropertyValue(FM_PROP_COMMAND));
-                            if (aSource.len())
+                            if (aSource.getLength())
                             {
                                 // benachrichtigung der Shell
                                 FmXFormShell* pShImpl =  m_pView->GetFormShell()->GetImpl();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2566,7 +2566,7 @@ void FmXFormShell::startListening()
         {
             // wenn es eine Datenquelle gibt, dann den Listener aufbauen
             ::rtl::OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
-            if (aSource.len())
+            if (aSource.getLength())
             {
                 // we have to recognize any change roset change
                 xDatabaseForm->addRowSetListener(this);

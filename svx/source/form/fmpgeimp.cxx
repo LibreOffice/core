@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
+ *  last change: $Author: th $ $Date: 2001-05-11 15:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
     // die ::com::sun::star::form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
     // und die StandardForm
-    if (rDatabase.is() && rCursorSource.len())
+    if (rDatabase.is() && rCursorSource.getLength())
     {
         // erst in der aktuellen form suchen
         xForm = FindForm(xCurrentForm, rDatabase, rCursorSource, nCommandType);
@@ -396,7 +396,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
             try { xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
 
-            if (rDBTitle.len())
+            if (rDBTitle.getLength())
                 xSet->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
             else
             {
@@ -472,11 +472,11 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(rForm, UNO_QUERY);
         ::rtl::OUString aCursorSource = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
-        if (!aCursorSource.len() || ((nType == nCommandType) && (aCursorSource == rCursorSource))) // found the form
+        if (!aCursorSource.getLength() || ((nType == nCommandType) && (aCursorSource == rCursorSource))) // found the form
         {
             xResultForm = rForm;
             // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
-            if (!aCursorSource.len())
+            if (!aCursorSource.getLength())
             {
                 xSet->setPropertyValue(FM_PROP_COMMAND, makeAny(rCursorSource));
                 xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
@@ -508,7 +508,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
         sName = ::comphelper::getString(aValue);
         Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
 
-        if (!sName.len() || xNameAcc->hasByName(sName))
+        if (!sName.getLength() || xNameAcc->hasByName(sName))
         {
             // setzen eines default Namens ueber die ClassId
             Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
@@ -517,7 +517,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
 
             ::rtl::OUString sDefaultName = getDefaultName(nClassId, xControls);
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
-            if (!sName.len() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
+            if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
             }
@@ -541,7 +541,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
                 aValue = xSet->getPropertyValue(FM_PROP_LABEL);
                 ::rtl::OUString aText;
                 aValue >>= aText;
-                if (!aText.len())
+                if (!aText.getLength())
                 {
                     aLabel.SearchAndReplace( getDefaultName(nClassId), ::rtl::OUString(SVX_RES(nResId)) );
                     xSet->setPropertyValue( FM_PROP_LABEL, makeAny(::rtl::OUString(aLabel)) );
