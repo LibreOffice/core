@@ -20352,3 +20352,9 @@ _real@8@3fff8666666666666800
 ??4?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
 ?getImplementationId@?$WeakImplHelper1@VXSelectionChangeListener@view@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
 ?realloc@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
+??0SdrOutlinerCache@@QAE@PAVSdrModel@@@Z
+??1SdrOutlinerCache@@QAE@XZ
+?createOutliner@SdrOutlinerCache@@QAEPAVSdrOutliner@@G@Z
+?disposeOutliner@SdrOutlinerCache@@QAEXPAVSdrOutliner@@@Z
+?createOutliner@SdrModel@@QAEPAVSdrOutliner@@G@Z
+?disposeOutliner@SdrModel@@QAEXPAVSdrOutliner@@@Z
