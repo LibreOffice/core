@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 12:09:52 $
+ *  last change: $Author: fme $ $Date: 2002-11-22 15:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,11 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
         rRect.Left( aLine.GetLineStart() );
         rRect.Height( aLine.GetDropHeight() );
         rRect.Width( aLine.GetDropLeft() );
+
+#ifdef BIDI
+        if ( IsRightToLeft() )
+            SwitchLTRtoRTL( rRect );
+#endif
 
 #ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
