@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_EXPORT_GIF
     Text [ dutch ] = "GIF-opties" ;
     Text [ swedish ] = "GIF-alternativ" ;
     Text [ danish ] = "GIF indstillinger" ;
-    Text [ portuguese_brazilian ] = "GIF Optionen" ;
+    Text [ portuguese_brazilian ] = "Opções GIF" ;
     Text [ portuguese ] = "Opções GIF" ;
     OKButton BTN_OK
     {
@@ -110,7 +110,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ dutch ] = "Modus" ;
         Text [ swedish ] = "Läge" ;
         Text [ danish ] = "Modus" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text [ portuguese ] = "Modo" ;
         Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
@@ -127,6 +127,9 @@ ModalDialog DLG_EXPORT_GIF
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
+        Text[ czech ] = "ReÅ¾im";
+        Text[ hebrew ] = "â€®××¦×‘ ×¢×‘×•×“×”â€¬";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤¾à¤°";
     };
     CheckBox CBX_INTERLACED
     {
@@ -136,7 +139,7 @@ ModalDialog DLG_EXPORT_GIF
         Text = "~Interlaced" ;
         Text [ ENGLISH ] = "~Interlaced" ;
         Text [ english_us ] = "~Interlaced" ;
-        Text [ portuguese_brazilian ] = "~Interlaced" ;
+        Text [ portuguese_brazilian ] = "~Entrelaçado" ;
         Text [ swedish ] = "~Interlaced" ;
         Text [ danish ] = "~Interlaced" ;
         Text [ italian ] = "Interlaced" ;
@@ -146,7 +149,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ portuguese ] = "~Entrelaçado" ;
         Text[ chinese_simplified ] = "äº¤é”™(~I)";
         Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
-        Text[ polish ] = "Interlaced";
+        Text[ polish ] = "~Z przeplotem";
         Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ¬ãƒ¼ã‚¹æ–¹å¼(~I)";
         Text[ chinese_traditional ] = "äº¤éŒ¯(~I)";
         Text[ arabic ] = "ãÊÔÇÈß";
@@ -154,11 +157,14 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "äº¤é”™(~I)";
         Text[ greek ] = "Ğåğëåãìİíç";
         Text[ korean ] = "ì¸í„°ë ˆì´ìŠ¤(~I)";
-        Text[ turkish ] = "~Interlaced";
+        Text[ turkish ] = "~Karıştırılmış";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Entrellaçat";
         Text[ finnish ] = "Lomitettu";
         Text[ thai ] = "~à¸›à¸£à¸°à¸ªà¸²à¸™à¸à¸±à¸™";
+        Text[ czech ] = "ProklÃ¡danÃ½";
+        Text[ hebrew ] = "â€®×’×¨×¤×™×§×” ××©×•×œ×‘×ªâ€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤²à¤¾ à¤¹à¥à¤†";
     };
     FixedLine GRP_DRAW
     {
@@ -167,7 +173,7 @@ ModalDialog DLG_EXPORT_GIF
         Text = "Zeichenobjekte" ;
         Text [ ENGLISH ] = "Drawing objects" ;
         Text [ english_us ] = "Drawing objects" ;
-        Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
+        Text [ portuguese_brazilian ] = "Objetos de desenho" ;
         Text [ swedish ] = "Ritobjekt" ;
         Text [ danish ] = "Tegneobjekter" ;
         Text [ italian ] = "Oggetti di disegno" ;
@@ -177,10 +183,10 @@ ModalDialog DLG_EXPORT_GIF
         Text [ portuguese ] = "Objectos de desenho" ;
         Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-        Text[ polish ] = "Obiekty graficzne";
+        Text[ polish ] = "Obiekty rysunkowe";
         Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
         Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Obiekty graficzne";
+    Text[ polish ] = "Obiekty rysunkowe";
     Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
     Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
@@ -194,6 +200,9 @@ ModalDialog DLG_EXPORT_GIF
         Text[ catalan ] = "Objectes de dibuix";
         Text[ finnish ] = "Piirrosobjektit";
         Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
+        Text[ czech ] = "GrafickÃ© objekty";
+        Text[ hebrew ] = "â€®×¢×¦××™ ×¡×¨×˜×•×˜â€¬";
+        Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -203,7 +212,7 @@ ModalDialog DLG_EXPORT_GIF
         Text = "~Transparent speichern" ;
         Text [ ENGLISH ] = "Save ~transparent" ;
         Text [ english_us ] = "Save ~transparency" ;
-        Text [ portuguese_brazilian ] = "~Transparent speichern" ;
+        Text [ portuguese_brazilian ] = "Salvar ~transparência" ;
         Text [ swedish ] = "Spara ~transparent" ;
         Text [ danish ] = "Gem ~transparent" ;
         Text [ italian ] = "Salva in modo trasparente" ;
@@ -213,7 +222,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ portuguese ] = "~Guardar em modo transparente" ;
         Text[ chinese_simplified ] = "å­˜ç›˜é€æ˜(~T)";
         Text[ russian ] = "Ñîõğàíèòü â ïğîçğà÷íîì ğåæèìå";
-        Text[ polish ] = "Zapisz w trybie przeŸroczystym";
+        Text[ polish ] = "Zapisz przezroczys~toœæ";
         Text[ japanese ] = "é€éæ€§ã®ã¾ã¾ä¿å­˜(~T)";
         Text[ chinese_traditional ] = "å„²å­˜é€æ˜(~T)";
         Text[ arabic ] = "ÍİÙ ÔİÇİ";
@@ -226,10 +235,13 @@ ModalDialog DLG_EXPORT_GIF
         Text[ catalan ] = "Desa la ~transparència";
         Text[ finnish ] = "Tallenna läpinäkyvyys";
         Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¸§à¸²à¸¡à¹‚~à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+        Text[ czech ] = "UloÅ¾it prÅ¯hlednost";
+        Text[ hebrew ] = "â€®×©××™×¨×ª ×©×§×£â€¬";
+        Text[ hindi ] = "~à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹";
     };
     Text[ chinese_simplified ] = "GIF é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû GIF";
-    Text[ polish ] = "Opcje GIF";
+    Text[ polish ] = "Opcje formatu GIF";
     Text[ japanese ] = "GIF ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "GIFé¸é …";
     Text[ arabic ] = "GIF ÎíÇÑÇÊ";
@@ -242,7 +254,24 @@ ModalDialog DLG_EXPORT_GIF
     Text[ catalan ] = "Opcions GIF";
     Text[ finnish ] = "GIF-vientiasetukset";
     Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ GIF ";
+    Text[ czech ] = "Volby pro formÃ¡t GIF";
+    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª GIFâ€¬";
+    Text[ hindi ] = "GIF à¤µà¤¿à¤•à¤²à¥à¤ª";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
