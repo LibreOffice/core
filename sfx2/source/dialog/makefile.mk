@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: as $ $Date: 2001-03-05 07:11:43 $
+#   last change: $Author: dv $ $Date: 2001-04-27 10:38:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,9 @@ SLOFILES =\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/eventdlg.obj		\
+        $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filepicker.obj		\
+        $(SLO)$/folderpicker.obj	\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
@@ -114,7 +116,9 @@ SLOFILES =\
         $(SLO)$/versdlg.obj
 
 EXCEPTIONSFILES=\
+        $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filepicker.obj		\
+        $(SLO)$/folderpicker.obj	\
         $(SLO)$/maillistener.obj	\
         $(SLO)$/mailmodel.obj
 
@@ -126,6 +130,7 @@ SRCFILES =\
         dinfedt.src			\
         dlgrun.src			\
         eventdlg.src		\
+        filedlghelper.src	\
         macropg.src			\
         mail.src			\
         mailwindow.src		\
