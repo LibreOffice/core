@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:23:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ namespace pcr
     #define PROPERTY_ID_WORDBREAK            70
     #define PROPERTY_ID_MULTILINE            71
     #define PROPERTY_ID_MULTISELECTION       72
-        // free
+    #define PROPERTY_ID_AUTOLINEBREAK        73
     #define PROPERTY_ID_HSCROLL              74
     #define PROPERTY_ID_VSCROLL              75
     #define PROPERTY_ID_SPIN                 76
@@ -284,6 +284,7 @@ namespace pcr
     #define PROPERTY_ID_SHOW_NAVIGATION      137
     #define PROPERTY_ID_SHOW_RECORDACTIONS   138
     #define PROPERTY_ID_SHOW_FILTERSORT      139
+    #define PROPERTY_ID_TEXTTYPE             140
 
 //............................................................................
 } // namespace pcr
