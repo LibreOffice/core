@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:55:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     {
         bDisableCtrls = TRUE;
         aBtnStop.Enable();
+        aBtnStop.Update();
         String aStr( RTL_CONSTASCII_USTRINGPARAM( "Animator:" ) ); // Hier sollte man sich noch etwas gescheites ausdenken!
         pProgress = new SfxProgress( NULL, aStr, nFullTime );
     }
@@ -729,6 +730,7 @@ void AnimationWindow::WaitInEffect( ULONG nMilliSeconds ) const
     while (nCurrent < nEnd)
     {
         nCurrent = Time::GetSystemTicks();
+        Application::Reschedule();
     }
 }
 
@@ -745,6 +747,8 @@ void AnimationWindow::WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
 
         if( pProgress )
             pProgress->SetState( nTime + nMilliSeconds + aCurrent - aEnd );
+
+        Application::Reschedule();
 
         if( !bMovie )
             return;
