@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:21:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include "tabvwsh.hxx"
 #include "reffact.hxx"
 #include "scresid.hxx"
-#include "pivot.hxx"
 #include "pvglob.hxx"
 //CHINA001 #include "pvfundlg.hxx"
 #include "globstr.hrc"
@@ -106,27 +105,20 @@ long PivotGlobal::nSelSpace  = 0;
 
 
 //============================================================================
-//  struct FuncData
 
-struct FuncData
+void lcl_FillToPivotField( PivotField& rPivotField, const ScDPFuncData& rFuncData )
 {
-    SCsCOL  nCol;
-    USHORT nFuncMask;
-
-    FuncData( SCsCOL col, USHORT funcs = PIVOT_FUNC_SUM )
-        : nCol(col), nFuncMask(funcs) {}
-
-    BOOL operator==( const FuncData& r )
-        { return ( (nCol==r.nCol)&&(nFuncMask==r.nFuncMask) ); }
-};
-
+    rPivotField.nCol = rFuncData.mnCol;
+    rPivotField.nFuncMask = rFuncData.mnFuncMask;
+    rPivotField.maFieldRef = rFuncData.maFieldRef;
+}
 
 //============================================================================
 
 //----------------------------------------------------------------------------
 
 ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                                    const ScDPObject* pDPObject )
+                                    const ScDPObject& rDPObject )
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_PIVOT_LAYOUT ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
@@ -163,26 +155,20 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aStrNewTable    ( ScResId( SCSTR_NEWTABLE ) ),
 
         bIsDrag         ( FALSE ),
-        aLabelDataArr   ( NULL ),
-        nLabelCount     ( 0 ),
 
         eLastActiveType ( TYPE_SELECT ),
         nOffset         ( 0 ),
         //
-        pDlgDPObject    ( NULL ),
+        xDlgDPObject    ( new ScDPObject( rDPObject ) ),
         pViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument() ),
         bRefInputMode   ( FALSE )
 {
-    if ( pDPObject )
-    {
-        pDlgDPObject = new ScDPObject( *pDPObject );
-        pDlgDPObject->SetAlive( TRUE );     // needed to get structure information
-        pDlgDPObject->FillOldParam( thePivotData, FALSE );
-        pDlgDPObject->FillLabelData( thePivotData, bShowAll, MAX_LABELS );
-    }
+    xDlgDPObject->SetAlive( TRUE );     // needed to get structure information
+    xDlgDPObject->FillOldParam( thePivotData, FALSE );
+    xDlgDPObject->FillLabelData( thePivotData );
 
     Init();
     FreeResource();
@@ -191,19 +177,13 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScDPLayoutDlg::~ScDPLayoutDlg()
+ScDPLayoutDlg::~ScDPLayoutDlg()
 {
     USHORT nEntries = aLbOutPos.GetEntryCount();
     USHORT i;
 
     for ( i=2; i<nEntries; i++ )
         delete (String*)aLbOutPos.GetEntryData( i );
-
-    for ( i=0; i<nLabelCount; i++ )
-        delete aLabelDataArr[i];
-    delete [] aLabelDataArr;
-
-    delete pDlgDPObject;
 }
 
 
@@ -362,19 +342,20 @@ void ScDPLayoutDlg::InitWndSelect( LabelData** ppLabelArr, long nLabels )
 {
     if ( ppLabelArr )
     {
-        size_t nLast;
-        nLabelCount     = (nLabels > MAX_LABELS)    ? MAX_LABELS  : nLabels;
-        nLast           = (nLabelCount > PAGE_SIZE) ? PAGE_SIZE-1 : nLabelCount-1;
-        aLabelDataArr   = new LabelData*[nLabelCount];
+        size_t nLabelCount = static_cast< size_t >( (nLabels > MAX_LABELS) ? MAX_LABELS : nLabels );
+        size_t nLast = (nLabelCount > PAGE_SIZE) ? (PAGE_SIZE - 1) : (nLabelCount - 1);
 
-        for ( size_t i=0; (i<nLabelCount); i++ )
+        aLabelDataArr.clear();
+        aLabelDataArr.reserve( nLabelCount );
+
+        for ( size_t i=0; i < nLabelCount; i++ )
         {
-            aLabelDataArr[i] = new LabelData( *ppLabelArr[i] );
+            aLabelDataArr.push_back( *ppLabelArr[i] );
 
             if ( i <= nLast )
             {
-                aWndSelect.AddField( *(aLabelDataArr[i]->pStrColName), i );
-                aSelectArr[i].reset( new FuncData( aLabelDataArr[i]->nCol, aLabelDataArr[i]->nFuncMask ) );
+                aWndSelect.AddField( aLabelDataArr[i].maName, i );
+                aSelectArr[i].reset( new ScDPFuncData( aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask ) );
             }
         }
     }
@@ -387,7 +368,7 @@ void ScDPLayoutDlg::InitWnd( PivotField* pArr, long nCount, ScDPFieldType eType 
 {
     if ( pArr && (eType != TYPE_SELECT) )
     {
-        FuncDataVec*        pInitArr = NULL;
+        ScDPFuncDataVec*    pInitArr = NULL;
         ScDPFieldWindow*    pInitWnd = NULL;
         BOOL                bDataArr = FALSE;
 
@@ -427,7 +408,7 @@ void ScDPLayoutDlg::InitWnd( PivotField* pArr, long nCount, ScDPFieldType eType 
 
                 if ( nCol != PIVOT_DATA_FIELD )
                 {
-                    (*pInitArr)[j].reset( new FuncData( nCol, nMask ) );
+                    (*pInitArr)[j].reset( new ScDPFuncData( nCol, nMask, pArr[i].maFieldRef ) );
 
                     if ( !bDataArr )
                     {
@@ -435,15 +416,17 @@ void ScDPLayoutDlg::InitWnd( PivotField* pArr, long nCount, ScDPFieldType eType 
                     }
                     else
                     {
-                        LabelData* pData = GetLabelData( nCol );
-                        DBG_ASSERT( pData, "LabelData not found" );
+                        ScDPLabelData* pData = GetLabelData( nCol );
+                        DBG_ASSERT( pData, "ScDPLabelData not found" );
                         if (pData)
                         {
-                            String aStr( GetFuncString( (*pInitArr)[j]->nFuncMask,
-                                                         pData->bIsValue ) );
+                            String aStr( GetFuncString( (*pInitArr)[j]->mnFuncMask,
+                                                         pData->mbIsValue ) );
 
                             aStr += GetLabelString( nCol );
                             pInitWnd->AddField( aStr, j );
+
+                            pData->mnFuncMask = nMask;
                         }
                     }
                     ++j;
@@ -474,14 +457,14 @@ void ScDPLayoutDlg::InitFocus()
 
 void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Point& rAtPos )
 {
-    FuncData            fData( *(aSelectArr[nFromIndex]) );
+    ScDPFuncData        fData( *(aSelectArr[nFromIndex]) );
     size_t              nAt   = 0;
     ScDPFieldWindow*    toWnd = NULL;
     ScDPFieldWindow*    rmWnd1 = NULL;
     ScDPFieldWindow*    rmWnd2 = NULL;
-    FuncDataVec*        toArr = NULL;
-    FuncDataVec*        rmArr1 = NULL;
-    FuncDataVec*        rmArr2 = NULL;
+    ScDPFuncDataVec*    toArr = NULL;
+    ScDPFuncDataVec*    rmArr1 = NULL;
+    ScDPFuncDataVec*    rmArr2 = NULL;
     BOOL                bDataArr = FALSE;
 
     switch ( eToType )
@@ -521,12 +504,12 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
     }
 
     if (   (toArr->back().get() == NULL)
-        && (!Contains( toArr, fData.nCol, nAt )) )
+        && (!Contains( toArr, fData.mnCol, nAt )) )
     {
         // ggF. in anderem Fenster entfernen
         if ( rmArr1 )
         {
-            if ( Contains( rmArr1, fData.nCol, nAt ) )
+            if ( Contains( rmArr1, fData.mnCol, nAt ) )
             {
                 rmWnd1->DelField( nAt );
                 Remove( rmArr1, nAt );
@@ -534,19 +517,19 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
         }
         if ( rmArr2 )
         {
-            if ( Contains( rmArr2, fData.nCol, nAt ) )
+            if ( Contains( rmArr2, fData.mnCol, nAt ) )
             {
                 rmWnd2->DelField( nAt );
                 Remove( rmArr2, nAt );
             }
         }
 
-        LabelData*  pData = aLabelDataArr[nFromIndex+nOffset];
+        ScDPLabelData&  rData = aLabelDataArr[nFromIndex+nOffset];
         size_t      nAddedAt = 0;
 
         if ( !bDataArr )
         {
-            if ( toWnd->AddField( *(pData->pStrColName),
+            if ( toWnd->AddField( rData.maName,
                                   DlgPos2WndPos( rAtPos, *toWnd ),
                                   nAddedAt ) )
             {
@@ -556,16 +539,16 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
         }
         else
         {
-            USHORT nMask = fData.nFuncMask;
-            String aStr( GetFuncString( nMask, pData->bIsValue ) );
+            USHORT nMask = fData.mnFuncMask;
+            String aStr( GetFuncString( nMask, rData.mbIsValue ) );
 
-            aStr += *(pData->pStrColName);
+            aStr += rData.maName;
 
             if ( toWnd->AddField( aStr,
                                   DlgPos2WndPos( rAtPos, *toWnd ),
                                   nAddedAt ) )
             {
-                fData.nFuncMask = nMask;
+                fData.mnFuncMask = nMask;
                 Insert( toArr, fData, nAddedAt );
                 toWnd->GrabFocus();
             }
@@ -587,10 +570,10 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         ScDPFieldWindow*    toWnd    = NULL;
         ScDPFieldWindow*    rmWnd1   = NULL;
         ScDPFieldWindow*    rmWnd2   = NULL;
-        FuncDataVec*        fromArr  = NULL;
-        FuncDataVec*        toArr    = NULL;
-        FuncDataVec*        rmArr1   = NULL;
-        FuncDataVec*        rmArr2   = NULL;
+        ScDPFuncDataVec*    fromArr  = NULL;
+        ScDPFuncDataVec*    toArr    = NULL;
+        ScDPFuncDataVec*    rmArr1   = NULL;
+        ScDPFuncDataVec*    rmArr2   = NULL;
         size_t              nAt      = 0;
         BOOL                bDataArr = FALSE;
 
@@ -655,15 +638,15 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
         if ( fromArr && toArr && fromWnd && toWnd )
         {
-            FuncData fData( *((*fromArr)[nFromIndex]) );
+            ScDPFuncData fData( *((*fromArr)[nFromIndex]) );
 
-            if ( Contains( fromArr, fData.nCol, nAt ) )
+            if ( Contains( fromArr, fData.mnCol, nAt ) )
             {
                 fromWnd->DelField( nAt );
                 Remove( fromArr, nAt );
 
                 if (   (toArr->back().get() == NULL)
-                    && (!Contains( toArr, fData.nCol, nAt )) )
+                    && (!Contains( toArr, fData.mnCol, nAt )) )
                 {
                     size_t nAddedAt = 0;
                     if ( !bDataArr )
@@ -671,7 +654,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                         // ggF. in anderem Fenster entfernen
                         if ( rmArr1 )
                         {
-                            if ( Contains( rmArr1, fData.nCol, nAt ) )
+                            if ( Contains( rmArr1, fData.mnCol, nAt ) )
                             {
                                 rmWnd1->DelField( nAt );
                                 Remove( rmArr1, nAt );
@@ -679,14 +662,14 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                         }
                         if ( rmArr2 )
                         {
-                            if ( Contains( rmArr2, fData.nCol, nAt ) )
+                            if ( Contains( rmArr2, fData.mnCol, nAt ) )
                             {
                                 rmWnd2->DelField( nAt );
                                 Remove( rmArr2, nAt );
                             }
                         }
 
-                        if ( toWnd->AddField( GetLabelString( fData.nCol ),
+                        if ( toWnd->AddField( GetLabelString( fData.mnCol ),
                                               DlgPos2WndPos( rAtPos, *toWnd ),
                                               nAddedAt ) )
                         {
@@ -697,15 +680,15 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                     else
                     {
                         String aStr;
-                        USHORT nMask = fData.nFuncMask;
+                        USHORT nMask = fData.mnFuncMask;
                         aStr  = GetFuncString( nMask );
-                        aStr += GetLabelString( fData.nCol );
+                        aStr += GetLabelString( fData.mnCol );
 
                         if ( toWnd->AddField( aStr,
                                               DlgPos2WndPos( rAtPos, *toWnd ),
                                               nAddedAt ) )
                         {
-                            fData.nFuncMask = nMask;
+                            fData.mnFuncMask = nMask;
                             Insert( toArr, fData, nAddedAt );
                             toWnd->GrabFocus();
                         }
@@ -717,7 +700,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
     else // -> eFromType == eToType
     {
         ScDPFieldWindow*    theWnd  = NULL;
-        FuncDataVec*        theArr   = NULL;
+        ScDPFuncDataVec*    theArr   = NULL;
         size_t              nAt      = 0;
         size_t              nToIndex = 0;
         Point               aToPos;
@@ -747,9 +730,9 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                 break;
         }
 
-        FuncData fData( *((*theArr)[nFromIndex]) );
+        ScDPFuncData fData( *((*theArr)[nFromIndex]) );
 
-        if ( Contains( theArr, fData.nCol, nAt ) )
+        if ( Contains( theArr, fData.mnCol, nAt ) )
         {
             aToPos = DlgPos2WndPos( rAtPos, *theWnd );
             theWnd->GetExistingIndex( aToPos, nToIndex );
@@ -763,7 +746,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
                 if ( !bDataArr )
                 {
-                    if ( theWnd->AddField( GetLabelString( fData.nCol ),
+                    if ( theWnd->AddField( GetLabelString( fData.mnCol ),
                                            aToPos,
                                            nAddedAt ) )
                     {
@@ -773,15 +756,15 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                 else
                 {
                     String aStr;
-                    USHORT nMask = fData.nFuncMask;
+                    USHORT nMask = fData.mnFuncMask;
                     aStr  = GetFuncString( nMask );
-                    aStr += GetLabelString( fData.nCol );
+                    aStr += GetLabelString( fData.mnCol );
 
                     if ( theWnd->AddField( aStr,
                                            DlgPos2WndPos( rAtPos, *theWnd ),
                                            nAddedAt ) )
                     {
-                        fData.nFuncMask = nMask;
+                        fData.mnFuncMask = nMask;
                         Insert( theArr, fData, nAddedAt );
                     }
                 }
@@ -794,7 +777,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
 void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
 {
-    FuncDataVec* pArr = NULL;
+    ScDPFuncDataVec* pArr = NULL;
     switch( eFromType )
     {
         case TYPE_PAGE: pArr = &aPageArr;    break;
@@ -820,7 +803,7 @@ void ScDPLayoutDlg::NotifyMouseButtonUp( const Point& rAt )
     {
         bIsDrag = FALSE;
 
-        ScDPFieldType   eDnDToType;
+        ScDPFieldType   eDnDToType = TYPE_SELECT;
         Point           aPos = ScreenToOutputPixel( rAt );
         BOOL            bDel = FALSE;
 
@@ -915,7 +898,7 @@ PointerStyle ScDPLayoutDlg::NotifyMouseButtonDown( ScDPFieldType eType, size_t n
 
 void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 {
-    FuncDataVec* pArr = NULL;
+    ScDPFuncDataVec* pArr = NULL;
     switch ( eType )
     {
         case TYPE_PAGE:     pArr = &aPageArr;   break;
@@ -927,52 +910,61 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
     if ( pArr )
     {
         size_t nArrPos = 0;
-        LabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->nCol, &nArrPos );
-        if ( pData )
+        if( ScDPLabelData* pData = GetLabelData( (*pArr)[nFieldIndex]->mnCol, &nArrPos ) )
         {
-            String aFieldName = *(pData->pStrColName);
-            BOOL bOldShowAll = bShowAll[nArrPos];
-
-//CHINA001             ScDPFunctionDlg* pDlg =
-//CHINA001          new ScDPFunctionDlg( this,
-//CHINA001          eType != TYPE_DATA,
-//CHINA001          aFieldName,
-//CHINA001          pArr[nFieldIndex]->nFuncMask,
-//CHINA001          bOldShowAll );
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-            AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg( this,
-                                                                        eType != TYPE_DATA,
-                                                                        aFieldName,
-                                                                        (*pArr)[nFieldIndex]->nFuncMask,
-                                                                        bOldShowAll,
-                                                                        ResId(RID_SCDLG_PIVOTSUBT));
-            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-            if ( pDlg->Execute() == RET_OK )
+            switch ( eType )
             {
-                  (*pArr)[nFieldIndex]->nFuncMask
-                = pData->nFuncMask
-                = pDlg->GetFuncMask();
-
-                if ( eType == TYPE_DATA )
+                case TYPE_PAGE:
+                case TYPE_COL:
+                case TYPE_ROW:
                 {
-                    String aStr;
-                    aStr  = GetFuncString ( aDataArr[nFieldIndex]->nFuncMask );
-                    aStr += GetLabelString( aDataArr[nFieldIndex]->nCol );
-                    aWndData.SetFieldText( aStr, nFieldIndex );
-                }
-                else
-                {
-                    BOOL bNewShowAll = pDlg->GetShowAll();
-                    if (bNewShowAll != bOldShowAll)
+                    // list of names of all data fields
+                    std::vector< String > aDataFieldNames;
+                    for( ScDPFuncDataVec::const_iterator aIt = aDataArr.begin(), aEnd = aDataArr.end();
+                            (aIt != aEnd) && aIt->get(); ++aIt )
                     {
-                        //! remember which were changed?
-                        bShowAll[nArrPos] = bNewShowAll;
+                        String aName( GetLabelString( (*aIt)->mnCol ) );
+                        if( aName.Len() )
+                            aDataFieldNames.push_back( aName );
                     }
+
+                    bool bLayout = (eType == TYPE_ROW) &&
+                        ((aDataFieldNames.size() > 1) || ((nFieldIndex + 1 < pArr->size()) && (*pArr)[nFieldIndex+1].get()));
+
+                    AbstractScDPSubtotalDlg* pDlg = pFact->CreateScDPSubtotalDlg(
+                        this, ScResId( RID_SCDLG_PIVOTSUBT ),
+                        *xDlgDPObject, *pData, *(*pArr)[nFieldIndex], aDataFieldNames, bLayout );
+
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        pDlg->FillLabelData( *pData );
+                        (*pArr)[nFieldIndex]->mnFuncMask = pData->mnFuncMask;
+                    }
+                    delete pDlg;
+                }
+                break;
+
+                case TYPE_DATA:
+                {
+                    AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg(
+                        this, ScResId( RID_SCDLG_DPDATAFIELD ),
+                        aLabelDataArr, *pData, *(*pArr)[nFieldIndex] );
+
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        (*pArr)[nFieldIndex]->mnFuncMask = pData->mnFuncMask = pDlg->GetFuncMask();
+                        (*pArr)[nFieldIndex]->maFieldRef = pDlg->GetFieldRef();
+
+                        String aStr( GetFuncString ( aDataArr[nFieldIndex]->mnFuncMask ) );
+                        aStr += GetLabelString( aDataArr[nFieldIndex]->mnCol );
+                        aWndData.SetFieldText( aStr, nFieldIndex );
+                    }
+                    delete pDlg;
                 }
             }
-            delete pDlg;
         }
     }
 }
@@ -1049,7 +1041,7 @@ void ScDPLayoutDlg::Deactivate()
 
 //----------------------------------------------------------------------------
 
-BOOL ScDPLayoutDlg::Contains( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt )
+BOOL ScDPLayoutDlg::Contains( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt )
 {
     if ( !pArr )
         return FALSE;
@@ -1059,7 +1051,7 @@ BOOL ScDPLayoutDlg::Contains( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt )
 
     while ( (i<pArr->size()) && ((*pArr)[i].get() != NULL) && !bFound )
     {
-        bFound = ((*pArr)[i]->nCol == nCol);
+        bFound = ((*pArr)[i]->mnCol == nCol);
         if ( bFound )
             nAt = i;
         i++;
@@ -1071,32 +1063,32 @@ BOOL ScDPLayoutDlg::Contains( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt )
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::Remove( FuncDataVec* pArr, size_t nAt )
+void ScDPLayoutDlg::Remove( ScDPFuncDataVec* pArr, size_t nAt )
 {
     if ( !pArr || (nAt>=pArr->size()) )
         return;
 
     pArr->erase( pArr->begin() + nAt );
-    pArr->push_back( FuncDataRef() );
+    pArr->push_back( ScDPFuncDataRef() );
 }
 
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::Insert( FuncDataVec* pArr, const FuncData& rFData, size_t nAt )
+void ScDPLayoutDlg::Insert( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt )
 {
     if ( !pArr || (nAt>=pArr->size()) )
         return;
 
     if ( (*pArr)[nAt].get() == NULL )
     {
-        (*pArr)[nAt].reset( new FuncData( rFData ) );
+        (*pArr)[nAt].reset( new ScDPFuncData( rFData ) );
     }
     else
     {
         if ( pArr->back().get() == NULL ) // mind. ein Slot frei?
         {
-            pArr->insert( pArr->begin() + nAt, FuncDataRef( new FuncData( rFData ) ) );
+            pArr->insert( pArr->begin() + nAt, ScDPFuncDataRef( new ScDPFuncData( rFData ) ) );
             pArr->erase( pArr->end() - 1 );
         }
     }
@@ -1105,25 +1097,17 @@ void ScDPLayoutDlg::Insert( FuncDataVec* pArr, const FuncData& rFData, size_t nA
 
 //----------------------------------------------------------------------------
 
-LabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pPos )
+ScDPLabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pnPos )
 {
-    LabelData*  pData   = NULL;
-    BOOL        bFound  = FALSE;
-
-    if ( aLabelDataArr )
+    ScDPLabelData* pData = 0;
+    for( ScDPLabelDataVec::iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); !pData && (aIt != aEnd); ++aIt )
     {
-        for ( size_t i=0; (i<nLabelCount) && !bFound; i++ )
+        if( aIt->mnCol == nCol )
         {
-            bFound = (aLabelDataArr[i]->nCol == nCol);
-            if ( bFound )
-            {
-                pData = aLabelDataArr[i];
-                if (pPos)
-                    *pPos = i;
-            }
+            pData = &*aIt;
+            if( pnPos ) *pnPos = aIt - aLabelDataArr.begin();
         }
     }
-
     return pData;
 }
 
@@ -1132,11 +1116,10 @@ LabelData* ScDPLayoutDlg::GetLabelData( SCsCOL nCol, size_t* pPos )
 
 String ScDPLayoutDlg::GetLabelString( SCsCOL nCol )
 {
-    LabelData* pData = GetLabelData( nCol );
+    ScDPLabelData* pData = GetLabelData( nCol );
     DBG_ASSERT( pData, "LabelData not found" );
-    if (pData && pData->pStrColName)
-        return *pData->pStrColName;
-
+    if (pData)
+        return pData->maName;
     return String();
 }
 
@@ -1204,6 +1187,10 @@ void ScDPLayoutDlg::CalcWndSizes()
     aWndCol.SetSizePixel( Size( MAX_FIELDS * OWIDTH / 2, 2 * OHEIGHT ) );
     aWndData.SetSizePixel( Size( MAX_FIELDS * OWIDTH / 2, MAX_FIELDS * OHEIGHT ) );
 
+    // #i29203# align right border of page window with data window
+    long nDataPosX = aWndData.GetPosPixel().X() + aWndData.GetSizePixel().Width();
+    aWndPage.SetPosPixel( Point( nDataPosX - aWndPage.GetSizePixel().Width(), aWndPage.GetPosPixel().Y() ) );
+
     // selection area
     aWndSelect.SetSizePixel( Size(
         2 * OWIDTH + SSPACE, LINE_SIZE * OHEIGHT + (LINE_SIZE - 1) * SSPACE ) );
@@ -1238,31 +1225,19 @@ BOOL ScDPLayoutDlg::GetPivotArrays(    PivotField*  pPageArr,
     USHORT i=0;
 
     for ( i=0; (i<aDataArr.size()) && (aDataArr[i].get() != NULL ); i++ )
-    {
-        pDataArr[i].nCol        = aDataArr[i]->nCol;
-        pDataArr[i].nFuncMask   = aDataArr[i]->nFuncMask;
-    }
+        lcl_FillToPivotField( pDataArr[i], *aDataArr[i] );
     rDataCount = i;
 
     for ( i=0; (i<aPageArr.size()) && (aPageArr[i].get() != NULL ); i++ )
-    {
-        pPageArr[i].nCol        = aPageArr[i]->nCol;
-        pPageArr[i].nFuncMask   = aPageArr[i]->nFuncMask;
-    }
+        lcl_FillToPivotField( pPageArr[i], *aPageArr[i] );
     rPageCount = i;
 
     for ( i=0; (i<aColArr.size()) && (aColArr[i].get() != NULL ); i++ )
-    {
-        pColArr[i].nCol         = aColArr[i]->nCol;
-        pColArr[i].nFuncMask    = aColArr[i]->nFuncMask;
-    }
+        lcl_FillToPivotField( pColArr[i], *aColArr[i] );
     rColCount = i;
 
     for ( i=0; (i<aRowArr.size()) && (aRowArr[i].get() != NULL ); i++ )
-    {
-        pRowArr[i].nCol         = aRowArr[i]->nCol;
-        pRowArr[i].nFuncMask    = aRowArr[i]->nFuncMask;
-    }
+        lcl_FillToPivotField( pRowArr[i], *aRowArr[i] );
     rRowCount = i;
 
     if ( rRowCount < aRowArr.size() )
@@ -1360,7 +1335,7 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
         BOOL bFit = GetPivotArrays( aPageArr,   aColArr,   aRowArr,   aDataArr,
                                     nPageCount, nColCount, nRowCount, nDataCount );
-        if ( bFit && pDlgDPObject )
+        if ( bFit )
         {
             ScRange aOutRange( aAdrDest );      // bToNewTable is passed separately
 
@@ -1370,7 +1345,7 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             aSaveData.SetColumnGrand( aBtnTotalCol.IsChecked() );
             aSaveData.SetRowGrand( aBtnTotalRow.IsChecked() );
 
-            uno::Reference<sheet::XDimensionsSupplier> xSource = pDlgDPObject->GetSource();
+            uno::Reference<sheet::XDimensionsSupplier> xSource = xDlgDPObject->GetSource();
 
             ScDPObject::ConvertOrientation( aSaveData, aPageArr, nPageCount,
                             sheet::DataPilotFieldOrientation_PAGE,   NULL, 0, 0, xSource, FALSE );
@@ -1380,18 +1355,32 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                             sheet::DataPilotFieldOrientation_ROW,    NULL, 0, 0, xSource, FALSE );
             ScDPObject::ConvertOrientation( aSaveData, aDataArr, nDataCount,
                             sheet::DataPilotFieldOrientation_DATA,   NULL, 0, 0, xSource, FALSE,
-                            aColArr, nColCount, aRowArr, nRowCount );
+                            aColArr, nColCount, aRowArr, nRowCount, aPageArr, nPageCount );
 
             //  "show all" property
-            //! init from pDlgDPObject, set only changed values
-            for ( size_t i=0; i<nLabelCount; i++ )
-                if ( aLabelDataArr && aLabelDataArr[i]->pStrColName )
+            //! init from xDlgDPObject, set only changed values
+            for( ScDPLabelDataVec::const_iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); aIt != aEnd; ++aIt )
+            {
+                if( ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName( aIt->maName ) )
                 {
-                    ScDPSaveDimension* pDim =
-                        aSaveData.GetExistingDimensionByName( *aLabelDataArr[i]->pStrColName );
-                    if (pDim)
-                        pDim->SetShowEmpty( bShowAll[i] );
+                    pDim->SetUsedHierarchy( aIt->mnUsedHier );
+                    pDim->SetShowEmpty( aIt->mbShowAll );
+                    pDim->SetSortInfo( &aIt->maSortInfo );
+                    pDim->SetLayoutInfo( &aIt->maLayoutInfo );
+                    pDim->SetAutoShowInfo( &aIt->maShowInfo );
+
+                    // visibility of members
+                    if( const rtl::OUString* pItem = aIt->maMembers.getConstArray() )
+                    {
+                        sal_Int32 nVisIdx = 0, nVisSize = aIt->maVisible.getLength();
+                        for( const rtl::OUString* pEnd = pItem + aIt->maMembers.getLength(); pItem != pEnd; ++pItem, ++nVisIdx )
+                        {
+                            bool bVis = (nVisIdx >= nVisSize) || aIt->maVisible[ nVisIdx ];
+                            pDim->GetMemberByName( *pItem )->SetIsVisible( bVis );
+                        }
+                    }
                 }
+            }
 
             USHORT nWhichPivot = SC_MOD()->GetPool().GetWhich( SID_PIVOT_TABLE );
             ScPivotItem aOutItem( nWhichPivot, &aSaveData, &aOutRange, bToNewTable );
@@ -1527,17 +1516,16 @@ IMPL_LINK( ScDPLayoutDlg, ScrollHdl, ScrollBar *, EMPTYARG )
     long nOffsetDiff = nNewOffset - nOffset;
     nOffset = nNewOffset;
 
-    LabelData*  pData   = NULL;
-    size_t      nFields = Min( static_cast<size_t>(nLabelCount - nOffset), static_cast<size_t>(PAGE_SIZE) );
+    size_t nFields = std::min< size_t >( aLabelDataArr.size() - nOffset, PAGE_SIZE );
 
     aWndSelect.ClearFields();
 
     size_t i=0;
     for ( i=0; i<nFields; i++ )
     {
-        pData = aLabelDataArr[nOffset+i];
-        aWndSelect.AddField( *(pData->pStrColName), i );
-        aSelectArr[i].reset( new FuncData( pData->nCol, pData->nFuncMask ) );
+        const ScDPLabelData& rData = aLabelDataArr[nOffset+i];
+        aWndSelect.AddField( rData.maName, i );
+        aSelectArr[i].reset( new ScDPFuncData( rData.mnCol, rData.mnFuncMask ) );
     }
     for ( ; i<aSelectArr.size(); i++ )
         aSelectArr[i].reset();
