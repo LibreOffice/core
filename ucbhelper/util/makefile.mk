@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-25 11:37:05 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:35:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ LIB1FILES=	$(SLB)$/client.lib \
 
 SHL1TARGET=	$(TARGET)$(UCBHELPER_MAJOR)$(COMID)
 SHL1STDLIBS = \
-    $(COMPHELPERLIB)  \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALHELPERLIB) \
