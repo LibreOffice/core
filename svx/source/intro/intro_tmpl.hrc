@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:58:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,132 +533,39 @@ ItemList = \
     < "This product is based on the OpenOffice.org project." ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "G e n e r a l  M a n a g e m e n t" ; 8 ; > ; \
+    < "GENERAL MANAGEMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Michael Bemmer" ; > ; \
     < "" ; > ; \
-    < "Functional Staff" ; 8 ; > ; \
+    < "FUNCTIONAL STAFF" ; 8 ; > ; \
     < "" ; > ; \
     < "Sabine Schroeder" ; > ; \
     < "Volker Seubert" ; > ; \
     < "" ; > ; \
-    < "OpenOffice.org Coordination" ; 8 ; > ; \
+    < "OpenOffice.org COORDINATION" ; 8 ; > ; \
     < "" ; > ; \
     < "Stefan Taxhet" ; > ; \
     < "" ; > ; \
-    < "Technical Architect" ; 8 ; > ; \
+    < "TECHNICAL ARCHITECT" ; 8 ; > ; \
     < "" ; > ; \
     < "Matthias Huetsch" ; > ; \
     < "Kay Ramme" ; > ; \
     < "" ; > ; \
-    < "Sun Sigma Black Belt" ; 8 ; > ; \
+    < "SUN SIGMA BLACK BELT" ; 8 ; > ; \
     < "" ; > ; \
     < "Stefan Zimmermann" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "U s e r  E x p e r i e n c e" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Lutz Hoeger" ; > ; \
-    < "" ; > ; \
-    < "Bettina Haberer" ; > ; \
-    < "Christian Jansen" ; > ; \
-    < "Frank Loehmann" ; > ; \
-    < "Elizabeth Matthis" ; > ; \
-    < "Matthias Mueller-Prove" ; > ; \
-    < "Colm Smyth" ; > ; \
-    < "Falko Tesch" ; > ; \
-    < "" ; > ; \
-    < "" ; > ; \
-    < "Q u a l i t y  A s s u r a n c e   &   C o o r d i n a t i o n" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Nils Fuhrmann" ; > ; \
-    < "" ; > ; \
-    < "Program Management" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Joost Andrae" ; > ; \
-    < "Martin Damboldt" ; > ; \
-    < "Martin Hollmichel" ; > ; \
-    < "Andre Kuemmel" ; > ; \
-    < "" ; > ; \
-    < "Release Engineering & Development Tools" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Joerg Jahnke" ; > ; \
-    < "" ; > ; \
-    < "Release Engineering " ; 8 ; > ; \
-    < "" ; > ; \
-    < "Oliver Bolte" ; > ; \
-    < "Vladimir Glazounov" ; > ; \
-    < "Hans-Joachim Lankenau" ; > ; \
-    < "Jens-Heiner Rechtien" ; > ; \
-    < "Ruediger Timm" ; > ; \
-    < "Kurt Zenker" ; > ; \
-    < "" ; > ; \
-    < "Development Tools" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Bernd Eilers" ; > ; \
-    < "Gregor Hartmann" ; > ; \
-    < "Ivo Hinkelmann" ; > ; \
-    < "Frank Mau" ; > ; \
-    < "Nikolai Pretzell" ; > ; \
-    < "" ; > ; \
-    < "Quality Assurance" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Thorsten Ziehm" ; > ; \
-    < "" ; > ; \
-    < "QA %PRODUCTNAME Automation" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Thorsten Bosbach" ; > ; \
-    < "Helge Delfs" ; > ; \
-    < "Joerg Sievers" ; > ; \
-    < "" ; > ; \
-    < "QA %PRODUCTNAME Writer" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Stefan Baltzer" ; > ; \
-    < "Hasan Ilter" ; > ; \
-    < "Michael Ruess" ; > ; \
-    < "Eric Savary" ; > ; \
-    < "Ulf Stroehler" ; > ; \
-    < "" ; > ; \
-    < "QA %PRODUCTNAME Calc" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Oliver Craemer" ; > ; \
-    < "Peter Junge" ; > ; \
-    < "Thomas Klarhoefer" ; > ; \
-    < "Frank Stecher" ; > ; \
-    < "" ; > ; \
-    < "QA %PRODUCTNAME Impress & Base" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Christoph Lukasiak" ; > ; \
-    < "Marc Neumann" ; > ; \
-    < "Wolfram Garten" ; > ; \
-    < "Christian Guenther" ; > ; \
-    < "Fredrik Haegg" ; > ; \
-    < "" ; > ; \
-    < "QA %PRODUCTNAME Framework" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Olaf Felka" ; > ; \
-    < "Uwe Luebbers" ; > ; \
-    < "Thorsten Martens" ; > ; \
-    < "Joerg W. Skottke" ; > ; \
-    < "Andreas Treumann" ; > ; \
-    < "Ralf Unger" ; > ; \
-    < "" ; > ; \
-    < "Information Technology" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Dirk Marquardt" ; > ; \
-    < "" ; > ; \
-    < "" ; > ; \
-    < "%PRODUCTNAME  D e v e l o p m e n t" ; 8 ; > ; \
+    < "%PRODUCTNAME DEVELOPMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Dieter Loeschky" ; > ; \
     < "" ; > ; \
-    < "Technical Architect" ; 8 ; > ; \
+    < "TECHNICAL ARCHITECT" ; 8 ; > ; \
     < "" ; > ; \
     < "Michael Brauer" ; > ; \
     < "Malte Timmermann" ; > ; \
-    < "Armin Le Grand" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME Writer" ; 8 ; > ; \
+    < "%PRODUCTNAME WRITER" ; 8 ; > ; \
     < "" ; > ; \
     < "Andreas Martens" ; > ; \
     < "" ; > ; \
@@ -674,30 +581,32 @@ ItemList = \
     < "Gunnar Timm" ; > ; \
     < "Daniel Vogelheim" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME Calc & Impress & Base" ; 8 ; > ; \
+    < "%PRODUCTNAME CALC & IMPRESS & BASE" ; 8 ; > ; \
     < "" ; > ; \
     < "Kai Ahrens" ; > ; \
     < "" ; > ; \
     < "Sascha Ballach" ; > ; \
     < "Thorsten Behrens" ; > ; \
+    < "Daniel Boelzle" ; > ; \
     < "Andre Fischer" ; > ; \
     < "Ingrid Halama" ; > ; \
     < "Sven Jacobi" ; > ; \
     < "Ocke Janssen" ; > ; \
+    < "Armin Le Grand" ; > ; \
     < "Christian Lippka" ; > ; \
+    < "John Marmion" ; > ; \
     < "Bjoern Milcke" ; > ; \
     < "Niklas Nebel" ; > ; \
     < "Eike Rathke" ; > ; \
     < "Daniel Rentz" ; > ; \
     < "Frank Schoenheit" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME Framework" ; 8 ; > ; \
+    < "%PRODUCTNAME INFRASTRUCTURE" ; 8 ; > ; \
     < "" ; > ; \
     < "Mathias Bauer" ; > ; \
     < "" ; > ; \
     < "Stephan Bergmann" ; > ; \
     < "Andreas Bille" ; > ; \
-    < "Daniel Boelzle" ; > ; \
     < "Carsten Driesner" ; > ; \
     < "Michael Hoennig" ; > ; \
     < "Joachim Lingner" ; > ; \
@@ -707,16 +616,17 @@ ItemList = \
     < "Kai Sommerfeld" ; > ; \
     < "Mikhail Voitenko" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME Extras" ; 8 ; > ; \
+    < "%PRODUCTNAME EXTRAS" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Thomas Verbeek" ; > ; \
     < "" ; > ; \
     < "Volker Ahrendt" ; > ; \
     < "Mustafa Cakar" ; > ; \
     < "Berend Cornelius" ; > ; \
     < "Ilko Hoepping" ; > ; \
     < "Stella Schulze" ; > ; \
-    < "Thomas Verbeek" ; > ; \
     < "" ; > ; \
-    < "Platform Technology" ; 8 ; > ; \
+    < "PLATFORM TECHNOLOGY" ; 8 ; > ; \
     < "" ; > ; \
     < "Christof Pintaske" ; > ; \
     < "" ; > ; \
@@ -731,7 +641,7 @@ ItemList = \
     < "Ingo Schmidt" ; > ; \
     < "Dirk Voelzke" ; > ; \
     < "" ; > ; \
-    < "Programmability" ; 8 ; > ; \
+    < "PROGRAMMABILITY" ; 8 ; > ; \
     < "" ; > ; \
     < "James Cleere" ; > ; \
     < "" ; > ; \
@@ -748,7 +658,7 @@ ItemList = \
     < "Svante Schubert" ; > ; \
     < "Stephan Wunderlich" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME China Team" ; 8 ; > ; \
+    < "%PRODUCTNAME CHINA TEAM" ; 8 ; > ; \
     < "" ; > ; \
     < "William Wan" ; > ; \
     < "" ; > ; \
@@ -769,7 +679,7 @@ ItemList = \
     < "Wilson Guo" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "A P O C" ; 8 ; > ; \
+    < "APOC" ; 8 ; > ; \
     < "" ; > ; \
     < "Dirk Grobler" ; > ; \
     < "" ; > ; \
@@ -784,7 +694,99 @@ ItemList = \
     < "Klaus Ruehl" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "M a n u a l s  &  O n l i n e  H e l p" ; 8 ; > ; \
+    < "USER EXPERIENCE" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Lutz Hoeger" ; > ; \
+    < "" ; > ; \
+    < "Bettina Haberer" ; > ; \
+    < "Christian Jansen" ; > ; \
+    < "Frank Loehmann" ; > ; \
+    < "Elizabeth Matthis" ; > ; \
+    < "Matthias Mueller-Prove" ; > ; \
+    < "Colm Smyth" ; > ; \
+    < "Falko Tesch" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "QUALITY ASSURANCE & COORDINATION" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Nils Fuhrmann" ; > ; \
+    < "" ; > ; \
+    < "PROGRAM MANAGEMENT" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Joost Andrae" ; > ; \
+    < "Martin Damboldt" ; > ; \
+    < "Martin Hollmichel" ; > ; \
+    < "Andre Kuemmel" ; > ; \
+    < "" ; > ; \
+    < "RELEASE ENGINEERING & DEVELOPMENT TOOLS" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Joerg Jahnke" ; > ; \
+    < "" ; > ; \
+    < "RELEASE ENGINEERING" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Oliver Bolte" ; > ; \
+    < "Vladimir Glazounov" ; > ; \
+    < "Hans-Joachim Lankenau" ; > ; \
+    < "Jens-Heiner Rechtien" ; > ; \
+    < "Ruediger Timm" ; > ; \
+    < "Kurt Zenker" ; > ; \
+    < "" ; > ; \
+    < "DEVELOPMENT TOOLS" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Bernd Eilers" ; > ; \
+    < "Gregor Hartmann" ; > ; \
+    < "Ivo Hinkelmann" ; > ; \
+    < "Frank Mau" ; > ; \
+    < "Nikolai Pretzell" ; > ; \
+    < "" ; > ; \
+    < "QUALITY ASSURANCE" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Thorsten Ziehm" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME AUTOMATION" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Thorsten Bosbach" ; > ; \
+    < "Helge Delfs" ; > ; \
+    < "Joerg Sievers" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME WRITER" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Stefan Baltzer" ; > ; \
+    < "Hasan Ilter" ; > ; \
+    < "Michael Ruess" ; > ; \
+    < "Eric Savary" ; > ; \
+    < "Ulf Stroehler" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME CALC" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Oliver Craemer" ; > ; \
+    < "Peter Junge" ; > ; \
+    < "Thomas Klarhoefer" ; > ; \
+    < "Frank Stecher" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME IMPRESS & BASE" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Christoph Lukasiak" ; > ; \
+    < "Marc Neumann" ; > ; \
+    < "Wolfram Garten" ; > ; \
+    < "Christian Guenther" ; > ; \
+    < "Fredrik Haegg" ; > ; \
+    < "" ; > ; \
+    < "QA %PRODUCTNAME INFRASTRUCTURE" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Olaf Felka" ; > ; \
+    < "Uwe Luebbers" ; > ; \
+    < "Thorsten Martens" ; > ; \
+    < "Joerg W. Skottke" ; > ; \
+    < "Andreas Treumann" ; > ; \
+    < "Ralf Unger" ; > ; \
+    < "" ; > ; \
+    < "INFORMATION TECHNOLOGY" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Dirk Marquardt" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "MANUALS & ONLINE HELP" ; 8 ; > ; \
     < "" ; > ; \
     < "Frank Peters" ; > ; \
     < "" ; > ; \
@@ -794,7 +796,7 @@ ItemList = \
     < "Martina Waller" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "G l o b a l i z a t i o n   M a n a g e m e n t" ; 8 ; > ; \
+    < "GLOBALIZATION MANAGEMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Susan Andersson" ; > ; \
     < "Bing Hong" ; > ; \
@@ -805,7 +807,7 @@ ItemList = \
     < "Shripad Patki" ; > ; \
     < "Tom Garland" ; > ; \
     < "" ; > ; \
-    < "Engineering" ; 8 ; > ; \
+    < "ENGINEERING" ; 8 ; > ; \
     < "" ; > ; \
     < "Ian McDonnell" ; > ; \
     < "Kane Zeng " ; > ; \
@@ -815,11 +817,11 @@ ItemList = \
     < "Phill Zhang " ; > ; \
     < "Vincent Park" ; > ; \
     < "" ; > ; \
-    < "Program Management" ; 8 ; > ; \
+    < "PROGRAM MANAGEMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Young Joo Song" ; > ; \
     < "" ; > ; \
-    < "Translation" ; 8 ; > ; \
+    < "TRANSLATION" ; 8 ; > ; \
     < "" ; > ; \
     < "Brigitte Le Grand" ; > ; \
     < "Magdy Samuel Abdel Koddous" ; > ; \
@@ -829,22 +831,22 @@ ItemList = \
     < "Sofia Nilsson" ; > ; \
     < "Zaoliang Luo" ; > ; \
     < "" ; > ; \
-    < "Documentation" ; 8 ; > ; \
+    < "DOCUMENTATION" ; 8 ; > ; \
     < "" ; > ; \
     < "Hiroko Matano" ; > ; \
     < "Michael Ryan" ; > ; \
     < "Tina Dwyer" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
-    < "M a r k e t i n g   &   O p e r a t i o n s" ; 8 ; > ; \
+    < "MARKETING & OPERATIONS" ; 8 ; > ; \
     < "" ; > ; \
-    < "Product & Program Managment" ; 8 ; > ; \
+    < "PRODUCT & PROGRAM MANAGMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Susan Jefferies" ; > ; \
     < "Jeff McMeekin" ; > ; \
     < "Goetz Wohlberg" ; > ; \
     < "" ; > ; \
-    < "Marketing" ; 8 ; > ; \
+    < "MARKETING" ; 8 ; > ; \
     < "" ; > ; \
     < "Alexei Koudriachov" ; > ; \
     < "Ashish Mukharji" ; > ; \
@@ -853,13 +855,14 @@ ItemList = \
     < "Iyer Venkatesan" ; > ; \
     < "Jennifer Winger" ; > ; \
     < "" ; > ; \
-    < "Operations" ; 8 ; > ; \
+    < "OPERATIONS" ; 8 ; > ; \
     < "" ; > ; \
     < "Scott Citta" ; > ; \
     < "Jane Cooley" ; > ; \
     < "Lisa Medlin" ; > ; \
     < "" ; > ; \
-    < "Technical Training, Market & Business Development" ; 8 ; > ; \
+    < "TECHNICAL TRAINING, MARKET &" ; 8 ; > ; \
+    < "BUSINESS DEVELOPMENT" ; 8 ; > ; \
     < "" ; > ; \
     < "Matthew Baier" ; > ; \
     < "Herve Bernard" ; > ; \
@@ -868,7 +871,7 @@ ItemList = \
     < "Jane Worden" ; > ; \
     < "Sophia Zheng " ; > ; \
     < "" ; > ; \
-    < "Additional Functions" ; 8 ; > ; \
+    < "ADDITIONAL FUNCTIONS" ; 8 ; > ; \
     < "" ; > ; \
     < "Douglas Lenser" ; > ; \
     < "Frank Psotka" ; > ; \
