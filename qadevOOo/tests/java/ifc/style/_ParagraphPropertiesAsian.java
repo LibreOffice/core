@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ParagraphPropertiesAsian.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:12:50 $
+ *  last change: $Date: 2003-11-18 16:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,46 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.style.ParagraphProperties
 */
 public class _ParagraphPropertiesAsian extends MultiPropertyTest {
+        /**
+     * Custom tester for properties which have <code>boolean</code> type
+     * and can be void, so if they have void value, the new value must
+     * be specified. Switches between true and false.
+     */
+    protected PropertyTester BooleanTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if ((oldValue != null) &&
+                    (oldValue.equals(new Boolean((boolean) false)))) {
+                return new Boolean((boolean) true);
+            } else {
+                return new Boolean((boolean) false);
+            }
+        }
+    };
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaIsHangingPunctuation() {
+        log.println("Testing with custom Property tester");
+        testProperty("ParaIsHangingPunctuation", BooleanTester);
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaIsCharacterDistance() {
+        log.println("Testing with custom Property tester");
+        testProperty("ParaIsCharacterDistance", BooleanTester);
+    }
+
+    /**
+     * Tested with custom property tester.
+     */
+    public void _ParaIsForbiddenRules() {
+        log.println("Testing with custom Property tester");
+        testProperty("ParaIsForbiddenRules", BooleanTester);
+    }
+
 
 }  // finish class _ParagraphProperties
 
