@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:19:50 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ControlElement::ControlElement(
     ElementBase * pParent, DialogImport * pImport )
     SAL_THROW( () )
     : ElementBase(
-        _pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
+        pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
 {
     if (_pParent)
     {
