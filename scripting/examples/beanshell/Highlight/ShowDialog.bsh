@@ -1,0 +1,57 @@
+import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.EventObject;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.script.XLibraryContainer;
+import com.sun.star.awt.*;
+import com.sun.star.util.*;
+
+// UNO awt components of the Highlight dialog
+XMultiComponentFactory xmcf =
+    context.getComponentContext().getServiceManager();
+
+Object[] args = new Object[1];
+args[0] = context.getDocument();
+
+Object obj;
+try {
+    obj = xmcf.createInstanceWithArgumentsAndContext(
+        "com.sun.star.awt.DialogProvider", args,
+        context.getComponentContext());
+    /*
+    obj = xmcf.createInstanceWithContext(
+        "com.sun.star.awt.DialogProvider",
+        context.getComponentContext());
+     */
+}
+catch (com.sun.star.uno.Exception e) {
+    System.err.println("Error getting DialogProvider object");
+    return 0;
+}
+
+XDialogProvider xDialogProvider = (XDialogProvider)
+    UnoRuntime.queryInterface(XDialogProvider.class, obj);
+
+System.err.println("Got DialogProvider, now get dialog");
+
+try {
+    findDialog = xDialogProvider.createDialog("vnd.sun.star.script:" +
+        "ScriptBindingLibrary.Highlight?location=application");
+}
+catch (java.lang.Exception e) {
+    System.err.println("Got exception on first creating dialog: " +
+    e.getMessage());
+}
+
+Thread t = new Thread() {
+    public void run() {
+        findDialog.execute();
+    }
+};
+t.start();
+
+return 0;
