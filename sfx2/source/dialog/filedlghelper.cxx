@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
+ *  last change: $Author: dv $ $Date: 2001-08-20 10:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1570,6 +1570,18 @@ String FileDialogHelper::GetPath() const
     }
 
     return aPath;
+}
+
+// ------------------------------------------------------------------------
+Sequence < OUString > FileDialogHelper::GetMPath() const
+{
+    if ( mpImp->mxFileDlg.is() )
+        return mpImp->mxFileDlg->getFiles();
+    else
+    {
+        Sequence < OUString > aEmpty;
+        return aEmpty;
+    }
 }
 
 // ------------------------------------------------------------------------
