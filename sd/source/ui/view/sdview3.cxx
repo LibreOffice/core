@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:41:16 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,16 +839,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
     {
-        // Falls auch ein URL-Format gedropt wurde, nehmen
-        // wir natuerlich dieses und kehren somit sofort zurueck,
-        // da beim Aufrufer dieser URL eingefuegt wird
-        String          aTmpStr;
-        INetBookmark    aINetBookmark( aTmpStr, aTmpStr );
-
-        // FIXME: was (!INetBookmark::DragServerHasFormat( 0 ) || !aINetBookmark.PasteDragServer( 0 )) before
-        if( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
-            !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-            !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) )
+        if( ( FORMAT_STRING == nFormat ) ||
+            ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
+              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) ) )
         {
             String aStr;
 

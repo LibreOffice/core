@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-23 12:50:33 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,8 +937,12 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
     else
     {
         SdPage* pPage = (SdPage*)pRecord->pObj->GetPage();
-        if (pPage->GetPresObj(PRESOBJ_BACKGROUND) == pRecord->pObj)
-               pRecord->pObj->Paint(pRecord->rOut, pRecord->rInfoRec);
+
+        if( ( pPage->GetPresObj(PRESOBJ_BACKGROUND) == pRecord->pObj ) ||
+            ( ANIMATIONMODE_PREVIEW == eAnimationMode ) )
+        {
+            pRecord->pObj->Paint(pRecord->rOut, pRecord->rInfoRec);
+        }
     }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-26 12:11:54 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,46 +577,16 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if( !pFuSlideShow )
             {
-                SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-                BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != nSId ) && pFullScreen ) ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
-
                 if( pDrView->IsTextEdit() )
                     pDrView->EndTextEdit();
 
+                SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
+                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
+
                 if( bFullScreen )
+                    SdPresViewShell::CreateFullScreenShow( pDoc, rReq );
+                else
                 {
-                    // create new presentation shell to run presentation in
-                    SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
-                    BOOL bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != nSId ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
-
-                    WorkWindow* pWorkWindow = new WorkWindow( NULL, WB_HIDE );
-                    pWorkWindow->StartPresentationMode( TRUE, bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0 );
-                    SfxTopFrame* pNewFrame = SfxTopFrame::Create( pDocSh, pWorkWindow, 4, TRUE );
-                    pNewFrame->SetPresentationMode( TRUE );
-                    SfxBoolItem aShowItem( SID_SHOWPOPUPS, FALSE );
-                    SfxUInt16Item aId( SID_CONFIGITEMID, SID_NAVIGATOR );
-                    pNewFrame->GetCurrentViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
-                    pNewFrame->GetCurrentViewFrame()->Show();
-
-                    if( pNewFrame )
-                    {
-                        SdPresViewShell* pShell = (SdPresViewShell*) pNewFrame->GetCurrentViewFrame()->GetViewShell();
-
-                        pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->pDoc, rReq );
-                        pShell->pFuSlideShow->StartShow();
-                        pShell->pFuSlideShow->Activate();
-                    }
-                    else
-                    {
-                        pWorkWindow->StartPresentationMode( FALSE, bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0 );
-                        delete pWorkWindow;
-                        bFullScreen = FALSE;
-                    }
-                }
-
-                if( !bFullScreen )
-                {
-                    // presentation in window
                     pFuSlideShow = new FuSlideShow( this, pWindow, pDrView, pDoc, rReq );
                     pFuSlideShow->StartShow();
                     pFuSlideShow->Activate();
@@ -638,23 +608,19 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 pFuSlideShow->Destroy();
                 pFuSlideShow = NULL;
 
-                const USHORT nPresViewShellId = pFrameView->GetPresentationViewShellId();
-
-                if( ( nPresViewShellId != SID_VIEWSHELL0 ) || ISA( SdPresViewShell ) )
+                if( ISA( SdPresViewShell ) )
+                    GetViewFrame()->GetDispatcher()->Execute( SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
+                else if( pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
                 {
-                    if( ISA( SdPresViewShell ) )
-                        GetViewFrame()->GetDispatcher()->Execute( SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
-                    else
-                    {
-                        pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
-                        pFrameView->SetSlotId(SID_OBJECT_SELECT);
-                        GetViewFrame()->GetDispatcher()->Execute( nPresViewShellId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-                    }
+                    const USHORT nRestoreViewShellId = pFrameView->GetPresentationViewShellId();
+
+                    pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
+                    pFrameView->SetSlotId(SID_OBJECT_SELECT);
+                    GetViewFrame()->GetDispatcher()->Execute( nRestoreViewShellId, SFX_CALLMODE_ASYNCHRON );
                 }
             }
-            rReq.Ignore ();
 
-            // sonst bleiben alle Draw-Slots disabled
+            rReq.Ignore ();
             GetViewFrame()->GetBindings().InvalidateAll( TRUE );
         }
         break;

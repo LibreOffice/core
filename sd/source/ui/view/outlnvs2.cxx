@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 14:31:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,9 @@
 #include "fucushow.hxx"
 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
-
+#include "sdattr.hxx"
 #include "preview.hxx"
+#include "presvish.hxx"
 
 /************************************************************************/
 
@@ -327,15 +328,21 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_PRESENTATION:
         {
-            // den Outliner-Inhalt ins Draw-Model schreiben
             pOlView->PrepareClose();
 
-            // Zum Zeichentisch wechseln
-            pFrameView->SetPresentationViewShellId(SID_VIEWSHELL2);
-            pFrameView->SetSlotId(SID_PRESENTATION);
-            pFrameView->SetPageKind(PK_STANDARD);
-            GetViewFrame()->GetDispatcher()->Execute(
-                SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+            SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
+            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
+
+            if( bFullScreen )
+                SdPresViewShell::CreateFullScreenShow( pDoc, rReq );
+            else
+            {
+                pFrameView->SetPresentationViewShellId( SID_VIEWSHELL2 );
+                pFrameView->SetSlotId( SID_PRESENTATION );
+                pFrameView->SetPageKind( PK_STANDARD );
+                GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON );
+            }
+
             rReq.Done();
         }
         break;
