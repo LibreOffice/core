@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:29:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,24 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
 
+        /** loads the information for the windows.
+            @param  _aViewProps
+                The properties which comes from the layout information.
+        */
+        void loadTableWindows(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aViewProps);
+
+        /** loads the information for one window.
+            @param  _rTable
+                The properties which comes from the layout information.
+        */
+        void loadTableWindow(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rTable);
+
+        /** saves the TableWindows structure in a sequence of property values
+            @param  _rViewProps
+                Contains the new sequence.
+        */
+        void saveTableWindows(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+
         virtual ~OJoinController();
     public:
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -142,10 +160,6 @@ namespace dbaui
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
-
-        //
-        virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
         /**
             only defines a method to save a SQLException in d&d methods to show the error at a later state
