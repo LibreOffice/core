@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+#   last change: $Author: ka $ $Date: 2002-08-13 11:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,18 @@ IDLFILES=\
     OfficeDocumentView.idl\
     PaperFormat.idl\
     PaperOrientation.idl\
+    PrintableState.idl\
+    PrintableStateEvent.idl\
     PrinterDescriptor.idl\
     PrintOptions.idl\
     PrintSettings.idl\
+    RenderDescriptor.idl\
+    RenderOptions.idl\
     XControlAccess.idl\
     XLineCursor.idl\
-    XPrintable.idl\
     XPrintPreview.idl\
     XPrintSettingsSupplier.idl\
+    XRenderable.idl\
     XScreenCursor.idl\
     XSelectionChangeListener.idl\
     XSelectionSupplier.idl\
@@ -92,8 +96,7 @@ IDLFILES=\
     XViewSettingsSupplier.idl\
     XPrintableBroadcaster.idl\
     XPrintableListener.idl\
-    PrintableState.idl\
-    PrintableStateEvent.idl
+    XPrintable.idl
 
 # ------------------------------------------------------------------
 
