@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:21:22 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,7 +761,10 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
-    sal_Bool bShowRedlineChanges = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+    sal_Bool bRecordRedlineChanges = sal_False,bShowRedlineChanges = sal_False,
+             bShowFooter = sal_False, bShowHeader = sal_False;
+    sal_Bool bChangeShowRedline = sal_False, bChangeRecordRedline = sal_False,
+             bChangeFooter = sal_False, bChangeHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
@@ -788,30 +791,50 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
         {
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
+            bChangeShowRedline = sal_True;
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "RecordRedlineChanges" ) ) )
+        {
+            bRecordRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
+            bChangeRecordRedline = sal_True;
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
         {
             bShowHeader = *(sal_Bool *)(pValue->Value.getValue());
+            bChangeFooter = sal_True;
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
         {
             bShowFooter = *(sal_Bool *)(pValue->Value.getValue());
+            bChangeHeader = sal_True;
         }
         pValue++;
     }
     if( pDoc->GetDocShell() )
         pDoc->GetDocShell()->SetVisArea ( aRect );
 
-    pDoc->SetHeadInBrowse ( bShowHeader );
-    pDoc->SetFootInBrowse ( bShowFooter );
+    if (bChangeHeader)
+        pDoc->SetHeadInBrowse ( bShowHeader );
+    if (bChangeFooter)
+        pDoc->SetFootInBrowse ( bShowFooter );
 
     sal_uInt16 eOld = pDoc->GetRedlineMode();
-    if ( bShowRedlineChanges )
-        eOld |= (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
-    else
-        eOld &= ~(REDLINE_SHOW_INSERT|REDLINE_SHOW_INSERT);
-    pDoc->SetRedlineMode( eOld );
-
+    if (bChangeShowRedline)
+    {
+        if ( bShowRedlineChanges )
+            eOld |= (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
+        else
+            eOld &= ~(REDLINE_SHOW_INSERT|REDLINE_SHOW_INSERT);
+    }
+    if (bChangeRecordRedline)
+    {
+        if ( bRecordRedlineChanges )
+            eOld |= (REDLINE_ON);
+        else
+            eOld &= ~(REDLINE_ON);
+    }
+    if (bChangeShowRedline || bChangeRecordRedline )
+        pDoc->SetRedlineMode( eOld );
 }
 
 void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue > & aConfigProps)
