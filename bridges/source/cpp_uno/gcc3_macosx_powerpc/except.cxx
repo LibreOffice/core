@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:32:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <bridges/cpp_uno/bridge.hxx>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
