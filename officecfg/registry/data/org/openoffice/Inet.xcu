@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:31:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,11 @@
   <node oor:name="Settings">
     <prop oor:name="ooInetProxyType">
       <value>1</value>
+    </prop>
+  </node>
+  <node oor:name="DefaultSearchEngine" install:module="defaultsearchengine">
+    <prop oor:name="Name">
+     <value>Google</value>
     </prop>
   </node>
   <node oor:name="SearchEngines">
