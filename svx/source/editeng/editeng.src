@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:19:20 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ Menu RID_MENU_SPELL
             Text[ portuguese_brazilian ] = "Verificação ~Ortográfica";
             Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
             Text[ korean ] = "ë§žì¶¤ë²• ê²€ì‚¬(~S)...";
-            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
+            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥";
             Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
             Text[ turkish ] = "~Yazým Kontrolü...";
             Text[ arabic ] = "ÊÏ~ÞíÞ ÅãáÇÆí";
