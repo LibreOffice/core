@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-22 13:43:46 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aRemPB( this, PaResId( RID_PA_BTN_DEL ) ),
         m_aGroupBox( this, PaResId( RID_PA_GROUP_INSTALL ) ),
         m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
-        m_aAddFontsPB( this, PaResId( RID_PA_BTN_ADDFONTS ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
         m_aRenamePB( this, PaResId( RID_PA_BTN_RENAME ) ),
         m_aTestPagePB( this, PaResId( RID_PA_TESTPAGE ) ),
@@ -169,7 +168,6 @@ void PADialog::Init()
     m_aRenamePB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aTestPagePB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aFontsPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
-    m_aAddFontsPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aAddPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aDevicesLB.setDelPressedLink( LINK( this, PADialog, DelPressedHdl ) );
 
@@ -215,11 +213,6 @@ IMPL_LINK( PADialog, ClickBtnHdl, PushButton*, pButton )
     else if( pButton == &m_aFontsPB )
     {
         FontNameDlg aDialog( this );
-        aDialog.Execute();
-    }
-    else if( pButton == & m_aAddFontsPB )
-    {
-        FontImportDialog aDialog( this );
         aDialog.Execute();
     }
 

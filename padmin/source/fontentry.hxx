@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _PAD_FONTENTRY_HXX_
 #define _PAD_FONTENTRY_HXX_
 
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
@@ -101,9 +104,13 @@ namespace padmin {
     {
         OKButton                            m_aOKBtn;
         CancelButton                        m_aCancelBtn;
+        PushButton                          m_aRemoveBtn;
+        DelMultiListBox                     m_aNewFontsBox;
         GroupBox                            m_aFromBox;
         Edit                                m_aFromDirEdt;
         PushButton                          m_aFromBtn;
+        CheckBox                            m_aLinkOnlyBox;
+        FixedText                           m_aFixedText;
         bool                                m_bOverwriteAll;
         bool                                m_bOverwriteNone;
         ProgressDialog*                     m_pProgress;
@@ -119,9 +126,18 @@ namespace padmin {
         String                              m_aNoWritableFontsDirText;
         String                              m_aFontsImportedText;
 
+        ::std::hash_map< ::rtl::OString, ::std::list< ::psp::FastPrintFontInfo >, ::rtl::OStringHash >
+                                            m_aNewFonts;
+
+        Timer                               m_aRefreshTimer;
+        DECL_LINK( RefreshTimeoutHdl, void* );
+
+
         ::psp::PrintFontManager&            m_rFontManager;
 
         DECL_LINK( ClickBtnHdl, Button* );
+        DECL_LINK( ModifyHdl, Edit* );
+        DECL_LINK( DelPressedHdl, ListBox* );
 
         // implement ImportFontCallback
         virtual void importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason );
@@ -131,6 +147,7 @@ namespace padmin {
         virtual bool isCanceled();
 
         void copyFonts();
+        void fillFontBox();
     public:
         FontImportDialog( Window* );
         ~FontImportDialog();
@@ -140,53 +157,26 @@ namespace padmin {
     {
     private:
         OKButton                    m_aOKButton;
-        PushButton                  m_aModifyButton;
         PushButton                  m_aRemoveButton;
+        PushButton                  m_aImportButton;
 
         DelListBox                  m_aFontBox;
-
         FixedText                   m_aFixedText;
-        FixedText                   m_aTxtFoundry;
-        ComboBox                    m_aFoundryBox;
-        FixedText                   m_aTxtFamily;
-        Edit                        m_aFamilyEdit;
-        FixedText                   m_aTxtWeight;
-        ComboBox                    m_aWeightBox;
-        FixedText                   m_aTxtSlant;
-        ComboBox                    m_aSlantBox;
-        FixedText                   m_aTxtStyleWidth;
-        ComboBox                    m_aStyleWidthBox;
-        FixedText                   m_aTxtAddStyle;
-        ComboBox                    m_aAddStyleBox;
-        FixedText                   m_aTxtSpacing;
-        ListBox                     m_aSpacingListBox;
-        FixedText                   m_aTxtRegistry;
-        ComboBox                    m_aRegistryBox;
-        FixedText                   m_aTxtEncoding;
-        ComboBox                    m_aEncodingBox;
-        GroupBox                    m_aPropGroupBox;
 
         ::psp::PrintFontManager&    m_rFontManager;
 
         // maps fontID to XLFD
         ::std::hash_map< ::psp::fontID, String >
                                     m_aFonts;
-
-        // error messages
-        String                      m_aFontsDirWriteFailed;
-
-
-        void SelectFont();
-        void ChangeFontEntry( ::psp::fontID nFontID );
-        void changeSelected();
-        String matchSelectionToken( int );
+        void init();
     public:
         FontNameDlg( Window* );
         ~FontNameDlg();
 
         DECL_LINK( ClickBtnHdl, Button* );
-        DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( DelPressedHdl, ListBox* );
+
+        static String fillFontEntry( ::psp::FastPrintFontInfo& rInfo, const String& rFile );
     };
 } // namespace
 

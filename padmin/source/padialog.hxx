@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ namespace padmin {
 
         PushButton                          m_aAddPB;
         PushButton                          m_aFontsPB;
-        PushButton                          m_aAddFontsPB;
         CancelButton                        m_aCancelButton;
 
         String                              m_aDefPrt;

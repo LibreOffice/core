@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,32 +127,12 @@
 #define RID_METDLG_BTN_ALL            4
 #define RID_METDLG_BTN_CORRECT        5
 
-#define RID_FONTNAMEDIALOG         1030
-#define RID_FNTNM_FIXED               1
-#define RID_FNTNM_FOUNDRY             2
-#define RID_FNTNM_FAMILY              3
-#define RID_FNTNM_WEIGHT              4
-#define RID_FNTNM_SLANT               5
-#define RID_FNTNM_SPACING             6
-#define RID_FNTNM_REGISTRY            7
-#define RID_FNTNM_ENCODING            8
-#define RID_FNTNM_TXT_FOUNDRY         9
-#define RID_FNTNM_TXT_FAMILY         10
-#define RID_FNTNM_TXT_WEIGHT         11
-#define RID_FNTNM_TXT_SLANT          12
-#define RID_FNTNM_TXT_SPACING        13
-#define RID_FNTNM_TXT_REGISTRY       14
-#define RID_FNTNM_TXT_ENCODING       15
-#define RID_FNTNM_BTN_OK             16
-#define RID_FNTNM_STYLEWIDTH         17
-#define RID_FNTNM_TXT_STYLEWIDTH     18
-#define RID_FNTNM_BTN_REMOVE         19
-#define RID_FNTNM_LB_FONTS           20
-#define RID_FNTNM_GRP_FONTPROP       21
-#define RID_FNTNM_BTN_MODIFY         22
-#define RID_FNTNM_TXT_ADDSTYLE       24
-#define RID_FNTNM_ADDSTYLE           25
-#define RID_FNTNM_STR_FONTSDIRWRITEFAILED 26
+#define RID_FONTNAMEDIALOG              1030
+#define RID_FNTNM_FIXED                     1
+#define RID_FNTNM_BTN_OK                    2
+#define RID_FNTNM_BTN_REMOVE                3
+#define RID_FNTNM_LB_FONTS                  4
+#define RID_FNTNM_BTN_IMPORT                5
 
 #define RID_TXT_REFETCH            1031
 
@@ -163,39 +143,41 @@
 
 #define RID_BUTTERFLY              1047
 
-#define RID_COMMAND_TXT_MODIFY        1049
-#define RID_COMMAND_TXT_ADDENTRY      1050
-#define RID_PA_TXT_NOWRITE         1052
-#define RID_DOUBLEFONTFILE         1053
-#define RID_INVALIDFONTPATH        1054
-#define RID_TESTPAGESAVE           1055
-#define RID_FNTNM_FONTNAME_TXT     1056
-#define RID_FNTNM_NOFONT_TXT       1057
-#define RID_QUERY_REMOVEDRIVER     1058
-#define RID_QUERY_REMOVEPRINTER    1059
-#define RID_QUERY_REMOVEFONTFROMLIST 1060
-#define RID_QUERY_DRIVERUSED       1062
-#define RID_ERR_REMOVEDEFAULTDRIVER 1063
-#define RID_ERR_WRITEFONTSDIR      1064
+#define RID_COMMAND_TXT_MODIFY              1049
+#define RID_COMMAND_TXT_ADDENTRY            1050
+#define RID_PA_TXT_NOWRITE              1052
+#define RID_DOUBLEFONTFILE              1053
+#define RID_INVALIDFONTPATH             1054
+#define RID_TESTPAGESAVE                1055
+#define RID_FNTNM_FONTNAME_TXT          1056
+#define RID_FNTNM_NOFONT_TXT            1057
+#define RID_QUERY_REMOVEDRIVER          1058
+#define RID_QUERY_REMOVEPRINTER         1059
+#define RID_QUERY_REMOVEFONTFROMLIST        1060
+#define RID_STR_REMOVE_MULTIPLE_FONTS       1061
+#define RID_QUERY_DRIVERUSED            1062
+#define RID_ERR_REMOVEDEFAULTDRIVER         1063
+#define RID_ERR_WRITEFONTSDIR           1064
 
-#define RID_FONTIMPORT_DIALOG               1065
-#define RID_FIMP_BTN_OK                     1
-#define RID_FIMP_BTN_CANCEL                 2
-#define RID_FIMP_EDT_FROM                   3
-#define RID_FIMP_BTN_FROM                   4
-#define RID_FIMP_GRP_FROM                   5
-#define RID_FIMP_EDT_TO                     6
-#define RID_FIMP_BTN_TO                     7
-#define RID_FIMP_GRP_TO                     8
-#define RID_FIMP_STR_IMPORTOP               9
-#define RID_FIMP_STR_QUERYOVERWRITE         10
-#define RID_FIMP_STR_OVERWRITEALL           11
-#define RID_FIMP_STR_OVERWRITENONE          12
-#define RID_FIMP_STR_NOAFM                  13
-#define RID_FIMP_STR_AFMCOPYFAILED          14
-#define RID_FIMP_STR_FONTCOPYFAILED         15
-#define RID_FIMP_STR_NOWRITEABLEFONTSDIR    16
-#define RID_FIMP_STR_NUMBEROFFONTSIMPORTED  17
+#define RID_FONTIMPORT_DIALOG                   1065
+#define RID_FIMP_BTN_OK                         1
+#define RID_FIMP_BTN_CANCEL                     2
+#define RID_FIMP_EDT_FROM                       3
+#define RID_FIMP_BTN_FROM                       4
+#define RID_FIMP_GRP_FROM                       5
+#define RID_FIMP_BTN_REMOVE                     6
+#define RID_FIMP_BOX_NEWFONTS                   7
+#define RID_FIMP_TXT_HELP                        8
+#define RID_FIMP_STR_IMPORTOP                   9
+#define RID_FIMP_STR_QUERYOVERWRITE             10
+#define RID_FIMP_STR_OVERWRITEALL               11
+#define RID_FIMP_STR_OVERWRITENONE              12
+#define RID_FIMP_STR_NOAFM                      13
+#define RID_FIMP_STR_AFMCOPYFAILED              14
+#define RID_FIMP_STR_FONTCOPYFAILED             15
+#define RID_FIMP_STR_NOWRITEABLEFONTSDIR        16
+#define RID_FIMP_STR_NUMBEROFFONTSIMPORTED      17
+#define RID_FIMP_BOX_LINKONLY                    18
 
 #define RID_TXT_IMPORTTITLE                 1066
 #define RID_TXT_FONTS2IMPORT                    1067

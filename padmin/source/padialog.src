@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.1.1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:42:53 $
+ *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,33 @@ ModalDialog RID_FONTIMPORT_DIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230 , 48 ) ;
+    Size = MAP_APPFONT ( 230 , 170 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Schriften importieren" ;
     Text [ English ] = "Import fonts" ;
 
+    MultiListBox RID_FIMP_BOX_NEWFONTS
+    {
+        Border = TRUE;
+        Sort=TRUE;
+        SimpleMode = TRUE;
+        AutoHScroll = TRUE;
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 160, 75 );
+    };
+    FixedText RID_FIMP_TXT_HELP
+    {
+        Pos = MAP_APPFONT( 5, 135 );
+        Size = MAP_APPFONT( 220, 24 );
+        WordBreak=TRUE;
+        Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Danach entfernen Sie bitte die Schriften, die nicht importiert werden sollen, mit Hilfe der Entfernen Schaltfläche und starten Sie dann den Import mit der OK-Schaltfläche.";
+        Text [ English ] = "Please choose the directory from which to import fonts. After that please remove the fonts you do not want to import with the Remove button. Start the import with the OK button.";
+    };
     GroupBox RID_FIMP_GRP_FROM
     {
-        Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 160, 30 );
+        Pos = MAP_APPFONT( 5, 85 );
+        Size = MAP_APPFONT( 160, 45 );
         Text = "Quellverzeichnis";
         Text [ English ] = "Source directory";
         Text[ english_us ] = "Source directory";
@@ -101,8 +118,21 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Edit RID_FIMP_EDT_FROM
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 10, 17 );
+        Pos = MAP_APPFONT( 10, 97 );
         Size = MAP_APPFONT( 130, 12 );
+    };
+    PushButton RID_FIMP_BTN_FROM
+    {
+        Pos = MAP_APPFONT( 145, 97 );
+        Size = MAP_APPFONT( 15, 12 );
+        Text = "...";
+    };
+    CheckBox RID_FIMP_BOX_LINKONLY
+    {
+        Pos = MAP_APPFONT( 10, 115 );
+        Size = MAP_APPFONT( 145, 10 );
+        Text = "Beim Import nur ~Softlinks anlegen";
+        Text [ English ] = "Create ~Softlinks only";
     };
     OKButton RID_FIMP_BTN_OK
     {
@@ -115,11 +145,12 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Pos = MAP_APPFONT( 175, 29 );
         Size = MAP_APPFONT( 50, 14 );
     };
-    PushButton RID_FIMP_BTN_FROM
+    PushButton RID_FIMP_BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 145, 17 );
-        Size = MAP_APPFONT( 15, 12 );
-        Text = "...";
+        Pos = MAP_APPFONT( 175, 48 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text = "Entfernen";
+        Text [ English ] = "Remove";
     };
     String RID_FIMP_STR_IMPORTOP
     {
@@ -369,6 +400,12 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Text[ catalan ] = "Importar fuentes";
 };
 
+String RID_STR_REMOVE_MULTIPLE_FONTS
+{
+    Text = "Wenn Sie die Schrift\n\n   %s1\n\nentfernen werden auch folgende Scriften entfernt, da sie in derselben Datei enhalten sind:\n\n%s2\n\nWollen Sie das ?";
+    Text [ English ] = "If the font\n\n   %s1\nis removed the following fonts will also be removed because they are contained in the same file:\n\n%s2\n\nDo you want that ?";
+};
+
 ModalDialog RID_PADIALOG
 {
     OutputSize = TRUE ;
@@ -384,28 +421,28 @@ ModalDialog RID_PADIALOG
     {
         Pos = MAP_APPFONT( 225, 150 );
         Size = MAP_APPFONT( 50, 15 );
-        Text = "~Schließen";
-        Text [ english ] = "~Close";
-        Text[ english_us ] = "~Close";
-        Text[ portuguese ] = "~Fechar";
-        Text[ russian ] = "~Çàêğûòü";
+        Text = "Schließen";
+        Text [ english ] = "Close";
+        Text[ english_us ] = "Close";
+        Text[ portuguese ] = "Fechar";
+        Text[ russian ] = "Çàêğûòü";
         Text[ greek ] = "Êëåß~óéìï";
-        Text[ dutch ] = "~Sluiten";
-        Text[ french ] = "~Fermer";
-        Text[ spanish ] = "~Cerrar";
-        Text[ italian ] = "C~hiudi";
-        Text[ danish ] = "~Close";
-        Text[ swedish ] = "~Stäng";
-        Text[ polish ] = "~Zamknij";
-        Text[ portuguese_brazilian ] = "~Close";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ korean ] = "´İ±â(~C)";
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
-        Text[ turkish ] = "~Close";
+        Text[ dutch ] = "Sluiten";
+        Text[ french ] = "Fermer";
+        Text[ spanish ] = "Cerrar";
+        Text[ italian ] = "Chiudi";
+        Text[ danish ] = "Close";
+        Text[ swedish ] = "Stäng";
+        Text[ polish ] = "Zamknij";
+        Text[ portuguese_brazilian ] = "Close";
+        Text[ japanese ] = "•Â‚¶‚é";
+        Text[ korean ] = "´İ±â";
+        Text[ chinese_simplified ] = "¹Ø±Õ";
+        Text[ chinese_traditional ] = "Ãö³¬";
+        Text[ turkish ] = "Close";
         Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ finnish ] = "~Close";
-        Text[ catalan ] = "~Cerrar";
+        Text[ finnish ] = "Close";
+        Text[ catalan ] = "Cerrar";
     };
 
     GroupBox RID_PA_GROUP_INSTALL
@@ -628,7 +665,7 @@ ModalDialog RID_PADIALOG
     {
         Pos = MAP_APPFONT( 215, 55 );
         Size = MAP_APPFONT( 55, 15 );
-        Text = "St~andard";
+        Text = "~Standard";
         Text [english] = "~Default";
         Text[ language_user1 ] = "EM30.3.01 this refers to the Default Printer";
         Text[ english_us ] = "Default";
@@ -1132,7 +1169,7 @@ ModalDialog RID_FONTNAMEDIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 255 , 249 ) ;
+    Size = MAP_APPFONT ( 255 , 110 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Schriften" ;
@@ -1165,59 +1202,39 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ finnish ] = "Close";
         Text[ catalan ] = "Cerrar";
     };
-    PushButton RID_FNTNM_BTN_MODIFY
-    {
-        Pos = MAP_APPFONT ( 196 , 25 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Überneh~men" ;
-        Text [ English ] = "~Modify" ;
-        Text[ english_us ] = "Apply";
-        Text[ portuguese ] = "Aplica~r";
-        Text[ russian ] = "~Ïğèíÿòü";
-        Text[ greek ] = "Åöáñ~ìïãŞ";
-        Text[ dutch ] = "~Overnemen";
-        Text[ french ] = "~Appliquer";
-        Text[ spanish ] = "~Aplicar";
-        Text[ italian ] = "Applica";
-        Text[ danish ] = "~Modify";
-        Text[ swedish ] = "Öve~rta";
-        Text[ polish ] = "Zastosuj";
-        Text[ portuguese_brazilian ] = "~Modify";
-        Text[ japanese ] = "“K—p(~M)";
-        Text[ korean ] = "Àû¿ë";
-        Text[ chinese_simplified ] = "Ì×ÓÃ(~M)";
-        Text[ chinese_traditional ] = "®M¥Î(~M)";
-        Text[ turkish ] = "~Modify";
-        Text[ arabic ] = "ÊØÈíŞ";
-        Text[ finnish ] = "Apply";
-        Text[ catalan ] = "~Aplicar";
-    };
     PushButton RID_FNTNM_BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 196 , 44 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Entfernen" ;
-        Text [ English ] = "~Remove" ;
-        Text[ english_us ] = "~Remove";
-        Text[ portuguese ] = "~Remover";
-        Text[ russian ] = "~Óáğàòü";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "~Supprimer";
-        Text[ spanish ] = "~Eliminar";
-        Text[ italian ] = "Rimuo~vi";
-        Text[ danish ] = "~Remove";
-        Text[ swedish ] = "Ta b~ort";
-        Text[ polish ] = "Usuñ";
-        Text[ portuguese_brazilian ] = "~Remove";
-        Text[ japanese ] = "íœ(~R)";
-        Text[ korean ] = "Á¦°Å(~R)";
-        Text[ chinese_simplified ] = "É¾³ı(~R)";
-        Text[ chinese_traditional ] = "²¾°£(~R)";
-        Text[ turkish ] = "~Remove";
-        Text[ arabic ] = "ÅÒÇáÉ";
-        Text[ finnish ] = "~Remove";
-        Text[ catalan ] = "~Eliminar";
+        Text = "~Entfernen..." ;
+        Text [ English ] = "~Remove..." ;
+        Text[ english_us ] = "~Remove...";
+        Text[ portuguese ] = "~Remover...";
+        Text[ russian ] = "~Óáğàòü...";
+        Text[ greek ] = "ÄéáãñáöŞ...";
+        Text[ dutch ] = "~Verwijderen...";
+        Text[ french ] = "~Supprimer...";
+        Text[ spanish ] = "~Eliminar...";
+        Text[ italian ] = "Rimuo~vi...";
+        Text[ danish ] = "~Remove...";
+        Text[ swedish ] = "Ta b~ort...";
+        Text[ polish ] = "Usuñ...";
+        Text[ portuguese_brazilian ] = "~Remove...";
+        Text[ japanese ] = "íœ(~R)...";
+        Text[ korean ] = "Á¦°Å(~R)...";
+        Text[ chinese_simplified ] = "É¾³ı(~R)...";
+        Text[ chinese_traditional ] = "²¾°£(~R)...";
+        Text[ turkish ] = "~Remove...";
+        Text[ arabic ] = "ÅÒÇáÉ...";
+        Text[ finnish ] = "~Remove...";
+        Text[ catalan ] = "~Eliminar...";
+    };
+    PushButton RID_FNTNM_BTN_IMPORT
+    {
+        Pos = MAP_APPFONT ( 196 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Importieren...";
+        Text [ English ] = "Imp~ort...";
     };
     ListBox RID_FNTNM_LB_FONTS
     {
@@ -1226,392 +1243,13 @@ ModalDialog RID_FONTNAMEDIALOG
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 185 , 70 ) ;
     };
-    GroupBox RID_FNTNM_GRP_FONTPROP
-    {
-        Pos = MAP_APPFONT ( 6 , 80 ) ;
-        Size = MAP_APPFONT ( 185 , 166 ) ;
-        Text = "Schrifteigenschaften";
-    };
     FixedText RID_FNTNM_FIXED
     {
-        Pos = MAP_APPFONT ( 11 , 88 ) ;
-        Size = MAP_APPFONT ( 175 , 16 ) ;
-        Text = "Aus den Eigenschaften wird der Xwindow-Name\nder Schrift konstruiert" ;
-        Text [ English ] = "The Xwindow name of the font is constructed\nfrom the properties" ;
-        Text[ english_us ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ portuguese ] = "O nome Xwindow do tipo de letra constrói-se\na partir das propriedades.";
-        Text[ russian ] = "Èìÿ øğèôòà Xwindow îáğàçîâàíî\nèç ñâîéñòâ";
-        Text[ greek ] = "Ôï üíïìá Xwindow ôçò ãñáììáôïóåéñÜò äçìéïõñãåßôáé\náğü ôéò éäéüôçôİò ôçò.";
-        Text[ dutch ] = "De Xwindow-naam van het lettertype\nwordt samengesteld uit de eigenschappen";
-        Text[ french ] = "Le nom Xwindow de la police\nest généré à partir des propriétés";
-        Text[ spanish ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
-        Text[ italian ] = "Il nome Xwindow è determinato\ndalle caratteristiche";
-        Text[ danish ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ swedish ] = "Xwindow-namnet på teckensnittet konstrueras\nutifrån egenskaperna";
-        Text[ polish ] = "Nazwa Xwindow czcionki utworzona\nzostanie z w³aœciwoœci.";
-        Text[ portuguese_brazilian ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ japanese ] = "Ì«İÄ‚Ì X ³¨İÄŞ³–¼‚Í‘®«‚©‚ç\\¬‚³‚ê‚Ü‚·B";
-        Text[ korean ] = "µî·ÏÁ¤º¸·ÎºÎÅÍ¡¡±Û²ÃÀÇ XÀ©µµ¿ì¡¡ÀÌ¸§ÀÌ¡¡±¸¼ºµË´Ï´Ù";
-        Text[ chinese_simplified ] = "Xwindow Ãû³ÆÊÇÓÉ×ÖÌåÊôĞÔ¹¹³ÉµÄ";
-        Text[ chinese_traditional ] = "Xwindow ¦WºÙ¥Ñ¦r«¬Äİ©ÊÌÛ¦¨";
-        Text[ turkish ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ arabic ] = "íÊÑßÈ ÇÓã ÎØXwindow   \n ãä ÇáÎÕÇÆÕ";
-        Text[ finnish ] = "The Xwindow name of the font is constructed\nfrom the properties";
-        Text[ catalan ] = "De las propiedades se construirá el nombre\nXwindow de la fuente.";
-    };
-    FixedText RID_FNTNM_TXT_FOUNDRY
-    {
-        Pos = MAP_APPFONT ( 11 , 110 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Hersteller :" ;
-        Text [ English ] = "~Foundry :" ;
-        Text [ english_us ] = "Manufacturer:" ;
-        Text [ portuguese_brazilian ] = "Hersteller :" ;
-        Text [ swedish ] = "T~illverkare :" ;
-        Text [ danish ] = "Producent :" ;
-        Text [ italian ] = "Fabbricante :" ;
-        Text [ spanish ] = "~Fabricante:" ;
-        Text [ french ] = "~Fabricant :" ;
-        Text [ dutch ] = "~Producent :" ;
-        Text [ portuguese ] = "~Fabricante:" ;
-        Text[ russian ] = "Èçãîòîâèòåëü:";
-        Text[ greek ] = "ÊáôáóêåõáóôŞò:";
-        Text[ polish ] = "Producent :";
-        Text[ japanese ] = "»‘¢Œ³:";
-        Text[ korean ] = "ÀÛ¼ºÀÎ:";
-        Text[ chinese_simplified ] = "ÖÆÔìÉÌ£º";
-        Text[ chinese_traditional ] = "¨î³y°Ó¡G";
-        Text[ arabic ] = "ÇáãõäÊöÌ :";
-        Text[ turkish ] = "Üretici:";
-        Text[ finnish ] = "Manufacturer:";
-        Text[ catalan ] = "~Fabricante:";
-    };
-    ComboBox RID_FNTNM_FOUNDRY
-    {
-        Pos = MAP_APPFONT ( 95 , 108 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedText RID_FNTNM_TXT_FAMILY
-    {
-        Pos = MAP_APPFONT ( 11 , 125 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Familie :" ;
-        Text [ English ] = "Fa~mily :" ;
-        Text[ english_us ] = "~Family :";
-        Text[ portuguese ] = "Fa~mília:";
-        Text[ russian ] = "Ñåìåéñòâî :";
-        Text[ greek ] = "Ïéêïãİíåéá :";
-        Text[ dutch ] = "Fa~milie :";
-        Text[ french ] = "Fa~mille :";
-        Text[ spanish ] = "Fa~milia :";
-        Text[ italian ] = "~Famiglia :";
-        Text[ danish ] = "Fa~mily :";
-        Text[ swedish ] = "~Familj :";
-        Text[ polish ] = "Rodzina fontów :";
-        Text[ portuguese_brazilian ] = "Fa~mily :";
-        Text[ japanese ] = "‘‘Ì(~F):";
-        Text[ korean ] = "°è¿­ (~F):";
-        Text[ chinese_simplified ] = "²úÆ·ÏµÁĞ(~F)£º";
-        Text[ chinese_traditional ] = "²£«~¨t¦C(~F)¡G";
-        Text[ turkish ] = "Fa~mily :";
-        Text[ arabic ] = "ÇáÚÇÆáÉ:";
-        Text[ finnish ] = "~Family :";
-        Text[ catalan ] = "Fa~milia :";
-    };
-    Edit RID_FNTNM_FAMILY
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 95 , 123 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
-    };
-    FixedText RID_FNTNM_TXT_WEIGHT
-    {
-        Pos = MAP_APPFONT ( 11 , 140 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Gewicht :" ;
-        Text [ English ] = "~Weight :" ;
-        Text[ english_us ] = "~Weight :";
-        Text[ portuguese ] = "~Peso:";
-        Text[ russian ] = "~Òîëùèíà :";
-        Text[ greek ] = "ÂÜñïò :";
-        Text[ dutch ] = "~Gewicht :";
-        Text[ french ] = "~Poids :";
-        Text[ spanish ] = "~Peso :";
-        Text[ italian ] = "Peso :";
-        Text[ danish ] = "~Weight :";
-        Text[ swedish ] = "~Vikt :";
-        Text[ polish ] = "Gruboœæ :";
-        Text[ portuguese_brazilian ] = "~Weight :";
-        Text[ japanese ] = "‘¾‚³(~W):";
-        Text[ korean ] = "¹«°Ô (~W):";
-        Text[ chinese_simplified ] = "´ÖÏ¸(~W)£º";
-        Text[ chinese_traditional ] = "²Ê²Ó(~W)¡G";
-        Text[ turkish ] = "~Weight :";
-        Text[ arabic ] = "ÇáæÒä:";
-        Text[ finnish ] = "~Weight :";
-        Text[ catalan ] = "~Peso :";
-    };
-    ComboBox RID_FNTNM_WEIGHT
-    {
-        Pos = MAP_APPFONT ( 95 , 138 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedText RID_FNTNM_TXT_SLANT
-    {
-        Pos = MAP_APPFONT ( 11 , 155 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Neigung :" ;
-        Text [ English ] = "~Slant :" ;
-        Text[ english_us ] = "~Slant :";
-        Text[ portuguese ] = "~Inclinação:";
-        Text[ russian ] = "~Íàêëîí :";
-        Text[ greek ] = "Êëßóç :";
-        Text[ dutch ] = "~Helling :";
-        Text[ french ] = "~Inclinaison :";
-        Text[ spanish ] = "~Inclinación :";
-        Text[ italian ] = "Inclina~zione :";
-        Text[ danish ] = "~Slant :";
-        Text[ swedish ] = "Lut~ning :";
-        Text[ polish ] = "Pochylenie :";
-        Text[ portuguese_brazilian ] = "~Slant :";
-        Text[ japanese ] = "ŒX‚«(~S):";
-        Text[ korean ] = "°æ»ç (~S):";
-        Text[ chinese_simplified ] = "ÇãĞ±(~S)£º";
-        Text[ chinese_traditional ] = "¶É±×(~S)¡G";
-        Text[ turkish ] = "~Slant :";
-        Text[ arabic ] = "ÇáÇäÍÏÇÑ :";
-        Text[ finnish ] = "~Slant :";
-        Text[ catalan ] = "~Inclinación :";
-    };
-    ComboBox RID_FNTNM_SLANT
-    {
-        Pos = MAP_APPFONT ( 95 , 153 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "*" ;
-            "i" ;
-            "o" ;
-            "r" ;
-        };
-    };
-    FixedText RID_FNTNM_TXT_STYLEWIDTH
-    {
-        Pos = MAP_APPFONT ( 11 , 170 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Breite :" ;
-        Text [ English ] = "W~idth :" ;
-        Text[ english_us ] = "W~idth :";
-        Text[ portuguese ] = "~Largura:";
-        Text[ russian ] = "Øèğèíà :";
-        Text[ greek ] = "ĞëÜôïò :";
-        Text[ dutch ] = "B~reedte :";
-        Text[ french ] = "~Largeur :";
-        Text[ spanish ] = "An~cho :";
-        Text[ italian ] = "Larghezza :";
-        Text[ danish ] = "W~idth :";
-        Text[ swedish ] = "~Bredd :";
-        Text[ polish ] = "Szerokoœæ :";
-        Text[ portuguese_brazilian ] = "W~idth :";
-        Text[ japanese ] = "•(W~):";
-        Text[ korean ] = "³Êºñ (~I):";
-        Text[ chinese_simplified ] = "¿í¶È(~I)£º";
-        Text[ chinese_traditional ] = "¼e«×(~I)¡G";
-        Text[ turkish ] = "W~idth :";
-        Text[ arabic ] = "ÇáÚÑÖ :";
-        Text[ finnish ] = "W~idth :";
-        Text[ catalan ] = "An~cho :";
-    };
-    ComboBox RID_FNTNM_STYLEWIDTH
-    {
-        Pos = MAP_APPFONT ( 95 , 168 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedText RID_FNTNM_TXT_ADDSTYLE
-    {
-        Pos = MAP_APPFONT ( 11 , 185 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Zusätzliche Attribute :" ;
-        Text [ English ] = "~Additional attributes :";
-        Text[ english_us ] = "~Additional attributes :";
-        Text[ portuguese ] = "~Atributos adicionais:";
-        Text[ russian ] = "~Äîïîëíèòåëüíûå àòğèáóòû :";
-        Text[ greek ] = "Ğñüóèåôåò éäéüôçôåò :";
-        Text[ dutch ] = "~Extra attributen :";
-        Text[ french ] = "~Attributs supplémentaires :";
-        Text[ spanish ] = "~Atributos adicionales :";
-        Text[ italian ] = "Altri attri~buti :";
-        Text[ danish ] = "~Additional attributes :";
-        Text[ swedish ] = "~Ytterligare attribut :";
-        Text[ polish ] = "Dodatkowe atrybuty :";
-        Text[ portuguese_brazilian ] = "~Additional attributes :";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ì‘®«(~A):";
-        Text[ korean ] = "Ãß°¡ÀûÀÎ¡¡¼Ó¼º (~A):";
-        Text[ chinese_simplified ] = "¸½¼ÓµÄÊôĞÔ(~A)£º";
-        Text[ chinese_traditional ] = "¨ä¥¦Äİ©Ê(~A)¡G";
-        Text[ turkish ] = "~Additional attributes :";
-        Text[ arabic ] = "ÓãÇÊ ÅÖÇİíÉ :";
-        Text[ finnish ] = "~Additional attributes :";
-        Text[ catalan ] = "~Atributos adicionales :";
-    };
-    ComboBox RID_FNTNM_ADDSTYLE
-    {
-        Pos = MAP_APPFONT ( 95 , 183 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "" ;
-            "iso8859" ;
-            "sans";
-            "sans serif";
-            "serif";
-            "script";
-            "decor";
-            "symbol";
-        };
-    };
-    FixedText RID_FNTNM_TXT_SPACING
-    {
-        Pos = MAP_APPFONT ( 11 , 200 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Dichte :" ;
-        Text [ English ] = "S~pacing :" ;
-        Text[ english_us ] = "S~pacing :";
-        Text[ portuguese ] = "~Espaçamento:";
-        Text[ russian ] = "Ïëîòíîñòü :";
-        Text[ greek ] = "Ğõêíüôçôá :";
-        Text[ dutch ] = "S~patiëring :";
-        Text[ french ] = "~Espacement :";
-        Text[ spanish ] = "E~spacio :";
-        Text[ italian ] = "Spa~zio :";
-        Text[ danish ] = "S~pacing :";
-        Text[ swedish ] = "Täth~et :";
-        Text[ polish ] = "Spacje :";
-        Text[ portuguese_brazilian ] = "S~pacing :";
-        Text[ japanese ] = "•¶šŠÔŠu(~P):";
-        Text[ korean ] = "°£°İ (~P):";
-        Text[ chinese_simplified ] = "¼ä¸ô(~P):";
-        Text[ chinese_traditional ] = "¶¡¹j(~P)¡G";
-        Text[ turkish ] = "S~pacing :";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ :";
-        Text[ finnish ] = "S~pacing :";
-        Text[ catalan ] = "E~spacio :";
-    };
-    ListBox RID_FNTNM_SPACING
-    {
-        Pos = MAP_APPFONT ( 95 , 198 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            "c character cell" ;
-            "m monospace" ;
-            "p proportional" ;
-        };
-    };
-    FixedText RID_FNTNM_TXT_REGISTRY
-    {
-        Pos = MAP_APPFONT ( 11 , 215 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Registrierung :" ;
-        Text [ English ] = "Re~gistry :" ;
-        Text[ english_us ] = "Re~gistry :";
-        Text[ portuguese ] = "~Registo:";
-        Text[ russian ] = "Ğåãèñòğàöèÿ :";
-        Text[ greek ] = "ÄŞëùóç :";
-        Text[ dutch ] = "Re~gistratie :";
-        Text[ french ] = "Enre~gistrement :";
-        Text[ spanish ] = "Re~gistro :";
-        Text[ italian ] = "Re~gistrazione :";
-        Text[ danish ] = "Re~gistry :";
-        Text[ swedish ] = "~Registrering :";
-        Text[ polish ] = "Rejestracja :";
-        Text[ portuguese_brazilian ] = "Re~gistry :";
-        Text[ japanese ] = "“o˜^(~G):";
-        Text[ korean ] = "µî·Ï (~G):";
-        Text[ chinese_simplified ] = "µÇ¼Ç(~G)£º";
-        Text[ chinese_traditional ] = "µn°O(~G)¡G";
-        Text[ turkish ] = "Re~gistry :";
-        Text[ arabic ] = "ÇáÊÓÌíá :";
-        Text[ finnish ] = "Re~gistry :";
-        Text[ catalan ] = "Re~gistro :";
-    };
-    ComboBox RID_FNTNM_REGISTRY
-    {
-        Pos = MAP_APPFONT ( 95 , 213 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedText RID_FNTNM_TXT_ENCODING
-    {
-        Pos = MAP_APPFONT ( 11 , 230 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "~Kodierung :" ;
-        Text [ English ] = "Enco~ding :" ;
-        Text[ english_us ] = "Enco~ding :";
-        Text[ portuguese ] = "~Codificação:";
-        Text[ russian ] = "Êîäèğîâêà :";
-        Text[ greek ] = "~Êùäéêïğïßçóç :";
-        Text[ dutch ] = "Co~dering :";
-        Text[ french ] = "~Encodage :";
-        Text[ spanish ] = "Codi~ficación :";
-        Text[ italian ] = "Codifica :";
-        Text[ danish ] = "Enco~ding :";
-        Text[ swedish ] = "~Kodning :";
-        Text[ polish ] = "Kodowanie :";
-        Text[ portuguese_brazilian ] = "Enco~ding :";
-        Text[ japanese ] = "•„†‰»(~D):";
-        Text[ korean ] = "ÀÎÄÚµù (~D):";
-        Text[ chinese_simplified ] = "±àÂë(~D)£º";
-        Text[ chinese_traditional ] = "½s½X(~D)¡G";
-        Text[ turkish ] = "Enco~ding :";
-        Text[ arabic ] = "ÇáÊÑãíÒ :";
-        Text[ finnish ] = "Enco~ding :";
-        Text[ catalan ] = "Codi~ficación :";
-    };
-    ComboBox RID_FNTNM_ENCODING
-    {
-        Pos = MAP_APPFONT ( 95 , 228 ) ;
-        Size = MAP_APPFONT ( 90 , 150 ) ;
-        Sort = TRUE ;
-        DropDown = TRUE ;
-    };
-    String RID_FNTNM_STR_FONTSDIRWRITEFAILED
-    {
-        Text = "Die Schrift %s1 kann nicht geändert werden weil die Datei\n  %s2\nnicht geschrieben werden kann.";
-        Text [ English ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ english_us ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ portuguese ] = "É impossível modificar o tipo de letra %s1, porque não é\npossível escrever o ficheiro   %s2\\.";
-        Text[ russian ] = "Èçìåíèòü øğèôò %s1 íåâîçìîæíî, ïîñêîëüêó ôàéë \n  %s2\näîñòóïåí òîëüêî äëÿ ÷òåíèÿ.";
-        Text[ greek ] = "Äåí åßíáé äõíáôüí íá ôñïğïğïéçèåß ç ãñáììáôïóåéñÜ %s1 åğåéäŞ äåí ìğïñåß íá åêôåëåóôåß ç åããñáöŞ ôïõ áñ÷åßïõ\n  %s2.";
-        Text[ dutch ] = "Lettertype %s1 kan niet worden veranderd daar bestand\n %s2\nniet kan worden geschreven.";
-        Text[ french ] = "Impossible de modifier la police %s1 car écriture du fichier\n  %s2\n impossible !";
-        Text[ spanish ] = "No se puede modificar la fuente %s1 porque no se puede escribir el archivo\n  %s2\n.";
-        Text[ italian ] = "Impossibile modificare il font %1 perché il file\n  %2\nnon può essere scritto.";
-        Text[ danish ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ swedish ] = "Det går inte att ändra teckensnittet %s1 eftersom det inte går att skriva filen\n  %s2\n.";
-        Text[ polish ] = "Czcionki %s1 nie mo¿na zmieniæ, poniewa¿ pliku\n  %s2\nnie mo¿na zapisaæ.";
-        Text[ portuguese_brazilian ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ japanese ] = "Ì§²Ù\n  %s2\n‚ª‘‚«‚Ü‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅAÌ«İÄ %s1 ‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = "%s1 ±Û²ÃÀº¡¡¹Ù²Ü ¼ö¡¡¾ø½À´Ï´Ù£¬\n  %s2\nÆÄÀÏÀ»¡¡¾µ ¼ö¡¡¾ø±â¡¡¶§¹®ÀÔ´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÎŞ·¨¸ü¸Ä×ÖÌå %s1 £¬ÒòÎªÎÄ¼ş\n  %s2\nÎŞ·¨±»¸ÄĞ´¡£";
-        Text[ chinese_traditional ] = "µLªkÅÜ§ó¦r«¬ %s1 ¡A¦]¬°µLªkÂĞ¼gÀÉ®×\n  %s2\n ¡C";
-        Text[ turkish ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ arabic ] = "áÇ íãßä ÊÛííÑ ÇáÎØ %s1¡ ÍíË íÊÚĞÑ ßÊÇÈÉ Çáãáİ \n  %s2.";
-        Text[ finnish ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
-        Text[ catalan ] = "No se puede modificar la fuente %s1 porque no se puede escribir el archivo\n  %s2\n.";
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 175 , 24 ) ;
+        WordBreak = TRUE;
+        Text = "Hinweis: Sie können nur die für die Applikation lokal installierten Schriften verändern.";
+        Text [ English ] = "Hint: you can only modify the fonts installed for the application locally.";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";
@@ -1633,56 +1271,6 @@ ModalDialog RID_FONTNAMEDIALOG
     Text[ arabic ] = "ÇáÎØæØ";
     Text[ finnish ] = "Fonts";
     Text[ catalan ] = "Fuentes";
-};
-String RID_FNTNM_FONTNAME_TXT
-{
-    Text = "Eigenschaften von %s" ;
-    Text [ English ] = "Properties of %s" ;
-    Text[ english_us ] = "Properties of %s";
-    Text[ portuguese ] = "Propriedades de %s";
-    Text[ russian ] = "Ñâîéñòâà %s";
-    Text[ greek ] = "Éäéüôçôåò ôïõ %s";
-    Text[ dutch ] = "Eigenschappen van %s";
-    Text[ french ] = "Propriétés de %s";
-    Text[ spanish ] = "Propiedades de %s";
-    Text[ italian ] = "Proprietà di %s";
-    Text[ danish ] = "Properties of %s";
-    Text[ swedish ] = "Egenskaper för %s";
-    Text[ polish ] = "W³aœciwoœci %s";
-    Text[ portuguese_brazilian ] = "Properties of %s";
-    Text[ japanese ] = "%s ‚Ì‘®«";
-    Text[ korean ] = "%sÀÇ¡¡µî·ÏÁ¤º¸";
-    Text[ chinese_simplified ] = "%s µÄÊôĞÔ";
-    Text[ chinese_traditional ] = "%s ªºÄİ©Ê";
-    Text[ turkish ] = "Properties of %s";
-    Text[ arabic ] = "ÎÕÇÆÕ %s";
-    Text[ finnish ] = "Properties of %s";
-    Text[ catalan ] = "Propiedades de %s";
-};
-String RID_FNTNM_NOFONT_TXT
-{
-    Text = "Keine Schrift gewählt" ;
-    Text [ English ] = "No font selected" ;
-    Text[ english_us ] = "No font selected";
-    Text[ portuguese ] = "Nenhum tipo de letra seleccionado";
-    Text[ russian ] = "Øğèôò íå âûáğàí";
-    Text[ greek ] = "Äåí åğéëİ÷èçêå ãñáììáôïóåéñÜ";
-    Text[ dutch ] = "Geen lettertype geselecteerd";
-    Text[ french ] = "Aucune police sélectionnée";
-    Text[ spanish ] = "Ninguna fuente seleccionada";
-    Text[ italian ] = "Non sono stati selezionati font";
-    Text[ danish ] = "No font selected";
-    Text[ swedish ] = "Inget teckensnitt har valts";
-    Text[ polish ] = "Nie wybrano czcionki";
-    Text[ portuguese_brazilian ] = "No font selected";
-    Text[ japanese ] = "Ì«İÄ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
-    Text[ korean ] = "±Û²ÃÀ»¡¡¼±ÅÃÇÏÁö¡¡¾Ê¾Ò½À´Ï´Ù";
-    Text[ chinese_simplified ] = "Ã»ÓĞÑ¡ÔñÈÎºÎ×ÖÌå";
-    Text[ chinese_traditional ] = "¨S¦³¿ï¤¤¥ô¦ó¦r«¬";
-    Text[ turkish ] = "No font selected";
-    Text[ arabic ] = "áã íÊã ÇÎÊíÇÑ ÃíÉ ÎØæØ";
-    Text[ finnish ] = "No font selected";
-    Text[ catalan ] = "Ninguna fuente seleccionada";
 };
 String RID_BXT_TESTPAGE
 {
