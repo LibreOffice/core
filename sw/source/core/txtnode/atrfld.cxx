@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:39:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ SwTxtFld::~SwTxtFld( )
 |*
 *************************************************************************/
 
-void SwTxtFld::Expand()
+void SwTxtFld::Expand() const
 {
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
     ASSERT( pMyTxtNd, "wo ist denn mein Node?" );
