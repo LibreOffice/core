@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:26:56 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,19 +229,21 @@ void SwViewImp::UnlockPaint()
 |*  Letzte Aenderung    AMA 04. Jun. 98
 |*
 |*************************************************************************/
-/// OD 29.08.2002 #102450#
-/// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
-/// color as the background color at the outliner of the draw view.
-void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect,
-                            const Color* pPageBackgrdColor ) const
+// OD 29.08.2002 #102450#
+// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
+// color as the background color at the outliner of the draw view.
+// OD 09.12.2002 #103045# - add 4th parameter for the horizontal text direction
+// of the page in order to set the default horizontal text direction at the
+// outliner of the draw view for painting layers <hell> and <heaven>.
+void SwViewImp::PaintLayer( const BYTE _nLayerID, const SwRect& _rRect,
+                            const Color* _pPageBackgrdColor,
+                            const bool _bIsPageRightToLeft ) const
 {
     if ( HasDrawView() )
     {
         //change the draw mode in high contrast mode
         OutputDevice* pOutDev = GetShell()->GetOut();
         ULONG nOldDrawMode = pOutDev->GetDrawMode();
-        /// OD 29.08.2002 - comment unnecessary method call
-        //SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
             (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
@@ -250,37 +252,47 @@ void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect,
                                 DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
         }
 
-        /// OD 29.08.2002 #102450#
-        /// For correct handling of accessibily, high contrast, the page background
-        /// color is set as the background color at the outliner of the draw view.
-        /// Only necessary for the layers hell and heaven
+        // OD 29.08.2002 #102450#
+        // For correct handling of accessibility, high contrast, the page background
+        // color is set as the background color at the outliner of the draw view.
+        // Only necessary for the layers hell and heaven
         Color aOldOutlinerBackgrdColor;
-        if ( (nLayerID == GetShell()->GetDoc()->GetHellId()) ||
-             (nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        // OD 09.12.2002 #103045# - set default horizontal text direction on
+        // painting <hell> or <heaven>.
+        EEHorizontalTextDirection aOldEEHoriTextDir;
+        if ( (_nLayerID == GetShell()->GetDoc()->GetHellId()) ||
+             (_nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
         {
-            ASSERT( pPageBackgrdColor,
+            ASSERT( _pPageBackgrdColor,
                     "incorrect usage of SwViewImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
-            if ( pPageBackgrdColor )
+            if ( _pPageBackgrdColor )
             {
                 aOldOutlinerBackgrdColor =
                         GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
-                //const_cast<class SdrOutliner*>(GetDrawView()->GetModell()->GetDrawOutliner())->SetBackgroundColor( *pPageBackgrdColor );
-                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *pPageBackgrdColor );
+                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *_pPageBackgrdColor );
             }
+
+            aOldEEHoriTextDir =
+                GetDrawView()->GetModel()->GetDrawOutliner().GetDefaultHorizontalTextDirection();
+            EEHorizontalTextDirection aEEHoriTextDirOfPage =
+                _bIsPageRightToLeft ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
+            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
         }
 
         Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
-        GetPageView()->RedrawOneLayer( nLayerID, rRect.SVRect(),
+        GetPageView()->RedrawOneLayer( _nLayerID, _rRect.SVRect(),
                         pOutDev,
                         GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0,
                         &aLnk );
 
-        /// OD 29.08.2002 #102450#
-        /// reset background color of the outliner
-        if ( (nLayerID == GetShell()->GetDoc()->GetHellId()) ||
-             (nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        // OD 29.08.2002 #102450#
+        // reset background color of the outliner
+        // OD 09.12.2002 #103045# - reset default horizontal text direction
+        if ( (_nLayerID == GetShell()->GetDoc()->GetHellId()) ||
+             (_nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
         {
-                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+            GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+            GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
         }
 
         pOutDev->SetDrawMode( nOldDrawMode );
