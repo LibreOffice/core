@@ -14,12 +14,12 @@ Const MaxLayouts = 50
 Const MaxStyles = 100
 Const MaxBullets = 10
 
-Public NumberOfLayouts%, NumberOfStyles%
+&apos;Public NumberOfLayouts%, NumberOfStyles%
 
 &apos; Filled with title, previous, next, home, top, bullet, background, file name
-Public Style(8, MaxStyles) as String
+Public Style(MaxStyles, 8) as String
 
-Public Layout$(2, MaxLayouts)
+Public Layout$(MaxLayouts, 2)
 
 Public TextureDir$, BulletDir$, GraphicsDir$, GalleryDir$, PhotosDir$
 Public CurrentBullet$, CurrentPrev$, CurrentNext$, CurrentHome$, CurrentTop$
@@ -47,42 +47,36 @@ Public DialogModel as Object
 
 Sub Main
 Dim RetValue
-&apos;On Local Error Goto GlobalErrorHandler
-	Dim SOBitmapPath,sBitmapPath as String
+On Local Error Goto GlobalErrorHandler
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
 	oViewSettings = oBaseDocument.CurrentController.ViewSettings
 	oViewCursor = oBaseDocument.GetCurrentController.ViewCursor
+	CurWebPageIndex = -1
 	ProgressBar = oBaseDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	ProgressBar.Start(&quot;&quot;, 100)
 	SetProgressValue(2)
 	oBaseDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
 	oViewSettings.ShowTextBoundaries = False
-	MainDialog = LoadDialog(&quot;WebWizard&quot;,&quot;WebWzrd&quot;)
-	DialogModel = MainDialog.Model
 	LoadLanguage
 	SetProgressValue(10)
 	GetPaths()
-	NumberofLayouts = FillupWebListbox(oUcb, &quot;/cnt&quot;, MainDialog, &quot;lbTemplate&quot;, Layout$())
+	Layout() = getListBoxArrays(oUcb, &quot;/cnt&quot;)
+	GetCurIndex(DialogModel, Layout(),2)
 	SetProgressValue(30)
-	GetCurIndex(DialogModel.lbTemplate, Layout(),NumberofLayouts,2)
 	oCursor = oBasedocument.Text.CreateTextCursor
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
-	SetProgressValue(40)
-	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, MainDialog, &quot;lbStyles&quot;, Style())
 	SetProgressValue(50)
+	Style() = getListBoxArrays(oUcb, &quot;/stl&quot;)
+	SetProgressValue(70)
 	LoadWebPageStyles(oBaseDocument)
+	SetProgressValue(90)
+	oBaseDocument.UnlockControllers	
+	OpenWebDialog()
 	SetProgressValue(98)
 	SetProgressValue(0)
-	oBaseDocument.UnlockControllers	
-	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
-	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
-	DialogModel.ImagePreview.ImageURL = sBitmapPath
-	ToggleOptionButtons(DialogModel, bWithBackGraphic)
-	MainDialog.GetControl(&quot;lbTemplate&quot;).SetFocus()
-	DialogModel.cbGoOn.DefaultButton = True
 	RetValue = MainDialog.Execute
 	Select Case RetValue
 		Case 0
@@ -95,7 +89,7 @@ Dim RetValue
 GLOBALERRORHANDLER:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
-		CancelHTMLWizard()
+&apos;		CancelHTMLWizard()
 	End If
 End Sub
 
@@ -113,7 +107,7 @@ Sub ReloadCurrentDocument()
 Dim OldDocIndex as Integer
 On Local Error Goto ErrorOcurred
 	OldDocIndex = CurDocIndex
-	CurDocIndex = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
+	CurDocIndex = GetCurIndex(DialogModel.lbTemplate, Layout(), 2)
 	If OldDocIndex &lt;&gt; CurDocIndex Then
 		oBaseDocument.LockControllers
 		ToggleDialogControls(False)
@@ -136,24 +130,29 @@ End Sub
 
 
 
-Sub LoadWebPageStyles()
+
+Sub LoadWebPageStyles(aEvent as Object, Optional bStartUp as Boolean)
 Dim OldWebPageIndex as Integer
 	OldWebPageIndex = CurWebPageIndex
-	CurWebPageIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
+	If IsNull(DialogModel) Then
+		CurWebPageIndex = GetCurIndex(DialogModel, Style(), 8)
+	Else
+		CurWebPageIndex = GetCurIndex(DialogModel.lbStyles, Style(), 8)
+	End If
 	If OldWebPageIndex &lt;&gt; CurWebPageIndex Then
 		ToggleDialogControls(False)
 		oBaseDocument.LockControllers
 		bWithBackGraphic = LoadNewStyles(oBaseDocument, DialogModel, CurWebPageIndex, FileStr, Style(), TextureDir)
-		CurrentBullet$ = BulletDir + Style(6, CurWebPageIndex)
-		CurrentPrev$ = GraphicsDir + Style(2, CurWebPageIndex)
-		CurrentNext$ = GraphicsDir + Style(3, CurWebPageIndex)
-		CurrentHome$ = GraphicsDir + Style(4, CurWebPageIndex)
-		CurrentTop$ = GraphicsDir + Style(5, CurWebPageIndex)
+		CurrentBullet$ = BulletDir + Style(CurWebPageIndex, 6)
+		CurrentPrev$ = GraphicsDir + Style(CurWebPageIndex, 2)
+		CurrentNext$ = GraphicsDir + Style(CurWebPageIndex, 3)
+		CurrentHome$ = GraphicsDir + Style(CurWebPageIndex, 4)
+		CurrentTop$ = GraphicsDir + Style(CurWebPageIndex, 5)
 		With oBaseDocument.DocumentInfo
 			.GetUserFieldValue(0) = ExtractGraphicNames(CurWebPageIndex,2)
 			.GetUserFieldValue(1) = ExtractGraphicNames(CurWebPageIndex, 4)
-			.GetUserFieldValue(2) = Style(6, CurWebPageIndex)       &apos; Bullet
-			.GetUserFieldValue(3) = Style(7, CurWebPageIndex)       &apos; Background
+			.GetUserFieldValue(2) = Style(CurWebPageIndex, 6)       &apos; Bullet
+			.GetUserFieldValue(3) = Style(CurWebPageIndex, 7)       &apos; Background
 		End With
 		SetBulletAndGraphics()
 		CheckControls(oBaseDocument.DrawPage)
@@ -166,8 +165,8 @@ End Sub
 
 Function ExtractGraphicNames(CurIndex as Integer, i as Integer) as String
 Dim FieldValue as String
-	FieldValue = GetFileNameWithoutExtension(Style(i,CurIndex))
-	FieldValue = FieldValue &amp; &quot; &quot; &amp;	GetFileNameWithoutExtension(Style(i+1,CurIndex))
+	FieldValue = GetFileNameWithoutExtension(Style(CurIndex, i))
+	FieldValue = FieldValue &amp; &quot; &quot; &amp;	GetFileNameWithoutExtension(Style(CurIndex, i+1))
 	ExtractGraphicNames = FieldValue
 End Function
 
@@ -257,7 +256,6 @@ Dim SavePath as String
 		.GetUserFieldValue(2) = &quot;&quot;
 		.GetUserFieldValue(3) = &quot;&quot;
 	End With
-
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;&quot;)
@@ -265,7 +263,7 @@ Dim SavePath as String
 &apos;	oBaseDocument.UnlockControllers()
 End Sub
 
-		
+
 Function CopyFile(ByVal SourceUrl as String, TargetDir as String)
 Dim sFileName as String
 Dim sNewFileUrl as String
@@ -276,8 +274,7 @@ Dim sNewFileUrl as String
 End Function
 
 
-
-Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
+Function getListBoxArrays(oUcb as Object, sFileFilter as String)
 Dim oDocInfo as Object
 Dim oListboxControl as Object
 Dim Description as String
@@ -294,18 +291,21 @@ Dim m as Integer
 Dim n as Integer
 Dim s as Integer
 Dim a as Integer
-Dim SelList(0) as Integer
 Dim LocMaxIndex as Integer
 Dim InfoNames()
-	oListboxControl = oDialog.GetControl(ListboxName)
+Dim DimCount as Integer
 	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
-        
+	If sFileFilter = &quot;/cnt&quot; Then
+		DimCount = 2
+	Else
+		DimCount = 8
+	End If
 	LocMaxIndex = Ubound(DirContent())
-        
+	Dim List(LocMaxIndex, DimCount) as String    
 	Dim SortList(LocMaxIndex,1)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
@@ -323,11 +323,9 @@ Dim InfoNames()
 			Description = RetrieveDocTitle(oDocInfo, FileName)
 			oDocInfo.Read(FileName)
 			InfoNames = oDocInfo.ElementNames()
-			oListboxControl.AddItem(Description,a)
-			a = a + 1
-			List(1,i) = Description
+			List(a,1) = Description
 			If sFileFilter = &quot;/cnt&quot; Then
-				List(2,i) = Filename
+				List(a,2) = Filename
 			Else
 				m = 2
 				For n = 0 To 3
@@ -335,25 +333,29 @@ Dim InfoNames()
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then
-					        List(m,i) = sFieldList(s) &amp; &quot;.gif&quot;
+					        List(a,m) = sFieldList(s) &amp; &quot;.gif&quot;
 						Else
-					        List(m,i) = sFieldList(s)
+					        List(a,m) = sFieldList(s)
 						End If
 						m = m + 1
 					Next s
 				Next n
-				List(8,i) = FileName
+				List(a,8) = FileName
 			End If
+			a = a + 1			
 		End If
 	Next i
+	If sFileFilter = &quot;/cnt&quot; Then
+		ReDim PreServe List(a-1,2) as String
+	Else
+		ReDim PreServe List(a-1,8) as String
+	End If
 	If Not bItemfound Then
-		MsgBox(WebWiz_gErrContentNotFound$ , 16, WebWiz_gWizardName$)
+		MsgBox(WebWiz_gErrContentNotFound$, 16, WebWiz_gWizardName$)
 		oBaseDocument.Dispose()
 		Stop
 	End If
-	SelList(0) = 0
-	oListboxControl.Model.SelectedItems() = SelList()
-	FillupWebListbox = i
+	getListBoxArrays = List()
 End Function
 
 
@@ -404,11 +406,13 @@ End Sub
 
 
 Sub ToggleDialogControls(ByVal bDoEnable as Boolean, Optional FocusControlName as String)
-	DialogModel.Enabled = bDoEnable
-	If bDoEnable Then
-		&apos; Enable Controls referring to Background graphic only when this Property is set
-		bDoEnable = bWithBackGraphic
-		ToggleOptionButtons(DialogModel, bDoEnable)
-		MainDialog.GetControl(FocusControlName).SetFocus()
+	If Not IsNull(DialogModel) Then
+		DialogModel.Enabled = bDoEnable
+		If bDoEnable Then
+			&apos; Enable Controls referring to Background graphic only when this Property is set
+			bDoEnable = bWithBackGraphic
+			ToggleOptionButtons(DialogModel, bDoEnable)
+			MainDialog.GetControl(FocusControlName).SetFocus()
+		End If
 	End If
 End Sub</script:module>

@@ -3,6 +3,7 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
+
 Function LoadNewStyles(oDocument as Object, oDialogModel as Object, CurIndex as Integer, SourceFile as String, Styles() as String, TextureDir as String) as Boolean
 Dim BackGroundURL as String
 Dim oBackGraph as Object
@@ -18,7 +19,7 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 	End If
 
 	&apos; Read array fields for background, bullet &amp; graphics
-	BackgroundURL = Styles(7, CurIndex)
+	BackgroundURL = Styles(CurIndex, 7)
 	If Left(BackgroundURL, 1) &lt;&gt; &quot;#&quot; Then
 		BackgroundURL = TextureDir + BackgroundURL
 		bLocWithBackGraphic = True
@@ -40,6 +41,7 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 					oStyle.BackGraphicUrl = BackGroundURL
 					SetTileBackgroundorNot(oDialogModel, oStyle)
 				End If
+				Exit For
 			End If
 		End If
 	Next i
@@ -47,7 +49,7 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 ErrorOcurred:
 	If Err &lt;&gt; 0 Then
 		MsgBox (WebWiz_gErrWhileLoadStyles$, 16, WebWiz_gWizardName$)
-		CancelHTMLWizard()
+&apos;		CancelHTMLWizard()
 	End If
 End Function
 
@@ -62,7 +64,7 @@ Dim i as Integer
 			oStyle = oPageFamily.GetbyIndex(i)
 			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
 				If oStyle.BackGraphicUrl &lt;&gt; &quot;&quot; Then
-					oStyleBack.GraphicUrl = CopyFile(oStyle.BackGraphicUrl, SavePath)
+					oStyle.BackGraphicUrl = CopyFile(oStyle.BackGraphicUrl, SavePath)
 					Exit Sub
 				End If
 			End If
@@ -97,31 +99,42 @@ End Sub
 
 
 Sub SetTileBackgroundorNot(DialogModel as Object, oStyle as Object)
-  	If DialogModel.optTiled.State = 1 Then
-    	oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.TILED
-  	Else
-    	oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.AREA
+	If Not IsNull(DialogModel) Then
+  		If DialogModel.optTiled.State = 1 Then
+    		oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.TILED
+  		Else
+    		oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.AREA
+  		End If
   	End If
 End Sub
 
 
 Sub	ToggleOptionButtons(DialogModel as Object, bDoEnable as Integer)
-	DialogModel.optTiled.Enabled = bDoEnable
-	DialogModel.optArea.Enabled = bDoEnable
-	DialogModel.hlnBackground.Enabled = bDoEnable
+	If Not IsNull(DialogModel) Then
+		DialogModel.optTiled.Enabled = bDoEnable
+		DialogModel.optArea.Enabled = bDoEnable
+		DialogModel.hlnBackground.Enabled = bDoEnable
+	End If
 End Sub
 
 
-Function GetCurIndex(oListbox as Object, sList() as String, MaxIndex as Integer, FileIndex as Integer)
-Dim i, n as Integer
+Function GetCurIndex(oListbox as Object, sList() as String, FileIndex as Integer)
+Dim i as Integer
+Dim n as Integer
 Dim SelValue as String
-	&apos; Get selected list entry
-	n = oListbox.SelectedItems(0)
-	SelValue = oListbox.StringItemList(n)
+Dim MaxIndex as Integer
+	If IsNull(oListBox) Then
+		&apos; Startup for WebWizard
+		SelValue = sList(0,1)
+	Else
+		n = oListbox.SelectedItems(0)
+		SelValue = oListbox.StringItemList(n)
+	End If
 	&apos; Find field index for chosen list entry
+	MaxIndex = Ubound(sList)
 	For i = 0 To MaxIndex
-		If sList(1, i) = SelValue Then
-			FileStr = sList(FileIndex, i)
+		If sList(i,1) = SelValue Then
+			FileStr = sList(i, FileIndex)
 			Exit For
 		End If
 	Next
