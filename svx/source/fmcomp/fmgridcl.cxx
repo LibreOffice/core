@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:58:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ sal_Bool FmGridHeader::Drop( const DropEvent& rEvt )
                 {
                     xThisRoundCol = xFactory->createColumn(sFieldService);
                     if (xThisRoundCol.is() && ::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xThisRoundCol))
-                        xThisRoundCol->setPropertyValue(FM_PROP_STRICTFORMAT, makeAny(sal_Bool(sal_False)));
+                        xThisRoundCol->setPropertyValue(FM_PROP_STRICTFORMAT, ::cppu::bool2any(sal_False));
                 }
                 if (nColCount)
                     xSecondCol = xThisRoundCol;
