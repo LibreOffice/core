@@ -10152,3 +10152,8 @@ _real@8@4003a000000000000000
 ?_CreateDataStylesImport@SvXMLImport@@IAEXXZ
 ?_CreateNumberFormatsSupplier@SvXMLImport@@IAEXXZ
 ?exportByte@XMLSettingsExportHelper@@ABEXCABVOUString@rtl@@@Z
+?SetStatisticAttributes@SdXMLImport@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+?deallocate@?$_STL_alloc_proxy@PAU?$_rbT__N@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@U12@V?$allocator@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@@_STL@@QAEXPAU?$_rbT__N@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@I@Z
+??1?$Reference@VXActionLockable@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?query@?$Reference@VXActionLockable@document@star@sun@com@@@uno@star@sun@com@@SA?AV12345@ABVBaseReference@2345@@Z
+?s_pType_com_sun_star_document_XActionLockable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXActionLockable@document@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
