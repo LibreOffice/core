@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2001-03-14 17:50:31 $
+#   last change: $Author: kz $ $Date: 2001-03-28 16:05:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1051,6 +1051,8 @@ CDEFS+= -D$(TFDEF)
 
 .IF "$(USE_NAMESPACE)"==""
 CDEFS+=-D_USE_NO_NAMESPACE
+.ELSE
+CDEFS+=-D_USE_NAMESPACE
 .ENDIF
 
 CDEFSCXX=
