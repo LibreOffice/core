@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 06:25:24 $
+ *  last change: $Author: as $ $Date: 2001-01-26 08:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
-#define __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
+#ifndef __FRAMEWORK_SERVICES_PLUGINFRAME_HXX_
+#define __FRAMEWORK_SERVICES_PLUGINFRAME_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -643,4 +643,4 @@ class cIMPL_MainThreadExecutor  :   public SOLARTHREADEXECUTOR
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
+#endif  //  #ifndef __FRAMEWORK_SERVICES_PLUGINFRAME_HXX_

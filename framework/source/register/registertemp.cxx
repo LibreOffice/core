@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-12-20 09:48:03 $
+ *  last change: $Author: as $ $Date: 2001-01-26 08:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
                              )
 =================================================================================================================*/
 
-#ifndef __FRAMEWORK_BAEHSERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <baeh_services/mediatypedetectionhelper.hxx>
+#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#include <services/mediatypedetectionhelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_

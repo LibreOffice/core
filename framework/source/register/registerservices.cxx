@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-12-20 09:48:03 $
+ *  last change: $Author: as $ $Date: 2001-01-26 08:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,16 +91,16 @@
                              )
 =================================================================================================================*/
 
-#ifndef __FRAMEWORK_BAEHSERVICES_URLTRANSFORMER_HXX_
-#include <baeh_services/urltransformer.hxx>
+#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#include <services/urltransformer.hxx>
 #endif
 
-#ifndef __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
-#include <baeh_services/pluginframe.hxx>
+#ifndef __FRAMEWORK_SERVICES_PLUGINFRAME_HXX_
+#include <services/pluginframe.hxx>
 #endif
 
-#ifndef __FRAMEWORK_BAEHSERVICES_DESKTOP_HXX_
-#include <baeh_services/desktop.hxx>
+#ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
+#include <services/desktop.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_DOCUMENTPROPERTIES_HXX_
