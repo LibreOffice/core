@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FirstConnection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:25:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -66,7 +66,7 @@ public class FirstConnection extends java.lang.Object {
     protected void useConnection() throws java.lang.Exception {
         try {
             xRemoteServiceManager = this.getRemoteServiceManager(
-                    "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager");
+                    "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
             String available = (null != xRemoteServiceManager ? "available" : "not available");
             System.out.println( "remote ServiceManager is " + available );
         }
