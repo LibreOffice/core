@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-25 14:50:04 $
+ *  last change: $Author: vg $ $Date: 2002-01-29 14:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,13 @@
 
 #ifdef WNT
 #define __STDC__ 1
+#include <string.h>
+char    *optarg = NULL;
+int     optind  = 1;
+int     optopt  = 0;
+int     opterr  = 0;
 #endif
 
-/* Heiner Rechtien: poor man's getopt() */
-int     simple_getopt(int argc, char *argv[], const char *optstring);
-                        //, const struct option *longopts, int longind);
 
 #ifdef UNX
 #include <unistd.h>
@@ -95,6 +97,9 @@ int     simple_getopt(int argc, char *argv[], const char *optstring);
 #endif
 
 #include "cppdep.hxx"
+
+/* Heiner Rechtien: poor man's getopt() */
+int     simple_getopt(int argc, char *argv[], const char *optstring);
 
 class RscHrcDep : public CppDep
 {
