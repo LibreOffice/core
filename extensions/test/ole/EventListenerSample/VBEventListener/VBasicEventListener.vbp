@@ -1,7 +1,7 @@
 Type=OleDll
 Class=VBEventListener; VBEventListener.cls
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINNT\System32\stdole2.tlb#OLE Automation
-Module=Module1; ..\..\..\..\..\..\Development\VisualStudio\VB98\Module1.bas
+Module=Module1; Module1.bas
 Startup="Sub Main"
 HelpFile=""
 ExeName32="VBasicEventListener.dll"
