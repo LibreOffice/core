@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:10:39 $
+ *  last change: $Author: th $ $Date: 2001-05-14 08:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,7 +1218,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         else
         {
             sal_Int32 n = 0;
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':'. n ), 0, 23 ) )
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':', n ), 0, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )
                 if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
@@ -1358,7 +1358,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
         else
         {
             sal_Int32 n = 0;
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':'. n ), 0, 23 ) )
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':', n ), 0, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )
                 if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )

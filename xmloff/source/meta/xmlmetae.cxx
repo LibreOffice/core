@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:44:20 $
+ *  last change: $Author: th $ $Date: 2001-05-14 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
                             ::rtl::OUString::createFromAscii(sXML_keywords) );
         xHandler->ignorableWhitespace( sWS );
         xHandler->startElement( sElem, xAttrList );
-        sal_int32 nTokenIndex = 0;
+        sal_Int32 nTokenIndex = 0;
         do
         {
             rtl::OUString sKeyword = sKeywords.getToken( 0, ',', nTokenIndex ).trim();
