@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:03:06 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 11:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "appuno.hxx"
 
 #include <svtools/sbx.hxx>
+#include <svtools/itempool.hxx>
 
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
@@ -459,8 +460,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-//        USHORT nWhich = rPool.GetWhich(nSlotId);
-        if ( rSet.GetItemState( nSlotId ) == SFX_ITEM_SET ) //???
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
         {
             USHORT nSubCount = pType->nAttribs;
             if ( nSubCount )
@@ -469,6 +470,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             else
                 nProps++;
         }
+        else
+            DBG_ERROR("Processing property slot without argument!");
 
 #ifdef DEBUG
         nItems++;
@@ -482,8 +485,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         {
             // check every formal argument of the method
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-//            USHORT nWhich = rPool.GetWhich( pArg->nSlotId );
-            if ( rSet.GetItemState( rArg.nSlotId ) == SFX_ITEM_SET ) //???
+            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
             {
                 USHORT nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
@@ -575,8 +578,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
                 {
                     const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-        //            USHORT nWhich = rPool.GetWhich( pArg->nSlotId );
-                    if ( nId == rArg.nSlotId )
+                    USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+                    if ( nId == nWhich )
                         break;
 
                     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
@@ -642,6 +645,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     }
 #endif
 
+    if ( !nProps )
+        return;
+
     // convert every item into a property
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nProps );
     ::com::sun::star::beans::PropertyValue *pValue = aSequ.getArray();
@@ -649,8 +655,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-//        USHORT nWhich = rPool.GetWhich(nSlotId);
-        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nSlotId, sal_False );
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
         if ( pItem ) //???
         {
             USHORT nSubCount = pType->nAttribs;
@@ -682,8 +688,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-//            USHORT nWhich = rPool.GetWhich( nArg.nSlotId );
-            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, rArg.nSlotId, sal_False );
+            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
             if ( pItem ) //???
             {
                 USHORT nSubCount = rArg.pType->nAttribs;
