@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:08:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ using namespace ::com::sun::star::accessibility;
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
-        sal_uInt16 nTab,
+        SCTAB nTab,
         ScSplitPos eSplitPos)
     :
     ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
@@ -356,8 +356,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 mbDelIns = sal_True;
 
                 sal_Int16 nId(0);
-                sal_Int16 nX(rRef.GetDx());
-                sal_Int16 nY(rRef.GetDy());
+                SCsCOL nX(rRef.GetDx());
+                SCsROW nY(rRef.GetDy());
                 ScRange aRange(rRef.GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
@@ -419,7 +419,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
         sal_Int32* pSequence = aSequence.getArray();
         sal_Int32 nCount(0);
-        for (sal_uInt16 i = maRange.aStart.Row(); i <= maRange.aEnd.Row(); ++i)
+        for (SCROW i = maRange.aStart.Row(); i <= maRange.aEnd.Row(); ++i)
         {
             if (rMarkdata.IsRowMarked(i))
             {
@@ -446,7 +446,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
         sal_Int32* pSequence = aSequence.getArray();
         sal_Int32 nCount(0);
-        for (sal_uInt16 i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
+        for (SCCOL i = maRange.aStart.Col(); i <= maRange.aEnd.Col(); ++i)
         {
             if (rMarkdata.IsColumnMarked(i))
             {
@@ -474,7 +474,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
-        bResult = rMarkdata.IsRowMarked((sal_uInt16)nRow);
+        bResult = rMarkdata.IsRowMarked((SCROW)nRow);
     }
     return bResult;
 }
@@ -492,7 +492,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
-        bResult = rMarkdata.IsColumnMarked((sal_uInt16)nColumn);
+        bResult = rMarkdata.IsColumnMarked((SCCOL)nColumn);
     }
     return bResult;
 }
@@ -500,8 +500,8 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
 ScAccessibleCell* ScAccessibleSpreadsheet::GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn)
 {
     ScAccessibleCell* pAccessibleCell = NULL;
-    ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
-        static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
+    ScAddress aCellAddress(static_cast<SCCOL>(maRange.aStart.Col() + nColumn),
+        static_cast<SCROW>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
     if ((aCellAddress == maActiveCell) && mpAccCell)
     {
         pAccessibleCell = mpAccCell;
@@ -544,7 +544,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
     if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
-        bResult = rMarkdata.IsCellMarked(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow));
+        bResult = rMarkdata.IsCellMarked(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow));
     }
     return bResult;
 }
@@ -562,7 +562,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
         IsObjectValid();
         if (mpViewShell)
         {
-            sal_Int16 nX, nY;
+            SCsCOL nX;
+            SCsROW nY;
             mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY);
             xAccessible = getAccessibleCellAt(nY, nX);
         }
@@ -757,7 +758,7 @@ void SAL_CALL
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
         sal_Int32 nRow(getAccessibleRow(nChildIndex));
 
-        if (mpViewShell->GetViewData()->GetMarkData().IsCellMarked(static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow)))
+        if (mpViewShell->GetViewData()->GetMarkData().IsCellMarked(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)))
             SelectCell(nRow, nCol, sal_True);
     }
 }
@@ -767,7 +768,7 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
 
     mpViewShell->DoneBlockMode( sal_True ); // continue selecting
-    mpViewShell->InitBlockMode( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), maRange.aStart.Tab(), bDeselect, sal_False, sal_False );
+    mpViewShell->InitBlockMode( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), maRange.aStart.Tab(), bDeselect, sal_False, sal_False );
 
     mpViewShell->SelectionChanged();
 }
@@ -803,11 +804,13 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
 
 void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 {
-    sal_uInt32 nCount((rRange.aEnd.Col() - rRange.aStart.Col() + 1) * (rRange.aEnd.Row() - rRange.aStart.Row() + 1));
+    sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
+                rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
+                rRange.aStart.Row() + 1));
     sal_uInt32 nPos(0);
-    for (sal_uInt16 nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+    for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
     {
-        for (sal_uInt16 nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
         {
             ScMyAddress aCell(nCol, nRow, maActiveCell.Tab());
             mpSortedMarkedCells->push_back(aCell);
@@ -976,7 +979,8 @@ Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
 {
     if (mpViewShell)
     {
-        sal_Int16 nStartX, nStartY, nEndX, nEndY;
+        SCsCOL nStartX, nEndX;
+        SCsROW nStartY, nEndY;
 
         mpViewShell->GetViewData()->GetPosFromPixel( 1, 1, meSplitPos, nStartX, nStartY);
         mpViewShell->GetViewData()->GetPosFromPixel( rVisArea.GetWidth(), rVisArea.GetHeight(), meSplitPos, nEndX, nEndY);
