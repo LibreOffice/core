@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-10 08:16:13 $
+ *  last change: $Author: tl $ $Date: 2001-04-10 08:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,6 @@
 #ifndef _SFXTBXCTRL_HXX
 #include <sfx2/tbxctrl.hxx>
 #endif
-#ifndef _STDCTRL_HXX
-#include <svtools/stdctrl.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
 
 class ToolBox;
 class SvxPopupWindowListBox;
@@ -84,9 +78,6 @@ protected:
     USHORT                  nItemId;
 
     DECL_LINK( PopupModeEndHdl, void * );
-
-//  SvxListBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind,
-//                     USHORT nGetEntriesSlotId );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

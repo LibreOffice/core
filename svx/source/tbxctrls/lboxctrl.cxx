@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-10 08:16:48 $
+ *  last change: $Author: tl $ $Date: 2001-04-10 08:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
+#endif
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
 #endif
 #ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
@@ -286,20 +289,6 @@ SvxListBoxControl::SvxListBoxControl(
     rBox.Invalidate();
 }
 
-#ifdef NEVER
-SvxListBoxControl::SvxListBoxControl(
-        USHORT nId, ToolBox& rTbx, SfxBindings& rBind ,
-        USHORT nGetEntriesSlotId) :
-
-    SfxToolBoxControl( nId, rTbx, rBind ),
-    nItemId     ( nId ),
-    pPopupWin   ( 0 )
-{
-    ToolBox& rBox = GetToolBox();
-    rBox.SetItemBits( nId, TIB_DROPDOWN | rBox.GetItemBits( nId ) );
-    rBox.Invalidate();
-}
-#endif
 
 SvxListBoxControl::~SvxListBoxControl()
 {
