@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:32:35 $
+ *  last change: $Author: rt $ $Date: 2002-09-05 11:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,17 +1771,17 @@ String RID_STR_FIELDSELECTION
     Text[ russian ] = "Âûáîğ ïîëÿ:";
     Text[ greek ] = "ÅğéëïãŞ ğåäßïõ:";
     Text[ dutch ] = "Veld selecteren:";
-    Text[ french ] = "Sélection de champ :";
-    Text[ spanish ] = "Selección de campo:";
+    Text[ french ] = "Ajout de champ :";
+    Text[ spanish ] = "Añadir campo:";
     Text[ finnish ] = "Kenttävalinta:";
-    Text[ italian ] = "Scelta campo:";
+    Text[ italian ] = "Aggiungi campo:";
     Text[ danish ] = "Feltudvalg:";
-    Text[ swedish ] = "Fälturval:";
+    Text[ swedish ] = "Lägg till fält:";
     Text[ polish ] = "Wybór pola:";
     Text[ portuguese_brazilian ] = "Feldauswahl:";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®é¸æŠ:";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æŒ¿å…¥";
     Text[ korean ] = "í•„ë“œ ì¶”ê°€:";
-    Text[ chinese_simplified ] = "é€‰æ‹©å­—æ®µï¼š";
+    Text[ chinese_simplified ] = "æ–°å¢å­—æ®µï¼š";
     Text[ chinese_traditional ] = "æ–°å¢æ¬„ä½ï¼š";
     Text[ turkish ] = "Alan seçimi:";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇáÍŞá:";
