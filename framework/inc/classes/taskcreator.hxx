@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:49:56 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -125,14 +121,14 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          a helper to create new tasks, sub or plugin frames for "_blank" or FrameSearchFlag::CREATE
-    @descr          There are different places to create new tasks/plugin frames. Its not easy to service this code!
+    @short          a helper to create new tasks or sub frames for "_blank" or FrameSearchFlag::CREATE
+    @descr          There are different places to create new (task)frames. Its not easy to service this code!
                     Thats the reason for this helper. He capsulate asynchronous/synchronous creation by calling
                     a simple interface.
 
     @devstatus      ready to use
     @threadsafe     yes
-    @modified       16.05.2002 09:09, as96863
+    @modified       20.08.2003 08:37, as96863
 *//*-*************************************************************************************************************/
 class TaskCreator : private ThreadHelpBase
 {
@@ -157,10 +153,6 @@ class TaskCreator : private ThreadHelpBase
     private:
 
         css::uno::Reference< css::frame::XFrame > implts_createSystemTask ( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                            const ::rtl::OUString&                                      sName    ,
-                                                                                  sal_Bool                                              bVisible );
-        css::uno::Reference< css::frame::XFrame > implts_createBrowserTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                            const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin  ,
                                                                             const ::rtl::OUString&                                      sName    ,
                                                                                   sal_Bool                                              bVisible );
         static ::rtl::OUString                    impl_filterNames        ( const ::rtl::OUString&                                      sName    );

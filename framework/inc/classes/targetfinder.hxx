@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:49:46 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,13 +114,12 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          We need some informations about our caller, With these enum he can specify his frame type ...
-                    (Frame/Task/PlugInFrame/Desktop ...)
+                    (Frame/Desktop ...)
 *//*-*************************************************************************************************************/
 enum EFrameType
 {
     E_UNKNOWNFRAME  ,
     E_DESKTOP       ,
-    E_PLUGINFRAME   ,
     E_TASK          ,
     E_FRAME
 };
@@ -256,12 +255,6 @@ class TargetFinder
     //-------------------------------------------------------------------------------------------------------------
     private:
         static ETargetClass impl_classifyForDesktop_findFrame         (         sal_Bool            bParentExist        ,
-                                                                        const   ::rtl::OUString&    sTargetName         ,
-                                                                                sal_Int32           nSearchFlags        );
-
-        static ETargetClass impl_classifyForPlugInFrame_findFrame     (         sal_Bool            bParentExist        ,
-                                                                                sal_Bool            bChildrenExist      ,
-                                                                        const   ::rtl::OUString&    sFrameName          ,
                                                                         const   ::rtl::OUString&    sTargetName         ,
                                                                                 sal_Int32           nSearchFlags        );
 
