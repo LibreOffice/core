@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:15:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 12:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,11 @@ UnoDataBrowserView::~UnoDataBrowserView()
     {
         delete m_pTreeView;
         m_pTreeView = NULL;
+    }
+    if(m_pStatus)
+    {
+        delete m_pStatus;
+        m_pStatus = NULL;
     }
     ::comphelper::disposeComponent(m_xGrid);
 }
