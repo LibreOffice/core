@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:34:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Label" ),              BASEPROPERTY_LABEL,             ::getCppuType((const ::rtl::OUString*)0),       ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LineColor" ),          BASEPROPERTY_LINECOLOR,         ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LineCount" ),          BASEPROPERTY_LINECOUNT,         ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LineEndFormat" ),      BASEPROPERTY_LINE_END_FORMAT,   ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LineIncrement" ),      BASEPROPERTY_LINEINCREMENT,     ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT, sal_True ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LiteralMask" ),        BASEPROPERTY_LITERALMASK,       ::getCppuType((const ::rtl::OUString*)0),       ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "LiveScroll" ),         BASEPROPERTY_LIVE_SCROLL,       ::getBooleanCppuType(),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MaxTextLen" ),         BASEPROPERTY_MAXTEXTLEN,        ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Moveable" ),           BASEPROPERTY_MOVEABLE,          ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "MouseTransparent" ),   BASEPROPERTY_MOUSETRANSPARENT,  ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND ),
