@@ -1,10 +1,10 @@
-    /*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-09 09:38:28 $
+ *  last change: $Author: os $ $Date: 2002-09-20 12:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
                     C2U(cAccessSrvc),
                     aArgs);
         }
-#ifdef DBG_UTIL
+#ifdef DEBUG
         catch(Exception& rEx)
         {
             OString sMsg("CreateInstance exception: ");
