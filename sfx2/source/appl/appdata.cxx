@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-18 11:18:55 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pSfxPlugInObjectShellFactory( 0 ),
         pDefFocusWin( 0 ),
         pSfxFrameObjectFactoryPtr( 0 ),
-        pStopButtonTimer( 0 ),
         pCancelMgr( 0 ),
         nDocModalMode(0),
         pDisabledSlotList( 0 ),

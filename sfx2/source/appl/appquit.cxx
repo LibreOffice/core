@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-05 08:57:29 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,8 +269,6 @@ void SfxApplication::Deinitialize()
     bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
-
-    delete pAppData_Impl->pStopButtonTimer;
 
     SvFactory::ClearDemandObjects();
     DELETEZ(pImp->pTemplateDlg);

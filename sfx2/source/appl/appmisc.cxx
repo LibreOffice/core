@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-10 15:06:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,3 +865,15 @@ SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
     else
         return 0;
 }
+
+SfxCancelManager *SfxApplication::GetCancelManager() const
+{
+    if ( !pAppData_Impl->pCancelMgr )
+    {
+        pAppData_Impl->pCancelMgr = new SfxCancelManager;
+        pAppData_Impl->StartListening( *pAppData_Impl->pCancelMgr );
+    }
+    return pAppData_Impl->pCancelMgr;
+}
+
+
