@@ -2,9 +2,9 @@
  *
  *  $RCSfile: katakanaToHiragana.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,7 @@
 #define TRANSLITERATION_katakanaToHiragana
 #include <transliteration_OneToOne.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace rtl;
-
 namespace com { namespace sun { namespace star { namespace i18n {
-
-katakanaToHiragana::katakanaToHiragana()
-{
-    transliterationName = "katakanaToHiragana";
-    implementationName = "com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA";
-}
 
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
@@ -88,12 +78,12 @@ static sal_Unicode toHiragana (const sal_Unicode c)
     return c;
 }
 
-
-OUString SAL_CALL
-katakanaToHiragana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-    throw(RuntimeException)
+katakanaToHiragana::katakanaToHiragana()
 {
-    return transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset, (TransFunc) toHiragana );
+    func = toHiragana;
+    table = 0;
+    transliterationName = "katakanaToHiragana";
+    implementationName = "com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA";
 }
 
 } } } }
