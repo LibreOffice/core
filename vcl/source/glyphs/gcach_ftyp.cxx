@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.52 $
- *  last change: $Author: hdu $ $Date: 2001-07-11 16:38:24 $
+ *  $Revision: 1.53 $
+ *  last change: $Author: hdu $ $Date: 2001-07-18 15:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #include "freetype/internal/ftobjs.h"
 #include "freetype/internal/sfnt.h"
 #include "freetype/internal/ftstream.h"
+
+#include <svapp.hxx>
+#include <settings.hxx>
+#include <tools/lang.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -335,21 +339,14 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
     rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
     while( (rcOSL = aDir.getNextItem( aDirItem, 20 )) == osl::FileBase::E_None )
     {
-#ifdef TF_FILEURL
         osl::FileStatus aFileStatus( FileStatusMask_FileURL );
-#else
-        osl::FileStatus aFileStatus( FileStatusMask_NativePath );
-#endif
-
         rcOSL = aDirItem.getFileStatus( aFileStatus );
+
         ::rtl::OUString aUSytemPath;
-#ifdef TF_FILEURL
         OSL_VERIFY(  osl_File_E_None
             == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
-#else
-        ::rtl::OUString aUFileName = aFileStatus.getNativePath();
-#endif
         ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;
@@ -395,12 +392,12 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
             aFontData.meWeight      = FT_STYLE_FLAG_BOLD & aFaceFT->style_flags ? WEIGHT_BOLD : WEIGHT_NORMAL;
             aFontData.meItalic      = FT_STYLE_FLAG_ITALIC & aFaceFT->style_flags ? ITALIC_NORMAL : ITALIC_NONE;
 
+            FT_Done_Face( aFaceFT );
+
             aFontData.mnVerticalOrientation = 0;
             aFontData.mbOrientation = true;
             aFontData.mbDevice      = false;
             aFontData.mnQuality     = 0;    // prefer client-side fonts if available
-
-            FT_Done_Face( aFaceFT );
 
             AddFontFile( aCFileName, nFaceNum, 0, &aFontData );
             ++nCount;
@@ -415,9 +412,43 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 
 long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 {
+    const char* pLangBoostName = "soui.ttf";
+    const LanguageType aLang = Application::GetSettings().GetUILanguage();
+    switch( aLang )
+    {
+        case LANGUAGE_JAPANESE:
+            pLangBoostName = "soui.ttf";    // japanese is default
+            break;
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_SINGAPORE:
+            pLangBoostName = "soui_zhs.ttf";
+            break;
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_MACAU:
+            pLangBoostName = "soui_zht.ttf";
+            break;
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            pLangBoostName = "soui_kor.ttf";
+            break;
+    }
+    const rtl::OString aLangBoostName( pLangBoostName );
+
     long nCount = 0;
     for( FontList::const_iterator it(maFontList.begin()); it != maFontList.end(); ++it, ++nCount )
-        pToAdd->Add( new ImplFontData( (*it)->GetFontData() ) );
+    {
+        ImplFontData* pFontData = new ImplFontData( (*it)->GetFontData() );
+
+        // boost UI font quality if UI language matches
+        const ::rtl::OString aCFileName = (*it)->GetFontFileName()->toAsciiLowerCase();
+        if( 0 < aCFileName.indexOf( aLangBoostName ) )
+            pFontData->mnQuality += 10;
+
+        pToAdd->Add( pFontData );
+    }
+
     return nCount;
 }
 
