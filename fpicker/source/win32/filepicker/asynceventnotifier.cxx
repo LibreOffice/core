@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-15 15:51:26 $
+ *  last change: $Author: tra $ $Date: 2001-11-15 16:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,34 +147,42 @@ void SAL_CALL CAsyncFilePickerEventNotifier::run( )
     {
         m_NotifyFilePickerEvent.wait( );
 
-        while ( m_FilePickerEventList.size() > 0 )
+        if ( !m_rBroadcastHelper.bDisposed )
         {
-            ClearableMutexGuard aGuard( m_FilePickerEventListMutex );
+            ::osl::MutexGuard aGuard( m_rBroadcastHelper.rMutex );
 
-            FilePickerEventRecord_t nextEventRecord = m_FilePickerEventList.front();
-            m_FilePickerEventList.pop_front();
-
-            aGuard.clear();
-
-            ::cppu::OInterfaceContainerHelper* pICHelper =
-                m_rBroadcastHelper.aLC.getContainer(getCppuType((Reference<XFilePickerListener>*)0) );
-
-            if ( pICHelper )
+            if ( !m_rBroadcastHelper.bDisposed )
             {
-                ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
-
-                while( iter.hasMoreElements() )
+                while ( m_FilePickerEventList.size() > 0 )
                 {
-                    Reference< XFilePickerListener > xFPListener( iter.next( ), ::com::sun::star::uno::UNO_QUERY );
+                    ClearableMutexGuard aGuard( m_FilePickerEventListMutex );
 
-                    try
+                    FilePickerEventRecord_t nextEventRecord = m_FilePickerEventList.front();
+                    m_FilePickerEventList.pop_front();
+
+                    aGuard.clear();
+
+                    ::cppu::OInterfaceContainerHelper* pICHelper =
+                        m_rBroadcastHelper.aLC.getContainer(getCppuType((Reference<XFilePickerListener>*)0) );
+
+                    if ( pICHelper )
                     {
-                        if ( xFPListener.is() )
-                            (xFPListener.get()->*nextEventRecord.first)(nextEventRecord.second);
-                    }
-                    catch( RuntimeException& )
-                    {
-                        OSL_ENSURE( sal_False, "RuntimeException during event dispatching" );
+                        ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
+
+                        while( iter.hasMoreElements() )
+                        {
+                            Reference< XFilePickerListener > xFPListener( iter.next( ), ::com::sun::star::uno::UNO_QUERY );
+
+                            try
+                            {
+                                if ( xFPListener.is() )
+                                    (xFPListener.get()->*nextEventRecord.first)(nextEventRecord.second);
+                            }
+                            catch( RuntimeException& )
+                            {
+                                OSL_ENSURE( sal_False, "RuntimeException during event dispatching" );
+                            }
+                        }
                     }
                 }
             }
