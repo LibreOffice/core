@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:22:09 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,13 +354,23 @@ void SdrRectObj::ImpDoPaintRectObjShadow(ExtOutputDevice& rXOut, const SdrPaintI
         {
             // prepare line geometry
             const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft));
+
+            // #b4899532# if not filled but fill draft, avoid object being invisible in using
+            // a hair linestyle and COL_LIGHTGRAY
+            SfxItemSet aItemSet(rSet);
+            if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+            {
+                ImpPrepareLocalItemSetForDraftLine(aItemSet);
+            }
+
+            // prepare line geometry
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft));
 
             // new shadow line drawing
             if( pLineGeometry.get() )
             {
                 // draw the line geometry
-                ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
+                ImpDrawShadowLineGeometry(rXOut, aItemSet, *pLineGeometry);
             }
         }
     }
@@ -414,12 +424,22 @@ void SdrRectObj::ImpDoPaintRectObj(ExtOutputDevice& rXOut, const SdrPaintInfoRec
         {
             // prepare line geometry
             const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+
+            // #b4899532# if not filled but fill draft, avoid object being invisible in using
+            // a hair linestyle and COL_LIGHTGRAY
+            SfxItemSet aItemSet(rSet);
+            if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
+            {
+                ImpPrepareLocalItemSetForDraftLine(aItemSet);
+            }
+
+            // prepare line geometry
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
 
             if( pLineGeometry.get() )
             {
                 // draw the line geometry
-                ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+                ImpDrawColorLineGeometry(rXOut, aItemSet, *pLineGeometry);
             }
         }
     }
