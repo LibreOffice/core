@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-18 11:09:36 $
+ *  last change: $Author: jbu $ $Date: 2001-11-05 11:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,17 @@
 
 struct remote_Interface;
 
+/** @internal
+ */
 typedef void (SAL_CALL * remote_DispatchMethod)( remote_Interface * pRemoteI,
                                                  typelib_TypeDescription * pMemberType,
                                                  void * pReturn,
                                                  void * pArgs[],
                                                  uno_Any ** ppException );
 
-
+/**
+   @internal
+ */
 typedef void ( SAL_CALL * requestClientSideDispatcher ) (
     uno_Environment *pEnvRemote,
     typelib_TypeDescription * pMemberType,
@@ -100,6 +104,8 @@ typedef void ( SAL_CALL * requestClientSideDispatcher ) (
     void *ppArgs[],
     uno_Any **ppException );
 
+/** The base class of an UNO interface in a remote environment.
+ */
 struct remote_Interface
 {
     void (SAL_CALL * acquire)( remote_Interface * pInterface );
@@ -109,7 +115,9 @@ struct remote_Interface
     remote_DispatchMethod pDispatcher;
 };
 
-
+/** The mapping between an binary-c-uno and a remote environment.
+    @internal
+ */
 struct remote_Mapping
 {
     uno_Mapping aBase;

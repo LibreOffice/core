@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:47 $
+ *  last change: $Author: jbu $ $Date: 2001-11-05 11:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,37 +62,39 @@
 #define _BRIDGES_REMOTE_CONNECTION_H_
 #include <sal/types.h>
 
+/** Specfies a C-interface for a bidirectional bytestream,
+    which is used by a UNO remote environment.
+ */
 struct remote_Connection
 {
     void ( SAL_CALL * acquire ) ( remote_Connection *);
 
     void ( SAL_CALL * release ) ( remote_Connection *);
 
+    /**
+      reads nSize bytes from the connection. This method blocks, until
+      all bytes are available or an error occurs.
+      @return Number of bytes read.
+              If the return value is less than nSize, an unrecoverable
+              i/o error has occured or the connection was closed.
 
-    /***
-     * reads nSize bytes from the connection. This method blocks, until
-     * all bytes are available or an error occurs.
-     * @return Number of bytes read.<br>
-     *         If the return value is less than nSize, an unrecoverable
-     *         i/o error has occured or the connection was closed.
-     *
-     ***/
+     */
     sal_Int32 (SAL_CALL * read)(remote_Connection *, sal_Int8 *pDest, sal_Int32 nSize );
 
-    /***
-     * @return Number of bytes written.<br>
-     *         if the return value is less than nSize an unrecoverable
-     *         i/o error has occured or the connection was closed.
-     ***/
+    /**
+      @return Number of bytes written.
+              if the return value is less than nSize an unrecoverable
+              i/o error has occured or the connection was closed.
+     */
     sal_Int32 (SAL_CALL * write)(remote_Connection *, const sal_Int8 *pSource, sal_Int32 nSize );
 
     void ( SAL_CALL * flush ) ( remote_Connection * );
 
-    /***
-     * closes the connection. Any read or write operation after this call shall not be served
-     * anymore. Any ongoing read or write operation must return immeadiatly after this call.
-     * The implementation should cope with multiple calls to this method.
-     ***/
+    /** closes the connection.
+        Any read or write operation after this call shall not be served
+        anymore. Any ongoing read or write operation must return immeadiatly after this call.
+        The implementation should cope with multiple calls to this method.
+     */
     void (SAL_CALL * close) ( remote_Connection * );
 };
 
