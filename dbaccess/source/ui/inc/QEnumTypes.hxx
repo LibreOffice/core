@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:10:26 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,40 @@ namespace dbaui
         CROSS_JOIN,
         INNER_JOIN
     };
+
+    //==================================================================
+    enum EControlType
+    {
+        tpDefault = 0,
+        tpRequired,
+        tpTextLen,
+        tpNumType,
+        tpLength,
+        tpScale,
+        tpFormat,
+        tpAutoIncrement,
+        tpBoolDefault,
+        tpColumnName,
+        tpType
+    };
+
+    enum EScrollDir
+    {
+        scrollUp,
+        scrollDown,
+        scrollHome,
+        scrollEnd
+    };
+
+    enum EEditMode
+    {
+        ADD,
+        DROP,
+        KEY,
+        ADD_DROP
+    };
+
+
 }
 #endif // DBAUI_ENUMTYPES_HXX
 

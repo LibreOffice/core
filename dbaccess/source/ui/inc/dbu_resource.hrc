@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 08:07:55 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START +  6
 #define PAGE_ADO                        RID_PAGE_START +  7
 #define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
+#define RID_DB_TAB_EDITOR               RID_PAGE_START +  9
 
 //========================================================================
 // error boxes
@@ -129,6 +130,7 @@
 #define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START + 11
 #define ERR_QRY_ILLEGAL_JOIN            RID_ERRORBOX_START + 12
 #define ERR_CANTADMINQUERIES            RID_ERRORBOX_START + 13
+#define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START + 14
 
 //========================================================================
 // query boxes
@@ -139,6 +141,7 @@
 #define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  3
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  4
 #define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
+#define QUERY_BRW_DELETE_TABLE          RID_QUERYBOX_START +  6
 
 //========================================================================
 // warning boxes
@@ -195,6 +198,8 @@
 #define MENU_BROWSERTREE_CONTEXT        RID_MENU_START +  4
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
+#define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
+#define RID_BRW_TABLEDESIGN_TOOLBOX     RID_MENU_START +  8
 
 //========================================================================
 // strings
@@ -251,23 +256,79 @@
 #define STR_QUERY_FALSE                     RID_STRING_START + 47
 #define STR_QUERY_TRUE                      RID_STRING_START + 48
 
-
 #define STR_ALL_TABLES                      RID_STRING_START + 49
 #define STR_ALL_VIEWS                       RID_STRING_START + 50
 #define STR_ALL_TABLES_AND_VIEWS            RID_STRING_START + 51
 
-
+#define STR_TABLEDESIGN_DBFIELDTYPES        RID_STRING_START + 52
+#define STR_TABLEDESIGN_UNDO_PRIMKEY        RID_STRING_START + 53
+#define STR_VALUE_YES                       RID_STRING_START + 54
+#define STR_VALUE_NO                        RID_STRING_START + 55
+#define STR_VALUE_ASC                       RID_STRING_START + 56
+#define STR_VALUE_DESC                      RID_STRING_START + 57
+#define STR_VALUE_NONE                      RID_STRING_START + 58
+#define STR_TAB_FIELD_NAME                  RID_STRING_START + 59
+#define STR_TAB_FIELD_DATATYPE              RID_STRING_START + 60
+#define STR_TAB_FIELD_LENGTH                RID_STRING_START + 61
+#define STR_TAB_FIELD_DESCR                 RID_STRING_START + 62
+#define STR_TAB_FIELD_NULLABLE              RID_STRING_START + 63
+#define STR_FIELD_AUTOINCREMENT             RID_STRING_START + 64
+#define STR_TAB_PROPERTIES                  RID_STRING_START + 65
+#define STR_TABPAGE_GENERAL                 RID_STRING_START + 66
+#define STR_TAB_TABLE_DESCRIPTION           RID_STRING_START + 67
+#define STR_TAB_TABLE_PROPERTIES            RID_STRING_START + 68
+#define STR_TABED_UNDO_TYPE_CHANGED         RID_STRING_START + 69
+#define STR_TABED_UNDO_ROWDELETED           RID_STRING_START + 70
+#define STR_TABED_UNDO_ROWINSERTED          RID_STRING_START + 71
+#define STR_TABED_UNDO_NEWROWINSERTED       RID_STRING_START + 72
+#define STR_TABED_UNDO_PRIMKEY              RID_STRING_START + 73
+#define STR_HELP_AUTOINCREMENT              RID_STRING_START + 74
+#define STR_HELP_FORMAT_BUTTON              RID_STRING_START + 75
+#define STR_HELP_FORMAT_CODE                RID_STRING_START + 76
+#define STR_HELP_SCALE                      RID_STRING_START + 77
+#define STR_HELP_LENGTH                     RID_STRING_START + 78
+#define STR_HELP_NUMERIC_TYPE               RID_STRING_START + 79
+#define STR_HELP_TEXT_LENGTH                RID_STRING_START + 80
+#define STR_HELP_FIELD_REQUIRED             RID_STRING_START + 81
+#define STR_HELP_DEFAULT_VALUE              RID_STRING_START + 82
+#define STR_HELP_BOOL_DEFAULT               RID_STRING_START + 83
+#define STR_FORMAT                          RID_STRING_START + 84
+#define STR_SCALE                           RID_STRING_START + 85
+#define STR_LENGTH                          RID_STRING_START + 86
+#define STR_NUMERIC_TYPE                    RID_STRING_START + 87
+#define STR_TEXT_LENGTH                     RID_STRING_START + 88
+#define STR_FIELD_REQUIRED                  RID_STRING_START + 89
+#define STR_DEFAULT_VALUE                   RID_STRING_START + 90
+#define STR_TABED_UNDO_CELLMODIFIED         RID_STRING_START + 91
+#define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STRING_START + 92
+#define STR_SVT_SQL_INTERNATIONAL           RID_STRING_START + 93
+#define STR_SVT_SQL_SYNTAX_ERROR            RID_STRING_START + 94
+#define STR_SVT_SQL_SYNTAX_ERROR_BEFORE     RID_STRING_START + 95
+#define STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE    RID_STRING_START + 96
+#define STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE    RID_STRING_START + 97
+#define STR_SVT_SQL_SYNTAX_NO_NUM           RID_STRING_START + 98
+#define STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID  RID_STRING_START + 99
+#define STR_SVT_SQL_SYNTAX_INT_NO_VALID     RID_STRING_START + 100
+#define STR_SVT_SQL_SYNTAX_REAL_NO_VALID    RID_STRING_START + 101
+#define STR_SVT_SQL_SYNTAX_REAL_NO_INT      RID_STRING_START + 102
+#define STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE  RID_STRING_START + 103
+#define STR_TBL_COLUMN_IS_KEYCOLUMN         RID_STRING_START + 104
+#define STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE   RID_STRING_START + 105
 //========================================================================
 // untyped resources
 
 #define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
+#define PB_FORMAT                       RID_UNTYPED_START +  3
 
 #endif // _DBU_RESOURCE_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/02/06 08:07:55  oj
+ *  new querybox
+ *
  *  Revision 1.22  2001/02/05 13:48:36  fs
  *  #83430# +ERR_CANTADMINQUERIES / +WARN_SAVEFORQUERIES
  *

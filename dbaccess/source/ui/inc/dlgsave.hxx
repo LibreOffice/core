@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:01:42 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
+#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -85,23 +88,33 @@ namespace dbaui
     class OSaveAsDlg : public ModalDialog
     {
     private:
+        FixedText       m_aCatalogLbl;
+        Edit            m_aCatalog;
+        FixedText       m_aSchemaLbl;
+        Edit            m_aSchema;
         FixedText       m_aLabel;
         Edit            m_aTitle;
         OKButton        m_aPB_OK;
         CancelButton    m_aPB_CANCEL;
         HelpButton      m_aPB_HELP;
         String          m_aQryLabel;
+        String          m_sTblLabel;
         String          m_aName;
         String          m_aExists;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNames;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xNames;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
+        sal_Int32       m_nType;
 
 
     public:
         OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMetaData,
                     const String& rDefault);
 
-        String getName() const { return m_aName; }
+        String getName() const      { return m_aName; }
+        String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(); }
+        String getSchema() const    { return m_aSchema.IsVisible() ? m_aSchema.GetText() : String(); }
     private:
         DECL_LINK(ButtonClickHdl, Button *);
         DECL_LINK(EditModifyHdl,  Edit * );

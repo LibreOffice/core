@@ -37,6 +37,9 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
+#ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
+#include "ParseContext.hxx"
+#endif
 
 
 class VCLXWindow;
@@ -56,7 +59,8 @@ namespace dbaui
         ::std::vector< OTableWindowData*>       m_vTableData;
         ::std::vector<OTableFieldDesc*>         m_vTableFieldDesc;
 
-        ::connectivity::OSQLParser              m_aSqlParser;   // to parse sql statements
+        OQueryParseContext*                     m_pParseContext;
+        ::connectivity::OSQLParser*             m_pSqlParser;   // to parse sql statements
         ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator; // to iterate through them
         ::std::vector<sal_uInt32>               m_vColumnWidth;
         Fraction                                m_aZoom;
@@ -138,7 +142,7 @@ namespace dbaui
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
 
-        ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
+        ::connectivity::OSQLParser*             getParser()         { return m_pSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
         sal_uInt32 getColWidth(sal_uInt16 _nPos) const
         {
