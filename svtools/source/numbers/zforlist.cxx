@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2001-06-26 12:48:57 $
+ *  last change: $Author: er $ $Date: 2001-06-26 14:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
 {
     BOOL bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = UNKNOWN_SUBSTITUTE;
+        eNewLnge = SysLnge;
 
     pFormatScanner->SetConvertMode(eLnge, eNewLnge);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
@@ -555,7 +555,7 @@ BOOL SvNumberFormatter::PutandConvertEntrySystem(String& rString,
 {
     BOOL bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = UNKNOWN_SUBSTITUTE;
+        eNewLnge = SysLnge;
 
     pFormatScanner->SetConvertMode(eLnge, eNewLnge, TRUE);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
