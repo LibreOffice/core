@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:52:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #if defined(UNX)  || defined(MAC)
 #define CDECL
 #endif
+#ifdef UNX
+#include <sys/resource.h>
+#endif
 
 #include <stdio.h>
 
@@ -127,6 +130,7 @@ static char* strListBasicKeyWords[] = {
     "base",
     "binary",
     "boolean",
+    "byref",
     "byval",
     "call",
     "case",
@@ -266,6 +270,12 @@ BOOL SbModule::IsCompiled() const
 {
     return BOOL( pImage != 0 );
 }
+
+const SbxObject* SbModule::FindType( String aTypeName ) const
+{
+    return pImage ? pImage->FindType( aTypeName ) : NULL;
+}
+
 
 // Aus dem Codegenerator: Loeschen des Images und Invalidieren der Entries
 
@@ -554,6 +564,12 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
     if( pVar )
         pVar->SbxValue::Clear();
 
+    // return-Wert von CreateUnoDialog loeschen
+    static String aName3( RTL_CONSTASCII_USTRINGPARAM("CDec") );
+    pVar = pBasic->GetRtl()->Find( aName3, SbxCLASS_METHOD );
+    if( pVar )
+        pVar->SbxValue::Clear();
+
     // Ueber alle Sub-Basics gehen
     SbxArray* pObjs = pBasic->GetObjects();
     USHORT nCount = pObjs->Count();
@@ -584,6 +600,8 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 // Ausfuehren eines BASIC-Unterprogramms
 USHORT SbModule::Run( SbMethod* pMeth )
 {
+    static USHORT nMaxCallLevel = 0;
+
     USHORT nRes = 0;
     BOOL bDelInst = BOOL( pINST == NULL );
     StarBASICRef xBasic;
@@ -598,9 +616,32 @@ USHORT SbModule::Run( SbMethod* pMeth )
         SbErrorStack*& rErrStack = GetSbData()->pErrStack;
         delete rErrStack;
         rErrStack = NULL;
+
+        if( nMaxCallLevel == 0 )
+        {
+#ifdef UNX
+          struct rlimit rl;
+          getrlimit ( RLIMIT_STACK, &rl );
+          // printf( "RLIMIT_STACK = %ld\n", rl.rlim_cur );
+#endif
+#ifdef LINUX
+          // Empiric value, 900 = needed bytes/Basic call level
+          // for Linux including 10% safety margin
+          nMaxCallLevel = rl.rlim_cur / 900;
+#elif SOLARIS
+          // Empiric value, 1650 = needed bytes/Basic call level
+          // for Solaris including 10% safety margin
+          nMaxCallLevel = rl.rlim_cur / 1650;
+#elif WIN32
+          nMaxCallLevel = 5800;
+#else
+          nMaxCallLevel = MAXRECURSION;
+#endif
+        }
     }
+
     // Rekursion zu tief?
-    if( ++pINST->nCallLvl <= MAXRECURSION )
+    if( ++pINST->nCallLvl <= nMaxCallLevel )
     {
         // Globale Variable in allen Mods definieren
         GlobalRunInit( /* bBasicStart = */ bDelInst );
