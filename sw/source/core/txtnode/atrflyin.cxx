@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrflyin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:33:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
             {
                 SwTxtFrm *pTmp = pFirst;
                 do
-                {   if( ( (SwFlyFrm*)pFrm )->GetAnchor() == (SwFrm*) pTmp )
+                {   if( ( (SwFlyFrm*)pFrm )->GetAnchorFrm() == (SwFrm*) pTmp )
                     {
                         if ( pTmp != pCurrFrm )
                         {
