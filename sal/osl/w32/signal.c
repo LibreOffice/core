@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:34:45 $
+ *  last change: $Author: jbu $ $Date: 2001-08-09 15:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ static BOOL WINAPI IsWin95A()
     return TRUE;
 }
 
+/* magic Microsoft C++ compiler exception constant */
+#define EXCEPTION_MSC_CPP_EXCEPTION 0xe06d7363
+
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
     oslSignalInfo   Info;
@@ -147,6 +150,10 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
     switch (lpEP->ExceptionRecord->ExceptionCode)
     {
+        /* Transform unhandled exceptions into access violations.
+           Microsoft C++ compiler (add more for other compilers if necessary).
+         */
+        case EXCEPTION_MSC_CPP_EXCEPTION:
         case EXCEPTION_ACCESS_VIOLATION:
             Info.Signal = osl_Signal_AccessViolation;
             break;
