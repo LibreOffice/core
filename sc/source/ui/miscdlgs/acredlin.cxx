@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 10:46:00 $
+ *  last change: $Author: dr $ $Date: 2002-09-25 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,73 +1870,47 @@ IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, pTi)
 
     return 0;
 }
+
 IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, pTi)
 {
-    const ScChangeAction* pScChangeAction=NULL;
-    ULONG nCount=pTheView->GetSelectionCount();
+    ScTabView* pTabView = pViewData->GetView();
 
-    SvLBoxEntry* pEntry=pTheView->FirstSelected();
-    ScRedlinData *pEntryData=NULL;
-    BOOL bAcceptFlag;
-    BOOL bRejectFlag;
+    BOOL bAcceptFlag = TRUE;
+    BOOL bRejectFlag = TRUE;
+    BOOL bContMark = FALSE;
 
-    bAcceptFlag=TRUE;
-    bRejectFlag=TRUE;
-
-    while(pEntry!=NULL)
+    pTabView->DoneBlockMode();  // clears old marking
+    SvLBoxEntry* pEntry = pTheView->FirstSelected();
+    while( pEntry )
     {
-/*      if(nCount!=1)
+        ScRedlinData* pEntryData = (ScRedlinData*) pEntry->GetUserData();
+        if( pEntryData )
         {
-            bAcceptFlag=bAcceptEnableFlag;
-            bRejectFlag=bRejectEnableFlag;
-        }
-        else
-        {
-            bAcceptFlag=TRUE;
-            bRejectFlag=TRUE;
-        }
-*/
-        pEntryData=(ScRedlinData *)(pEntry->GetUserData());
-        if(pEntryData!=NULL)
-        {
-            if(bRejectFlag) bRejectFlag=pEntryData->bIsRejectable;
-            if(bAcceptFlag) bAcceptFlag=pEntryData->bIsAcceptable;
-        }
-        else
-        {
-            bAcceptFlag=FALSE;
-            bRejectFlag=FALSE;
-        }
-        bAcceptEnableFlag=bAcceptFlag;
-        bRejectEnableFlag=bRejectFlag;
+            bRejectFlag &= pEntryData->bIsRejectable;
+            bAcceptFlag &= pEntryData->bIsAcceptable;
 
-        pEntry=pTheView->NextSelected(pEntry);
-    }
-
-    pEntry=pTheView->GetCurEntry();
-
-    if(pEntry!=NULL)
-    {
-        pEntryData=(ScRedlinData *)(pEntry->GetUserData());
-
-        if(pEntryData!=NULL)
-        {
-            if(bRejectFlag) bRejectFlag=pEntryData->bIsRejectable;
-            if(bAcceptFlag) bAcceptFlag=pEntryData->bIsAcceptable;
-
-            pScChangeAction=(ScChangeAction*) pEntryData->pData;
-            if(pScChangeAction && pScChangeAction->GetType()!=SC_CAT_DELETE_TABS
-                && (!pEntryData->bDisabled || pScChangeAction->IsVisible()))
+            const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
+            if( pScChangeAction && (pScChangeAction->GetType() != SC_CAT_DELETE_TABS) &&
+                    (!pEntryData->bDisabled || pScChangeAction->IsVisible()) )
             {
-                const ScBigRange& rRange = pScChangeAction->GetBigRange();
-                if(rRange.IsValid(pDoc) && IsActive())
+                const ScBigRange& rBigRange = pScChangeAction->GetBigRange();
+                if( rBigRange.IsValid( pDoc ) && IsActive() )
                 {
-                    ScRange aRef=rRange.MakeRange();
-                    ScTabView* pTabView=pViewData->GetView();
-                    pTabView->MarkRange(aRef);
+                    BOOL bSetCursor = !pTheView->NextSelected( pEntry );
+                    pTabView->MarkRange( rBigRange.MakeRange(), bSetCursor, bContMark );
+                    bContMark = TRUE;
                 }
             }
         }
+        else
+        {
+            bAcceptFlag = FALSE;
+            bRejectFlag = FALSE;
+        }
+        bAcceptEnableFlag = bAcceptFlag;
+        bRejectEnableFlag = bRejectFlag;
+
+        pEntry = pTheView->NextSelected( pEntry );
     }
 
     BOOL bEnable = pDoc->IsDocEditable() && !pDoc->GetChangeTrack()->IsProtected();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-25 14:41:37 $
+ *  last change: $Author: dr $ $Date: 2002-09-25 15:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,14 +1445,14 @@ void ScTabView::MarkDataArea( BOOL bIncludeCursor )
     SelectionChanged();
 }
 
-void ScTabView::MarkRange( const ScRange& rRange, BOOL bSetCursor )
+void ScTabView::MarkRange( const ScRange& rRange, BOOL bSetCursor, BOOL bContinue )
 {
     USHORT nTab = rRange.aStart.Tab();
     SetTabNo( nTab );
 
     HideAllCursors();
-    DoneBlockMode();        // alte Markierung aufheben vor dem Align
-    if (bSetCursor)         // Wenn Cursor gesetzt wird, immer auch alignen
+    DoneBlockMode( bContinue ); // bContinue==TRUE -> clear old mark
+    if (bSetCursor)             // Wenn Cursor gesetzt wird, immer auch alignen
     {
         USHORT nAlignX = rRange.aStart.Col();
         USHORT nAlignY = rRange.aStart.Row();

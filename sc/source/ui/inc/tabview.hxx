@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:08:39 $
+ *  last change: $Author: dr $ $Date: 2002-09-25 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ public:
     void            MarkDataArea( BOOL bIncludeCursor = TRUE );
     void            Unmark();
 
-    void            MarkRange( const ScRange& rRange, BOOL bSetCursor = TRUE );
+    void            MarkRange( const ScRange& rRange, BOOL bSetCursor = TRUE, BOOL bContinue = FALSE );
 
     BOOL            IsMarking( USHORT nCol, USHORT nRow, USHORT nTab ) const;
 
