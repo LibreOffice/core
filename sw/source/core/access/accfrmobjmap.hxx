@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjmap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:05:41 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class SwFrmOrObjMap : public _SwFrmOrObjMap
 
 public:
 
-    SwFrmOrObjMap( const Rectangle& rVisArea, const SwFrm *pFrm );
+    SwFrmOrObjMap( const SwRect& rVisArea, const SwFrm *pFrm );
 
     inline static sal_Bool IsSortingRequired( const SwFrm *pFrm );
 };

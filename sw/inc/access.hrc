@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 15:57:14 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,9 @@
 #define STR_ACCESS_REPLACEMENT_POSTIT       (RC_ACCESS_BEGIN + 16)
 #define STR_ACCESS_REPLACEMENT_FRAME        (RC_ACCESS_BEGIN + 17)
 #define STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS (RC_ACCESS_BEGIN + 18)
+#define STR_ACCESS_TABLE_DESC               (RC_ACCESS_BEGIN + 19)
 
-#define ACCESS_ACT_END  STR_ACCESS_REPLACEMENT_FRAME
+#define ACCESS_ACT_END  STR_ACCESS_TABLE_DESC
 
 #if ACCESS_ACT_END > RC_ACCESS_END
 #error Resource-Id Ueberlauf in #file, #line

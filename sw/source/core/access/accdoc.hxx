@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ public:
 
     SwAccessibleDocument(
         SwAccessibleMap *pMap );
+
+    void SetVisArea();
 
     //=====  XAccessibleContext  ==============================================
 

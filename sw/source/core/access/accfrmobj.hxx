@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2002-04-10 12:30:56 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,14 @@
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
 #endif
+#ifndef _CELLFRM_HXX
+#include <cellfrm.hxx>
+#endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
 #endif
 
 class SwFrmOrObj
@@ -98,6 +104,7 @@ public:
 
     inline sal_Bool IsAccessible() const;
     inline sal_Bool IsBoundAsChar() const;
+    inline sal_Bool IsVisibleChildrenOnly() const;
     inline SwRect GetBox() const;
     inline SwRect GetBounds() const;
 };
@@ -188,7 +195,10 @@ inline const SwFrm *SwFrmOrObj::GetSwFrm() const
 inline sal_Bool SwFrmOrObj::IsAccessible() const
 {
     // currently only SwFrms are accessible
-    return pFrm && pFrm->IsAccessibleFrm();
+    return pFrm && pFrm->IsAccessibleFrm() &&
+           ( !pFrm->IsCellFrm() ||
+             static_cast<const SwCellFrm *>( pFrm )->GetTabBox()
+                                                     ->GetSttNd() != 0 );
 }
 
 inline sal_Bool SwFrmOrObj::IsBoundAsChar() const
@@ -196,6 +206,14 @@ inline sal_Bool SwFrmOrObj::IsBoundAsChar() const
     // currently only SwFrms are accessible
     return pFrm && pFrm->IsFlyFrm() &&
            static_cast< const SwFlyFrm *>(pFrm)->IsFlyInCntFrm();
+}
+
+inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
+{
+    return !pFrm ||
+           !( pFrm->IsTabFrm() || pFrm->IsInTab() ||
+             (IsBoundAsChar() &&
+              static_cast< const SwFlyFrm *>(pFrm)->GetAnchor()->IsInTab()) );
 }
 
 inline SwRect SwFrmOrObj::GetBox() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,20 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
 SwAccessibleDocument::~SwAccessibleDocument()
 {
 }
+
+void SwAccessibleDocument::SetVisArea()
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwRect aOldVisArea( GetVisArea() );
+    const SwRect& rNewVisArea = GetMap()->GetVisArea();
+    if( aOldVisArea != rNewVisArea )
+    {
+        SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
+        ChildrenScrolled( GetFrm(), aOldVisArea );
+    }
+}
+
 
 Reference< XAccessible> SAL_CALL SwAccessibleDocument::getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException)

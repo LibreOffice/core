@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjslist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:06:09 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class SwFrmOrObjSList
 {
     friend class SwFrmOrObjSList_const_iterator;
 
-    Rectangle aVisArea;
+    SwRect aVisArea;
     const SwFrm *pFrm;  // The frame we are iterating over
     sal_Bool bVisibleOnly;
 
@@ -105,7 +105,7 @@ public:
     typedef SwFrmOrObjSList_const_iterator const_iterator;
 
     inline SwFrmOrObjSList( const SwFrm *pF );
-    inline SwFrmOrObjSList( const Rectangle& rVisArea, const SwFrm *pF );
+    inline SwFrmOrObjSList( const SwRect& rVisArea, const SwFrm *pF );
 
     inline const_iterator begin() const;
     inline const_iterator end() const;
@@ -153,12 +153,13 @@ inline SwFrmOrObjSList::SwFrmOrObjSList( const SwFrm *pF ) :
 {
 }
 
-inline SwFrmOrObjSList::SwFrmOrObjSList( const Rectangle& rVisArea,
+inline SwFrmOrObjSList::SwFrmOrObjSList( const SwRect& rVisArea,
                                              const SwFrm *pF ) :
     aVisArea( rVisArea ),
-    pFrm( pF ),
-    bVisibleOnly( sal_True )
+    pFrm( pF )
 {
+    SwFrmOrObj aFrm( pFrm );
+    bVisibleOnly = aFrm.IsVisibleChildrenOnly();
 }
 
 inline SwFrmOrObjSList_const_iterator SwFrmOrObjSList::begin() const

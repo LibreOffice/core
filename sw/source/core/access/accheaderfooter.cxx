@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,7 @@
 #ifndef _HFFRM_HXX
 #include <hffrm.hxx>
 #endif
-#ifndef _PAGEFRM_HXX
-#include <pagefrm.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
-#include <pagedesc.hxx>
-#endif
 
-#ifndef _FLDBAS_HXX
-#include <fldbas.hxx>
-#endif
 #ifndef _ACCHEADERFOOTER_HXX
 #include "accheaderfooter.hxx"
 #endif
@@ -159,13 +150,8 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription (void)
     sal_uInt16 nResId = AccessibleRole::HEADER == GetRole()
         ? STR_ACCESS_HEADER_DESC
         : STR_ACCESS_FOOTER_DESC ;
-    sal_uInt16 nPageNum = GetFrm()->GetVirtPageNum();
-    sal_uInt32 nFmt = GetFrm()->FindPageFrm()->GetPageDesc()
-                              ->GetNumType().GetNumberingType();
-    if( SVX_NUM_NUMBER_NONE == nFmt )
-        nFmt = SVX_NUM_ARABIC;
 
-    OUString sArg( FormatNumber( nPageNum, nFmt ) );
+    OUString sArg( GetFormattedPageNumber() );
 
     return GetResource( nResId, &sArg );
 }

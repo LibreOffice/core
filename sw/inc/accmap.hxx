@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:18:25 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include "viewsh.hxx"
+#endif
 
 class Rectangle;
 class SwFrm;
@@ -127,21 +130,25 @@ public:
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
 
-    ViewShell *GetShell() { return pVSh; }
+    ViewShell *GetShell() const { return pVSh; }
+    const SwRect& GetVisArea() const { return pVSh->VisArea(); }
 
     void RemoveContext( const SwFrm *pFrm );
 
-    void DisposeFrm( const SwFrm *pFrm, sal_Bool bRecursive=sal_False );
+    // Dispose frame and its children if bRecursive is set
+    void Dispose( const SwFrm *pFrm, sal_Bool bRecursive=sal_False );
 
-    void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+    void InvalidatePosOrSize( const SwFrm *pFrm, const SwRect& rOldFrm );
 
-    void InvalidateFrmContent( const SwFrm *pFrm );
+    void InvalidateContent( const SwFrm *pFrm );
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
 
     void SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext );
 
+    // Invalidate state of whole tree. If an action is open, this call
+    // is processed when the last action ends.
     void InvalidateStates( sal_uInt8 nStates );
 
     void FireEvents();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,40 +152,45 @@ protected:
     void SetParent( SwAccessibleContext *pParent );
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
 
-    void UpdateStateSet( sal_Bool bSetToDefunc=sal_False );
+    Window *GetWindow();
+    SwAccessibleMap *GetMap() { return pMap; }
 
-    // A child has been added while setting the vis area
-    virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
+    // Notify all children that the vis araea has changed.
+    // The SwFrm might belong to the current object or to any other child or
+    // grandchild.
+    void ChildrenScrolled( const SwFrm *pFrm, const SwRect& rOldVisArea );
 
-    // A child has been removed while setting the vis area
-    virtual sal_Bool ChildScrolledOut( const SwFrm *pFrm );
+    // The context's showing state changed. May only be called for context that
+    // exist even if they aren't visible.
+    void Scrolled( const SwRect& rOldVisArea );
 
     // A child has been moved while setting the vis area
-    virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
+    void ScrolledWithin( const SwRect& rOldVisArea );
 
-    // The editable state of a child should be checked
-    virtual sal_Bool CheckStatesChild( const SwFrm *pFrm, sal_uInt8 nStates );
+    // The has been added while setting the vis area
+    void ScrolledIn();
 
-    // A child shall be disposed
-    virtual sal_Bool DisposeChild( const SwFrm *pFrm,
-                                   sal_Bool bRecursive );
+    // The context has to be removed while setting the vis area
+    void ScrolledOut( const SwRect& rOldVisArea );
 
-public:
-    void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
+    // Invalidate the states of all children of the specified SwFrm. The
+    // SwFrm might belong the the current object or to any child or grandchild!
+    void InvalidateChildrenStates( const SwFrm *pFrm, sal_uInt8 nStates );
 
-    static ::rtl::OUString GetResource( sal_uInt16 nResId,
-                                 const ::rtl::OUString *pArg1 = 0,
-                                 const ::rtl::OUString *pArg2 = 0 );
-
-protected:
-    // Set states for getAccessibleStateSet.
-    // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
-    // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    // Dispose children of the specified SwFrm. The SwFrm might belong to
+    // the current object or to any other child or grandchild.
+    void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
+                                       sal_Bool bRecursive );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
     virtual void _InvalidateCursorPos();
+
+public:
+
+    void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
+
+protected:
 
     // broadcast visual data event
     void FireVisibleDataEvent();
@@ -193,8 +198,10 @@ protected:
     // broadcast state change event
     void FireStateChangedEvent( sal_Int16 nState, sal_Bool bNewState );
 
-    Window *GetWindow();
-    SwAccessibleMap *GetMap() { return pMap; }
+    // Set states for getAccessibleStateSet.
+    // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
+    // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
+    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ~SwAccessibleContext();
 
@@ -349,13 +356,13 @@ public:
     //====== thread safe C++ interface ========================================
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( sal_Bool bRecursive = sal_False );
+    void Dispose( sal_Bool bRecursive = sal_False );
 
     // The object has been moved by the layout
-    void PosChanged();
+    void InvalidatePosOrSize();
 
     // The object has been moved by the layout
-    void ChildPosChanged( const SwFrm *pFrm, const SwRect& rFrm );
+    void InvalidateChildPosOrSize( const SwFrm *pFrm, const SwRect& rFrm );
 
     // The content may have changed (but it hasn't tohave changed)
     void InvalidateContent();
@@ -363,15 +370,18 @@ public:
     // The caretPos has changed
     void InvalidateCursorPos();
 
-    // Scroll (update vis area)
-    virtual void SetVisArea( const Rectangle& rNewVisArea );
-
-    // Check editable state
-    void CheckStates( sal_uInt8 nStates );
+    // Check states
+    void InvalidateStates( sal_uInt8 nStates );
 
     const ::rtl::OUString& GetName() const { return sName; }
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
+
+    static ::rtl::OUString GetResource( sal_uInt16 nResId,
+                                 const ::rtl::OUString *pArg1 = 0,
+                                 const ::rtl::OUString *pArg2 = 0 );
+
+
 };
 
 // some heaviliy used exception support

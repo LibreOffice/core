@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:04:26 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,11 @@ sal_Bool SwAccessibleFrameBase::IsSelected()
     sal_Bool bRet = sal_False;
 
     DBG_ASSERT( GetMap(), "no map?" );
-    ViewShell *pVSh = GetMap()->GetShell();
+    const ViewShell *pVSh = GetMap()->GetShell();
     DBG_ASSERT( pVSh, "no shell?" );
     if( pVSh->ISA( SwFEShell ) )
     {
-        SwFEShell *pFESh = static_cast< SwFEShell * >( pVSh );
+        const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
         const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
         if( pFlyFrm == GetFrm() )
             bRet = sal_True;
@@ -143,7 +143,7 @@ void SwAccessibleFrameBase::GetStates(
     // SELECTABLE
     rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
-    // TODO: SELECTED
+    // SELECTED
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
@@ -221,14 +221,14 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
         Reference< XAccessible > xParent( GetWeakParent() );
         if( xParent.is() )
         {
-            SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
+            SwAccessibleContext *pAcc =
+                static_cast <SwAccessibleContext *>( xParent.get() );
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
             pAcc->FireAccessibleEvent( aEvent );
         }
     }
-
 }
 
 sal_Bool SwAccessibleFrameBase::HasCursor()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:04:45 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#ifndef _SV_GEN_HXX
-#include <vcl/gen.hxx>
-#endif
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
@@ -78,53 +75,38 @@
 
 class SwAccessibleFrame
 {
-    Rectangle aVisArea;
+    SwRect aVisArea;
     const SwFrm *pFrm;
 
-    static sal_Int32 GetChildCount( const Rectangle& rVisArea,
+    static sal_Int32 GetChildCount( const SwRect& rVisArea,
                                     const SwFrm *pFrm );
-    static SwFrmOrObj GetChild( const Rectangle& rVisArea,
+    static SwFrmOrObj GetChild( const SwRect& rVisArea,
                                   const SwFrm *pFrm,
                                   sal_Int32& rPos );
-    static sal_Bool GetChildIndex( const Rectangle& rVisArea,
+    static sal_Bool GetChildIndex( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     const SwFrmOrObj& rChild,
                                     sal_Int32& rPos );
-    static SwFrmOrObj GetChildAt( const Rectangle& rVisArea,
+    static SwFrmOrObj GetChildAt( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     const Point& rPos );
 
     static void MergeLowerBounds( SwRect& rBounds,
-                                  const Rectangle& rVisArea,
+                                  const SwRect& rVisArea,
                                   const SwFrm *pFrm );
 protected:
-
-    // A child has been added while setting the vis area
-    virtual sal_Bool ChildScrolledIn( const SwFrm *pFrm );
-
-    // A child has been removed while setting the vis area
-    virtual sal_Bool ChildScrolledOut( const SwFrm *pFrm );
-
-    // A child has been moved while setting the vis area
-    virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
-
-    // The editable state of a child should be checked
-    virtual sal_Bool CheckStatesChild( const SwFrm *pFrm, sal_uInt8 nStates );
-
-    // A child shall be disposed
-    virtual sal_Bool DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
 
     sal_Bool IsEditable( ViewShell *pVSh ) const;
 
     sal_Bool IsOpaque( ViewShell *pVSh ) const;
 
-    inline sal_Bool IsShowing( const Rectangle& rFrm ) const;
+    inline sal_Bool IsShowing( const SwRect& rFrm ) const;
     inline sal_Bool IsShowing( const SwFrm *pFrm ) const;
     inline sal_Bool IsShowing() const { return IsShowing( GetFrm() ); }
 
     void ClearFrm() { pFrm = 0; }
 
-    SwAccessibleFrame( const Rectangle& rVisArea,
+    SwAccessibleFrame( const SwRect& rVisArea,
                        const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
 
@@ -132,13 +114,14 @@ public:
     // Return the SwFrm this context is attached to.
     const SwFrm *GetFrm() const { return pFrm; };
 
+
     static const SwFrm *GetParent( const SwFrm *pFrm );
 
 protected:
 
     // Return the bounding box of the frame clipped to the vis area. If
     // no frame is specified, use this' frame.
-    Rectangle GetBounds( const SwFrm *pFrm=0 );
+    SwRect GetBounds( const SwFrm *pFrm=0 );
 
     // Return the upper that has a context attached. This might be
     // another one than the immediate upper.
@@ -151,28 +134,14 @@ protected:
     inline sal_Int32 GetChildIndex( const SwFrmOrObj& rChild ) const;
     inline SwFrmOrObj GetChildAt( const Point& rPos ) const;
 
-    static void SetVisArea( const SwFrm *pFrm,
-                            const Rectangle& rOldVisArea,
-                            const Rectangle& rNewVisArea,
-                            SwAccessibleFrame *pAcc = 0 );
-    virtual void SetVisArea( const Rectangle& rNewVisArea );
+    inline void SetVisArea( const SwRect& rNewVisArea );
+    const SwRect& GetVisArea() const { return aVisArea; }
 
-    static void CheckStatesChildren( const SwFrm *pFrm,
-                                  const Rectangle& rOldVisArea,
-                                 sal_uInt8 nStates,
-                                  SwAccessibleFrame *pAcc = 0 );
-    inline void CheckStatesChildren( sal_uInt8 nStates );
-    static void DisposeChildren( const SwFrm *pFrm,
-                                  const Rectangle& rOldVisArea,
-                                 sal_Bool bRecursive,
-                                  SwAccessibleFrame *pAcc = 0 );
-    inline void DisposeChildren( sal_Bool bRecursive );
 
-    const Rectangle& GetVisArea() const { return aVisArea; }
-
+    String GetFormattedPageNumber() const;
 };
 
-inline sal_Bool SwAccessibleFrame::IsShowing( const Rectangle& rFrm ) const
+inline sal_Bool SwAccessibleFrame::IsShowing( const SwRect& rFrm ) const
 {
     return rFrm.IsOver( aVisArea );
 }
@@ -208,15 +177,9 @@ inline SwFrmOrObj SwAccessibleFrame::GetChildAt( const Point& rPos ) const
     return GetChildAt( aVisArea, pFrm, rPos );
 }
 
-inline void SwAccessibleFrame::CheckStatesChildren( sal_uInt8 nStates )
+inline void SwAccessibleFrame::SetVisArea( const SwRect& rNewVisArea )
 {
-    CheckStatesChildren( GetFrm(), aVisArea, nStates, this );
+    aVisArea = rNewVisArea;
 }
-
-inline void SwAccessibleFrame::DisposeChildren( sal_Bool bRecursive )
-{
-    DisposeChildren( GetFrm(), aVisArea, bRecursive, this );
-}
-
 #endif
 

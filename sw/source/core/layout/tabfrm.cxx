@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 09:32:39 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 14:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2981,6 +2981,13 @@ SwCellFrm::~SwCellFrm()
     SwModify* pMod = GetFmt();
     if( pMod )
     {
+#ifdef ACCESSIBLE_LAYOUT
+        // At this stage the lower frames aren't destroyed already,
+        // therfor we have to do a recursive dispose.
+        ViewShell *pVSh = GetShell();
+        if( pVSh )
+            pVSh->Imp()->DisposeAccessibleFrm( this, sal_True );
+#endif
         pMod->Remove( this );           // austragen,
         if( !pMod->GetDepends() )
             delete pMod;                // und loeschen

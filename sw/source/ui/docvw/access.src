@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 15:58:12 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,4 +150,9 @@ String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
 {
     Text = "[Bullet]" ;
     Text [ english ] = "[Bullet]" ;
+};
+String STR_ACCESS_TABLE_DESC
+{
+    Text = "$(ARG1) auf Seite $(ARG2)" ;
+    Text [ english ] = "$(ARG1) on page $(ARG2)" ;
 };

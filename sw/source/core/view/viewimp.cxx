@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:11:48 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 14:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm, sal_Bool bRecursive )
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().DisposeFrm( pFrm, bRecursive );
+            pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, bRecursive );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
@@ -413,7 +413,8 @@ void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().MoveFrm( pFrm, rOldFrm );
+            pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm,
+                                                                 rOldFrm );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
@@ -426,7 +427,7 @@ void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().InvalidateFrmContent( pFrm );
+            pTmp->Imp()->GetAccessibleMap().InvalidateContent( pFrm );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }

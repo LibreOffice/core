@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #ifndef _ACCEMBEDDED_HXX
 #include <accembedded.hxx>
 #endif
+#ifndef _ACCCELL_HXX
+#include <acccell.hxx>
+#endif
+#ifndef _ACCTABLE_HXX
+#include <acctable.hxx>
+#endif
 #ifndef _FESH_HXX
 #include "fesh.hxx"
 #endif
@@ -115,6 +121,12 @@
 #endif
 #ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
+#endif
+#ifndef _CELLFRM_HXX
+#include <cellfrm.hxx>
+#endif
+#ifndef _TABFRM_HXX
+#include <tabfrm.hxx>
 #endif
 #ifndef _NDTYP_HXX
 #include <ndtyp.hxx>
@@ -152,6 +164,7 @@ public:
 
 };
 
+//------------------------------------------------------------------------------
 struct SwAccessibleEvent_Impl
 {
 public:
@@ -161,7 +174,7 @@ public:
 private:
     SwRect      aOldFrm;                // the old bounds for CHILD_POS_CHANGED
     WeakReference < XAccessible > xAcc; // The object that fires the event
-    const SwFrm *pFrm;                  // the child for CHILD_POS_CHANGED and
+    SwFrmOrObj  aFrmOrObj;              // the child for CHILD_POS_CHANGED and
                                         // the same as xAcc for any other
                                         // event type
     EventType   eType;                  // The event type
@@ -171,25 +184,26 @@ private:
 
 public:
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                             const SwFrm *pF ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ), nStates( 0 )
+                             const SwFrmOrObj& rFrmOrObj ) :
+        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), nStates( 0 )
     {}
-    SwAccessibleEvent_Impl( EventType eT, const SwFrm *pF ) :
-        eType( eT ), pFrm( pF ), nStates( 0 )
+    SwAccessibleEvent_Impl( EventType eT, const SwFrmOrObj& rFrmOrObj ) :
+        eType( eT ), aFrmOrObj( rFrmOrObj ), nStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::DISPOSE == eType,
                 "wrong event constructor, DISPOSE only" );
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                            const SwFrm *pF, const SwRect& rR ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ), aOldFrm( rR ), nStates( 0 )
+                            const SwFrmOrObj& rFrmOrObj, const SwRect& rR ) :
+        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), aOldFrm( rR ),
+        nStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == eType,
                 "wrong event constructor, CHILD_POS_CHANGED only" );
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
-                            const SwFrm *pF, sal_uInt8 nSt  ) :
-        eType( eT ), xAcc( pA ), pFrm( pF ), nStates( nSt )
+                            const SwFrmOrObj& rFrmOrObj, sal_uInt8 nSt  ) :
+        eType( eT ), xAcc( pA ), aFrmOrObj( rFrmOrObj ), nStates( nSt )
     {
         ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == eType,
                 "wrong event constructor, CARET_OR_STATES only" );
@@ -202,11 +216,11 @@ public:
 
     inline const SwRect& GetOldFrm() const { return aOldFrm; }
 
-    inline const SwFrm *GetFrm() const { return pFrm; }
+    inline const SwFrm *GetFrm() const { return aFrmOrObj.GetSwFrm(); }
 
     inline void SetStates( sal_uInt8 nSt ) { nStates |= nSt; }
     inline sal_Bool IsUpdateCursorPos() const { return (nStates & ACC_STATE_CARET) != 0; }
-    inline sal_Bool IsCheckStates() const { return (nStates & ACC_STATE_MASK) != 0; }
+    inline sal_Bool IsInvalidateStates() const { return (nStates & ACC_STATE_MASK) != 0; }
     inline sal_uInt8 GetStates() const { return nStates & ACC_STATE_MASK; }
     inline sal_uInt8 GetAllStates() const { return nStates; }
 };
@@ -221,7 +235,7 @@ inline ::vos::ORef < SwAccessibleContext >
     return xAccImpl;
 }
 
-
+//------------------------------------------------------------------------------
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
 
 class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
@@ -236,74 +250,73 @@ public:
     inline sal_Bool IsFiring() const { return bFiring; }
 };
 
+//------------------------------------------------------------------------------
 typedef ::std::map < const SwFrm *, SwAccessibleEventList_Impl::iterator, SwFrmFunc > _SwAccessibleEventMap_Impl;
 
 class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
 {
 };
 
-
-SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
-    pMap( 0  ),
-    pEvents( 0  ),
-    pEventMap( 0  ),
-    pVSh( pSh ),
-    nPara( 1 ),
-    nFootnote( 1 ),
-    nEndnote( 1 )
+//------------------------------------------------------------------------------
+static sal_Bool AreInSameTable( const Reference< XAccessible >& rAcc,
+                                 const SwFrm *pFrm )
 {
+    sal_Bool bRet = sal_False;
+
+    if( pFrm && pFrm->IsCellFrm() && rAcc.is() )
+    {
+        // Is it in the same table? We check that
+        // by comparing the last table frame in the
+        // follow chain, because that's cheaper than
+        // searching the first one.
+        SwAccessibleContext *pAccImpl =
+            static_cast< SwAccessibleContext *>( rAcc.get() );
+        if( pAccImpl->GetFrm()->IsCellFrm() )
+        {
+            const SwTabFrm *pTabFrm1 = pAccImpl->GetFrm()->FindTabFrm();
+            while( pTabFrm1->GetFollow() )
+                   pTabFrm1 = pTabFrm1->GetFollow();
+
+            const SwTabFrm *pTabFrm2 = pFrm->FindTabFrm();
+            while( pTabFrm2->GetFollow() )
+                   pTabFrm2 = pTabFrm2->GetFollow();
+
+            bRet = (pTabFrm1 == pTabFrm2);
+        }
+    }
+
+    return bRet;
 }
 
-SwAccessibleMap::~SwAccessibleMap()
+void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 {
-    Reference < XAccessible > xAcc;
+    ::vos::ORef < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
+    if( xAccImpl.isValid() )
     {
-        vos::OGuard aGuard( aMutex );
-        if( pMap )
+        switch( rEvent.GetType() )
         {
-            const SwRootFrm *pRootFrm = GetShell()->GetLayout();
-            SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
-            if( aIter != pMap->end() )
-                xAcc = (*aIter).second;
-            if( !xAcc.is() )
-                xAcc = new SwAccessibleDocument( this );
+        case SwAccessibleEvent_Impl::INVALID_CONTENT:
+            xAccImpl->InvalidateContent();
+            break;
+        case SwAccessibleEvent_Impl::POS_CHANGED:
+            xAccImpl->InvalidatePosOrSize();
+            break;
+        case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
+            xAccImpl->InvalidateChildPosOrSize( rEvent.GetFrm(),
+                                       rEvent.GetOldFrm() );
+            break;
+        case SwAccessibleEvent_Impl::DISPOSE:
+            ASSERT( xAccImpl.isValid(),
+                    "dispose event has been stored" );
+            break;
         }
-    }
-
-    SwAccessibleDocument *pAcc =
-        static_cast< SwAccessibleDocument * >( xAcc.get() );
-    pAcc->Dispose( sal_True );
-
-    {
-        vos::OGuard aGuard( aMutex );
-#ifndef PRODUCT
-        ASSERT( !pMap || pMap->empty(),
-                "Map should be empty after disposing the root frame" );
-        if( pMap )
+        if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
         {
-            SwAccessibleContextMap_Impl::iterator aIter = pMap->begin();
-            while( aIter != pMap->end() )
-            {
-                Reference < XAccessible > xTmp = (*aIter).second;
-                if( xTmp.is() )
-                {
-                    SwAccessibleContext *pTmp =
-                        static_cast< SwAccessibleContext * >( xTmp.get() );
-                }
-            }
+            if( rEvent.IsUpdateCursorPos() )
+                xAccImpl->InvalidateCursorPos();
+            if( rEvent.IsInvalidateStates() )
+                xAccImpl->InvalidateStates( rEvent.GetStates() );
         }
-#endif
-        delete pMap;
-        pMap = 0;
-    }
-
-    {
-        vos::OGuard aGuard( aEventMutex );
-        ASSERT( !(pEvents || pEventMap), "pending events" );
-        delete pEventMap;
-        pEventMap = 0;
-        delete pEvents;
-        pEvents = 0;
     }
 }
 
@@ -405,38 +418,6 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     }
 }
 
-void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
-{
-    ::vos::ORef < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
-    if( xAccImpl.isValid() )
-    {
-        switch( rEvent.GetType() )
-        {
-        case SwAccessibleEvent_Impl::INVALID_CONTENT:
-            xAccImpl->InvalidateContent();
-            break;
-        case SwAccessibleEvent_Impl::POS_CHANGED:
-            xAccImpl->PosChanged();
-            break;
-        case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
-            xAccImpl->ChildPosChanged( rEvent.GetFrm(),
-                                       rEvent.GetOldFrm() );
-            break;
-        case SwAccessibleEvent_Impl::DISPOSE:
-            ASSERT( xAccImpl.isValid(),
-                    "dispose event has been stored" );
-            break;
-        }
-        if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
-        {
-            if( rEvent.IsUpdateCursorPos() )
-                xAccImpl->InvalidateCursorPos();
-            if( rEvent.IsCheckStates() )
-                xAccImpl->CheckStates( rEvent.GetStates() );
-        }
-    }
-}
-
 void SwAccessibleMap::InvalidateCursorPosition(
         const Reference< XAccessible >& rAcc )
 {
@@ -454,6 +435,71 @@ void SwAccessibleMap::InvalidateCursorPosition(
     else
     {
         pAccImpl->InvalidateCursorPos();
+    }
+}
+
+
+SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
+    pMap( 0  ),
+    pEvents( 0  ),
+    pEventMap( 0  ),
+    pVSh( pSh ),
+    nPara( 1 ),
+    nFootnote( 1 ),
+    nEndnote( 1 )
+{
+}
+
+SwAccessibleMap::~SwAccessibleMap()
+{
+    Reference < XAccessible > xAcc;
+    {
+        vos::OGuard aGuard( aMutex );
+        if( pMap )
+        {
+            const SwRootFrm *pRootFrm = GetShell()->GetLayout();
+            SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pRootFrm );
+            if( aIter != pMap->end() )
+                xAcc = (*aIter).second;
+            if( !xAcc.is() )
+                xAcc = new SwAccessibleDocument( this );
+        }
+    }
+
+    SwAccessibleDocument *pAcc =
+        static_cast< SwAccessibleDocument * >( xAcc.get() );
+    pAcc->Dispose( sal_True );
+
+    {
+        vos::OGuard aGuard( aMutex );
+#ifndef PRODUCT
+        ASSERT( !pMap || pMap->empty(),
+                "Map should be empty after disposing the root frame" );
+        if( pMap )
+        {
+            SwAccessibleContextMap_Impl::iterator aIter = pMap->begin();
+            while( aIter != pMap->end() )
+            {
+                Reference < XAccessible > xTmp = (*aIter).second;
+                if( xTmp.is() )
+                {
+                    SwAccessibleContext *pTmp =
+                        static_cast< SwAccessibleContext * >( xTmp.get() );
+                }
+            }
+        }
+#endif
+        delete pMap;
+        pMap = 0;
+    }
+
+    {
+        vos::OGuard aGuard( aEventMutex );
+        ASSERT( !(pEvents || pEventMap), "pending events" );
+        delete pEventMap;
+        pEventMap = 0;
+        delete pEvents;
+        pEvents = 0;
     }
 }
 
@@ -510,7 +556,7 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
     {
         SwAccessibleDocument *pAcc =
             static_cast< SwAccessibleDocument * >( xAcc.get() );
-        pAcc->SetVisArea( GetShell()->VisArea().SVRect() );
+        pAcc->SetVisArea();
     }
 
     return xAcc;
@@ -579,6 +625,14 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         }
                     }
                     break;
+                case FRM_CELL:
+                    pAcc = new SwAccessibleCell( this,
+                                    static_cast< const SwCellFrm *>( pFrm ) );
+                    break;
+                case FRM_TAB:
+                    pAcc = new SwAccessibleTable( this,
+                                    static_cast< const SwTabFrm *>( pFrm ) );
+                    break;
                 }
                 xAcc = pAcc;
 
@@ -595,7 +649,8 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         pMap->insert( aEntry );
                     }
 
-                    if( pAcc->HasCursor() )
+                    if( pAcc->HasCursor() &&
+                        !AreInSameTable( pMap->xCursorContext, pFrm ) )
                     {
                         // If the new context has the focus, and if we know
                         // another context that had the focus, then the focus
@@ -673,39 +728,55 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
     }
 }
 
-void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm, sal_Bool bRecursive )
-{
-    if( pFrm->IsAccessibleFrm() )
-    {
-        Reference < XAccessible > xAcc;
 
+void SwAccessibleMap::Dispose( const SwFrm *pFrm, sal_Bool bRecursive )
+{
+    // Indeed, the following assert checks the frame's accessible flag,
+    // because that's the one that is evaluated in the layout. The frame
+    // might not be accessible anyway. That's the case for cell frames that
+    // contain further cells.
+    ASSERT( pFrm->IsAccessibleFrm(),
+            "non accessible frame should be disposed" );
+
+    SwFrmOrObj aFrmOrObj( pFrm );
+    Reference < XAccessible > xAcc;
+    if( aFrmOrObj.IsAccessible() )
+    {
+        // get accessible context for frame
         {
             vos::OGuard aGuard( aMutex );
 
             if( pMap )
             {
-                SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pFrm );
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    pMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != pMap->end() )
                     xAcc = (*aIter).second;
             }
         }
 
+        // remove events stored for the frame
         {
             vos::OGuard aGuard( aEventMutex );
             if( pEvents )
             {
                 SwAccessibleEventMap_Impl::iterator aIter =
-                    pEventMap->find( pFrm );
+                    pEventMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != pEventMap->end() )
                 {
                     SwAccessibleEvent_Impl aEvent(
-                                SwAccessibleEvent_Impl::DISPOSE, pFrm );
+                            SwAccessibleEvent_Impl::DISPOSE, aFrmOrObj );
                     AppendEvent( aEvent );
                 }
             }
         }
 
-        // Dispose when map mutex is not locked
+        // If the frame is accessible and there is a context for it, dispose
+        // the frame. If the frame is no context for it but disposing should
+        // take place recursive, the frame's children have to be disposed
+        // anyway, so we have to create the context then.
+        if( !xAcc.is() && bRecursive )
+            xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
         if( xAcc.is() )
         {
             SwAccessibleContext *pAccImpl =
@@ -715,9 +786,11 @@ void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm, sal_Bool bRecursive )
     }
 }
 
-void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
+void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
+                                           const SwRect& rOldFrm )
 {
-    if( pFrm->IsAccessibleFrm() )
+    SwFrmOrObj aFrmOrObj( pFrm );
+    if( aFrmOrObj.IsAccessible() )
     {
         Reference < XAccessible > xAcc;
         Reference < XAccessible > xParentAcc;
@@ -726,7 +799,8 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
 
             if( pMap )
             {
-                SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pFrm );
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    pMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != pMap->end() )
                 {
                     // If there is an accesible object already it is
@@ -737,7 +811,8 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                 {
                     // Otherwise we look if the parent is accessible.
                     // If not, there is nothing to do.
-                    const SwFrm *pParent = SwAccessibleFrame::GetParent( pFrm );
+                    const SwFrm *pParent =
+                        SwAccessibleFrame::GetParent( aFrmOrObj.GetSwFrm() );
 
                     if( pParent )
                     {
@@ -753,20 +828,19 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
 
         if( xAcc.is() )
         {
-            ASSERT( !rOldFrm.IsEmpty(),
-                    "new context has already a size" );
+            ASSERT( !rOldFrm.IsEmpty(), "context should have a size" );
             SwAccessibleContext *pAccImpl =
                 static_cast< SwAccessibleContext *>( xAcc.get() );
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::POS_CHANGED, pAccImpl,
-                    pFrm );
+                    aFrmOrObj );
                 AppendEvent( aEvent );
             }
             else
             {
-                pAccImpl->PosChanged();
+                pAccImpl->InvalidatePosOrSize();
             }
         }
         else if( xParentAcc.is() )
@@ -777,20 +851,22 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    pAccImpl, pFrm, rOldFrm );
+                    pAccImpl, aFrmOrObj, rOldFrm );
                 AppendEvent( aEvent );
             }
             else
             {
-                pAccImpl->ChildPosChanged( pFrm, rOldFrm );
+                pAccImpl->InvalidateChildPosOrSize( aFrmOrObj.GetSwFrm(),
+                                                    rOldFrm );
             }
         }
     }
 }
 
-void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
+void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
 {
-    if( pFrm->IsAccessibleFrm() )
+    SwFrmOrObj aFrmOrObj( pFrm );
+    if( aFrmOrObj.IsAccessible() )
     {
         Reference < XAccessible > xAcc;
         {
@@ -798,7 +874,8 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
 
             if( pMap )
             {
-                SwAccessibleContextMap_Impl::iterator aIter = pMap->find( pFrm );
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    pMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != pMap->end() )
                     xAcc = (*aIter).second;
             }
@@ -812,7 +889,7 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
             {
                 SwAccessibleEvent_Impl aEvent(
                     SwAccessibleEvent_Impl::INVALID_CONTENT, pAccImpl,
-                    pFrm );
+                    aFrmOrObj );
                 AppendEvent( aEvent );
             }
             else
@@ -825,23 +902,35 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
 
 void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
-    ViewShell *pVSh = GetShell();
-    if( pVSh->ISA( SwFEShell ) )
+    SwFrmOrObj aFrmOrObj( pFrm );
+    const ViewShell *pVSh = GetShell();
+    if( pVSh->ISA( SwCrsrShell ) )
     {
-        sal_uInt16 nObjCount;
-        SwFEShell *pFESh = static_cast< SwFEShell * >( pVSh );
-        const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
-        if( pFlyFrm )
+        const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
+        if( pCSh->IsTableMode() )
         {
-            pFrm = pFlyFrm;
+            while( aFrmOrObj.GetSwFrm() && !aFrmOrObj.GetSwFrm()->IsCellFrm() )
+                aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
         }
-        else if( (nObjCount = pFESh->IsObjSelected()) > 0 )
+        else if( pVSh->ISA( SwFEShell ) )
         {
-            pFrm = 0;
+            sal_uInt16 nObjCount;
+            const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
+            const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
+            if( pFlyFrm )
+            {
+                ASSERT( !pFrm || pFrm->FindFlyFrm() == pFlyFrm,
+                        "cursor is not contained in fly frame" );
+                aFrmOrObj = pFlyFrm;
+            }
+            else if( (nObjCount = pFESh->IsObjSelected()) > 0 )
+            {
+                aFrmOrObj = static_cast<const SwFrm *>( 0 );
+            }
         }
     }
 
-    ASSERT( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    ASSERT( aFrmOrObj.IsAccessible(), "frame is not accessible" );
 
     Reference < XAccessible > xOldAcc;
     Reference < XAccessible > xAcc;
@@ -854,12 +943,39 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             xOldAcc = pMap->xCursorContext;
             pMap->xCursorContext = xAcc;    // clear reference
 
-            if( pFrm && pFrm->IsAccessibleFrm() )
+            if( aFrmOrObj.IsAccessible() )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
-                    pMap->find( pFrm );
+                    pMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != pMap->end() )
                     xAcc = (*aIter).second;
+
+                // For cells, some extra thoughts are necessary,
+                // because invalidating the cursor for one cell
+                // invalidates the cursor for all cells of the same
+                // table. For this reason, we don't want to
+                // invalidate the cursor for the old cursor object
+                // and the new one if they are within the same table,
+                // because this would result in doing the work twice.
+                // Moreover, we have to make sure to invalidate the
+                // cursor even if the current cell has no accessible object.
+                // If the old cursor objects exists and is in the same
+                // table, its the best choice, because using it avoids
+                // an unnessarary cursor invalidation cycle when creating
+                // a new object for the current cell.
+                if( aFrmOrObj.GetSwFrm()->IsCellFrm() )
+                {
+                    if( xOldAcc.is() &&
+                         AreInSameTable( xOldAcc, aFrmOrObj.GetSwFrm() ) )
+                    {
+                        if( xAcc.is() )
+                            xOldAcc = xAcc; // avoid extra invalidation
+                        else
+                            xAcc = xOldAcc; // make sure ate least one
+                    }
+                    if( !xAcc.is() )
+                        xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
+                }
             }
         }
     }
@@ -895,7 +1011,7 @@ void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates )
     }
     else
     {
-        pAccImpl->CheckStates( nStates );
+        pAccImpl->InvalidateStates( nStates );
     }
 }
 
