@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:30:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1556,11 +1556,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 
             //Einschraenkungen wegen Kopf-/Fusszeilen
             if ( !( pLay->IsCompletePaint() &&
-                   ( pLay->GetFmt()->GetDoc()->IsHeadInBrowse() ||
-                     pLay->GetFmt()->GetDoc()->IsFootInBrowse() ||
-                     pLay->FindPageFrm()->FindFtnCont() )
-                  )
-               )
+                   pLay->FindPageFrm()->FindFtnCont() ) )
             {
                 bNoPaint = TRUE;
             }
