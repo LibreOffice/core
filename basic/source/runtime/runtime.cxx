@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,7 @@ SbiInstance::SbiInstance( StarBASIC* p )
     nErr     =
     nErl     = 0;
     bReschedule = TRUE;
+    bCompatibility = FALSE;
 }
 
 SbiInstance::~SbiInstance()
