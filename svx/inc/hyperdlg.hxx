@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: sj $ $Date: 2001-05-18 17:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ class SvxHlinkCtrl : public SfxControllerItem
 private :
     SvxHpLinkDlg *pParent;
 
-    SfxStatusForwarder aForwarder;
+    SfxStatusForwarder aOnlineForwarder;
+    SfxStatusForwarder aRdOnlyForwarder;
 
 public :
     SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
@@ -132,7 +133,17 @@ private:
     SfxBindings*        mpBindings;
     SfxItemSet*         mpItemSet;
 
-    BOOL                mbIsHTMLDoc;
+    sal_Bool            mbDummy1    : 1;
+    sal_Bool            mbDummy2    : 1;
+    sal_Bool            mbDummy3    : 1;
+    sal_Bool            mbDummy4    : 1;
+    sal_Bool            mbDummy5    : 1;
+    sal_Bool            mbDummy6    : 1;
+    sal_Bool            mbReadOnly  : 1;
+    sal_Bool            mbIsHTMLDoc : 1;
+
+    void*               mpDummy1;
+    void*               mpDummy2;
 
     DECL_LINK (ClickApplyHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );
@@ -146,7 +157,8 @@ public:
     ~SvxHpLinkDlg ();
 
     USHORT SetPage( SvxHyperlinkItem* pItem );
-    void   EnableInetBrowse( BOOL bEnable = TRUE );
+    void   EnableInetBrowse( sal_Bool bEnable = sal_True );
+    void   SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
     const BOOL IsHTMLDoc() const { return mbIsHTMLDoc; }
 
     SfxDispatcher* GetDispatcher() const { return mpBindings->GetDispatcher(); }
