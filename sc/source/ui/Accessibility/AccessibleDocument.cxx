@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:01:57 $
+ *  last change: $Author: sab $ $Date: 2002-09-30 08:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2114,8 +2114,10 @@ sal_Bool ScAccessibleDocument::IsTableSelected() const
     if(mpViewShell)
     {
         sal_uInt16 nTab(getVisibleTable());
-        mpViewShell->GetViewData()->GetMarkData().MarkToMulti();
-        if (mpViewShell->GetViewData()->GetMarkData().IsAllMarked(ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))))
+        //#103800#; use a copy of MarkData
+        ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
+        aMarkData.MarkToMulti();
+        if (aMarkData.IsAllMarked(ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))))
             bResult = sal_True;
     }
     return bResult;
