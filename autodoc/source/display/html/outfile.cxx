@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:45:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 // NOT FULLY DECLARED SERVICES
 #include <cosv/file.hxx>
 #include <udm/html/htmlitem.hxx>
+#include <toolkit/out_position.hxx>
+#include "strconst.hxx"
 
 
 using namespace csi;
@@ -73,77 +75,129 @@ using csi::xml::AnAttribute;
 
 
 #define CRLF "\n"
-    static const char s_StdStyle[] =
-//          "\ta { color: #444488; }" CRLF
-/*
-            "\ta.syntax { font-weight:bold; color: #444488; }" CRLF
-            "\ta.memberlink { font-weight:bold; color: #444488; }" CRLF
-            "\ta.objchapter { font-size:16pt; font-weight:bold }" CRLF
-            "\ta.inverse { font-size:12pt; color: #ffffff; }" CRLF
-            "\ta.inversebig { font-size:20pt; color: #ffffff; }" CRLF
-            "\th2 { font-size:18pt; }" CRLF
-            "\th2.inverse { font-size:18pt; color: #ffffff; }" CRLF
-            "\th3 { font-size:15pt;  }" CRLF
-            "\th3.inverse { font-size:15pt; color: #ffffff; }" CRLF
-            "\th4 { font-size:14pt; }" CRLF
-            "\th4.inverse { font-size:14pt; color: #ffffff; }" CRLF
-            "\tp { font-size:12pt; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tp.inverse { font-size:12pt; color: #ffffff; }" CRLF
-            "\tp.tagtitle { font-size:14pt; font-weight:bold; margin-top:7pt; margin-bottom:3pt; }" CRLF
-            "\tp.copyright {font-size: 10pt; font-style: italic; text-align: center}" CRLF
-            "\tpre.inverse { color: #ffffff; }" CRLF
-            "\tcode { color: #444488; }" CRLF
-*/
-            "\th1 { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }" CRLF
-            "\th2 { font-family:\"Arial\"; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }" CRLF
-            "\th3 { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }" CRLF
-            "\th4 { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tdl { margin-top:1pt; margin-bottom:1pt; }" CRLF
-            "\tdl.member { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }" CRLF
-            "\tdt { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tdt.member { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tdt.simple { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tdd { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
-            "\tdd.member { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }" CRLF
-            "\tp  { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }" CRLF
-            "\tpre { font-family: Times, serif; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }" CRLF
-            "\ttr { font-size:10pt; }" CRLF
-            "\ttd { font-size:10pt; }" CRLF
 
-//          "\t.TableHeadingColor     { background: #CCCCFF } /* Dark mauve */" CRLF
-//          "\t.TableSubHeadingColor  { background: #EEEEFF } /* Light mauve */" CRLF
-//          "\t.TableRowColor         { background: #FFFFFF } /* White */" CRLF
-//          "\t.FrameTitleFont   { font-size: normal; font-family: normal }" CRLF
-//          "\t.FrameHeadingFont { font-size: normal; font-family: normal }" CRLF
-//          "\t.FrameItemFont    { font-size: normal; font-family: normal }" CRLF
-//          "\ttd.NavBarCell1    { background-color:#EEEEFF;}/* Light mauve */" CRLF
-//          "\ttd.NavBarCell1Rev { background-color:#00008B;}/* Dark Blue */" CRLF
-//          "\tfont.NavBarFont1    { font-family: Arial, Helvetica, sans-serif; color:#000000;}" CRLF
-//          "\tfont.NavBarFont1Rev { font-family: Arial, Helvetica, sans-serif; color:#FFFFFF;}" CRLF
-//          "\t.NavBarCell2    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}" CRLF
-//          "\t.NavBarCell3    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}" CRLF
-            ;
+const char * const
+    C_sStdStyle =
+    "body   { background-color:#ffffff; }"CRLF
+    "h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }"CRLF
+    "h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }"CRLF
+    "h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }"CRLF
+    "h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "dl     { margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }"CRLF
+    "dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }"CRLF
+    "p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "tr     { font-size:10pt; }"CRLF
+    "td     { font-size:10pt; }"CRLF
+    CRLF
+    "dt.attention   { color:#dd0000; }"CRLF
+    CRLF
+    "div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }"CRLF
+    ".subtitle      { background-color:#ccccff; }"CRLF
+    CRLF
+    "td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "td.flagno      { font-family:Arial; font-size:8pt; }"CRLF
+    "td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    CRLF
+    "td.navimain, td.navimain a"CRLF
+    "               { background-color:#eeeeff; color:#000000;"CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "td.navimainself"CRLF
+    "               { background-color:#2222ad; color:#ffffff;"CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "td.navimainnone"CRLF
+    "               { background-color:#eeeeff; color:#000000;"CRLF
+    "                 font-family:Arial; font-size:12pt; }"CRLF
+    CRLF
+    "div.define     { font-family:Arial; background-color:#ccccff; }"CRLF
+    CRLF
+    ".nqclass       { color:#008800; }"CRLF
+    CRLF
+    "h3.help        { background-color:#eeeeff; margin-top:12pt; }"CRLF
+    CRLF
+    ".btpubl        { color:#33ff33; }"CRLF
+    ".btprot        { color:#cc9933; }"CRLF
+    ".btpriv        { color:#ff6666; }"CRLF
+    ".btvpubl       { color:#33ff33; font-style:italic; }"CRLF
+    ".btvprot       { color:#cc9933; font-style:italic; }"CRLF
+    ".btvpriv       { color:#ff6666; font-style:italic; }"CRLF
+    ".btself        { font-weight:bold; }"CRLF
+    ;
+
+
+const char * const
+    C_sCssExplanations =
+    "/* Explanation of CSS classes:"CRLF
+    CRLF
+    "dl.member       provides coloured frame for function descriptions."CRLF
+    "dd.member       makes the content of this frame white"CRLF
+    CRLF
+    "dt.attention    special colour for @attention remarks"CRLF
+    CRLF
+    "div.title       HTML page headline"CRLF
+    ".subtitle       headline of lists of members and similar"CRLF
+    CRLF
+    "                These are for the flagtables in classes:"CRLF
+    "td.flagname     Flag name."CRLF
+    "td.flagyes      flag value \"yes\""CRLF
+    "td.flagno       flag value \"no\""CRLF
+    "td.flagtext     other flag value"CRLF
+    CRLF
+    CRLF
+    "                These are for the main navigationbar:"CRLF
+    "td.navimain, td.navimain a"CRLF
+    "                Links in navibar."CRLF
+    "td.navimainself Text in navibar which refers to current page."CRLF
+    "td.navimainnone Text which links to nothing."CRLF
+    CRLF
+    CRLF
+    "div.define      Subtitles on the #define/macro descriptions page"CRLF
+    CRLF
+    ".nqclass        special color for classes in the qualification"CRLF
+    "                on top of type pages like in:"CRLF
+    "                ::nsp1::nsp2::_ClassXY_::"CRLF
+    CRLF
+    "h3.help         Subtitles on the help page"CRLF
+    CRLF
+    "                These are for the base class tree on class pages:"CRLF
+    ".btpubl         public base class"CRLF
+    ".btprot         protected"CRLF
+    ".btpriv         private"CRLF
+    ".btvpubl        virtual public"CRLF
+    ".btvprot        virtual protected"CRLF
+    ".btvpriv        virtual private"CRLF
+    ".btself         placeholder for currently displayed class"CRLF
+    CRLF
+    "*/"CRLF
+    ;
+
 
 
 HtmlDocuFile::HtmlDocuFile()
-//  :   // aBodyData
+    :   sFilePath(),
+        sTitle(),
+        sCopyright(),
+        nDepth(0),
+        aBodyData()
 {
-    aBodyData
-//      << new AnAttribute( "link", "#0000cc" )
-//      << new AnAttribute( "vlink", "#9999cc" )
-        << new AnAttribute( "bgcolor", "#ffffff" );
-
-    SetStyle(s_StdStyle);
 }
 
 void
-HtmlDocuFile::SetLocation( const csv::ploc::Path & i_rFilePath )
+HtmlDocuFile::SetLocation( const csv::ploc::Path &  i_rFilePath,
+                           uintt                    i_depthInOutputTree )
 {
     static StreamStr sPath_(1000);
     sPath_.seekp(0);
     i_rFilePath.Get( sPath_ );
 
     sFilePath = sPath_.c_str();
+    nDepth = i_depthInOutputTree;
 }
 
 void
@@ -153,14 +207,8 @@ HtmlDocuFile::SetTitle( const char * i_sTitle )
 }
 
 void
-HtmlDocuFile::SetStyle( const char * i_sStyle )
-{
-    sStyle = i_sStyle;
-}
-
-void
 HtmlDocuFile::SetBodyAttr( const char *        i_sAttrName,
-                            const char *        i_sAttrValue )
+                           const char *        i_sAttrValue )
 {
     aBodyData << new AnAttribute( i_sAttrName, i_sAttrValue );
 }
@@ -203,21 +251,44 @@ HtmlDocuFile::CreateFile()
     return true;
 }
 
+void
+HtmlDocuFile::WriteCssFile( const csv::ploc::Path & i_rFilePath )
+{
+    Cout() << "\nCreate css file ..." << Endl();
+
+    csv::File
+        aCssFile(i_rFilePath, csv::CFM_CREATE);
+    csv::OpenCloseGuard
+        aOpenGuard(aCssFile);
+    if (NOT aOpenGuard)
+    {
+        Cerr() << "Can't create file " << "cpp.css" << "." << Endl();
+        return;
+    }
+
+    aCssFile.write("/*      Autodoc css file for C++ documentation      */\n\n\n");
+    aCssFile.write(C_sStdStyle);
+    aCssFile.write("\n\n\n");
+    aCssFile.write(C_sCssExplanations);
+}
 
 void
 HtmlDocuFile::WriteHeader( csv::File & io_aFile )
 {
     static const char s1[] =
-        "<html>\n<head>\n<title>";
+        "<html>\n<head>\n"
+        "<title>";
     static const char s2[] =
-        "</title>\n<style>";
+        "</title>\n"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"";
     static const char s3[] =
-        "</style>\n</head>\n";
+        "\">\n</head>\n";
 
     io_aFile.write( s1 );
     io_aFile.write( sTitle );
     io_aFile.write( s2 );
-    io_aFile.write( sStyle );
+    io_aFile.write( output::get_UpLink(nDepth) );
+    io_aFile.write( C_sHFN_Css );
     io_aFile.write( s3 );
 }
 
@@ -247,54 +318,3 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
     }
     aBodyData.WriteOut(io_aFile);
 }
-
-
-
-
-
-
-
-#if 0
-
-
-#define CRLF "\n"
-    static const char sStyle[] =
-            "\ta { color: #444488; }" CRLF
-            "\ta.syntax { font-weight:bold; color: #444488; }" CRLF
-            "\ta.memberlink { font-weight:bold; color: #444488; }" CRLF
-            "\ta.objchapter { font-size:16pt; font-weight:bold }" CRLF
-            "\ta.inverse { font-size:12pt; color: #ffffff; }" CRLF
-            "\ta.inversebig { font-size:20pt; color: #ffffff; }" CRLF
-            "\th2 { font-size:18pt; }" CRLF
-            "\th2.inverse { font-size:18pt; color: #ffffff; }" CRLF
-            "\th3 { font-size:15pt;  }" CRLF
-            "\th3.inverse { font-size:15pt; color: #ffffff; }" CRLF
-            "\th4 { font-size:14pt; }" CRLF
-            "\th4.inverse { font-size:14pt; color: #ffffff; }" CRLF
-            "\tdt { margin-top:3pt; margin-bottom:1pt; }" CRLF
-            "\tdd { margin-top:1pt; margin-bottom:1pt; }" CRLF
-            "\tp { font-size:12pt; margin-top:2pt; margin-bottom:1pt; }" CRLF
-            "\tp.inverse { font-size:12pt; color: #ffffff; }" CRLF
-            "\tp.tagtitle { font-size:14pt; font-weight:bold; margin-top:7pt; margin-bottom:3pt; }" CRLF
-            "\tp.copyright {font-size: 10pt; font-style: italic; text-align: center}" CRLF
-            "\tpre.inverse { color: #ffffff; }" CRLF
-            "\tcode { color: #444488; }" CRLF
-            ".TableHeadingColor     { background: #CCCCFF } /* Dark mauve */" CRLF
-            ".TableSubHeadingColor  { background: #EEEEFF } /* Light mauve */" CRLF
-            ".TableRowColor         { background: #FFFFFF } /* White */" CRLF
-            ".FrameTitleFont   { font-size: normal; font-family: normal }" CRLF
-            ".FrameHeadingFont { font-size: normal; font-family: normal }" CRLF
-            ".FrameItemFont    { font-size: normal; font-family: normal }" CRLF
-            ".NavBarCell1    { background-color:#EEEEFF;}/* Light mauve */" CRLF
-            ".NavBarCell1Rev { background-color:#00008B;}/* Dark Blue */" CRLF
-            ".NavBarFont1    { font-family: Arial, Helvetica, sans-serif; color:#000000;}" CRLF
-            ".NavBarFont1Rev { font-family: Arial, Helvetica, sans-serif; color:#FFFFFF;}" CRLF
-            ".NavBarCell2    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}" CRLF
-            ".NavBarCell3    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}" CRLF;
-    static const char sBodyAttrs[] =
-            "link=\"#444488\" vlink=\"#444488\" bgcolor=\"#ffffff\"";
-
-
-
-#endif // 0
-
