@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-14 12:28:43 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 17:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,12 +832,62 @@ FmFormShell* FmXFormView::GetFormShell() const
     return m_pView ? m_pView->GetFormShell() : NULL;
 }
 // -----------------------------------------------------------------------------
-void FmXFormView::AutoFocus()
+void FmXFormView::AutoFocus( sal_Bool _bSync )
 {
     if (m_nAutoFocusEvent)
           Application::RemoveUserEvent(m_nAutoFocusEvent);
-    m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
+
+    if ( _bSync )
+        OnAutoFocus( NULL );
+    else
+        m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
 }
+// -----------------------------------------------------------------------------
+static Reference< XControl > lcl_firstFocussableControl( const Sequence< Reference< XControl > >& _rControls )
+{
+    Reference< XControl > xReturn;
+
+    // loop through all the controls
+    const Reference< XControl >* pControls = _rControls.getConstArray();
+    const Reference< XControl >* pControlsEnd = _rControls.getConstArray() + _rControls.getLength();
+    for ( ; pControls != pControlsEnd; ++pControls )
+    {
+        try
+        {
+            // check the class id of the control model
+            sal_Int16 nClassId = FormComponentType::CONTROL;
+
+            Reference< XPropertySet > xModelProps;
+            if ( pControls->is() )
+                xModelProps = xModelProps.query( (*pControls)->getModel() );
+            if ( xModelProps.is() )
+                xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+
+            // controls which are not focussable
+            if  (   ( FormComponentType::CONTROL != nClassId )
+                &&  ( FormComponentType::IMAGEBUTTON != nClassId )
+                &&  ( FormComponentType::GROUPBOX != nClassId )
+                &&  ( FormComponentType::FIXEDTEXT != nClassId )
+                &&  ( FormComponentType::HIDDENCONTROL != nClassId )
+                &&  ( FormComponentType::IMAGECONTROL != nClassId )
+                )
+            {
+                xReturn = *pControls;
+                break;
+            }
+        }
+        catch( const Exception& e )
+        {
+            e;  // make compiler happy
+        }
+
+        if ( !xReturn.is() && _rControls.getLength() )
+            xReturn = _rControls[0];
+    }
+
+    return xReturn;
+}
+
 // -----------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
 {
@@ -867,12 +917,9 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
             Sequence< Reference< XControl > > aControls;
             if (xTabControllerModel.is())
                 aControls = xTabControllerModel->getControls();
-            Reference< XControl > xFirstControl;
-            if (aControls.getLength())
-                xFirstControl = aControls[0];
 
             // set the focus to this first control
-            Reference< XWindow > xControlWindow(xFirstControl, UNO_QUERY);
+            Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
             if (xControlWindow.is())
                 xControlWindow->setFocus();
 
