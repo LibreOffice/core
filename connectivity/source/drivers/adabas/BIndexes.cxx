@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-12 17:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
                     aName == ::rtl::OUString::createFromAscii("SYSPRIMARYKEYINDEX"),
                     xRow->getShort(7) == IndexType::CLUSTERED);
                 xRet = pRet;
+                break;
             }
         }
     }
