@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:55:39 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,12 +629,13 @@ void SwFldFuncPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(FALSE);
     aSelectionLB.Clear();
 
-    SvStringsDtor& rLst = GetFldMgr().GetSubTypes(nTypeId);
-    USHORT nCount = rLst.Count();
+    SvStringsDtor aLst;
+    GetFldMgr().GetSubTypes(nTypeId, aLst);
+    USHORT nCount = aLst.Count();
 
     for (USHORT i = 0; i < nCount; ++i)
     {
-        USHORT nPos = aSelectionLB.InsertEntry(*rLst[i]);
+        USHORT nPos = aSelectionLB.InsertEntry(*aLst[i]);
         aSelectionLB.SetEntryData(nPos, (void*)i);
     }
 
