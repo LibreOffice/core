@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 08:20:16 $
+#   last change: $Author: rt $ $Date: 2004-09-20 09:51:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,10 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
+        $(SLO)$/futempl.obj		\
         $(SLO)$/futext2.obj		\
         $(SLO)$/fuinsfil.obj	\
-        $(SLO)$/fuinsert.obj	
+        $(SLO)$/fuinsert.obj
 
 SLOFILES = \
         $(SLO)$/fuformatpaintbrush.obj	\
@@ -159,7 +160,7 @@ SLOFILES = \
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \
-        $(SLO)$/undoback.obj    
+        $(SLO)$/undoback.obj
 
 .IF "$(GUI)" == "WNT"
 
