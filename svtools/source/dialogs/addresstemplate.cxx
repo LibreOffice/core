@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-19 07:04:44 $
+ *  last change: $Author: fs $ $Date: 2001-07-19 12:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,8 @@ namespace svt
         m_aDatasource.SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
         m_aOK.SetClickHdl(LINK(this, AddressBookSourceDialog, OnOkClicked));
 
+        m_aDatasource.SetDropDownLineCount(10);
+
         // initialize the field controls
         resetFields();
         m_aFieldScroller.SetThumbPos(0);
@@ -564,6 +566,9 @@ namespace svt
             return;
         }
 
+        // the currently selected table
+        ::rtl::OUString sOldTable = m_aTable.GetText();
+
         m_aTable.Clear();
 
         m_xCurrentDatasourceTables= NULL;
@@ -613,11 +618,21 @@ namespace svt
             return;
         }
 
+        sal_Bool bKnowOldTable = sal_False;
         // fill the table list
         const ::rtl::OUString* pTableNames = aTableNames.getConstArray();
         const ::rtl::OUString* pEnd = pTableNames + aTableNames.getLength();
         for (;pTableNames != pEnd; ++pTableNames)
+        {
             m_aTable.InsertEntry(*pTableNames);
+            if (0 == pTableNames->compareTo(sOldTable))
+                bKnowOldTable = sal_True;
+        }
+
+        // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
+        if (!bKnowOldTable)
+            sOldTable = ::rtl::OUString();
+        m_aTable.SetText(sOldTable);
 
         resetFields();
     }
