@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-09 15:43:46 $
+ *  last change: $Author: obr $ $Date: 2002-04-30 13:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <dndevdis.hxx>
 #include <dndlcon.hxx>
+#include <window.h>
 
 #include <vos/mutex.hxx>
 #include <svapp.hxx>
@@ -299,6 +300,32 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 
 //==================================================================================================
+// DNDEventDispatcher::dragGestureRecognized
+//==================================================================================================
+
+void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
+    throw(RuntimeException)
+{   MutexGuard aImplGuard( m_aMutex );
+
+    Point origin( dge.DragOriginX, dge.DragOriginY );
+    sal_Int32 nListeners;
+
+    // find the window that is toplevel for this coordinates
+    OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    Window * pChildWindow = m_pTopWindow->ImplFindWindow( origin );
+
+    if( NULL == pChildWindow )
+        pChildWindow = m_pTopWindow;
+
+    while( pChildWindow->ImplGetClientWindow() )
+        pChildWindow = pChildWindow->ImplGetClientWindow();
+
+    aSolarGuard.clear();
+
+    fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
+}
+
+//==================================================================================================
 // DNDEventDispatcher::disposing
 //==================================================================================================
 
@@ -484,6 +511,54 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
         // release UI lock
         pWindow->DecrementLockCount();
     }
+
+    return n;
+}
+
+//==================================================================================================
+// DNDEventDispatcher::fireDragGestureRecognized
+//==================================================================================================
+
+sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
+    const Reference< XDragSource >& xSource, const Any event,
+    const Point& rOrigin, const sal_Int8 nDragAction
+)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 n = 0;
+
+    if( pWindow && pWindow->IsInputEnabled() )
+    {
+        OClearableGuard aGuard( Application::GetSolarMutex() );
+
+        // query DropTarget from window
+        Reference< XDragGestureRecognizer > xDragGestureRecognizer = pWindow->GetDragGestureRecognizer();
+
+        if( xDragGestureRecognizer.is() )
+        {
+            // retrieve relative mouse position
+            Point relLoc = pWindow->ImplFrameToOutput( rOrigin );
+            aGuard.clear();
+
+            n = static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent(
+                nDragAction, relLoc.X(), relLoc.Y(), xSource, event );
+        }
+
+        // release UI lock
+        pWindow->DecrementLockCount();
+    }
+
+#ifdef REMOTE_APPSERVER
+
+     if( ! pWindow->ImplGetFrameData()->mbInternalDragGestureRecognizer )
+     {
+        if( xSource.is() )
+        {
+            xSource->startDrag( DragGestureEvent(), 0, 0, 0, Reference< XTransferable >(), Reference< XDragSourceListener > () );
+        }
+     }
+
+#endif
 
     return n;
 }
