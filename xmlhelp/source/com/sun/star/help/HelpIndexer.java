@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:07:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:37:15 $
  *
  *  The Contents of this file are made available subject to tUhe terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public class HelpIndexer {
             String fileName =
                 installDirectory + _language + File.separator + _module + ".db";
 
-            table.open(fileName, null, Db.DB_BTREE, Db.DB_RDONLY, 0644);
+            table.open(null,fileName, null, Db.DB_BTREE, Db.DB_RDONLY, 0644);
             Dbc cursor = table.cursor(null, 0);
             StringDbt key = new StringDbt();
             StringDbt data = new StringDbt();
@@ -440,7 +440,7 @@ public class HelpIndexer {
                         + _module
                         + ".key";
 
-                table.open(fileName, null, Db.DB_BTREE, Db.DB_CREATE, 0644);
+                table.open(null,fileName, null, Db.DB_BTREE, Db.DB_CREATE, 0644);
 
                 for (int i = 0; i < list.length; ++i) {
                     Data data = (Data) _hash.get(list[i]);
@@ -475,7 +475,7 @@ public class HelpIndexer {
                     + _module
                     + ".ht";
 
-            table.open(fileName, null, Db.DB_BTREE, Db.DB_CREATE, 0644);
+            table.open(null,fileName, null, Db.DB_BTREE, Db.DB_CREATE, 0644);
 
             for (int i = 0; i < list.length; ++i) {
                 String data = (String) _hashHelptext.get(list[i]);
