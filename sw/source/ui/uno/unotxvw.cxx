@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 10:13:04 $
+ *  last change: $Author: os $ $Date: 2001-06-05 07:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,12 @@ SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 /* -----------------04.11.98 15:32-------------------
  *
  * --------------------------------------------------*/
-sal_Bool lcl_FindObjInGroup(uno::Reference< awt::XControl > & xRet, SdrObjGroup* pGroup, const Reference< awt::XControlModel > & xModel, Window* pWin)
+sal_Bool lcl_FindObjInGroup(
+    uno::Reference< awt::XControl > & xRet,
+    SdrObjGroup* pGroup,
+    const Reference< awt::XControlModel > & xModel,
+    Window* pWin,
+    SdrObject*& rpFound)
 {
     SdrObjList* pList = pGroup->GetSubList();
     sal_uInt32 nCount = pList->GetObjCount();
@@ -229,12 +234,13 @@ sal_Bool lcl_FindObjInGroup(uno::Reference< awt::XControl > & xRet, SdrObjGroup*
             if( xCM.is() && xModel == xCM )
             {
                 xRet = pFormObj->GetUnoControl( pWin );
+                rpFound = pObj;
                 break;
             }
         }
         else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pObj )))
         {
-            if(lcl_FindObjInGroup(xRet, pGroup, xModel, pWin))
+            if(lcl_FindObjInGroup(xRet, pGroup, xModel, pWin, rpFound))
                 break;
         }
     }
@@ -454,8 +460,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     rSh.HideCrsr();
                     rSh.EnterSelFrmMode();
                 }
+                return sal_True;
             }
-            return sal_True;
         }
 
         Reference< text::XTextTable >  xTbl(xInterface, uno::UNO_QUERY);;
@@ -474,6 +480,40 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             return sal_True;
         }
 
+        SwXCell* pCell = (SwXCell*)
+                xIfcTunnel->getSomething(SwXCell::getUnoTunnelId());
+        if(pCell)
+        {
+            SwFrmFmt* pTblFrmFmt = pCell->GetFrmFmt();
+            if(pTblFrmFmt && pTblFrmFmt->GetDoc() == pDoc)
+            {
+                SwTableBox* pBox = pCell->GetTblBox();
+                SwTable* pTable = SwTable::FindTable( pTblFrmFmt );
+                pBox = SwXCell::FindBox(pTable, pBox);
+                if(pBox)
+                {
+                    const SwStartNode* pSttNd = pBox->GetSttNd();
+                    SwPosition aPos(*pSttNd);
+                    SwPaM aPam(aPos);
+                    aPam.Move(fnMoveForward, fnGoNode);
+                    rSh.EnterStdMode();
+                    rSh.SetSelection(aPam);
+                    return sal_True;
+                }
+            }
+        }
+        SwXCellRange* pRange = (SwXCellRange*)
+                xIfcTunnel->getSomething(SwXCellRange::getUnoTunnelId());
+        if(pRange)
+        {
+           const SwUnoCrsr* pUnoCrsr = pRange->GetTblCrsr();
+           if(pUnoCrsr)
+           {
+                rSh.EnterStdMode();
+                rSh.SetSelection(*pUnoCrsr);
+                return sal_True;
+           }
+        }
         Reference< text::XTextContent >  xBkm(xInterface, uno::UNO_QUERY);;
 
         if(xBkm.is() && xIfcTunnel.is())
@@ -493,8 +533,25 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 return sal_True;
             }
         }
-        // IndexMark, sdbcx::Index, TextField, Draw, Section, text::Footnote, text::Paragraph
+        // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
         //
+
+        // detect controls
+
+        Reference< awt::XControlModel > xCtrlModel(xInterface, UNO_QUERY);
+        if(xCtrlModel.is())
+        {
+            Reference<awt::XControl> XControl;
+            SdrObject* pObj = GetControl(xCtrlModel, XControl);
+            if(pObj)
+            {
+                SdrView* pDrawView = rSh.GetDrawView();
+                SdrPageView* pPV = pDrawView->GetPageViewPvNum(0);
+                if ( pPV && pObj->GetPage() == pPV->GetPage() )
+                    pDrawView->MarkObj( pObj, pPV );
+                return sal_True;
+            }
+        }
 
         Reference< drawing::XShapes >  xShapeColl( xInterface, uno::UNO_QUERY );
         Reference< beans::XPropertySet >  xTmpProp(xInterface, uno::UNO_QUERY);
@@ -713,15 +770,14 @@ void SwXTextView::removeSelectionChangeListener(
     if(!bRemoved)
         throw uno::RuntimeException();
 }
-/*-- 17.12.98 09:34:27---------------------------------------------------
+/* -----------------------------01.06.01 14:41--------------------------------
 
-  -----------------------------------------------------------------------*/
-Reference< awt::XControl >  SwXTextView::getControl(const Reference< awt::XControlModel > & xModel)
-        throw( container::NoSuchElementException, uno::RuntimeException )
+ ---------------------------------------------------------------------------*/
+SdrObject* SwXTextView::GetControl(
+        const Reference< awt::XControlModel > & xModel,
+        Reference< ::com::sun::star::awt::XControl >& xToFill  )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference< awt::XControl >  xRet;
-
+    SdrObject* pRet = 0;
     ViewShell *pVSh = 0;
     SwView* pView = ((SwXTextView*)this)->GetView();
     if(pView)
@@ -734,26 +790,37 @@ Reference< awt::XControl >  SwXTextView::getControl(const Reference< awt::XContr
             sal_uInt32 nCount = pPage->GetObjCount();
             for( sal_uInt32 i=0; i< nCount; i++ )
             {
-                SdrObject* pObj = pPage->GetObj(i);
-                SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
+                pRet = pPage->GetObj(i);
+                SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pRet );
                 SdrObjGroup* pGroup;
                 if( pFormObj )
                 {
                     Reference< awt::XControlModel >  xCM = pFormObj->GetUnoControlModel();
                     if( xCM.is() && xModel == xCM )
                     {
-                        xRet = pFormObj->GetUnoControl( pWin );
+                        xToFill = pFormObj->GetUnoControl( pWin );
                         break;
                     }
                 }
-                else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pObj )))
+                else if(0 != (pGroup = PTR_CAST( SdrObjGroup, pRet )))
                 {
-                    if(lcl_FindObjInGroup(xRet, pGroup, xModel, pWin))
+                    if(lcl_FindObjInGroup(xToFill, pGroup, xModel, pWin, pRet))
                         break;
                 }
             }
         }
     }
+    return pRet;
+}
+/*-- 17.12.98 09:34:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Reference< awt::XControl >  SwXTextView::getControl(const Reference< awt::XControlModel > & xModel)
+        throw( container::NoSuchElementException, uno::RuntimeException )
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    Reference< awt::XControl >  xRet;
+    GetControl(xModel, xRet);
     return xRet;
 }
 /*-- 17.12.98 09:34:28---------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 14:58:19 $
+ *  last change: $Author: os $ $Date: 2001-06-05 07:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,11 @@ class SwXTextView :
     SwView*                 pView;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *         pxViewSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextViewCursor > *   pxTextViewCursor;
+
+    SdrObject* GetControl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model,
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xToFill  );
+
 
 public:
     SwXTextView(SwView* pSwView);

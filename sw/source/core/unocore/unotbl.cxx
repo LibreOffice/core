@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-05-28 13:42:31 $
+ *  last change: $Author: os $ $Date: 2001-06-05 07:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,6 +730,29 @@ SwXCell::SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode) :
 SwXCell::~SwXCell()
 {
 
+}
+/* -----------------------------10.03.00 18:02--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+/* -----------------------------10.03.00 18:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
+    throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    else
+        return SwXText::getSomething(rId);
 }
 /* -----------------------------18.05.00 10:18--------------------------------
 
@@ -4140,6 +4163,18 @@ sal_uInt16 SwXCellRange::getRowCount(void)
 {
     return aRgDesc.nBottom - aRgDesc.nTop + 1;
 }
+/* -----------------------------05.06.01 09:19--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
+{
+    const SwUnoCrsr* pRet = 0;
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pFmt)
+        pRet = pTblCrsr;
+    return pRet;
+}
+
 /*-- 11.12.98 14:27:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/

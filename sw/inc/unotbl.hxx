@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:43:33 $
+ *  last change: $Author: os $ $Date: 2001-06-05 07:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,6 @@ class SwXCell : public SwXCellBaseClass,
     SwTableBox*             pBox;       // only set in non-XML import
     const SwStartNode*      pStartNode; // only set in XML import
 
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
     sal_Bool                            IsValid();
@@ -141,6 +139,11 @@ public:
     virtual ~SwXCell();
 
     TYPEINFO();
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    //XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
@@ -187,9 +190,11 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    const SwTableBox*   GetTblBox()const {return pBox;}
+    SwTableBox*   GetTblBox()const {return pBox;}
     static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName = 0);
     static SwTableBox*  FindBox(SwTable* pTable, SwTableBox* pBox);
+
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 /* -----------------27.06.98 15:40-------------------
  *
@@ -498,6 +503,8 @@ public:
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_uInt16      getRowCount(void);
     sal_uInt16      getColumnCount(void);
+
+    const SwUnoCrsr* GetTblCrsr() const;
 };
 /* -----------------03.02.99 07:31-------------------
  *
