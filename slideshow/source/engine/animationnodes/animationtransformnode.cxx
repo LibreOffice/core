@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ *  $RCSfile: animationtransformnode.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:03:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// must be first
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include <animationtransformnode.hxx>
+#include <animationfactory.hxx>
+#include <activitiesfactory.hxx>
+
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#endif
+
+
+using namespace ::com::sun::star;
+
+namespace presentation
+{
+    namespace internal
+    {
+        AnimationTransformNode::AnimationTransformNode( const uno::Reference< animations::XAnimationNode >& xNode,
+                                                        const BaseContainerNodeSharedPtr&                   rParent,
+                                                        const NodeContext&                                  rContext ) :
+            ActivityAnimationBaseNode( xNode, rParent, rContext ),
+            mxTransformNode( xNode, uno::UNO_QUERY_THROW )
+        {
+        }
+
+        void AnimationTransformNode::dispose()
+        {
+            mxTransformNode.clear();
+
+            ActivityAnimationBaseNode::dispose();
+        }
+
+        bool AnimationTransformNode::init()
+        {
+            if( !ActivityAnimationBaseNode::init() )
+                return false;
+
+            try
+            {
+                // TODO(F2): For restart functionality, we must regenerate activities,
+                // since they are not able to reset their state (or implement _that_)
+                getActivity() = createTransformActivity();
+            }
+            catch( uno::Exception& )
+            {
+                // catch and ignore. We later handle empty activities, but for
+                // other nodes to function properly, the core functionality of
+                // this node must remain up and running.
+            }
+
+            return true;
+        }
+
+#if defined(VERBOSE) && defined(DBG_UTIL)
+        const char* AnimationTransformNode::getDescription() const
+        {
+            return "AnimationTransformNode";
+        }
+#endif
+
+        AnimationActivitySharedPtr AnimationTransformNode::createTransformActivity()
+        {
+            ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
+
+            const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
+
+            const AttributableShapeSharedPtr& rShape( getShape() );
+
+            switch( nTransformType )
+            {
+                default:
+                    ENSURE_AND_THROW( false,
+                                      "AnimationTransformNode::createTransformActivity(): Unknown transform type" );
+
+                case animations::AnimationTransformType::TRANSLATE:
+                    // FALLTHROUGH intended
+                case animations::AnimationTransformType::SCALE:
+                    return ActivitiesFactory::createAnimateActivity( aParms,
+                                                                     AnimationFactory::createPairPropertyAnimation(
+                                                                         rShape,
+                                                                         getContext().mpLayerManager,
+                                                                         nTransformType ),
+                                                                     getXAnimateNode() );
+
+                case animations::AnimationTransformType::ROTATE:
+                    return ActivitiesFactory::createAnimateActivity( aParms,
+                                                                     AnimationFactory::createNumberPropertyAnimation(
+                                                                         ::rtl::OUString(
+                                                                             RTL_CONSTASCII_USTRINGPARAM("Rotate") ),
+                                                                         rShape,
+                                                                         getContext().mpLayerManager ),
+                                                                     getXAnimateNode() );
+
+                case animations::AnimationTransformType::SKEWX:
+                    return ActivitiesFactory::createAnimateActivity( aParms,
+                                                                     AnimationFactory::createNumberPropertyAnimation(
+                                                                         ::rtl::OUString(
+                                                                             RTL_CONSTASCII_USTRINGPARAM("SkewX") ),
+                                                                         rShape,
+                                                                         getContext().mpLayerManager ),
+                                                                     getXAnimateNode() );
+
+                case animations::AnimationTransformType::SKEWY:
+                    return ActivitiesFactory::createAnimateActivity( aParms,
+                                                                     AnimationFactory::createNumberPropertyAnimation(
+                                                                         ::rtl::OUString(
+                                                                             RTL_CONSTASCII_USTRINGPARAM("SkewY") ),
+                                                                         rShape,
+                                                                         getContext().mpLayerManager ),
+                                                                     getXAnimateNode() );
+            }
+        }
+    }
+}
