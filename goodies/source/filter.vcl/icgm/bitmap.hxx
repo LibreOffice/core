@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,12 @@ class CGMBitmapDescriptor
         long                    mnLocalColorPrecision;
         sal_uInt32              mnCompressionMode;
                                 CGMBitmapDescriptor() :
+                                mpBuf       ( NULL ),
+                                mpBitmap    ( NULL ),
                                 mpAcc       ( NULL ),
                                 mbStatus    ( sal_False ),
                                 mbVMirror   ( sal_False ),
-                                mbHMirror   ( sal_False ),
-                                mpBitmap    ( NULL ),
-                                mpBuf       ( NULL ) { };
+                                mbHMirror   ( sal_False ) { };
                                 ~CGMBitmapDescriptor()
                                 {
                                     if ( mpAcc )
