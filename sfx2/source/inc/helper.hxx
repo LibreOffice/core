@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:35:31 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 08:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ public:
                                 GetResultSet( const String& rURL );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetHelpTreeViewContents( const String& rURL );
+    static String               GetActiveHelpString( const String& rURL );
 
     static sal_Bool             CopyTo( const String& rSource, const String& rDest );
     static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );
