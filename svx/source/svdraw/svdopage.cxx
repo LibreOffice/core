@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 12:15:52 $
+ *  last change: $Author: cl $ $Date: 2002-04-29 14:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "svdpage.hxx"
 #include "svdpagv.hxx"
 #include "svdoutl.hxx"
+
+#ifndef _SVX_COLORCFG_HXX
+#include "colorcfg.hxx"
+#endif
 
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -273,8 +277,12 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(bPaintArea)
     {
         OutputDevice& rOut=*rXOut.GetOutDev();
-        rOut.SetFillColor( Application::GetSettings().GetStyleSettings().GetWindowColor() );
-        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+        svx::ColorConfig aColorConfig;
+        svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
+        svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+
+        rOut.SetFillColor( aDocColor.nColor );
+        rOut.SetLineColor( aBorderColor.bIsVisible ? aBorderColor.nColor: aDocColor.nColor );
         rOut.DrawRect(aOutRect);
     }
 
@@ -427,10 +435,16 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     if(bPaintFrame)
     {
-        OutputDevice& rOut=*rXOut.GetOutDev();
-        rOut.SetFillColor();
-        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
-        rOut.DrawRect(aOutRect);
+        svx::ColorConfig aColorConfig;
+        svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
+
+        if( aColor.bIsVisible )
+        {
+            OutputDevice& rOut=*rXOut.GetOutDev();
+            rOut.SetFillColor();
+            rOut.SetLineColor( aColor.nColor );
+            rOut.DrawRect(aOutRect);
+        }
     }
 
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
