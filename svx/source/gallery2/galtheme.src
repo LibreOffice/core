@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:50:51 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 19:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,12 @@ String RID_GALLERYSTR_THEME_3D
     Text = "3D-Effekte";
     Text[ENGLISH] = "3D effects";
     Text[english_us] = "3D Effects";
-    Text[ portuguese ] = "3D";
+    Text[ portuguese ] = "Efeitos 3D";
     Text[ russian ] = "Ýôôåêòû 3-Ì";
-    Text[ dutch ] = "3D";
+    Text[ dutch ] = "3D-effecten";
     Text[ french ] = "Effets 3D";
     Text[ spanish ] = "Efectos 3D";
-    Text[ italian ] = "3D";
+    Text[ italian ] = "Effetti 3D";
     Text[ danish ] = "3D";
     Text[ swedish ] = "3D-effekter";
     Text[ polish ] = "Efekty 3-W";
@@ -149,12 +149,12 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text = "Büro";
     Text[ENGLISH] = "Office";
     Text[english_us] = "Office";
-    Text[ portuguese ] = "Cliparts";
+    Text[ portuguese ] = "Escritório";
     Text[ russian ] = "Îôèñ";
-    Text[ dutch ] = "Clipart";
+    Text[ dutch ] = "Kantoor";
     Text[ french ] = "Bureau";
     Text[ spanish ] = "Oficina";
-    Text[ italian ] = "Clipart";
+    Text[ italian ] = "Ufficio";
     Text[ danish ] = "Clipart";
     Text[ swedish ] = "Kontor";
     Text[ polish ] = "Biuro";
@@ -230,12 +230,12 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text = "Emoticons";
     Text[ENGLISH] = "Emoticons";
     Text[english_us] = "Emoticons";
-    Text[ portuguese ] = "Formas";
+    Text[ portuguese ] = "Emoticons";
     Text[ russian ] = "Ñìàéëèêè";
-    Text[ dutch ] = "Vormen";
+    Text[ dutch ] = "Emoticons";
     Text[ french ] = "Emoticons";
     Text[ spanish ] = "Emoticon";
-    Text[ italian ] = "Forme";
+    Text[ italian ] = "Emoticons";
     Text[ danish ] = "Former";
     Text[ swedish ] = "Emoticons";
     Text[ polish ] = "BuŸka";
@@ -392,12 +392,12 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text = "Personen";
     Text[ENGLISH] = "People";
     Text[english_us] = "People";
-    Text[ portuguese ] = "Móveis";
+    Text[ portuguese ] = "Pessoas";
     Text[ russian ] = "Ëþäè";
-    Text[ dutch ] = "Meubels";
+    Text[ dutch ] = "Personen";
     Text[ french ] = "Gens";
     Text[ spanish ] = "Personas";
-    Text[ italian ] = "Mobili";
+    Text[ italian ] = "Persone";
     Text[ danish ] = "Møbler";
     Text[ swedish ] = "Personer";
     Text[ polish ] = "Ludzie";
@@ -577,13 +577,13 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text = "Pfeile";
     Text[ENGLISH] = "Arrows";
     Text[english_us] = "Arrows";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Setas";
     Text[ russian ] = "Ñòðåëêè";
     Text[ greek ] = "ÂÝëç";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Pijlen";
     Text[ french ] = "Flèches";
     Text[ spanish ] = "Flechas";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Frecce";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Pilar";
     Text[ polish ] = "Strza³ki";
@@ -603,13 +603,13 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text = "Sprechblasen";
     Text[ENGLISH] = "Balloons";
     Text[english_us] = "Balloons";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Balões";
     Text[ russian ] = "Âûíîñêè";
     Text[ greek ] = "Ðåäßá äéáëüãïõ";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Tekstballons";
     Text[ french ] = "Bulles";
     Text[ spanish ] = "Llamadas";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Vignetta";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Pratbubblor";
     Text[ polish ] = "Chmurki tekstowe";
@@ -629,13 +629,13 @@ String RID_GALLERYSTR_THEME_KEYBOARD
     Text = "Tastatur";
     Text[ENGLISH] = "Keyboard";
     Text[english_us] = "Keyboard";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Teclado";
     Text[ russian ] = "Êëàâèàòóðà";
     Text[ greek ] = "Ðëçêôñïëüãéï";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Toetsenbord";
     Text[ french ] = "Clavier";
     Text[ spanish ] = "Teclado";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Tastiera";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Tangentbord";
     Text[ polish ] = "Klawiatura";
@@ -655,13 +655,13 @@ String RID_GALLERYSTR_THEME_TIME
     Text = "Zeit";
     Text[ENGLISH] = "Time";
     Text[english_us] = "Time";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Hora";
     Text[ russian ] = "Âðåìÿ";
     Text[ greek ] = "¿ñá";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Tijd";
     Text[ french ] = "Heure";
     Text[ spanish ] = "Hora";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Orario";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Tid";
     Text[ polish ] = "Czas";
@@ -681,13 +681,13 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text = "Präsentation";
     Text[ENGLISH] = "Presentation";
     Text[english_us] = "Presentation";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Apresentação";
     Text[ russian ] = "Ïðåçåíòàöèÿ";
     Text[ greek ] = "Ðáñïõóßáóç";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Presentatie";
     Text[ french ] = "Présentation";
     Text[ spanish ] = "Presentación";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Presentazione";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Presentation";
     Text[ polish ] = "Prezentacja";
@@ -707,13 +707,13 @@ String RID_GALLERYSTR_THEME_CALENDAR
     Text = "Kalender";
     Text[ENGLISH] = "Calendar";
     Text[english_us] = "Calendar";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Calendário";
     Text[ russian ] = "Êàëåíäàðü";
     Text[ greek ] = "Çìåñïëüãéï";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Agenda";
     Text[ french ] = "Calendrier";
     Text[ spanish ] = "Calendario";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Calendario";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
@@ -733,13 +733,13 @@ String RID_GALLERYSTR_THEME_NAVIGATION
     Text = "Navigation";
     Text[ENGLISH] = "Navigation";
     Text[english_us] = "Navigation";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Navegação";
     Text[ russian ] = "Íàâèãàöèÿ";
     Text[ greek ] = "ÐëïÞãçóç";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Navigatie";
     Text[ french ] = "Navigation";
     Text[ spanish ] = "Navegación";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Navigazione";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Navigation";
     Text[ polish ] = "Nawigacja";
@@ -759,13 +759,13 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text = "Kommunikation";
     Text[ENGLISH] = "Communication";
     Text[english_us] = "Communication";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Comunicação";
     Text[ russian ] = "Êîììóíèêàöèÿ";
     Text[ greek ] = "Åðéêïéíùíßá";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Communicatie";
     Text[ french ] = "Communication";
     Text[ spanish ] = "Comunicación";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Comunicazione";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Kommunikation";
     Text[ polish ] = "Komunikacja";
@@ -785,13 +785,13 @@ String RID_GALLERYSTR_THEME_FINANCES
     Text = "Finanzen";
     Text[ENGLISH] = "Finances";
     Text[english_us] = "Finances";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Finanças";
     Text[ russian ] = "Ôèíàíñû";
     Text[ greek ] = "ÏéêïíïìéêÜ";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Financiën";
     Text[ french ] = "Économie";
     Text[ spanish ] = "Finanzas";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Finanze";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Ekonomi";
     Text[ polish ] = "Finanse";
@@ -811,13 +811,13 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text = "Computer";
     Text[ENGLISH] = "Computer";
     Text[english_us] = "Computers";
-    Text[ portuguese ] = "Temas próprios";
+    Text[ portuguese ] = "Computador";
     Text[ russian ] = "Êîìïüþòåð";
     Text[ greek ] = "ÕðïëïãéóôÞò";
-    Text[ dutch ] = "Eigen onderwerp";
+    Text[ dutch ] = "Computer";
     Text[ french ] = "Ordinateur";
     Text[ spanish ] = "Ordenador";
-    Text[ italian ] = "Argomento proprio";
+    Text[ italian ] = "Computer";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Dator";
     Text[ polish ] = "Komputer";
