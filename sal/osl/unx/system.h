@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:24:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ extern struct ps_strings *__ps_strings;
 #   define  NO_PTHREAD_PRIORITY
 extern int pthread_cancel(pthread_t);
 extern unsigned int nanosleep(unsigned int);
-#   define  SLEEP_TIMESPEC(timespec)    (timespec##.tv_sec > 0) ? sleep(timespec##.tv_sec), nanosleep(timespec##.tv_nsec) : nanosleep(timespec##.tv_nsec)
+#   define  SLEEP_TIMESPEC(timespec)    (timespec .tv_sec > 0) ? sleep(timespec .tv_sec), nanosleep(timespec .tv_nsec) : nanosleep(timespec .tv_nsec)
 #   define  PATH_MAX                    _POSIX_PATH_MAX
 #   define  S_ISSOCK                    S_ISFIFO
 #   define  PTHREAD_SIGACTION           pthread_sigaction
@@ -447,14 +447,14 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 
 #ifndef NORMALIZE_TIMESPEC
 #   define NORMALIZE_TIMESPEC(timespec) \
-          timespec##.tv_sec  += timespec##.tv_nsec / 1000000000; \
-          timespec##.tv_nsec %= 1000000000;
+          timespec . tv_sec  += timespec . tv_nsec / 1000000000; \
+          timespec . tv_nsec %= 1000000000;
 #endif
 
 #ifndef SET_TIMESPEC
 #   define SET_TIMESPEC(timespec, sec, nsec) \
-          timespec##.tv_sec  = (sec);  \
-          timespec##.tv_nsec = (nsec); \
+          timespec . tv_sec  = (sec);  \
+          timespec . tv_nsec = (nsec); \
         NORMALIZE_TIMESPEC(timespec);
 #endif
 
