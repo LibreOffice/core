@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1513,7 +1513,7 @@ void SwXShape::attach(const Reference< XTextRange > & xTextRange)
     if(xRangeTunnel.is())
     {
         SwXTextRange* pRange = 0;
-        SwXTextCursor* pCursor = 0;
+        OTextCursorHelper* pCursor = 0;
         SwXTextPortion* pPortion = 0;
         SwXText* pText = 0;
 
@@ -1521,18 +1521,20 @@ void SwXShape::attach(const Reference< XTextRange > & xTextRange)
                                 SwXTextRange::getUnoTunnelId());
         pText = (SwXText*)xRangeTunnel->getSomething(
                                 SwXText::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
         pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
                                 SwXTextPortion::getUnoTunnelId());
-        SwUnoCrsr* pUnoCrsr = pCursor? pCursor->GetCrsr() : pPortion ? pPortion->GetCrsr() : 0;
 
         if (pRange)
             pDoc = pRange->GetDoc();
-        if (!pDoc && pText)
+        else if (!pDoc && pText)
             pDoc = pText->GetDoc();
-        if (!pDoc && pUnoCrsr)
-            pDoc = pUnoCrsr->GetDoc();
+        else if (!pDoc && pCursor)
+            pDoc = pCursor->GetDoc();
+        else if ( !pDoc && pPortion && pPortion->GetCrsr() )
+            pDoc = pPortion->GetCrsr()->GetDoc();
+
     }
 
     if(!pDoc)
