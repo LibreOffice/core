@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 16:10:54 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 08:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,33 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _TXTCMP_HXX //autogen
-#include <svtools/txtcmp.hxx>
+#if SUPD>=514
+#define NEW_REGULAR_SEARCH
+#endif
+
+#ifdef NEW_REGULAR_SEARCH
+    #ifndef _UNOTOOLS_TEXTSEARCH_HXX
+    #include <unotools/textsearch.hxx>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+    #include <com/sun/star/util/SearchOptions.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
+    #include <com/sun/star/util/SearchAlgorithms.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
+    #include <com/sun/star/util/SearchResult.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+    #include <com/sun/star/util/SearchFlags.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+    #include <com/sun/star/lang/Locale.hpp>
+    #endif
+#else
+    #ifndef _TXTCMP_HXX //autogen
+    #include <svtools/txtcmp.hxx>
+    #endif
 #endif
 
 #ifndef _ISOLANG_HXX
@@ -153,7 +178,6 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
-using namespace ::com::sun::star::uno;
 
 //#define COMPARE_BOOKMARKS(a, b) compareUsrAny(a, b)
 #define COMPARE_BOOKMARKS(a, b) ::comphelper::compare(a, b)
@@ -164,8 +188,32 @@ using namespace ::com::sun::star::uno;
 #else
 #define INLINE_METHOD inline
 #endif // DEBUG || DBG_UTIL
+
 #define IFACECAST(c)          ((const Reference< XInterface >&)c)
  // SUN C52 has some ambiguities without this cast ....
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+
+// ***************************************************************************************************
+
+//------------------------------------------------------------------------
+void buildApplicationLocale(Locale& _rLocale)
+{
+    String sLanguage, sCountry;
+    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+    _rLocale.Language = sLanguage;
+    _rLocale.Country = sCountry;
+}
+
+//------------------------------------------------------------------------
+Locale buildApplicationLocale()
+{
+    Locale aReturn;
+    buildApplicationLocale(aReturn);
+    return aReturn;
+}
 
 // ***************************************************************************************************
 
@@ -591,9 +639,8 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
 
         if (!m_bCase)
         {// normieren, wenn kein Gross/Klein
-            String sLanguage, sCountry;
-            ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-            sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(sLanguage, sCountry));
+            Locale aAppLocale = buildApplicationLocale();
+            sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
         }
 
         // jetzt ist der Test einfach ...
@@ -644,6 +691,24 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     FieldCollectionIterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
+#ifdef NEW_REGULAR_SEARCH
+    SearchOptions aParam;
+    aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
+    aParam.searchFlag = 0;
+    if (!m_bCase)
+        aParam.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
+    if (m_bLevenshtein)
+    {
+        if (m_bLevRelaxed)
+            aParam.searchFlag |= SearchFlags::LEV_RELAXED;
+        aParam.changedChars = m_nLevOther;
+        aParam.deletedChars = m_nLevShorter;
+        aParam.insertedChars = m_nLevLonger;
+    }
+    aParam.searchString = strExpression;
+    buildApplicationLocale(aParam.Locale);
+    TextSearch aLocalEngine(aParam);
+#else
     SearchParam aParam(strExpression, m_bRegular ? SearchParam::SRCH_REGEXP : SearchParam::SRCH_LEVDIST, m_bCase, sal_False, sal_False);
     if (m_bLevenshtein)
     {
@@ -654,6 +719,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     }
 
     SearchText aLocalEngine(aParam, GetpApp()->GetAppInternational());
+#endif
 
     // --------------------------------------------------------------
     sal_Bool bFound(sal_False);
@@ -678,7 +744,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
         else
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
-        // (um Case brauche ich mir hier nicht zu kuemmern, das macht der SearchText, da ich ihm meinen Case-Parameter mitgegeben habe)
+        // (don't care about case here, this is done by the TextSearch object, 'cause we passed our case parameter to it)
 
         xub_StrLen nStart = 0, nEnd = sCurrentCheck.getLength();
         bFound = aLocalEngine.SearchFrwrd(sCurrentCheck, &nStart, &nEnd);
@@ -691,7 +757,11 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
             switch (m_nPosition)
             {
                 case MATCHING_WHOLETEXT :
+#ifdef NEW_REGULAR_SEARCH
+                    if (nEnd != sCurrentCheck.getLength())
+#else
                     if (nEnd != sCurrentCheck.getLength() - 1)
+#endif
                     {
                         bFound = sal_False;
                         break;
@@ -702,7 +772,11 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
                         bFound = sal_False;
                     break;
                 case MATCHING_END :
+#ifdef NEW_REGULAR_SEARCH
+                    if (nEnd != sCurrentCheck.getLength())
+#else
                     if (nEnd != sCurrentCheck.getLength() - 1)
+#endif
                         bFound = sal_False;
                     break;
             }
@@ -951,9 +1025,8 @@ void FmSearchEngine::SearchNextImpl()
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!m_bCase)
     {// normieren, wenn kein Gross/Klein
-        XubString sLanguage, sCountry;
-        ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-        strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(sLanguage, sCountry));
+        Locale aAppLocale = buildApplicationLocale();
+        strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
     }
 
     if (!m_bRegular && !m_bLevenshtein)
