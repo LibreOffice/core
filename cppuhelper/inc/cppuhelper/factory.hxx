@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 16:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,20 @@ typedef void * (SAL_CALL * component_getFactoryFunc)(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 
 //##################################################################################################
+
+#define WRITE_COMPONENT_INFO_FUNCTION       "writeComponentInfo"
+#define CREATE_COMPONENT_FACTORY_FUNCTION   "createComponentFactory"
+
+/** This function pointer describes a function to write needed administrativ information
+ *  about a component into the registry.
+ */
+typedef sal_Bool (SAL_CALL * WriteComponentInfoFunc)( uno_Interface * pXKey );
+
+/** This function pointer describes a function to create a factory for one or more components.
+ */
+typedef uno_Interface* (SAL_CALL * CreateComponentFactoryFunc)(
+    const sal_Unicode *, uno_Interface * pXSMgr, uno_Interface * pXKey );
+
 
 /** */ //for docpp
 namespace cppu
