@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:12:58 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ korean ] = "문서는 로드 및 활성화되었습니다.";
     Message[ turkish ] = "Belge zaten y�kl� ve a��k.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El documento ya est� cargado y activado.";
+    Message[ catalan ] = "Document ja obert.";
     Message[ thai ] = "เปิดเอกสารแล้ว";
 };
 
@@ -123,7 +123,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message[ korean ] = "문서를 로드할 수 없습니다.";
     Message[ turkish ] = "Belge y�klenemiyor.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No es posible cargar el documento.";
+    Message[ catalan ] = "No es pot obrir el document.";
     Message[ thai ] = "ไม่สามารถเปิดเอกสารได้";
 };
 
@@ -156,7 +156,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message[ korean ] = "구성 파일 읽기 오류.";
     Message[ turkish ] = "Konfig�rasyon dosyas� okunurken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al leer el archivo de configuraci�n.";
+    Message[ catalan ] = "S'ha produ�t un error al llegir el fitxer de configuraci�.";
     Message[ thai ] = "อ่านแฟ้มโครงแบบผิดพลาด";
 };
 
@@ -189,7 +189,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ korean ] = "구성 파일 쓰기 오류.";
     Message[ turkish ] = "Konfig�rasyon dosyas�na yaz�l�rken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al escribir el archivo de configuraci�n.";
+    Message[ catalan ] = "S'ha produ�t un error en escriure al fitxer de configuraci�.";
     Message[ thai ] = "เขียนแฟ้มโครงแบบผิดพลาด";
 };
 
@@ -222,7 +222,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message[ korean ] = "구성 열기시에 오류.";
     Message[ turkish ] = "Konfig�rasyon dosyas� a��l�rken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al abrir el archivo de configuraci�n.";
+    Message[ catalan ] = "S'ha produ�t un error al obrir el fitxer de configuraci�.";
     Message[ thai ] = "เปิดแฟ้มโครงแบบผิดพลาด";
 };
 
@@ -255,7 +255,7 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     Message[ korean ] = "구성 파일이 아닙니다.";
     Message[ turkish ] = "Dosya, konfig�rasyon dosyas� de�il.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El archivo no es un archivo de configuraci�n.";
+    Message[ catalan ] = "Aquest no �s un fitxer de configuraci�.";
     Message[ thai ] = "แฟ้มไม่เป็นแฟ้มโครงแบบ";
 };
 
@@ -288,7 +288,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ korean ] = "구성 파일의 버전이 틀립니다.";
     Message[ turkish ] = "Konfig�rasyon dosyas�n�n s�r�m� yanl��.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El archivo de configuraci�n tiene una versi�n falsa.";
+    Message[ catalan ] = "El fitxer de configuraci� t� una versi� falsa.";
     Message[ thai ] = "แฟ้มโครงแบบมีเวอร์ชั่นไม่ถูกต้อง";
 };
 
@@ -321,7 +321,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message[ korean ] = "BASIC 라이브러리\n'@'에 쓰기시에 오류 .";
     Message[ turkish ] = "BASIC kitapl���, \n'@' i�ine kaydedilirken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al escribir la biblioteca BASIC en\n'@'.";
+    Message[ catalan ] = "S'ha produ�t un error al escriure la biblioteca BASIC a\n'@'.";
     Message[ thai ] = "บันทึกคลัง BASIC ใน\n'@' ผิดพลาด";
 };
 
@@ -352,7 +352,7 @@ ErrorBox MSG_SIGNAL
     Message[ korean ] = "예기치 않은 응용 프로그램 오류가 발생했습니다.\n사용자에게 위험 부담이 있지만 열려있는 모든 문서의 저장을 시도해 볼 수 있습니다!\n\n 응용 프로그램을 종료하기 전에 작업 내용을 저장하겠습니까?";
     Message[ turkish ] = "Beklenmeyen bir program hatas� olu�tu!\n�u an a��k olan t�m belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapat�lmadan �nce belgeleriniz kaydedilmeye �al���ls�n m�?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�Se ha producido un error inesperado de la aplicaci�n!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n�Desea guardar su trabajo antes de cerrar la aplicaci�n?";
+    Message[ catalan ] = "S'ha produ�t un error inesperat a l'aplicaci�!\nAra podeu, assumint el risc, intentar\nsalvar tots els documents oberts!\n\nVoleu desar la feina abans de tancar l'aplicaci�?";
     Message[ finnish ] = "On ilmennyt odottamaton ohjelmavirhe.\n\nHaluatko yritt�� tallentaa kaikkien avointen asiakirjojen muutokset ennen kuin ohjelma lopetetaan?";
     Message[ thai ] = "เกิดข้อผิดพลาดที่ไม่คาดคิดกับโปรแกรม \n\nคุณต้องการบันทึกการเปลี่ยนแปลงในเอกสารที่ nเปิดอยู่ทั้งหมดก่อนโปรแกรมถูกยกเลิกหรือไม่?";
 };
@@ -513,7 +513,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message[ korean ] = "이 양식은 E-Mail로 전송될 것입니다 .\n이 경우, 받는 사람에게 귀하의 E-mail 주소가 알려지게 됩니다.";
     Message[ turkish ] = "E-posta ile form g�nderilecek.\nBu �ekilde al�c� e-posta adresinizi de g�recektir.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Se debe enviar un formulario por correo electr�nico.\nCon ello se dar� a conocer al destinatario su direcci�n electr�nica.";
+    Message[ catalan ] = "S'ha d'enviar un formulari per correu electr�nic.\nAmb aix� el destinatari podr� saber la vostra direcci� de correu electr�nic.";
     Message[ finnish ] = "Lomake l�hetet��n s�hk�postitse.\nS�hk�postiosoitteesi tulee l�hett�j�n tietoon.";
     Message[ thai ] = "ส่งฟอร์มโดยอีเมล์\nนี้หมายถึงว่าผู้รับจะได้เห็นที่อยู่อีเมล์ของคุณ";
 };
@@ -543,7 +543,7 @@ String STR_RECOVER_TITLE
     Text[ korean ] = "파일 복구";
     Text[ turkish ] = "Dosya kurtarma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Recuperar archivo";
+    Text[ catalan ] = "Restabliment del fitxer";
     Text[ finnish ] = "Tiedoston palautus";
     Text[ thai ] = "ฟื้นฟูแฟ้ม";
 };
@@ -573,7 +573,7 @@ String STR_RECOVER_QUERY
     Text[ korean ] = "파일 \"$1\"을(를）복구하겠습니까?";
     Text[ turkish ] = "\"$1\" dosyas� geri getirilsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea restaurar el archivo \"$1\"?";
+    Text[ catalan ] = "Voleu que es restauri el fitxer \"$1\"?";
     Text[ finnish ] = "Palautetaanko tiedosto $1?";
     Text[ thai ] = "คืนค่าแฟ้ม \"$1\" หรือไม่?";
 };
@@ -605,7 +605,7 @@ String GID_INTERN
     Text[ korean ] = "내부의";
     Text[ turkish ] = "��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Interno";
+    Text[ catalan ] = "Intern";
     Text[ thai ] = "ภายใน";
 };
 
@@ -636,7 +636,7 @@ String GID_APPLICATION
     Text[ korean ] = "응용 프로그램";
     Text[ turkish ] = "Uygulama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicaci�n";
+    Text[ catalan ] = "Aplicaci�";
     Text[ thai ] = "โปรแกรมประยุกต์";
 };
 
@@ -667,7 +667,7 @@ String GID_VIEW
     Text[ korean ] = "보기";
     Text[ turkish ] = "G�r�n�m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Disseny";
+    Text[ catalan ] = "Veure";
     Text[ thai ] = "มุมมอง";
 };
 
@@ -698,7 +698,7 @@ String GID_DOCUMENT
     Text[ korean ] = "문서";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Documentos";
+    Text[ catalan ] = "Documents";
     Text[ thai ] = "เอกสาร";
 };
 
@@ -850,7 +850,7 @@ String GID_NAVIGATOR
     Text[ korean ] = "탐색";
     Text[ turkish ] = "Dola�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Navegar";
+    Text[ catalan ] = "Navega";
     Text[ finnish ] = "Siirry";
     Text[ thai ] = "นำทาง";
 };
@@ -880,7 +880,7 @@ String GID_INSERT
     Text[ korean ] = "삽입";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Enganxa";
+    Text[ catalan ] = "Insereix";
     Text[ finnish ] = "Lis��";
     Text[ thai ] = "แทรก";
 };
@@ -940,7 +940,7 @@ String GID_TEMPLATE
     Text[ korean ] = "템플릿";
     Text[ turkish ] = "�ablon";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantillas";
+    Text[ catalan ] = "Plantilles";
     Text[ finnish ] = "Mallipohjat";
     Text[ thai ] = "แม่แบบ";
 };
@@ -970,7 +970,7 @@ String GID_TEXT
     Text[ korean ] = "텍스트";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "text ";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "ข้อความ";
 };
@@ -1000,7 +1000,7 @@ String GID_FRAME
     Text[ korean ] = "프레임";
     Text[ turkish ] = "�er�eve";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vora";
+    Text[ catalan ] = "Marc";
     Text[ finnish ] = "Kehys";
     Text[ thai ] = "กรอบ";
 };
@@ -1030,7 +1030,7 @@ String GID_GRAPHIC
     Text[ korean ] = "그래픽";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gr�fics";
+    Text[ catalan ] = "Imatge";
     Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "กราฟิค";
 };
@@ -1060,7 +1060,7 @@ String GID_TABLE
     Text[ korean ] = "시트";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea";
+    Text[ catalan ] = "Taula";
     Text[ finnish ] = "Taulukko";
     Text[ thai ] = "ตาราง";
 };
@@ -1090,7 +1090,7 @@ String GID_ENUMERATION
     Text[ korean ] = "번호";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeraci�n";
+    Text[ catalan ] = "Numeraci�";
     Text[ finnish ] = "Numerointi";
     Text[ thai ] = "ลำดับเลข";
 };
@@ -1150,7 +1150,7 @@ String GID_SPECIAL
     Text[ korean ] = "특수 함수";
     Text[ turkish ] = "�zel i�levler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funciones especiales";
+    Text[ catalan ] = "Funcions especials";
     Text[ finnish ] = "Erikoistoiminnot";
     Text[ thai ] = "ฟังก์ชั่นพิเศษ";
 };
@@ -1180,7 +1180,7 @@ String GID_IMAGE
     Text[ korean ] = "이미지";
     Text[ turkish ] = "Resim";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
     Text[ finnish ] = "Kuva";
     Text[ thai ] = "ภาพ";
 };
@@ -1330,7 +1330,7 @@ String GID_DRAWING
     Text[ korean ] = "그리기";
     Text[ turkish ] = "�izim";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dibujar";
+    Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirros";
     Text[ thai ] = "วาดรูป";
 };
@@ -1360,7 +1360,7 @@ String GID_CONTROLS
     Text[ korean ] = "컨트롤";
     Text[ turkish ] = "Kumanda ��eleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Elementos de control";
+    Text[ catalan ] = "Controls";
     Text[ finnish ] = "Ohjaimet";
     Text[ thai ] = "ตัวควบคุม";
 };
@@ -1485,7 +1485,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "경로";
                 Text[ turkish ] = "Veri yolu";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Colors";
+                Text[ catalan ] = "Camins";
                 Text[ thai ] = "เส้นทาง";
             };
             PageItem
@@ -1517,7 +1517,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "맞춤법 검사";
                 Text[ turkish ] = "Yaz�m denetimi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Revisi�n ortogr�fica";
+                Text[ catalan ] = "Revisi� ortogr�fica";
                 Text[ thai ] = "ตรวจสอบการสะกด";
             };
         };
@@ -1565,7 +1565,7 @@ InfoBox MSG_CANT_QUIT
     Message[ korean ] = "응용 프로그램을 현재 종료할 수 없습니다.\n인쇄 작업이 모두 끝날 때까지 또는\nOLE가 활성화될 때까지 기다렸다가 모든 대화상자를 닫으십시오.";
     Message[ turkish ] = "�u an uygulamadan ��k�lam�yor.\nT�m yazd�rma i�lerinin ve/veya\nOLE i�lemlerinin bitmesini bekleyip t�m pencereleri kapat�n.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La aplicaci�n no se puede cerrar por el momento. \nPor favor espere hasta que finalice la impresi�n de\n todos los documentos y/o activaciones OLE\ny cierre todos los di�logos.";
+    Message[ catalan ] = "L'aplicaci� no es pot tancar de moment. \nEspereu que s'acabi la impressi� de\n tots els documents i/o activacions OLE\ni tanqueu tots els quadres de di�leg.";
     Message[ thai ] = "ไม่สามารถยกเลิกดปรแกรมประยุกต์ขณะนี้ได้\nกรุณารอจนกว่าจะเสร็จสิ้นงานพิมพ์ทั้งหมดและ/หรือ\nการกระทำ OLE และปิดไดอะล็อกทั้งหมดก่อน";
 };
 
@@ -1598,7 +1598,7 @@ QueryBox MSG_IS_SERVER
     Message[ korean ] = "개체 또는 프린터 서버로서 이 응용 프로그램이 아직 작동 중입니다.\n그래도 닫으시겠습니까?";
     Message[ turkish ] = "Uygulama �u an nesne ya da yazd�rma sunucusu olarak �al���yor.\nYine de kapat�ls�n m�?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Esta aplicaci�n est� a�n activa como servidor de objeto o de impresi�n.\n�Desea finalizarla?";
+    Message[ catalan ] = "Aquesta aplicaci� encara est� activa com a servidor d'objecte o d'impressi�.\nVoleu tancar-la?";
     Message[ thai ] = "โปรแกรมประยุกต์นี้เป็นวัตถุหรือเซิร์ฟเวอร์การพิมพ์ที่ทำงานอยู่\nคุณต้องการยกเลิกหรือไม่?";
 };
 
@@ -1627,7 +1627,7 @@ String STR_NODOUBLE
     Text[ korean ] = "%PRODUCTNAME은(는) 두 번 이상 시작되지 않습니다 .";
     Text[ turkish ] = "%PRODUCTNAME i�in birden fazla oturum a��lamaz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "%PRODUCTNAME no se puede iniciar m�s de una vez.";
+    Text[ catalan ] = "%PRODUCTNAME no es pot iniciar m�s d'una vegada.";
     Text[ finnish ] = "Ohjelmasta %PRODUCTNAME ei voi olla k�yt�ss� kuin yksi istunto kerrallaan.";
     Text[ thai ] = "ไม่สามารถเริ่ม %PRODUCTNAME มากกว่าหนึ่งครั้ง";
 };
@@ -1657,7 +1657,7 @@ String STR_NOPRINTER
     Text[ korean ] = "%PRODUCTNAME의 기능 중에는 프린터 드라이버가 있어야만 정확하게 작동하는 것도 있습니다.\n프린터 드라이버를 설치하십시오.";
     Text[ turkish ] = "Baz� %PRODUCTNAME i�levleri yaz�c� s�r�c�s� olmadan do�ru �al��amaz.\nBir yaz�c� s�r�c�s� kurun.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Algunas funciones de %PRODUCTNAME no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno.";
+    Text[ catalan ] = "Algunes funcions d'%PRODUCTNAME no poden treballar correctament sense un controlador d'impressora.\nInstal.leu-ne un.";
     Text[ finnish ] = "Jotkin ohjelman %PRODUCTNAME toiminnot eiv�t toimi ilman tulostinajuria.\nAsenna tulostinajuri.";
     Text[ thai ] = "บางฟังก์ชั่น %PRODUCTNAME จะไม่ทำงานอย่างเหมาะสมโดยไม่มีโปรแกรมขับเครื่องพิมพ์\nกรุณาติดตั้งโปรแกรมขับเครื่องพิมพ์";
 };
@@ -1689,7 +1689,7 @@ String STR_ISMODIFIED
     TEXT[ greek ] = "������ �� ������������ �� ������� ��� %1;";
     TEXT[ korean ] = "%1의 변경 사항을 저장하겠습니까?";
     TEXT[ turkish ] = "%1 i�inde yap�lan de�i�iklikler kaydedilsin mi?";
-    TEXT[ catalan ] = "�Desea guardar las modificaciones en %1?";
+    TEXT[ catalan ] = "Voleu desar les modificacions a %1?";
     TEXT[ thai ] = "คุณต้องการบันทึกการเปลี่ยนแปลงไปยัง %1หรือไม่?";
 };
 
@@ -1720,7 +1720,7 @@ String STR_AUTOSAVE
     TEXT[ korean ] = "자동 저장";
     TEXT[ turkish ] = "Otomatik kay�t";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Guardar autom�ticamente";
+    TEXT[ catalan ] = "Desa autom�ticament";
     TEXT[ thai ] = "บันทึกอัตโนมัติ";
 };
 
@@ -1751,7 +1751,7 @@ String STR_RESWARNING
     TEXT[ korean ] = "시스템 자원이 부족합니다 .계속 진행하기 전에 다른 응용 프로그램을 중지하거나 열려있는 창을 닫으십시오.";
     TEXT[ turkish ] = "Sistem kaynaklar� azal�yor. �al��maya devam etmeden �nce di�er uygulamalar� ya da bir ka� pencere kapat�n.";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "No hay suficientes recursos del sistema. Por favor, elimine otras aplicaciones o cierre algunas ventanas antes de continuar.";
+    TEXT[ catalan ] = "No hi ha prou recursos al sistema. Tanqueu altres aplicacions o finestres abans de continuar.";
     TEXT[ thai ] = "ทรัพยากรระบบจำกัด กรุณาเลิกโปรแกรมประยุกต์อื่นหรือปิดบางหน้าต่างลงก่อนทำต่อ";
 };
 String STR_RESEXCEPTION
@@ -1781,7 +1781,7 @@ String STR_RESEXCEPTION
     TEXT[ korean ] = "중요한 프로그램 부분을 찾지 못했습니다. 설치를 검사하십시오.";
     TEXT[ turkish ] = "�nemli program ��eleri bulunamad�. Kurulumunuzu kontrol edin.";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "No se encuentran archivos importantes del programa. Compruebe la instalaci�n.";
+    TEXT[ catalan ] = "No es poden trobar fitxers importants del programa. Comproveu la instal.laci�.";
     TEXT[ thai ] = "มีบางแฟ้มตกหล่น  กรุณาตรวจสอบการติดตั้งโปรแกรมประยุกต์";
 };
 
@@ -1810,7 +1810,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ korean ] = "알람 데이터를 저장하는 동안 다른 시스템 오류가 발생했습니다.\n데이터가 완전히 저장되지 않았을 수도  있습니다.";
     TEXT[ turkish ] = "Alarm verileri kayd� s�ras�nda ba�ka bir sistem hatas� olu�tu.\nVeriler tam olarak kaydedilmemi� olabilir.";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ha ocurrido otro error en el sistema mientras se guardaban los datos.\nEs posible que no se hayan guardado completamente.";
+    TEXT[ catalan ] = "S'ha produ�t un error del sistema mentre es desaven les dades.\n�s possible que no s'hagin desat completament.";
     TEXT[ finnish ] = "On ilmennyt toinen virhe tallennusta palautettaessa.\nKaikki tietoja ei ole ehk� tallennettu.";
     TEXT[ thai ] = "เกิดข้อผิดพลาดอื่นในระหว่างฟื้นฟูการบันทึก\nเป็นไปได้ที่ไม่สามารถบันทึกข้อมูลทั้งหมดได้";
 };
@@ -1840,7 +1840,7 @@ String STR_SYSRESEXCEPTION
     Text[ korean ] = "시스템 자원이 소모되었습니다. 응용 프로그램을 다시 시작하십시오.";
     Text[ turkish ] = "Sistem kaynaklar� t�kendi. Uygulamay� yeniden ba�lat�n�z.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Los recursos del sistema se han acabado. Por favor reinicie la aplicaci�n.";
+    Text[ catalan ] = "Els recursos del sistema s'han esgotat. Reinicieu l'aplicaci�.";
     Text[ finnish ] = "J�rjestelm�resurssit ovat loppu. Aloita sovellus uudelleen.";
     Text[ thai ] = "ใช้ทรัพยากรระบบหมด  กรุณาเริ่มโปรแกรมประยุกต์ใหม่";
 };
@@ -1872,7 +1872,7 @@ ErrorBox MSG_ERR_SOINIT
     Message[ korean ] = "개체 시스템 초기화시에 오류.";
     Message[ turkish ] = "Nesne sistemi ba�lat�l�rken hata olu�tu.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Error al inicializar el sistema objeto.";
+    Message[ catalan ] = "S'ha produ�t un error en inicialitzar el sistema d'objectes.";
     Message[ thai ] = "การเริ่มระบบวัตถุผิดพลาด";
 };
 
@@ -1903,7 +1903,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ korean ] = "파일 $(FILE)이(가) 존재하지 않습니다.";
     Text[ turkish ] = "$(FILE) dosyas� mevcut de�il.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No existe el archivo $(FILE).";
+    Text[ catalan ] = "No existeix el fitxer $(FILE).";
     Text[ thai ] = "ไม่มีแฟ้ม $(FILE) อยู่";
 };
 
@@ -1934,7 +1934,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text[ korean ] = "파일 $(FILE)의 경로가 존재하지 않습니다.";
     Text[ turkish ] = "$(FILE) dosyas�n�n veri yolu mevcut de�il.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No existe la ruta de acceso al archivo $(FILE).";
+    Text[ catalan ] = "No existeix el cam� d'acc�s al fitxer $(FILE).";
     Text[ thai ] = "ไม่มีเส้นทางไปยังแฟ้ม $(FILE) อยู่";
 };
 
@@ -1965,7 +1965,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ korean ] = "현재 너무 많은 파일이 열려 있어\n파일$(FILE)을 열지 못했습니다.\n일부 파일을 닫고 다시 시도하십시오.";
     Text[ turkish ] = "$(FILE) dosyas�, �u an �ok fazla dosya a��k oldu�u\ni�in a��lam�yor.\nBirka� dosyay� kapat�p yeniden deneyin.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo abrir el archivo $(FILE)\nya que hay muchos archivos abiertos.\nCierre algunos archivos e int�ntelo otra vez.";
+    Text[ catalan ] = "No s'ha pogut obrir el fitxer $(FILE),\nja que hi ha oberts massa fitxers.\nTanqueu alguns fitxers e intenti-ho de nou.";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้ม $(FILE) ,\nเพราะมีแฟ้มจำนวนมากเปิดอยู่\nกรุณาปิดบางแฟ้มและลองอีกครั้ง";
 };
 
@@ -1996,7 +1996,7 @@ String MSG_IOERR_ACCESS_DENIED
     Text[ korean ] = "액세스 권한이 없어 파일 $(FILE)을 열지 못했습니다.";
     Text[ turkish ] = "$(FILE) dosyas�, eri�im haklar�n�n olmamas� nedeniyle a��lamad�.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo se abrir el archivo $(FILE) por falta de derechos.";
+    Text[ catalan ] = "No s'ha pogut obrir el fitxer $(FILE) per falta de drets.";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้ม $(FILE) เนื่องจากสิทธิในการเข้าถึงผิดพลาด";
 };
 
@@ -2027,7 +2027,7 @@ String MSG_IOERR_INVALID_ACCESS
     Text[ korean ] = "파일 $(FILE)을 액세스하지 못했습니다.";
     Text[ turkish ] = "$(FILE) dosyas�na eri�ilemedi.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo acceder al archivo $(FILE).";
+    Text[ catalan ] = "No s'ha pogut accedir al fitxer $(FILE).";
     Text[ thai ] = "ไม่สามารถเข้าถึงแฟ้ม $(FILE) ";
 };
 
@@ -2058,7 +2058,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ korean ] = "유효하지 않은  파일 핸들로 인해 파일 $(FILE) 을(를) 열지 못했습니다.";
     Text[ turkish ] = "$(FILE) dosyas� ge�ersiz bir dosya tutamac� nedeniyle a��lamad�.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo abrir el archivo $(FILE) debido a un controlador de archivos no v�lido.";
+    Text[ catalan ] = "No s'ha pogut obrir el fitxer $(FILE) ja que el controlador de discs no �s v�lid.";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้ม $(FILE)  เนื่องจากควบคุมแฟ้มไม่ถูกต้อง";
 };
 
@@ -2089,7 +2089,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ korean ] = "파일 $(FILE)을(를）만들지 못했습니다.";
     Text[ turkish ] = "$(FILE) dosyas� olu�turulamad�.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo crear el archivo $(FILE).";
+    Text[ catalan ] = "No s'ha pogut crear el fitxer $(FILE).";
     Text[ thai ] = "ไม่สามารถสร้างแฟ้ม $(FILE) ";
 };
 
@@ -2120,7 +2120,7 @@ String MSG_IOERR_SHARING
     Text[ korean ] = "$(FILE)에 공유 액세스시 오류 .";
     Text[ turkish ] = "$(FILE) dosyas�na payla��lan eri�imde hata olu�tu.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error durante el acceso compartido al archivo $(FILE).";
+    Text[ catalan ] = "S'ha produ�t un error durant el proc�s d'acc�s compartit al fitxer $(FILE).";
     Text[ thai ] = "ข้อผิดพลาดโดยร่วมกันเข้าถึง $(FILE).";
 };
 
@@ -2170,7 +2170,7 @@ String MSG_IOERR_GENERAL
     Text[ korean ] = "파일 $(FILE) 액세스시 일반 입／출력 오류 .";
     Text[ turkish ] = "$(FILE) dosyas�na eri�imde genel girdi/��kt� hatas� olu�tu..";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error general de entrada/salida al acceder a $(FILE).";
+    Text[ catalan ] = "S'ha produ�t un error d'E/S en accedir a $(FILE).";
     Text[ finnish ] = "On ilmennyt yleinen keskeytysvirhe k�ytett�ess� tiedostoa $(FILE).";
     Text[ thai ] = "ทั่วไป I/O การเข้าถึงผิดพลาด $(FILE).";
 };
@@ -2250,7 +2250,7 @@ String STR_EVENT_NEWMESSAGE
     Text[ korean ] = "메시지가 수신되었습니다.";
     Text[ turkish ] = "�leti al�nd�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mensaje recibido";
+    Text[ catalan ] = "Missatge rebut";
     Text[ finnish ] = "Vastaanotettu viesti";
     Text[ thai ] = "ได้รับข้อความ";
 };
@@ -2282,7 +2282,7 @@ String STR_EVENT_STARTAPP
     Text[ korean ] = "응용 프로그램 시작";
     Text[ turkish ] = "Program� �al��t�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Iniciar aplicaci�n";
+    Text[ catalan ] = "Iniciar l'aplicaci�";
     Text[ thai ] = "เริ่มโปรแกรมประยุกต์";
 };
 
@@ -2311,7 +2311,7 @@ String STR_EVENT_ONERROR
     Text[ korean ] = "JavaScript  런타임 오류";
     Text[ turkish ] = "Javascript y�r�t�m s�resi hatas�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error de ejecuci�n Javascript";
+    Text[ catalan ] = "Error d'execuci� de Javascript";
     Text[ finnish ] = "JavaScriptin suoritusvirhe";
     Text[ thai ] = "ใช้งาน JavaScript ผิดพลาด";
 };
@@ -2343,7 +2343,7 @@ String STR_EVENT_CLOSEAPP
     Text[ korean ] = "프로그램 종료";
     Text[ turkish ] = "Programdan ��k��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cerrar aplicaci�n";
+    Text[ catalan ] = "Tanca l'aplicaci�";
     Text[ thai ] = "ปิดโปรแกรมประยุกต์";
 };
 
@@ -2374,7 +2374,7 @@ String STR_EVENT_CREATEDOC
     Text[ korean ] = "문서 만들기";
     Text[ turkish ] = "Belge olu�tur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crear documento";
+    Text[ catalan ] = "Crea un document";
     Text[ thai ] = "สร้างเอกสาร";
 };
 
@@ -2403,7 +2403,7 @@ String STR_EVENT_CLOSEDOC
     Text[ korean ] = "문서 닫기";
     Text[ turkish ] = "Belgeyi kapat";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El documento se va a cerrar";
+    Text[ catalan ] = "Tanca el document";
     Text[ finnish ] = "Sulje asiakirja";
     Text[ thai ] = "ปิดเอกสาร";
 };
@@ -2435,7 +2435,7 @@ String STR_EVENT_PREPARECLOSEDOC
     Text[ korean ] = "문서 닫기";
     Text[ turkish ] = "Belgeyi kapat";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cerrar documento";
+    Text[ catalan ] = "Tanca el document";
     Text[ thai ] = "ปิดเอกสาร";
 };
 
@@ -2466,7 +2466,7 @@ String STR_EVENT_OPENDOC
     Text[ korean ] = "문서 열기";
     Text[ turkish ] = "Belge a�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Abrir documento";
+    Text[ catalan ] = "Obre el document";
     Text[ thai ] = "เปิดเอกสาร";
 };
 
@@ -2497,7 +2497,7 @@ String STR_EVENT_SAVEDOC
     Text[ korean ] = "문서 저장";
     Text[ turkish ] = "Belgeyi kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar documento";
+    Text[ catalan ] = "Desa el document";
     Text[ thai ] = "บันทึกเอกสาร";
 };
 
@@ -2528,7 +2528,7 @@ String STR_EVENT_SAVEASDOC
     Text[ korean ] = "문서를 다른 이름으로 저장";
     Text[ turkish ] = "Belgeyi farkl� kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar documento como";
+    Text[ catalan ] = "Desa el document com a";
     Text[ thai ] = "บันทึกเอกสารเป็น";
 };
 
@@ -2555,7 +2555,7 @@ String STR_EVENT_SAVEDOCDONE
     Text[ arabic ] = "�� ��� �������";
     Text[ turkish ] = "Belge kaydedildi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El documento se guard�";
+    Text[ catalan ] = "S'ha desat el document";
     Text[ finnish ] = "Asiakirja on tallennettu";
     Text[ thai ] = "บันทึกเอกสารแล้ว";
 };
@@ -2583,7 +2583,7 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ arabic ] = "�� ��� ������� ��";
     Text[ turkish ] = "Belge farkl� kaydedildi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El documento se guard� como";
+    Text[ catalan ] = "S'ha anomenat i desat el document";
     Text[ finnish ] = "Asiakirja on tallennettu nimell�";
     Text[ thai ] = "บันทึกเอกสารเป็นแล้ว";
 };
@@ -2615,7 +2615,7 @@ String STR_EVENT_ACTIVATEDOC
     Text[ korean ] = "문서 활성화";
     Text[ turkish ] = "Belgeyi etkinle�tir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Activar documento";
+    Text[ catalan ] = "Activa el document";
     Text[ thai ] = "เอกสารที่ใช้งานอยู่";
 };
 
@@ -2646,7 +2646,7 @@ String STR_EVENT_DEACTIVATEDOC
     Text[ korean ] = "문서 비활성화";
     Text[ turkish ] = "Belgeyi  devreden ��kart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desactivar documento";
+    Text[ catalan ] = "Desactiva el document";
     Text[ thai ] = "เอกสารที่ไม่ได้ใช้งาน";
 };
 
@@ -2675,7 +2675,7 @@ String STR_EVENT_PRINTDOC
     Text[ korean ] = "문서 인쇄";
     Text[ turkish ] = "Belgeyi yazd�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimir documento";
+    Text[ catalan ] = "Imprimeix el document";
     Text[ finnish ] = "Tulosta asiakirja";
     Text[ thai ] = "พิมพ์เอกสาร";
 };
@@ -2706,7 +2706,7 @@ String STR_ERR_NOTEMPLATE
     Text[ korean ] = "템플릿의 형식이 올바르지 않습니다.";
     Text[ turkish ] = "Se�ilen �ablonun format� yanl��";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La plantilla tiene un formato incorrecto";
+    Text[ catalan ] = "La plantilla t� un format incorrecte";
     Text[ finnish ] = "Valitun mallipohjan muoto ei ole kelvollinen.";
     Text[ thai ] = "แม่แบบที่เลือกมีรูปแบบที่ไม่ถูกต้อง";
 };
@@ -2736,7 +2736,7 @@ String STR_ERR_NOFILE
     Text[ korean ] = "파일 $을(를）열 수 없습니다.";
     Text[ turkish ] = "$ dosyas� a��lam�yor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El archivo $ no se puede abrir.";
+    Text[ catalan ] = "No es pot obrir el fitxer $.";
     Text[ finnish ] = "Tiedoston $ avaaminen ei onnistu.";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้ม $.";
 };
@@ -2797,7 +2797,7 @@ String STR_EXITANDRETURN
     Text[ korean ] = "끝내기 & 돌아가기 (~X)";
     Text[ turkish ] = "~��k ve d�n: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Terminar y regresar a  ";
+    Text[ catalan ] = "~Surt i retorna a ";
     Text[ finnish ] = "Lo~peta ja palaa";
     Text[ thai ] = "~ออกและกลับไปที่ ";
 };
@@ -2827,7 +2827,7 @@ String STR_EXTHELPSTATUS
     Text[ korean ] = "주제를 선택하려면 클릭하거나 명령어를 선택하십시오.";
     Text[ turkish ] = "Bir komut se�in ya da bir konu se�mek i�in t�klay�n.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccione un comando o pulse para seleccionar un tema.";
+    Text[ catalan ] = "Seleccioneu una ordre o feu clic per a seleccionar un tema.";
     Text[ finnish ] = "Valitse komento tai valitse teema napsauttamalla sit�.";
     Text[ thai ] = "เลือกคำสั่งหรือคลิ๊กเพื่อเลือกชุดรูปแบบ";
 };
@@ -2859,7 +2859,7 @@ String STR_MAIL
     Text[ korean ] = "메일";
     Text[ turkish ] = "Posta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Correo";
+    Text[ catalan ] = "Correu";
     Text[ thai ] = "เมล์";
 };
 
@@ -2888,7 +2888,7 @@ String STR_ADDRESS_NAME
     Text[ korean ] = "주소";
     Text[ turkish ] = "Adres";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Direcciones";
+    Text[ catalan ] = "Adreces";
     Text[ finnish ] = "Osoitteet";
     Text[ thai ] = "ที่อยู่";
 };
@@ -2948,7 +2948,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ korean ] = "'XX'에서는 자동으로 시작하지 않음.";
     Text[ turkish ] = "'XX' oldu�unda otomatik ba�latma yap�lmas�n";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No iniciar autom�ticamente con 'XX'";
+    Text[ catalan ] = "No iniciar autom�ticament amb 'XX'";
     Text[ finnish ] = "Ei automaattista aloitusta kohteessa XX";
     Text[ thai ] = "ไม่เริ่มอัตโนมัติที่ 'XX'";
 };
@@ -2978,7 +2978,7 @@ String RID_STR_NOWELCOMESCREEN
     Text[ korean ] = "조언을 더 이상 표시하지 않음";
     Text[ turkish ] = "�neri g�r�nt�leme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No mostrar m�s las sugerencias";
+    Text[ catalan ] = "No mostris els consells";
     Text[ finnish ] = "�l� n�yt� vihjeit�";
     Text[ thai ] = "อย่าแสดงคำแนะนำ";
 };
@@ -3008,7 +3008,7 @@ String RID_HELPBAR
     Text[ korean ] = "도움말 모음";
     Text[ turkish ] = "Yard�m �ubu�u";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de ayuda";
+    Text[ catalan ] = "Barra d'ajuda";
     Text[ finnish ] = "Ohjepalkki";
     Text[ thai ] = "แถบช่วยเหลือ";
 };
@@ -3093,7 +3093,7 @@ String RID_STR_HLPFILENOTEXIST
     Text[ korean ] = "이 주제에 대한 도움말이 설치되지 않았습니다.";
     Text[ turkish ] = "Bu konu ile ilgili yard�m kurulmad�.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El archivo de ayuda para este tema no ha sido instalado.";
+    Text[ catalan ] = "El fitxer d'ajuda per aquest tema no s'ha instal.lat.";
     Text[ finnish ] = "T�m�n aiheen ohjetiedostoja ei ole asennettu.";
     Text[ thai ] = "แฟ้มช่วยเหลือสำหรับหัวข้อนี้ที่ไม่ได้ติดตั้ง";
 };
@@ -3123,7 +3123,7 @@ String RID_STR_HLPAPPNOTSTARTED
     Text[ korean ] = "도움말 응용 프로그램을 시작하지 못했습니다.";
     Text[ turkish ] = "Yard�m uygulamas� ba�lat�lamad�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se pudo iniciar la aplicaci�n de ayuda.";
+    Text[ catalan ] = "No s'ha pogut iniciar el sistema d'ajuda";
     Text[ finnish ] = "Ohjej�rjestelm�n k�ynnist�minen ei onnistu";
     Text[ thai ] = "ไม่สามารถเริ่มระบบช่วยเหลือ";
 };
@@ -3420,7 +3420,7 @@ String RID_SPECIALCONFIG_ERROR
     Text[ greek ] = "������������� ������ ���� ������ ����������.\n�������� ������������ ���� ����������� ��� �������!";
     Text[ korean ] = "특수 구성에서 오류가 발생하였습니다. 관리자에게 문의하십시오 !";
     Text[ turkish ] = "�zel konfig�rasyonda bir hata bulundu.\nL�tfen sistem y�neticinize ba�vurun!";
-    Text[ catalan ] = "En la configuraci�n especial se ha detectado un error.\nP�ngase por favor en contacto con su administrador.";
+    Text[ catalan ] = "En la configuraci� especial s'ha detectat un error.\nPoseu-vos en contacte amb el seu administrador.";
     Text[ finnish ] = "Erityiskokoonpanossa on ilmennyt virhe.\nOta yhteys p��k�ytt�j��n.";
     Text[ thai ] = "เกิดข้อผิดพลาดในโครงแบบพิเศษ\nกรุณาติดต่อผู้ดูแลระบบของคุณ";
 };
@@ -3466,7 +3466,7 @@ String RID_PLUGIN
     Text[ korean ] = "플러그인 활성화";
     Text[ turkish ] = "Plug-In'leri etkinle�tir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Activar Plug-in";
+    Text[ catalan ] = "Habilita els connectors";
     Text[ finnish ] = "Ota lis�osat k�ytt��n";
     Text[ thai ] = "เปิดใช้งานปลั๊กอิน";
 };
@@ -3493,7 +3493,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ chinese_traditional ] = "無法正確初始化重要的程式元件。請啟動安裝程式，執行修复選項。";
     Text[ arabic ] = "���� ����� ��� ����� �������� ������ ���� ����.\n������ ��� ������ ������� ������� /repair.";
     Text[ turkish ] = "�nemli program ��eleri do�ru bir �ekilde ba�lat�lamad�.\nKurulumu /repair se�ene�i ile ba�lat�n.";
-    Text[ catalan ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalaci�n con la opci�n /repair.";
+    Text[ catalan ] = "Alguns components importants del programa no s'han pogut instal.lar.\nInicieu de nou el programa d'instal.laci� amb l'opci� /repair.";
     Text[ finnish ] = "T�rkeit� ohjelman osia ei voitu alustaa oikein.\nK�ynnist� asennusohjelma k�ytt�m�ll� korjausasetusta.";
     Text[ thai ] = "ไม่สามารถเริ่มส่วนประกอบที่สำคัญของโปรแกรมได้อย่างถูกต้อง\nกรุณาเริ่มติดตั้งโปรแกรมด้วยตัวเลือก /ตัวซ่อม";
 };
@@ -3554,7 +3554,7 @@ String STR_KEY_CONFIG_DIR
     Text[ korean ] = "구성";
     Text[ turkish ] = "Konfig�rasyon";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuraci�n";
+    Text[ catalan ] = "Configuraci�";
     Text[ thai ] = "โครงแบบ";
 };
 String STR_KEY_WORK_PATH
@@ -3584,7 +3584,7 @@ String STR_KEY_WORK_PATH
     Text[ korean ] = "작업 디렉토리";
     Text[ turkish ] = "�al��ma dizini";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Directorio de trabajo";
+    Text[ catalan ] = "Els meus documents";
     Text[ thai ] = "เอกสารของฉัน";
 };
 String STR_KEY_GRAPHICS_PATH
@@ -3614,7 +3614,7 @@ String STR_KEY_GRAPHICS_PATH
     Text[ korean ] = "그래픽";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gr�fics";
+    Text[ catalan ] = "Imatges";
     Text[ thai ] = "กราฟิค";
 };
 String STR_KEY_BITMAP_PATH
@@ -3642,7 +3642,7 @@ String STR_KEY_BITMAP_PATH
     Text[ korean ] = "기호";
     Text[ language_user1 ] = "BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
     Text[ turkish ] = "Simgeler";
-    Text[ catalan ] = "S�mbols";
+    Text[ catalan ] = "Icones";
     Text[ finnish ] = "Kuvakkeet";
     Text[ thai ] = "ไอคอน";
 };
@@ -3678,7 +3678,7 @@ String STR_KEY_PALETTE_PATH
     Text[ korean ] = "팔레트";
     Text[ turkish ] = "Paletler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Paletas";
+    Text[ catalan ] = "Paletes";
     Text[ thai ] = "จานสี";
 };
 String STR_KEY_BACKUP_PATH
@@ -3708,7 +3708,7 @@ String STR_KEY_BACKUP_PATH
     Text[ korean ] = "백업 복사";
     Text[ turkish ] = "Yedekleme kopyalar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copias de seguridad";
+    Text[ catalan ] = "Copies de seguretat";
     Text[ thai ] = "สำรอง";
 };
 String STR_KEY_MODULES_PATH
@@ -3768,7 +3768,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ korean ] = "문서 서식";
     Text[ turkish ] = "Belge �ablonlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantillas de documento";
+    Text[ catalan ] = "Plantilles";
     Text[ thai ] = "แม่แบบ";
 };
 String STR_KEY_GLOSSARY_PATH
@@ -3793,7 +3793,7 @@ String STR_KEY_GLOSSARY_PATH
     Text[ chinese_traditional ] = "自動圖文集";
     Text[ turkish ] = "Otomatik metin";
     Text[ arabic ] = "�� ������";
-    Text[ catalan ] = "AutoTexto";
+    Text[ catalan ] = "AutoText";
     Text[ finnish ] = "Automaattinen teksti";
     Text[ thai ] = "ข้อความอัตโนมัติ";
 };
@@ -3824,7 +3824,7 @@ String STR_KEY_DICTIONARY_PATH
     Text[ korean ] = "사전";
     Text[ turkish ] = "S�zl�kler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diccionarios";
+    Text[ catalan ] = "Diccionaris";
     Text[ thai ] = "พจนานุกรม";
 };
 String STR_KEY_HELP_DIR
@@ -3852,7 +3852,7 @@ String STR_KEY_HELP_DIR
     Text[ korean ] = "도움말 파일";
     Text[ turkish ] = "Yard�m dosyalar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Archivos de ayuda";
+    Text[ catalan ] = "Ajuda";
     Text[ finnish ] = "Ohje";
     Text[ thai ] = "ช่วยเหลือ";
 };
@@ -3881,7 +3881,7 @@ String STR_KEY_GALLERY_DIR
     Text[ korean ] = "갤러리";
     Text[ turkish ] = "Galeri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gallery";
+    Text[ catalan ] = "Galeria";
     Text[ finnish ] = "Galleria";
     Text[ thai ] = "คลังภาพ";
 };
@@ -3911,7 +3911,7 @@ String STR_KEY_STORAGE_DIR
     Text[ korean ] = "메시지  저장장소";
     Text[ turkish ] = "�leti depolama alan�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Memoria de mensajes";
+    Text[ catalan ] = "Emmagatzematge de missatges";
     Text[ finnish ] = "Viestivaranto";
     Text[ thai ] = "เก็บข้อความ";
 };
@@ -3938,7 +3938,7 @@ String STR_KEY_TEMP_PATH
     Text[ chinese_traditional ] = "暫存檔案";
     Text[ turkish ] = "Temporary base directory";
     Text[ arabic ] = "Temporary base directory";
-    Text[ catalan ] = "Temporary base directory";
+    Text[ catalan ] = "Directori base temporal";
     Text[ thai ] = "ฐานไดเร็กทอรี่ชั่วคราว";
 };
 String STR_KEY_PLUGINS_PATH
@@ -3965,7 +3965,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ greek ] = "��������� ����������� ���������� (Plug-Ins)";
     Text[ korean ] = "플러그인 디렉토리";
     Text[ turkish ] = "Plug-In dizini";
-    Text[ catalan ] = "Directorio de Plug-ins";
+    Text[ catalan ] = "Connectors";
     Text[ finnish ] = "Lis�osat";
     Text[ thai ] = "ปลั๊กอิน";
 };
@@ -3992,7 +3992,7 @@ String STR_KEY_FAVORITES_DIR
     Text[ chinese_traditional ] = "資料夾書籤";
     Text[ arabic ] = "������ ������ �������";
     Text[ turkish ] = "Yer i�areti klas�r�";
-    Text[ catalan ] = "Marcadores de carpetas";
+    Text[ catalan ] = "Marcadors de carpetes";
     Text[ finnish ] = "Kansion kirjanmerkit";
     Text[ thai ] = "ตัวคั่นโฟลเดอร์";
 };
@@ -4019,7 +4019,7 @@ String STR_KEY_FILTER_PATH
     Text[ arabic ] = "����";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtre";
+    Text[ catalan ] = "Filtres";
     Text[ finnish ] = "Suodattimet";
     Text[ thai ] = "ตัวกรอง";
 };
@@ -4045,7 +4045,7 @@ String STR_KEY_ADDINS_PATH
     Text[ chinese_traditional ] = "AddIns";
     Text[ arabic ] = "Add-Ins";
     Text[ turkish ] = "Add-In";
-    Text[ catalan ] = "AddIns";
+    Text[ catalan ] = "Inclusions";
     Text[ finnish ] = "Lis�osat";
     Text[ thai ] = "ตัวเพิ่มใน";
 };
@@ -4072,7 +4072,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ arabic ] = "����� ��������";
     Text[ turkish ] = "Kullan�c� konfig�rasyonu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Configuraci�n de usuario";
+    Text[ catalan ] = "Configuraci� d'usuari";
     Text[ finnish ] = "K�ytt�j�n m��ritykset";
     Text[ thai ] = "โครงแบบผู้ใช้";
 };
@@ -4098,7 +4098,7 @@ String STR_KEY_USERDICTIONARY_DIR
     Text[ chinese_traditional ] = "自訂字典";
     Text[ arabic ] = "������ ��������";
     Text[ turkish ] = "Kullan�c� s�zl�kleri";
-    Text[ catalan ] = "Diccionarios de usuario";
+    Text[ catalan ] = "Diccionaris de l'usuari";
     Text[ finnish ] = "Omat sanakirjat";
     Text[ thai ] = "พจนานุกรมผู้ใช้";
 };
@@ -4124,7 +4124,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ chinese_traditional ] = "自動校正";
     Text[ arabic ] = "����� ������";
     Text[ turkish ] = "Otomatik d�zeltme";
-    Text[ catalan ] = "Correcci� autom�tica";
+    Text[ catalan ] = "AutoCorrecci�";
     Text[ finnish ] = "Automaattinen korjaus";
     Text[ thai ] = "แก้ไขอัตโนมัติ";
 };
@@ -4151,7 +4151,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ chinese_traditional ] = "語言規則";
     Text[ arabic ] = "�����";
     Text[ turkish ] = "Dil";
-    Text[ catalan ] = "Ajudes sobre l'escriptura";
+    Text[ catalan ] = "Ajudes a l'escriptura";
     Text[ finnish ] = "Kirjoituksen aputy�kalut";
     Text[ thai ] = "ตัวเขียน";
 };
@@ -4180,7 +4180,7 @@ String STR_QUICKSTART_EXIT
     Text[ chinese_traditional ] = "結束快速啟動";
     Text[ turkish ] = "Exit %PRODUCTNAME QuickStart";
     Text[ arabic ] = "Exit %PRODUCTNAME QuickStart";
-    Text[ catalan ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ catalan ] = "Surt de l'inici r�pid d'%PRODUCTNAME";
     Text[ thai ] = "ออกจากการเรียกใช้งานด่วน";
 };
 String STR_QUICKSTART_TIP
@@ -4206,7 +4206,7 @@ String STR_QUICKSTART_TIP
     Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 快速啟動";
     Text[ turkish ] = "%PRODUCTNAME QuickStart active";
     Text[ arabic ] = "%PRODUCTNAME QuickStart active";
-    Text[ catalan ] = "%PRODUCTNAME QuickStart active";
+    Text[ catalan ] = "Inici r�pid d'%PRODUCTNAME actiu";
     Text[ thai ] = "เรียกใช้งานด่วน %PRODUCTNAME %PRODUCTVERSION ";
 };
 String STR_QUICKSTART_FILEOPEN
@@ -4232,7 +4232,7 @@ String STR_QUICKSTART_FILEOPEN
     Text[ chinese_traditional ] = "開啟檔案...";
     Text[ turkish ] = "File open...";
     Text[ arabic ] = "File open...";
-    Text[ catalan ] = "File open...";
+    Text[ catalan ] = "Obre el fitxer...";
     Text[ thai ] = "เปิดแฟ้ม...";
 };
 String STR_QUICKSTART_FROMTEMPLATE
@@ -4258,7 +4258,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ chinese_traditional ] = "採用樣式...";
     Text[ turkish ] = "From template...";
     Text[ arabic ] = "From template...";
-    Text[ catalan ] = "From template...";
+    Text[ catalan ] = "De la plantilla...";
     Text[ thai ] = "จากแม่แบบ...";
 };
 String STR_QUICKSTART_PRELAUNCH
@@ -4284,7 +4284,7 @@ String STR_QUICKSTART_PRELAUNCH
     Text[ chinese_traditional ] = "系統啓動時載入 %PRODUCTNAME";
     Text[ turkish ] = "Pre-launch %PRODUCTNAME during system start";
     Text[ arabic ] = "Pre-launch %PRODUCTNAME during system start";
-    Text[ catalan ] = "Pre-launch %PRODUCTNAME during system start";
+    Text[ catalan ] = "Pre-carrega l'%PRODUCTNAME a l'inici del sistema";
     Text[ thai ] = "โหลด %PRODUCTNAME ในระหว่างเริ่มระบบ";
 };
 String STR_QUICKSTART_LNKNAME
