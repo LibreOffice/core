@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 15:34:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <tools/bigint.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
