@@ -79,10 +79,10 @@ AC_ARG_ENABLE(macos9,
                           Usage: --enable-macos9
 ],,)
 AC_ARG_ENABLE(xprint,
-[  --enable-xprint         Use this option if you want to build OpenOffice with
-                          Xprint printing functionality.                          
+[  --disable-xprint         Use this option if you want to build OpenOffice
+                          without Xprint printing functionality.                          
 
-                          Usage: --enable-xprint
+                          Usage: --disable-xprint
 ],,)
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice with additional language
@@ -952,7 +952,7 @@ fi
 if test -z "$CYGWIN"; then
    CYGWIN="NO_CYGWIN"
 fi
-if test -z "$enable_xprint"; then
+if test "$enable_xprint" = "no"; then
    enable_xprint="NO_XPRINT"
 else
    enable_xprint="TRUE"
