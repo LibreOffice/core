@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:59:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,26 @@ hidspecial HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE             { HelpId = HID_SEND_H
 hidspecial HID_COLUMN_VALUESET                             { HelpId = HID_COLUMN_VALUESET                         ;};
 hidspecial HID_FORMAT_NAME_OBJECT_NAME                     { HelpId = HID_FORMAT_NAME_OBJECT_NAME    ;};
 hidspecial HID_INSERT_FILE                                 { HelpID = HID_INSERT_FILE; };
+hidspecial HID_NID_TBL                  { HelpId = HID_NID_TBL; };
+hidspecial HID_NID_FRM                  { HelpId = HID_NID_FRM; };
+hidspecial HID_NID_GRF                  { HelpId = HID_NID_GRF; };
+hidspecial HID_NID_OLE                  { HelpId = HID_NID_OLE; };
+hidspecial HID_NID_PGE                  { HelpId = HID_NID_PGE ; };
+hidspecial HID_NID_OUTL                 { HelpId = HID_NID_OUTL; };
+hidspecial HID_NID_MARK                 { HelpId = HID_NID_MARK; };
+hidspecial HID_NID_DRW                  { HelpId = HID_NID_DRW ; };
+hidspecial HID_NID_CTRL                 { HelpId = HID_NID_CTRL; };
+hidspecial HID_NID_PREV                 { HelpId = HID_NID_PREV; };
+hidspecial HID_NID_REG                  { HelpId = HID_NID_REG ; };
+hidspecial HID_NID_BKM                  { HelpId = HID_NID_BKM ; };
+hidspecial HID_NID_SEL                  { HelpId = HID_NID_SEL     ; };
+hidspecial HID_NID_FTN                  { HelpId = HID_NID_FTN     ; };
+hidspecial HID_NID_POSTIT               { HelpId = HID_NID_POSTIT  ; };
+hidspecial HID_NID_SRCH_REP             { HelpId = HID_NID_SRCH_REP; };
+hidspecial HID_NID_INDEX_ENTRY          { HelpId = HID_NID_INDEX_ENTRY         ; };
+hidspecial HID_NID_TABLE_FORMULA        { HelpId = HID_NID_TABLE_FORMULA       ; };
+hidspecial HID_NID_TABLE_FORMULA_ERROR  { HelpID = HID_NID_TABLE_FORMULA_ERROR ; };
+hidspecial HID_NID_NEXT                 { HelpID = HID_NID_NEXT  ; };
 hidspecial HID_MM_SELECTDBTABLEDDIALOG_LISTBOX             { HelpID = HID_MM_SELECTDBTABLEDDIALOG_LISTBOX; };
 hidspecial HID_MM_ADDRESSLIST_HB                           { HelpID = HID_MM_ADDRESSLIST_HB ; };
 hidspecial HID_MM_ADDRESSLIST_TLB                          { HelpID = HID_MM_ADDRESSLIST_TLB; };
