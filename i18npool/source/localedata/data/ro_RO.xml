@@ -30,8 +30,8 @@
 <DoubleQuotationStart>„</DoubleQuotationStart>
 <DoubleQuotationEnd>”</DoubleQuotationEnd>
 </Markers>
-<TimeAM>am</TimeAM>
-<TimePM>pm</TimePM>
+<TimeAM>AM</TimeAM>
+<TimePM>PM</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT>
