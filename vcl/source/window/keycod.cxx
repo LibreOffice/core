@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:38:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_KEYCOD_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -82,7 +80,7 @@
 #endif
 
 #ifndef _RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
