@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 15:52:27 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:49:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,8 @@ APP1STDLIBS=			\
     $(CPPULIB)			\
     $(TKLIB)            \
     $(SALLIB) \
-       $(JVMFWKLIB)
+    $(JVMFWKLIB) \
+    $(SVXLIB)
 
 
 #	$(APP1_STDPRE)		\
@@ -276,6 +277,27 @@ APP5LINKRES=$(MISC)$/ooffice.res
 APP5STACK=10000000
 .ENDIF # WNT
 
+.IF "$(GUI)" == "WNT"
+APP6TARGET=so$/officeloader
+APP6RES=$(RES)$/soloader.res
+APP6NOSAL=TRUE
+APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
+APP6VERINFO=verinfo.rc
+APP6LINKRES=$(MISC)$/soffice.res
+APP6ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP6OBJS = \
+        $(OBJ)$/officeloader.obj
+
+APP7TARGET=officeloader
+APP7RES=$(RES)$/ooloader.res
+APP7NOSAL=TRUE
+APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
+APP7VERINFO=ooverinfo.rc
+APP7LINKRES=$(MISC)$/ooffice.res
+APP7ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
+APP7OBJS = \
+        $(OBJ)$/officeloader.obj
+.ENDIF # WNT
 
 
 all: $(BIN)$/so ALLTAR
