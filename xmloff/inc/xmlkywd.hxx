@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-24 11:46:41 $
+ *  last change: $Author: sab $ $Date: 2001-01-24 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,7 @@ XML_CONSTASCII_ACTION( sXML_casemap_uppercase, "uppercase" );
 XML_CONSTASCII_ACTION( sXML_categories, "categories" );
 XML_CONSTASCII_ACTION( sXML_category, "category" );
 XML_CONSTASCII_ACTION( sXML_category_and_value, "category-and-value" );
+XML_CONSTASCII_ACTION( sXML_cell_address, "cell-address");
 XML_CONSTASCII_ACTION( sXML_cell_content_change, "cell-content-change");
 XML_CONSTASCII_ACTION( sXML_cell_content_deletion, "cell-content-deletion");
 XML_CONSTASCII_ACTION( sXML_cell_count, "cell-count");
