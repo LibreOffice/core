@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-20 15:39:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _I18N_INDEXENTRYSUPPLIER_HXX_
 #define _I18N_INDEXENTRYSUPPLIER_HXX_
 
-#include <drafts/com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -74,7 +74,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
 class IndexEntrySupplier : public cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier,
+    com::sun::star::i18n::XExtendedIndexEntrySupplier,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -130,10 +130,10 @@ public:
 
 private:
     rtl::OUString aServiceName;
-    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
     sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const rtl::OUString& name) throw( com::sun::star::uno::RuntimeException );
-    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
 
 protected:
