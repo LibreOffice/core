@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:16:30 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
@@ -307,9 +306,10 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
         maData.mbStrikeout = ::get_flag( nStyle, EXC_CF_FONT_STRIKEOUT );
 }
 
-void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, bool bSkipPoolDefs ) const
+void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclImpFontMode eMode, bool bSkipPoolDefs ) const
 {
-    bool bEE = (eMode == xlFontEEIDs) || (eMode == xlFontHFIDs);
+    // true = edit engine Which-IDs (EE_CHAR_*); false = Calc Which-IDs (ATTR_*)
+    bool bEE = eMode != EXC_FONTMODE_CELL;
 
 // item = the item to put into the item set
 // sc_which = the Calc Which-ID of the item
@@ -317,14 +317,17 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
 #define PUTITEM( item, sc_which, ee_which ) \
     ScfTools::PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
-// Font item - #91658# set only for valid script types
-    if( mbFontNameUsed )
+// Font item
+    // #i36997# do not set default Tahoma font from notes
+    bool bDefNoteFont = (eMode == EXC_FONTMODE_NOTE) && (maData.maName.EqualsIgnoreCaseAscii( "Tahoma" ));
+    if( mbFontNameUsed && !bDefNoteFont )
     {
         CharSet eFontCharSet = maData.GetScCharSet();
         CharSet eTempCharSet = (bEE && (eFontCharSet == GetCharSet())) ?
             ScfTools::GetSystemCharSet() : eFontCharSet;
 
         SvxFontItem aFontItem( maData.GetScFamily( GetCharSet() ), maData.maName, EMPTY_STRING, PITCH_DONTKNOW, eTempCharSet );
+        // #91658# set only for valid script types
         if( mbAscii )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
         if( mbCjk )
@@ -337,7 +340,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontWhichIDMode eMode, 
     if( mbHeightUsed )
     {
         sal_Int32 nHeight = maData.mnHeight;
-        if( eMode == xlFontEEIDs )  // do not convert header/footer height
+        if( bEE && (eMode != EXC_FONTMODE_HF) )     // do not convert header/footer height
             nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // #98527# 1 in == 72 pt
 
         SvxFontHeightItem aHeightItem( nHeight );
@@ -504,7 +507,7 @@ void XclImpFontBuffer::ReadEfont( XclImpStream& rStrm )
 }
 
 void XclImpFontBuffer::FillToItemSet(
-        SfxItemSet& rItemSet, XclFontWhichIDMode eMode,
+        SfxItemSet& rItemSet, XclImpFontMode eMode,
         sal_uInt16 nFontIndex, bool bSkipPoolDefs ) const
 {
     if( const XclImpFont* pFont = GetFont( nFontIndex ) )
@@ -1212,7 +1215,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // font
     if( mbFontUsed )
-        GetFontBuffer().FillToItemSet( rItemSet, xlFontScIDs, mnXclFont, bSkipPoolDefs );
+        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTMODE_CELL, mnXclFont, bSkipPoolDefs );
 
     // value format
     if( mbFmtUsed )
