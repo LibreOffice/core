@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:38 $
+ *  last change: $Author: aw $ $Date: 2002-11-20 14:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2663,3 +2663,15 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     }
     return nId;
 }
+
+// #102344# Implementation was missing; edge track needs to be invalidated additionally.
+void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
+{
+    // call parent functionality
+    SdrTextObj::NbcSetAnchorPos(rPnt);
+
+    // Additionally, invalidate edge track
+    bEdgeTrackDirty = TRUE;
+}
+
+// eof
