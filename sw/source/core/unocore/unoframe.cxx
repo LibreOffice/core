@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 14:39:32 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,8 +1896,6 @@ void SwXFrame::ResetDescriptor()
 /* -----------------18.02.99 13:34-------------------
  *
  * --------------------------------------------------*/
-
-
 void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             throw( IllegalArgumentException, RuntimeException )
 {
@@ -2073,7 +2071,43 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
     //setzt das Flag zurueck und loescht den Descriptor-Pointer
     ResetDescriptor();
 }
+/* -----------------------------04.04.01 14:27--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwXFrame::attach(const uno::Reference< XTextRange > & xTextRange)
+    throw( IllegalArgumentException, RuntimeException )
+{
+    SwFrmFmt* pFmt;
+    if(IsDescriptor())
+        attachToRange(xTextRange);
+    else if(0 != (pFmt = GetFrmFmt()))
+    {
+        Reference<XUnoTunnel> xRangeTunnel( xTextRange, UNO_QUERY);
+        SwXTextRange* pRange = 0;
+        SwXTextCursor* pCursor = 0;
+        if(xRangeTunnel.is())
+        {
+            pRange = (SwXTextRange*)xRangeTunnel->getSomething(
+                                    SwXTextRange::getUnoTunnelId());
+            pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
+                                    SwXTextCursor::getUnoTunnelId());
+        }
+        SwDoc* pDoc = pFmt->GetDoc();
+        SwUnoInternalPaM aIntPam(*pDoc);
+        if(SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange))
+        {
+            SfxItemSet aSet( pDoc->GetAttrPool(),
+                        RES_ANCHOR, RES_ANCHOR );
+            aSet.SetParent(&pFmt->GetAttrSet());
+            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(RES_ANCHOR);
+            aAnchor.SetAnchor( aIntPam.Start() );
+            aSet.Put(aAnchor);
+            pDoc->SetFlyFrmAttr( *pFmt, aSet );
+        }
+        else
+            throw IllegalArgumentException();
+    }
+}
 /*-- 22.04.99 08:03:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2330,7 +2364,7 @@ sal_Bool SwXTextFrame::hasElements(void) throw( RuntimeException )
 void SwXTextFrame::attach(const uno::Reference< XTextRange > & xTextRange)
     throw( IllegalArgumentException, RuntimeException )
 {
-
+    SwXFrame::attach(xTextRange);
 }
 /*-- 11.12.98 15:23:04---------------------------------------------------
 
@@ -2510,6 +2544,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  )
   -----------------------------------------------------------------------*/
 void SwXTextGraphicObject::attach(const uno::Reference< XTextRange > & xTextRange) throw( IllegalArgumentException, RuntimeException )
 {
+    SwXFrame::attach(xTextRange);
 }
 /*-- 11.12.98 16:02:27---------------------------------------------------
 
@@ -2686,6 +2721,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  
   -----------------------------------------------------------------------*/
 void SwXTextEmbeddedObject::attach(const uno::Reference< XTextRange > & xTextRange) throw( IllegalArgumentException, RuntimeException )
 {
+    SwXFrame::attach(xTextRange);
 }
 /*-- 11.12.98 16:16:54---------------------------------------------------
 
