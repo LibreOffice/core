@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemClipboard.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 12:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 interface XClipboardEx;
 interface XClipboardNotifier;
+interface XFlushableClipboard;
 
 //=============================================================================
 /** The system clipboard service builds a bridge to the OS specific clipboard
@@ -100,6 +101,13 @@ service SystemClipboard
     /** provides the ability to request notifications on content changes.
     */
     interface XClipboardNotifier;
+
+    //-------------------------------------------------------------------------
+    /** provides the ability to render the complete clipboard content. this
+        interface is only available if the method getRenderingCapabilities of
+        the interface XClipboardEx returns Persistant
+    */
+    [optional] interface XFlushableClipboard;
 
     //-------------------------------------------------------------------------
     /** for shutdown and listener support.
