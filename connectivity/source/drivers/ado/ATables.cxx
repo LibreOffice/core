@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     ADOTable* pTable = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pTable);
 
-        Reference< XNamed > xRet = new OAdoTable(isCaseSensitive(),pTable);
+    Reference< XNamed > xRet = new OAdoTable(isCaseSensitive(),pTable);
 
     return xRet;
 }
@@ -114,7 +114,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
 {
-    OAdoTable* pNew = new OAdoTable(isCaseSensitive());
+    OAdoTableDescriptor* pNew = new OAdoTableDescriptor(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -123,10 +123,10 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        OAdoTable* pTable = (OAdoTable*)xTunnel->getSomething(OAdoTable:: getUnoTunnelImplementationId());
+        OAdoTableDescriptor* pTable = (OAdoTableDescriptor*)xTunnel->getSomething(OAdoTableDescriptor:: getUnoTunnelImplementationId());
         m_pCollection->Append(OLEVariant(pTable->getImpl()));
     }
 

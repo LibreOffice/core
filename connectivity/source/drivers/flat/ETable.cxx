@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ void OFlatTable::fillColumns()
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,nPrecision,nScale,eType,sal_False,sal_False,sal_False,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-        Reference< XFastPropertySet> xCol = pColumn;
+        Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
     }
     m_aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -827,13 +827,13 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols, 
     OSQLColumns::const_iterator aIter = _rCols.begin();
     for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
     {
-        Reference< XFastPropertySet> xColumn = *aIter;
+        Reference< XPropertySet> xColumn = *aIter;
 
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
-        xColumn->getFastPropertyValue(PROPERTY_ID_PRECISION) >>= nLen;
-        sal_Int32 nType = getINT32(xColumn->getFastPropertyValue(PROPERTY_ID_TYPE));
+        xColumn->getPropertyValue(PROPERTY_PRECISION) >>= nLen;
+        sal_Int32 nType = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
         ByteString aStr(m_aCurrentLine.GetToken(i-1,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
 
         if (aStr.Len() == 0)

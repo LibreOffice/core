@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 13:20:47 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
-#include <com/sun/star/beans/XFastPropertySet.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPropertySet_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -243,7 +243,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
             const ::rtl::OUString* pBegin = aColNames.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aColNames.getLength();
-            Reference< XFastPropertySet> xColumn;
+            Reference< XPropertySet> xColumn;
             for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
             {
                 if(match(columnNamePattern,*pBegin,'\0'))
@@ -252,16 +252,16 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
                     xColumns->getByName(*pBegin) >>= xColumn;
                     OSL_ENSHURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPE);
-                    aRow[6] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[7] = xColumn->getFastPropertyValue(PROPERTY_ID_PRECISION);
-                    //  aRow[8] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[9] = xColumn->getFastPropertyValue(PROPERTY_ID_SCALE);
-                    aRow[11] = xColumn->getFastPropertyValue(PROPERTY_ID_ISNULLABLE);
-                    //  aRow[12] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[13] = xColumn->getFastPropertyValue(PROPERTY_ID_DEFAULTVALUE);
-                    //  aRow[14] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    //  aRow[15] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
+                    aRow[5] = xColumn->getPropertyValue(PROPERTY_TYPE);
+                    aRow[6] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[7] = xColumn->getPropertyValue(PROPERTY_PRECISION);
+                    //  aRow[8] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[9] = xColumn->getPropertyValue(PROPERTY_SCALE);
+                    aRow[11] = xColumn->getPropertyValue(PROPERTY_ISNULLABLE);
+                    //  aRow[12] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[13] = xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE);
+                    //  aRow[14] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    //  aRow[15] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
                     switch(getINT32(aRow[5]))
                     {
                     case DataType::CHAR:
@@ -376,15 +376,15 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
     const ::rtl::OUString* pBegin = aIdxNames.getConstArray();
     const ::rtl::OUString* pEnd = pBegin + aIdxNames.getLength();
-    Reference< XFastPropertySet> xIndex;
+    Reference< XPropertySet> xIndex;
     for(;pBegin != pEnd;++pBegin)
     {
         xIndexes->getByName(*pBegin) >>= xIndex;
         OSL_ENSHURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
-        if(unique && !getBOOL(xIndex->getFastPropertyValue(PROPERTY_ID_ISUNIQUE)))
+        if(unique && !getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
             continue;
-        aRow[4] = xIndex->getFastPropertyValue(PROPERTY_ID_ISUNIQUE);
+        aRow[4] = xIndex->getPropertyValue(PROPERTY_ISUNIQUE);
         aRow[6] <<= *pBegin;
 
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
@@ -404,7 +404,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         const ::rtl::OUString* pColBegin = aColNames.getConstArray();
         const ::rtl::OUString* pColEnd = pColBegin + aColNames.getLength();
-        Reference< XFastPropertySet> xColumn;
+        Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
             xColumns->getByName(*pColBegin) >>= xColumn;

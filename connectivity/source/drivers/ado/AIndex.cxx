@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ void WpADOIndex::Create()
     }
 }
 // -------------------------------------------------------------------------
-OAdoIndex::OAdoIndex(sal_Bool _bCase,   ADOIndex* _pIndex) : OIndex_ADO(_bCase)
+OAdoIndexDescriptor::OAdoIndexDescriptor(sal_Bool _bCase,   ADOIndex* _pIndex) : OIndexDescriptor_ADO(_bCase)
 {
     construct();
     if(_pIndex)
@@ -119,31 +119,13 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,   ADOIndex* _pIndex) : OIndex_ADO(_bCase)
 
     refreshColumns();
 }
+IMPLEMENT_SERVICE_INFO(OAdoIndex,"com.sun.star.sdbcx.OAdoIndex","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-OAdoIndex::OAdoIndex(   const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Catalog,
-                sal_Bool _isUnique,
-                sal_Bool _isPrimaryKeyIndex,
-                sal_Bool _isClustered,
-                sal_Bool _bCase
-                ) : OIndex_ADO(_Name,
-                                  _Catalog,
-                                  _isUnique,
-                                  _isPrimaryKeyIndex,
-                                  _isClustered,_bCase)
+OAdoIndex::OAdoIndex(sal_Bool _bCase,   ADOIndex* _pIndex) : OAdoIndexDescriptor(_bCase,_pIndex)
 {
-    construct();
-    m_aIndex.Create();
-    m_aIndex.put_Name(_Name);
-    m_aIndex.put_Unique(_isUnique);
-    m_aIndex.put_PrimaryKey(_isPrimaryKeyIndex);
-    m_aIndex.put_Clustered(_isClustered);
-
-    refreshColumns();
 }
-// -------------------------------------------------------------------------
-
-void OAdoIndex::refreshColumns()
+// -----------------------------------------------------------------------------
+void OAdoIndexDescriptor::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
 
@@ -171,22 +153,22 @@ void OAdoIndex::refreshColumns()
 }
 
 // -------------------------------------------------------------------------
-Any SAL_CALL OAdoIndex::queryInterface( const Type & rType ) throw(RuntimeException)
+Any SAL_CALL OAdoIndexDescriptor::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
     if(aRet.hasValue())
         return aRet;
-    return OIndex_ADO::queryInterface(rType);
+    return OIndexDescriptor_ADO::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OAdoIndex::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OAdoIndexDescriptor::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return ::comphelper::concatSequences(aTypes.getTypes(),OIndex_ADO::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OIndexDescriptor_ADO::getTypes());
 }
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
+Sequence< sal_Int8 > OAdoIndexDescriptor::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
@@ -203,7 +185,7 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
 
 // com::sun::star::lang::XUnoTunnel
 //------------------------------------------------------------------
-sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
+sal_Int64 OAdoIndexDescriptor::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
@@ -211,7 +193,7 @@ sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (Run
     return 0;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
+void SAL_CALL OAdoIndexDescriptor::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aIndex.IsValid())
     {
@@ -245,7 +227,7 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoIndex::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void SAL_CALL OAdoIndexDescriptor::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_aIndex.IsValid())
     {

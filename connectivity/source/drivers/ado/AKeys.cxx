@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
     ADOKey* pKey = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pKey);
 
-        Reference< XNamed > xRet = new OAdoKey(isCaseSensitive(),pKey);
+    Reference< XNamed > xRet = new OAdoKey(isCaseSensitive(),pKey);
 
     return xRet;
 }
@@ -107,7 +107,7 @@ void OKeys::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OKeys::createEmptyObject()
 {
-    OAdoKey* pNew = new OAdoKey(isCaseSensitive());
+    OAdoKeyDescriptor* pNew = new OAdoKeyDescriptor(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        OAdoKey* pKey = (OAdoKey*)xTunnel->getSomething(OAdoKey:: getUnoTunnelImplementationId());
+        OAdoKeyDescriptor* pKey = (OAdoKeyDescriptor*)xTunnel->getSomething(OAdoKeyDescriptor:: getUnoTunnelImplementationId());
         // To pass as column parameter to Key's Apppend method
         OLEVariant vOptional;
         vOptional.vt = VT_ERROR;
@@ -145,7 +145,7 @@ void SAL_CALL OKeys::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOut
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     m_pCollection->Delete(OLEVariant(index));
 

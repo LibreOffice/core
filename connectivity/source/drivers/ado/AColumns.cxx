@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
     ADOColumn* pColumn = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pColumn);
 
-        Reference< XNamed > xRet = new OAdoColumn(isCaseSensitive(),pColumn);
+    Reference< XNamed > xRet = new OAdoColumn(isCaseSensitive(),pColumn);
 
     return xRet;
 }
@@ -107,7 +107,7 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OAdoColumn* pNew = new OAdoColumn(isCaseSensitive());
+    OAdoColumnDescriptor* pNew = new OAdoColumnDescriptor(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
     {
-        OAdoColumn* pColumn = (OAdoColumn*)xTunnel->getSomething(OAdoColumn::getUnoTunnelImplementationId());
+        OAdoColumnDescriptor* pColumn = (OAdoColumnDescriptor*)xTunnel->getSomething(OAdoColumnDescriptor::getUnoTunnelImplementationId());
         m_pCollection->Append(OLEVariant(pColumn->getColumnImpl()));
     }
 

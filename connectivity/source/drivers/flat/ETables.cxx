@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,7 @@ void OFlatTables::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OFlatTables::createEmptyObject()
 {
-    OFlatTable* pRet = new OFlatTable((OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
-    Reference< XPropertySet > xRet = pRet;
+    Reference< XPropertySet > xRet;
     return xRet;
 }
 typedef connectivity::sdbcx::OCollection OFlatTables_BASE_BASE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:30:56 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _CONNECTIVITY_DBASE_CATALOG_HXX_
+#include "dbase/DCatalog.hxx"
+#endif
 #define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -116,12 +119,12 @@ Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 {
-    //  static_cast<OFileCatalog&>(m_rParent).refreshTables();
+    static_cast<ODbaseCatalog*>(&m_rParent)->refreshTables();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseTables::createEmptyObject()
 {
-    ODbaseTable* pRet = new ODbaseTable((ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
+    ODbaseTableDescriptor* pRet = new ODbaseTableDescriptor((ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

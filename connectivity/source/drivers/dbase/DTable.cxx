@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 13:45:05 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ void ODbaseTable::fillColumns()
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aColumnName,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,nPrecision,aDBFColumn.db_dez,eType,sal_False,sal_False,sal_False,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-        Reference< XFastPropertySet> xCol = pColumn;
+        Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
     }
 }
@@ -529,7 +529,7 @@ void SAL_CALL ODbaseTable::disposing(void)
 #ifdef DEBUG
     for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> xProp = *aIter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp = *aIter;
         xProp = NULL;
     }
     m_aColumns->clear();
@@ -704,18 +704,18 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
     for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
     {
         //  pVal = (*_rRow)[i].getBodyPtr();
-        Reference< XFastPropertySet> xColumn = *aIter;
+        Reference< XPropertySet> xColumn = *aIter;
 
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
-        xColumn->getFastPropertyValue(PROPERTY_ID_PRECISION) >>= nLen;
-        sal_Int32 nType = getINT32(xColumn->getFastPropertyValue(PROPERTY_ID_TYPE));
+        xColumn->getPropertyValue(PROPERTY_PRECISION) >>= nLen;
+        sal_Int32 nType = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
         switch(nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getFastPropertyValue(PROPERTY_ID_SCALE)));
+                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(PROPERTY_SCALE)));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT:         nLen = 1; break;
             case DataType::LONGVARCHAR: nLen = 10; break;
@@ -1069,7 +1069,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
 
     ::rtl::OUString aName;
-    Reference<XFastPropertySet> xCol;
+    Reference<XPropertySet> xCol;
     for(sal_Int32 i=0;i<xColumns->getCount();++i)
     {
         xColumns->getByIndex(i) >>= xCol;
@@ -1077,7 +1077,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         char  cTyp;
 
-        xCol->getFastPropertyValue(PROPERTY_ID_NAME) >>= aName;
+        xCol->getPropertyValue(PROPERTY_NAME) >>= aName;
 
         if (aName.getLength() > nMaxFieldLength)
         {
@@ -1094,7 +1094,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         m_aFileStream << aCol.GetBuffer();
         m_aFileStream.Write(aBuffer, 11 - aCol.Len());
 
-        switch (getINT32(xCol->getFastPropertyValue(PROPERTY_ID_TYPE)))
+        switch (getINT32(xCol->getPropertyValue(PROPERTY_TYPE)))
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1134,9 +1134,9 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         m_aFileStream.Write(aBuffer, 4);
 
         sal_Int32 nPrecision = 0;
-        xCol->getFastPropertyValue(PROPERTY_ID_PRECISION) >>= nPrecision;
+        xCol->getPropertyValue(PROPERTY_PRECISION) >>= nPrecision;
         sal_Int32 nScale = 0;
-        xCol->getFastPropertyValue(PROPERTY_ID_SCALE) >>= nScale;
+        xCol->getPropertyValue(PROPERTY_SCALE) >>= nScale;
 
         switch(cTyp)
         {
@@ -1168,7 +1168,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 //                      0, String() );
                     break;
                 }
-                if (getBOOL(xCol->getFastPropertyValue(PROPERTY_ID_ISCURRENCY))) // Currency wird gesondert behandelt
+                if (getBOOL(xCol->getPropertyValue(PROPERTY_ISCURRENCY))) // Currency wird gesondert behandelt
                 {
                     m_aFileStream << (BYTE)10;          // Standard Laenge
                     m_aFileStream << (BYTE)4;
@@ -1397,7 +1397,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     if (!fetchRow(aRow,_rCols,TRUE))
         return sal_False;
 
-    Reference<XFastPropertySet> xCol;
+    Reference<XPropertySet> xCol;
     ::rtl::OUString aColName;
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     for (USHORT i = 0; i < m_pColumns->getCount(); i++)
@@ -1405,8 +1405,8 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         m_pColumns->getByIndex(i) >>= xCol;
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
 
-        xCol->getFastPropertyValue(PROPERTY_ID_NAME) >>= aColName;
-        Reference<XFastPropertySet> xIndex = isUniqueByColumnName(aColName);
+        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
+        Reference<XPropertySet> xIndex = isUniqueByColumnName(aColName);
         if (xIndex.is())
         {
             Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
@@ -1418,9 +1418,9 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
             //  sal_Int32 nPos = 0;
             for(;aIter != _rCols.end();++aIter,++nPos)
             {
-//              Reference<XFastPropertySet> xFindCol;
+//              Reference<XPropertySet> xFindCol;
 //              _xCols->getByIndex(nPos) >>= xFindCol;
-                if(aCase(getString((*aIter)->getFastPropertyValue(PROPERTY_ID_REALNAME)),aColName))
+                if(aCase(getString((*aIter)->getPropertyValue(PROPERTY_REALNAME)),aColName))
                     break;
             }
             if (aIter == _rCols.end())
@@ -1601,15 +1601,15 @@ void ODbaseTable::AllocBuffer()
     }
 }
 // -------------------------------------------------------------------------
-Reference<XFastPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString& _rColName)
+Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString& _rColName)
 {
     if(!m_pIndexes)
         refreshIndexes();
-    Reference<XFastPropertySet> xIndex;
+    Reference<XPropertySet> xIndex;
     for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
     {
         m_pIndexes->getByIndex(i) >>= xIndex;
-        if(getBOOL(xIndex->getFastPropertyValue(PROPERTY_ID_ISUNIQUE)))
+        if(getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
         {
             Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
             if(xCols->hasByName(_rColName))
@@ -1617,7 +1617,7 @@ Reference<XFastPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUStr
 
         }
     }
-    return Reference<XFastPropertySet>();
+    return Reference<XPropertySet>();
 }
 //------------------------------------------------------------------
 double toDouble(const ByteString& rString)
@@ -1643,11 +1643,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     USHORT nByteOffset  = 1;
 
     // Felder aktualisieren:
-    Reference<XFastPropertySet> xCol;
-    Reference<XFastPropertySet> xIndex;
+    Reference<XPropertySet> xCol;
+    Reference<XPropertySet> xIndex;
     USHORT i;
     ::rtl::OUString aColName;
-    ::std::vector< Reference<XFastPropertySet> > aIndexedCols(m_pColumns->getCount());
+    ::std::vector< Reference<XPropertySet> > aIndexedCols(m_pColumns->getCount());
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
@@ -1655,15 +1655,15 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
         m_pColumns->getByIndex(i) >>= xCol;
-        xCol->getFastPropertyValue(PROPERTY_ID_NAME) >>= aColName;
+        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
         sal_Int32 nPos = 0;
         for(;nPos<_xCols->getCount();++nPos)
         {
-            Reference<XFastPropertySet> xFindCol;
+            Reference<XPropertySet> xFindCol;
             _xCols->getByIndex(nPos) >>= xFindCol;
-            if(aCase(getString(xFindCol->getFastPropertyValue(PROPERTY_ID_NAME)),aColName))
+            if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
                 break;
         }
         if (nPos >= _xCols->getCount())
@@ -1707,17 +1707,17 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
         m_pColumns->getByIndex(i) >>= xCol;
-        xCol->getFastPropertyValue(PROPERTY_ID_NAME) >>= aColName;
+        xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
-        USHORT nLen = (USHORT)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
-        sal_Int32 nType = getINT32(xCol->getFastPropertyValue(PROPERTY_ID_TYPE));
+        USHORT nLen = (USHORT)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
+        sal_Int32 nType = getINT32(xCol->getPropertyValue(PROPERTY_TYPE));
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
-                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xCol->getFastPropertyValue(PROPERTY_ID_SCALE)));
+                nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xCol->getPropertyValue(PROPERTY_SCALE)));
                 break;  // das Vorzeichen und das Komma
             case DataType::BIT: nLen = 1; break;
             case DataType::LONGVARCHAR:nLen = 10; break;
@@ -1728,9 +1728,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         sal_Int32 nPos = 0;
         for(;nPos<_xCols->getCount();++nPos)
         {
-            Reference<XFastPropertySet> xFindCol;
+            Reference<XPropertySet> xFindCol;
             _xCols->getByIndex(nPos) >>= xFindCol;
-            if(aCase(getString(xFindCol->getFastPropertyValue(PROPERTY_ID_NAME)),aColName))
+            if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
                 break;
         }
 
@@ -1794,8 +1794,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     double n = rRow[nPos];
 
-                    int nPrecision      = (int)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
-                    int nScale          = (int)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_SCALE));
+                    int nPrecision      = (int)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
+                    int nScale          = (int)getINT32(xCol->getPropertyValue(PROPERTY_SCALE));
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
@@ -1880,3 +1880,19 @@ BOOL ODbaseTable::WriteBuffer()
     m_aFileStream.Seek(nPos);
     return m_aFileStream.Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
 }
+// -----------------------------------------------------------------------------
+ODbaseTableDescriptor::ODbaseTableDescriptor( ODbaseConnection* _pConnection) : ODbaseTable(_pConnection)
+{
+}
+typedef connectivity::sdbcx::OTableDescriptor ODbaseTableDescriptor_BASE;
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* ODbaseTableDescriptor::createArrayHelper( ) const
+{
+    return ODbaseTableDescriptor_BASE::createArrayHelper();
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & SAL_CALL ODbaseTableDescriptor::getInfoHelper()
+{
+    return ODbaseTableDescriptor_BASE::getInfoHelper();
+}
+// -----------------------------------------------------------------------------

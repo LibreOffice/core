@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,16 @@ using namespace com::sun::star::ucb;
 
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
+IMPLEMENT_SERVICE_INFO(ODbaseIndexDescriptor,"com.sun.star.sdbcx.driver.dbase.IndexDescriptor","com.sun.star.sdbcx.IndexDescriptor");
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers())
     , m_pTable(_pTable)
 {
     construct();
+}
+// -----------------------------------------------------------------------------
+ODbaseIndexDescriptor::ODbaseIndexDescriptor(ODbaseTable* _pTable) : ODbaseIndex(_pTable)
+{
 }
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
@@ -549,7 +554,7 @@ BOOL ODbaseIndex::CreateImpl()
         return FALSE;
     }
 
-    Reference<XFastPropertySet> xCol;
+    Reference<XPropertySet> xCol;
     m_pColumns->getByIndex(1) >>= xCol;
 
     // ist die Spalte schon indiziert ?
@@ -586,7 +591,7 @@ BOOL ODbaseIndex::CreateImpl()
     // Zun‰chst muﬂ das Ergebnis sortiert sein
     Reference<XStatement> xStmt = m_pTable->getConnection()->createStatement();
 
-    String aName(getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME)));
+    String aName(getString(xCol->getPropertyValue(PROPERTY_NAME)));
 
     String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
     String aStatement;
@@ -626,10 +631,10 @@ BOOL ODbaseIndex::CreateImpl()
     m_aFileStream.SetStreamSize(512);
 
     sal_Int32 nType = 0;
-    xCol->getFastPropertyValue(PROPERTY_ID_TYPE) >>= nType;
+    xCol->getPropertyValue(PROPERTY_TYPE) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
     ByteString aCol(aName,gsl_getSystemTextEncoding());
     strcpy(m_aHeader.db_name,aCol.GetBuffer());

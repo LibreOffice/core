@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _CONNECTIVITY_DBASE_TABLE_HXX_
 #include "dbase/DTable.hxx"
 #endif
+#ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMNDESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VIndexColumnDescriptor.hxx"
+#endif
 #ifndef _CONNECTIVITY_SDBCX_INDEXCOLUMN_HXX_
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #endif
@@ -88,17 +91,17 @@ Reference< XNamed > ODbaseIndexColumns::createObject(const ::rtl::OUString& _rNa
 
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
 
-    Reference< XFastPropertySet > xCol(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())));
+    Reference< XPropertySet > xCol(*find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive())));
     if(!xCol.is())
         return Reference< XNamed >();
 
     Reference< XNamed > xRet = new sdbcx::OIndexColumn(sal_True,_rName
-                                                    ,getString(xCol->getFastPropertyValue(PROPERTY_ID_TYPENAME))
+                                                    ,getString(xCol->getPropertyValue(PROPERTY_TYPENAME))
                                                     ,::rtl::OUString()
-                                                    ,getINT32(xCol->getFastPropertyValue(PROPERTY_ID_ISNULLABLE))
-                                                    ,getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION))
-                                                    ,getINT32(xCol->getFastPropertyValue(PROPERTY_ID_SCALE))
-                                                    ,getINT32(xCol->getFastPropertyValue(PROPERTY_ID_TYPE))
+                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_ISNULLABLE))
+                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_PRECISION))
+                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_SCALE))
+                                                    ,getINT32(xCol->getPropertyValue(PROPERTY_TYPE))
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False
@@ -115,7 +118,7 @@ void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexColumns::createEmptyObject()
 {
-    sdbcx::OColumn* pRet = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    sdbcx::OIndexColumnDescriptor* pRet = new sdbcx::OIndexColumnDescriptor(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

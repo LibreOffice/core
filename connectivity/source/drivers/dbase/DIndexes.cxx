@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexes::createEmptyObject()
 {
-    ODbaseIndex* pRet = new ODbaseIndex(m_pTable);
+    ODbaseIndexDescriptor* pRet = new ODbaseIndexDescriptor(m_pTable);
     Reference< XPropertySet > xRet = pRet;
     return xRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:34:31 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
     ::osl::MutexGuard aGuard( m_aMutex );
 
     OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                            ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
+                            ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ),
                             ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
@@ -1820,16 +1820,16 @@ BOOL OResultSet::OpenImpl()
     OValueVector::iterator aRowIter = m_aRow->begin();
     ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
     sal_Int32 i=0;
-    Reference<XFastPropertySet> xProp;
+    Reference<XPropertySet> xProp;
     ++aRowIter;
     for(OSQLColumns::iterator aIter = m_xColumns->begin();aIter != m_xColumns->end();++aIter,++i,++aRowIter)
     {
         xNames->getByIndex(i) >>= xProp;
         try
         {
-            aRowIter->setBound(aCase(connectivity::getString(xProp->getFastPropertyValue(PROPERTY_ID_NAME)),connectivity::getString((*aIter)->getFastPropertyValue(PROPERTY_ID_REALNAME))));
+            aRowIter->setBound(aCase(connectivity::getString(xProp->getPropertyValue(PROPERTY_NAME)),connectivity::getString((*aIter)->getPropertyValue(PROPERTY_REALNAME))));
             sal_Int32 nType;
-            xProp->getFastPropertyValue(PROPERTY_ID_TYPE) >>= nType;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
             aRowIter->setTypeKind(nType);
         }
         catch(...)
@@ -1967,7 +1967,7 @@ BOOL OResultSet::OpenImpl()
                     if(xIndexSup.is())
                     {
                         xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
-                        Reference<XFastPropertySet> xColProp;
+                        Reference<XPropertySet> xColProp;
                         xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
                         // iterate through the indexes to find the matching column
                         for(sal_Int32 i=0;i<xIndexes->getCount();++i)
@@ -1975,7 +1975,7 @@ BOOL OResultSet::OpenImpl()
                             Reference<XColumnsSupplier> xIndex;
                             xIndexes->getByIndex(i) >>= xIndex;
                             Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                            if(xIndexCols->hasByName(connectivity::getString(xColProp->getFastPropertyValue(PROPERTY_ID_NAME))))
+                            if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
                             {
                                 m_pFileSet = new OKeySet();
 
@@ -2437,7 +2437,7 @@ void OResultSet::ParseAssignValues(const ::std::vector< String>& aColumnNameList
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
     {
         // Parameter hinzufuegen, Typ ... entsprechend der Column, der der Wert zugewiesen wird
-        Reference<XFastPropertySet> xCol;
+        Reference<XPropertySet> xCol;
         m_xColNames->getByName(aColumnName) >>= xCol;
         sal_Int32 nParameter = -1;
         if(m_xParamColumns.isValid())
@@ -2463,7 +2463,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
                                    BOOL bSetNull,
                                    UINT32 nParameter)
 {
-    Reference<XFastPropertySet> xCol;
+    Reference<XPropertySet> xCol;
     m_xColNames->getByName(aColumnName) >>= xCol;
     sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
     // Kommt diese Column ueberhaupt in der Datei vor?
@@ -2487,7 +2487,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
         (*m_aAssignValues)[nId].setNull();
     else
     {
-        switch (getINT32(xCol->getFastPropertyValue(PROPERTY_ID_TYPE)))
+        switch (getINT32(xCol->getPropertyValue(PROPERTY_TYPE)))
         {
             // Kriterium je nach Typ als String oder double in die Variable packen ...
             case DataType::CHAR:
@@ -2544,7 +2544,7 @@ void OResultSet::SetAssignValue(const String& aColumnName,
 }
 
 //------------------------------------------------------------------
-UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XFastPropertySet>& _xCol)
+UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
 
     // Nr. des neu hinzuzufuegenden Parameters:
@@ -2577,13 +2577,13 @@ UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XFas
         // Typ, Precision, Scale ... der angegebenen Column verwenden,
         // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
         // Column wird der Wert verglichen.
-        eType = getINT32(_xCol->getFastPropertyValue(PROPERTY_ID_TYPE));
-        nPrecision = getINT32(_xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
-        nScale = getINT32(_xCol->getFastPropertyValue(PROPERTY_ID_SCALE));
-        nNullable = getINT32(_xCol->getFastPropertyValue(PROPERTY_ID_ISNULLABLE));;
+        eType = getINT32(_xCol->getPropertyValue(PROPERTY_TYPE));
+        nPrecision = getINT32(_xCol->getPropertyValue(PROPERTY_PRECISION));
+        nScale = getINT32(_xCol->getPropertyValue(PROPERTY_SCALE));
+        nNullable = getINT32(_xCol->getPropertyValue(PROPERTY_ISNULLABLE));;
     }
 
-    Reference<XFastPropertySet> xParaColumn;
+    Reference<XPropertySet> xParaColumn;
     connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(aParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
@@ -2620,7 +2620,7 @@ void OResultSet::describeParameter()
             pParseNode = pParseNode->getChild(0);
 
             m_aSQLIterator.getColumnRange(pParseNode,aColName,aTabName);
-            Reference<XFastPropertySet> xCol;
+            Reference<XPropertySet> xCol;
             xTable->getColumns()->getByName(aColName) >>= xCol;
             m_xParamColumns->push_back(xCol);
         }

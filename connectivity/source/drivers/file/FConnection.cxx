@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         aFile = ::ucb::Content(aFileName,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
     }
-    catch(::ucb::ContentCreationException &e)
+    catch(::ucb::ContentCreationException&)
     {
-        e;
+        throw SQLException();
     }
 
 //  if (aFileStat.IsKind(FSYS_KIND_WILD))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:19:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,13 +150,13 @@ Any OOperandRow::getValue() const
     return (*m_pRow)[m_nRowPos].makeAny();
 }
 //------------------------------------------------------------------
-OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XFastPropertySet>& _xColumn)
-    : OOperandRow(_nPos,getINT32(_xColumn->getFastPropertyValue(PROPERTY_ID_TYPE)))
+OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
+    : OOperandRow(_nPos,getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)))
     , m_xColumn(_xColumn)
 {
 }
 //------------------------------------------------------------------
-OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,const Reference< XFastPropertySet>& _xColumn)
+OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
                :OOperandAttr(_nPos,_xColumn)
 {
 }
@@ -222,21 +222,21 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, ::vos::ORef<connectivity::OSQ
 
 
 //------------------------------------------------------------------
-void OOperandParam::describe(const Reference< XFastPropertySet>& rColumn, ::vos::ORef<connectivity::OSQLColumns> rParameterColumns)
+void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORef<connectivity::OSQLColumns> rParameterColumns)
 {
     // den alten namen beibehalten
 
-    Reference< XFastPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
+    Reference< XPropertySet> xColumn = (*rParameterColumns)[getRowPos()];
 
-    xColumn->setFastPropertyValue(PROPERTY_ID_TYPENAME,rColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME));
-    xColumn->setFastPropertyValue(PROPERTY_ID_DEFAULTVALUE,rColumn->getFastPropertyValue(PROPERTY_ID_DEFAULTVALUE));
-    xColumn->setFastPropertyValue(PROPERTY_ID_PRECISION,rColumn->getFastPropertyValue(PROPERTY_ID_PRECISION));
-    xColumn->setFastPropertyValue(PROPERTY_ID_TYPE,rColumn->getFastPropertyValue(PROPERTY_ID_TYPE));
-    xColumn->setFastPropertyValue(PROPERTY_ID_SCALE,rColumn->getFastPropertyValue(PROPERTY_ID_SCALE));
-    xColumn->setFastPropertyValue(PROPERTY_ID_ISNULLABLE,rColumn->getFastPropertyValue(PROPERTY_ID_ISNULLABLE));
-    xColumn->setFastPropertyValue(PROPERTY_ID_ISAUTOINCREMENT,rColumn->getFastPropertyValue(PROPERTY_ID_ISAUTOINCREMENT));
+    xColumn->setPropertyValue(PROPERTY_TYPENAME,rColumn->getPropertyValue(PROPERTY_TYPENAME));
+    xColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,rColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
+    xColumn->setPropertyValue(PROPERTY_PRECISION,rColumn->getPropertyValue(PROPERTY_PRECISION));
+    xColumn->setPropertyValue(PROPERTY_TYPE,rColumn->getPropertyValue(PROPERTY_TYPE));
+    xColumn->setPropertyValue(PROPERTY_SCALE,rColumn->getPropertyValue(PROPERTY_SCALE));
+    xColumn->setPropertyValue(PROPERTY_ISNULLABLE,rColumn->getPropertyValue(PROPERTY_ISNULLABLE));
+    xColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,rColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
 
-    m_eDBType = getINT32(rColumn->getFastPropertyValue(PROPERTY_ID_TYPE));
+    m_eDBType = getINT32(rColumn->getPropertyValue(PROPERTY_TYPE));
 }
 
 //------------------------------------------------------------------

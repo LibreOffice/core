@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
             aColumnName = pPredicateNode->getChild(2)->getTokenValue();
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> xCol;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
         {
             if (m_orgColumns->getByName(aColumnName) >>= xCol)  // Column existiert nicht im Resultset

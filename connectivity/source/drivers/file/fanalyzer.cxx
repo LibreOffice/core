@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
                     if (pLeft)
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> xCol;
+                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
                         Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
                         OSL_ENSHURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);

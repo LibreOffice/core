@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FColumns.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,10 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
 
-        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
-        m_pTable->getSchema(),m_pTable->getName(),_rName);
+    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
+    m_pTable->getSchema(),m_pTable->getName(),_rName);
 
-        Reference< XNamed > xRet = NULL;
+    Reference< XNamed > xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -134,8 +134,8 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    sdbcx::OColumn* pRet = new sdbcx::OColumn(m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-        Reference< XPropertySet > xRet = pRet;
+    sdbcx::OColumnDescriptor* pRet = new sdbcx::OColumnDescriptor(m_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference< XPropertySet > xRet = pRet;
     return xRet;
 }
 

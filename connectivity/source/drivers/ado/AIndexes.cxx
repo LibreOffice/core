@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndexes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 08:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
     ADOIndex* pIndex = NULL;
     m_pCollection->get_Item(OLEVariant(_rName),&pIndex);
 
-        Reference< XNamed > xRet = new OAdoIndex(isCaseSensitive(),pIndex);
+    Reference< XNamed > xRet = new OAdoIndex(isCaseSensitive(),pIndex);
 
     return xRet;
 }
@@ -104,7 +104,7 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    OAdoIndex* pNew = new OAdoIndex(isCaseSensitive());
+    OAdoIndexDescriptor* pNew = new OAdoIndexDescriptor(isCaseSensitive());
     return pNew;
 }
 // -------------------------------------------------------------------------
