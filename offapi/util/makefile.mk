@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 16:11:47 $
+#   last change: $Author: mtg $ $Date: 2000-11-08 17:27:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssi18n.db \
     $(UCR)$/csslinguistic2.db \
     $(UCR)$/cssmozilla.db \
+    $(UCR)$/csspackage.db \
     $(UCR)$/csspgp.db \
     $(UCR)$/cssplugin.db \
     $(UCR)$/csspresentation.db \
