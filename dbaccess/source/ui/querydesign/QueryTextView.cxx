@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:54:08 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 11:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ using namespace ::com::sun::star::frame;
 OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     : Window(pParent)
     ,m_pBeamer(NULL)
+    ,m_pView(NULL)
 {
     m_pView = new OQueryViewSwitch(this,_pController,_rFactory);
 
