@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,9 +700,9 @@ IMPL_LINK(MasterPageContainer::Implementation,
             && (unsigned)aRequest.maToken<maContainer.size())
         {
             String sURL (maContainer[aRequest.maToken].msURL);
-            BitmapEx aBitmap (LoadPreviewFromURL (sURL));
-            maContainer[aRequest.maToken].maPreview
-                = maPreviewRenderer.ScaleBitmap (aBitmap, aRequest.mnWidth);
+            // Store bitmap in original size so that both preview sizes have
+            // access to the full resolution.
+            maContainer[aRequest.maToken].maPreview = LoadPreviewFromURL (sURL);
             aRequest.maCallback.Call (aRequest.mpUserData);
         }
     }
