@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-29 12:47:49 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 16:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,22 +945,62 @@ void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && mbContextMenuEnabled )
     {
         Point nPos = rCEvt.GetMousePosPixel();
-        SvLBoxEntry* pEntry = GetEntry( nPos );
-        if ( pEntry )
-        {
-            SelectAll( FALSE );
-            Select( pEntry, TRUE );
 
-            PopupMenu aMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
-            USHORT nId = aMenu.Execute( this, nPos );
-            switch ( nId )
+        SvLBoxEntry* pClickedEntry = GetEntry( nPos );
+        if ( pClickedEntry )
+        {
+            sal_Bool bClickedIsSelected = sal_False;
+
+            // collect the currently selected entries
+            sal_Int32 nSelectedEntries = GetSelectionCount();
+            ::std::vector< SvLBoxEntry* > aSelectedEntries;
+            aSelectedEntries.reserve( nSelectedEntries );
             {
-                case MID_FILEVIEW_DELETE :
-                    DeleteEntries();
-                    break;
-                case MID_FILEVIEW_RENAME :
-                    EditEntry( pEntry );
-                    break;
+                SvLBoxEntry* pSelected = FirstSelected();
+                while ( pSelected )
+                {
+                    aSelectedEntries.push_back( pSelected );
+                    bClickedIsSelected |= ( pClickedEntry == pSelected );
+                    pSelected = NextSelected( pSelected );
+                }
+            }
+
+            // if the entry which the user clicked at is not selected
+            if ( !bClickedIsSelected )
+            {   // deselect all other and select the clicked one
+                SelectAll( sal_False );
+                Select( pClickedEntry, sal_True );
+            }
+
+            nSelectedEntries = GetSelectionCount();
+            if ( nSelectedEntries )
+            {
+                PopupMenu aMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+                aMenu.EnableItem( MID_FILEVIEW_DELETE, 0 < nSelectedEntries );
+                aMenu.EnableItem( MID_FILEVIEW_RENAME, 1 == nSelectedEntries );
+                aMenu.RemoveDisabledEntries( sal_True, sal_True );
+
+                switch ( aMenu.Execute( this, nPos ) )
+                {
+                    case MID_FILEVIEW_DELETE :
+                        DeleteEntries();
+                        break;
+
+                    case MID_FILEVIEW_RENAME :
+                        EditEntry( FirstSelected() );
+                        break;
+                }
+            }
+
+            // restore the selection if necessary
+            if ( !bClickedIsSelected )
+            {
+                SelectAll( sal_False );
+                for (   ::std::vector< SvLBoxEntry* >::const_iterator aSelectLoop = aSelectedEntries.begin();
+                        aSelectLoop != aSelectedEntries.end();
+                        ++aSelectLoop
+                    )
+                    Select( *aSelectLoop, sal_True );
             }
         }
     }
@@ -984,6 +1024,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     SvLBoxEntry* pEntry = FirstSelected();
     String aURL;
 
+    ByteString sDialogPosition;
     while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
     {
         SvLBoxEntry *pCurEntry = pEntry;
@@ -1000,6 +1041,8 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+            if ( sDialogPosition.Len() )
+                aDlg.SetWindowState( sDialogPosition );
 
             if ( GetSelectionCount() > 1 )
                 aDlg.EnableAllButton();
@@ -1008,6 +1051,8 @@ void ViewTabListBox_Impl::DeleteEntries()
                 eResult = aDlg.GetResult();
             else
                 eResult = svtools::QUERYDELETE_CANCEL;
+
+            sDialogPosition = aDlg.GetWindowState( );
         }
 
         if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
