@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:54:59 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 11:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,10 @@ BOOL Storage::IsStorageFile( const String & rFileName )
 BOOL Storage::IsStorageFile( SvStream* pStream )
 {
     StgHeader aHdr;
-    return ( pStream && aHdr.Load( *pStream ) && aHdr.Check() );
+    ULONG nPos = pStream->Tell();
+    BOOL bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
+    pStream->Seek( nPos );
+    return bRet;
 }
 
 // Open the storage file. If writing is permitted and the file is not
@@ -653,7 +656,7 @@ BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, BOOL 
     }
     StorageStream* pStm = new StorageStream( pIo, p, m );
     if( p && !p->bDirect )
-        pStm->bAutoCommit = TRUE;
+        pStm->SetAutoCommit( TRUE );
     pIo->MoveError( *pStm );
     return pStm;
 }
