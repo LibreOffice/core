@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:51:13 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 11:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2042,7 +2042,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 57 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text = "Bereich enthält ~Spaltenköpfe" ;
+        Text = "Bereich enthält ~Spaltenbeschriftungen" ;
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;

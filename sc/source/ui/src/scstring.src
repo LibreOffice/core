@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:29:40 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3415,8 +3415,8 @@ String STR_ACC_TABLE_DESCR
 
 String STR_ACC_CELL_NAME
 {
-    Text = "Tabellenzelle %1";
-    Text[ english ] = "Table Cell %1";
+    Text = "Zelle %1";
+    Text[ english ] = "Cell %1";
     Text[ english_us ] = "Cell %1";
     Text[ portuguese ] = "Table Cell %1";
     Text[ russian ] = "Table Cell %1";
@@ -3703,8 +3703,8 @@ String STR_ACC_EDITLINE_DESCR
 
 String STR_ACC_EDITCELL_NAME
 {
-    Text = "Tabellenzelle %1";
-    Text[ english ] = "Table Cell %1";
+    Text = "Zelle %1";
+    Text[ english ] = "Cell %1";
     Text[ english_us ] = "Cell %1";
     Text[ portuguese ] = "Table Cell %1";
     Text[ russian ] = "Table Cell %1";
