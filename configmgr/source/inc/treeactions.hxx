@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-20 12:14:20 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #ifndef CONFIGMGR_APITYPES_HXX_
 #include "confapitypes.hxx"
 #endif
-
 
 //..........................................................................
 namespace configmgr
@@ -175,6 +174,49 @@ private:
     void ensure();
 };
 
+
+//==========================================================================
+//= OCloneForLocale
+//==========================================================================
+//= clones a subtree , in the process selecting only the best match locale
+//= from the set representation of localized values
+//==========================================================================
+class OCloneForLocale : public NodeAction
+{
+    rtl::OUString           m_sTargetLocale;
+    std::auto_ptr<INode>    m_pClone;
+public:
+    OCloneForLocale(OUString const& aLocale) : m_sTargetLocale(aLocale) {}
+    std::auto_ptr<INode> getResult() { return m_pClone; }
+
+private:
+    void handle(ValueNode const& _aValue);
+    void handle(ISubtree const&  _aSubtree);
+};
+
+//==========================================================================
+//= OExpandLocalizedValues
+//==========================================================================
+//= clones a subtree , in the process expanding localized value nodes to a one-element set
+//==========================================================================
+class OExpandLocalizedValues : public NodeAction
+{
+    std::auto_ptr<INode>    m_pClone;
+public:
+    OExpandLocalizedValues() {}
+    std::auto_ptr<INode> getResult() { return m_pClone; }
+
+private:
+    void handle(ValueNode const& _aValue);
+    void handle(ISubtree const&  _aSubtree);
+};
+//==========================================================================
+// Helper function to invoke the previous ones properly
+
+// convert to the given locale format, no matter what the original representation
+std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale);
 
 // ===================================================================
 // = OChangeCounter
