@@ -283,6 +283,7 @@ hedabu: ..\inc\fontoptions.hxx %_DEST%\inc%_EXT%\svtools\fontoptions.hxx
 hedabu: ..\inc\addxmltostorageoptions.hxx %_DEST%\inc%_EXT%\svtools\addxmltostorageoptions.hxx
 hedabu: ..\inc\defaultoptions.hxx %_DEST%\inc%_EXT%\svtools\defaultoptions.hxx
 hedabu: ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
+hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
 
 hedabu: ..\inc\lngmisc.hxx %_DEST%\inc%_EXT%\svtools\lngmisc.hxx
 hedabu: ..\inc\lingucfg.hxx %_DEST%\inc%_EXT%\svtools\lingucfg.hxx
