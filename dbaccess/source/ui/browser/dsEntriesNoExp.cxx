@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:33:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,16 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter")]    = ID_BROWSER_FORMLETTER;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertColumns")] = ID_BROWSER_INSERTCOLUMNS;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertContent")] = ID_BROWSER_INSERTCONTENT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/ToggleExplore")] = ID_BROWSER_EXPLORER;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBrowserExplorer")]               = ID_BROWSER_EXPLORER;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/DocumentDataSource")] = ID_BROWSER_DOCUMENT_DATASOURCE;
+
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBFormLetter")]                   = ID_BROWSER_FORMLETTER;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBInsertColumns")]                = ID_BROWSER_INSERTCOLUMNS;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBInsertContent")]                = ID_BROWSER_INSERTCONTENT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBDocumentDataSource")]           = ID_BROWSER_DOCUMENT_DATASOURCE;
+
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:CloseWin")]                        = ID_BROWSER_CLOSE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBRebuildData")]                   = ID_BROWSER_REFRESH_REBUILD;
 
             // TODO reenable our own code if we really have a handling for the formslots
 //  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
@@ -201,11 +209,6 @@ void SbaTableQueryBrowser::AddSupportedFeatures()
 String SbaTableQueryBrowser::getURL() const
 {
     return String();
-}
-//------------------------------------------------------------------------------
-ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
-{
-    return m_bShowToolbox ? new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) ) : NULL;
 }
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::notifyHiContrastChanged()
