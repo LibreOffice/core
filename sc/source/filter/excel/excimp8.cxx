@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-05 09:19:20 $
+ *  last change: $Author: dr $ $Date: 2001-07-05 15:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@ extern const sal_Char* pVBAStorageName;
 extern const sal_Char* pVBASubStorageName;
 
 ExcStreamConsumer::ExcStreamConsumer() :
-    pStrm               ( NULL ),
     pNode               ( NULL ),
     nBytesLeft          ( 0 )
 {
@@ -169,7 +168,6 @@ ExcStreamConsumer::ExcStreamConsumer() :
 
 ExcStreamConsumer::~ExcStreamConsumer()
 {
-    delete pStrm;
     while ( pNode )
         RemoveNode();
 }
@@ -192,82 +190,50 @@ void ExcStreamConsumer::RemoveNode()
     delete pTemp;
 }
 
-const DffRecordHeader* ExcStreamConsumer::Consume( SvStream* pS, sal_uInt32 nLen )
+const DffRecordHeader* ExcStreamConsumer::Consume( SvStream& rSrcStrm )
 {
-    DffRecordHeader* pRetValue = NULL;
-    if ( pS )
-    {
-        sal_uInt32  nEntry = ( pStrm ) ? pStrm->Tell() : 0;
-        sal_Bool    bOwnsStream = ( nLen == 0 );
+    sal_uInt32 nEntry = aStrm.Tell();
+    sal_uInt32 nSrcLen = rSrcStrm.Seek( STREAM_SEEK_TO_END );
+    if( !nSrcLen )
+        return NULL;
 
-        if ( !nLen )
+    rSrcStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    sal_Char* pBuf = new sal_Char[ nSrcLen ];
+    rSrcStrm.Read( pBuf, nSrcLen );
+    aStrm.Write( pBuf, nSrcLen );
+    delete[] pBuf;
+
+    sal_uInt32 nPos = aStrm.Tell();
+    aStrm.Seek( nEntry );
+    if( nBytesLeft )
+    {
+        if( nSrcLen < nBytesLeft )
         {
-            pS->Seek( STREAM_SEEK_TO_END );
-            nLen = pS->Tell();
-            if ( !nLen )
-            {
-                delete pS;
-                return NULL;
-            }
-            pS->Seek( 0 );
-        }
-        if ( bOwnsStream && ( pStrm == NULL ) )
-        {
-            pStrm = pS;
-            pStrm->Seek( STREAM_SEEK_TO_END );
+            aStrm.SeekRel( nSrcLen );
+            nBytesLeft -= nSrcLen;
         }
         else
         {
-            if ( ( bOwnsStream == FALSE ) && ( pStrm == NULL ) )
-                pStrm = new SvMemoryStream;
-            if ( pStrm )
-            {
-                sal_Char* pBuf = new sal_Char[ nLen ];
-                pS->Read( pBuf, nLen );
-                pStrm->Write( pBuf, nLen );
-                delete [] pBuf;
-                if ( bOwnsStream )
-                    delete pS;
-            }
-            else
-                pStrm = pS;
+            aStrm.SeekRel( nBytesLeft );
+            nBytesLeft = 0;
         }
-        sal_uInt32 nPos = pStrm->Tell();
-        pStrm->Seek( nEntry );
-        if ( nBytesLeft )
-        {
-            if ( nLen < nBytesLeft )
-            {
-                pStrm->SeekRel( nLen );
-                nBytesLeft -= nLen;
-            }
-            else
-            {
-                pStrm->SeekRel( nBytesLeft );
-                nBytesLeft = 0;
-            }
-        }
-        while ( pStrm->Tell() < nPos )
-        {
-            *pStrm >> aHd;
-            if ( aHd.IsContainer() )
-                UpdateNode( aHd );
-            else
-            {
-                if ( ( pStrm->Tell() + aHd.nRecLen ) <= nPos )
-                    pStrm->SeekRel( aHd.nRecLen );
-                else
-                {
-                    nBytesLeft = ( pStrm->Tell() + aHd.nRecLen ) - nPos;
-                    pStrm->Seek( nPos );
-                }
-            }
-        }
-        if ( !nBytesLeft )
-            pRetValue = &aHd;
-        pStrm->Seek( nPos );
     }
-    return pRetValue;
+    while( aStrm.Tell() < nPos )
+    {
+        aStrm >> aHd;
+        if( aHd.IsContainer() )
+            UpdateNode( aHd );
+        else if( (aStrm.Tell() + aHd.nRecLen) <= nPos )
+            aStrm.SeekRel( aHd.nRecLen );
+        else
+        {
+            nBytesLeft = aStrm.Tell() + aHd.nRecLen - nPos;
+            aStrm.Seek( nPos );
+        }
+    }
+    aStrm.Seek( nPos );
+
+    return nBytesLeft ? NULL : &aHd;
 }
 
 sal_Bool ExcStreamConsumer::AppendData( sal_Char* pBuf, sal_uInt32 nLen )
@@ -281,15 +247,15 @@ sal_Bool ExcStreamConsumer::AppendData( sal_Char* pBuf, sal_uInt32 nLen )
         while ( pTemp )
         {
             pTemp->nSize += nLen;               // updating container sizes
-            pStrm->Seek( pTemp->nPos + 4 );
-            *pStrm << ( pTemp->nSize - 8 );
+            aStrm.Seek( pTemp->nPos + 4 );
+            aStrm << ( pTemp->nSize - 8 );
             pTemp = pTemp->pPrev;
         }
         aHd.nRecLen += nLen;
-        pStrm->Seek( aHd.nFilePos + 4 );        // updating atom size
-        *pStrm << aHd.nRecLen;
-        pStrm->Seek( STREAM_SEEK_TO_END );
-        pStrm->Write( pBuf, nLen );
+        aStrm.Seek( aHd.nFilePos + 4 );        // updating atom size
+        aStrm << aHd.nRecLen;
+        aStrm.Seek( STREAM_SEEK_TO_END );
+        aStrm.Write( pBuf, nLen );
         return TRUE;
     }
     return bRetValue;
@@ -688,6 +654,17 @@ BOOL Biff8MSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
 
     return FALSE;
 }
+
+void Biff8MSDffManager::SetSdrObject( ExcEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData )
+{
+    SdrObject* pSdrObj = NULL;
+    BOOL bRet = GetShape( nId, pSdrObj, rData );
+    if( bRet )
+        pEscherObj->SetObj( pSdrObj );
+    else if( pSdrObj )
+        delete pSdrObj;
+}
+
 
 
 String      ImportExcel8::aSstErrTxt( _STRINGCONST( "*** ERROR IN SST ***" ) );
@@ -1874,9 +1851,9 @@ void ImportExcel8::BGPic( void )
 
 void ImportExcel8::Msodrawinggroup( void )
 {
-    SvMemoryStream* pMemStrm = new SvMemoryStream;
-    aIn.CopyRecordToStream( *pMemStrm );
-    const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( pMemStrm, 0 );
+    SvMemoryStream aMemStrm;
+    aIn.CopyRecordToStream( aMemStrm );
+    const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( aMemStrm );
 }
 
 
@@ -1886,7 +1863,7 @@ void ImportExcel8::Msodrawing( void )
     aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
     ULONG nL = aIn.GetRecLen();
 
-    if ( !aExcStreamConsumer.GetStream() )
+    if ( !aExcStreamConsumer.HasData() )
         return;
 
     aIn.PushPosition();
@@ -1897,12 +1874,12 @@ void ImportExcel8::Msodrawing( void )
 
         bTabStartDummy = FALSE;
     }
-    const ULONG nS = aExcStreamConsumer.GetStream()->Tell();
+    const ULONG nS = aExcStreamConsumer.GetStream().Tell();
     if( nL )
     {
-        SvMemoryStream* pMemStrm = new SvMemoryStream;
-        aIn.CopyRecordToStream( *pMemStrm );
-        const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( pMemStrm, 0 );
+        SvMemoryStream aMemStrm;
+        aIn.CopyRecordToStream( aMemStrm );
+        const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( aMemStrm );
         if ( pLatestRecHd )
         {
             switch ( pLatestRecHd->nRecType )
@@ -1935,7 +1912,7 @@ void ImportExcel8::Msodrawing( void )
         if( pActEscherObj )
             delete pActEscherObj;   // aEscherObjList.Append( pActEscherObj );
 
-        pActEscherObj = new ExcEscherObj( nS, aExcStreamConsumer.GetStream()->Tell() - 1, nTab, pExcRoot );
+        pActEscherObj = new ExcEscherObj( nS, aExcStreamConsumer.GetStream().Tell() - 1, nTab, pExcRoot );
 
         if( bMaybeTxo )
         {
@@ -2534,10 +2511,10 @@ void ImportExcel8::PostDocLoad( void )
     if( pWebQBuffer )
         pWebQBuffer->Apply( pD );
 
-    if( aExcStreamConsumer.GetStream() )
+    if( aExcStreamConsumer.HasData() )
     {
         Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( pExcRoot, aPosBuffer, aEscherObjList,
-                                            *aExcStreamConsumer.GetStream(), 0, 0, pD->GetDrawLayer(), 1440 );
+                                            aExcStreamConsumer.GetStream(), 0, 0, pD->GetDrawLayer(), 1440 );
 
         const String            aStrName( _STRING( "Ctls" ) );
         SvStorage&              rStrg = *pExcRoot->pRootStorage;
@@ -2593,30 +2570,25 @@ void ImportExcel8::PostDocLoad( void )
                 {
                     pMSDffImportData = new SvxMSDffImportData;
 
-                    pSdrObj = NULL;
-                    pDffMan->GetShape( nShapeId, pSdrObj, *pMSDffImportData );
-
-                    if( pSdrObj )
+                    ExcEscherObj* p = (ExcEscherObj*) aEscherObjList.Get( nObjNum );
+                    if( p && !p->GetObj() )
                     {
-                        pAnch = aPosBuffer.GetAnchorData( nObjNum );
-                        bRangeTest = FALSE;
-                        if( pAnch )
+                        pDffMan->SetSdrObject( p, nShapeId, *pMSDffImportData );
+
+                        if( p->GetObj() )
                         {
-                            bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                            if( pAutoFilterBuffer )
-                                bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                        }
-                        if( bRangeTest )
-                        {
-                            delete pSdrObj;
-                            pSdrObj = NULL;
-                        }
-                        else
-                        {
-                            ExcEscherObj* p = (ExcEscherObj*) aEscherObjList.Get( nObjNum );
-                            if ( p )
+                            pAnch = aPosBuffer.GetAnchorData( nObjNum );
+                            bRangeTest = FALSE;
+                            if( pAnch )
                             {
-                                p->SetObj( pSdrObj );
+                                bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                                if( pAutoFilterBuffer )
+                                    bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                            }
+                            if( bRangeTest )
+                                p->SetObj( NULL );      // delete SdrObject
+                            else
+                            {
                                 switch ( p->GetObjType() )
                                 {
                                     case OT_CHART:
@@ -2642,7 +2614,6 @@ void ImportExcel8::PostDocLoad( void )
                             }
                         }
                     }
-
                     delete pMSDffImportData;
                 }
             }

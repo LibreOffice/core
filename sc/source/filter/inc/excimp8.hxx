@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-05 09:18:10 $
+ *  last change: $Author: dr $ $Date: 2001-07-05 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 struct ClientAnchorData;
 class FilterProgressBar;
 class PosBuffer;
+class ExcEscherObj;
 class ExcEscherObjList;
 class ExcChart;
 class ScBaseCell;
@@ -141,6 +142,8 @@ public:
                                             ULONG               nDefaultFontHeight_ = 24,
                                             SvStream*           pStData2_           = 0);
     virtual                 ~Biff8MSDffManager();
+
+    void                    SetSdrObject( ExcEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData );
 };
 
 
@@ -465,22 +468,23 @@ struct ExcStreamNode
 
 class ExcStreamConsumer
 {
-        sal_uInt32              nBytesLeft;
-        SvStream*               pStrm;
-        ExcStreamNode*          pNode;
-        DffRecordHeader         aHd;
+private:
+    sal_uInt32                  nBytesLeft;
+    SvMemoryStream              aStrm;
+    ExcStreamNode*              pNode;
+    DffRecordHeader             aHd;
 
-        void                    UpdateNode( const DffRecordHeader& rHd );
-        void                    RemoveNode();
+    void                        UpdateNode( const DffRecordHeader& rHd );
+    void                        RemoveNode();
 
-    public :
+public:
+                                ExcStreamConsumer();
+                                ~ExcStreamConsumer();
 
-        const DffRecordHeader*  Consume( SvStream* pStrm, sal_uInt32 nLen );    // owns stream if nLen == 0
-        sal_Bool                AppendData( sal_Char* pBuf, sal_uInt32 nLen );
-        SvStream*               GetStream() const { return pStrm; };
-
-        ExcStreamConsumer();
-        ~ExcStreamConsumer();
+    const DffRecordHeader*      Consume( SvStream& rSrcStrm );
+    sal_Bool                    AppendData( sal_Char* pBuf, sal_uInt32 nLen );
+    sal_Bool                    HasData() const { return aStrm.Tell() > 0; }
+    SvStream&                   GetStream() { return aStrm; }
 };
 
 
