@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,9 +562,9 @@ namespace dbaui
                 SotStorageStreamRef aStream;
                 Reference<XEventListener> xEvt;
                 ODatabaseImportExport* pImport = NULL;
-                if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML))
+                if(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) || _rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
                 {
-                    const_cast<TransferableDataHelper&>(_rPasteData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML,aStream);
+                    const_cast<TransferableDataHelper&>(_rPasteData).GetSotStorageStream(_rPasteData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aStream);
                         // TODO: why are the GetXXX methods not const???
 
                     pImport = new OHTMLImportExport(xDestConnection,getNumberFormatter(),getORB());
@@ -916,6 +916,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/07/02 13:22:11  oj
+ *  #88476# save name of object before recursive call
+ *
  *  Revision 1.16  2001/06/22 10:53:59  oj
  *  #88455# serveral fixes for parameters
  *

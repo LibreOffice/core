@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,14 +549,27 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
     ::rtl::OUString aAlias(::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters()));
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
-        aAlias = aAlias.copy(0,aAlias.getLength() -(aAlias.getLength()-nMaxNameLen-2));
+        aAlias = aAlias.copy(0,nMaxNameLen);
 
     ::rtl::OUString sName(aAlias);
-    sal_Int32 nPos = 1;
-    while(m_aDestColumns.find(sName) != m_aDestColumns.end())
+    if(m_aDestColumns.find(sName) != m_aDestColumns.end())
     {
-        sName = aAlias;
-        sName += ::rtl::OUString::valueOf(++nPos);
+        aAlias = aAlias.copy(0,nMaxNameLen-1);
+
+        sal_Int32 nPos = 1;
+        sal_Int32 nCount = 2;
+        while(m_aDestColumns.find(sName) != m_aDestColumns.end())
+        {
+            sName = aAlias;
+            sName += ::rtl::OUString::valueOf(++nPos);
+            if(nMaxNameLen && sName.getLength() > nMaxNameLen)
+            {
+                aAlias = aAlias.copy(0,nMaxNameLen-nCount);
+                sName = aAlias;
+                sName += ::rtl::OUString::valueOf(nPos);
+                ++nCount;
+            }
+        }
     }
     aAlias = sName;
     // now create a column

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
     #endif
             if  (   (   !_sTypeName.getLength()
-                    ||  (aIter->second->aTypeName   == _sTypeName)
+                    ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
                 &&  (aIter->second->nPrecision      >= _nPrecision)
                 &&  (aIter->second->nMaximumScale   >= _nScale)
@@ -321,7 +321,7 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
-                if  (   (aIter->second->aLocalTypeName  == _sTypeName)
+                if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     &&  (aIter->second->nPrecision      >= _nPrecision)
                     &&  (aIter->second->nMaximumScale   >= _nScale)
                     )

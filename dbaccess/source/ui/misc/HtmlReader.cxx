@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,10 +583,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                         aColumnName = String(ModuleRes(STR_COLUMN_NAME));
 
                     CreateDefaultColumn(aColumnName);
-//                  SbaColumn* pColumn = CreateColumn(aColumnName,aTableName,pDestList);
-//                  pColumn->Put(SvxHorJustifyItem( eVal, SBA_ATTR_ALIGN_HOR_JUSTIFY) );
-//
-//                  pDestList->InsertAt(aColumnName,pColumn);
                     aColumnName.Erase();
 
                     DELETEZ(pValue);
@@ -620,7 +616,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_CAPTION_OFF:
                 aTableName.EraseLeadingChars();
                 aTableName.EraseTrailingChars();
-                if(aTableName.Len())
+                if(!aTableName.Len())
                     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
                 else
                     aTableName = aTempName;
@@ -647,6 +643,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
+    if(!aTableName.Len())
+        aTableName = aTempName;
 
     m_bInTbl = sal_False;
 
@@ -682,11 +680,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     m_bIsAutoIncrement  = aWizard.SetAutoincrement();
                     m_vColumns          = aWizard.GetColumnPositions();
                     m_vColumnTypes      = aWizard.GetColumnTypes();
-//                  m_xTable = aWizard.GetTableDef();
-//                  void *pTemp = (void *)&m_vColumns;
-//                  map<String,String,SbaStringCompare> aTmp = aWizard.GetNameMapping();
-//                  void* pTemp2 = (void *)&aTmp;
-//                  m_bError = !SbaExplorerExchObj::CheckColumnMerge(xSourceDef->GetColumns(),m_xTable->GetOriginalColumns(),pTemp,pTemp2);
                 }
                 break;
             default:
