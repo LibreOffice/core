@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:40 $
+#   last change: $Author: jsc $ $Date: 2002-11-27 09:57:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ IDLFILES=\
     IndexColumnDescriptor.idl \
     IndexDescriptor.idl \
     Key.idl \
+    KeyColumn.idl \
     KeyDescriptor.idl \
     KeyColumnDescriptor.idl \
     KeyDescriptor.idl \
