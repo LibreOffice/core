@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: er $ $Date: 2001-07-05 14:52:48 $
+#   last change: $Author: er $ $Date: 2001-07-10 12:04:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,18 +79,19 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Types -------------------------------------
 
 
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(UNOUCROUT)
 
-# --- Types -------------------------------------
-
-#UNOTYPES+=	\
-#	com.sun.star.lang.XCharacterClassification \
-#	com.sun.star.lang.XLocaleData \
-#	com.sun.star.lang.XNumberFormatCode
+UNOTYPES+= \
+    com.sun.star.i18n.XCalendar             \
+    com.sun.star.i18n.XCharacterClassification \
+    com.sun.star.i18n.XCollator             \
+    com.sun.star.i18n.XLocaleData           \
+    com.sun.star.i18n.XNumberFormatCode     \
+    com.sun.star.i18n.XTransliteration
 
 
 # --- Files -------------------------------------
