@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 10:28:53 $
+ *  last change: $Author: os $ $Date: 2002-09-10 08:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,10 +686,11 @@ SvxNumRule::SvxNumRule(ULONG nFeatures, USHORT nLevels, BOOL bCont, SvxNumRuleTy
         {
             aFmts[i] = new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER);
             //daran wird zwischen writer und draw unterschieden
-            if(bContinuousNumbering)
+            if(nFeatures & NUM_CONTINUOUS)
             {
                 aFmts[i]->SetLSpace( MM100_TO_TWIP(DEF_WRITER_LSPACE) );
                 aFmts[i]->SetAbsLSpace( MM100_TO_TWIP(DEF_WRITER_LSPACE * (i+1)) );
+                aFmts[i]->SetFirstLineOffset(MM100_TO_TWIP(-DEF_WRITER_LSPACE));
             }
             else
             {
