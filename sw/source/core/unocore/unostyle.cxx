@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 10:01:18 $
+ *  last change: $Author: os $ $Date: 2000-10-24 15:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 /******************************************************************************
  *
@@ -590,14 +591,14 @@ sal_Bool SwXStyleFamilies::hasElements(void) throw( RuntimeException )
 
   -----------------------------------------------------------------------*/
 void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
-    const Sequence< beans::PropertyValue >& aOptions)
+    const Sequence< PropertyValue >& aOptions)
     throw( io::IOException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid() && rURL.len())
     {
         int nCount = aOptions.getLength();
-        const beans::PropertyValue* pArray = aOptions.getConstArray();
+        const PropertyValue* pArray = aOptions.getConstArray();
         for(int i = 0; i < nCount; i++)
         {
             String sName = pArray[i].Name;
@@ -662,28 +663,28 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 /*-- 16.12.98 15:13:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
+Sequence< PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
         throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    Sequence< beans::PropertyValue > aSeq(5);
-    beans::PropertyValue* pArray = aSeq.getArray();
+    Sequence< PropertyValue > aSeq(5);
+    PropertyValue* pArray = aSeq.getArray();
     Any aVal;
     sal_Bool bTemp = bLoadStyleText;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[0] = beans::PropertyValue(C2U(UNO_NAME_LOAD_TEXT_STYLES), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[0] = PropertyValue(C2U(UNO_NAME_LOAD_TEXT_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     bTemp = bLoadStyleFrame;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[1] = beans::PropertyValue(C2U(UNO_NAME_LOAD_FRAME_STYLES), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[1] = PropertyValue(C2U(UNO_NAME_LOAD_FRAME_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     bTemp = bLoadStylePage;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[2] = beans::PropertyValue(C2U(UNO_NAME_LOAD_PAGE_STYLES), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[2] = PropertyValue(C2U(UNO_NAME_LOAD_PAGE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     bTemp = bLoadStyleNumbering;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[3] = beans::PropertyValue(C2U(UNO_NAME_LOAD_NUMBERING_STYLES), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[3] = PropertyValue(C2U(UNO_NAME_LOAD_NUMBERING_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     bTemp = bLoadStyleOverwrite;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[4] = beans::PropertyValue(C2U(UNO_NAME_OVERWRITE_STYLES), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[4] = PropertyValue(C2U(UNO_NAME_OVERWRITE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
     return aSeq;
 }
 
@@ -1394,15 +1395,15 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 /*-- 17.12.98 08:26:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
+Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
     throw( RuntimeException )
 {
-    Reference< beans::XPropertySetInfo >  xRet;
+    Reference< XPropertySetInfo >  xRet;
     switch( eFamily )
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            static Reference< beans::XPropertySetInfo >  xCharRef;
+            static Reference< XPropertySetInfo >  xCharRef;
             if(!xCharRef.is())
             {
                 SfxItemPropertySet aPropSet(
@@ -1414,7 +1415,7 @@ Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            static Reference< beans::XPropertySetInfo >  xParaRef;
+            static Reference< XPropertySetInfo >  xParaRef;
             if(!xParaRef.is())
             {
                 SfxItemPropertySet aPropSet(
@@ -1426,7 +1427,7 @@ Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
         break;
         case SFX_STYLE_FAMILY_PAGE     :
         {
-            static Reference< beans::XPropertySetInfo >  xPageRef;
+            static Reference< XPropertySetInfo >  xPageRef;
             if(!xPageRef.is())
             {
                 SfxItemPropertySet aPropSet(
@@ -1438,7 +1439,7 @@ Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
         break;
         case SFX_STYLE_FAMILY_FRAME    :
         {
-            static Reference< beans::XPropertySetInfo >  xFrameRef;
+            static Reference< XPropertySetInfo >  xFrameRef;
             if(!xFrameRef.is())
             {
                 SfxItemPropertySet aPropSet(
@@ -1450,7 +1451,7 @@ Reference< beans::XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
         break;
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            static Reference< beans::XPropertySetInfo >  xNumRef;
+            static Reference< XPropertySetInfo >  xNumRef;
             if(!xNumRef.is())
             {
                 SfxItemPropertySet aPropSet(
@@ -1486,8 +1487,8 @@ void    SwXStyle::ApplyDescriptorProperties()
 
   -----------------------------------------------------------------------*/
 void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
-    throw( beans::UnknownPropertyException,
-        beans::PropertyVetoException,
+    throw( UnknownPropertyException,
+        PropertyVetoException,
         lang::IllegalArgumentException,
          lang::WrappedTargetException,
         RuntimeException)
@@ -1506,7 +1507,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), rPropertyName);
     if(!pMap)
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily);
@@ -1769,7 +1770,7 @@ put_itemset:
 
   -----------------------------------------------------------------------*/
 Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
@@ -1787,7 +1788,7 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), rPropertyName);
     if(!pMap)
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
     if(pBasePool)
     {
         USHORT nSaveMask = pBasePool->GetSearchMask();
@@ -1909,8 +1910,8 @@ query_itemset:
 
   -----------------------------------------------------------------------*/
 void SwXStyle::addPropertyChangeListener(const OUString& PropertyName,
-    const Reference< beans::XPropertyChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    const Reference< XPropertyChangeListener > & aListener)
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -1918,8 +1919,8 @@ void SwXStyle::addPropertyChangeListener(const OUString& PropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXStyle::removePropertyChangeListener(const OUString& PropertyName,
-    const Reference< beans::XPropertyChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    const Reference< XPropertyChangeListener > & aListener)
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -1927,8 +1928,8 @@ void SwXStyle::removePropertyChangeListener(const OUString& PropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXStyle::addVetoableChangeListener(const OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    const Reference< XVetoableChangeListener > & aListener)
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -1936,8 +1937,8 @@ void SwXStyle::addVetoableChangeListener(const OUString& PropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXStyle::removeVetoableChangeListener(const OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener > & aListener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    const Reference< XVetoableChangeListener > & aListener)
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -1945,11 +1946,27 @@ void SwXStyle::removeVetoableChangeListener(const OUString& PropertyName,
 /*-- 08.03.99 10:50:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, RuntimeException )
+PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
+        throw( UnknownPropertyException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
+
+    Sequence< OUString > aNames(1);
+    OUString* pNames = aNames.getArray();
+    pNames[0] = rPropertyName;
+    Sequence< PropertyState > aStates = getPropertyStates(aNames);
+    return aStates.getConstArray()[0];
+}
+/*-- 08.03.99 10:50:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Sequence< PropertyState > SwXStyle::getPropertyStates(
+    const Sequence< OUString >& rPropertyNames)
+        throw( UnknownPropertyException, RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< PropertyState > aRet(rPropertyNames.getLength());
+    PropertyState* pStates = aRet.getArray();
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily );
@@ -1958,31 +1975,39 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
 
         if(pBase)
         {
+            const OUString* pNames = rPropertyNames.getConstArray();
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-            String sPropName(rPropertyName);
-            //Sonderbehandlung fuer das SvxNumRuleItem:
-            if(sPropName.EqualsAscii(UNO_NAME_NUMBERING_RULES))
+            sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
+            switch(eFamily)
             {
-                eRet = beans::PropertyState_DIRECT_VALUE;
-            }
-            else if(sPropName.EqualsAscii(UNO_NAME_FOLLOW_STYLE))
-            {
-                eRet = beans::PropertyState_DIRECT_VALUE;
-            }
-            else
-            {
-                sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
-                switch(eFamily)
+                case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
+                case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
+                case SFX_STYLE_FAMILY_PAGE:
                 {
-                    case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-                    case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-                    case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
-                    case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+//                  nPropSetId = PROPERTY_SET_PAGE_STYLE  ;
+                    //page styles do not support inheritance of properties
+                    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
+                        pStates[i] = PropertyState_DIRECT_VALUE;
+                    return aRet;
                 }
+                break;
+                case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+            }
 
-                SfxItemSet aSet = aStyle.GetItemSet();
-                eRet = aSwMapProvider.GetPropertySet(nPropSetId).
-                                    getPropertyState(sPropName, aSet);
+            SfxItemSet aSet = aStyle.GetItemSet();
+            for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
+            {
+                String sPropName(pNames[i]);
+                if(sPropName.EqualsAscii(UNO_NAME_NUMBERING_RULES)||
+                    sPropName.EqualsAscii(UNO_NAME_FOLLOW_STYLE))
+                {
+                    pStates[i] = PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    pStates[i] = aSwMapProvider.GetPropertySet(nPropSetId).
+                                        getPropertyState(sPropName, aSet);
+                }
             }
         }
         else
@@ -1990,28 +2015,13 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
     }
     else
         throw RuntimeException();
-    return eRet;
-}
-/*-- 08.03.99 10:50:27---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
-    const Sequence< OUString >& PropertyNames)
-    throw( beans::UnknownPropertyException, RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    const OUString* pNames = PropertyNames.getConstArray();
-    Sequence< beans::PropertyState > aRet(PropertyNames.getLength());
-    beans::PropertyState* pStates = aRet.getArray();
-    for(sal_Int32 i = 0; i < PropertyNames.getLength(); i++)
-        pStates[i] = getPropertyState(pNames[i]);
     return aRet;
 }
 /*-- 08.03.99 10:50:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, RuntimeException )
+        throw( UnknownPropertyException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(pBasePool)
@@ -2063,7 +2073,7 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
 
   -----------------------------------------------------------------------*/
 Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+    throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
@@ -2179,7 +2189,8 @@ SwXPageStyle::~SwXPageStyle()
 /*-- 17.12.98 08:43:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(
+    UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
@@ -2187,7 +2198,7 @@ Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(::com::s
                     aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PAGE_STYLE),
                     rPropertyName);
     if(!pMap)
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
     if(GetBasePool())
     {
         sal_uInt16 nRes;
@@ -2357,8 +2368,8 @@ MakeObject:
 
   -----------------------------------------------------------------------*/
 void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
-    throw( beans::UnknownPropertyException,
-        beans::PropertyVetoException,
+    throw( UnknownPropertyException,
+        PropertyVetoException,
         lang::IllegalArgumentException,
          lang::WrappedTargetException,
         RuntimeException)
@@ -2368,7 +2379,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& aV
                         aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PAGE_STYLE),
                         rPropertyName);
     if(!pMap)
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
     if(GetBasePool())
     {
         switch(pMap->nWID)
@@ -2568,314 +2579,4 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
     }
     return pRet;
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/10/18 11:20:20  mib
-    Setting/Getting PageNumber now works correctly for paragraph styles
-
-    Revision 1.2  2000/10/12 17:15:50  mib
-    (Header|Footer)Text(Left)? now don't respect UsedOn property
-
-    Revision 1.1.1.1  2000/09/19 00:08:29  hr
-    initial import
-
-    Revision 1.96  2000/09/18 16:04:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.95  2000/09/01 14:23:40  os
-    #78380# Header and footer separated
-
-    Revision 1.94  2000/08/31 13:42:36  os
-    DropCap: WhichId corrected
-
-    Revision 1.93  2000/08/31 10:04:03  os
-    Detect conditional style by PoolId
-
-    Revision 1.92  2000/08/25 08:49:07  os
-    +property DropCapCharStyleName
-
-    Revision 1.91  2000/08/23 10:49:07  os
-    new service: ...style.ConditionalParagraphStyle
-
-    Revision 1.90  2000/08/15 10:06:51  os
-    #76785# invalidate style after removing via replaceByName
-
-    Revision 1.89  2000/08/10 10:55:15  os
-    solaris compiler bug
-
-    Revision 1.88  2000/08/02 14:53:57  mib
-    Standard char style now isn't present physically
-
-    Revision 1.87  2000/07/21 13:13:12  os
-    #76644# Category property at paragraph styles
-
-    Revision 1.86  2000/07/10 10:37:38  os
-    #76667# isUserDefined: search mask corrected
-
-    Revision 1.85  2000/07/10 07:47:41  os
-    #76697# create object of SwDocStyleSheet
-
-    Revision 1.84  2000/07/06 08:01:51  os
-    ::setParent: no exception if the parent is already set
-
-    Revision 1.83  2000/06/29 13:06:33  os
-    service ParagraphStyle
-
-    Revision 1.82  2000/06/28 14:05:06  os
-    ::getPropertyValue: search always for all styles
-
-    Revision 1.81  2000/06/28 12:29:32  os
-    #76403# SwXStyleFamilies::getByIndex: exception condition corrected
-
-    Revision 1.80  2000/06/28 09:24:00  os
-    IsPhysical: prevent style from creating
-
-    Revision 1.79  2000/06/27 13:37:22  os
-    new Properties: IsAutoUpdate + DisplayName
-
-    Revision 1.78  2000/06/27 12:10:33  os
-    #76423# programmatic style names
-
-    Revision 1.77  2000/06/26 12:56:42  os
-    new Property: IsPhysical
-
-    Revision 1.76  2000/05/25 09:55:12  hr
-    exception specification
-
-    Revision 1.75  2000/05/16 17:21:36  jp
-    Changes for Unicode
-
-    Revision 1.74  2000/05/16 09:14:55  os
-    project usr removed
-
-    Revision 1.73  2000/04/26 11:35:20  os
-    GetName() returns String&
-
-    Revision 1.72  2000/04/25 13:23:11  os
-    SwXPageStyle::setPropertyValue: throw exception for readonly properties
-
-    Revision 1.71  2000/04/19 13:35:31  os
-    UNICODE
-
-    Revision 1.70  2000/04/11 08:31:04  os
-    UNICODE
-
-    Revision 1.69  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.68  2000/03/21 15:42:25  os
-    UNOIII
-
-    Revision 1.67  2000/03/07 18:38:25  os
-    #73638# ::loadStyles.. : create Reader with PaM instead of Doc
-
-    Revision 1.66  2000/03/07 18:03:30  os
-    #73638# ::loadStyles.. : only file names are valid
-
-    Revision 1.65  2000/02/11 14:36:04  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.64  2000/02/04 08:56:48  jp
-    #72424# Chg: PropertyValue
-
-    Revision 1.63  2000/02/02 16:58:07  jp
-    Task #72579#: interface of SwReader is changed
-
-    Revision 1.62  2000/01/28 15:20:25  os
-    #69861# Chg: beans::Xbeans::PropertyState; #72424# Chg: PropertyValue
-
-    Revision 1.61  1999/11/25 15:31:53  os
-    #70144# ::setName - create a copy style sheet
-
-    Revision 1.60  1999/11/22 10:37:57  os
-    missing headers added
-
-    Revision 1.59  1999/11/19 16:40:19  os
-    modules renamed
-
-    Revision 1.58  1999/10/28 09:19:23  os
-    #69199# set/getName corrected
-
-    Revision 1.57  1999/08/23 14:17:54  OS
-    #68353# create SwXPageStyle in ServiceProvider too
-
-
-      Rev 1.56   23 Aug 1999 16:17:54   OS
-   #68353# create SwXPageStyle in ServiceProvider too
-
-      Rev 1.55   20 Jul 1999 14:55:08   OS
-   #67495# PageDescName property in paragraph styles
-
-      Rev 1.54   09 Jul 1999 09:22:52   OS
-   #67525#
-
-      Rev 1.53   07 Jul 1999 17:50:22   OS
-   #67343# re-enable setPropertyValue
-
-      Rev 1.52   18 Jun 1999 08:56:40   OS
-   #67037# SetItemSet: dont apply on full range
-
-      Rev 1.51   20 May 1999 08:51:40   OS
-   #65130# replaceByName impl.
-
-      Rev 1.50   12 May 1999 15:39:32   OS
-   #66150# nArrLen initialisiert!
-
-      Rev 1.49   07 May 1999 14:08:48   KZ
-   #include <svtools/smplhint.hxx> eingefuegt
-
-      Rev 1.48   23 Apr 1999 15:29:28   OS
-   #65134# Properties schon am Style als Descriptor
-
-      Rev 1.47   23 Apr 1999 08:26:38   OS
-   #65194# Semikolon muss weg
-
-      Rev 1.46   22 Apr 1999 16:13:56   OS
-   #65194# throw -> throw; #65124# not impl. nur noch warning; EventListener
-
-      Rev 1.45   30 Mar 1999 12:47:54   OS
-   #64019# HeaderTextLeft/Right - neuer Versuch
-
-      Rev 1.44   15 Mar 1999 14:37:52   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.43   12 Mar 1999 09:41:28   OS
-   #62845# lang::XServiceInfo impl.
-
-      Rev 1.42   09 Mar 1999 12:41:28   OS
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-      Rev 1.41   08 Mar 1999 13:49:36   OS
-   #62461##62543 beans::Xbeans::PropertyState
-
-      Rev 1.40   26 Feb 1999 09:38:02   OS
-   #62454# SetItemSet immer rufen
-
-      Rev 1.39   23 Feb 1999 10:22:06   OS
-   #61767# Kapitelnumerierung funktioniert wieder
-
-      Rev 1.38   22 Feb 1999 13:23:42   OS
-   #60606# Numerierungsregel incl. Font richtig setzen
-
-      Rev 1.37   19 Feb 1999 16:34:48   OS
-   #62083# StyleName beim insert setzen
-
-      Rev 1.36   19 Feb 1999 09:35:10   OS
-   #62083# Styles per ServiceProvider anlegen
-
-      Rev 1.35   04 Feb 1999 16:23:40   OS
-   #56371# richtigen rechten Header/FooterText finden
-
-      Rev 1.34   03 Feb 1999 11:48:12   OS
-   #56371# ItemSet des StyleSheets kopieren
-
-      Rev 1.33   02 Feb 1999 12:52:22   OS
-   #56371# richtige IdlClasses
-
-      Rev 1.32   22 Jan 1999 15:09:24   OS
-   #56371# Draw wieder verfuegbar
-
-      Rev 1.31   21 Jan 1999 13:45:32   OS
-   #56371##52654# NumberingRule und FollowStyle
-
-      Rev 1.30   21 Jan 1999 09:57:06   OS
-   #60971# Zeichenvorlagen der Numerierung an Absatzvorlagen setzen
-
-      Rev 1.29   14 Jan 1999 16:21:46   OS
-   #56371# TF_ONE51
-
-      Rev 1.28   13 Jan 1999 10:49:04   OS
-   #52654# Start/Endnote fuer Kopf-/Fusszeile zurueckgeben
-
-      Rev 1.27   05 Jan 1999 10:10:54   OS
-   #60606# #52654# Numerierungsregel an Styles wieder korrekt
-
-      Rev 1.26   21 Dec 1998 16:22:30   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.25   17 Dec 1998 09:21:02   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.24   10 Dec 1998 15:53:38   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.23   30 Oct 1998 16:32:06   OS
-   #52654# fehlende Initialisierung
-
-      Rev 1.22   23 Sep 1998 07:43:08   OS
-   #52654# syntax
-
-      Rev 1.21   18 Sep 1998 09:31:06   OS
-   52654# style::XStyleLoader
-
-      Rev 1.20   31 Aug 1998 14:56:32   OS
-   #52654# addStyle: richtige Parameter fuer 504
-
-      Rev 1.19   31 Aug 1998 14:40:00   OS
-   #52654# addStyle: nur noch mit dem Namen des parents aufrufen
-
-      Rev 1.18   27 Aug 1998 09:36:40   OS
-   #52654# Kopf- und Fusszeilen impl.
-
-      Rev 1.17   12 Aug 1998 19:43:48   HR
-   #54781#: ::::getCppuType((const Reference< XInterface >*)0)() -> ( XInterface*)0)->getSmartUik()
-
-      Rev 1.16   21 Jul 1998 17:00:32   OS
-   SwXStyle::getPropertySetInfo - abhaengigg von eFamily unterschiedliche Infos liefern #52654#
-
-      Rev 1.15   10 Jul 1998 18:08:28   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.14   10 Jul 1998 14:43:58   HR
-   .is()
-
-      Rev 1.13   09 Jul 1998 09:13:56   OS
-   getElementBy* - queryInterface auf XInterface
-
-
-      Rev 1.12   25 Jun 1998 11:14:58   OS
-   PreopertyMaps nur noch vom PropertyMapProvider
-
-      Rev 1.11   23 Jun 1998 10:25:26   OS
-   CONVERT_TWIPS
-
-      Rev 1.10   19 Jun 1998 08:47:26   OS
-   Twip-Konvertierung
-
-      Rev 1.9   18 Jun 1998 18:09:58   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   queryInterface fuer style::StyleFamily/ies berichtigt
-
-
-      Rev 1.8   18 Jun 1998 08:11:10   OS
-   Property-Namen veraendert
-
-      Rev 1.7   16 Jun 1998 17:25:18   OS
-   Bold/Italic/Underlined ersetzt durch Weight, Posture, Underline
-
-      Rev 1.6   15 Jun 1998 12:46:12   OS
-   SwXContainer:: vergessen
-
-      Rev 1.5   10 Jun 1998 09:54:46   OS
-   Package-Umstellung
-
-      Rev 1.4   04 Jun 1998 09:40:04   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   getIdlClasses
-
-
-      Rev 1.3   29 May 1998 13:48:34   OS
-   Properties erweitern
-
-      Rev 1.2   27 May 1998 13:45:10   OS
-   grundsaetzlich vollstaendig
-
-      Rev 1.1   26 May 1998 16:59:08   OS
-   teilweise funktionstuechtig
-
-      Rev 1.0   26 May 1998 12:29:40   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
