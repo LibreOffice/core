@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ip_ce.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,9 @@ namespace idl
     class Exception;
     class Interface;
     class Service;
+    class SglIfcService;
     class Singleton;
+    class SglIfcSingleton;
     class Struct;
     class Typedef;
 
@@ -117,6 +119,11 @@ class CePilot
     Service &           Store_Service(
                             Ce_id               i_nOwner,
                             const String &      i_sName );
+    virtual SglIfcService &
+                        Store_SglIfcService(
+                            Ce_id               i_nOwner,
+                            const String &      i_sName,
+                            Type_id             i_nBaseInterface ) = 0;
     Interface &         Store_Interface(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
@@ -142,6 +149,11 @@ class CePilot
     Singleton &         Store_Singleton(
                             Ce_id               i_nOwner,
                             const String &      i_sName );
+    virtual SglIfcSingleton &
+                        Store_SglIfcSingleton(
+                            Ce_id               i_nOwner,
+                            const String &      i_sName,
+                            Type_id             i_nBaseInterface ) = 0;
 
     Constant &          Store_Constant(
                             Ce_id               i_nOwner,
@@ -158,8 +170,10 @@ class CePilot
                             Ce_id               i_nOwner,
                             const String &      i_sName,
                             Type_id             i_nReturnType,
-                            bool                i_bOneWay,
-                            bool                i_bConst );
+                            bool                i_bOneWay );
+    virtual Function &  Store_ServiceConstructor(
+                            Ce_id               i_nOwner,
+                            const String &      i_sName ) = 0;
     StructElement &     Store_StructMember(
                             Ce_id               i_nOwner,
                             const String &      i_sName,
@@ -176,7 +190,8 @@ class CePilot
                             Ce_id               i_nOwner,
                             const String &      i_sName,
                             Type_id             i_nType,
-                            bool                i_bReadOnly );
+                            bool                i_bReadOnly,
+                            bool                i_bBound );
     // INQUIRY
     const Module &      GlobalNamespace() const;
     const CodeEntity &  Find_Ce(
@@ -259,8 +274,7 @@ class CePilot
                             Ce_id               i_nOwner,
                             const String &      i_sName,
                             Type_id             i_nReturnType,
-                            bool                i_bOneWay,
-                            bool                i_bConst ) = 0;
+                            bool                i_bOneWay ) = 0;
     virtual StructElement &
                         do_Store_StructMember(
                             Ce_id               i_nOwner,
@@ -279,7 +293,8 @@ class CePilot
                             Ce_id               i_nOwner,
                             const String &      i_sName,
                             Type_id             i_nType,
-                            bool                i_bReadOnly ) = 0;
+                            bool                i_bReadOnly,
+                            bool                i_bBound ) = 0;
 
     virtual const Module &
                         inq_GlobalNamespace() const = 0;
@@ -393,9 +408,8 @@ inline Function &
 CePilot::Store_Function(    Ce_id               i_nOwner,
                             const String &      i_sName,
                             Type_id             i_nReturnType,
-                            bool                i_bOneWay,
-                            bool                i_bConst )
-    { return do_Store_Function(i_nOwner,i_sName,i_nReturnType,i_bOneWay,i_bConst); }
+                            bool                i_bOneWay )
+    { return do_Store_Function(i_nOwner,i_sName,i_nReturnType,i_bOneWay); }
 
 inline StructElement &
 CePilot::Store_StructMember(   Ce_id               i_nOwner,
@@ -419,8 +433,9 @@ inline Attribute &
 CePilot::Store_Attribute( Ce_id               i_nOwner,
                           const String &      i_sName,
                           Type_id             i_nType,
-                          bool                i_bReadOnly )
-    { return do_Store_Attribute(i_nOwner, i_sName, i_nType, i_bReadOnly); }
+                          bool                i_bReadOnly,
+                          bool                i_bBound )
+    { return do_Store_Attribute(i_nOwner, i_sName, i_nType, i_bReadOnly, i_bBound); }
 
 inline const Module &
 CePilot::GlobalNamespace() const
