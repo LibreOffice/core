@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:49:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ static const char* pOp1[] = {
 static const char* pOp2[] = {
     "NUMBER",           // Laden einer numerischen Konstanten (+ID)
     "STRING",           // Laden einer Stringkonstanten (+ID)
-    "CONST",            // Immediate Load (+Wert)
+    "CONSTANT",         // Immediate Load (+Wert)
     "ARGN",             // Speichern eines named Args in Argv (+StringID)
     "PAD",              // String auf feste Laenge bringen (+Laenge)
     // Verzweigungen
@@ -512,7 +512,7 @@ void SbiDisas::Str2Op( String& rText )
 
 void SbiDisas::ImmOp( String& rText )
 {
-    rText += nOp1;
+    rText += String::CreateFromInt32(nOp1);
 }
 
 // OnGoto Operand
