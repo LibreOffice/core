@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 14:49:54 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -331,7 +333,6 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                     if ( pTTProperties->mnSID == SID_NEWDOCDIRECT
                       || pTTProperties->mnSID == SID_OPENDOC )
                     {
-                        pTTProperties->mnSID;
                         SfxPoolItem** pArgs = pTTProperties->mppArgs;
                         SfxAllItemSet aSet( SFX_APP()->GetPool() );
                         if ( pArgs && *pArgs )
@@ -451,26 +452,26 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
 }
 
 SfxApplication::SfxApplication()
-    : _nFeatures( ULONG_MAX )
-    , pImp( 0 )
-    , pAppData_Impl( 0 )
+    : pImp( 0 )
+    , _nFeatures( ULONG_MAX )
+    , pViewFrame( 0 )
+    , pSlotPool( 0 )
+    , pResMgr( 0 )
+    , pAppDispat( 0 )
     , pMenuMgr( 0 )
     , pAcceleratorMgr( 0 )
     , pStatusBarMgr( 0 )
-    , pAppDispat( 0 )
-    , bDispatcherLocked( sal_False )
-    , pResMgr( 0 )
     , pCfgMgr( 0 )
-    , pSlotPool( 0 )
+    , pImageMgr( 0 )
+    , pOptions( 0 )
+    , pAppData_Impl( 0 )
+    , nInterfaces( 0 )
     , pInterfaces( 0 )
+    , bDispatcherLocked( sal_False )
     , bInInit( sal_False )
     , bInExit( sal_False )
     , bDowning( sal_True )
     , bCreatedExternal( sal_False )
-    , pOptions( 0 )
-    , pViewFrame( 0 )
-    , pImageMgr( 0 )
-    , nInterfaces( 0 )
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
