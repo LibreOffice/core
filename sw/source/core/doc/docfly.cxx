@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 16:03:40 $
+ *  last change: $Author: ama $ $Date: 2001-04-04 12:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,9 +517,10 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
             // kein break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
-            // kein break;
-        case RES_ANCHOR:
             break;
+        case RES_ANCHOR:
+            if( bMakeFrms )
+                break;
 
         default:
             if( !IsInvalidItem( aIter.GetCurItem() ) && ( SFX_ITEM_SET !=
