@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:27:40 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "수준";
         Text[ turkish ] = "D�zey";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nivel";
+        Text[ catalan ] = "Nivell";
         Text[ thai ] = "ระดับ";
     };
     MultiListBox LB_LEVEL
@@ -144,7 +144,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "위치와 간격";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Konum ve aral�k";
-        Text[ catalan ] = "Posici�n y espacio";
+        Text[ catalan ] = "Posici� i espai";
         Text[ finnish ] = "Sijainti ja v�lit";
         Text[ thai ] = "ตำแหน่งและระยะห่าง";
     };
@@ -173,7 +173,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "들여쓰기";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sangr�a";
+        Text[ catalan ] = "Sagnat";
         Text[ finnish ] = "Sisenn�";
         Text[ thai ] = "ระยะเยื้อง";
     };
@@ -202,7 +202,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "�������";
         Text[ korean ] = "비례(~V)";
         Text[ turkish ] = "Orant�l�";
-        Text[ catalan ] = "Relati~vo";
+        Text[ catalan ] = "Relati~u";
         Text[ finnish ] = "~Suhteellinen";
         Text[ thai ] = "สัมพัท~ธ์";
     };
@@ -249,7 +249,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "텍스트와의 간격(~X)";
         Text[ turkish ] = "Metin uzakl���";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Distancia al texto";
+        Text[ catalan ] = "Espai al te~xt";
         Text[ finnish ] = "Tekstin ti~la";
         Text[ thai ] = "ระยะห่างถึงข้อ~ความ";
     };
@@ -296,7 +296,7 @@ TabPage TP_NUM_POSITION
         Text[ korean ] = "최소간격 번호 <-> 텍스트(~M)";
         Text[ turkish ] = "Asgari numara <-> metin aral���";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distancia m�nima N�mero <-> Texto";
+        Text[ catalan ] = "Dist�ncia m�nima N�mero <-> Text";
         Text[ finnish ] = "~V�himm�istila numerointi <-> teksti";
         Text[ thai ] = "ลำดับตัวเลขระยะห่าง~น้อยที่สุด <-> ข้อความ";
     };
@@ -343,7 +343,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "�������� ���������";
         Text[ korean ] = "번호 매기기 맞춤(~A)";
         Text[ turkish ] = "Numara hizalama";
-        Text[ catalan ] = "~Alineaci�n de la numeraci�n";
+        Text[ catalan ] = "~Alineament de la numeraci�";
         Text[ finnish ] = "Numeroinnin ~tasaus";
         Text[ thai ] = "~จัดตำแหน่งลำดับตัวเลข";
     };
@@ -481,9 +481,9 @@ TabPage TP_NUM_POSITION
     };
     StringList [ catalan ] =
     {
-            < "Izquierda" ; > ;
-        < "Centrado" ; > ;
-        < "Derecha" ; > ;
+            < "Esquerra" ; > ;
+        < "Centrat" ; > ;
+        < "Dreta" ; > ;
     };
     StringList [ finnish ] =
     {
@@ -523,7 +523,7 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "����������";
         Text[ korean ] = "기본 값(~D)";
         Text[ turkish ] = "Standart";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "~Valor per defecte";
         Text[ finnish ] = "~Oletusarvo";
         Text[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -575,7 +575,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "글머리 기호";
                 Text[ turkish ] = "Madde i�aretleri";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Vi�etas";
+                Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
                 Text[ thai ] = "สัญลักษณ์แสดงหัวข้อย่อย";
             };
@@ -603,7 +603,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "번호 매기기 유형";
                 Text[ turkish ] = "Numaralama t�r�";
                 Text[ language_user1 ] = "Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
-                Text[ catalan ] = "Tipo de numeraci�n";
+                Text[ catalan ] = "Tipus de numeraci�";
                 Text[ finnish ] = "Numerointityyppi";
                 Text[ thai ] = "ชนิดลำดับตัวเลข";
             };
@@ -631,7 +631,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "아웃트라인";
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Esquema";
+                Text[ catalan ] = "Contorn";
                 Text[ finnish ] = "J�sennys";
                 Text[ thai ] = "เค้าร่าง";
             };
@@ -659,7 +659,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "그래픽";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Im�genes";
+                Text[ catalan ] = "Imatges";
                 Text[ finnish ] = "Kuvat";
                 Text[ thai ] = "กราฟิค";
             };
@@ -687,7 +687,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "위치";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Posici�n";
+                Text[ catalan ] = "Posici�";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "ตำแหน่ง";
             };
@@ -716,7 +716,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ korean ] = "옵션";
                 Text[ turkish ] = "Se�enekler";
                 Text[ language_user1 ] = "KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "Opcions";
                 Text[ finnish ] = "Asetukset";
                 Text[ thai ] = "ตัวเลือก";
             };
@@ -760,7 +760,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ korean ] = "삭제(~R)";
         Text[ turkish ] = "Kald�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "เ~อาออก";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
@@ -782,7 +782,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ korean ] = "번호 매기기/글머리 기호";
     Text[ turkish ] = "Numaralama/madde i�aretleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeraci�n/Vi�etas";
+    Text[ catalan ] = "Numeraci�/vinyetes";
     Text[ finnish ] = "Numerointi/luettelomerkit";
     Text[ thai ] = "ลำดับตัวเลข/สัญลักษณ์แสดงหัวข้อย่อย";
 };
