@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-05 09:41:34 $
+ *  last change: $Author: os $ $Date: 2001-09-07 13:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ class SfxCommonTemplateDialog_Impl;
 class SfxTemplateControllerItem: public SfxControllerItem {
     SfxCommonTemplateDialog_Impl  &rTemplateDlg;
     BYTE                            nWaterCanState;
-
+    long                            nUserEventId;
 
     DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                 SfxTemplateControllerItem*);
@@ -81,6 +81,7 @@ protected:
 
 public:
     SfxTemplateControllerItem( USHORT nId, SfxCommonTemplateDialog_Impl &rDlg, SfxBindings &);
+    ~SfxTemplateControllerItem();
 };
 
 

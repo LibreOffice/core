@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-05 09:41:34 $
+ *  last change: $Author: os $ $Date: 2001-09-07 13:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,15 @@ SfxTemplateControllerItem::SfxTemplateControllerItem(
         SfxBindings &rBindings):
     SfxControllerItem(nId, rBindings),
     rTemplateDlg(rDlg),
-    nWaterCanState(0xff)
+    nWaterCanState(0xff),
+    nUserEventId(0)
 {
+}
+// -----------------------------------------------------------------------
+SfxTemplateControllerItem::~SfxTemplateControllerItem()
+{
+    if(nUserEventId)
+        Application::RemoveUserEvent(nUserEventId);
 }
 
 // -----------------------------------------------------------------------
@@ -143,7 +150,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                 DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
-            Application::PostUserEvent( STATIC_LINK(
+            nUserEventId = Application::PostUserEvent( STATIC_LINK(
                         this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );
             break;
         }
@@ -192,6 +199,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
 IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                     SfxTemplateControllerItem*, EMPTYARG)
 {
+    pThis->nUserEventId = 0;
     SfxBoolItem* pState = 0;
     switch(pThis->nWaterCanState)
     {
