@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercontrols.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 
 #ifndef _UNOCONTROLS_PROGRESSMONITOR_CTRL_HXX
 #include "progressmonitor.hxx"
+#endif
+
+#ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
+#include "statusindicator.hxx"
 #endif
 //=============================================================================
 
@@ -279,6 +283,7 @@ using namespace ::com::sun::star::registry                      ;
 CREATEINSTANCE  ( FrameControl      )
 CREATEINSTANCE  ( ProgressBar       )
 CREATEINSTANCE  ( ProgressMonitor   )
+CREATEINSTANCE  ( StatusIndicator   )
 //=============================================================================
 
 //______________________________________________________________________________________________________________
@@ -326,6 +331,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void*   pServiceManager ,
         COMPONENT_INFO  ( FrameControl      )
         COMPONENT_INFO  ( ProgressBar       )
         COMPONENT_INFO  ( ProgressMonitor   )
+        COMPONENT_INFO  ( StatusIndicator   )
         //=============================================================================
 
         AS_DBG_OUT ( "component_writeInfo():\t\t... leave pRegistryKey scope\n" )
@@ -372,6 +378,8 @@ extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementat
         IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressBar      )
         else
         IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressMonitor  )
+        else
+        IF_NAME_CREATECOMPONENTFACTORY_SINGLE( StatusIndicator  )
         //=============================================================================
 
         // Factory is valid - service was found.
