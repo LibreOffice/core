@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:41:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230 , 160 ) ;
+    Size = MAP_APPFONT ( 230 , 185 );
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Schriften hinzufügen" ;
@@ -81,7 +81,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     };
     FixedText RID_FIMP_TXT_HELP
     {
-        Pos = MAP_APPFONT( 5, 130 );
+        Pos = MAP_APPFONT( 5, 155 );
         Size = MAP_APPFONT( 220, 24 );
         WordBreak=TRUE;
         Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Starten Sie dann das Hinzufügen der selektierten Schriften mit der OK-Schaltfläche.";
@@ -160,9 +160,24 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Size = MAP_APPFONT( 15, 12 );
         Text = "...";
     };
-    CheckBox RID_FIMP_BOX_LINKONLY
+    CheckBox RID_FIMP_BOX_SUBDIRS
     {
         Pos = MAP_APPFONT( 10, 115 );
+        Size = MAP_APPFONT( 145, 10 );
+        Text = "~Unterverzeichnisse durchsuchen";
+        Text [ English ] = "Sea~rch Subdirectories";
+    };
+    FixedLine RID_FIMP_FL_TARGETOPTS
+    {
+        Pos = MAP_APPFONT( 5, 130 );
+        Size = MAP_APPFONT( 160, 8 );
+        Text = "Zieloptionen";
+        Text [ English ] = "Target options";
+    };
+
+    CheckBox RID_FIMP_BOX_LINKONLY
+    {
+        Pos = MAP_APPFONT( 10, 140 );
         Size = MAP_APPFONT( 145, 10 );
         Text = "Beim Hinzufügen nur ~Softlinks anlegen";
         Text [ English ] = "Create ~Softlinks only";
@@ -211,8 +226,8 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Pos = MAP_APPFONT( 175, 44 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "~Alle markieren";
-        Text [ English ] = "~Select all";
-        Text[ english_us ] = "~Select All";
+        Text [ English ] = "Select ~all";
+        Text[ english_us ] = "Select ~All";
         Text[ portuguese ] = "~Seleccionar tudo";
         Text[ russian ] = "~Âûäåëèòü âñå";
         Text[ greek ] = "ÅðéëïãÞ üë~ùí";
