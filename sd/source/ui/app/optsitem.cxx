@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 10:25:52 $
+ *  last change: $Author: pw $ $Date: 2000-10-17 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,8 +407,6 @@ void SdOptionsContents::SetDefaults()
     SetOutlineMode( FALSE );
     SetHairlineMode( FALSE);
     SetNoText( FALSE );
-    SetSolidDragging( FALSE );
-    SetSolidMarkHdl( TRUE );
 }
 
 // -----------------------------------------------------------------------------
@@ -418,9 +416,7 @@ BOOL SdOptionsContents::operator==( const SdOptionsContents& rOpt ) const
     return( IsExternGraphic() == rOpt.IsExternGraphic() &&
             IsOutlineMode() == rOpt.IsOutlineMode() &&
             IsHairlineMode() == rOpt.IsHairlineMode() &&
-            IsNoText() == rOpt.IsNoText() &&
-            IsSolidDragging() == rOpt.IsSolidDragging() &&
-            IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() );
+            IsNoText() == rOpt.IsNoText() );
 }
 
 // -----------------------------------------------------------------------------
@@ -433,11 +429,8 @@ void SdOptionsContents::GetPropNameArray( const char**& ppNames, ULONG& rCount )
         "Display/ContourMode",
         "Display/LineContour",
         "Display/TextPlaceholder"
-        // "bSolidDragging",
-        // "bSolidMarkHdl"
     };
 
-    // rCount = 6;
     rCount = 4;
     ppNames = aPropNames;
 }
@@ -490,8 +483,6 @@ SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, F
         SetOutlineMode( pView->IsFillDraft() );
         SetHairlineMode( pView->IsLineDraft() );
         SetNoText( pView->IsTextDraft() );
-        SetSolidDragging( pView->IsSolidDragging() );
-        SetSolidMarkHdl( pView->IsSolidMarkHdl() );
     }
     else
     {
@@ -499,8 +490,6 @@ SdOptionsContentsItem::SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, F
         SetOutlineMode( pOpts->IsOutlineMode() );
         SetHairlineMode( pOpts->IsHairlineMode() );
         SetNoText( pOpts->IsNoText() );
-        SetSolidDragging( pOpts->IsSolidDragging() );
-        SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
     }
 }
 
@@ -527,8 +516,6 @@ void SdOptionsContentsItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetOutlineMode( IsOutlineMode() );
     pOpts->SetHairlineMode(IsHairlineMode() );
     pOpts->SetNoText( IsNoText() );
-    pOpts->SetSolidDragging( IsSolidDragging() );
-    pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
 }
 
 /*************************************************************************
@@ -566,6 +553,8 @@ void SdOptionsMisc::SetDefaults()
     SetClickChangeRotation( FALSE );
     SetStartWithActualPage( FALSE );
     SetPreviewQuality( DRAWMODE_DEFAULT );
+    SetSolidDragging( FALSE );
+    SetSolidMarkHdl( TRUE );
 }
 
 // -----------------------------------------------------------------------------
@@ -584,7 +573,9 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
-            GetPreviewQuality() == rOpt.GetPreviewQuality() );
+            GetPreviewQuality() == rOpt.GetPreviewQuality() &&
+            IsSolidDragging() == rOpt.IsSolidDragging() &&
+            IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() );
 }
 
 // -----------------------------------------------------------------------------
@@ -593,24 +584,25 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 {
     static const char* aPropNames[] =
     {
-        // bMarkedHitMovesAlways,
-        // bMoveOnlyDragging,
+        "ObjectMoveable",
         "NoDistort",
         "TextObject/QuickEditing",
         "BackgroundCache",
         "CopyWhileMoving",
-        // bPickThrough
+        "TextObject/Selectable",
         "BigHandles",
         "DclickTextedit",
         "RotateClick",
         "Preview",
+        "CreateWithAttributes",
+        "SimpleHandles",
 
         // just for impress
         "NewDoc/AutoPilot",
         "Start/CurrentPage"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 10 : 8 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 14 : 12 );
     ppNames = aPropNames;
 }
 
@@ -618,20 +610,24 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsMisc::ReadData( const Any* pValues )
 {
-    SetCrookNoContortion( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetQuickEdit( *(sal_Bool*)pValues[ 1 ].getValue() );
-    SetMasterPagePaintCaching( *(sal_Bool*) pValues[ 2 ].getValue() );
-    SetDragWithCopy( *(sal_Bool*) pValues[ 3 ].getValue() );
-    SetBigHandles( *(sal_Bool*) pValues[ 4 ].getValue() );
-    SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 5 ].getValue() );
-    SetClickChangeRotation( *(sal_Bool*) pValues[ 6 ].getValue() );
-    SetPreviewQuality( *(sal_Int32*) pValues[ 7 ].getValue() );
+    SetMarkedHitMovesAlways( *(sal_Bool*) pValues[ 0 ].getValue() );
+    SetCrookNoContortion( *(sal_Bool*) pValues[ 1 ].getValue() );
+    SetQuickEdit( *(sal_Bool*)pValues[ 2 ].getValue() );
+    SetMasterPagePaintCaching( *(sal_Bool*) pValues[ 3 ].getValue() );
+    SetDragWithCopy( *(sal_Bool*) pValues[ 4 ].getValue() );
+    SetPickThrough( *(sal_Bool*) pValues[ 5 ].getValue() );
+    SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
+    SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
+    SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
+    SetPreviewQuality( *(sal_Int32*) pValues[ 9 ].getValue() );
+    SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
+    SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        SetStartWithTemplate( *(sal_Bool*) pValues[ 8 ].getValue() );
-        SetStartWithActualPage( *(sal_Bool*) pValues[ 9 ].getValue() );
+        SetStartWithTemplate( *(sal_Bool*) pValues[ 12 ].getValue() );
+        SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
     }
 
     return TRUE;
@@ -641,20 +637,24 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
 
 BOOL SdOptionsMisc::WriteData( Any* pValues ) const
 {
-    pValues[ 0 ] <<= IsCrookNoContortion();
-    pValues[ 1 ] <<= IsQuickEdit();
-    pValues[ 2 ] <<= IsMasterPagePaintCaching();
-    pValues[ 3 ] <<= IsDragWithCopy();
-    pValues[ 4 ] <<= IsBigHandles();
-    pValues[ 5 ] <<= IsDoubleClickTextEdit();
-    pValues[ 6 ] <<= IsClickChangeRotation();
-    pValues[ 7 ] <<= (sal_Int32) GetPreviewQuality();
+    pValues[ 0 ] <<= IsMarkedHitMovesAlways();
+    pValues[ 1 ] <<= IsCrookNoContortion();
+    pValues[ 2 ] <<= IsQuickEdit();
+    pValues[ 3 ] <<= IsMasterPagePaintCaching();
+    pValues[ 4 ] <<= IsDragWithCopy();
+    pValues[ 5 ] <<= IsPickThrough();
+    pValues[ 6 ] <<= IsBigHandles();
+    pValues[ 7 ] <<= IsDoubleClickTextEdit();
+    pValues[ 8 ] <<= IsClickChangeRotation();
+    pValues[ 9 ] <<= (sal_Int32) GetPreviewQuality();
+    pValues[ 10 ] <<= IsSolidDragging();
+    pValues[ 11 ] <<= IsSolidMarkHdl();
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        pValues[ 8 ] <<= IsStartWithTemplate();
-        pValues[ 9 ] <<= IsStartWithActualPage();
+        pValues[ 12 ] <<= IsStartWithTemplate();
+        pValues[ 13 ] <<= IsStartWithActualPage();
     }
 
     return TRUE;
@@ -694,7 +694,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pView->IsClickChangeRotation() );
         SetPreviewQuality( pView->GetPreviewDrawMode() );
-
+        SetSolidDragging( pView->IsSolidDragging() );
+        SetSolidMarkHdl( pView->IsSolidMarkHdl() );
     }
     else
     {
@@ -709,6 +710,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetDoubleClickTextEdit( pOpts->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOpts->IsClickChangeRotation() );
         SetPreviewQuality( pOpts->GetPreviewQuality() );
+        SetSolidDragging( pOpts->IsSolidDragging() );
+        SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
     }
 }
 
@@ -745,6 +748,8 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetClickChangeRotation( IsClickChangeRotation() );
     pOpts->SetStartWithActualPage( IsStartWithActualPage() );
     pOpts->SetPreviewQuality( GetPreviewQuality() );
+    pOpts->SetSolidDragging( IsSolidDragging() );
+    pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:47:42 $
+ *  last change: $Author: pw $ $Date: 2000-10-17 15:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,8 +255,6 @@ private:
     BOOL    bOutlineMode    : 1; // Content/Display/ContourMode
     BOOL    bHairlineMode   : 1; // Content/Display/LineContour
     BOOL    bNoText         : 1; // Content/Display/TextPlaceholder
-    BOOL    bSolidDragging  : 1; // ???
-    BOOL    bSolidMarkHdl   : 1; // ???
 
 protected:
 
@@ -276,15 +274,11 @@ public:
     BOOL    IsOutlineMode() const { Init(); return (BOOL) bOutlineMode; }
     BOOL    IsHairlineMode() const { Init(); return (BOOL) bHairlineMode; }
     BOOL    IsNoText() const { Init(); return (BOOL) bNoText; }
-    BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
-    BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
 
     void    SetExternGraphic( BOOL bOn = TRUE ) { if( bExternGraphic != bOn ) { OptionsChanged(); bExternGraphic = bOn; } }
     void    SetOutlineMode( BOOL bOn = TRUE ) { if( bOutlineMode != bOn ) { OptionsChanged(); bOutlineMode = bOn; } }
     void    SetHairlineMode( BOOL bOn = TRUE ) { if( bHairlineMode != bOn ) { OptionsChanged(); bHairlineMode = bOn; } }
     void    SetNoText( BOOL bOn = TRUE ) { if( bNoText != bOn ) { OptionsChanged(); bNoText = bOn; } }
-    void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
-    void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
 };
 
 // -----------------------------------------------------------------------------
@@ -311,22 +305,21 @@ class SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
-                                            // missing: // Misc/TextObject/Selectable; /Misc/ObjectMoveable; /Misc/SimpleHandles
-
     BOOL    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
-    BOOL    bMarkedHitMovesAlways   : 1;
-    BOOL    bMoveOnlyDragging       : 1;
+    BOOL    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
+    BOOL    bMoveOnlyDragging       : 1;    // Currently, not in use !!!
     BOOL    bCrookNoContortion      : 1;    // Misc/NoDistort
     BOOL    bQuickEdit              : 1;    // Misc/TextObject/QuickEditing
     BOOL    bMasterPageCache        : 1;    // Misc/BackgroundCache
     BOOL    bDragWithCopy           : 1;    // Misc/CopyWhileMoving
-    BOOL    bPickThrough            : 1;
+    BOOL    bPickThrough            : 1;    // Misc/TextObject/Selectable
     BOOL    bBigHandles             : 1;    // Misc/BigHandles
     BOOL    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     BOOL    bClickChangeRotation    : 1;    // Misc/RotateClick
     BOOL    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
     ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
-
+    BOOL    bSolidDragging          : 1;    // Misc/CreateWithAttributes
+    BOOL    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, ULONG& rCount ) const;
@@ -354,6 +347,8 @@ public:
     BOOL    IsClickChangeRotation() const { Init(); return (BOOL) bClickChangeRotation; }
     BOOL    IsStartWithActualPage() const { Init(); return (BOOL) bStartWithActualPage; }
     ULONG   GetPreviewQuality() const { Init(); return nPreviewQuality; }
+    BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
+    BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
@@ -368,6 +363,8 @@ public:
     void    SetClickChangeRotation( BOOL bOn = TRUE ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( BOOL bOn = TRUE ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
     void    SetPreviewQuality( ULONG nQual ) { if( nPreviewQuality != nQual ) { OptionsChanged(); nPreviewQuality = nQual; } }
+    void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
+    void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
 };
 
 // -----------------------------------------------------------------------------
@@ -565,13 +562,13 @@ private:
     BOOL    bHiddenPages        : 1;    // Print/Other/HiddenPage
     BOOL    bPagesize           : 1;    // Print/Page/PageSize
     BOOL    bPagetile           : 1;    // Print/Page/PageTile
-    BOOL    bWarningPrinter     : 1;
-    BOOL    bWarningSize        : 1;
-    BOOL    bWarningOrientation : 1;
+    BOOL    bWarningPrinter     : 1;    //  These flags you get
+    BOOL    bWarningSize        : 1;    //  from the common options,
+    BOOL    bWarningOrientation : 1;    //  currently org.openoffice.Office.Common.xml (class OfaMiscCfg ; sfx2/misccfg.hxx )
     BOOL    bBooklet            : 1;    // Print/Page/Booklet
     BOOL    bFront              : 1;    // Print/Page/BookletFront
     BOOL    bBack               : 1;    // Print/Page/BookletFront
-    BOOL    bCutPage            : 1;
+    BOOL    bCutPage            : 1;    // NOT persistent !!!
     BOOL    bPaperbin           : 1;    // Print/Other/FromPrinterSetup
     UINT16  nQuality;                   // Print/Other/Quality
 
