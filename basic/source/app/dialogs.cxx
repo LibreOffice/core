@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:28:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,8 +1001,10 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         aMlbControls.Clear();
         aMlbSlots.Clear();
 
-        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID )   // kein altes Office
-            nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur Übermittlung des Modus verwendet
+        if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // kein altes Office
+            nDisplayMode = pWinInfo->nRType;            // Wird im Reset zur Übermittlung des Modus verwendet
+//        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID ) // kein altes Office
+//          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur Übermittlung des Modus verwendet
 
         return;
     }
@@ -1015,7 +1017,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         else
         {
             aMsg.AppendAscii( "--" );
-            aMsg += pWinInfo->aUId.GetString();
+            aMsg += pWinInfo->aUId;
             aMsg.AppendAscii( ": " );
             aMsg += pWinInfo->aRName;
         }
@@ -1023,7 +1025,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
     }
     else
     {
-        aMsg += pWinInfo->aUId.GetString();
+        aMsg += pWinInfo->aUId;
         aMsg.Expand(13);
     }
     aMsg.AppendAscii( "   " );          // Mindestens 3 Blanks sollten schon sein.
