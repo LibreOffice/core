@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ExtendedTypeDetectionFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:28:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_ExtendedTypeDetectionFactory_idl__
+#define __com_sun_star_document_ExtendedTypeDetectionFactory_idl__
+
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContainerQuery_idl__
+#include <com/sun/star/container/XContainerQuery.idl>
+#endif
+
+#ifndef __com_sun_star_util_XFlushable_idl__
+#include <com/sun/star/util/XFlushable.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** factory to create extended type detection components.
+
+    <p>
+    This factory implements read/write access on the underlying configuration set.
+    and further a validate and flush mechanism for more performance and a special query mode
+    can be used here too.
+    </p>
+ */
+service ExtendedTypeDetectionFactory
+{
+    //-------------------------------------------------------------------------
+    /** factory interface to create and initialize extended type detection components.
+
+        <p>
+        A detection component must be specified by it's uno implementation name and will be crated then.
+        Every new created component can be intialized with it's own configuration data
+        and may given optional arguments of the corresponding createInstanceWithArguments() request. To do so the
+        service must support the optional interface <type scope="com::sun::star::lang">XInitialization</type>.
+        The arguments parameter will have the following structure:
+        <ul>
+            <li>sequence< Any >[0] contains a sequence< <type scope="com::sun::star::beans">PropertyValue</type> >,
+                which represent the configuration data set of this detector component. The used properties are the same, as
+                they are available at the container interface of this factoyr service. (see below)</li>
+            <li>Every following item of the argument list sequence< Any >[1..n] contains the copied argument of the
+                corresponding createInstanceWithArguments() call. That means: Item 0 or the original list was copied as
+                item 1 of the destination list ... etc.
+        </ul>
+        </p>
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    //-------------------------------------------------------------------------
+    /** provides read access to the complete set of configuration data.
+
+        <p>
+        Every container item is specified as a set of properties and will be
+        represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
+        Follow properties are supported:
+        (But note: not all of them must be present everytimes!)
+        </p>
+        <table border=1>
+            <tr>
+                <td><strong>Property Name</strong></td>
+                <td><strong>Value Type</strong></td>
+                <td><strong>Description</strong></td>
+            </tr>
+            <tr>
+                <td><em>Name</em></td>
+                <td>[string]</td>
+                <td>It means the uno implementation name of the detector component.
+                    Note: It means the realy the implementation instead of the uno service name.
+                    Because it's not possible to distinguish between more then one components; if all of them
+                    uses a generic service identifier!</td>
+            </tr>
+            <tr>
+                <td><em>Types</em></td>
+                <td>[sequence< string >]</td>
+                <td>It's a list of all types, which can be detected by this extended detection component.
+                    All items of this list must match an item of the <type>TypeDetection</type> container service.</td>
+            </tr>
+        </table>
+        </p>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** provides a write access to the configuration data.
+     */
+    [optional] interface com::sun::star::container::XNameContainer;
+
+    //-------------------------------------------------------------------------
+    /** provides search on the configuration data set.
+
+        <p>
+        Against simple property search it provides some complex algorithms too.
+        For further informations please read the SDK documentation.
+        </p>
+     */
+    [optional] interface com::sun::star::container::XContainerQuery;
+
+    //-------------------------------------------------------------------------
+    /** can be used to perform container changes.
+
+        <p>
+        Because the complexness of such configuration set can be very high,
+        it seams not very usefull to update the undelying configuration layer
+        on every container change request immediatly. Another strategy can be to
+        make all changes (adding/changing/removing of items) and call flush at the end.
+        That will validate the whole container and reject inconsistent data sets.
+        Only in case all made changes was correct, they will be written back to the
+        configuration. Further this interface provides the possibelity, that interested
+        changes listener can be registered too.
+        </p>
+     */
+    [optional] interface com::sun::star::util::XFlushable;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
