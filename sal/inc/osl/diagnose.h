@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-10-31 11:57:44 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 12:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #define _OSL_DIAGNOSE_H_
 
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 #ifdef __cplusplus
