@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include <sfx2/request.hxx> //CHINA001
-#include <svx/svxids.hrc> //add CHINA001
+#include <svxids.hrc> //add CHINA001
 #include <svtools/intitem.hxx> //add CHINA001
 
 // class TabWin_Impl -----------------------------------------------------
