@@ -7,6 +7,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\statusbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\menubar
@@ -34,6 +35,7 @@ touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 ..\uiconfig\dbrelation\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\menubar\*.xml
 ..\uiconfig\dbtable\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar\*.xml
 ..\uiconfig\dbapp\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\toolbar\*.xml
+..\uiconfig\dbapp\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbapp\statusbar\*.xml
 ..\uiconfig\dbbrowser\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbbrowser\toolbar\*.xml
 ..\uiconfig\dbquery\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\toolbar\*.xml
 ..\uiconfig\dbrelation\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar\*.xml
