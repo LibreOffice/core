@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:27:00 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10601,7 +10601,7 @@ String SIP_XA_FILLBMP_TILE
     Text[ arabic ] = "ΚΪΘΖΙ ΗαΘαΗΨΙ";
     Text[ dutch ] = "Tegelvulling";
     Text[ chinese_simplified ] = "Ζ½ΖΜ³δΜξ";
-    Text[ greek ] = "Γέμισμα πλακακιού";
+    Text[ greek ] = "Γέμισμα παράθεσης";
     Text[ korean ] = "ΉΩµΟΖΗ Γ¤Ώμ±β";
     Text[ turkish ] = "Dφώeme taώlarύ";
 };
@@ -11018,7 +11018,7 @@ String SIP_XA_FILLBMP_POSOFFSETX
     Text[ arabic ] = "ΗαγζΦΪ ΗαΘαΗΨΙ Σ Θά %";
     Text[ dutch ] = "Tegelpositie X in %";
     Text[ chinese_simplified ] = "Ζ½ΖΜΞ»ΦΓ X %";
-    Text[ greek ] = "Θέση X πλακακιού σε %";
+    Text[ greek ] = "Θέση X παράθεσης σε %";
     Text[ korean ] = "ΉΩµΟΖΗ ΐ§Δ΅X Έ¦ %·Ξ";
     Text[ turkish ] = "Dφώeme taώύ konumu X (%)";
 };
@@ -11044,7 +11044,7 @@ String SIP_XA_FILLBMP_POSOFFSETY
     Text[ arabic ] = "γζΦΪ ΗαΘαΗΨΙ Υ Θά %";
     Text[ dutch ] = "Tegelpositie Y in %";
     Text[ chinese_simplified ] = "Ζ½ΖΜΞ»ΦΓ Y %";
-    Text[ greek ] = "Θέση Y πλακακιού σε %";
+    Text[ greek ] = "Θέση Y παράθεσης σε %";
     Text[ korean ] = "ΉΩµΟΖΗ ΐ§Δ΅YΈ¦ %·Ξ";
     Text[ turkish ] = "Dφώeme taώύ konumu Y (%)";
 };
@@ -13046,7 +13046,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text = "Autoformen Justierung";
     Text [ ENGLISH ] = "Autoshape Adjustment" ;
     Text[ english_us ] = "AutoShape Adjustment";
-    Text[ portuguese ] = "SvDraw Autoshape Adjustment";
+    Text[ portuguese ] = "Ajuste de formas automαticas";
     Text[ russian ] = "Βϋπΰβνθβΰνθε ΰβςξτξπμ";
     Text[ greek ] = "Ρύθμιση Αυτομορφών";
     Text[ dutch ] = "SvDraw Autoshape Adjustment";
@@ -16488,7 +16488,7 @@ String SIP_SA_GRAFCROP
     Text[ english ] = "Crop";
     Text[ english_us ] = "Crop";
 
-    Text[ portuguese ] = "Crop";
+    Text[ portuguese ] = "Recortar";
     Text[ russian ] = "Ξαπεηΰςό";
     Text[ greek ] = "Προσαρμογή";
     Text[ dutch ] = "Knippen";
