@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-09-03 11:13:32 $
+ *  last change: $Author: os $ $Date: 2002-09-18 11:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2126,7 +2126,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
     SvxBrushItem aBrushItem;
 
-    if( SwWrtShell::SEL_TBL & nSelType )
+    if( SwWrtShell::SEL_TBL_CELLS & nSelType )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2182,7 +2182,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             return;
     }
 
-    if( SwWrtShell::SEL_TBL & nSelType )
+    if( SwWrtShell::SEL_TBL_CELLS & nSelType )
     {
         rSh.SetBoxBackground( aBrushItem );
     }
