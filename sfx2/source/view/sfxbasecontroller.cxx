@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:35:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-29 13:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,7 +1433,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 
     ::com::sun::star::uno::Sequence< sal_Int16 > aSeq =
-        comphelper::containerToSequence< std::list< sal_Int16 >, sal_Int16 >( aGroupList );
+        comphelper::containerToSequence< sal_Int16 >( aGroupList );
 
     return aSeq;
 }
@@ -1482,7 +1482,7 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
-        comphelper::containerToSequence< std::list< ::com::sun::star::frame::DispatchInformation >, ::com::sun::star::frame::DispatchInformation >( aCmdList );
+        comphelper::containerToSequence< ::com::sun::star::frame::DispatchInformation, std::list< ::com::sun::star::frame::DispatchInformation > >( aCmdList );
 
     return aSeq;
 }
