@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:59:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@ void ScDrawView::InvalidateAttribs()
     SfxBindings& rBindings = pViewData->GetBindings();
 
         // echte Statuswerte:
+
+    // #i25616#
+    rBindings.Invalidate( SID_ATTR_FILL_SHADOW );
 
     rBindings.Invalidate( SID_ATTR_FILL_STYLE );
     rBindings.Invalidate( SID_ATTR_FILL_COLOR );
