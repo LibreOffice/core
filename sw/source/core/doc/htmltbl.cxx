@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:36:04 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,17 +502,20 @@ USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
         // DocShell.
         if( rDoc.GetDocShell() && GetpApp() && GetpApp()->GetDefaultDevice() )
         {
+            // this case shouldn't happen because the filter always waits until
+            // a view has been created
+/*
             nWidth = (USHORT)Application::GetDefaultDevice()
                     ->PixelToLogic( rDoc.GetDocShell()->GetActualSize(),
                                     MapMode( MAP_TWIP ) ).Width();
-
-            ASSERT( nWidth, "GetActualSize liefert 0" );
+*/
+            ASSERT( nWidth, "No browse width available" );
         }
 #ifndef PRODUCT
         else
         {
             // und wenn das auch nicht klappt, gibt es zur Zeit keine Breite
-            ASSERT( nWidth, "Nix da um eine Browse-Breite zu berechnen" );
+            ASSERT( nWidth, "No browse width available" );
         }
 #endif
     }
