@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:43:26 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 16:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
             Text[ polish ] = "~Kopiuj opis kolumny";
             Text[ portuguese_brazilian ] = "Copy column d~escription";
-            Text[ japanese ] = "列の見出しをｺﾋﾟｰ(~E)";
+            Text[ japanese ] = "列の見出しをコピー(~E)";
             Text[ korean ] = "열 설명 복사(~E)";
             Text[ chinese_simplified ] = "复制列标题(~E)";
             Text[ chinese_traditional ] = "複製列標題(~E)";
@@ -180,7 +180,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ chinese_simplified ] = "表格格式...";
             Text[ russian ] = "������ �������...";
             Text[ polish ] = "Formatowanie tabeli...";
-            Text[ japanese ] = "ﾃｰﾌﾞﾙの書式...";
+            Text[ japanese ] = "テーブルの書式...";
             Text[ chinese_traditional ] = "工作表格式...";
             Text[ arabic ] = "����� ������...";
             Text[ greek ] = "����������� ������...";
@@ -236,7 +236,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ swedish ] = "�ngra: datainmatning";
     Text[ polish ] = "Cofni�cie: wpisywania danych";
     Text[ portuguese_brazilian ] = "Undo: input data";
-    Text[ japanese ] = "元に戻す: ﾃﾞｰﾀの入力";
+    Text[ japanese ] = "元に戻す: データの入力";
     Text[ korean ] = "실행 취소: 데이터 입력";
     Text[ chinese_simplified ] = "撤销命令：输入数据";
     Text[ chinese_traditional ] = "復原：輸入資料";
@@ -261,9 +261,9 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ swedish ] = "Spara aktuell datapost";
     Text[ polish ] = "Zapisz bie��cy rekord";
     Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
-    Text[ japanese ] = "現在のﾚｺｰﾄﾞを保存";
+    Text[ japanese ] = "現在のレコードを保存";
     Text[ chinese_simplified ] = "存盘当前的数据条目";
-    Text[ chinese_traditional ] = "儲存當前的資料條目";
+    Text[ chinese_traditional ] = "儲存目前的資料條目";
     Text[ arabic ] = "��� ����� ������";
     Text[ dutch ] = "Actuele record opslaan";
     Text[ chinese_simplified ] = "存盘当前的数据条目";
@@ -290,7 +290,7 @@ String STR_QRY_TITLE
     Text[ chinese_simplified ] = "查询 #";
     Text[ russian ] = "������ #";
     Text[ polish ] = "Kwerenda #";
-    Text[ japanese ] = "ｸｴﾘｰ #";
+    Text[ japanese ] = "クエリー #";
     Text[ dutch ] = "Query #";
     Text[ chinese_simplified ] = "查询 #";
     Text[ greek ] = "������� #";
@@ -318,7 +318,7 @@ String STR_TBL_TITLE
     Text[ chinese_simplified ] = "表格 #";
     Text[ russian ] = "������� #";
     Text[ polish ] = "Tabela #";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ #";
+    Text[ japanese ] = "テーブル #";
     Text[ dutch ] = "Tabel #";
     Text[ chinese_simplified ] = "表格 #";
     Text[ greek ] = "������� #";
@@ -346,7 +346,7 @@ String STR_VIEW_TITLE
     Text[ swedish ] = "Vy #";
     Text[ polish ] = "Widok #";
     Text[ portuguese_brazilian ] = "View #";
-    Text[ japanese ] = "ﾋﾞｭｰ #";
+    Text[ japanese ] = "ビュー #";
     Text[ korean ] = "전면 #";
     Text[ chinese_simplified ] = "视图 #";
     Text[ chinese_traditional ] = "檢視 #";
@@ -401,7 +401,7 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ polish ] = "Nie znaleziono odpowiednich nazw kolumn!";
     Text[ portuguese_brazilian ] = "No matching column names found.";
     Text[ japanese ] = "一致する列の名前はありません。";
-    Text[ korean ] = "No matching column names found.";
+    Text[ korean ] = "일치하는 열 이름을 찾지 못했습니다.";
     Text[ chinese_simplified ] = "无法找到相符的列名称！";
     Text[ chinese_traditional ] = "沒有找到符合條件的欄名稱！";
     Text[ turkish ] = "No matching column names found.";
@@ -426,14 +426,15 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ swedish ] = "Det har uppst�tt ett fel. Vill du forts�tta att kopiera?";
     Text[ polish ] = "Wyst�pi� b��d! Kontynuowa� proces kopiowania?";
     Text[ portuguese_brazilian ] = "A error occured. Would you like to continue the copying?";
-    Text[ japanese ] = "ｴﾗｰが発生しました。ｺﾋﾟｰ処理を続行しますか。";
-    Text[ korean ] = "A error occured. Would you like to continue the copying?";
+    Text[ japanese ] = "エラーが発生しました。コピー処理を続行しますか。";
+    Text[ korean ] = "오류 발생! 복사를 계속 진행하시겠습니다?";
     Text[ chinese_simplified ] = "出现一个错误！还是要继续复制？";
     Text[ chinese_traditional ] = "已經發生一個錯誤。要繼續複製？";
     Text[ turkish ] = "A error occured. Would you like to continue the copying?";
     Text[ arabic ] = "A error occured. Would you like to continue the copying?";
     Text[ catalan ] = "A error occured. Would you like to continue the copying?";
 };
+
 
 
 
