@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-12 16:11:59 $
+#   last change: $Author: os $ $Date: 2001-01-16 13:33:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ IDLFILES=\
     LinkTargets.idl\
     MediaDescriptor.idl\
     OfficeDocument.idl\
+    RedlineDisplayType.idl \
     StandaloneDocumentInfo.idl\
     TypeDetection.idl\
     XActionLockable.idl\
