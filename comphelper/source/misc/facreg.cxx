@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-11 17:47:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <osl/diagnose.h>
 #endif
 
+#include "rtl/ustrbuf.hxx"
+
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
 
@@ -85,11 +87,17 @@ extern uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer_getSuppor
 extern OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
-// NamedPropertyValuesContainer
+// AnyCompareFactory
 extern uno::Sequence< OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw();
 extern OUString SAL_CALL AnyCompareFactory_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL AnyCompareFactory_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// OfficeInstallationDirectories
+extern uno::Sequence< OUString > SAL_CALL OfficeInstallationDirectories_getSupportedServiceNames() throw();
+extern OUString SAL_CALL OfficeInstallationDirectories_getImplementationName() throw();
+extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonName() throw();
+extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL OfficeInstallationDirectories_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
 //
 #ifdef __cplusplus
@@ -112,6 +120,20 @@ void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& 
         xNewKey->createKey( rServices.getConstArray()[i]);
 }
 
+void SAL_CALL registerSingleton( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const OUString& rSingletonName, const OUString& rServiceName )
+{
+    OUStringBuffer aSingletonKeyName;
+    aSingletonKeyName.appendAscii( "/" );
+    aSingletonKeyName.append( rImplementationName );
+    aSingletonKeyName.appendAscii( "/UNO/SINGLETONS/" );
+    aSingletonKeyName.append( rSingletonName );
+
+    uno::Reference< registry::XRegistryKey >  xNewKey( pRegistryKey->createKey( aSingletonKeyName.makeStringAndClear() ) );
+    OSL_ENSURE( xNewKey.is(), "could not create a registry key !");
+
+    xNewKey->setStringValue( rServiceName );
+}
+
 sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if( pRegistryKey )
@@ -124,7 +146,11 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, IndexedPropertyValuesContainer_getImplementationName(), IndexedPropertyValuesContainer_getSupportedServiceNames() );
             // NamedPropertyValuesContainer
             writeInfo( pKey, NamedPropertyValuesContainer_getImplementationName(), NamedPropertyValuesContainer_getSupportedServiceNames() );
+            // AnyCompareFactory
             writeInfo( pKey, AnyCompareFactory_getImplementationName(), AnyCompareFactory_getSupportedServiceNames() );
+            // OfficeInstallationDirectories
+            writeInfo( pKey, OfficeInstallationDirectories_getImplementationName(), OfficeInstallationDirectories_getSupportedServiceNames() );
+            registerSingleton( pKey, OfficeInstallationDirectories_getImplementationName(), OfficeInstallationDirectories_getSingletonName(), OfficeInstallationDirectories_getSingletonServiceName() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -164,6 +190,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 AnyCompareFactory_getImplementationName(),
                 AnyCompareFactory_createInstance,
                 AnyCompareFactory_getSupportedServiceNames() );
+        }
+        else if( OfficeInstallationDirectories_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                OfficeInstallationDirectories_getImplementationName(),
+                OfficeInstallationDirectories_createInstance,
+                OfficeInstallationDirectories_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
