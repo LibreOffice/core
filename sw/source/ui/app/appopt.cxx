@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 14:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,134 +358,136 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
     SwModuleOptions* pMCfg = GetModuleConfig();
 
-        const SfxPoolItem* pItem;
-        SfxBindings &rBnd = pAppView->GetViewFrame()->GetBindings();
-        /*--------------------------------------------------------------------------
-                Seite Dokumentansicht auswerten
-        ----------------------------------------------------------------------------*/
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                        FN_PARAM_DOCDISP, FALSE, &pItem ))
+    const SfxPoolItem* pItem;
+    SfxBindings &rBnd = pAppView ? pAppView->GetViewFrame()->GetBindings()
+                                 : SfxViewFrame::Current()->GetBindings();
+
+    /*---------------------------------------------------------------------
+            Seite Dokumentansicht auswerten
+    -----------------------------------------------------------------------*/
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                FN_PARAM_DOCDISP, FALSE, &pItem ))
+    {
+        const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
+
+        if(!aViewOpt.IsViewMetaChars())
+        {
+            if(     !aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab ||
+                    !aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace ||
+                    !aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd ||
+                    !aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak )
             {
-                const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
-
-                if(!aViewOpt.IsViewMetaChars())
-                {
-                    if(     !aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab ||
-                            !aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace ||
-                            !aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd ||
-                            !aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak )
-                    {
-                        aViewOpt.SetViewMetaChars(TRUE);
-                        rBnd.Invalidate(FN_VIEW_META_CHARS);
-                    }
-
-                }
-                pDocDispItem->FillViewOptions( aViewOpt );
-                rBnd.Invalidate(FN_VIEW_GRAPHIC);
-                rBnd.Invalidate(FN_VIEW_HIDDEN_PARA);
+                aViewOpt.SetViewMetaChars(TRUE);
+                rBnd.Invalidate(FN_VIEW_META_CHARS);
             }
 
-        /*--------------------------------------------------------------------------
-                    Elemente - Item auswerten
-        ----------------------------------------------------------------------------*/
+        }
+        pDocDispItem->FillViewOptions( aViewOpt );
+        rBnd.Invalidate(FN_VIEW_GRAPHIC);
+        rBnd.Invalidate(FN_VIEW_HIDDEN_PARA);
+    }
 
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                                            FN_PARAM_ELEM, FALSE, &pItem ) )
-            {
-                const SwElemItem* pElemItem = (const SwElemItem*)pItem;
-                pElemItem->FillViewOptions( aViewOpt );
+    /*---------------------------------------------------------------------
+                Elemente - Item auswerten
+    -----------------------------------------------------------------------*/
 
-            }
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                                    FN_PARAM_ELEM, FALSE, &pItem ) )
+    {
+        const SwElemItem* pElemItem = (const SwElemItem*)pItem;
+        pElemItem->FillViewOptions( aViewOpt );
 
-            if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC,
-                                                            FALSE, &pItem ) )
-            {
-                SFX_APP()->SetOptions(rSet);
-                const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
-                ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
-            }
+    }
 
-            if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP,
-                                                            FALSE, &pItem ) )
-            {
-                USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
-                pUsrPref->SetDefTab(nTabDist);
-                if(pAppView)
-                {
-                    SvxTabStopItem aDefTabs( 0, 0 );
-                    MakeDefTabs( nTabDist, aDefTabs );
-                    pAppView->GetWrtShell().SetDefault( aDefTabs );
-                }
-            }
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC,
+                                                    FALSE, &pItem ) )
+    {
+        SFX_APP()->SetOptions(rSet);
+        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
+    }
+
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP,
+                                                    FALSE, &pItem ) )
+    {
+        USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
+        pUsrPref->SetDefTab(nTabDist);
+        if(pAppView)
+        {
+            SvxTabStopItem aDefTabs( 0, 0 );
+            MakeDefTabs( nTabDist, aDefTabs );
+            pAppView->GetWrtShell().SetDefault( aDefTabs );
+        }
+    }
 
 
-        /*-----------------01.02.97 11.36-------------------
-            Hintergrund nur im WebDialog
-        --------------------------------------------------*/
-            if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
-            {
-                const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSet.Get(
-                                        RES_BACKGROUND);
-                aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
-            }
+    /*-----------------01.02.97 11.36-------------------
+        Hintergrund nur im WebDialog
+    --------------------------------------------------*/
+    if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
+    {
+        const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSet.Get(
+                                RES_BACKGROUND);
+        aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
+    }
 
-        /*--------------------------------------------------------------------------
-                    Seite Rastereinstellungen auswerten
-        ----------------------------------------------------------------------------*/
+    /*--------------------------------------------------------------------
+            Seite Rastereinstellungen auswerten
+    ----------------------------------------------------------------------*/
 
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                                        SID_ATTR_GRID_OPTIONS, FALSE, &pItem ))
-            {
-                const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                                SID_ATTR_GRID_OPTIONS, FALSE, &pItem ))
+    {
+        const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
 
-                aViewOpt.SetSnap( pGridItem->GetUseGridSnap() );
-                aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
-                if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
-                    aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
-                Size aSize = Size( pGridItem->GetFldDrawX()  ,
-                                    pGridItem->GetFldDrawY()  );
-                if( aViewOpt.GetSnapSize() != aSize )
-                    aViewOpt.SetSnapSize( aSize );
-                short nDiv = (short)pGridItem->GetFldDivisionX() ;
-                if( aViewOpt.GetDivisionX() != nDiv  )
-                    aViewOpt.SetDivisionX( nDiv );
-                nDiv = (short)pGridItem->GetFldDivisionY();
-                if( aViewOpt.GetDivisionY() != nDiv  )
-                    aViewOpt.SetDivisionY( nDiv  );
+        aViewOpt.SetSnap( pGridItem->GetUseGridSnap() );
+        aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
+        if( aViewOpt.IsGridVisible() != pGridItem->GetGridVisible() )
+            aViewOpt.SetGridVisible( pGridItem->GetGridVisible());
+        Size aSize = Size( pGridItem->GetFldDrawX()  ,
+                            pGridItem->GetFldDrawY()  );
+        if( aViewOpt.GetSnapSize() != aSize )
+            aViewOpt.SetSnapSize( aSize );
+        short nDiv = (short)pGridItem->GetFldDivisionX() ;
+        if( aViewOpt.GetDivisionX() != nDiv  )
+            aViewOpt.SetDivisionX( nDiv );
+        nDiv = (short)pGridItem->GetFldDivisionY();
+        if( aViewOpt.GetDivisionY() != nDiv  )
+            aViewOpt.SetDivisionY( nDiv  );
 
-                rBnd.Invalidate(SID_GRID_VISIBLE);
-                rBnd.Invalidate(SID_GRID_USE);
-            }
+        rBnd.Invalidate(SID_GRID_VISIBLE);
+        rBnd.Invalidate(SID_GRID_USE);
+    }
 
     //--------------------------------------------------------------------------
     //      Writer Drucker Zusatzeinstellungen auswerten
     //----------------------------------------------------------------------------
 
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                                        FN_PARAM_ADDPRINTER, FALSE, &pItem ))
-            {
-                SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
-                if (pOpt)
-                {
-                    const SwAddPrinterItem* pAddPrinterAttr = (const SwAddPrinterItem*)pItem;
-                    pAddPrinterAttr->SetPrintOptions(pOpt);
-                    pOpt->SetFaxName( pAddPrinterAttr->GetFax());
-                }
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                                FN_PARAM_ADDPRINTER, FALSE, &pItem ))
+    {
+        SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
+        if (pOpt)
+        {
+            const SwAddPrinterItem* pAddPrinterAttr = (const SwAddPrinterItem*)pItem;
+            pAddPrinterAttr->SetPrintOptions(pOpt);
+            pOpt->SetFaxName( pAddPrinterAttr->GetFax());
+        }
 
-            }
+    }
 
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                                FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
-            {
-                ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
-                rBnd.Invalidate(FN_SHADOWCURSOR);
-            }
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                        FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
+    {
+        ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
+        rBnd.Invalidate(FN_SHADOWCURSOR);
+    }
 
-            if( SFX_ITEM_SET == rSet.GetItemState(
-                                FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
-            {
-                aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
-            }
+    if( SFX_ITEM_SET == rSet.GetItemState(
+                        FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
+    {
+        aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
+    }
 
 
 #ifndef PRODUCT
@@ -510,8 +512,8 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             }
 #endif
         // dann an der akt. View und Shell die entsp. Elemente setzen
-        ApplyUsrPref(aViewOpt, pAppView,
-                     bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
+    ApplyUsrPref( aViewOpt, pAppView,
+                 bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
 }
 /* -----------------12.02.99 12:28-------------------
  *
@@ -586,6 +588,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/06 13:31:28  jp
+    should changes: don't use IniManager
+
     Revision 1.2  2000/09/28 15:22:17  os
     use of configuration service in view options
 
