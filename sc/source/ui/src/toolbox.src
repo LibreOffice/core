@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-11-01 11:35:03 $
+ *  last change: $Author: kz $ $Date: 2001-11-06 11:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: os $ $Date: 2001-11-01 11:35:03 $ $Revision: 1.30 $
+ // $Author: kz $ $Date: 2001-11-06 11:12:43 $ $Revision: 1.31 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -207,7 +207,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†";
     Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ";
     Text[ greek ] = "Function Autopilot";
-    Text[ korean ] = "μλ™νμΌλΏ κΈ°λ¥";
+    Text[ korean ] = "μλ™ νμΌλΏ κΈ°λ¥";
     Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto de funciones";
@@ -320,7 +320,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ chinese_traditional ] = "ε‡½ζ•Έ";
     Text[ arabic ] = "ΗαΟΗαΙ";
     Text[ greek ] = "Συνάρτηση";
-    Text[ korean ] = "κΈ°λ¥";
+    Text[ korean ] = "ν•¨μ";
     Text[ turkish ] = "έώlev";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciσn";
@@ -714,7 +714,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαΜΟΗζα";
     Text[ greek ] = "Γραμμή αντικειμένων πινάκων";
-    Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈ κ°μ²΄λª¨μ";
+    Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈ κ°μ²΄ λª¨μ";
     Text[ turkish ] = "Tablo nesne ηubuπu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objetos para tablas";
@@ -976,7 +976,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ chinese_traditional ] = "ι ιΆζªΆθ¦–η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ γΪΗνδΙ ΗαΥέΝΙ";
     Text[ greek ] = "Γραμμή αντικειμένων προεπισκόπησης σελίδας";
-    Text[ korean ] = "μª½ λ―Έλ¦¬λ³΄κΈ° κ°μ²΄ λª¨μ";
+    Text[ korean ] = "νμ΄μ§€ λ―Έλ¦¬λ³΄κΈ° κ°μ²΄ λª¨μ";
     Text[ turkish ] = "Sayfa φnizleme nesne ηubuπu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de vista preliminar";
@@ -1759,6 +1759,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
