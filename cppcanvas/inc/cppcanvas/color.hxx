@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:57:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,31 @@ namespace cppcanvas
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Color > ColorSharedPtr;
+
+    inline sal_uInt8 getRed( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0xFF000000U) >> 24U );
+    }
+
+    inline sal_uInt8 getGreen( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0x00FF0000U) >> 16U );
+    }
+
+    inline sal_uInt8 getBlue( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( (nCol&0x0000FF00U) >> 8U );
+    }
+
+    inline sal_uInt8 getAlpha( Color::IntSRGBA nCol )
+    {
+        return static_cast<sal_uInt8>( nCol&0x000000FFU );
+    }
+
+    inline Color::IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
+    {
+        return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|(nAlpha);
+    }
 
 }
 
