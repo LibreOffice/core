@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:19:51 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,36 @@
 
 package com.sun.star.script.framework.browse;
 
+import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.beans.PropertyAttribute;
+
 import com.sun.star.lib.uno.helper.PropertySet;
+
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.beans.XIntrospectionAccess;
+
+import com.sun.star.lang.XMultiComponentFactory;
+
+
 import com.sun.star.script.XInvocation;
+
+import com.sun.star.ucb.XSimpleFileAccess;
 
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 
 import com.sun.star.script.framework.provider.ScriptProvider;
-import com.sun.star.script.framework.log.*;
+import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.Parcel;
 import com.sun.star.script.framework.container.ParcelContainer;
 import com.sun.star.script.framework.browse.DialogFactory;
+
 import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -91,6 +101,7 @@ public class ParcelBrowseNode extends PropertySet
     private ScriptProvider provider;
     //private RootBrowseNode parent;
     private Collection browsenodes;
+    private String name;
     private ParcelContainer container;
     private Parcel parcel;
     public boolean deletable = true;
@@ -100,6 +111,7 @@ public class ParcelBrowseNode extends PropertySet
 
     public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
         this.provider = provider;
+        this.name = parcelName;
         this.container = container;
 
         // TODO decide whether exception is propagated out or not
@@ -127,6 +139,33 @@ public class ParcelBrowseNode extends PropertySet
             this.creatable = true;
         }
 
+        String parcelDirUrl = parcel.getPathToParcel();
+        XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
+        XMultiComponentFactory xFac = xCtx.getServiceManager();
+        try
+        {
+            XSimpleFileAccess xSFA = ( XSimpleFileAccess)
+                UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                    xFac.createInstanceWithContext(
+                        "com.sun.star.ucb.SimpleFileAccess",
+                        xCtx ) );
+            if ( xSFA != null && ( xSFA.isReadOnly( parcelDirUrl ) ||
+                container.isUnoPkg() ) )
+            {
+                deletable = false;
+                editable  = false;
+                creatable = false;
+                renamable = false;
+            }
+        }
+        catch ( com.sun.star.uno.Exception e )
+        {
+            // TODO propagate potential errors
+            // Pthrow new com.sun.star.uno.RuntimeException( e.toString() );
+            LogUtils.DEBUG( "Caught exception creating ParcelBrowseNode " + e );
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
+        }
+
     }
 
     public String getName() {
@@ -137,7 +176,7 @@ public class ParcelBrowseNode extends PropertySet
         try
         {
 
-            if ( container != null && container.hasByName( parcel.getName() ) && parcel != null )
+            if ( hasChildNodes() )
             {
                 String[] names = parcel.getElementNames();
                 browsenodes = new ArrayList( names.length );
@@ -146,6 +185,11 @@ public class ParcelBrowseNode extends PropertySet
                 {
                     browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
                 }
+            }
+            else
+            {
+                LogUtils.DEBUG("ParcelBrowseNode.getChildeNodes no children " );
+                return new XBrowseNode[0];
             }
         }
         catch ( Exception e )
@@ -158,7 +202,7 @@ public class ParcelBrowseNode extends PropertySet
     }
 
     public boolean hasChildNodes() {
-        if ( container != null && container.hasByName( parcel.getName() ) && parcel != null )
+        if ( container != null && container.hasByName( getName() ) && parcel != null )
         {
             return parcel.hasElements();
         }
@@ -186,6 +230,7 @@ public class ParcelBrowseNode extends PropertySet
                com.sun.star.script.CannotConvertException,
                com.sun.star.reflection.InvocationTargetException
     {
+        LogUtils.DEBUG("ParcelBrowseNode invoke for " + aFunctionName );
         // Initialise the out paramters - not used but prevents error in
         // UNO bridge
         aOutParamIndex[0] = new short[0];
@@ -224,7 +269,7 @@ public class ParcelBrowseNode extends PropertySet
                     newName = (String) AnyConverter.toString(aParams[0]);
                 }
 
-                if (newName == null || newName.equals(""))
+                if ( newName == null || newName.equals(""))
                 {
                     result =  new Any(new Type(Boolean.class), Boolean.FALSE);
                 }
@@ -254,7 +299,7 @@ public class ParcelBrowseNode extends PropertySet
             }
             catch (Exception e)
             {
-                    //System.err.print("create failed with: " + e );
+        LogUtils.DEBUG("ParcelBrowseNode[create] failed with: " + e );
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
@@ -285,10 +330,34 @@ public class ParcelBrowseNode extends PropertySet
         }
         else if (aFunctionName.equals("Renamable"))
         {
+            String newName = null;
             try
             {
-                LogUtils.DEBUG( "Renaming parcel");
-                String newName = (String) AnyConverter.toString(aParams[0]);
+
+                if (aParams == null || aParams.length < 1 ||
+                    AnyConverter.isString(aParams[0]) == false)
+                {
+                    String prompt = "Enter new name for Library";
+                    String title = "Rename Library";
+
+                    // try to get a DialogFactory instance, if it fails
+                    // just use a Swing JOptionPane to prompt for the name
+                    try
+                    {
+                        DialogFactory dialogFactory =
+                            DialogFactory.getDialogFactory();
+
+                        newName = dialogFactory.showInputDialog(title, prompt);
+                    }
+                    catch (Exception e)
+                    {
+                        newName = JOptionPane.showInputDialog(null, prompt, title,
+                            JOptionPane.QUESTION_MESSAGE);
+                    }
+                }
+                else {
+                    newName = (String) AnyConverter.toString(aParams[0]);
+                }
                 container.renameParcel( getName(), newName );
                 Parcel p = (Parcel)container.getByName( newName );
                 if(browsenodes == null )
@@ -305,12 +374,13 @@ public class ParcelBrowseNode extends PropertySet
             }
             catch (Exception e)
             {
-                result =  new Any(new Type(Boolean.class), null);
+                result =  new Any(new Type(Boolean.class), Boolean.FALSE);
 
                 // throw new com.sun.star.reflection.InvocationTargetException(
                 //     "Error renaming parcel: " + e.getMessage());
             }
         }
+
         else {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");
