@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 19:01:51 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 15:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ spanish ] = "Contraseña principal";
         Text[ finnish ] = "Master ~password";
         Text[ italian ] = "Password principale";
-        Text[ danish ] = "Master ~password";
+        Text[ danish ] = "Hovedadgangskode";
         Text[ swedish ] = "Huvudlösenord";
         Text[ polish ] = "Has³o g³ówne";
         Text[ portuguese_brazilian ] = "Master ~password";
@@ -127,7 +127,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ spanish ] = "~Confirmar contraseña principal";
         Text[ finnish ] = "~Confirm master password";
         Text[ italian ] = "~Conferma password principale";
-        Text[ danish ] = "~Confirm master password";
+        Text[ danish ] = "~Bekræft hovedadgangskode";
         Text[ swedish ] = "~Bekräfta huvudlösenord";
         Text[ polish ] = "~PotwierdŸ has³o g³ówne";
         Text[ portuguese_brazilian ] = "~Confirm master password";
@@ -172,7 +172,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ spanish ] = "Determinar la contraseña principal";
     Text[ finnish ] = "Please enter master password";
     Text[ italian ] = "Digitate la password principale";
-    Text[ danish ] = "Please enter master password";
+    Text[ danish ] = "Definer hovedadgangskode";
     Text[ swedish ] = "Definiera huvudlösenord";
     Text[ polish ] = "Zdefiniuj has³o g³ówne";
     Text[ portuguese_brazilian ] = "Please enter master password";
@@ -198,7 +198,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ spanish ] = "Las dos contraseñas no coinciden. Introdúzcalas otra vez.";
     Text[ finnish ] = "Passwords are different, please enter again!";
     Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
-    Text[ danish ] = "Passwords are different, please enter again!";
+    Text[ danish ] = "De to adgangskoder stemmer ikke overens, prøv igen!";
     Text[ swedish ] = "De båda lösenorden stämmer inte överens, mata in lösenordet igen!";
     Text[ polish ] = "Podane has³a nie zgadzaj¹ siê! Nale¿y wpisaæ je ponownie.";
     Text[ portuguese_brazilian ] = "Passwords are different, please enter again!";
