@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.38 2001-02-26 14:57:23 cl Exp $
+	$Id: drawing.mod,v 1.39 2001-02-28 10:58:37 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -338,6 +338,8 @@
 <!ATTLIST style:properties draw:fit-to-size %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fit-to-contour %boolean; #IMPLIED>
 <!ATTLIST style:properties fo:vertical-align (top | middle | bottom ) #IMPLIED>
+<!ATTLIST style:properties draw:textarea-horizontal-align ( left | center | right | justify ) #IMPLIED>
+<!ATTLIST style:properties draw:textarea-vertical-align ( top | middle | bottom ) #IMPLIED>
 
 <!-- fill attributes -->
 <!ATTLIST style:properties draw:fill (none|solid|bitmap|gradient|hatch) #IMPLIED>
