@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:25:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ String STR_HUMAN_SWWEBDOC_NAME
     Text[ korean ] = "HTML";
     Text[ turkish ] = "HTML";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
@@ -130,6 +131,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ korean ] = "%PRODUCTNAME 4.0¡¡HTML ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
 {
@@ -143,7 +145,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text [ spanish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ french ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
-    Text [ portuguese ] = "HTML (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese ] = "%PRODUCTNAME 5.0 HTML" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
     Text[ russian ] = "HTML â %PRODUCTNAME 5.0 ";
     Text[ polish ] = "%PRODUCTNAME 5.0 - HTML";
@@ -156,29 +158,31 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text[ korean ] = "HTML (%PRODUCTNAME 5.0)";
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 HTML Dokument" ;
     Text [ English ] = "%PRODUCTNAME 6.0 HTML Document" ;
     Text[ english_us ] = "%PRODUCTNAME 6.0 HTML Document";
-    Text[ portuguese ] = "HTML (%PRODUCTNAME 5.0)";
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
     Text[ russian ] = "Äîêóìåíò HTML (%PRODUCTNAME 6.0) ";
     Text[ greek ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ french ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ dutch ] = "%PRODUCTNAME 6.0 HTML Document";
+    Text[ french ] = "%PRODUCTNAME 6.0 Document HTML";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Documento HTML";
-    Text[ italian ] = "HTML %PRODUCTNAME 6.0";
+    Text[ italian ] = "Documento HTML %PRODUCTNAME 6.0";
     Text[ danish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ swedish ] = "HTML-dokument %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument HTML";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 HTML Œ`Ž®ÄÞ·­ÒÝÄ";
     Text[ korean ] = "%PRODUCTNAME 5.£°HTML ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 HTML";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML";
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ arabic ] = "%PRODUCTNAME 6.0 HTML";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 HTML";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -205,6 +209,7 @@ String STR_SHELLNAME_WEBTEXT
     Text[ korean ] = "ÅØ½ºÆ®/À¥";
     Text[ turkish ] = "Metin/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto/Web";
 };
 String STR_SHELLNAME_WEBFRAME
 {
@@ -231,6 +236,7 @@ String STR_SHELLNAME_WEBFRAME
     Text[ korean ] = "ÇÁ·¹ÀÓ/À¥";
     Text[ turkish ] = "Çerçeve/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco/Web";
 };
 String RID_WEBTOOLS_TOOLBOX
 {
@@ -257,6 +263,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text[ korean ] = "ÁÖ µµ±¸ ¸ðÀ½/À¥";
     Text[ turkish ] = "Ana araç çubuðu/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de herramientas/Web";
 };
 ToolBox RID_WEBTOOLS_TOOLBOX
 {
@@ -414,6 +421,7 @@ String RID_WEBTEXT_TOOLBOX
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ðÀ½/À¥";
     Text[ turkish ] = "Metin nesne çubuðu/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de objetos de texto/Web";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
 {
@@ -469,6 +477,7 @@ String RID_WEBFRAME_TOOLBOX
     Text[ korean ] = "ÇÁ·¹ÀÓ °³Ã¼ ¸ðÀ½/À¥";
     Text[ turkish ] = "Çerçeve nesne çubuðu/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de objetos de marco/Web";
 };
 ToolBox RID_WEBFRAME_TOOLBOX
 {
@@ -535,6 +544,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ korean ] = "±×·¡ÇÈ °³Ã¼ ¸ðÀ½/À¥";
     Text[ turkish ] = "Grafik nesne çubuðu/Web";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de objetos gráficos/Web";
 };
 ToolBox RID_WEBGRAPHIC_TOOLBOX
 {
@@ -597,6 +607,7 @@ String RID_WEBOLE_TOOLBOX
     Text[ korean ] = "°³Ã¼";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto";
 };
 ToolBox RID_WEBOLE_TOOLBOX
 {
