@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-07 17:41:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _I18N_CALENDARIMPL_HXX_
 #define _I18N_CALENDARIMPL_HXX_
 
-#include <drafts/com/sun/star/i18n/XExtendedCalendar.hpp>
-#include <drafts/com/sun/star/i18n/CalendarDisplayCode.hpp>
+#include <com/sun/star/i18n/XExtendedCalendar.hpp>
+#include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -77,7 +77,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class CalendarImpl : public cppu::WeakImplHelper2
 <
-    drafts::com::sun::star::i18n::XExtendedCalendar,
+    com::sun::star::i18n::XExtendedCalendar,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -125,14 +125,14 @@ public:
 
 private:
     struct lookupTableItem {
-    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
+    lookupTableItem(const rtl::OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     rtl::OUString uniqueID;
-    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
     };
     List lookupTable;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
-    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XExtendedCalendar > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
 };
 
 } } } }
