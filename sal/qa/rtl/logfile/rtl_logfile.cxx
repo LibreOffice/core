@@ -9,15 +9,15 @@
 #include <string.h>
 
 #ifdef UNX
-#   include <unistd.h>
+#       include <unistd.h>
 #endif
 
 #include <rtl/logfile.hxx>
 #include <cppunit/simpleheader.hxx>
 
-#ifndef _OSL_MODULE_HXX_
-#include <osl/module.hxx>
-#endif
+// #ifndef      _OSL_MODULE_HXX_
+// #include <osl/module.hxx>
+// #endif
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -45,17 +45,15 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 
 /** get the absolute source file URL "file:///.../sal/qa/rtl/logfile/"
   */
-inline ::rtl::OUString getModulePath( void )
+
+inline ::rtl::OUString getTempPath( void )
 {
-    ::rtl::OUString suDirPath;
-    ::osl::Module::getUrlFromAddress( ( void* ) &getModulePath, suDirPath );
-
-    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
-    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
-    suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
-    suDirPath += rtl::OUString::createFromAscii("qa/rtl/logfile/");
-
-    return suDirPath;
+#ifdef UNX
+    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/"));
+#else /* Windows */
+    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/"));
+#endif
+    return suDirURL;
 }
 
 /** if the file exist
@@ -76,88 +74,109 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 */
 inline ::rtl::OUString getCurrentPID(  )
 {
-    //~ Get current PID and turn it into OUString;
-    int nPID = 0;
+        //~ Get current PID and turn it into OUString;
+        int nPID = 0;
 #ifdef WNT
-    nPID = GetCurrentProcessId();
+        nPID = GetCurrentProcessId();
 #else
-    nPID = getpid();
+        nPID = getpid();
 #endif
-    return ( ::rtl::OUString::valueOf( ( long )nPID ) );
+        return ( ::rtl::OUString::valueOf( ( long )nPID ) );
 }
 
 
 // -----------------------------------------------------------------------------
+/*
+ * LLA:
+ * check if logfile is create
+ * be careful with relative logfiles they will create near the source, maybe it's no write access to it.
+ * use absolute path to logfile instead.
+ */
 namespace rtl_logfile
 {
     class logfile : public CppUnit::TestFixture
     {
     public:
 
-    //directly call rtl_logfile_trace
+        //directly call rtl_logfile_trace
         void logfile_001()
         {
-#if (defined WNT) || (defined SOLARIS)
-        putenv("RTL_LOGFILE=logfile1");
-#else
-            setenv("RTL_LOGFILE", "logfile1", 0);
+#ifdef SOLARIS
+                putenv("RTL_LOGFILE=/tmp/logfile1");
 #endif
-               rtl_logfile_trace("trace %d\n", 2 );
-        rtl_logfile_trace("trace %d %d\n" , 1,2 );
-        rtl_logfile_trace("trace %d %d %d\n" , 1 , 2 ,3 );
-        rtl::OUString suFilePath = getModulePath();
-        suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-        suFilePath +=  rtl::OUString::createFromAscii(".log");
-
-        ::osl::FileBase::RC   nError1;
-            ::osl::File aTestFile( suFilePath );
-            printUString( suFilePath );
-            nError1 = aTestFile.open ( OpenFlag_Read );
-        CPPUNIT_ASSERT_MESSAGE("create the log file: but the logfile does not exist",
-( ::osl::FileBase::E_NOENT != nError1 ) && ( ::osl::FileBase::E_ACCES != nError1 ) );
-            sal_Char       buffer_read[400];
-            sal_uInt64  nCount_read;
-        nError1 = aTestFile.read( buffer_read, 400, nCount_read );
-        //t_print("buffer is %s\n", buffer_read );
-            CPPUNIT_ASSERT_MESSAGE("write right logs", strstr( buffer_read, "trace 1 2 3") != NULL );
-            aTestFile.sync();
-            aTestFile.close();
-            /*// delete logfile on the disk
-
-        nError1 = osl::File::remove( suFilePath );
-        printError( nError1 );
-        CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError1 ) || ( nError1 == ::osl::FileBase::E_NOENT ) );
-        */
-    }
-    //Profiling output should only be generated for a special product version of OpenOffice
-    // which is compiled with a defined preprocessor symbol 'TIMELOG'. Now, the symbol not defined
-    void logfile_002()
-        {
-#if (defined WNT) || (defined SOLARIS)
-    putenv("RTL_LOGFILE=logfile2");
-#else
-        setenv("RTL_LOGFILE", "logfile2", 0);
+#ifdef WNT
+                putenv("RTL_LOGFILE=c:\\temp\\logfile1");
 #endif
-        RTL_LOGFILE_TRACE( "trace the log" );
-        RTL_LOGFILE_TRACE1( "trace %d" , 1 );
-        RTL_LOGFILE_TRACE2( "trace %d %d" , 1,2 );
-        RTL_LOGFILE_TRACE3( "trace %d %d %d" , 1 , 2 ,3 );
-
-    }
-
-    void logfile_003()
-        {
-#if (defined WNT) || (defined SOLARIS)
-    putenv("RTL_LOGFILE=logfile3");
-#else
-        setenv("RTL_LOGFILE", "logfile3", 0);
+#ifdef LINUX
+                setenv("RTL_LOGFILE", "/tmp/logfile1", 0);
 #endif
-        RTL_LOGFILE_CONTEXT ( foo , "foo-function" );
-        RTL_LOGFILE_CONTEXT_TRACE ( foo , "trace" );
-        RTL_LOGFILE_CONTEXT_TRACE1 ( foo , "trace %d" , 1 );
-        RTL_LOGFILE_CONTEXT_TRACE2 ( foo , "trace %d %d" , 1 , 2 );
-        RTL_LOGFILE_CONTEXT_TRACE3 ( foo , "trace %d %d %d" , 1 , 2 , 3);
-    }
+                rtl_logfile_trace("trace %d\n", 2 );
+                rtl_logfile_trace("trace %d %d\n" , 1,2 );
+                rtl_logfile_trace("trace %d %d %d\n" , 1 , 2 ,3 );
+
+                rtl::OUString suFilePath = getTempPath();
+                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
+                suFilePath +=  rtl::OUString::createFromAscii(".log");
+
+                ::osl::FileBase::RC   nError1;
+                ::osl::File aTestFile( suFilePath );
+                printUString( suFilePath );
+                nError1 = aTestFile.open ( OpenFlag_Read );
+                CPPUNIT_ASSERT_MESSAGE("create the log file: but the logfile does not exist",
+                                       ( ::osl::FileBase::E_NOENT != nError1 ) &&
+                                       ( ::osl::FileBase::E_ACCES != nError1 ) );
+                sal_Char       buffer_read[400];
+                sal_uInt64      nCount_read;
+                nError1 = aTestFile.read( buffer_read, 400, nCount_read );
+                //t_print("buffer is %s\n", buffer_read );
+                CPPUNIT_ASSERT_MESSAGE("write right logs", strstr( buffer_read, "trace 1 2 3") != NULL );
+                aTestFile.sync();
+                aTestFile.close();
+                /*// delete logfile on the disk
+
+                nError1 = osl::File::remove( suFilePath );
+                printError( nError1 );
+                CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError1 ) || ( nError1 == ::osl::FileBase::E_NOENT ) );
+                */
+        }
+        //Profiling output should only be generated for a special product version of OpenOffice
+        // which is compiled with a defined preprocessor symbol 'TIMELOG'. Now, the symbol not defined
+        void logfile_002()
+            {
+#ifdef SOLARIS
+                putenv("RTL_LOGFILE=/tmp/logfile2");
+#endif
+#ifdef WNT
+                putenv("RTL_LOGFILE=c:\\temp\\logfile2");
+#endif
+#ifdef LINUX
+                setenv("RTL_LOGFILE", "/tmp/logfile2", 0);
+#endif
+                RTL_LOGFILE_TRACE( "trace the log" );
+                RTL_LOGFILE_TRACE1( "trace %d" , 1 );
+                RTL_LOGFILE_TRACE2( "trace %d %d" , 1,2 );
+                RTL_LOGFILE_TRACE3( "trace %d %d %d" , 1 , 2 ,3 );
+// TODO: assertion test!
+        }
+
+        void logfile_003()
+            {
+#ifdef SOLARIS
+                putenv("RTL_LOGFILE=/tmp/logfile2");
+#endif
+#ifdef WNT
+                putenv("RTL_LOGFILE=c:\\temp\\logfile2");
+#endif
+#ifdef LINUX
+                setenv("RTL_LOGFILE", "/tmp/logfile2", 0);
+#endif
+                RTL_LOGFILE_CONTEXT ( foo , "foo-function" );
+                RTL_LOGFILE_CONTEXT_TRACE ( foo , "trace" );
+                RTL_LOGFILE_CONTEXT_TRACE1 ( foo , "trace %d" , 1 );
+                RTL_LOGFILE_CONTEXT_TRACE2 ( foo , "trace %d %d" , 1 , 2 );
+                RTL_LOGFILE_CONTEXT_TRACE3 ( foo , "trace %d %d %d" , 1 , 2 , 3);
+// TODO: assertion test!
+            }
 
 
         CPPUNIT_TEST_SUITE( logfile );
@@ -178,32 +197,32 @@ NOADDITIONAL;
 //~ do some clean up work after all test completed.
 class GlobalObject
 {
-    public:
+public:
     ~GlobalObject()
-    {
-        try
         {
-            t_print( "\n#Do some clean-ups ... only delete logfile1_*.log here!\n" );
-            rtl::OUString suFilePath = getModulePath();
-        suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-        suFilePath +=  rtl::OUString::createFromAscii(".log");
+            try
+            {
+                t_print( "\n#Do some clean-ups ... only delete logfile1_*.log here!\n" );
+                rtl::OUString suFilePath = getTempPath();
+                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
+                suFilePath +=  rtl::OUString::createFromAscii(".log");
 
-            //if ( ifFileExist( suFilePath )  == sal_True )
-            ::osl::FileBase::RC nError1;
-            nError1 = osl::File::remove( suFilePath );
+                //if ( ifFileExist( suFilePath )  == sal_True )
+                ::osl::FileBase::RC nError1;
+                nError1 = osl::File::remove( suFilePath );
 #ifdef WNT
-        t_print("Please remove logfile* manully! Error is Permision denied!");
+                t_print("Please remove logfile* manully! Error is Permision denied!");
 #endif
+            }
+            catch (CppUnit::Exception &e)
+            {
+                t_print("Exception caught in GlobalObject dtor(). Exception message: '%s'. Source line: %d\n", e.what(), e.sourceLine().lineNumber());
+            }
+            catch (...)
+            {
+                t_print("Exception caught (...) in GlobalObject dtor()\n");
+            }
         }
-        catch (CppUnit::Exception &e)
-        {
-            t_print("Exception caught in GlobalObject dtor(). Exception message: '%s'. Source line: %d\n", e.what(), e.sourceLine().lineNumber());
-        }
-        catch (...)
-        {
-            t_print("Exception caught (...) in GlobalObject dtor()\n");
-        }
-    }
 };
 
 GlobalObject theGlobalObject;
