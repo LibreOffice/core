@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:21 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,13 @@ private:
     sal_Bool                        m_bIsLoaded;
     sal_Bool                        m_bCTLFontEnabled;
     sal_Bool                        m_bCTLSequenceChecking;
+    sal_Bool                        m_bCTLRestricted;
     SvtCTLOptions::CursorMovement   m_eCTLCursorMovement;
     SvtCTLOptions::TextNumerals     m_eCTLTextNumerals;
 
     sal_Bool                        m_bROCTLFontEnabled;
     sal_Bool                        m_bROCTLSequenceChecking;
+    sal_Bool                        m_bROCTLRestricted;
     sal_Bool                        m_bROCTLCursorMovement;
     sal_Bool                        m_bROCTLTextNumerals;
 
@@ -134,6 +136,9 @@ public:
 
     void            SetCTLSequenceChecking( sal_Bool _bEnabled );
     sal_Bool        IsCTLSequenceChecking() const { return m_bCTLSequenceChecking;}
+
+    void            SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
+    sal_Bool        IsCTLSequenceCheckingRestricted( void ) const   { return m_bCTLRestricted; }
 
     void            SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement );
     SvtCTLOptions::CursorMovement
@@ -161,6 +166,7 @@ sal_Bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
         case SvtCTLOptions::E_CTLSEQUENCECHECKING : bReadOnly = m_bROCTLSequenceChecking  ; break;
         case SvtCTLOptions::E_CTLCURSORMOVEMENT   : bReadOnly = m_bROCTLCursorMovement    ; break;
         case SvtCTLOptions::E_CTLTEXTNUMERALS     : bReadOnly = m_bROCTLTextNumerals      ; break;
+        case SvtCTLOptions::E_CTLSEQUENCECHECKINGRESTRICTED: bReadOnly = m_bROCTLRestricted  ; break;
     }
     return bReadOnly;
 }
@@ -172,11 +178,13 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     m_bIsLoaded             ( sal_False ),
     m_bCTLFontEnabled       ( sal_False ),
     m_bCTLSequenceChecking  ( sal_False ),
+    m_bCTLRestricted        ( sal_False ),
     m_eCTLCursorMovement    ( SvtCTLOptions::MOVEMENT_LOGICAL ),
     m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC ),
 
     m_bROCTLFontEnabled     ( CFG_READONLY_DEFAULT ),
     m_bROCTLSequenceChecking( CFG_READONLY_DEFAULT ),
+    m_bROCTLRestricted      ( CFG_READONLY_DEFAULT ),
     m_bROCTLCursorMovement  ( CFG_READONLY_DEFAULT ),
     m_bROCTLTextNumerals    ( CFG_READONLY_DEFAULT )
 {
@@ -256,6 +264,17 @@ void SvtCTLOptions_Impl::Commit()
                 }
             }
             break;
+
+            case  4:
+            {
+                if (!m_bROCTLRestricted)
+                {
+                    pNames[nRealCount] = pOrgNames[nProp];
+                    pValues[nRealCount].setValue( &m_bCTLRestricted, rType );
+                    ++nRealCount;
+                }
+            }
+            break;
         }
     }
     aNames.realloc(nRealCount);
@@ -270,12 +289,13 @@ void SvtCTLOptions_Impl::Load()
     Sequence< rtl::OUString >& rPropertyNames = PropertyNames::get();
     if ( !rPropertyNames.getLength() )
     {
-        rPropertyNames.realloc(4);
+        rPropertyNames.realloc(5);
         rtl::OUString* pNames = rPropertyNames.getArray();
         pNames[0] = ASCII_STR("CTLFont");
         pNames[1] = ASCII_STR("CTLSequenceChecking");
         pNames[2] = ASCII_STR("CTLCursorMovement");
         pNames[3] = ASCII_STR("CTLTextNumerals");
+        pNames[4] = ASCII_STR("CTLSequenceCheckingRestricted");
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );
@@ -299,6 +319,7 @@ void SvtCTLOptions_Impl::Load()
                     {
                         case 0: { m_bCTLFontEnabled = bValue; m_bROCTLFontEnabled = pROStates[nProp]; } break;
                         case 1: { m_bCTLSequenceChecking = bValue; m_bROCTLSequenceChecking = pROStates[nProp]; } break;
+                        case 4: { m_bCTLRestricted = bValue; m_bROCTLRestricted = pROStates[nProp]; } break;
                     }
                 }
                 else if ( pValues[nProp] >>= nValue )
@@ -336,6 +357,15 @@ void SvtCTLOptions_Impl::SetCTLSequenceChecking( sal_Bool _bEnabled )
     {
         SetModified();
         m_bCTLSequenceChecking = _bEnabled;
+    }
+}
+//------------------------------------------------------------------------------
+void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( sal_Bool _bEnabled )
+{
+    if(!m_bROCTLRestricted && m_bCTLRestricted != _bEnabled)
+    {
+        SetModified();
+        m_bCTLRestricted = _bEnabled;
     }
 }
 //------------------------------------------------------------------------------
@@ -411,6 +441,18 @@ sal_Bool SvtCTLOptions::IsCTLSequenceChecking() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLSequenceChecking();
+}
+// -----------------------------------------------------------------------------
+void SvtCTLOptions::SetCTLSequenceCheckingRestricted( sal_Bool _bEnable )
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
+}
+// -----------------------------------------------------------------------------
+sal_Bool SvtCTLOptions::IsCTLSequenceCheckingRestricted( void ) const
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    return pCTLOptions->IsCTLSequenceCheckingRestricted();
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
