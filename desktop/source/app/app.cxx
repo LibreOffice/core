@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2001-02-23 11:22:36 $
+ *  last change: $Author: lla $ $Date: 2001-03-07 09:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <svtools/pathoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
+
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 
@@ -173,7 +177,16 @@ void Desktop::Main()
 //  Read the common configuration items for optimization purpose
 //  do not do it if terminate flag was specified, to avoid exception
     if( !bTerminate )
-        PreloadConfigTrees();
+    {
+        try
+        {
+            PreloadConfigTrees();
+        }
+        catch(com::sun::star::uno::Exception &e)
+        {
+            bTerminate = true;
+        }
+    }
 
 //  The only step that should be done if terminate flag was specified
 //  Typically called by the plugin only
