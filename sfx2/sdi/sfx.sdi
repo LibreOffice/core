@@ -6968,7 +6968,7 @@ SfxVoidItem StoreModuleSource SID_BASICIDE_STOREMODULESOURCE
 //--------------------------------------------------------------------------
 SfxTemplateItem StyleApplyState SID_STYLE_APPLY
 [
-    SfxUInt16Item StyleApply(SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY);
+    SfxUInt16Item StyleApply(SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE);
 
     /* flags: */
     AutoUpdate = FALSE,
