@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 
         aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + sDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
         aSql += ::rtl::OUString::createFromAscii(" DROP ");
-        aSql += ::dbtools::quoteName(sQuote,m_aElements[index]->first);
+        aSql += ::dbtools::quoteName(sQuote,getElementName(index));
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);

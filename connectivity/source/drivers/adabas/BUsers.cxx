@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void SAL_CALL OUsers::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
     if (index < 0 || index >= getCount())
         ::dbtools::throwInvalidIndexException(*this);
 
-    dropByName(m_aElements[index]->first);
+    dropByName(getElementName(index));
 }
 // -----------------------------------------------------------------------------
 

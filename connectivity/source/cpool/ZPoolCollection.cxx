@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,14 @@ Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const 
     Reference< XDriver > xDriver;
     Reference< XInterface > xDriverNode;
     ::rtl::OUString sImplName;
-    if(isPoolingEnabledByUrl(_rURL,xDriver,sImplName,xDriverNode))
+    if(isPoolingEnabledByUrl(_rURL,xDriver,sImplName,xDriverNode) && xDriver.is())
     {
         OConnectionPool* pConnectionPool = getConnectionPool(sImplName,xDriver,xDriverNode);
 
         if(pConnectionPool)
             xConnection = pConnectionPool->getConnectionWithInfo(_rURL,_rInfo);
     }
-    else
+    else if(xDriver.is())
         xConnection = xDriver->connect(_rURL,_rInfo);
 
     return xConnection;

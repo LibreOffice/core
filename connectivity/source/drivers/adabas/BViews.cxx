@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void SAL_CALL OViews::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    dropByName((*m_aElements[index]).first);
+    dropByName(getElementName(index));
 }
 // -----------------------------------------------------------------------------
 void OViews::createView( const Reference< XPropertySet >& descriptor )
@@ -285,8 +285,8 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 // -----------------------------------------------------------------------------
 void OViews::appendNew(const ::rtl::OUString& _rsNewTable)
 {
-    m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_rsNewTable,WeakReference< XNamed >())));
-        // notify our container listeners
+    insertElement(_rsNewTable,NULL);
+    // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())

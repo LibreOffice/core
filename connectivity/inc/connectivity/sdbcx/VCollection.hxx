@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,16 +147,18 @@ namespace connectivity
         class SAL_NO_VTABLE OCollection : public OCollectionBase
         {
         protected:
-
             typedef ::std::map< ::rtl::OUString, Object_BASE, ::comphelper::UStringMixLess> ObjectMap;
             typedef ObjectMap::iterator ObjectIter;
 
+        //  private:
             // this combination of map and vector is used to have a fast name and index access
             ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
             ObjectMap                               m_aNameMap;         // hold the elements and a name
 
             ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
             ::cppu::OInterfaceContainerHelper       m_aRefreshListeners;
+
+        protected:
             ::cppu::OWeakObject&                    m_rParent;          // parent of the collection
             ::osl::Mutex&                           m_rMutex;           // mutex of the parent
 
@@ -176,6 +178,17 @@ namespace connectivity
                 <p>Does <em>not</em> dispose the objects hold by the collection.</p>
             */
             void clear_NoDispose();
+
+            /**  insert a new element into the collection
+            */
+            void insertElement(const ::rtl::OUString& _sElementName,const Object_BASE& _xElement);
+
+            /** return the name of element at index _nIndex
+            */
+            const ::rtl::OUString& getElementName(sal_Int32 _nIndex)
+            {
+                return m_aElements[_nIndex]->first;
+            }
 
         public:
             virtual ~OCollection();

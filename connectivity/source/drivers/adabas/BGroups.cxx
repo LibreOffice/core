@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void SAL_CALL OGroups::dropByIndex( sal_Int32 index ) throw(SQLException, IndexO
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    dropByName(m_aElements[index]->first);
+    dropByName(getElementName(index));
 }
 
 

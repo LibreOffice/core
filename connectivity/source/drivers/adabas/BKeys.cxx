@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,6 @@ void SAL_CALL OKeys::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOut
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    dropByName(m_aElements[index]->first);
+    dropByName(getElementName(index));
 }
 

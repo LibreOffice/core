@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 11:05:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ void SAL_CALL ODbaseTables::dropByIndex( sal_Int32 index ) throw(SQLException, I
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    dropByName((*m_aElements[index]).first);
+    dropByName(getElementName(index));
 }
 // -------------------------------------------------------------------------
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:18:40 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,17 @@ namespace connectivity
         ::com::sun::star::uno::Any                  getAny()        const { return *(::com::sun::star::uno::Any*)m_aValue.m_pValue; }
         ::com::sun::star::uno::Any                  makeAny()       const;
     };
+
+    // -------------------------------------------------------------------------
+    /// TSetBound is a unary_function to set the bound value with e.q. for_each call
+    struct TSetBound : ::std::unary_function<ORowSetValue,void>
+    {
+        sal_Bool m_bBound;
+        TSetBound(sal_Bool _bBound) : m_bBound(_bBound){}
+        void operator()(ORowSetValue& _rValue) const { _rValue.setBound(m_bBound); }
+
+    };
+
     // ----------------------------------------------------------------------------
     // Vector for file based rows
     // ----------------------------------------------------------------------------

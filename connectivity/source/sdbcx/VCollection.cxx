@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 14:24:28 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,17 +128,17 @@ void OCollection::disposing(void)
     ::osl::MutexGuard aGuard(m_rMutex);
     for( ObjectIter aIter = m_aNameMap.begin(); aIter != m_aNameMap.end(); ++aIter)
     {
-        if((*aIter).second.is())
+        if(aIter->second.is())
         {
             ::comphelper::disposeComponent(aIter->second);
             (*aIter).second = NULL;
         }
     }
-    m_aElements.clear();
-    m_aNameMap.clear();
-
-    ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
-    ObjectMap(m_aNameMap).swap(m_aNameMap);
+//  m_aElements.clear();
+//  m_aNameMap.clear();
+//
+    ::std::vector< ObjectIter >().swap(m_aElements);
+    ObjectMap().swap(m_aNameMap);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
@@ -192,7 +192,7 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
 Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    sal_Int32 nLen = getCount();
+    sal_Int32 nLen = m_aElements.size();
     Sequence< ::rtl::OUString > aNameList(nLen);
 
     sal_Int32 i=0;
@@ -356,13 +356,13 @@ Type SAL_CALL OCollection::getElementType(  ) throw(RuntimeException)
 sal_Bool SAL_CALL OCollection::hasElements(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    return getCount() > 0;
+    return !m_aNameMap.empty();
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCollection::getCount(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    return m_aElements.size();
+    return m_aNameMap.size();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OCollection::hasByName( const ::rtl::OUString& aName ) throw(RuntimeException)
@@ -381,4 +381,10 @@ void SAL_CALL OCollection::removeRefreshListener( const Reference< XRefreshListe
     m_aRefreshListeners.removeInterface(l);
 }
 // -----------------------------------------------------------------------------
-
+void OCollection::insertElement(const ::rtl::OUString& _sElementName,const Object_BASE& _xElement)
+{
+    OSL_ENSURE(m_aNameMap.find(_sElementName) == m_aNameMap.end(),"Element already exists");
+    if(m_aNameMap.find(_sElementName) == m_aNameMap.end())
+        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_sElementName,_xElement)));
+}
+// -----------------------------------------------------------------------------
