@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-09 12:44:39 $
+ *  last change: $Author: sb $ $Date: 2001-05-29 07:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ typedef enum
     /** The RFC 2732 <uric> char class.
 
         @descr
-        The 'valid' characters are !$&'()*+,-./:; = ?@[ ]_~ plus digits and
+        The 'valid' characters are !$&'()*+,-./:;=?@[]_~ plus digits and
         letters.
      */
     rtl_UriCharClassUric,
@@ -144,7 +144,7 @@ typedef enum
     /** The char class for the values of uno URL parameters.
 
         @descr
-        The 'valid' characters are !$&'()*+-./:?@[]_~ plus digits and letters.
+        The 'valid' characters are !$&'()*+-./:?@_~ plus digits and letters.
      */
     rtl_UriCharClassUnoParamValue,
 
