@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:11:16 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_TIS_620                (RTL_TEXTENC_CAST( 87 ))
 #define RTL_TEXTENCODING_KOI8_U                 (RTL_TEXTENC_CAST( 88 ))
 #define RTL_TEXTENCODING_ISCII_DEVANAGARI       (RTL_TEXTENC_CAST( 89 ))
+#define RTL_TEXTENCODING_JAVA_UTF8              (RTL_TEXTENC_CAST( 90 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
  * rtl_isOctetEncoding in tencinfo.c.
  */
@@ -270,6 +271,7 @@ Turkish (Windows-1254)                          RTL_TEXTENCODING_MS_1254
 
 Unicode (UTF-7)                                 RTL_TEXTENCODING_UTF7
 Unicode (UTF-8)                                 RTL_TEXTENCODING_UTF8
+Unicode (Java's modified UTF-8)                 RTL_TEXTENCODING_JAVA_UTF8
 
 Vietnamese (Windows-1258)                       RTL_TEXTENCODING_MS_1258
 
