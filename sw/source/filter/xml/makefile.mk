@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+#   last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ CXXFILES = \
         xmliteme.cxx	\
         swxmlat.cxx      \
         xmlbrsh.cxx		\
-        xmlfonte.cxx
+        xmlfonte.cxx	\
+        XMLRedlineImportHelper.cxx
 
 SLOFILES =  \
         $(SLO)$/swxml.obj \
@@ -119,7 +120,8 @@ SLOFILES =  \
         $(SLO)$/xmliteme.obj \
         $(SLO)$/swxmlat.obj \
         $(SLO)$/xmlbrsh.obj \
-        $(SLO)$/xmlfonte.obj
+        $(SLO)$/xmlfonte.obj \
+        $(SLO)$/XMLRedlineImportHelper.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/swxml.obj \
@@ -138,7 +140,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmliteme.obj \
         $(SLO)$/swxmlat.obj \
         $(SLO)$/xmlbrsh.obj \
-        $(SLO)$/xmlfonte.obj
+        $(SLO)$/xmlfonte.obj \
+        $(SLO)$/XMLRedlineImportHelper.obj
 
 # --- Tagets -------------------------------------------------------
 

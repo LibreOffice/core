@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: xmltexti.hxx,v $
+ *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
  *
@@ -59,63 +59,92 @@
  *
  ************************************************************************/
 
-#ifndef _XMLTEXTI_HXX
-#define _XMLTEXTI_HXX
+#ifndef _XMLREDLINEIMPORTHELPER_HXX
+#define _XMLREDLINEIMPORTHELPER_HXX
 
-#ifndef _XMLOFF_TXTIMP_HXX
-#include <xmloff/txtimp.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
-class XMLRedlineImportHelper;
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
+#ifndef _REDLINE_HXX
+#include "redline.hxx"
+#endif
+
+#ifndef _REDLENUM_HXX
+#include "redlenum.hxx"
+#endif
+
+#include <map>
+
+class RedlineInfo;
+class SwRedlineData;
+class SwDoc;
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextCursor; }
+    namespace text { class XTextRange; }
+} } }
 
 
-class SwXMLTextImportHelper : public XMLTextImportHelper
+typedef ::std::map< ::rtl::OUString, RedlineInfo* > RedlineMapType;
+
+class XMLRedlineImportHelper
 {
-    XMLRedlineImportHelper *pRedlineHelper;
+    const ::rtl::OUString sEmpty;
+    const ::rtl::OUString sInsertion;
+    const ::rtl::OUString sDeletion;
+    const ::rtl::OUString sFormatChange;
 
-protected:
-    virtual SvXMLImportContext *CreateTableChildContext(
-                SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    RedlineMapType aRedlineMap;
 
 public:
-    SwXMLTextImportHelper(
-            const ::com::sun::star::uno::Reference <
-                ::com::sun::star::frame::XModel>& rModel,
-            sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress );
-    ~SwXMLTextImportHelper();
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet>
-            createAndInsertOLEObject( SvXMLImport& rImport,
-                                      const ::rtl::OUString& rHRef,
-                                         const ::rtl::OUString& rClassId );
+    XMLRedlineImportHelper();
+    virtual ~XMLRedlineImportHelper();
 
-    virtual sal_Bool IsInHeaderFooter() const;
-
-
-    // redlining helper methods
-    // (override to provide the real implementation)
-    virtual void RedlineAdd(
+    /// create a redline object
+    /// (The redline will be inserted into the document after both start
+    ///  and end cursor has been set.)
+    void Add(
         const ::rtl::OUString& rType,       /// redline type (insert, del,... )
         const ::rtl::OUString& rId,         /// use to identify this redline
         const ::rtl::OUString& rAuthor,     /// name of the author
         const ::rtl::OUString& rComment,    /// redline comment
         const ::com::sun::star::util::DateTime& rDateTime);     /// date+time
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XTextCursor> RedlineCreateText(
+
+    /// create a text section for the redline, and return an
+    /// XText/XTextCursor that may be used to write into it.
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::text::XTextCursor> CreateRedlineTextSection(
             ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> xOldCursor,
             const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
-    virtual void RedlineSetCursor(
+
+    /// Set start or end position for a redline in the text body.
+    /// Accepts XTextRange objects.
+    void SetCursor(
         const ::rtl::OUString& rId,     /// ID used to RedlineAdd() call
-        sal_Bool bStart,                /// start or end Cursor
-        ::com::sun::star::uno::Reference<
+        sal_Bool bStart,                /// start or end Range
+        ::com::sun::star::uno::Reference<   /// the actual XTextRange
             ::com::sun::star::text::XTextRange> & rRange);
 
+private:
+
+    inline sal_Bool IsReady(RedlineInfo* pRedline);
+
+    void InsertIntoDocument(RedlineInfo* pRedline);
+
+    SwRedlineData* ConvertRedline(
+        RedlineInfo* pRedline,  /// RedlineInfo to be converted
+        SwDoc* pDoc);           /// document needed for Author-ID conversion
 };
 
-#endif  //  _XMLTEXTI_HXX
+#endif
 

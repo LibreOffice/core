@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 21:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _XMLTEXTI_HXX
 #include "xmltexti.hxx"
 #endif
+#ifndef _XMLREDLINEIMPORTHELPER_HXX
+#include "XMLRedlineImportHelper.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -116,12 +119,14 @@ using namespace ::com::sun::star::xml::sax;
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress ) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress )
+    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress ),
+    pRedlineHelper(NULL)
 {
 }
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
+    delete pRedlineHelper;
 }
 
 SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
@@ -215,4 +220,50 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
                                       IsStylesOnlyMode(), bShowProgress );
+}
+
+
+// redlining helper methods
+// (override to provide the real implementation)
+
+void SwXMLTextImportHelper::RedlineAdd(
+    const OUString& rType,
+    const OUString& rId,
+    const OUString& rAuthor,
+    const OUString& rComment,
+    const util::DateTime& rDateTime)
+{
+    if (NULL == pRedlineHelper)
+        pRedlineHelper = new XMLRedlineImportHelper();
+
+    pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
+}
+
+Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
+    Reference<XTextCursor> xOldCursor,
+    const OUString& rId)
+{
+    Reference<XTextCursor> xRet;
+
+    if (NULL != pRedlineHelper)
+    {
+        xRet = pRedlineHelper->CreateRedlineTextSection(xOldCursor, rId);
+    }
+    // else: NOOP
+
+    return xRet;
+}
+
+void SwXMLTextImportHelper::RedlineSetCursor(
+    const OUString& rId,
+    sal_Bool bStart,
+    Reference<XTextRange> & rRange)
+{
+    if (NULL != pRedlineHelper)
+    {
+        pRedlineHelper->SetCursor(rId, bStart, rRange);
+    }
+    // else: NOOP
+    // (redline needs to be RedlineAdd() (which creates the pRedlineHelper)
+    // before, so without pRedlineHelper this is a NOOP anyway
 }
