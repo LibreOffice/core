@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dr $ $Date: 2002-09-12 09:53:49 $
+#   last change: $Author: vg $ $Date: 2003-04-17 17:42:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -197,6 +197,9 @@ CXXFILES = \
         txenctab.cxx \
         zoom.cxx \
         grfflt.cxx \
+        commonlingui.cxx \
+        hangulhanjadlg.cxx \
+        hangulhanja.cxx \
         $(PROJECTPCHSOURCE).cxx
 
 SRS1NAME=dialogs
@@ -248,7 +251,9 @@ SRC1FILES =  \
         dlgctrl.src \
         grfflt.src \
         langbox.src \
-        frmdirlbox.src
+        frmdirlbox.src \
+        hangulhanjadlg.src \
+        commonlingui.src
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -258,101 +263,6 @@ SRC2FILES =  \
         tabline.src \
         labdlg.src \
         transfrm.src
-
-
-SLOFILES=\
-        $(SLO)$/_bmpmask.obj\
-        $(SLO)$/_contdlg.obj\
-        $(SLO)$/iconcdlg.obj\
-        $(SLO)$/connect.obj \
-        $(SLO)$/connctrl.obj \
-        $(SLO)$/contwnd.obj	\
-        $(SLO)$/fontlb.obj   \
-        $(SLO)$/graphctl.obj \
-        $(SLO)$/hyperdlg.obj \
-        $(SLO)$/hltpbase.obj \
-        $(SLO)$/hlinettp.obj \
-        $(SLO)$/hlmailtp.obj \
-        $(SLO)$/hldoctp.obj \
-        $(SLO)$/hldocntp.obj \
-        $(SLO)$/hlmarkwn.obj \
-        $(SLO)$/imapdlg.obj \
-        $(SLO)$/imapwnd.obj \
-        $(SLO)$/measure.obj \
-        $(SLO)$/dstribut.obj \
-        $(SLO)$/measctrl.obj \
-        $(SLO)$/passwd.obj \
-        $(SLO)$/strarray.obj \
-        $(SLO)$/align.obj    \
-        $(SLO)$/backgrnd.obj \
-        $(SLO)$/bbdlg.obj    \
-        $(SLO)$/border.obj   \
-        $(SLO)$/charmap.obj  \
-        $(SLO)$/chardlg.obj  \
-        $(SLO)$/checklbx.obj \
-        $(SLO)$/ctrdial.obj    \
-        $(SLO)$/ctredlin.obj \
-        $(SLO)$/dlgctrl.obj \
-        $(SLO)$/dlgctl3d.obj \
-        $(SLO)$/dlgname.obj \
-        $(SLO)$/dlgutil.obj  \
-        $(SLO)$/fntctrl.obj  \
-        $(SLO)$/fontwork.obj \
-        $(SLO)$/frmsel.obj   \
-    $(SLO)$/grfpage.obj \
-        $(SLO)$/hdft.obj     \
-    $(SLO)$/hyphen.obj   \
-        $(SLO)$/impgrf.obj   \
-        $(SLO)$/opengrf.obj   \
-        $(SLO)$/labdlg.obj \
-        $(SLO)$/langtab.obj \
-        $(SLO)$/langbox.obj \
-        $(SLO)$/linelink.obj \
-        $(SLO)$/nforient.obj    \
-        $(SLO)$/numfmt.obj   \
-    $(SLO)$/numpages.obj   \
-        $(SLO)$/page.obj     \
-        $(SLO)$/pagectrl.obj \
-        $(SLO)$/paragrph.obj \
-        $(SLO)$/paraprev.obj \
-    $(SLO)$/pfiledlg.obj \
-        $(SLO)$/postdlg.obj  \
-    $(SLO)$/prtqry.obj \
-        $(SLO)$/relfld.obj   \
-        $(SLO)$/rlrcitem.obj \
-        $(SLO)$/rulritem.obj \
-        $(SLO)$/rubydialog.obj \
-    $(SLO)$/simptabl.obj \
-    $(SLO)$/spldlg.obj   \
-    $(SLO)$/splwrap.obj  \
-        $(SLO)$/srchxtra.obj \
-        $(SLO)$/srchctrl.obj \
-    $(SLO)$/srchdlg.obj  \
-        $(SLO)$/stddlg.obj   \
-        $(SLO)$/svxbox.obj   \
-        $(SLO)$/svxruler.obj \
-        $(SLO)$/tabarea.obj \
-        $(SLO)$/tabline.obj \
-        $(SLO)$/tabstpge.obj \
-        $(SLO)$/textattr.obj \
-        $(SLO)$/textanim.obj \
-    $(SLO)$/thesdlg.obj  \
-        $(SLO)$/tparea.obj   \
-        $(SLO)$/tpbitmap.obj \
-        $(SLO)$/tpcolor.obj  \
-        $(SLO)$/tpgradnt.obj \
-        $(SLO)$/tphatch.obj  \
-        $(SLO)$/tpline.obj \
-        $(SLO)$/tplneend.obj \
-        $(SLO)$/tplnedef.obj \
-        $(SLO)$/tpshadow.obj   \
-        $(SLO)$/transfrm.obj \
-        $(SLO)$/worient.obj    \
-        $(SLO)$/txenctab.obj \
-        $(SLO)$/txencbox.obj \
-        $(SLO)$/zoom.obj	 \
-        $(SLO)$/grfflt.obj	\
-        $(SLO)$/frmdirlbox.obj
 
 
 EXCEPTIONSFILES=\
@@ -368,7 +278,106 @@ EXCEPTIONSFILES=\
         $(SLO)$/thesdlg.obj		\
         $(SLO)$/spldlg.obj		\
         $(SLO)$/numpages.obj	\
-        $(SLO)$/splwrap.obj
+        $(SLO)$/splwrap.obj		\
+        $(SLO)$/hangulhanja.obj
+
+SLOFILES=\
+        $(SLO)$/charmap.obj     \
+        $(SLO)$/_bmpmask.obj    \
+        $(SLO)$/frmsel.obj   \
+        $(SLO)$/hltpbase.obj    \
+        $(SLO)$/hldocntp.obj    \
+        $(SLO)$/hlmarkwn.obj    \
+        $(SLO)$/opengrf.obj     \
+        $(SLO)$/hyphen.obj      \
+        $(SLO)$/rubydialog.obj  \
+        $(SLO)$/thesdlg.obj     \
+        $(SLO)$/spldlg.obj      \
+        $(SLO)$/numpages.obj    \
+        $(SLO)$/splwrap.obj     \
+        $(SLO)$/hangulhanja.obj \
+        $(SLO)$/_contdlg.obj\
+        $(SLO)$/iconcdlg.obj\
+        $(SLO)$/connect.obj \
+        $(SLO)$/connctrl.obj \
+        $(SLO)$/contwnd.obj	\
+        $(SLO)$/fontlb.obj   \
+        $(SLO)$/graphctl.obj \
+        $(SLO)$/hyperdlg.obj \
+        $(SLO)$/hlinettp.obj \
+        $(SLO)$/hlmailtp.obj \
+        $(SLO)$/hldoctp.obj \
+        $(SLO)$/imapdlg.obj \
+        $(SLO)$/imapwnd.obj \
+        $(SLO)$/measure.obj \
+        $(SLO)$/dstribut.obj \
+        $(SLO)$/measctrl.obj \
+        $(SLO)$/passwd.obj \
+        $(SLO)$/strarray.obj \
+        $(SLO)$/align.obj    \
+        $(SLO)$/backgrnd.obj \
+        $(SLO)$/bbdlg.obj    \
+        $(SLO)$/border.obj   \
+        $(SLO)$/chardlg.obj  \
+        $(SLO)$/checklbx.obj \
+        $(SLO)$/ctrdial.obj    \
+        $(SLO)$/ctredlin.obj \
+        $(SLO)$/dlgctrl.obj \
+        $(SLO)$/dlgctl3d.obj \
+        $(SLO)$/dlgname.obj \
+        $(SLO)$/dlgutil.obj  \
+        $(SLO)$/fntctrl.obj  \
+        $(SLO)$/fontwork.obj \
+        $(SLO)$/grfpage.obj \
+        $(SLO)$/hdft.obj     \
+        $(SLO)$/impgrf.obj   \
+        $(SLO)$/labdlg.obj \
+        $(SLO)$/langtab.obj \
+        $(SLO)$/langbox.obj \
+        $(SLO)$/linelink.obj \
+        $(SLO)$/nforient.obj    \
+        $(SLO)$/numfmt.obj   \
+        $(SLO)$/page.obj     \
+        $(SLO)$/pagectrl.obj \
+        $(SLO)$/paragrph.obj \
+        $(SLO)$/paraprev.obj \
+        $(SLO)$/pfiledlg.obj \
+        $(SLO)$/postdlg.obj  \
+        $(SLO)$/prtqry.obj \
+        $(SLO)$/relfld.obj   \
+        $(SLO)$/rlrcitem.obj \
+        $(SLO)$/rulritem.obj \
+        $(SLO)$/simptabl.obj \
+        $(SLO)$/srchxtra.obj \
+        $(SLO)$/srchctrl.obj \
+        $(SLO)$/srchdlg.obj  \
+        $(SLO)$/stddlg.obj   \
+        $(SLO)$/svxbox.obj   \
+        $(SLO)$/svxruler.obj \
+        $(SLO)$/tabarea.obj \
+        $(SLO)$/tabline.obj \
+        $(SLO)$/tabstpge.obj \
+        $(SLO)$/textattr.obj \
+        $(SLO)$/textanim.obj \
+        $(SLO)$/tparea.obj   \
+        $(SLO)$/tpbitmap.obj \
+        $(SLO)$/tpcolor.obj  \
+        $(SLO)$/tpgradnt.obj \
+        $(SLO)$/tphatch.obj  \
+        $(SLO)$/tpline.obj \
+        $(SLO)$/tplneend.obj \
+        $(SLO)$/tplnedef.obj \
+        $(SLO)$/tpshadow.obj   \
+        $(SLO)$/transfrm.obj \
+        $(SLO)$/worient.obj    \
+        $(SLO)$/txenctab.obj \
+        $(SLO)$/txencbox.obj \
+        $(SLO)$/zoom.obj	 \
+        $(SLO)$/grfflt.obj	\
+        $(SLO)$/frmdirlbox.obj \
+        $(SLO)$/commonlingui.obj \
+        $(SLO)$/hangulhanjadlg.obj
+
 
 .IF "$(COM)" == "C50"
 EXCEPTIONSNOOPTFILES=$(SLO)$/impgrf.obj
