@@ -8775,3 +8775,10 @@ _real@40f86a0000000000
 ?GetIndexForPoint@ListBox@@QBEJABVPoint@@AAG@Z
 ??_C@_0DC@CNNGEIGA@o?3?2SRC680?2wntmsci8?2inc?2salhelper@
 ??_C@_0DH@CEGOBNEJ@Race?$DP?5Ref?5count?5of?5singleton?5?$DO0?0@
+??0?$_STLP_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@V?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@@2@@_STL@@QAE@ABV01@@Z
+?swap@?$hash_map@VOUString@rtl@@VBitmapEx@@UOUStringHash@2@U?$equal_to@VOUString@rtl@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@6@@_STL@@QAEXAAV12@@Z
+?swap@?$hashtable@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@VOUString@rtl@@UOUStringHash@4@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@2@U?$equal_to@VOUString@rtl@@@2@V?$allocator@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@2@@_STL@@QAEXAAV12@@Z
+?swap@_STL@@YAXAAU?$_Select1st@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@1@0@Z
+?swap@_STL@@YAXAAU?$equal_to@VOUString@rtl@@@1@0@Z
+?swap@_STL@@YAXAAUOUStringHash@rtl@@0@Z
+?swap@_STL@@YAXAAV?$_STLP_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@V?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@@2@@1@0@Z
