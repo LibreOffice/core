@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:28:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 13:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,9 +823,9 @@ ErrorBox ERR_QRY_TOOCOMPLEX
 };
 ErrorBox ERR_QRY_NOSELECT
 {
-    Message = "Es fehlt eine Selektion" ;
-    Message [ ENGLISH ] = "Missing selection" ;
-    Message [ norwegian ] = "Missing selection" ;
+    Message = "Es fehlt eine Selektion!" ;
+    Message [ ENGLISH ] = "Missing selection!" ;
+    Message [ norwegian ] = "Missing selection!" ;
     Message [ italian ] = "Selezione mancante" ;
     Message [ portuguese_brazilian ] = "Falta seleção" ;
     Message [ portuguese ] = "Falta selecção" ;
