@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:01:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include "ndtxt.hxx" // for lcl_FixPosition
+#endif
+
 
 SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
@@ -148,6 +152,25 @@ SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
     }
 
 
+void lcl_FixPosition( SwPosition& rPos )
+{
+    // make sure the position has 1) the proper node, and 2) a proper index
+    SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+
+    if( rPos.nContent.GetIdxReg() != pTxtNode  ||
+        rPos.nContent.GetIndex() > ( pTxtNode == NULL ? 0 : pTxtNode->Len() ) )
+    {
+        DBG_ERROR( "illegal position" );
+        xub_StrLen nLen = rPos.nContent.GetIndex();
+        if( pTxtNode == NULL )
+            nLen = 0;
+        else if( nLen >= pTxtNode->Len() )
+            nLen = pTxtNode->Len();
+        rPos.nContent.Assign( pTxtNode, nLen );
+    }
+}
+
+
 SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
                                 const String& rName, const String& rShortName,
                                 BOOKMARK_TYPE eMark )
@@ -167,6 +190,11 @@ SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
         if( rPaM.HasMark() )
             pBM->pPos2 = new SwPosition( *rPaM.GetMark() );
     }
+
+    // fix bookmark positions if they are invalid
+    lcl_FixPosition( *pBM->pPos1 );
+    if( pBM->pPos2 != NULL )
+        lcl_FixPosition( *pBM->pPos2 );
 
     if( !pBookmarkTbl->Insert( pBM ) )
         delete pBM, pBM = 0;
