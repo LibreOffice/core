@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:55:41 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "childwin.hxx"
 #include "app.hxx"
@@ -181,8 +183,8 @@ sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
 //=========================================================================
 SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
-    , eChildAlignment(SFX_ALIGN_NOALIGNMENT)
     , nType(nId)
+    , eChildAlignment(SFX_ALIGN_NOALIGNMENT)
     , pWindow(0L)
 {
     pImp = new SfxChildWindow_Impl;
@@ -390,6 +392,7 @@ sal_uInt16 SfxChildWindow::GetPosition()
     return pImp->pFact->nPos;
 }
 
+#if 0
 static void ImplWindowStateFromStr( Point rPos, Size rSize, const ByteString& rStr )
 {
     ULONG       nValidMask  = 0;
@@ -424,6 +427,7 @@ static void ImplWindowStateFromStr( Point rPos, Size rSize, const ByteString& rS
         nValidMask |= WINDOWSTATE_MASK_HEIGHT;
     }
 }
+#endif
 
 //-------------------------------------------------------------------------
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
@@ -484,7 +488,6 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
 void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
 {
     SfxChildWindowContext *pCon = NULL;
-    SfxChildWindow *pChild=0;
     SfxChildWinFactory* pFact=0;
     SfxApplication *pApp = SFX_APP();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
