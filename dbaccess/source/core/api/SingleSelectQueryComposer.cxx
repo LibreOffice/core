@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:40:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,9 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 sal_Int64 SAL_CALL OSingleSelectQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
+        return reinterpret_cast<sal_Int64>(this);
 
-    return 0;
+    return sal_Int64(0);
 }
 // -------------------------------------------------------------------------
 // XSingleSelectQueryAnalyzer
@@ -320,7 +320,6 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
 
     getColumns();
     getTables();
-    getParameters();
 }
 // -----------------------------------------------------------------------------
 Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingFilter(  ) throw (RuntimeException)
@@ -482,6 +481,7 @@ void SAL_CALL OSingleSelectQueryComposer::setFilter( const ::rtl::OUString& filt
     aSql += getSQLPart(Order);
 
     setQuery_Impl(aSql);
+    clearParametersCollection();  // parameters may also have changed with the filter
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQLException, RuntimeException)
@@ -1037,6 +1037,16 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     }
 
     return m_aCurrentColumns[ParameterColumns];
+}
+// -----------------------------------------------------------------------------
+void OSingleSelectQueryComposer::clearParametersCollection()
+{
+    if ( m_aCurrentColumns[ParameterColumns] )
+    {
+        m_aCurrentColumns[ParameterColumns]->disposing();
+        m_aColumnsCollection.push_back(m_aCurrentColumns[ParameterColumns]);
+        m_aCurrentColumns[ParameterColumns] = NULL;
+    }
 }
 // -----------------------------------------------------------------------------
 void OSingleSelectQueryComposer::clearCurrentCollections()
