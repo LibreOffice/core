@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Shape.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:16 $
+ *  last change:$Date: 2003-09-08 10:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.drawing;
 
-import com.sun.star.style.XStyle;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.style.XStyle;
 
 /**
 * Testing <code>com.sun.star.drawing.Shape</code>

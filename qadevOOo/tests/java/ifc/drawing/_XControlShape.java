@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControlShape.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:15 $
+ *  last change:$Date: 2003-09-08 10:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+import util.FormTools;
+
 import com.sun.star.awt.XControlModel;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import util.FormTools;
 
 /**
 * Testing <code>com.sun.star.drawing.XControlShape</code>
