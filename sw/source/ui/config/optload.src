@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:43:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ TabPage TP_OPTCAPTION_PAGE
     FixedText FT_OBJECTS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 121 , 20 ) ;
+        Size = MAP_APPFONT ( 106 , 20 ) ;
         WordBreak = TRUE ;
         Text [ de ] = "Automatische Beschriftung\nbeim Einfügen von:" ;
         Text [ en-US ] = "Add captions automatically\nwhen inserting:" ;
@@ -211,7 +211,7 @@ TabPage TP_OPTCAPTION_PAGE
     Control CLB_OBJECTS
     {
         Pos = MAP_APPFONT ( 6 , 29 ) ;
-        Size = MAP_APPFONT ( 121 , 150 ) ;
+        Size = MAP_APPFONT ( 106 , 150 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -242,16 +242,16 @@ TabPage TP_OPTCAPTION_PAGE
 
     FixedLine FL_SETTINGS_2
     {
-        Pos = MAP_APPFONT ( 133 , 3 ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Pos = MAP_APPFONT ( 118 , 3 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
         Text [ de ] = "Beschriftung" ;
         Text [ en-US ] = "Caption" ;
         Text [ x-comment ] = " ";
     };
     FixedText TXT_CATEGORY
     {
-        Pos = MAP_APPFONT ( 139 , 16 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 16 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "~Kategorie" ;
         Text [ en-US ] = "Category" ;
         Left = TRUE ;
@@ -267,8 +267,8 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText TXT_FORMAT
     {
-        Pos = MAP_APPFONT ( 139 , 31 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 31 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "~Nummerierung" ;
         Text [ en-US ] = "~Numbering" ;
         Left = TRUE ;
@@ -284,8 +284,8 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText TXT_TEXT
     {
-        Pos = MAP_APPFONT ( 139 , 45 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 45 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "~Separator" ;
         Text [ en-US ] = "Separator" ;
         Left = TRUE ;
@@ -301,8 +301,8 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText TXT_POS
     {
-        Pos = MAP_APPFONT ( 139 , 60 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 60 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Left = TRUE ;
         Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position" ;
@@ -319,16 +319,16 @@ TabPage TP_OPTCAPTION_PAGE
 
     FixedLine FL_NUMCAPT
     {
-        Pos = MAP_APPFONT ( 133 , 74 ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Pos = MAP_APPFONT ( 118 , 74 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
         Text [ de ] = "Kapitelweise Nummerierung der Beschriftung" ;
         Text [ en-US ] = "Numbering captions by chapter" ;
         Text [ x-comment ] = " ";
     };
     FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 139 , 87 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 87 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "E~bene" ;
         Text [ en-US ] = "Level" ;
         Text [ x-comment ] = " ";
@@ -355,8 +355,8 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 139 , 102 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 102 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "~Trenner" ;
         Text [ en-US ] = "Separator" ;
         Text [ x-comment ] = " ";
@@ -371,16 +371,16 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedLine FL_CATEGORY
     {
-        Pos = MAP_APPFONT ( 133 , 115 ) ;
-        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Pos = MAP_APPFONT ( 118 , 115 ) ;
+        Size = MAP_APPFONT ( 136 , 8 ) ;
         Text [ de ] = "Kategorie- und Rahmenformat" ;
         Text [ en-US ] = "Category and frame format" ;
         Text [ x-comment ] = " ";
     };
     FixedText FT_CHARSTYLE
     {
-        Pos = MAP_APPFONT ( 139 , 128 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 128 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ de ] = "Zeichenvorlage" ;
         Text [ en-US ] = "Character style" ;
         Text [ x-comment ] = " ";
@@ -407,16 +407,16 @@ TabPage TP_OPTCAPTION_PAGE
     };
     CheckBox CB_APPLYBORDER
     {
-        Pos = MAP_APPFONT ( 139 , 143 ) ;
-        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Pos = MAP_APPFONT ( 125 , 143 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
         Text [ de ] = "~Rahmen und Schatten anwenden" ;
         Text [ en-US ] = "Apply border and shadow" ;
         Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 139 , 159 ) ;
-        Size = MAP_APPFONT ( 109 , 20 ) ;
+        Pos = MAP_APPFONT ( 125 , 159 ) ;
+        Size = MAP_APPFONT ( 123 , 20 ) ;
         Border = TRUE;
     };
 
