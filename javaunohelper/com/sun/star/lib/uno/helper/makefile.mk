@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2002-08-13 10:35:49 $
+#   last change: $Author: rt $ $Date: 2004-07-23 15:16:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,10 @@ TARGET  = com_sun_star_lib_uno_helper
 
 
 # --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+.INCLUDE : settings.mk
 
 # Files --------------------------------------------------------
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES = ridl.jar jurt.jar unoil.jar
 
 
 JAVACLASSFILES= \
