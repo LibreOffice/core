@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 16:33:38 $
+#   last change: $Author: ganaya $ $Date: 2001-02-13 06:10:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,11 +177,15 @@ SLOFILES+=$(SLO)$/staticmbadabas.obj
 SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
 
-SHL1VERSIONMAP= $(ADABAS_TARGET).map
+.IF "$(OS)"=="MACOSX"
+SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
+.ELSE      
+SHL1VERSIONMAP=$(ADABAS_TARGET).map
+.ENDIF
+
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(ADABAS_TARGET)$(ADABAS_MAJOR)
-SHL1VERSIONMAP= $(TARGET).map
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
