@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 05:56:57 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 14:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ danish ] = "®1995-1998 Sun Microsystems, Inc.";
         TEXT[ swedish ] = "®1995-1998 Sun Microsystems, Inc.";
         TEXT[ polish ] = "®1995-1998 Sun Microsystems, Inc.";
-        TEXT[ portuguese_brazilian ] = "®1995-1998 Sun Microsystems, Inc.";
+        TEXT[ portuguese_brazilian ] = "?1995-1998 Sun Microsystems, Inc.";
         TEXT[ japanese ] = "®1995-1998 Sun Microsystems, Inc.";
         TEXT[ korean ] = "1995-1998 Sun Microsystems, Inc.";
         TEXT[ chinese_simplified ] = "?995-1998 Sun Microsystems, Inc.";
@@ -538,7 +538,7 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ danish ] = "The print function is not available!";
     MESSAGE[ swedish ] = "The print function is not available!";
     MESSAGE[ polish ] = "The print function is not available! ";
-    MESSAGE[ portuguese_brazilian ] = "Drucken steht nicht zur Verfügung!";
+    MESSAGE[ portuguese_brazilian ] = "Drucken steht nicht zur Verf?ung!";
     MESSAGE[ japanese ] = "ÌßØİÀ‚ª‚ ‚è‚Ü‚¹‚ñ";
     MESSAGE[ korean ] = "ÇÁ¸°Æ® ±â´É ¾ÈµÊ!";
     MESSAGE[ chinese_simplified ] = "The print function is not available!";
@@ -651,7 +651,7 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ danish ] = "This window does not contain a main program!";
     MESSAGE[ swedish ] = "This window does not contain a main program!";
     MESSAGE[ polish ] = "This window does not contain a main program! ";
-    MESSAGE[ portuguese_brazilian ] = "Dieses Fenster enthält kein Hauptprogramm!";
+    MESSAGE[ portuguese_brazilian ] = "Dieses Fenster enth?lt kein Hauptprogramm!";
     MESSAGE[ japanese ] = "‚±‚Ì³¨İÄŞ³‚ÉÒ²İÌßÛ¸Ş×Ñ‚ÍŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "ÀÌ À©µµ¿ì´Â ¸ŞÀÎ ÇÁ·Î±×·¥À» Æ÷ÇÔÇÏ°í ÀÖÁö ¾Ê½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "This window does not contain a main program!";
@@ -827,7 +827,7 @@ ErrorBox IDS_INVALID_VALUE {
     MESSAGE[ danish ] = "The value is invalid and cannot be set.";
     MESSAGE[ swedish ] = "The value is invalid and cannot be set.";
     MESSAGE[ polish ] = "The value is invalid and cannot be set.";
-    MESSAGE[ portuguese_brazilian ] = "Der Wert ist ungültig und kann daher nicht gesetzt werden.";
+    MESSAGE[ portuguese_brazilian ] = "Der Wert ist ung?tig und kann daher nicht gesetzt werden.";
     MESSAGE[ japanese ] = "’l‚ª–³Œø‚ÅAİ’è‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ªÀÌ¹Ç·Î ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù.";
     MESSAGE[ chinese_simplified ] = "The value is invalid and cannot be set.";
@@ -873,7 +873,7 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ danish ] = "Error saving files! Run anyway?";
     MESSAGE[ swedish ] = "Error saving files! Run anyway?";
     MESSAGE[ polish ] = "Error saving files! Run anyway? ";
-    MESSAGE[ portuguese_brazilian ] = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
+    MESSAGE[ portuguese_brazilian ] = "Fehler beim Speichern der Dateien! Trotzdem ausf?ren?";
     MESSAGE[ japanese ] = "Ì§²Ù•Û‘¶‚Ì´×°‚Å‚·BÀs‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
     MESSAGE[ korean ] = "ÆÄÀÏ ÀúÀå½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! °è¼Ó ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
@@ -918,7 +918,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     MESSAGE[ danish ] = "File has been changed. Save?";
     MESSAGE[ swedish ] = "File has been changed. Save?";
     MESSAGE[ polish ] = "File has been changed. Save?";
-    MESSAGE[ portuguese_brazilian ] = "Datei ist geändert worden. Abspeichern?";
+    MESSAGE[ portuguese_brazilian ] = "Datei ist ge?ndert worden. Abspeichern?";
     MESSAGE[ japanese ] = "Ì§²Ù‚É•ÏX‚ª‚ ‚è‚Ü‚·B•Û‘¶‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed. Save?";
@@ -963,7 +963,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     MESSAGE[ danish ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ swedish ] = "File has been changed on data mediumim Editor geändert worden. Save?";
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Save? ";
-    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Abspeichern?";
+    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger und\nim Editor ge?ndert worden. Abspeichern?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Æ\n´ÃŞ¨À‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B•Û‘¶‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Save?";
@@ -1008,7 +1008,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     MESSAGE[ danish ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ swedish ] = "File has been changed on data medium. Skriva över?";
     MESSAGE[ polish ] = "File has been changed on data medium.\nOverwrite?";
-    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden.\nÜberschreiben?";
+    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger ge?ndert worden.\n?berschreiben?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù.\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î??";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium.\nOverwrite?";
@@ -1053,8 +1053,8 @@ QueryBox IDS_ASKRELOAD {
     MESSAGE[ danish ] = "File has been changed on data medium. Reload?";
     MESSAGE[ swedish ] = "File has been changed on data medium. Reload?";
     MESSAGE[ polish ] = "File has been changed on data medium. Reload? ";
-    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden. Erneut Laden?";
-    MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B“Ç‚İ‚İ‚È‚¨‚µ‚Ü‚·‚©B";
+    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger ge?ndert worden. Erneut Laden?";
+    MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B“Ç‚İ‚İ‚È‚¨‚µ";
     MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼»óÀÇ ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium. Reload?";
@@ -1098,7 +1098,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     MESSAGE[ danish ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ swedish ] = "File has been changed on data mediumim Editor geändert worden. Reload?";
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Reload? ";
-    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Erneut Laden?";
+    MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datentr?ger und\nim Editor ge?ndert worden. Erneut Laden?";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í”}‘Ìã‚Æ\n´ÃŞ¨À‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B“Ç‚İ‚İ‚È‚¨‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â»óÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Reload?";
@@ -2048,7 +2048,7 @@ Menu RID_FILE {
             TEXT[ danish ] = "~Open...";
             TEXT[ swedish ] = "~Open...";
             TEXT[ polish ] = "~Open... ";
-            TEXT[ portuguese_brazilian ] = "Ö~ffnen...";
+            TEXT[ portuguese_brazilian ] = "?~ffnen...";
             TEXT[ japanese ] = "ŠJ‚­(~O)...";
             TEXT[ korean ] = "¿­±â(~O)...";
             TEXT[ chinese_simplified ] = "~Open...";
@@ -2077,7 +2077,7 @@ Menu RID_FILE {
             TEXT[ danish ] = "~Close";
             TEXT[ swedish ] = "~Close";
             TEXT[ polish ] = "~Close ";
-            TEXT[ portuguese_brazilian ] = "S~chließen";
+            TEXT[ portuguese_brazilian ] = "S~chlie?en";
             TEXT[ japanese ] = "•Â‚¶‚é(~C)";
             TEXT[ korean ] = "´İ±â(~C)";
             TEXT[ chinese_simplified ] = "~Close";
@@ -2302,7 +2302,7 @@ Menu RID_EDIT {
             TEXT[ danish ] = "~Undo";
             TEXT[ swedish ] = "~Undo";
             TEXT[ polish ] = "~Undo ";
-            TEXT[ portuguese_brazilian ] = "~Rückgängig";
+            TEXT[ portuguese_brazilian ] = "~R?kg?ngig";
             TEXT[ japanese ] = "Œ³‚É–ß‚·(~U)";
             TEXT[ korean ] = "½ÇÇàÃë¼Ò(~U)";
             TEXT[ chinese_simplified ] = "~Undo";
@@ -2413,7 +2413,7 @@ Menu RID_EDIT {
             TEXT[ danish ] = "~Paste";
             TEXT[ swedish ] = "~Paste";
             TEXT[ polish ] = "~Paste ";
-            TEXT[ portuguese_brazilian ] = "E~infügen";
+            TEXT[ portuguese_brazilian ] = "E~inf?en";
             TEXT[ japanese ] = "“\\‚è•t‚¯(~P)";
             TEXT[ korean ] = "ºÙ¿©³Ö±â(~P)";
             TEXT[ chinese_simplified ] = "~Paste";
@@ -2440,7 +2440,7 @@ Menu RID_EDIT {
             TEXT[ danish ] = "~Delete";
             TEXT[ swedish ] = "~Delete";
             TEXT[ polish ] = "~Delete ";
-            TEXT[ portuguese_brazilian ] = "~Löschen";
+            TEXT[ portuguese_brazilian ] = "~L?chen";
             TEXT[ japanese ] = "íœ(~D)";
             TEXT[ korean ] = "»èÁ¦(~D)";
             TEXT[ chinese_simplified ] = "~Delete";
@@ -2662,7 +2662,7 @@ Menu RID_RUN {
             TEXT[ danish ] = "Si~ngle Step over Procedure";
             TEXT[ swedish ] = "Si~ngle Step over Procedure";
             TEXT[ polish ] = "Si~ngle Step over Procedure";
-            TEXT[ portuguese_brazilian ] = "Einzelschritt über ~Prozeduren";
+            TEXT[ portuguese_brazilian ] = "Einzelschritt ?er ~Prozeduren";
             TEXT[ japanese ] = "Si~ngle Stepping (subroutines excluded)";
             TEXT[ korean ] = "ÇÁ·Î½ÃÀúÀÇ °¢ ´Ü°è(~N)";
             TEXT[ chinese_simplified ] = "Si~ngle Step over Procedure";
@@ -2697,7 +2697,7 @@ Menu RID_RUN {
             TEXT[ danish ] = "Set / Delete Break Point";
             TEXT[ swedish ] = "Set / Delete Break Point";
             TEXT[ polish ] = "Set / Delete Break Point";
-            TEXT[ portuguese_brazilian ] = "Brechpunkt setzen/löschen";
+            TEXT[ portuguese_brazilian ] = "Brechpunkt setzen/l?chen";
             TEXT[ japanese ] = "Set / Delete Break Point";
             TEXT[ korean ] = "Áß´ÜÁ¡ ¼³Á¤/»èÁ¦";
             TEXT[ chinese_simplified ] = "Set / Delete Break Point";
@@ -2777,7 +2777,7 @@ Menu RID_RUN {
             TEXT[ danish ] = "~Next Error";
             TEXT[ swedish ] = "~Next Error";
             TEXT[ polish ] = "~Next Error";
-            TEXT[ portuguese_brazilian ] = "~Nächster Fehler";
+            TEXT[ portuguese_brazilian ] = "~N?chster Fehler";
             TEXT[ japanese ] = "Ÿ‚Ì´×°(~N)";
             TEXT[ korean ] = "´ÙÀ½ ¿À·ù(~N)";
             TEXT[ chinese_simplified ] = "~Next Error";
@@ -2921,7 +2921,7 @@ Menu RID_WINDOW {
             TEXT[ danish ] = "~Overlapping";
             TEXT[ swedish ] = "~Overlapping";
             TEXT[ polish ] = "~Overlapping";
-            TEXT[ portuguese_brazilian ] = "~Überlappend";
+            TEXT[ portuguese_brazilian ] = "~?berlappend";
             TEXT[ japanese ] = "d‚Ë‚Ä•\\¦(~O)";
             TEXT[ korean ] = "°ãÄ§(~O)";
             TEXT[ chinese_simplified ] = "~Overlapping";
@@ -3342,7 +3342,7 @@ TabPage RID_TP_GENERIC {
         Text[ danish ] = "Delete";
         Text[ swedish ] = "Delete";
         Text[ polish ] = "Delete";
-        Text[ portuguese_brazilian ] = "Löschen";
+        Text[ portuguese_brazilian ] = "L?chen";
         Text[ japanese ] = "íœ";
         Text[ korean ] = "Áö¿ì±â";
         Text[ chinese_simplified ] = "Delete";
@@ -3428,7 +3428,7 @@ TabPage RID_TP_GENERIC {
         Text[ danish ] = "Delete";
         Text[ swedish ] = "Delete";
         Text[ polish ] = "Delete";
-        Text[ portuguese_brazilian ] = "Löschen";
+        Text[ portuguese_brazilian ] = "L?chen";
         Text[ japanese ] = "íœ";
         Text[ korean ] = "Áö¿ì±â";
         Text[ chinese_simplified ] = "Delete";
@@ -3919,7 +3919,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ danish ] = "Close";
         Text[ swedish ] = "Close";
         Text[ polish ] = "Close";
-        Text[ portuguese_brazilian ] = "Schließen";
+        Text[ portuguese_brazilian ] = "Schlie?en";
         Text[ japanese ] = "Close";
         Text[ korean ] = "´İ±â";
         Text[ chinese_simplified ] = "Close";
