@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-14 10:18:26 $
+ *  last change: $Author: mib $ $Date: 2002-11-26 14:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,7 +906,7 @@ SwDoc* SwXTextCursor::GetDoc()
   -----------------------------------------------------------------------*/
 void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, sal_Bool bTableMode)
 {
-    sal_uInt16 nFlags = 0;//???
+    sal_uInt16 nFlags = SETATTR_APICALL;
     SwDoc* pDoc = rPam.GetDoc();
     //StartEndAction
     UnoActionContext aAction(pDoc);
