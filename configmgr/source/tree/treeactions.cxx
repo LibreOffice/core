@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:53 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ void OMergeTreeAction::handle(ValueChange& _rChange)
     }
     else
     {
-        ValueNode* pNode = new ValueNode(_rChange.getNodeName(), _rChange.getNewValue());
+        ValueNode* pNode = new ValueNode(_rChange.getNodeName(), _rChange.getNewValue(), _rChange.getAttributes());
 
         // add the tree to the change list
         AddNode* pChange = new AddNode(auto_ptr<INode>(pNode),_rChange.getNodeName());
@@ -152,8 +152,7 @@ void OMergeTreeAction::handle(SubtreeChange& _rChange)
         if (pSubTree)
         {
             // generate a new change
-            SubtreeChange* pChange = new SubtreeChange(_rChange.getNodeName());
-            pChange->setChildTemplateName(_rChange.getChildTemplateName());
+            SubtreeChange* pChange = new SubtreeChange(_rChange, SubtreeChange::NoChildCopy());
 
             OMergeTreeAction aNextLevel(*pChange, pSubTree);
             _rChange.forEachChange(aNextLevel);
@@ -171,8 +170,7 @@ void OMergeTreeAction::handle(SubtreeChange& _rChange)
     // otherwise we have to create the node
     else
     {
-        Subtree* pNode = new Subtree(_rChange.getNodeName());
-        pNode->setChildTemplateName(_rChange.getChildTemplateName());
+        Subtree* pNode = new Subtree(_rChange.getNodeName(), _rChange.getChildTemplateName(), _rChange.getAttributes());
 
         // add the subnodes
         OCreateSubtreeAction aNextLevel(pNode);
@@ -228,6 +226,7 @@ void OMergeTreeAction::handle(AddNode& _rChange)
         {
             ValueChange* pChange = new ValueChange(_rChange.getNodeName(),
                                                    pNewValueNode->getValue(),
+                                                   pNewValueNode->getAttributes(),
                                                    ValueChange::changeValue,
                                                    pValueNode->getValue());
             m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
@@ -240,6 +239,27 @@ void OMergeTreeAction::handle(AddNode& _rChange)
         m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
     }
 }
+
+//==========================================================================
+//= OChangeCounter
+//==========================================================================
+void OChangeCounter::handle(ValueChange const& aValueNode)
+{
+    ++nCount;
+}
+
+void OChangeCounter::handle(AddNode const& aAddNode)
+{
+    ++nCount;
+}
+
+void OChangeCounter::handle(RemoveNode const& aRemoveNode)
+{
+    ++nCount;
+}
+
+void OChangeCounter::handle(SubtreeChange const& aSubtree) { applyToChildren(aSubtree); }
+
 
 //==========================================================================
 //= OCreateSubtreeAction
@@ -260,7 +280,7 @@ void OCreateSubtreeAction::handle(ValueChange& _rChange)
     ensure();
 
     // create a node by a ValueChange
-    ValueNode* pNode = new ValueNode(_rChange.getNodeName(), _rChange.getNewValue());
+    ValueNode* pNode = new ValueNode(_rChange.getNodeName(), _rChange.getNewValue(), _rChange.getAttributes());
     m_pTree->addChild(std::auto_ptr<INode>(pNode));
 }
 
@@ -270,8 +290,7 @@ void OCreateSubtreeAction::handle(SubtreeChange& _rChange)
     ensure();
 
     // create a node by a ValueChange
-    Subtree* pNode = new Subtree(_rChange.getNodeName());
-    pNode->setChildTemplateName(_rChange.getChildTemplateName());
+    Subtree* pNode = new Subtree(_rChange.getNodeName(), _rChange.getChildTemplateName(), _rChange.getAttributes());
 
     // add it to the tree
     m_pTree->addChild(auto_ptr<INode>(pNode));

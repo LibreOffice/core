@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "apitypes.hxx"
 #include <vos/ref.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <options.hxx>
 
 namespace osl { class Mutex; }
 namespace configmgr
@@ -110,7 +111,6 @@ namespace configmgr
             UnoInterfaceRef makeUnoElement(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
             UnoInterfaceRef findUnoElement(configuration::NodeID const& aNode);
 
-            UnoInterfaceRef makeUnoAccessRoot(configuration::Tree const& aTree);
             UnoInterfaceRef makeUnoGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
             UnoInterfaceRef makeUnoSetElement(configuration::ElementTree const& aTree);
 
@@ -118,7 +118,7 @@ namespace configmgr
             NodeElement* findElement(configuration::NodeID const& aNode);
 
             NodeElement*    makeGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
-            TreeElement*    makeAccessRoot(configuration::Tree const& aTree);
+            TreeElement*    makeAccessRoot(configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
             SetElement*     makeSetElement(configuration::ElementTree const& aTree);
 
             SetElement*     findSetElement(configuration::ElementTree const& aTree);
@@ -139,7 +139,7 @@ namespace configmgr
             uno::Sequence< sal_Int8 > doGetElementTunnelID() const { return m_aTunnelID.getImplementationId(); }
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate) = 0;
-            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate) = 0;
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions) = 0;
             virtual SetElement*     doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate) = 0;
 
             static ApiTreeImpl& getImplementation(NodeElement& pElement);

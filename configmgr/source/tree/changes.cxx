@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:05:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,12 @@ using namespace configmgr;
 //= ValueChange
 //==========================================================================
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(OUString const& _rName,Any aNewValue, Mode aMode, Any aOldValue)
+ValueChange::ValueChange(OUString const& _rName,Any aNewValue, const configuration::Attributes& _rAttributes, Mode aMode, Any aOldValue)
     : Change(_rName)
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue)
      ,m_eMode(aMode)
+     ,m_aAttributes(_rAttributes)
 {
 }
 // -------------------------------------------------------------------------
@@ -84,15 +85,17 @@ ValueChange::ValueChange(Any aNewValue, ValueNode const& aOldValue)
     : Change(aOldValue.getName())
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue.getValue())
+     ,m_aAttributes(aOldValue.getAttributes())
 {
     m_eMode = aOldValue.isDefault() ? wasDefault : changeValue;
 }
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(SetToDefault,  ValueNode const& aOldValue)
+ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
     : Change(aOldValue.getName())
      ,m_aValue(aOldValue.getDefault())
      ,m_aOldValue(aOldValue.getValue())
      ,m_eMode(setToDefault)
+     ,m_aAttributes(aOldValue.getAttributes())
 {
 }
 
@@ -102,6 +105,7 @@ ValueChange::ValueChange(const ValueChange& _rChange)
             ,m_aValue(_rChange.getNewValue())
             ,m_aOldValue(_rChange.getOldValue())
             ,m_eMode(_rChange.getMode())
+            ,m_aAttributes(_rChange.getAttributes())
 {}
 
 // -------------------------------------------------------------------------

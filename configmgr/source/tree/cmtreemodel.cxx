@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 12:05:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,11 +287,8 @@ bool operator==(SubtreeChange::ChildIterator const& lhs, SubtreeChange::ChildIte
 //==========================================================================
 //--------------------------------------------------------------------------
 SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
-    :SubtreeChange(_rSource.getNodeName())
+    :SubtreeChange(_rSource, SubtreeChange::NoChildCopy())
 {
-    // don't forget the template name
-    setChildTemplateName(_rSource.getChildTemplateName());
-
     ChildIterator aSourceChildren = _rSource.begin();
     while (aSourceChildren != _rSource.end())
     {

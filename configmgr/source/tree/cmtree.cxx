@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:53 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,7 @@
 #ifndef _CONFIGMGR_TREEACCESS_HXX_
 #include "treeaccess.hxx"
 #endif
-#ifndef CONFIGMGR_API_CHANGESSET_HXX_
-#include "confchangesset.hxx"
-#endif
+
 
 // WISDOM
 // !!Never write same code twice!!
@@ -114,17 +112,13 @@ namespace configmgr
 
 // ---------------------------- Node implementation ----------------------------
 
-    INode::INode(){}
-    INode::INode(OUString const& aName)
-            :m_aName(aName){}
+    INode::INode(configuration::Attributes _aAttr):m_aAttributes(_aAttr){}
+    INode::INode(OUString const& aName, configuration::Attributes _aAttr)
+          :m_aName(aName)
+          ,m_aAttributes(_aAttr){}
     // CopyCTor will be create automatically
 
     INode::~INode() {}
-
-    // Node* Node::clone() {}
-
-    OUString INode::getName() const {return m_aName;}
-    NodeAttributes INode::getAttributes() const {return m_aNodeAttribute;}
 
     ISubtree*         INode::asISubtree(){return NULL;}
     ISubtree const*   INode::asISubtree() const {return NULL;}
@@ -133,103 +127,56 @@ namespace configmgr
 
 
 // ------------------------- SearchNode implementation -------------------------
-    SearchNode::SearchNode(){}
+    SearchNode::SearchNode():INode(configuration::Attributes()){}
     SearchNode::SearchNode(OUString const& aName)
-            :INode(aName){}
+        :INode(aName, configuration::Attributes()){}
 
     INode* SearchNode::clone() const {return new SearchNode(*this);}
 
-    OUString SearchNode::getName() const {return getName();}
     SearchNode::~SearchNode(){}
+
+    //==========================================================================
+    //= OPropagateLevels
+    //==========================================================================
+    /** fills a subtree with the correct level informations
+    */
+    struct OPropagateLevels : public NodeModification
+    {
+    protected:
+        sal_Int32   nChildLevel;
+    public:
+        OPropagateLevels(sal_Int32 _nParentLevel)
+        {
+            nChildLevel = (ITreeProvider::ALL_LEVELS == _nParentLevel) ? ITreeProvider::ALL_LEVELS : _nParentLevel - 1;
+        }
+        virtual void handle(ValueNode&) { /* not interested in value nodes */ }
+        virtual void handle(ISubtree& _rSubtree)
+        {
+            if ((ITreeProvider::ALL_LEVELS == nChildLevel) || nChildLevel > _rSubtree.getLevel())
+                _rSubtree.setLevel(nChildLevel);
+        }
+    };
 
 
 // -------------------------- ISubtree implementation --------------------------
     ISubtree* ISubtree::asISubtree() {return this;}
     ISubtree const* ISubtree::asISubtree() const {return this;}
 
+    //--------------------------------------------------------------------------
+    void ISubtree::setLevel(sal_Int16 _nLevel)
+    {
+        m_nLevel = _nLevel;
+        if (0 == _nLevel)
+            // nothing more to do, this means "nothing known about any children"
+            return;
+
+        // forward the level number to any child subtrees we have
+        OPropagateLevels aDeeperInto(_nLevel);
+        aDeeperInto.applyToChildren(*this);
+    }
+
 // --------------------------- Subtree implementation ---------------------------
-
-    Subtree::Subtree(OUString const& aName)
-        :ISubtree(aName)
-        ,m_nLevel(0)
-    {
-    }
-    Subtree::Subtree()
-        :m_nLevel(0)
-    {
-    }
-    Subtree::~Subtree() {}
-
-// #pragma message("__FILE__(__LINE__) Subtree::clone() has empty implementation")
     INode* Subtree::clone() const {return new Subtree(*this);}
-
-// #define MAX_NODE_NAME_LENGTH 256
-
-// RECURSIVE:     Node* Subtree::createChild(OUString const& aPath)
-// RECURSIVE:     {
-// RECURSIVE:         //?   configmgr::Node searchObj(aName);
-// RECURSIVE:         //?   ChildList::iterator it = m_aNode->GetSet().find(&searchObj);
-// RECURSIVE:         //?   if (it == m_aNode->GetSet().end())
-// RECURSIVE:         //?       return NULL;
-// RECURSIVE:         //?   else
-// RECURSIVE:         //?       return *it;
-// RECURSIVE:         sal_Unicode aName[MAX_NODE_NAME_LENGTH];
-// RECURSIVE:         int nStartPos = 0;
-// RECURSIVE:         int nPos = 0;
-// RECURSIVE:
-// RECURSIVE:         if (aPath[0] == '/')
-// RECURSIVE:         {
-// RECURSIVE:             nStartPos++;
-// RECURSIVE:         }
-// RECURSIVE:         if (aPath[nStartPos] == '\0')
-// RECURSIVE:         {
-// RECURSIVE:             return this;
-// RECURSIVE:         }
-// RECURSIVE:
-// RECURSIVE:         int nEndPos = nStartPos;
-// RECURSIVE:         while ((aPath[nEndPos] != '\0') && (aPath[nEndPos] != '/')) {
-// RECURSIVE:             aName[nPos++] = aPath[nEndPos++];
-// RECURSIVE:         }
-// RECURSIVE:         aName[nPos] = '\0';
-// RECURSIVE:
-// RECURSIVE: #ifdef DEBUG
-// RECURSIVE:         // list(cout << " searching for [" << aName << "] in\n");
-// RECURSIVE: #endif
-// RECURSIVE:
-// RECURSIVE:         // search Node
-// RECURSIVE:         SearchNode searchObj(aName);
-// RECURSIVE:         ChildList::iterator it = m_aChildren->GetSet().find(&searchObj);
-// RECURSIVE:         if (it == m_aChildren->GetSet().end())
-// RECURSIVE:         {
-// RECURSIVE:             // create new Child
-// RECURSIVE:             auto_ptr<Node> pSubtree( new Subtree(aName));
-// RECURSIVE:             Node *pN = addChild(pSubtree);
-// RECURSIVE:             Subtree *pS = (Subtree*)pN;
-// RECURSIVE:             return pS->createChild(aPath + nEndPos);
-// RECURSIVE:         }
-// RECURSIVE:         else {
-// RECURSIVE:             // call recursive the inner child
-// RECURSIVE:             Node *pN = *it;
-// RECURSIVE:             Subtree *pP = (Subtree*)pN;
-// RECURSIVE:             return pP->createChild(aPath + nEndPos);
-// RECURSIVE:         }
-// RECURSIVE:     }
-
-    INode* Subtree::createChild(OUString const& aName)
-    {
-        // POST: create Subtree if not found
-
-        // search Node
-        SearchNode searchObj(aName);
-        ChildList::iterator it = m_aChildren.GetSet().find(&searchObj);
-        if (it == m_aChildren.GetSet().end())
-        {
-            // create new Child
-            auto_ptr<INode> pSubtree( new Subtree(aName));
-            return addChild(pSubtree);
-        }
-        return *it;
-    }
 
     INode* Subtree::doGetChild(OUString const& aName) const
     {
@@ -276,28 +223,6 @@ namespace configmgr
         }
         return aReturn;
     }
-
-    //==========================================================================
-    //= OPropagateLevels
-    //==========================================================================
-    /** fills a subtree with the correct level informations
-    */
-    struct OPropagateLevels : public NodeModification
-    {
-    protected:
-        sal_Int32   nChildLevel;
-    public:
-        OPropagateLevels(sal_Int32 _nParentLevel)
-        {
-            nChildLevel = (ITreeProvider::ALL_LEVELS == _nParentLevel) ? ITreeProvider::ALL_LEVELS : _nParentLevel - 1;
-        }
-        virtual void handle(ValueNode&) { /* not interested in value nodes */ }
-        virtual void handle(ISubtree& _rSubtree)
-        {
-            if ((ITreeProvider::ALL_LEVELS == nChildLevel) || nChildLevel > _rSubtree.getLevel())
-                _rSubtree.setLevel(nChildLevel);
-        }
-    };
 
     //==========================================================================
     //= OCompleteTree
@@ -411,7 +336,7 @@ namespace configmgr
                     OSL_ENSHURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
                     // generate a new change
 
-                    SubtreeChange* pChange = new SubtreeChange(aNodeName);
+                    SubtreeChange* pChange = new SubtreeChange(_rSubtree);
                     OBuildChangeTree aNextLevel(*pChange, pSubTree);
                     aNextLevel.applyToChildren(_rSubtree);
 
@@ -428,22 +353,6 @@ namespace configmgr
         }
     };
 
-
-    //--------------------------------------------------------------------------
-    void Subtree::setLevel(sal_Int16 _nLevel)
-    {
-        m_nLevel = _nLevel;
-        if (0 == _nLevel)
-            // nothing more to do, this means "nothing known about any children"
-            return;
-
-        // forward the level number to any child subtrees we have
-        OPropagateLevels aDeeperInto(_nLevel);
-        aDeeperInto.applyToChildren(*this);
-    }
-
-    //--------------------------------------------------------------------------
-    sal_Int16 Subtree::getLevel() const {return m_nLevel;}
 
     void Subtree::forEachChild(NodeAction& anAction) const {
         for(ChildList::const_iterator it = m_aChildren.GetSet().begin();
@@ -502,7 +411,7 @@ namespace configmgr
     bool ValueNode::hasDefault() const
     {
         // POST: true, if only m_aDefaultValue is set.
-        return getAttributes().optional || m_aDefaultValue.hasValue();
+        return getAttributes().bNullable || m_aDefaultValue.hasValue();
     }
 
     bool ValueNode::isNull() const
@@ -604,7 +513,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    ISubtree* Tree::requestSubtree( OUString const& aComponentName, sal_Int16 nLevel ) throw (container::NoSuchElementException)
+    ISubtree* Tree::requestSubtree( OUString const& aComponentName, const vos::ORef<OOptions>& _xOptions, sal_Int16 nLevel ) throw (container::NoSuchElementException)
     {
         // OLD:
         // INode* pResult = m_pRoot->getChild(aComponentName);
@@ -778,7 +687,7 @@ namespace configmgr
                     if (i != _rLocation.end())
                     {
                         // do we still have (at least) one level to go than we need a new temporary node
-                        pNewChild = new Subtree(aNodeName);
+                        pNewChild = new Subtree(aNodeName, rtl::OUString(), configuration::Attributes());
                         pNewChild = static_cast<Subtree*>(pInsertInto->addChild(::std::auto_ptr<INode>(pNewChild)));
                         pNewChild->setLevel(0); // which means "we know nothing about any children"
                     }
@@ -799,53 +708,14 @@ namespace configmgr
         }
     }
 
-
-    std::auto_ptr<TreeChangeList> Tree::mergeSubTree(const ConfigurationName& _rLocation,  std::auto_ptr<ISubtree> pSubtree)
-    {
-        // first look for the subtree
-        Subtree* pEntry = m_pRoot;
-        for (ConfigurationName::Iterator i = _rLocation.begin(); i != _rLocation.end() && pEntry != NULL; i++)
-            pEntry = static_cast<Subtree*>(pEntry->getChild(*i));
-
-#ifdef DEBUG
-        ::rtl::OString aStr("Tree: there is no Subtree for name:=");
-        aStr += rtl::OUStringToOString(_rLocation.fullName(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(pEntry, aStr.getStr());
-#endif
-        if (pEntry)
-        {
-            std::auto_ptr<TreeChangeList> pChangeList(new TreeChangeList(_rLocation.getParentName().fullName(), _rLocation.localName()));
-            // now fill the change list
-            OBuildChangeTree aTreeChange(pChangeList->root, pEntry);
-            aTreeChange.applyToChildren(*pSubtree.get());
-
-            // now count if there are any changes
-            OChangeCounter aCounter;
-            pChangeList->root.dispatch(aCounter);
-
-            if (aCounter.nCount == 0)
-                pChangeList.reset();
-            else
-            {
-                TreeUpdate aTreeUpdate(pEntry);
-                pChangeList->root.forEachChange(aTreeUpdate);
-            }
-            return pChangeList;
-
-        }
-        else
-            return std::auto_ptr<TreeChangeList>(0);
-    }
-
-
-    void Tree::updateTree( TreeChangeList& aTree) throw (lang::WrappedTargetException, uno::RuntimeException)
+    void Tree::updateTree( TreeChangeList& aTree, const vos::ORef<OOptions>& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
         ConfigurationName aSubtreeName(aTree.pathToRoot, aTree.root.getNodeName());
         ISubtree *pSubtree = NULL;
         try
         {
             // request the subtree, atleast one level must exist!
-            pSubtree = requestSubtree(aSubtreeName.fullName(), 1);
+            pSubtree = requestSubtree(aSubtreeName.fullName(), _xOptions, 1);
         }
         catch(container::NoSuchElementException&e)
         {

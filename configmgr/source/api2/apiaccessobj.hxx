@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,11 +159,10 @@ namespace configmgr
         class OReadRootElement : public RootElement, public NodeClass
         {
             static ServiceInfo const*const s_pServiceInfo;
-
             mutable ApiRootTreeImpl     m_aRootTree;
         public:
             OReadRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree)
-            : m_aRootTree(pUnoThis, rProvider,aTree)
+                : m_aRootTree(pUnoThis, rProvider,aTree, vos::ORef <OOptions >())
             {}
 
             virtual NodeRef             doGetNode() const;
@@ -184,8 +183,8 @@ namespace configmgr
 
             mutable ApiRootTreeImpl     m_aRootTree;
         public:
-            OUpdateRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree)
-            : m_aRootTree(pUnoThis, rProvider,aTree)
+            OUpdateRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+            : m_aRootTree(pUnoThis, rProvider,aTree,_xOptions)
             {}
 
             virtual NodeRef             doGetNode() const;

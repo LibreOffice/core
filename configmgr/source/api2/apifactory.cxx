@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
             else
             {
                 OSL_ENSURE(aTree.getContextTree().isEmpty(),"INTERNAL ERROR: Found tree (not a set element) with a parent tree.");
-                pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr());
+                pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr(), vos::ORef< OOptions >());
             }
         }
         implHaveNewElement(aNodeID,pRet);
@@ -272,14 +272,9 @@ void Factory::revokeElement(NodeID const& aNodeID, NodeElement& rElement)
     if (doFindElement(aNodeID) == &rElement)
         doRevokeElement(aNodeID, &rElement);
 }
-//-----------------------------------------------------------------------------
 
-UnoInterfaceRef Factory::makeUnoAccessRoot(Tree const& aTree)
-{
-    return implToUno(makeAccessRoot(aTree));
-}
 //-----------------------------------------------------------------------------
-TreeElement* Factory::makeAccessRoot(Tree const& aTree)
+TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
 {
     OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Making element from tree requires valid tree");
     if (aTree.isEmpty()) return 0;
@@ -300,9 +295,7 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree)
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
-
-        pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr());
-
+        pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr(), _xOptions);
         implHaveNewElement (aNodeID,pRet);
     }
     return pRet;
