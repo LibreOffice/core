@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:42:20 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
                     pBreakIt->xBreak->endOfScript(rTxt, nPos, nScript);
                 if (nEnd == -1)
                     break;
-                nPos = nEnd;
+                nPos = writer_cast<xub_StrLen>(nEnd);
                 maScripts.push_back(ScriptEntry(nPos, nScript));
                 nScript = pBreakIt->xBreak->getScriptType(rTxt, nPos);
             }
@@ -648,7 +648,7 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
     if (maBiDiIter != maDirChanges.end())
     {
         if (maBiDiIter->first < nMinPos)
-            nMinPos = maBiDiIter->first;
+            nMinPos = writer_cast<xub_StrLen>(maBiDiIter->first);
         mbCharIsRTL = maBiDiIter->second;
     }
 
@@ -2363,9 +2363,10 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 SwWW8Writer::InsUInt16(aAt, 0xD634);
                 aAt.Insert( BYTE(6), aAt.Count() );
                 aAt.Insert( BYTE(0), aAt.Count() );
-                aAt.Insert( BYTE(3), aAt.Count() );
+                aAt.Insert( BYTE(1), aAt.Count() );
                 aAt.Insert( BYTE(1 << i), aAt.Count() );
                 aAt.Insert( BYTE(3), aAt.Count() );
+
                 SwWW8Writer::InsUInt16(aAt,
                     pDefaultFmt->GetBox().GetDistance(*pBrd));
             }
