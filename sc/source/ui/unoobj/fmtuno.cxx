@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
-                aPos = ScAddress( (USHORT)aAddress.Column, (USHORT)aAddress.Row, aAddress.Sheet );
+                aPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_STYLENAME ) )
         {
@@ -567,7 +567,7 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aSrcPos.Set( (USHORT)aSourcePosition.Column, (USHORT)aSourcePosition.Row, aSourcePosition.Sheet );
+    aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
     if (pParent)
         pParent->DataChanged();
 }
@@ -736,7 +736,7 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aSrcPos.Set( (USHORT)aSourcePosition.Column, (USHORT)aSourcePosition.Row, aSourcePosition.Sheet );
+    aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
     DataChanged();
 }
 
