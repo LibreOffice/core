@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 08:53:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ STD_RES_FILE( gid_File_Res_Sc, sc )
 File gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/embedding_calc.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
+    Name = "/registry/spool/org/openoffice/Office/Embedding-calc.xcu";
 End
 
 #ifdef SOLAR_JAVA
@@ -133,29 +133,29 @@ End
 File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_calc_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_calc_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Calc_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Office.Common-calc.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-calc.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Setup_Calc_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Setup-calc.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
+    Name = "/registry/spool/org/openoffice/Setup-calc.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Calcwindowstate_Xcs
