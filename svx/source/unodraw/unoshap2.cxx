@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-19 12:08:10 $
+ *  last change: $Author: aw $ $Date: 2001-04-24 11:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,9 @@ void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSeq
 
     // Zeiger auf innere sequences holen
     const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
+
+    // #85920# Clear the given polygon, since the new one shall be SET, not ADDED
+    rNewPolyPolygon.Clear();
 
     for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
     {
