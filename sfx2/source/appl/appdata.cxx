@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:48:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ void SfxAppData_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
     SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
     if( pHint && pHint->GetId() == SFX_HINT_CANCELLABLE )
     {
+/*
         // vom Cancel-Manager
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
               pFrame;
@@ -224,6 +225,7 @@ void SfxAppData_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
                 rBind.Update( SID_BROWSE_STOP );
             rBind.Invalidate( SID_BROWSE_STOP );
         }
+ */
     }
 }
 
