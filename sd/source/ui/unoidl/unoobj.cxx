@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 14:31:09 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 16:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,7 +877,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
 {
     uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
 
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.shape",
+    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
                                                   "com.sun.star.document.LinkTarget" );
 
     SdrObject* pObj = mpShape->GetSdrObject();
