@@ -205,7 +205,7 @@ $(SHL1TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
     +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
@@ -652,7 +652,7 @@ $(SHL2TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
     +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
@@ -1099,7 +1099,7 @@ $(SHL3TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
     +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
@@ -1546,7 +1546,7 @@ $(SHL4TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
     +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
@@ -1993,7 +1993,7 @@ $(SHL5TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
     +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
@@ -2440,7 +2440,7 @@ $(SHL6TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
     +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
@@ -2887,7 +2887,7 @@ $(SHL7TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
     +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
@@ -3334,7 +3334,7 @@ $(SHL8TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
     +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
@@ -3781,7 +3781,7 @@ $(SHL9TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
     +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
@@ -4228,7 +4228,7 @@ $(SHL10TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
     +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)

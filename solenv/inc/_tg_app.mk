@@ -107,7 +107,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
     @-+echo #include  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -185,6 +185,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP2LINKTYPE)" != ""
@@ -294,7 +295,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
     @-+echo #include  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -372,6 +373,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP3LINKTYPE)" != ""
@@ -481,7 +483,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
     @-+echo #include  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -559,6 +561,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP4LINKTYPE)" != ""
@@ -668,7 +671,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
     @-+echo #include  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -746,6 +749,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP5LINKTYPE)" != ""
@@ -855,7 +859,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
     @-+echo #include  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -933,6 +937,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP6LINKTYPE)" != ""
@@ -1042,7 +1047,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
     @-+echo #include  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -1120,6 +1125,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP7LINKTYPE)" != ""
@@ -1229,7 +1235,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
     @-+echo #include  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -1307,6 +1313,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP8LINKTYPE)" != ""
@@ -1416,7 +1423,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
     @-+echo #include  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -1494,6 +1501,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP9LINKTYPE)" != ""
@@ -1603,7 +1611,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
     @-+echo #include  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -1681,6 +1689,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target
 # unroll begin
 
 .IF "$(APP10LINKTYPE)" != ""
@@ -1790,7 +1799,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
     @-+echo #include  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
@@ -1868,3 +1877,4 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 
 # Anweisungen fuer das Linken
+#next Target

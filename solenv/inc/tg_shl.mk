@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-07 11:05:49 $
+#   last change: $Author: hjs $ $Date: 2001-06-18 14:13:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -305,7 +305,7 @@ $(SHL$(TNR)TARGETN) : \
     @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
     +$(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)

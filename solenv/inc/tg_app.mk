@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-12 07:34:45 $
-#*    $Revision: 1.25 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-06-18 14:13:47 $
+#*    $Revision: 1.26 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -153,7 +153,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
     @-+echo #include  "$(APP$(TNR)VERINFO)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
-    $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(linkinc)" == ""
     $(LINK) @$(mktmp \
