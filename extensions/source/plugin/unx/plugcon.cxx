@@ -2,12 +2,15 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.1 2001-10-23 17:31:20 pl Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.2 2002-02-21 16:59:30 hr Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1  2001/10/23 17:31:20  pl
+      #92403# move plugins into own executable like SO5.2
+
       Revision 1.5  2000/03/22 12:01:07  pl
       #74086# do not wait indefinitely on dead mediators
 
@@ -29,6 +32,7 @@
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
+#include <cstdarg>
 
 UINT32 PluginConnector::GetStreamID( NPStream* pStream )
 {
