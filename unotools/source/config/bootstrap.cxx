@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-02 12:15:30 $
+ *  last change: $Author: jb $ $Date: 2001-11-06 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ namespace utl
         bool initUserInstallationData(rtl::Bootstrap& _rData);
     };
 // ---------------------------------------------------------------------------------------
+    static OUString getExecutableDirectory();
+// ---------------------------------------------------------------------------------------
     Bootstrap::Impl const& Bootstrap::data()
     {
         static Impl* s_pData = NULL;
@@ -185,7 +187,7 @@ namespace utl
             using namespace osl;
             MutexGuard aGuard( Mutex::getGlobalMutex() );
 
-            static Impl s_theData(OUString(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_DATA_NAME)));
+            static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
 
             s_pData = &s_theData;
         }
@@ -494,6 +496,19 @@ OUString getExecutableBaseName()
 }
 
 // ---------------------------------------------------------------------------------------
+static
+OUString getExecutableDirectory()
+{
+    OUString sFileName;
+    OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&sFileName.pData));
+
+    sal_Int32 nDirEnd = sFileName.lastIndexOf(cURLSeparator);
+
+    OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
+
+    return sFileName.copy(0,nDirEnd);
+}
+
 // ----------------------------------------------------------------------------------
 
 static
