@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:31:27 $
+ *  last change: $Author: dl $ $Date: 2001-04-12 14:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
-            EESpellState eState = ( (OutlinerView*) pOutlView)
-                                  ->StartThesaurus( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
-
+            EESpellState eState = ( (OutlinerView*) pOutlView)->StartThesaurus();
             DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
             if (eState == EE_SPELL_NOLANGUAGE)
@@ -213,8 +211,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
         }
 
-        EESpellState eState = pOutlView->StartThesaurus( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
-
+        EESpellState eState = pOutlView->StartThesaurus();
         DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
         if (eState == EE_SPELL_NOLANGUAGE)
