@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:47:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     Text = "Tabellenauswahl";
     Text [ english ] = "Table Selection";
     Text [ english_us ] = "Table Selection";
-    Text[ language_user1 ] = "ZL: Datenbank-Tabelle";
+    Text[ language_user1 ] = "; ZL: Datenbank-Tabelle";
     Text[ portuguese ] = "Selecηγo de tabela";
     Text[ russian ] = "Βϋαξπ ςΰαλθφϋ";
     Text[ dutch ] = "tabel selecteren";
@@ -138,7 +138,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text [ english_us ]= "On the right side, you see all the tables from the data source of the form.\n\n\nChoose the table from which the data should be used as basis for the list content:";
         Text[ portuguese ] = "O lado direito mostra-lhe todas as tabelas da fonte de dados do formulαrio.\n\n\nSeleccione a tabela com os dados que vγo servir de base ao conteϊdo da lista.";
         Text[ russian ] = "Ροπΰβΰ οξκΰηΰνϋ βρε ςΰαλθφϋ τξπμ θρςξχνθκξβ δΰννϋυ.\n\n\nΒϋαεπθςε ςΰαλθφσ, κξςξπΰÿ δξλζνΰ οξρλσζθςό ξρνξβξι δλÿ ρξδεπζθμξγξ ροθρκΰ:";
-        Text[ greek ] = "Στην δεξιά πλευρά προβάλλονται όλοι οι πίνακες από τον προορισμό των δεδομένων της φόρμας.\n\n\nΕπιλέξτε τον πίνακα του οποίου τα δεδομένα θα ";
+        Text[ greek ] = "Στα δεξιά, βλέπετε όλους τους πίνακες από την προέλευση δεδομένων της φόρμας.\n\n\nΕπιλέξτε τον πίνακα του οποίου τα δεδομένα θα χρησιμοποιηθούν ως βάση για τα περιεχόμενα της λίστας:";
         Text[ dutch ] = "Aan de rechterkant ziet u alle tabellen uit de gegevensbron van het formulier.\n\n\nKies de tabel waarvan de gegevens de basis moeten vormen voor de inhoud van de lijst:";
         Text[ french ] = "Toutes les tables de la source de donnιes du formulaire sont mentionnιes ΰ droite.\n\n\nSιlectionnez les tables dont les donnιes devront servir de base au contenu de la liste :";
         Text[ spanish ] = "En la parte derecha puede ver todas las tablas de la base de datos del formulario.\n\n\nSeleccione la tabla de la que deban tomarse los datos para el contenido de la lista:";
@@ -347,7 +347,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ english_us ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
         Text[ portuguese ] = "O conteϊdo do campo seleccionado serα mostrado na lista se os campos ligados coincidirem.";
         Text[ russian ] = "Ρξδεπζθμξε βϋαπΰννξγξ οξλÿ ασδες οξκΰηΰνξ β ροθρκε, ερλθ ρβÿηΰννϋε οξλÿ ρξβοΰδΰώς.";
-        Text[ greek ] = "Το περιεχόμενο του επιλεγμένου πεδίου εμφανίζεται στο πεδίο λίστας όταν συμπίπτουν τα συνδεδεμένα πεδία.";
+        Text[ greek ] = "Το περιεχόμενο του επιλεγμένου πεδίου εμφανίζεται στο πεδίο λίστας όταν τα συνδεδεμένα πεδία είναι πανομοιότυπα.";
         Text[ dutch ] = "De inhoud van het geselecteerde veld wordt in de keuzelijst weergegeven als de gekoppelde velden overeenkomen.";
         Text[ french ] = "Le contenu du champ sιlectionnι sera affichι dans la zone de liste ΰ condition que les champs liιs concordent bien.";
         Text[ spanish ] = "El contenido del campo seleccionado se mostrarα en el listado si coinciden los campos vinculados.";
@@ -417,7 +417,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ english_us ] = "This is where you select fields with matching contents so that the value from the display field will be shown.";
         Text[ portuguese ] = "Os conteϊdos dos campos que seleccionar aqui terγo que coincidir, de forma a poder ver os respectivos valores no campo de visualizaηγo.";
         Text[ russian ] = "Δλÿ ςξγξ χςξαϋ ξςξαπΰζΰλξρό ηνΰχενθε οξλÿ, βϋαεπθςε οξλÿ, ρ ρξγλΰρξβΰννϋμ ρξδεπζθμϋμ.";
-        Text[ greek ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ greek ] = "Εδώ επιλέγετε πεδία των οποίων τα περιεχόμενα συμφωνούν, ώστε να εμφανιστεί η τιμή του πεδίου εμφάνισης.";
         Text[ dutch ] = "Kies hier de velden waarvan de inhoud overeen moet stemmen, zodat de waarde uit het weergaveveld kan worden weergegeven.";
         Text[ french ] = "Sιlectionnez les champs dont le contenu doit coοncider afin d'afficher la valeur du champ de visualisation.";
         Text[ spanish ] = "Seleccione los campos cuyo contenido debe coincidir para que se muestre el valor en el campo de visualizaciσn.";
@@ -559,13 +559,13 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ swedish ] = "Du kan antingen spara kombinationsfδltets vδrde i ett databasfδlt eller bara anvδnda det fφr visning.";
     Text [ polish ] = "Wartoζ pola kombi moΏna zapisaζ w polu bazy danych lub uΏyζ jej tylko do wywietlenia.";
     Text [ portuguese_brazilian ] = "Vocκ pode salvar o valor da caixa de combinaηγo num campo da base de dados ou utilizα-lo apenas para visualizaηγo.";
-    Text [ japanese ] = "γ‚³γƒ³γƒγƒγƒƒγ‚―γ‚Ήγ®ε€¤γ―γ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγƒ•γ‚£γƒΌγƒ«γƒ‰γ«δΏε­γ™γ‚‹γ‹γ€γ‚γ‚‹γ„γ―θ΅¨η¤Ίη”¨γ§γ—γ‹δ½Ώη”¨γ§γγΎγ›γ‚“γ€‚";
+    Text [ japanese ] = "γ‚³γƒ³γƒγƒγƒƒγ‚―γ‚Ήγ®ε€¤γ―γ€γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγƒ•γ‚£γƒΌγƒ«γƒ‰γ«δΏε­γ™γ‚‹γ‹γ€γ‚γ‚‹γ„γ―θ΅¨η¤Ίε°‚η”¨γ¨γ—γ¦δ½Ώη”¨γ™γ‚‹γ“γ¨γγ§γγΎγ™γ€‚";
     Text [ chinese_simplified ] = "ζ‚¨θƒ½ε¤ε°†η»„εζ δΈ­η„ζ•°ε€Όε­ε…¥ζ•°ζ®εΊ“ε­—ζ®µε†…ζ–η”¨δΊζΎη¤Ίγ€‚";
     Text [ chinese_traditional ] = "ζ‚¨θƒ½ε¤ ε°‡ηµ„εζ¬„δ½η„ζ•Έε€Όε­ε…¥δΈ€ε€‹θ³‡ζ–™εΊ«ζ¬„δ½ζ–η”¨ζ–Όι΅―η¤Ίγ€‚";
     Text [ arabic ] = "νγίδί ΝέΩ ήνγΙ γΡΘΪ ΗαΚΝΡνΡ ζΗαΣΡΟ έν Νήα ήΗΪΟΙ ΘνΗδΗΚ΅ Γζ ΗΣΚΞΟΗγεΗ ααΪΡΦ έήΨ.";
     Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
     Text [ chinese_simplified ] = "ζ‚¨θƒ½ε¤ε°†η»„εζ δΈ­η„ζ•°ε€Όε­ε…¥ζ•°ζ®εΊ“ε­—ζ®µε†…ζ–η”¨δΊζΎη¤Ίγ€‚";
-    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή του πεδίου συνδυασμού σε ένα πεδίο της βάσης δεδομένων ή να το χρησιμοποιήσετε μόνο για την εμφάνισή του. ";
+    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή του πεδίου συνδυασμού σε ένα πεδίο βάσης δεδομένων ή να την χρησιμοποιήσετε για λόγους εμφάνισης.";
     Text [ korean ] = "μ½¤λ³΄ μƒμμ κ°’μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ— μ €μ¥ν•κ±°λ‚ ν‘μ‹ν•  λ•λ§ μ‚¬μ©ν•  μ μμµλ‹λ‹¤.";
     Text [ turkish ] = "Siz isterseniz Aηύlan Kutu deπerini saklarsύnύz veya gφstermek iηin kullanύrsύnύz.";
     Text[ catalan ] = "Podeu desar el valor del quadre combinat en un camp d'una base de dades o bι utilitzar-lo amb finalitats de visualitzaciσ";
@@ -576,6 +576,7 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text[ hindi ] = "ΰ¤†ΰ¤ª ΰ¤•ΰ¥‰ΰ¤®ΰ¥ΰ¤¬ΰ¥‹ ΰ¤•ΰ¥ΰ¤·ΰ¥‡ΰ¤¤ΰ¥ΰ¤° ΰ¤•ΰ¤Ύ ΰ¤®ΰ¥‚ΰ¤²ΰ¥ΰ¤― ΰ¤•ΰ¥‹ ΰ¤²ΰ¥‡ΰ¤–ΰ¤Ύΰ¤Έΰ¤‚ΰ¤ΰ¤― ΰ¤•ΰ¥ΰ¤·ΰ¥‡ΰ¤¤ΰ¥ΰ¤° ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Έΰ¤‚ΰ¤ΰ¤Ώΰ¤¤ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¤…ΰ¤¥ΰ¤µΰ¤Ύ ΰ¤¦ΰ¤Ώΰ¤–ΰ¤Ύΰ¤¨ΰ¥‡ ΰ¤•ΰ¥‡ ΰ¤²ΰ¤Ώΰ¤ ΰ¤‰ΰ¤ªΰ¤―ΰ¥‹ΰ¤— ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "MΓ΄ΕΎete alebo uloΕΎiΕ¥ hodnotu combo boxu do databΓ΅zovΓ©ho poΔΎa, alebo ju pouΕΎiΕ¥ na zobrazenie.";
 };
+
 
 
 
