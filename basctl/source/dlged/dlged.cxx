@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-01 09:26:02 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 14:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+
 #pragma hdrstop
 
 #ifndef _SVXIDS_HRC
@@ -167,13 +171,18 @@ void VCDlgEditor::ShowDialog()
 
     // create a dialog
     uno::Reference< awt::XControl > xDlg( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), uno::UNO_QUERY );
-    uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel, uno::UNO_QUERY );
 
+    // clone the dialog model
+    uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
+    uno::Reference< util::XCloneable > xNew = xC->createClone();
+    uno::Reference< awt::XControlModel > xDlgMod( xNew, uno::UNO_QUERY );
+
+    // set the model
     xDlg->setModel( xDlgMod );
 
     // create a peer
     uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
-    xDlg->createPeer( xToolkit, NULL );
+    xDlg->createPeer( xToolkit, pWindow->GetComponentInterface() );
 
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
     xD->execute();
@@ -276,14 +285,14 @@ void VCDlgEditor::SetWindow( Window* pWindow )
     pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "VCHiddenLayer" ) ), FALSE );
     pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
 
-    Size aGridSize( 60, 60 );  //Twips
+    //Size aGridSize( 60, 60 );  //Twips
+    Size aGridSize( 100, 100 );  // 100TH_MM
     bGridSnap    = TRUE;
     bGridVisible = TRUE;
     pSdrView->SetGridCoarse( aGridSize );
     pSdrView->SetSnapGrid( aGridSize );
     pSdrView->SetGridSnap( bGridSnap );
     pSdrView->SetGridVisible( FALSE );
-
     pSdrView->SetDragStripes( FALSE );
 
     pSdrView->SetDesignMode( TRUE );  // tbe put this somewhere else
@@ -498,7 +507,8 @@ void VCDlgEditor::SetDialog( )
                Any aA = xNameAcc->getByName( pNames[n] );
             Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
                aA >>= xCtrlModel;
-            DlgEdObj* pCtrlObj = new DlgEdObj(pDlgEdForm);
+            DlgEdObj* pCtrlObj = new DlgEdObj();
+            pCtrlObj->SetDlgEdForm(pDlgEdForm);
             pCtrlObj->SetUnoControlModel( xCtrlModel );
             pCtrlObj->StartPropertyListening();
             pCtrlObj->SetChanged();
