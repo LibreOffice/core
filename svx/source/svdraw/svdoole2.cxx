@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-03 17:34:09 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
 #include <com/sun/star/embed/XLinkageSupport.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
@@ -1352,7 +1355,13 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             aSz.Height = aVisArea.GetSize().Height();
             xObjRef->setVisualAreaSize( GetAspect(), aSz );
 
-            aSz = xObjRef->getVisualAreaSize( GetAspect() );
+            try
+            {
+                aSz = xObjRef->getVisualAreaSize( GetAspect() );
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {}
+
             Rectangle aAcceptedVisArea;
             aAcceptedVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
             //Rectangle aAcceptedVisArea(rIPRef->GetVisArea());
@@ -1373,7 +1382,17 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {
                 // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
                 // If we don't cache it for own objects also we must load the object here
-                awt::Size aObjSize = xObjRef->getVisualAreaSize( GetAspect() );
+                awt::Size aObjSize;
+                try
+                {
+                    aObjSize = xObjRef->getVisualAreaSize( GetAspect() );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
+                    aObjSize.Width = 5000;
+                    aObjSize.Height = 5000;
+                }
 
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
                 Size aObjAreaSize(aObjSize.Width, aObjSize.Height);
