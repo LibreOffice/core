@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsSelectionFunction.hxx"
-#include "controller/SlsSlideParameterFunction.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "SlsHideSlideFunction.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -78,7 +77,6 @@
 
 #include "PreviewWindow.hxx"
 #include "PreviewChildWindow.hxx"
-#include "SlideChangeChildWindow.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fuzoom.hxx"
@@ -87,7 +85,7 @@
 #include "fuexpand.hxx"
 #include "fusumry.hxx"
 #include "fuscale.hxx"
-#include "fuslshow.hxx"
+#include "slideshow.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -97,6 +95,7 @@
 #include "ViewShellBase.hxx"
 #include "sdattr.hxx"
 #include "PresentationViewShell.hxx"
+#include "TaskPaneViewShell.hxx"
 #include "FrameView.hxx"
 #include "zoomlist.hxx"
 #include "sdpage.hxx"
@@ -172,14 +171,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             ShowSlideShow (rRequest);
             break;
 
-        case SID_DIA:
-            rShell.SetCurrentFunction (
-                new SlideParameterFunction (
-                    mrController,
-                    rRequest));
-            rShell.Cancel();
-            break;
-
         case SID_HIDE_SLIDE:
             rShell.SetCurrentFunction (
                 new HideSlideFunction (
@@ -225,58 +216,24 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             rRequest.Done();
             break;
 
+        case SID_SLIDE_TRANSITIONS_PANEL:
+        {
+            // Make the slide transition panel visible (expand it) in the
+            // tool pane.
+            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+                toolpanel::TaskPaneViewShell::PID_SLIDE_TRANSITION);
+            rShell.GetViewFrame()->GetDispatcher()->Execute(
+                SID_TASK_PANE,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                &aMakeToolPaneVisible,
+                &aPanelId,
+                NULL);
 
-        case SID_DIA_TIME:
-        case SID_DIA_EFFECT:
-        case SID_DIA_SPEED:
-        case SID_DIA_AUTO:
-        // Diawechsel-Window
-            if ( ! rRequest.GetArgs())
-            {
-                rShell.GetViewFrame()->SetChildWindow(
-                    SlideChangeChildWindow::GetChildWindowId(), TRUE);
-            }
-            else
-            {
-                rShell.SetCurrentFunction(
-                    new SlideParameterFunction (
-                        mrController,
-                        rRequest));
-                if (rRequest.GetSlot() == SID_DIA_AUTO)
-                    rShell.Invalidate (SID_DIA_TIME);
-                // Reinstall pFuOld.
-                rShell.Cancel();
-            }
-            rRequest.Done();
-            break;
-
-        case SID_SLIDE_CHANGE_WIN:
-            if (rRequest.GetArgs())
-                rShell.GetViewFrame()->SetChildWindow(
-                    SlideChangeChildWindow::GetChildWindowId(),
-                    ((const SfxBoolItem&) (rRequest.GetArgs()->
-                        Get(SID_SLIDE_CHANGE_WIN))).GetValue());
-            else
-                rShell.GetViewFrame()->ToggleChildWindow(
-                    SlideChangeChildWindow::GetChildWindowId() );
-
-            rShell.GetViewFrame()->GetBindings().Invalidate(
-                SID_SLIDE_CHANGE_WIN);
             rShell.Cancel();
             rRequest.Ignore ();
             break;
-
-        case SID_SLIDE_CHANGE_STATE:
-            rShell.UpdateSlideChangeWindow();
-            rShell.Cancel();
-            rRequest.Done();
-            break;
-
-        case SID_SLIDE_CHANGE_ASSIGN:
-            AssignTransitionEffect ();
-            rShell.Cancel();
-            rRequest.Done();
-            break;
+        }
 
         case SID_PREVIEW_WIN:
         {
@@ -564,10 +521,6 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
 
 void SlotManager::GetAttrState (SfxItemSet& rSet)
 {
-    // Remember of whether at least one item belongs to the DIA combo which
-    // are handled together below.
-    BOOL bDia = FALSE;
-
     // Iteratate over all items.
     SfxWhichIter aIter (rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -578,13 +531,6 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
             : nWhich;
         switch (nSlotId)
         {
-            case SID_DIA_TIME:
-            case SID_DIA_EFFECT:
-            case SID_DIA_SPEED:
-            case SID_DIA_AUTO:
-                bDia = TRUE;
-            break;
-
             case SID_PAGES_PER_ROW:
                 rSet.Put (
                     SfxUInt16Item (
@@ -596,100 +542,6 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
         }
         nWhich = aIter.NextWhich();
     }
-
-    if (bDia)
-    {
-        SdPage* pPage      = NULL;
-
-        // SfxItemSet aSet( GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END );
-
-        // jetzt werden die Seitenattribute "per Hand" gemerged
-        bool bSameEffect = true;          // Annahme: alle Seiten haben die
-        bool bSameSpeed = true;       // gleichen Attribute
-        bool bSameTime = true;
-        bool bSameChange = true;
-
-        ::com::sun::star::presentation::FadeEffect eLastEffect;
-        FadeSpeed  eLastSpeed;
-        PresChange eLastChange;
-        ULONG      nLastTime;
-        // BOOL    bLastSoundOn;
-        // String      bLastSound; <-- ziemlich uebel (Prefix)
-
-        model::SlideSorterModel::Enumeration aSelectedPages (
-            mrController.GetModel().GetSelectedPagesEnumeration());
-        if (aSelectedPages.HasMoreElements()
-            && mrController.GetModel().GetEditMode()==EM_PAGE)
-        {
-            // Get attributes of first selected page.
-            pPage = aSelectedPages.GetNextElement().GetPage();
-            eLastEffect = pPage->GetFadeEffect();
-            eLastSpeed = pPage->GetFadeSpeed();
-            nLastTime = pPage->GetTime();
-            eLastChange = pPage->GetPresChange();
-
-            // Compare to other selected pages.
-            while (aSelectedPages.HasMoreElements())
-            {
-                pPage = aSelectedPages.GetNextElement().GetPage();
-                if (eLastEffect != pPage->GetFadeEffect())
-                    bSameEffect = false;
-                if (eLastSpeed != pPage->GetFadeSpeed())
-                    bSameSpeed = false;
-                if (nLastTime != pPage->GetTime())
-                    bSameTime = false;
-                if (eLastChange != pPage->GetPresChange())
-                    bSameChange = false;
-            }
-
-            // das Set besetzen
-            //if (bSameEffect)  rSet.Put( DiaEffectItem( eLastEffect ) );
-            if (bSameEffect)
-                rSet.Put( SfxAllEnumItem( SID_DIA_EFFECT, eLastEffect ) );
-            else
-                rSet.InvalidateItem( SID_DIA_EFFECT );
-
-            // if (bSameSpeed)   rSet.Put( DiaSpeedItem( eLastSpeed ) );
-            if (bSameSpeed)
-                rSet.Put( SfxAllEnumItem( SID_DIA_SPEED, eLastSpeed ) );
-            else
-                rSet.InvalidateItem( SID_DIA_SPEED );
-
-            // SID_DIA_TIME soll disabled werden, wenn nicht automatisch
-            // ausgewaehlt wurde (also auch uneindeutig)
-            if( bSameChange )
-            {
-                rSet.Put( SfxAllEnumItem( SID_DIA_AUTO, eLastChange ) );
-
-                if( eLastChange != PRESCHANGE_AUTO )
-                    rSet.DisableItem( SID_DIA_TIME );
-                else
-                {
-                    if( bSameTime )
-                        rSet.Put( SfxUInt32Item( SID_DIA_TIME, nLastTime ) );
-                    else
-                        rSet.InvalidateItem( SID_DIA_TIME );
-                }
-            }
-            else
-            {
-                rSet.InvalidateItem( SID_DIA_AUTO );
-                rSet.DisableItem( SID_DIA_TIME );
-            }
-        }
-        else
-        {
-            // When the selection is empty or the master pages are shown
-            // then disable these items.
-            rSet.DisableItem (SID_DIA_EFFECT);
-            rSet.DisableItem (SID_DIA_SPEED);
-            rSet.DisableItem (SID_DIA_AUTO);
-            rSet.DisableItem (SID_DIA_TIME);
-        }
-
-        // rSet.Set( aSet );
-    }
-
 }
 
 
@@ -794,6 +646,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     DrawDocShell* pDocShell
         = mrController.GetModel().GetDocument()->GetDocSh();
 
+/*
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
         SfxChildWindow* pPreviewChildWindow
@@ -809,7 +662,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
             rSet.DisableItem( SID_PRESENTATION );
         }
     }
-
+*/
     if (rShell.GetActualFunction())
     {
         USHORT nSId = rShell.GetActualFunction()->GetSlotID();
@@ -853,13 +706,6 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
             rSet.DisableItem( SID_ZOOM_OUT );
         if( 100 >= pWindow->GetMaxZoom() || bUIActive )
             rSet.DisableItem( SID_SIZE_REAL );
-    }
-
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SLIDE_CHANGE_WIN ) )
-    {
-        USHORT nId = SlideChangeChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_SLIDE_CHANGE_WIN,
-                rShell.GetViewFrame()->HasChildWindow( nId ) ) );
     }
 
     // PreviewWindow
@@ -1277,7 +1123,7 @@ void SlotManager::ShowSlideShow( SfxRequest& rRequest)
         bFullScreen = pFullScreen->GetValue();
     else
         bFullScreen
-            = mrController.GetModel().GetDocument()->GetPresFullScreen();
+            = mrController.GetModel().GetDocument()->getPresentationSettings().mbFullScreen;
 
     if (bFullScreen)
     {
@@ -1290,9 +1136,15 @@ void SlotManager::ShowSlideShow( SfxRequest& rRequest)
         if ( ! rShell.IsMainViewShell())
         {
             // We are not the main sub shell, so delegate this call
-            // to the main sub shell by *not* calling Done() at rRequest so
-            // that the SFX passes this slot to the main sub shell further
-            // down the shell stack.
+            // to the main sub shell.  Because there is no SFX functionality
+            // to forward a slot call further down the stack we have to do
+            // that here manually.
+            ViewShell* pMainViewShell
+                = rShell.GetViewShellBase().GetPaneManager().GetViewShell(
+                    PaneManager::PT_CENTER);
+            if (pMainViewShell->ISA(DrawViewShell))
+                PTR_CAST(DrawViewShell, pMainViewShell)->FuSupport (
+                    rRequest);
         }
         else
         {
@@ -1576,7 +1428,8 @@ void SlotManager::AssignTransitionEffect (void)
     // selected in the slide sorter.
     rModel.SynchronizeDocumentSelection();
 
-    rShell.AssignFromSlideChangeWindow(rModel.GetEditMode());
+    // #i34011#: Needs review, AF's bugfix is removed here
+    //rShell.AssignFromSlideChangeWindow(rModel.GetEditMode());
 
     // We have to remove the selection of master pages to not confuse the
     // model.
