@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 09:23:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,15 @@ class SwUnoCrsr : public virtual SwCursor, public SwModify
 
 public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
-    SwUnoCrsr( SwUnoCrsr& );
     virtual ~SwUnoCrsr();
+
+    // @@@ semantic: no copy ctor.
+    SwUnoCrsr( SwUnoCrsr& );
+private:
+    // forbidden and not implemented.
+    SwUnoCrsr( const SwUnoCrsr& );
+    SwUnoCrsr & operator= ( const SwUnoCrsr& );
+public:
 
     virtual operator SwUnoCrsr* ();
 
