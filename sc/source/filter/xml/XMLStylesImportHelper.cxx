@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:10:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,13 @@ using namespace com::sun::star;
 
 void ScMyStyleNumberFormats::AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat)
 {
-    ScMyStyleNumberFormat aFormat(rStyleName, nNumberFormat);
-    aSet.insert(aFormat);
+    aSet.insert(ScMyStyleNumberFormat(rStyleName, nNumberFormat));
 }
 
 sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const rtl::OUString& rStyleName)
 {
     ScMyStyleNumberFormat aStyleNumberFormat(rStyleName);
-    ScMyStyleNumberFormatSet::iterator aItr = aSet.find(aStyleNumberFormat);
+    ScMyStyleNumberFormatSet::iterator aItr(aSet.find(aStyleNumberFormat));
     if (aItr == aSet.end())
         return -1;
     else
@@ -142,8 +141,8 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, ScRangeList* pList,
     if (pList->Count() > nMaxRanges)
     {
         sal_Int32 nCount(pList->Count());
-        ScRange* pRange = NULL;
-        for (sal_Int32 i = 0; i < nCount; i++)
+        ScRange* pRange(NULL);
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
             pRange = pList->GetObject(i);
             if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
@@ -166,8 +165,8 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, ScRangeListRef xLi
     if (xList->Count() > nMaxRanges)
     {
         sal_Int32 nCount(xList->Count());
-        ScRange* pRange = NULL;
-        for (sal_Int32 i = 0; i < nCount; i++)
+        ScRange* pRange(NULL);
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
             pRange = xList->GetObject(i);
             if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
@@ -253,10 +252,10 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
     ScMyCurrencyStyle aStyle;
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;
-    ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->find(aStyle);
+    ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->find(aStyle));
     if (aItr == pCurrencyList->end())
     {
-        std::pair<ScMyCurrencyStylesSet::iterator, bool> aPair = pCurrencyList->insert(aStyle);
+        std::pair<ScMyCurrencyStylesSet::iterator, bool> aPair(pCurrencyList->insert(aStyle));
         if (aPair.second)
         {
             aItr = aPair.first;
@@ -270,7 +269,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
 void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const SCsCOL nDx, const SCsROW nDy,
         const SCsTAB nDz, ScDocument* pDoc)
 {
-    UpdateRefMode aRefMode = URM_INSDEL;
+    UpdateRefMode aRefMode(URM_INSDEL);
     if (pNumberList)
         pNumberList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
     if (pTextList)
@@ -287,11 +286,12 @@ void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const SCsCOL nDx, cons
         pUndefinedList->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
     if (pCurrencyList)
     {
-        ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->begin();
-        while (aItr != pCurrencyList->end())
+        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
+        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
+        while (aItr != aEndItr)
         {
             aItr->xRanges->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
-            aItr++;
+            ++aItr;
         }
     }
 }
@@ -313,7 +313,7 @@ void ScMyStyleRanges::SetStylesToRanges(ScRangeList* pList,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
     sal_Int32 nCount(pList->Count());
-    for (sal_Int32 i = 0; i < nCount; i++)
+    for (sal_Int32 i = 0; i < nCount; ++i)
         rImport.SetStyleToRange(*pList->GetObject(i), pStyleName, nCellType, pCurrency);
 }
 
@@ -322,7 +322,7 @@ void ScMyStyleRanges::SetStylesToRanges(ScRangeListRef xList,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
     sal_Int32 nCount(xList->Count());
-    for (sal_Int32 i = 0; i < nCount; i++)
+    for (sal_Int32 i = 0; i < nCount; ++i)
         rImport.SetStyleToRange(*xList->GetObject(i), pStyleName, nCellType, pCurrency);
 }
 
@@ -344,11 +344,12 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLIm
         SetStylesToRanges(pUndefinedList, pStyleName, util::NumberFormat::UNDEFINED, NULL, rImport);
     if (pCurrencyList)
     {
-        ScMyCurrencyStylesSet::iterator aItr = pCurrencyList->begin();
-        while (aItr != pCurrencyList->end())
+        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
+        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
+        while (aItr != aEndItr)
         {
             SetStylesToRanges(aItr->xRanges, pStyleName, util::NumberFormat::CURRENCY, &aItr->sCurrency, rImport);
-            aItr++;
+            ++aItr;
         }
     }
 }
@@ -363,9 +364,9 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     pPrevStyleName(NULL),
     pPrevCurrency(NULL),
     pStyleName(NULL),
-    pCurrency(NULL)
+    pCurrency(NULL),
+    aRowDefaultStyle(aCellStyles.end())
 {
-    aRowDefaultStyle = aCellStyles.end();
 }
 
 ScMyStylesImportHelper::~ScMyStylesImportHelper()
@@ -401,10 +402,10 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
         aStyle.sStyleName = *pStyleName;
     else
         DBG_ERROR("here is no stylename given");
-    ScMyStylesSet::iterator aItr = aCellStyles.find(aStyle);
+    ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
     if (aItr == aCellStyles.end())
     {
-        std::pair<ScMyStylesSet::iterator, bool> aPair = aCellStyles.insert(aStyle);
+        std::pair<ScMyStylesSet::iterator, bool> aPair(aCellStyles.insert(aStyle));
         if (aPair.second)
             aItr = aPair.first;
         else
@@ -425,9 +426,9 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         SCCOL nEndCol(rRange.aEnd.Col());
         if (aColDefaultStyles.size() > nStartCol)
         {
-            ScMyStylesSet::iterator aPrevItr = aColDefaultStyles[nStartCol];
+            ScMyStylesSet::iterator aPrevItr(aColDefaultStyles[nStartCol]);
             DBG_ASSERT(aColDefaultStyles.size() > nEndCol, "to much columns");
-            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
+            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
@@ -471,7 +472,7 @@ void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
     if (nMaxRanges == 0)
         nMaxRanges = aColDefaultStyles.size();
-    ScMyStylesSet::iterator aItr = GetIterator(pPrevStyleName);
+    ScMyStylesSet::iterator aItr(GetIterator(pPrevStyleName));
     if (aItr != aCellStyles.end())
     {
         if (nPrevCellType != util::NumberFormat::CURRENCY)
@@ -495,10 +496,10 @@ void ScMyStylesImportHelper::AddRange()
 void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
-    ScMyStylesSet::iterator aItr = GetIterator(&sStyleName);
+    ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
     DBG_ASSERT(aItr != aCellStyles.end(), "no column default style")
     aColDefaultStyles.reserve(aColDefaultStyles.size() + nRepeat);
-    for (sal_Int32 i = 0; i < nRepeat; i++)
+    for (sal_Int32 i = 0; i < nRepeat; ++i)
         aColDefaultStyles.push_back(aItr);
 }
 
@@ -589,11 +590,12 @@ void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& r
 void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
 {
     rImport.LockSolarMutex();
-    ScMyStylesSet::iterator aItr = aCellStyles.begin();
-    while (aItr != aCellStyles.end())
+    ScMyStylesSet::iterator aItr(aCellStyles.begin());
+    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
+    while (aItr != aEndItr)
     {
         aItr->xRanges->InsertRow(nRow, nTab, pDoc);
-        aItr++;
+        ++aItr;
     }
     rImport.UnlockSolarMutex();
 }
@@ -601,11 +603,12 @@ void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTa
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
 {
     rImport.LockSolarMutex();
-    ScMyStylesSet::iterator aItr = aCellStyles.begin();
-    while (aItr != aCellStyles.end())
+    ScMyStylesSet::iterator aItr(aCellStyles.begin());
+    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
+    while (aItr != aEndItr)
     {
         aItr->xRanges->InsertCol(nCol, nTab, pDoc);
-        aItr++;
+        ++aItr;
     }
     rImport.UnlockSolarMutex();
 }
@@ -622,11 +625,12 @@ void ScMyStylesImportHelper::EndTable()
 
 void ScMyStylesImportHelper::SetStylesToRanges()
 {
-    ScMyStylesSet::iterator aItr = aCellStyles.begin();
-    while (aItr != aCellStyles.end())
+    ScMyStylesSet::iterator aItr(aCellStyles.begin());
+    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
+    while (aItr != aEndItr)
     {
         aItr->xRanges->SetStylesToRanges(&aItr->sStyleName, rImport);
-        aItr++;
+        ++aItr;
     }
     aColDefaultStyles.clear();
     aCellStyles.clear();
