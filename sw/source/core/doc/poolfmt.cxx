@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 14:46:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,7 +1675,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
         nId = RES_POOLPAGE_BEGIN;
     }
 
-    ResId aResId( RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN, pSwResMgr );
+    ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), pSwResMgr );
     String aNm( aResId );
     if( pDesc )
     {
@@ -1845,7 +1845,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    ResId aResId( RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN, pSwResMgr );
+    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), pSwResMgr );
     String aNm( aResId );
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
