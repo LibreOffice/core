@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:09:59 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,8 +289,12 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
         if ( bRecord )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-            pDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pUndoDoc );
+            pUndoDoc->InitUndoSelected( pDoc, rMark );
+            // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+            ScRange aCopyRange = aRange;
+            aCopyRange.aStart.SetTab(0);
+            aCopyRange.aEnd.SetTab(pDoc->GetTableCount()-1);
+            pDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pUndoDoc );
             pDoc->BeginDrawUndo();
         }
 
@@ -310,7 +314,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
 
         if ( bRecord )                          // erst jetzt ist Draw-Undo verfuegbar
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoCut( pDocSh, aRange, aOldEnd, pUndoDoc ) );
+                new ScUndoCut( pDocSh, aRange, aOldEnd, rMark, pUndoDoc ) );
 
         aModificator.SetDocumentModified();
         ShowCursor();                           // Cursor aendert sich !
@@ -866,14 +870,17 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     if ( bRecord )
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab, bColInfo, bRowInfo );
-        pDoc->CopyToDocument( nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab,
+        pUndoDoc->InitUndoSelected( pDoc, rMark, bColInfo, bRowInfo );
+
+        // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
+        SCTAB nTabCount = pDoc->GetTableCount();
+        pDoc->CopyToDocument( nStartCol, nStartRow, 0, nUndoEndCol, nUndoEndRow, nTabCount-1,
                                 nUndoFlags, FALSE, pUndoDoc );
 
         if ( bCutMode )
         {
             pRefUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pRefUndoDoc->InitUndo( pDoc, 0, pDoc->GetTableCount()-1, FALSE, FALSE );
+            pRefUndoDoc->InitUndo( pDoc, 0, nTabCount-1, FALSE, FALSE );
 
             pUndoData = new ScRefUndoData( pDoc );
         }
