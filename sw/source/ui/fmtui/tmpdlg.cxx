@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:26:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,18 +664,18 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             break;
 
         case TP_BACKGROUND:
+        {
+            sal_Int32 nFlagType = 0;
             if( SFX_STYLE_FAMILY_PARA == nType )
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_PARACTL));
-                //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowParaControl();
+                nFlagType |= SVX_SHOW_PARACTL;
             if( SFX_STYLE_FAMILY_CHAR != nType )
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
-                //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
+                nFlagType |= SVX_SHOW_SELECTOR;
             if( SFX_STYLE_FAMILY_FRAME == nType )
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_TRANSPARENCY));
-                //CHINA001 ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+                nFlagType |= SVX_ENABLE_TRANSPARENCY;
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
             rPage.PageCreated(aSet);
-            break;
-
+        }
+        break;
         case TP_CONDCOLL:
             ((SwCondCollPage&)rPage).SetCollection(
                 ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(), bNewStyle );
