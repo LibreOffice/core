@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:09:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -107,7 +106,6 @@ const ULONG ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
 
 
 const BYTE ExcDummy8_040::pMyData[] = {
-    0x13, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PASSWORD
     0xaf, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REV (8+)
     0xbc, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REVPASS (8+)
 //  0x3d, 0x00, 0x12, 0x00, 0xe0, 0x01, 0x5a, 0x00, 0xcf,   // WINDOW1
