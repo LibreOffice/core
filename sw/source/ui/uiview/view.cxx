@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:34:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -1143,7 +1140,7 @@ SwView::~SwView()
 
     SetWindow( 0 );
 
-    pViewImpl->GetUNOObject_Impl()->Invalidate();
+    pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
     delete pScrollFill;
@@ -1876,4 +1873,10 @@ SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
     }
     return rxTmpDoc;
 }
+/* -----------------3/31/2003 12:39PM----------------
 
+ --------------------------------------------------*/
+void SwView::AddTransferable(SwTransferable& rTransferable)
+{
+    GetViewImpl()->AddTransferable(rTransferable);
+}
