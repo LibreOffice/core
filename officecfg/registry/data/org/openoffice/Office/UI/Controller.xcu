@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:51:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,17 @@
         </prop>
       </node>
       <node oor:name="c8" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AvailableToolbars</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolBarsMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ScriptOrganizer</value>
         </prop>
