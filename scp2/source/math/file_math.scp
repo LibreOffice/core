@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:52:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,3 +137,18 @@ File gid_File_Oo_Office_Ui_Mathcommands_Xcu
    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
    Name = "/registry/data/org/openoffice/Office/UI/MathCommands.xcu";
 End
+
+File gid_File_Registry_Spool_Oo_Common_Math_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Office.Common-math.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Setup_Math_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Setup-math.xcu";
+End
+
