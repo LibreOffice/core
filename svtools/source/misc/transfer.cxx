@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 11:30:51 $
+ *  last change: $Author: dvo $ $Date: 2002-05-27 12:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,7 +1426,8 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OU
             sal_Int32       nLen = aSeq.getLength();
 
             //JP 10.10.2001: 92930 - don't copy the last zero characterinto the string.
-            if( nLen && ( 0 == *( pChars + nLen - 1 ) ) )
+            //DVO 2002-05-27: strip _all_ trailing zeros
+            while( nLen && ( 0 == *( pChars + nLen - 1 ) ) )
                 --nLen;
 
             rStr = ::rtl::OUString( pChars, nLen, gsl_getSystemTextEncoding() );
