@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:24:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4621,6 +4621,32 @@ String STR_ADDRESSBOOK_MOZILLA
     Text[ czech ] = "Databáze kontaktů z Mozilly";
     Text[ hebrew ] = "Mozilla Adressbuch";
     Text[ hindi ] = "Mozilla पता पुस्तक";
+};
+String STR_ADDRESSBOOK_EVOLUTION
+{
+    Text = "Evolution address book";
+    Text [ english ] = "Evolution address book";
+    Text[ english_us ] = "Evolution address book";
+    Text[ portuguese ] = "Evolution address book";
+    Text[ russian ] = "Evolution address book";
+    Text[ greek ] = "Evolution address book";
+    Text[ dutch ] = "Evolution address book";
+    Text[ french ] = "Evolution address book";
+    Text[ spanish ] = "Evolution address book";
+    Text[ finnish ] = "Evolution address book";
+    Text[ italian ] = "Evolution address book";
+    Text[ danish ] = "Evolution address book";
+    Text[ swedish ] = "Evolution address book";
+    Text[ polish ] = "Evolution address book";
+    Text[ portuguese_brazilian ] = "Evolution address book";
+    Text[ japanese ] = "Evolution address book";
+    Text[ korean ] = "Evolution address book";
+    Text[ chinese_simplified ] = "Evolution address book";
+    Text[ chinese_traditional ] = "Evolution address book";
+    Text[ turkish ] = "Evolution address book";
+    Text[ arabic ] = "Evolution address book";
+    Text[ catalan ] = "Evolution address book";
+    Text[ thai ] = "Evolution address book";
 };
 String STR_ADDRESSBOOK_LDAP
 {
