@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:33:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
     if ( pViewShell )
     {
         SfxFrame* pFrame = pViewShell->GetViewFrame()->GetFrame();
-        uno::Reference<frame::XFrame> xUnoFrame = pFrame->GetFrameInterface();
-        m_xIntercepted = uno::Reference<frame::XDispatchProviderInterception>(xUnoFrame, uno::UNO_QUERY);
+        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pFrame->GetFrameInterface(), uno::UNO_QUERY));
         if (m_xIntercepted.is())
         {
             comphelper::increment( m_refCount );
@@ -211,7 +210,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setSlaveDispatchProvider(
                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    m_xSlaveDispatcher = xNewDispatchProvider;
+    m_xSlaveDispatcher.set(xNewDispatchProvider);
 }
 
 uno::Reference<frame::XDispatchProvider> SAL_CALL
@@ -227,7 +226,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    m_xMasterDispatcher = xNewSupplier;
+    m_xMasterDispatcher.set(xNewSupplier);
 }
 
 // XEventListener
@@ -267,12 +266,9 @@ ScDispatch::~ScDispatch()
 
     if (bListeningToView && pViewShell)
     {
-        uno::Reference<view::XSelectionSupplier> xSupplier = lcl_GetSelectionSupplier( pViewShell );
+        uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
         if ( xSupplier.is() )
-        {
-            uno::Reference<view::XSelectionChangeListener> xThis = this;
-            xSupplier->removeSelectionChangeListener(xThis);
-        }
+            xSupplier->removeSelectionChangeListener(this);
     }
 }
 
@@ -346,7 +342,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     //  initial state
     frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = sal_True;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.FeatureURL = aURL;
 
     if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
@@ -357,12 +353,9 @@ void SAL_CALL ScDispatch::addStatusListener(
 
         if (!bListeningToView)
         {
-            uno::Reference<view::XSelectionSupplier> xSupplier = lcl_GetSelectionSupplier( pViewShell );
+            uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
-            {
-                uno::Reference<view::XSelectionChangeListener> xThis = this;
-                xSupplier->addSelectionChangeListener(xThis);
-            }
+                xSupplier->addSelectionChangeListener(this);
             bListeningToView = sal_True;
         }
 
@@ -398,12 +391,9 @@ void SAL_CALL ScDispatch::removeStatusListener(
 
         if ( aDataSourceListeners.Count() == 0 && pViewShell )
         {
-            uno::Reference<view::XSelectionSupplier> xSupplier = lcl_GetSelectionSupplier( pViewShell );
+            uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
-            {
-                uno::Reference<view::XSelectionChangeListener> xThis = this;
-                xSupplier->removeSelectionChangeListener(xThis);
-            }
+                xSupplier->removeSelectionChangeListener(this);
             bListeningToView = sal_False;
         }
     }
@@ -431,7 +421,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
              aNewImport.nType      != aLastImport.nType )
         {
             frame::FeatureStateEvent aEvent;
-            aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
             aEvent.FeatureURL.Complete = rtl::OUString::createFromAscii( cURLDocDataSource );
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
@@ -450,12 +440,11 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
                                 throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
-    uno::Reference<view::XSelectionChangeListener> xThis = this;
-    xSupplier->removeSelectionChangeListener(xThis);
+    xSupplier->removeSelectionChangeListener(this);
     bListeningToView = sal_False;
 
     lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( USHORT n=0; n<aDataSourceListeners.Count(); n++ )
         (*aDataSourceListeners[n])->disposing( aEvent );
 
