@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-19 15:35:06 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#if !( defined(FREEBSD) || defined(NETBSD) )
+#if !( defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) )
 #include <alloca.h>
 #endif
 
@@ -140,6 +140,10 @@
 #ifdef USE_BUILTIN_RASTERIZER
 #include <gcach_xpeer.hxx>
 #endif // USE_BUILTIN_RASTERIZER
+
+#ifdef MACOSX
+#include <hash_set>
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -220,7 +224,13 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
         aPhoneNumber.Erase();
         bRet = false;
     }
+
+    // [ed] 6/15/02 m_bSwallowFaxNo isn't defined on OS X for some reason... +++ FIXME
+#ifdef MACOSX
+        return bRet;
+#else
     return m_bSwallowFaxNo ? bRet : false;
+#endif
 }
 
 // ----------------------------------------------------------------------------
