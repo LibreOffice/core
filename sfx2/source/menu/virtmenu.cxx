@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:37:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,15 +98,11 @@
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "app.hxx"
-#include "accmgr.hxx"
 #include "sfxtypes.hxx"
 #include "arrdecl.hxx"
 #include "sfx.hrc"
-//#include "ipfrm.hxx"
-//#include "ipenv.hxx"
 #include "appdata.hxx"
 #include "viewsh.hxx"
-#include "imgmgr.hxx"
 #include "sfxpicklist.hxx"
 #include "macrconf.hxx"
 #include "sfxresid.hxx"
@@ -243,8 +239,8 @@ void SfxVirtualMenu::Construct_Impl()
     pSVMenu->SetSelectHdl( LINK(this, SfxVirtualMenu, Select) );
 
     // #107258# accelerator keys are needed for accessibility
-    if ( bOLE )
-        InvalidateKeyCodes();
+    //if ( bOLE )
+    //    InvalidateKeyCodes();
 
     if ( !pResMgr && pParent )
         pResMgr = pParent->pResMgr;
@@ -477,9 +473,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
         if ( pPopup )
         {
-            DBG_ASSERT( SfxMenuManager::IsPopupFunction(nId) ||
-                        !SFX_SLOTPOOL().GetIdPool().IsLocked(nId),
-                        "popupmenu with existing func-id" );
             SfxMenuControl *pMnuCtrl =
                 SfxMenuControl::CreateControl(nId, *pPopup, *pBindings);
 
@@ -1121,7 +1114,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( bControllersUnBound )
             BindControllers();
 
-        InvalidateKeyCodes();
+        //InvalidateKeyCodes();
         pBindings->GetDispatcher_Impl()->Flush();
         for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
@@ -1335,7 +1328,7 @@ String SfxVirtualMenu::GetItemHelpText( USHORT nId ) const
 }
 
 //--------------------------------------------------------------------
-
+/*
 void SfxVirtualMenu::InvalidateKeyCodes()
 {
     DBG_ASSERT( pSVMenu, "invalidating key of incomplete menu" );
@@ -1362,7 +1355,7 @@ void SfxVirtualMenu::InvalidateKeyCodes()
             pSVMenu->SetAccelKey( nId, aCode );
         }
     }
-}
+} */
 
 //--------------------------------------------------------------------
 
