@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:52:34 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 14:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ protected:
     Timer               aPaintTimer;
     Rectangle           aPaintRect;
 
+    // Data for new library container mechanism
+
 public:
     VCDlgEditor( StarBASIC* pBasic );
     ~VCDlgEditor();
@@ -144,8 +146,10 @@ public:
     ScrollBar*      GetVScroll() const { return pVScroll; }
     void            DoScroll( ScrollBar* pActScroll );
 
-    void            SetDialog();  // tbe change this
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const {return m_xUnoControlDialogModel;}
+    void            SetDialog( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
+                        {return m_xUnoControlDialogModel;}
 
     StarBASIC*      GetBasic() const;
 
