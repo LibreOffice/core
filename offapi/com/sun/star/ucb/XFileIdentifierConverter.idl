@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileIdentifierConverter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-13 11:31:27 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** specifies methods to convert a normalized path to a file URL
-    and vice versa;
-    Additionally there is a method to get the hostname.
+/** specifies methods to convert between (file) URLs and file paths in system
+    dependent notation.
 
     @version    1.0
     @author     Andreas Bille
@@ -81,40 +80,23 @@ module com { module sun { module star { module ucb {
 interface XFileIdentifierConverter : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** converts a normalized file path to a (file) URL.
+    /** Get information about the 'locality' of a file content provider.
 
-        @param HostName
-        the name of the host relative to which the normalized path and the
-        URL shall be interpreted.
+        The returned information can be used to chose the 'best' among a
+        number of file content providers implementing this interface.
 
-        @param NormalizedPath
-        a normalized path.
-
-        @returns
-        the URL corresponding to the normalized path, or an empty string if
-        either the host names do not match or the normalized path cannot be
-        converted into a URL.
-    */
-    string getFileURLFromNormalizedPath( [in] string HostName,
-                                         [in] string NormalizedPath );
-
-    //-------------------------------------------------------------------------
-    /** converts a (file) URL to a normalized file path.
-
-        @param HostName
-        the name of the host relative to which the normalized path and the
-        URL shall be interpreted.
-
-        @param URL
-        a URL.
+        @param BaseURL
+        the base (file) URL used to specify a file content provider.
 
         @returns
-        the normalized path corresponding to the URL, or an empty string if
-        either the host names do not match or the URL cannot be converted into
-        a normalized path.
-    */
-    string getNormalizedPathFromFileURL( [in] string HostName,
-                                         [in] string URL );
+        an appropriat value representing the 'locality' of the specified file
+        content provider.   Generally, higher (non-negative) numbers denote
+        file content providers that are more 'local', and negative numbers
+        denote content providers that are not file content providers at all.
+        As a convention (and to keep this useful), values should be restricted
+        to the range from -1 to +10, inclusive.
+     */
+    long getFileProviderLocality( [in] string BaseURL );
 
     //-------------------------------------------------------------------------
     /** converts a file path in system dependent notation to a (file) URL.
@@ -136,19 +118,14 @@ interface XFileIdentifierConverter : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** converts a (file) URL to a file path in system dependent notation.
 
-        @param BaseURL
-        the base (file) URL relative to which the file path shall be
-        interpreted.
-
         @param URL
-        a URL.
+        a (file) URL.
 
         @returns
         the file path corresponding to the URL, or an empty string if the URL
         cannot be converted into a file path.
     */
-    string getSystemPathFromFileURL( [in] string BaseURL,
-                                     [in] string URL );
+    string getSystemPathFromFileURL( [in] string URL );
 };
 
 //=============================================================================
