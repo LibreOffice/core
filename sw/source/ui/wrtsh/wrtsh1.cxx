@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-14 18:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
@@ -690,7 +693,8 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         if ( !xRef->IsLink() )
         {
             //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-            if( SFX_APP()->HasFeature( SFX_FEATURE_SCHART ) )
+            SvtModuleOptions aMOpt;
+            if( aMOpt.IsChart() )
             {
                 SvGlobalName aObjClsId( *xRef->GetSvFactory() );
                 SchMemChart* pMemChart;
@@ -743,7 +747,8 @@ BOOL SwWrtShell::FinishOLEObj()                     // Server wird beendet
     if( bRet )
     {
         //  Link fuer Daten-Highlighting im Chart zuruecksetzen
-        if( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+        SvtModuleOptions aMOpt;
+        if( aMOpt.IsChart() )
         {
             SvInPlaceObject* pObj = pIPClient->GetIPObj();
             SvGlobalName aObjClsId( *pObj->GetSvFactory() );
@@ -1569,6 +1574,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.5  2000/10/27 14:29:47  os
+   sba includes removed
+
    Revision 1.4  2000/10/25 15:36:07  jp
    use CharClass/BreakIt instead of old WordSelection
 

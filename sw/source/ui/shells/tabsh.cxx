@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
+ *  last change: $Author: jp $ $Date: 2000-11-14 18:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SVX_RULRITEM_HXX //autogen
 #include <svx/rulritem.hxx>
@@ -1133,9 +1136,11 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             break;
 
             case SID_INSERT_DIAGRAM:
-                if ( !SFX_APP()->HasFeature( SFX_FEATURE_SMATH ) ||
-                     rSh.IsTblComplexForChart() )
-                    rSet.DisableItem(nSlot);
+                {
+                    SvtModuleOptions aMOpt;
+                    if ( !aMOpt.IsMath() || rSh.IsTblComplexForChart() )
+                        rSet.DisableItem(nSlot);
+                }
                 break;
 
             case FN_INSERT_TABLE:
@@ -1409,6 +1414,9 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:36:37  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 

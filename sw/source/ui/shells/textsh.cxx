@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:27:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-14 18:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SFXMSG_HXX //autogen
 #include <sfx2/msg.hxx>
@@ -404,7 +407,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case SID_INSERT_DIAGRAM:
         {
-            if ( !SFX_APP()->HasFeature( SFX_FEATURE_SCHART ) )
+            SvtModuleOptions aMOpt;
+            if ( !aMOpt.IsChart() )
                 break;
             if(!rReq.IsAPI())
             {
@@ -689,6 +693,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
     USHORT nWhich = aIter.FirstWhich();
+    SvtModuleOptions aMOpt;
     while ( nWhich )
     {
         switch ( nWhich )
@@ -704,15 +709,14 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 break;
 
             case SID_INSERT_DIAGRAM:
-                if( !SFX_APP()->HasFeature( SFX_FEATURE_SCHART ) )
+                if( !aMOpt.IsChart() )
                 {
                     rSet.DisableItem( nWhich );
                     break;
                 }
 
             case FN_INSERT_SMA:
-                if( FN_INSERT_SMA == nWhich &&
-                     !SFX_APP()->HasFeature( SFX_FEATURE_SMATH ) )
+                if( FN_INSERT_SMA == nWhich && !aMOpt.IsMath() )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -982,6 +986,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/05 12:27:50  jp
+    should change: remove image
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
+ *  last change: $Author: jp $ $Date: 2000-11-14 18:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -1142,8 +1145,11 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 
         case FN_ABSTRACT_STARIMPRESS:
         case FN_OUTLINE_TO_IMPRESS:
-            if ( !SFX_APP()->HasFeature( SFX_FEATURE_SIMPRESS ) )
-                rSet.DisableItem( nWhich );
+            {
+                SvtModuleOptions aMOpt;
+                if ( !aMOpt.IsImpress() )
+                    rSet.DisableItem( nWhich );
+            }
             /* no break here */
         case FN_ABSTRACT_NEWDOC:
         case FN_OUTLINE_TO_CLIPBOARD:
@@ -1454,6 +1460,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/31 20:32:32  jp
+    change usage of filestream to medium
+
     Revision 1.3  2000/10/30 20:30:08  jp
     Bug #79779#: BrushGraphicCache removed
 
