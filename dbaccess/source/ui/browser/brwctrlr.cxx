@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-16 13:02:16 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 09:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,6 +2057,7 @@ void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( Runti
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
         // bound-field-dependent slots ....
+    m_xParser.clear();
 }
 
 //------------------------------------------------------------------------------
