@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-09-07 19:37:38 $
+ *  last change: $Author: obo $ $Date: 2001-10-16 14:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,13 +578,8 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
 //      BOOL bIsStg = SvStorage::IsStorageFile( rFile );
         SvStorageRef refStor = new SvStorage( EMPTY_STRING );
-#ifndef SO3
-        SvObjectRef refOleObj =
-            SvInPlaceObject::ClassFactory()->CreateAndInit( rFile, refStor, bLink );
-#else
         SvObjectRef refOleObj =
             ((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( rFile, refStor, bLink );
-#endif
         SvInPlaceObjectRef refObj( &refOleObj );
         if( refObj.Is() )
             return PasteObject( rPos, refObj );
