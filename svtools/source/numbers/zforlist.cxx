@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:04:15 $
+ *  last change: $Author: er $ $Date: 2001-08-07 16:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATUSAGE_HPP_
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATTYPE_HPP_
+#include <com/sun/star/i18n/KNumberFormatType.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -1981,6 +1984,116 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
 }
 
 
+sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
+        ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
+        sal_Int32 nCnt
+#ifndef PRODUCT
+        , BOOL bCheckCorrectness
+#endif
+        )
+{
+    using namespace ::com::sun::star;
+
+    if ( !nCnt )
+        return -1;
+#ifndef PRODUCT
+    if ( bCheckCorrectness )
+    {   // check the locale data for correctness
+        ByteString aMsg;
+        sal_Int32 nElem, nShort, nMedium, nLong, nShortDef, nMediumDef, nLongDef;
+        nShort = nMedium = nLong = nShortDef = nMediumDef = nLongDef = -1;
+        for ( nElem = 0; nElem < nCnt; nElem++ )
+        {
+            switch ( pFormatArr[nElem].Type )
+            {
+                case i18n::KNumberFormatType::SHORT :
+                    nShort = nElem;
+                break;
+                case i18n::KNumberFormatType::MEDIUM :
+                    nMedium = nElem;
+                break;
+                case i18n::KNumberFormatType::LONG :
+                    nLong = nElem;
+                break;
+                default:
+                    aMsg = "unknown type";
+            }
+            if ( pFormatArr[nElem].Default )
+            {
+                switch ( pFormatArr[nElem].Type )
+                {
+                    case i18n::KNumberFormatType::SHORT :
+                        if ( nShortDef != -1 )
+                            aMsg = "dupe short type default";
+                        nShortDef = nElem;
+                    break;
+                    case i18n::KNumberFormatType::MEDIUM :
+                        if ( nMediumDef != -1 )
+                            aMsg = "dupe medium type default";
+                        nMediumDef = nElem;
+                    break;
+                    case i18n::KNumberFormatType::LONG :
+                        if ( nLongDef != -1 )
+                            aMsg = "dupe long type default";
+                        nLongDef = nElem;
+                    break;
+                }
+            }
+            if ( aMsg.Len() )
+            {
+                aMsg.Insert( "ImpAdjustFormatCodeDefault: ", 0 );
+                aMsg += "\nXML locale data FormatElement formatindex: ";
+                aMsg += ByteString::CreateFromInt32( pFormatArr[nElem].Index );
+                DBG_ERRORFILE( xLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
+                aMsg.Erase();
+            }
+        }
+        if ( nShort != -1 && nShortDef == -1 )
+            aMsg += "no short type default  ";
+        if ( nMedium != -1 && nMediumDef == -1 )
+            aMsg += "no medium type default  ";
+        if ( nLong != -1 && nLongDef == -1 )
+            aMsg += "no long type default  ";
+        if ( aMsg.Len() )
+        {
+            aMsg.Insert( "ImpAdjustFormatCodeDefault: ", 0 );
+            aMsg += "\nXML locale data FormatElement group of: ";
+            aMsg += ByteString( String( pFormatArr[0].NameID ), RTL_TEXTENCODING_UTF8 );
+            DBG_ERRORFILE( xLocaleData->AppendLocaleInfo( aMsg ).GetBuffer() );
+            aMsg.Erase();
+        }
+    }
+#endif
+    // find the default (medium preferred, then long) and reset all other defaults
+    sal_Int32 nElem, nDef, nMedium;
+    nDef = nMedium = -1;
+    for ( nElem = 0; nElem < nCnt; nElem++ )
+    {
+        if ( pFormatArr[nElem].Default )
+        {
+            switch ( pFormatArr[nElem].Type )
+            {
+                case i18n::KNumberFormatType::MEDIUM :
+                    nDef = nMedium = nElem;
+                break;
+                case i18n::KNumberFormatType::LONG :
+                    if ( nMedium == -1 )
+                        nDef = nElem;
+                // fallthru
+                default:
+                    if ( nDef == -1 )
+                        nDef = nElem;
+                    pFormatArr[nElem].Default = sal_False;
+            }
+        }
+    }
+    if ( nDef == -1 )
+        nDef = 0;
+    pFormatArr[nDef].Default = sal_True;
+    return nDef;
+}
+
+
 void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 {
     using namespace ::com::sun::star;
@@ -2057,6 +2170,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
     // Number
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq
         = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
@@ -2087,6 +2201,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
     // Percent number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0%
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
@@ -2159,6 +2274,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
     // Date
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // DD.MM.YY   System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
@@ -2289,6 +2405,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
     // Time
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::TIME );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // HH:MM
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
@@ -2330,6 +2447,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
     // DateTime
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // DD.MM.YY HH:MM   System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
@@ -2346,6 +2464,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
     // Scientific number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0.00E+000
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
@@ -2417,7 +2536,9 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
     // ImpGenerateFormats for old "automatic" currency formats.
     uno::Sequence< i18n::NumberFormatCode > aFormatSeq =
         rNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
+    i18n::NumberFormatCode * pFormatArr = aFormatSeq.getArray();
     sal_Int32 nCodes = aFormatSeq.getLength();
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), nCodes );
     for ( j = 0; j < nCodes; j++ )
     {
         if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
@@ -2425,35 +2546,47 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
             DBG_ERRORFILE( "ImpGenerateAdditionalFormats: too many formats" );
             break;  // for
         }
-        if ( aFormatSeq[j].Index < NF_INDEX_TABLE_ENTRIES &&
-                aFormatSeq[j].Index != NF_CURRENCY_1000DEC2_CCC )
+        if ( pFormatArr[j].Index < NF_INDEX_TABLE_ENTRIES &&
+                pFormatArr[j].Index != NF_CURRENCY_1000DEC2_CCC )
         {   // Insert only if not already inserted, but internal index must be
             // above so ImpInsertFormat can distinguish it.
-            sal_Int16 nOrgIndex = aFormatSeq[j].Index;
-            aFormatSeq[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
-            if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
+            sal_Int16 nOrgIndex = pFormatArr[j].Index;
+            pFormatArr[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
+            if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                     SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
                     bAfterLoadingSO5, nOrgIndex ) )
                 nPos++;
-            aFormatSeq[j].Index = nOrgIndex;
+            pFormatArr[j].Index = nOrgIndex;
         }
     }
 
     // all additional format codes provided by I18N that are not old standard index
     aFormatSeq = rNumberFormatCode.getAllFormatCodes();
     nCodes = aFormatSeq.getLength();
-    for ( j = 0; j < nCodes; j++ )
+    if ( nCodes )
     {
-        if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+        pFormatArr = aFormatSeq.getArray();
+#ifdef PRODUCT
+        sal_Int32 nDef = ImpAdjustFormatCodeDefault( pFormatArr, nCodes );
+#else
+        // don't check ALL
+        sal_Int32 nDef = ImpAdjustFormatCodeDefault( pFormatArr, nCodes, FALSE );
+#endif
+        // don't have any defaults here
+        pFormatArr[nDef].Default = sal_False;
+        for ( j = 0; j < nCodes; j++ )
         {
-            DBG_ERRORFILE( "ImpGenerateAdditionalFormats: too many formats" );
-            break;  // for
+            if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
+            {
+                DBG_ERRORFILE( "ImpGenerateAdditionalFormats: too many formats" );
+                break;  // for
+            }
+            if ( pFormatArr[j].Index >= NF_INDEX_TABLE_ENTRIES )
+                if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
+                        SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
+                        bAfterLoadingSO5 ) )
+                    nPos++;
         }
-        if ( aFormatSeq[j].Index >= NF_INDEX_TABLE_ENTRIES )
-            if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
-                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                    bAfterLoadingSO5 ) )
-                nPos++;
     }
 
     pStdFormat->SetLastInsertKey( (USHORT)(nPos - CLOffset) );
