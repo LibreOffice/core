@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:45:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_USEBACKUPEXCEPTION_HPP_
+#include <com/sun/star/embed/UseBackupException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
@@ -286,6 +289,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_xFactory( xFactory )
 , m_xStream( xStream )
 , m_xProperties( xProperties )
+, m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 {
@@ -320,6 +324,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
 , m_xFactory( xFactory )
+, m_bHasCommonPassword( sal_False )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages
 , m_bControlMediaType( sal_False )
 {
@@ -762,6 +767,16 @@ void OStorage_Impl::Commit()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
+    if ( !m_bListCreated )
+    {
+        // nothing was changed, but a new empty storage must be marked as commited one
+        ReadContents();
+        if ( !m_bIsRoot && !m_aChildrenList.size() )
+            m_bCommited = sal_True;
+
+        return;
+    }
+
     // if storage is commited it should have a valid Package representation
     OSL_ENSURE( m_xPackageFolder.is(), "The package representation should exist!\n" );
     if ( !m_xPackageFolder.is() )
@@ -936,7 +951,23 @@ void OStorage_Impl::Commit()
         if ( !xChangesBatch.is() )
             throw uno::RuntimeException(); // TODO
 
-        xChangesBatch->commitChanges();
+        try
+        {
+            xChangesBatch->commitChanges();
+        }
+        catch( lang::WrappedTargetException& r )
+        {
+            // the wrapped UseBackupException means that the target medium can be corrupted
+            embed::UseBackupException aException;
+            if ( r.TargetException >>= aException )
+            {
+                m_xStream = uno::Reference< io::XStream >();
+                m_xInputStream = uno::Reference< io::XInputStream >();
+                throw aException;
+            }
+
+            throw;
+        }
     }
     else if ( !m_bCommited )
     {
@@ -1624,6 +1655,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<embed::XStorage*> ( this )
                     ,   static_cast<embed::XTransactedObject*> ( this )
+                    ,   static_cast<embed::XTransactionBroadcaster*> ( this )
                     ,   static_cast<util::XModifiable*> ( this )
                     ,   static_cast<container::XNameAccess*> ( this )
                     ,   static_cast<container::XElementAccess*> ( this )
@@ -1682,6 +1714,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
                                     // ,    ::getCppuType( ( const uno::Reference< container::XNameAccess >* )NULL )
                                     // ,    ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
@@ -2185,8 +2218,8 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !aElementName.getLength() || !aNewName.getLength()
-      || !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
+    if ( !aElementName.getLength() || !aNewName.getLength() || !xDest.is() )
+        // || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException();
 
     SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
@@ -2289,9 +2322,6 @@ void SAL_CALL OStorage::commit()
 
     if ( m_pData->m_bReadOnlyWrap )
         throw io::IOException(); // TODO: access_denied
-
-    if ( !m_pImpl->m_bListCreated )
-        return; // nothing was changed
 
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
