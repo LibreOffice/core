@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:52 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ namespace basegfx
         B2DPolygon& operator=(const B2DPolygon& rPolygon);
 
         // compare operators
-        sal_Bool operator==(const B2DPolygon& rPolygon) const;
-        sal_Bool operator!=(const B2DPolygon& rPolygon) const;
+        bool operator==(const B2DPolygon& rPolygon) const;
+        bool operator!=(const B2DPolygon& rPolygon) const;
 
         // member count
         sal_uInt32 count() const;
@@ -121,7 +121,7 @@ namespace basegfx
         void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
         ::basegfx::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
         void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
-        sal_Bool areControlPointsUsed() const;
+        bool areControlPointsUsed() const;
 
         // insert/append other 2D polygons
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
@@ -134,14 +134,14 @@ namespace basegfx
         void clear();
 
         // closed state
-        sal_Bool isClosed() const;
-        void setClosed(sal_Bool bNew);
+        bool isClosed() const;
+        void setClosed(bool bNew);
 
         // flip polygon direction
         void flip();
 
         // test if Polygon has double points
-        sal_Bool hasDoublePoints() const;
+        bool hasDoublePoints() const;
 
         // remove double points, at the begin/end and follow-ups, too
         void removeDoublePoints();

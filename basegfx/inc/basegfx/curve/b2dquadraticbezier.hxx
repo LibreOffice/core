@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:46 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,11 @@ namespace basegfx
         B2DQuadraticBezier& operator=(const B2DQuadraticBezier& rBezier);
 
         // compare operators
-        sal_Bool operator==(const B2DQuadraticBezier& rBezier) const;
-        sal_Bool operator!=(const B2DQuadraticBezier& rBezier) const;
+        bool operator==(const B2DQuadraticBezier& rBezier) const;
+        bool operator!=(const B2DQuadraticBezier& rBezier) const;
 
         // test if control point is placed on the edge
-        sal_Bool isBezier() const;
+        bool isBezier() const;
 
         // data interface
         ::basegfx::B2DPoint getStartPoint() const { return maStartPoint; }

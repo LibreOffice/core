@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:07 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,21 +106,21 @@ public:
     void incRefCount() { mnRefCount++; }
     void decRefCount() { mnRefCount--; }
 
-    sal_Bool isEqual(const ImplB3DPolyPolygon& rPolygonList) const
+    bool isEqual(const ImplB3DPolyPolygon& rPolygonList) const
     {
         // same polygon count?
         if(maPolygons.size() != rPolygonList.maPolygons.size())
-            return sal_False;
+            return false;
 
         // if zero polygons the polys are equal
         if(!maPolygons.size())
-            return sal_True;
+            return true;
 
         // compare polygon content
         if(maPolygons != rPolygonList.maPolygons)
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
     const ::basegfx::B3DPolygon& getB3DPolygon(sal_uInt32 nIndex) const
@@ -181,7 +181,7 @@ public:
         return maPolygons.size();
     }
 
-    void setClosed(sal_Bool bNew)
+    void setClosed(bool bNew)
     {
         for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
         {
@@ -271,21 +271,21 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B3DPolyPolygon::operator==(const B3DPolyPolygon& rPolyPolygon) const
+    bool B3DPolyPolygon::operator==(const B3DPolyPolygon& rPolyPolygon) const
     {
         if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
         {
-            return sal_True;
+            return true;
         }
 
         return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
     }
 
-    sal_Bool B3DPolyPolygon::operator!=(const B3DPolyPolygon& rPolyPolygon) const
+    bool B3DPolyPolygon::operator!=(const B3DPolyPolygon& rPolyPolygon) const
     {
         if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
         {
-            return sal_False;
+            return false;
         }
 
         return !mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
@@ -380,9 +380,9 @@ namespace basegfx
         mpPolyPolygon->incRefCount();
     }
 
-    sal_Bool B3DPolyPolygon::isClosed() const
+    bool B3DPolyPolygon::isClosed() const
     {
-        sal_Bool bRetval(sal_True);
+        bool bRetval(true);
 
         // PolyPOlygon is closed when all contained Polygons are closed or
         // no Polygon exists.
@@ -390,14 +390,14 @@ namespace basegfx
         {
             if(!(mpPolyPolygon->getB3DPolygon(a)).isClosed())
             {
-                bRetval = sal_False;
+                bRetval = false;
             }
         }
 
         return bRetval;
     }
 
-    void B3DPolyPolygon::setClosed(sal_Bool bNew)
+    void B3DPolyPolygon::setClosed(bool bNew)
     {
         if(bNew != isClosed())
         {
@@ -412,15 +412,15 @@ namespace basegfx
         mpPolyPolygon->flip();
     }
 
-    sal_Bool B3DPolyPolygon::hasDoublePoints() const
+    bool B3DPolyPolygon::hasDoublePoints() const
     {
-        sal_Bool bRetval(sal_False);
+        bool bRetval(false);
 
         for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB3DPolygon(a)).hasDoublePoints())
             {
-                bRetval = sal_True;
+                bRetval = true;
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:58 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,10 @@ namespace basegfx
     public:
         /** Create a 3D Vector
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 3D Vector.
+            The vector is initialized to (0.0, 0.0, 0.0)
         */
-        B3DVector(double fVal = 0.0)
-        :   B3DTuple(fVal)
+        B3DVector()
+        :   B3DTuple()
         {}
 
         /** Create a 3D Vector
@@ -122,7 +120,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        B3DVector(const ::basegfx::B3DTuple& rTuple)
+        explicit B3DVector(const ::basegfx::B3DTuple& rTuple)
         :   B3DTuple(rTuple)
         {}
 
@@ -243,10 +241,10 @@ namespace basegfx
         /** Test if this 3D Vector is normalized
 
             @return
-            sal_True if lenth of vector is equal to 1.0
-            sal_False else
+            true if lenth of vector is equal to 1.0
+            false else
         */
-        sal_Bool isNormalized() const
+        bool isNormalized() const
         {
             const double fOne(1.0);
             const double fScalar(scalar(*this));

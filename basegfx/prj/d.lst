@@ -15,6 +15,8 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\matrix
 mkdir: %_DEST%\inc%_EXT%\basegfx\point
 ..\inc\basegfx\point\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2dpoint.hxx
 ..\inc\basegfx\point\b3dpoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dpoint.hxx
+..\inc\basegfx\point\b2ipoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2ipoint.hxx
+..\inc\basegfx\point\b3ipoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3ipoint.hxx
 ..\inc\basegfx\point\b2dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b2dhompoint.hxx
 ..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dhompoint.hxx
 
@@ -22,11 +24,24 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\range
 ..\inc\basegfx\range\basicrange.hxx %_DEST%\inc%_EXT%\basegfx\range\basicrange.hxx
 ..\inc\basegfx\range\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1drange.hxx
 ..\inc\basegfx\range\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drange.hxx
+..\inc\basegfx\range\b2drectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drectangle.hxx
 ..\inc\basegfx\range\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3drange.hxx
+..\inc\basegfx\range\b3dbox.hxx %_DEST%\inc%_EXT%\basegfx\range\b3dbox.hxx
+..\inc\basegfx\range\b1irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1irange.hxx
+..\inc\basegfx\range\b2irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2irange.hxx
+..\inc\basegfx\range\b2irectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2irectangle.hxx
+..\inc\basegfx\range\b3irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3irange.hxx
+..\inc\basegfx\range\b3ibox.hxx %_DEST%\inc%_EXT%\basegfx\range\b3ibox.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\vector
 ..\inc\basegfx\vector\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dvector.hxx
+..\inc\basegfx\vector\b2dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2dsize.hxx
 ..\inc\basegfx\vector\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dvector.hxx
+..\inc\basegfx\vector\b3dsize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3dsize.hxx
+..\inc\basegfx\vector\b2ivector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2ivector.hxx
+..\inc\basegfx\vector\b2isize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b2isize.hxx
+..\inc\basegfx\vector\b3ivector.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3ivector.hxx
+..\inc\basegfx\vector\b3isize.hxx %_DEST%\inc%_EXT%\basegfx\vector\b3isize.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\curve
 ..\inc\basegfx\curve\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\curve\b2dcubicbezier.hxx
@@ -48,3 +63,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 ..\inc\basegfx\tuple\b2dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2dtuple.hxx
 ..\inc\basegfx\tuple\b3dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3dtuple.hxx
+..\inc\basegfx\tuple\b2ituple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2ituple.hxx
+..\inc\basegfx\tuple\b3ituple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3ituple.hxx
+..\inc\basegfx\tuple\b2i64tuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2i64tuple.hxx
+..\inc\basegfx\tuple\b3i64tuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3i64tuple.hxx

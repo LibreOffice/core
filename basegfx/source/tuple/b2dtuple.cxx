@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:13 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,26 +72,26 @@ namespace basegfx
     // initialize static member
     ::basegfx::B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
 
-    sal_Bool B2DTuple::equalZero() const
+    bool B2DTuple::equalZero() const
     {
         return (this == &maEmptyTuple ||
                 (::basegfx::fTools::equalZero(mfX) && ::basegfx::fTools::equalZero(mfY)));
     }
 
-    sal_Bool B2DTuple::equalZero(const double& rfSmallValue) const
+    bool B2DTuple::equalZero(const double& rfSmallValue) const
     {
         return (this == &maEmptyTuple ||
                 (::basegfx::fTools::equalZero(mfX, rfSmallValue) && ::basegfx::fTools::equalZero(mfY, rfSmallValue)));
     }
 
-    sal_Bool B2DTuple::equal(const B2DTuple& rTup) const
+    bool B2DTuple::equal(const B2DTuple& rTup) const
     {
         return (
             ::basegfx::fTools::equal(mfX, rTup.mfX) &&
             ::basegfx::fTools::equal(mfY, rTup.mfY));
     }
 
-    sal_Bool B2DTuple::equal(const B2DTuple& rTup, const double& rfSmallValue) const
+    bool B2DTuple::equal(const B2DTuple& rTup, const double& rfSmallValue) const
     {
         return (
             ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&

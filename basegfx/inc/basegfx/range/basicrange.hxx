@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,105 +70,124 @@
 #include <float.h>
 #endif
 
-#define START_MINIMUM_VALUE                     (DBL_MAX)
-#define START_MAXIMUM_VALUE                     (DBL_MIN)
 
 namespace basegfx
 {
-    class BasicRange
+    template< typename T, typename Traits > class BasicRange
     {
     protected:
-        double                                      mfMinimum;
-        double                                      mfMaximum;
+        T       mnMinimum;
+        T       mnMaximum;
 
     public:
+        BasicRange() :
+            mnMinimum(Traits::initMin()),
+            mnMaximum(Traits::initMax())
+        {
+        }
+
+        BasicRange( T nValue ) :
+            mnMinimum(nValue),
+            mnMaximum(nValue)
+        {
+        }
+
+        BasicRange(const BasicRange& rRange) :
+            mnMinimum(rRange.mnMinimum),
+            mnMaximum(rRange.mnMaximum)
+        {
+        }
+
         void reset()
         {
-            mfMinimum = START_MINIMUM_VALUE;
-            mfMaximum = START_MAXIMUM_VALUE;
+            mnMinimum = Traits::initMin();
+            mnMaximum = Traits::initMax();
         }
 
-        sal_Bool isEmpty() const
+        bool isEmpty() const
         {
-            return sal_Bool(START_MINIMUM_VALUE == mfMinimum && START_MAXIMUM_VALUE == mfMaximum);
+            return Traits::initMin() == mnMinimum && Traits::initMax() == mnMaximum;
         }
 
-        double getMinimum() const { return mfMinimum; }
-        double getMaximum() const { return mfMaximum; }
-
-        double getRange() const
-        {
-            return (mfMaximum - mfMinimum);
-        }
+        T getMinimum() const { return mnMinimum; }
+        T getMaximum() const { return mnMaximum; }
 
         double getCenter() const
         {
-            return ((mfMaximum + mfMinimum) / 2.0);
+            return ((mnMaximum + mnMinimum) / 2.0);
         }
 
-        sal_Bool isInside(double fValue) const
+        bool isInside(T nValue) const
         {
-            return sal_Bool((fValue >= mfMinimum) && (fValue <= mfMaximum));
+            return (nValue >= mnMinimum) && (nValue <= mnMaximum);
         }
 
-        sal_Bool isInside(const BasicRange& rRange) const
+        bool isInside(const BasicRange& rRange) const
         {
-            return sal_Bool((rRange.getMinimum() >= mfMinimum) && (rRange.getMaximum() <= mfMaximum));
+            return (rRange.mnMinimum >= mnMinimum) && (rRange.mnMaximum <= mnMaximum);
         }
 
-        sal_Bool overlaps(const BasicRange& rRange) const
+        bool overlaps(const BasicRange& rRange) const
         {
-            return !sal_Bool((rRange.getMaximum() < mfMinimum) || (rRange.getMinimum() > mfMaximum));
-        }
-
-        BasicRange()
-        :   mfMinimum(START_MINIMUM_VALUE),
-            mfMaximum(START_MAXIMUM_VALUE)
-        {
-        }
-        BasicRange(double fStartValue)
-        :   mfMinimum(fStartValue),
-            mfMaximum(fStartValue)
-        {
-        }
-        BasicRange(const BasicRange& rRange)
-        :   mfMinimum(rRange.getMinimum()),
-            mfMaximum(rRange.getMaximum())
-        {
+            return !((rRange.mnMinimum < mnMinimum) || (rRange.mnMaximum > mnMaximum));
         }
 
         void operator=(const BasicRange& rRange)
         {
-            mfMinimum = rRange.getMinimum();
-            mfMaximum = rRange.getMaximum();
+            mnMinimum = rRange.mnMinimum;
+            mnMaximum = rRange.mnMaximum;
         }
 
-        void expand(double fValue)
+        void expand(T nValue)
         {
-            if(fValue < mfMinimum)
+            if(nValue < mnMinimum)
             {
-                mfMinimum = fValue;
+                mnMinimum = nValue;
             }
 
-            if(fValue > mfMaximum)
+            if(nValue > mnMaximum)
             {
-                mfMaximum = fValue;
+                mnMaximum = nValue;
             }
         }
 
         void expand(const BasicRange& rRange)
         {
-            if(rRange.getMinimum() < mfMinimum)
+            if(rRange.mnMinimum < mnMinimum)
             {
-                mfMinimum = rRange.getMinimum();
+                mnMinimum = rRange.mnMinimum;
             }
 
-            if(rRange.getMaximum() > mfMaximum)
+            if(rRange.mnMaximum > mnMaximum)
             {
-                mfMaximum = rRange.getMaximum();
+                mnMaximum = rRange.mnMaximum;
             }
         }
+
+        typename Traits::DifferenceType getRange() const
+        {
+            return (mnMaximum - mnMinimum);
+        }
+
     };
+
+    // some pre-fabricated traits
+    struct DoubleTraits
+    {
+        static double initMin() { return DBL_MAX; };
+        static double initMax() { return DBL_MIN; };
+
+        typedef double DifferenceType;
+    };
+
+    struct Int32Traits
+    {
+        static sal_Int32 initMin() { return 0x7FFFFFFFL; };
+        static sal_Int32 initMax() { return 0x80000000UL; };
+
+        typedef sal_Int64 DifferenceType;
+    };
+
 } // end of namespace basegfx
 
 #endif _BGFX_RANGE_BASICRANGE_HXX

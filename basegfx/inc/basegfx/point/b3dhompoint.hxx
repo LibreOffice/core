@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-12-03 09:24:25 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,9 @@ namespace basegfx
 
         /** Test if this homogen point does have a homogenous part
 
-            @return Returns sal_True if this point has no homogenous part
+            @return Returns true if this point has no homogenous part
         */
-        sal_Bool implIsHomogenized() const
+        bool implIsHomogenized() const
         {
             const double fOne(1.0);
             return ::basegfx::fTools::equal(mfW, fOne);
@@ -127,12 +127,10 @@ namespace basegfx
     public:
         /** Create a homogen point
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the Point. The homogenous part is initialized to 1.0.
+            The point is initialized to (0.0, 0.0, 0.0)
         */
-        B3DHomPoint(double fVal = 0.0)
-        :   maTuple(fVal),
+        B3DHomPoint()
+        :   maTuple(),
             mfW(1.0)
         {}
 
@@ -161,7 +159,7 @@ namespace basegfx
             The 3D point which will be copied. The homogenous part
             is initialized to 1.0.
         */
-        B3DHomPoint(const B3DPoint& rVec)
+        explicit B3DHomPoint(const B3DPoint& rVec)
         :   maTuple(rVec),
             mfW(1.0)
         {}
@@ -320,13 +318,13 @@ namespace basegfx
             return *this;
         }
 
-        sal_Bool operator==( const B3DHomPoint& rPnt ) const
+        bool operator==( const B3DHomPoint& rPnt ) const
         {
             implTestAndHomogenize();
             return (maTuple == rPnt.maTuple);
         }
 
-        sal_Bool operator!=( const B3DHomPoint& rPnt ) const
+        bool operator!=( const B3DHomPoint& rPnt ) const
         {
             implTestAndHomogenize();
             return (maTuple != rPnt.maTuple);

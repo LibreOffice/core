@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-12-03 09:24:26 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,14 @@
 #ifndef _BGFX_TUPLE_B3DTUPLE_HXX
 #define _BGFX_TUPLE_B3DTUPLE_HXX
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
+
 
 namespace basegfx
 {
@@ -89,14 +94,12 @@ namespace basegfx
     public:
         /** Create a 3D Tuple
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 3D Tuple.
+            The tuple is initialized to (0.0, 0.0, 0.0)
         */
-        B3DTuple(double fVal = 0.0)
-        :   mfX(fVal),
-            mfY(fVal),
-            mfZ(fVal)
+        B3DTuple()
+        :   mfX(0.0),
+            mfY(0.0),
+            mfZ(0.0)
         {}
 
         /** Create a 3D Tuple
@@ -190,7 +193,7 @@ namespace basegfx
         // comparators with tolerance
         //////////////////////////////////////////////////////////////////////
 
-        sal_Bool equalZero() const
+        bool equalZero() const
         {
             return (this == &maEmptyTuple ||
                 (::basegfx::fTools::equalZero(mfX)
@@ -198,7 +201,7 @@ namespace basegfx
                 && ::basegfx::fTools::equalZero(mfZ)));
         }
 
-        sal_Bool equalZero(const double& rfSmallValue) const
+        bool equalZero(const double& rfSmallValue) const
         {
             return (this == &maEmptyTuple ||
                 (::basegfx::fTools::equalZero(mfX, rfSmallValue)
@@ -206,7 +209,7 @@ namespace basegfx
                 && ::basegfx::fTools::equalZero(mfZ, rfSmallValue)));
         }
 
-        sal_Bool equal(const B3DTuple& rTup) const
+        bool equal(const B3DTuple& rTup) const
         {
             return (
                 ::basegfx::fTools::equal(mfX, rTup.mfX) &&
@@ -214,7 +217,7 @@ namespace basegfx
                 ::basegfx::fTools::equal(mfZ, rTup.mfZ));
         }
 
-        sal_Bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
+        bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
         {
             return (
                 ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
@@ -279,12 +282,12 @@ namespace basegfx
             return B3DTuple(-mfX, -mfY, -mfZ);
         }
 
-        sal_Bool operator==( const B3DTuple& rTup ) const
+        bool operator==( const B3DTuple& rTup ) const
         {
             return equal(rTup);
         }
 
-        sal_Bool operator!=( const B3DTuple& rTup ) const
+        bool operator!=( const B3DTuple& rTup ) const
         {
             return !equal(rTup);
         }

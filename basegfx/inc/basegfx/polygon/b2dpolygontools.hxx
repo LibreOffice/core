@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,62 +91,62 @@ namespace basegfx
             method corrects this (removes double start/end points)
             and sets the Closed()-state of the polygon correctly.
         */
-        void checkClosed(::basegfx::B2DPolygon& rCandidate);
+        void checkClosed(B2DPolygon& rCandidate);
 
         // Get index of outmost point (e.g. biggest X and biggest Y)
-        sal_uInt32 getIndexOfOutmostPoint(const ::basegfx::B2DPolygon& rCandidate);
+        sal_uInt32 getIndexOfOutmostPoint(const B2DPolygon& rCandidate);
 
         // Get successor and predecessor indices. Returning the same index means there
         // is none. Same for successor.
-        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate);
-        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate);
+        sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
+        sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
 
         // Get index of first different predecessor. Returning the same index means there
         // is none. Same for successor.
-        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate);
-        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rCandidate);
+        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
+        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
 
         // Get orientation of Polygon
-        ::basegfx::B2DVectorOrientation getOrientation(const ::basegfx::B2DPolygon& rCandidate);
+        B2VectorOrientation getOrientation(const B2DPolygon& rCandidate);
 
         // isInside tests for B2dPoint and other B2dPolygon. On border is not inside as long as
-        // not sal_True is given in bWithBorder flag.
-        sal_Bool isInside(const ::basegfx::B2DPolygon& rCandidate, const ::basegfx::B2DPoint& rPoint, sal_Bool bWithBorder = sal_False);
-        sal_Bool isInside(const ::basegfx::B2DPolygon& rCandidate, const ::basegfx::B2DPolygon& rPolygon, sal_Bool bWithBorder = sal_False);
+        // not true is given in bWithBorder flag.
+        bool isInside(const B2DPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
+        bool isInside(const B2DPolygon& rCandidate, const B2DPolygon& rPolygon, bool bWithBorder = false);
 
         // get size of polygon. Control vectors are included in that ranges.
-        ::basegfx::B2DRange getRange(const ::basegfx::B2DPolygon& rCandidate);
+        B2DRange getRange(const B2DPolygon& rCandidate);
 
         // get area of polygon
-        double getArea(const ::basegfx::B2DPolygon& rCandidate);
+        double getArea(const B2DPolygon& rCandidate);
 
         // get length of polygon edge from point nIndex to nIndex + 1
-        double getEdgeLength(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+        double getEdgeLength(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // get length of polygon
-        double getLength(const ::basegfx::B2DPolygon& rCandidate);
+        double getLength(const B2DPolygon& rCandidate);
 
         // get position on polygon for absolute given distance. If
         // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
         // using getLength(...)
-        ::basegfx::B2DPoint getPositionAbsolute(const ::basegfx::B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+        B2DPoint getPositionAbsolute(const B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
 
         // get position on polygon for relative given distance in range [0.0 .. 1.0]. If
         // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
         // using getLength(...)
-        ::basegfx::B2DPoint getPositionRelative(const ::basegfx::B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+        B2DPoint getPositionRelative(const B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
 
         // get orientation at given polygon point
-        ::basegfx::B2DVectorOrientation getPointOrientation(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+        B2VectorOrientation getPointOrientation(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // Continuity check for point with given index
-        ::basegfx::B2DVectorContinuity getContinuityInPoint(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+        B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        ::basegfx::B2DPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolygon& rCandidate, double fDistanceBound = 0.0);
+        B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound = 0.0);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        ::basegfx::B2DPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolygon& rCandidate, double fAngleBound = 5.0);
+        B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 5.0);
 
         // Definitions for the cut flags used from the findCut methods
         typedef sal_uInt16 CutFlagValue;
@@ -164,7 +164,7 @@ namespace basegfx
         // and pCut2 will contain the cut coordinate on each edge in ]0.0, 1.0]
         // (if given) and the return value will contain a cut description.
         CutFlagValue findCut(
-            const ::basegfx::B2DPolygon& rCandidate,
+            const B2DPolygon& rCandidate,
             sal_uInt32 nIndex1, sal_uInt32 nIndex2,
             CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
@@ -172,26 +172,26 @@ namespace basegfx
         // This version is working with two indexed edges from different
         // polygons.
         CutFlagValue findCut(
-            const ::basegfx::B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
-            const ::basegfx::B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
+            const B2DPolygon& rCandidate1, sal_uInt32 nIndex1,
+            const B2DPolygon& rCandidate2, sal_uInt32 nIndex2,
             CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
 
         // This version works with two points and vectors to define the
         // edges for the cut test.
         CutFlagValue findCut(
-            const ::basegfx::B2DPoint& rEdge1Start, const ::basegfx::B2DVector& rEdge1Delta,
-            const ::basegfx::B2DPoint& rEdge2Start, const ::basegfx::B2DVector& rEdge2Delta,
+            const B2DPoint& rEdge1Start, const B2DVector& rEdge1Delta,
+            const B2DPoint& rEdge2Start, const B2DVector& rEdge2Delta,
             CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
 
         // test if point is on the given edge in range ]0.0..1.0[ without
-        // the start/end points. If so, return sal_True and put the parameter
+        // the start/end points. If so, return true and put the parameter
         // value in pCut (if provided)
-        sal_Bool isPointOnEdge(
-            const ::basegfx::B2DPoint& rPoint,
-            const ::basegfx::B2DPoint& rEdgeStart,
-            const ::basegfx::B2DVector& rEdgeDelta,
+        bool isPointOnEdge(
+            const B2DPoint& rPoint,
+            const B2DPoint& rEdgeStart,
+            const B2DVector& rEdgeDelta,
             double* pCut = 0L);
 
 

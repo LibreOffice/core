@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,14 +119,14 @@ namespace basegfx
         void addToList(B2DPolygonNode*& rpList);
         void remFromList(B2DPolygonNode*& rpList);
 
-        sal_Bool getOrientation() const;
+        bool getOrientation() const;
         void swapOrientation();
         ::basegfx::B2DRange getRange() const;
 
         // isInside tests for B2dPoint and other B2DPolygonNode Polygon. On border is not inside as long as
-        // not sal_True is given in bWithBorder flag.
-        sal_Bool isInside(const ::basegfx::B2DPoint& rPnt, sal_Bool bWithBorder = sal_False) const;
-        sal_Bool isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder = sal_False) const;
+        // not true is given in bWithBorder flag.
+        bool isInside(const ::basegfx::B2DPoint& rPnt, bool bWithBorder = false) const;
+        bool isPolygonInside(B2DPolygonNode* pPoly, bool bWithBorder = false) const;
     };
 
     // a type definition to have a vector of pointers to B2DPolygonNodes
@@ -149,7 +149,7 @@ namespace basegfx
         unsigned                                mbOrientation : 1;
 
     public:
-        B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR, sal_Bool bCoOr = sal_False, sal_Bool bOr = sal_True)
+        B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR, bool bCoOr = false, bool bOr = true)
         :   mpLeft(pL),
             mpRight(pR),
             mbCorrectOrientation(bCoOr),
@@ -161,7 +161,7 @@ namespace basegfx
         B2DPolygonNode* getLeft() const { return mpLeft; }
         B2DPolygonNode* getRight() const { return mpRight; }
 
-        sal_Bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
+        bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
         {
             return ((pA == mpLeft && pB == mpRight) || (pB == mpLeft && pA == mpRight));
         }
@@ -190,10 +190,10 @@ namespace basegfx
 
         void init(B2DPolygonNode* pNew);
         const ::basegfx::B2DRange& getRange() const { return maRange; }
-        sal_Bool getOrientation() const { return mbOrientation; }
+        bool getOrientation() const { return mbOrientation; }
 
         sal_Int32 getDepth() const { return mnDepth; }
-        void changeDepth(sal_Bool bOrientation);
+        void changeDepth(bool bOrientation);
     };
 } // end of namespace basegfx
 
@@ -209,22 +209,22 @@ namespace basegfx
         B2DPolyPolygon                          maNotClosedPolygons;
 
         // help routines
-        sal_Bool isSamePos(const ::basegfx::B2DPoint& rPntA, const ::basegfx::B2DPoint& rPntB)
+        bool isSamePos(const ::basegfx::B2DPoint& rPntA, const ::basegfx::B2DPoint& rPntB)
         {
             return rPntA.equal(rPntB);
         }
 
         B2DSimpleCut* getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB);
         B2DPolygonNode* extractNextPolygon(B2DPolygonNode*& rpList);
-        sal_Bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
-        sal_Bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
+        bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
+        bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
 
-        sal_Bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+        bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
         {
             return isSamePos(pA->getNext()->getPosition(), pB->getNext()->getPosition());
         }
 
-        sal_Bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+        bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
         {
             return isSamePos(pA->getPrevious()->getPosition(), pB->getPrevious()->getPosition());
         }
@@ -235,12 +235,12 @@ namespace basegfx
         void polysToList(B2DPolygonNode*& rpList);
         void listToPolys(B2DPolygonNode*& rpList);
 
-        sal_Bool doRangesIntersect(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
+        bool doRangesIntersect(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
         {
             return rRange1.overlaps(rRange2);
         }
 
-        sal_Bool doRangesInclude(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
+        bool doRangesInclude(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
         {
             return rRange1.isInside(rRange2);
         }
@@ -252,7 +252,7 @@ namespace basegfx
         ~B2DPolyPolygonCutter();
 
         // put/get poly
-        void addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, sal_Bool bForceOrientation = sal_False);
+        void addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, bool bForceOrientation = false);
         void getPolyPolygon(B2DPolyPolygon& rPolyPolygon);
 
         // transformations
@@ -260,7 +260,7 @@ namespace basegfx
         void removeDoubleIntersections();
 
         // remove included
-        void removeIncludedPolygons(sal_Bool bUseOr = sal_True);
+        void removeIncludedPolygons(bool bUseOr = true);
     };
 } // end of namespace basegfx
 

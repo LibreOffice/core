@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:51 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,10 @@ namespace basegfx
     public:
         /** Create a 2D Point
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 2D Point.
+            The point is initialized to (0.0, 0.0)
         */
-        B2DPoint(double fVal = 0.0)
-        :   B2DTuple(fVal)
+        B2DPoint()
+        :   B2DTuple()
         {}
 
         /** Create a 2D Point
@@ -118,7 +116,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        B2DPoint(const ::basegfx::B2DTuple& rTuple)
+        explicit B2DPoint(const ::basegfx::B2DTuple& rTuple)
         :   B2DTuple(rTuple)
         {}
 

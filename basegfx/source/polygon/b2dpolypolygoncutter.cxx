@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:06 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 namespace basegfx
 {
-    B2DPolygonNode::B2DPolygonNode(const ::basegfx::B2DPoint& rPosition, B2DPolygonNode* pPrevious)
+    B2DPolygonNode::B2DPolygonNode(const B2DPoint& rPosition, B2DPolygonNode* pPrevious)
     :   maPosition(rPosition)
     {
         mpListPrevious = this;
@@ -190,14 +190,14 @@ namespace basegfx
         }
     }
 
-    sal_Bool B2DPolygonNode::getOrientation() const
+    bool B2DPolygonNode::getOrientation() const
     {
         const B2DPolygonNode* pOutmost = this;
         const B2DPolygonNode* pCurrent = this->getNext();
 
         while(pCurrent != this)
         {
-            if(::basegfx::fTools::more(pOutmost->getPosition().getX(), pCurrent->getPosition().getX()))
+            if(fTools::more(pOutmost->getPosition().getX(), pCurrent->getPosition().getX()))
             {
                 if(pCurrent->getPosition().getX() < pOutmost->getPosition().getX())
                 {
@@ -216,9 +216,9 @@ namespace basegfx
             pCurrent = pCurrent->getNext();
         }
 
-        ::basegfx::B2DVector aVec1(pOutmost->getPrevious()->getPosition() - pOutmost->getPosition());
-        ::basegfx::B2DVector aVec2(pOutmost->getNext()->getPosition() - pOutmost->getPosition());
-        return sal_Bool(::basegfx::fTools::more(aVec1.getX() * aVec2.getY(), aVec1.getY() * aVec2.getX()));
+        B2DVector aVec1(pOutmost->getPrevious()->getPosition() - pOutmost->getPosition());
+        B2DVector aVec2(pOutmost->getNext()->getPosition() - pOutmost->getPosition());
+        return bool(fTools::more(aVec1.getX() * aVec2.getY(), aVec1.getY() * aVec2.getX()));
     }
 
     void B2DPolygonNode::swapOrientation()
@@ -231,9 +231,9 @@ namespace basegfx
         } while(pCurrent != this);
     }
 
-    ::basegfx::B2DRange B2DPolygonNode::getRange() const
+    B2DRange B2DPolygonNode::getRange() const
     {
-        ::basegfx::B2DRange aRetval;
+        B2DRange aRetval;
         const B2DPolygonNode* pCurrent = this;
 
         do {
@@ -244,26 +244,26 @@ namespace basegfx
         return aRetval;
     }
 
-    sal_Bool B2DPolygonNode::isInside(const ::basegfx::B2DPoint& rPoint, sal_Bool bWithBorder) const
+    bool B2DPolygonNode::isInside(const B2DPoint& rPoint, bool bWithBorder) const
     {
-        sal_Bool bInside(sal_False);
+        bool bInside(false);
         const B2DPolygonNode* pCurrent = this;
 
         do
         {
             if(bWithBorder && pCurrent->getPosition().equal(rPoint))
             {
-                return sal_True;
+                return true;
             }
 
             B2DPolygonNode* pNext = pCurrent->getNext();
-            const sal_Bool bCompYA(::basegfx::fTools::more(pCurrent->getPosition().getY(), rPoint.getY()));
-            const sal_Bool bCompYB(::basegfx::fTools::more(pNext->getPosition().getY(), rPoint.getY()));
+            const bool bCompYA(fTools::more(pCurrent->getPosition().getY(), rPoint.getY()));
+            const bool bCompYB(fTools::more(pNext->getPosition().getY(), rPoint.getY()));
 
             if(bCompYA != bCompYB)
             {
-                const sal_Bool bCompXA(::basegfx::fTools::more(pCurrent->getPosition().getX(), rPoint.getX()));
-                const sal_Bool bCompXB(::basegfx::fTools::more(pNext->getPosition().getX(), rPoint.getX()));
+                const bool bCompXA(fTools::more(pCurrent->getPosition().getX(), rPoint.getX()));
+                const bool bCompXB(fTools::more(pNext->getPosition().getX(), rPoint.getX()));
 
                 if(bCompXA == bCompXB)
                 {
@@ -279,11 +279,11 @@ namespace basegfx
                         (pCurrent->getPosition().getX() - pNext->getPosition().getX()) /
                         (pCurrent->getPosition().getY() - pNext->getPosition().getY());
 
-                    if(bWithBorder && ::basegfx::fTools::more(fCmp, rPoint.getX()))
+                    if(bWithBorder && fTools::more(fCmp, rPoint.getX()))
                     {
                         bInside = !bInside;
                     }
-                    else if(::basegfx::fTools::moreOrEqual(fCmp, rPoint.getX()))
+                    else if(fTools::moreOrEqual(fCmp, rPoint.getX()))
                     {
                         bInside = !bInside;
                     }
@@ -298,10 +298,10 @@ namespace basegfx
         return bInside;
     }
 
-    sal_Bool B2DPolygonNode::isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder) const
+    bool B2DPolygonNode::isPolygonInside(B2DPolygonNode* pPoly, bool bWithBorder) const
     {
         B2DPolygonNode* pTest = pPoly;
-        sal_Bool bAllAInside(sal_True);
+        bool bAllAInside(true);
 
         do {
             bAllAInside = isInside(pTest->getPosition(), bWithBorder);
@@ -348,7 +348,7 @@ namespace basegfx
         mnDepth = (mbOrientation) ? 0L : -1L;
     }
 
-    void B2DClipExtraPolygonInfo::changeDepth(sal_Bool bOrientation)
+    void B2DClipExtraPolygonInfo::changeDepth(bool bOrientation)
     {
         if(bOrientation)
         {
@@ -376,7 +376,7 @@ namespace basegfx
         maPolygonList.clear();
     }
 
-    void B2DPolyPolygonCutter::removeIncludedPolygons(sal_Bool bUseOr)
+    void B2DPolyPolygonCutter::removeIncludedPolygons(bool bUseOr)
     {
         const sal_uInt32 aCount(maPolygonList.size());
         B2DClipExtraPolygonInfo* pInfos = new B2DClipExtraPolygonInfo[aCount];
@@ -400,7 +400,7 @@ namespace basegfx
                 if(a != b && doRangesInclude(rInfoA.getRange(), rInfoB.getRange()))
                 {
                     // volume B in A, test pA, pB for inclusion, with border
-                    if(maPolygonList[a]->isPolygonInside(maPolygonList[b], sal_True))
+                    if(maPolygonList[a]->isPolygonInside(maPolygonList[b], true))
                     {
                         // pB is inside pA
                         rInfoB.changeDepth(rInfoA.getOrientation());
@@ -486,7 +486,7 @@ namespace basegfx
 
         for(sal_uInt32 a(0L); a < rPolygon.count(); a++)
         {
-            ::basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(a));
+            B2DPoint aPoint(rPolygon.getB2DPoint(a));
             pRetval = new B2DPolygonNode(aPoint, pRetval);
         }
 
@@ -521,7 +521,7 @@ namespace basegfx
         } while(pAct != pPolygon);
     }
 
-    void B2DPolyPolygonCutter::addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, sal_Bool bForceOrientation)
+    void B2DPolyPolygonCutter::addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, bool bForceOrientation)
     {
         for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
         {
@@ -536,10 +536,10 @@ namespace basegfx
             {
                 if(bForceOrientation)
                 {
-                    ::basegfx::B2DVectorOrientation aOrientation =
-                        ::basegfx::tools::getOrientation(aCandidate);
+                    B2VectorOrientation aOrientation =
+                        tools::getOrientation(aCandidate);
 
-                    if(::basegfx::ORIENTATION_POSITIVE != aOrientation)
+                    if(ORIENTATION_POSITIVE != aOrientation)
                     {
                         aCandidate.flip();
                     }
@@ -575,7 +575,7 @@ namespace basegfx
                     pAct = pAct->getNext();
                 } while(pAct != pCand);
 
-                aNewPolygon.setClosed(sal_True);
+                aNewPolygon.setClosed(true);
                 rPolyPolygon.append(aNewPolygon);
             }
 
@@ -656,7 +656,7 @@ namespace basegfx
                 do {
                     if(isSamePos(pA->getPosition(), pB->getPosition()))
                     {
-                        aNewCuts.push_back(new B2DSimpleCut(pA, pB, sal_True, pCand->getOrientation()));
+                        aNewCuts.push_back(new B2DSimpleCut(pA, pB, true, pCand->getOrientation()));
                     }
 
                     // next B
@@ -679,42 +679,42 @@ namespace basegfx
                 do {
                     pB->calcMinMaxX(fMaxBX, fMinBX);
 
-                    if(::basegfx::fTools::more(fMaxBX, fMinAX)
-                        && ::basegfx::fTools::more(fMaxAX, fMinBX))
+                    if(fTools::more(fMaxBX, fMinAX)
+                        && fTools::more(fMaxAX, fMinBX))
                     {
                         pB->calcMinMaxY(fMaxBY, fMinBY);
 
-                        if(::basegfx::fTools::more(fMaxBY, fMinAY)
-                            && ::basegfx::fTools::more(fMaxAY, fMinBY))
+                        if(fTools::more(fMaxBY, fMinAY)
+                            && fTools::more(fMaxAY, fMinBY))
                         {
                             if(!isSamePos(pA->getPosition(), pB->getPosition()))
                             {
-                                const ::basegfx::B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
-                                const ::basegfx::B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
+                                const B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
+                                const B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
 
-                                if(::basegfx::tools::findCut(pA->getPosition(), aVectorA, pB->getPosition(), aVectorB, CUTFLAG_LINE, &fCut))
+                                if(tools::findCut(pA->getPosition(), aVectorA, pB->getPosition(), aVectorB, CUTFLAG_LINE, &fCut))
                                 {
                                     // crossover, two new points
-                                    ::basegfx::B2DPoint aNewPos(::basegfx::interpolate(pA->getPosition(), pA->getNext()->getPosition(), fCut));
+                                    B2DPoint aNewPos(interpolate(pA->getPosition(), pA->getNext()->getPosition(), fCut));
                                     B2DPolygonNode* pCutLo = new B2DPolygonNode(aNewPos, pA);
                                     B2DPolygonNode* pCutHi = new B2DPolygonNode(aNewPos, pB);
-                                    aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi, sal_True, pCand->getOrientation()));
+                                    aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi, true, pCand->getOrientation()));
                                     pA->calcMinMaxX(fMaxAX, fMinAX);
                                     pA->calcMinMaxY(fMaxAY, fMinAY);
                                 }
                                 else
                                 {
-                                    if(::basegfx::tools::isPointOnEdge(pA->getPosition(), pB->getPosition(), aVectorB, &fCut))
+                                    if(tools::isPointOnEdge(pA->getPosition(), pB->getPosition(), aVectorB, &fCut))
                                     {
                                         // startpoint A at edge B, one new point
                                         B2DPolygonNode* pCutHi = new B2DPolygonNode(pA->getPosition(), pB);
-                                        aNewCuts.push_back(new B2DSimpleCut(pA, pCutHi, sal_True, pCand->getOrientation()));
+                                        aNewCuts.push_back(new B2DSimpleCut(pA, pCutHi, true, pCand->getOrientation()));
                                     }
-                                    else if(::basegfx::tools::isPointOnEdge(pB->getPosition(), pA->getPosition(), aVectorA, &fCut))
+                                    else if(tools::isPointOnEdge(pB->getPosition(), pA->getPosition(), aVectorA, &fCut))
                                     {
                                         // startpoint B at edge A, one new point
                                         B2DPolygonNode* pCutLo = new B2DPolygonNode(pB->getPosition(), pA);
-                                        aNewCuts.push_back(new B2DSimpleCut(pCutLo, pB, sal_True, pCand->getOrientation()));
+                                        aNewCuts.push_back(new B2DSimpleCut(pCutLo, pB, true, pCand->getOrientation()));
                                         pA->calcMinMaxX(fMaxAX, fMinAX);
                                         pA->calcMinMaxY(fMaxAY, fMinAY);
                                     }
@@ -743,11 +743,11 @@ namespace basegfx
         }
     }
 
-    sal_Bool B2DPolyPolygonCutter::isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB)
+    bool B2DPolyPolygonCutter::isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB)
     {
         // build entering vectors
-        ::basegfx::B2DVector aVecA(pA->getPrevious()->getPosition() - pA->getPosition());
-        ::basegfx::B2DVector aVecB(pB->getPrevious()->getPosition() - pA->getPosition());
+        B2DVector aVecA(pA->getPrevious()->getPosition() - pA->getPosition());
+        B2DVector aVecB(pB->getPrevious()->getPosition() - pA->getPosition());
         aVecA.normalize();
         aVecB.normalize();
         double fDegreeA2 = atan2(aVecA.getY(), aVecA.getX());
@@ -769,30 +769,30 @@ namespace basegfx
             fDegreeA1 = fTemp;
         }
 
-        sal_Bool bB1Inside(::basegfx::fTools::more(fDegreeB1, fDegreeA1)
-            && ::basegfx::fTools::more(fDegreeA2, fDegreeB1));
-        sal_Bool bB2Inside(::basegfx::fTools::more(fDegreeB2, fDegreeA1)
-            && ::basegfx::fTools::more(fDegreeA2, fDegreeB2));
+        bool bB1Inside(fTools::more(fDegreeB1, fDegreeA1)
+            && fTools::more(fDegreeA2, fDegreeB1));
+        bool bB2Inside(fTools::more(fDegreeB2, fDegreeA1)
+            && fTools::more(fDegreeA2, fDegreeB2));
 
         if(bB1Inside && bB2Inside)
         {
-            return sal_False;
+            return false;
         }
 
-        sal_Bool bB1Outside(::basegfx::fTools::more(fDegreeA1, fDegreeB1)
-            || ::basegfx::fTools::more(fDegreeB1, fDegreeA2));
-        sal_Bool bB2Outside(::basegfx::fTools::more(fDegreeA1, fDegreeB2)
-            || ::basegfx::fTools::more(fDegreeB2, fDegreeA2));
+        bool bB1Outside(fTools::more(fDegreeA1, fDegreeB1)
+            || fTools::more(fDegreeB1, fDegreeA2));
+        bool bB2Outside(fTools::more(fDegreeA1, fDegreeB2)
+            || fTools::more(fDegreeB2, fDegreeA2));
 
         return !(bB1Outside && bB2Outside);
     }
 
-    sal_Bool B2DPolyPolygonCutter::isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave)
+    bool B2DPolyPolygonCutter::isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave)
     {
         // build entering vectors
-        ::basegfx::B2DVector aVecJ(pEnter->getLeft()->getNext()->getPosition() - pEnter->getLeft()->getPosition());
-        ::basegfx::B2DVector aVecA(pEnter->getLeft()->getPrevious()->getPosition() - pEnter->getLeft()->getPosition());
-        ::basegfx::B2DVector aVecB(pEnter->getRight()->getPrevious()->getPosition() - pEnter->getLeft()->getPosition());
+        B2DVector aVecJ(pEnter->getLeft()->getNext()->getPosition() - pEnter->getLeft()->getPosition());
+        B2DVector aVecA(pEnter->getLeft()->getPrevious()->getPosition() - pEnter->getLeft()->getPosition());
+        B2DVector aVecB(pEnter->getRight()->getPrevious()->getPosition() - pEnter->getLeft()->getPosition());
         aVecJ.normalize();
         aVecA.normalize();
         aVecB.normalize();
@@ -822,7 +822,7 @@ namespace basegfx
             fDegreeB2 -= (2.0 * F_PI);
         }
 
-        sal_Bool bA2BiggerB2(::basegfx::fTools::more(fDegreeA2, fDegreeB2));
+        bool bA2BiggerB2(fTools::more(fDegreeA2, fDegreeB2));
 
         // build leaving vectors
         aVecJ = pLeave->getLeft()->getPrevious()->getPosition() - pLeave->getLeft()->getPosition();
@@ -857,7 +857,7 @@ namespace basegfx
             fDegreeB1 -= (2.0 * F_PI);
         }
 
-        sal_Bool bA1BiggerB1(::basegfx::fTools::more(fDegreeA1, fDegreeB1));
+        bool bA1BiggerB1(fTools::more(fDegreeA1, fDegreeB1));
 
         // compare
         return (bA1BiggerB1 == bA2BiggerB2);
@@ -878,7 +878,7 @@ namespace basegfx
         sal_uInt32 a;
 
         // create volume list for all polys for faster compares
-        ::basegfx::B2DRange* pVolumes = new ::basegfx::B2DRange[maPolygonList.size()];
+        B2DRange* pVolumes = new B2DRange[maPolygonList.size()];
 
         for(a = 0L; a < maPolygonList.size(); a++)
         {
@@ -928,23 +928,23 @@ namespace basegfx
                         do {
                             pB->calcMinMaxX(fMaxBX, fMinBX);
 
-                            if(::basegfx::fTools::more(fMaxBX, fMinAX)
-                                && ::basegfx::fTools::more(fMaxAX, fMinBX))
+                            if(fTools::more(fMaxBX, fMinAX)
+                                && fTools::more(fMaxAX, fMinBX))
                             {
                                 pB->calcMinMaxY(fMaxBY, fMinBY);
 
-                                if(::basegfx::fTools::more(fMaxBY, fMinAY)
-                                    && ::basegfx::fTools::more(fMaxAY, fMinBY))
+                                if(fTools::more(fMaxBY, fMinAY)
+                                    && fTools::more(fMaxAY, fMinBY))
                                 {
                                     if(!isSamePos(pA->getPosition(), pB->getPosition()))
                                     {
-                                        const ::basegfx::B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
-                                        const ::basegfx::B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
+                                        const B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
+                                        const B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
 
-                                        if(::basegfx::tools::findCut(pA->getPosition(), aVectorA, pB->getPosition(), aVectorB, CUTFLAG_LINE, &fCut))
+                                        if(tools::findCut(pA->getPosition(), aVectorA, pB->getPosition(), aVectorB, CUTFLAG_LINE, &fCut))
                                         {
                                             // crossover, two new points, use as cutpoint
-                                            ::basegfx::B2DPoint aNewPos(::basegfx::interpolate(pA->getPosition(), pA->getNext()->getPosition(), fCut));
+                                            B2DPoint aNewPos(interpolate(pA->getPosition(), pA->getNext()->getPosition(), fCut));
                                             B2DPolygonNode* pCutLo = new B2DPolygonNode(aNewPos, pA);
                                             B2DPolygonNode* pCutHi = new B2DPolygonNode(aNewPos, pB);
                                             aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi));
@@ -953,14 +953,14 @@ namespace basegfx
                                         }
                                         else
                                         {
-                                            if(::basegfx::tools::isPointOnEdge(pA->getPosition(), pB->getPosition(), aVectorB, &fCut))
+                                            if(tools::isPointOnEdge(pA->getPosition(), pB->getPosition(), aVectorB, &fCut))
                                             {
                                                 // startpoint A at edge B, one new point
                                                 // leaves or enters common section
                                                 B2DPolygonNode* pCutHi = new B2DPolygonNode(pA->getPosition(), pB);
                                                 aTmpCuts.push_back(new B2DSimpleCut(pA, pCutHi));
                                             }
-                                            else if(::basegfx::tools::isPointOnEdge(pB->getPosition(), pA->getPosition(), aVectorA, &fCut))
+                                            else if(tools::isPointOnEdge(pB->getPosition(), pA->getPosition(), aVectorA, &fCut))
                                             {
                                                 // startpoint B at edge A, one new point
                                                 // leaves or enters common section
@@ -986,15 +986,15 @@ namespace basegfx
                     for(sal_uInt32 c(0L); c < aTmpCuts.size();)
                     {
                         B2DSimpleCut* pCand = aTmpCuts[c];
-                        sal_Bool bPrevSamePos(isPrevSamePos(pCand->getLeft(), pCand->getRight()));
-                        sal_Bool bNextSamePos(isNextSamePos(pCand->getLeft(), pCand->getRight()));
-                        sal_Bool bDelete(sal_False);
-                        sal_Bool bIncC(sal_True);
+                        bool bPrevSamePos(isPrevSamePos(pCand->getLeft(), pCand->getRight()));
+                        bool bNextSamePos(isNextSamePos(pCand->getLeft(), pCand->getRight()));
+                        bool bDelete(false);
+                        bool bIncC(true);
 
                         if(bPrevSamePos && bNextSamePos)
                         {
                             // single point inside continued same direction section
-                            bDelete = sal_True;
+                            bDelete = true;
                         }
                         else if(!bPrevSamePos && !bNextSamePos)
                         {
@@ -1004,12 +1004,12 @@ namespace basegfx
                                 // real cut, move to real cutlist
                                 aNewCuts.push_back(pCand);
                                 aTmpCuts.erase(aTmpCuts.begin() + c);
-                                bIncC = sal_False;
+                                bIncC = false;
                             }
                             else
                             {
                                 // no cut, just a touch in one point
-                                bDelete = sal_True;
+                                bDelete = true;
                             }
                         }
 
@@ -1018,7 +1018,7 @@ namespace basegfx
                         {
                             delete pCand;
                             aTmpCuts.erase(aTmpCuts.begin() + c);
-                            bIncC = sal_False;
+                            bIncC = false;
                         }
 
                         // next candidate
@@ -1036,8 +1036,8 @@ namespace basegfx
                         aTmpCuts.erase(aTmpCuts.begin());
                         B2DPolygonNode* pActA = pCutA->getLeft();
                         B2DPolygonNode* pActB = pCutA->getRight();
-                        sal_Bool bPrevSamePos(isPrevSamePos(pActA, pActB));
-                        sal_Bool bNextSamePos(isNextSamePos(pActA, pActB));
+                        bool bPrevSamePos(isPrevSamePos(pActA, pActB));
+                        bool bNextSamePos(isNextSamePos(pActA, pActB));
 
                         if(aTmpCuts.size())
                         {

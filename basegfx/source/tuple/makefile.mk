@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:24:16 $
+#   last change: $Author: thb $ $Date: 2004-01-16 10:34:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,12 @@ TARGET=tuple
 
 SLOFILES= \
                 $(SLO)$/b2dtuple.obj		\
-                $(SLO)$/b3dtuple.obj
-            
+                $(SLO)$/b3dtuple.obj		\
+                $(SLO)$/b2ituple.obj		\
+                $(SLO)$/b3ituple.obj		\
+                $(SLO)$/b2i64tuple.obj		\
+                $(SLO)$/b3i64tuple.obj
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk

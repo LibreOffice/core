@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:00 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace basegfx
     }
 
     // compare operators
-    sal_Bool B2DCubicBezier::operator==(const B2DCubicBezier& rBezier) const
+    bool B2DCubicBezier::operator==(const B2DCubicBezier& rBezier) const
     {
         return (
             maStartPoint == rBezier.maStartPoint
@@ -122,7 +122,7 @@ namespace basegfx
         );
     }
 
-    sal_Bool B2DCubicBezier::operator!=(const B2DCubicBezier& rBezier) const
+    bool B2DCubicBezier::operator!=(const B2DCubicBezier& rBezier) const
     {
         return (
             maStartPoint != rBezier.maStartPoint
@@ -133,14 +133,14 @@ namespace basegfx
     }
 
     // test if vectors are used
-    sal_Bool B2DCubicBezier::isBezier() const
+    bool B2DCubicBezier::isBezier() const
     {
         if(maControlPointA != maStartPoint || maControlPointB != maEndPoint)
         {
-            return sal_True;
+            return true;
         }
 
-        return sal_False;
+        return false;
     }
 
     void B2DCubicBezier::testAndSolveTrivialBezier()

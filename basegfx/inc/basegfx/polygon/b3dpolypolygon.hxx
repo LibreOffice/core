@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:54 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ namespace basegfx
         B3DPolyPolygon& operator=(const B3DPolyPolygon& rPolyPolygon);
 
         // compare operators
-        sal_Bool operator==(const B3DPolyPolygon& rPolyPolygon) const;
-        sal_Bool operator!=(const B3DPolyPolygon& rPolyPolygon) const;
+        bool operator==(const B3DPolyPolygon& rPolyPolygon) const;
+        bool operator!=(const B3DPolyPolygon& rPolyPolygon) const;
 
         // polygon interface
         sal_uInt32 count() const;
@@ -121,14 +121,14 @@ namespace basegfx
         void clear();
 
         // closed state
-        sal_Bool isClosed() const;
-        void setClosed(sal_Bool bNew);
+        bool isClosed() const;
+        void setClosed(bool bNew);
 
         // flip polygon direction
         void flip();
 
         // test if PolyPolygon has double points
-        sal_Bool hasDoublePoints() const;
+        bool hasDoublePoints() const;
 
         // remove double points, at the begin/end and follow-ups, too
         void removeDoublePoints();

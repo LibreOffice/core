@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:15 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B2DVector::isNormalized() const
+    bool B2DVector::isNormalized() const
     {
         const double fOne(1.0);
         const double fScalar(scalar(*this));
@@ -170,13 +170,13 @@ namespace basegfx
         return (::basegfx::fTools::equal(fOne, fScalar));
     }
 
-    sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
+    bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
     {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
         return ::basegfx::fTools::equalZero(fVal);
     }
 
-    B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
+    B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
     {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
 
@@ -205,9 +205,9 @@ namespace basegfx
         return aRes*=rMat;
     }
 
-    ::basegfx::B2DVectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
+    B2VectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
     {
-        ::basegfx::B2DVectorContinuity eRetval(::basegfx::CONTINUITY_NONE);
+        B2VectorContinuity eRetval(::basegfx::CONTINUITY_NONE);
 
         if(!rBackVector.equalZero() && !rForwardVector.equalZero())
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygontools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:07 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace basegfx
             while(rCandidate.count() > 1L
                 && rCandidate.getB3DPoint(0L).equal(rCandidate.getB3DPoint(rCandidate.count() - 1L)))
             {
-                rCandidate.setClosed(sal_True);
+                rCandidate.setClosed(true);
                 rCandidate.remove(rCandidate.count() - 1L);
             }
         }
@@ -244,7 +244,7 @@ namespace basegfx
             if(nPointCount > 1L)
             {
                 sal_uInt32 nIndex(0L);
-                sal_Bool bIndexDone(sal_False);
+                bool bIndexDone(false);
                 const double fZero(0.0);
                 double fEdgeLength(fZero);
 
@@ -267,7 +267,7 @@ namespace basegfx
                     {
                         // crop to polygon start
                         fDistance = fZero;
-                        bIndexDone = sal_True;
+                        bIndexDone = true;
                     }
                 }
 
@@ -285,7 +285,7 @@ namespace basegfx
                         // crop to polygon end
                         fDistance = fZero;
                         nIndex = nPointCount - 1L;
-                        bIndexDone = sal_True;
+                        bIndexDone = true;
                     }
                 }
 
@@ -306,7 +306,7 @@ namespace basegfx
                         else
                         {
                             // it's on this edge, stop
-                            bIndexDone = sal_True;
+                            bIndexDone = true;
                         }
                     } while (!bIndexDone);
                 }
@@ -328,7 +328,7 @@ namespace basegfx
                     }
 
                     // add calculated average value to the return value
-                    aRetval += ::basegfx::average(aRetval, aNextPoint, fRelative);
+                    aRetval += ::basegfx::interpolate(aRetval, aNextPoint, fRelative);
                 }
             }
 
@@ -382,11 +382,11 @@ namespace basegfx
                             }
                             else
                             {
-                                aResult.append(aStart + (aVector * fPosOnVector));
+                                aResult.append( B3DPoint(aStart + (aVector * fPosOnVector)) );
                             }
 
                             // add end point
-                            aResult.append(aStart + (aVector * (fPosOnVector + fDashDotLength)));
+                            aResult.append( B3DPoint(aStart + (aVector * (fPosOnVector + fDashDotLength))) );
 
                             // add line to PolyPolygon
                             aRetval.append(aResult);

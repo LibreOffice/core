@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-12-03 09:24:24 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,9 @@ namespace basegfx
 
         /** Test if this homogen point does have a homogenous part
 
-            @return Returns sal_True if this point has no homogenous part
+            @return Returns true if this point has no homogenous part
         */
-        sal_Bool implIsHomogenized() const;
+        bool implIsHomogenized() const;
 
         /** Remove homogenous part of this Point
 
@@ -119,12 +119,10 @@ namespace basegfx
     public:
         /** Create a homogen point
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the Point. The homogenous part is initialized to 1.0.
+            The point is initialized to (0.0, 0.0)
         */
-        B2DHomPoint(double fVal = 0.0)
-        :   maTuple(fVal),
+        B2DHomPoint()
+        :   maTuple(),
             mfW(1.0)
         {}
 
@@ -149,7 +147,7 @@ namespace basegfx
             The 2D point which will be copied. The homogenous part
             is initialized to 1.0.
         */
-        B2DHomPoint(const B2DPoint& rVec)
+        explicit B2DHomPoint(const B2DPoint& rVec)
         :   maTuple(rVec),
             mfW(1.0)
         {}
@@ -233,9 +231,9 @@ namespace basegfx
 
         B2DHomPoint& operator-(void);
 
-        sal_Bool operator==( const B2DHomPoint& rPnt ) const;
+        bool operator==( const B2DHomPoint& rPnt ) const;
 
-        sal_Bool operator!=( const B2DHomPoint& rPnt ) const;
+        bool operator!=( const B2DHomPoint& rPnt ) const;
 
         B2DHomPoint& operator=( const B2DHomPoint& rPnt );
     };

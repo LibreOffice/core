@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,18 @@ namespace basegfx
 {
     class B3DRange
     {
-        ::basegfx::BasicRange           maRangeX;
-        ::basegfx::BasicRange           maRangeY;
-        ::basegfx::BasicRange           maRangeZ;
+        typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
+
+        MyBasicRange            maRangeX;
+        MyBasicRange            maRangeY;
+        MyBasicRange            maRangeZ;
 
     public:
         B3DRange()
         {
         }
 
-        B3DRange(const B3DTuple& rTuple)
+        explicit B3DRange(const B3DTuple& rTuple)
         :   maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY()),
             maRangeZ(rTuple.getZ())
@@ -97,7 +99,7 @@ namespace basegfx
         {
         }
 
-        sal_Bool isEmpty() const
+        bool isEmpty() const
         {
             return (
                 maRangeX.isEmpty()
@@ -156,7 +158,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool isInside(const B3DTuple& rTuple) const
+        bool isInside(const B3DTuple& rTuple) const
         {
             return (
                 maRangeX.isInside(rTuple.getX())
@@ -165,7 +167,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool isInside(const B3DRange& rRange) const
+        bool isInside(const B3DRange& rRange) const
         {
             return (
                 maRangeX.isInside(rRange.maRangeX)
@@ -174,7 +176,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool overlaps(const B3DRange& rRange) const
+        bool overlaps(const B3DRange& rRange) const
         {
             return (
                 maRangeX.overlaps(rRange.maRangeX)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,18 +66,19 @@
 #include <basegfx/range/basicrange.hxx>
 #endif
 
+
 namespace basegfx
 {
     class B1DRange
     {
-        ::basegfx::BasicRange                   maRange;
+        ::basegfx::BasicRange< double, DoubleTraits >   maRange;
 
     public:
         B1DRange()
         {
         }
 
-        B1DRange(double fStartValue)
+        explicit B1DRange(double fStartValue)
         :   maRange(fStartValue)
         {
         }
@@ -87,7 +88,7 @@ namespace basegfx
         {
         }
 
-        sal_Bool isEmpty() const
+        bool isEmpty() const
         {
             return maRange.isEmpty();
         }
@@ -122,17 +123,17 @@ namespace basegfx
             return maRange.getCenter();
         }
 
-        sal_Bool isInside(double fValue) const
+        bool isInside(double fValue) const
         {
             return maRange.isInside(fValue);
         }
 
-        sal_Bool isInside(const B1DRange& rRange) const
+        bool isInside(const B1DRange& rRange) const
         {
             return maRange.isInside(rRange.maRange);
         }
 
-        sal_Bool overlaps(const B1DRange& rRange) const
+        bool overlaps(const B1DRange& rRange) const
         {
             return maRange.overlaps(rRange.maRange);
         }

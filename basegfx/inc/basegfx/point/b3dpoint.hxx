@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:51 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,10 @@ namespace basegfx
     public:
         /** Create a 3D Point
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 3D Point.
+            The point is initialized to (0.0, 0.0, 0.0)
         */
-        B3DPoint(double fVal = 0.0)
-        :   B3DTuple(fVal)
+        B3DPoint()
+        :   B3DTuple()
         {}
 
         /** Create a 3D Point
@@ -122,7 +120,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B3DTuple-based classes
         */
-        B3DPoint(const ::basegfx::B3DTuple& rTuple)
+        explicit B3DPoint(const ::basegfx::B3DTuple& rTuple)
         :   B3DTuple(rTuple)
         {}
 

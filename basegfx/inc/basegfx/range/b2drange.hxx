@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:56 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,17 @@ namespace basegfx
 {
     class B2DRange
     {
-        ::basegfx::BasicRange           maRangeX;
-        ::basegfx::BasicRange           maRangeY;
+        typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
+
+        MyBasicRange        maRangeX;
+        MyBasicRange        maRangeY;
 
     public:
         B2DRange()
         {
         }
 
-        B2DRange(const B2DTuple& rTuple)
+        explicit B2DRange(const B2DTuple& rTuple)
         :   maRangeX(rTuple.getX()),
             maRangeY(rTuple.getY())
         {
@@ -94,7 +96,7 @@ namespace basegfx
         {
         }
 
-        sal_Bool isEmpty() const
+        bool isEmpty() const
         {
             return (
                 maRangeX.isEmpty()
@@ -146,7 +148,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool isInside(const B2DTuple& rTuple) const
+        bool isInside(const B2DTuple& rTuple) const
         {
             return (
                 maRangeX.isInside(rTuple.getX())
@@ -154,7 +156,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool isInside(const B2DRange& rRange) const
+        bool isInside(const B2DRange& rRange) const
         {
             return (
                 maRangeX.isInside(rRange.maRangeX)
@@ -162,7 +164,7 @@ namespace basegfx
                 );
         }
 
-        sal_Bool overlaps(const B2DRange& rRange) const
+        bool overlaps(const B2DRange& rRange) const
         {
             return (
                 maRangeX.overlaps(rRange.maRangeX)
@@ -182,6 +184,7 @@ namespace basegfx
             maRangeY.expand(rRange.maRangeY);
         }
     };
+
 } // end of namespace basegfx
 
 #endif //   _BGFX_RANGE_B2DRANGE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:05 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public:
 
     const ::basegfx::B2DPoint& getCoordinate() const { return maPoint; }
     void setCoordinate(const ::basegfx::B2DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
-    sal_Bool operator==(const CoordinateData2D& rData ) const { return (maPoint == rData.getCoordinate()); }
+    bool operator==(const CoordinateData2D& rData ) const { return (maPoint == rData.getCoordinate()); }
     void transform(const ::basegfx::B2DHomMatrix& rMatrix) { maPoint *= rMatrix; }
 };
 
@@ -132,7 +132,7 @@ public:
         return maVector.size();
     }
 
-    sal_Bool isEqual(const CoordinateDataArray2D& rCandidate) const
+    bool isEqual(const CoordinateDataArray2D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
@@ -262,7 +262,7 @@ public:
     const ::basegfx::B2DVector& getVectorB() const { return maVectorB; }
     void setVectorB(const ::basegfx::B2DVector& rValue) { if(rValue != maVectorB) maVectorB = rValue; }
 
-    sal_Bool operator==(const ControlVectorPair2D& rData ) const
+    bool operator==(const ControlVectorPair2D& rData ) const
         { return (maVectorA == rData.getVectorA() && maVectorB == rData.getVectorB()); }
 };
 
@@ -319,12 +319,12 @@ public:
         return maVector.size();
     }
 
-    sal_Bool isEqual(const ControlVectorArray2D& rCandidate) const
+    bool isEqual(const ControlVectorArray2D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
 
-    sal_Bool isUsed() const
+    bool isUsed() const
     {
         return (0L != mnUsedVectors);
     }
@@ -336,8 +336,8 @@ public:
 
     void setVectorA(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue)
     {
-        sal_Bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorA().equalZero());
-        sal_Bool bIsUsed(!rValue.equalZero());
+        bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorA().equalZero());
+        bool bIsUsed(!rValue.equalZero());
 
         if(bWasUsed)
         {
@@ -368,8 +368,8 @@ public:
 
     void setVectorB(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue)
     {
-        sal_Bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorB().equalZero());
-        sal_Bool bIsUsed(!rValue.equalZero());
+        bool bWasUsed(mnUsedVectors && !maVector[nIndex].getVectorB().equalZero());
+        bool bIsUsed(!rValue.equalZero());
 
         if(bWasUsed)
         {
@@ -483,7 +483,7 @@ public:
     :   mnRefCount(1),
         maPoints(0L),
         mpControlVector(0L),
-        mbIsClosed(sal_False)
+        mbIsClosed(false)
     {
         // complete initialization with defaults
     }
@@ -549,12 +549,12 @@ public:
         return maPoints.count();
     }
 
-    sal_Bool isClosed() const
+    bool isClosed() const
     {
         return mbIsClosed;
     }
 
-    void setClosed(sal_Bool bNew)
+    void setClosed(bool bNew)
     {
         if(bNew != mbIsClosed)
         {
@@ -562,13 +562,13 @@ public:
         }
     }
 
-    sal_Bool isEqual(const ImplB2DPolygon& rCandidate) const
+    bool isEqual(const ImplB2DPolygon& rCandidate) const
     {
         if(mbIsClosed == rCandidate.mbIsClosed)
         {
             if(maPoints.isEqual(rCandidate.maPoints))
             {
-                sal_Bool bControlVectorsAreEqual(sal_True);
+                bool bControlVectorsAreEqual(true);
 
                 if(mpControlVector)
                 {
@@ -593,12 +593,12 @@ public:
 
                 if(bControlVectorsAreEqual)
                 {
-                    return sal_True;
+                    return true;
                 }
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     const ::basegfx::B2DPoint& getPoint(sal_uInt32 nIndex) const
@@ -660,7 +660,7 @@ public:
         }
     }
 
-    sal_Bool areControlPointsUsed() const
+    bool areControlPointsUsed() const
     {
         return (mpControlVector && mpControlVector->isUsed());
     }
@@ -821,7 +821,7 @@ public:
         }
     }
 
-    sal_Bool hasDoublePoints() const
+    bool hasDoublePoints() const
     {
         if(mbIsClosed)
         {
@@ -835,12 +835,12 @@ public:
                     if(mpControlVector->getVectorA(nIndex).equalZero()
                         && mpControlVector->getVectorB(nIndex).equalZero())
                     {
-                        return sal_True;
+                        return true;
                     }
                 }
                 else
                 {
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -855,17 +855,17 @@ public:
                     if(mpControlVector->getVectorA(a).equalZero()
                         && mpControlVector->getVectorB(a).equalZero())
                     {
-                        return sal_True;
+                        return true;
                     }
                 }
                 else
                 {
-                    return sal_True;
+                    return true;
                 }
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     void removeDoublePointsAtBeginEnd()
@@ -875,11 +875,11 @@ public:
         {
             if(mpControlVector)
             {
-                sal_Bool bRemove;
+                bool bRemove;
 
                 do
                 {
-                    bRemove = sal_False;
+                    bRemove = false;
 
                     if(maPoints.count() > 1L)
                     {
@@ -890,7 +890,7 @@ public:
                             if(mpControlVector->getVectorA(nIndex).equalZero()
                                 && mpControlVector->getVectorB(nIndex).equalZero())
                             {
-                                bRemove = sal_True;
+                                bRemove = true;
                             }
                         }
                     }
@@ -1045,21 +1045,21 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B2DPolygon::operator==(const B2DPolygon& rPolygon) const
+    bool B2DPolygon::operator==(const B2DPolygon& rPolygon) const
     {
         if(mpPolygon == rPolygon.mpPolygon)
         {
-            return sal_True;
+            return true;
         }
 
         return mpPolygon->isEqual(*(rPolygon.mpPolygon));
     }
 
-    sal_Bool B2DPolygon::operator!=(const B2DPolygon& rPolygon) const
+    bool B2DPolygon::operator!=(const B2DPolygon& rPolygon) const
     {
         if(mpPolygon == rPolygon.mpPolygon)
         {
-            return sal_False;
+            return false;
         }
 
         return !mpPolygon->isEqual(*(rPolygon.mpPolygon));
@@ -1144,7 +1144,7 @@ namespace basegfx
         }
     }
 
-    sal_Bool B2DPolygon::areControlPointsUsed() const
+    bool B2DPolygon::areControlPointsUsed() const
     {
         return mpPolygon->areControlPointsUsed();
     }
@@ -1225,12 +1225,12 @@ namespace basegfx
         mpPolygon->incRefCount();
     }
 
-    sal_Bool B2DPolygon::isClosed() const
+    bool B2DPolygon::isClosed() const
     {
         return mpPolygon->isClosed();
     }
 
-    void B2DPolygon::setClosed(sal_Bool bNew)
+    void B2DPolygon::setClosed(bool bNew)
     {
         if(mpPolygon->isClosed() != bNew)
         {
@@ -1248,7 +1248,7 @@ namespace basegfx
         }
     }
 
-    sal_Bool B2DPolygon::hasDoublePoints() const
+    bool B2DPolygon::hasDoublePoints() const
     {
         return mpPolygon->hasDoublePoints();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:02 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,10 @@ namespace basegfx
 
         public:
             // Is last line used?
-            sal_Bool isLastLineDefault() const
+            bool isLastLineDefault() const
             {
                 if(!mpLine)
-                    return sal_True;
+                    return true;
 
                 for(sal_uInt16 a(0); a < RowSize; a++)
                 {
@@ -141,7 +141,7 @@ namespace basegfx
 
                     if(!::basegfx::fTools::equal(fDefault, fLineValue))
                     {
-                        return sal_False;
+                        return false;
                     }
                 }
 
@@ -149,7 +149,7 @@ namespace basegfx
                 delete ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine;
                 ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine = 0L;
 
-                return sal_True;
+                return true;
             }
 
             // This constructor is only used form the static identity matrix, thus
@@ -238,7 +238,7 @@ namespace basegfx
             {
                 if(mpLine)
                 {
-                    sal_Bool bNecessary(sal_False);
+                    bool bNecessary(false);
 
                     for(sal_uInt16 a(0);!bNecessary && a < RowSize; a++)
                     {
@@ -247,7 +247,7 @@ namespace basegfx
 
                         if(!::basegfx::fTools::equal(fDefault, fLineValue))
                         {
-                            bNecessary = sal_True;
+                            bNecessary = true;
                         }
                     }
 
@@ -260,7 +260,7 @@ namespace basegfx
             }
 
             // Left-upper decompositon
-            sal_Bool ludcmp(sal_uInt16 nIndex[], sal_Int16& nParity)
+            bool ludcmp(sal_uInt16 nIndex[], sal_Int16& nParity)
             {
                 double fBig, fSum, fDum;
                 double fStorage[RowSize];
@@ -286,7 +286,7 @@ namespace basegfx
 
                     if(::basegfx::fTools::equalZero(fBig))
                     {
-                        return sal_False;
+                        return false;
                     }
 
                     fStorage[a] = 1.0 / fBig;
@@ -348,7 +348,7 @@ namespace basegfx
 
                     if(::basegfx::fTools::equalZero(fValBB))
                     {
-                        return sal_False;
+                        return false;
                     }
 
                     if(b != (RowSize - 1))
@@ -362,7 +362,7 @@ namespace basegfx
                     }
                 }
 
-                return sal_True;
+                return true;
             }
 
             void lubksb(const sal_uInt16 nIndex[], double fRow[]) const
@@ -410,7 +410,7 @@ namespace basegfx
                 }
             }
 
-            sal_Bool isIdentity() const
+            bool isIdentity() const
             {
                 // last line needs no testing if not existing
                 const sal_uInt16 nMaxLine = (mpLine) ? RowSize : (RowSize - 1);
@@ -424,15 +424,15 @@ namespace basegfx
 
                         if(!::basegfx::fTools::equal(fDefault, fValueAB))
                         {
-                            return sal_False;
+                            return false;
                         }
                     }
                 }
 
-                return sal_True;
+                return true;
             }
 
-            sal_Bool isInvertible() const
+            bool isInvertible() const
             {
                 ImplHomMatrixTemplate aWork(*this);
                 sal_uInt16 nIndex[RowSize];
@@ -441,26 +441,26 @@ namespace basegfx
                 return aWork.ludcmp(nIndex, nParity);
             }
 
-            sal_Bool isNormalized() const
+            bool isNormalized() const
             {
                 if(!mpLine)
-                    return sal_True;
+                    return true;
 
                 const double fHomValue(get((RowSize - 1), (RowSize - 1)));
 
                 if(::basegfx::fTools::equalZero(fHomValue))
                 {
-                    return sal_True;
+                    return true;
                 }
 
                 const double fOne(1.0);
 
                 if(::basegfx::fTools::equal(fOne, fHomValue))
                 {
-                    return sal_True;
+                    return true;
                 }
 
-                return sal_False;
+                return false;
             }
 
             void doInvert(const ImplHomMatrixTemplate& rWork, const sal_uInt16 nIndex[])
@@ -623,7 +623,7 @@ namespace basegfx
                 testLastLine();
             }
 
-            sal_Bool isEqual(const ImplHomMatrixTemplate& rMat)
+            bool isEqual(const ImplHomMatrixTemplate& rMat)
             {
                 const sal_uInt16 nMaxLine = (mpLine || rMat.mpLine) ? RowSize : (RowSize - 1);
 
@@ -636,12 +636,12 @@ namespace basegfx
 
                         if(!::basegfx::fTools::equal(fValueA, fValueB))
                         {
-                            return sal_False;
+                            return false;
                         }
                     }
                 }
 
-                return sal_True;
+                return true;
             }
         };
 

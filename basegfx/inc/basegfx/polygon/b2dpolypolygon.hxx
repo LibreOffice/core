@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ namespace basegfx
         B2DPolyPolygon& operator=(const B2DPolyPolygon& rPolyPolygon);
 
         // compare operators
-        sal_Bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
-        sal_Bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
+        bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
+        bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
 
         // polygon interface
         sal_uInt32 count() const;
@@ -107,7 +107,7 @@ namespace basegfx
         void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
 
         // test for curve
-        sal_Bool areControlPointsUsed() const;
+        bool areControlPointsUsed() const;
 
         // insert/append single polygon
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
@@ -124,14 +124,14 @@ namespace basegfx
         void clear();
 
         // closed state
-        sal_Bool isClosed() const;
-        void setClosed(sal_Bool bNew);
+        bool isClosed() const;
+        void setClosed(bool bNew);
 
         // flip polygon direction
         void flip();
 
         // test if PolyPolygon has double points
-        sal_Bool hasDoublePoints() const;
+        bool hasDoublePoints() const;
 
         // remove double points, at the begin/end and follow-ups, too
         void removeDoublePoints();

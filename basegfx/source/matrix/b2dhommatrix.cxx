@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2003-12-08 13:24:07 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ namespace basegfx
         mpM->set(nRow, nColumn, fValue);
     }
 
-    sal_Bool B2DHomMatrix::isIdentity() const
+    bool B2DHomMatrix::isIdentity() const
     {
         if(mpM == &get2DIdentityMatrix())
-            return sal_True;
+            return true;
 
         return mpM->isIdentity();
     }
@@ -163,12 +163,12 @@ namespace basegfx
         mpM->incRefCount();
     }
 
-    sal_Bool B2DHomMatrix::isInvertible() const
+    bool B2DHomMatrix::isInvertible() const
     {
         return mpM->isInvertible();
     }
 
-    sal_Bool B2DHomMatrix::invert()
+    bool B2DHomMatrix::invert()
     {
         Impl2DHomMatrix aWork(*mpM);
         sal_uInt16* pIndex = new sal_uInt16[mpM->getEdgeLength()];
@@ -180,14 +180,14 @@ namespace basegfx
             mpM->doInvert(aWork, pIndex);
             delete pIndex;
 
-            return sal_True;
+            return true;
         }
 
         delete pIndex;
-        return sal_False;
+        return false;
     }
 
-    sal_Bool B2DHomMatrix::isNormalized() const
+    bool B2DHomMatrix::isNormalized() const
     {
         return mpM->isNormalized();
     }
@@ -270,18 +270,18 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B2DHomMatrix::operator==(const B2DHomMatrix& rMat) const
+    bool B2DHomMatrix::operator==(const B2DHomMatrix& rMat) const
     {
         if(mpM == rMat.mpM)
-            return sal_True;
+            return true;
 
         return mpM->isEqual(*rMat.mpM);
     }
 
-    sal_Bool B2DHomMatrix::operator!=(const B2DHomMatrix& rMat) const
+    bool B2DHomMatrix::operator!=(const B2DHomMatrix& rMat) const
     {
         if(mpM == rMat.mpM)
-            return sal_False;
+            return false;
 
         return !mpM->isEqual(*rMat.mpM);
     }
@@ -365,15 +365,15 @@ namespace basegfx
     }
 
     // Decomposition
-    sal_Bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
+    bool B2DHomMatrix::decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const
     {
         // when perspective is used, decompose is not made here
         if(!mpM->isLastLineDefault())
-            return sal_False;
+            return false;
 
         // If determinant is zero, decomposition is not possible
         if(0.0 == mpM->doDeterminant())
-            return sal_False;
+            return false;
 
         // copy 2x2 matrix and translate vector to 3x3 matrix
         ::basegfx::B3DHomMatrix a3DHomMat;
@@ -403,10 +403,10 @@ namespace basegfx
             rTranslate.setX(r3DTranslate.getX());
             rTranslate.setY(r3DTranslate.getY());
 
-            return sal_True;
+            return true;
         }
 
-        return sal_False;
+        return false;
     }
 } // end of namespace basegfx
 

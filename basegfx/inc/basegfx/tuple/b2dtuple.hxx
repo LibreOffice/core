@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-12-03 09:24:26 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,11 @@ namespace basegfx
     public:
         /** Create a 2D Tuple
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 2D Tuple.
+            The tuple is initialized to (0.0, 0.0)
         */
-        B2DTuple(double fVal = 0.0)
-        :   mfX(fVal),
-            mfY(fVal)
+        B2DTuple()
+        :   mfX(0.0),
+            mfY(0.0)
         {}
 
         /** Create a 2D Tuple
@@ -174,13 +172,13 @@ namespace basegfx
         // comparators with tolerance
         //////////////////////////////////////////////////////////////////////
 
-        sal_Bool equalZero() const;
+        bool equalZero() const;
 
-        sal_Bool equalZero(const double& rfSmallValue) const;
+        bool equalZero(const double& rfSmallValue) const;
 
-        sal_Bool equal(const B2DTuple& rTup) const;
+        bool equal(const B2DTuple& rTup) const;
 
-        sal_Bool equal(const B2DTuple& rTup, const double& rfSmallValue) const;
+        bool equal(const B2DTuple& rTup, const double& rfSmallValue) const;
 
         // operators
         //////////////////////////////////////////////////////////////////////
@@ -233,12 +231,12 @@ namespace basegfx
             return B2DTuple(-mfX, -mfY);
         }
 
-        sal_Bool operator==( const B2DTuple& rTup ) const
+        bool operator==( const B2DTuple& rTup ) const
         {
             return equal(rTup);
         }
 
-        sal_Bool operator!=( const B2DTuple& rTup ) const
+        bool operator!=( const B2DTuple& rTup ) const
         {
             return !equal(rTup);
         }
@@ -360,8 +358,9 @@ namespace basegfx
 
     inline B2DTuple operator/(double t, const B2DTuple& rTup)
     {
-        B2DTuple aNew(rTup);
-        aNew /= t;
+        B2DTuple aNew(t, t);
+        B2DTuple aTmp(rTup);
+        aNew /= aTmp;
         return aNew;
     }
 } // end of namespace basegfx

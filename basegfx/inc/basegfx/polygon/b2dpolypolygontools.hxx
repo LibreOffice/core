@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:53 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,12 @@ namespace basegfx
         // in the given PolyPolygon. Only closed polygons are handled. The non-closed
         // polygons or the ones with less than 3 points are preserved, but not
         // computed.
-        // bForceOrientation: If sal_True, the orientations of all contained polygons
+        // bForceOrientation: If true, the orientations of all contained polygons
         // is changed to ORIENTATION_POSITIVE before computing.
-        // bInvertRemove: if sal_True, created polygons which are inside others and
+        // bInvertRemove: if true, created polygons which are inside others and
         // have the same orientation are removed (cleanup).
         void removeIntersections(::basegfx::B2DPolyPolygon& rCandidate,
-            sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
+            bool bForceOrientation = true, bool bInvertRemove = false);
 
         // Subdivide all contained curves. Use distanceBound value if given.
         ::basegfx::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);

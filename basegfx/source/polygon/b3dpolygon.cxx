@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:06 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
 
     const ::basegfx::B3DPoint& getCoordinate() const { return maPoint; }
     void setCoordinate(const ::basegfx::B3DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
-    sal_Bool operator==(const CoordinateData3D& rData ) const { return (maPoint == rData.getCoordinate()); }
+    bool operator==(const CoordinateData3D& rData ) const { return (maPoint == rData.getCoordinate()); }
     void transform(const ::basegfx::B3DHomMatrix& rMatrix) { maPoint *= rMatrix; }
 };
 
@@ -128,7 +128,7 @@ public:
         return maVector.size();
     }
 
-    sal_Bool isEqual(const CoordinateDataArray3D& rCandidate) const
+    bool isEqual(const CoordinateDataArray3D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
@@ -262,7 +262,7 @@ public:
     ImplB3DPolygon()
     :   mnRefCount(1),
         maPoints(0L),
-        mbIsClosed(sal_False)
+        mbIsClosed(false)
     {
         // complete initialization with defaults
     }
@@ -307,12 +307,12 @@ public:
         return maPoints.count();
     }
 
-    sal_Bool isClosed() const
+    bool isClosed() const
     {
         return mbIsClosed;
     }
 
-    void setClosed(sal_Bool bNew)
+    void setClosed(bool bNew)
     {
         if(bNew != mbIsClosed)
         {
@@ -320,17 +320,17 @@ public:
         }
     }
 
-    sal_Bool isEqual(const ImplB3DPolygon& rCandidate) const
+    bool isEqual(const ImplB3DPolygon& rCandidate) const
     {
         if(mbIsClosed == rCandidate.mbIsClosed)
         {
             if(maPoints.isEqual(rCandidate.maPoints))
             {
-                return sal_True;
+                return true;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     const ::basegfx::B3DPoint& getPoint(sal_uInt32 nIndex) const
@@ -378,7 +378,7 @@ public:
         }
     }
 
-    sal_Bool hasDoublePoints() const
+    bool hasDoublePoints() const
     {
         if(mbIsClosed)
         {
@@ -387,7 +387,7 @@ public:
 
             if(maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex))
             {
-                return sal_True;
+                return true;
             }
         }
 
@@ -396,11 +396,11 @@ public:
         {
             if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1L))
             {
-                return sal_True;
+                return true;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     void removeDoublePointsAtBeginEnd()
@@ -486,21 +486,21 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B3DPolygon::operator==(const B3DPolygon& rPolygon) const
+    bool B3DPolygon::operator==(const B3DPolygon& rPolygon) const
     {
         if(mpPolygon == rPolygon.mpPolygon)
         {
-            return sal_True;
+            return true;
         }
 
         return mpPolygon->isEqual(*(rPolygon.mpPolygon));
     }
 
-    sal_Bool B3DPolygon::operator!=(const B3DPolygon& rPolygon) const
+    bool B3DPolygon::operator!=(const B3DPolygon& rPolygon) const
     {
         if(mpPolygon == rPolygon.mpPolygon)
         {
-            return sal_False;
+            return false;
         }
 
         return !mpPolygon->isEqual(*(rPolygon.mpPolygon));
@@ -625,12 +625,12 @@ namespace basegfx
         mpPolygon->incRefCount();
     }
 
-    sal_Bool B3DPolygon::isClosed() const
+    bool B3DPolygon::isClosed() const
     {
         return mpPolygon->isClosed();
     }
 
-    void B3DPolygon::setClosed(sal_Bool bNew)
+    void B3DPolygon::setClosed(bool bNew)
     {
         if(mpPolygon->isClosed() != bNew)
         {
@@ -648,7 +648,7 @@ namespace basegfx
         }
     }
 
-    sal_Bool B3DPolygon::hasDoublePoints() const
+    bool B3DPolygon::hasDoublePoints() const
     {
         return mpPolygon->hasDoublePoints();
     }

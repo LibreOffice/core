@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:58 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace basegfx
 
     /** Descriptor for the mathematical orientations of two 2D Vectors
     */
-    enum B2DVectorOrientation
+    enum B2VectorOrientation
     {
         /// mathematically positive oriented
         ORIENTATION_POSITIVE = 0,
@@ -87,7 +87,7 @@ namespace basegfx
 
     /** Descriptor for the mathematical continuity of two 2D Vectors
     */
-    enum B2DVectorContinuity
+    enum B2VectorContinuity
     {
         /// none
         CONTINUITY_NONE = 0,
@@ -112,12 +112,10 @@ namespace basegfx
     public:
         /** Create a 2D Vector
 
-            @param fVal
-            This parameter is used to initialize the coordinate
-            part of the 2D Vector.
+            The vector is initialized to (0.0, 0.0)
         */
-        B2DVector(double fVal = 0.0)
-        :   B2DTuple(fVal)
+        B2DVector()
+        :   B2DTuple()
         {}
 
         /** Create a 2D Vector
@@ -146,7 +144,7 @@ namespace basegfx
         /** constructor with tuple to allow copy-constructing
             from B2DTuple-based classes
         */
-        B2DVector(const ::basegfx::B2DTuple& rTuple)
+        explicit B2DVector(const ::basegfx::B2DTuple& rTuple)
         :   B2DTuple(rTuple)
         {}
 
@@ -198,10 +196,10 @@ namespace basegfx
         /** Test if this 2D Vector is normalized
 
             @return
-            sal_True if lenth of vector is equal to 1.0
-            sal_False else
+            true if lenth of vector is equal to 1.0
+            false else
         */
-        sal_Bool isNormalized() const;
+        bool isNormalized() const;
 
         /** Calculate the Scalar with another 2D Vector
 
@@ -264,7 +262,7 @@ namespace basegfx
         @return
         The mathematical Orientation of the two involved 2D Vectors
     */
-    B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
+    B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
 
     /** Calculate a perpendicular 2D Vector to the given one
 
@@ -287,10 +285,10 @@ namespace basegfx
         The second 2D Vector
 
         @return
-        sal_Bool if the two values are parallel. Also sal_True if
+        bool if the two values are parallel. Also true if
         one of the vectors is empty.
     */
-    sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
+    bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
 
@@ -304,7 +302,7 @@ namespace basegfx
         The two given vectors are assumed to describe control points on a
         common point. Calculate if there is a continuity between them.
     */
-    ::basegfx::B2DVectorContinuity getContinuity( const B2DVector& rBackVector, const B2DVector& rForwardVector );
+    B2VectorContinuity getContinuity( const B2DVector& rBackVector, const B2DVector& rForwardVector );
 
 } // end of namespace basegfx
 

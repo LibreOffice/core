@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:26:57 $
+#   last change: $Author: thb $ $Date: 2004-01-16 10:34:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,10 @@ TARGET=vector
 
 SLOFILES= \
                 $(SLO)$/b2dvector.obj		\
-                $(SLO)$/b3dvector.obj
-            
+                $(SLO)$/b3dvector.obj		\
+                $(SLO)$/b2ivector.obj		\
+                $(SLO)$/b3ivector.obj
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk

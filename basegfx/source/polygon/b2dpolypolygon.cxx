@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:06 $
+ *  last change: $Author: thb $ $Date: 2004-01-16 10:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,21 +110,21 @@ public:
     void incRefCount() { mnRefCount++; }
     void decRefCount() { mnRefCount--; }
 
-    sal_Bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
+    bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
     {
         // same polygon count?
         if(maPolygons.size() != rPolygonList.maPolygons.size())
-            return sal_False;
+            return false;
 
         // if zero polygons the polys are equal
         if(!maPolygons.size())
-            return sal_True;
+            return true;
 
         // compare polygon content
         if(maPolygons != rPolygonList.maPolygons)
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
     const ::basegfx::B2DPolygon& getB2DPolygon(sal_uInt32 nIndex) const
@@ -185,7 +185,7 @@ public:
         return maPolygons.size();
     }
 
-    void setClosed(sal_Bool bNew)
+    void setClosed(bool bNew)
     {
         for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
         {
@@ -275,21 +275,21 @@ namespace basegfx
         return *this;
     }
 
-    sal_Bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
+    bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
     {
         if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
         {
-            return sal_True;
+            return true;
         }
 
         return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
     }
 
-    sal_Bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
+    bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
     {
         if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
         {
-            return sal_False;
+            return false;
         }
 
         return !mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
@@ -318,7 +318,7 @@ namespace basegfx
         }
     }
 
-    sal_Bool B2DPolyPolygon::areControlPointsUsed() const
+    bool B2DPolyPolygon::areControlPointsUsed() const
     {
         for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
         {
@@ -326,11 +326,11 @@ namespace basegfx
 
             if(rPolygon.areControlPointsUsed())
             {
-                return sal_True;
+                return true;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount)
@@ -399,9 +399,9 @@ namespace basegfx
         mpPolyPolygon->incRefCount();
     }
 
-    sal_Bool B2DPolyPolygon::isClosed() const
+    bool B2DPolyPolygon::isClosed() const
     {
-        sal_Bool bRetval(sal_True);
+        bool bRetval(true);
 
         // PolyPOlygon is closed when all contained Polygons are closed or
         // no Polygon exists.
@@ -409,14 +409,14 @@ namespace basegfx
         {
             if(!(mpPolyPolygon->getB2DPolygon(a)).isClosed())
             {
-                bRetval = sal_False;
+                bRetval = false;
             }
         }
 
         return bRetval;
     }
 
-    void B2DPolyPolygon::setClosed(sal_Bool bNew)
+    void B2DPolyPolygon::setClosed(bool bNew)
     {
         if(bNew != isClosed())
         {
@@ -431,15 +431,15 @@ namespace basegfx
         mpPolyPolygon->flip();
     }
 
-    sal_Bool B2DPolyPolygon::hasDoublePoints() const
+    bool B2DPolyPolygon::hasDoublePoints() const
     {
-        sal_Bool bRetval(sal_False);
+        bool bRetval(false);
 
         for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
         {
             if((mpPolyPolygon->getB2DPolygon(a)).hasDoublePoints())
             {
-                bRetval = sal_True;
+                bRetval = true;
             }
         }
 
