@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,6 +821,8 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         }
     }
 
+    GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
+
     // set page name?
     if(!bHandoutMaster && msName.getLength() && GetLocalShapesContext().is())
     {
@@ -976,7 +978,7 @@ void SdXMLMasterPageContext::EndElement()
     }
 
     SdXMLGenericPageContext::EndElement();
-    GetImport().GetShapeImport()->restoreConnections();
+    GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
 }
 
 //////////////////////////////////////////////////////////////////////////////

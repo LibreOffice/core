@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 16:50:57 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XIMPSHAPE_HXX
 #define _XIMPSHAPE_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
-#include <com/sun/star/container/XIndexContainer.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
+#include <com/sun/star/container/XIdentifierContainer.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -110,7 +110,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxCursor;
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxOldCursor;
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList> mxAttrList;
-    com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > mxGluePoints;
+    com::sun::star::uno::Reference< com::sun::star::container::XIdentifierContainer > mxGluePoints;
 
     rtl::OUString               maDrawStyleName;
     rtl::OUString               maTextStyleName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 12:55:14 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2618,19 +2618,7 @@ sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
     {
         nId = rConn1.GetConnectorId();
         if( !rConn1.IsAutoVertex() )
-        {
-            // for user defined glue points we have
-            // to get the index for this id first
-            const SdrGluePointList* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList() : NULL;
-            if( NULL == pList )
-                return -1;
-
-            nId = pList->FindGluePoint((sal_uInt16)nId);
-            if( SDRGLUEPOINT_NOTFOUND == nId )
-                return -1;
-
             nId += 4;
-        }
     }
     return nId;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-14 16:50:57 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         if( !xSupplier.is() )
             return;
 
-        mxGluePoints = xSupplier->getGluePoints();
+        mxGluePoints = uno::Reference< container::XIdentifierContainer >::query( xSupplier->getGluePoints() );
 
         if( !mxGluePoints.is() )
             return;
@@ -376,7 +376,8 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
     {
         try
         {
-            mxGluePoints->insertByIndex( nId, uno::makeAny( aGluePoint ) );
+            sal_Int32 nInternalId = mxGluePoints->insert( uno::makeAny( aGluePoint ) );
+            GetImport().GetShapeImport()->addGluePointMapping( mxShape, nId, nInternalId );
         }
         catch( uno::Exception& )
         {

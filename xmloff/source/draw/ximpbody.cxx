@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             }
         }
     }
+
+    GetImport().GetShapeImport()->startPage( rShapes );
 
     uno::Reference< drawing::XDrawPage > xDrawPage(rShapes, uno::UNO_QUERY);
 
@@ -352,7 +354,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
 void SdXMLDrawPageContext::EndElement()
 {
     SdXMLGenericPageContext::EndElement();
-    GetImport().GetShapeImport()->restoreConnections();
+    GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
 }
 
 //////////////////////////////////////////////////////////////////////////////

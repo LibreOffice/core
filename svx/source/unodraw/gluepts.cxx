@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 08:28:08 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) thr
                 USHORT nId = pList->Insert( aSdrGlue );
                 mpObject->SendRepaintBroadcast();
 
-                return (sal_Int32)(nId + NON_USER_DEFINED_GLUE_POINTS);
+                return (sal_Int32)((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS);
             }
 
             throw lang::IllegalArgumentException();
@@ -416,7 +416,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
         *pIdentifier++ = (sal_Int32)i;
 
     for( i = 0; i < nCount; i++ )
-        *pIdentifier++ = (sal_Int32) (*pList)[i].GetId();
+        *pIdentifier++ = (sal_Int32) (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS;
 
     return aIdSequence;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:27 $
+ *  last change: $Author: cl $ $Date: 2001-06-19 14:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,18 +152,16 @@ struct XShapeCompareHelper
 
 /** this map store all glue point id mappings for shapes that had user defined glue points. This
     is needed because on insertion the glue points will get a new and unique id */
-/*
-typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XShape >, std::pair< sal_Int32, sal_Int32 >, XShapeCompareHelper > GluePointsIdMap;
-*/
+typedef std::map<sal_Int32,sal_Int32,ltint32> GluePointIdMap;
+typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XShape >, GluePointIdMap, XShapeCompareHelper > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during
     import of shapes for one page. Since pages could be nested ( notes pages inside impress ) there
     is a pointer so one can build up a stack of this structs */
 struct XMLShapeImportPageContextImpl
 {
-/*
-    GluePointsIdMap     maGluePointsIdMap;
-*/
+    ShapeGluePointsMap      maShapeGluePointsMap;
+
     uno::Reference < drawing::XShapes > mxShapes;
 
     struct XMLShapeImportPageContextImpl* mpNext;
@@ -1149,10 +1147,10 @@ void XMLShapeImportHelper::restoreConnections()
                 {
                     aAny <<= xShape;
                     xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
-                }
 
-                aAny <<= rHint.nDestGlueId;
-                xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+                    aAny <<= getGluePointId( xShape, rHint.nDestGlueId );
+                    xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+                }
 
                 // #86637# restore line deltas
                 xConnector->setPropertyValue(aStr1, aLine1Delta );
@@ -1180,12 +1178,25 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
                           sal_Int32 nSourceId, sal_Int32 nDestinnationId )
 {
+    if( mpPageContext )
+        mpPageContext->maShapeGluePointsMap[xShape][nSourceId] = nDestinnationId;
 }
 
 /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
     inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
 sal_Int32 XMLShapeImportHelper::getGluePointId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId )
 {
+    if( mpPageContext )
+    {
+        ShapeGluePointsMap::iterator aShapeIter( mpPageContext->maShapeGluePointsMap.find( xShape ) );
+        if( aShapeIter != mpPageContext->maShapeGluePointsMap.end() )
+        {
+            GluePointIdMap::iterator aIdIter = (*aShapeIter).second.find(nSourceId);
+            if( aIdIter != (*aShapeIter).second.end() )
+                return (*aIdIter).second;
+        }
+    }
+
     return -1;
 }
 
@@ -1204,6 +1215,8 @@ void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::st
     DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
     if( NULL == mpPageContext )
         return;
+
+    restoreConnections();
 
     XMLShapeImportPageContextImpl* pNextContext = mpPageContext->mpNext;
     delete mpPageContext;
