@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:27:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     MP_E( "ParaIsConnectBorder", STYLE, JOIN_BORDER,  XML_TYPE_BOOL, 0 ),
 
-    MP_E( "DefaultOutlineLevel", STYLE, DEFAULT_OUTLINE_LEVEL, XML_TYPE_TEXT_NUMBER8_ONE_BASED, 0 ),
+    MP_E( "DefaultOutlineLevel", STYLE, DEFAULT_OUTLINE_LEVEL, XML_TYPE_TEXT_NUMBER8_ONE_BASED|MID_FLAG_SPECIAL_ITEM_EXPORT|MID_FLAG_NO_PROPERTY_IMPORT, CTF_DEFAULT_OUTLINE_LEVEL ),
 
     M_END()
 };
