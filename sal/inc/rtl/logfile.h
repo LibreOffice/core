@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-09 13:01:28 $
+ *  last change: $Author: cd $ $Date: 2001-07-27 14:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,51 @@ void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
                                 osl_getThreadIdentifier( 0 ) ); \
              rtl_logfile_trace( frmt, arg1 , arg2 , arg3 ); \
              rtl_logfile_trace( "\n" )
+
+//  Now the macros with project and author arguments.  The strings
+//  are formatted in a way, so that the log file can be parsed by
+//  post processing scripts.
+#define RTL_LOGFILE_TRACE_AUTHOR( project, author, string )  \
+             rtl_logfile_trace( "%06lu %lu | %s (%s) : %s\n", \
+                                osl_getGlobalTimer(), \
+                                osl_getThreadIdentifier( 0 ), \
+                                project,\
+                                author,\
+                                string )
+#define RTL_LOGFILE_TRACE_AUTHOR1( project, author, frmt, arg1 ) \
+             rtl_logfile_trace( "%06lu %lu | %s (%s) : ", \
+                                osl_getGlobalTimer(), \
+                                osl_getThreadIdentifier( 0 ),\
+                                project,\
+                                author );\
+             rtl_logfile_trace( frmt, arg1 ); \
+             rtl_logfile_trace( "\n" )
+
+#define RTL_LOGFILE_TRACE_AUTHOR2( project, author, frmt, arg1 , arg2 ) \
+             rtl_logfile_trace( "%06lu %lu | %s (%s) : ", \
+                                osl_getGlobalTimer(), \
+                                osl_getThreadIdentifier( 0 ),\
+                                project,\
+                                author ); \
+             rtl_logfile_trace( frmt, arg1 , arg2 ); \
+             rtl_logfile_trace( "\n" )
+#define RTL_LOGFILE_TRACE_AUTHOR3( project, author, frmt, arg1 , arg2 , arg3 ) \
+             rtl_logfile_trace( "%06lu %lu | %s (%s) : ", \
+                                osl_getGlobalTimer(), \
+                                osl_getThreadIdentifier( 0 ),\
+                                project,\
+                                author ); \
+             rtl_logfile_trace( frmt, arg1 , arg2 , arg3 ); \
+             rtl_logfile_trace( "\n" )
 #else
 #define RTL_LOGFILE_TRACE( string )  ((void)0)
 #define RTL_LOGFILE_TRACE1( frmt, arg1 ) ((void)0)
 #define RTL_LOGFILE_TRACE2( frmt, arg1 , arg2 ) ((void)0)
 #define RTL_LOGFILE_TRACE3( frmt, arg1 , arg2 , arg3 ) ((void)0)
+
+#define RTL_LOGFILE_TRACE_AUTHOR( project, author, string )  ((void)0)
+#define RTL_LOGFILE_TRACE_AUTHOR1( project, author, frmt, arg1 ) ((void)0)
+#define RTL_LOGFILE_TRACE_AUTHOR2( project, author, frmt, arg1 , arg2 ) ((void)0)
+#define RTL_LOGFILE_TRACE_AUTHOR3( project, author, frmt, arg1 , arg2 , arg3 ) ((void)0)
 #endif // TIMELOG
 #endif
