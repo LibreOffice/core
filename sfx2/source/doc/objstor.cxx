@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:29:31 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,7 +1255,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // it is reasonable in case an open document suddenly became unavailable.
 
                 OUString aOrigName = pMedium ? OUString(pMedium->GetName()) : OUString();
-                if ( aOrigName && aOrigName.compareToAscii( "private:", 8 ) != COMPARE_EQUAL
+                if ( aOrigName.getLength() && aOrigName.compareToAscii( "private:", 8 ) != COMPARE_EQUAL
                       && !::utl::UCBContentHelper::Exists( aOrigName ) )
                 {
                     if ( !IsHandsOff() )
