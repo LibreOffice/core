@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:33:59 $
+ *  last change: $Author: hr $ $Date: 2002-05-28 12:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,7 +1801,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     // Because if a listener disagree with this close() request - we hace time to finish this
     // internal operations too ...
     // Note: container is threadsafe himself.
-    css::lang::EventObject             aSource    (static_cast<::cppu::OWeakObject*>(this));
+    css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
     {
@@ -1828,7 +1828,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
             WriteGuard aWriteLock( m_aLock );
             m_bSelfClose = sal_True;
         }/* SAFE */
-        throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast<::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
     }
 
     // If no load proccesses could be detected ... ask controller for his agreement.
@@ -1841,7 +1841,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     if (bComponentInside)
     {
         if ( ! setComponent(NULL,NULL) )
-            throw css::util::CloseVetoException(DECLARE_ASCII("Controller disagree with that ..."),static_cast<::cppu::OWeakObject*>(this));
+            throw css::util::CloseVetoException(DECLARE_ASCII("Controller disagree with that ..."),static_cast< ::cppu::OWeakObject*>(this));
     }
 
     // If closing is allowed ... inform all istener and dispose this frame!
