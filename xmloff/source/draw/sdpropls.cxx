@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:14 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 11:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "TextWritingMode",                 XML_NAMESPACE_DRAW, XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE, CTF_WRITINGMODE ),
     MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
+    MAP( "FontIndependentLineSpacing",      XML_NAMESPACE_DRAW, XML_FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
 
     // shadow attributes
     MAP( "Shadow",                          XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
