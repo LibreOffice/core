@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 10:38:37 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:47:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,8 @@ LIB3OBJFILES=\
     $(SLO)$/pver.obj		\
     $(SLO)$/urihelper.obj	\
     $(SLO)$/vcldata.obj		\
+        $(SLO)$/embedtransfer.obj    \
+        $(SLO)$/embedhlp.obj    \
     $(SLO)$/transfer.obj	\
     $(SLO)$/transfer2.obj	\
     $(SLO)$/cliplistener.obj \
@@ -138,6 +140,7 @@ LIB3OBJFILES=\
     $(SLO)$/acceleratorexecute.obj
 
 EXCEPTIONSFILES=\
+        $(SLO)$/embedhlp.obj    \
     $(SLO)$/productregistration.obj	\
     $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/strmadpt.obj			\
