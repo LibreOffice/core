@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:12:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     CheckBox CB_CONDITION
     {
@@ -135,6 +136,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Podmíněný styl";
         Text[ hebrew ] = "~Als bedingte Vorlage";
         Text[ hindi ] = "~शर्त के अन्तर्गत शैली";
+        Text[ slovak ] = "~Podmienený štýl";
     };
     FixedText FT_CONTEXT
     {
@@ -168,6 +170,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Kontext";
         Text[ hebrew ] = "~Kontext";
         Text[ hindi ] = "~सन्दर्भ";
+        Text[ slovak ] = "Konte~xt";
     };
     FixedText FT_USED
     {
@@ -201,6 +204,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Použité styly";
         Text[ hebrew ] = "Verwendete Vorlage";
         Text[ hindi ] = "लागू की हुयी शैलियाँ";
+        Text[ slovak ] = "Použité štýly";
     };
     Control TB_CONDCOLLS
     {
@@ -244,6 +248,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Styly odstavce";
         Text[ hebrew ] = "A~bsatzvorlagen";
         Text[ hindi ] = "~परिच्छेद शैलियाँ";
+        Text[ slovak ] = "Štýly ~odstavca";
     };
     ListBox LB_STYLE
     {
@@ -298,6 +303,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Odstranit";
         Text[ hebrew ] = "~Entfernen";
         Text[ hindi ] = "हटा~ओ";
+        Text[ slovak ] = "~Odstrániť";
     };
     PushButton PB_ASSIGN
     {
@@ -332,6 +338,7 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "Použít";
         Text[ hebrew ] = "‮יישום‬";
         Text[ hindi ] = "~लागू करो";
+        Text[ slovak ] = "~Použiť";
     };
     StringArray STR_REGIONS
     {
@@ -1173,6 +1180,37 @@ TabPage TP_CONDCOLL
             < " 9. संख्या स्तर" ; > ;
             < "10. संख्या स्तर" ; > ;
         };
+    ItemList [ slovak ] =
+    {
+         < "Nadpis tabuľky" ; > ;
+        < "Tabuľka" ; > ;
+        < "Rámček" ; > ;
+        < "Sekcia" ; > ;
+        < "Poznámka pod čiarou" ; > ;
+        < "Vysvetlivka" ; > ;
+        < "Záhlavie" ; > ;
+        < "Zápätie" ; > ;
+        < " 1. úroveň osnovy" ; > ;
+        < " 2. úroveň osnovy" ; > ;
+        < " 3. úroveň osnovy" ; > ;
+        < " 4. úroveň osnovy" ; > ;
+        < " 5. úroveň osnovy" ; > ;
+        < " 6. úroveň osnovy" ; > ;
+        < " 7. úroveň osnovy " ; > ;
+        < " 8. úroveň osnovy" ; > ;
+        < " 9. úroveň osnovy" ; > ;
+        < "10. úroveň osnovy" ; > ;
+        < " 1. úroveň číslovania" ; > ;
+        < " 2. úroveň číslovania" ; > ;
+        < " 3. úroveň číslovania" ; > ;
+        < " 4. úroveň číslovania" ; > ;
+        < " 5. úroveň číslovania" ; > ;
+        < " 6. úroveň číslovania" ; > ;
+        < " 7. úroveň číslovania" ; > ;
+        < " 8. úroveň číslovania" ; > ;
+        < " 9. úroveň číslovania" ; > ;
+        < "10. úroveň číslovania" ; > ;
+    };
     };
     String STR_NOTEMPL
     {
@@ -1203,9 +1241,12 @@ TabPage TP_CONDCOLL
         Text[ czech ] = "<nic>";
         Text[ hebrew ] = "<keine>";
         Text[ hindi ] = "<कोई नहीं>";
+        Text[ slovak ] = "<nič>";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
