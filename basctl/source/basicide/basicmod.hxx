@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicmod.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,24 +70,15 @@
 #include <tools/shl.hxx>
 #endif
 
-class BasicIDEModuleDummy : public SfxModule
+class BasicIDEModule : public SfxModule
 {
 public:
-                // SvFactory name convention:
-                // 'p' + SfxObjectShell-subclass + 'Factory'
-    SfxObjectFactory *pBasicDocShellFactory;
-
-    BasicIDEModuleDummy(ResMgr    *pMgr,
-                  BOOL      bDummy,
-                  SfxObjectFactory *pObjFact) :
-       SfxModule(pMgr, bDummy, (SfxObjectFactory*) pObjFact, NULL),
-       pBasicDocShellFactory(pObjFact)
-    {
-    }
-
-    virtual SfxModule *Load ();
+    BasicIDEModule( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
+       SfxModule( pMgr, FALSE, pObjFact, NULL )
+       {}
 };
 
-#define BASIC_MOD() ( *(BasicIDEModuleDummy**) GetAppData(SHL_IDE) )
+
+#define BASIC_MOD() ( *(BasicIDEModule**) GetAppData(SHL_IDE) )
 
 #endif
