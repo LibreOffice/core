@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:54:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,7 @@ void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
     aufgesetzt, um ggf. einen Hilfetext einzublenden.
 */
 {
+    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
     Point aMousePos = rMEvt.GetPosPixel();
     pCurEntry = GetCurEntry();
 
@@ -401,6 +402,7 @@ void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
         Help::ShowBalloon( this, aMousePos, String() );
         aTimer.Stop();
     }
+    */
 }
 
 
@@ -411,11 +413,16 @@ IMPL_LINK( SfxConfigFunctionListBox_Impl, TimerHdl, Timer*, pTimer)
     Helptext des Entries als Balloon-Help eingeblendet.
 */
 {
+    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();
     SvLBoxEntry *pEntry = GetCurEntry();
     if ( pEntry && GetEntry( aMousePos ) == pEntry && pCurEntry == pEntry )
-        Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), GetHelpText( pEntry ) );
+    {
+        String sHelpText = GetHelpText( pEntry );
+        Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), sHelpText );
+    }
+    */
     return 0L;
 }
 
@@ -596,7 +603,9 @@ void SfxConfigFunctionListBox_Impl::FunctionSelected()
     Entry anzeigen soll.
 */
 {
+    /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
     Help::ShowBalloon( this, Point(), String() );
+    */
 }
 
 void SfxConfigFunctionListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
@@ -1011,7 +1020,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             bIsRootNode = TRUE;
                         }
 
-                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             BOOL bDisplay = TRUE;
@@ -1075,7 +1084,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                                         children[n]->getChildNodes();
 
-                                    for ( ULONG m = 0; m < grandchildren.getLength(); m++ )
+                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
@@ -1088,7 +1097,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                         }
                     }
                 }
-                catch (RuntimeException &e) {
+                catch (RuntimeException&) {
                     // do nothing, the entry will not be displayed in the UI
                 }
             }
@@ -1443,7 +1452,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                         Sequence< Reference< browse::XBrowseNode > > children =
                             rootNode->getChildNodes();
 
-                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
                         {
                             if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                             {
@@ -1487,7 +1496,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                         }
                     }
                 }
-                catch (RuntimeException &e) {
+                catch (RuntimeException&) {
                     // do nothing, the entry will not be displayed in the UI
                 }
             }
@@ -1667,7 +1676,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             bIsRootNode = TRUE;
                         }
 
-                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             BOOL bDisplay = TRUE;
@@ -1720,7 +1729,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                                         children[n]->getChildNodes();
 
-                                    for ( ULONG m = 0; m < grandchildren.getLength(); m++ )
+                                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
@@ -1733,7 +1742,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         }
                     }
                 }
-                catch (RuntimeException &e) {
+                catch (RuntimeException&) {
                     // do nothing, the entry will not be displayed in the UI
                 }
             }
