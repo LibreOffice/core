@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2557,6 +2557,16 @@ uno::Reference< uno::XInterface > SdrModel::createUnoModel()
     DBG_ERROR( "SdrModel::createUnoModel() - base implementation should not be called!" );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
     return xInt;
+}
+
+void SdrModel::setLock( BOOL bLock )
+{
+    if( mbModelLocked != bLock )
+    {
+        mbModelLocked = bLock;
+        if( bLock = sal_False )
+            ReformatAllTextObjects();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
