@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-24 13:49:29 $
+ *  last change: $Author: mhu $ $Date: 2001-10-15 06:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 extern oslMutex         g_CurrentDirectoryMutex;
+
+extern void SAL_CALL ___rtl_memory_init (void);
+extern void SAL_CALL ___rtl_memory_fini (void);
 
 //------------------------------------------------------------------------------
 // defines
@@ -189,6 +192,9 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
 
+                /* initialize memory management */
+                ___rtl_memory_init();
+
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
@@ -259,6 +265,8 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
 
             osl_destroyMutex( g_CurrentDirectoryMutex );
 
+            /* finalize memory management */
+            ___rtl_memory_fini();
             break;
 
         case DLL_THREAD_ATTACH:
