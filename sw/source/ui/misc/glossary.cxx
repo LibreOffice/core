@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 08:41:06 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,29 +127,11 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTGROUP_HPP_
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTENTRY_HPP_
-#include <com/sun/star/text/XAutoTextEntry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XAUTOTEXTCONTAINER_HPP_
-#include <com/sun/star/text/XAutoTextContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -226,6 +208,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
@@ -240,6 +225,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::ucb;
 using namespace ::rtl;
+using namespace ::sfx2;
 
 /* -----------------------------08.02.00 10:28--------------------------------
 
@@ -735,17 +721,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         case FN_GL_IMPORT:
         {
             // call the FileOpenDialog do find WinWord - Files with templates
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference < XFilePicker > xFP;
-            if( xMgr.is() )
-            {
-                Sequence <Any> aProps(1);
-                aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-                xFP = Reference< XFilePicker >(
-                        xMgr->createInstanceWithArguments(
-                            C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                        UNO_QUERY );
-            }
+            FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+            Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
             String sWW8( C2S(FILTER_WW8) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:03:01 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,6 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -260,7 +254,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -271,6 +267,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::rtl;
+using namespace ::sfx2;
 
 #define C2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -311,18 +308,8 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
 {
     String sRet;
 
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMgr.is() )
-    {
-        Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= bOpen ?
-            TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_SIMPLE;
-        xFP = Reference< XFilePicker >(
-                xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                UNO_QUERY );
-    }
+    FileDialogHelper aDlgHelper( bOpen ? FILEOPEN_SIMPLE : FILESAVE_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
     String sCurFltr( IDX_FILE_EXTENSION );

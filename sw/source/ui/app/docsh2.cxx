@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-08-09 06:53:28 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,9 +278,6 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
@@ -295,9 +292,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -872,22 +866,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 nRet = pNewFileDlg->Execute();
                 if(RET_TEMPLATE_LOAD == nRet)
                 {
-                    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                    Reference < XFilePicker > xFP;
-                    if( xMgr.is() )
-                    {
-                        Sequence <Any> aProps(1);
-                        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-                        xFP = Reference< XFilePicker >(
-                                xMgr->createInstanceWithArguments(
-                                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                                UNO_QUERY );
-                    }
-                    if(!xFP.is())
-                    {
-                        DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
-                        break;
-                    }
+                    FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+                    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
                     xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                     SfxObjectFactory &rFact = GetFactory();
@@ -1241,22 +1222,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 const SwTxtFmtColl* pSplitColl = 0;
 
-                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                Reference < XFilePicker > xFP;
-                if( xMgr.is() )
-                {
-                    Sequence <Any> aProps(1);
-                    aProps.getArray()[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-                    xFP = Reference< XFilePicker >(
-                            xMgr->createInstanceWithArguments(
-                                C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                            UNO_QUERY );
-                }
-                if(!xFP.is())
-                {
-                    DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
-                    break;
-                }
+                FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
+                Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                 const SfxFilter* pFlt;
                 USHORT nStrId;

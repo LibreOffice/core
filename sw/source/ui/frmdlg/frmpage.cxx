@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 07:35:46 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
@@ -188,9 +185,6 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -198,8 +192,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::sfx2;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 struct FrmMap
 {
@@ -2593,17 +2585,9 @@ SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMgr.is() )
-    {
-        Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        xFP = Reference< XFilePicker >(
-                xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                UNO_QUERY );
-    }
+    FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
     String sTemp(aURLED.GetText());
     if(sTemp.Len())
         xFP->setDisplayDirectory(sTemp);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:59:28 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,24 +143,21 @@
 #ifndef _CHARDLG_HRC
 #include <chardlg.hrc>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::sfx2;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
@@ -433,18 +430,9 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
 
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMgr.is() )
-    {
-        Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        xFP = Reference< XFilePicker >(
-                xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                UNO_QUERY );
-    }
-    DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
+    FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
 //    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
     if( xFP->execute() == RET_OK )
     {

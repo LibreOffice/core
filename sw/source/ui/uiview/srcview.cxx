@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-26 05:53:10 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -245,8 +242,8 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #define SwSrcView
@@ -265,9 +262,9 @@ using namespace com::sun::star::ui::dialogs;
 using namespace com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
+using namespace ::sfx2;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
                       SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
@@ -566,18 +563,10 @@ void SwSrcView::Execute(SfxRequest& rReq)
         {
             SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference < XFilePicker > xFP;
-            if( xMgr.is() )
-            {
-                Sequence <Any> aProps(1);
-                aProps.getArray()[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-                xFP = Reference< XFilePicker >(
-                        xMgr->createInstanceWithArguments(
-                            C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                        UNO_QUERY );
-            }
-            DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
+
+            FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+            Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
         //    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 

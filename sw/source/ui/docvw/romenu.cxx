@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:02:30 $
+ *  last change: $Author: fme $ $Date: 2001-08-09 12:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,25 +173,20 @@
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
+using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
@@ -496,18 +491,10 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
     SwWrtShell &rSh = rView.GetWrtShell();
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference < XFilePicker > xFP;
-    if( xMgr.is() )
-    {
-        Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-        xFP = Reference< XFilePicker >(
-                xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
-                UNO_QUERY );
-    }
-    DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
+
+    FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath);
