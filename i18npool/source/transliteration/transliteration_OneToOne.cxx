@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_OneToOne.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:54:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startP
     const sal_Unicode * src = inStr.getStr() + startPos;
 
     // Allocate nCount length to offset argument.
-    sal_Int32 *p, position;
+    sal_Int32 *p = 0;
+    sal_Int32 position = 0;
     if (useOffset) {
         offset.realloc( nCount );
         p = offset.getArray();
