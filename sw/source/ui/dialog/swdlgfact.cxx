@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:37:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,13 @@
 #include <optload.hxx> //add for SwLoadOptPage
 #include <optpage.hxx> //add for OptPage
 #include <swuiidxmrk.hxx> //add for SwIndexMarkDlg, SwAuthMarkDlg, SwIndexMarkModalDlg, SwAuthMarkModalDlg
+#include <svx/dialogs.hrc>
+#ifndef _MAILMERGEWIZARD_HXX
+#include <mailmergewizard.hxx>
+#endif
+#ifndef _MAILCONFIGPAGE_HXX
+#include <mailconfigpage.hxx>
+#endif
 
 IMPL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);//CHINA001 add for SwInsertAbstractDlg
@@ -177,6 +184,7 @@ IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractMailMergeWizard_Impl);
 
 // AbstractTabDialog_Impl begin
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
@@ -628,6 +636,23 @@ Window* AbstractAuthMarkFloatDlg_Impl::GetWindow()
     return (Window*)pDlg;
 }
 // AbstractAuthMarkFloatDlg_Impl end
+
+void AbstractMailMergeWizard_Impl::SetReloadDocument(const String& rURL)
+{
+    pDlg->SetReloadDocument(rURL);
+}
+const String&       AbstractMailMergeWizard_Impl::GetReloadDocument() const
+{
+    return pDlg->GetReloadDocument();
+}
+BOOL AbstractMailMergeWizard_Impl::ShowPage( USHORT nLevel )
+{
+    return pDlg->skipUntil(nLevel);
+}
+sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
+{
+    return pDlg->GetRestartPage();
+}
 
 //-------------- SwAbstractDialogFactory implementation--------------
 
@@ -1656,6 +1681,11 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateIndexMarkModalDlg( const
     return 0;
 }
 //add for SwIndexMarkModalDlg end
+AbstractMailMergeWizard*    SwAbstractDialogFactory_Impl::CreateMailMergeWizard(
+                                    SwView& rView, SwMailMergeConfigItem& rConfigItem)
+{
+    return new AbstractMailMergeWizard_Impl( new SwMailMergeWizard(rView, rConfigItem));
+}
 
 //add for static func in SwGlossaryDlg
 GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( USHORT nId )
@@ -1686,15 +1716,16 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( USHOR
 //------------------ Factories for TabPages
 CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
 {
+    CreateTabPage pRet = 0;
     switch ( nId )
     {
         case TP_OPTCOMPATIBILITY_PAGE :
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE :
-            return SwCompatibilityOptPage::Create;
+            pRet = SwCompatibilityOptPage::Create;
             break;
         case TP_OPTLOAD_PAGE :
         case RID_SW_TP_OPTLOAD_PAGE :
-            return SwLoadOptPage::Create;
+            pRet = SwLoadOptPage::Create;
             break;
         case TP_OPTCAPTION_PAGE:
         case RID_SW_TP_OPTCAPTION_PAGE:
@@ -1703,47 +1734,48 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
         case TP_CONTENT_OPT :
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
-            return SwContentOptPage::Create;
+            pRet = SwContentOptPage::Create;
             break;
         case TP_OPTSHDWCRSR :
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
-            return SwShdwCrsrOptionsTabPage::Create;
+            pRet = SwShdwCrsrOptionsTabPage::Create;
             break;
         case RID_SW_TP_REDLINE_OPT :
         case TP_REDLINE_OPT :
-            return SwRedlineOptionsTabPage::Create;
+            pRet = SwRedlineOptionsTabPage::Create;
             break;
         case RID_SW_TP_OPTTEST_PAGE :
         case TP_OPTTEST_PAGE :
 #ifndef  PRODUCT
-            return SwTestTabPage::Create;
+            pRet = SwTestTabPage::Create;
 #endif
             break;
         case TP_OPTPRINT_PAGE :
         case RID_SW_TP_HTML_OPTPRINT_PAGE:
         case RID_SW_TP_OPTPRINT_PAGE:
-            return SwAddPrinterTabPage::Create;
+            pRet = SwAddPrinterTabPage::Create;
             break;
         case TP_STD_FONT :
         case RID_SW_TP_STD_FONT:
         case RID_SW_TP_STD_FONT_CJK:
         case RID_SW_TP_STD_FONT_CTL:
-            return SwStdFontTabPage::Create;
+            pRet = SwStdFontTabPage::Create;
             break;
         case TP_OPTTABLE_PAGE :
         case RID_SW_TP_HTML_OPTTABLE_PAGE:
         case RID_SW_TP_OPTTABLE_PAGE:
-            return SwTableOptionsTabPage::Create;
+            pRet = SwTableOptionsTabPage::Create;
             break;
         case TP_DOC_STAT :
-            return SwDocStatPage::Create;
+            pRet = SwDocStatPage::Create;
             break;
-        default:
-            break;
+        case RID_SW_TP_MAILCONFIG:
+            pRet = SwMailConfigPage::Create;
+        break;
     }
 
-    return 0;
+    return pRet;
 }
 
 GetTabPageRanges SwAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
