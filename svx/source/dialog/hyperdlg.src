@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:46:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,7 +1372,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ dutch ] = "Doel in document";
         Text[ french ] = "Cible à l'intérieur du document";
         Text[ spanish ] = "Destino en el documento";
-        Text[ italian ] = "Destinazione all'interno del documento";
+        Text[ italian ] = "Destinazione nel documento";
         Text[ danish ] = "Mål i dokumentet";
         Text[ swedish ] = "Mål i dokumentet";
         Text[ polish ] = "Cel w dokumencie";
@@ -1500,7 +1500,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Cel w dokumencie!";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "ÄÞ·­ÒÝÄ‚É‚ ‚éÀ°¹Þ¯Ä!";
-        QuickHelpText[ korean ] = " ¹®¼­³» ´ë»ó!";
+        QuickHelpText[ korean ] = "¹®¼­³» ´ë»ó!";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµÄÚµÄÄ¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤§¤ºªº¥Ø¼Ð";
         QuickHelpText[ arabic ] = "ÇáåÏÝ Ýí ÇáãÓÊäÏ";
@@ -2762,5 +2762,6 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
