@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:42:06 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 11:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     aReturn.bEnabled = m_bRelationsPossible;
     switch (_nId)
     {
-        case ID_REALTION_ADD_RELATION:
+        case ID_RELATION_ADD_RELATION:
             aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && m_bEditable;
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
@@ -321,7 +321,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
                 }
             }
             break;
-        case ID_REALTION_ADD_RELATION:
+        case ID_RELATION_ADD_RELATION:
             static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>(m_pView)->getTableView())->AddNewRelation();
             break;
         default:
@@ -446,7 +446,7 @@ short ORelationController::saveModified()
 void ORelationController::AddSupportedFeatures()
 {
     OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]  = ID_REALTION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]  = ID_RELATION_ADD_RELATION;
 }
 // -----------------------------------------------------------------------------
 ToolBox* ORelationController::CreateToolBox(Window* _pParent)
