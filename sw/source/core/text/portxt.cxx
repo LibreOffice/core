@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,8 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
             SetLen( nLen );
         }
     }
-    else if (  rGuess.CutPos() == rInf.GetLineStart() )
+    // special case: first character does not fit to line
+    else if ( rGuess.CutPos() == rInf.GetLineStart() )
     {
         SetLen( 1 );
         Width( nLineWidth );
@@ -277,7 +278,10 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
                  aGuess.BreakPos() > rInf.GetIdx() ||
-                    rInf.GetFly() ||
+                 // this is weird: during formatting the follow of a field
+                 // the values rInf.GetIdx and rInf.GetLineStart are replaced
+                 // IsFakeLineStart indicates GetIdx > GetLineStart
+                 rInf.IsFakeLineStart() || rInf.GetFly() ||
                  rInf.GetLast()->IsFlyPortion() || rInf.IsFirstMulti() ||
                   (rInf.GetLast()->InFldGrp() && !rInf.GetLast()->InNumberGrp()
                       && lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,26 +216,29 @@ class SwFldSlot
     xub_StrLen nIdx;
     xub_StrLen nLen;
     sal_Bool bOn;
-    SwTxtSizeInfo *pInf;
+    SwTxtFormatInfo *pInf;
 public:
-    SwFldSlot( const SwTxtSizeInfo *pNew, const SwFldPortion *pPor );
+    SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor );
     ~SwFldSlot();
 };
 
-SwFldSlot::SwFldSlot( const SwTxtSizeInfo *pNew, const SwFldPortion *pPor )
+SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
 {
     bOn = pPor->GetExpTxt( *pNew, aTxt );
 
     // Der Text wird ausgetauscht...
     if( bOn )
     {
-        pInf = (SwTxtSizeInfo*)pNew;
+        pInf = (SwTxtFormatInfo*)pNew;
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());
         pInf->SetLen( aTxt.Len() );
         if( pPor->IsFollow() )
+        {
+            pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
             pInf->SetIdx( 0 );
+        }
         else
         {
             XubString aTmp( aTxt );
@@ -254,6 +257,7 @@ SwFldSlot::~SwFldSlot()
         pInf->SetTxt( *pOldTxt );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
+        pInf->SetFakeLineStart( sal_False );
     }
 }
 
@@ -431,6 +435,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             if( IsFollow() )
                 rInf.SetLineStart( 0 );
             rInf.SetNotEOL( nFullLen == nOldFullLen && nTxtRest > nFollow );
+
+            // the height depending on the fields font is set,
+            // this is required for SwTxtGuess::Guess
+            Height( rInf.GetTxtHeight() );
             bFull = SwTxtPortion::Format( rInf );
             rInf.SetNotEOL( sal_False );
             rInf.SetLineStart( nOldLineStart );
