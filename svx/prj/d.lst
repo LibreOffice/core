@@ -55,6 +55,7 @@ mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
 ..\res\cjkintro.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\intro.bmp
 ..\res\ofaabout.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\about.bmp
 ..\res\soffice.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\intro.bmp
+..\res\ooointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice\intro.bmp
 
 mkdir: %_DEST%\inc%_EXT%\svx
 hedabu: ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
