@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmptyContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 16:00:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class ScXMLImport;
 class ScXMLEmptyContext : public SvXMLImportContext
 {
     rtl::OUString   sPrintRanges;
-    sal_Bool        bStartFormPage : 1;
+    sal_Bool        bStartFormPage;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
