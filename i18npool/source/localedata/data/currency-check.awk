@@ -74,7 +74,7 @@ file != FILENAME {
                 bFormatAuto = 0
         }
     }
-    else if ( $0 ~ /^<FormatCode>.*\[\$.*-[0-9a-fA-F]+\]/ ||
+    else if ( $0 ~ /^[[:blank:]]*<FormatCode>.*\[\$.*-[0-9a-fA-F]+\]/ ||
             (sMatchReplace && $0 ~ sMatchReplace ) )
     {
         if ( sReplaceFrom )
@@ -147,7 +147,7 @@ function getCurrencyParams() {
         else
             bSymbolCompati = 0
     }
-    else if ( $0 ~ /^<CurrencySymbol>/ )
+    else if ( $0 ~ /^[[:blank:]]*<CurrencySymbol>/ )
     {
         split( $0, arr, /<|>/ )
         if ( sRefCurrencyFromLocale )
