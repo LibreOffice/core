@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 20:43:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 20:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,7 @@ hidspecial HID_CLB_LINGU_MODULES                { HelpID =  HID_CLB_LINGU_MODULE
 hidspecial HID_CLB_LINGU_OPTIONS                { HelpID =  HID_CLB_LINGU_OPTIONS           ;};
 
 
+hidspecial SID_DSBROWSER_EXPLORER               { HelpID =  SID_DSBROWSER_EXPLORER          ;};
 
 //HID_AUTOCORR_HELP_END
 
