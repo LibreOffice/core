@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-31 07:22:01 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 09:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ namespace connectivity
 
             sal_Int32       m_nAnonABCount;
             rtl::OUString   m_sMozillaURI;
+            sal_Bool        m_UsesFactory ;
+            sal_Bool        m_IsLDAP ;
 
         public:
             OMozabConnection(OMozabDriver* _pDriver);
@@ -106,6 +108,9 @@ namespace connectivity
             // no interface methods
             rtl::OUString getMozURI() const
                 { return m_sMozillaURI; }
+
+            sal_Bool usesFactory(void) const { return m_UsesFactory ; }
+            sal_Bool isLDAP(void) const { return m_IsLDAP ; }
 
             sal_Int32 getNextAnonymousAB()
                 { return (++m_nAnonABCount); }
