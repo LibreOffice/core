@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">Option Explicit
 
 &apos;  *****  BASIC  *****
 &apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden koennen.
@@ -188,12 +188,12 @@ Dim i as Integer
 	If Instr(1,ModuleName,&quot;/&quot;) &lt;&gt; 0 Then
 		NameList() = ArrayoutOfString(ModuleName,&quot;/&quot;, MaxIndex)
 		For i = 0 To MaxIndex
-			If oFactoriesAccess.HasByName(NameList(i)) Then
-				CheckInstalledModule() = True
+			If Not oFactoriesAccess.HasByName(NameList(i)) Then
+				CheckInstalledModule() = False
 				Exit Function
 			End If
 		Next i
-		CheckInstalledModule() = False
+		CheckInstalledModule() = True
 	Else
 		CheckInstalledModule() = oFactoriesAccess.HasByName(ModuleName)
 	End If
