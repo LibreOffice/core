@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jp $ $Date: 2001-10-18 12:14:21 $
+#   last change: $Author: kz $ $Date: 2001-10-22 09:21:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,13 +138,16 @@ EXCEPTIONSFILES=	\
     $(SLO)$/unoobj2.obj\
     $(SLO)$/unoparagraph.obj\
     $(SLO)$/unoport.obj\
-    $(SLO)$/unoportenum.obj\
     $(SLO)$/unoredline.obj\
     $(SLO)$/unoredlines.obj\
     $(SLO)$/unosrch.obj\
     $(SLO)$/unostyle.obj\
     $(SLO)$/unotbl.obj \
     $(SLO)$/unotext.obj
+
+EXCEPTIONSNOOPTFILES = \
+    $(SLO)$/unoportenum.obj
+
 
 # --- Targets -------------------------------------------------------
 
