@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-23 21:19:01 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,10 +313,10 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ English ] = "Http Pro~xy" ;
         Text [ english_us ] = "HT~TP proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
-        Text [ spanish ] = "~Proxy Http" ;
+        Text [ spanish ] = "Proxy Http" ;
         Text [ french ] = "~Proxy Http" ;
         Text [ dutch ] = "Http Pro~xy" ;
-        Text [ swedish ] = "~Http-proxy" ;
+        Text [ swedish ] = "Http-prox~y" ;
         Text [ danish ] = "Http proxy" ;
         Text [ portuguese_brazilian ] = "Http Pro~xy" ;
         Text [ portuguese ] = "Pro~xy Http" ;
@@ -381,7 +381,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ English ] = "~Ftp Proxy" ;
         Text [ english_us ] = "~FTP proxy" ;
         Text [ italian ] = "Proxy ~Ftp" ;
-        Text [ spanish ] = "~Proxy Ftp" ;
+        Text [ spanish ] = "Proxy Ftp" ;
         Text [ french ] = "Proxy ~Ftp" ;
         Text [ dutch ] = "~Ftp Proxy" ;
         Text [ swedish ] = "~Ftp-proxy" ;
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ swedish ] = "P~ort" ;
         Text [ danish ] = "Port" ;
         Text [ italian ] = "P~orta" ;
-        Text [ spanish ] = "P~uerto" ;
+        Text [ spanish ] = "Puerto" ;
         Text [ french ] = "P~ort" ;
         Text [ dutch ] = "P~oort" ;
         Text [ portuguese ] = "P~ort" ;
@@ -606,7 +606,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = "~Automatisch" ;
         Text [ English ] = "~Auto" ;
         Text [ english_us ] = "~Automatic" ;
-        Text [ italian ] = "~Automatico" ;
+        Text [ italian ] = "Automatico" ;
         Text [ spanish ] = "~Automático" ;
         Text [ french ] = "~Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
@@ -981,7 +981,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ swedish ] = "Su~ffix" ;
         Text [ danish ] = "Suffiks" ;
         Text [ italian ] = "Su~ffisso" ;
-        Text [ spanish ] = "S~ufijo" ;
+        Text [ spanish ] = "Sufijo" ;
         Text [ french ] = "Su~ffixe" ;
         Text [ dutch ] = "Su~ffix" ;
         Text [ portuguese ] = "Su~fixo" ;
@@ -1015,7 +1015,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ italian ] = "Separatore" ;
         Text [ spanish ] = "~Separador" ;
         Text [ french ] = "S~éparateur" ;
-        Text [ swedish ] = "Skilje~tecken" ;
+        Text [ swedish ] = "S~kiljetecken" ;
         Text [ danish ] = "Separator" ;
         Text [ portuguese_brazilian ] = "~Trenner" ;
         Text [ portuguese ] = "~Separador" ;
@@ -1249,7 +1249,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ english_us ] = "~Add" ;
         Text [ italian ] = "Aggiungi" ;
         Text [ spanish ] = "~Añadir" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ danish ] = "Tilføj" ;
         Text [ portuguese_brazilian ] = "H~inzuf?en" ;
@@ -1436,7 +1436,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "~Run macro";
         Text[ dutch ] = "~Run macro";
         Text[ french ] = "Exécuter la macro";
-        Text[ spanish ] = "~Ejecutar macro";
+        Text[ spanish ] = "Ejecutar macro";
         Text[ finnish ] = "~Run macro";
         Text[ italian ] = "~Esegui macro";
         Text[ danish ] = "~Run macro";
@@ -1635,7 +1635,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "Show ~warning before running macro";
         Text[ dutch ] = "Show ~warning before running macro";
         Text[ french ] = "Avertissement systématique avant exécution";
-        Text[ spanish ] = "~Advertir siempre antes de la ejecución";
+        Text[ spanish ] = "Advertir siempre antes de la ejecución";
         Text[ finnish ] = "Show ~warning before running macro";
         Text[ italian ] = "~Avvisa sempre prima dell'esecuzione";
         Text[ danish ] = "Show ~warning before running macro";
@@ -1723,8 +1723,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par ~défaut" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ french ] = "Par défaut" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "æ ‡å‡†(~E)";
@@ -1785,7 +1785,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ danish ] = "Tilføj" ;
         Text [ italian ] = "~Aggiungi" ;
         Text [ spanish ] = "~Añadir" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ dutch ] = "Toe~voegen" ;
         Text [ portuguese ] = "A~dicionar" ;
         Text[ chinese_simplified ] = "æ–°å¢ž(~A)";
@@ -1870,7 +1870,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ french ] = "Contrôles de sécurité";
         Text[ swedish ] = "S~äkerhetskontroller";
         Text[ dutch ] = "V~eiligheidscontroles";
-        Text[ spanish ] = "Co~ntroles de seguridad";
+        Text[ spanish ] = "Controles de seguridad";
         Text[ chinese_simplified ] = "å®‰å…¨æ£€æŸ¥(~S)";
         Text[ russian ] = "Ïðîâåðêà áåçîïàñíîñòè";
         Text[ polish ] = "Kontrola zabezpieczeñ";
@@ -2142,7 +2142,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
         Text [ italian ] = "~Plug in" ;
-        Text [ spanish ] = "~Plug-ins" ;
+        Text [ spanish ] = "Plug-ins" ;
         Text [ french ] = "Plug-ins" ;
         Text [ dutch ] = "~PlugIns" ;
         Text [ portuguese ] = "~Plug-ins" ;
@@ -2171,7 +2171,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "ÌéêñïåöáñìïãÝò";
         Text[ dutch ] = "~Applets";
         Text[ french ] = "Applets";
-        Text[ spanish ] = "~Applets";
+        Text[ spanish ] = "Applets";
         Text[ finnish ] = "Sovelmat";
         Text[ italian ] = "~Applet";
         Text[ danish ] = "Applets";
