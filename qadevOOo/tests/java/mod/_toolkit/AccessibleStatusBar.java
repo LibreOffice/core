@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBar.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:59:30 $
+ *  last change:$Date: 2003-09-08 13:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,7 @@
 package mod._toolkit;
 
 import java.io.PrintWriter;
-import com.sun.star.lang.XMultiServiceFactory;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.PosSize;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -84,6 +70,19 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object that implements the following interfaces :
@@ -186,8 +185,6 @@ public class AccessibleStatusBar extends TestCase {
 
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xTextDoc);
-
-        XController xController = aModel.getCurrentController();
 
         XInterface oObj = null;
 
