@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:11:47 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,55 +71,16 @@ ModalDialog RID_SVXDLG_POSTIT
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 198 , 134 ) ;
-    Text = "Notiz" ;
-    Text [ ENGLISH ] = "Note" ;
-    Text [ norwegian ] = "Merknad" ;
-    Text [ italian ] = "Nota" ;
-    Text [ portuguese_brazilian ] = "Anotação" ;
-    Text [ portuguese ] = "Observação" ;
-    Text [ finnish ] = "Huomautus" ;
-    Text [ danish ] = "Note" ;
-    Text [ french ] = "Note" ;
-    Text [ swedish ] = "Anteckning" ;
-    Text [ dutch ] = "Aantekening" ;
-    Text [ spanish ] = "Nota" ;
-    Text [ english_us ] = "Note" ;
+    Text [ de ] = "Notiz" ;
+    Text [ en-US ] = "Note" ;
     Moveable = TRUE ;
     FixedText FT_LASTEDITLABEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text = "Autor" ;
-        Text [ ENGLISH ] = "Author" ;
-        Text [ norwegian ] = "Forfatter" ;
-        Text [ italian ] = "Autore" ;
-        Text [ portuguese_brazilian ] = "Autor" ;
-        Text [ portuguese ] = "Autor" ;
-        Text [ finnish ] = "Tekijä" ;
-        Text [ danish ] = "Forfatter" ;
-        Text [ french ] = "Auteur" ;
-        Text [ swedish ] = "Författare" ;
-        Text [ dutch ] = "Auteur" ;
-        Text [ spanish ] = "Autor" ;
-        Text [ english_us ] = "Author" ;
+        Text [ de ] = "Autor" ;
+        Text [ en-US ] = "Author" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ä½œè€…";
-        Text[ russian ] = "Àâòîğ";
-        Text[ polish ] = "Autor";
-        Text[ japanese ] = "ä½œæˆè€…";
-        Text[ chinese_traditional ] = "ä½œè€…";
-        Text[ arabic ] = "ÇáãÄáİ";
-        Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ì‘ì„±ì";
-        Text[ turkish ] = "Yazan";
-        Text[ catalan ] = "Autor";
-        Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
-        Text[ czech ] = "Autor";
-        Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤•";
-        Text[ slovak ] = "Autor";
-        Text[ hungarian ] = "SzerzÅ‘";
-        Text[ slovenian ] = "Avtor";
     };
     FixedText FT_LASTEDIT
     {
@@ -131,37 +92,9 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "~Text" ;
-        Text [ English ] = "~Text" ;
-        Text [ norwegian ] = "~Text" ;
-        Text [ italian ] = "~Testo" ;
-        Text [ portuguese_brazilian ] = "~Texto" ;
-        Text [ portuguese ] = "~Texto" ;
-        Text [ finnish ] = "~Teksti" ;
-        Text [ danish ] = "~Tekst" ;
-        Text [ french ] = "Texte" ;
-        Text [ swedish ] = "~Text" ;
-        Text [ dutch ] = "~Tekst" ;
-        Text [ spanish ] = "Te~xto" ;
-        Text [ english_us ] = "~Text" ;
+        Text [ de ] = "~Text" ;
+        Text [ en-US ] = "~Text" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "~Tekst";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
-        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
-        Text[ turkish ] = "Metin";
-        Text[ catalan ] = "~Text";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "Text";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "~Text";
-        Text[ hungarian ] = "S~zÃ¶veg";
-        Text[ slovenian ] = "~Besedilo";
     };
     MultiLineEdit ED_EDIT
     {
@@ -177,36 +110,8 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text = "Inhalt" ;
-        Text [ ENGLISH ] = "Contents" ;
-        Text [ norwegian ] = "Innhold  " ;
-        Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Índice" ;
-        Text [ portuguese ] = "Conteúdo" ;
-        Text [ finnish ] = "Sisältö" ;
-        Text [ danish ] = "Indhold" ;
-        Text [ french ] = "Contenu" ;
-        Text [ swedish ] = "Innehåll" ;
-        Text [ dutch ] = "Inhoud" ;
-        Text [ spanish ] = "Contenido" ;
-        Text [ english_us ] = "Contents" ;
-        Text[ chinese_simplified ] = "å†…å®¹";
-        Text[ russian ] = "Ñîäåğæàíèå";
-        Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "å†…å®¹";
-        Text[ chinese_traditional ] = "å…§å®¹";
-        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
-        Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "ë‚´ìš©";
-        Text[ turkish ] = "İçerikler";
-        Text[ catalan ] = "Contingut";
-        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
-        Text[ czech ] = "Obsah";
-        Text[ hebrew ] = "â€®×ª×•×›×Ÿ ×¢×™× ×™×™× ×™×â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¤¸à¥‚à¤šà¥€";
-        Text[ slovak ] = "Obsah";
-        Text[ hungarian ] = "Tartalom";
-        Text[ slovenian ] = "Vsebina";
+        Text [ de ] = "Inhalt" ;
+        Text [ en-US ] = "Contents" ;
     };
     OKButton BTN_POST_OK
     {
@@ -240,157 +145,29 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "E~infügen" ;
-        Text [ English ] = "~Insert" ;
-        Text[ english_us ] = "~Insert";
-        Text[ portuguese ] = "Co~lar";
-        Text[ russian ] = "Âñòàâèòü";
-        Text[ greek ] = "Åğ~éêüëëçóç";
-        Text[ dutch ] = "I~nvoegen";
-        Text[ french ] = "Insérer";
-        Text[ spanish ] = "In~sertar";
-        Text[ finnish ] = "L~iitä";
-        Text[ italian ] = "~Inserisci";
-        Text[ danish ] = "~Indsæt";
-        Text[ swedish ] = "~Infoga";
-        Text[ polish ] = "Wklej";
-        Text[ japanese ] = "æŒ¿å…¥(~I)";
-        Text[ korean ] = "ì‚½ì…(~I)";
-        Text[ chinese_simplified ] = "æ’å…¥(~I)";
-        Text[ chinese_traditional ] = "æ’å…¥(~I)";
-        Text[ turkish ] = "~Ekle";
-        Text[ arabic ] = "áÕŞ";
-        Text[ catalan ] = "~Enganxa";
-        Text[ thai ] = "~à¸§à¸²à¸‡";
-        Text[ portuguese_brazilian ] = "Co~lar";
-        Text[ czech ] = "VloÅ¾it";
-        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-        Text[ hindi ] = "~Insert";
-        Text[ slovak ] = "VloÅ¾~iÅ¥";
-        Text[ hungarian ] = "~BeszÃºrÃ¡s";
-        Text[ slovenian ] = "~Vstavi";
+        Text [ de ] = "E~infügen" ;
+        Text [ en-US ] = "~Insert";
     };
     PushButton BTN_AUTHOR
     {
         Pos = MAP_APPFONT ( 75 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Autor" ;
-        Text [ ENGLISH ] = "Author" ;
-        Text [ norwegian ] = "Forfatter" ;
-        Text [ italian ] = "Mittente" ;
-        Text [ portuguese_brazilian ] = "~Autor" ;
-        Text [ portuguese ] = "~Autor" ;
-        Text [ finnish ] = "Tekijä" ;
-        Text [ danish ] = "Forfatter" ;
-        Text [ french ] = "Auteur" ;
-        Text [ swedish ] = "Skapad av" ;
-        Text [ dutch ] = "~Auteur" ;
-        Text [ spanish ] = "Autor" ;
-        Text [ english_us ] = "Author" ;
-        Text[ chinese_simplified ] = "ä½œè€…";
-        Text[ russian ] = "Àâòîğ";
-        Text[ polish ] = "~Autor";
-        Text[ japanese ] = "ä½œæˆè€…";
-        Text[ chinese_traditional ] = "ä½œè€…";
-        Text[ arabic ] = "ÇáãÄáİ";
-        Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ì‘ì„±ì(~A)";
-        Text[ turkish ] = "Yazar";
-        Text[ catalan ] = "~Autor";
-        Text[ thai ] = "~à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
-        Text[ czech ] = "Autor";
-        Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-        Text[ hindi ] = "~à¤²à¥‡à¤–à¤•";
-        Text[ slovak ] = "~Autor";
-        Text[ hungarian ] = "SzerzÅ‘";
-        Text[ slovenian ] = "Avtor";
+        Text [ de ] = "Autor" ;
+        Text [ en-US ] = "Author" ;
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
     {
-        Text = "Notiz bearbeiten" ;
-        Text [ English ] = "Edit Note" ;
-        Text [ norwegian ] = "Rediger Merknad" ;
-        Text [ italian ] = "Modifica nota" ;
-        Text [ portuguese_brazilian ] = "Editar Anotação" ;
-        Text [ portuguese ] = "Editar anotação" ;
-        Text [ finnish ] = "Muokkaa huomautusta" ;
-        Text [ danish ] = "Rediger note" ;
-        Text [ french ] = "Éditer la note" ;
-        Text [ swedish ] = "Redigera anteckning" ;
-        Text [ dutch ] = "Aantekening bewerken" ;
-        Text [ spanish ] = "Editar nota" ;
-        Text [ english_us ] = "Edit Note" ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘å¤‡æ³¨";
-        Text[ russian ] = "Ïğàâêà ïğèìå÷àíèÿ";
-        Text[ polish ] = "Edytuj notatkê";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®ç·¨é›†";
-        Text[ chinese_traditional ] = "ç·¨è¼¯å‚™è¨»";
-        Text[ arabic ] = "ÊÍÑíÑ ãáÇÍÙÉ";
-        Text[ greek ] = "Åğåîåñãáóßá óçìåßùóçò";
-        Text[ korean ] = "ë©”ëª¨ í¸ì§‘";
-        Text[ turkish ] = "Notu düzenle";
-        Text[ catalan ] = "Edita la nota";
-        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
-        Text[ czech ] = "Upravit poznÃ¡mku";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×ª ×”×¢×¨×”â€¬";
-        Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ slovak ] = "UpraviÅ¥ poznÃ¡mku";
-        Text[ hungarian ] = "Jegyzet szerkesztÃ©se";
-        Text[ slovenian ] = "Uredi opombo";
+        Text [ de ] = "Notiz bearbeiten" ;
+        Text [ en-US ] = "Edit Note" ;
     };
     String STR_NOTIZ_INSERT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Notiz einfügen : Notiz einf³gen */
         /* ### ACHTUNG: Neuer Text in Resource? Notiz einfügen : Notiz einf³gen */
-        Text = "Notiz einfügen" ;
-        Text [ English ] = "Insert Note" ;
-        Text [ norwegian ] = "Sett inn Merknad" ;
-        Text [ italian ] = "Inserisci nota" ;
-        Text [ portuguese_brazilian ] = "Inserir anotação" ;
-        Text [ portuguese ] = "Inserir anotação" ;
-        Text [ finnish ] = "Lisää huomautus" ;
-        Text [ danish ] = "Indsæt note" ;
-        Text [ french ] = "Insérer une note" ;
-        Text [ swedish ] = "Infoga anteckning" ;
-        Text [ dutch ] = "Aantekening invoegen" ;
-        Text [ spanish ] = "Insertar nota" ;
-        Text [ english_us ] = "Insert note" ;
-        Text[ chinese_simplified ] = "æ’å…¥å¤‡æ³¨";
-        Text[ russian ] = "Âñòàâèòü ïğèìå÷àíèå";
-        Text[ polish ] = "Wstaw notatkê";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®æŒ¿å…¥";
-        Text[ chinese_traditional ] = "æ’å…¥å‚™è¨»";
-        Text[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
-        Text[ greek ] = "ÅéóáãùãŞ óçìåßùóçò";
-        Text[ korean ] = "ë©”ëª¨ ì‚½ì…";
-        Text[ turkish ] = "Not ekle";
-        Text[ catalan ] = "Insereix una nota";
-        Text[ thai ] = "à¹à¸—à¸£à¸à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
-        Text[ czech ] = "VloÅ¾it poznÃ¡mku";
-        Text[ hebrew ] = "â€®×”×›× ×¡×ª ×”×¢×¨×”â€¬";
-        Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€ à¤œà¥‹à¤¡à¤¼à¥‹";
-        Text[ slovak ] = "VloÅ¾iÅ¥ poznÃ¡mku";
-        Text[ hungarian ] = "Jegyzet beszÃºrÃ¡sa";
-        Text[ slovenian ] = "Vstavi opombo";
+        Text [ de ] = "Notiz einfügen" ;
+        Text [ en-US ] = "Insert note" ;
     };
-    Text[ chinese_simplified ] = "å¤‡æ³¨";
-    Text[ russian ] = "Ïğèìå÷àíèå";
-    Text[ polish ] = "Notatka";
-    Text[ japanese ] = "ãƒ¡ãƒ¢";
-    Text[ chinese_traditional ] = "å‚™è¨»";
-    Text[ arabic ] = "ãáÇÍÙÉ";
-    Text[ greek ] = "Óçìåßùóç";
-    Text[ korean ] = "ë©”ëª¨";
-    Text[ turkish ] = "Not";
-    Text[ catalan ] = "Nota";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
-    Text[ czech ] = "PoznÃ¡mka";
-    Text[ hebrew ] = "â€®×”×¢×¨×”â€¬";
-    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
-    Text[ slovak ] = "PoznÃ¡mka";
-    Text[ hungarian ] = "MegjegyzÃ©s";
-    Text[ slovenian ] = "Opomba";
 };
  // ********************************************************************** EOF
 
