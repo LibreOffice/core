@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:10:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
 }}}}
@@ -181,7 +185,7 @@ inline void WrongList::InsertWrong( const WrongRange& rWrong, USHORT nPos )
 
 
 
-class EdtAutoCorrDoc : public SvxAutoCorrDoc
+class SVX_DLLPUBLIC EdtAutoCorrDoc : public SvxAutoCorrDoc
 {
     ImpEditEngine*  pImpEE;
     ContentNode*    pCurNode;
