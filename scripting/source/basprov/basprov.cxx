@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:07:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,15 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 #ifndef _SBXCLASS_HXX
 #include <svtools/sbx.hxx>
 #endif
@@ -185,6 +194,92 @@ namespace basprov
 
     BasicProviderImpl::~BasicProviderImpl()
     {
+    }
+
+    // -----------------------------------------------------------------------------
+
+    bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const ::rtl::OUString& rLibName )
+    {
+        bool bIsShared = false;
+
+        Reference< script::XLibraryContainer2 > xLibContainer( rxLibContainer, UNO_QUERY );
+        if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) && xLibContainer->isLibraryLink( rLibName ) )
+        {
+            ::rtl::OUString aFileURL;
+            if ( m_xContext.is() )
+            {
+                Reference< uri::XUriReferenceFactory > xUriFac;
+                Reference< lang::XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+                if ( xSMgr.is() )
+                {
+                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString::createFromAscii(
+                        "com.sun.star.uri.UriReferenceFactory" ), m_xContext ), UNO_QUERY );
+                }
+
+                if ( xUriFac.is() )
+                {
+                    ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
+                    Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
+
+                    if ( xUriRef.is() )
+                    {
+                        ::rtl::OUString aScheme = xUriRef->getScheme();
+                        if ( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+                        {
+                            aFileURL = aLinkURL;
+                        }
+                        else if ( aScheme.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.pkg" ) )
+                        {
+                            ::rtl::OUString aAuthority = xUriRef->getAuthority();
+                            if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
+                            {
+                                ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
+                                aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                                Reference<util::XMacroExpander> xMacroExpander(
+                                    m_xContext->getValueByName(
+                                    ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+                                    UNO_QUERY );
+                                if ( xMacroExpander.is() )
+                                    aFileURL = xMacroExpander->expandMacros( aDecodedURL );
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( aFileURL.getLength() )
+            {
+                osl::DirectoryItem aFileItem;
+                osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                OSL_VERIFY( osl::DirectoryItem::get( aFileURL, aFileItem ) == osl::FileBase::E_None );
+                OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
+                ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
+
+                ::rtl::OUString aShareURL;
+                OSL_VERIFY( osl_getExecutableFile( &aShareURL.pData ) == osl_Process_E_None );
+                sal_Int32 nIndex = aShareURL.lastIndexOf( '/' );
+                if ( nIndex >= 0 )
+                {
+                    nIndex = aShareURL.lastIndexOf( '/', nIndex );
+                    if ( nIndex >= 0 )
+                    {
+                        aShareURL = aShareURL.copy( 0, nIndex + 1 );
+                        aShareURL += ::rtl::OUString::createFromAscii( "share" );
+                    }
+                }
+
+                osl::DirectoryItem aShareItem;
+                osl::FileStatus aShareStatus( FileStatusMask_FileURL );
+                OSL_VERIFY( osl::DirectoryItem::get( aShareURL, aShareItem ) == osl::FileBase::E_None );
+                OSL_VERIFY( aShareItem.getFileStatus( aShareStatus ) == osl::FileBase::E_None );
+                ::rtl::OUString aCanonicalShareURL( aShareStatus.getFileURL() );
+
+                if ( aCanonicalFileURL.match( aCanonicalShareURL ) )
+                    bIsShared = true;
+            }
+        }
+
+        return bIsShared;
     }
 
     // -----------------------------------------------------------------------------
@@ -416,25 +511,23 @@ namespace basprov
     {
         ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
 
-         Reference< script::XLibraryContainer > xLibContainer;
-         Reference< script::XLibraryContainer2 > xLibContainer2;
-         BasicManager* pBasicManager = NULL;
+        Reference< script::XLibraryContainer > xLibContainer;
+        BasicManager* pBasicManager = NULL;
 
-         if ( m_bIsAppScriptCtx )
-         {
-             xLibContainer = m_xLibContainerApp;
-             pBasicManager = m_pAppBasicManager;
-         }
-         else
-         {
-             xLibContainer = m_xLibContainerDoc;
-             pBasicManager = m_pDocBasicManager;
-         }
-         xLibContainer2 = Reference< script::XLibraryContainer2 >( xLibContainer, UNO_QUERY );
+        if ( m_bIsAppScriptCtx )
+        {
+            xLibContainer = m_xLibContainerApp;
+            pBasicManager = m_pAppBasicManager;
+        }
+        else
+        {
+            xLibContainer = m_xLibContainerDoc;
+            pBasicManager = m_pDocBasicManager;
+        }
 
         Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
-        if ( pBasicManager && xLibContainer.is() && xLibContainer2.is() )
+        if ( pBasicManager && xLibContainer.is() )
         {
             Sequence< ::rtl::OUString > aLibNames = xLibContainer->getElementNames();
             sal_Int32 nLibCount = aLibNames.getLength();
@@ -442,57 +535,31 @@ namespace basprov
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
             sal_Int32 childsFound = 0;
-            sal_Int32 i;
 
-            for ( i = 0 ; i < nLibCount ; ++i )
+            for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
             {
-                if ( m_bIsAppScriptCtx  )
+                bool bCreate = false;
+                if ( m_bIsAppScriptCtx )
                 {
-                    sal_Bool isLibLink = false;
-                    try
-                    {
-                        isLibLink = xLibContainer2->isLibraryLink( pLibNames[i] );
-
-                    }
-                    catch( container::NoSuchElementException e )
-                    {
-                        // TO DO can we do anything here???
-                        continue;
-                    }
-                    // TO DO need to look at this
-                    // np - if this Provider has been created with an application
-                    // context then we need to display scripts for the user or
-                    // share area ( this depends on the directory the Provider was
-                    // initialised with ). In basic however it seems that scripts in
-                    // the user area means more or less that the libraries that
-                    // contain the scripts are not links. The share area is
-                    // nothing more than an arbitrary directory contains libraries
-                    // and is referenced by a link. So effectively there is no
-                    // concept of a "share" directory with basic. For this reason
-                    // the script framework will represent any script not in
-                    // user area under the share node ( needs revisiting )
-
-                    if ( m_bIsUserCtx && ( isLibLink == sal_False ) )
-                    {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
-                        continue;
-                    }
-                    if ( !m_bIsUserCtx && ( isLibLink == sal_True ) )
-                    {
-                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
-                        continue;
-                    }
+                    bool bShared = isLibraryShared( xLibContainer, pLibNames[i] );
+                    if ( ( m_bIsUserCtx && !bShared ) || ( !m_bIsUserCtx && bShared ) )
+                        bCreate = true;
                 }
                 else
                 {
-                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                    bCreate = true;
+                }
+                if ( bCreate )
+                {
+                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl(
+                        m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i], m_bIsAppScriptCtx ) );
                 }
             }
-            if ( i != childsFound )
-            {
+
+            if ( childsFound != nLibCount )
                 aChildNodes.realloc( childsFound );
-            }
         }
+
         return aChildNodes;
     }
 
