@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:19 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 08:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,13 +503,15 @@ class SmSymDefineDialog : public ModalDialog
     const SmSym        *pOrigSymbol;
 
     FontList           *pFontList;
+    const SubsetMap    *pSubsetMap;
 
     DECL_LINK(OldSymbolChangeHdl, ComboBox *);
     DECL_LINK(OldSymbolSetChangeHdl, ComboBox *);
     DECL_LINK(ModifyHdl, ComboBox *);
     DECL_LINK(FontChangeHdl, ListBox *);
+    DECL_LINK(SubsetChangeHdl, ListBox*);
     DECL_LINK(StyleChangeHdl, ComboBox *);
-    DECL_LINK( CharHighlightHdl, Control* pControl );
+    DECL_LINK(CharHighlightHdl, Control* pControl);
     DECL_LINK(AddClickHdl, Button *);
     DECL_LINK(ChangeClickHdl, Button *);
     DECL_LINK(DeleteClickHdl, Button *);
