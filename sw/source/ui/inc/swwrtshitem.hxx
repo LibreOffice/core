@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swwrtshitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:08:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,18 @@
 #ifndef _SW_WRTSHELLITEM_HXX
 #define _SW_WRTSHELLITEM_HXX
 
-
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
 #endif
 
-#include "wrtsh.hxx"
-#include <svtools/svstdarr.hxx>
-class SwWrtShellItem: public SfxPoolItem
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+class SwWrtShell;
+class SvStringsDtor;
+
+class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
 {
     SwWrtShell*         pWrtSh;
 
