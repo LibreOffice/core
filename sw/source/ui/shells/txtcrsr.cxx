@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-09 12:44:39 $
+ *  last change: $Author: os $ $Date: 2002-06-26 11:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,9 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 rSh.GotoFtnTxt();
             bSetRetVal = FALSE;
             break;
+        case FN_TO_FOOTNOTE_AREA :
+            DBG_ERROR("not implemented")
+        break;
         case FN_PREV_TABLE:
             bRet = rSh.MoveTable( fnTablePrev, fnTableStart);
             break;
