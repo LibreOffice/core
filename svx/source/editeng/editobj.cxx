@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #include <editeng.hxx>
 #include <fontitem.hxx>
 #include <cscoitem.hxx>
-#include <vcl/system.hxx>
 #include <flditem.hxx>
 #include <lrspitem.hxx>
 #include <tstpitem.hxx>
