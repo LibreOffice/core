@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-08-13 10:54:27 $
+ *  last change: $Author: th $ $Date: 2001-08-13 11:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,10 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const
     aSize.Height() += TAB_TABOFFSET_Y*2;
     if ( mbExtraSpace )
         aSize.Width() += TAB_EXTRASPACE_X;
+    // For languages with short names (e.g. Chinese), because the space is
+    // normally only one pixel per char
+    else if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
+        aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.Len();
 
     // Evt. den Text kuerzen
     if ( aSize.Width()+4 >= nMaxWidth )
