@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: od $ $Date: 2002-08-30 12:05:51 $
+ *  last change: $Author: fme $ $Date: 2002-09-20 08:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
     if( !pCol )
         pCol = &aGlobalRetoucheColor;
 
-    return DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue();
+    return pCol->IsDark();
 }
 
 /*************************************************************************

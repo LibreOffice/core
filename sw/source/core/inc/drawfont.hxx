@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-12 08:34:16 $
+ *  last change: $Author: fme $ $Date: 2002-09-20 08:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,6 @@ class ViewShell;
 class SwTxtNode;
 class SwAttrHandler;
 class SwTxtFrm;
-
-#define DARK_COLOR 154
 
 /*************************************************************************
  *                class SwScanner

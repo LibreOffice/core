@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-18 11:34:14 $
+ *  last change: $Author: fme $ $Date: 2002-09-20 08:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2230,7 +2230,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 {
     const Font& rFnt = pFnt ? *pFnt : GetOut().GetFont();
     sal_Bool bPrt = OUTDEV_PRINTER == GetOut().GetOutDevType();
-    ColorData nNewColor;
+    ColorData nNewColor = COL_BLACK;
     sal_Bool bChgFntColor = sal_False;
     sal_Bool bChgUnderColor = sal_False;
 
@@ -2241,8 +2241,6 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 
         if ( COL_BLACK != GetOut().GetTextLineColor().GetColor() )
             bChgUnderColor = sal_True;
-
-        nNewColor = COL_BLACK;
     }
     else
     {
@@ -2287,28 +2285,22 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
                     pCol = NULL;
             }
 
+            // no user defined color at paragraph or font background
             if ( ! pCol )
-            {
-                // no user defined color at paragraph or font background
-                if( GetShell() && GetShell()->GetWin() )
-                {
-                    // we take the window text color for painting
-                    nNewColor = GetShell()->GetWin()->GetSettings().
-                                GetStyleSettings().GetWindowTextColor().
-                                GetColor();
-                }
-                else
-                    pCol = &aGlobalRetoucheColor;
-            }
+                pCol = &aGlobalRetoucheColor;
 
-            if ( pCol )
-            {
-                // we invert the color set at the background
-                nNewColor = ( DARK_COLOR > pCol->GetRed() +
-                                           pCol->GetGreen() +
-                                           pCol->GetBlue() ) ?
-                                           COL_WHITE : COL_BLACK;
-            }
+            // we take the window text color for painting
+            if( GetShell() && GetShell()->GetWin() )
+                nNewColor = GetShell()->GetWin()->GetSettings().
+                            GetStyleSettings().GetWindowTextColor().
+                            GetColor();
+
+            // change painting color depending of dark/bright background
+            Color aTmpColor( nNewColor );
+            if ( pCol->IsDark() && aTmpColor.IsDark() )
+                nNewColor = COL_WHITE;
+            else if ( pCol->IsBright() && aTmpColor.IsBright() )
+                nNewColor = COL_BLACK;
         }
     }
 
