@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.TypeDetection" oor:name="Types">
+    <node oor:name="Types">
+            <node oor:name="devguide_FlatXMLType_Cpp_calc" oor:op="replace">
+                <prop oor:name="UIOrder"><value>0</value></prop>
+                <prop oor:name="DetectService"><value>devguide.officedev.samples.filter.FlatXmlDetect</value></prop>
+                <prop oor:name="URLPattern"/>
+                <prop oor:name="Extensions"><value>fods</value></prop>
+                <prop oor:name="MediaType"/>
+                <prop oor:name="Preferred"><value>false</value></prop>
+                <prop oor:name="PreferredFilter"><value>devguide_FlatXMLFilter_Cpp_calc</value></prop>
+                <prop oor:name="UIName">
+                    <value xml:lang="en-US">DevGuide FlatXML Calc</value>
+                </prop>
+                <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLType_Cpp_draw" oor:op="replace">
+                <prop oor:name="UIOrder"><value>0</value></prop>
+                <prop oor:name="DetectService"><value>devguide.officedev.samples.filter.FlatXmlDetect</value></prop>
+                <prop oor:name="URLPattern"/>
+                <prop oor:name="Extensions"><value>fodg</value></prop>
+                <prop oor:name="MediaType"/>
+                <prop oor:name="Preferred"><value>false</value></prop>
+                <prop oor:name="PreferredFilter"><value>devguide_FlatXMLFilter_Cpp_draw</value></prop>
+                <prop oor:name="UIName">
+                    <value xml:lang="en-US">DevGuide FlatXML Draw</value>
+                </prop>
+                <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLType_Cpp_impress" oor:op="replace">
+                <prop oor:name="UIOrder"><value>0</value></prop>
+                <prop oor:name="DetectService"><value>devguide.officedev.samples.filter.FlatXmlDetect</value></prop>
+                <prop oor:name="URLPattern"/>
+                <prop oor:name="Extensions"><value>fodp</value></prop>
+                <prop oor:name="MediaType"/>
+                <prop oor:name="Preferred"><value>false</value></prop>
+                <prop oor:name="PreferredFilter"><value>devguide_FlatXMLFilter_Cpp_impress</value></prop>
+                <prop oor:name="UIName">
+                    <value xml:lang="en-US">DevGuide FlatXML Impress</value>
+                </prop>
+                <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
+            </node>
+            <node oor:name="devguide_FlatXMLType_Cpp_writer" oor:op="replace">
+                <prop oor:name="UIOrder"><value>0</value></prop>
+                <prop oor:name="DetectService"><value>devguide.officedev.samples.filter.FlatXmlDetect</value></prop>
+                <prop oor:name="URLPattern"/>
+                <prop oor:name="Extensions"><value>fodt</value></prop>
+                <prop oor:name="MediaType"/>
+                <prop oor:name="Preferred"><value>false</value></prop>
+                <prop oor:name="PreferredFilter"><value>devguide_FlatXMLFilter_Cpp_writer</value></prop>
+                <prop oor:name="UIName">
+                    <value xml:lang="en-US">DevGuide FlatXML Writer</value>
+                </prop>
+                <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
+            </node>
+    </node>
+</oor:component-data>
