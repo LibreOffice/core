@@ -13,7 +13,7 @@ EXTRA_MOZ_TARGET+= $(foreach,i,$(XPIDLXPT) $(MISC)$/$i)
 EXTRA_MOZ_TARGET+= $(XPIDL_TYPELIB_MODULE)
 .ENDIF
 
-ALLMOZ:=$(EXTRA_MOZ_TARGET) $(DO_XPIDL) $(PRCPUCFG) $(EXPORT_HEADER)
+ALLMOZ:=$(EXTRA_MOZ_TARGET) $(DO_XPIDL) $(GEN_PRCPUCFG) $(EXPORT_HEADER)
 
 $(INCCOM)$/%.h : %.idl
     +$(COPY) $< $(INCCOM)
@@ -37,7 +37,7 @@ CPUCFG=_linux.cfg
 .ENDIF
 
 .IF "$(GEN_PRCPUCFG)"!=""
-$(PRCPUCFG): $(PRJ)$/pr$/include$/md$/$(CPUCFG) 
+$(GEN_PRCPUCFG): $(PRJ)$/pr$/include$/md$/$(CPUCFG) 
     @+$(COPY) $(PRJ)$/pr$/include$/md$/$(CPUCFG) $@
 .ENDIF
 
