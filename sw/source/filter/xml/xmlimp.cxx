@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:13 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,27 +1023,31 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
  "PrintPaperFromSetup" ,
  "PrintTables" ,
  "PrintSingleJobs",
- "UpdateFromTemplate",
- "PrinterIndependentLayout"
+ "UpdateFromTemplate"
   };
 #define TBL_MAX 100
-int aArr[ TBL_MAX ];
-int nPrime, nSub;
 
-unsigned long calc_hash( const char* p )
+typedef unsigned long ULONG;
+
+ULONG aArr[ TBL_MAX ];
+ULONG nPrime, nSub;
+
+
+ULONG lcl_hash( const char* p, ULONG nPrime, ULONG nSub )
 {
-    unsigned long ii = 0;
+    ULONG n = 0;
     while( *p )
-        ii = (ii * nPrime) ^ ( *p++ - nSub );
-    return ii;
+        n = (n * nPrime) ^ ( *p++ - nSub );
+    return n;
 }
+
 int Chk_Unique_hashValue( unsigned short nTblSize )
 {
     memset( aArr, 0, sizeof( aArr ) );
-    unsigned long ii;
+    ULONG ii;
     for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
     {
-        ii = calc_hash( aNmArr[ n ] ) % nTblSize;
+        ii = lcl_hash( aNmArr[ n ], nPrime, nSub ) % nTblSize;
         if( aArr[ ii ] )
             break;
         aArr[ ii ] = 1;
@@ -1051,14 +1055,33 @@ int Chk_Unique_hashValue( unsigned short nTblSize )
     return n == ( sizeof( aNmArr ) / sizeof( aNmArr[0] ) );
 }
 
-void Show_Result( unsigned short nTblSize )
+void Show_Result( unsigned short nTblSize, int nPrime, int nSub )
 {
-    printf( "\nTblSz = %d\n", nTblSize );
-    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+    printf( "\tstatic const struct\n"
+            "\t{\n"
+            "\t\tconst sal_Char* pName;\n"
+            "\t\tsal_uInt16 nLen;\n"
+            "\t} aNotSetArr[%d] =\n"
+            "\t{\n",
+            nTblSize );
+
+    for( unsigned long ii = 0; ii < nTblSize; ++ii )
     {
-        unsigned long ii = calc_hash( aNmArr[ n ] ) % nTblSize;
-        printf( "%-30s -> %3d\n", aNmArr[ n ], ii );
+        int found = -1;
+        for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
+        {
+            if( ii == ( lcl_hash( aNmArr[ n ], nPrime, nSub ) % nTblSize ) )
+                found = n;
+        }
+        printf( "\t\t/" "*%2d*" "/ {", ii );
+        printf( ( found == -1 ) ? "0,0" : "RTL_CONSTASCII_STRINGPARAM(\"%s\")", aNmArr[found] );
+        printf( "}%s\n", (ii==nTblSize-1) ? "" : "," );
     }
+
+    printf( "\t};\n"
+            "\tconst ULONG nPrime = %d;\n"
+            "\tconst ULONG nSub = %d;\n",
+            nPrime, nSub );
 }
 
 void main()
@@ -1085,59 +1108,54 @@ void main()
     nSub = nSb;
     nTblSize = nLTbl;
 
-    Show_Result( nTblSize );
-    printf( "\nPrime: %d, nSub: %d, TblSz = %d - %d", nPrime, nSub,
-            sizeof( aNmArr ) / sizeof( aNmArr[0] ), nTblSize );
+    Show_Result( nTblSize, nPrime, nSub );
 }
 -----------------------------------------------------------------
     */
-        static const struct {
-                const sal_Char* pName;
-                sal_uInt16 nLen;
-    }  aNotSetArr[40] = {
-/* 0*/      {0,0},
-/* 1*/      {RTL_CONSTASCII_STRINGPARAM( "PrintTables" )},
-/* 2*/      {RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" )},
-/* 3*/      {0,0},
-/* 4*/      {0,0},
-/* 5*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacingAtStart" )},
-/* 6*/      {0,0},
-/* 7*/      {RTL_CONSTASCII_STRINGPARAM( "CharacterCompressionType" )},
-/* 8*/      {0,0},
-/* 9*/      {RTL_CONSTASCII_STRINGPARAM( "PrintDrawings" )},
-/*10*/      {RTL_CONSTASCII_STRINGPARAM( "PrintRightPages" )},
-/*11*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPageBackground" )},
-/*12*/      {RTL_CONSTASCII_STRINGPARAM( "LinkUpdateMode" )},
-/*13*/      {RTL_CONSTASCII_STRINGPARAM( "UpdateFromTemplate" )},
-/*14*/      {0,0},
-/*15*/      {RTL_CONSTASCII_STRINGPARAM( "PrintBlackFonts" )},
-/*16*/      {RTL_CONSTASCII_STRINGPARAM( "PrintSingleJobs" )},
-/*17*/      {RTL_CONSTASCII_STRINGPARAM( "ChartAutoUpdate" )},
-/*18*/      {RTL_CONSTASCII_STRINGPARAM( "IsKernAsianPunctuation" )},
-/*19*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacing" )},
-/*20*/      {0,0},
-/*21*/      {0,0},
-/*22*/      {0,0},
-/*23*/      {0,0},
-/*24*/      {RTL_CONSTASCII_STRINGPARAM( "PrintReversed" )},
-/*25*/      {RTL_CONSTASCII_STRINGPARAM( "FieldAutoUpdate" )},
-/*26*/      {RTL_CONSTASCII_STRINGPARAM( "PrintProspect" )},
-/*27*/      {0,0},
-/*28*/      {RTL_CONSTASCII_STRINGPARAM( "PrintControls" )},
-/*29*/      {0,0},
-/*30*/      {RTL_CONSTASCII_STRINGPARAM( "PrintAnnotationMode" )},
-/*31*/      {RTL_CONSTASCII_STRINGPARAM( "PrintGraphics" )},
-/*32*/      {RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" )},
-/*33*/      {0,0},
-/*34*/      {0,0},
-/*35*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPaperFromSetup" )},
-/*36*/      {RTL_CONSTASCII_STRINGPARAM( "PrintLeftPages" )},
-/*37*/      {RTL_CONSTASCII_STRINGPARAM( "PrintFaxName" )},
-/*38*/      {0,0},
-/*39*/      {0,0},
+    static const struct
+    {
+        const sal_Char* pName;
+        sal_uInt16 nLen;
+    } aNotSetArr[35] =
+    {
+        /* 0*/ {RTL_CONSTASCII_STRINGPARAM("PrintPageBackground")},
+        /* 1*/ {RTL_CONSTASCII_STRINGPARAM("PrintControls")},
+        /* 2*/ {0,0},
+        /* 3*/ {0,0},
+        /* 4*/ {RTL_CONSTASCII_STRINGPARAM("PrintReversed")},
+        /* 5*/ {RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters")},
+        /* 6*/ {RTL_CONSTASCII_STRINGPARAM("PrintAnnotationMode")},
+        /* 7*/ {RTL_CONSTASCII_STRINGPARAM("PrintFaxName")},
+        /* 8*/ {0,0},
+        /* 9*/ {0,0},
+        /*10*/ {RTL_CONSTASCII_STRINGPARAM("PrintProspect")},
+        /*11*/ {0,0},
+        /*12*/ {RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart")},
+        /*13*/ {RTL_CONSTASCII_STRINGPARAM("PrintPaperFromSetup")},
+        /*14*/ {RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing")},
+        /*15*/ {RTL_CONSTASCII_STRINGPARAM("PrintDrawings")},
+        /*16*/ {RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate")},
+        /*17*/ {0,0},
+        /*18*/ {RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode")},
+        /*19*/ {RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate")},
+        /*20*/ {RTL_CONSTASCII_STRINGPARAM("PrintTables")},
+        /*21*/ {RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation")},
+        /*22*/ {RTL_CONSTASCII_STRINGPARAM("PrintLeftPages")},
+        /*23*/ {RTL_CONSTASCII_STRINGPARAM("PrintSingleJobs")},
+        /*24*/ {RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType")},
+        /*25*/ {0,0},
+        /*26*/ {RTL_CONSTASCII_STRINGPARAM("PrintGraphics")},
+        /*27*/ {0,0},
+        /*28*/ {0,0},
+        /*29*/ {0,0},
+        /*30*/ {RTL_CONSTASCII_STRINGPARAM("PrintBlackFonts")},
+        /*31*/ {RTL_CONSTASCII_STRINGPARAM("PrintRightPages")},
+        /*32*/ {RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate")},
+        /*33*/ {0,0},
+        /*34*/ {0,0}
     };
-    const ULONG nPrime = 51;
-    const ULONG nSub = 51;
+    const ULONG nPrime = 43;
+    const ULONG nSub = 116;
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1150,6 +1168,7 @@ void main()
     // default if they're missing. So we watch for them in the loop
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
+    bool bAddExternalLeading = false;
 
     while( nCount-- )
     {
@@ -1179,7 +1198,8 @@ void main()
                 // did we find any of the non-default cases?
                 if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout")) )
                     bPrinterIndependentLayout = true;
-
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddExternalLeading")) )
+                    bAddExternalLeading = true;
             }
             catch( Exception& )
             {
@@ -1198,6 +1218,15 @@ void main()
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("PrinterIndependentLayout") ),
             aAny );
+    }
+
+    if( ! bAddExternalLeading )
+    {
+        Any aAny;
+        sal_Bool bTmp = sal_False;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")), aAny);
     }
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
