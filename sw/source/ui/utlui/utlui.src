@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-12 07:36:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese ] = "Reconhecer URL" ;
         Text[ chinese_simplified ] = "Ê¶±ğ URL";
         Text[ russian ] = "Ğàñïîçíàâàòü URL";
-        Text[ polish ] = "Rozpoznanie adresu URL";
+        Text[ polish ] = "Rozpoznawanie adresów URL";
         Text[ japanese ] = "URL ”F¯";
         Text[ chinese_traditional ] = "ÃÑ§O URL";
         Text[ arabic ] = "ÇáÊÚÑİ Úáì URL";
@@ -540,7 +540,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ portuguese ] = "Aplicar estilo \"Marcas\" ou \"Numeração\"";
         Text[ danish ] = "Anvend typografi \"Punktopstilling\" eller \"Nummerering\"";
         Text[ french ] = "Appliquer le style \"Puces\" ou \"Numérotation\"";
-        Text[ swedish ] = "Använd formatmallen \"Uppräkning\" eller \"Numrering\"";
+        Text[ swedish ] = "Använd formatmallen \"Punktuppställning\" eller \"Numrering\"";
         Text[ dutch ] = "Sjabloon \"Opsomming\" of \"Nummering\" toepassen";
         Text[ spanish ] = "Aplicar estilo \"Viñetas\" o \"Numeración\"";
         Text[ english_us ] = "Set \"Bullet\" or \"Numbering\" Style";
@@ -872,7 +872,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ chinese_simplified ] = "¸ü¸Ä¿òµÄ´óĞ¡";
     Text[ russian ] = "Èçìåíèòü ğàçìåğ ğàìêè";
     Text[ polish ] = "Zmieñ rozmiar ramki";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì»²½Ş•ÏX";
+    Text[ japanese ] = "˜g‚Ì»²½Ş•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§ó®Ø¤j¤p";
     Text[ arabic ] = "ÊÚÏíá ÍÌã ÇáßÇÏÑ";
     Text[ greek ] = "ÁëëáãŞ ìåãİèïõò ğëáéóßïõ";
@@ -896,7 +896,7 @@ String STR_EVENT_FRM_MOVE
     Text[ chinese_simplified ] = "ÒÆ¶¯¿ò";
     Text[ russian ] = "Ïåğåìåñòèòü ğàìêó";
     Text[ polish ] = "Przenieœ ramkê";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚ÌˆÚ“®";
+    Text[ japanese ] = "˜g‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Ê®Ø";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáßÇÏÑ";
     Text[ greek ] = "Ìåôáêßíçóç ğëáéóßïõ";
@@ -969,7 +969,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+    Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßæÇÏÑ äÕ";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
@@ -1258,7 +1258,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
     Text[ polish ] = "Ramka tekstu";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+    Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ äÕ";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
@@ -1344,7 +1344,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     TEXT [ English ] = "Region" ;
     Text [ english_us ] = "Section" ;
     Text [ italian ] = "Area" ;
-    Text [ spanish ] = "Area" ;
+    Text [ spanish ] = "Área" ;
     Text [ french ] = "Section" ;
     Text [ dutch ] = "Bereik" ;
     Text [ swedish ] = "Kategori" ;
