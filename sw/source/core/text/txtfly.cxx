@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 15:54:06 $
+ *  last change: $Author: ama $ $Date: 2001-12-13 16:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,7 +1381,7 @@ SwFlyList *SwTxtFly::InitFlyList()
         if( nMinBottom )
         {
 #ifdef VERTICAL_LAYOUT
-            SwTwips nMax = (pCurrFrm->GetUpper()->*fnRect->fnGetLimit)();
+            SwTwips nMax = (pCurrFrm->GetUpper()->*fnRect->fnGetPrtBottom)();
             if( (*fnRect->fnYDiff)( nMinBottom, nMax ) > 0 )
                 nMinBottom = nMax;
 #else
