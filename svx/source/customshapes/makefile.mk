@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 16:25:37 $
+#   last change: $Author: kz $ $Date: 2005-01-21 16:46:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Types -------------------------------------
 
-# Disable optimization for SunCC (funny loops
+# Disable optimization for SunCC SPARC (funny loops
 # when parsing e.g. "x+width/2")
-.IF "$(OS)"=="SOLARISS" && "$(COM)"!="GCC"
+.IF "$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC"
 NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
 .ENDIF
 # same issue for MACOSX
