@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
 
             nCnt += nEnd - nPos;
 
-            if ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() )
+            if ( !pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() ||
+                  pPor->IsBreakPortion() )
                 --nCnt;
 
             return nCnt;
