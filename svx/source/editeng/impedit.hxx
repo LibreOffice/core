@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-22 18:16:33 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,7 +883,7 @@ public:
     const XubString&    GetAutoCompleteText() const { return aAutoCompleteText; }
     void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
 
-    void                TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
     void                SetAsianCompressionMode( USHORT n );
     USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }
