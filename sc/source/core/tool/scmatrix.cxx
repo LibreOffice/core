@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:59:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
-
 #include <tools/debug.hxx>
 #include <math.h>
 
@@ -75,6 +67,10 @@
 #include "address.hxx"
 #include "errorcodes.hxx"
 #include "interpre.hxx"
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -399,12 +395,61 @@ const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
         if ( IsString( nIndex ) )
             return GetString( nIndex );
         else
+        {
+            SetErrorAtInterpreter( GetError( nIndex));
             DBG_ERRORFILE("ScMatrix::GetString: access error, no string");
+        }
     }
     else
         DBG_ERRORFILE("ScMatrix::GetString: dimension error");
     return ScGlobal::GetEmptyString();
 }
+
+
+String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
+{
+    if (IsString( nIndex))
+    {
+        if (IsEmptyPath( nIndex))
+        {   // result of empty FALSE jump path
+            ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
+                    ScGlobal::eLnge);
+            String aStr;
+            Color* pColor = NULL;
+            rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
+            return aStr;
+        }
+        return GetString( nIndex );
+    }
+
+    USHORT nError = GetError( nIndex);
+    if (nError)
+    {
+        SetErrorAtInterpreter( nError);
+        return ScGlobal::GetErrorString( nError);
+    }
+
+    double fVal= GetDouble( nIndex);
+    ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
+            ScGlobal::eLnge);
+    String aStr;
+    rFormatter.GetInputLineString( fVal, nKey, aStr);
+    return aStr;
+}
+
+
+String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+{
+    if (ValidColRow( nC, nR))
+    {
+        SCSIZE nIndex = CalcOffset( nC, nR);
+        return GetString( rFormatter, nIndex);
+    }
+    else
+        DBG_ERRORFILE("ScMatrix::GetString: dimension error");
+    return String();
+}
+
 
 const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) const
 {
