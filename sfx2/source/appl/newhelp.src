@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:22:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,7 +983,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ greek ] = "No themes found.";
     MESSAGE[ dutch ] = "No themes found.";
     MESSAGE[ french ] = "Aucun r�sultat de recherche.";
-    MESSAGE[ spanish ] = "No themes found.";
+    MESSAGE[ spanish ] = "No se han encontrado temas";
     MESSAGE[ finnish ] = "No themes found.";
     MESSAGE[ italian ] = "No themes found.";
     MESSAGE[ danish ] = "No themes found.";
@@ -993,10 +993,11 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ japanese ] = "ﾃｰﾏは見つかりません。";
     MESSAGE[ korean ] = "No themes found.";
     MESSAGE[ chinese_simplified ] = "No themes found.";
-    MESSAGE[ chinese_traditional ] = "No themes found.";
+    MESSAGE[ chinese_traditional ] = "沒有找到主題。";
     MESSAGE[ turkish ] = "No themes found.";
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
 
