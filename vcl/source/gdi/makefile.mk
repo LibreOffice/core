@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 13:47:03 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:48:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,6 +135,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/pdfwriter_impl.obj	\
             $(SLO)$/sallayout.obj		\
             $(SLO)$/salgdilayout.obj	\
+            $(SLO)$/salnativewidgets-none.obj	\
             $(SLO)$/bmpconv.obj
 
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
