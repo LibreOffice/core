@@ -1,8 +1,9 @@
-mkdir: %_DEST%\idl%_EXT%\draft
-mkdir: %_DEST%\idl%_EXT%\draft\com
-mkdir: %_DEST%\idl%_EXT%\draft\com\sun
-mkdir: %_DEST%\idl%_EXT%\draft\com\sun\star
-mkdir: %_DEST%\idl%_EXT%\draft\com\sun\star\sync
+mkdir: %_DEST%\idl%_EXT%\drafts
+mkdir: %_DEST%\idl%_EXT%\drafts\com
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\sync
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %_DEST%\idl%_EXT%\com
 mkdir: %_DEST%\idl%_EXT%\com\sun
 mkdir: %_DEST%\idl%_EXT%\com\sun\star
@@ -105,6 +106,8 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\com\sun\star\xml\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\*.idl
 ..\com\sun\star\xml\sax\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\sax\*.idl
 ..\com\sun\star\ui\dialogs\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs\*.idl
+
+..\drafts\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\frame\*.idl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
