@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:30:56 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,6 +517,10 @@ sal_Int32 ReadThroughComponent(
     catch ( packages::WrongPasswordException& )
     {
         return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch( packages::zip::ZipIOException& )
+    {
+        return ERRCODE_IO_BROKENPACKAGE;
     }
     catch ( uno::Exception& )
     {}
