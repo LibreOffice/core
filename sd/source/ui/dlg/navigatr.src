@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,12 @@ Window FLT_NAVIGATOR
                 Text [ french ] = "Mode Live" ;
                 Text [ dutch ] = "Livemodus" ;
                 Text [ danish ] = "Livemodus" ;
-                Text [ portuguese_brazilian ] = "Livemodus" ;
+                Text [ portuguese_brazilian ] = "Modo Ao Vivo" ;
                 Text [ portuguese ] = "Ao vivo" ;
                 Text [ swedish ] = "Livel‰ge" ;
                 Text[ chinese_simplified ] = "ÂÆûÂÜµÊ®°Âºè";
                 Text[ russian ] = "–ÂÊËÏ ËÌÚÂ‡ÍÚË‚ÌÓ„Ó Â‰‡ÍÚËÓ‚‡ÌËˇ";
-                Text[ polish ] = "Tryb Live";
+                Text[ polish ] = "Tryb na øywo";
                 Text[ japanese ] = "„É©„Ç§„Éñ„É¢„Éº„Éâ";
                 Text[ chinese_traditional ] = "ÂØ¶Ê≥ÅÊ®°Âºè";
                 Text[ arabic ] = "«·Ê÷⁄ «·„»«‘—";
@@ -118,6 +118,9 @@ Window FLT_NAVIGATOR
                 Text[ catalan ] = "Mode en viu";
                 Text[ finnish ] = "Muokkaa esitett‰ess‰";
                 Text[ thai ] = "‡πÇ‡∏´‡∏°‡∏î‡∏ñ‡πà‡∏≤‡∏¢‡∏ó‡∏≠‡∏î‡∏™‡∏î";
+                Text[ czech ] = "≈Ωiv√° prezentace";
+                Text[ hebrew ] = "Livemodus";
+                Text[ hindi ] = "‡§™‡•ç‡§∞‡§§‡•ç‡§Ø‡§ï‡•ç‡§∑ ‡§™‡•ç‡§∞‡§ï‡§æ‡§∞";
             };
             ToolBoxItem
             {
@@ -132,12 +135,12 @@ Window FLT_NAVIGATOR
                 Text [ spanish ] = "Pluma" ;
                 Text [ french ] = "Crayon" ;
                 Text [ danish ] = "Pen" ;
-                Text [ portuguese_brazilian ] = "Stift" ;
+                Text [ portuguese_brazilian ] = "Ponteiro" ;
                 Text [ portuguese ] = "Ponteiro" ;
                 Text [ swedish ] = "Penna" ;
                 Text[ chinese_simplified ] = "Á¨î";
                 Text[ russian ] = " ‡‡Ì‰‡¯";
-                Text[ polish ] = "Kredka";
+                Text[ polish ] = "Wskaünik";
                 Text[ japanese ] = "„Éö„É≥";
                 Text[ chinese_traditional ] = "Áï´Á≠Ü";
                 Text[ arabic ] = "ﬁ·„";
@@ -148,6 +151,9 @@ Window FLT_NAVIGATOR
                 Text[ catalan ] = "Punter";
                 Text[ finnish ] = "Osoitin";
                 Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏ä‡∏µ‡πâ";
+                Text[ czech ] = "Ukazov√°tko";
+                Text[ hebrew ] = "Stift";
+                Text[ hindi ] = "‡§∏‡•Ç‡§ö‡§ï ‡§°‡§®‡•ç‡§°‡§æ";
             };
             ToolBoxItem
             {
@@ -162,11 +168,11 @@ Window FLT_NAVIGATOR
                 Text [ ENGLISH ] = "First page" ;
                 Text [ english_us ] = "First Slide" ;
                 Text [ italian ] = "Prima pagina" ;
-                Text [ spanish ] = "Primera p·gina" ;
+                Text [ spanish ] = "Primera diapositiva" ;
                 Text [ french ] = "PremiËre page" ;
                 Text [ dutch ] = "Eerste pagina" ;
                 Text [ danish ] = "F¯rste side" ;
-                Text [ portuguese_brazilian ] = "Erste Seite" ;
+                Text [ portuguese_brazilian ] = "Primeiro Slide" ;
                 Text [ portuguese ] = "Primeira p·gina" ;
                 Text [ swedish ] = "Fˆrsta sidan" ;
                 Text[ chinese_simplified ] = "È¶ñÈ°µ";
@@ -177,11 +183,14 @@ Window FLT_NAVIGATOR
                 Text[ arabic ] = "«·’›Õ… «·√Ê·Ï";
                 Text[ greek ] = "–Ò˛ÙÁ ÛÂÎﬂ‰·";
                 Text[ korean ] = "Ï≤´Î≤àÏß∏ Ïä¨ÎùºÏù¥Îìú";
-                Text[ turkish ] = "›lk sayfa";
+                Text[ turkish ] = "›lk slayt";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Primera diapositiva";
                 Text[ finnish ] = "Ensimm‰inen dia";
                 Text[ thai ] = "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á‡∏≠‡∏±‡∏ô‡πÅ‡∏£‡∏Å";
+                Text[ czech ] = "Prvn√≠ sn√≠mek";
+                Text[ hebrew ] = "Erste Seite";
+                Text[ hindi ] = "‡§™‡§π‡§ø‡§≤‡§æ ‡§∏‡•ç‡§≤‡§á‡§°";
             };
             ToolBoxItem
             {
@@ -193,10 +202,10 @@ Window FLT_NAVIGATOR
                 Text [ dutch ] = "Vorige pagina" ;
                 Text [ english_us ] = "Previous Slide" ;
                 Text [ italian ] = "pagina precedente" ;
-                Text [ spanish ] = "P·gina anterior" ;
+                Text [ spanish ] = "Diapositiva anterior" ;
                 Text [ french ] = "Page prÈcÈdente" ;
                 Text [ danish ] = "forrige side" ;
-                Text [ portuguese_brazilian ] = "vorherige Seite" ;
+                Text [ portuguese_brazilian ] = "Slide Anterior" ;
                 Text [ portuguese ] = "P·gina anterior" ;
                 Text [ swedish ] = "FˆregÂende sida" ;
                 Text[ chinese_simplified ] = "‰∏ä‰∏ÄÈ°µ";
@@ -207,11 +216,14 @@ Window FLT_NAVIGATOR
                 Text[ arabic ] = "«·’›Õ… «·”«»ﬁ…";
                 Text[ greek ] = "–ÒÔÁ„Ô˝ÏÂÌÁ ÛÂÎﬂ‰·";
                 Text[ korean ] = "Ïù¥Ï†Ñ Ïä¨ÎùºÏù¥Îìú";
-                Text[ turkish ] = "÷nceki sayfa";
+                Text[ turkish ] = "÷nceki slayt";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Diapositiva anterior";
                 Text[ finnish ] = "Edellinen dia";
                 Text[ thai ] = "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á‡∏≠‡∏±‡∏ô‡∏Å‡πà‡∏≠‡∏ô";
+                Text[ czech ] = "P≈ôedchoz√≠ sn√≠mek";
+                Text[ hebrew ] = "vorherige Seite";
+                Text[ hindi ] = "‡§™‡§ø‡§õ‡§≤‡§æ ‡§∏‡•ç‡§≤‡§á‡§°";
             };
             ToolBoxItem
             {
@@ -225,10 +237,10 @@ Window FLT_NAVIGATOR
                 Text [ dutch ] = "Volgende pagina" ;
                 Text [ english_us ] = "Next Slide" ;
                 Text [ italian ] = "Pagina successiva" ;
-                Text [ spanish ] = "P·gina siguiente" ;
+                Text [ spanish ] = "Diapositiva siguiente" ;
                 Text [ french ] = "Page suivante" ;
                 Text [ danish ] = "NÊste side" ;
-                Text [ portuguese_brazilian ] = "N?chste Seite" ;
+                Text [ portuguese_brazilian ] = "PrÛximo Slide" ;
                 Text [ portuguese ] = "P·gina seguinte" ;
                 Text [ swedish ] = "N‰sta sida" ;
                 Text[ chinese_simplified ] = "‰∏ã‰∏ÄÈ°µ";
@@ -244,6 +256,9 @@ Window FLT_NAVIGATOR
                 Text[ catalan ] = "P‡gina seg¸ent";
                 Text[ finnish ] = "Seuraava dia";
                 Text[ thai ] = "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á‡∏ñ‡∏±‡∏î‡πÑ‡∏õ";
+                Text[ czech ] = "Dal≈°√≠ sn√≠mek";
+                Text[ hebrew ] = "N√§chste Seite";
+                Text[ hindi ] = "‡§Ö‡§ó‡§≤‡§æ ‡§∏‡•ç‡§≤‡§á‡§°";
             };
             ToolBoxItem
             {
@@ -255,10 +270,10 @@ Window FLT_NAVIGATOR
                 Text [ dutch ] = "Laatste pagina" ;
                 Text [ english_us ] = "Last Slide" ;
                 Text [ italian ] = "Ultima pagina" ;
-                Text [ spanish ] = "⁄ltima p·gina" ;
+                Text [ spanish ] = "⁄ltima diapositiva" ;
                 Text [ french ] = "DerniËre page" ;
                 Text [ danish ] = "Sidste side" ;
-                Text [ portuguese_brazilian ] = "Letzte Seite" ;
+                Text [ portuguese_brazilian ] = "⁄ltimo Slide" ;
                 Text [ portuguese ] = "⁄ltima p·gina" ;
                 Text [ swedish ] = "Sista sidan" ;
                 Text[ chinese_simplified ] = "ÊúÄÂêé‰∏ÄÈ°µ";
@@ -269,11 +284,14 @@ Window FLT_NAVIGATOR
                 Text[ arabic ] = "«·’›Õ… «·√ŒÌ—…";
                 Text[ greek ] = "‘ÂÎÂıÙ·ﬂ· ÛÂÎﬂ‰·";
                 Text[ korean ] = "ÎßàÏßÄÎßâ Ïä¨ÎùºÏù¥Îìú";
-                Text[ turkish ] = "Son sayfa";
+                Text[ turkish ] = "Son slayt";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "⁄ltima p‡gina";
                 Text[ finnish ] = "Viimeinen dia";
                 Text[ thai ] = "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á‡∏≠‡∏±‡∏ô‡∏™‡∏∏‡∏î‡∏ó‡πâ‡∏≤‡∏¢";
+                Text[ czech ] = "Posledn√≠ sn√≠mek";
+                Text[ hebrew ] = "Letzte Seite";
+                Text[ hindi ] = "‡§Ö‡§Ç‡§§‡§ø‡§Æ ‡§∏‡•ç‡§≤‡§á‡§°";
             };
             ToolBoxItem
             {
@@ -294,7 +312,7 @@ Window FLT_NAVIGATOR
                 Text [ french ] = "Mode Glisser" ;
                 Text [ dutch ] = "Sleepmodus" ;
                 Text [ danish ] = "TrÊkmodus" ;
-                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text [ portuguese_brazilian ] = "Modo Arrastar" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ swedish ] = "Dral‰ge" ;
                 Text[ chinese_simplified ] = "ÊãñÊõ≥Ê®°Âºè";
@@ -310,6 +328,9 @@ Window FLT_NAVIGATOR
                 Text[ catalan ] = "Mode d'arrossegament";
                 Text[ finnish ] = "Vetotila";
                 Text[ thai ] = "‡πÇ‡∏´‡∏°‡∏î‡∏•‡∏≤‡∏Å";
+                Text[ czech ] = "Re≈æim p≈ôet√°hnut√≠";
+                Text[ hebrew ] = "Dragmodus";
+                Text[ hindi ] = "‡§ñ‡•Ä‡§Ç‡§ö‡§®‡•á ‡§ï‡§æ ‡§™‡•ç‡§∞‡§ï‡§æ‡§∞";
             };
         };
     };
@@ -330,7 +351,7 @@ Window FLT_NAVIGATOR
         QuickHelpText [ french ] = "Documents" ;
         QuickHelpText [ danish ] = "Dokumenter" ;
         QuickHelpText [ portuguese ] = "Documentos" ;
-        QuickHelpText [ portuguese_brazilian ] = "Dokumente" ;
+        QuickHelpText [ portuguese_brazilian ] = "Documentos" ;
         /* ### ACHTUNG: Neuer Text in Resource? Geˆffnete Dokumente : Ge˜ffnete Dokumente */
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "ƒÓÍÛÏÂÌÚ˚";
@@ -349,6 +370,9 @@ Window FLT_NAVIGATOR
         QuickHelpText[ catalan ] = "Documents";
         QuickHelpText[ finnish ] = "Asiakirjat";
         QuickHelpText[ thai ] = "Documents";
+        QuickHelpText[ czech ] = "Dokumenty";
+        QuickHelpText[ hebrew ] = "‚ÄÆ◊û◊°◊û◊õ◊ô◊ù‚Ä¨";
+        QuickHelpText[ hindi ] = "‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞";
     };
 
     #define NAVIGATR_IDLIST \
@@ -381,6 +405,15 @@ Window FLT_NAVIGATOR
         NAVIGATR_IDLIST
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
