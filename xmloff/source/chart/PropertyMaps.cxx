@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: bm $ $Date: 2001-11-05 17:09:55 $
+ *  last change: $Author: obo $ $Date: 2001-11-08 16:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
                                                             const SvXMLImport& rImport ) :
         SvXMLImportPropertyMapper( rMapper, const_cast< SvXMLImport & >( rImport )),
-        mrImport( rMapper, const_cast< SvXMLImport & >( rImport ))
+        mrImport( const_cast< SvXMLImport & > ( rImport ))
 {
     // chain shape mapper for drawing properties
 
