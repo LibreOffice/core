@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:20:56 $
+ *  last change: $Author: os $ $Date: 2001-07-31 10:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                     sal_uInt16 nToxType, sal_Bool bGlobal) :
         SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
         aExampleContainerWIN(this, ResId(WIN_EXAMPLE)),
-        aDummyContainerWIN(this, ResId(WIN_EXAMPLE)),
         aExampleWIN( &aExampleContainerWIN, 0 ),
         aShowExampleCB( this, ResId(CB_SHOWEXAMPLE)),
         sUserDefinedIndex(ResId(ST_USERDEFINEDINDEX)),
@@ -755,7 +754,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
                     uno::Any aAny = aTestContent.getPropertyValue( OUString::createFromAscii("IsDocument") );
                     bExist = aAny.hasValue() ? *(sal_Bool*)aAny.getValue() : FALSE;
                 }
-                catch(...)
+                catch(Exception&)
                 {
                     bExist = FALSE;
                 }
@@ -788,8 +787,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         && pExampleFrame && pExampleFrame->IsServiceAvailable();
 
     aExampleContainerWIN.Show( bSetViewWindow );
-    aDummyContainerWIN.Show( ! bSetViewWindow );
-    SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : &aDummyContainerWIN );
+    SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : 0 );
 
     Point aPos = GetPosPixel();
      Size aSize = GetSizePixel();
@@ -843,7 +841,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         }
         CreateOrUpdateExample(eCurrentTOXType.eType);
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("::CreateExample() - exception caught")
     }
@@ -1222,7 +1220,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 //#endif
 
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("::CreateExample() - exception caught")
     }
