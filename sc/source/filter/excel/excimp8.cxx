@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:33 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,8 @@ extern const sal_Char* pVBASubStorageName;
 
 
 
-ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rDocUrl, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, pDoc, rDocUrl )
+ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, XclBiff eBiff, ScDocument* pDoc, const String& rDocUrl, SvStorage* pPivotCache ) :
+    ImportExcel( rStream, eBiff, pDoc, rDocUrl )
 {
     delete pFormConv;
 
@@ -498,6 +498,30 @@ void ImportExcel8::Dimensions( void )
 
     pColRowBuff->SetDimension(
         ScRange( static_cast<SCCOL>(nColFirst), static_cast<SCROW>(nRowFirst), GetCurrScTab(), static_cast<SCCOL>(nColLast), static_cast<SCROW>(nRowLast), GetCurrScTab() ) );
+}
+
+void ImportExcel8::ReadBasic( void )
+{
+    bHasBasic = TRUE;
+
+    SfxObjectShell* pShell = GetDocShell();
+
+    if( pShell )
+    {
+        SvtFilterOptions* pFltOpts = SvtFilterOptions::Get();
+        if( pFltOpts )
+        {
+            if( pFltOpts->IsLoadExcelBasicCode() || pFltOpts->IsLoadExcelBasicStorage() )
+            {
+                DBG_ASSERT( pExcRoot->pRootStorage, "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
+
+                SvxImportMSVBasic   aBasicImport( *pShell, *pExcRoot->pRootStorage, pFltOpts->IsLoadExcelBasicCode(), pFltOpts->IsLoadExcelBasicStorage() );
+
+                aBasicImport.Import( String::CreateFromAscii( pVBAStorageName ),
+                                     String::CreateFromAscii( pVBASubStorageName ) );
+            }
+        }
+    }
 }
 
 
