@@ -1,0 +1,47 @@
+#ifndef __com_sun_star_ui_XUIElement_idl__
+#define __com_sun_star_ui_XUIElement_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** provides a function to retrieve a special purpose interface dependent
+    on the user interface element type.
+
+    <p>
+    The type of the interface depends on the real type of the user interface
+    element. A menubar user interface element provides access to its
+    <type scope="com::sun::star::awt">XSystemDependentMenuBarPeer</type>
+    which supports to retrieve the system dependent menu handle.
+    A floating window or a toolbar user interface element return a
+    <type scope=com::sun::star::awt>XWindow</type>
+    interface.
+    </p>
+*/
+
+interface XUIElement : com::sun::star::uno::XInterface
+{
+    /** returns an interface to get access to user interface type specific functions.
+
+        @return
+            a special purpose interface which depends on the type of the user
+            interface element.
+    */
+    com::sun::star::uno::XInterface getRealInterface();
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
